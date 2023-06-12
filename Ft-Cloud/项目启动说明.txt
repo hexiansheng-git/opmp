@@ -1,4 +1,4 @@
-1、按需创建数据库ft-cloud-system(必须)、ft-cloud-activiti、ft-cloud-quartz、ft-cloud-gen、ft-cloud-drag、ft-cloud-demo
+1、按需创建数据库ft-cloud-system(必须)、ft-cloud-gen、ft-cloud-drag、ft-cloud-demo
 2、按需初始化数据库，SQL脚本在 Ft-Cloud\resource\mysql_sql目录下
 3、安装nacos、seata 安装包在 Ft-Cloud\resource\soft_package目录下
 4、nacos导入配置，文件在Ft-Cloud\resource\nacos_config目录下，其中ft-gateway-dev.yml、ft-service-auth-dev.yml、ft-service-system-dev.yml必须导入，其他按需导入
