@@ -1,0 +1,21 @@
+# Spring
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      namespace: cfhec-opmp-web
+      server-addr: 192.168.2.78:8848
+      discovery:
+        # 服务注册地址
+        server-addr: ${spring.cloud.nacos.server-addr}
+        namespace: ${spring.cloud.nacos.namespace}
+      config:
+        # 配置中心地址
+        server-addr: ${spring.cloud.nacos.server-addr}
+        namespace: ${spring.cloud.nacos.namespace}
+        # 配置文件格式
+        file-extension: yml
+        # 共享配置
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
