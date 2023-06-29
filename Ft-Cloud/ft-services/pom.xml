@@ -8,14 +8,13 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-     <modules>
+    <modules>
         <module>ft-service-auth</module>
         <module>ft-service-system</module>
         <module>ft-service-job</module>
-        <module>ft-service-file</module>
         <module>ft-service-demo</module>
-         <module>ft-service-eidolon</module>
-         <module>ft-service-flowable</module>
+        <module>ft-service-eidolon</module>
+        <module>ft-service-flowable</module>
     </modules>
 
     <artifactId>ft-services</artifactId>
