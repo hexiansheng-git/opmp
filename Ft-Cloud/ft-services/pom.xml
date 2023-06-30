@@ -12,7 +12,7 @@
         <module>ft-service-auth</module>
         <module>ft-service-system</module>
         <module>ft-service-job</module>
-        <module>ft-service-demo</module>
+        <module>ft-service-pm</module>
         <module>ft-service-eidolon</module>
         <module>ft-service-flowable</module>
     </modules>
