@@ -237,12 +237,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
+            <dependency>
+                <groupId>com.hhwy</groupId>
+                <artifactId>ft-common</artifactId>
+                <version>2.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>ft-api</module>
+        <module>ft-common</module>
         <module>ft-gateway</module>
         <module>ft-services</module>
     </modules>
