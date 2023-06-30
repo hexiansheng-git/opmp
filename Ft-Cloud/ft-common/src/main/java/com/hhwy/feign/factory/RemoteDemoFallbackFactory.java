@@ -1,4 +1,4 @@
-package com.hhwy.pm.api.factory;
+package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.api.RemoteDemoService;
