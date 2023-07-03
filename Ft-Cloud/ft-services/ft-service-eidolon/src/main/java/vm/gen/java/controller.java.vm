@@ -1,0 +1,96 @@
+package ${genTable.packageName}.${genTable.beanNameProperty}.controller;
+
+import java.util.Arrays;
+import java.util.List;
+import java.io.IOException;
+import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpServletResponse;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.core.web.controller.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import ${genTable.packageName}.${genTable.beanNameProperty}.service.I${genTable.beanNameClass}Service;
+import ${genTable.packageName}.${genTable.beanNameProperty}.domain.${genTable.beanNameClass};
+
+import org.springframework.validation.annotation.Validated;
+import com.hhwy.utils.validation.ValidationGroups;
+
+/**
+ * @author $!{genTable.author}
+ * @date ${createDate}
+ * @remark $!{genTable.tableComment}
+ */
+@Validated
+@RestController
+@RequestMapping("/${genTable.beanNameProperty}")
+public class ${genTable.beanNameClass}Controller extends BaseController{
+
+    @Autowired
+    private I${genTable.beanNameClass}Service ${genTable.beanNameProperty}Service;
+
+    #set($hasPk=false)
+    #foreach ($column in $genTable.columns)
+        #if($column.isPk == "1")
+            #set($hasPk=true)
+            #set($pkJavaType=$column.javaType)
+        #end
+    #end
+
+    @GetMapping
+    public AjaxResult get${genTable.beanNameClass}(@Validated(ValidationGroups.Get.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+        ${genTable.beanNameClass} ${genTable.beanNameProperty} =  ${genTable.beanNameProperty}Service.get${genTable.beanNameClass}(${genTable.beanNameProperty}Param);
+        return AjaxResult.success(${genTable.beanNameProperty});
+    }
+
+    @GetMapping("/list")
+    public AjaxResult get${genTable.beanNameClass}List(@Validated(ValidationGroups.Select.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+        startPage();
+        List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List = ${genTable.beanNameProperty}Service.get${genTable.beanNameClass}List(${genTable.beanNameProperty}Param);
+        return getDataTableAjaxResult(${genTable.beanNameProperty}List);
+    }
+
+    @PostMapping
+    public AjaxResult insert${genTable.beanNameClass}(@Validated(ValidationGroups.Save.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+        ${genTable.beanNameProperty}Service.insert${genTable.beanNameClass}(${genTable.beanNameProperty}Param);
+        return AjaxResult.success(${genTable.beanNameProperty}Param);
+    }
+
+    @PostMapping("/list")
+    public AjaxResult insert${genTable.beanNameClass}List(@Validated(ValidationGroups.Save.class) @RequestBody List<${genTable.beanNameClass}> ${genTable.beanNameProperty}ListParam){
+        ${genTable.beanNameProperty}Service.insert${genTable.beanNameClass}List(${genTable.beanNameProperty}ListParam);
+        return AjaxResult.success(${genTable.beanNameProperty}ListParam);
+    }
+
+    @PostMapping
+    public AjaxResult update${genTable.beanNameClass}(@Validated(ValidationGroups.Update.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+        return toAjax(${genTable.beanNameProperty}Service.update${genTable.beanNameClass}(${genTable.beanNameProperty}Param));
+    }
+
+    #if($hasPk)
+        @PostMapping("/list")
+        public AjaxResult update${genTable.beanNameClass}List(@Validated(ValidationGroups.Update.class) @RequestBody List<${genTable.beanNameClass}> ${genTable.beanNameProperty}ListParam){
+            return toAjax(${genTable.beanNameProperty}Service.update${genTable.beanNameClass}List(${genTable.beanNameProperty}ListParam));
+        }
+    #end
+
+    @PostMapping
+    public AjaxResult delete${genTable.beanNameClass}(@Validated(ValidationGroups.Delete.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+        return toAjax(${genTable.beanNameProperty}Service.delete${genTable.beanNameClass}(${genTable.beanNameProperty}Param));
+    }
+
+    #if($hasPk)
+        @PostMapping("/{pks}")
+        public AjaxResult delete${genTable.beanNameClass}ByPks(@PathVariable ${pkJavaType}[] pks){
+            List<${pkJavaType}> ${genTable.beanNameProperty}PkList = Arrays.asList(pks);
+            return toAjax(${genTable.beanNameProperty}Service.delete${genTable.beanNameClass}ByPks(${genTable.beanNameProperty}PkList));
+        }
+    #end
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, ${genTable.beanNameClass} ${genTable.beanNameProperty}Param) throws IOException {
+        List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List = ${genTable.beanNameProperty}Service.get${genTable.beanNameClass}List(${genTable.beanNameProperty}Param);
+        ExcelUtils<${genTable.beanNameClass}> util = new ExcelUtils<>(${genTable.beanNameClass}.class);
+        util.exportExcel(response, ${genTable.beanNameProperty}List, DateUtils.getDate());
+    }
+}

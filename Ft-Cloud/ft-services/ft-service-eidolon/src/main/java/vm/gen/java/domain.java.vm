@@ -1,0 +1,55 @@
+package ${genTable.packageName}.${genTable.beanNameProperty}.domain;
+
+import com.hhwy.common.core.web.domain.BaseEntity;
+import java.util.Date;
+import java.math.BigDecimal;
+import com.hhwy.common.core.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.util.List;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * @author $!{genTable.author}
+ * @date ${createDate}
+ * @remark $!{genTable.tableComment}
+ */
+public class ${genTable.beanNameClass} extends BaseEntity {
+    private static final long serialVersionUID = 1L;
+
+    #foreach ($column in $genTable.columns)
+        /**
+         * 字段描述：$!{column.columnComment}
+         */
+        #if($column.columnType.equalsIgnoreCase("datetime"))
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        #end
+        #if($column.columnType.equalsIgnoreCase("time"))
+            @JsonFormat(pattern = "HH:mm:ss")
+        #end
+        #if($column.columnType.equalsIgnoreCase("date"))
+            @JsonFormat(pattern = "yyyy-MM-dd")
+        #end
+        #if($column.javaType.equalsIgnoreCase("Long"))
+            @JsonSerialize(using = ToStringSerializer.class)
+        #end
+        @JsonProperty
+        #if(${column.columnComment} && ${column.columnComment} != "")
+            @Excel(name = "$!{column.columnComment}" #if($column.columnType.equalsIgnoreCase("datetime")) ,dateFormat = "yyyy-MM-dd HH:mm:ss" #end #if($column.columnType.equalsIgnoreCase("time")) ,dateFormat = "HH:mm:ss" #end #if($column.columnType.equalsIgnoreCase("date")) ,dateFormat = "yyyy-MM-dd" #end )
+        #end
+        private ${column.javaType} ${column.propertyName};
+    #end
+
+    #foreach ($column in $genTable.columns)
+        @JsonIgnore
+        public ${column.javaType} get${column.acronymUpperPropertyName}() {
+            return ${column.propertyName};
+        }
+        @JsonIgnore
+        public void set${column.acronymUpperPropertyName}(${column.javaType} ${column.propertyName}) {
+            this.${column.propertyName} = ${column.propertyName};
+        }
+    #end
+}

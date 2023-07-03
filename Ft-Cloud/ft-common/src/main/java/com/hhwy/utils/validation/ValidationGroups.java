@@ -2,6 +2,8 @@ package com.hhwy.utils.validation;
 
 public class ValidationGroups {
 
+    //根据id获取一条数据，使用的校验组
+    public interface Get {};
     //新增保存时，使用的校验组
     public interface Save {};
     //更新数据时，使用的校验组

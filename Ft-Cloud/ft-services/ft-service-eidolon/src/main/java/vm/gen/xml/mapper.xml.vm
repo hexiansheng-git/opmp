@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="${genTable.packageName}.${genTable.beanNameProperty}.mapper.${genTable.beanNameClass}Mapper">
+    #set($hasPk=false)
+    #foreach ($column in $genTable.columns)
+        #if($column.isPk == "1")
+            #set($hasPk=true)
+            #set($pkColumnName=$column.columnName)
+            #set($pkPropertyName=$column.propertyName)
+        #end
+        #if(${column.columnName.equals("del_flag")})
+            #set($hasDelFlag=true)
+        #end
+    #end
+
+    <resultMap type="${genTable.packageName}.${genTable.beanNameProperty}.domain.${genTable.beanNameClass}" id="${genTable.beanNameClass}ResultMap">
+        #foreach ($column in $genTable.columns)
+            <result property="${column.propertyName}" column="${column.columnName}" />
+        #end
+    </resultMap>
+
+    <select id="get${genTable.beanNameClass}" resultMap="${genTable.beanNameClass}ResultMap">
+        select
+        #set ($i=0)
+        #foreach ($column in $genTable.columns)
+            #if($i == 0)
+                `$column.columnName`
+            #else
+                ,`$column.columnName`
+            #end
+            #set ($i=$i+1)
+        #end
+        from ${genTable.tableName}
+        <where>
+            del_flag = "0"
+            #foreach ($column in $genTable.columns)
+                #set($propertyName=$column.propertyName)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                <if test="$propertyName != null #if($javaType == 'String') and $propertyName.trim() != ''#end"> and `$columnName` = #{$propertyName}</if>
+            #end
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="get${genTable.beanNameClass}List" resultMap="${genTable.beanNameClass}ResultMap">
+        select
+        #set ($i=0)
+        #foreach ($column in $genTable.columns)
+            #if($i == 0)
+                `$column.columnName`
+            #else
+                ,`$column.columnName`
+            #end
+            #set ($i=$i+1)
+        #end
+        from ${genTable.tableName}
+        <where>
+            del_flag = "0"
+            #foreach ($column in $genTable.columns)
+                #set($propertyName=$column.propertyName)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                <if test="$propertyName != null #if($javaType == 'String') and $propertyName.trim() != ''#end"> and `$columnName` = #{$propertyName}</if>
+            #end
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insert${genTable.beanNameClass}" #if($hasPk) useGeneratedKeys="true" keyProperty="$pkColumnName" #end >
+        insert into ${genTable.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach ($column in $genTable.columns)
+                #set($propertyName=$column.propertyName)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                <if test="$propertyName != null #if($javaType == 'String') and $propertyName != ''#end">`$columnName`,</if>
+            #end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #foreach ($column in $genTable.columns)
+                #set($propertyName=$column.propertyName)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                <if test="$propertyName != null #if($javaType == 'String') and $propertyName != ''#end">#{$propertyName},</if>
+            #end
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insert${genTable.beanNameClass} -->
+    <insert id="insert${genTable.beanNameClass}List">
+        insert into ${genTable.tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            #foreach ($column in $genTable.columns)
+                #set($columnName=$column.columnName)
+                #if(!${columnName.equals("del_flag")})
+                    `$columnName`,
+                #end
+            #end
+        </trim>
+        values
+        <foreach collection="${genTable.beanNameProperty}List" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #foreach ($column in $genTable.columns)
+                    #set($propertyName=$column.propertyName)
+                    #set($javaType=$column.javaType)
+                    #set($columnName=$column.columnName)
+                    #if(!${columnName.equals("del_flag")})
+                        #{item.$propertyName},
+                    #end
+                #end
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="update${genTable.beanNameClass}">
+        update ${genTable.tableName}
+        <trim prefix="SET" suffixOverrides=",">
+            #foreach ($column in $genTable.columns)
+                #set($propertyName=$column.propertyName)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                <if test="$propertyName != null #if($javaType == 'String' ) and  $propertyName.trim() != ''#end">`$columnName` = #{$propertyName},</if>
+            #end
+        </trim>
+        <where>
+            #foreach ($column in $genTable.columns)
+                #set($propertyName=$column.propertyName)
+                #set($javaType=$column.javaType)
+                #set($columnName=$column.columnName)
+                #if($hasPk)
+                    #if($column.isPk == "1")
+                        <if test="$propertyName != null #if($javaType == 'String' ) and $propertyName.trim() != ''#end"> and `$columnName` = #{$propertyName}</if>
+                    #end
+                #else
+                    <if test="$propertyName != null #if($javaType == 'String' ) and $propertyName.trim() != ''#end"> and `$columnName` = #{$propertyName}</if>
+                #end
+            #end
+        </where>
+    </update>
+
+    #if($hasPk)
+        <update id="update${genTable.beanNameClass}List">
+            update ${genTable.tableName}
+            <trim prefix="set" suffixOverrides=",">
+                #foreach ($column in $genTable.columns)
+                    #set($propertyName=$column.propertyName)
+                    #set($columnName=$column.columnName)
+                    <trim prefix="$columnName  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `${pkColumnName}`=#{item.${pkPropertyName}} then #{item.$propertyName}
+                        </foreach>
+                    </trim>
+                #end
+            </trim>
+            where `${pkColumnName}` in
+            <foreach collection="${pkPropertyName}List" index="index" item="item" separator="," open="(" close=")">
+                #{item.${pkPropertyName}}
+            </foreach>
+        </update>
+    #end
+
+    #if($hasDelFlag)
+        <update id="delete${genTable.beanNameClass}">
+            update `${genTable.tableName}` set del_flag = 1
+            <where>
+                #foreach ($column in $genTable.columns)
+                    #set($propertyName=$column.propertyName)
+                    #set($javaType=$column.javaType)
+                    #set($columnName=$column.columnName)
+                    <if test="$propertyName != null #if($javaType == 'String' ) and $propertyName.trim() != ''#end"> and `$columnName` = #{$propertyName}</if>
+                #end
+            </where>
+        </update>
+
+        #if($hasPk)
+            <update id="delete${genTable.beanNameClass}ByPks">
+                update `${genTable.tableName}` set del_flag = 1
+                <where>
+                    `${pkColumnName}` in
+                    <foreach item="${pkPropertyName}" collection="${genTable.beanNameProperty}PkList" open="(" separator="," close=")">
+                        #{${pkPropertyName}}
+                    </foreach>
+                </where>
+            </update>
+        #end
+    #else
+        <delete id="delete${genTable.beanNameClass}">
+            delete from `${genTable.tableName}`
+            <where>
+                #foreach ($column in $genTable.columns)
+                    #set($propertyName=$column.propertyName)
+                    #set($javaType=$column.javaType)
+                    #set($columnName=$column.columnName)
+                    <if test="$propertyName != null #if($javaType == 'String' ) and $propertyName.trim() != ''#end"> and `$columnName` = #{$propertyName}</if>
+                #end
+            </where>
+        </delete>
+
+        #if($hasPk)
+            <delete id="delete${genTable.beanNameClass}ByPks">
+                delete from `${genTable.tableName}`
+                <where>
+                    `${pkColumnName}` in
+                    <foreach item="${pkPropertyName}" collection="${genTable.beanNameProperty}PkList" open="(" separator="," close=")">
+                        #{${pkPropertyName}}
+                    </foreach>
+                </where>
+            </delete>
+        #end
+    #end
+</mapper>

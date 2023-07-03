@@ -1,0 +1,92 @@
+package ${genTable.packageName}.${genTable.beanNameProperty}.service.impl;
+
+import java.util.List;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.security.util.SecurityUtils;
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import ${genTable.packageName}.${genTable.beanNameProperty}.mapper.${genTable.beanNameClass}Mapper;
+import ${genTable.packageName}.${genTable.beanNameProperty}.service.I${genTable.beanNameClass}Service;
+import ${genTable.packageName}.${genTable.beanNameProperty}.domain.${genTable.beanNameClass};
+import com.hhwy.utils.idworker.IdWorker;
+
+/**
+ * @author $!{genTable.author}
+ * @date ${createDate}
+ * @remark $!{genTable.tableComment}
+ */
+@Service
+public class ${genTable.beanNameClass}ServiceImpl implements I${genTable.beanNameClass}Service{
+
+    @Autowired
+    private ${genTable.beanNameClass}Mapper ${genTable.beanNameProperty}Mapper;
+
+    #set($hasPk=false)
+    #foreach ($column in $genTable.columns)
+        #if($column.isPk == "1")
+            #set($hasPk=true)
+            #set($pkJavaType=$column.javaType)
+        #end
+    #end
+
+    public ${genTable.beanNameClass} get${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty}) {
+        return ${genTable.beanNameProperty}Mapper.get${genTable.beanNameClass}(${genTable.beanNameProperty});
+    }
+
+    public List<${genTable.beanNameClass}> get${genTable.beanNameClass}List(${genTable.beanNameClass} ${genTable.beanNameProperty}) {
+        return ${genTable.beanNameProperty}Mapper.get${genTable.beanNameClass}List(${genTable.beanNameProperty});
+    }
+
+    @Transactional
+    public int insert${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty}) {
+        ${genTable.beanNameProperty}.setId(IdWorker.createId());
+        ${genTable.beanNameProperty}.setCreateUser(SecurityUtils.getUserName());
+        ${genTable.beanNameProperty}.setCreateTime(DateUtils.getNowDate());
+        return ${genTable.beanNameProperty}Mapper.insert${genTable.beanNameClass}(${genTable.beanNameProperty});
+    }
+
+    @Transactional
+    public int insert${genTable.beanNameClass}List(List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List) {
+        for (${genTable.beanNameClass} ${genTable.beanNameProperty} : ${genTable.beanNameProperty}List) {
+            ${genTable.beanNameProperty}.setId(IdWorker.createId());
+            ${genTable.beanNameProperty}.setCreateUser(SecurityUtils.getUserName());
+            ${genTable.beanNameProperty}.setCreateTime(DateUtils.getNowDate());
+        }
+        return ${genTable.beanNameProperty}Mapper.insert${genTable.beanNameClass}List(${genTable.beanNameProperty}List);
+    }
+
+    @Transactional
+    public int update${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty}) {
+        ${genTable.beanNameProperty}.setUpdateUser(SecurityUtils.getUserName());
+        ${genTable.beanNameProperty}.setUpdateTime(DateUtils.getNowDate());
+        return ${genTable.beanNameProperty}Mapper.update${genTable.beanNameClass}(${genTable.beanNameProperty});
+    }
+
+    #if($hasPk)
+        @Transactional
+        public int update${genTable.beanNameClass}List(List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List) {
+            for (${genTable.beanNameClass} ${genTable.beanNameProperty} : ${genTable.beanNameProperty}List) {
+                ${genTable.beanNameProperty}.setUpdateUser(SecurityUtils.getUserName());
+                ${genTable.beanNameProperty}.setUpdateTime(DateUtils.getNowDate());
+            }
+            return ${genTable.beanNameProperty}Mapper.update${genTable.beanNameClass}List(${genTable.beanNameProperty}List);
+        }
+    #end
+
+    @Transactional
+    public int delete${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty}) {
+        ${genTable.beanNameProperty}.setUpdateUser(SecurityUtils.getUserName());
+        ${genTable.beanNameProperty}.setUpdateTime(DateUtils.getNowDate());
+        return ${genTable.beanNameProperty}Mapper.delete${genTable.beanNameClass}(${genTable.beanNameProperty});
+    }
+
+    #if($hasPk)
+        @Transactional
+        public int delete${genTable.beanNameClass}ByPks(List<${pkJavaType}> ${genTable.beanNameProperty}PkList) {
+            return ${genTable.beanNameProperty}Mapper.delete${genTable.beanNameClass}ByPks(${genTable.beanNameProperty}PkList);
+        }
+    #end
+}

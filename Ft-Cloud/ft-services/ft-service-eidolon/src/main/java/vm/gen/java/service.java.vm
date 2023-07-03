@@ -1,0 +1,39 @@
+package ${genTable.packageName}.${genTable.beanNameProperty}.service;
+
+import java.util.List;
+import ${genTable.packageName}.${genTable.beanNameProperty}.domain.${genTable.beanNameClass};
+
+/**
+ * @author $!{genTable.author}
+ * @date ${createDate}
+ * @remark $!{genTable.tableComment}
+ */
+public interface I${genTable.beanNameClass}Service {
+    #set($hasPk=false)
+    #foreach ($column in $genTable.columns)
+        #if($column.isPk == "1")
+            #set($hasPk=true)
+            #set($pkJavaType=$column.javaType)
+        #end
+    #end
+
+    ${genTable.beanNameClass} get${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty});
+
+    List<${genTable.beanNameClass}> get${genTable.beanNameClass}List(${genTable.beanNameClass} ${genTable.beanNameProperty});
+
+    int insert${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty});
+
+    int insert${genTable.beanNameClass}List(List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List);
+
+    int update${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty});
+
+    #if($hasPk)
+        int update${genTable.beanNameClass}List(List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List);
+    #end
+
+    int delete${genTable.beanNameClass}(${genTable.beanNameClass} ${genTable.beanNameProperty});
+
+    #if($hasPk)
+        int delete${genTable.beanNameClass}ByPks(List<${pkJavaType}> ${genTable.beanNameProperty}PkList);
+    #end
+}
