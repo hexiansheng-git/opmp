@@ -50,39 +50,39 @@ public class ${genTable.beanNameClass}Controller extends BaseController{
         return getDataTableAjaxResult(${genTable.beanNameProperty}List);
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public AjaxResult insert${genTable.beanNameClass}(@Validated(ValidationGroups.Save.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         ${genTable.beanNameProperty}Service.insert${genTable.beanNameClass}(${genTable.beanNameProperty}Param);
         return AjaxResult.success(${genTable.beanNameProperty}Param);
     }
 
-    @PostMapping("/list")
+    @PostMapping("/batchAdd")
     public AjaxResult insert${genTable.beanNameClass}List(@Validated(ValidationGroups.Save.class) @RequestBody List<${genTable.beanNameClass}> ${genTable.beanNameProperty}ListParam){
         ${genTable.beanNameProperty}Service.insert${genTable.beanNameClass}List(${genTable.beanNameProperty}ListParam);
         return AjaxResult.success(${genTable.beanNameProperty}ListParam);
     }
 
-    @PostMapping
+    @PostMapping("/update")
     public AjaxResult update${genTable.beanNameClass}(@Validated(ValidationGroups.Update.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         return toAjax(${genTable.beanNameProperty}Service.update${genTable.beanNameClass}(${genTable.beanNameProperty}Param));
     }
 
     #if($hasPk)
-        @PostMapping("/list")
+        @PostMapping("/batchUpdate")
         public AjaxResult update${genTable.beanNameClass}List(@Validated(ValidationGroups.Update.class) @RequestBody List<${genTable.beanNameClass}> ${genTable.beanNameProperty}ListParam){
             return toAjax(${genTable.beanNameProperty}Service.update${genTable.beanNameClass}List(${genTable.beanNameProperty}ListParam));
         }
     #end
 
-    @PostMapping
+    @PostMapping("/delete")
     public AjaxResult delete${genTable.beanNameClass}(@Validated(ValidationGroups.Delete.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         return toAjax(${genTable.beanNameProperty}Service.delete${genTable.beanNameClass}(${genTable.beanNameProperty}Param));
     }
 
     #if($hasPk)
-        @PostMapping("/{pks}")
-        public AjaxResult delete${genTable.beanNameClass}ByPks(@PathVariable ${pkJavaType}[] pks){
-            List<${pkJavaType}> ${genTable.beanNameProperty}PkList = Arrays.asList(pks);
+        @PostMapping("/{ids}")
+        public AjaxResult delete${genTable.beanNameClass}ByPks(@PathVariable ${pkJavaType}[] ids){
+            List<${pkJavaType}> ${genTable.beanNameProperty}PkList = Arrays.asList(ids);
             return toAjax(${genTable.beanNameProperty}Service.delete${genTable.beanNameClass}ByPks(${genTable.beanNameProperty}PkList));
         }
     #end
