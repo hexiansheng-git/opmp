@@ -1,5 +1,6 @@
 package com.hhwy.pm;
 
+import com.hhwy.common.datasource.core.EnableFtDynamicDataSource;
 import com.hhwy.common.security.annotation.EnableFtFeignClients;
 import com.hhwy.common.tenant.annotation.EnableFtTenantClient;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +23,7 @@ import java.net.UnknownHostException;
 @EnableCustomConfig
 @EnableCustomSwagger2
 @EnableFtFeignClients
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.hhwy.*"})
 //@EnableFtDynamicDataSource
 @EnableFtTenantClient
 //@EnableFtSocketServer
