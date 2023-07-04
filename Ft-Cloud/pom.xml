@@ -239,16 +239,16 @@
             </dependency>
             <dependency>
                 <groupId>com.hhwy</groupId>
-                <artifactId>ft-common</artifactId>
-                <version>2.0.0</version>
+                <artifactId>ft-commons</artifactId>
+                <version>3.0.0</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
     <modules>
-        <module>ft-common</module>
         <module>ft-gateway</module>
         <module>ft-services</module>
+        <module>ft-commons</module>
     </modules>
     <packaging>pom</packaging>
 

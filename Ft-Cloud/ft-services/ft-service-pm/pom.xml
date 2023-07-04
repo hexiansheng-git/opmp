@@ -101,7 +101,8 @@
         <!--common  系统feign接口 & 工具类 & 实体类-->
         <dependency>
             <groupId>com.hhwy</groupId>
-            <artifactId>ft-common</artifactId>
+            <artifactId>ft-commons</artifactId>
+            <version>3.0.0</version>
         </dependency>
     </dependencies>
 
@@ -121,6 +122,7 @@
                 </executions>
             </plugin>
         </plugins>
+
     </build>
    
 </project>
