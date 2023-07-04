@@ -37,7 +37,6 @@
   <select id="getXmslMainStructureHydrology" resultMap="XmslMainStructureHydrologyResultMap">
     select
     `id`
-    ,`xmslMain`
     ,`position`
     ,`dry_season_river_width`
     ,`rainy_season_river_width`
@@ -108,7 +107,6 @@
   <select id="getXmslMainStructureHydrologyList" resultMap="XmslMainStructureHydrologyResultMap">
     select
     `id`
-    ,`xmslMain`
     ,`position`
     ,`dry_season_river_width`
     ,`rainy_season_river_width`
@@ -249,7 +247,6 @@
     insert into xmsl_main_structure_hydrology
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
-      `xmslMain`,
       `position`,
       `dry_season_river_width`,
       `rainy_season_river_width`,
@@ -485,7 +482,7 @@
       </trim>
     </trim>
     where `id` in
-    <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
       #{item.id}
     </foreach>
   </update>

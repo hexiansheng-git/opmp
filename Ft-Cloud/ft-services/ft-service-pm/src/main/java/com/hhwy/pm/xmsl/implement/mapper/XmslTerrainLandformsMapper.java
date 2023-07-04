@@ -23,8 +23,7 @@ public interface XmslTerrainLandformsMapper {
 
     int updateXmslTerrainLandforms(XmslTerrainLandforms xmslTerrainLandforms);
 
-    int updateXmslTerrainLandformsList(
-        @Param("xmslTerrainLandformsList") List<XmslTerrainLandforms> xmslTerrainLandformsList);
+    int updateXmslTerrainLandformsList(@Param("list") List<XmslTerrainLandforms> xmslTerrainLandformsList);
 
     int deleteXmslTerrainLandforms(XmslTerrainLandforms xmslTerrainLandforms);
 

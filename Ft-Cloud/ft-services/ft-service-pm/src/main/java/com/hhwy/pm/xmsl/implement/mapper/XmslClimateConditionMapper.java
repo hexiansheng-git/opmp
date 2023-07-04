@@ -22,8 +22,7 @@ public interface XmslClimateConditionMapper {
 
     int updateXmslClimateCondition(XmslClimateCondition xmslClimateCondition);
 
-    int updateXmslClimateConditionList(
-        @Param("xmslClimateConditionList") List<XmslClimateCondition> xmslClimateConditionList);
+    int updateXmslClimateConditionList(@Param("list") List<XmslClimateCondition> xmslClimateConditionList);
 
     int deleteXmslClimateCondition(XmslClimateCondition xmslClimateCondition);
 

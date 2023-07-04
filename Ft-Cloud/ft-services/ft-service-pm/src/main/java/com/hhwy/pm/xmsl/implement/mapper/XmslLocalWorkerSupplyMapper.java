@@ -23,8 +23,7 @@ public interface XmslLocalWorkerSupplyMapper {
 
     int updateXmslLocalWorkerSupply(XmslLocalWorkerSupply xmslLocalWorkerSupply);
 
-    int updateXmslLocalWorkerSupplyList(
-        @Param("xmslLocalWorkerSupplyList") List<XmslLocalWorkerSupply> xmslLocalWorkerSupplyList);
+    int updateXmslLocalWorkerSupplyList(@Param("list") List<XmslLocalWorkerSupply> xmslLocalWorkerSupplyList);
 
     int deleteXmslLocalWorkerSupply(XmslLocalWorkerSupply xmslLocalWorkerSupply);
 

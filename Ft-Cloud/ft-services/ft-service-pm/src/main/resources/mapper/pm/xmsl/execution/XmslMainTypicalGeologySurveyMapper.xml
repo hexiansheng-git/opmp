@@ -37,7 +37,6 @@
   <select id="getXmslMainTypicalGeologySurvey" resultMap="XmslMainTypicalGeologySurveyResultMap">
     select
     `id`
-    ,`xmslMain`
     ,`main_position`
     ,`owner_depth`
     ,`owner_description`
@@ -111,7 +110,6 @@
     resultMap="XmslMainTypicalGeologySurveyResultMap">
     select
     `id`
-    ,`xmslMain`
     ,`main_position`
     ,`owner_depth`
     ,`owner_description`
@@ -254,7 +252,6 @@
     insert into xmsl_main_typical_geology_survey
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
-      `xmslMain`,
       `main_position`,
       `owner_depth`,
       `owner_description`,
@@ -491,7 +488,7 @@
       </trim>
     </trim>
     where `id` in
-    <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
       #{item.id}
     </foreach>
   </update>

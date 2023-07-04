@@ -40,7 +40,6 @@
   <select id="getXmslTerrainLandforms" resultMap="XmslTerrainLandformsResultMap">
     select
     `id`
-    ,`xmslMain`
     ,`section`
     ,`terrain`
     ,`max_altitude`
@@ -111,7 +110,6 @@
   <select id="getXmslTerrainLandformsList" resultMap="XmslTerrainLandformsResultMap">
     select
     `id`
-    ,`xmslMain`
     ,`section`
     ,`terrain`
     ,`max_altitude`
@@ -250,7 +248,6 @@
     insert into xmsl_terrain_landforms
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
-      `xmslMain`,
       `section`,
       `terrain`,
       `max_altitude`,
@@ -504,7 +501,7 @@
       </trim>
     </trim>
     where `id` in
-    <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
       #{item.id}
     </foreach>
   </update>

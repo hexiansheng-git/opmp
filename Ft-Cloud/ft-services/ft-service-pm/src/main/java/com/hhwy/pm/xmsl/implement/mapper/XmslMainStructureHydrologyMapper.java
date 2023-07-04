@@ -24,8 +24,7 @@ public interface XmslMainStructureHydrologyMapper {
 
     int updateXmslMainStructureHydrology(XmslMainStructureHydrology xmslMainStructureHydrology);
 
-    int updateXmslMainStructureHydrologyList(
-        @Param("xmslMainStructureHydrologyList") List<XmslMainStructureHydrology> xmslMainStructureHydrologyList);
+    int updateXmslMainStructureHydrologyList(@Param("list") List<XmslMainStructureHydrology> xmslMainStructureHydrologyList);
 
     int deleteXmslMainStructureHydrology(XmslMainStructureHydrology xmslMainStructureHydrology);
 

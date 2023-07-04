@@ -26,8 +26,7 @@ public interface XmslConstructionInterferenceMapper {
     int updateXmslConstructionInterference(
         XmslConstructionInterference xmslConstructionInterference);
 
-    int updateXmslConstructionInterferenceList(
-        @Param("xmslConstructionInterferenceList") List<XmslConstructionInterference> xmslConstructionInterferenceList);
+    int updateXmslConstructionInterferenceList(@Param("list") List<XmslConstructionInterference> xmslConstructionInterferenceList);
 
     int deleteXmslConstructionInterference(
         XmslConstructionInterference xmslConstructionInterference);

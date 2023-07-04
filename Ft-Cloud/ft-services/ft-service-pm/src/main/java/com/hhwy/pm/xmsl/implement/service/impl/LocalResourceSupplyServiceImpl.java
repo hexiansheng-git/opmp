@@ -40,17 +40,23 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         LocalResourceSupply result = new LocalResourceSupply();
 
         XmslLocalWorkerSupply xmslLocalWorkerSupply = new XmslLocalWorkerSupply();
-        BeanUtils.copyProperties(localResourceSupply.getLocalWorkerSupply(), xmslLocalWorkerSupply);
+        if (localResourceSupply.getLocalWorkerSupply() != null) {
+            BeanUtils.copyProperties(localResourceSupply.getLocalWorkerSupply(), xmslLocalWorkerSupply);
+        }
         List<XmslLocalWorkerSupply> localWorkerSupplyList = xmslLocalWorkerSupplyMapper
             .getXmslLocalWorkerSupplyList(xmslLocalWorkerSupply);
 
         XmslLocalMaterialsSupply xmslLocalMaterialsSupply = new XmslLocalMaterialsSupply();
-        BeanUtils.copyProperties(localResourceSupply.getLocalMaterialsSupply(), xmslLocalMaterialsSupply);
+        if (localResourceSupply.getLocalMaterialsSupply() != null) {
+            BeanUtils.copyProperties(localResourceSupply.getLocalMaterialsSupply(), xmslLocalMaterialsSupply);
+        }
         List<XmslLocalMaterialsSupply> localMaterialsSupplyList = xmslLocalMaterialsSupplyMapper
             .getXmslLocalMaterialsSupplyList(xmslLocalMaterialsSupply);
 
         XmslLocalEquipmentSupply xmslLocalEquipmentSupply = new XmslLocalEquipmentSupply();
-        BeanUtils.copyProperties(localResourceSupply.getLocalEquipmentSupply(), xmslLocalEquipmentSupply);
+        if (localResourceSupply.getLocalEquipmentSupply() != null) {
+            BeanUtils.copyProperties(localResourceSupply.getLocalEquipmentSupply(), xmslLocalEquipmentSupply);
+        }
         List<XmslLocalEquipmentSupply> localEquipmentSupplyList =
             xmslLocalEquipmentSupplyMapper.getXmslLocalEquipmentSupplyList(xmslLocalEquipmentSupply);
 

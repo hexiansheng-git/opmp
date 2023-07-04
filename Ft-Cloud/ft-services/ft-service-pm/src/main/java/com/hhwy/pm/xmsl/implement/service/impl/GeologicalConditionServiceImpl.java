@@ -3,8 +3,8 @@ package com.hhwy.pm.xmsl.implement.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SecurityUtils;
 import com.hhwy.common.core.utils.bean.BeanUtils;
-import com.hhwy.pm.xmsl.implement.domain.XmslBadGeologySurvey;
 import com.hhwy.pm.xmsl.implement.domain.GeologicalCondition;
+import com.hhwy.pm.xmsl.implement.domain.XmslBadGeologySurvey;
 import com.hhwy.pm.xmsl.implement.domain.XmslMainTypicalGeologySurvey;
 import com.hhwy.pm.xmsl.implement.mapper.XmslBadGeologySurveyMapper;
 import com.hhwy.pm.xmsl.implement.mapper.XmslMainTypicalGeologySurveyMapper;
@@ -35,12 +35,16 @@ public class GeologicalConditionServiceImpl implements IGeologicalConditionServi
         GeologicalCondition result = new GeologicalCondition();
 
         XmslMainTypicalGeologySurvey xmslMainTypicalGeologySurvey = new XmslMainTypicalGeologySurvey();
-        BeanUtils.copyProperties(geologicalCondition.getMainTypicalGeologySurvey(), xmslMainTypicalGeologySurvey);
+        if (geologicalCondition.getMainTypicalGeologySurvey() != null) {
+            BeanUtils.copyProperties(geologicalCondition.getMainTypicalGeologySurvey(), xmslMainTypicalGeologySurvey);
+        }
         List<XmslMainTypicalGeologySurvey> mainTypicalGeologyList = xmslMainTypicalGeologySurveyMapper
             .getXmslMainTypicalGeologySurveyList(xmslMainTypicalGeologySurvey);
 
         XmslBadGeologySurvey xmslBadGeologySurvey = new XmslBadGeologySurvey();
-        BeanUtils.copyProperties(geologicalCondition.getBadGeologySurvey(), xmslBadGeologySurvey);
+        if (geologicalCondition.getBadGeologySurvey() != null) {
+            BeanUtils.copyProperties(geologicalCondition.getBadGeologySurvey(), xmslBadGeologySurvey);
+        }
         List<XmslBadGeologySurvey> badGeologyList = xmslBadGeologySurveyMapper
             .getXmslBadGeologySurveyList(xmslBadGeologySurvey);
 

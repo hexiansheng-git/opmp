@@ -21,7 +21,7 @@ public interface XmslExtendMapper {
 
     int updateXmslExtend(XmslExtend xmslExtend);
 
-    int updateXmslExtendList(@Param("xmslExtendList") List<XmslExtend> xmslExtendList);
+    int updateXmslExtendList(@Param("list") List<XmslExtend> xmslExtendList);
 
     int deleteXmslExtend(XmslExtend xmslExtend);
 

@@ -24,8 +24,7 @@ public interface XmslLocalMaterialsSupplyMapper {
 
     int updateXmslLocalMaterialsSupply(XmslLocalMaterialsSupply xmslLocalMaterialsSupply);
 
-    int updateXmslLocalMaterialsSupplyList(
-        @Param("xmslLocalMaterialsSupplyList") List<XmslLocalMaterialsSupply> xmslLocalMaterialsSupplyList);
+    int updateXmslLocalMaterialsSupplyList(@Param("list") List<XmslLocalMaterialsSupply> xmslLocalMaterialsSupplyList);
 
     int deleteXmslLocalMaterialsSupply(XmslLocalMaterialsSupply xmslLocalMaterialsSupply);
 

@@ -24,8 +24,7 @@ public interface XmslMainTypicalGeologySurveyMapper {
 
     int updateXmslMainTypicalGeologySurvey(XmslMainTypicalGeologySurvey xmslMainTypicalGeologySurvey);
 
-    int updateXmslMainTypicalGeologySurveyList(
-        @Param("xmslMainTypicalGeologySurveyList") List<XmslMainTypicalGeologySurvey> xmslMainTypicalGeologySurveyList);
+    int updateXmslMainTypicalGeologySurveyList(@Param("list") List<XmslMainTypicalGeologySurvey> xmslMainTypicalGeologySurveyList);
 
     int deleteXmslMainTypicalGeologySurvey(XmslMainTypicalGeologySurvey xmslMainTypicalGeologySurvey);
 

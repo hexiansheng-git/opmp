@@ -23,8 +23,7 @@ public interface XmslBadGeologySurveyMapper {
 
     int updateXmslBadGeologySurvey(XmslBadGeologySurvey xmslBadGeologySurvey);
 
-    int updateXmslBadGeologySurveyList(
-        @Param("xmslBadGeologySurveyList") List<XmslBadGeologySurvey> xmslBadGeologySurveyList);
+    int updateXmslBadGeologySurveyList(@Param("list") List<XmslBadGeologySurvey> xmslBadGeologySurveyList);
 
     int deleteXmslBadGeologySurvey(XmslBadGeologySurvey xmslBadGeologySurvey);
 

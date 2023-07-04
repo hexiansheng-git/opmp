@@ -24,8 +24,7 @@ public interface XmslLocalEquipmentSupplyMapper {
 
     int updateXmslLocalEquipmentSupply(XmslLocalEquipmentSupply xmslLocalEquipmentSupply);
 
-    int updateXmslLocalEquipmentSupplyList(
-        @Param("xmslLocalEquipmentSupplyList") List<XmslLocalEquipmentSupply> xmslLocalEquipmentSupplyList);
+    int updateXmslLocalEquipmentSupplyList(@Param("list") List<XmslLocalEquipmentSupply> xmslLocalEquipmentSupplyList);
 
     int deleteXmslLocalEquipmentSupply(XmslLocalEquipmentSupply xmslLocalEquipmentSupply);
 

@@ -26,8 +26,7 @@ public interface XmslBasicFacilitiesConditionsMapper {
     int updateXmslBasicFacilitiesConditions(
         XmslBasicFacilitiesConditions xmslBasicFacilitiesConditions);
 
-    int updateXmslBasicFacilitiesConditionsList(
-        @Param("xmslBasicFacilitiesConditionsList") List<XmslBasicFacilitiesConditions> xmslBasicFacilitiesConditionsList);
+    int updateXmslBasicFacilitiesConditionsList(@Param("list") List<XmslBasicFacilitiesConditions> xmslBasicFacilitiesConditionsList);
 
     int deleteXmslBasicFacilitiesConditions(
         XmslBasicFacilitiesConditions xmslBasicFacilitiesConditions);

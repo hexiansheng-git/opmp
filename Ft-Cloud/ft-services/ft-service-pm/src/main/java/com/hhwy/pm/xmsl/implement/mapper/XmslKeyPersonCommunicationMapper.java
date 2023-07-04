@@ -24,8 +24,7 @@ public interface XmslKeyPersonCommunicationMapper {
 
     int updateXmslKeyPersonCommunication(XmslKeyPersonCommunication xmslKeyPersonCommunication);
 
-    int updateXmslKeyPersonCommunicationList(
-        @Param("xmslKeyPersonCommunicationList") List<XmslKeyPersonCommunication> xmslKeyPersonCommunicationList);
+    int updateXmslKeyPersonCommunicationList(@Param("list") List<XmslKeyPersonCommunication> xmslKeyPersonCommunicationList);
 
     int deleteXmslKeyPersonCommunication(XmslKeyPersonCommunication xmslKeyPersonCommunication);
 
