@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.hhwy.factory.RemoteDemoFallbackFactory
+  com.hhwy.feign.factory.RemoteDemoFallbackFactory
