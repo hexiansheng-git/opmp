@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.xmsl.implement.mapper.XmslMainTypicalGeologySurveyMapper">
+
+  <resultMap type="com.hhwy.pm.xmsl.implement.domain.XmslMainTypicalGeologySurvey"
+    id="XmslMainTypicalGeologySurveyResultMap">
+    <result property="id" column="id"/>
+    <result property="mainPosition" column="main_position"/>
+    <result property="ownerDepth" column="owner_depth"/>
+    <result property="ownerDescription" column="owner_description"/>
+    <result property="projectDepDepth" column="project_dep_depth"/>
+    <result property="projectDepDescription" column="project_dep_description"/>
+    <result property="projectDepSurveyMethod" column="project_dep_survey_method"/>
+    <result property="fileGroupId" column="file_group_id"/>
+    <result property="remark" column="remark"/>
+    <result property="regionId" column="region_id"/>
+    <result property="regionName" column="region_name"/>
+    <result property="projectId" column="project_id"/>
+    <result property="projectName" column="project_name"/>
+    <result property="deptId" column="dept_id"/>
+    <result property="createUser" column="create_user"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateUser" column="update_user"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="delUser" column="del_user"/>
+    <result property="delTime" column="del_time"/>
+    <result property="delFlag" column="del_flag"/>
+    <result property="ptVar1" column="pt_var1"/>
+    <result property="ptVar2" column="pt_var2"/>
+    <result property="ptVar3" column="pt_var3"/>
+    <result property="ptVar4" column="pt_var4"/>
+    <result property="ptVar5" column="pt_var5"/>
+  </resultMap>
+
+  <select id="getXmslMainTypicalGeologySurvey" resultMap="XmslMainTypicalGeologySurveyResultMap">
+    select
+    `id`
+    ,`xmslMain`
+    ,`main_position`
+    ,`owner_depth`
+    ,`owner_description`
+    ,`project_dep_depth`
+    ,`project_dep_description`
+    ,`project_dep_survey_method`
+    ,`file_group_id`
+    ,`remark`
+    ,`region_id`
+    ,`region_name`
+    ,`project_id`
+    ,`project_name`
+    ,`dept_id`
+    ,`create_user`
+    ,`create_time`
+    ,`update_user`
+    ,`update_time`
+    ,`del_user`
+    ,`del_time`
+    ,`del_flag`
+    ,`pt_var1`
+    ,`pt_var2`
+    ,`pt_var3`
+    ,`pt_var4`
+    ,`pt_var5`
+    from xmsl_main_typical_geology_survey
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="mainPosition != null  and mainPosition != ''">and `main_position` =
+        #{mainPosition}
+      </if>
+      <if test="ownerDepth != null  and ownerDepth != ''">and `owner_depth` = #{ownerDepth}</if>
+      <if test="ownerDescription != null  and ownerDescription != ''">and `owner_description` =
+        #{ownerDescription}
+      </if>
+      <if test="projectDepDepth != null  and projectDepDepth != ''">and `project_dep_depth` =
+        #{projectDepDepth}
+      </if>
+      <if test="projectDepDescription != null  and projectDepDescription != ''">and
+        `project_dep_description` = #{projectDepDescription}
+      </if>
+      <if test="projectDepSurveyMethod != null  and projectDepSurveyMethod != ''">and
+        `project_dep_survey_method` = #{projectDepSurveyMethod}
+      </if>
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}
+      </if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <select id="getXmslMainTypicalGeologySurveyList"
+    resultMap="XmslMainTypicalGeologySurveyResultMap">
+    select
+    `id`
+    ,`xmslMain`
+    ,`main_position`
+    ,`owner_depth`
+    ,`owner_description`
+    ,`project_dep_depth`
+    ,`project_dep_description`
+    ,`project_dep_survey_method`
+    ,`file_group_id`
+    ,`remark`
+    ,`region_id`
+    ,`region_name`
+    ,`project_id`
+    ,`project_name`
+    ,`dept_id`
+    ,`create_user`
+    ,`create_time`
+    ,`update_user`
+    ,`update_time`
+    ,`del_user`
+    ,`del_time`
+    ,`del_flag`
+    ,`pt_var1`
+    ,`pt_var2`
+    ,`pt_var3`
+    ,`pt_var4`
+    ,`pt_var5`
+    from xmsl_main_typical_geology_survey
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="mainPosition != null  and mainPosition != ''">and `main_position` =
+        #{mainPosition}
+      </if>
+      <if test="ownerDepth != null  and ownerDepth != ''">and `owner_depth` = #{ownerDepth}</if>
+      <if test="ownerDescription != null  and ownerDescription != ''">and `owner_description` =
+        #{ownerDescription}
+      </if>
+      <if test="projectDepDepth != null  and projectDepDepth != ''">and `project_dep_depth` =
+        #{projectDepDepth}
+      </if>
+      <if test="projectDepDescription != null  and projectDepDescription != ''">and
+        `project_dep_description` = #{projectDepDescription}
+      </if>
+      <if test="projectDepSurveyMethod != null  and projectDepSurveyMethod != ''">and
+        `project_dep_survey_method` = #{projectDepSurveyMethod}
+      </if>
+      <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}
+      </if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <insert id="insertXmslMainTypicalGeologySurvey" useGeneratedKeys="true" keyProperty="id">
+    insert into xmsl_main_typical_geology_survey
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null ">`id`,</if>
+      <if test="mainPosition != null  and mainPosition != ''">`main_position`,</if>
+      <if test="ownerDepth != null  and ownerDepth != ''">`owner_depth`,</if>
+      <if test="ownerDescription != null  and ownerDescription != ''">`owner_description`,</if>
+      <if test="projectDepDepth != null  and projectDepDepth != ''">`project_dep_depth`,</if>
+      <if test="projectDepDescription != null  and projectDepDescription != ''">
+        `project_dep_description`,
+      </if>
+      <if test="projectDepSurveyMethod != null  and projectDepSurveyMethod != ''">
+        `project_dep_survey_method`,
+      </if>
+      <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+      <if test="remark != null  and remark != ''">`remark`,</if>
+      <if test="regionId != null ">`region_id`,</if>
+      <if test="regionName != null  and regionName != ''">`region_name`,</if>
+      <if test="projectId != null ">`project_id`,</if>
+      <if test="projectName != null  and projectName != ''">`project_name`,</if>
+      <if test="deptId != null ">`dept_id`,</if>
+      <if test="createUser != null  and createUser != ''">`create_user`,</if>
+      <if test="createTime != null ">`create_time`,</if>
+      <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+      <if test="updateTime != null ">`update_time`,</if>
+      <if test="delUser != null  and delUser != ''">`del_user`,</if>
+      <if test="delTime != null ">`del_time`,</if>
+      <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null ">#{id},</if>
+      <if test="mainPosition != null  and mainPosition != ''">#{mainPosition},</if>
+      <if test="ownerDepth != null  and ownerDepth != ''">#{ownerDepth},</if>
+      <if test="ownerDescription != null  and ownerDescription != ''">#{ownerDescription},</if>
+      <if test="projectDepDepth != null  and projectDepDepth != ''">#{projectDepDepth},</if>
+      <if test="projectDepDescription != null  and projectDepDescription != ''">
+        #{projectDepDescription},
+      </if>
+      <if test="projectDepSurveyMethod != null  and projectDepSurveyMethod != ''">
+        #{projectDepSurveyMethod},
+      </if>
+      <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+      <if test="remark != null  and remark != ''">#{remark},</if>
+      <if test="regionId != null ">#{regionId},</if>
+      <if test="regionName != null  and regionName != ''">#{regionName},</if>
+      <if test="projectId != null ">#{projectId},</if>
+      <if test="projectName != null  and projectName != ''">#{projectName},</if>
+      <if test="deptId != null ">#{deptId},</if>
+      <if test="createUser != null  and createUser != ''">#{createUser},</if>
+      <if test="createTime != null ">#{createTime},</if>
+      <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+      <if test="updateTime != null ">#{updateTime},</if>
+      <if test="delUser != null  and delUser != ''">#{delUser},</if>
+      <if test="delTime != null ">#{delTime},</if>
+      <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+    </trim>
+  </insert>
+
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用xmlMainTypicalGeologySurvey -->
+  <insert id="insertXmslMainTypicalGeologySurveyList">
+    insert into xmsl_main_typical_geology_survey
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      `id`,
+      `xmslMain`,
+      `main_position`,
+      `owner_depth`,
+      `owner_description`,
+      `project_dep_depth`,
+      `project_dep_description`,
+      `project_dep_survey_method`,
+      `file_group_id`,
+      `remark`,
+      `region_id`,
+      `region_name`,
+      `project_id`,
+      `project_name`,
+      `dept_id`,
+      `create_user`,
+      `create_time`,
+      `update_user`,
+      `update_time`,
+      `del_user`,
+      `del_time`,
+      `pt_var1`,
+      `pt_var2`,
+      `pt_var3`,
+      `pt_var4`,
+      `pt_var5`,
+    </trim>
+    values
+    <foreach collection="xmslMainTypicalGeologySurveyList" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{item.id},
+        #{item.mainPosition},
+        #{item.ownerDepth},
+        #{item.ownerDescription},
+        #{item.projectDepDepth},
+        #{item.projectDepDescription},
+        #{item.projectDepSurveyMethod},
+        #{item.fileGroupId},
+        #{item.remark},
+        #{item.regionId},
+        #{item.regionName},
+        #{item.projectId},
+        #{item.projectName},
+        #{item.deptId},
+        #{item.createUser},
+        #{item.createTime},
+        #{item.updateUser},
+        #{item.updateTime},
+        #{item.delUser},
+        #{item.delTime},
+        #{item.ptVar1},
+        #{item.ptVar2},
+        #{item.ptVar3},
+        #{item.ptVar4},
+        #{item.ptVar5},
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="updateXmslMainTypicalGeologySurvey">
+    update xmsl_main_typical_geology_survey
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="id != null ">`id` = #{id},</if>
+      <if test="mainPosition != null  and  mainPosition != ''">`main_position` = #{mainPosition},
+      </if>
+      <if test="ownerDepth != null  and  ownerDepth != ''">`owner_depth` = #{ownerDepth},</if>
+      <if test="ownerDescription != null  and  ownerDescription != ''">`owner_description` =
+        #{ownerDescription},
+      </if>
+      <if test="projectDepDepth != null  and  projectDepDepth != ''">`project_dep_depth` =
+        #{projectDepDepth},
+      </if>
+      <if test="projectDepDescription != null  and  projectDepDescription != ''">
+        `project_dep_description` = #{projectDepDescription},
+      </if>
+      <if test="projectDepSurveyMethod != null  and  projectDepSurveyMethod != ''">
+        `project_dep_survey_method` = #{projectDepSurveyMethod},
+      </if>
+      <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+      <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+      <if test="regionId != null ">`region_id` = #{regionId},</if>
+      <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+      <if test="projectId != null ">`project_id` = #{projectId},</if>
+      <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+      <if test="deptId != null ">`dept_id` = #{deptId},</if>
+      <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+      <if test="createTime != null ">`create_time` = #{createTime},</if>
+      <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+      <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+      <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+      <if test="delTime != null ">`del_time` = #{delTime},</if>
+      <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+      <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+      <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+      <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+      <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+      <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+    </trim>
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+    </where>
+  </update>
+
+  <update id="updateXmslMainTypicalGeologySurveyList">
+    update xmsl_main_typical_geology_survey
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
+        </foreach>
+      </trim>
+      <trim prefix="main_position  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.mainPosition}
+        </foreach>
+      </trim>
+      <trim prefix="owner_depth  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ownerDepth}
+        </foreach>
+      </trim>
+      <trim prefix="owner_description  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ownerDescription}
+        </foreach>
+      </trim>
+      <trim prefix="project_dep_depth  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectDepDepth}
+        </foreach>
+      </trim>
+      <trim prefix="project_dep_description  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectDepDescription}
+        </foreach>
+      </trim>
+      <trim prefix="project_dep_survey_method  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectDepSurveyMethod}
+        </foreach>
+      </trim>
+      <trim prefix="file_group_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.fileGroupId}
+        </foreach>
+      </trim>
+      <trim prefix="remark  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.remark}
+        </foreach>
+      </trim>
+      <trim prefix="region_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionId}
+        </foreach>
+      </trim>
+      <trim prefix="region_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionName}
+        </foreach>
+      </trim>
+      <trim prefix="project_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectId}
+        </foreach>
+      </trim>
+      <trim prefix="project_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectName}
+        </foreach>
+      </trim>
+      <trim prefix="dept_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.deptId}
+        </foreach>
+      </trim>
+      <trim prefix="create_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUser}
+        </foreach>
+      </trim>
+      <trim prefix="create_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delUser}
+        </foreach>
+      </trim>
+      <trim prefix="del_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var1  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar1}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var2  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar2}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var3  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar3}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var4  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar4}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var5  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar5}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
+  </update>
+
+  <update id="deleteXmslMainTypicalGeologySurvey">
+    update `xmsl_main_typical_geology_survey` set del_flag = 1
+    <where>
+      and `id` = #{id}
+    </where>
+  </update>
+
+  <update id="deleteXmslMainTypicalGeologySurveyByPks">
+    update `xmsl_main_typical_geology_survey` set del_flag = 1
+    <where>
+      `id` in
+      <foreach item="id" collection="xmslMainTypicalGeologySurveyPkList" open="(" separator=","
+        close=")">
+        #{id}
+      </foreach>
+    </where>
+  </update>
+</mapper>

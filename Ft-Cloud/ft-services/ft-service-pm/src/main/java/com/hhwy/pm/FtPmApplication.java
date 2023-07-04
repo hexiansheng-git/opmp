@@ -1,4 +1,4 @@
-package com.hhwy;
+package com.hhwy.pm;
 
 import com.hhwy.common.security.annotation.EnableFtFeignClients;
 import com.hhwy.common.tenant.annotation.EnableFtTenantClient;
