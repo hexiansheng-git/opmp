@@ -3,7 +3,7 @@ package com.hhwy.pm.xmsl.project.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.*;
 import com.hhwy.pm.xmsl.project.mapper.*;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
@@ -96,8 +96,8 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public List<XmslProjectEngineeringAmount> getXmslProjectEngineeringAmountTreeList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList){
         List<XmslProjectEngineeringAmount> treeList = new ArrayList<>();
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            Long pid = xmslProjectEngineeringAmount.getPid();
-            if(pid == null || pid == 0){
+            Long parentTreeId = xmslProjectEngineeringAmount.getParentTreeId();
+            if(parentTreeId == null || parentTreeId == 0){
                 this.getChildren(xmslProjectEngineeringAmount,xmslProjectEngineeringAmountList);
                 treeList.add(xmslProjectEngineeringAmount);
             }
@@ -113,7 +113,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     private void getChildren(XmslProjectEngineeringAmount root, List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList) {
         List<XmslProjectEngineeringAmount> children = new ArrayList<>();
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            if (xmslProjectEngineeringAmount.getPid() != null && xmslProjectEngineeringAmount.getPid().equals(root.getId())) {
+            if (xmslProjectEngineeringAmount.getParentTreeId() != null && xmslProjectEngineeringAmount.getParentTreeId().equals(root.getTreeId())) {
                 getChildren(xmslProjectEngineeringAmount, xmslProjectEngineeringAmountList);
                 children.add(xmslProjectEngineeringAmount);
             }
@@ -168,15 +168,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
     }
 
-    @Transactional
-    public int insertProjectBasicInfoList(List<XmslProjectBasicInfo> xmslProjectBasicInfoList) {
-        for (XmslProjectBasicInfo xmslProjectBasicInfo : xmslProjectBasicInfoList) {
-            xmslProjectBasicInfo.setCreateUser(SecurityUtils.getUserName());
-            xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
-        }
-        return xmslProjectBasicInfoMapper.insertProjectBasicInfoList(xmslProjectBasicInfoList);
-    }
-
     /**
      * 修改项目基本信息
      * @param xmslProjectBasicInfo
@@ -211,15 +202,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         xmslProjectBasicInfo.setUpdateUser(SecurityUtils.getUserName());
         xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
-    }
-
-    @Transactional
-    public int updateProjectBasicInfoList(List<XmslProjectBasicInfo> xmslProjectBasicInfoList) {
-        for (XmslProjectBasicInfo xmslProjectBasicInfo : xmslProjectBasicInfoList) {
-            xmslProjectBasicInfo.setUpdateUser(SecurityUtils.getUserName());
-            xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslProjectBasicInfoMapper.updateProjectBasicInfoList(xmslProjectBasicInfoList);
     }
     
     @Transactional

@@ -3,7 +3,7 @@ package com.hhwy.pm.xmsl.project.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBridgeStructure;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectBridgeStructureMapper;
@@ -24,21 +24,9 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
     @Autowired
     private XmslProjectBridgeStructureMapper xmslProjectBridgeStructureMapper;
 
-                                                                                                                                                                                                                                                                                                                                        
-    public XmslProjectBridgeStructure getProjectBridgeStructure(XmslProjectBridgeStructure xmslProjectBridgeStructure) {
-        return xmslProjectBridgeStructureMapper.getProjectBridgeStructure(xmslProjectBridgeStructure);
-    }
-
+    @Override
     public List<XmslProjectBridgeStructure> getProjectBridgeStructureList(XmslProjectBridgeStructure xmslProjectBridgeStructure) {
         return xmslProjectBridgeStructureMapper.getProjectBridgeStructureList(xmslProjectBridgeStructure);
-    }
-
-    @Transactional
-    public int insertProjectBridgeStructure(XmslProjectBridgeStructure xmslProjectBridgeStructure) {
-        xmslProjectBridgeStructure.setId(IdWorker.createId());
-        xmslProjectBridgeStructure.setCreateUser(SecurityUtils.getUserName());
-        xmslProjectBridgeStructure.setCreateTime(DateUtils.getNowDate());
-        return xmslProjectBridgeStructureMapper.insertProjectBridgeStructure(xmslProjectBridgeStructure);
     }
 
     /**
@@ -53,16 +41,8 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
         for (XmslProjectBridgeStructure xmslProjectBridgeStructure : xmslProjectBridgeStructureList) {
             Long projectBridgeStructureId = xmslProjectBridgeStructure.getId();
             if(projectBridgeStructureId == null){
-//                projectBridgeStructure.setProjectId(projectBasicInfo.getId());
-//                projectBridgeStructure.setProjectBasicInfoId(projectBasicInfo.getId());
-//                projectBridgeStructure.setProjectName(projectBasicInfo.getProjectName());
-//                projectBridgeStructure.setId(IdWorker.createId());
-//                projectBridgeStructure.setCreateUser(SecurityUtils.getUserName());
-//                projectBridgeStructure.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslProjectBridgeStructure);
             }else{
-//                projectBridgeStructure.setUpdateUser(SecurityUtils.getUserName());
-//                projectBridgeStructure.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslProjectBridgeStructure);
             }
         }
@@ -87,17 +67,13 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
             xmslProjectBridgeStructure.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
             xmslProjectBridgeStructure.setProjectId(xmslProjectBasicInfo.getProjectId());
             xmslProjectBridgeStructure.setProjectName(xmslProjectBasicInfo.getProjectName());
+            xmslProjectBridgeStructure.setRegionId(xmslProjectBasicInfo.getRegionId());
+            xmslProjectBridgeStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
+            xmslProjectBridgeStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectBridgeStructure.setCreateUser(SecurityUtils.getUserName());
             xmslProjectBridgeStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectBridgeStructureMapper.insertProjectBridgeStructureList(xmslProjectBridgeStructureList);
-    }
-
-    @Transactional
-    public int updateProjectBridgeStructure(XmslProjectBridgeStructure xmslProjectBridgeStructure) {
-        xmslProjectBridgeStructure.setUpdateUser(SecurityUtils.getUserName());
-        xmslProjectBridgeStructure.setUpdateTime(DateUtils.getNowDate());
-        return xmslProjectBridgeStructureMapper.updateProjectBridgeStructure(xmslProjectBridgeStructure);
     }
 
     @Transactional
@@ -108,7 +84,8 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
         }
         return xmslProjectBridgeStructureMapper.updateProjectBridgeStructureList(xmslProjectBridgeStructureList);
     }
-    
+
+    @Override
     @Transactional
     public int deleteProjectBridgeStructure(XmslProjectBridgeStructure xmslProjectBridgeStructure) {
         xmslProjectBridgeStructure.setUpdateUser(SecurityUtils.getUserName());
@@ -116,6 +93,7 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
         return xmslProjectBridgeStructureMapper.deleteProjectBridgeStructure(xmslProjectBridgeStructure);
     }
 
+    @Override
     @Transactional
     public int deleteProjectBridgeStructureByPks(List<Long> projectBridgeStructurePkList) {
         return xmslProjectBridgeStructureMapper.deleteProjectBridgeStructureByPks(projectBridgeStructurePkList);

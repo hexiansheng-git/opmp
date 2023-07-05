@@ -6,7 +6,8 @@
 
     <resultMap type="com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount" id="ProjectEngineeringAmountResultMap">
         <result property="id" column="id"/>
-        <result property="pid" column="pid"/>
+        <result property="treeId" column="tree_id"/>
+        <result property="parentTreeId" column="parent_tree_id"/>
         <result property="projectBasicInfoId" column="project_basic_info_id"/>
         <result property="projectId" column="project_id"/>
         <result property="projectName" column="project_name"/>
@@ -34,7 +35,8 @@
     <select id="getProjectEngineeringAmount" resultMap="ProjectEngineeringAmountResultMap">
         select
         `id`
-        ,`pid`
+        ,`tree_id`
+        ,`parent_tree_id`
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
@@ -61,7 +63,8 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="treeId != null ">and `tree_id` = #{treeId}</if>
+            <if test="parentTreeId != null ">and `parent_tree_id` = #{parentTreeId}</if>
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
@@ -93,7 +96,8 @@
     <select id="getProjectEngineeringAmountList" resultMap="ProjectEngineeringAmountResultMap">
         select
         `id`
-        ,`pid`
+        ,`tree_id`
+        ,`parent_tree_id`
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
@@ -118,9 +122,49 @@
         ,`pt_var5`
         from xmsl_project_engineering_amount
         <where>
-            del_flag = "0"
+            del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="treeId != null ">and `tree_id` = #{treeId}</if>
+            <if test="parentTreeId != null ">and `parent_tree_id` = #{parentTreeId}</if>
+            <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="engineeringProject != null  and engineeringProject != ''">and `engineering_project` =
+                #{engineeringProject}
+            </if>
+            <if test="units != null  and units != ''">and `units` = #{units}</if>
+            <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="getProjectEngineeringAmountExportVoList" resultType="com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo">
+        select
+        `engineering_project` engineeringProject
+        ,`units` units
+        ,`amount` amount
+        ,`remark` remark
+        from xmsl_project_engineering_amount
+        <where>
+            del_flag = '0'
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="treeId != null ">and `tree_id` = #{treeId}</if>
+            <if test="parentTreeId != null ">and `parent_tree_id` = #{parentTreeId}</if>
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
@@ -153,7 +197,8 @@
         insert into xmsl_project_engineering_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="pid != null ">`pid`,</if>
+            <if test="treeId != null ">`tree_id`,</if>
+            <if test="parentTreeId != null ">`parent_tree_id`,</if>
             <if test="projectBasicInfoId != null ">`project_basic_info_id`,</if>
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
@@ -179,7 +224,8 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="pid != null ">#{pid},</if>
+            <if test="treeId != null ">#{treeId},</if>
+            <if test="parentTreeId != null ">#{parentTreeId},</if>
             <if test="projectBasicInfoId != null ">#{projectBasicInfoId},</if>
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
@@ -210,7 +256,8 @@
         insert into xmsl_project_engineering_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `pid`,
+            `tree_id`,
+            `parent_tree_id`,
             `project_basic_info_id`,
             `project_id`,
             `project_name`,
@@ -237,7 +284,8 @@
         <foreach collection="xmslProjectEngineeringAmountList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.pid},
+                #{item.treeId},
+                #{item.parentTreeId},
                 #{item.projectBasicInfoId},
                 #{item.projectId},
                 #{item.projectName},
@@ -266,7 +314,8 @@
     <update id="updateProjectEngineeringAmount">
         update xmsl_project_engineering_amount
         <trim prefix="SET" suffixOverrides=",">
-            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="treeId != null ">`tree_id` = #{treeId},</if>
+            <if test="parentTreeId != null ">`parent_tree_id` = #{parentTreeId},</if>
             <if test="projectBasicInfoId != null ">`project_basic_info_id` = #{projectBasicInfoId},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
@@ -279,13 +328,8 @@
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
-            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-            <if test="createTime != null ">`create_time` = #{createTime},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-            <if test="delTime != null ">`del_time` = #{delTime},</if>
-            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -300,9 +344,14 @@
     <update id="updateProjectEngineeringAmountList">
         update xmsl_project_engineering_amount
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="pid  = case" suffix="end,">
+            <trim prefix="tree_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.pid}
+                    when `id`=#{item.id} then #{item.treeId}
+                </foreach>
+            </trim>
+            <trim prefix="parent_tree_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.parentTreeId}
                 </foreach>
             </trim>
             <trim prefix="project_basic_info_id  = case" suffix="end,">
@@ -355,16 +404,6 @@
                     when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
-            <trim prefix="create_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUser}
-                </foreach>
-            </trim>
-            <trim prefix="create_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createTime}
-                </foreach>
-            </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateUser}
@@ -373,21 +412,6 @@
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delUser}
-                </foreach>
-            </trim>
-            <trim prefix="del_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
@@ -423,14 +447,14 @@
     </update>
 
     <update id="deleteProjectEngineeringAmount">
-        update `xmsl_project_engineering_amount` set del_flag = 1
+        update `xmsl_project_engineering_amount` set del_flag = '1'
         <where>
             and `id` = #{id}
         </where>
     </update>
 
     <update id="deleteProjectEngineeringAmountByPks">
-        update `xmsl_project_engineering_amount` set del_flag = 1
+        update `xmsl_project_engineering_amount` set del_flag = '1'
         <where>
             `id` in
             <foreach item="id" collection="projectEngineeringAmountPkList" open="(" separator="," close=")">

@@ -5,8 +5,12 @@ import java.util.List;
 import java.io.IOException;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
+
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -31,7 +35,8 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @return
      */
     @GetMapping("getProjectBasicInfoById")
-    public AjaxResult getProjectBasicInfoById(Long id){
+    @Validated(ValidationGroups.Get.class)
+    public AjaxResult getProjectBasicInfoById(@NotNull(message = "id不能为空",groups = ValidationGroups.Get.class) Long id){
         if(id == null){
             return AjaxResult.error("id不能为空！");
         }
@@ -51,7 +56,7 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @return
      */
     @GetMapping("/list")
-    public AjaxResult getProjectBasicInfoList(XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult getProjectBasicInfoList(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo xmslProjectBasicInfoParam){
         startPage();
         List<XmslProjectBasicInfo> xmslProjectBasicInfoList = projectBasicInfoService.getProjectBasicInfoList(xmslProjectBasicInfoParam);
         return getDataTableAjaxResult(xmslProjectBasicInfoList);
@@ -63,15 +68,9 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @return
      */
     @PostMapping("/add")
-    public AjaxResult insertProjectBasicInfo(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult insertProjectBasicInfo(@Validated(ValidationGroups.Save.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         projectBasicInfoService.insertProjectBasicInfo(xmslProjectBasicInfoParam);
         return AjaxResult.success(xmslProjectBasicInfoParam);
-    }
-
-    @PostMapping("/list")
-    public AjaxResult insertProjectBasicInfoList(@RequestBody List<XmslProjectBasicInfo> xmslProjectBasicInfoListParam){
-        projectBasicInfoService.insertProjectBasicInfoList(xmslProjectBasicInfoListParam);
-        return AjaxResult.success(xmslProjectBasicInfoListParam);
     }
 
     /**
@@ -80,24 +79,19 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @return
      */
     @PutMapping("/update")
-    public AjaxResult updateProjectBasicInfo(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult updateProjectBasicInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         int i = projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
         return toAjax(i);
     }
-
-    @PutMapping("/list")
-    public AjaxResult updateProjectBasicInfoList(@RequestBody List<XmslProjectBasicInfo> xmslProjectBasicInfoListParam){
-        return toAjax(projectBasicInfoService.updateProjectBasicInfoList(xmslProjectBasicInfoListParam));
-    }
     
     @DeleteMapping("/remove")
-    public AjaxResult deleteProjectBasicInfo(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult deleteProjectBasicInfo(@Validated(ValidationGroups.Delete.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         return toAjax(projectBasicInfoService.deleteProjectBasicInfo(xmslProjectBasicInfoParam));
     }
 
-    @DeleteMapping("/remove/{pks}")
-    public AjaxResult deleteProjectBasicInfoByPks(@PathVariable Long[] pks){
-        List<Long> projectBasicInfoPkList = Arrays.asList(pks);
+    @DeleteMapping("/remove/{ids}")
+    public AjaxResult deleteProjectBasicInfoByPks(@PathVariable Long[] ids){
+        List<Long> projectBasicInfoPkList = Arrays.asList(ids);
         return toAjax(projectBasicInfoService.deleteProjectBasicInfoByPks(projectBasicInfoPkList));
     }
     

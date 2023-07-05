@@ -3,9 +3,10 @@ package com.hhwy.pm.xmsl.project.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectEngineeringAmountMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -24,21 +25,9 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     @Autowired
     private XmslProjectEngineeringAmountMapper xmslProjectEngineeringAmountMapper;
 
-                                                                                                                                                                                                                                                                                                                
-    public XmslProjectEngineeringAmount getProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount) {
-        return xmslProjectEngineeringAmountMapper.getProjectEngineeringAmount(xmslProjectEngineeringAmount);
-    }
 
     public List<XmslProjectEngineeringAmount> getProjectEngineeringAmountList(XmslProjectEngineeringAmount xmslProjectEngineeringAmount) {
         return xmslProjectEngineeringAmountMapper.getProjectEngineeringAmountList(xmslProjectEngineeringAmount);
-    }
-
-    @Transactional
-    public int insertProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount) {
-        xmslProjectEngineeringAmount.setId(IdWorker.createId());
-        xmslProjectEngineeringAmount.setCreateUser(SecurityUtils.getUserName());
-        xmslProjectEngineeringAmount.setCreateTime(DateUtils.getNowDate());
-        return xmslProjectEngineeringAmountMapper.insertProjectEngineeringAmount(xmslProjectEngineeringAmount);
     }
 
     /**
@@ -53,16 +42,8 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
             Long projectEngineeringAmountId = xmslProjectEngineeringAmount.getId();
             if(projectEngineeringAmountId == null){
-//                projectEngineeringAmount.setId(IdWorker.createId());
-//                projectEngineeringAmount.setProjectId(projectBasicInfo.getProjectId());
-//                projectEngineeringAmount.setProjectBasicInfoId(projectBasicInfo.getId());
-//                projectEngineeringAmount.setProjectName(projectBasicInfo.getProjectName());
-//                projectEngineeringAmount.setCreateUser(SecurityUtils.getUserName());
-//                projectEngineeringAmount.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslProjectEngineeringAmount);
             }else{
-//                projectEngineeringAmount.setUpdateUser(SecurityUtils.getUserName());
-//                projectEngineeringAmount.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslProjectEngineeringAmount);
             }
         }
@@ -78,20 +59,17 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     public int insertProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList, XmslProjectBasicInfo xmslProjectBasicInfo) {
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
             xmslProjectEngineeringAmount.setId(IdWorker.createId());
+            xmslProjectEngineeringAmount.setTreeId(IdWorker.createId());
             xmslProjectEngineeringAmount.setProjectId(xmslProjectBasicInfo.getProjectId());
             xmslProjectEngineeringAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
             xmslProjectEngineeringAmount.setProjectName(xmslProjectBasicInfo.getProjectName());
+            xmslProjectEngineeringAmount.setRegionId(xmslProjectBasicInfo.getRegionId());
+            xmslProjectEngineeringAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
+            xmslProjectEngineeringAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectEngineeringAmount.setCreateUser(SecurityUtils.getUserName());
             xmslProjectEngineeringAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectEngineeringAmountMapper.insertProjectEngineeringAmountList(xmslProjectEngineeringAmountList);
-    }
-
-    @Transactional
-    public int updateProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount) {
-        xmslProjectEngineeringAmount.setUpdateUser(SecurityUtils.getUserName());
-        xmslProjectEngineeringAmount.setUpdateTime(DateUtils.getNowDate());
-        return xmslProjectEngineeringAmountMapper.updateProjectEngineeringAmount(xmslProjectEngineeringAmount);
     }
 
     @Transactional
@@ -113,5 +91,10 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     @Transactional
     public int deleteProjectEngineeringAmountByPks(List<Long> projectEngineeringAmountPkList) {
         return xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmountByPks(projectEngineeringAmountPkList);
+    }
+
+    @Override
+    public List<XmslProjectEngineeringAmountExportVo> getProjectEngineeringAmountExportVoList(XmslProjectEngineeringAmount projectEngineeringAmountParam) {
+        return xmslProjectEngineeringAmountMapper.getProjectEngineeringAmountExportVoList(projectEngineeringAmountParam);
     }
 }

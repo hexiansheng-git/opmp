@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.project.mapper;
 
 import java.util.List;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -28,4 +29,6 @@ public interface XmslProjectEngineeringAmountMapper {
     int deleteProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount);
 
     int deleteProjectEngineeringAmountByPks(@Param("projectEngineeringAmountPkList") List<Long> projectEngineeringAmountPkList);
+
+    List<XmslProjectEngineeringAmountExportVo> getProjectEngineeringAmountExportVoList(XmslProjectEngineeringAmount projectEngineeringAmountParam);
 }

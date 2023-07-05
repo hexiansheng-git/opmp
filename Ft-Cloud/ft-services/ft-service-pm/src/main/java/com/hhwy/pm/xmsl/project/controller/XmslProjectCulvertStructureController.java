@@ -1,14 +1,21 @@
 package com.hhwy.pm.xmsl.project.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectCulvertStructure;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectCulvertStructureService;
 import org.springframework.web.bind.annotation.*;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author han
@@ -22,57 +29,39 @@ public class XmslProjectCulvertStructureController extends BaseController{
     @Autowired
     private IXmslProjectCulvertStructureService projectCulvertStructureService;
 
-                                                                                                                                                                                                                                                                                                                                        
-//    @GetMapping
-//    public AjaxResult getProjectCulvertStructure(ProjectCulvertStructure projectCulvertStructureParam){
-//        ProjectCulvertStructure projectCulvertStructure =  projectCulvertStructureService.getProjectCulvertStructure(projectCulvertStructureParam);
-//        return AjaxResult.success(projectCulvertStructure);
-//    }
-//
-//    @GetMapping("/list")
-//    public AjaxResult getProjectCulvertStructureList(ProjectCulvertStructure projectCulvertStructureParam){
-//        startPage();
-//        List<ProjectCulvertStructure> projectCulvertStructureList = projectCulvertStructureService.getProjectCulvertStructureList(projectCulvertStructureParam);
-//        return getDataTableAjaxResult(projectCulvertStructureList);
-//    }
-//
-//    @PostMapping
-//    public AjaxResult insertProjectCulvertStructure(@RequestBody ProjectCulvertStructure projectCulvertStructureParam){
-//        projectCulvertStructureService.insertProjectCulvertStructure(projectCulvertStructureParam);
-//        return AjaxResult.success(projectCulvertStructureParam);
-//    }
-//
-//    @PostMapping("/list")
-//    public AjaxResult insertProjectCulvertStructureList(@RequestBody List<ProjectCulvertStructure> projectCulvertStructureListParam){
-//        projectCulvertStructureService.insertProjectCulvertStructureList(projectCulvertStructureListParam);
-//        return AjaxResult.success(projectCulvertStructureListParam);
-//    }
-//
-//    @PutMapping
-//    public AjaxResult updateProjectCulvertStructure(@RequestBody ProjectCulvertStructure projectCulvertStructureParam){
-//        return toAjax(projectCulvertStructureService.updateProjectCulvertStructure(projectCulvertStructureParam));
-//    }
-//
-//    @PutMapping("/list")
-//    public AjaxResult updateProjectCulvertStructureList(@RequestBody List<ProjectCulvertStructure> projectCulvertStructureListParam){
-//        return toAjax(projectCulvertStructureService.updateProjectCulvertStructureList(projectCulvertStructureListParam));
-//    }
     
-    @DeleteMapping
+    @PostMapping
     public AjaxResult deleteProjectCulvertStructure(@RequestBody XmslProjectCulvertStructure xmslProjectCulvertStructureParam){
         return toAjax(projectCulvertStructureService.deleteProjectCulvertStructure(xmslProjectCulvertStructureParam));
     }
 
-    @DeleteMapping("/{pks}")
-    public AjaxResult deleteProjectCulvertStructureByPks(@PathVariable Long[] pks){
-        List<Long> projectCulvertStructurePkList = Arrays.asList(pks);
+    @PostMapping("/remove/{ids}")
+    public AjaxResult deleteProjectCulvertStructureByPks(@PathVariable Long[] ids){
+        List<Long> projectCulvertStructurePkList = Arrays.asList(ids);
         return toAjax(projectCulvertStructureService.deleteProjectCulvertStructureByPks(projectCulvertStructurePkList));
     }
+
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("import")
+    public AjaxResult importProjectCulvertStructure(@RequestPart("file") MultipartFile file){
+        ExcelUtils<XmslProjectCulvertStructure> util = new ExcelUtils<>(XmslProjectCulvertStructure.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<XmslProjectCulvertStructure> xmslProjectCulvertStructureList = util.importExcel(inputStream);
+            return AjaxResult.success(xmslProjectCulvertStructureList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
     
-//    @GetMapping("/export")
-//    public void export(HttpServletResponse response, ProjectCulvertStructure projectCulvertStructureParam) throws IOException {
-//        List<ProjectCulvertStructure> projectCulvertStructureList = projectCulvertStructureService.getProjectCulvertStructureList(projectCulvertStructureParam);
-//        ExcelUtils<ProjectCulvertStructure> util = new ExcelUtils<>(ProjectCulvertStructure.class);
-//        util.exportExcel(response, projectCulvertStructureList, DateUtils.getDate());
-//    }
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, XmslProjectCulvertStructure projectCulvertStructureParam) throws IOException {
+        List<XmslProjectCulvertStructure> projectCulvertStructureList = projectCulvertStructureService.getProjectCulvertStructureList(projectCulvertStructureParam);
+        ExcelUtils<XmslProjectCulvertStructure> util = new ExcelUtils<>(XmslProjectCulvertStructure.class);
+        util.exportExcel(response, projectCulvertStructureList, DateUtils.getDate());
+    }
 }

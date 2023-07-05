@@ -9,19 +9,9 @@ import java.util.List;
  * @remark 主要材料数量
  */
 public interface IXmslProjectMaterialsAmountService {
-                                                                                                                                                                                                                                                                                                    
-//    ProjectMaterialsAmount getProjectMaterialsAmount(ProjectMaterialsAmount projectMaterialsAmount);
 
-//    List<ProjectMaterialsAmount> getProjectMaterialsAmountList(ProjectMaterialsAmount projectMaterialsAmount);
+    List<XmslProjectMaterialsAmount> getProjectMaterialsAmountList(XmslProjectMaterialsAmount projectMaterialsAmount);
 
-//    int insertProjectMaterialsAmount(ProjectMaterialsAmount projectMaterialsAmount);
-
-//    int insertProjectMaterialsAmountList(List<ProjectMaterialsAmount> projectMaterialsAmountList);
-
-//    int updateProjectMaterialsAmount(ProjectMaterialsAmount projectMaterialsAmount);
-
-//    int updateProjectMaterialsAmountList(List<ProjectMaterialsAmount> projectMaterialsAmountList);
-    
     int deleteProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount);
 
     int deleteProjectMaterialsAmountByPks(List<Long> projectMaterialsAmountPkList);

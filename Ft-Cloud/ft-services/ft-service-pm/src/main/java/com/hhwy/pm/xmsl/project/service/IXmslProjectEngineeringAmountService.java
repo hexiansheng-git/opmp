@@ -1,6 +1,8 @@
 package com.hhwy.pm.xmsl.project.service;
 
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
+
 import java.util.List;
 
 /**
@@ -9,20 +11,12 @@ import java.util.List;
  * @remark 主要工程数量
  */
 public interface IXmslProjectEngineeringAmountService {
-                                                                                                                                                                                                                                                                                                                
-//    ProjectEngineeringAmount getProjectEngineeringAmount(ProjectEngineeringAmount projectEngineeringAmount);
 
-//    List<ProjectEngineeringAmount> getProjectEngineeringAmountList(ProjectEngineeringAmount projectEngineeringAmount);
+    List<XmslProjectEngineeringAmount> getProjectEngineeringAmountList(XmslProjectEngineeringAmount projectEngineeringAmount);
 
-//    int insertProjectEngineeringAmount(ProjectEngineeringAmount projectEngineeringAmount);
-
-//    int insertProjectEngineeringAmountList(List<ProjectEngineeringAmount> projectEngineeringAmountList);
-
-//    int updateProjectEngineeringAmount(ProjectEngineeringAmount projectEngineeringAmount);
-
-//    int updateProjectEngineeringAmountList(List<ProjectEngineeringAmount> projectEngineeringAmountList);
-    
     int deleteProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount);
 
     int deleteProjectEngineeringAmountByPks(List<Long> projectEngineeringAmountPkList);
+
+    List<XmslProjectEngineeringAmountExportVo> getProjectEngineeringAmountExportVoList(XmslProjectEngineeringAmount projectEngineeringAmountParam);
 }

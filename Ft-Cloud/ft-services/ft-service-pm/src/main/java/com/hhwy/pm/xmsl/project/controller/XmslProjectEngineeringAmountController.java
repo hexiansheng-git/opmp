@@ -1,14 +1,27 @@
 package com.hhwy.pm.xmsl.project.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
+import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountImportVo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
+import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.BeanUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author han
@@ -22,57 +35,65 @@ public class XmslProjectEngineeringAmountController extends BaseController{
     @Autowired
     private IXmslProjectEngineeringAmountService projectEngineeringAmountService;
 
-                                                                                                                                                                                                                                                                                                                
-//    @GetMapping
-//    public AjaxResult getProjectEngineeringAmount(ProjectEngineeringAmount projectEngineeringAmountParam){
-//        ProjectEngineeringAmount projectEngineeringAmount =  projectEngineeringAmountService.getProjectEngineeringAmount(projectEngineeringAmountParam);
-//        return AjaxResult.success(projectEngineeringAmount);
-//    }
-//
-//    @GetMapping("/list")
-//    public AjaxResult getProjectEngineeringAmountList(ProjectEngineeringAmount projectEngineeringAmountParam){
-//        startPage();
-//        List<ProjectEngineeringAmount> projectEngineeringAmountList = projectEngineeringAmountService.getProjectEngineeringAmountList(projectEngineeringAmountParam);
-//        return getDataTableAjaxResult(projectEngineeringAmountList);
-//    }
-//
-//    @PostMapping
-//    public AjaxResult insertProjectEngineeringAmount(@RequestBody ProjectEngineeringAmount projectEngineeringAmountParam){
-//        projectEngineeringAmountService.insertProjectEngineeringAmount(projectEngineeringAmountParam);
-//        return AjaxResult.success(projectEngineeringAmountParam);
-//    }
-//
-//    @PostMapping("/list")
-//    public AjaxResult insertProjectEngineeringAmountList(@RequestBody List<ProjectEngineeringAmount> projectEngineeringAmountListParam){
-//        projectEngineeringAmountService.insertProjectEngineeringAmountList(projectEngineeringAmountListParam);
-//        return AjaxResult.success(projectEngineeringAmountListParam);
-//    }
-//
-//    @PutMapping
-//    public AjaxResult updateProjectEngineeringAmount(@RequestBody ProjectEngineeringAmount projectEngineeringAmountParam){
-//        return toAjax(projectEngineeringAmountService.updateProjectEngineeringAmount(projectEngineeringAmountParam));
-//    }
-//
-//    @PutMapping("/list")
-//    public AjaxResult updateProjectEngineeringAmountList(@RequestBody List<ProjectEngineeringAmount> projectEngineeringAmountListParam){
-//        return toAjax(projectEngineeringAmountService.updateProjectEngineeringAmountList(projectEngineeringAmountListParam));
-//    }
     
-    @DeleteMapping
+    @PostMapping
     public AjaxResult deleteProjectEngineeringAmount(@RequestBody XmslProjectEngineeringAmount xmslProjectEngineeringAmountParam){
         return toAjax(projectEngineeringAmountService.deleteProjectEngineeringAmount(xmslProjectEngineeringAmountParam));
     }
 
-    @DeleteMapping("/{pks}")
-    public AjaxResult deleteProjectEngineeringAmountByPks(@PathVariable Long[] pks){
-        List<Long> projectEngineeringAmountPkList = Arrays.asList(pks);
+    @PostMapping("/remove/{ids}")
+    public AjaxResult deleteProjectEngineeringAmountByPks(@PathVariable Long[] ids){
+        List<Long> projectEngineeringAmountPkList = Arrays.asList(ids);
         return toAjax(projectEngineeringAmountService.deleteProjectEngineeringAmountByPks(projectEngineeringAmountPkList));
     }
-    
-//    @GetMapping("/export")
-//    public void export(HttpServletResponse response, ProjectEngineeringAmount projectEngineeringAmountParam) throws IOException {
-//        List<ProjectEngineeringAmount> projectEngineeringAmountList = projectEngineeringAmountService.getProjectEngineeringAmountList(projectEngineeringAmountParam);
-//        ExcelUtils<ProjectEngineeringAmount> util = new ExcelUtils<>(ProjectEngineeringAmount.class);
-//        util.exportExcel(response, projectEngineeringAmountList, DateUtils.getDate());
-//    }
+
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("import")
+    public AjaxResult importProjectEngineeringAmount(@RequestPart("file") MultipartFile file){
+        ExcelUtils<XmslProjectEngineeringAmountImportVo> util = new ExcelUtils<>(XmslProjectEngineeringAmountImportVo.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<XmslProjectEngineeringAmountImportVo> xmslProjectEngineeringAmountImportVoList = util.importExcel(inputStream);
+            for (XmslProjectEngineeringAmountImportVo xmslProjectEngineeringAmountImportVo : xmslProjectEngineeringAmountImportVoList) {
+                xmslProjectEngineeringAmountImportVo.setTreeId(IdWorker.createId());
+            }
+            for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo1 : xmslProjectEngineeringAmountImportVoList) {
+                String parentInnerCode = projectEngineeringAmountImportVo1.getParentInnerCode();
+                if(StringUtils.isNotBlank(parentInnerCode)){
+                    for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo2 : xmslProjectEngineeringAmountImportVoList) {
+                        if(parentInnerCode.equals(projectEngineeringAmountImportVo2.getInnerCode())){
+                            projectEngineeringAmountImportVo1.setParentTreeId(projectEngineeringAmountImportVo2.getTreeId());
+                            break;
+                        }
+                    }
+                }
+            }
+            ArrayList<XmslProjectEngineeringAmount> resultList = new ArrayList<>();
+            for (XmslProjectEngineeringAmountImportVo projectEngineeringAmountImportVo : xmslProjectEngineeringAmountImportVoList) {
+                XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
+                BeanUtils.copyProperties(projectEngineeringAmountImportVo,xmslProjectEngineeringAmount);
+                resultList.add(xmslProjectEngineeringAmount);
+            }
+            return AjaxResult.success(resultList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param projectEngineeringAmountParam
+     * @throws IOException
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response,@Validated(ValidationGroups.Select.class)  XmslProjectEngineeringAmount projectEngineeringAmountParam) throws IOException {
+        List<XmslProjectEngineeringAmountExportVo> projectEngineeringAmountExportVoList = projectEngineeringAmountService.getProjectEngineeringAmountExportVoList(projectEngineeringAmountParam);
+        ExcelUtils<XmslProjectEngineeringAmountExportVo> util = new ExcelUtils<>(XmslProjectEngineeringAmountExportVo.class);
+        util.exportExcel(response, projectEngineeringAmountExportVoList, DateUtils.getDate());
+    }
 }

@@ -24,12 +24,8 @@ public interface IXmslProjectBasicInfoService {
 
     int insertProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
-    int insertProjectBasicInfoList(List<XmslProjectBasicInfo> xmslProjectBasicInfoList);
-
     int updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
-    int updateProjectBasicInfoList(List<XmslProjectBasicInfo> xmslProjectBasicInfoList);
-    
     int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
     int deleteProjectBasicInfoByPks(List<Long> projectBasicInfoPkList);

@@ -10,19 +10,9 @@ import java.util.List;
  * @remark 主要涵洞结构形式
  */
 public interface IXmslProjectCulvertStructureService {
-                                                                                                                                                                                                                                                                                                                                        
-//    ProjectCulvertStructure getProjectCulvertStructure(ProjectCulvertStructure projectCulvertStructure);
 
-//    List<ProjectCulvertStructure> getProjectCulvertStructureList(ProjectCulvertStructure projectCulvertStructure);
+    List<XmslProjectCulvertStructure> getProjectCulvertStructureList(XmslProjectCulvertStructure projectCulvertStructure);
 
-//    int insertProjectCulvertStructure(ProjectCulvertStructure projectCulvertStructure);
-
-//    int insertProjectCulvertStructureList(List<ProjectCulvertStructure> projectCulvertStructureList);
-
-//    int updateProjectCulvertStructure(ProjectCulvertStructure projectCulvertStructure);
-
-//    int updateProjectCulvertStructureList(List<ProjectCulvertStructure> projectCulvertStructureList);
-    
     int deleteProjectCulvertStructure(XmslProjectCulvertStructure xmslProjectCulvertStructure);
 
     int deleteProjectCulvertStructureByPks(List<Long> projectCulvertStructurePkList);

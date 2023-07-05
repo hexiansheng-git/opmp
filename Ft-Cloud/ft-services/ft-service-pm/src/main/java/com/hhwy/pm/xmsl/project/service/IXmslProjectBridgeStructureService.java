@@ -10,19 +10,9 @@ import java.util.List;
  * @remark 主要桥梁结构形式
  */
 public interface IXmslProjectBridgeStructureService {
-                                                                                                                                                                                                                                                                                                                                        
-//    ProjectBridgeStructure getProjectBridgeStructure(ProjectBridgeStructure projectBridgeStructure);
 
     List<XmslProjectBridgeStructure> getProjectBridgeStructureList(XmslProjectBridgeStructure xmslProjectBridgeStructure);
 
-//    int insertProjectBridgeStructure(ProjectBridgeStructure projectBridgeStructure);
-
-//    int insertProjectBridgeStructureList(List<ProjectBridgeStructure> projectBridgeStructureList);
-
-//    int updateProjectBridgeStructure(ProjectBridgeStructure projectBridgeStructure);
-
-//    int updateProjectBridgeStructureList(List<ProjectBridgeStructure> projectBridgeStructureList);
-    
     int deleteProjectBridgeStructure(XmslProjectBridgeStructure xmslProjectBridgeStructure);
 
     int deleteProjectBridgeStructureByPks(List<Long> projectBridgeStructurePkList);

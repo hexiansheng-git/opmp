@@ -27,50 +27,15 @@ public class XmslProjectBridgeStructureController extends BaseController{
     @Autowired
     private IXmslProjectBridgeStructureService projectBridgeStructureService;
 
-                                                                                                                                                                                                                                                                                                                                        
-//    @GetMapping
-//    public AjaxResult getProjectBridgeStructure(ProjectBridgeStructure projectBridgeStructureParam){
-//        ProjectBridgeStructure projectBridgeStructure =  projectBridgeStructureService.getProjectBridgeStructure(projectBridgeStructureParam);
-//        return AjaxResult.success(projectBridgeStructure);
-//    }
-//
-//    @GetMapping("/list")
-//    public AjaxResult getProjectBridgeStructureList(ProjectBridgeStructure projectBridgeStructureParam){
-//        startPage();
-//        List<ProjectBridgeStructure> projectBridgeStructureList = projectBridgeStructureService.getProjectBridgeStructureList(projectBridgeStructureParam);
-//        return getDataTableAjaxResult(projectBridgeStructureList);
-//    }
-//
-//    @PostMapping
-//    public AjaxResult insertProjectBridgeStructure(@RequestBody ProjectBridgeStructure projectBridgeStructureParam){
-//        projectBridgeStructureService.insertProjectBridgeStructure(projectBridgeStructureParam);
-//        return AjaxResult.success(projectBridgeStructureParam);
-//    }
-//
-//    @PostMapping("/list")
-//    public AjaxResult insertProjectBridgeStructureList(@RequestBody List<ProjectBridgeStructure> projectBridgeStructureListParam){
-//        projectBridgeStructureService.insertProjectBridgeStructureList(projectBridgeStructureListParam);
-//        return AjaxResult.success(projectBridgeStructureListParam);
-//    }
-//
-//    @PutMapping
-//    public AjaxResult updateProjectBridgeStructure(@RequestBody ProjectBridgeStructure projectBridgeStructureParam){
-//        return toAjax(projectBridgeStructureService.updateProjectBridgeStructure(projectBridgeStructureParam));
-//    }
-//
-//    @PutMapping("/list")
-//    public AjaxResult updateProjectBridgeStructureList(@RequestBody List<ProjectBridgeStructure> projectBridgeStructureListParam){
-//        return toAjax(projectBridgeStructureService.updateProjectBridgeStructureList(projectBridgeStructureListParam));
-//    }
     
-    @DeleteMapping
+    @PostMapping
     public AjaxResult deleteProjectBridgeStructure(@RequestBody XmslProjectBridgeStructure xmslProjectBridgeStructureParam){
         return toAjax(projectBridgeStructureService.deleteProjectBridgeStructure(xmslProjectBridgeStructureParam));
     }
 
-    @DeleteMapping("/{pks}")
-    public AjaxResult deleteProjectBridgeStructureByPks(@PathVariable Long[] pks){
-        List<Long> projectBridgeStructurePkList = Arrays.asList(pks);
+    @PostMapping("/remove/{ids}")
+    public AjaxResult deleteProjectBridgeStructureByPks(@PathVariable Long[] ids){
+        List<Long> projectBridgeStructurePkList = Arrays.asList(ids);
         return toAjax(projectBridgeStructureService.deleteProjectBridgeStructureByPks(projectBridgeStructurePkList));
     }
 

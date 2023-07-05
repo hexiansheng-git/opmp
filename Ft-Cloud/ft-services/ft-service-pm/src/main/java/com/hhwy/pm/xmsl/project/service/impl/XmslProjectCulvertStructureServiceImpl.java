@@ -3,7 +3,7 @@ package com.hhwy.pm.xmsl.project.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectCulvertStructure;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectCulvertStructureMapper;
@@ -24,21 +24,9 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
     @Autowired
     private XmslProjectCulvertStructureMapper xmslProjectCulvertStructureMapper;
 
-                                                                                                                                                                                                                                                                                                                                        
-    public XmslProjectCulvertStructure getProjectCulvertStructure(XmslProjectCulvertStructure xmslProjectCulvertStructure) {
-        return xmslProjectCulvertStructureMapper.getProjectCulvertStructure(xmslProjectCulvertStructure);
-    }
 
     public List<XmslProjectCulvertStructure> getProjectCulvertStructureList(XmslProjectCulvertStructure xmslProjectCulvertStructure) {
         return xmslProjectCulvertStructureMapper.getProjectCulvertStructureList(xmslProjectCulvertStructure);
-    }
-
-    @Transactional
-    public int insertProjectCulvertStructure(XmslProjectCulvertStructure xmslProjectCulvertStructure) {
-        xmslProjectCulvertStructure.setId(IdWorker.createId());
-        xmslProjectCulvertStructure.setCreateUser(SecurityUtils.getUserName());
-        xmslProjectCulvertStructure.setCreateTime(DateUtils.getNowDate());
-        return xmslProjectCulvertStructureMapper.insertProjectCulvertStructure(xmslProjectCulvertStructure);
     }
 
     /**
@@ -53,16 +41,8 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
         for (XmslProjectCulvertStructure xmslProjectCulvertStructure : xmslProjectCulvertStructureList) {
             Long projectCulvertStructureId = xmslProjectCulvertStructure.getId();
             if(projectCulvertStructureId == null){
-//                projectCulvertStructure.setId(IdWorker.createId());
-//                projectCulvertStructure.setProjectId(projectBasicInfo.getProjectId());
-//                projectCulvertStructure.setProjectBasicInfoId(projectBasicInfo.getId());
-//                projectCulvertStructure.setProjectName(projectBasicInfo.getProjectName());
-//                projectCulvertStructure.setCreateUser(SecurityUtils.getUserName());
-//                projectCulvertStructure.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslProjectCulvertStructure);
             }else{
-//                projectCulvertStructure.setUpdateUser(SecurityUtils.getUserName());
-//                projectCulvertStructure.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslProjectCulvertStructure);
             }
         }
@@ -81,17 +61,13 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
             xmslProjectCulvertStructure.setProjectId(xmslProjectBasicInfo.getProjectId());
             xmslProjectCulvertStructure.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
             xmslProjectCulvertStructure.setProjectName(xmslProjectBasicInfo.getProjectName());
+            xmslProjectCulvertStructure.setRegionId(xmslProjectBasicInfo.getRegionId());
+            xmslProjectCulvertStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
+            xmslProjectCulvertStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectCulvertStructure.setCreateUser(SecurityUtils.getUserName());
             xmslProjectCulvertStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectCulvertStructureMapper.insertProjectCulvertStructureList(xmslProjectCulvertStructureList);
-    }
-
-    @Transactional
-    public int updateProjectCulvertStructure(XmslProjectCulvertStructure xmslProjectCulvertStructure) {
-        xmslProjectCulvertStructure.setUpdateUser(SecurityUtils.getUserName());
-        xmslProjectCulvertStructure.setUpdateTime(DateUtils.getNowDate());
-        return xmslProjectCulvertStructureMapper.updateProjectCulvertStructure(xmslProjectCulvertStructure);
     }
 
     @Transactional

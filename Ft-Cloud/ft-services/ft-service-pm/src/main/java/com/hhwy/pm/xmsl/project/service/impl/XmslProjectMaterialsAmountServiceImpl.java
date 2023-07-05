@@ -3,7 +3,7 @@ package com.hhwy.pm.xmsl.project.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectMaterialsAmount;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectMaterialsAmountMapper;
@@ -24,21 +24,8 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
     @Autowired
     private XmslProjectMaterialsAmountMapper xmslProjectMaterialsAmountMapper;
 
-                                                                                                                                                                                                                                                                                                    
-    public XmslProjectMaterialsAmount getProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
-        return xmslProjectMaterialsAmountMapper.getProjectMaterialsAmount(xmslProjectMaterialsAmount);
-    }
-
     public List<XmslProjectMaterialsAmount> getProjectMaterialsAmountList(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
         return xmslProjectMaterialsAmountMapper.getProjectMaterialsAmountList(xmslProjectMaterialsAmount);
-    }
-
-    @Transactional
-    public int insertProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
-        xmslProjectMaterialsAmount.setId(IdWorker.createId());
-        xmslProjectMaterialsAmount.setCreateUser(SecurityUtils.getUserName());
-        xmslProjectMaterialsAmount.setCreateTime(DateUtils.getNowDate());
-        return xmslProjectMaterialsAmountMapper.insertProjectMaterialsAmount(xmslProjectMaterialsAmount);
     }
 
     /**
@@ -53,16 +40,8 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
         for (XmslProjectMaterialsAmount xmslProjectMaterialsAmount : xmslProjectMaterialsAmountList) {
             Long projectMaterialsAmountId = xmslProjectMaterialsAmount.getId();
             if(projectMaterialsAmountId == null){
-//                projectMaterialsAmount.setId(IdWorker.createId());
-//                projectMaterialsAmount.setProjectId(projectBasicInfo.getProjectId());
-//                projectMaterialsAmount.setProjectBasicInfoId(projectBasicInfo.getId());
-//                projectMaterialsAmount.setProjectName(projectBasicInfo.getProjectName());
-//                projectMaterialsAmount.setCreateUser(SecurityUtils.getUserName());
-//                projectMaterialsAmount.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslProjectMaterialsAmount);
             }else{
-//                projectMaterialsAmount.setUpdateUser(SecurityUtils.getUserName());
-//                projectMaterialsAmount.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslProjectMaterialsAmount);
             }
         }
@@ -86,17 +65,13 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
             xmslProjectMaterialsAmount.setProjectId(xmslProjectBasicInfo.getProjectId());
             xmslProjectMaterialsAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
             xmslProjectMaterialsAmount.setProjectName(xmslProjectBasicInfo.getProjectName());
+            xmslProjectMaterialsAmount.setRegionId(xmslProjectBasicInfo.getRegionId());
+            xmslProjectMaterialsAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
+            xmslProjectMaterialsAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectMaterialsAmount.setCreateUser(SecurityUtils.getUserName());
             xmslProjectMaterialsAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectMaterialsAmountMapper.insertProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
-    }
-
-    @Transactional
-    public int updateProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
-        xmslProjectMaterialsAmount.setUpdateUser(SecurityUtils.getUserName());
-        xmslProjectMaterialsAmount.setUpdateTime(DateUtils.getNowDate());
-        return xmslProjectMaterialsAmountMapper.updateProjectMaterialsAmount(xmslProjectMaterialsAmount);
     }
 
     /**
