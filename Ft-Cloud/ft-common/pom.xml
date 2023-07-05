@@ -25,6 +25,12 @@
 
         <dependency>
             <groupId>com.hhwy</groupId>
+            <artifactId>ft-common-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hhwy</groupId>
             <artifactId>ft-common-security</artifactId>
             <version>2.1.2</version>
             <scope>compile</scope>
