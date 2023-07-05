@@ -1,18 +1,21 @@
 package com.hhwy.pm.xmsl.implement.controller;
 
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author zhenglili
@@ -39,9 +42,26 @@ public class XmslTerrainLandformsController extends BaseController {
         return AjaxResult.success("保存成功！");
     }
 
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public AjaxResult deleteXmslTerrainLandformsByPks(Long[] pks) {
         List<Long> xmslTerrainLandformsPkList = Arrays.asList(pks);
         return toAjax(xmslTerrainLandformsService.deleteXmslTerrainLandformsByPks(xmslTerrainLandformsPkList));
+    }
+
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("/importExcel")
+    public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
+        ExcelUtils<XmslTerrainLandforms> util = new ExcelUtils<>(XmslTerrainLandforms.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<XmslTerrainLandforms> list = util.importExcel(inputStream);
+            return AjaxResult.success(list);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
     }
 }

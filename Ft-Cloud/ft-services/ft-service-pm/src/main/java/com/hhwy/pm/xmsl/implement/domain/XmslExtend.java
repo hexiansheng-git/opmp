@@ -22,6 +22,7 @@ public class XmslExtend extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "主键id")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     /**
      * 字段描述：当地政策要点说明

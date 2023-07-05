@@ -1,7 +1,7 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.mapper.XmslTerrainLandformsMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;

@@ -1,8 +1,8 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
 import com.hhwy.common.core.utils.bean.BeanUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.implement.domain.GeologicalCondition;
 import com.hhwy.pm.xmsl.implement.domain.XmslBadGeologySurvey;
 import com.hhwy.pm.xmsl.implement.domain.XmslMainTypicalGeologySurvey;
@@ -89,6 +89,7 @@ public class GeologicalConditionServiceImpl implements IGeologicalConditionServi
             List<XmslBadGeologySurvey> updateBadList = new ArrayList<>();
             for (XmslBadGeologySurvey bad : geologicalCondition.getBadGeologySurveyList()) {
                 if (bad.getId() == null) {
+                    bad.setId(IdWorker.createId());
                     bad.setCreateUser(SecurityUtils.getUserName());
                     bad.setCreateTime(DateUtils.getNowDate());
                     insertBadList.add(bad);

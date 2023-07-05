@@ -29,8 +29,7 @@ public class XmslExtendController extends BaseController {
         return AjaxResult.success(xmslExtend);
     }
 
-    @PostMapping
-    @GetMapping("/save")
+    @PostMapping("/save")
     public AjaxResult save(@RequestBody XmslExtend xmslExtendParam) {
         XmslExtend xmslExtend = xmslExtendService.save(xmslExtendParam);
         return AjaxResult.success(xmslExtend);

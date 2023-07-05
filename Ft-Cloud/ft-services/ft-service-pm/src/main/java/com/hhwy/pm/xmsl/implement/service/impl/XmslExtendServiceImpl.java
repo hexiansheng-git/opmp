@@ -1,10 +1,11 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SecurityUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.implement.domain.XmslExtend;
 import com.hhwy.pm.xmsl.implement.mapper.XmslExtendMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslExtendService;
+import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +29,7 @@ public class XmslExtendServiceImpl implements IXmslExtendService {
     public XmslExtend save(XmslExtend xmslExtend) {
         XmslExtend extend = xmslExtendMapper.getXmslExtend(new XmslExtend());
         if (extend == null || extend.getId() == null) {
+            xmslExtend.setId(IdWorker.createId());
             xmslExtend.setCreateUser(SecurityUtils.getUserName());
             xmslExtend.setCreateTime(DateUtils.getNowDate());
             xmslExtendMapper.insertXmslExtend(xmslExtend);
