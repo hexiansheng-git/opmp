@@ -1,13 +1,16 @@
 package com.hhwy.pm.xmsl.implement.controller;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +53,7 @@ public class XmslTerrainLandformsController extends BaseController {
 
     /**
      * 导入
+     *
      * @param file
      * @return
      */
@@ -63,5 +67,14 @@ public class XmslTerrainLandformsController extends BaseController {
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, XmslTerrainLandforms xmslTerrainLandformsParam)
+        throws IOException {
+        List<XmslTerrainLandforms> xmslTerrainLandformsList =
+            xmslTerrainLandformsService.getXmslTerrainLandformsList(xmslTerrainLandformsParam);
+        ExcelUtils<XmslTerrainLandforms> util = new ExcelUtils<>(XmslTerrainLandforms.class);
+        util.exportExcel(response, xmslTerrainLandformsList, DateUtils.getDate());
     }
 }

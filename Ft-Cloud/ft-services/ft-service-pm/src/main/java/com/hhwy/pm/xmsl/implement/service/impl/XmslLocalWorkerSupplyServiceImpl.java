@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
+import com.hhwy.pm.xmsl.implement.domain.XmslLocalWorkerSupply;
 import com.hhwy.pm.xmsl.implement.mapper.XmslLocalWorkerSupplyMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslLocalWorkerSupplyService;
 import java.util.List;
@@ -17,6 +18,11 @@ public class XmslLocalWorkerSupplyServiceImpl implements IXmslLocalWorkerSupplyS
 
     @Autowired
     private XmslLocalWorkerSupplyMapper xmslLocalWorkerSupplyMapper;
+
+    @Override
+    public List<XmslLocalWorkerSupply> getXmslLocalWorkerSupplyList(XmslLocalWorkerSupply xmslLocalWorkerSupply) {
+        return xmslLocalWorkerSupplyMapper.getXmslLocalWorkerSupplyList(xmslLocalWorkerSupply);
+    }
 
     @Transactional
     public int deleteXmslLocalWorkerSupplyByPks(List<Long> xmslLocalWorkerSupplyPkList) {

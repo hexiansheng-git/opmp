@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service;
 
+import com.hhwy.pm.xmsl.implement.domain.XmslLocalWorkerSupply;
 import java.util.List;
 
 /**
@@ -8,5 +9,8 @@ import java.util.List;
  * @remark 属地工人供应情况
  */
 public interface IXmslLocalWorkerSupplyService {
+
+    List<XmslLocalWorkerSupply> getXmslLocalWorkerSupplyList(XmslLocalWorkerSupply xmslLocalWorkerSupply);
+
     int deleteXmslLocalWorkerSupplyByPks(List<Long> xmslLocalWorkerSupplyPkList);
 }

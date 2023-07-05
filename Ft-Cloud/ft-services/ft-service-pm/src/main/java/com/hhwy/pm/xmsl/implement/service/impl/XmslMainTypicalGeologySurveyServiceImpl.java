@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
+import com.hhwy.pm.xmsl.implement.domain.XmslMainTypicalGeologySurvey;
 import com.hhwy.pm.xmsl.implement.mapper.XmslMainTypicalGeologySurveyMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslMainTypicalGeologySurveyService;
 import java.util.List;
@@ -17,6 +18,12 @@ public class XmslMainTypicalGeologySurveyServiceImpl implements IXmslMainTypical
 
     @Autowired
     private XmslMainTypicalGeologySurveyMapper xmslMainTypicalGeologySurveyMapper;
+
+    @Override
+    public List<XmslMainTypicalGeologySurvey> getXmslMainTypicalGeologySurvey(
+        XmslMainTypicalGeologySurvey xmslMainTypicalGeologySurvey) {
+        return xmslMainTypicalGeologySurveyMapper.getXmslMainTypicalGeologySurveyList(xmslMainTypicalGeologySurvey);
+    }
 
     @Transactional
     public int deleteXmslMainTypicalGeologySurveyByPks(List<Long> xmslMainTypicalGeologySurveyPkList) {

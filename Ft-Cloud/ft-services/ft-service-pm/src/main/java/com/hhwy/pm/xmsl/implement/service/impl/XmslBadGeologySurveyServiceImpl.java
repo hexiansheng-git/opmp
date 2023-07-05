@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
+import com.hhwy.pm.xmsl.implement.domain.XmslBadGeologySurvey;
 import com.hhwy.pm.xmsl.implement.mapper.XmslBadGeologySurveyMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslBadGeologySurveyService;
 import java.util.List;
@@ -17,6 +18,11 @@ public class XmslBadGeologySurveyServiceImpl implements IXmslBadGeologySurveySer
 
     @Autowired
     private XmslBadGeologySurveyMapper xmslBadGeologySurveyMapper;
+
+    @Override
+    public List<XmslBadGeologySurvey> getXmslBadGeologySurvey(XmslBadGeologySurvey xmslBadGeologySurvey) {
+        return xmslBadGeologySurveyMapper.getXmslBadGeologySurveyList(xmslBadGeologySurvey);
+    }
 
     @Transactional
     public int deleteXmslBadGeologySurveyByPks(List<Long> xmslBadGeologySurveyPkList) {

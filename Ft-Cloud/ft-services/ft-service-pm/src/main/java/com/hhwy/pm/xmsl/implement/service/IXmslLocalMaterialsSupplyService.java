@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service;
 
+import com.hhwy.pm.xmsl.implement.domain.XmslLocalMaterialsSupply;
 import java.util.List;
 
 /**
@@ -8,6 +9,8 @@ import java.util.List;
  * @remark 当地资源供应-属地物资供应情况
  */
 public interface IXmslLocalMaterialsSupplyService {
+
+    List<XmslLocalMaterialsSupply> getXmslLocalMaterialsSupplyList(XmslLocalMaterialsSupply xmslLocalMaterialsSupply);
 
     int deleteXmslLocalMaterialsSupplyByPks(List<Long> xmslLocalMaterialsSupplyPkList);
 }

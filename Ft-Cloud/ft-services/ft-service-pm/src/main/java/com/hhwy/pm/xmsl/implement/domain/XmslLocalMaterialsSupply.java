@@ -67,7 +67,6 @@ public class XmslLocalMaterialsSupply extends BaseEntity {
      * 字段描述：项目id
      */
     @JsonProperty
-    @Excel(name = "项目id")
     private Integer projectId;
     /**
      * 字段描述：项目名称

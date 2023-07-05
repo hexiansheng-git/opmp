@@ -1,14 +1,18 @@
 package com.hhwy.pm.xmsl.implement.controller;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.implement.domain.XmslLocalEquipmentSupply;
 import com.hhwy.pm.xmsl.implement.service.IXmslLocalEquipmentSupplyService;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -50,5 +54,14 @@ public class XmslLocalEquipmentSupplyController extends BaseController {
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, XmslLocalEquipmentSupply xmslLocalEquipmentSupplyParam)
+        throws IOException {
+        List<XmslLocalEquipmentSupply> xmslLocalEquipmentSupplyList =
+            xmslLocalEquipmentSupplyService.getXmslLocalEquipmentSupplyList(xmslLocalEquipmentSupplyParam);
+        ExcelUtils<XmslLocalEquipmentSupply> util = new ExcelUtils<>(XmslLocalEquipmentSupply.class);
+        util.exportExcel(response, xmslLocalEquipmentSupplyList, DateUtils.getDate());
     }
 }

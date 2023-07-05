@@ -139,7 +139,6 @@ public class XmslTerrainLandforms extends BaseEntity {
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @Excel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间

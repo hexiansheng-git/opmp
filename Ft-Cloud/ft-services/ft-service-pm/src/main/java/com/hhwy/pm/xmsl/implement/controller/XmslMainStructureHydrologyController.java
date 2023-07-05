@@ -1,13 +1,16 @@
 package com.hhwy.pm.xmsl.implement.controller;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.implement.domain.XmslMainStructureHydrology;
 import com.hhwy.pm.xmsl.implement.service.IXmslMainStructureHydrologyService;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,5 +68,14 @@ public class XmslMainStructureHydrologyController extends BaseController {
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, XmslMainStructureHydrology xmslMainStructureHydrologyParam)
+        throws IOException {
+        List<XmslMainStructureHydrology> xmslMainStructureHydrologyList =
+            xmslMainStructureHydrologyService.getXmslMainStructureHydrologyList(xmslMainStructureHydrologyParam);
+        ExcelUtils<XmslMainStructureHydrology> util = new ExcelUtils<>(XmslMainStructureHydrology.class);
+        util.exportExcel(response, xmslMainStructureHydrologyList, DateUtils.getDate());
     }
 }

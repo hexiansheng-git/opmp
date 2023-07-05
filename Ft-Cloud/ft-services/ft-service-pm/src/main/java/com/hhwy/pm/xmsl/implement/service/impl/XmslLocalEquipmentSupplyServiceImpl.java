@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
+import com.hhwy.pm.xmsl.implement.domain.XmslLocalEquipmentSupply;
 import com.hhwy.pm.xmsl.implement.mapper.XmslLocalEquipmentSupplyMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslLocalEquipmentSupplyService;
 import java.util.List;
@@ -17,6 +18,12 @@ public class XmslLocalEquipmentSupplyServiceImpl implements IXmslLocalEquipmentS
 
     @Autowired
     private XmslLocalEquipmentSupplyMapper xmslLocalEquipmentSupplyMapper;
+
+    @Override
+    public List<XmslLocalEquipmentSupply> getXmslLocalEquipmentSupplyList(
+        XmslLocalEquipmentSupply xmslLocalEquipmentSupply) {
+        return xmslLocalEquipmentSupplyMapper.getXmslLocalEquipmentSupplyList(xmslLocalEquipmentSupply);
+    }
 
     @Transactional
     public int deleteXmslLocalEquipmentSupplyByPks(List<Long> xmslLocalEquipmentSupplyPkList) {

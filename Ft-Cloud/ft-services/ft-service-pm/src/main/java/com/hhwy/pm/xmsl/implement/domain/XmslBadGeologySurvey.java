@@ -39,7 +39,6 @@ public class XmslBadGeologySurvey extends BaseEntity {
      * 字段描述：拟处理方式
      */
     @JsonProperty
-    @Excel(name = "拟处理方式")
     private String planHandleMethod;
     /**
      * 字段描述：附件组id
