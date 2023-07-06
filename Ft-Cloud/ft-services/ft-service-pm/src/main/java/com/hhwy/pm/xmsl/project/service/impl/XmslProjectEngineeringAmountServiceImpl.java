@@ -67,6 +67,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
             xmslProjectEngineeringAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectEngineeringAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectEngineeringAmount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslProjectEngineeringAmount.setCreateUserName(SecurityUtils.getUserName());
             xmslProjectEngineeringAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectEngineeringAmountMapper.insertProjectEngineeringAmountList(xmslProjectEngineeringAmountList);

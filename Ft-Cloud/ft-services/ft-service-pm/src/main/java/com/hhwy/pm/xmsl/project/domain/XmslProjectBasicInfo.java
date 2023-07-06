@@ -108,10 +108,9 @@ public class XmslProjectBasicInfo extends BaseEntity {
     /**
      * 字段描述：合同工期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "合同工期")
-    private Date contractSchedule;
+    private String contractSchedule;
     /**
      * 字段描述：开工日期
      */
@@ -320,7 +319,7 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "所属区域id")
     @NotNull(message = "区域id不能为空",groups = {ValidationGroups.Select.class,ValidationGroups.Save.class})
-    private Integer regionId;
+    private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
@@ -332,13 +331,19 @@ public class XmslProjectBasicInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "部门id")
-    private Integer deptId;
+    private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
     @Excel(name = "数据创建者id")
     private String createUser;
+    /**
+     * 字段描述：数据创建者名称
+     */
+    @JsonProperty
+    @Excel(name = "数据创建者名称")
+    private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */

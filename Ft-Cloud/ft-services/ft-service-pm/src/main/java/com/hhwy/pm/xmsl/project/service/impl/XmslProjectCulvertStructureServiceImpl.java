@@ -65,6 +65,7 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
             xmslProjectCulvertStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectCulvertStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectCulvertStructure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslProjectCulvertStructure.setCreateUserName(SecurityUtils.getUserName());
             xmslProjectCulvertStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectCulvertStructureMapper.insertProjectCulvertStructureList(xmslProjectCulvertStructureList);

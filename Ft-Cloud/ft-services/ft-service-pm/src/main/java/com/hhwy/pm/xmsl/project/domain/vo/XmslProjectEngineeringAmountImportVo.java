@@ -3,7 +3,6 @@ package com.hhwy.pm.xmsl.project.domain.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
 
 /**

@@ -60,6 +60,10 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         xmslProjectBasicInfo.setId(id);
         xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(xmslProjectBasicInfo);
 
+        if(xmslProjectBasicInfo == null){
+            throw new RuntimeException("获取项目信息失败！");
+        }
+
         //主要桥梁结构形式
         XmslProjectBridgeStructure xmslProjectBridgeStructure = new XmslProjectBridgeStructure();
         xmslProjectBridgeStructure.setProjectBasicInfoId(id);
@@ -164,6 +168,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         }
 
         xmslProjectBasicInfo.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        xmslProjectBasicInfo.setCreateUserName(SecurityUtils.getUserName());
         xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
     }

@@ -153,7 +153,7 @@
             </if>
             <if test="capitalSource != null  and capitalSource != ''">and `capital_source` = #{capitalSource}</if>
             <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractSchedule != null ">and `contract_schedule` = #{contractSchedule}</if>
+            <if test="contractSchedule != null and contractSchedule != ''">and `contract_schedule` = #{contractSchedule}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
             <if test="completionDate != null ">and `completion_date` = #{completionDate}</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">and `defects_liability_period` =
@@ -326,7 +326,7 @@
             </if>
             <if test="capitalSource != null  and capitalSource != ''">and `capital_source` = #{capitalSource}</if>
             <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractSchedule != null ">and `contract_schedule` = #{contractSchedule}</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">and `contract_schedule` = #{contractSchedule}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
             <if test="completionDate != null ">and `completion_date` = #{completionDate}</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">and `defects_liability_period` =
@@ -432,7 +432,7 @@
             <if test="managementCompany != null  and managementCompany != ''">`management_company`,</if>
             <if test="capitalSource != null  and capitalSource != ''">`capital_source`,</if>
             <if test="contractType != null  and contractType != ''">`contract_type`,</if>
-            <if test="contractSchedule != null ">`contract_schedule`,</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">`contract_schedule`,</if>
             <if test="startDate != null ">`start_date`,</if>
             <if test="completionDate != null ">`completion_date`,</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">`defects_liability_period`,</if>
@@ -506,7 +506,7 @@
             <if test="managementCompany != null  and managementCompany != ''">#{managementCompany},</if>
             <if test="capitalSource != null  and capitalSource != ''">#{capitalSource},</if>
             <if test="contractType != null  and contractType != ''">#{contractType},</if>
-            <if test="contractSchedule != null ">#{contractSchedule},</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">#{contractSchedule},</if>
             <if test="startDate != null ">#{startDate},</if>
             <if test="completionDate != null ">#{completionDate},</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">#{defectsLiabilityPeriod},</if>
@@ -721,7 +721,7 @@
             </if>
             <if test="capitalSource != null  and  capitalSource != ''">`capital_source` = #{capitalSource},</if>
             <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
-            <if test="contractSchedule != null ">`contract_schedule` = #{contractSchedule},</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">`contract_schedule` = #{contractSchedule},</if>
             <if test="startDate != null ">`start_date` = #{startDate},</if>
             <if test="completionDate != null ">`completion_date` = #{completionDate},</if>
             <if test="defectsLiabilityPeriod != null  and  defectsLiabilityPeriod != ''">`defects_liability_period` =
@@ -789,13 +789,8 @@
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
-            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-            <if test="createTime != null ">`create_time` = #{createTime},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-            <if test="delTime != null ">`del_time` = #{delTime},</if>
-            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -1055,16 +1050,6 @@
                     when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
-            <trim prefix="create_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUser}
-                </foreach>
-            </trim>
-            <trim prefix="create_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createTime}
-                </foreach>
-            </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateUser}
@@ -1073,21 +1058,6 @@
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delUser}
-                </foreach>
-            </trim>
-            <trim prefix="del_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
