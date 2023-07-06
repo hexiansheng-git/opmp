@@ -48,7 +48,7 @@ public class XmslProjectMaterialsAmount extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "材料名称")
-    private String type;
+    private String materialName;
     /**
      * 字段描述：单位
      */

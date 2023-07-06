@@ -9,7 +9,7 @@
         <result property="projectBasicInfoId" column="project_basic_info_id"/>
         <result property="projectId" column="project_id"/>
         <result property="projectName" column="project_name"/>
-        <result property="type" column="type"/>
+        <result property="materialName" column="material_name"/>
         <result property="units" column="units"/>
         <result property="amount" column="amount"/>
         <result property="remark" column="remark"/>
@@ -37,7 +37,7 @@
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
-        ,`type`
+        ,`material_name`
         ,`units`
         ,`amount`
         ,`remark`
@@ -64,7 +64,7 @@
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="materialName != null  and materialName != ''">and `material_name` = #{materialName}</if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
             <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -94,7 +94,7 @@
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
-        ,`type`
+        ,`material_name`
         ,`units`
         ,`amount`
         ,`remark`
@@ -121,7 +121,7 @@
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="materialName != null  and materialName != ''">and `material_name` = #{materialName}</if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
             <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -152,7 +152,7 @@
             <if test="projectBasicInfoId != null ">`project_basic_info_id`,</if>
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
-            <if test="type != null  and type != ''">`type`,</if>
+            <if test="materialName != null  and materialName != ''">`material_name`,</if>
             <if test="units != null  and units != ''">`units`,</if>
             <if test="amount != null  and amount != ''">`amount`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
@@ -178,7 +178,7 @@
             <if test="projectBasicInfoId != null ">#{projectBasicInfoId},</if>
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
-            <if test="type != null  and type != ''">#{type},</if>
+            <if test="materialName != null  and materialName != ''">#{materialName},</if>
             <if test="units != null  and units != ''">#{units},</if>
             <if test="amount != null  and amount != ''">#{amount},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
@@ -209,7 +209,7 @@
             `project_basic_info_id`,
             `project_id`,
             `project_name`,
-            `type`,
+            `material_name`,
             `units`,
             `amount`,
             `remark`,
@@ -236,7 +236,7 @@
                 #{item.projectBasicInfoId},
                 #{item.projectId},
                 #{item.projectName},
-                #{item.type},
+                #{item.materialName},
                 #{item.units},
                 #{item.amount},
                 #{item.remark},
@@ -265,7 +265,7 @@
             <if test="projectBasicInfoId != null ">`project_basic_info_id` = #{projectBasicInfoId},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-            <if test="type != null  and  type != ''">`type` = #{type},</if>
+            <if test="materialName != null  and  materialName != ''">`material_name` = #{materialName},</if>
             <if test="units != null  and  units != ''">`units` = #{units},</if>
             <if test="amount != null  and  amount != ''">`amount` = #{amount},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
@@ -303,9 +303,9 @@
                     when `id`=#{item.id} then #{item.projectName}
                 </foreach>
             </trim>
-            <trim prefix="type  = case" suffix="end,">
+            <trim prefix="material_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.type}
+                    when `id`=#{item.id} then #{item.materialName}
                 </foreach>
             </trim>
             <trim prefix="units  = case" suffix="end,">
