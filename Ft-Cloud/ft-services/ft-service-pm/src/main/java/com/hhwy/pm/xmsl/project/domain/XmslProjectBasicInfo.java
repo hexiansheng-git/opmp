@@ -46,11 +46,17 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @Excel(name = "项目id")
     private String projectCode;
     /**
-     * 字段描述：项目名称
+     * 字段描述：项目名称（中文）
      */
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
+    /**
+     * 字段描述：项目简称（中文）
+     */
+    @JsonProperty
+    @Excel(name = "项目简称（中文）")
+    private String projectShortName;
     /**
      * 字段描述：项目名称（外文）
      */

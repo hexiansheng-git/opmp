@@ -9,6 +9,7 @@
         <result property="projectId" column="project_id"/>
         <result property="projectCode" column="project_code"/>
         <result property="projectName" column="project_name"/>
+        <result property="projectShortName" column="project_short_name"/>
         <result property="projectNameForeignLang" column="project_name_foreign_lang"/>
         <result property="mileage" column="mileage"/>
         <result property="contractPrice" column="contract_price"/>
@@ -76,6 +77,7 @@
         ,`project_id`
         ,`project_code`
         ,`project_name`
+        ,`project_short_name`
         ,`project_name_foreign_lang`
         ,`mileage`
         ,`contract_price`
@@ -142,6 +144,7 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectCode != null ">and `project_code` = #{projectCode}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectShortName != null  and projectShortName != ''">and `project_short_name` = #{projectShortName}</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">and `project_name_foreign_lang`
                 = #{projectNameForeignLang}
             </if>
@@ -251,6 +254,7 @@
         ,`project_id`
         ,`project_code`
         ,`project_name`
+        ,`project_short_name`
         ,`project_name_foreign_lang`
         ,`mileage`
         ,`contract_price`
@@ -317,6 +321,7 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectCode != null ">and `project_code` = #{projectCode}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectShortName != null  and projectShortName != ''">and `project_short_name` = #{projectShortName}</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">and `project_name_foreign_lang`
                 = #{projectNameForeignLang}
             </if>
@@ -427,6 +432,7 @@
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectCode != null ">`project_code`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="projectShortName != null  and projectShortName != ''">`project_short_name`,</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">`project_name_foreign_lang`,
             </if>
             <if test="mileage != null  and mileage != ''">`mileage`,</if>
@@ -503,6 +509,7 @@
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectCode != null ">#{projectCode},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="projectShortName != null  and projectShortName != ''">#{projectShortName},</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">#{projectNameForeignLang},</if>
             <if test="mileage != null  and mileage != ''">#{mileage},</if>
             <if test="contractPrice != null ">#{contractPrice},</if>
@@ -583,6 +590,7 @@
             `project_id`,
             `project_code`,
             `project_name`,
+            `project_short_name`,
             `project_name_foreign_lang`,
             `mileage`,
             `contract_price`,
@@ -649,6 +657,7 @@
                 #{item.projectId},
                 #{item.projectCode},
                 #{item.projectName},
+                #{item.projectShortName},
                 #{item.projectNameForeignLang},
                 #{item.mileage},
                 #{item.contractPrice},
@@ -717,6 +726,7 @@
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectCode != null ">`project_code` = #{projectCode},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="projectShortName != null  and  projectShortName != ''">`project_short_name` = #{projectShortName},</if>
             <if test="projectNameForeignLang != null  and  projectNameForeignLang != ''">`project_name_foreign_lang` =
                 #{projectNameForeignLang},
             </if>
@@ -827,6 +837,11 @@
             <trim prefix="project_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="project_short_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectShortName}
                 </foreach>
             </trim>
             <trim prefix="project_name_foreign_lang  = case" suffix="end,">
