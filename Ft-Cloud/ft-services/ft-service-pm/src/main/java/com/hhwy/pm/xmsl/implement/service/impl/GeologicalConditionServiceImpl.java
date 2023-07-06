@@ -1,7 +1,6 @@
 package com.hhwy.pm.xmsl.implement.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.bean.BeanUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.implement.domain.GeologicalCondition;
 import com.hhwy.pm.xmsl.implement.domain.XmslBadGeologySurvey;
@@ -35,16 +34,10 @@ public class GeologicalConditionServiceImpl implements IGeologicalConditionServi
         GeologicalCondition result = new GeologicalCondition();
 
         XmslMainTypicalGeologySurvey xmslMainTypicalGeologySurvey = new XmslMainTypicalGeologySurvey();
-        if (geologicalCondition.getMainTypicalGeologySurvey() != null) {
-            BeanUtils.copyProperties(geologicalCondition.getMainTypicalGeologySurvey(), xmslMainTypicalGeologySurvey);
-        }
         List<XmslMainTypicalGeologySurvey> mainTypicalGeologyList = xmslMainTypicalGeologySurveyMapper
             .getXmslMainTypicalGeologySurveyList(xmslMainTypicalGeologySurvey);
 
         XmslBadGeologySurvey xmslBadGeologySurvey = new XmslBadGeologySurvey();
-        if (geologicalCondition.getBadGeologySurvey() != null) {
-            BeanUtils.copyProperties(geologicalCondition.getBadGeologySurvey(), xmslBadGeologySurvey);
-        }
         List<XmslBadGeologySurvey> badGeologyList = xmslBadGeologySurveyMapper
             .getXmslBadGeologySurveyList(xmslBadGeologySurvey);
 
@@ -64,11 +57,12 @@ public class GeologicalConditionServiceImpl implements IGeologicalConditionServi
             for (XmslMainTypicalGeologySurvey main : geologicalCondition.getMainTypicalGeologySurveyList()) {
                 if (main.getId() == null) {
                     main.setId(IdWorker.createId());
-                    main.setCreateUser(SecurityUtils.getUserName());
+                    main.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    main.setCreateUserName(SecurityUtils.getUserName());
                     main.setCreateTime(DateUtils.getNowDate());
                     insertMainList.add(main);
                 } else {
-                    main.setUpdateUser(SecurityUtils.getUserName());
+                    main.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                     main.setUpdateTime(DateUtils.getNowDate());
                     updateMainList.add(main);
                 }
@@ -90,11 +84,12 @@ public class GeologicalConditionServiceImpl implements IGeologicalConditionServi
             for (XmslBadGeologySurvey bad : geologicalCondition.getBadGeologySurveyList()) {
                 if (bad.getId() == null) {
                     bad.setId(IdWorker.createId());
-                    bad.setCreateUser(SecurityUtils.getUserName());
+                    bad.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    bad.setCreateUserName(SecurityUtils.getUserName());
                     bad.setCreateTime(DateUtils.getNowDate());
                     insertBadList.add(bad);
                 } else {
-                    bad.setUpdateUser(SecurityUtils.getUserName());
+                    bad.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                     bad.setUpdateTime(DateUtils.getNowDate());
                     updateBadList.add(bad);
                 }

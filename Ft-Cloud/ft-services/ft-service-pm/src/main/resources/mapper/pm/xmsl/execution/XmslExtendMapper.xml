@@ -15,6 +15,7 @@
     <result property="projectName" column="project_name"/>
     <result property="deptId" column="dept_id"/>
     <result property="createUser" column="create_user"/>
+    <result property="createUserName" column="create_user_name"/>
     <result property="createTime" column="create_time"/>
     <result property="updateUser" column="update_user"/>
     <result property="updateTime" column="update_time"/>
@@ -40,6 +41,7 @@
     ,`project_name`
     ,`dept_id`
     ,`create_user`
+    ,`create_user_name`
     ,`create_time`
     ,`update_user`
     ,`update_time`
@@ -69,6 +71,7 @@
       <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
       <if test="deptId != null ">and `dept_id` = #{deptId}</if>
       <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
       <if test="createTime != null ">and `create_time` = #{createTime}</if>
       <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
       <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
@@ -96,6 +99,7 @@
     ,`project_name`
     ,`dept_id`
     ,`create_user`
+    ,`create_user_name`
     ,`create_time`
     ,`update_user`
     ,`update_time`
@@ -125,6 +129,7 @@
       <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
       <if test="deptId != null ">and `dept_id` = #{deptId}</if>
       <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
       <if test="createTime != null ">and `create_time` = #{createTime}</if>
       <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
       <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
@@ -157,6 +162,7 @@
       <if test="projectName != null  and projectName != ''">`project_name`,</if>
       <if test="deptId != null ">`dept_id`,</if>
       <if test="createUser != null  and createUser != ''">`create_user`,</if>
+      <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
       <if test="createTime != null ">`create_time`,</if>
       <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
       <if test="updateTime != null ">`update_time`,</if>
@@ -184,6 +190,7 @@
       <if test="projectName != null  and projectName != ''">#{projectName},</if>
       <if test="deptId != null ">#{deptId},</if>
       <if test="createUser != null  and createUser != ''">#{createUser},</if>
+      <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
       <if test="createTime != null ">#{createTime},</if>
       <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
       <if test="updateTime != null ">#{updateTime},</if>
@@ -212,6 +219,7 @@
       `project_name`,
       `dept_id`,
       `create_user`,
+      `create_user_name`,
       `create_time`,
       `update_user`,
       `update_time`,
@@ -236,6 +244,7 @@
         #{item.projectName},
         #{item.deptId},
         #{item.createUser},
+        #{item.createUserName},
         #{item.createTime},
         #{item.updateUser},
         #{item.updateTime},
@@ -267,6 +276,7 @@
       <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
       <if test="deptId != null ">`dept_id` = #{deptId},</if>
       <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+      <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
       <if test="createTime != null ">`create_time` = #{createTime},</if>
       <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
       <if test="updateTime != null ">`update_time` = #{updateTime},</if>
@@ -335,6 +345,11 @@
       <trim prefix="create_user  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.createUser}
+        </foreach>
+      </trim>
+      <trim prefix="create_user_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUserName}
         </foreach>
       </trim>
       <trim prefix="create_time  = case" suffix="end,">

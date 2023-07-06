@@ -47,7 +47,7 @@ public class XmslExtend extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "所属区域id")
-    private Integer regionId;
+    private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
@@ -59,7 +59,7 @@ public class XmslExtend extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目id")
-    private Integer projectId;
+    private Long projectId;
     /**
      * 字段描述：项目名称
      */
@@ -71,13 +71,18 @@ public class XmslExtend extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "部门id")
-    private Integer deptId;
+    private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
     @Excel(name = "数据创建者id")
     private String createUser;
+    /**
+     * 字段描述：数据创建者名称
+     */
+    @JsonProperty
+    private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */

@@ -163,7 +163,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
             projectMaterialsAmountService.insertProjectMaterialsAmountList(xmslProjectBasicInfo.getXmslProjectMaterialsAmountList(), xmslProjectBasicInfo);
         }
 
-        xmslProjectBasicInfo.setCreateUser(SecurityUtils.getUserName());
+        xmslProjectBasicInfo.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
     }
@@ -199,14 +199,14 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
             projectMaterialsAmountService.editProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
         }
 
-        xmslProjectBasicInfo.setUpdateUser(SecurityUtils.getUserName());
+        xmslProjectBasicInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
     }
     
     @Transactional
     public int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
-        xmslProjectBasicInfo.setUpdateUser(SecurityUtils.getUserName());
+        xmslProjectBasicInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.deleteProjectBasicInfo(xmslProjectBasicInfo);
     }

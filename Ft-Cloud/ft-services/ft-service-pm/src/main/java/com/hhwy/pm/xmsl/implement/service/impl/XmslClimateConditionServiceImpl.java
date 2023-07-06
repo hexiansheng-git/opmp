@@ -39,11 +39,12 @@ public class XmslClimateConditionServiceImpl implements IXmslClimateConditionSer
         for (XmslClimateCondition xmslClimateCondition : xmslClimateConditionList) {
             if (xmslClimateCondition.getId() == null) {
                 xmslClimateCondition.setId(IdWorker.createId());
-                xmslClimateCondition.setCreateUser(SecurityUtils.getUserName());
+                xmslClimateCondition.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                xmslClimateCondition.setCreateUserName(SecurityUtils.getUserName());
                 xmslClimateCondition.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslClimateCondition);
             } else {
-                xmslClimateCondition.setUpdateUser(SecurityUtils.getUserName());
+                xmslClimateCondition.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslClimateCondition.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslClimateCondition);
             }

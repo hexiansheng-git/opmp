@@ -64,7 +64,7 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
             xmslProjectCulvertStructure.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectCulvertStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectCulvertStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectCulvertStructure.setCreateUser(SecurityUtils.getUserName());
+            xmslProjectCulvertStructure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectCulvertStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectCulvertStructureMapper.insertProjectCulvertStructureList(xmslProjectCulvertStructureList);
@@ -73,7 +73,7 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
     @Transactional
     public int updateProjectCulvertStructureList(List<XmslProjectCulvertStructure> xmslProjectCulvertStructureList) {
         for (XmslProjectCulvertStructure xmslProjectCulvertStructure : xmslProjectCulvertStructureList) {
-            xmslProjectCulvertStructure.setUpdateUser(SecurityUtils.getUserName());
+            xmslProjectCulvertStructure.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectCulvertStructure.setUpdateTime(DateUtils.getNowDate());
         }
         return xmslProjectCulvertStructureMapper.updateProjectCulvertStructureList(xmslProjectCulvertStructureList);
@@ -81,7 +81,7 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
     
     @Transactional
     public int deleteProjectCulvertStructure(XmslProjectCulvertStructure xmslProjectCulvertStructure) {
-        xmslProjectCulvertStructure.setUpdateUser(SecurityUtils.getUserName());
+        xmslProjectCulvertStructure.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectCulvertStructure.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectCulvertStructureMapper.deleteProjectCulvertStructure(xmslProjectCulvertStructure);
     }

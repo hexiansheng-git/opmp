@@ -38,11 +38,12 @@ public class XmslBasicFacilitiesConditionsServiceImpl implements IXmslBasicFacil
         for (XmslBasicFacilitiesConditions xmslBasicFacilitiesConditions : xmslBasicFacilitiesConditionsList) {
             if (xmslBasicFacilitiesConditions.getId() == null) {
                 xmslBasicFacilitiesConditions.setId(IdWorker.createId());
-                xmslBasicFacilitiesConditions.setCreateUser(SecurityUtils.getUserName());
+                xmslBasicFacilitiesConditions.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                xmslBasicFacilitiesConditions.setCreateUserName(SecurityUtils.getUserName());
                 xmslBasicFacilitiesConditions.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslBasicFacilitiesConditions);
             } else {
-                xmslBasicFacilitiesConditions.setUpdateUser(SecurityUtils.getUserName());
+                xmslBasicFacilitiesConditions.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslBasicFacilitiesConditions.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslBasicFacilitiesConditions);
             }

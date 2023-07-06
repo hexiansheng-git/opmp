@@ -39,11 +39,12 @@ public class XmslConstructionInterferenceServiceImpl implements
         for (XmslConstructionInterference xmslConstructionInterference : xmslConstructionInterferenceList) {
             if (xmslConstructionInterference.getId() == null) {
                 xmslConstructionInterference.setId(IdWorker.createId());
-                xmslConstructionInterference.setCreateUser(SecurityUtils.getUserName());
+                xmslConstructionInterference.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                xmslConstructionInterference.setCreateUserName(SecurityUtils.getUserName());
                 xmslConstructionInterference.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslConstructionInterference);
             } else {
-                xmslConstructionInterference.setUpdateUser(SecurityUtils.getUserName());
+                xmslConstructionInterference.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslConstructionInterference.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslConstructionInterference);
             }

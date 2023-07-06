@@ -12,16 +12,6 @@ import lombok.Data;
 public class GeologicalCondition {
 
     /**
-     * 主线典型地质勘
-     */
-    private XmslMainTypicalGeologySurvey mainTypicalGeologySurvey;
-
-    /**
-     * 不良地质调查
-     */
-    private XmslBadGeologySurvey badGeologySurvey;
-
-    /**
      * 主线典型地质勘察集合
      */
     private List<XmslMainTypicalGeologySurvey> mainTypicalGeologySurveyList;

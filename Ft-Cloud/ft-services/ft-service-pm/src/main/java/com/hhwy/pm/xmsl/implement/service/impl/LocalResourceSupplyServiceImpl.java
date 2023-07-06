@@ -2,7 +2,6 @@ package com.hhwy.pm.xmsl.implement.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.core.utils.bean.BeanUtils;
 import com.hhwy.pm.xmsl.implement.domain.LocalResourceSupply;
 import com.hhwy.pm.xmsl.implement.domain.XmslLocalEquipmentSupply;
 import com.hhwy.pm.xmsl.implement.domain.XmslLocalMaterialsSupply;
@@ -40,23 +39,14 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         LocalResourceSupply result = new LocalResourceSupply();
 
         XmslLocalWorkerSupply xmslLocalWorkerSupply = new XmslLocalWorkerSupply();
-        if (localResourceSupply.getLocalWorkerSupply() != null) {
-            BeanUtils.copyProperties(localResourceSupply.getLocalWorkerSupply(), xmslLocalWorkerSupply);
-        }
         List<XmslLocalWorkerSupply> localWorkerSupplyList = xmslLocalWorkerSupplyMapper
             .getXmslLocalWorkerSupplyList(xmslLocalWorkerSupply);
 
         XmslLocalMaterialsSupply xmslLocalMaterialsSupply = new XmslLocalMaterialsSupply();
-        if (localResourceSupply.getLocalMaterialsSupply() != null) {
-            BeanUtils.copyProperties(localResourceSupply.getLocalMaterialsSupply(), xmslLocalMaterialsSupply);
-        }
         List<XmslLocalMaterialsSupply> localMaterialsSupplyList = xmslLocalMaterialsSupplyMapper
             .getXmslLocalMaterialsSupplyList(xmslLocalMaterialsSupply);
 
         XmslLocalEquipmentSupply xmslLocalEquipmentSupply = new XmslLocalEquipmentSupply();
-        if (localResourceSupply.getLocalEquipmentSupply() != null) {
-            BeanUtils.copyProperties(localResourceSupply.getLocalEquipmentSupply(), xmslLocalEquipmentSupply);
-        }
         List<XmslLocalEquipmentSupply> localEquipmentSupplyList =
             xmslLocalEquipmentSupplyMapper.getXmslLocalEquipmentSupplyList(xmslLocalEquipmentSupply);
 
@@ -77,11 +67,12 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
             for (XmslLocalWorkerSupply work : localResourceSupply.getLocalWorkerSupplyList()) {
                 if (work.getId() == null) {
                     work.setId(IdWorker.createId());
-                    work.setCreateUser(SecurityUtils.getUserName());
+                    work.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    work.setCreateUserName(SecurityUtils.getUserName());
                     work.setCreateTime(DateUtils.getNowDate());
                     insertWorkerList.add(work);
                 } else {
-                    work.setUpdateUser(SecurityUtils.getUserName());
+                    work.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                     work.setUpdateTime(DateUtils.getNowDate());
                     updateWorkerList.add(work);
                 }
@@ -103,11 +94,11 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
             for (XmslLocalMaterialsSupply materials : localResourceSupply.getLocalMaterialsSupplyList()) {
                 if (materials.getId() == null) {
                     materials.setId(IdWorker.createId());
-                    materials.setCreateUser(SecurityUtils.getUserName());
+                    materials.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     materials.setCreateTime(DateUtils.getNowDate());
                     insertMaterialsList.add(materials);
                 } else {
-                    materials.setUpdateUser(SecurityUtils.getUserName());
+                    materials.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                     materials.setUpdateTime(DateUtils.getNowDate());
                     updateMaterialsList.add(materials);
                 }
@@ -128,11 +119,11 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
             for (XmslLocalEquipmentSupply equipment : localResourceSupply.getLocalEquipmentSupplyList()) {
                 if (equipment.getId() == null) {
                     equipment.setId(IdWorker.createId());
-                    equipment.setCreateUser(SecurityUtils.getUserName());
+                    equipment.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     equipment.setCreateTime(DateUtils.getNowDate());
                     insertEquipmentList.add(equipment);
                 } else {
-                    equipment.setUpdateUser(SecurityUtils.getUserName());
+                    equipment.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                     equipment.setUpdateTime(DateUtils.getNowDate());
                     updateEquipmentList.add(equipment);
                 }

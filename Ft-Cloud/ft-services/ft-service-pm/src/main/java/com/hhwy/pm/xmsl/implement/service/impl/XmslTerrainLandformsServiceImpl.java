@@ -37,11 +37,12 @@ public class XmslTerrainLandformsServiceImpl implements IXmslTerrainLandformsSer
         for (XmslTerrainLandforms xmslTerrainLandforms : xmslTerrainLandformsList) {
             if (xmslTerrainLandforms.getId() == null) {
                 xmslTerrainLandforms.setId(IdWorker.createId());
-                xmslTerrainLandforms.setCreateUser(SecurityUtils.getUserName());
+                xmslTerrainLandforms.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                xmslTerrainLandforms.setCreateUserName(SecurityUtils.getUserName());
                 xmslTerrainLandforms.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslTerrainLandforms);
             } else {
-                xmslTerrainLandforms.setUpdateUser(SecurityUtils.getUserName());
+                xmslTerrainLandforms.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslTerrainLandforms.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslTerrainLandforms);
             }

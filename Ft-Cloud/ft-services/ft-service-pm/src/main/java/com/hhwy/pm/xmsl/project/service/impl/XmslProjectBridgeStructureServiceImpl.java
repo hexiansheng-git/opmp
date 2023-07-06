@@ -70,7 +70,7 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
             xmslProjectBridgeStructure.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectBridgeStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectBridgeStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectBridgeStructure.setCreateUser(SecurityUtils.getUserName());
+            xmslProjectBridgeStructure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectBridgeStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectBridgeStructureMapper.insertProjectBridgeStructureList(xmslProjectBridgeStructureList);
@@ -79,7 +79,7 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
     @Transactional
     public int updateProjectBridgeStructureList(List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList) {
         for (XmslProjectBridgeStructure xmslProjectBridgeStructure : xmslProjectBridgeStructureList) {
-            xmslProjectBridgeStructure.setUpdateUser(SecurityUtils.getUserName());
+            xmslProjectBridgeStructure.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectBridgeStructure.setUpdateTime(DateUtils.getNowDate());
         }
         return xmslProjectBridgeStructureMapper.updateProjectBridgeStructureList(xmslProjectBridgeStructureList);
@@ -88,7 +88,7 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
     @Override
     @Transactional
     public int deleteProjectBridgeStructure(XmslProjectBridgeStructure xmslProjectBridgeStructure) {
-        xmslProjectBridgeStructure.setUpdateUser(SecurityUtils.getUserName());
+        xmslProjectBridgeStructure.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectBridgeStructure.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectBridgeStructureMapper.deleteProjectBridgeStructure(xmslProjectBridgeStructure);
     }

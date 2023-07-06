@@ -12,21 +12,6 @@ import lombok.Data;
 public class LocalResourceSupply {
 
     /**
-     * 当地工人供应情况
-     */
-    private XmslLocalWorkerSupply localWorkerSupply;
-
-    /**
-     * 当地物资供应情况
-     */
-    private XmslLocalMaterialsSupply localMaterialsSupply;
-
-    /**
-     * 当地设备供应情况
-     */
-    private XmslLocalEquipmentSupply localEquipmentSupply;
-
-    /**
      * 当地工人供应情况集合
      */
     private List<XmslLocalWorkerSupply> localWorkerSupplyList;

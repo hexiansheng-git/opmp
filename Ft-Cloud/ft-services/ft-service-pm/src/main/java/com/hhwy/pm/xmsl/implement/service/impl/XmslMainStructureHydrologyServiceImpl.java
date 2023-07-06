@@ -38,11 +38,12 @@ public class XmslMainStructureHydrologyServiceImpl implements IXmslMainStructure
         for (XmslMainStructureHydrology xmslMainStructureHydrology : xmslMainStructureHydrologyList) {
             if (xmslMainStructureHydrology.getId() == null) {
                 xmslMainStructureHydrology.setId(IdWorker.createId());
-                xmslMainStructureHydrology.setCreateUser(SecurityUtils.getUserName());
+                xmslMainStructureHydrology.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                xmslMainStructureHydrology.setCreateUserName(SecurityUtils.getUserName());
                 xmslMainStructureHydrology.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslMainStructureHydrology);
             } else {
-                xmslMainStructureHydrology.setUpdateUser(SecurityUtils.getUserName());
+                xmslMainStructureHydrology.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslMainStructureHydrology.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslMainStructureHydrology);
             }

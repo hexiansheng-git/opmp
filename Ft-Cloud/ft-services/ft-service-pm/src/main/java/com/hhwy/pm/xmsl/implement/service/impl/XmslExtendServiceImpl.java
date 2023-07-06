@@ -30,12 +30,13 @@ public class XmslExtendServiceImpl implements IXmslExtendService {
         XmslExtend extend = xmslExtendMapper.getXmslExtend(new XmslExtend());
         if (extend == null || extend.getId() == null) {
             xmslExtend.setId(IdWorker.createId());
-            xmslExtend.setCreateUser(SecurityUtils.getUserName());
+            xmslExtend.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslExtend.setCreateUserName(SecurityUtils.getUserName());
             xmslExtend.setCreateTime(DateUtils.getNowDate());
             xmslExtendMapper.insertXmslExtend(xmslExtend);
         } else {
             xmslExtend.setId(extend.getId());
-            xmslExtend.setUpdateUser(SecurityUtils.getUserName());
+            xmslExtend.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslExtend.setUpdateTime(DateUtils.getNowDate());
             xmslExtendMapper.updateXmslExtend(xmslExtend);
         }

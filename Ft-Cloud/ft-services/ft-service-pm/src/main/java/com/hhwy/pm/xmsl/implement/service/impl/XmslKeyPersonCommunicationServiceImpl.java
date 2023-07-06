@@ -37,14 +37,15 @@ public class XmslKeyPersonCommunicationServiceImpl implements IXmslKeyPersonComm
         List<XmslKeyPersonCommunication> insertList = new ArrayList<>();
         List<XmslKeyPersonCommunication> updateList = new ArrayList<>();
         for (XmslKeyPersonCommunication xmslKeyPersonCommunication : xmslKeyPersonCommunicationList) {
-            xmslKeyPersonCommunication.setCreateUser(SecurityUtils.getUserName());
+            xmslKeyPersonCommunication.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             if (xmslKeyPersonCommunication.getId() == null) {
                 xmslKeyPersonCommunication.setId(IdWorker.createId());
-                xmslKeyPersonCommunication.setCreateUser(SecurityUtils.getUserName());
+                xmslKeyPersonCommunication.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                xmslKeyPersonCommunication.setCreateUserName(SecurityUtils.getUserName());
                 xmslKeyPersonCommunication.setCreateTime(DateUtils.getNowDate());
                 insertList.add(xmslKeyPersonCommunication);
             } else {
-                xmslKeyPersonCommunication.setUpdateUser(SecurityUtils.getUserName());
+                xmslKeyPersonCommunication.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslKeyPersonCommunication.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(xmslKeyPersonCommunication);
             }

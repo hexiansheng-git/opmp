@@ -68,7 +68,7 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
             xmslProjectMaterialsAmount.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectMaterialsAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectMaterialsAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectMaterialsAmount.setCreateUser(SecurityUtils.getUserName());
+            xmslProjectMaterialsAmount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectMaterialsAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectMaterialsAmountMapper.insertProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
@@ -82,7 +82,7 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
     @Transactional
     public int updateProjectMaterialsAmountList(List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList) {
         for (XmslProjectMaterialsAmount xmslProjectMaterialsAmount : xmslProjectMaterialsAmountList) {
-            xmslProjectMaterialsAmount.setUpdateUser(SecurityUtils.getUserName());
+            xmslProjectMaterialsAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectMaterialsAmount.setUpdateTime(DateUtils.getNowDate());
         }
         return xmslProjectMaterialsAmountMapper.updateProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
@@ -90,7 +90,7 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
     
     @Transactional
     public int deleteProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
-        xmslProjectMaterialsAmount.setUpdateUser(SecurityUtils.getUserName());
+        xmslProjectMaterialsAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectMaterialsAmount.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectMaterialsAmountMapper.deleteProjectMaterialsAmount(xmslProjectMaterialsAmount);
     }

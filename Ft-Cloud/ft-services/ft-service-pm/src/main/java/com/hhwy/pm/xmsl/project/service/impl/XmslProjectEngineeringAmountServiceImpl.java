@@ -66,7 +66,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
             xmslProjectEngineeringAmount.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectEngineeringAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectEngineeringAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectEngineeringAmount.setCreateUser(SecurityUtils.getUserName());
+            xmslProjectEngineeringAmount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectEngineeringAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectEngineeringAmountMapper.insertProjectEngineeringAmountList(xmslProjectEngineeringAmountList);
@@ -75,7 +75,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     @Transactional
     public int updateProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList) {
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            xmslProjectEngineeringAmount.setUpdateUser(SecurityUtils.getUserName());
+            xmslProjectEngineeringAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslProjectEngineeringAmount.setUpdateTime(DateUtils.getNowDate());
         }
         return xmslProjectEngineeringAmountMapper.updateProjectEngineeringAmountList(xmslProjectEngineeringAmountList);
@@ -83,7 +83,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     
     @Transactional
     public int deleteProjectEngineeringAmount(XmslProjectEngineeringAmount xmslProjectEngineeringAmount) {
-        xmslProjectEngineeringAmount.setUpdateUser(SecurityUtils.getUserName());
+        xmslProjectEngineeringAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectEngineeringAmount.setUpdateTime(DateUtils.getNowDate());
         return xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmount(xmslProjectEngineeringAmount);
     }
