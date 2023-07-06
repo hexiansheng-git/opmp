@@ -324,7 +324,7 @@ public class XmslProjectBasicInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "所属区域id")
-    @NotNull(message = "区域id不能为空",groups = {ValidationGroups.Select.class,ValidationGroups.Save.class})
+//    @NotNull(message = "区域id不能为空",groups = {ValidationGroups.Select.class,ValidationGroups.Save.class})
     private Long regionId;
     /**
      * 字段描述：所属区域名称
