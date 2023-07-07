@@ -6,8 +6,7 @@
 
     <resultMap type="com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount" id="ProjectEngineeringAmountResultMap">
         <result property="id" column="id"/>
-        <result property="treeId" column="tree_id"/>
-        <result property="parentTreeId" column="parent_tree_id"/>
+        <result property="pid" column="pid"/>
         <result property="projectBasicInfoId" column="project_basic_info_id"/>
         <result property="projectId" column="project_id"/>
         <result property="projectName" column="project_name"/>
@@ -36,8 +35,7 @@
     <select id="getProjectEngineeringAmount" resultMap="ProjectEngineeringAmountResultMap">
         select
         `id`
-        ,`tree_id`
-        ,`parent_tree_id`
+        ,`pid`
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
@@ -65,8 +63,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="treeId != null ">and `tree_id` = #{treeId}</if>
-            <if test="parentTreeId != null ">and `parent_tree_id` = #{parentTreeId}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
@@ -99,8 +96,7 @@
     <select id="getProjectEngineeringAmountList" resultMap="ProjectEngineeringAmountResultMap">
         select
         `id`
-        ,`tree_id`
-        ,`parent_tree_id`
+        ,`pid`
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
@@ -128,8 +124,7 @@
         <where>
             del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="treeId != null ">and `tree_id` = #{treeId}</if>
-            <if test="parentTreeId != null ">and `parent_tree_id` = #{parentTreeId}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
@@ -168,8 +163,7 @@
         <where>
             del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="treeId != null ">and `tree_id` = #{treeId}</if>
-            <if test="parentTreeId != null ">and `parent_tree_id` = #{parentTreeId}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
@@ -203,8 +197,7 @@
         insert into xmsl_project_engineering_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="treeId != null ">`tree_id`,</if>
-            <if test="parentTreeId != null ">`parent_tree_id`,</if>
+            <if test="pid != null ">`pid`,</if>
             <if test="projectBasicInfoId != null ">`project_basic_info_id`,</if>
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
@@ -231,8 +224,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="treeId != null ">#{treeId},</if>
-            <if test="parentTreeId != null ">#{parentTreeId},</if>
+            <if test="pid != null ">#{pid},</if>
             <if test="projectBasicInfoId != null ">#{projectBasicInfoId},</if>
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
@@ -264,8 +256,7 @@
         insert into xmsl_project_engineering_amount
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `tree_id`,
-            `parent_tree_id`,
+            `pid`,
             `project_basic_info_id`,
             `project_id`,
             `project_name`,
@@ -293,8 +284,7 @@
         <foreach collection="xmslProjectEngineeringAmountList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.treeId},
-                #{item.parentTreeId},
+                #{item.pid},
                 #{item.projectBasicInfoId},
                 #{item.projectId},
                 #{item.projectName},
@@ -324,8 +314,7 @@
     <update id="updateProjectEngineeringAmount">
         update xmsl_project_engineering_amount
         <trim prefix="SET" suffixOverrides=",">
-            <if test="treeId != null ">`tree_id` = #{treeId},</if>
-            <if test="parentTreeId != null ">`parent_tree_id` = #{parentTreeId},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
             <if test="projectBasicInfoId != null ">`project_basic_info_id` = #{projectBasicInfoId},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
@@ -354,14 +343,9 @@
     <update id="updateProjectEngineeringAmountList">
         update xmsl_project_engineering_amount
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="tree_id  = case" suffix="end,">
+            <trim prefix="pid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.treeId}
-                </foreach>
-            </trim>
-            <trim prefix="parent_tree_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.parentTreeId}
+                    when `id`=#{item.id} then #{item.pid}
                 </foreach>
             </trim>
             <trim prefix="project_basic_info_id  = case" suffix="end,">

@@ -100,8 +100,8 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public List<XmslProjectEngineeringAmount> getXmslProjectEngineeringAmountTreeList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList){
         List<XmslProjectEngineeringAmount> treeList = new ArrayList<>();
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            Long parentTreeId = xmslProjectEngineeringAmount.getParentTreeId();
-            if(parentTreeId == null || parentTreeId == 0){
+            Long pid = xmslProjectEngineeringAmount.getPid();
+            if(pid == null || pid == 0){
                 this.getChildren(xmslProjectEngineeringAmount,xmslProjectEngineeringAmountList);
                 treeList.add(xmslProjectEngineeringAmount);
             }
@@ -117,7 +117,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     private void getChildren(XmslProjectEngineeringAmount root, List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList) {
         List<XmslProjectEngineeringAmount> children = new ArrayList<>();
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            if (xmslProjectEngineeringAmount.getParentTreeId() != null && xmslProjectEngineeringAmount.getParentTreeId().equals(root.getTreeId())) {
+            if (xmslProjectEngineeringAmount.getPid() != null && xmslProjectEngineeringAmount.getPid().equals(root.getPid())) {
                 getChildren(xmslProjectEngineeringAmount, xmslProjectEngineeringAmountList);
                 children.add(xmslProjectEngineeringAmount);
             }
@@ -172,6 +172,8 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
     }
+
+//    public List<XmslProjectEngineeringAmount>
 
     /**
      * 修改项目基本信息

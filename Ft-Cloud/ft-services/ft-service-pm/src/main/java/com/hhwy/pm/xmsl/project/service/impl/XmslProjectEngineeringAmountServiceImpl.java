@@ -59,7 +59,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
     public int insertProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList, XmslProjectBasicInfo xmslProjectBasicInfo) {
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
             xmslProjectEngineeringAmount.setId(IdWorker.createId());
-            xmslProjectEngineeringAmount.setTreeId(IdWorker.createId());
+            xmslProjectEngineeringAmount.setPid(IdWorker.createId());
             xmslProjectEngineeringAmount.setProjectId(xmslProjectBasicInfo.getProjectId());
             xmslProjectEngineeringAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
             xmslProjectEngineeringAmount.setProjectName(xmslProjectBasicInfo.getProjectName());
