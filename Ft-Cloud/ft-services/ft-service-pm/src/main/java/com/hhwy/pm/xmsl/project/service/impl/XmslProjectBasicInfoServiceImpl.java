@@ -158,7 +158,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //主要工程数量
         List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList = xmslProjectBasicInfo.getXmslProjectEngineeringAmountList();
         if(!CollectionUtils.isEmpty(xmslProjectEngineeringAmountList)){
-            projectEngineeringAmountService.insertProjectEngineeringAmountList(xmslProjectBasicInfo.getXmslProjectEngineeringAmountList(), xmslProjectBasicInfo);
+            projectEngineeringAmountService.maintainTreeStructure(xmslProjectBasicInfo.getXmslProjectEngineeringAmountList(), xmslProjectBasicInfo);
         }
 
         //主要材料数量
@@ -172,8 +172,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
         return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
     }
-
-//    public List<XmslProjectEngineeringAmount>
 
     /**
      * 修改项目基本信息
@@ -197,7 +195,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //主要工程数量
         List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList = xmslProjectBasicInfo.getXmslProjectEngineeringAmountList();
         if(!CollectionUtils.isEmpty(xmslProjectEngineeringAmountList)){
-            projectEngineeringAmountService.editProjectEngineeringAmountList(xmslProjectEngineeringAmountList, xmslProjectBasicInfo);
+            projectEngineeringAmountService.maintainTreeStructure(xmslProjectEngineeringAmountList, xmslProjectBasicInfo);
         }
 
         //主要材料数量
