@@ -15,6 +15,7 @@ import ${genTable.packageName}.${genTable.beanNameProperty}.domain.${genTable.be
 
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
  * @author $!{genTable.author}
@@ -37,12 +38,15 @@ public class ${genTable.beanNameClass}Controller extends BaseController{
         #end
     #end
 
+
+    @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:list")
     @GetMapping
     public AjaxResult get${genTable.beanNameClass}(@Validated(ValidationGroups.Get.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         ${genTable.beanNameClass} ${genTable.beanNameProperty} =  ${genTable.beanNameProperty}Service.get${genTable.beanNameClass}(${genTable.beanNameProperty}Param);
         return AjaxResult.success(${genTable.beanNameProperty});
     }
 
+    @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:list")
     @GetMapping("/list")
     public AjaxResult get${genTable.beanNameClass}List(@Validated(ValidationGroups.Select.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         startPage();
@@ -50,36 +54,42 @@ public class ${genTable.beanNameClass}Controller extends BaseController{
         return getDataTableAjaxResult(${genTable.beanNameProperty}List);
     }
 
+    @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:add")
     @PostMapping("/add")
     public AjaxResult insert${genTable.beanNameClass}(@Validated(ValidationGroups.Save.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         ${genTable.beanNameProperty}Service.insert${genTable.beanNameClass}(${genTable.beanNameProperty}Param);
         return AjaxResult.success(${genTable.beanNameProperty}Param);
     }
 
+    @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:add")
     @PostMapping("/batchAdd")
     public AjaxResult insert${genTable.beanNameClass}List(@Validated(ValidationGroups.Save.class) @RequestBody List<${genTable.beanNameClass}> ${genTable.beanNameProperty}ListParam){
         ${genTable.beanNameProperty}Service.insert${genTable.beanNameClass}List(${genTable.beanNameProperty}ListParam);
         return AjaxResult.success(${genTable.beanNameProperty}ListParam);
     }
 
+    @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:update")
     @PostMapping("/update")
     public AjaxResult update${genTable.beanNameClass}(@Validated(ValidationGroups.Update.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         return toAjax(${genTable.beanNameProperty}Service.update${genTable.beanNameClass}(${genTable.beanNameProperty}Param));
     }
 
     #if($hasPk)
+        @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:update")
         @PostMapping("/batchUpdate")
         public AjaxResult update${genTable.beanNameClass}List(@Validated(ValidationGroups.Update.class) @RequestBody List<${genTable.beanNameClass}> ${genTable.beanNameProperty}ListParam){
             return toAjax(${genTable.beanNameProperty}Service.update${genTable.beanNameClass}List(${genTable.beanNameProperty}ListParam));
         }
     #end
 
+    @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:remove")
     @PostMapping("/delete")
     public AjaxResult delete${genTable.beanNameClass}(@Validated(ValidationGroups.Delete.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         return toAjax(${genTable.beanNameProperty}Service.delete${genTable.beanNameClass}(${genTable.beanNameProperty}Param));
     }
 
     #if($hasPk)
+        @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:remove")
         @PostMapping("/{ids}")
         public AjaxResult delete${genTable.beanNameClass}ByPks(@PathVariable ${pkJavaType}[] ids){
             List<${pkJavaType}> ${genTable.beanNameProperty}PkList = Arrays.asList(ids);

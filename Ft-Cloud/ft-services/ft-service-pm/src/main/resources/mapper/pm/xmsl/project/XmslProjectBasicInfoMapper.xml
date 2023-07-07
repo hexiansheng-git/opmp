@@ -9,6 +9,7 @@
         <result property="projectId" column="project_id"/>
         <result property="projectCode" column="project_code"/>
         <result property="projectName" column="project_name"/>
+        <result property="projectShortName" column="project_short_name"/>
         <result property="projectNameForeignLang" column="project_name_foreign_lang"/>
         <result property="mileage" column="mileage"/>
         <result property="contractPrice" column="contract_price"/>
@@ -56,6 +57,7 @@
         <result property="regionName" column="region_name"/>
         <result property="deptId" column="dept_id"/>
         <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
@@ -75,6 +77,7 @@
         ,`project_id`
         ,`project_code`
         ,`project_name`
+        ,`project_short_name`
         ,`project_name_foreign_lang`
         ,`mileage`
         ,`contract_price`
@@ -122,6 +125,7 @@
         ,`region_name`
         ,`dept_id`
         ,`create_user`
+        ,`create_user_name`
         ,`create_time`
         ,`update_user`
         ,`update_time`
@@ -140,6 +144,7 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectCode != null ">and `project_code` = #{projectCode}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectShortName != null  and projectShortName != ''">and `project_short_name` = #{projectShortName}</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">and `project_name_foreign_lang`
                 = #{projectNameForeignLang}
             </if>
@@ -153,7 +158,7 @@
             </if>
             <if test="capitalSource != null  and capitalSource != ''">and `capital_source` = #{capitalSource}</if>
             <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractSchedule != null ">and `contract_schedule` = #{contractSchedule}</if>
+            <if test="contractSchedule != null and contractSchedule != ''">and `contract_schedule` = #{contractSchedule}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
             <if test="completionDate != null ">and `completion_date` = #{completionDate}</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">and `defects_liability_period` =
@@ -227,6 +232,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
@@ -248,6 +254,7 @@
         ,`project_id`
         ,`project_code`
         ,`project_name`
+        ,`project_short_name`
         ,`project_name_foreign_lang`
         ,`mileage`
         ,`contract_price`
@@ -295,6 +302,7 @@
         ,`region_name`
         ,`dept_id`
         ,`create_user`
+        ,`create_user_name`
         ,`create_time`
         ,`update_user`
         ,`update_time`
@@ -313,6 +321,7 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectCode != null ">and `project_code` = #{projectCode}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="projectShortName != null  and projectShortName != ''">and `project_short_name` = #{projectShortName}</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">and `project_name_foreign_lang`
                 = #{projectNameForeignLang}
             </if>
@@ -326,7 +335,7 @@
             </if>
             <if test="capitalSource != null  and capitalSource != ''">and `capital_source` = #{capitalSource}</if>
             <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractSchedule != null ">and `contract_schedule` = #{contractSchedule}</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">and `contract_schedule` = #{contractSchedule}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
             <if test="completionDate != null ">and `completion_date` = #{completionDate}</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">and `defects_liability_period` =
@@ -400,6 +409,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
@@ -422,6 +432,7 @@
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectCode != null ">`project_code`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="projectShortName != null  and projectShortName != ''">`project_short_name`,</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">`project_name_foreign_lang`,
             </if>
             <if test="mileage != null  and mileage != ''">`mileage`,</if>
@@ -432,7 +443,7 @@
             <if test="managementCompany != null  and managementCompany != ''">`management_company`,</if>
             <if test="capitalSource != null  and capitalSource != ''">`capital_source`,</if>
             <if test="contractType != null  and contractType != ''">`contract_type`,</if>
-            <if test="contractSchedule != null ">`contract_schedule`,</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">`contract_schedule`,</if>
             <if test="startDate != null ">`start_date`,</if>
             <if test="completionDate != null ">`completion_date`,</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">`defects_liability_period`,</if>
@@ -480,6 +491,7 @@
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="deptId != null ">`dept_id`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
             <if test="createTime != null ">`create_time`,</if>
             <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
             <if test="updateTime != null ">`update_time`,</if>
@@ -497,6 +509,7 @@
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectCode != null ">#{projectCode},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="projectShortName != null  and projectShortName != ''">#{projectShortName},</if>
             <if test="projectNameForeignLang != null  and projectNameForeignLang != ''">#{projectNameForeignLang},</if>
             <if test="mileage != null  and mileage != ''">#{mileage},</if>
             <if test="contractPrice != null ">#{contractPrice},</if>
@@ -506,7 +519,7 @@
             <if test="managementCompany != null  and managementCompany != ''">#{managementCompany},</if>
             <if test="capitalSource != null  and capitalSource != ''">#{capitalSource},</if>
             <if test="contractType != null  and contractType != ''">#{contractType},</if>
-            <if test="contractSchedule != null ">#{contractSchedule},</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">#{contractSchedule},</if>
             <if test="startDate != null ">#{startDate},</if>
             <if test="completionDate != null ">#{completionDate},</if>
             <if test="defectsLiabilityPeriod != null  and defectsLiabilityPeriod != ''">#{defectsLiabilityPeriod},</if>
@@ -554,6 +567,7 @@
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="deptId != null ">#{deptId},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
             <if test="updateTime != null ">#{updateTime},</if>
@@ -576,6 +590,7 @@
             `project_id`,
             `project_code`,
             `project_name`,
+            `project_short_name`,
             `project_name_foreign_lang`,
             `mileage`,
             `contract_price`,
@@ -623,6 +638,7 @@
             `region_name`,
             `dept_id`,
             `create_user`,
+            `create_user_name`,
             `create_time`,
             `update_user`,
             `update_time`,
@@ -641,6 +657,7 @@
                 #{item.projectId},
                 #{item.projectCode},
                 #{item.projectName},
+                #{item.projectShortName},
                 #{item.projectNameForeignLang},
                 #{item.mileage},
                 #{item.contractPrice},
@@ -688,6 +705,7 @@
                 #{item.regionName},
                 #{item.deptId},
                 #{item.createUser},
+                #{item.createUserName},
                 #{item.createTime},
                 #{item.updateUser},
                 #{item.updateTime},
@@ -708,6 +726,7 @@
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectCode != null ">`project_code` = #{projectCode},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="projectShortName != null  and  projectShortName != ''">`project_short_name` = #{projectShortName},</if>
             <if test="projectNameForeignLang != null  and  projectNameForeignLang != ''">`project_name_foreign_lang` =
                 #{projectNameForeignLang},
             </if>
@@ -721,7 +740,7 @@
             </if>
             <if test="capitalSource != null  and  capitalSource != ''">`capital_source` = #{capitalSource},</if>
             <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
-            <if test="contractSchedule != null ">`contract_schedule` = #{contractSchedule},</if>
+            <if test="contractSchedule != null  and contractSchedule != ''">`contract_schedule` = #{contractSchedule},</if>
             <if test="startDate != null ">`start_date` = #{startDate},</if>
             <if test="completionDate != null ">`completion_date` = #{completionDate},</if>
             <if test="defectsLiabilityPeriod != null  and  defectsLiabilityPeriod != ''">`defects_liability_period` =
@@ -789,13 +808,8 @@
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
-            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-            <if test="createTime != null ">`create_time` = #{createTime},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-            <if test="delTime != null ">`del_time` = #{delTime},</if>
-            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -823,6 +837,11 @@
             <trim prefix="project_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="project_short_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectShortName}
                 </foreach>
             </trim>
             <trim prefix="project_name_foreign_lang  = case" suffix="end,">
@@ -1055,16 +1074,6 @@
                     when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
-            <trim prefix="create_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUser}
-                </foreach>
-            </trim>
-            <trim prefix="create_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createTime}
-                </foreach>
-            </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateUser}
@@ -1073,21 +1082,6 @@
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.updateTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delUser}
-                </foreach>
-            </trim>
-            <trim prefix="del_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">

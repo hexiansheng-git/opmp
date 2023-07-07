@@ -88,7 +88,7 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
      * 字段描述：所属区域id
      */
     @JsonProperty
-    private Integer regionId;
+    private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
@@ -98,12 +98,17 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
      * 字段描述：部门id
      */
     @JsonProperty
-    private Integer deptId;
+    private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
     private String createUser;
+    /**
+     * 字段描述：数据创建者名称
+     */
+    @JsonProperty
+    private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */

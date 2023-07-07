@@ -7,12 +7,9 @@ import java.util.List;
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -46,11 +43,17 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @Excel(name = "项目id")
     private String projectCode;
     /**
-     * 字段描述：项目名称
+     * 字段描述：项目名称（中文）
      */
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
+    /**
+     * 字段描述：项目简称（中文）
+     */
+    @JsonProperty
+    @Excel(name = "项目简称（中文）")
+    private String projectShortName;
     /**
      * 字段描述：项目名称（外文）
      */
@@ -108,10 +111,9 @@ public class XmslProjectBasicInfo extends BaseEntity {
     /**
      * 字段描述：合同工期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "合同工期")
-    private Date contractSchedule;
+    private String contractSchedule;
     /**
      * 字段描述：开工日期
      */
@@ -319,8 +321,8 @@ public class XmslProjectBasicInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "所属区域id")
-    @NotNull(message = "区域id不能为空",groups = {ValidationGroups.Select.class,ValidationGroups.Save.class})
-    private Integer regionId;
+//    @NotNull(message = "区域id不能为空",groups = {ValidationGroups.Select.class,ValidationGroups.Save.class})
+    private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
@@ -332,13 +334,19 @@ public class XmslProjectBasicInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "部门id")
-    private Integer deptId;
+    private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
     @Excel(name = "数据创建者id")
     private String createUser;
+    /**
+     * 字段描述：数据创建者名称
+     */
+    @JsonProperty
+    @Excel(name = "数据创建者名称")
+    private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */

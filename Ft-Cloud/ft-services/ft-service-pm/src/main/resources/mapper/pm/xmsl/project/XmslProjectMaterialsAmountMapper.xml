@@ -9,7 +9,7 @@
         <result property="projectBasicInfoId" column="project_basic_info_id"/>
         <result property="projectId" column="project_id"/>
         <result property="projectName" column="project_name"/>
-        <result property="type" column="type"/>
+        <result property="materialName" column="material_name"/>
         <result property="units" column="units"/>
         <result property="amount" column="amount"/>
         <result property="remark" column="remark"/>
@@ -17,6 +17,7 @@
         <result property="regionName" column="region_name"/>
         <result property="deptId" column="dept_id"/>
         <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
@@ -36,7 +37,7 @@
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
-        ,`type`
+        ,`material_name`
         ,`units`
         ,`amount`
         ,`remark`
@@ -44,6 +45,7 @@
         ,`region_name`
         ,`dept_id`
         ,`create_user`
+        ,`create_user_name`
         ,`create_time`
         ,`update_user`
         ,`update_time`
@@ -62,7 +64,7 @@
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="materialName != null  and materialName != ''">and `material_name` = #{materialName}</if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
             <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -70,6 +72,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
@@ -91,7 +94,7 @@
         ,`project_basic_info_id`
         ,`project_id`
         ,`project_name`
-        ,`type`
+        ,`material_name`
         ,`units`
         ,`amount`
         ,`remark`
@@ -99,6 +102,7 @@
         ,`region_name`
         ,`dept_id`
         ,`create_user`
+        ,`create_user_name`
         ,`create_time`
         ,`update_user`
         ,`update_time`
@@ -117,7 +121,7 @@
             <if test="projectBasicInfoId != null ">and `project_basic_info_id` = #{projectBasicInfoId}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="materialName != null  and materialName != ''">and `material_name` = #{materialName}</if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
             <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -125,6 +129,7 @@
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
@@ -147,7 +152,7 @@
             <if test="projectBasicInfoId != null ">`project_basic_info_id`,</if>
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
-            <if test="type != null  and type != ''">`type`,</if>
+            <if test="materialName != null  and materialName != ''">`material_name`,</if>
             <if test="units != null  and units != ''">`units`,</if>
             <if test="amount != null  and amount != ''">`amount`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
@@ -155,6 +160,7 @@
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="deptId != null ">`dept_id`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
             <if test="createTime != null ">`create_time`,</if>
             <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
             <if test="updateTime != null ">`update_time`,</if>
@@ -172,7 +178,7 @@
             <if test="projectBasicInfoId != null ">#{projectBasicInfoId},</if>
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
-            <if test="type != null  and type != ''">#{type},</if>
+            <if test="materialName != null  and materialName != ''">#{materialName},</if>
             <if test="units != null  and units != ''">#{units},</if>
             <if test="amount != null  and amount != ''">#{amount},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
@@ -180,6 +186,7 @@
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="deptId != null ">#{deptId},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
             <if test="updateTime != null ">#{updateTime},</if>
@@ -202,7 +209,7 @@
             `project_basic_info_id`,
             `project_id`,
             `project_name`,
-            `type`,
+            `material_name`,
             `units`,
             `amount`,
             `remark`,
@@ -210,6 +217,7 @@
             `region_name`,
             `dept_id`,
             `create_user`,
+            `create_user_name`,
             `create_time`,
             `update_user`,
             `update_time`,
@@ -228,7 +236,7 @@
                 #{item.projectBasicInfoId},
                 #{item.projectId},
                 #{item.projectName},
-                #{item.type},
+                #{item.materialName},
                 #{item.units},
                 #{item.amount},
                 #{item.remark},
@@ -236,6 +244,7 @@
                 #{item.regionName},
                 #{item.deptId},
                 #{item.createUser},
+                #{item.createUserName},
                 #{item.createTime},
                 #{item.updateUser},
                 #{item.updateTime},
@@ -256,15 +265,15 @@
             <if test="projectBasicInfoId != null ">`project_basic_info_id` = #{projectBasicInfoId},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-            <if test="type != null  and  type != ''">`type` = #{type},</if>
+            <if test="materialName != null  and  materialName != ''">`material_name` = #{materialName},</if>
             <if test="units != null  and  units != ''">`units` = #{units},</if>
             <if test="amount != null  and  amount != ''">`amount` = #{amount},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
-            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
-            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="updateUser != null and updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`upadte_time` = #{updateTime},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -294,9 +303,9 @@
                     when `id`=#{item.id} then #{item.projectName}
                 </foreach>
             </trim>
-            <trim prefix="type  = case" suffix="end,">
+            <trim prefix="material_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.type}
+                    when `id`=#{item.id} then #{item.materialName}
                 </foreach>
             </trim>
             <trim prefix="units  = case" suffix="end,">

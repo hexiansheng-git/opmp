@@ -71,6 +71,7 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
             xmslProjectBridgeStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectBridgeStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectBridgeStructure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslProjectBridgeStructure.setCreateUserName(SecurityUtils.getUserName());
             xmslProjectBridgeStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectBridgeStructureMapper.insertProjectBridgeStructureList(xmslProjectBridgeStructureList);

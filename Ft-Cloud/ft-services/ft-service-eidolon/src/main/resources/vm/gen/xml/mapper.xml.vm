@@ -20,19 +20,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <result property="${column.propertyName}" column="${column.columnName}" />
         #end
     </resultMap>
-
-    <select id="get${genTable.beanNameClass}" resultMap="${genTable.beanNameClass}ResultMap">
+    <sql id="select${genTable.beanNameClass}Vo">
         select
-        #set ($i=0)
-        #foreach ($column in $genTable.columns)
-            #if($i == 0)
-                `$column.columnName`
-            #else
-                ,`$column.columnName`
+            #set ($i=0)
+            #foreach ($column in $genTable.columns)
+                #if($i == 0)
+                    `$column.columnName`
+                #else
+             ,`$column.columnName`
+                #end
+                #set ($i=$i+1)
             #end
-            #set ($i=$i+1)
-        #end
         from ${genTable.tableName}
+    </sql>
+    <select id="get${genTable.beanNameClass}" resultMap="${genTable.beanNameClass}ResultMap">
+        <include refid="select${genTable.beanNameClass}Vo" />
         <where>
             del_flag = "0"
             #foreach ($column in $genTable.columns)
@@ -46,17 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="get${genTable.beanNameClass}List" resultMap="${genTable.beanNameClass}ResultMap">
-        select
-        #set ($i=0)
-        #foreach ($column in $genTable.columns)
-            #if($i == 0)
-                `$column.columnName`
-            #else
-                ,`$column.columnName`
-            #end
-            #set ($i=$i+1)
-        #end
-        from ${genTable.tableName}
+        <include refid="select${genTable.beanNameClass}Vo" />
         <where>
             del_flag = "0"
             #foreach ($column in $genTable.columns)

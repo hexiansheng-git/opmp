@@ -69,6 +69,7 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
             xmslProjectMaterialsAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectMaterialsAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
             xmslProjectMaterialsAmount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslProjectMaterialsAmount.setCreateUserName(SecurityUtils.getUserName());
             xmslProjectMaterialsAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectMaterialsAmountMapper.insertProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
