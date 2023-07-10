@@ -8,10 +8,12 @@ import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechSt
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtils;
 import com.hhwy.utils.tree.TreeVO;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -97,13 +99,71 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
 
     /**
      * 树列表查询
+     *
      * @param qqchContractTechStandardIdentify
      * @return
      */
     public List<? extends TreeVO> getTreeList(QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, 0l);
+        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, null);
         return treeVOS;
+    }
+
+    /**
+     * 批量保存
+     *
+     * @param qqchContractTechStandardIdentifyList
+     */
+    @Transactional
+    public void batchSave(List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList) {
+        if (CollectionUtils.isEmpty(qqchContractTechStandardIdentifyList)) {
+            return;
+        }
+
+        List<QqchContractTechStandardIdentify> insertList = new ArrayList<>();
+        List<QqchContractTechStandardIdentify> updateList = new ArrayList<>();
+        for (QqchContractTechStandardIdentify qqchContractTechStandardIdentify : qqchContractTechStandardIdentifyList) {
+            this.recursionSubset(qqchContractTechStandardIdentify, insertList, updateList);
+        }
+
+        if (insertList.size() > 0) {
+            qqchContractTechStandardIdentifyMapper.insertQqchContractTechStandardIdentifyList(insertList);
+        }
+        if (updateList.size() > 0) {
+            qqchContractTechStandardIdentifyMapper.updateQqchContractTechStandardIdentifyList(updateList);
+        }
+    }
+
+    /**
+     * 递归处理子节点
+     *
+     * @param qqchContractTechStandardIdentify
+     * @param insertList
+     * @param updateList
+     */
+    public void recursionSubset(QqchContractTechStandardIdentify qqchContractTechStandardIdentify,
+        List<QqchContractTechStandardIdentify> insertList, List<QqchContractTechStandardIdentify> updateList) {
+        Long id = qqchContractTechStandardIdentify.getId();
+        if (id == null) {
+            id = IdWorker.createId();
+            qqchContractTechStandardIdentify.setId(id);
+            qqchContractTechStandardIdentify.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchContractTechStandardIdentify.setCreateUserName(SecurityUtils.getUserName());
+            qqchContractTechStandardIdentify.setCreateTime(DateUtils.getNowDate());
+            insertList.add(qqchContractTechStandardIdentify);
+        } else {
+            qqchContractTechStandardIdentify.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchContractTechStandardIdentify.setUpdateTime(DateUtils.getNowDate());
+            updateList.add(qqchContractTechStandardIdentify);
+        }
+
+        List<QqchContractTechStandardIdentify> childList = qqchContractTechStandardIdentify.getChildList();
+        if (!CollectionUtils.isEmpty(childList)) {
+            for (QqchContractTechStandardIdentify child : childList) {
+                child.setPid(id);
+                this.recursionSubset(child, insertList, updateList);
+            }
+        }
     }
 }

@@ -180,12 +180,7 @@ public class QqchContractTechStandardIdentify extends TreeVO {
     private String ptVar5;
 
     /**
-     * 孩子节点集合
-     */
-    private List<TreeVO> children1;
-
-    /**
      * 子集合
      */
-//    private List<QqchContractTechStandardIdentify> children;
+    private List<QqchContractTechStandardIdentify> childList;
 }

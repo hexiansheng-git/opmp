@@ -27,8 +27,12 @@ public class TreeUtils extends BaseEntity {
                 dtoList.stream().filter((item) -> treeVO.getId().equals(item.getPid())).collect(Collectors.toList()));
         });
 
-        List<? extends TreeVO> collect = dtoList.stream().filter((item) -> pid.equals(item.getPid()))
-            .collect(Collectors.toList());
+        List<? extends TreeVO> collect = dtoList.stream().filter((item) -> {
+            if (item.getPid() == null || item.getPid() == 0) {
+                return true;
+            }
+            return item.getPid().equals(pid);
+        }).collect(Collectors.toList());
 
         return collect;
 

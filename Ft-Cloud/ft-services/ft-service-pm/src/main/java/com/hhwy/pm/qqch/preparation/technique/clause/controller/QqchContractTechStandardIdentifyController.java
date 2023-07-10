@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,8 +96,8 @@ public class QqchContractTechStandardIdentifyController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "qqchContractTechStandardIdentify:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteQqchContractTechStandardIdentifyByPks(@PathVariable Long[] ids) {
+    @PostMapping("/remove")
+    public AjaxResult deleteQqchContractTechStandardIdentifyByPks(Long[] ids) {
         List<Long> qqchContractTechStandardIdentifyPkList = Arrays.asList(ids);
         return toAjax(qqchContractTechStandardIdentifyService
             .deleteQqchContractTechStandardIdentifyByPks(qqchContractTechStandardIdentifyPkList));
@@ -126,6 +125,20 @@ public class QqchContractTechStandardIdentifyController extends BaseController {
         List<? extends TreeVO> treeList = qqchContractTechStandardIdentifyService
             .getTreeList(qqchContractTechStandardIdentifyParam);
         return AjaxResult.success(treeList);
+    }
+
+    /**
+     * 批量保存
+     *
+     * @param qqchContractTechStandardIdentifyListParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchContractTechStandardIdentify:add")
+    @PostMapping("/batchSave")
+    public AjaxResult batchSave(
+        @Validated(ValidationGroups.Save.class) @RequestBody List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyListParam) {
+        qqchContractTechStandardIdentifyService.batchSave(qqchContractTechStandardIdentifyListParam);
+        return AjaxResult.success(qqchContractTechStandardIdentifyListParam);
     }
 
 }

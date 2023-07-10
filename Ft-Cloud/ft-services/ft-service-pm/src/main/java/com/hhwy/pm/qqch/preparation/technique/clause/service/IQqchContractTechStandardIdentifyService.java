@@ -33,4 +33,6 @@ public interface IQqchContractTechStandardIdentifyService {
 
     List<? extends TreeVO> getTreeList(
         QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
+
+    void batchSave(List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList);
 }
