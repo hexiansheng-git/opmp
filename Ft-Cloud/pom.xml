@@ -64,7 +64,7 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Alibaba Nacos 配置 -->
+            <!-- Alibaba Nacos 配置  不用可以注释掉-->
 <!--            <dependency>-->
 <!--                <groupId>com.alibaba.nacos</groupId>-->
 <!--                <artifactId>nacos-client</artifactId>-->

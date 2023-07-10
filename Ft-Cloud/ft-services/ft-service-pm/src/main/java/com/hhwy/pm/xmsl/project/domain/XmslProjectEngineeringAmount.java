@@ -31,17 +31,11 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
     /**
-     * 字段描述：树id
-     */
-    @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long treeId;
-    /**
      * 字段描述：父id
      */
     @JsonProperty
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private Long parentTreeId;
+    private Long pid;
     /**
      * 字段描述：主表id
      */

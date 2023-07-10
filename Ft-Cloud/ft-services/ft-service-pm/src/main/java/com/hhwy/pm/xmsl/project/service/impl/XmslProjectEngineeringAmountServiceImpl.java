@@ -13,6 +13,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -55,11 +56,50 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
         }
     }
 
+    /**
+     * 维护主要工程数量树结构
+     * @param xmslProjectEngineeringAmountList
+     * @return
+     */
+    public void maintainTreeStructure(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList,XmslProjectBasicInfo xmslProjectBasicInfo){
+        List<XmslProjectEngineeringAmount> insertList = new ArrayList<>();
+        List<XmslProjectEngineeringAmount> updateList = new ArrayList<>();
+        for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
+            this.maintainSubset(xmslProjectEngineeringAmount,insertList,updateList);
+        }
+        if(insertList.size() > 0){
+            this.insertProjectEngineeringAmountList(insertList,xmslProjectBasicInfo);
+        }
+        if(updateList.size() > 0){
+            this.updateProjectEngineeringAmountList(updateList);
+        }
+    }
+
+    /**
+     * 维护子集
+     * @param root
+     */
+    public void maintainSubset(XmslProjectEngineeringAmount root,List<XmslProjectEngineeringAmount> insertList,List<XmslProjectEngineeringAmount> updateList){
+        Long id = root.getId();
+        if(id == null){
+            id = IdWorker.createId();
+            root.setId(id);
+            insertList.add(root);
+        }else {
+            updateList.add(root);
+        }
+        List<XmslProjectEngineeringAmount> children = root.getChildren();
+        if(!CollectionUtils.isEmpty(children)){
+            for (XmslProjectEngineeringAmount child : children) {
+                child.setPid(id);
+                this.maintainSubset(child,insertList,updateList);
+            }
+        }
+    }
+
     @Transactional
     public int insertProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList, XmslProjectBasicInfo xmslProjectBasicInfo) {
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            xmslProjectEngineeringAmount.setId(IdWorker.createId());
-            xmslProjectEngineeringAmount.setTreeId(IdWorker.createId());
             xmslProjectEngineeringAmount.setProjectId(xmslProjectBasicInfo.getProjectId());
             xmslProjectEngineeringAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
             xmslProjectEngineeringAmount.setProjectName(xmslProjectBasicInfo.getProjectName());

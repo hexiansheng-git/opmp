@@ -44,7 +44,7 @@ public class XmslProjectBasicInfoController extends BaseController{
     }
 
     @GetMapping
-    public AjaxResult getProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult getProjectBasicInfo(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         XmslProjectBasicInfo xmslProjectBasicInfo =  projectBasicInfoService.getProjectBasicInfo(xmslProjectBasicInfoParam);
         return AjaxResult.success(xmslProjectBasicInfo);
     }
@@ -55,7 +55,7 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @return
      */
     @GetMapping("/list")
-    public AjaxResult getProjectBasicInfoList(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult getProjectBasicInfoList(@Validated(ValidationGroups.Select.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         startPage();
         List<XmslProjectBasicInfo> xmslProjectBasicInfoList = projectBasicInfoService.getProjectBasicInfoList(xmslProjectBasicInfoParam);
         return getDataTableAjaxResult(xmslProjectBasicInfoList);
@@ -77,18 +77,18 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @param xmslProjectBasicInfoParam
      * @return
      */
-    @PutMapping("/update")
+    @PostMapping("/update")
     public AjaxResult updateProjectBasicInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         int i = projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
         return toAjax(i);
     }
     
-    @DeleteMapping("/remove")
+    @PostMapping("/remove")
     public AjaxResult deleteProjectBasicInfo(@Validated(ValidationGroups.Delete.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
         return toAjax(projectBasicInfoService.deleteProjectBasicInfo(xmslProjectBasicInfoParam));
     }
 
-    @DeleteMapping("/remove/{ids}")
+    @PostMapping("/remove/{ids}")
     public AjaxResult deleteProjectBasicInfoByPks(@PathVariable Long[] ids){
         List<Long> projectBasicInfoPkList = Arrays.asList(ids);
         return toAjax(projectBasicInfoService.deleteProjectBasicInfoByPks(projectBasicInfoPkList));
