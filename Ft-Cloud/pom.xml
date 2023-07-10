@@ -64,12 +64,12 @@
                 <scope>import</scope>
             </dependency>
 
-            <!-- Alibaba Nacos 配置 -->
-            <dependency>
-                <groupId>com.alibaba.nacos</groupId>
-                <artifactId>nacos-client</artifactId>
-                <version>${alibaba.nacos.version}</version>
-            </dependency>
+            <!-- Alibaba Nacos 配置  不用可以注释掉-->
+<!--            <dependency>-->
+<!--                <groupId>com.alibaba.nacos</groupId>-->
+<!--                <artifactId>nacos-client</artifactId>-->
+<!--                <version>${alibaba.nacos.version}</version>-->
+<!--            </dependency>-->
 
             <!-- SpringBoot 依赖配置 -->
             <dependency>
