@@ -1,0 +1,359 @@
+package com.hhwy.pm.xmsl.contractInfo.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Date;
+
+/**
+ * @author ldd
+ * @date 2023-07-10 13:57:39
+ * @remark  合同信息--主合同信息实体类
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class XmslContractInfo extends BaseEntity {
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 字段描述：主键
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "主键")
+    private Long id;
+    /**
+     * 字段描述：合同编号
+     */
+    @JsonProperty
+    @Excel(name = "合同编号")
+    private String code;
+    /**
+     * 字段描述：合同名称
+     */
+    @JsonProperty
+    @Excel(name = "合同名称")
+    private String name;
+    /**
+     * 字段描述：项目编号
+     */
+    @JsonProperty
+    @Excel(name = "项目编号")
+    private String projectCode;
+    /**
+     * 字段描述：项目名称(外文)
+     */
+    @JsonProperty
+    @Excel(name = "项目名称(外文)")
+    private String projectNameYw;
+    /**
+     * 字段描述：中标日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "中标日期", dateFormat = "yyyy-MM-dd")
+    private Date winDate;
+    /**
+     * 字段描述：合同签订日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "合同签订日期", dateFormat = "yyyy-MM-dd")
+    private Date signDate;
+    /**
+     * 字段描述：品牌名称
+     */
+    @JsonProperty
+    @Excel(name = "品牌名称")
+    private String brandName;
+    /**
+     * 字段描述：项目分类（字典项 project_category）
+     */
+    @JsonProperty
+    @Excel(name = "项目分类（字典项 project_category）")
+    private String projectCategory;
+    /**
+     * 字段描述：合同类型(字典项 contract_type)
+     */
+    @JsonProperty
+    @Excel(name = "合同类型(字典项 contract_type)")
+    private String contractType;
+    /**
+     * 字段描述：合同属性(字典项 contract_attribute)
+     */
+    @JsonProperty
+    @Excel(name = "合同属性(字典项 contract_attribute)")
+    private String contractAttribute;
+    /**
+     * 字段描述：所属时区（字典项 time_zone ）
+     */
+    @JsonProperty
+    @Excel(name = "所属时区（字典项 time_zone ）")
+    private String timeZone;
+    /**
+     * 字段描述：编制人id
+     */
+    @JsonProperty
+    @Excel(name = "编制人id")
+    private String operateUserId;
+    /**
+     * 字段描述：编制人
+     */
+    @JsonProperty
+    @Excel(name = "编制人")
+    private String operateUserName;
+    /**
+     * 字段描述：编制日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "编制日期", dateFormat = "yyyy-MM-dd")
+    private Date operateTime;
+    /**
+     * 字段描述：计量批复时限（天）
+     */
+    @JsonProperty
+    @Excel(name = "计量批复时限（天）")
+    private String meteringTime;
+    /**
+     * 字段描述：项目规模
+     */
+    @JsonProperty
+    @Excel(name = "项目规模")
+    private String projectScale;
+    /**
+     * 字段描述：合同工期（月)
+     */
+    @JsonProperty
+    @Excel(name = "合同工期（月)")
+    private String duration;
+    /**
+     * 字段描述：合同开工日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "合同开工日期", dateFormat = "yyyy-MM-dd")
+    private Date startTime;
+    /**
+     * 字段描述：合同交工日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "合同交工日期", dateFormat = "yyyy-MM-dd")
+    private Date handoverTime;
+    /**
+     * 字段描述：合同竣工日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "合同竣工日期", dateFormat = "yyyy-MM-dd")
+    private Date completedTime;
+    /**
+     * 字段描述：缺陷责任（月）
+     */
+    @JsonProperty
+    @Excel(name = "缺陷责任（月）")
+    private String defectLiability;
+    /**
+     * 字段描述：合同不含税金额
+     */
+    @JsonProperty
+    @Excel(name = "合同不含税金额")
+    private BigDecimal excludingAmout;
+    /**
+     * 字段描述：税率
+     */
+    @JsonProperty
+    @Excel(name = "税率")
+    private BigDecimal taxRate;
+    /**
+     * 字段描述：税金
+     */
+    @JsonProperty
+    @Excel(name = "税金")
+    private BigDecimal taxes;
+    /**
+     * 字段描述：合同含税金额
+     */
+    @JsonProperty
+    @Excel(name = "合同含税金额")
+    private BigDecimal includingAmout;
+    /**
+     * 字段描述：有效合同金额
+     */
+    @JsonProperty
+    @Excel(name = "有效合同金额")
+    private BigDecimal effectiveAmout;
+    /**
+     * 字段描述：清单标价货币(编码)
+     */
+    @JsonProperty
+    @Excel(name = "清单标价货币(编码)")
+    private String listCurrencyCode;
+    /**
+     * 字段描述：清单标价货币(名称)
+     */
+    @JsonProperty
+    @Excel(name = "清单标价货币(名称)")
+    private String listCurrencyName;
+    /**
+     * 字段描述：最低计量支付金额
+     */
+    @JsonProperty
+    @Excel(name = "最低计量支付金额")
+    private BigDecimal minPayAmount;
+    /**
+     * 字段描述：计量账单审核时长（天)
+     */
+    @JsonProperty
+    @Excel(name = "计量账单审核时长（天)")
+    private String billProcessDuration;
+    /**
+     * 字段描述：附件组id
+     */
+    @JsonProperty
+    @Excel(name = "附件组id")
+    private String fileGroupId;
+    /**
+     * 字段描述：备注/描述
+     */
+    @JsonProperty
+    @Excel(name = "备注/描述")
+    private String remark;
+    /**
+     * 字段描述：所属区域id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "所属区域id")
+    private Long regionId;
+    /**
+     * 字段描述：所属区域名称
+     */
+    @JsonProperty
+    @Excel(name = "所属区域名称")
+    private String regionName;
+    /**
+     * 字段描述：项目id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "项目id")
+    private Long projectId;
+    /**
+     * 字段描述：项目名称
+     */
+    @JsonProperty
+    @Excel(name = "项目名称")
+    private String projectName;
+    /**
+     * 字段描述：部门id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "部门id")
+    private Long deptId;
+    /**
+     * 字段描述：数据创建者id
+     */
+    @JsonProperty
+    @Excel(name = "数据创建者id")
+    private String createUser;
+    /**
+     * 字段描述：数据创建者名称
+     */
+    @JsonProperty
+    @Excel(name = "数据创建者名称")
+    private String createUserName;
+    /**
+     * 字段描述：数据创建系统时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
+    private Date createTime;
+    /**
+     * 字段描述：数据修改者id
+     */
+    @JsonProperty
+    @Excel(name = "数据修改者id")
+    private String updateUser;
+    /**
+     * 字段描述：数据修改系统时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd")
+    private Date updateTime;
+    /**
+     * 字段描述：数据删除者
+     */
+    @JsonProperty
+    @Excel(name = "数据删除者")
+    private String delUser;
+    /**
+     * 字段描述：数据删除系统时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd")
+    private Date delTime;
+    /**
+     * 字段描述：删除标识：0未删除；1已删除
+     */
+    @JsonProperty
+    @Excel(name = "删除标识：0未删除；1已删除")
+    private String delFlag;
+    /**
+     * 字段描述：预留字段1
+     */
+    @JsonProperty
+    @Excel(name = "预留字段1")
+    private String ptVar1;
+    /**
+     * 字段描述：预留字段2
+     */
+    @JsonProperty
+    @Excel(name = "预留字段2")
+    private String ptVar2;
+    /**
+     * 字段描述：预留字段3
+     */
+    @JsonProperty
+    @Excel(name = "预留字段3")
+    private String ptVar3;
+    /**
+     * 字段描述：预留字段4
+     */
+    @JsonProperty
+    @Excel(name = "预留字段4")
+    private String ptVar4;
+    /**
+     * 字段描述：预留字段5
+     */
+    @JsonProperty
+    @Excel(name = "预留字段5")
+    private String ptVar5;
+    /**
+     * 字段描述：流程状态（5已完成）
+     */
+    @JsonProperty
+    @Excel(name = "流程状态（5已完成）")
+    private String taskStatus;
+    /**
+     * 字段描述：是否有效（0无效 1有效）
+     */
+    @JsonProperty
+    @Excel(name = "是否有效（0无效 1有效）")
+    private String valid;
+    
+    }
