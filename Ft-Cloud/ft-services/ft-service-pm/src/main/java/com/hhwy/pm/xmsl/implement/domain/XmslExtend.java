@@ -2,6 +2,8 @@ package com.hhwy.pm.xmsl.implement.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
@@ -22,7 +24,7 @@ public class XmslExtend extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "主键id")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 字段描述：当地政策要点说明
