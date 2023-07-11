@@ -51,11 +51,11 @@ public class XmslBidWinHandoverFile extends BaseEntity {
     @Excel(name = "反馈意见")
     private String feedback;
     /**
-     * 字段描述：排序号
+     * 字段描述：排序
      */
     @JsonProperty
-    @Excel(name = "排序号")
-    private Integer sortNum;
+    @Excel(name = "排序")
+    private String sort;
     /**
      * 字段描述：附件组id
      */

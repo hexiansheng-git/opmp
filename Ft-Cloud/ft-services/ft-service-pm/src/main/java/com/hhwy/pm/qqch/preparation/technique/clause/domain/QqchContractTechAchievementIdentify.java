@@ -12,11 +12,11 @@ import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-07 15:51:11
+ * @date 2023-07-10 14:36:27
  * @remark
  */
 @Data
-public class QqchContractTechStandardIdentify extends TreeVO {
+public class QqchContractTechAchievementIdentify extends TreeVO {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,41 +35,42 @@ public class QqchContractTechStandardIdentify extends TreeVO {
     @Excel(name = "父id")
     private Long pid;
     /**
-     * 字段描述：技术标准类别（字典类型standard_type）
+     * 字段描述：项目阶段
      */
     @JsonProperty
-    @Excel(name = "技术标准类别")
-    private String standardType;
+    @Excel(name = "项目阶段")
+    private String projectPhase;
     /**
-     * 字段描述：标准名称
+     * 字段描述：类别
      */
     @JsonProperty
-    @Excel(name = "标准名称")
-    private String standardName;
+    @Excel(name = "类别")
+    private String type;
     /**
-     * 字段描述：标准号
+     * 字段描述：文件细目
      */
     @JsonProperty
-    @Excel(name = "标准号")
-    private String standardNum;
+    @Excel(name = "文件细目")
+    private String fileDetail;
     /**
-     * 字段描述：标准来源
+     * 字段描述：提交时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "标准来源")
-    private String standardSource;
-    /**
-     * 字段描述：优先级别（字典类型priority_level）
-     */
-    @JsonProperty
-    @Excel(name = "优先级别")
-    private String priorityLevel;
+    @Excel(name = "提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date submitTime;
     /**
      * 字段描述：排序
      */
     @JsonProperty
     @Excel(name = "排序")
     private String sort;
+    /**
+     * 字段描述：备注
+     */
+    @JsonProperty
+    @Excel(name = "备注")
+    private String remark;
     /**
      * 字段描述：所属区域id
      */
@@ -194,5 +195,5 @@ public class QqchContractTechStandardIdentify extends TreeVO {
     /**
      * 子集合
      */
-    private List<QqchContractTechStandardIdentify> childList;
+    private List<QqchContractTechAchievementIdentify> childList;
 }

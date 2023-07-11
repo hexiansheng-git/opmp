@@ -3,19 +3,19 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
-  namespace="com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper">
+  namespace="com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechAchievementIdentifyMapper">
 
   <resultMap
-    type="com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify"
-    id="QqchContractTechStandardIdentifyResultMap">
+    type="com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify"
+    id="QqchContractTechAchievementIdentifyResultMap">
     <result property="id" column="id"/>
     <result property="pid" column="pid"/>
-    <result property="standardType" column="standard_type"/>
-    <result property="standardName" column="standard_name"/>
-    <result property="standardNum" column="standard_num"/>
-    <result property="standardSource" column="standard_source"/>
-    <result property="priorityLevel" column="priority_level"/>
+    <result property="projectPhase" column="project_phase"/>
+    <result property="type" column="type"/>
+    <result property="fileDetail" column="file_detail"/>
+    <result property="submitTime" column="submit_time"/>
     <result property="sort" column="sort"/>
+    <result property="remark" column="remark"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
     <result property="projectId" column="project_id"/>
@@ -36,49 +36,49 @@
     <result property="ptVar5" column="pt_var5"/>
     <result property="taskStatus" column="task_status"/>
   </resultMap>
-  <sql id="selectQqchContractTechStandardIdentifyVo">
-      select
-            `id`
-         ,`pid`
-         ,`standard_type`
-         ,`standard_name`
-         ,`standard_num`
-         ,`standard_source`
-         ,`priority_level`
-         ,`sort`
-         ,`region_id`
-         ,`region_name`
-         ,`project_id`
-         ,`project_name`
-         ,`dept_id`
-         ,`create_user`
-         ,`create_user_name`
-         ,`create_time`
-         ,`update_user`
-         ,`update_time`
-         ,`del_user`
-         ,`del_time`
-         ,`del_flag`
-         ,`pt_var1`
-         ,`pt_var2`
-         ,`pt_var3`
-         ,`pt_var4`
-         ,`pt_var5`
-         ,`task_status`
-    from qqch_contract_tech_standard_identify
+  <sql id="selectQqchContractTechAchievementIdentifyVo">
+    select
+          `id`
+       ,`pid`
+       ,`project_phase`
+       ,`type`
+       ,`file_detail`
+       ,`submit_time`
+       ,`sort`
+       ,`remark`
+       ,`region_id`
+       ,`region_name`
+       ,`project_id`
+       ,`project_name`
+       ,`dept_id`
+       ,`create_user`
+       ,`create_user_name`
+       ,`create_time`
+       ,`update_user`
+       ,`update_time`
+       ,`del_user`
+       ,`del_time`
+       ,`del_flag`
+       ,`pt_var1`
+       ,`pt_var2`
+       ,`pt_var3`
+       ,`pt_var4`
+       ,`pt_var5`
+       ,`task_status`
+    from qqch_contract_tech_achievement_identify
     </sql>
-  <select id="getQqchContractTechStandardIdentify" resultMap="QqchContractTechStandardIdentifyResultMap">
-    <include refid="selectQqchContractTechStandardIdentifyVo"/>
+  <select id="getQqchContractTechAchievementIdentify" resultMap="QqchContractTechAchievementIdentifyResultMap">
+    <include refid="selectQqchContractTechAchievementIdentifyVo"/>
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="standardType != null  and standardType != ''">and `standard_type` = #{standardType}</if>
-      <if test="standardName != null  and standardName != ''">and `standard_name` = #{standardName}</if>
-      <if test="standardNum != null  and standardNum != ''">and `standard_num` = #{standardNum}</if>
-      <if test="standardSource != null  and standardSource != ''">and `standard_source` = #{standardSource}</if>
-      <if test="priorityLevel != null  and priorityLevel != ''">and `priority_level` = #{priorityLevel}</if>
+      <if test="projectPhase != null  and projectPhase != ''">and `project_phase` = #{projectPhase}</if>
+      <if test="type != null  and type != ''">and `type` = #{type}</if>
+      <if test="fileDetail != null  and fileDetail != ''">and `file_detail` = #{fileDetail}</if>
+      <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
       <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -102,18 +102,18 @@
     order by create_time desc
   </select>
 
-  <select id="getQqchContractTechStandardIdentifyList" resultMap="QqchContractTechStandardIdentifyResultMap">
-    <include refid="selectQqchContractTechStandardIdentifyVo"/>
+  <select id="getQqchContractTechAchievementIdentifyList" resultMap="QqchContractTechAchievementIdentifyResultMap">
+    <include refid="selectQqchContractTechAchievementIdentifyVo"/>
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="standardType != null  and standardType != ''">and `standard_type` = #{standardType}</if>
-      <if test="standardName != null  and standardName != ''">and `standard_name` = #{standardName}</if>
-      <if test="standardNum != null  and standardNum != ''">and `standard_num` = #{standardNum}</if>
-      <if test="standardSource != null  and standardSource != ''">and `standard_source` = #{standardSource}</if>
-      <if test="priorityLevel != null  and priorityLevel != ''">and `priority_level` = #{priorityLevel}</if>
+      <if test="projectPhase != null  and projectPhase != ''">and `project_phase` = #{projectPhase}</if>
+      <if test="type != null  and type != ''">and `type` = #{type}</if>
+      <if test="fileDetail != null  and fileDetail != ''">and `file_detail` = #{fileDetail}</if>
+      <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
       <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -137,17 +137,17 @@
     order by sort
   </select>
 
-  <insert id="insertQqchContractTechStandardIdentify" useGeneratedKeys="true" keyProperty="id">
-    insert into qqch_contract_tech_standard_identify
+  <insert id="insertQqchContractTechAchievementIdentify" useGeneratedKeys="true" keyProperty="id">
+    insert into qqch_contract_tech_achievement_identify
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null ">`id`,</if>
       <if test="pid != null ">`pid`,</if>
-      <if test="standardType != null  and standardType != ''">`standard_type`,</if>
-      <if test="standardName != null  and standardName != ''">`standard_name`,</if>
-      <if test="standardNum != null  and standardNum != ''">`standard_num`,</if>
-      <if test="standardSource != null  and standardSource != ''">`standard_source`,</if>
-      <if test="priorityLevel != null  and priorityLevel != ''">`priority_level`,</if>
+      <if test="projectPhase != null  and projectPhase != ''">`project_phase`,</if>
+      <if test="type != null  and type != ''">`type`,</if>
+      <if test="fileDetail != null  and fileDetail != ''">`file_detail`,</if>
+      <if test="submitTime != null ">`submit_time`,</if>
       <if test="sort != null  and sort != ''">`sort`,</if>
+      <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
       <if test="projectId != null ">`project_id`,</if>
@@ -171,12 +171,12 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null ">#{id},</if>
       <if test="pid != null ">#{pid},</if>
-      <if test="standardType != null  and standardType != ''">#{standardType},</if>
-      <if test="standardName != null  and standardName != ''">#{standardName},</if>
-      <if test="standardNum != null  and standardNum != ''">#{standardNum},</if>
-      <if test="standardSource != null  and standardSource != ''">#{standardSource},</if>
-      <if test="priorityLevel != null  and priorityLevel != ''">#{priorityLevel},</if>
+      <if test="projectPhase != null  and projectPhase != ''">#{projectPhase},</if>
+      <if test="type != null  and type != ''">#{type},</if>
+      <if test="fileDetail != null  and fileDetail != ''">#{fileDetail},</if>
+      <if test="submitTime != null ">#{submitTime},</if>
       <if test="sort != null  and sort != ''">#{sort},</if>
+      <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
       <if test="projectId != null ">#{projectId},</if>
@@ -199,18 +199,18 @@
     </trim>
   </insert>
 
-  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchContractTechStandardIdentify -->
-  <insert id="insertQqchContractTechStandardIdentifyList">
-    insert into qqch_contract_tech_standard_identify
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchContractTechAchievementIdentify -->
+  <insert id="insertQqchContractTechAchievementIdentifyList">
+    insert into qqch_contract_tech_achievement_identify
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
       `pid`,
-      `standard_type`,
-      `standard_name`,
-      `standard_num`,
-      `standard_source`,
-      `priority_level`,
+      `project_phase`,
+      `type`,
+      `file_detail`,
+      `submit_time`,
       `sort`,
+      `remark`,
       `region_id`,
       `region_name`,
       `project_id`,
@@ -231,16 +231,16 @@
       `task_status`,
     </trim>
     values
-    <foreach collection="qqchContractTechStandardIdentifyList" item="item" separator=",">
+    <foreach collection="qqchContractTechAchievementIdentifyList" item="item" separator=",">
       <trim prefix="(" suffix=")" suffixOverrides=",">
         #{item.id},
         #{item.pid},
-        #{item.standardType},
-        #{item.standardName},
-        #{item.standardNum},
-        #{item.standardSource},
-        #{item.priorityLevel},
+        #{item.projectPhase},
+        #{item.type},
+        #{item.fileDetail},
+        #{item.submitTime},
         #{item.sort},
+        #{item.remark},
         #{item.regionId},
         #{item.regionName},
         #{item.projectId},
@@ -263,17 +263,17 @@
     </foreach>
   </insert>
 
-  <update id="updateQqchContractTechStandardIdentify">
-    update qqch_contract_tech_standard_identify
+  <update id="updateQqchContractTechAchievementIdentify">
+    update qqch_contract_tech_achievement_identify
     <trim prefix="SET" suffixOverrides=",">
       <if test="id != null ">`id` = #{id},</if>
       <if test="pid != null ">`pid` = #{pid},</if>
-      <if test="standardType != null  and  standardType != ''">`standard_type` = #{standardType},</if>
-      <if test="standardName != null  and  standardName != ''">`standard_name` = #{standardName},</if>
-      <if test="standardNum != null  and  standardNum != ''">`standard_num` = #{standardNum},</if>
-      <if test="standardSource != null  and  standardSource != ''">`standard_source` = #{standardSource},</if>
-      <if test="priorityLevel != null  and  priorityLevel != ''">`priority_level` = #{priorityLevel},</if>
+      <if test="projectPhase != null  and  projectPhase != ''">`project_phase` = #{projectPhase},</if>
+      <if test="type != null  and  type != ''">`type` = #{type},</if>
+      <if test="fileDetail != null  and  fileDetail != ''">`file_detail` = #{fileDetail},</if>
+      <if test="submitTime != null ">`submit_time` = #{submitTime},</if>
       <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+      <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
       <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -299,8 +299,8 @@
     </where>
   </update>
 
-  <update id="updateQqchContractTechStandardIdentifyList">
-    update qqch_contract_tech_standard_identify
+  <update id="updateQqchContractTechAchievementIdentifyList">
+    update qqch_contract_tech_achievement_identify
     <trim prefix="set" suffixOverrides=",">
       <trim prefix="id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
@@ -312,34 +312,34 @@
           when `id`=#{item.id} then #{item.pid}
         </foreach>
       </trim>
-      <trim prefix="standard_type  = case" suffix="end,">
+      <trim prefix="project_phase  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.standardType}
+          when `id`=#{item.id} then #{item.projectPhase}
         </foreach>
       </trim>
-      <trim prefix="standard_name  = case" suffix="end,">
+      <trim prefix="type  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.standardName}
+          when `id`=#{item.id} then #{item.type}
         </foreach>
       </trim>
-      <trim prefix="standard_num  = case" suffix="end,">
+      <trim prefix="file_detail  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.standardNum}
+          when `id`=#{item.id} then #{item.fileDetail}
         </foreach>
       </trim>
-      <trim prefix="standard_source  = case" suffix="end,">
+      <trim prefix="submit_time  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.standardSource}
-        </foreach>
-      </trim>
-      <trim prefix="priority_level  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.priorityLevel}
+          when `id`=#{item.id} then #{item.submitTime}
         </foreach>
       </trim>
       <trim prefix="sort  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.sort}
+        </foreach>
+      </trim>
+      <trim prefix="remark  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.remark}
         </foreach>
       </trim>
       <trim prefix="region_id  = case" suffix="end,">
@@ -444,17 +444,17 @@
     </foreach>
   </update>
 
-  <update id="deleteQqchContractTechStandardIdentify">
-    update `qqch_contract_tech_standard_identify` set del_flag = 1
+  <update id="deleteQqchContractTechAchievementIdentify">
+    update `qqch_contract_tech_achievement_identify` set del_flag = 1
     <where>
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="standardType != null  and standardType != ''">and `standard_type` = #{standardType}</if>
-      <if test="standardName != null  and standardName != ''">and `standard_name` = #{standardName}</if>
-      <if test="standardNum != null  and standardNum != ''">and `standard_num` = #{standardNum}</if>
-      <if test="standardSource != null  and standardSource != ''">and `standard_source` = #{standardSource}</if>
-      <if test="priorityLevel != null  and priorityLevel != ''">and `priority_level` = #{priorityLevel}</if>
+      <if test="projectPhase != null  and projectPhase != ''">and `project_phase` = #{projectPhase}</if>
+      <if test="type != null  and type != ''">and `type` = #{type}</if>
+      <if test="fileDetail != null  and fileDetail != ''">and `file_detail` = #{fileDetail}</if>
+      <if test="submitTime != null ">and `submit_time` = #{submitTime}</if>
       <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -477,11 +477,11 @@
     </where>
   </update>
 
-  <update id="deleteQqchContractTechStandardIdentifyByPks">
-    update `qqch_contract_tech_standard_identify` set del_flag = 1
+  <update id="deleteQqchContractTechAchievementIdentifyByPks">
+    update `qqch_contract_tech_achievement_identify` set del_flag = 1
     <where>
       `id` in
-      <foreach item="id" collection="qqchContractTechStandardIdentifyPkList" open="(" separator="," close=")">
+      <foreach item="id" collection="qqchContractTechAchievementIdentifyPkList" open="(" separator="," close=")">
         #{id}
       </foreach>
     </where>
