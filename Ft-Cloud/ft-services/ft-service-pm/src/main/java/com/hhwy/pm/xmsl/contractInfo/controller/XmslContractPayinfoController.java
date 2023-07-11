@@ -53,12 +53,6 @@ public class XmslContractPayinfoController extends BaseController {
         return AjaxResult.success(xmslContractPayinfoParam);
     }
 
-    @PreAuthorize(hasPermi = "xmslContractPayinfo:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertXmslContractPayinfoList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractPayinfo> xmslContractPayinfoListParam) {
-        xmslContractPayinfoService.insertXmslContractPayinfoList(xmslContractPayinfoListParam);
-        return AjaxResult.success(xmslContractPayinfoListParam);
-    }
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:update")
     @PostMapping("/update")

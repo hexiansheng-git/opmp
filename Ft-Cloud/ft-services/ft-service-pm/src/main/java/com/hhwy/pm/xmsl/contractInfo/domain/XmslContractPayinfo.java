@@ -56,16 +56,16 @@ public class XmslContractPayinfo extends BaseEntity {
     @Excel(name = "比例")
     private Float proportion;
     /**
-     * 字段描述：折算汇率类型
+     * 字段描述：折算汇率类型 字典项（rate_type）
      */
     @JsonProperty
     @Excel(name = "折算汇率类型")
     private String rateType;
     /**
-     * 字段描述：折算汇率(字典项  obversion_rate )
+     * 字段描述：折算汇率
      */
     @JsonProperty
-    @Excel(name = "折算汇率(字典项  obversion_rate )")
+    @Excel(name = "折算汇率")
     private String obversionRate;
     /**
      * 字段描述：资金来源

@@ -11,7 +11,6 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,7 +19,7 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-10 13:57:39
- * @remark
+ * @remark  合同信息--主合同信息Controller
  */
 @Validated
 @RestController
@@ -46,12 +45,19 @@ public class XmslContractInfoController extends BaseController {
         return getDataTableAjaxResult(xmslContractInfoList);
     }
 
+    /**
+     *  主合同信息新增
+     *
+     * @param xmslContractInfoParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "xmslContractInfo:add")
     @PostMapping("/add")
     public AjaxResult insertXmslContractInfo(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
         xmslContractInfoService.insertXmslContractInfo(xmslContractInfoParam);
         return AjaxResult.success(xmslContractInfoParam);
     }
+
 
     @PreAuthorize(hasPermi = "xmslContractInfo:add")
     @PostMapping("/batchAdd")
@@ -60,11 +66,19 @@ public class XmslContractInfoController extends BaseController {
         return AjaxResult.success(xmslContractInfoListParam);
     }
 
+
+    /**
+     *  主合同信息修改
+     *
+     * @param xmslContractInfoParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
     @PostMapping("/update")
     public AjaxResult updateXmslContractInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
         return toAjax(xmslContractInfoService.updateXmslContractInfo(xmslContractInfoParam));
     }
+
 
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
     @PostMapping("/batchUpdate")

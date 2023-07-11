@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface IXmslContractInsureService {
 
     int insertXmslContractInsure(XmslContractInsure xmslContractInsure);
 
-    int insertXmslContractInsureList(List<XmslContractInsure> xmslContractInsureList);
+    int insertXmslContractInsureList(List<XmslContractInsure> xmslContractInsureList, XmslContractInfo xmslContractInfo);
 
     int updateXmslContractInsure(XmslContractInsure xmslContractInsure);
 

@@ -128,7 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="winDate != null "> and `win_date` = #{winDate}</if>
                             <if test="signDate != null "> and `sign_date` = #{signDate}</if>
                             <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
-                            <if test="project category != null  and project category != ''"> and `project_category` = #{project category}</if>
+                            <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
                             <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
                             <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
                             <if test="timeZone != null  and timeZone != ''"> and `time_zone` = #{timeZone}</if>
@@ -189,7 +189,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="winDate != null "> and `win_date` = #{winDate}</if>
                             <if test="signDate != null "> and `sign_date` = #{signDate}</if>
                             <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
-                            <if test="project category != null  and project category != ''"> and `project_category` = #{project category}</if>
+                            <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
                             <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
                             <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
                             <if test="timeZone != null  and timeZone != ''"> and `time_zone` = #{timeZone}</if>
@@ -249,7 +249,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="winDate != null ">`win_date`,</if>
                             <if test="signDate != null ">`sign_date`,</if>
                             <if test="brandName != null  and brandName != ''">`brand_name`,</if>
-                            <if test="project category != null  and project category != ''">`project_category`,</if>
+                            <if test="projectCategory != null  and projectCategory != ''">`project_category`,</if>
                             <if test="contractType != null  and contractType != ''">`contract_type`,</if>
                             <if test="contractAttribute != null  and contractAttribute != ''">`contract_attribute`,</if>
                             <if test="timeZone != null  and timeZone != ''">`time_zone`,</if>
@@ -304,7 +304,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="winDate != null ">#{winDate},</if>
                             <if test="signDate != null ">#{signDate},</if>
                             <if test="brandName != null  and brandName != ''">#{brandName},</if>
-                            <if test="project category != null  and project category != ''">#{project category},</if>
+                            <if test="projectCategory != null  and projectCategory != ''">#{projectCategory},</if>
                             <if test="contractType != null  and contractType != ''">#{contractType},</if>
                             <if test="contractAttribute != null  and contractAttribute != ''">#{contractAttribute},</if>
                             <if test="timeZone != null  and timeZone != ''">#{timeZone},</if>
@@ -420,7 +420,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                                 #{item.winDate},
                                                                                 #{item.signDate},
                                                                                 #{item.brandName},
-                                                                                #{item.project category},
+                                                                                #{item.projectCategory},
                                                                                 #{item.contractType},
                                                                                 #{item.contractAttribute},
                                                                                 #{item.timeZone},
@@ -479,7 +479,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="winDate != null ">`win_date` = #{winDate},</if>
                             <if test="signDate != null ">`sign_date` = #{signDate},</if>
                             <if test="brandName != null  and  brandName != ''">`brand_name` = #{brandName},</if>
-                            <if test="project category != null  and  project category != ''">`project_category` = #{project category},</if>
+                            <if test="projectCategory != null  and  projectCategory != ''">`project_category` = #{projectCategory},</if>
                             <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
                             <if test="contractAttribute != null  and  contractAttribute != ''">`contract_attribute` = #{contractAttribute},</if>
                             <if test="timeZone != null  and  timeZone != ''">`time_zone` = #{timeZone},</if>
@@ -575,7 +575,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
                                     <trim prefix="project_category  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.project category}
+                            when `id`=#{item.id} then #{item.projectCategory}
                         </foreach>
                     </trim>
                                     <trim prefix="contract_type  = case" suffix="end,">
@@ -816,7 +816,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="winDate != null "> and `win_date` = #{winDate}</if>
                                     <if test="signDate != null "> and `sign_date` = #{signDate}</if>
                                     <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
-                                    <if test="project category != null  and project category != ''"> and `project_category` = #{project category}</if>
+                                    <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
                                     <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
                                     <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
                                     <if test="timeZone != null  and timeZone != ''"> and `time_zone` = #{timeZone}</if>

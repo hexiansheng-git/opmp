@@ -6,12 +6,15 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ldd
@@ -27,6 +30,7 @@ public class XmslContractInfo extends BaseEntity {
     /**
      * 字段描述：主键
      */
+    @NotNull(message = "主键不能为空",groups = {ValidationGroups.Update.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键")
@@ -34,6 +38,7 @@ public class XmslContractInfo extends BaseEntity {
     /**
      * 字段描述：合同编号
      */
+    @NotBlank(message = "合同编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "合同编号")
     private String code;
@@ -72,30 +77,35 @@ public class XmslContractInfo extends BaseEntity {
     /**
      * 字段描述：品牌名称
      */
+    @NotBlank(message = "品牌名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "品牌名称")
     private String brandName;
     /**
      * 字段描述：项目分类（字典项 project_category）
      */
+    @NotBlank(message = "项目分类不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "项目分类（字典项 project_category）")
     private String projectCategory;
     /**
      * 字段描述：合同类型(字典项 contract_type)
      */
+    @NotBlank(message = "合同类型不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "合同类型(字典项 contract_type)")
     private String contractType;
     /**
      * 字段描述：合同属性(字典项 contract_attribute)
      */
+    @NotBlank(message = "合同属性不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "合同属性(字典项 contract_attribute)")
     private String contractAttribute;
     /**
      * 字段描述：所属时区（字典项 time_zone ）
      */
+    @NotBlank(message = "所属时区不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "所属时区（字典项 time_zone ）")
     private String timeZone;
@@ -133,12 +143,14 @@ public class XmslContractInfo extends BaseEntity {
     /**
      * 字段描述：合同工期（月)
      */
+    @NotBlank(message = "合同工期（月)不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "合同工期（月)")
     private String duration;
     /**
      * 字段描述：合同开工日期
      */
+    @NotNull(message = "合同开工日期不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "合同开工日期", dateFormat = "yyyy-MM-dd")
@@ -172,6 +184,7 @@ public class XmslContractInfo extends BaseEntity {
     /**
      * 字段描述：税率
      */
+    @NotNull(message = "税率不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "税率")
     private BigDecimal taxRate;
@@ -355,5 +368,11 @@ public class XmslContractInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "是否有效（0无效 1有效）")
     private String valid;
-    
+
+    //投保险种
+    private List<XmslContractInsure> xmslContractInsureList;
+    //签订信息
+    private List<XmslContractSign> xmslContractSignList;
+    //项目支付信息
+    private List<XmslContractPayinfo> xmslContractPayinfoList;
     }

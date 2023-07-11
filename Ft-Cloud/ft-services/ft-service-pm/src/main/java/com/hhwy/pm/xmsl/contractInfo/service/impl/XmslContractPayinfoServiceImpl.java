@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractPayinfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
@@ -41,9 +42,15 @@ public class XmslContractPayinfoServiceImpl implements IXmslContractPayinfoServi
     }
 
     @Transactional
-    public int insertXmslContractPayinfoList(List<XmslContractPayinfo> xmslContractPayinfoList) {
+    public int insertXmslContractPayinfoList(List<XmslContractPayinfo> xmslContractPayinfoList, XmslContractInfo xmslContractInfo) {
         for (XmslContractPayinfo xmslContractPayinfo : xmslContractPayinfoList) {
             xmslContractPayinfo.setId(IdWorker.createId());
+            xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
+            xmslContractPayinfo.setProjectId(xmslContractInfo.getProjectId());
+            xmslContractPayinfo.setProjectName(xmslContractInfo.getProjectName());
+            xmslContractPayinfo.setRegionId(xmslContractInfo.getRegionId());
+            xmslContractPayinfo.setRegionName(xmslContractInfo.getRegionName());
+            xmslContractPayinfo.setDeptId(xmslContractInfo.getDeptId());
             xmslContractPayinfo.setCreateUser(SecurityUtils.getUserName());
             xmslContractPayinfo.setCreateTime(DateUtils.getNowDate());
         }

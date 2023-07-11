@@ -11,7 +11,6 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
@@ -53,12 +52,6 @@ public class XmslContractInsureController extends BaseController {
         return AjaxResult.success(xmslContractInsureParam);
     }
 
-    @PreAuthorize(hasPermi = "xmslContractInsure:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertXmslContractInsureList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractInsure> xmslContractInsureListParam) {
-        xmslContractInsureService.insertXmslContractInsureList(xmslContractInsureListParam);
-        return AjaxResult.success(xmslContractInsureListParam);
-    }
 
     @PreAuthorize(hasPermi = "xmslContractInsure:update")
     @PostMapping("/update")

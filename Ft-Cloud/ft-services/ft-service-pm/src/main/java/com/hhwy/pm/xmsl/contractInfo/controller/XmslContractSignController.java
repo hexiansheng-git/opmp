@@ -53,12 +53,6 @@ public class XmslContractSignController extends BaseController {
         return AjaxResult.success(xmslContractSignParam);
     }
 
-    @PreAuthorize(hasPermi = "xmslContractSign:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertXmslContractSignList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractSign> xmslContractSignListParam) {
-        xmslContractSignService.insertXmslContractSignList(xmslContractSignListParam);
-        return AjaxResult.success(xmslContractSignListParam);
-    }
 
     @PreAuthorize(hasPermi = "xmslContractSign:update")
     @PostMapping("/update")

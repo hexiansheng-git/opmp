@@ -15,6 +15,12 @@ public interface IXmslContractInfoService {
 
     List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo);
 
+    /**
+     *  主合同信息新增
+     *
+     * @param xmslContractInfo
+     * @return
+     */
     int insertXmslContractInfo(XmslContractInfo xmslContractInfo);
 
     int insertXmslContractInfoList(List<XmslContractInfo> xmslContractInfoList);

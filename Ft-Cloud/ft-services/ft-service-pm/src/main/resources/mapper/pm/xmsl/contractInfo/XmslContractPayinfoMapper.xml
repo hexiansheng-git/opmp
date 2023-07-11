@@ -498,7 +498,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </update>
     
             <update id="deleteXmslContractPayinfo">
-            update `xmsl_contract_payinfo` set del_flag = 1
+            update `xmsl_contract_payinfo` set del_flag = 1,`update_user` = #{updateUser},`update_time` = #{updateTime}
             <where>
                                     <if test="id != null "> and `id` = #{id}</if>
                                     <if test="masterId != null "> and `master_id` = #{masterId}</if>
@@ -521,8 +521,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
                                     <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
                                     <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
                                     <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
                                     <if test="delTime != null "> and `del_time` = #{delTime}</if>
                                     <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>

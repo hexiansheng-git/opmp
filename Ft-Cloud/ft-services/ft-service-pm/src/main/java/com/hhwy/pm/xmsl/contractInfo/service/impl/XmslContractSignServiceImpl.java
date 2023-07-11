@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSign;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractSignMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSignService;
@@ -41,9 +42,15 @@ public class XmslContractSignServiceImpl implements IXmslContractSignService {
     }
 
     @Transactional
-    public int insertXmslContractSignList(List<XmslContractSign> xmslContractSignList) {
+    public int insertXmslContractSignList(List<XmslContractSign> xmslContractSignList, XmslContractInfo xmslContractInfo) {
         for (XmslContractSign xmslContractSign : xmslContractSignList) {
             xmslContractSign.setId(IdWorker.createId());
+            xmslContractSign.setMasterId(xmslContractInfo.getId());
+            xmslContractSign.setProjectId(xmslContractInfo.getProjectId());
+            xmslContractSign.setProjectName(xmslContractInfo.getProjectName());
+            xmslContractSign.setRegionId(xmslContractInfo.getRegionId());
+            xmslContractSign.setRegionName(xmslContractInfo.getRegionName());
+            xmslContractSign.setDeptId(xmslContractInfo.getDeptId());
             xmslContractSign.setCreateUser(SecurityUtils.getUserName());
             xmslContractSign.setCreateTime(DateUtils.getNowDate());
         }

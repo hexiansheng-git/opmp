@@ -182,7 +182,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertXmslContractInsureList">
         insert into xmsl_contract_insure
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                `id`,
+                                                                `id`,
                                                                 `master_id`,
                                                                 `name`,
                                                                 `amount`,
@@ -200,7 +200,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `update_time`,
                                                                 `del_user`,
                                                                 `del_time`,
-                                                                                            `pt_var1`,
+                                                                 `pt_var1`,
                                                                 `pt_var2`,
                                                                 `pt_var3`,
                                                                 `pt_var4`,
@@ -209,7 +209,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         values
         <foreach collection="xmslContractInsureList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                            #{item.id},
+                                                                                 #{item.id},
                                                                                 #{item.masterId},
                                                                                 #{item.name},
                                                                                 #{item.amount},
@@ -227,7 +227,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                                 #{item.updateTime},
                                                                                 #{item.delUser},
                                                                                 #{item.delTime},
-                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar1},
                                                                                 #{item.ptVar2},
                                                                                 #{item.ptVar3},
                                                                                 #{item.ptVar4},
@@ -400,8 +400,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </update>
     
             <update id="deleteXmslContractInsure">
-            update `xmsl_contract_insure` set del_flag = 1
-            <where>
+            update `xmsl_contract_insure` set del_flag = 1 , update_user=#{updateUser} ,update_time=#{updateTime}
+                                     <where>
                                     <if test="id != null "> and `id` = #{id}</if>
                                     <if test="masterId != null "> and `master_id` = #{masterId}</if>
                                     <if test="name != null  and name != ''"> and `name` = #{name}</if>
@@ -416,8 +416,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
                                     <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
                                     <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
                                     <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
                                     <if test="delTime != null "> and `del_time` = #{delTime}</if>
                                     <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
