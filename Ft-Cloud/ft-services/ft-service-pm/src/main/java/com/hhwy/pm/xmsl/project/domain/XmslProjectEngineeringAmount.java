@@ -75,6 +75,12 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
     @Excel(name = "数量")
     private String amount;
     /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private String sort;
+    /**
      * 字段描述：备注/描述
      */
     @JsonProperty
