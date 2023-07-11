@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -29,8 +30,45 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         return qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlan(qqchChangeProcedurePlan);
     }
 
-    public List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList(QqchChangeProcedurePlan qqchChangeProcedurePlan) {
-        return qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(qqchChangeProcedurePlan);
+    /**
+     * 获取变更程序策划集合
+     * @return
+     */
+    public List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList() {
+        return qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList();
+    }
+
+    /**
+     * 批量编辑（新增和修改）
+     * @param qqchChangeProcedurePlanListParam
+     * @return
+     */
+    @Override
+    @Transactional
+    public int editQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanListParam) {
+        List<QqchChangeProcedurePlan> insertList = new ArrayList<>();
+        List<QqchChangeProcedurePlan> updateList = new ArrayList<>();
+        for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanListParam) {
+            Long id = qqchChangeProcedurePlan.getId();
+            if(id == null){
+                qqchChangeProcedurePlan.setId(IdWorker.createId());
+                qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
+                qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
+                qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());
+                insertList.add(qqchChangeProcedurePlan);
+            }else {
+                qqchChangeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
+                qqchChangeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
+                updateList.add(qqchChangeProcedurePlan);
+            }
+        }
+        if(insertList.size() > 0){
+            qqchChangeProcedurePlanMapper.insertQqchChangeProcedurePlanList(insertList);
+        }
+        if(updateList.size() > 0){
+            qqchChangeProcedurePlanMapper.updateQqchChangeProcedurePlanList(updateList);
+        }
+        return 1;
     }
 
     @Transactional

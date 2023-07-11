@@ -15,7 +15,7 @@ public interface QqchComparisonSchemeMapper {
 
     QqchComparisonScheme getQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
 
-    List<QqchComparisonScheme> getQqchComparisonSchemeList(QqchComparisonScheme qqchComparisonScheme);
+    List<QqchComparisonScheme> getQqchComparisonSchemeList();
 
     int insertQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
 

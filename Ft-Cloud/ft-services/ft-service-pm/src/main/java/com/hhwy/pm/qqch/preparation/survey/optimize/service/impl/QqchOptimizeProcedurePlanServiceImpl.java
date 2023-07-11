@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -43,8 +44,31 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
      * @return
      */
     @Override
+    @Transactional
     public int editQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanListParam) {
-        return 0;
+        List<QqchOptimizeProcedurePlan> insertList = new ArrayList<>();
+        List<QqchOptimizeProcedurePlan> updateList = new ArrayList<>();
+        for (QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan : qqchOptimizeProcedurePlanListParam) {
+            Long id = qqchOptimizeProcedurePlan.getId();
+            if(id == null){
+                qqchOptimizeProcedurePlan.setId(IdWorker.createId());
+                qqchOptimizeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
+                qqchOptimizeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
+                qqchOptimizeProcedurePlan.setCreateTime(DateUtils.getNowDate());
+                insertList.add(qqchOptimizeProcedurePlan);
+            }else {
+                qqchOptimizeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
+                qqchOptimizeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
+                updateList.add(qqchOptimizeProcedurePlan);
+            }
+        }
+        if(insertList.size() > 0){
+            qqchOptimizeProcedurePlanMapper.insertQqchOptimizeProcedurePlanList(insertList);
+        }
+        if(updateList.size() > 0){
+            qqchOptimizeProcedurePlanMapper.updateQqchOptimizeProcedurePlanList(updateList);
+        }
+        return 1;
     }
 
     @Transactional

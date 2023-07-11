@@ -56,7 +56,7 @@
     <select id="getQqchPreparationSurveyExtend" resultMap="QqchPreparationSurveyExtendResultMap">
         <include refid="selectQqchPreparationSurveyExtendVo"/>
         <where>
-            del_flag = "0"
+            del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
             <if test="optimizeProcedurePlanGroupId != null  and optimizeProcedurePlanGroupId != ''">and
                 `optimize_procedure_plan_group_id` = #{optimizeProcedurePlanGroupId}
@@ -83,7 +83,6 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
     </select>
 
     <select id="getQqchPreparationSurveyExtendList" resultMap="QqchPreparationSurveyExtendResultMap">

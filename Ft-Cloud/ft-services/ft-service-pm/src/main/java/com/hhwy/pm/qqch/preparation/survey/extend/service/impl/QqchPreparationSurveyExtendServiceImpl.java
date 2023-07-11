@@ -25,8 +25,26 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
     private QqchPreparationSurveyExtendMapper qqchPreparationSurveyExtendMapper;
 
 
-    public QqchPreparationSurveyExtend getQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {
-        return qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+    /**
+     * 获取扩展数据
+     * @return
+     */
+    @Override
+    public QqchPreparationSurveyExtend getQqchPreparationSurveyExtend() {
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend();
+        if(qqchPreparationSurveyExtend == null){
+            //数据库中不存在数据
+            qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
+            qqchPreparationSurveyExtend.setId(IdWorker.createId());
+            qqchPreparationSurveyExtend.setChangeProcedurePlanGroupId(StringUtils.valueOf(IdWorker.createId()));
+            qqchPreparationSurveyExtend.setOptimizeProcedurePlanGroupId(StringUtils.valueOf(IdWorker.createId()));
+            qqchPreparationSurveyExtend.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
+            qqchPreparationSurveyExtend.setCreateUserName(SecurityUtils.getUserName());
+            qqchPreparationSurveyExtend.setCreateTime(DateUtils.getNowDate());
+            qqchPreparationSurveyExtendMapper.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        }
+
+        return qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend();
     }
 
     public List<QqchPreparationSurveyExtend> getQqchPreparationSurveyExtendList(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {

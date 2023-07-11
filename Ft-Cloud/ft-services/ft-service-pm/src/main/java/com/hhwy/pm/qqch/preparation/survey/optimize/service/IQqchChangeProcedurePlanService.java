@@ -13,7 +13,18 @@ public interface IQqchChangeProcedurePlanService {
 
     QqchChangeProcedurePlan getQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
 
-    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList(QqchChangeProcedurePlan qqchChangeProcedurePlan);
+    /**
+     * 获取变更程序策划集合
+     * @return
+     */
+    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList();
+
+    /**
+     * 批量编辑（新增和修改）
+     * @param qqchChangeProcedurePlanListParam
+     * @return
+     */
+    int editQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanListParam);
 
     int insertQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
 

@@ -11,19 +11,5 @@ import java.util.List;
  */
 public interface IQqchComparisonSchemeHeaderService {
 
-    QqchComparisonSchemeHeader getQqchComparisonSchemeHeader(QqchComparisonSchemeHeader qqchComparisonSchemeHeader);
-
     List<QqchComparisonSchemeHeader> getQqchComparisonSchemeHeaderList(QqchComparisonSchemeHeader qqchComparisonSchemeHeader);
-
-    int insertQqchComparisonSchemeHeader(QqchComparisonSchemeHeader qqchComparisonSchemeHeader);
-
-    int insertQqchComparisonSchemeHeaderList(List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList);
-
-    int updateQqchComparisonSchemeHeader(QqchComparisonSchemeHeader qqchComparisonSchemeHeader);
-
-    int updateQqchComparisonSchemeHeaderList(List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList);
-
-    int deleteQqchComparisonSchemeHeader(QqchComparisonSchemeHeader qqchComparisonSchemeHeader);
-
-    int deleteQqchComparisonSchemeHeaderByPks(List<Long> qqchComparisonSchemeHeaderPkList);
 }

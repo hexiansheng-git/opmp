@@ -66,7 +66,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="optimizationPoint != null ">and `optimization_point` = #{optimizationPoint}</if>
+            <if test="optimizationPoint != null and optimizationPoint != ''">and `optimization_point` = #{optimizationPoint}</if>
             <if test="changePrinciple != null  and changePrinciple != ''">and `change_principle` = #{changePrinciple}
             </if>
             <if test="changeQuantity != null  and changeQuantity != ''">and `change_quantity` = #{changeQuantity}</if>
@@ -101,47 +101,14 @@
 
     <select id="getQqchDesignTechnologyOptimizeList" resultMap="QqchDesignTechnologyOptimizeResultMap">
         <include refid="selectQqchDesignTechnologyOptimizeVo"/>
-        <where>
-            del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="optimizationPoint != null ">and `optimization_point` = #{optimizationPoint}</if>
-            <if test="changePrinciple != null  and changePrinciple != ''">and `change_principle` = #{changePrinciple}
-            </if>
-            <if test="changeQuantity != null  and changeQuantity != ''">and `change_quantity` = #{changeQuantity}</if>
-            <if test="formerUnivalence != null  and formerUnivalence != ''">and `former_univalence` =
-                #{formerUnivalence}
-            </if>
-            <if test="afterChangeUnivalence != null  and afterChangeUnivalence != ''">and `after_change_univalence` =
-                #{afterChangeUnivalence}
-            </if>
-            <if test="predictSave != null  and predictSave != ''">and `predict_save` = #{predictSave}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-        </where>
-        order by create_time desc
+        where del_flag = '0'
     </select>
 
     <insert id="insertQqchDesignTechnologyOptimize" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_design_technology_optimize
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="optimizationPoint != null ">`optimization_point`,</if>
+            <if test="optimizationPoint != null and optimizationPoint != ''">`optimization_point`,</if>
             <if test="changePrinciple != null  and changePrinciple != ''">`change_principle`,</if>
             <if test="changeQuantity != null  and changeQuantity != ''">`change_quantity`,</if>
             <if test="formerUnivalence != null  and formerUnivalence != ''">`former_univalence`,</if>
@@ -168,7 +135,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="optimizationPoint != null ">#{optimizationPoint},</if>
+            <if test="optimizationPoint != null and optimizationPoint != ''">#{optimizationPoint},</if>
             <if test="changePrinciple != null  and changePrinciple != ''">#{changePrinciple},</if>
             <if test="changeQuantity != null  and changeQuantity != ''">#{changeQuantity},</if>
             <if test="formerUnivalence != null  and formerUnivalence != ''">#{formerUnivalence},</if>
@@ -258,7 +225,7 @@
     <update id="updateQqchDesignTechnologyOptimize">
         update qqch_design_technology_optimize
         <trim prefix="SET" suffixOverrides=",">
-            <if test="optimizationPoint != null ">`optimization_point` = #{optimizationPoint},</if>
+            <if test="optimizationPoint != null and optimizationPoint != ''">`optimization_point` = #{optimizationPoint},</if>
             <if test="changePrinciple != null  and  changePrinciple != ''">`change_principle` = #{changePrinciple},</if>
             <if test="changeQuantity != null  and  changeQuantity != ''">`change_quantity` = #{changeQuantity},</if>
             <if test="formerUnivalence != null  and  formerUnivalence != ''">`former_univalence` =
@@ -390,7 +357,7 @@
         update `qqch_design_technology_optimize` set del_flag = '1'
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="optimizationPoint != null ">and `optimization_point` = #{optimizationPoint}</if>
+            <if test="optimizationPoint != null and optimizationPoint != ''">and `optimization_point` = #{optimizationPoint}</if>
             <if test="changePrinciple != null  and changePrinciple != ''">and `change_principle` = #{changePrinciple}
             </if>
             <if test="changeQuantity != null  and changeQuantity != ''">and `change_quantity` = #{changeQuantity}</if>

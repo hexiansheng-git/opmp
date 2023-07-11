@@ -32,10 +32,9 @@ public class QqchDesignTechnologyOptimize extends BaseEntity {
     /**
      * 字段描述：优化点
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "优化点")
-    private Long optimizationPoint;
+    private String optimizationPoint;
     /**
      * 字段描述：主要变更原则
      */

@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
+import java.util.List;
+
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -155,4 +157,8 @@ public class QqchComparisonScheme extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    /**
+     * 字段描述：表头
+     */
+    private List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList;
 }

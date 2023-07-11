@@ -93,8 +93,13 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
         return toAjax(qqchOptimizeProcedurePlanService.deleteQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlanParam));
     }
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:remove")
-    @PostMapping("/{ids}")
+    @PostMapping("/remove/{ids}")
     public AjaxResult deleteQqchOptimizeProcedurePlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchOptimizeProcedurePlanPkList = Arrays.asList(ids);
         return toAjax(qqchOptimizeProcedurePlanService.deleteQqchOptimizeProcedurePlanByPks(qqchOptimizeProcedurePlanPkList));

@@ -15,7 +15,11 @@ public interface QqchDesignTechnologyOptimizeMapper {
 
     QqchDesignTechnologyOptimize getQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
 
-    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
+    /**
+     * 获取设计技术优化要点集合
+     * @return
+     */
+    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList();
 
     int insertQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
 
