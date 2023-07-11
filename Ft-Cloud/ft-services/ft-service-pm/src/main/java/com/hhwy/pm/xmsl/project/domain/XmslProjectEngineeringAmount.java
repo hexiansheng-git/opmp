@@ -1,5 +1,7 @@
 package com.hhwy.pm.xmsl.project.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import java.util.List;
@@ -28,26 +30,26 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
      * 字段描述：主键id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 字段描述：父id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long pid;
     /**
      * 字段描述：主表id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     @NotNull(message = "主表id不能空！",groups = ValidationGroups.Select.class)
     private Long projectBasicInfoId;
     /**
      * 字段描述：项目id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long projectId;
     /**
      * 字段描述：项目名称
