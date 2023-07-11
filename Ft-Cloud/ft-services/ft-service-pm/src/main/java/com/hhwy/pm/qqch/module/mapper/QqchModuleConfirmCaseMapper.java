@@ -24,7 +24,7 @@ public interface QqchModuleConfirmCaseMapper {
 
     int updateQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
-    int updateQqchModuleConfirmCaseList(@Param("qqchModuleConfirmCaseList") List<QqchModuleConfirmCase> qqchModuleConfirmCaseList);
+    int updateQqchModuleConfirmCaseList(@Param("list") List<QqchModuleConfirmCase> qqchModuleConfirmCaseList);
 
     int deleteQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
