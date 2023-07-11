@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.system.mapper.DictMapper">
+	
+	<resultMap type="com.hhwy.system.core.domain.SysDictData" id="SysDictDataResult">
+		<id     property="dictDataId"   column="dict_data_id"   />
+		<result property="parentId"   column="parent_id"   />
+		<result property="dictSort"   column="dict_sort"   />
+		<result property="dictLabel"  column="dict_label"  />
+		<result property="dictValue"  column="dict_value"  />
+		<result property="dictType"   column="dict_type"   />
+		<result property="cssClass"   column="css_class"   />
+		<result property="listClass"  column="list_class"  />
+		<result property="isDefault"  column="is_default"  />
+		<result property="status"     column="status"      />
+		<result property="createUser"   column="create_user"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateUser"   column="update_user"   />
+		<result property="updateTime" column="update_time" />
+		<result property="ptVar1"       column="pt_var_1"       />
+		<result property="ptVar2"       column="pt_var_2"       />
+		<result property="ptVar3"       column="pt_var_3"       />
+		<result property="ptVar4"       column="pt_var_4"       />
+		<result property="ptVar5"       column="pt_var_5"       />
+	</resultMap>
+	
+	<sql id="selectDictDataVo">
+        select dict_data_id, parent_id, dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_user, create_time, remark, pt_var_1, pt_var_2, pt_var_3, pt_var_4, pt_var_5
+		from sys_dict_data
+    </sql>
+
+
+	<select id="selectDictValueByTypeAndLabel" resultMap="SysDictDataResult">
+		<include refid="selectDictDataVo"/>
+		where dict_type = #{dictType} and find_in_set(`dict_label`, #{dictLabels}) order by dict_sort asc
+	</select>
+
+
+	
+</mapper> 
