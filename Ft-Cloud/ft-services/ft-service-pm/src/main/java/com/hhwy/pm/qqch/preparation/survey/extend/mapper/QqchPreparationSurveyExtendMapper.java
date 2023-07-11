@@ -14,7 +14,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface QqchPreparationSurveyExtendMapper {
 
-    QqchPreparationSurveyExtend getQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
+    /**
+     * 获取扩展数据
+     * @return
+     */
+    QqchPreparationSurveyExtend getQqchPreparationSurveyExtend();
 
     List<QqchPreparationSurveyExtend> getQqchPreparationSurveyExtendList(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
 

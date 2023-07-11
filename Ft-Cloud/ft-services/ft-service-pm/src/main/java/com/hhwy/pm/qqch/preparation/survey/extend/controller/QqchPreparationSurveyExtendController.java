@@ -30,11 +30,14 @@ public class QqchPreparationSurveyExtendController extends BaseController {
     @Autowired
     private IQqchPreparationSurveyExtendService qqchPreparationSurveyExtendService;
 
-
+    /**
+     * 获取扩展数据
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchPreparationSurveyExtend:list")
     @GetMapping
-    public AjaxResult getQqchPreparationSurveyExtend(@Validated(ValidationGroups.Get.class) @RequestBody QqchPreparationSurveyExtend qqchPreparationSurveyExtendParam) {
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtendParam);
+    public AjaxResult getQqchPreparationSurveyExtend() {
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend();
         return AjaxResult.success(qqchPreparationSurveyExtend);
     }
 
@@ -46,6 +49,11 @@ public class QqchPreparationSurveyExtendController extends BaseController {
         return getDataTableAjaxResult(qqchPreparationSurveyExtendList);
     }
 
+    /**
+     * 新增扩展数据
+     * @param qqchPreparationSurveyExtendParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchPreparationSurveyExtend:add")
     @PostMapping("/add")
     public AjaxResult insertQqchPreparationSurveyExtend(@Validated(ValidationGroups.Save.class) @RequestBody QqchPreparationSurveyExtend qqchPreparationSurveyExtendParam) {

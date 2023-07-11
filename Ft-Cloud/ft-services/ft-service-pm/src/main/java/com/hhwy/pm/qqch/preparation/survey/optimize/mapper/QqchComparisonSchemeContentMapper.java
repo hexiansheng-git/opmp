@@ -28,5 +28,19 @@ public interface QqchComparisonSchemeContentMapper {
 
     int deleteQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent);
 
+    /**
+     * 删除行
+     * @param schemeId
+     * @param sorts
+     * @return
+     */
+    int deleteBySchemeIdAndSorts(@Param("schemeId") Long schemeId,@Param("sorts") String[] sorts);
+
+    /**
+     * 删除列
+     * @param headerIds
+     */
+    void deleteByHeaderIds(@Param("headerIds") Long[] headerIds);
+
     int deleteQqchComparisonSchemeContentByPks(@Param("qqchComparisonSchemeContentPkList") List<Long> qqchComparisonSchemeContentPkList);
 }

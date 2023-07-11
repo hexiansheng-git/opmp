@@ -13,7 +13,18 @@ public interface IQqchDesignTechnologyOptimizeService {
 
     QqchDesignTechnologyOptimize getQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
 
-    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
+    /**
+     * 获取设计技术优化要点集合
+     * @return
+     */
+    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList();
+
+    /**
+     * 批量编辑（新增和修改）
+     * @param qqchDesignTechnologyOptimizeListParam
+     * @return
+     */
+    int editQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeListParam);
 
     int insertQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
 

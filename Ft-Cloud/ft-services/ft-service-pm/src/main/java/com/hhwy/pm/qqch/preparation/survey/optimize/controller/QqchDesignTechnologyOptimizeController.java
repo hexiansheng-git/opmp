@@ -38,12 +38,26 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
         return AjaxResult.success(qqchDesignTechnologyOptimize);
     }
 
+    /**
+     * 设计技术优化要点台账
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:list")
     @GetMapping("/list")
-    public AjaxResult getQqchDesignTechnologyOptimizeList(@Validated(ValidationGroups.Select.class) @RequestBody QqchDesignTechnologyOptimize qqchDesignTechnologyOptimizeParam) {
-        startPage();
-        List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeParam);
-        return getDataTableAjaxResult(qqchDesignTechnologyOptimizeList);
+    public AjaxResult getQqchDesignTechnologyOptimizeList() {
+        List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeList();
+        return AjaxResult.success(qqchDesignTechnologyOptimizeList);
+    }
+
+    /**
+     * 批量编辑（新增和修改）
+     * @param qqchDesignTechnologyOptimizeListParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:update")
+    @PostMapping("/batchEdit")
+    public AjaxResult editQqchDesignTechnologyOptimizeList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeListParam) {
+        return toAjax(qqchDesignTechnologyOptimizeService.editQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeListParam));
     }
 
     @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:add")
@@ -78,8 +92,13 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
         return toAjax(qqchDesignTechnologyOptimizeService.deleteQqchDesignTechnologyOptimize(qqchDesignTechnologyOptimizeParam));
     }
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:remove")
-    @PostMapping("/{ids}")
+    @PostMapping("/remove/{ids}")
     public AjaxResult deleteQqchDesignTechnologyOptimizeByPks(@PathVariable Long[] ids) {
         List<Long> qqchDesignTechnologyOptimizePkList = Arrays.asList(ids);
         return toAjax(qqchDesignTechnologyOptimizeService.deleteQqchDesignTechnologyOptimizeByPks(qqchDesignTechnologyOptimizePkList));
@@ -87,7 +106,7 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchDesignTechnologyOptimize qqchDesignTechnologyOptimizeParam) throws IOException {
-        List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeParam);
+        List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeList();
         ExcelUtils<QqchDesignTechnologyOptimize> util = new ExcelUtils<>(QqchDesignTechnologyOptimize.class);
         util.exportExcel(response, qqchDesignTechnologyOptimizeList, DateUtils.getDate());
     }

@@ -38,8 +38,7 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     @Override
     public List<QqchOptimizeChangeOrganization> getQqchOptimizeChangeOrganizationTreeList() {
         List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(new QqchOptimizeChangeOrganization());
-        List<QqchOptimizeChangeOrganization> treeList = this.assembleTreeList(qqchOptimizeChangeOrganizationList);
-        return treeList;
+        return this.assembleTreeList(qqchOptimizeChangeOrganizationList);
     }
 
     /**
@@ -67,7 +66,7 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     private void getChildren(QqchOptimizeChangeOrganization root, List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList) {
         List<QqchOptimizeChangeOrganization> children = new ArrayList<>();
         for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : qqchOptimizeChangeOrganizationList) {
-            if (qqchOptimizeChangeOrganization.getPid() != null && qqchOptimizeChangeOrganization.getPid().equals(root.getPid())) {
+            if (qqchOptimizeChangeOrganization.getPid() != null && qqchOptimizeChangeOrganization.getPid().equals(root.getId())) {
                 getChildren(qqchOptimizeChangeOrganization, qqchOptimizeChangeOrganizationList);
                 children.add(qqchOptimizeChangeOrganization);
             }
@@ -91,7 +90,6 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     @Transactional
     public int insertQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList) {
         for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : qqchOptimizeChangeOrganizationList) {
-            qqchOptimizeChangeOrganization.setId(IdWorker.createId());
             qqchOptimizeChangeOrganization.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchOptimizeChangeOrganization.setCreateUserName(SecurityUtils.getUserName());
             qqchOptimizeChangeOrganization.setCreateTime(DateUtils.getNowDate());
@@ -133,6 +131,7 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
      * @return
      */
     @Override
+    @Transactional
     public int editQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList){
         List<QqchOptimizeChangeOrganization> insertList = new ArrayList<>();
         List<QqchOptimizeChangeOrganization> updateList = new ArrayList<>();

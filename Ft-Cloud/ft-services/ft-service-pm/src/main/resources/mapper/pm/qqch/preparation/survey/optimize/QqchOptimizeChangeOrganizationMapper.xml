@@ -10,7 +10,7 @@
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
         <result property="teamRole" column="team_role"/>
-        <result property="order" column="order"/>
+        <result property="sort" column="sort"/>
         <result property="projectPosition" column="project_position"/>
         <result property="memberName" column="member_name"/>
         <result property="memberId" column="member_id"/>
@@ -38,7 +38,7 @@
              `id`
              ,`pid`
              ,`team_role`
-             ,`order`
+             ,`sort`
              ,`project_position`
              ,`member_name`
              ,`member_id`
@@ -69,7 +69,7 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="teamRole != null  and teamRole != ''">and `team_role` = #{teamRole}</if>
-            <if test="order != null  and order != ''">and `order` = #{order}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="projectPosition != null  and projectPosition != ''">and `project_position` = #{projectPosition}
             </if>
             <if test="memberName != null  and memberName != ''">and `member_name` = #{memberName}</if>
@@ -102,7 +102,7 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="teamRole != null  and teamRole != ''">and `team_role` = #{teamRole}</if>
-            <if test="order != null  and order != ''">and `order` = #{order}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="projectPosition != null  and projectPosition != ''">and `project_position` = #{projectPosition}
             </if>
             <if test="memberName != null  and memberName != ''">and `member_name` = #{memberName}</if>
@@ -126,7 +126,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by order
+        order by `sort`
     </select>
 
     <insert id="insertQqchOptimizeChangeOrganization" useGeneratedKeys="true" keyProperty="id">
@@ -135,7 +135,7 @@
             <if test="id != null ">`id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="teamRole != null  and teamRole != ''">`team_role`,</if>
-            <if test="order != null  and order != ''">`order`,</if>
+            <if test="sort != null  and sort != ''">`sort`,</if>
             <if test="projectPosition != null  and projectPosition != ''">`project_position`,</if>
             <if test="memberName != null  and memberName != ''">`member_name`,</if>
             <if test="memberId != null ">`member_id`,</if>
@@ -162,7 +162,7 @@
             <if test="id != null ">#{id},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="teamRole != null  and teamRole != ''">#{teamRole},</if>
-            <if test="order != null  and order != ''">#{order},</if>
+            <if test="sort != null  and sort != ''">#{sort},</if>
             <if test="projectPosition != null  and projectPosition != ''">#{projectPosition},</if>
             <if test="memberName != null  and memberName != ''">#{memberName},</if>
             <if test="memberId != null ">#{memberId},</if>
@@ -194,7 +194,7 @@
             `id`,
             `pid`,
             `team_role`,
-            `order`,
+            `sort`,
             `project_position`,
             `member_name`,
             `member_id`,
@@ -222,7 +222,7 @@
                 #{item.id},
                 #{item.pid},
                 #{item.teamRole},
-                #{item.order},
+                #{item.sort},
                 #{item.projectPosition},
                 #{item.memberName},
                 #{item.memberId},
@@ -252,7 +252,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="teamRole != null  and  teamRole != ''">`team_role` = #{teamRole},</if>
-            <if test="order != null  and  order != ''">`order` = #{order},</if>
+            <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
             <if test="projectPosition != null  and  projectPosition != ''">`project_position` = #{projectPosition},</if>
             <if test="memberName != null  and  memberName != ''">`member_name` = #{memberName},</if>
             <if test="memberId != null ">`member_id` = #{memberId},</if>
@@ -287,9 +287,9 @@
                     when `id`=#{item.id} then #{item.teamRole}
                 </foreach>
             </trim>
-            <trim prefix="order  = case" suffix="end,">
+            <trim prefix="`sort`  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.order}
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="project_position  = case" suffix="end,">
@@ -380,7 +380,7 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="teamRole != null  and teamRole != ''">and `team_role` = #{teamRole}</if>
-            <if test="order != null  and order != ''">and `order` = #{order}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="projectPosition != null  and projectPosition != ''">and `project_position` = #{projectPosition}
             </if>
             <if test="memberName != null  and memberName != ''">and `member_name` = #{memberName}</if>

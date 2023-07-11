@@ -1,5 +1,7 @@
 package com.hhwy.pm.xmsl.project.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import com.hhwy.common.core.annotation.Excel;
@@ -24,19 +26,19 @@ public class XmslProjectCulvertStructure extends BaseEntity {
      * 字段描述：主键id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 字段描述：主表id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long projectBasicInfoId;
     /**
      * 字段描述：项目id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long projectId;
     /**
      * 字段描述：项目名称
