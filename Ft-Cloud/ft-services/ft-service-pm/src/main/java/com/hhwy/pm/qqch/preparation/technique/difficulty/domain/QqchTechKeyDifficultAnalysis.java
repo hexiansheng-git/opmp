@@ -164,10 +164,4 @@ public class QqchTechKeyDifficultAnalysis extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-    /**
-     * 字段描述：流程状态（5已完成）
-     */
-    @JsonProperty
-    @Excel(name = "流程状态（5已完成）")
-    private String taskStatus;
 }
