@@ -1,22 +1,21 @@
-package com.hhwy.pm.qqch.preparation.technique.clause.domain;
+package com.hhwy.pm.qqch.preparation.technique.difficulty.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
-import java.util.List;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-07 15:51:11
+ * @date 2023-07-10 14:20:39
  * @remark
  */
 @Data
-public class QqchContractTechStandardIdentify extends TreeVO {
+public class QqchTechKeyDifficultAnalysis extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,48 +27,29 @@ public class QqchContractTechStandardIdentify extends TreeVO {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：父id
+     * 字段描述：类型：1，重点；2，难点
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "类型：1，重点；2，难点")
+    private String type;
     /**
-     * 字段描述：技术标准类别（字典类型standard_type）
+     * 字段描述：技术重点/难点
      */
     @JsonProperty
-    @Excel(name = "技术标准类别")
-    private String standardType;
-    /**
-     * 字段描述：标准名称
-     */
-    @JsonProperty
-    @Excel(name = "标准名称")
-    private String standardName;
-    /**
-     * 字段描述：标准号
-     */
-    @JsonProperty
-    @Excel(name = "标准号")
-    private String standardNum;
-    /**
-     * 字段描述：标准来源
-     */
-    @JsonProperty
-    @Excel(name = "标准来源")
-    private String standardSource;
-    /**
-     * 字段描述：优先级别（字典类型priority_level）
-     */
-    @JsonProperty
-    @Excel(name = "优先级别")
-    private String priorityLevel;
+    @Excel(name = "技术重点/难点")
+    private String keyDifficult;
     /**
      * 字段描述：排序
      */
     @JsonProperty
     @Excel(name = "排序")
     private String sort;
+    /**
+     * 字段描述：备注
+     */
+    @JsonProperty
+    @Excel(name = "备注")
+    private String remark;
     /**
      * 字段描述：所属区域id
      */
@@ -190,9 +170,4 @@ public class QqchContractTechStandardIdentify extends TreeVO {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
-
-    /**
-     * 子集合
-     */
-    private List<QqchContractTechStandardIdentify> childList;
 }

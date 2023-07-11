@@ -11,24 +11,6 @@ import java.util.List;
  */
 public interface IQqchContractTechStandardIdentifyService {
 
-    QqchContractTechStandardIdentify getQqchContractTechStandardIdentify(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
-
-    List<QqchContractTechStandardIdentify> getQqchContractTechStandardIdentifyList(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
-
-    int insertQqchContractTechStandardIdentify(QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
-
-    int insertQqchContractTechStandardIdentifyList(
-        List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList);
-
-    int updateQqchContractTechStandardIdentify(QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
-
-    int updateQqchContractTechStandardIdentifyList(
-        List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList);
-
-    int deleteQqchContractTechStandardIdentify(QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
-
     int deleteQqchContractTechStandardIdentifyByPks(List<Long> qqchContractTechStandardIdentifyPkList);
 
     List<? extends TreeVO> getTreeList(

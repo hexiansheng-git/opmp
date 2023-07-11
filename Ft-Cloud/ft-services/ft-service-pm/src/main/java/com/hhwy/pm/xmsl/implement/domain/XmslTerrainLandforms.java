@@ -2,6 +2,8 @@ package com.hhwy.pm.xmsl.implement.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
@@ -21,7 +23,7 @@ public class XmslTerrainLandforms extends BaseEntity {
      * 字段描述：主键id
      */
     @JsonProperty
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 字段描述：段落

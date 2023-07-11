@@ -1,4 +1,4 @@
-package com.hhwy.pm.xmsl.download.controller;
+package com.hhwy.pm.common.download;
 
 import com.alibaba.cloud.commons.io.IOUtils;
 import java.io.InputStream;

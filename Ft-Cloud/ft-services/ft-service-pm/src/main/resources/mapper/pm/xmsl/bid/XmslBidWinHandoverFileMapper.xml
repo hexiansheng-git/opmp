@@ -10,7 +10,7 @@
     <result property="fileName" column="file_name"/>
     <result property="importance" column="importance"/>
     <result property="feedback" column="feedback"/>
-    <result property="sortNum" column="sort_num"/>
+    <result property="sort" column="sort"/>
     <result property="fileGroupId" column="file_group_id"/>
     <result property="remark" column="remark"/>
     <result property="regionId" column="region_id"/>
@@ -40,7 +40,7 @@
     ,`file_name`
     ,`importance`
     ,`feedback`
-    ,`sort_num`
+    ,`sort`
     ,`file_group_id`
     ,`remark`
     ,`region_id`
@@ -69,7 +69,7 @@
       <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
       <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
       <if test="feedback != null  and feedback != ''">and `feedback` = #{feedback}</if>
-      <if test="sortNum != null ">and `sort_num` = #{sortNum}</if>
+      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
       <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -91,7 +91,7 @@
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
-    order by create_time desc
+    order by sort
   </select>
 
   <select id="getXmslBidWinHandoverFileList" resultMap="XmslBidWinHandoverFileResultMap">
@@ -101,7 +101,7 @@
     ,`file_name`
     ,`importance`
     ,`feedback`
-    ,`sort_num`
+    ,`sort`
     ,`file_group_id`
     ,`remark`
     ,`region_id`
@@ -130,7 +130,7 @@
       <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
       <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
       <if test="feedback != null  and feedback != ''">and `feedback` = #{feedback}</if>
-      <if test="sortNum != null ">and `sort_num` = #{sortNum}</if>
+      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
       <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -163,7 +163,7 @@
       <if test="fileName != null  and fileName != ''">`file_name`,</if>
       <if test="importance != null  and importance != ''">`importance`,</if>
       <if test="feedback != null  and feedback != ''">`feedback`,</if>
-      <if test="sortNum != null ">`sort_num`,</if>
+      <if test="sort != null  and sort != ''">`sort`,</if>
       <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
@@ -191,7 +191,7 @@
       <if test="fileName != null  and fileName != ''">#{fileName},</if>
       <if test="importance != null  and importance != ''">#{importance},</if>
       <if test="feedback != null  and feedback != ''">#{feedback},</if>
-      <if test="sortNum != null ">#{sortNum},</if>
+      <if test="sort != null  and sort != ''">#{sort},</if>
       <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
@@ -224,7 +224,7 @@
       `file_name`,
       `importance`,
       `feedback`,
-      `sort_num`,
+      `sort`,
       `file_group_id`,
       `remark`,
       `region_id`,
@@ -253,7 +253,7 @@
         #{item.fileName},
         #{item.importance},
         #{item.feedback},
-        #{item.sortNum},
+        #{item.sort},
         #{item.fileGroupId},
         #{item.remark},
         #{item.regionId},
@@ -285,7 +285,7 @@
       <if test="fileName != null  and  fileName != ''">`file_name` = #{fileName},</if>
       <if test="importance != null  and  importance != ''">`importance` = #{importance},</if>
       <if test="feedback != null  and  feedback != ''">`feedback` = #{feedback},</if>
-      <if test="sortNum != null ">`sort_num` = #{sortNum},</if>
+      <if test="sort != null  and sort != ''">`sort` = #{sort},</if>
       <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -340,9 +340,9 @@
           when `id`=#{item.id} then #{item.feedback}
         </foreach>
       </trim>
-      <trim prefix="sort_num  = case" suffix="end,">
+      <trim prefix="sort  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.sortNum}
+          when `id`=#{item.id} then #{item.sort}
         </foreach>
       </trim>
       <trim prefix="file_group_id  = case" suffix="end,">
@@ -460,7 +460,7 @@
       <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
       <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
       <if test="feedback != null  and feedback != ''">and `feedback` = #{feedback}</if>
-      <if test="sortNum != null ">and `sort_num` = #{sortNum}</if>
+      <if test="sort != null and sort != ''">and `sort` = #{sort}</if>
       <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
