@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.moduleIdentity.contant;
+package com.hhwy.pm.qqch.module.contant;
 
 /**
  * 模块标识常量类
