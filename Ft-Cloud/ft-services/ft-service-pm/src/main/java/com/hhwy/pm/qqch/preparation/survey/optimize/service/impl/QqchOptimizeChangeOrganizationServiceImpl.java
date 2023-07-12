@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrg
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeChangeOrganizationMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeChangeOrganizationService;
+import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,9 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
         QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = new QqchOptimizeChangeOrganizationVo();
 
         List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(new QqchOptimizeChangeOrganization());
-        List<QqchOptimizeChangeOrganization> treeList = this.assembleTreeList(qqchOptimizeChangeOrganizationList);
+
+        //转树列表
+        List<QqchOptimizeChangeOrganization> treeList = ListTreeUtil.formatTree(qqchOptimizeChangeOrganizationList, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), QqchOptimizeChangeOrganization::getChildren, QqchOptimizeChangeOrganization::setChildren);
         qqchOptimizeChangeOrganizationVo.setTreeList(treeList);
 
         //TODO 获取确认状态
