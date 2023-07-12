@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.utils.tree.TreeVO;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface IXmslContractListService {
 
-    XmslContractList getXmslContractList(XmslContractList xmslContractList);
+    List<? extends TreeVO> getXmslContractList(XmslContractList xmslContractList);
 
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 

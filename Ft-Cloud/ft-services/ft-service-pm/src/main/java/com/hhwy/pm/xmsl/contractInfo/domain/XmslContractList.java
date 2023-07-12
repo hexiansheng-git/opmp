@@ -5,12 +5,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.tree.TreeVO;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -24,7 +23,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XmslContractList extends BaseEntity {
+public class XmslContractList extends TreeVO {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -45,6 +44,7 @@ public class XmslContractList extends BaseEntity {
     /**
      * 字段描述：父id
      */
+    @NotNull(message = "父id不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "父id")
@@ -277,5 +277,10 @@ public class XmslContractList extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+//    /**
+//     * 子集合
+//     */
+//    private List<XmslContractList> childList;
 
 }

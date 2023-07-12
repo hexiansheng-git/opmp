@@ -7,6 +7,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.utils.tree.TreeVO;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -34,8 +35,8 @@ public class XmslContractListController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractList:list")
     @GetMapping
     public AjaxResult getXmslContractList(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractList xmslContractListParam) {
-        XmslContractList xmslContractList = xmslContractListService.getXmslContractList(xmslContractListParam);
-        return AjaxResult.success(xmslContractList);
+        List<? extends TreeVO> treeList  = xmslContractListService.getXmslContractList(xmslContractListParam);
+        return AjaxResult.success(treeList);
     }
 
     @PreAuthorize(hasPermi = "xmslContractList:list")

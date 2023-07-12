@@ -6,6 +6,8 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractSpecialMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtils;
+import com.hhwy.utils.tree.TreeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,8 +26,10 @@ public class XmslContractSpecialServiceImpl implements IXmslContractSpecialServi
     private XmslContractSpecialMapper xmslContractSpecialMapper;
 
 
-    public XmslContractSpecial getXmslContractSpecial(XmslContractSpecial xmslContractSpecial) {
-        return xmslContractSpecialMapper.getXmslContractSpecial(xmslContractSpecial);
+    public List<? extends TreeVO>   getXmslContractSpecial(XmslContractSpecial xmslContractSpecial) {
+        List<XmslContractSpecial> list = xmslContractSpecialMapper.getXmslContractSpecial(xmslContractSpecial);
+        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, null);
+        return treeVOS;
     }
 
     public List<XmslContractSpecial> getXmslContractSpecialList(XmslContractSpecial xmslContractSpecial) {

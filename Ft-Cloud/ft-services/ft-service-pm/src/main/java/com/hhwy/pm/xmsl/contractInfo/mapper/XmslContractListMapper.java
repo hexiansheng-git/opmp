@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface XmslContractListMapper {
 
-    XmslContractList getXmslContractList(XmslContractList xmslContractList);
+    List<XmslContractList> getXmslContractList(XmslContractList xmslContractList);
 
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 
