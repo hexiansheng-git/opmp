@@ -3,15 +3,18 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractListMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtils;
 import com.hhwy.utils.tree.TreeVO;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,13 +48,54 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     }
 
     @Transactional
-    public int insertXmslContractListList(List<XmslContractList> xmslContractListList) {
-        for (XmslContractList xmslContractList : xmslContractListList) {
-            xmslContractList.setId(IdWorker.createId());
-            xmslContractList.setCreateUser(SecurityUtils.getUserName());
-            xmslContractList.setCreateTime(DateUtils.getNowDate());
+    public int insertXmslContractListList(List<XmslContractListVo> xmslContractListList) {
+        if(CollectionUtils.isEmpty(xmslContractListList)){
+            return 0;
         }
-        return xmslContractListMapper.insertXmslContractListList(xmslContractListList);
+
+        List<XmslContractListVo> insertList = new ArrayList<>();
+        List<XmslContractListVo> updateList = new ArrayList<>();
+        for (XmslContractListVo xmslContractList : xmslContractListList) {
+            this.recursionSubset(xmslContractList, insertList, updateList);
+        }
+
+        if (insertList.size() > 0) {
+            xmslContractListMapper.insertXmslContractListList(insertList);
+        }
+        if (updateList.size() > 0) {
+            xmslContractListMapper.updateXmslContractListList(updateList);
+        }
+        return 1;
+    }
+
+    /**
+     *   递归
+     * @param xmslContractList
+     * @param insertList
+     * @param updateList
+     */
+    private void recursionSubset(XmslContractListVo xmslContractList, List<XmslContractListVo> insertList, List<XmslContractListVo> updateList) {
+        Long id = xmslContractList.getId();
+        if (id == null) {
+            id = IdWorker.createId();
+            xmslContractList.setId(id);
+            xmslContractList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslContractList.setCreateUserName(SecurityUtils.getUserName());
+            xmslContractList.setCreateTime(DateUtils.getNowDate());
+            insertList.add(xmslContractList);
+        } else {
+            xmslContractList.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslContractList.setUpdateTime(DateUtils.getNowDate());
+            updateList.add(xmslContractList);
+        }
+
+        List<XmslContractListVo> children = xmslContractList.getChildren();
+        if (!CollectionUtils.isEmpty(children)) {
+            for (XmslContractListVo child : children) {
+                child.setPid(id);
+                this.recursionSubset(child, insertList, updateList);
+            }
+        }
     }
 
     @Transactional
@@ -61,14 +105,6 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         return xmslContractListMapper.updateXmslContractList(xmslContractList);
     }
 
-    @Transactional
-    public int updateXmslContractListList(List<XmslContractList> xmslContractListList) {
-        for (XmslContractList xmslContractList : xmslContractListList) {
-            xmslContractList.setUpdateUser(SecurityUtils.getUserName());
-            xmslContractList.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslContractListMapper.updateXmslContractListList(xmslContractListList);
-    }
 
     @Transactional
     public int deleteXmslContractList(XmslContractList xmslContractList) {

@@ -1,30 +1,21 @@
-package com.hhwy.pm.xmsl.contractInfo.domain;
+package com.hhwy.pm.xmsl.contractInfo.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeVO;
 import com.hhwy.utils.validation.ValidationGroups;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-/**
- * @author ldd
- * @date 2023-07-10 14:17:42
- * @remark   合同信息--主合同清单实体类
- */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class XmslContractList extends TreeVO {
+public class XmslContractListVo {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -279,5 +270,5 @@ public class XmslContractList extends TreeVO {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-
+    private List<XmslContractListVo> children;
 }

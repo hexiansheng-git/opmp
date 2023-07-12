@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.tree.TreeVO;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -56,7 +57,7 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertXmslContractListList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractList> xmslContractListListParam) {
+    public AjaxResult insertXmslContractListList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractListVo> xmslContractListListParam) {
         xmslContractListService.insertXmslContractListList(xmslContractListListParam);
         return AjaxResult.success(xmslContractListListParam);
     }
@@ -67,11 +68,7 @@ public class XmslContractListController extends BaseController {
         return toAjax(xmslContractListService.updateXmslContractList(xmslContractListParam));
     }
 
-    @PreAuthorize(hasPermi = "xmslContractList:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateXmslContractListList(@Validated(ValidationGroups.Update.class) @RequestBody List<XmslContractList> xmslContractListListParam) {
-        return toAjax(xmslContractListService.updateXmslContractListList(xmslContractListListParam));
-    }
+
 
     @PreAuthorize(hasPermi = "xmslContractList:remove")
     @PostMapping("/delete")
