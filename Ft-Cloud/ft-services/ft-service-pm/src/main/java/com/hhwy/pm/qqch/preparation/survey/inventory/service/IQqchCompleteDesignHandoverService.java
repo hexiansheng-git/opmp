@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service;
 
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
+import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 
 import java.util.List;
 
@@ -16,14 +17,21 @@ public interface IQqchCompleteDesignHandoverService {
      * @param qqchCompleteDesignHandover
      * @return
      */
-    List<QqchCompleteDesignHandover> getQqchCompleteDesignHandoverList(QqchCompleteDesignHandover qqchCompleteDesignHandover);
+    QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(QqchCompleteDesignHandover qqchCompleteDesignHandover);
 
     /**
      * 保存
-     * @param qqchCompleteDesignHandoverListParam
+     * @param qqchCompleteDesignHandoverVo
      * @return
      */
-    int editQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverListParam);
+    void save(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo);
+
+    /**
+     * 确认
+     * @param qqchCompleteDesignHandoverVo
+     * @return
+     */
+    void confirm(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo);
 
     /**
      * 批量删除

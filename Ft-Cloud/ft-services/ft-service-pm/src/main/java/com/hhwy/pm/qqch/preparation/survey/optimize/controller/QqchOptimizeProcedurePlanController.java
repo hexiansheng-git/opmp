@@ -2,20 +2,16 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.io.IOException;
-
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeProcedurePlanService;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author han
@@ -31,66 +27,39 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
     private IQqchOptimizeProcedurePlanService qqchOptimizeProcedurePlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:list")
-    @GetMapping
-    public AjaxResult getQqchOptimizeProcedurePlan(@Validated(ValidationGroups.Get.class) @RequestBody QqchOptimizeProcedurePlan qqchOptimizeProcedurePlanParam) {
-        QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan = qqchOptimizeProcedurePlanService.getQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlanParam);
-        return AjaxResult.success(qqchOptimizeProcedurePlan);
-    }
-
     /**
      * 优化程序策划台账
      * @return
      */
     @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:list")
     @GetMapping("/list")
-    public AjaxResult getQqchOptimizeProcedurePlanList() {
-        List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanService.getQqchOptimizeProcedurePlanList();
-        return AjaxResult.success(qqchOptimizeProcedurePlanList);
+    public AjaxResult getQqchOptimizeProcedurePlanVo() {
+        QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = qqchOptimizeProcedurePlanService.getQqchOptimizeProcedurePlanVo();
+        return AjaxResult.success(qqchOptimizeProcedurePlanVo);
     }
 
     /**
-     * 批量编辑（新增和修改）
-     * @param qqchOptimizeProcedurePlanListParam
+     * 保存
+     * @param qqchOptimizeProcedurePlanVo
      * @return
      */
     @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:update")
-    @PostMapping("/batchEdit")
-    public AjaxResult editQqchOptimizeProcedurePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanListParam) {
-        qqchOptimizeProcedurePlanService.editQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanListParam);
-        return AjaxResult.success(qqchOptimizeProcedurePlanListParam);
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
+        qqchOptimizeProcedurePlanService.save(qqchOptimizeProcedurePlanVo);
+        return AjaxResult.success(qqchOptimizeProcedurePlanVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchOptimizeProcedurePlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlan qqchOptimizeProcedurePlanParam) {
-        qqchOptimizeProcedurePlanService.insertQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlanParam);
-        return AjaxResult.success(qqchOptimizeProcedurePlanParam);
-    }
-
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchOptimizeProcedurePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanListParam) {
-        qqchOptimizeProcedurePlanService.insertQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanListParam);
-        return AjaxResult.success(qqchOptimizeProcedurePlanListParam);
-    }
-
+    /**
+     * 确认
+     * @param qqchOptimizeProcedurePlanVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchOptimizeProcedurePlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeProcedurePlan qqchOptimizeProcedurePlanParam) {
-        return toAjax(qqchOptimizeProcedurePlanService.updateQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlanParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateQqchOptimizeProcedurePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanListParam) {
-        return toAjax(qqchOptimizeProcedurePlanService.updateQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanListParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchOptimizeProcedurePlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchOptimizeProcedurePlan qqchOptimizeProcedurePlanParam) {
-        return toAjax(qqchOptimizeProcedurePlanService.deleteQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlanParam));
+    @PostMapping("/confirm")
+    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
+        qqchOptimizeProcedurePlanService.confirm(qqchOptimizeProcedurePlanVo);
+        return AjaxResult.success(qqchOptimizeProcedurePlanVo);
     }
 
     /**
@@ -103,12 +72,5 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
     public AjaxResult deleteQqchOptimizeProcedurePlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchOptimizeProcedurePlanPkList = Arrays.asList(ids);
         return toAjax(qqchOptimizeProcedurePlanService.deleteQqchOptimizeProcedurePlanByPks(qqchOptimizeProcedurePlanPkList));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchOptimizeProcedurePlan qqchOptimizeProcedurePlanParam) throws IOException {
-        List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanService.getQqchOptimizeProcedurePlanList();
-        ExcelUtils<QqchOptimizeProcedurePlan> util = new ExcelUtils<>(QqchOptimizeProcedurePlan.class);
-        util.exportExcel(response, qqchOptimizeProcedurePlanList, DateUtils.getDate());
     }
 }

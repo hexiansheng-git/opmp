@@ -1,6 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchDesignTechnologyOptimizeVo;
 
 import java.util.List;
 
@@ -11,30 +11,28 @@ import java.util.List;
  */
 public interface IQqchDesignTechnologyOptimizeService {
 
-    QqchDesignTechnologyOptimize getQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
-
     /**
      * 获取设计技术优化要点集合
      * @return
      */
-    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList();
+    QqchDesignTechnologyOptimizeVo getQqchDesignTechnologyOptimizeVo();
 
     /**
-     * 批量编辑（新增和修改）
-     * @param qqchDesignTechnologyOptimizeListParam
+     * 保存
+     * @param qqchDesignTechnologyOptimizeVo
+     */
+    void save(QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo);
+
+    /**
+     * 确认  添加已确认状态，并保存数据
+     * @param qqchDesignTechnologyOptimizeVo
+     */
+    void confirm(QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo);
+
+    /**
+     * 批量删除
+     * @param qqchDesignTechnologyOptimizePkList
      * @return
      */
-    int editQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeListParam);
-
-    int insertQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
-
-    int insertQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList);
-
-    int updateQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
-
-    int updateQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList);
-
-    int deleteQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
-
     int deleteQqchDesignTechnologyOptimizeByPks(List<Long> qqchDesignTechnologyOptimizePkList);
 }

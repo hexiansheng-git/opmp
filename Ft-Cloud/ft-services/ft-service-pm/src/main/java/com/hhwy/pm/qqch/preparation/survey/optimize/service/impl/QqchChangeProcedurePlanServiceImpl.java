@@ -6,7 +6,9 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchChangeProcedurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchChangeProcedurePlanService;
 import org.springframework.stereotype.Service;
@@ -26,29 +28,55 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     private QqchChangeProcedurePlanMapper qqchChangeProcedurePlanMapper;
 
 
-    public QqchChangeProcedurePlan getQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan) {
-        return qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlan(qqchChangeProcedurePlan);
-    }
-
     /**
-     * 获取变更程序策划集合
+     * 获取变更程序策划
      * @return
      */
-    public List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList() {
-        return qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList();
+    public QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo() {
+        QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = new QqchChangeProcedurePlanVo();
+
+        List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList();
+        qqchChangeProcedurePlanVo.setQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
+
+        //TODO 获取确认状态
+        qqchChangeProcedurePlanVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
+
+        return qqchChangeProcedurePlanVo;
     }
 
     /**
-     * 批量编辑（新增和修改）
-     * @param qqchChangeProcedurePlanListParam
+     * 保存
+     * @param qqchChangeProcedurePlanVo
+     */
+    @Override
+    @Transactional
+    public void save(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
+        List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanVo.getQqchChangeProcedurePlanList();
+        this.editQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
+    }
+
+    /**
+     * 确认
+     * @param qqchChangeProcedurePlanVo
      * @return
      */
     @Override
     @Transactional
-    public int editQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanListParam) {
+    public void confirm(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
+        this.editQqchChangeProcedurePlanList(qqchChangeProcedurePlanVo.getQqchChangeProcedurePlanList());
+
+        //TODO 修改确认状态
+    }
+
+    /**
+     * 批量编辑
+     * @param qqchChangeProcedurePlanList
+     */
+    @Transactional
+    public void editQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList){
         List<QqchChangeProcedurePlan> insertList = new ArrayList<>();
         List<QqchChangeProcedurePlan> updateList = new ArrayList<>();
-        for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanListParam) {
+        for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
             Long id = qqchChangeProcedurePlan.getId();
             if(id == null){
                 qqchChangeProcedurePlan.setId(IdWorker.createId());
@@ -68,54 +96,16 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         if(updateList.size() > 0){
             qqchChangeProcedurePlanMapper.updateQqchChangeProcedurePlanList(updateList);
         }
-        return 1;
     }
 
-    @Transactional
-    public int insertQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan) {
-        qqchChangeProcedurePlan.setId(IdWorker.createId());
-        qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-        qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
-        qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());
-        return qqchChangeProcedurePlanMapper.insertQqchChangeProcedurePlan(qqchChangeProcedurePlan);
-    }
-
-    @Transactional
-    public int insertQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList) {
-        for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
-            qqchChangeProcedurePlan.setId(IdWorker.createId());
-            qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-            qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
-            qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchChangeProcedurePlanMapper.insertQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
-    }
-
-    @Transactional
-    public int updateQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan) {
-        qqchChangeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchChangeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchChangeProcedurePlanMapper.updateQqchChangeProcedurePlan(qqchChangeProcedurePlan);
-    }
-
-    @Transactional
-    public int updateQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList) {
-        for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
-            qqchChangeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-            qqchChangeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchChangeProcedurePlanMapper.updateQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
-    }
-
-    @Transactional
-    public int deleteQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan) {
-        qqchChangeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchChangeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchChangeProcedurePlanMapper.deleteQqchChangeProcedurePlan(qqchChangeProcedurePlan);
-    }
-
+    /**
+     * 批量删除
+     * @param qqchChangeProcedurePlanPkList
+     * @return
+     */
     @Transactional
     public int deleteQqchChangeProcedurePlanByPks(List<Long> qqchChangeProcedurePlanPkList) {
         return qqchChangeProcedurePlanMapper.deleteQqchChangeProcedurePlanByPks(qqchChangeProcedurePlanPkList);
     }
+
 }

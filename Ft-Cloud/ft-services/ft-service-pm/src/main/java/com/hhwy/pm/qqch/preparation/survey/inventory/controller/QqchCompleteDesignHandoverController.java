@@ -2,14 +2,11 @@ package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
 import java.util.Arrays;
 import java.util.List;
-import java.io.IOException;
 
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
+import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +36,32 @@ public class QqchCompleteDesignHandoverController extends BaseController {
     @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:list")
     @GetMapping("/list")
     public AjaxResult getQqchCompleteDesignHandoverList(@Validated(ValidationGroups.Select.class) @RequestBody QqchCompleteDesignHandover qqchCompleteDesignHandoverParam) {
-        List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverParam);
-        return AjaxResult.success(qqchCompleteDesignHandoverList);
+        QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverVo(qqchCompleteDesignHandoverParam);
+        return AjaxResult.success(qqchCompleteDesignHandoverVo);
     }
 
     /**
      * 保存
-     * @param qqchCompleteDesignHandoverListParam
+     * @param qqchCompleteDesignHandoverVo
      * @return
      */
     @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:update")
-    @PostMapping("/batchEdit")
-    public AjaxResult editQqchCompleteDesignHandoverList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverListParam) {
-        return toAjax(qqchCompleteDesignHandoverService.editQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverListParam));
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
+        qqchCompleteDesignHandoverService.save(qqchCompleteDesignHandoverVo);
+        return AjaxResult.success(qqchCompleteDesignHandoverVo);
+    }
+
+    /**
+     * 确认
+     * @param qqchCompleteDesignHandoverVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:update")
+    @PostMapping("/confirm")
+    public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
+        qqchCompleteDesignHandoverService.confirm(qqchCompleteDesignHandoverVo);
+        return AjaxResult.success(qqchCompleteDesignHandoverVo);
     }
 
     /**
@@ -64,12 +74,5 @@ public class QqchCompleteDesignHandoverController extends BaseController {
     public AjaxResult deleteQqchCompleteDesignHandoverByPks(@PathVariable Long[] ids) {
         List<Long> qqchCompleteDesignHandoverPkList = Arrays.asList(ids);
         return toAjax(qqchCompleteDesignHandoverService.deleteQqchCompleteDesignHandoverByPks(qqchCompleteDesignHandoverPkList));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchCompleteDesignHandover qqchCompleteDesignHandoverParam) throws IOException {
-        List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverParam);
-        ExcelUtils<QqchCompleteDesignHandover> util = new ExcelUtils<>(QqchCompleteDesignHandover.class);
-        util.exportExcel(response, qqchCompleteDesignHandoverList, DateUtils.getDate());
     }
 }

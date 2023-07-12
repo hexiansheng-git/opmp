@@ -1,6 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 
 import java.util.List;
 
@@ -11,32 +11,30 @@ import java.util.List;
  */
 public interface IQqchOptimizeProcedurePlanService {
 
-    QqchOptimizeProcedurePlan getQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan);
-
     /**
      * 获取优化程序策划集合
      * @return
      */
-    List<QqchOptimizeProcedurePlan> getQqchOptimizeProcedurePlanList();
+    QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo();
 
     /**
-     * 批量编辑（新增和修改）
-     * @param qqchOptimizeProcedurePlanListParam
+     * 保存
+     * @param qqchOptimizeProcedurePlanVo
      * @return
      */
-    int editQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanListParam);
+    void save(QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo);
 
+    /**
+     * 确认
+     * @param qqchOptimizeProcedurePlanVo
+     * @return
+     */
+    void confirm(QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo);
 
-    int insertQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan);
-
-    int insertQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList);
-
-    int updateQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan);
-
-    int updateQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList);
-
-    int deleteQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan);
-
+    /**
+     * 批量删除
+     * @param qqchOptimizeProcedurePlanPkList
+     * @return
+     */
     int deleteQqchOptimizeProcedurePlanByPks(List<Long> qqchOptimizeProcedurePlanPkList);
-
 }

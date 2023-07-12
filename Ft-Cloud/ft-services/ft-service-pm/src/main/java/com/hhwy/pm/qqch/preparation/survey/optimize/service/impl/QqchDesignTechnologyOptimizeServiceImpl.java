@@ -6,8 +6,9 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchDesignTechnologyOptimizeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchDesignTechnologyOptimizeMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchDesignTechnologyOptimizeService;
 import org.springframework.stereotype.Service;
@@ -27,16 +28,42 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
     private QqchDesignTechnologyOptimizeMapper qqchDesignTechnologyOptimizeMapper;
 
 
-    public QqchDesignTechnologyOptimize getQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize) {
-        return qqchDesignTechnologyOptimizeMapper.getQqchDesignTechnologyOptimize(qqchDesignTechnologyOptimize);
-    }
-
     /**
      * 获取设计技术优化要点集合
      * @return
      */
-    public List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList() {
-        return qqchDesignTechnologyOptimizeMapper.getQqchDesignTechnologyOptimizeList();
+    @Override
+    @Transactional
+    public QqchDesignTechnologyOptimizeVo getQqchDesignTechnologyOptimizeVo() {
+        QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo = new QqchDesignTechnologyOptimizeVo();
+        List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeMapper.getQqchDesignTechnologyOptimizeList();
+        qqchDesignTechnologyOptimizeVo.setQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeList);
+
+        //TODO 获取确认状态
+        qqchDesignTechnologyOptimizeVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
+
+        return qqchDesignTechnologyOptimizeVo;
+    }
+
+    /**
+     * 保存
+     * @param qqchDesignTechnologyOptimizeVo
+     */
+    @Override
+    public void save(QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo){
+        this.editQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeVo.getQqchDesignTechnologyOptimizeList());
+    }
+
+    /**
+     * 确认
+     * @param qqchDesignTechnologyOptimizeVo
+     */
+    @Override
+    public void confirm(QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo){
+        this.editQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeVo.getQqchDesignTechnologyOptimizeList());
+
+        //TODO 修改确认状态
+
     }
 
     /**
@@ -44,7 +71,6 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
      * @param qqchDesignTechnologyOptimizeListParam
      * @return
      */
-    @Override
     @Transactional
     public int editQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeListParam) {
         List<QqchDesignTechnologyOptimize> insertList = new ArrayList<>();
@@ -72,49 +98,12 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
         return 1;
     }
 
-    @Transactional
-    public int insertQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize) {
-        qqchDesignTechnologyOptimize.setId(IdWorker.createId());
-        qqchDesignTechnologyOptimize.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-        qqchDesignTechnologyOptimize.setCreateUserName(SecurityUtils.getUserName());
-        qqchDesignTechnologyOptimize.setCreateTime(DateUtils.getNowDate());
-        return qqchDesignTechnologyOptimizeMapper.insertQqchDesignTechnologyOptimize(qqchDesignTechnologyOptimize);
-    }
-
-    @Transactional
-    public int insertQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList) {
-        for (QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize : qqchDesignTechnologyOptimizeList) {
-            qqchDesignTechnologyOptimize.setId(IdWorker.createId());
-            qqchDesignTechnologyOptimize.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-            qqchDesignTechnologyOptimize.setCreateUserName(SecurityUtils.getUserName());
-            qqchDesignTechnologyOptimize.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchDesignTechnologyOptimizeMapper.insertQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeList);
-    }
-
-    @Transactional
-    public int updateQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize) {
-        qqchDesignTechnologyOptimize.setUpdateUser(SecurityUtils.getUserName());
-        qqchDesignTechnologyOptimize.setUpdateTime(DateUtils.getNowDate());
-        return qqchDesignTechnologyOptimizeMapper.updateQqchDesignTechnologyOptimize(qqchDesignTechnologyOptimize);
-    }
-
-    @Transactional
-    public int updateQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList) {
-        for (QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize : qqchDesignTechnologyOptimizeList) {
-            qqchDesignTechnologyOptimize.setUpdateUser(SecurityUtils.getUserName());
-            qqchDesignTechnologyOptimize.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchDesignTechnologyOptimizeMapper.updateQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeList);
-    }
-
-    @Transactional
-    public int deleteQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize) {
-        qqchDesignTechnologyOptimize.setUpdateUser(SecurityUtils.getUserName());
-        qqchDesignTechnologyOptimize.setUpdateTime(DateUtils.getNowDate());
-        return qqchDesignTechnologyOptimizeMapper.deleteQqchDesignTechnologyOptimize(qqchDesignTechnologyOptimize);
-    }
-
+    /**
+     * 批量删除
+     * @param qqchDesignTechnologyOptimizePkList
+     * @return
+     */
+    @Override
     @Transactional
     public int deleteQqchDesignTechnologyOptimizeByPks(List<Long> qqchDesignTechnologyOptimizePkList) {
         return qqchDesignTechnologyOptimizeMapper.deleteQqchDesignTechnologyOptimizeByPks(qqchDesignTechnologyOptimizePkList);

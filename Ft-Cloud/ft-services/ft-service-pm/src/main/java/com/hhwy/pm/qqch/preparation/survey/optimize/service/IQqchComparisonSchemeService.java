@@ -1,8 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
-
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 
 /**
  * @author han
@@ -15,14 +13,21 @@ public interface IQqchComparisonSchemeService {
      * 获取方案集合
      * @return
      */
-    List<QqchComparisonScheme> getQqchComparisonSchemeList();
+    QqchComparisonSchemeVo getQqchComparisonSchemeVo();
 
     /**
-     * 批量编辑
-     * @param qqchComparisonSchemeList
+     * 保存
+     * @param qqchComparisonSchemeVo
      * @return
      */
-    int editQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList);
+    void save(QqchComparisonSchemeVo qqchComparisonSchemeVo);
+
+    /**
+     * 确认
+     * @param qqchComparisonSchemeVo
+     * @return
+     */
+    void confirm(QqchComparisonSchemeVo qqchComparisonSchemeVo);
 
     /**
      * 删除方案
