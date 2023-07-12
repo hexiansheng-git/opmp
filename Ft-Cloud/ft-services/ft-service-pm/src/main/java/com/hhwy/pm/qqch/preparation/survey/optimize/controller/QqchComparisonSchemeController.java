@@ -4,6 +4,7 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeService;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -37,20 +38,33 @@ public class QqchComparisonSchemeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchComparisonScheme:list")
     @GetMapping("/list")
-    public AjaxResult getQqchComparisonSchemeList() {
-        List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeService.getQqchComparisonSchemeList();
-        return AjaxResult.success(qqchComparisonSchemeList);
+    public AjaxResult getQqchComparisonSchemeVo() {
+        QqchComparisonSchemeVo qqchComparisonSchemeVo = qqchComparisonSchemeService.getQqchComparisonSchemeVo();
+        return AjaxResult.success(qqchComparisonSchemeVo);
     }
 
     /**
-     * 批量编辑
-     * @param qqchComparisonSchemeListParam
+     * 保存
+     * @param qqchComparisonSchemeVo
      * @return
      */
     @PreAuthorize(hasPermi = "qqchComparisonScheme:update")
-    @PostMapping("/batchEdit")
-    public AjaxResult editQqchComparisonSchemeList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchComparisonScheme> qqchComparisonSchemeListParam) {
-        return toAjax(qqchComparisonSchemeService.editQqchComparisonSchemeList(qqchComparisonSchemeListParam));
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
+        qqchComparisonSchemeService.save(qqchComparisonSchemeVo);
+        return AjaxResult.success(qqchComparisonSchemeVo);
+    }
+
+    /**
+     * 确认
+     * @param qqchComparisonSchemeVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchComparisonScheme:update")
+    @PostMapping("/confirm")
+    public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
+        qqchComparisonSchemeService.confirm(qqchComparisonSchemeVo);
+        return AjaxResult.success(qqchComparisonSchemeVo);
     }
 
     /**
@@ -88,12 +102,5 @@ public class QqchComparisonSchemeController extends BaseController {
     @Validated(ValidationGroups.Get.class)
     public AjaxResult deleteColumn(@NotNull(message = "表头id不能为空！",groups = ValidationGroups.Get.class) @PathVariable Long[] headerIds) {
         return toAjax(qqchComparisonSchemeService.deleteColumn(headerIds));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchComparisonScheme qqchComparisonSchemeParam) throws IOException {
-        List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeService.getQqchComparisonSchemeList();
-        ExcelUtils<QqchComparisonScheme> util = new ExcelUtils<>(QqchComparisonScheme.class);
-        util.exportExcel(response, qqchComparisonSchemeList, DateUtils.getDate());
     }
 }

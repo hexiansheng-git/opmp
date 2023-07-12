@@ -6,6 +6,7 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
+import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchCompleteDesignHandoverMapper;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
 import org.springframework.stereotype.Service;
@@ -29,16 +30,45 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
      * @param qqchCompleteDesignHandover
      * @return
      */
-    public List<QqchCompleteDesignHandover> getQqchCompleteDesignHandoverList(QqchCompleteDesignHandover qqchCompleteDesignHandover) {
-        return qqchCompleteDesignHandoverMapper.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandover);
+    public QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(QqchCompleteDesignHandover qqchCompleteDesignHandover) {
+        QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = new QqchCompleteDesignHandoverVo();
+        List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList = qqchCompleteDesignHandoverMapper.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandover);
+        qqchCompleteDesignHandoverVo.setQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
+
+        //TODO 获取确认状态
+
+        return qqchCompleteDesignHandoverVo;
     }
 
     /**
      * 保存
-     * @param qqchCompleteDesignHandoverListParam
+     * @param qqchCompleteDesignHandoverVo
      * @return
      */
     @Override
+    public void save(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
+        this.editQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverVo.getQqchCompleteDesignHandoverList());
+    }
+
+    /**
+     * 确认
+     * @param qqchCompleteDesignHandoverVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void confirm(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
+        this.editQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverVo.getQqchCompleteDesignHandoverList());
+
+        //TODO 修改确认状态
+
+    }
+
+    /**
+     * 批量编辑
+     * @param qqchCompleteDesignHandoverListParam
+     * @return
+     */
     @Transactional
     public int editQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverListParam) {
         List<QqchCompleteDesignHandover> insertList = new ArrayList<>();
@@ -46,48 +76,24 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
         for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverListParam) {
             Long id = qqchCompleteDesignHandover.getId();
             if(id == null){
+                qqchCompleteDesignHandover.setId(IdWorker.createId());
+                qqchCompleteDesignHandover.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchCompleteDesignHandover.setCreateUserName(SecurityUtils.getUserName());
+                qqchCompleteDesignHandover.setCreateTime(DateUtils.getNowDate());
                 insertList.add(qqchCompleteDesignHandover);
             }else {
+                qqchCompleteDesignHandover.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchCompleteDesignHandover.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(qqchCompleteDesignHandover);
             }
         }
         if(insertList.size() > 0){
-            this.insertQqchCompleteDesignHandoverList(insertList);
+            qqchCompleteDesignHandoverMapper.insertQqchCompleteDesignHandoverList(insertList);
         }
         if(updateList.size() > 0){
-            this.updateQqchCompleteDesignHandoverList(updateList);
+            qqchCompleteDesignHandoverMapper.updateQqchCompleteDesignHandoverList(updateList);
         }
         return 1;
-    }
-
-    /**
-     * 批量插入
-     * @param qqchCompleteDesignHandoverList
-     * @return
-     */
-    @Transactional
-    public int insertQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList) {
-        for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
-            qqchCompleteDesignHandover.setId(IdWorker.createId());
-            qqchCompleteDesignHandover.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchCompleteDesignHandover.setCreateUserName(SecurityUtils.getUserName());
-            qqchCompleteDesignHandover.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchCompleteDesignHandoverMapper.insertQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
-    }
-
-    /**
-     * 批量修改
-     * @param qqchCompleteDesignHandoverList
-     * @return
-     */
-    @Transactional
-    public int updateQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList) {
-        for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
-            qqchCompleteDesignHandover.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchCompleteDesignHandover.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchCompleteDesignHandoverMapper.updateQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
     }
 
     /**

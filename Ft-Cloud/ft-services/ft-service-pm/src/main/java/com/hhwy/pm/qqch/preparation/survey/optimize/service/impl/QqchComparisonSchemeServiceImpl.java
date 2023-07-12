@@ -7,9 +7,11 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeHeader;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeContentMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeHeaderMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeMapper;
@@ -45,7 +47,9 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
      * 获取方案集合
      * @return
      */
-    public List<QqchComparisonScheme> getQqchComparisonSchemeList() {
+    public QqchComparisonSchemeVo getQqchComparisonSchemeVo() {
+        QqchComparisonSchemeVo qqchComparisonSchemeVo = new QqchComparisonSchemeVo();
+
         List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeMapper.getQqchComparisonSchemeList();
 
         //获取所有表头
@@ -81,7 +85,37 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
             }
             qqchComparisonScheme.setQqchComparisonSchemeHeaderList(headerList);
         }
-        return qqchComparisonSchemeList;
+
+        qqchComparisonSchemeVo.setQqchComparisonSchemeList(qqchComparisonSchemeList);
+        qqchComparisonSchemeVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
+
+        //TODO 获取确认状态
+
+        return qqchComparisonSchemeVo;
+    }
+
+    /**
+     * 保存
+     * @param qqchComparisonSchemeVo
+     * @return
+     */
+    @Override
+    public void save(QqchComparisonSchemeVo qqchComparisonSchemeVo) {
+        this.editQqchComparisonSchemeList(qqchComparisonSchemeVo.getQqchComparisonSchemeList());
+    }
+
+    /**
+     * 确认
+     * @param qqchComparisonSchemeVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void confirm(QqchComparisonSchemeVo qqchComparisonSchemeVo) {
+        this.editQqchComparisonSchemeList(qqchComparisonSchemeVo.getQqchComparisonSchemeList());
+
+        //TODO 修改确认状态
+
     }
 
     /**
@@ -89,7 +123,6 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
      * @param qqchComparisonSchemeList
      * @return
      */
-    @Override
     @Transactional
     public int editQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList) {
         List<QqchComparisonScheme> insertList = new ArrayList<>();

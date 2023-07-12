@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
-import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
@@ -10,12 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
  * @author han

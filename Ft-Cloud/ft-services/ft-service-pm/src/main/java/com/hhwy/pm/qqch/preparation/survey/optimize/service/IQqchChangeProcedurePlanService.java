@@ -1,6 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 
 import java.util.List;
 
@@ -11,30 +11,29 @@ import java.util.List;
  */
 public interface IQqchChangeProcedurePlanService {
 
-    QqchChangeProcedurePlan getQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
-
     /**
      * 获取变更程序策划集合
      * @return
      */
-    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList();
+    QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo();
 
     /**
      * 批量编辑（新增和修改）
-     * @param qqchChangeProcedurePlanListParam
+     * @param qqchChangeProcedurePlanVo
+     */
+    void save(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo);
+
+    /**
+     * 确认
+     * @param qqchChangeProcedurePlanVo
      * @return
      */
-    int editQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanListParam);
+    void confirm(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo);
 
-    int insertQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
-
-    int insertQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList);
-
-    int updateQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
-
-    int updateQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList);
-
-    int deleteQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
-
+    /**
+     * 批量删除
+     * @param qqchChangeProcedurePlanPkList
+     * @return
+     */
     int deleteQqchChangeProcedurePlanByPks(List<Long> qqchChangeProcedurePlanPkList);
 }

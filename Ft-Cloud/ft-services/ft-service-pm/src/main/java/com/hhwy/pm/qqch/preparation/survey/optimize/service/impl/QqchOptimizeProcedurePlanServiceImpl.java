@@ -6,7 +6,9 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeProcedurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeProcedurePlanService;
 import org.springframework.stereotype.Service;
@@ -26,16 +28,42 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     private QqchOptimizeProcedurePlanMapper qqchOptimizeProcedurePlanMapper;
 
 
-    public QqchOptimizeProcedurePlan getQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan) {
-        return qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlan);
-    }
-
     /**
      * 获取优化程序策划集合
      * @return
      */
-    public List<QqchOptimizeProcedurePlan> getQqchOptimizeProcedurePlanList() {
-        return qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList();
+    public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo() {
+        QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = new QqchOptimizeProcedurePlanVo();
+        List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList();
+        qqchOptimizeProcedurePlanVo.setQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
+
+        //TODO 获取确认状态
+        qqchOptimizeProcedurePlanVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
+
+        return qqchOptimizeProcedurePlanVo;
+    }
+
+    /**
+     * 保存
+     * @param qqchOptimizeProcedurePlanVo
+     * @return
+     */
+    @Override
+    public void save(QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
+        this.editQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanVo.getQqchOptimizeProcedurePlanList());
+    }
+
+    /**
+     * 确认
+     * @param qqchOptimizeProcedurePlanVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void confirm(QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
+        this.editQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanVo.getQqchOptimizeProcedurePlanList());
+
+        //TODO 修改确认状态
     }
 
     /**
@@ -43,7 +71,6 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
      * @param qqchOptimizeProcedurePlanListParam
      * @return
      */
-    @Override
     @Transactional
     public int editQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanListParam) {
         List<QqchOptimizeProcedurePlan> insertList = new ArrayList<>();
@@ -71,49 +98,12 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         return 1;
     }
 
-    @Transactional
-    public int insertQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan) {
-        qqchOptimizeProcedurePlan.setId(IdWorker.createId());
-        qqchOptimizeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-        qqchOptimizeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
-        qqchOptimizeProcedurePlan.setCreateTime(DateUtils.getNowDate());
-        return qqchOptimizeProcedurePlanMapper.insertQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlan);
-    }
-
-    @Transactional
-    public int insertQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList) {
-        for (QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan : qqchOptimizeProcedurePlanList) {
-            qqchOptimizeProcedurePlan.setId(IdWorker.createId());
-            qqchOptimizeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-            qqchOptimizeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
-            qqchOptimizeProcedurePlan.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchOptimizeProcedurePlanMapper.insertQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
-    }
-
-    @Transactional
-    public int updateQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan) {
-        qqchOptimizeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchOptimizeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchOptimizeProcedurePlanMapper.updateQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlan);
-    }
-
-    @Transactional
-    public int updateQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList) {
-        for (QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan : qqchOptimizeProcedurePlanList) {
-            qqchOptimizeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-            qqchOptimizeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchOptimizeProcedurePlanMapper.updateQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
-    }
-
-    @Transactional
-    public int deleteQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan) {
-        qqchOptimizeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchOptimizeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchOptimizeProcedurePlanMapper.deleteQqchOptimizeProcedurePlan(qqchOptimizeProcedurePlan);
-    }
-
+    /**
+     * 批量删除
+     * @param qqchOptimizeProcedurePlanPkList
+     * @return
+     */
+    @Override
     @Transactional
     public int deleteQqchOptimizeProcedurePlanByPks(List<Long> qqchOptimizeProcedurePlanPkList) {
         return qqchOptimizeProcedurePlanMapper.deleteQqchOptimizeProcedurePlanByPks(qqchOptimizeProcedurePlanPkList);
