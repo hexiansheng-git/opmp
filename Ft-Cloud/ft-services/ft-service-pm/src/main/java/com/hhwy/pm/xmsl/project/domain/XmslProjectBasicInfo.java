@@ -1,5 +1,7 @@
 package com.hhwy.pm.xmsl.project.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import java.math.BigDecimal;
@@ -7,9 +9,12 @@ import java.util.List;
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -25,16 +30,17 @@ public class XmslProjectBasicInfo extends BaseEntity {
     /**
      * 字段描述：主键id
      */
+    @NotNull(message = "主键不能为空",groups = {ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "主键id")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     /**
      * 字段描述：项目id
      */
     @JsonProperty
     @Excel(name = "项目id")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long projectId;
     /**
      * 字段描述：项目编码

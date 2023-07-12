@@ -15,7 +15,11 @@ public interface QqchChangeProcedurePlanMapper {
 
     QqchChangeProcedurePlan getQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
 
-    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList(QqchChangeProcedurePlan qqchChangeProcedurePlan);
+    /**
+     * 获取变更程序策划集合
+     * @return
+     */
+    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList();
 
     int insertQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
 

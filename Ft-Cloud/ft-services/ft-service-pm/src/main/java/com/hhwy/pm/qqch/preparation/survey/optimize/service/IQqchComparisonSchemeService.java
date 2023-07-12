@@ -11,19 +11,38 @@ import java.util.List;
  */
 public interface IQqchComparisonSchemeService {
 
-    QqchComparisonScheme getQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
+    /**
+     * 获取方案集合
+     * @return
+     */
+    List<QqchComparisonScheme> getQqchComparisonSchemeList();
 
-    List<QqchComparisonScheme> getQqchComparisonSchemeList(QqchComparisonScheme qqchComparisonScheme);
+    /**
+     * 批量编辑
+     * @param qqchComparisonSchemeList
+     * @return
+     */
+    int editQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList);
 
-    int insertQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
+    /**
+     * 删除方案
+     * @param schemeId 方案id
+     * @return
+     */
+    int deleteQqchComparisonSchemeById(Long schemeId);
 
-    int insertQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList);
+    /**
+     * 删除行
+     * @param schemeId
+     * @param sorts
+     * @return
+     */
+    int deleteLine(Long schemeId, String[] sorts);
 
-    int updateQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
-
-    int updateQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList);
-
-    int deleteQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
-
-    int deleteQqchComparisonSchemeByPks(List<Long> qqchComparisonSchemePkList);
+    /**
+     * 删除列（多列）
+     * @param headerIds
+     * @return
+     */
+    int deleteColumn(Long[] headerIds);
 }

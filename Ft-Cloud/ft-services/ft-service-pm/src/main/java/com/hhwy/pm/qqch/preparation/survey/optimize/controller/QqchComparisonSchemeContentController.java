@@ -31,60 +31,6 @@ public class QqchComparisonSchemeContentController extends BaseController {
     private IQqchComparisonSchemeContentService qqchComparisonSchemeContentService;
 
 
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:list")
-    @GetMapping
-    public AjaxResult getQqchComparisonSchemeContent(@Validated(ValidationGroups.Get.class) @RequestBody QqchComparisonSchemeContent qqchComparisonSchemeContentParam) {
-        QqchComparisonSchemeContent qqchComparisonSchemeContent = qqchComparisonSchemeContentService.getQqchComparisonSchemeContent(qqchComparisonSchemeContentParam);
-        return AjaxResult.success(qqchComparisonSchemeContent);
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:list")
-    @GetMapping("/list")
-    public AjaxResult getQqchComparisonSchemeContentList(@Validated(ValidationGroups.Select.class) @RequestBody QqchComparisonSchemeContent qqchComparisonSchemeContentParam) {
-        startPage();
-        List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeContentService.getQqchComparisonSchemeContentList(qqchComparisonSchemeContentParam);
-        return getDataTableAjaxResult(qqchComparisonSchemeContentList);
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchComparisonSchemeContent(@Validated(ValidationGroups.Save.class) @RequestBody QqchComparisonSchemeContent qqchComparisonSchemeContentParam) {
-        qqchComparisonSchemeContentService.insertQqchComparisonSchemeContent(qqchComparisonSchemeContentParam);
-        return AjaxResult.success(qqchComparisonSchemeContentParam);
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchComparisonSchemeContentList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchComparisonSchemeContent> qqchComparisonSchemeContentListParam) {
-        qqchComparisonSchemeContentService.insertQqchComparisonSchemeContentList(qqchComparisonSchemeContentListParam);
-        return AjaxResult.success(qqchComparisonSchemeContentListParam);
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchComparisonSchemeContent(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeContent qqchComparisonSchemeContentParam) {
-        return toAjax(qqchComparisonSchemeContentService.updateQqchComparisonSchemeContent(qqchComparisonSchemeContentParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateQqchComparisonSchemeContentList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchComparisonSchemeContent> qqchComparisonSchemeContentListParam) {
-        return toAjax(qqchComparisonSchemeContentService.updateQqchComparisonSchemeContentList(qqchComparisonSchemeContentListParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchComparisonSchemeContent(@Validated(ValidationGroups.Delete.class) @RequestBody QqchComparisonSchemeContent qqchComparisonSchemeContentParam) {
-        return toAjax(qqchComparisonSchemeContentService.deleteQqchComparisonSchemeContent(qqchComparisonSchemeContentParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchComparisonSchemeContent:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteQqchComparisonSchemeContentByPks(@PathVariable Long[] ids) {
-        List<Long> qqchComparisonSchemeContentPkList = Arrays.asList(ids);
-        return toAjax(qqchComparisonSchemeContentService.deleteQqchComparisonSchemeContentByPks(qqchComparisonSchemeContentPkList));
-    }
-
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchComparisonSchemeContent qqchComparisonSchemeContentParam) throws IOException {
         List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeContentService.getQqchComparisonSchemeContentList(qqchComparisonSchemeContentParam);

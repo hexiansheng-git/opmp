@@ -11,7 +11,11 @@ import java.util.List;
  */
 public interface IQqchPreparationSurveyExtendService {
 
-    QqchPreparationSurveyExtend getQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
+    /**
+     * 获取扩展数据
+     * @return
+     */
+    QqchPreparationSurveyExtend getQqchPreparationSurveyExtend();
 
     List<QqchPreparationSurveyExtend> getQqchPreparationSurveyExtendList(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
 

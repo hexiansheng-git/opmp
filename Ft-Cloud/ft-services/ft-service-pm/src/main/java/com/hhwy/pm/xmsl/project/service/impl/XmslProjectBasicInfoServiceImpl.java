@@ -117,7 +117,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     private void getChildren(XmslProjectEngineeringAmount root, List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList) {
         List<XmslProjectEngineeringAmount> children = new ArrayList<>();
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            if (xmslProjectEngineeringAmount.getPid() != null && xmslProjectEngineeringAmount.getPid().equals(root.getPid())) {
+            if (xmslProjectEngineeringAmount.getPid() != null && xmslProjectEngineeringAmount.getPid().equals(root.getId())) {
                 getChildren(xmslProjectEngineeringAmount, xmslProjectEngineeringAmountList);
                 children.add(xmslProjectEngineeringAmount);
             }

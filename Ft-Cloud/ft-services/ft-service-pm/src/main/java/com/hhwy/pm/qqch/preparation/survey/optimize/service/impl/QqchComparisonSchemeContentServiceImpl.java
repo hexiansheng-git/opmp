@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -25,58 +26,67 @@ public class QqchComparisonSchemeContentServiceImpl implements IQqchComparisonSc
     private QqchComparisonSchemeContentMapper qqchComparisonSchemeContentMapper;
 
 
-    public QqchComparisonSchemeContent getQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent) {
-        return qqchComparisonSchemeContentMapper.getQqchComparisonSchemeContent(qqchComparisonSchemeContent);
-    }
-
     public List<QqchComparisonSchemeContent> getQqchComparisonSchemeContentList(QqchComparisonSchemeContent qqchComparisonSchemeContent) {
         return qqchComparisonSchemeContentMapper.getQqchComparisonSchemeContentList(qqchComparisonSchemeContent);
     }
 
+    /**
+     * 批量编辑单元格
+     * @param qqchComparisonSchemeContentList
+     * @param schemeId
+     * @param headerId
+     */
     @Transactional
-    public int insertQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent) {
-        qqchComparisonSchemeContent.setId(IdWorker.createId());
-        qqchComparisonSchemeContent.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-        qqchComparisonSchemeContent.setCreateUserName(SecurityUtils.getUserName());
-        qqchComparisonSchemeContent.setCreateTime(DateUtils.getNowDate());
-        return qqchComparisonSchemeContentMapper.insertQqchComparisonSchemeContent(qqchComparisonSchemeContent);
+    public void editQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList, Long schemeId, Long headerId) {
+        List<QqchComparisonSchemeContent> insertList = new ArrayList<>();
+        List<QqchComparisonSchemeContent> updateList = new ArrayList<>();
+        for (QqchComparisonSchemeContent qqchComparisonSchemeContent : qqchComparisonSchemeContentList) {
+            Long id = qqchComparisonSchemeContent.getId();
+            if(id == null){
+                insertList.add(qqchComparisonSchemeContent);
+            }else {
+                updateList.add(qqchComparisonSchemeContent);
+            }
+        }
+        if(insertList.size() > 0){
+            this.insertQqchComparisonSchemeContentList(insertList, schemeId, headerId);
+        }
+        if(updateList.size() > 0){
+            this.updateQqchComparisonSchemeContentList(updateList);
+        }
     }
 
+    /**
+     * 批量插入单元格
+     * @param qqchComparisonSchemeContentList
+     * @param schemeId
+     * @param headerId
+     * @return
+     */
     @Transactional
-    public int insertQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList) {
+    public int insertQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList, Long schemeId, Long headerId) {
         for (QqchComparisonSchemeContent qqchComparisonSchemeContent : qqchComparisonSchemeContentList) {
             qqchComparisonSchemeContent.setId(IdWorker.createId());
-            qqchComparisonSchemeContent.setCreateUser(SecurityUtils.getUserName());
+            qqchComparisonSchemeContent.setSchemeId(schemeId);
+            qqchComparisonSchemeContent.setHeaderId(headerId);
+            qqchComparisonSchemeContent.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
+            qqchComparisonSchemeContent.setCreateUserName(SecurityUtils.getUserName());
             qqchComparisonSchemeContent.setCreateTime(DateUtils.getNowDate());
         }
         return qqchComparisonSchemeContentMapper.insertQqchComparisonSchemeContentList(qqchComparisonSchemeContentList);
     }
 
-    @Transactional
-    public int updateQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent) {
-        qqchComparisonSchemeContent.setUpdateUser(SecurityUtils.getUserName());
-        qqchComparisonSchemeContent.setUpdateTime(DateUtils.getNowDate());
-        return qqchComparisonSchemeContentMapper.updateQqchComparisonSchemeContent(qqchComparisonSchemeContent);
-    }
-
+    /**
+     * 批量修改单元格
+     * @param qqchComparisonSchemeContentList
+     * @return
+     */
     @Transactional
     public int updateQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList) {
         for (QqchComparisonSchemeContent qqchComparisonSchemeContent : qqchComparisonSchemeContentList) {
-            qqchComparisonSchemeContent.setUpdateUser(SecurityUtils.getUserName());
+            qqchComparisonSchemeContent.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchComparisonSchemeContent.setUpdateTime(DateUtils.getNowDate());
         }
         return qqchComparisonSchemeContentMapper.updateQqchComparisonSchemeContentList(qqchComparisonSchemeContentList);
-    }
-
-    @Transactional
-    public int deleteQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent) {
-        qqchComparisonSchemeContent.setUpdateUser(SecurityUtils.getUserName());
-        qqchComparisonSchemeContent.setUpdateTime(DateUtils.getNowDate());
-        return qqchComparisonSchemeContentMapper.deleteQqchComparisonSchemeContent(qqchComparisonSchemeContent);
-    }
-
-    @Transactional
-    public int deleteQqchComparisonSchemeContentByPks(List<Long> qqchComparisonSchemeContentPkList) {
-        return qqchComparisonSchemeContentMapper.deleteQqchComparisonSchemeContentByPks(qqchComparisonSchemeContentPkList);
     }
 }

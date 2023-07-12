@@ -54,7 +54,7 @@ public class QqchComparisonSchemeContent extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String order;
+    private String sort;
     /**
      * 字段描述：所属区域id
      */

@@ -11,7 +11,7 @@
         <result property="schemeId" column="scheme_id"/>
         <result property="headerId" column="header_id"/>
         <result property="description" column="description"/>
-        <result property="order" column="order"/>
+        <result property="sort" column="sort"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -37,7 +37,7 @@
              ,`scheme_id`
              ,`header_id`
              ,`description`
-             ,`order`
+             ,`sort`
              ,`region_id`
              ,`region_name`
              ,`project_id`
@@ -58,6 +58,7 @@
              ,`pt_var5`
         from qqch_comparison_scheme_content
     </sql>
+
     <select id="getQqchComparisonSchemeContent" resultMap="QqchComparisonSchemeContentResultMap">
         <include refid="selectQqchComparisonSchemeContentVo"/>
         <where>
@@ -66,7 +67,7 @@
             <if test="schemeId != null ">and `scheme_id` = #{schemeId}</if>
             <if test="headerId != null ">and `header_id` = #{headerId}</if>
             <if test="description != null  and description != ''">and `description` = #{description}</if>
-            <if test="order != null  and order != ''">and `order` = #{order}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -86,7 +87,6 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
     </select>
 
     <select id="getQqchComparisonSchemeContentList" resultMap="QqchComparisonSchemeContentResultMap">
@@ -97,7 +97,7 @@
             <if test="schemeId != null ">and `scheme_id` = #{schemeId}</if>
             <if test="headerId != null ">and `header_id` = #{headerId}</if>
             <if test="description != null  and description != ''">and `description` = #{description}</if>
-            <if test="order != null  and order != ''">and `order` = #{order}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -117,7 +117,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchComparisonSchemeContent" useGeneratedKeys="true" keyProperty="id">
@@ -127,7 +127,7 @@
             <if test="schemeId != null ">`scheme_id`,</if>
             <if test="headerId != null ">`header_id`,</if>
             <if test="description != null  and description != ''">`description`,</if>
-            <if test="order != null  and order != ''">`order`,</if>
+            <if test="sort != null  and sort != ''">`sort`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -152,7 +152,7 @@
             <if test="schemeId != null ">#{schemeId},</if>
             <if test="headerId != null ">#{headerId},</if>
             <if test="description != null  and description != ''">#{description},</if>
-            <if test="order != null  and order != ''">#{order},</if>
+            <if test="sort != null  and sort != ''">#{sort},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -182,7 +182,7 @@
             `scheme_id`,
             `header_id`,
             `description`,
-            `order`,
+            `sort`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -208,7 +208,7 @@
                 #{item.schemeId},
                 #{item.headerId},
                 #{item.description},
-                #{item.order},
+                #{item.sort},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -236,7 +236,7 @@
             <if test="schemeId != null ">`scheme_id` = #{schemeId},</if>
             <if test="headerId != null ">`header_id` = #{headerId},</if>
             <if test="description != null  and  description != ''">`description` = #{description},</if>
-            <if test="order != null  and  order != ''">`order` = #{order},</if>
+            <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -273,9 +273,9 @@
                     when `id`=#{item.id} then #{item.description}
                 </foreach>
             </trim>
-            <trim prefix="order  = case" suffix="end,">
+            <trim prefix="sort  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.order}
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -346,30 +346,30 @@
     </update>
 
     <update id="deleteQqchComparisonSchemeContent">
-        update `qqch_comparison_scheme_content` set del_flag = '1'
+        update `qqch_comparison_scheme_content` set del_flag = '1' , del_user = #{delUser} , del_time = #{delTime}
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="schemeId != null ">and `scheme_id` = #{schemeId}</if>
             <if test="headerId != null ">and `header_id` = #{headerId}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
-            <if test="order != null  and order != ''">and `order` = #{order}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
         </where>
+    </update>
+
+    <update id="deleteBySchemeIdAndSorts">
+        update `qqch_comparison_scheme_content` set del_flag = '1'
+        where scheme_id = #{schemeId}
+        and `sort` in
+        <foreach item="sort" collection="sorts" open="(" separator="," close=")">
+            #{sort}
+        </foreach>
+    </update>
+
+    <update id="deleteByHeaderIds">
+        update `qqch_comparison_scheme_content` set del_flag = '1'
+        and `header_id` in
+        <foreach item="headerId" collection="headerIds" open="(" separator="," close=")">
+            #{headerId}
+        </foreach>
     </update>
 
     <update id="deleteQqchComparisonSchemeContentByPks">
