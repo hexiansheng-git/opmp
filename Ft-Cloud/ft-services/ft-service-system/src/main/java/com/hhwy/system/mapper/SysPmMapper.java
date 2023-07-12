@@ -9,7 +9,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
-public interface DictMapper {
+public interface SysPmMapper {
 
     List<SysDictData> selectDictValueByTypeAndLabel(@Param("dictType") String var1, @Param("dictLabels") String var2);
 

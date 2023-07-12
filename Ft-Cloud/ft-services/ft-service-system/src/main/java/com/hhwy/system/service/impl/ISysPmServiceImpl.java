@@ -5,21 +5,21 @@ package com.hhwy.system.service.impl;/*
  **/
 
 import com.hhwy.system.core.domain.SysDictData;
-import com.hhwy.system.mapper.DictMapper;
-import com.hhwy.system.service.IDictService;
+import com.hhwy.system.mapper.SysPmMapper;
+import com.hhwy.system.service.ISysPmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class IDictServiceImpl implements IDictService {
+public class ISysPmServiceImpl implements ISysPmService {
 
     @Autowired
-    DictMapper dictMapper;
+    SysPmMapper sysPmMapper;
 
     @Override
     public List<SysDictData> selectDictValueByTypeAndLabel(String dictType, String dictLabel) {
-        return dictMapper.selectDictValueByTypeAndLabel(dictType,dictLabel);
+        return sysPmMapper.selectDictValueByTypeAndLabel(dictType,dictLabel);
     }
 }

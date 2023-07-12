@@ -8,7 +8,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.system.core.domain.SysDictData;
 import com.hhwy.system.core.service.ISysDictTypeService;
-import com.hhwy.system.service.IDictService;
+import com.hhwy.system.service.ISysPmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,12 +17,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/sys/dict")
-public class DictController {
+public class SysPmController {
     @Autowired
     ISysDictTypeService dictTypeService;
 
     @Autowired
-    IDictService dictService;
+    ISysPmService dictService;
 
     @GetMapping("/resolveDict")
     public AjaxResult resolveDictList(@RequestParam("dictType") String dictType, @RequestParam("dictValue") String dictValue) {
