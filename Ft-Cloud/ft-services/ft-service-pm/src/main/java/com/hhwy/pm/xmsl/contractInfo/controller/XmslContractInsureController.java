@@ -6,11 +6,14 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractInsureVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInsureService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
@@ -19,7 +22,7 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-10 14:17:36
- * @remark
+ * @remark  投保险种
  */
 @Validated
 @RestController
@@ -83,5 +86,20 @@ public class XmslContractInsureController extends BaseController {
         List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsureParam);
         ExcelUtils<XmslContractInsure> util = new ExcelUtils<>(XmslContractInsure.class);
         util.exportExcel(response, xmslContractInsureList, DateUtils.getDate());
+    }
+
+    /**
+     *   投保险种导入
+     *
+     */
+    @PostMapping("import")
+    public AjaxResult importFile(@RequestParam("file") MultipartFile file ) {
+        try {
+            ExcelUtils<XmslContractInsureVo> util = new ExcelUtils<>(XmslContractInsureVo.class);
+            List<XmslContractInsureVo> xmslContractInsureVos = util.importExcel(file.getInputStream());
+            return AjaxResult.success(xmslContractInsureVos);
+        }catch (Exception e){
+            throw new RuntimeException("导入失败！");
+        }
     }
 }

@@ -6,11 +6,13 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSign;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractSignVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSignService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-10 14:17:49
- * @remark
+ * @remark  签订信息
  */
 @Validated
 @RestController
@@ -84,5 +86,20 @@ public class XmslContractSignController extends BaseController {
         List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSignParam);
         ExcelUtils<XmslContractSign> util = new ExcelUtils<>(XmslContractSign.class);
         util.exportExcel(response, xmslContractSignList, DateUtils.getDate());
+    }
+
+    /**
+     *   签订信息导入
+     *
+     */
+    @PostMapping("import")
+    public AjaxResult importFile(@RequestParam("file") MultipartFile file ) {
+        try {
+            ExcelUtils<XmslContractSignVo> util = new ExcelUtils<>(XmslContractSignVo.class);
+            List<XmslContractSignVo> xmslContractSignVos = util.importExcel(file.getInputStream());
+            return AjaxResult.success(xmslContractSignVos);
+        }catch (Exception e){
+            throw new RuntimeException("导入失败！");
+        }
     }
 }

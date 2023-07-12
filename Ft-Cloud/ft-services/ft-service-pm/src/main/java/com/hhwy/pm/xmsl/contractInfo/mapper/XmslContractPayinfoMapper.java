@@ -4,6 +4,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -27,4 +28,6 @@ public interface XmslContractPayinfoMapper {
     int deleteXmslContractPayinfo(XmslContractPayinfo xmslContractPayinfo);
 
     int deleteXmslContractPayinfoByPks(@Param("xmslContractPayinfoPkList") List<Long> xmslContractPayinfoPkList);
+
+    List<Map> selDictDate(String type);
 }

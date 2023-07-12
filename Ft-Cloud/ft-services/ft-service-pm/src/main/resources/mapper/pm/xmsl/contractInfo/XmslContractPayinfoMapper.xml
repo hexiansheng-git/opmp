@@ -541,4 +541,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </foreach>
                 </where>
             </update>
-            </mapper>
+
+    <select id="selDictDate" resultType="map">
+        select  dict_label  dictLabel, dict_value  dictValue from sys_dict_data where  dict_type=#{type}
+    </select>
+</mapper>

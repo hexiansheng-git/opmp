@@ -25,11 +25,11 @@ public class XmslContractInsure extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：注释
+     * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "注释")
+    @Excel(name = "主键")
     private Long id;
     /**
      * 字段描述：主表id（xmsl_contract_payinfo）

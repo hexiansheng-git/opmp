@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -34,6 +37,7 @@ public class XmslContractList extends BaseEntity {
     /**
      * 字段描述：主表id（xmsl_contract_payinfo）
      */
+    @NotNull(message = "masterId不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主表id（xmsl_contract_payinfo）")
@@ -54,12 +58,14 @@ public class XmslContractList extends BaseEntity {
     /**
      * 字段描述：清单编号
      */
+    @NotBlank(message = "清单编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "清单编号")
     private String code;
     /**
      * 字段描述：清单中文名称
      */
+    @NotBlank(message = "清单中文名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "清单中文名称")
     private String chineseName;
@@ -72,8 +78,9 @@ public class XmslContractList extends BaseEntity {
     /**
      * 字段描述：清单类型(字典项（list_type）)
      */
+    @NotBlank(message = "清单类型不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "清单类型(字典项（list_type）)")
+    @Excel(name = "清单类型")
     private String listType;
     /**
      * 字段描述：单位编码
@@ -84,18 +91,21 @@ public class XmslContractList extends BaseEntity {
     /**
      * 字段描述：单位
      */
+    @NotBlank(message = "单位不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "单位")
     private String unit;
     /**
      * 字段描述：中标数量
      */
+    @NotNull(message = "中标数量不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "中标数量")
     private BigDecimal winNum;
     /**
      * 字段描述：中标单价（不含税）
      */
+    @NotNull(message = "中标单价（不含税）不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
     @Excel(name = "中标单价（不含税）")
     private BigDecimal winUnitPrice;

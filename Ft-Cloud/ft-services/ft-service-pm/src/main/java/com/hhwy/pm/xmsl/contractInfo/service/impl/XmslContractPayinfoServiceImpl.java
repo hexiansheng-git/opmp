@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -83,5 +84,10 @@ public class XmslContractPayinfoServiceImpl implements IXmslContractPayinfoServi
     @Transactional
     public int deleteXmslContractPayinfoByPks(List<Long> xmslContractPayinfoPkList) {
         return xmslContractPayinfoMapper.deleteXmslContractPayinfoByPks(xmslContractPayinfoPkList);
+    }
+
+    @Override
+    public List<Map> selDictDate(String type) {
+        return xmslContractPayinfoMapper.selDictDate(type);
     }
 }
