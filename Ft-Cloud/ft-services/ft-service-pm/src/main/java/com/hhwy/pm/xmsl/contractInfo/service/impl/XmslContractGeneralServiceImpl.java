@@ -28,7 +28,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
 
     public List<? extends TreeVO> getXmslContractGeneral(XmslContractGeneral xmslContractGeneral) {
         List<XmslContractGeneral> list = xmslContractGeneralMapper.getXmslContractGeneral(xmslContractGeneral);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, null);
+        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, 0l);
         return  treeVOS;
     }
 

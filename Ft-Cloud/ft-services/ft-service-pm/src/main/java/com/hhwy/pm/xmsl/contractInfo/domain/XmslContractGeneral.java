@@ -195,5 +195,6 @@ public class XmslContractGeneral extends TreeVO {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+    private Long[]  ids;
 
 }

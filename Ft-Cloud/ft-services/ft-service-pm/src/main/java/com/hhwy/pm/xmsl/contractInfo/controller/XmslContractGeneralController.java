@@ -80,8 +80,9 @@ public class XmslContractGeneralController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteXmslContractGeneralByPks(@PathVariable Long[] ids) {
+    @PostMapping("/remove")
+    public AjaxResult deleteXmslContractGeneralByPks(@RequestBody XmslContractGeneral xmslContractGeneralParam) {
+        Long [] ids = xmslContractGeneralParam.getIds();
         List<Long> xmslContractGeneralPkList = Arrays.asList(ids);
         return toAjax(xmslContractGeneralService.deleteXmslContractGeneralByPks(xmslContractGeneralPkList));
     }
