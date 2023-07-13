@@ -21,11 +21,24 @@ public class IgnoreWhiteProperties {
      */
     private List<String> whites = new ArrayList<>();
 
+    /**
+     * 进行权限校验，但不重置token过期时间的url配置列表
+     */
+    private List<String> inessential = new ArrayList<>();
+
     public List<String> getWhites() {
         return whites;
     }
 
     public void setWhites(List<String> whites) {
         this.whites = whites;
+    }
+
+    public List<String> getInessential() {
+        return inessential;
+    }
+
+    public void setInessential(List<String> inessential) {
+        this.inessential = inessential;
     }
 }

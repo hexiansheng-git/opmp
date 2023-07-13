@@ -28,4 +28,10 @@ public interface SystemServiceApi {
      */
     @GetMapping("/syspm/typeData")
     AjaxResult dictType(@RequestParam("dictType") String dictType);
+
+    /**
+     * 前期策划获取菜单信息
+     */
+    @GetMapping("/syspm/menu/qqch")
+    AjaxResult getQqchMenu();
 }

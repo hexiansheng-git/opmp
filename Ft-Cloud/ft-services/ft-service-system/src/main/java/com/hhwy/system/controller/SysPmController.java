@@ -6,8 +6,10 @@ package com.hhwy.system.controller;/*
 
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.system.api.domain.SysMenuV2;
 import com.hhwy.system.core.domain.SysDictData;
 import com.hhwy.system.core.service.ISysDictTypeService;
+import com.hhwy.system.core.service.ISysMenuV2Service;
 import com.hhwy.system.service.ISysPmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,9 @@ public class SysPmController {
 
     @Autowired
     ISysPmService dictService;
+
+    @Autowired
+    ISysMenuV2Service sysMenuService;
 
 
     /**
@@ -49,6 +54,11 @@ public class SysPmController {
         return AjaxResult.success(list);
     }
 
+    /**
+     * 根据字典类型查询字典数据
+     * @param dictType
+     * @return
+     */
     @GetMapping("/typeData")
     public AjaxResult dictType(@RequestParam String dictType) {
         List<SysDictData> data = dictTypeService.selectDictDataByType(dictType);
@@ -57,4 +67,15 @@ public class SysPmController {
         }
         return AjaxResult.success(data);
     }
+    //前期策划-工作计划获取菜单
+    @GetMapping("/menu/qqch")
+    public AjaxResult getQqchMenu() {
+        SysMenuV2 sysMenuV2 = new SysMenuV2();
+        sysMenuV2.setMenuType("menu");
+        sysMenuV2.setTitle("实施条件");
+        List<SysMenuV2> menuTreeList = sysMenuService.selectSysMenuTreeList(sysMenuV2);
+        return AjaxResult.success(menuTreeList);
+    }
+
+
 }
