@@ -1,6 +1,5 @@
 package com.hhwy.utils.tree;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
  * @date 2023-07-13 09:50:00
  * @remark 列表转树工具类
  */
-public class ToTreeUtils extends BaseEntity {
+public class ToTreeUtils {
 
     /**
      * @param nodes         list 列表集合

@@ -1,6 +1,5 @@
 package com.hhwy.utils.tree;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.util.CollectionUtils;
@@ -10,7 +9,7 @@ import org.springframework.util.CollectionUtils;
  * @date 2023-07-07 16:20:00
  * @remark 组装树结构工具类
  */
-public class TreeUtils extends BaseEntity {
+public class TreeUtils {
 
     /**
      * @param dtoList
