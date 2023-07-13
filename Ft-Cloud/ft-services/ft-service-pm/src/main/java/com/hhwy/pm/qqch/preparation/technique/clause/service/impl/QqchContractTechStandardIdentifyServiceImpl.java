@@ -6,8 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStan
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.utils.tree.ToTreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,11 +102,12 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
      * @param qqchContractTechStandardIdentify
      * @return
      */
-    public List<? extends TreeVO> getTreeList(QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
+    public List<QqchContractTechStandardIdentify> getTreeList(
+        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, null);
-        return treeVOS;
+        List<QqchContractTechStandardIdentify> treeList = ToTreeUtils.listToTree(list, "pid", "id");
+        return treeList;
     }
 
     /**
@@ -158,7 +158,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
             updateList.add(qqchContractTechStandardIdentify);
         }
 
-        List<QqchContractTechStandardIdentify> childList = qqchContractTechStandardIdentify.getChildList();
+        List<QqchContractTechStandardIdentify> childList = qqchContractTechStandardIdentify.getChildren();
         if (!CollectionUtils.isEmpty(childList)) {
             for (QqchContractTechStandardIdentify child : childList) {
                 child.setPid(id);

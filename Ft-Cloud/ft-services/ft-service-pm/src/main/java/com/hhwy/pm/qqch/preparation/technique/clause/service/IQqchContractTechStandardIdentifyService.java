@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.clause.service;
 
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify;
-import com.hhwy.utils.tree.TreeVO;
 import java.util.List;
 
 /**
@@ -13,7 +12,7 @@ public interface IQqchContractTechStandardIdentifyService {
 
     int deleteQqchContractTechStandardIdentifyByPks(List<Long> qqchContractTechStandardIdentifyPkList);
 
-    List<? extends TreeVO> getTreeList(
+    List<QqchContractTechStandardIdentify> getTreeList(
         QqchContractTechStandardIdentify qqchContractTechStandardIdentify);
 
     void batchSave(List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList);
