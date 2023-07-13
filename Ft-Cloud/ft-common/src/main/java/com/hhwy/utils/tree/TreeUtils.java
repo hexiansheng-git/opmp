@@ -15,6 +15,10 @@ import java.util.Map;
  */
 public class TreeUtils {
 
+    private static String idField = "id";
+    private static String parentIdField = "pid";
+    private static String childrenName = "children";
+
     /**
      * 对应id字段名称为id,父id字段名称为pid,子集合名称为children的专用方法
      *
@@ -23,12 +27,7 @@ public class TreeUtils {
      * @return
      */
     public static <T> List<T> listToTree(List<T> nodes) {
-        String parentIdField = "pid";
-        String idField = "id";
-        String childrenName = "children";
-
-        List<T> treeNodes = listToTreeGeneric(nodes, parentIdField, idField, childrenName);
-        return treeNodes;
+        return listToTreeGeneric(nodes, parentIdField, idField, childrenName);
     }
 
     /**
@@ -45,7 +44,7 @@ public class TreeUtils {
         List<T> treeNodes = new ArrayList<>();
         for (T node : nodes) {
             Object parentIdValue = getFieldValue(node, parentIdField);
-            Long parentId = 0L;
+            long parentId = 0L;
             if (parentIdValue != null) {
                 parentId = Long.parseLong(parentIdValue.toString());
             }
@@ -64,11 +63,12 @@ public class TreeUtils {
         List<T> children = new ArrayList<>();
         for (T node : nodes) {
             Object parentIdValue = getFieldValue(node, parentIdField);
-            Long parentId = 0L;
+            long parentId = 0L;
             if (parentIdValue != null) {
                 parentId = Long.parseLong(parentIdValue.toString());
             }
             Object idValue = getFieldValue(parent, idField);
+            assert idValue != null;
             Long id = Long.parseLong(idValue.toString());
             if (id.equals(parentId)) {
                 // 将节点加入对应的父节点中
@@ -89,9 +89,6 @@ public class TreeUtils {
      * @return
      */
     public static <T> Map<String,List<T>> splitTreeList(List<T> nodes){
-        String idField = "id";
-        String parentIdField = "pid";
-        String childrenName = "children";
         return splitTreeList(nodes,idField,parentIdField,childrenName);
     }
 
