@@ -14,10 +14,11 @@ public class ToTreeUtils {
      * @param nodes         list 列表集合
      * @param parentIdField 父id字段名
      * @param idField       id字段名
+     * @param childrenName  子集合名称
      * @param <T>
      * @return
      */
-    public static <T> List<T> listToTree(List<T> nodes, String parentIdField, String idField) {
+    public static <T> List<T> listToTree(List<T> nodes, String parentIdField, String idField, String childrenName) {
         List<T> treeNodes = new ArrayList<>();
         for (T node : nodes) {
             Object parentIdValue = getFieldValue(node, parentIdField);
@@ -26,16 +27,17 @@ public class ToTreeUtils {
                 parentId = Long.parseLong(parentIdValue.toString());
             }
             if (parentId == 0) {
-                // 父ID为0为根节点，直接加入列表中
+                // 父ID为0或null为根节点，直接加入列表中
                 treeNodes.add(node);
                 // 递归处理子节点
-                setChildren(node, nodes, parentIdField, idField);
+                setChildren(node, nodes, parentIdField, idField, childrenName);
             }
         }
         return treeNodes;
     }
 
-    private static <T> void setChildren(T parent, List<T> nodes, String parentIdField, String idField) {
+    private static <T> void setChildren(T parent, List<T> nodes, String parentIdField, String idField,
+        String childrenName) {
         List<T> children = new ArrayList<>();
         for (T node : nodes) {
             Object parentIdValue = getFieldValue(node, parentIdField);
@@ -49,11 +51,11 @@ public class ToTreeUtils {
                 // 将节点加入对应的父节点中
                 children.add(node);
                 // 递归处理子节点
-                setChildren(node, nodes, parentIdField, idField);
+                setChildren(node, nodes, parentIdField, idField, childrenName);
             }
         }
         if (!children.isEmpty()) {
-            setFieldValue(parent, "children", children);
+            setFieldValue(parent, childrenName, children);
         }
     }
 
