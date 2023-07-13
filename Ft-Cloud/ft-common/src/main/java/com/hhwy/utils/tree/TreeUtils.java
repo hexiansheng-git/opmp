@@ -1,7 +1,12 @@
 package com.hhwy.utils.tree;
 
+import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -74,6 +79,58 @@ public class TreeUtils {
         }
         if (!children.isEmpty()) {
             setFieldValue(parent, childrenName, children);
+        }
+    }
+
+    /**
+     * 拆分树列表：将需要新增的数据和需要修改的数据放到两个集合中
+     * @param nodes 需要拆分的树列表
+     * @param <T>
+     * @return
+     */
+    public static <T> Map<String,List<T>> splitTreeList(List<T> nodes){
+        String idField = "id";
+        String parentIdField = "pid";
+        String childrenName = "children";
+        return splitTreeList(nodes,idField,parentIdField,childrenName);
+    }
+
+    /**
+     * 拆分树列表：将需要新增的数据和需要修改的数据放到两个集合中
+     * @param nodes 需要拆分的树列表
+     * @param idField 主键字段名
+     * @param parentIdField 关联主键id字段名
+     * @param childrenName 子集字段名
+     * @param <T>
+     * @return
+     */
+    public static <T> Map<String,List<T>> splitTreeList(List<T> nodes, String idField,String parentIdField,String childrenName){
+        List<T> insertList = new ArrayList<>();
+        List<T> updateList = new ArrayList<>();
+        for (T node : nodes) {
+            split(node,idField,parentIdField,childrenName,insertList,updateList);
+        }
+        Map<String,List<T>> resultMap = new HashMap<>();
+        resultMap.put("insertList",insertList);
+        resultMap.put("updateList",updateList);
+        return resultMap;
+    }
+
+    private static <T> void split(T node,String idField,String parentIdField,String childrenName,List<T> insertList,List<T> updateList){
+        Object id = getFieldValue(node, idField);
+        if(id == null){
+            id = IdWorker.createId();
+            setFieldValue(node,idField,id);
+            insertList.add(node);
+        }else{
+            updateList.add(node);
+        }
+        List<T> children = (List<T>) getFieldValue(node, childrenName);
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                setFieldValue(child,parentIdField,id);
+                split(child,idField,parentIdField,childrenName,insertList,updateList);
+            }
         }
     }
 
