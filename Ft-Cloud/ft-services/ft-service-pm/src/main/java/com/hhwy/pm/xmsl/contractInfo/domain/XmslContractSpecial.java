@@ -5,12 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ldd
@@ -20,7 +21,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XmslContractSpecial extends TreeVO {
+public class XmslContractSpecial extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -208,5 +209,5 @@ public class XmslContractSpecial extends TreeVO {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-
+    private List<XmslContractSpecial> children;
 }

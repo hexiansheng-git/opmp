@@ -5,12 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ldd
@@ -20,7 +23,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XmslContractGeneral extends TreeVO {
+public class XmslContractGeneral extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -40,6 +43,7 @@ public class XmslContractGeneral extends TreeVO {
     /**
      * 字段描述：父id
      */
+    @NotBlank(message = "父id不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "父id")
@@ -196,5 +200,7 @@ public class XmslContractGeneral extends TreeVO {
     private String ptVar5;
 
     private Long[]  ids;
+
+    private List<XmslContractGeneral> children;
 
 }
