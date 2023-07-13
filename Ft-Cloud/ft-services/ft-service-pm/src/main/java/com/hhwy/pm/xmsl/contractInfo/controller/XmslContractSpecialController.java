@@ -79,9 +79,9 @@ public class XmslContractSpecialController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "xmslContractSpecial:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteXmslContractSpecialByPks(@PathVariable Long[] ids) {
-        List<Long> xmslContractSpecialPkList = Arrays.asList(ids);
+    @PostMapping("/remove")
+    public AjaxResult deleteXmslContractSpecialByPks(@RequestBody XmslContractSpecial xmslContractSpecialParam) {
+        List<Long> xmslContractSpecialPkList = Arrays.asList(xmslContractSpecialParam.getIds());
         return toAjax(xmslContractSpecialService.deleteXmslContractSpecialByPks(xmslContractSpecialPkList));
     }
 

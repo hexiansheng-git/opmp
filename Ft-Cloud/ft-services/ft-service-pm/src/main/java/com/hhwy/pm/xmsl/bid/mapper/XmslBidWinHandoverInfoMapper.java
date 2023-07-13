@@ -1,8 +1,9 @@
 package com.hhwy.pm.xmsl.bid.mapper;
 
 import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverInfo;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author zhenglili

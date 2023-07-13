@@ -209,5 +209,7 @@ public class XmslContractSpecial extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+    private Long[]  ids;
+
     private List<XmslContractSpecial> children;
 }

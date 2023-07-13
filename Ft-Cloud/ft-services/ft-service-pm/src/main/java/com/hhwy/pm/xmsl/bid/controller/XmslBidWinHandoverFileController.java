@@ -1,15 +1,16 @@
 package com.hhwy.pm.xmsl.bid.controller;
 
+import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zhenglili

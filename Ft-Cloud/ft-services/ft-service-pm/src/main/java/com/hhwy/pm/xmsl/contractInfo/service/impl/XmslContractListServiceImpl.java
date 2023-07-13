@@ -7,8 +7,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractListMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.utils.tree.ListTreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +28,10 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     private XmslContractListMapper xmslContractListMapper;
 
 
-    public List<? extends TreeVO> getXmslContractList(XmslContractList xmslContractList) {
+    public List<XmslContractList> getXmslContractList(XmslContractList xmslContractList) {
         List<XmslContractList> xmslContractList1 = xmslContractListMapper.getXmslContractList(xmslContractList);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(xmslContractList1, null);
-        return treeVOS;
+        List<XmslContractList> treeList = ListTreeUtil.formatTree(xmslContractList1, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractList::getChildren, XmslContractList::setChildren);
+        return treeList;
     }
 
     public List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList) {

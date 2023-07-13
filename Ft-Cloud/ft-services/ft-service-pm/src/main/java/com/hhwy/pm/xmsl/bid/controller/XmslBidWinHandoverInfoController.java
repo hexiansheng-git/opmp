@@ -1,9 +1,9 @@
 package com.hhwy.pm.xmsl.bid.controller;
 
-import com.hhwy.common.core.web.controller.BaseController;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverInfo;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
