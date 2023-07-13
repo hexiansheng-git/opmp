@@ -152,9 +152,9 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
             updateList.add(qqchContractTechAchievementIdentify);
         }
 
-        List<QqchContractTechAchievementIdentify> childList = qqchContractTechAchievementIdentify.getChildren();
-        if (!CollectionUtils.isEmpty(childList)) {
-            for (QqchContractTechAchievementIdentify child : childList) {
+        List<QqchContractTechAchievementIdentify> children = qqchContractTechAchievementIdentify.getChildren();
+        if (!CollectionUtils.isEmpty(children)) {
+            for (QqchContractTechAchievementIdentify child : children) {
                 child.setPid(id);
                 this.recursionSubset(child, insertList, updateList);
             }
