@@ -22,24 +22,12 @@ public class ToTreeUtils {
         String idField = "id";
         String childrenName = "children";
 
-        List<T> treeNodes = new ArrayList<>();
-        for (T node : nodes) {
-            Object parentIdValue = getFieldValue(node, parentIdField);
-            Long parentId = 0L;
-            if (parentIdValue != null) {
-                parentId = Long.parseLong(parentIdValue.toString());
-            }
-            if (parentId == 0) {
-                // 父ID为0或null为根节点，直接加入列表中
-                treeNodes.add(node);
-                // 递归处理子节点
-                setChildren(node, nodes, parentIdField, idField, childrenName);
-            }
-        }
+        List<T> treeNodes = listToTreeGeneric(nodes, parentIdField, idField, childrenName);
         return treeNodes;
     }
 
     /**
+     * 通用方法
      * @param nodes         list 列表集合
      * @param parentIdField 父id字段名
      * @param idField       id字段名
