@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchCompleteDesignHandoverMapper;
@@ -36,6 +37,7 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
         qqchCompleteDesignHandoverVo.setQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
 
         //TODO 获取确认状态
+        qqchCompleteDesignHandoverVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         return qqchCompleteDesignHandoverVo;
     }
