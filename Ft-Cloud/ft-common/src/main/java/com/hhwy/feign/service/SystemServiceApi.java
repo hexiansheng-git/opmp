@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface SystemServiceApi {
 
     //查询字典项，导出使用
-    @GetMapping(value = "/sys/dict/resolveDict")
+    @GetMapping(value = "/syspm/resolveDict")
     AjaxResult resolveDict(@RequestParam("dictType") String dictType,  @RequestParam("dictValue")  String dictValue);
     //查询字典项，导入使用,
-    @GetMapping(value = "/sys/dict/reverseDict")
+    @GetMapping(value = "/syspm/reverseDict")
     AjaxResult reverseDict(@RequestParam("dictType") String dictType,  @RequestParam("dictLabel")  String dictLabel);
 
     /**
@@ -26,6 +26,6 @@ public interface SystemServiceApi {
      * @param dictType
      * @return com.hhwy.common.core.web.domain.AjaxResult
      */
-    @GetMapping("/sys/dict/typeData")
+    @GetMapping("/syspm/typeData")
     AjaxResult dictType(@RequestParam("dictType") String dictType);
 }
