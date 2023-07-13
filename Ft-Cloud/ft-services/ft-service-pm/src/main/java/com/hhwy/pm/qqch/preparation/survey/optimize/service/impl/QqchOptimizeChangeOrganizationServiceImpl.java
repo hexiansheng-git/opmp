@@ -41,7 +41,8 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
         List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(new QqchOptimizeChangeOrganization());
 
         //转树列表
-        List<QqchOptimizeChangeOrganization> treeList = ListTreeUtil.formatTree(qqchOptimizeChangeOrganizationList, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), QqchOptimizeChangeOrganization::getChildren, QqchOptimizeChangeOrganization::setChildren);
+        List<QqchOptimizeChangeOrganization> treeList = ListTreeUtil.formatTree(qqchOptimizeChangeOrganizationList, o -> o.getPid() == null,
+            (r, n) -> r.getId().equals(n.getPid()), QqchOptimizeChangeOrganization::getChildren, QqchOptimizeChangeOrganization::setChildren);
         qqchOptimizeChangeOrganizationVo.setTreeList(treeList);
 
         //TODO 获取确认状态

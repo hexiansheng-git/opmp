@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sys/dict")
+@RequestMapping("/syspm")
 public class SysPmController {
     @Autowired
     ISysDictTypeService dictTypeService;
@@ -24,12 +24,25 @@ public class SysPmController {
     @Autowired
     ISysPmService dictService;
 
+
+    /**
+     * 查询字典项，导出使用  , 根据value查询 label
+     * @param dictType
+     * @param dictValue
+     * @return
+     */
     @GetMapping("/resolveDict")
     public AjaxResult resolveDictList(@RequestParam("dictType") String dictType, @RequestParam("dictValue") String dictValue) {
         List<SysDictData> list = dictTypeService.selectDictDataByTypeAndValues(dictType, dictValue);
         return AjaxResult.success(list);
     }
 
+    /**
+     * 查询字典项，导入使用  , 根据label查询 value
+     * @param dictType
+     * @param dictValue
+     * @return
+     */
     @GetMapping("/reverseDict")
     public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictValue") String dictLabel) {
         List<SysDictData> list = dictService.selectDictValueByTypeAndLabel(dictType, dictLabel);
