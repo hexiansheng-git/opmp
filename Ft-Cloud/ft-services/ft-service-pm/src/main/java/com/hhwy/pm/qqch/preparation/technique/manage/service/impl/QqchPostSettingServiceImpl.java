@@ -6,7 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchPostSettingMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ToTreeUtils;
+import com.hhwy.utils.tree.TreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
     public List<QqchPostSetting> getQqchPostSettingList(QqchPostSetting qqchPostSetting) {
         List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSetting);
-        return ToTreeUtils.listToTree(list);
+        return TreeUtils.listToTree(list);
     }
 
     @Transactional

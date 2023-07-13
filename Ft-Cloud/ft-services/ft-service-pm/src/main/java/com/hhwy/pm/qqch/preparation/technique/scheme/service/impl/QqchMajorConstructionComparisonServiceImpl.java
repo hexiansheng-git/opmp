@@ -6,7 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructio
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ToTreeUtils;
+import com.hhwy.utils.tree.TreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         QqchMajorConstructionComparison qqchMajorConstructionComparison) {
         List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper
             .getQqchMajorConstructionComparisonList(qqchMajorConstructionComparison);
-        return ToTreeUtils.listToTree(list);
+        return TreeUtils.listToTree(list);
     }
 
     @Transactional

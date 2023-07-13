@@ -6,7 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStan
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ToTreeUtils;
+import com.hhwy.utils.tree.TreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-        return ToTreeUtils.listToTree(list);
+        return TreeUtils.listToTree(list);
     }
 
     /**

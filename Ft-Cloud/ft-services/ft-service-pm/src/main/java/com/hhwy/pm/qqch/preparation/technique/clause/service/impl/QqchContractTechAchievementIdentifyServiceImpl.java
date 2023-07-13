@@ -6,7 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchi
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechAchievementIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechAchievementIdentifyService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ToTreeUtils;
+import com.hhwy.utils.tree.TreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +105,7 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
         QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
         List<QqchContractTechAchievementIdentify> list = qqchContractTechAchievementIdentifyMapper
             .getQqchContractTechAchievementIdentifyList(qqchContractTechAchievementIdentify);
-        return ToTreeUtils.listToTree(list);
+        return TreeUtils.listToTree(list);
     }
 
     @Transactional
