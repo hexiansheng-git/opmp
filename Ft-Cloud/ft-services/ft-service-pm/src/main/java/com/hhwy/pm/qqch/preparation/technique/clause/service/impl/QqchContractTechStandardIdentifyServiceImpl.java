@@ -106,8 +106,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-        List<QqchContractTechStandardIdentify> treeList = ToTreeUtils.listToTree(list);
-        return treeList;
+        return ToTreeUtils.listToTree(list);
     }
 
     /**

@@ -8,6 +8,7 @@ import com.hhwy.pm.xmsl.project.domain.*;
 import com.hhwy.pm.xmsl.project.mapper.*;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +81,10 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
         xmslProjectEngineeringAmount.setProjectBasicInfoId(id);
         List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList = xmslProjectEngineeringAmountMapper.getProjectEngineeringAmountList(xmslProjectEngineeringAmount);
-        List<XmslProjectEngineeringAmount> treeList = this.getXmslProjectEngineeringAmountTreeList(xmslProjectEngineeringAmountList);
+        List<XmslProjectEngineeringAmount> treeList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(xmslProjectEngineeringAmountList)){
+            treeList = ListTreeUtil.formatTree(xmslProjectEngineeringAmountList, o -> o.getPid() == null,(r, n) -> r.getId().equals(n.getPid()),XmslProjectEngineeringAmount::getChildren,XmslProjectEngineeringAmount::setChildren);
+        }
         xmslProjectBasicInfo.setXmslProjectEngineeringAmountList(treeList);
 
         //主要材料数量

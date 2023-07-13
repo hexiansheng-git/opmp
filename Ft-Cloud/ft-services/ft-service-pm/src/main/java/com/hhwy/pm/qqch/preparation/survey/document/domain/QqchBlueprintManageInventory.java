@@ -1,23 +1,25 @@
-package com.hhwy.pm.qqch.preparation.technique.manage.domain;
+package com.hhwy.pm.qqch.preparation.survey.document.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
-import java.util.List;
+import com.hhwy.common.core.annotation.Excel;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * @author zhenglili
- * @date 2023-07-11 15:23:27
- * @remark
+ * @author han
+ * @date 2023-07-13 11:40:34
+ * @remark 勘察设计图纸管理清单
  */
 @Data
-public class QqchPostSetting extends BaseEntity {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class QqchBlueprintManageInventory extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -28,48 +30,73 @@ public class QqchPostSetting extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：父id
+     * 字段描述：勘察设计阶段
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "勘察设计阶段")
+    private String surveyDesignStage;
     /**
-     * 字段描述：岗位类型：1，项目技术管理部门岗位；2，工区技术岗位
+     * 字段描述：图纸编号
      */
     @JsonProperty
-    @Excel(name = "岗位类型：1，项目技术管理部门岗位；2，工区技术岗位")
-    private String postType;
+    @Excel(name = "图纸编号")
+    private String blueprintCode;
     /**
-     * 字段描述：技术部门/工区技术
+     * 字段描述：图纸名称
      */
     @JsonProperty
-    @Excel(name = "技术部门/工区技术")
-    private String techDept;
+    @Excel(name = "图纸名称")
+    private String blueprintName;
     /**
-     * 字段描述：岗位id
+     * 字段描述：图纸范围
      */
     @JsonProperty
-    @Excel(name = "岗位id")
-    private String postId;
+    @Excel(name = "图纸范围")
+    private String blueprintScope;
     /**
-     * 字段描述：岗位名称
+     * 字段描述：批复日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "岗位名称")
-    private String postName;
+    @Excel(name = "批复日期", dateFormat = "yyyy-MM-dd")
+    private Date approvalDate;
     /**
-     * 字段描述：编制人数
+     * 字段描述：份数
      */
     @JsonProperty
-    @Excel(name = "编制人数")
-    private String headcount;
+    @Excel(name = "份数")
+    private String copies;
     /**
-     * 字段描述：排序
+     * 字段描述：签收人
      */
     @JsonProperty
-    @Excel(name = "排序")
-    private String sort;
+    @Excel(name = "签收人")
+    private String signer;
+    /**
+     * 字段描述：签收日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "签收日期", dateFormat = "yyyy-MM-dd")
+    private Date signDate;
+    /**
+     * 字段描述：是否电子版图纸
+     */
+    @JsonProperty
+    @Excel(name = "是否电子版图纸")
+    private String electronicEditionFlag;
+    /**
+     * 字段描述：是否为优化后图纸
+     */
+    @JsonProperty
+    @Excel(name = "是否为优化后图纸")
+    private String optimizeFlag;
+    /**
+     * 字段描述：是否为变更后图纸
+     */
+    @JsonProperty
+    @Excel(name = "是否为变更后图纸")
+    private String changeFlag;
     /**
      * 字段描述：备注
      */
@@ -190,9 +217,4 @@ public class QqchPostSetting extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
-    /**
-     * 子集合
-     */
-    private List<QqchPostSetting> children;
 }

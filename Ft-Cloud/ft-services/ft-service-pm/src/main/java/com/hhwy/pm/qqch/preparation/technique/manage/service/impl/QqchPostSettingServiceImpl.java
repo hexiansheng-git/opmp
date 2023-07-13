@@ -6,8 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchPostSettingMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.utils.tree.ToTreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,10 +25,9 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
     @Autowired
     private QqchPostSettingMapper qqchPostSettingMapper;
 
-    public List<? extends TreeVO> getQqchPostSettingList(QqchPostSetting qqchPostSetting) {
+    public List<QqchPostSetting> getQqchPostSettingList(QqchPostSetting qqchPostSetting) {
         List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSetting);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, null);
-        return treeVOS;
+        return ToTreeUtils.listToTree(list);
     }
 
     @Transactional
@@ -88,7 +86,7 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
             updateList.add(qqchPostSetting);
         }
 
-        List<QqchPostSetting> childList = qqchPostSetting.getChildList();
+        List<QqchPostSetting> childList = qqchPostSetting.getChildren();
         if (!CollectionUtils.isEmpty(childList)) {
             for (QqchPostSetting child : childList) {
                 child.setPid(id);

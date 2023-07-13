@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
@@ -16,7 +16,7 @@ import lombok.Data;
  * @remark
  */
 @Data
-public class QqchContractTechAchievementIdentify extends TreeVO {
+public class QqchContractTechAchievementIdentify extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -189,5 +189,5 @@ public class QqchContractTechAchievementIdentify extends TreeVO {
     /**
      * 子集合
      */
-    private List<QqchContractTechAchievementIdentify> childList;
+    private List<QqchContractTechAchievementIdentify> children;
 }
