@@ -173,6 +173,5 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
     /**
      * 字段描述：子集合
      */
-    @JsonProperty
     private List<XmslProjectEngineeringAmount> children;
 }
