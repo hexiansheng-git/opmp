@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
-import com.hhwy.utils.tree.TreeVO;
 import java.util.List;
 
 /**
@@ -11,7 +10,7 @@ import java.util.List;
  */
 public interface IQqchPostSettingService {
 
-    List<? extends TreeVO> getQqchPostSettingList(QqchPostSetting qqchPostSetting);
+    List<QqchPostSetting> getQqchPostSettingList(QqchPostSetting qqchPostSetting);
 
     void batchSave(List<QqchPostSetting> qqchPostSettingList, String postType);
 

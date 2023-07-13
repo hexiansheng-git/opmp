@@ -6,8 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchi
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechAchievementIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechAchievementIdentifyService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.utils.tree.ToTreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,11 +101,11 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
      * @param qqchContractTechAchievementIdentify
      * @return
      */
-    public List<? extends TreeVO> getTreeList(QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
+    public List<QqchContractTechAchievementIdentify> getTreeList(
+        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
         List<QqchContractTechAchievementIdentify> list = qqchContractTechAchievementIdentifyMapper
             .getQqchContractTechAchievementIdentifyList(qqchContractTechAchievementIdentify);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, null);
-        return treeVOS;
+        return ToTreeUtils.listToTree(list);
     }
 
     @Transactional
@@ -153,7 +152,7 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
             updateList.add(qqchContractTechAchievementIdentify);
         }
 
-        List<QqchContractTechAchievementIdentify> childList = qqchContractTechAchievementIdentify.getChildList();
+        List<QqchContractTechAchievementIdentify> childList = qqchContractTechAchievementIdentify.getChildren();
         if (!CollectionUtils.isEmpty(childList)) {
             for (QqchContractTechAchievementIdentify child : childList) {
                 child.setPid(id);

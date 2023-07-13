@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechAchievementIdentifyService;
-import com.hhwy.utils.tree.TreeVO;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +47,7 @@ public class QqchContractTechAchievementIdentifyController extends BaseControlle
     @GetMapping("/getTreeList")
     public AjaxResult getTreeList(
         @Validated(ValidationGroups.Select.class) @RequestBody QqchContractTechAchievementIdentify qqchContractTechAchievementIdentifyParam) {
-        List<? extends TreeVO> treeList =
+        List<QqchContractTechAchievementIdentify> treeList =
             qqchContractTechAchievementIdentifyService.getTreeList(qqchContractTechAchievementIdentifyParam);
         return AjaxResult.success(treeList);
     }

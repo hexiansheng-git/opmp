@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
-import com.hhwy.utils.tree.TreeVO;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +34,7 @@ public class QqchPostSettingController extends BaseController {
     public AjaxResult getTechDeptList(
         @Validated(ValidationGroups.Select.class) @RequestBody QqchPostSetting qqchPostSettingParam) {
         qqchPostSettingParam.setPostType("1");
-        List<? extends TreeVO> treeList = qqchPostSettingService.getQqchPostSettingList(qqchPostSettingParam);
+        List<QqchPostSetting> treeList = qqchPostSettingService.getQqchPostSettingList(qqchPostSettingParam);
         return AjaxResult.success(treeList);
     }
 
@@ -44,7 +43,7 @@ public class QqchPostSettingController extends BaseController {
     public AjaxResult getWorkAreaList(
         @Validated(ValidationGroups.Select.class) @RequestBody QqchPostSetting qqchPostSettingParam) {
         qqchPostSettingParam.setPostType("2");
-        List<? extends TreeVO> treeList = qqchPostSettingService.getQqchPostSettingList(qqchPostSettingParam);
+        List<QqchPostSetting> treeList = qqchPostSettingService.getQqchPostSettingList(qqchPostSettingParam);
         return AjaxResult.success(treeList);
     }
 
@@ -54,7 +53,7 @@ public class QqchPostSettingController extends BaseController {
         @Validated(ValidationGroups.Save.class) @RequestBody List<QqchPostSetting> qqchPostSettingListParam) {
         String postType = "1";
         qqchPostSettingService.batchSave(qqchPostSettingListParam, postType);
-        return AjaxResult.success(qqchPostSettingListParam);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "qqchPostSetting:add")
@@ -63,7 +62,7 @@ public class QqchPostSettingController extends BaseController {
         @Validated(ValidationGroups.Save.class) @RequestBody List<QqchPostSetting> qqchPostSettingListParam) {
         String postType = "2";
         qqchPostSettingService.batchSave(qqchPostSettingListParam, postType);
-        return AjaxResult.success(qqchPostSettingListParam);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "qqchPostSetting:remove")
