@@ -23,7 +23,7 @@ public interface XmslContractListMapper {
 
     int updateXmslContractList(XmslContractList xmslContractList);
 
-    int updateXmslContractListList(@Param("xmslContractListList") List<XmslContractListVo> xmslContractListList);
+    int updateXmslContractListList(@Param("list") List<XmslContractListVo> xmslContractListList);
 
     int deleteXmslContractList(XmslContractList xmslContractList);
 

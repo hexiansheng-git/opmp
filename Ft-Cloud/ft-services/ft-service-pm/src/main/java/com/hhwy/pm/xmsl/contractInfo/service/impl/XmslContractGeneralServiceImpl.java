@@ -6,12 +6,13 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractGeneralMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import com.hhwy.utils.tree.TreeVO;
+import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,10 +27,11 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
     private XmslContractGeneralMapper xmslContractGeneralMapper;
 
 
-    public List<? extends TreeVO> getXmslContractGeneral(XmslContractGeneral xmslContractGeneral) {
+    public List<XmslContractGeneral> getXmslContractGeneral(XmslContractGeneral xmslContractGeneral) {
         List<XmslContractGeneral> list = xmslContractGeneralMapper.getXmslContractGeneral(xmslContractGeneral);
-        List<? extends TreeVO> treeVOS = TreeUtils.buildTree(list, 0l);
-        return  treeVOS;
+        //转树列表
+        List<XmslContractGeneral> treeList = ListTreeUtil.formatTree(list, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
+        return  treeList;
     }
 
     public List<XmslContractGeneral> getXmslContractGeneralList(XmslContractGeneral xmslContractGeneral) {
@@ -44,14 +46,60 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         return xmslContractGeneralMapper.insertXmslContractGeneral(xmslContractGeneral);
     }
 
+    /**
+     *   批量新增修改
+     *
+     * @param xmslContractGeneralList
+     * @return
+     */
     @Transactional
     public int insertXmslContractGeneralList(List<XmslContractGeneral> xmslContractGeneralList) {
-        for (XmslContractGeneral xmslContractGeneral : xmslContractGeneralList) {
-            xmslContractGeneral.setId(IdWorker.createId());
-            xmslContractGeneral.setCreateUser(SecurityUtils.getUserName());
-            xmslContractGeneral.setCreateTime(DateUtils.getNowDate());
+        if(CollectionUtils.isEmpty(xmslContractGeneralList)){
+            return 0;
         }
-        return xmslContractGeneralMapper.insertXmslContractGeneralList(xmslContractGeneralList);
+        List<XmslContractGeneral> insertList = new ArrayList<>();
+        List<XmslContractGeneral> updateList = new ArrayList<>();
+        for (XmslContractGeneral xmslContractGeneral : xmslContractGeneralList) {
+            this.recursionSubset(xmslContractGeneral, insertList, updateList);
+        }
+
+        if (insertList.size() > 0) {
+            xmslContractGeneralMapper.insertXmslContractGeneralList(insertList);
+        }
+        if (updateList.size() > 0) {
+            xmslContractGeneralMapper.updateXmslContractGeneralList(updateList);
+        }
+        return 1;
+    }
+
+    /**
+     *  处理子集
+     * @param xmslContractGeneral
+     * @param insertList
+     * @param updateList
+     */
+    private void recursionSubset(XmslContractGeneral xmslContractGeneral, List<XmslContractGeneral> insertList, List<XmslContractGeneral> updateList) {
+        Long id = xmslContractGeneral.getId();
+        if (id == null) {
+            id = IdWorker.createId();
+            xmslContractGeneral.setId(id);
+            xmslContractGeneral.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslContractGeneral.setCreateUserName(SecurityUtils.getUserName());
+            xmslContractGeneral.setCreateTime(DateUtils.getNowDate());
+            insertList.add(xmslContractGeneral);
+        } else {
+            xmslContractGeneral.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslContractGeneral.setUpdateTime(DateUtils.getNowDate());
+            updateList.add(xmslContractGeneral);
+        }
+
+        List<XmslContractGeneral> children = xmslContractGeneral.getChildren();
+        if (!CollectionUtils.isEmpty(children)) {
+            for (XmslContractGeneral child : children) {
+                child.setPid(id);
+                this.recursionSubset(child, insertList, updateList);
+            }
+        }
     }
 
     @Transactional
