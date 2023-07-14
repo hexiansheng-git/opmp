@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service;
 
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
+import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPlanVo;
 
 import java.util.List;
 
@@ -11,19 +12,31 @@ import java.util.List;
  */
 public interface IQqchSurveyDesignRiskPlanService {
 
-    QqchSurveyDesignRiskPlan getQqchSurveyDesignRiskPlan(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
+    /**
+     * 勘察设计风险策划Vo
+     * @param qqchSurveyDesignRiskPlan
+     * @return
+     */
+    QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
 
-    List<QqchSurveyDesignRiskPlan> getQqchSurveyDesignRiskPlanList(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
+    /**
+     * 保存
+     * @param qqchSurveyDesignRiskPlanVo
+     * @return
+     */
+    void save(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo);
 
-    int insertQqchSurveyDesignRiskPlan(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
+    /**
+     * 确认
+     * @param qqchSurveyDesignRiskPlanVo
+     * @return
+     */
+    void confirm(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo);
 
-    int insertQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList);
-
-    int updateQqchSurveyDesignRiskPlan(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
-
-    int updateQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList);
-
-    int deleteQqchSurveyDesignRiskPlan(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
-
+    /**
+     * 批量删除
+     * @param qqchSurveyDesignRiskPlanPkList
+     * @return
+     */
     int deleteQqchSurveyDesignRiskPlanByPks(List<Long> qqchSurveyDesignRiskPlanPkList);
 }
