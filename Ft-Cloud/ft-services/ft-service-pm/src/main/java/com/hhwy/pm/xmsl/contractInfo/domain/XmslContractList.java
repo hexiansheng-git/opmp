@@ -28,12 +28,16 @@ import java.util.List;
 public class XmslContractList extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    @Excel(name = "层级码")
+    private Long innerCode;
+    @Excel(name = "父层级码")
+    private Long parentInnerCode;
+
     /**
      * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
     private Long id;
     /**
      * 字段描述：主表id（xmsl_contract_payinfo）
@@ -41,7 +45,6 @@ public class XmslContractList extends BaseEntity {
     @NotNull(message = "masterId不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主表id（xmsl_contract_payinfo）")
     private Long masterId;
     /**
      * 字段描述：父id
@@ -49,13 +52,11 @@ public class XmslContractList extends BaseEntity {
     @NotNull(message = "父id不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
     private Long pid;
     /**
      * 字段描述：祖籍id集合
      */
     @JsonProperty
-    @Excel(name = "祖籍id集合")
     private String ancestors;
     /**
      * 字段描述：清单编号
@@ -88,7 +89,6 @@ public class XmslContractList extends BaseEntity {
      * 字段描述：单位编码
      */
     @JsonProperty
-    @Excel(name = "单位编码")
     private String unitCode;
     /**
      * 字段描述：单位

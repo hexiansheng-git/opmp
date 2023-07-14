@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -8,15 +7,18 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * @author ldd
@@ -82,10 +84,41 @@ public class XmslContractListController extends BaseController {
         return toAjax(xmslContractListService.deleteXmslContractListByPks(xmslContractListPkList));
     }
 
+    /**
+     *  导出接口
+     *
+     * @param response
+     * @param xmslContractListParam
+     * @throws IOException
+     */
     @GetMapping("/export")
-    public void export(HttpServletResponse response, XmslContractList xmslContractListParam) throws IOException {
-        List<XmslContractList> xmslContractListList = xmslContractListService.getXmslContractListList(xmslContractListParam);
-        ExcelUtils<XmslContractList> util = new ExcelUtils<>(XmslContractList.class);
-        util.exportExcel(response, xmslContractListList, DateUtils.getDate());
+    public void export(HttpServletResponse response,@RequestBody XmslContractList xmslContractListParam) throws IOException {
+        try{
+             InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("template/exportXmslContractList.xlsx");
+             Map<String, Object> map = new HashMap<>();
+            List<XmslContractList> list = xmslContractListService.getXmslContractListList(xmslContractListParam);
+            ExcelUtilByTemplate.exportExcel(response, list, map, "xmslContractList", resourceAsStream);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+    /**
+     *  导入接口
+     *
+     * @throws IOException
+     */
+    @GetMapping("/import")
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
+      ExcelUtils<XmslContractList> util = new ExcelUtils<>(XmslContractList.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<XmslContractList> xmslContractLists = util.importExcel(inputStream);
+            List<XmslContractList> dateList = ListTreeUtil.formatTree(xmslContractLists, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), XmslContractList::getChildren, XmslContractList::setChildren);
+            return AjaxResult.success(dateList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
 }

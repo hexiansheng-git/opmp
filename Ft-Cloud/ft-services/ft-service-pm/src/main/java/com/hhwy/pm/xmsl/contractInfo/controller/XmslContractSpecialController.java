@@ -86,7 +86,7 @@ public class XmslContractSpecialController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response, XmslContractSpecial xmslContractSpecialParam) throws IOException {
+    public void export(HttpServletResponse response,@RequestBody XmslContractSpecial xmslContractSpecialParam) throws IOException {
         List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecialParam);
         ExcelUtils<XmslContractSpecial> util = new ExcelUtils<>(XmslContractSpecial.class);
         util.exportExcel(response, xmslContractSpecialList, DateUtils.getDate());

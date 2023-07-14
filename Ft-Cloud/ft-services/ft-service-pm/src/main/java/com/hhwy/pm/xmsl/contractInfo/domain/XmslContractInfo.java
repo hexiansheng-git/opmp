@@ -33,7 +33,6 @@ public class XmslContractInfo extends BaseEntity {
     @NotNull(message = "主键不能为空",groups = {ValidationGroups.Update.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
     private Long id;
     /**
      * 字段描述：合同编号
