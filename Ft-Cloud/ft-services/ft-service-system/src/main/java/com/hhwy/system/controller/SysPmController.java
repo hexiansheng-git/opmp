@@ -6,8 +6,11 @@ package com.hhwy.system.controller;/*
 
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.system.api.domain.SysMenuV2;
+import com.hhwy.common.security.service.TokenService;
+import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.domain.SysDictData;
+import com.hhwy.system.core.service.IMenuService;
 import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;
 import com.hhwy.system.service.ISysPmService;
@@ -29,7 +32,11 @@ public class SysPmController {
     @Autowired
     ISysMenuV2Service sysMenuService;
 
+    @Autowired
+    private TokenService tokenService;
 
+    @Autowired
+    private IMenuService menuService;
     /**
      * 查询字典项，导出使用  , 根据value查询 label
      * @param dictType
@@ -70,12 +77,22 @@ public class SysPmController {
     //前期策划-工作计划获取菜单
     @GetMapping("/menu/qqch")
     public AjaxResult getQqchMenu() {
-        SysMenuV2 sysMenuV2 = new SysMenuV2();
-        sysMenuV2.setMenuType("menu");
-        sysMenuV2.setTitle("实施条件");
-        List<SysMenuV2> menuTreeList = sysMenuService.selectSysMenuTreeList(sysMenuV2);
-        return AjaxResult.success(menuTreeList);
+//        SysMenuV2 sysMenuV2 = new SysMenuV2();
+//        sysMenuV2.setMenuType("menu");
+//        //暂时使用实施条件
+//        sysMenuV2.setTitle("实施条件");
+//        List<SysMenuV2> menuTreeList = sysMenuService.selectSysMenuTreeList(sysMenuV2);
+//        return AjaxResult.success(menuTreeList);
+
+        SysUser sysUser = this.tokenService.getSysUser();
+        SysMenu sysMenu = new SysMenu();
+        sysMenu.setMenuType("menu");
+        sysMenu.setTitle("实施条件");
+        List<SysMenu> list = this.menuService.selectMenuTreeList(sysMenu, sysUser);
+        return AjaxResult.success(list);
+
     }
+
 
 
 }

@@ -58,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     <result property="ptVar5" column="pt_var5" />
                     <result property="taskStatus" column="task_status" />
                     <result property="valid" column="valid" />
+                    <result property="version" column="version" />
             </resultMap>
     <sql id="selectXmslContractInfoVo">
         select
@@ -114,6 +115,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                          ,`pt_var5`
                                                          ,`task_status`
                                                          ,`valid`
+                                                         ,`version`
                                     from xmsl_contract_info
     </sql>
     <select id="getXmslContractInfo" resultMap="XmslContractInfoResultMap">
@@ -173,6 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
                             <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            <if test="version != null  and version != ''"> and `version` = #{version}</if>
                     </where>
         order by create_time desc
     </select>
@@ -234,6 +237,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
                             <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            <if test="version != null  and version != ''"> and `version` = #{version}</if>
                     </where>
         order by create_time desc
     </select>
@@ -294,6 +298,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
                             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
                             <if test="valid != null  and valid != ''">`valid`,</if>
+                            <if test="version != null  and version != ''">`version`,</if>
                     </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                             <if test="id != null ">#{id},</if>
@@ -349,6 +354,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
                             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
                             <if test="valid != null  and valid != ''">#{valid},</if>
+                            <if test="version != null  and version != ''">#{version},</if>
                     </trim>
     </insert>
 
@@ -401,13 +407,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `update_time`,
                                                                 `del_user`,
                                                                 `del_time`,
-                                                                                            `pt_var1`,
+                                                                `pt_var1`,
                                                                 `pt_var2`,
                                                                 `pt_var3`,
                                                                 `pt_var4`,
                                                                 `pt_var5`,
                                                                 `task_status`,
                                                                 `valid`,
+                                                                `version`,
                                     </trim>
         values
         <foreach collection="xmslContractInfoList" item="item" separator=",">
@@ -457,13 +464,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                                 #{item.updateTime},
                                                                                 #{item.delUser},
                                                                                 #{item.delTime},
-                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar1},
                                                                                 #{item.ptVar2},
                                                                                 #{item.ptVar3},
                                                                                 #{item.ptVar4},
                                                                                 #{item.ptVar5},
                                                                                 #{item.taskStatus},
                                                                                 #{item.valid},
+                                                                                #{item.version},
                                                 </trim>
         </foreach>
     </insert>
@@ -524,6 +532,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
                             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
                             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+                            <if test="version != null  and  version != ''">`version` = #{version},</if>
                     </trim>
         <where>
                                                                         <if test="id != null "> and `id` = #{id}</if>
@@ -798,6 +807,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             when `id`=#{item.id} then #{item.valid}
                         </foreach>
                     </trim>
+                <trim prefix="version  = case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when `id`=#{item.id} then #{item.version}
+                    </foreach>
+                </trim>
                             </trim>
             where `id` in
             <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
@@ -861,6 +875,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
                                     <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
                                     <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                                    <if test="version != null  and version != ''"> and `version` = #{version}</if>
                             </where>
         </update>
 

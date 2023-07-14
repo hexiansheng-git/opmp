@@ -33,7 +33,6 @@ public class XmslContractInfo extends BaseEntity {
     @NotNull(message = "主键不能为空",groups = {ValidationGroups.Update.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
     private Long id;
     /**
      * 字段描述：合同编号
@@ -368,6 +367,8 @@ public class XmslContractInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "是否有效（0无效 1有效）")
     private String valid;
+
+    private  String version;
 
     //投保险种
     private List<XmslContractInsure> xmslContractInsureList;

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-10 14:17:36
- * @remark  投保险种
+ * @remark  合同信息--投保险种
  */
 @Validated
 @RestController

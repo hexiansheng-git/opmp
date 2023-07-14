@@ -6,21 +6,25 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSpecial;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractSpecial;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSpecialService;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * @author ldd
  * @date 2023-07-10 14:17:51
- * @remark
+ * @remark  合同信息登记--专用条件
  */
 @Validated
 @RestController
@@ -85,10 +89,35 @@ public class XmslContractSpecialController extends BaseController {
         return toAjax(xmslContractSpecialService.deleteXmslContractSpecialByPks(xmslContractSpecialPkList));
     }
 
+    /**
+     *  导入
+     *
+     * @param response
+     * @param xmslContractSpecialParam
+     * @throws IOException
+     */
     @GetMapping("/export")
-    public void export(HttpServletResponse response, XmslContractSpecial xmslContractSpecialParam) throws IOException {
+    public void export(HttpServletResponse response,@RequestBody XmslContractSpecial xmslContractSpecialParam) throws IOException {
         List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecialParam);
         ExcelUtils<XmslContractSpecial> util = new ExcelUtils<>(XmslContractSpecial.class);
         util.exportExcel(response, xmslContractSpecialList, DateUtils.getDate());
+    }
+
+    /**
+     *  导出
+     * @param file
+     * @return
+     */
+    @GetMapping("/import")
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
+        ExcelUtils<ImportXmslContractSpecial> util = new ExcelUtils<>(ImportXmslContractSpecial.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<ImportXmslContractSpecial> xmslContractLists = util.importExcel(inputStream);
+            List<ImportXmslContractSpecial> dateList = ListTreeUtil.formatTree(xmslContractLists, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractSpecial::getChildren, ImportXmslContractSpecial::setChildren);
+            return AjaxResult.success(dateList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
     }
 }

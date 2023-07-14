@@ -41,14 +41,14 @@ public class ${genTable.beanNameClass}Controller extends BaseController{
 
     @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:list")
     @GetMapping
-    public AjaxResult get${genTable.beanNameClass}(@Validated(ValidationGroups.Get.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+    public AjaxResult get${genTable.beanNameClass}(@Validated(ValidationGroups.Get.class)  ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         ${genTable.beanNameClass} ${genTable.beanNameProperty} =  ${genTable.beanNameProperty}Service.get${genTable.beanNameClass}(${genTable.beanNameProperty}Param);
         return AjaxResult.success(${genTable.beanNameProperty});
     }
 
     @PreAuthorize(hasPermi = "${genTable.beanNameProperty}:list")
     @GetMapping("/list")
-    public AjaxResult get${genTable.beanNameClass}List(@Validated(ValidationGroups.Select.class) @RequestBody ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
+    public AjaxResult get${genTable.beanNameClass}List(@Validated(ValidationGroups.Select.class) ${genTable.beanNameClass} ${genTable.beanNameProperty}Param){
         startPage();
         List<${genTable.beanNameClass}> ${genTable.beanNameProperty}List = ${genTable.beanNameProperty}Service.get${genTable.beanNameClass}List(${genTable.beanNameProperty}Param);
         return getDataTableAjaxResult(${genTable.beanNameProperty}List);

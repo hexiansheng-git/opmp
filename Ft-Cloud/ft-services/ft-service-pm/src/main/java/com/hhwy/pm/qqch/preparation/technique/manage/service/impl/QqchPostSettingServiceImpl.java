@@ -6,7 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchPostSettingMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ToTreeUtils;
+import com.hhwy.utils.tree.TreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
     public List<QqchPostSetting> getQqchPostSettingList(QqchPostSetting qqchPostSetting) {
         List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSetting);
-        return ToTreeUtils.listToTree(list);
+        return TreeUtils.listToTree(list);
     }
 
     @Transactional
@@ -48,13 +48,6 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
         }
         if (updateList.size() > 0) {
             qqchPostSettingMapper.updateQqchPostSettingList(updateList);
-        }
-
-        for (QqchPostSetting qqchPostSetting : qqchPostSettingList) {
-            qqchPostSetting.setPostType(postType);
-            qqchPostSetting.setId(IdWorker.createId());
-            qqchPostSetting.setCreateUser(SecurityUtils.getUserName());
-            qqchPostSetting.setCreateTime(DateUtils.getNowDate());
         }
     }
 
@@ -86,9 +79,9 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
             updateList.add(qqchPostSetting);
         }
 
-        List<QqchPostSetting> childList = qqchPostSetting.getChildren();
-        if (!CollectionUtils.isEmpty(childList)) {
-            for (QqchPostSetting child : childList) {
+        List<QqchPostSetting> children = qqchPostSetting.getChildren();
+        if (!CollectionUtils.isEmpty(children)) {
+            for (QqchPostSetting child : children) {
                 child.setPid(id);
                 child.setPostType(qqchPostSetting.getPostType());
                 this.recursionSubset(child, insertList, updateList);
