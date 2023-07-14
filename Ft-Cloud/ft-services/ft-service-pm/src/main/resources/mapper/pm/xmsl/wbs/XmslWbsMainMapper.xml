@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.xmsl.wbs.xmslWbsMain.mapper.XmslWbsMainMapper">
+<mapper namespace="com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper">
 
-    <resultMap type="com.hhwy.pm.xmsl.wbs.xmslWbsMain.domain.XmslWbsMain" id="XmslWbsMainResultMap">
+    <resultMap type="com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain" id="XmslWbsMainResultMap">
         <result property="id" column="id"/>
         <result property="projectId" column="project_id"/>
         <result property="projectName" column="project_name"/>
