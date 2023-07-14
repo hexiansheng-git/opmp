@@ -33,14 +33,14 @@ public class QqchModuleConfirmCaseController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchModuleConfirmCase:list")
     @GetMapping
-    public AjaxResult getQqchModuleConfirmCase(@Validated(ValidationGroups.Get.class) @RequestBody QqchModuleConfirmCase qqchModuleConfirmCaseParam) {
+    public AjaxResult getQqchModuleConfirmCase(@Validated(ValidationGroups.Get.class) QqchModuleConfirmCase qqchModuleConfirmCaseParam) {
         QqchModuleConfirmCase qqchModuleConfirmCase = qqchModuleConfirmCaseService.getQqchModuleConfirmCase(qqchModuleConfirmCaseParam);
         return AjaxResult.success(qqchModuleConfirmCase);
     }
 
     @PreAuthorize(hasPermi = "qqchModuleConfirmCase:list")
     @GetMapping("/list")
-    public AjaxResult getQqchModuleConfirmCaseList(@Validated(ValidationGroups.Select.class) @RequestBody QqchModuleConfirmCase qqchModuleConfirmCaseParam) {
+    public AjaxResult getQqchModuleConfirmCaseList(@Validated(ValidationGroups.Select.class) QqchModuleConfirmCase qqchModuleConfirmCaseParam) {
         startPage();
         List<QqchModuleConfirmCase> qqchModuleConfirmCaseList = qqchModuleConfirmCaseService.getQqchModuleConfirmCaseList(qqchModuleConfirmCaseParam);
         return getDataTableAjaxResult(qqchModuleConfirmCaseList);

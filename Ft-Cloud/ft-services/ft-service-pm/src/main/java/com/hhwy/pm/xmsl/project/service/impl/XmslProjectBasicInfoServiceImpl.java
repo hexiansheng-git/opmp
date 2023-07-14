@@ -96,39 +96,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         return xmslProjectBasicInfo;
     }
 
-    /**
-     * 工程结构数量集合转换树列表
-     * @param xmslProjectEngineeringAmountList
-     * @return
-     */
-    public List<XmslProjectEngineeringAmount> getXmslProjectEngineeringAmountTreeList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList){
-        List<XmslProjectEngineeringAmount> treeList = new ArrayList<>();
-        for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            Long pid = xmslProjectEngineeringAmount.getPid();
-            if(pid == null || pid == 0){
-                this.getChildren(xmslProjectEngineeringAmount,xmslProjectEngineeringAmountList);
-                treeList.add(xmslProjectEngineeringAmount);
-            }
-        }
-        return treeList;
-    }
-
-    /**
-     * 获取子集
-     * @param root
-     * @param xmslProjectEngineeringAmountList
-     */
-    private void getChildren(XmslProjectEngineeringAmount root, List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList) {
-        List<XmslProjectEngineeringAmount> children = new ArrayList<>();
-        for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            if (xmslProjectEngineeringAmount.getPid() != null && xmslProjectEngineeringAmount.getPid().equals(root.getId())) {
-                getChildren(xmslProjectEngineeringAmount, xmslProjectEngineeringAmountList);
-                children.add(xmslProjectEngineeringAmount);
-            }
-        }
-        root.setChildren(children);
-    }
-
     public XmslProjectBasicInfo getProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
         return xmslProjectBasicInfoMapper.getProjectBasicInfo(xmslProjectBasicInfo);
     }
@@ -162,7 +129,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //主要工程数量
         List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList = xmslProjectBasicInfo.getXmslProjectEngineeringAmountList();
         if(!CollectionUtils.isEmpty(xmslProjectEngineeringAmountList)){
-            projectEngineeringAmountService.maintainTreeStructure(xmslProjectBasicInfo.getXmslProjectEngineeringAmountList(), xmslProjectBasicInfo);
+            projectEngineeringAmountService.editProjectEngineeringAmountList(xmslProjectBasicInfo.getXmslProjectEngineeringAmountList(), xmslProjectBasicInfo);
         }
 
         //主要材料数量
@@ -199,7 +166,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //主要工程数量
         List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList = xmslProjectBasicInfo.getXmslProjectEngineeringAmountList();
         if(!CollectionUtils.isEmpty(xmslProjectEngineeringAmountList)){
-            projectEngineeringAmountService.maintainTreeStructure(xmslProjectEngineeringAmountList, xmslProjectBasicInfo);
+            projectEngineeringAmountService.editProjectEngineeringAmountList(xmslProjectEngineeringAmountList, xmslProjectBasicInfo);
         }
 
         //主要材料数量

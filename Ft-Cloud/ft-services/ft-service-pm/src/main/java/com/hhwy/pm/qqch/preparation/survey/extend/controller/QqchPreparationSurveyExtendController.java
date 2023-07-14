@@ -43,7 +43,7 @@ public class QqchPreparationSurveyExtendController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchPreparationSurveyExtend:list")
     @GetMapping("/list")
-    public AjaxResult getQqchPreparationSurveyExtendList(@Validated(ValidationGroups.Select.class) @RequestBody QqchPreparationSurveyExtend qqchPreparationSurveyExtendParam) {
+    public AjaxResult getQqchPreparationSurveyExtendList(@Validated(ValidationGroups.Select.class) QqchPreparationSurveyExtend qqchPreparationSurveyExtendParam) {
         startPage();
         List<QqchPreparationSurveyExtend> qqchPreparationSurveyExtendList = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtendList(qqchPreparationSurveyExtendParam);
         return getDataTableAjaxResult(qqchPreparationSurveyExtendList);

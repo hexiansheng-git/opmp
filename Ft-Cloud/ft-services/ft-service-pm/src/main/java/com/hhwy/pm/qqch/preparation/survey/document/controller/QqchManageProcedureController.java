@@ -33,14 +33,14 @@ public class QqchManageProcedureController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchManageProcedure:list")
     @GetMapping
-    public AjaxResult getQqchManageProcedure(@Validated(ValidationGroups.Get.class) @RequestBody QqchManageProcedure qqchManageProcedureParam) {
+    public AjaxResult getQqchManageProcedure(@Validated(ValidationGroups.Get.class) QqchManageProcedure qqchManageProcedureParam) {
         QqchManageProcedure qqchManageProcedure = qqchManageProcedureService.getQqchManageProcedure(qqchManageProcedureParam);
         return AjaxResult.success(qqchManageProcedure);
     }
 
     @PreAuthorize(hasPermi = "qqchManageProcedure:list")
     @GetMapping("/list")
-    public AjaxResult getQqchManageProcedureList(@Validated(ValidationGroups.Select.class) @RequestBody QqchManageProcedure qqchManageProcedureParam) {
+    public AjaxResult getQqchManageProcedureList(@Validated(ValidationGroups.Select.class) QqchManageProcedure qqchManageProcedureParam) {
         startPage();
         List<QqchManageProcedure> qqchManageProcedureList = qqchManageProcedureService.getQqchManageProcedureList(qqchManageProcedureParam);
         return getDataTableAjaxResult(qqchManageProcedureList);

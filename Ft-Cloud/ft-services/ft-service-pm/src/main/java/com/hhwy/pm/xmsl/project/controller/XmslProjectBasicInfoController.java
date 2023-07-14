@@ -55,7 +55,7 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @return
      */
     @GetMapping("/list")
-    public AjaxResult getProjectBasicInfoList(@Validated(ValidationGroups.Select.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
+    public AjaxResult getProjectBasicInfoList(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo xmslProjectBasicInfoParam){
         startPage();
         List<XmslProjectBasicInfo> xmslProjectBasicInfoList = projectBasicInfoService.getProjectBasicInfoList(xmslProjectBasicInfoParam);
         return getDataTableAjaxResult(xmslProjectBasicInfoList);

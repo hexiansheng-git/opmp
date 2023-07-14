@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -32,12 +33,63 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     private QqchWorkGroupMemberMapper qqchWorkGroupMemberMapper;
 
 
-    public QqchWorkGroup getQqchWorkGroup(QqchWorkGroup qqchWorkGroup) {
-        return qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
-    }
-
+    /**
+     * 台账（历史记录）
+     * @param qqchWorkGroup
+     * @return
+     */
     public List<QqchWorkGroup> getQqchWorkGroupList(QqchWorkGroup qqchWorkGroup) {
         return qqchWorkGroupMapper.getQqchWorkGroupList(qqchWorkGroup);
+    }
+
+    /**
+     * 调整
+     * @param id
+     * @return
+     */
+    @Override
+    public QqchWorkGroup adjustQqchWorkGroup(Long id) {
+        QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
+        if(id == null){
+            //第一次新增
+            qqchWorkGroup.setVersion(BigDecimal.valueOf(1.0));
+            return qqchWorkGroup;
+        }
+
+        /*
+        调整
+         */
+        qqchWorkGroup.setId(id);
+        //获取调整数据
+        qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+        qqchWorkGroup.setId(null);
+        BigDecimal version = qqchWorkGroup.getVersion();
+        version = version.add(BigDecimal.valueOf(1));
+        qqchWorkGroup.setVersion(version);
+
+        return qqchWorkGroup;
+    }
+
+    /**
+     * 根据id获取工作小组信息
+     * @param id
+     * @return
+     */
+    @Override
+    public QqchWorkGroup getQqchWorkGroupById(Long id) {
+
+        QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
+        qqchWorkGroup.setId(id);
+        qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+
+        //获取工作小组成员
+        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
+        qqchWorkGroupMember.setWorkGroupId(id);
+        List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+
+        qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
+
+        return qqchWorkGroup;
     }
 
     /**
@@ -97,23 +149,5 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
         return qqchWorkGroupMapper.deleteQqchWorkGroup(qqchWorkGroup);
-    }
-
-    @Transactional
-    public int deleteQqchWorkGroupByPks(List<Long> qqchWorkGroupPkList) {
-        return qqchWorkGroupMapper.deleteQqchWorkGroupByPks(qqchWorkGroupPkList);
-    }
-
-    /**
-     * 根据id获取工作小组信息
-     * @param id
-     * @return
-     */
-    @Override
-    public QqchWorkGroup getQqchWorkGroupById(Long id) {
-        QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
-        qqchWorkGroup.setId(id);
-        qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
-        return qqchWorkGroup;
     }
 }
