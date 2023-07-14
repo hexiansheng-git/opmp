@@ -368,6 +368,8 @@ public class XmslContractInfo extends BaseEntity {
     @Excel(name = "是否有效（0无效 1有效）")
     private String valid;
 
+    private  String version;
+
     //投保险种
     private List<XmslContractInsure> xmslContractInsureList;
     //签订信息

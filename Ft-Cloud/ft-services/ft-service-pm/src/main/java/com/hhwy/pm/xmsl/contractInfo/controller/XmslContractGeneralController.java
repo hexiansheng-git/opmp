@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-10 14:17:30
- * @remark
+ * @remark   合同信息登记--通用条件
  */
 @Validated
 @RestController
@@ -90,6 +90,13 @@ public class XmslContractGeneralController extends BaseController {
         return toAjax(xmslContractGeneralService.deleteXmslContractGeneralByPks(xmslContractGeneralPkList));
     }
 
+    /**
+     *  导出
+     *
+     * @param response
+     * @param xmslContractGeneralParam
+     * @throws IOException
+     */
     @GetMapping("/export")
     public void export(HttpServletResponse response,@RequestBody XmslContractGeneral xmslContractGeneralParam) throws IOException {
         List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneralParam);
@@ -97,6 +104,12 @@ public class XmslContractGeneralController extends BaseController {
         util.exportExcel(response, xmslContractGeneralList, DateUtils.getDate());
     }
 
+    /**
+     *  导入
+     *
+     * @param file
+     * @return
+     */
     @GetMapping("/import")
     public AjaxResult importDate(@RequestPart("file") MultipartFile file){
         ExcelUtils<ImportXmslContractGeneral> util = new ExcelUtils<>(ImportXmslContractGeneral.class);

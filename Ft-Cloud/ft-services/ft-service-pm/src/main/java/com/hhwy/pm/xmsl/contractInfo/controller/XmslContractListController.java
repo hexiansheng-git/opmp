@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * @author ldd
  * @date 2023-07-10 14:17:42
- * @remark  主合同清单
+ * @remark  合同信息--主合同清单
  */
 @Validated
 @RestController
