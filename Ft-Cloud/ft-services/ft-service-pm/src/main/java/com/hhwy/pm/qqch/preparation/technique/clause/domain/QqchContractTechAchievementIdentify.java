@@ -13,7 +13,7 @@ import lombok.Data;
 /**
  * @author zhenglili
  * @date 2023-07-10 14:36:27
- * @remark
+ * @remark 3.1.2合同要求提交的技术文件成果识别
  */
 @Data
 public class QqchContractTechAchievementIdentify extends BaseEntity {

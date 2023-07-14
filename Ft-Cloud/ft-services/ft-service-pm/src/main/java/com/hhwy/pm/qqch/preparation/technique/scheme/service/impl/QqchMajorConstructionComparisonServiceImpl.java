@@ -3,11 +3,11 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
-import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtils;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,75 +25,46 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
     @Autowired
     private QqchMajorConstructionComparisonMapper qqchMajorConstructionComparisonMapper;
 
-
-    public QqchMajorConstructionComparison getQqchMajorConstructionComparison(
+    public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(
         QqchMajorConstructionComparison qqchMajorConstructionComparison) {
-        return qqchMajorConstructionComparisonMapper
-            .getQqchMajorConstructionComparison(qqchMajorConstructionComparison);
-    }
+        QqchMajorConstructionComparisonVo vo = new QqchMajorConstructionComparisonVo();
 
-    public List<QqchMajorConstructionComparison> getQqchMajorConstructionComparisonList(
-        QqchMajorConstructionComparison qqchMajorConstructionComparison) {
+        QqchMajorConstructionComparison qryParam = new QqchMajorConstructionComparison();
+        qryParam.setValid("1");
+        qryParam.setVersion(qqchMajorConstructionComparisonMapper.getMaxVersion());
         List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper
             .getQqchMajorConstructionComparisonList(qqchMajorConstructionComparison);
-        return TreeUtils.listToTree(list);
+        vo.setTreeList(TreeUtils.listToTree(list));
+        return vo;
     }
 
     @Transactional
-    public void batchSave(List<QqchMajorConstructionComparison> qqchMajorConstructionComparisonList) {
-        if (CollectionUtils.isEmpty(qqchMajorConstructionComparisonList)) {
+    public void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo) {
+        // 先批量删除当前版本所有数据
+        QqchMajorConstructionComparison deleteParam = new QqchMajorConstructionComparison();
+        deleteParam.setVersion(qqchMajorConstructionComparisonVo.getVersion());
+        deleteParam.setDelFlag("1");
+        qqchMajorConstructionComparisonMapper.updateQqchMajorConstructionComparison(deleteParam);
+
+        if (CollectionUtils.isEmpty(qqchMajorConstructionComparisonVo.getTreeList())) {
             return;
         }
 
-        List<QqchMajorConstructionComparison> insertList = new ArrayList<>();
-        List<QqchMajorConstructionComparison> updateList = new ArrayList<>();
-        for (QqchMajorConstructionComparison qqchMajorConstructionComparison : qqchMajorConstructionComparisonList) {
-            this.recursionSubset(qqchMajorConstructionComparison, insertList, updateList);
-        }
+        // 树转list
+        List<QqchMajorConstructionComparison> insertList = TreeUtils
+            .splitTreeList(qqchMajorConstructionComparisonVo.getTreeList());
 
-        if (insertList.size() > 0) {
-            qqchMajorConstructionComparisonMapper.insertQqchMajorConstructionComparisonList(insertList);
-        }
-        if (updateList.size() > 0) {
-            qqchMajorConstructionComparisonMapper.updateQqchMajorConstructionComparisonList(updateList);
-        }
-    }
-
-    @Transactional
-    public int deleteQqchMajorConstructionComparisonByPks(List<Long> qqchMajorConstructionComparisonPkList) {
-        return qqchMajorConstructionComparisonMapper
-            .deleteQqchMajorConstructionComparisonByPks(qqchMajorConstructionComparisonPkList);
-    }
-
-    /**
-     * 递归处理子节点
-     *
-     * @param qqchMajorConstructionComparison
-     * @param insertList
-     * @param updateList
-     */
-    public void recursionSubset(QqchMajorConstructionComparison qqchMajorConstructionComparison,
-        List<QqchMajorConstructionComparison> insertList, List<QqchMajorConstructionComparison> updateList) {
-        Long id = qqchMajorConstructionComparison.getId();
-        if (id == null) {
-            id = IdWorker.createId();
-            qqchMajorConstructionComparison.setId(id);
-            qqchMajorConstructionComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchMajorConstructionComparison.setCreateUserName(SecurityUtils.getUserName());
-            qqchMajorConstructionComparison.setCreateTime(DateUtils.getNowDate());
-            insertList.add(qqchMajorConstructionComparison);
-        } else {
-            qqchMajorConstructionComparison.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchMajorConstructionComparison.setUpdateTime(DateUtils.getNowDate());
-            updateList.add(qqchMajorConstructionComparison);
-        }
-
-        List<QqchMajorConstructionComparison> children = qqchMajorConstructionComparison.getChildren();
-        if (!CollectionUtils.isEmpty(children)) {
-            for (QqchMajorConstructionComparison child : children) {
-                child.setPid(id);
-                this.recursionSubset(child, insertList, updateList);
+        if (!CollectionUtils.isEmpty(insertList)) {
+            for (QqchMajorConstructionComparison insert : insertList) {
+                insert.setVersion(new BigDecimal("1"));
+                insert.setValid("1");
+                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                insert.setCreateUserName(SecurityUtils.getUserName());
+                insert.setCreateTime(DateUtils.getNowDate());
             }
         }
+
+        // 全量入库
+        qqchMajorConstructionComparisonMapper.insertQqchMajorConstructionComparisonList(insertList);
     }
 }

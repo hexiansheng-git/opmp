@@ -10,6 +10,7 @@
     <result property="pid" column="pid"/>
     <result property="subItemCode" column="sub_item_code"/>
     <result property="subItem" column="sub_item"/>
+    <result property="affiliationWbsCode" column="affiliation_wbs_code"/>
     <result property="affiliationWbs" column="affiliation_wbs"/>
     <result property="schemeName" column="scheme_name"/>
     <result property="equipmentConfig" column="equipment_config"/>
@@ -19,6 +20,8 @@
     <result property="convenienceCompare" column="convenience_compare"/>
     <result property="selectScheme" column="select_scheme"/>
     <result property="sort" column="sort"/>
+    <result property="version" column="version"/>
+    <result property="valid" column="valid"/>
     <result property="remark" column="remark"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
@@ -45,6 +48,7 @@
       ,`pid`
       ,`sub_item_code`
       ,`sub_item`
+      ,`affiliation_wbs_code`
       ,`affiliation_wbs`
       ,`scheme_name`
       ,`equipment_config`
@@ -54,6 +58,8 @@
       ,`convenience_compare`
       ,`select_scheme`
       ,`sort`
+      ,`version`
+      ,`valid`
       ,`remark`
       ,`region_id`
       ,`region_name`
@@ -74,7 +80,7 @@
       ,`pt_var4`
       ,`pt_var5`
     from qqch_major_construction_comparison
-  </sql>
+    </sql>
   <select id="getQqchMajorConstructionComparison" resultMap="QqchMajorConstructionComparisonResultMap">
     <include refid="selectQqchMajorConstructionComparisonVo"/>
     <where>
@@ -83,6 +89,9 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="subItemCode != null  and subItemCode != ''">and `sub_item_code` = #{subItemCode}</if>
       <if test="subItem != null  and subItem != ''">and `sub_item` = #{subItem}</if>
+      <if test="affiliationWbsCode != null  and affiliationWbsCode != ''">and `affiliation_wbs_code` =
+        #{affiliationWbsCode}
+      </if>
       <if test="affiliationWbs != null  and affiliationWbs != ''">and `affiliation_wbs` = #{affiliationWbs}</if>
       <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
       <if test="equipmentConfig != null  and equipmentConfig != ''">and `equipment_config` = #{equipmentConfig}</if>
@@ -94,6 +103,8 @@
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
       <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -125,6 +136,9 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="subItemCode != null  and subItemCode != ''">and `sub_item_code` = #{subItemCode}</if>
       <if test="subItem != null  and subItem != ''">and `sub_item` = #{subItem}</if>
+      <if test="affiliationWbsCode != null  and affiliationWbsCode != ''">and `affiliation_wbs_code` =
+        #{affiliationWbsCode}
+      </if>
       <if test="affiliationWbs != null  and affiliationWbs != ''">and `affiliation_wbs` = #{affiliationWbs}</if>
       <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
       <if test="equipmentConfig != null  and equipmentConfig != ''">and `equipment_config` = #{equipmentConfig}</if>
@@ -136,6 +150,8 @@
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
       <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -156,7 +172,7 @@
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
-    order by sort
+    order by sort desc
   </select>
 
   <insert id="insertQqchMajorConstructionComparison" useGeneratedKeys="true" keyProperty="id">
@@ -166,6 +182,7 @@
       <if test="pid != null ">`pid`,</if>
       <if test="subItemCode != null  and subItemCode != ''">`sub_item_code`,</if>
       <if test="subItem != null  and subItem != ''">`sub_item`,</if>
+      <if test="affiliationWbsCode != null  and affiliationWbsCode != ''">`affiliation_wbs_code`,</if>
       <if test="affiliationWbs != null  and affiliationWbs != ''">`affiliation_wbs`,</if>
       <if test="schemeName != null  and schemeName != ''">`scheme_name`,</if>
       <if test="equipmentConfig != null  and equipmentConfig != ''">`equipment_config`,</if>
@@ -175,6 +192,8 @@
       <if test="convenienceCompare != null  and convenienceCompare != ''">`convenience_compare`,</if>
       <if test="selectScheme != null  and selectScheme != ''">`select_scheme`,</if>
       <if test="sort != null  and sort != ''">`sort`,</if>
+      <if test="version != null ">`version`,</if>
+      <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -200,6 +219,7 @@
       <if test="pid != null ">#{pid},</if>
       <if test="subItemCode != null  and subItemCode != ''">#{subItemCode},</if>
       <if test="subItem != null  and subItem != ''">#{subItem},</if>
+      <if test="affiliationWbsCode != null  and affiliationWbsCode != ''">#{affiliationWbsCode},</if>
       <if test="affiliationWbs != null  and affiliationWbs != ''">#{affiliationWbs},</if>
       <if test="schemeName != null  and schemeName != ''">#{schemeName},</if>
       <if test="equipmentConfig != null  and equipmentConfig != ''">#{equipmentConfig},</if>
@@ -209,6 +229,8 @@
       <if test="convenienceCompare != null  and convenienceCompare != ''">#{convenienceCompare},</if>
       <if test="selectScheme != null  and selectScheme != ''">#{selectScheme},</if>
       <if test="sort != null  and sort != ''">#{sort},</if>
+      <if test="version != null ">#{version},</if>
+      <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -239,6 +261,7 @@
       `pid`,
       `sub_item_code`,
       `sub_item`,
+      `affiliation_wbs_code`,
       `affiliation_wbs`,
       `scheme_name`,
       `equipment_config`,
@@ -248,6 +271,8 @@
       `convenience_compare`,
       `select_scheme`,
       `sort`,
+      `version`,
+      `valid`,
       `remark`,
       `region_id`,
       `region_name`,
@@ -274,6 +299,7 @@
         #{item.pid},
         #{item.subItemCode},
         #{item.subItem},
+        #{item.affiliationWbsCode},
         #{item.affiliationWbs},
         #{item.schemeName},
         #{item.equipmentConfig},
@@ -283,6 +309,8 @@
         #{item.convenienceCompare},
         #{item.selectScheme},
         #{item.sort},
+        #{item.version},
+        #{item.valid},
         #{item.remark},
         #{item.regionId},
         #{item.regionName},
@@ -312,6 +340,9 @@
       <if test="pid != null ">`pid` = #{pid},</if>
       <if test="subItemCode != null  and  subItemCode != ''">`sub_item_code` = #{subItemCode},</if>
       <if test="subItem != null  and  subItem != ''">`sub_item` = #{subItem},</if>
+      <if test="affiliationWbsCode != null  and  affiliationWbsCode != ''">`affiliation_wbs_code` =
+        #{affiliationWbsCode},
+      </if>
       <if test="affiliationWbs != null  and  affiliationWbs != ''">`affiliation_wbs` = #{affiliationWbs},</if>
       <if test="schemeName != null  and  schemeName != ''">`scheme_name` = #{schemeName},</if>
       <if test="equipmentConfig != null  and  equipmentConfig != ''">`equipment_config` = #{equipmentConfig},</if>
@@ -323,6 +354,8 @@
       </if>
       <if test="selectScheme != null  and  selectScheme != ''">`select_scheme` = #{selectScheme},</if>
       <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+      <if test="version != null ">`version` = #{version},</if>
+      <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -371,6 +404,11 @@
           when `id`=#{item.id} then #{item.subItem}
         </foreach>
       </trim>
+      <trim prefix="affiliation_wbs_code  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.affiliationWbsCode}
+        </foreach>
+      </trim>
       <trim prefix="affiliation_wbs  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.affiliationWbs}
@@ -414,6 +452,16 @@
       <trim prefix="sort  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.sort}
+        </foreach>
+      </trim>
+      <trim prefix="version  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.version}
+        </foreach>
+      </trim>
+      <trim prefix="valid  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.valid}
         </foreach>
       </trim>
       <trim prefix="remark  = case" suffix="end,">
@@ -525,6 +573,9 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="subItemCode != null  and subItemCode != ''">and `sub_item_code` = #{subItemCode}</if>
       <if test="subItem != null  and subItem != ''">and `sub_item` = #{subItem}</if>
+      <if test="affiliationWbsCode != null  and affiliationWbsCode != ''">and `affiliation_wbs_code` =
+        #{affiliationWbsCode}
+      </if>
       <if test="affiliationWbs != null  and affiliationWbs != ''">and `affiliation_wbs` = #{affiliationWbs}</if>
       <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
       <if test="equipmentConfig != null  and equipmentConfig != ''">and `equipment_config` = #{equipmentConfig}</if>
@@ -536,6 +587,8 @@
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
       <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -567,4 +620,8 @@
       </foreach>
     </where>
   </update>
+
+  <select id="getMaxVersion" resultType="java.math.BigDecimal">
+    select max(version) from qqch_major_construction_comparison where del_flag = '0' and valid = '1' order by version desc;
+  </select>
 </mapper>
