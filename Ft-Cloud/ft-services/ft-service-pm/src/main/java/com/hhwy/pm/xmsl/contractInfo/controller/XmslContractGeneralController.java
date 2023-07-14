@@ -6,14 +6,18 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractGeneral;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractGeneralService;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -91,5 +95,18 @@ public class XmslContractGeneralController extends BaseController {
         List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneralParam);
         ExcelUtils<XmslContractGeneral> util = new ExcelUtils<>(XmslContractGeneral.class);
         util.exportExcel(response, xmslContractGeneralList, DateUtils.getDate());
+    }
+
+    @GetMapping("/import")
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file){
+        ExcelUtils<ImportXmslContractGeneral> util = new ExcelUtils<>(ImportXmslContractGeneral.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<ImportXmslContractGeneral> xmslContractLists = util.importExcel(inputStream);
+            List<ImportXmslContractGeneral> dateList = ListTreeUtil.formatTree(xmslContractLists, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractGeneral::getChildren, ImportXmslContractGeneral::setChildren);
+            return AjaxResult.success(dateList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
@@ -18,7 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -109,12 +113,12 @@ public class XmslContractListController extends BaseController {
      * @throws IOException
      */
     @GetMapping("/import")
-    public AjaxResult importDate(@RequestPart("file") MultipartFile file) throws Exception {
-      ExcelUtils<XmslContractList> util = new ExcelUtils<>(XmslContractList.class);
+    public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
+        ExcelUtils<ImportXmslContractListVo> util = new ExcelUtils<>(ImportXmslContractListVo.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<XmslContractList> xmslContractLists = util.importExcel(inputStream);
-            List<XmslContractList> dateList = ListTreeUtil.formatTree(xmslContractLists, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), XmslContractList::getChildren, XmslContractList::setChildren);
+            List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
+            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(importXmslContractListVos, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractListVo::getChildren, ImportXmslContractListVo::setChildren);
             return AjaxResult.success(dateList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

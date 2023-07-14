@@ -1,4 +1,4 @@
-package com.hhwy.pm.xmsl.contractInfo.domain;
+package com.hhwy.pm.xmsl.contractInfo.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -17,17 +17,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author ldd
- * @date 2023-07-10 14:17:42
- * @remark   合同信息--主合同清单实体类
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XmslContractList extends BaseEntity {
+public class ImportXmslContractListVo extends BaseEntity {
+
     private static final long serialVersionUID = 1L;
 
+    @Excel(name = "层级码")
+    private Long innerCode;
+    @Excel(name = "父层级码")
+    private Long parentInnerCode;
 
     /**
      * 字段描述：主键
@@ -278,5 +278,5 @@ public class XmslContractList extends BaseEntity {
 
     private Long[] ids;
 
-    private List<XmslContractList> children;
+    private List<ImportXmslContractListVo> children;
 }

@@ -1,4 +1,4 @@
-package com.hhwy.pm.xmsl.contractInfo.domain;
+package com.hhwy.pm.xmsl.contractInfo.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,26 +6,24 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author ldd
- * @date 2023-07-10 14:17:30
- * @remark  合同信息--通用条件实体类
- */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class XmslContractGeneral extends BaseEntity {
+public class ImportXmslContractSpecial extends BaseEntity {
+
     private static final long serialVersionUID = 1L;
 
+    @Excel(name = "层级码")
+    private Long innerCode;
+    @Excel(name = "父层级码")
+    private Long parentInnerCode;
 
     /**
      * 字段描述：主键
@@ -42,7 +40,6 @@ public class XmslContractGeneral extends BaseEntity {
     /**
      * 字段描述：父id
      */
-    @NotBlank(message = "父id不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long pid;
@@ -52,10 +49,10 @@ public class XmslContractGeneral extends BaseEntity {
     @JsonProperty
     private String ancestors;
     /**
-     * 字段描述：通用条件编码
+     * 字段描述：专用条件编号
      */
     @JsonProperty
-    @Excel(name = "通用条件编码")
+    @Excel(name = "专用条件编号")
     private String code;
     /**
      * 字段描述：条件名称
@@ -70,6 +67,18 @@ public class XmslContractGeneral extends BaseEntity {
     @Excel(name = "条件内容")
     private String content;
     /**
+     * 字段描述：通用条件id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long generalId;
+    /**
+     * 字段描述：通用条件编码
+     */
+    @JsonProperty
+    @Excel(name = "通用条件编码")
+    private String generalCode;
+    /**
      * 字段描述：附件组id
      */
     @JsonProperty
@@ -78,6 +87,7 @@ public class XmslContractGeneral extends BaseEntity {
      * 字段描述：备注/描述
      */
     @JsonProperty
+    @Excel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id
@@ -178,6 +188,5 @@ public class XmslContractGeneral extends BaseEntity {
 
     private Long[]  ids;
 
-    private List<XmslContractGeneral> children;
-
+    private List<ImportXmslContractSpecial> children;
 }

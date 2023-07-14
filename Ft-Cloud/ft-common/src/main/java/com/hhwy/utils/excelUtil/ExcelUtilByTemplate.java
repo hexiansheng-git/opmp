@@ -7,7 +7,6 @@ import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import org.apache.commons.collections4.CollectionUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -86,7 +85,7 @@ public class ExcelUtilByTemplate {
             //这里是将一些普通数据放到map中，方便填入，可以看getStringObjectMap()。
             //map的String是对应的名称，Object就是数据了。
             //将数据填入
-            if(map.isEmpty()){
+            if(!map.isEmpty()){
                 excelWriter.fill(map, writeSheet);
             }
         }
