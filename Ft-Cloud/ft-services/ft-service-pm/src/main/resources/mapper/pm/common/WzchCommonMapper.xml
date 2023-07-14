@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.common.mapper.WzchCommonMapper">
+    <select id="selectCanAdjust" resultType="java.lang.String">
+        SELECT t.valid
+        FROM ${tableName} AS t
+        WHERE t.id = #{businessId}
+    </select>
+
+    <select id="selectCanAdjustOnly" resultType="java.lang.Long">
+        select id
+        from ${tableName} s
+        where s.del_flag = 0
+          AND s.version=(SELECT max(t.version)
+                              FROM ${tableName} AS t
+                              WHERE t.del_flag = 0)
+    </select>
+</mapper>
