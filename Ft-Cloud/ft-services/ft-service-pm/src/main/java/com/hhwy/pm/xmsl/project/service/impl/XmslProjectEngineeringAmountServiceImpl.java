@@ -1,7 +1,8 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
@@ -9,7 +10,7 @@ import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectEngineeringAmountMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
-import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,62 +39,9 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
      */
     @Transactional
     public void editProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList, XmslProjectBasicInfo xmslProjectBasicInfo){
-        List<XmslProjectEngineeringAmount> insertList = new ArrayList<>();
-        List<XmslProjectEngineeringAmount> updateList = new ArrayList<>();
-        for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            Long projectEngineeringAmountId = xmslProjectEngineeringAmount.getId();
-            if(projectEngineeringAmountId == null){
-                insertList.add(xmslProjectEngineeringAmount);
-            }else{
-                updateList.add(xmslProjectEngineeringAmount);
-            }
-        }
-        if(insertList.size() > 0){
+        List<XmslProjectEngineeringAmount> insertList = TreeUtils.splitTreeList(xmslProjectEngineeringAmountList);
+        if(!CollectionUtils.isEmpty(insertList)){
             this.insertProjectEngineeringAmountList(insertList, xmslProjectBasicInfo);
-        }
-        if(updateList.size() > 0){
-            this.updateProjectEngineeringAmountList(updateList);
-        }
-    }
-
-    /**
-     * 维护主要工程数量树结构
-     * @param xmslProjectEngineeringAmountList
-     * @return
-     */
-    public void maintainTreeStructure(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList,XmslProjectBasicInfo xmslProjectBasicInfo){
-        List<XmslProjectEngineeringAmount> insertList = new ArrayList<>();
-        List<XmslProjectEngineeringAmount> updateList = new ArrayList<>();
-        for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            this.maintainSubset(xmslProjectEngineeringAmount,insertList,updateList);
-        }
-        if(insertList.size() > 0){
-            this.insertProjectEngineeringAmountList(insertList,xmslProjectBasicInfo);
-        }
-        if(updateList.size() > 0){
-            this.updateProjectEngineeringAmountList(updateList);
-        }
-    }
-
-    /**
-     * 维护子集
-     * @param root
-     */
-    public void maintainSubset(XmslProjectEngineeringAmount root,List<XmslProjectEngineeringAmount> insertList,List<XmslProjectEngineeringAmount> updateList){
-        Long id = root.getId();
-        if(id == null){
-            id = IdWorker.createId();
-            root.setId(id);
-            insertList.add(root);
-        }else {
-            updateList.add(root);
-        }
-        List<XmslProjectEngineeringAmount> children = root.getChildren();
-        if(!CollectionUtils.isEmpty(children)){
-            for (XmslProjectEngineeringAmount child : children) {
-                child.setPid(id);
-                this.maintainSubset(child,insertList,updateList);
-            }
         }
     }
 
