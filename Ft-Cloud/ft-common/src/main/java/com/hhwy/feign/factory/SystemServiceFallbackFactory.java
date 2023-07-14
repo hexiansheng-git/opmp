@@ -34,6 +34,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public AjaxResult dictType(String dictType) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }
+
+            @Override
+            public AjaxResult getQqchMenu() {
+                return null;
+            }
         };
     }
 }

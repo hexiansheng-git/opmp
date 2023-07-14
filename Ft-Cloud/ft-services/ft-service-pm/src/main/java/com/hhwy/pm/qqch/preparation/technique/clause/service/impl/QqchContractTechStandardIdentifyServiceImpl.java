@@ -6,7 +6,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStan
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.ToTreeUtils;
+import com.hhwy.utils.tree.TreeUtils;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,71 +25,6 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
     @Autowired
     private QqchContractTechStandardIdentifyMapper qqchContractTechStandardIdentifyMapper;
 
-
-    public QqchContractTechStandardIdentify getQqchContractTechStandardIdentify(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
-        return qqchContractTechStandardIdentifyMapper
-            .getQqchContractTechStandardIdentify(qqchContractTechStandardIdentify);
-    }
-
-    public List<QqchContractTechStandardIdentify> getQqchContractTechStandardIdentifyList(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
-        return qqchContractTechStandardIdentifyMapper
-            .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-    }
-
-    @Transactional
-    public int insertQqchContractTechStandardIdentify(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
-        qqchContractTechStandardIdentify.setId(IdWorker.createId());
-        qqchContractTechStandardIdentify.setCreateUser(SecurityUtils.getUserName());
-        qqchContractTechStandardIdentify.setCreateTime(DateUtils.getNowDate());
-        return qqchContractTechStandardIdentifyMapper
-            .insertQqchContractTechStandardIdentify(qqchContractTechStandardIdentify);
-    }
-
-    @Transactional
-    public int insertQqchContractTechStandardIdentifyList(
-        List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList) {
-        for (QqchContractTechStandardIdentify qqchContractTechStandardIdentify : qqchContractTechStandardIdentifyList) {
-            qqchContractTechStandardIdentify.setId(IdWorker.createId());
-            qqchContractTechStandardIdentify.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchContractTechStandardIdentify.setCreateUserName(SecurityUtils.getUserName());
-            qqchContractTechStandardIdentify.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchContractTechStandardIdentifyMapper
-            .insertQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentifyList);
-    }
-
-    @Transactional
-    public int updateQqchContractTechStandardIdentify(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
-        qqchContractTechStandardIdentify.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-        qqchContractTechStandardIdentify.setUpdateTime(DateUtils.getNowDate());
-        return qqchContractTechStandardIdentifyMapper
-            .updateQqchContractTechStandardIdentify(qqchContractTechStandardIdentify);
-    }
-
-    @Transactional
-    public int updateQqchContractTechStandardIdentifyList(
-        List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList) {
-        for (QqchContractTechStandardIdentify qqchContractTechStandardIdentify : qqchContractTechStandardIdentifyList) {
-            qqchContractTechStandardIdentify.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchContractTechStandardIdentify.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchContractTechStandardIdentifyMapper
-            .updateQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentifyList);
-    }
-
-    @Transactional
-    public int deleteQqchContractTechStandardIdentify(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
-        qqchContractTechStandardIdentify.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-        qqchContractTechStandardIdentify.setUpdateTime(DateUtils.getNowDate());
-        return qqchContractTechStandardIdentifyMapper
-            .deleteQqchContractTechStandardIdentify(qqchContractTechStandardIdentify);
-    }
-
     @Transactional
     public int deleteQqchContractTechStandardIdentifyByPks(List<Long> qqchContractTechStandardIdentifyPkList) {
         return qqchContractTechStandardIdentifyMapper
@@ -106,7 +41,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-        return ToTreeUtils.listToTree(list);
+        return TreeUtils.listToTree(list);
     }
 
     /**
@@ -157,9 +92,9 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
             updateList.add(qqchContractTechStandardIdentify);
         }
 
-        List<QqchContractTechStandardIdentify> childList = qqchContractTechStandardIdentify.getChildren();
-        if (!CollectionUtils.isEmpty(childList)) {
-            for (QqchContractTechStandardIdentify child : childList) {
+        List<QqchContractTechStandardIdentify> children = qqchContractTechStandardIdentify.getChildren();
+        if (!CollectionUtils.isEmpty(children)) {
+            for (QqchContractTechStandardIdentify child : children) {
                 child.setPid(id);
                 this.recursionSubset(child, insertList, updateList);
             }

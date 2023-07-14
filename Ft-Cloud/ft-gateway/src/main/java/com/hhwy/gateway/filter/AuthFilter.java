@@ -131,9 +131,11 @@ public class AuthFilter implements GlobalFilter, Ordered {
         if (StringUtils.isBlank(userId) || StringUtils.isBlank(username)) {
             return setUnauthorizedResponse(exchange, "令牌验证失败", HttpStatus.UNAUTHORIZED);
         }
-        // 设置token过期时间
-        redisService.expire(TokenUtils.getTokenKey(token, tenantKey), getExpireTime());
-        redisService.expire(CacheConstants.EXPIRE_TIME_KEY, getExpireTime());
+        if(!StringUtils.matches(url, ignoreWhite.getInessential())){
+            // 设置token过期时间
+            redisService.expire(TokenUtils.getTokenKey(token, tenantKey), getExpireTime());
+            redisService.expire(CacheConstants.EXPIRE_TIME_KEY, getExpireTime());
+        }
         // 设置用户信息到请求
         ServerHttpRequest mutableReq;
 
