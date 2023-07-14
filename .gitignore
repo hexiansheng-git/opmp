@@ -1,0 +1,5 @@
+/Ft-Cloud/.idea
+*.target
+target
+*.log
+*.iml

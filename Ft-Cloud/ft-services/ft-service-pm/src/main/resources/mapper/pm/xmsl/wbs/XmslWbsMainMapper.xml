@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.xmsl.wbs.xmslWbsMain.mapper.XmslWbsMainMapper">
+
+    <resultMap type="com.hhwy.pm.xmsl.wbs.xmslWbsMain.domain.XmslWbsMain" id="XmslWbsMainResultMap">
+        <result property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
+        <result property="publishUserName" column="publish_user_name"/>
+        <result property="publishUserId" column="publish_user_id"/>
+        <result property="publishDate" column="publish_date"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+    </resultMap>
+    <sql id="selectXmslWbsMainVo">
+        select
+            `id`
+         ,`project_id`
+         ,`project_name`
+         ,`version`
+         ,`valid`
+         ,`publish_user_name`
+         ,`publish_user_id`
+         ,`publish_date`
+         ,`create_user`
+         ,`create_user_name`
+         ,`create_time`
+        from xmsl_wbs_main
+    </sql>
+    <select id="getXmslWbsMain" resultMap="XmslWbsMainResultMap">
+        <include refid="selectXmslWbsMainVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null ">and `valid` = #{valid}</if>
+            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}
+            </if>
+            <if test="publishUserId != null ">and `publish_user_id` = #{publishUserId}</if>
+            <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getXmslWbsMainList" resultMap="XmslWbsMainResultMap">
+        <include refid="selectXmslWbsMainVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null ">and `valid` = #{valid}</if>
+            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}
+            </if>
+            <if test="publishUserId != null ">and `publish_user_id` = #{publishUserId}</if>
+            <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertXmslWbsMain" useGeneratedKeys="true" keyProperty="id">
+        insert into xmsl_wbs_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null ">`valid`,</if>
+            <if test="publishUserName != null  and publishUserName != ''">`publish_user_name`,</if>
+            <if test="publishUserId != null ">`publish_user_id`,</if>
+            <if test="publishDate != null ">`publish_date`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null ">#{valid},</if>
+            <if test="publishUserName != null  and publishUserName != ''">#{publishUserName},</if>
+            <if test="publishUserId != null ">#{publishUserId},</if>
+            <if test="publishDate != null ">#{publishDate},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertXmslWbsMain -->
+    <insert id="insertXmslWbsMainList">
+        insert into xmsl_wbs_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `project_id`,
+            `project_name`,
+            `version`,
+            `valid`,
+            `publish_user_name`,
+            `publish_user_id`,
+            `publish_date`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+        </trim>
+        values
+        <foreach collection="xmslWbsMainList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.version},
+                #{item.valid},
+                #{item.publishUserName},
+                #{item.publishUserId},
+                #{item.publishDate},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateXmslWbsMain">
+        update xmsl_wbs_main
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="valid != null ">`valid` = #{valid},</if>
+            <if test="publishUserName != null  and  publishUserName != ''">`publish_user_name` = #{publishUserName},
+            </if>
+            <if test="publishUserId != null ">`publish_user_id` = #{publishUserId},</if>
+            <if test="publishDate != null ">`publish_date` = #{publishDate},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateXmslWbsMainList">
+        update xmsl_wbs_main
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
+            <trim prefix="publish_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.publishUserName}
+                </foreach>
+            </trim>
+            <trim prefix="publish_user_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.publishUserId}
+                </foreach>
+            </trim>
+            <trim prefix="publish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.publishDate}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <delete id="deleteXmslWbsMain">
+        delete from `xmsl_wbs_main`
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null ">and `valid` = #{valid}</if>
+            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}
+            </if>
+            <if test="publishUserId != null ">and `publish_user_id` = #{publishUserId}</if>
+            <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+        </where>
+    </delete>
+
+    <delete id="deleteXmslWbsMainByPks">
+        delete from `xmsl_wbs_main`
+        <where>
+            `id` in
+            <foreach item="id" collection="xmslWbsMainPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </delete>
+</mapper>
