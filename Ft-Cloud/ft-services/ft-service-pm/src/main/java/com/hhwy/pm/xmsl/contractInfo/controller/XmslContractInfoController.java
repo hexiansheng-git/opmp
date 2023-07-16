@@ -105,4 +105,22 @@ public class XmslContractInfoController extends BaseController {
         ExcelUtils<XmslContractInfo> util = new ExcelUtils<>(XmslContractInfo.class);
         util.exportExcel(response, xmslContractInfoList, DateUtils.getDate());
     }
+
+    /**
+     *  主合同信息修改
+     *
+     * @param id 主键
+     * @return  监听器
+     */
+    @PostMapping("/listener")
+    public AjaxResult listener(Long id) {
+        XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
+        xmslContractInfo1.setId(id);
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfo1);
+        xmslContractInfo.setTaskStatus("5");//流程结束
+        xmslContractInfo.setValid("1"); //版本生效
+        xmslContractInfoService.updateXmslContractInfo1(xmslContractInfo);
+        return AjaxResult.success();
+    }
+
 }

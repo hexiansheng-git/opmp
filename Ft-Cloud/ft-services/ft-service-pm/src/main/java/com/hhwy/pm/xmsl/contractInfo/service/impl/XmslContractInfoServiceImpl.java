@@ -141,6 +141,11 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         return xmslContractInfoMapper.deleteXmslContractInfoByPks(xmslContractInfoPkList);
     }
 
+    @Override
+    public int updateXmslContractInfo1(XmslContractInfo xmslContractInfo) {
+        return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
+    }
+
 
     private void addSonTable(XmslContractInfo xmslContractInfo){
         //投保险种
