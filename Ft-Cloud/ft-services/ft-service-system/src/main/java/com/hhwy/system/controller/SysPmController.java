@@ -74,23 +74,21 @@ public class SysPmController {
         }
         return AjaxResult.success(data);
     }
-    //前期策划-工作计划获取菜单
+    //根据菜单名称获取下级菜单信息集合，工作计划获取菜单
     @GetMapping("/menu/qqch")
-    public AjaxResult getQqchMenu() {
-//        SysMenuV2 sysMenuV2 = new SysMenuV2();
-//        sysMenuV2.setMenuType("menu");
-//        //暂时使用实施条件
-//        sysMenuV2.setTitle("实施条件");
-//        List<SysMenuV2> menuTreeList = sysMenuService.selectSysMenuTreeList(sysMenuV2);
-//        return AjaxResult.success(menuTreeList);
-
+    public AjaxResult getQqchMenu(@RequestParam String name) {
         SysUser sysUser = this.tokenService.getSysUser();
         SysMenu sysMenu = new SysMenu();
         sysMenu.setMenuType("menu");
-        sysMenu.setTitle("实施条件");
         List<SysMenu> list = this.menuService.selectMenuTreeList(sysMenu, sysUser);
-        return AjaxResult.success(list);
-
+        List<SysMenu> resList = new ArrayList<>();
+        for(SysMenu item:list){
+            String title = item.getTitle();
+            if(title.equals(name)){
+                resList.add(item);
+            }
+        }
+        return AjaxResult.success(resList);
     }
 
 

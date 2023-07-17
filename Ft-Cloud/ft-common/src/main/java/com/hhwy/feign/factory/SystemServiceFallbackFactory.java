@@ -36,9 +36,10 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             }
 
             @Override
-            public AjaxResult getQqchMenu() {
+            public AjaxResult getQqchMenu(String name) {
                 return null;
             }
+
         };
     }
 }
