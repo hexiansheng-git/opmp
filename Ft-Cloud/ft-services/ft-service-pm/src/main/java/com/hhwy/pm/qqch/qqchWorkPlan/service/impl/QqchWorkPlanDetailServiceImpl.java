@@ -1,15 +1,16 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanDetailMapper;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
+import com.hhwy.utils.EntityUtils;
 import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
@@ -24,6 +25,8 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
 
     @Autowired
     private QqchWorkPlanDetailMapper qqchWorkPlanDetailMapper;
+    @Autowired
+    private CommonService wzchCommonService;
 
 
     public QqchWorkPlanDetail getQqchWorkPlanDetail(QqchWorkPlanDetail qqchWorkPlanDetail) {
@@ -78,5 +81,27 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
     @Transactional
     public int deleteQqchWorkPlanDetailByPks(List<Long> qqchWorkPlanDetailPkList) {
         return qqchWorkPlanDetailMapper.deleteQqchWorkPlanDetailByPks(qqchWorkPlanDetailPkList);
+    }
+    /**
+     * 更新详情信息
+     *
+     * @return 结果
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public int insertOrEditBatchByMainId(List<QqchWorkPlanDetail> detailList, Long mainId) {
+        wzchCommonService.deleteDetailsByMainId(mainId,"qqch_work_plan_detail");
+        if (detailList != null && detailList.size() > 0) {
+            // 集合类型转化 设置id 设置purchaseId
+            List<QqchWorkPlanDetail> insertOrUpdateData = detailList.stream().map(item -> {
+                Long id =IdWorker.createId();
+                item.setId(id);
+                item.setMainId(mainId);
+                EntityUtils.setCreateUpdateInfo(item);
+                return item;
+            }).collect(Collectors.toList());
+            return qqchWorkPlanDetailMapper.insertQqchWorkPlanDetailList(insertOrUpdateData);
+        }
+        return 1;
     }
 }

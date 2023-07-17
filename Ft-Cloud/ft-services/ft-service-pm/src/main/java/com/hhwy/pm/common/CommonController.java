@@ -2,7 +2,7 @@ package com.hhwy.pm.common;
 
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.pm.common.service.WzchCommonService;
+import com.hhwy.pm.common.service.CommonService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +12,10 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/common")
-public class WzchCommonController {
+public class CommonController {
 
     @Resource
-    private WzchCommonService commonService;
+    private CommonService commonService;
 
 
     /**校验数据是否能进行调整

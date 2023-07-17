@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.qqchWorkPlan.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.math.BigDecimal;
 
@@ -246,4 +247,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
     private String taskStatus;
 
     private String versionStr;
+
+
+    private List<QqchWorkPlanDetail> detailList=new ArrayList<>();
 }

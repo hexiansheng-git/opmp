@@ -1,6 +1,6 @@
 package com.hhwy.pm.common.service;
 
-import com.hhwy.pm.common.mapper.WzchCommonMapper;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.utils.exception.CustomBusinessException;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -13,9 +13,9 @@ import javax.annotation.Resource;
  */
 @Slf4j
 @Service
-public class WzchCommonService {
+public class CommonService {
     @Resource
-    private WzchCommonMapper commonMapper;
+    private CommonMapper commonMapper;
 
     /**
      * 校验单据能否被调整 (单条数据只能调整一次)
@@ -36,5 +36,16 @@ public class WzchCommonService {
         if (businessId.longValue() != idMax.longValue()) {
             throw new CustomBusinessException("此条数据只能调整一次");
         }
+    }
+
+
+    /**根据主id，逻辑删除子表数据
+     * @param mainId
+     * @param tableName
+     */
+    public void deleteDetailsByMainId(Long mainId, String tableName) {
+        Assert.notNull(mainId, "主表id不能为空");
+        Assert.notNull(tableName, "表名称不能为空");
+        this.commonMapper.deleteDetailsByMainId(mainId, tableName);
     }
 }

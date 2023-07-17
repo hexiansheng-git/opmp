@@ -7,13 +7,16 @@ import java.util.Map;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.WzchCommonMapper;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
+import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +34,9 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Autowired
     private QqchWorkPlanMapper qqchWorkPlanMapper;
     @Autowired
-    private WzchCommonMapper wzchCommonMapper;
+    private CommonMapper wzchCommonMapper;
+    @Autowired
+    private IQqchWorkPlanDetailService qqchWorkPlanDetailService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -52,7 +57,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             BigDecimal versionCode = null;
             if (ObjectNullUtil.isEmpty(versionMax)) {//代表 新增
                 versionCode = new BigDecimal("1.0");
-                busData.setId(IdWorker.createId());
+//                busData.setId(IdWorker.createId());
                 busData.setVersion(versionCode);
             } else {//代表编辑
                 versionCode = new BigDecimal(versionMax);
@@ -60,6 +65,14 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 workPlan.setVersion(versionCode);
                 QqchWorkPlan plan = this.getQqchWorkPlan(workPlan);
                 BeanUtils.copyProperties(plan,busData);
+                QqchWorkPlanDetail detail = new QqchWorkPlanDetail();
+                detail.setMainId(plan.getId());
+                detail.setDelFlag("0");
+                List<QqchWorkPlanDetail> detailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(detail);
+                if (!ObjectNullUtil.isEmpty(detailList)) {
+                    List<QqchWorkPlanDetail> planDetailsTree = TreeUtils.listToTree(detailList);
+                    busData.setDetailList(planDetailsTree);
+                }
             }
             busData.setVersionStr("v" + versionCode);
             // 设置创建信息
@@ -71,11 +84,14 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             QqchWorkPlan qqchWorkPlan = new QqchWorkPlan();
             qqchWorkPlan.setId(busId);
             BeanUtils.copyProperties(this.getQqchWorkPlan(qqchWorkPlan), busData);
-//            qqchWorkPlanD detail = new SbchEquipmentLeaseDetails();
-//            detail.setMainId(busId);
-//            detail.setDelFlag("0");
-//            List<SbchEquipmentLeaseDetails> detailList = detailsService.selectSbchEquipmentLeaseDetailsList(detail);
-//            busData.setDetailsList(detailList);
+            QqchWorkPlanDetail detail = new QqchWorkPlanDetail();
+            detail.setMainId(busId);
+            detail.setDelFlag("0");
+            List<QqchWorkPlanDetail> detailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(detail);
+            if (!ObjectNullUtil.isEmpty(detailList)) {
+                List<QqchWorkPlanDetail> planDetailsTree = TreeUtils.listToTree(detailList);
+                busData.setDetailList(planDetailsTree);
+            }
             // 如果用户的操作类型是调整就需要将单据编号的版本+1
             if (THREE.equals(type)) {
                 EntityUtils.setCreateInfo(busData);
@@ -100,11 +116,19 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     }
 
     @Transactional
-    public int insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
+    public Long insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
+        // 获取前端传入的设备明细
+        List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
         qqchWorkPlan.setId(IdWorker.createId());
-        qqchWorkPlan.setCreateUser(SecurityUtils.getUserName());
-        qqchWorkPlan.setCreateTime(DateUtils.getNowDate());
-        return qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
+        EntityUtils.setCreateUpdateInfo(qqchWorkPlan);
+        // 设置版本号码
+        qqchWorkPlan.setVersion(new BigDecimal("1.0"));
+        // 是否生效
+        qqchWorkPlan.setValid("0");
+        qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
+        // 明细
+        qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailList, qqchWorkPlan.getId());
+        return qqchWorkPlan.getId();
     }
 
     @Transactional

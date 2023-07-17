@@ -14,13 +14,20 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.utils.common.CommonBaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author hwj
- * @date 2023-07-14 17:15:57
+ * @date 2023-07-17 10:58:21
  * @remark qqch_work_plan_detail
  */
-public class QqchWorkPlanDetail extends BaseEntity {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class QqchWorkPlanDetail extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -244,354 +251,24 @@ public class QqchWorkPlanDetail extends BaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
-
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public Long getPid() {
-        return pid;
-    }
-
-    @JsonIgnore
-    public void setPid(Long pid) {
-        this.pid = pid;
-    }
-
-    @JsonIgnore
-    public Long getMainId() {
-        return mainId;
-    }
-
-    @JsonIgnore
-    public void setMainId(Long mainId) {
-        this.mainId = mainId;
-    }
-
-    @JsonIgnore
-    public Integer getOrderNum() {
-        return orderNum;
-    }
-
-    @JsonIgnore
-    public void setOrderNum(Integer orderNum) {
-        this.orderNum = orderNum;
-    }
-
-    @JsonIgnore
-    public String getWorkExplain() {
-        return workExplain;
-    }
-
-    @JsonIgnore
-    public void setWorkExplain(String workExplain) {
-        this.workExplain = workExplain;
-    }
-
-    @JsonIgnore
-    public String getIsFirst() {
-        return isFirst;
-    }
-
-    @JsonIgnore
-    public void setIsFirst(String isFirst) {
-        this.isFirst = isFirst;
-    }
-
-    @JsonIgnore
-    public String getEditorFirst() {
-        return editorFirst;
-    }
-
-    @JsonIgnore
-    public void setEditorFirst(String editorFirst) {
-        this.editorFirst = editorFirst;
-    }
-
-    @JsonIgnore
-    public Date getFinishTimeFirst() {
-        return finishTimeFirst;
-    }
-
-    @JsonIgnore
-    public void setFinishTimeFirst(Date finishTimeFirst) {
-        this.finishTimeFirst = finishTimeFirst;
-    }
-
-    @JsonIgnore
-    public String getIsSecond() {
-        return isSecond;
-    }
-
-    @JsonIgnore
-    public void setIsSecond(String isSecond) {
-        this.isSecond = isSecond;
-    }
-
-    @JsonIgnore
-    public String getEditorSecond() {
-        return editorSecond;
-    }
-
-    @JsonIgnore
-    public void setEditorSecond(String editorSecond) {
-        this.editorSecond = editorSecond;
-    }
-
-    @JsonIgnore
-    public Date getFinishTimeSecond() {
-        return finishTimeSecond;
-    }
-
-    @JsonIgnore
-    public void setFinishTimeSecond(Date finishTimeSecond) {
-        this.finishTimeSecond = finishTimeSecond;
-    }
-
-    @JsonIgnore
-    public String getIsThird() {
-        return isThird;
-    }
-
-    @JsonIgnore
-    public void setIsThird(String isThird) {
-        this.isThird = isThird;
-    }
-
-    @JsonIgnore
-    public String getEditorThird() {
-        return editorThird;
-    }
-
-    @JsonIgnore
-    public void setEditorThird(String editorThird) {
-        this.editorThird = editorThird;
-    }
-
-    @JsonIgnore
-    public Date getFinishTimeThird() {
-        return finishTimeThird;
-    }
-
-    @JsonIgnore
-    public void setFinishTimeThird(Date finishTimeThird) {
-        this.finishTimeThird = finishTimeThird;
-    }
-
-    @JsonIgnore
-    public String getFileGroupId() {
-        return fileGroupId;
-    }
-
-    @JsonIgnore
-    public void setFileGroupId(String fileGroupId) {
-        this.fileGroupId = fileGroupId;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @JsonIgnore
-    public Long getRegionId() {
-        return regionId;
-    }
-
-    @JsonIgnore
-    public void setRegionId(Long regionId) {
-        this.regionId = regionId;
-    }
-
-    @JsonIgnore
-    public String getRegionName() {
-        return regionName;
-    }
-
-    @JsonIgnore
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    @JsonIgnore
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    @JsonIgnore
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    @JsonIgnore
-    public String getProjectName() {
-        return projectName;
-    }
-
-    @JsonIgnore
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    @JsonIgnore
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    @JsonIgnore
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
-
-    @JsonIgnore
-    public String getTaskStatus() {
-        return taskStatus;
-    }
-
-    @JsonIgnore
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus;
-    }
+    /**
+     * 字段描述：第一阶段编制人姓名
+     */
+    @JsonProperty
+    @Excel(name = "第一阶段编制人姓名")
+    private String editorFirstName;
+    /**
+     * 字段描述：第二阶段编制人姓名
+     */
+    @JsonProperty
+    @Excel(name = "第二阶段编制人姓名")
+    private String editorSecondName;
+    /**
+     * 字段描述：第三阶段编制人姓名
+     */
+    @JsonProperty
+    @Excel(name = "第三阶段编制人姓名")
+    private String editorThirdName;
+
+    private List<QqchWorkPlanDetail> children;
 }

@@ -24,7 +24,7 @@ public interface IQqchWorkPlanService {
 
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);
 
-    int insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
+    Long insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
     int insertQqchWorkPlanList(List<QqchWorkPlan> qqchWorkPlanList);
 
