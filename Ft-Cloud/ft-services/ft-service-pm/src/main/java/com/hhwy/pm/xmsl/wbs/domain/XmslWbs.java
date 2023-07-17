@@ -7,7 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
+import lombok.Data;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -16,16 +21,17 @@ import java.util.Date;
  * @date 2023-07-13 18:13:13
  * @remark
  */
+@Data
 public class XmslWbs extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
      * 字段描述：主键id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键id")
-    private Long id;
+    @NotBlank(message = "Id不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+    private String id;
     /**
      * 字段描述：主表id,xmsl_wbs_main.id
      */
@@ -38,14 +44,15 @@ public class XmslWbs extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "编号，单位工程按整百递增，分部分项子分项按三位流水号递增")
+    @NotBlank(message = "编号不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String code;
     /**
      * 字段描述：父级ID,最顶级为0
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父级ID,最顶级为0")
-    private Long parentId;
+    @Excel(name = "父级ID,最顶级为-1")
+    private String parentId;
     /**
      * 字段描述：是否包含子级，0:否,1:是
      */
@@ -57,18 +64,21 @@ public class XmslWbs extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "祖级ID")
+    @NotBlank(message = "祖级ID不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String ancestors;
     /**
      * 字段描述：祖级名称
      */
     @JsonProperty
     @Excel(name = "祖级名称")
+    @NotBlank(message = "祖级名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String ancestorsName;
     /**
      * 字段描述：项目部位
      */
     @JsonProperty
     @Excel(name = "项目部位")
+    @NotBlank(message = "项目部位不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String partCode;
     /**
      * 字段描述：名称
@@ -106,12 +116,13 @@ public class XmslWbs extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "节点类型,字典:xmsl_wbs_type")
+    @NotBlank(message = "节点类型不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String nodeType;
     /**
      * 字段描述：单位
      */
     @JsonProperty
-    @Excel(name = "单位")
+    @Excel(name = "单位,字典:xmsl_wbs_unit")
     private String unit;
     /**
      * 字段描述：层级
@@ -265,15 +276,6 @@ public class XmslWbs extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @JsonIgnore
     public Long getMainId() {
@@ -293,16 +295,6 @@ public class XmslWbs extends BaseEntity {
     @JsonIgnore
     public void setCode(String code) {
         this.code = code;
-    }
-
-    @JsonIgnore
-    public Long getParentId() {
-        return parentId;
-    }
-
-    @JsonIgnore
-    public void setParentId(Long parentId) {
-        this.parentId = parentId;
     }
 
     @JsonIgnore

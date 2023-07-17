@@ -1,10 +1,7 @@
 package com.hhwy.pm.gencode.enums;
 
 /**
- * 生成编码 Enum
- * prefix:编码前缀
- * timeFormat:编码时间格式
- * digit: 流水号位数
+ * 生成编码 Enum prefix:编码前缀 timeFormat:编码时间格式 digit: 流水号位数
  *
  * @author mls
  */
@@ -15,7 +12,12 @@ public enum CodeEnum {
      /**
      *  前期策划工作计划
      */
-    BASE_LIMIT("QQCH","yyyyMMdd",3),
+    BASE_LIMIT("QQCH", "yyyyMMdd", 3),
+
+    /**
+     * 前期策划编制-3.4.2施工方案清单
+     */
+    QQCH_CONSTRUCTION_LIST("SGFAQD", null, 3),
 
     /**
      * 示例 XX20221123001

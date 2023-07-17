@@ -3,6 +3,8 @@ package com.hhwy.utils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.idworker.IdWorker;
 
 /**
  * @ClassName : AddBaseInfoUtil
@@ -11,7 +13,7 @@ import com.hhwy.common.security.util.SecurityUtils;
  * @Date :  16:09
  * @Version : V1.0
  **/
-public class AddBaseInfoUtil<T extends BaseEntity> {
+public class AddBaseInfoUtil<T extends CommonBaseEntity> {
     public T t;
 
     public AddBaseInfoUtil(){}
@@ -25,10 +27,29 @@ public class AddBaseInfoUtil<T extends BaseEntity> {
         t.setUpdateTime(DateUtils.getNowDate());
         t.setCreateTime(DateUtils.getNowDate());
         t.setDelFlag("0");
+        t.setTaskStatus("0");
+        t.setId(IdWorker.createId());
         return t;
     }
 
     public T update(T t){
+        String currentUserId = String.valueOf(SecurityUtils.getUserId());
+        t.setUpdateUser(currentUserId);
+        t.setUpdateTime(DateUtils.getNowDate());
+        return t;
+    }
+
+    public BaseEntity addBaseEntity(BaseEntity t){
+        String currentUserId = String.valueOf(SecurityUtils.getUserId());
+        t.setCreateUser(currentUserId);
+        t.setUpdateUser(currentUserId);
+        t.setUpdateTime(DateUtils.getNowDate());
+        t.setCreateTime(DateUtils.getNowDate());
+        t.setDelFlag("0");
+        return t;
+    }
+
+    public BaseEntity updateBaseEntity(BaseEntity t){
         String currentUserId = String.valueOf(SecurityUtils.getUserId());
         t.setUpdateUser(currentUserId);
         t.setUpdateTime(DateUtils.getNowDate());

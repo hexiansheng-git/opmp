@@ -1,8 +1,10 @@
 package com.hhwy.pm.xmsl.wbs.service;
 
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * wbs
@@ -14,7 +16,18 @@ public interface IXmslWbsService {
 
     XmslWbs getXmslWbs(XmslWbs xmslWbs);
 
+
+    Map listData(XmslWbs xmslWbs);
+
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
+
+    /**
+     * 判断是否有生效的wbs
+     * @return 0:没有，1>：有
+     */
+    int hasEffectWbs();
+
+    void save(XmslWbsDto dto);
 
     int insertXmslWbs(XmslWbs xmslWbs);
 

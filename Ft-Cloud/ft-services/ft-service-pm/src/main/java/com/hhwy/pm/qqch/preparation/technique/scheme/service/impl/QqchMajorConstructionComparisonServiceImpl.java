@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
@@ -24,22 +25,30 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
 
     @Autowired
     private QqchMajorConstructionComparisonMapper qqchMajorConstructionComparisonMapper;
+    @Autowired
+    private CommonMapper commonMapper;
 
-    public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(
-        QqchMajorConstructionComparison qqchMajorConstructionComparison) {
+    public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList() {
         QqchMajorConstructionComparisonVo vo = new QqchMajorConstructionComparisonVo();
 
+        // 获取最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_major_construction_comparison");
+        vo.setVersion(maxVersion);
+
         QqchMajorConstructionComparison qryParam = new QqchMajorConstructionComparison();
-        qryParam.setValid("1");
-        qryParam.setVersion(qqchMajorConstructionComparisonMapper.getMaxVersion());
+        qryParam.setVersion(maxVersion);
         List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper
-            .getQqchMajorConstructionComparisonList(qqchMajorConstructionComparison);
+            .getQqchMajorConstructionComparisonList(qryParam);
         vo.setTreeList(TreeUtils.listToTree(list));
         return vo;
     }
 
     @Transactional
     public void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo) {
+        if (qqchMajorConstructionComparisonVo.getVersion() == null) {
+            throw new RuntimeException("版本号不能为空！");
+        }
+
         // 先批量删除当前版本所有数据
         QqchMajorConstructionComparison deleteParam = new QqchMajorConstructionComparison();
         deleteParam.setVersion(qqchMajorConstructionComparisonVo.getVersion());
@@ -56,7 +65,7 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
 
         if (!CollectionUtils.isEmpty(insertList)) {
             for (QqchMajorConstructionComparison insert : insertList) {
-                insert.setVersion(new BigDecimal("1"));
+                insert.setVersion(qqchMajorConstructionComparisonVo.getVersion());
                 insert.setValid("1");
                 insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 insert.setCreateUserName(SecurityUtils.getUserName());

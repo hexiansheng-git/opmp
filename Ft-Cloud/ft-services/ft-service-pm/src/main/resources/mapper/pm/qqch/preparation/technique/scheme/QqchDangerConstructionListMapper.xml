@@ -2,10 +2,10 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper">
+<mapper namespace="com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchDangerConstructionListMapper">
 
-  <resultMap type="com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList"
-    id="QqchConstructionListResultMap">
+  <resultMap type="com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList"
+    id="QqchDangerConstructionListResultMap">
     <result property="id" column="id"/>
     <result property="schemeCode" column="scheme_code"/>
     <result property="schemeName" column="scheme_name"/>
@@ -14,7 +14,9 @@
     <result property="schemeType" column="scheme_type"/>
     <result property="schemeLevel" column="scheme_level"/>
     <result property="dangerLevel" column="danger_level"/>
-    <result property="isChange" column="is_change"/>
+    <result property="keySpecialProcesses" column="key_special_processes"/>
+    <result property="briefDescription" column="brief_description"/>
+    <result property="mainMeasure" column="main_measure"/>
     <result property="planPreparationTime" column="plan_preparation_time"/>
     <result property="planImplementTime" column="plan_implement_time"/>
     <result property="listPassTime" column="list_pass_time"/>
@@ -41,7 +43,7 @@
     <result property="ptVar4" column="pt_var4"/>
     <result property="ptVar5" column="pt_var5"/>
   </resultMap>
-  <sql id="selectQqchConstructionListVo">
+  <sql id="selectQqchDangerConstructionListVo">
     select
       `id`
       ,`scheme_code`
@@ -51,7 +53,10 @@
       ,`scheme_type`
       ,`scheme_level`
       ,`danger_level`
-      ,`is_change`
+      ,`key_special_processes`
+      ,`brief_description`
+      ,`main_measure`
+      ,`plan_preparation_time`
       ,`plan_implement_time`
       ,`list_pass_time`
       ,`contact_person`
@@ -76,10 +81,10 @@
       ,`pt_var3`
       ,`pt_var4`
       ,`pt_var5`
-    from qqch_construction_list
-    </sql>
-  <select id="getQqchConstructionList" resultMap="QqchConstructionListResultMap">
-    <include refid="selectQqchConstructionListVo"/>
+    from qqch_danger_construction_list
+  </sql>
+  <select id="getQqchDangerConstructionList" resultMap="QqchDangerConstructionListResultMap">
+    <include refid="selectQqchDangerConstructionListVo"/>
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
@@ -90,7 +95,11 @@
       <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
       <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
       <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
-      <if test="isChange != null  and isChange != ''">and `is_change` = #{isChange}</if>
+      <if test="keySpecialProcesses != null  and keySpecialProcesses != ''">and `key_special_processes` =
+        #{keySpecialProcesses}
+      </if>
+      <if test="briefDescription != null  and briefDescription != ''">and `brief_description` = #{briefDescription}</if>
+      <if test="mainMeasure != null  and mainMeasure != ''">and `main_measure` = #{mainMeasure}</if>
       <if test="planPreparationTime != null ">and `plan_preparation_time` = #{planPreparationTime}</if>
       <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
       <if test="listPassTime != null ">and `list_pass_time` = #{listPassTime}</if>
@@ -120,8 +129,8 @@
     order by create_time desc
   </select>
 
-  <select id="getQqchConstructionListList" resultMap="QqchConstructionListResultMap">
-    <include refid="selectQqchConstructionListVo"/>
+  <select id="getQqchDangerConstructionListList" resultMap="QqchDangerConstructionListResultMap">
+    <include refid="selectQqchDangerConstructionListVo"/>
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
@@ -132,7 +141,11 @@
       <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
       <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
       <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
-      <if test="isChange != null  and isChange != ''">and `is_change` = #{isChange}</if>
+      <if test="keySpecialProcesses != null  and keySpecialProcesses != ''">and `key_special_processes` =
+        #{keySpecialProcesses}
+      </if>
+      <if test="briefDescription != null  and briefDescription != ''">and `brief_description` = #{briefDescription}</if>
+      <if test="mainMeasure != null  and mainMeasure != ''">and `main_measure` = #{mainMeasure}</if>
       <if test="planPreparationTime != null ">and `plan_preparation_time` = #{planPreparationTime}</if>
       <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
       <if test="listPassTime != null ">and `list_pass_time` = #{listPassTime}</if>
@@ -162,8 +175,8 @@
     order by create_time desc
   </select>
 
-  <insert id="insertQqchConstructionList" useGeneratedKeys="true" keyProperty="id">
-    insert into qqch_construction_list
+  <insert id="insertQqchDangerConstructionList" useGeneratedKeys="true" keyProperty="id">
+    insert into qqch_danger_construction_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null ">`id`,</if>
       <if test="schemeCode != null  and schemeCode != ''">`scheme_code`,</if>
@@ -173,7 +186,9 @@
       <if test="schemeType != null  and schemeType != ''">`scheme_type`,</if>
       <if test="schemeLevel != null  and schemeLevel != ''">`scheme_level`,</if>
       <if test="dangerLevel != null  and dangerLevel != ''">`danger_level`,</if>
-      <if test="isChange != null  and isChange != ''">`is_change`,</if>
+      <if test="keySpecialProcesses != null  and keySpecialProcesses != ''">`key_special_processes`,</if>
+      <if test="briefDescription != null  and briefDescription != ''">`brief_description`,</if>
+      <if test="mainMeasure != null  and mainMeasure != ''">`main_measure`,</if>
       <if test="planPreparationTime != null ">`plan_preparation_time`,</if>
       <if test="planImplementTime != null ">`plan_implement_time`,</if>
       <if test="listPassTime != null ">`list_pass_time`,</if>
@@ -209,7 +224,9 @@
       <if test="schemeType != null  and schemeType != ''">#{schemeType},</if>
       <if test="schemeLevel != null  and schemeLevel != ''">#{schemeLevel},</if>
       <if test="dangerLevel != null  and dangerLevel != ''">#{dangerLevel},</if>
-      <if test="isChange != null  and isChange != ''">#{isChange},</if>
+      <if test="keySpecialProcesses != null  and keySpecialProcesses != ''">#{keySpecialProcesses},</if>
+      <if test="briefDescription != null  and briefDescription != ''">#{briefDescription},</if>
+      <if test="mainMeasure != null  and mainMeasure != ''">#{mainMeasure},</if>
       <if test="planPreparationTime != null ">#{planPreparationTime},</if>
       <if test="planImplementTime != null ">#{planImplementTime},</if>
       <if test="listPassTime != null ">#{listPassTime},</if>
@@ -238,9 +255,9 @@
     </trim>
   </insert>
 
-  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchConstructionList -->
-  <insert id="insertQqchConstructionListList">
-    insert into qqch_construction_list
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchDangerConstructionList -->
+  <insert id="insertQqchDangerConstructionListList">
+    insert into qqch_danger_construction_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
       `scheme_code`,
@@ -250,7 +267,9 @@
       `scheme_type`,
       `scheme_level`,
       `danger_level`,
-      `is_change`,
+      `key_special_processes`,
+      `brief_description`,
+      `main_measure`,
       `plan_preparation_time`,
       `plan_implement_time`,
       `list_pass_time`,
@@ -277,7 +296,7 @@
       `pt_var5`,
     </trim>
     values
-    <foreach collection="qqchConstructionListList" item="item" separator=",">
+    <foreach collection="qqchDangerConstructionListList" item="item" separator=",">
       <trim prefix="(" suffix=")" suffixOverrides=",">
         #{item.id},
         #{item.schemeCode},
@@ -287,7 +306,9 @@
         #{item.schemeType},
         #{item.schemeLevel},
         #{item.dangerLevel},
-        #{item.isChange},
+        #{item.keySpecialProcesses},
+        #{item.briefDescription},
+        #{item.mainMeasure},
         #{item.planPreparationTime},
         #{item.planImplementTime},
         #{item.listPassTime},
@@ -316,8 +337,8 @@
     </foreach>
   </insert>
 
-  <update id="updateQqchConstructionList">
-    update qqch_construction_list
+  <update id="updateQqchDangerConstructionList">
+    update qqch_danger_construction_list
     <trim prefix="SET" suffixOverrides=",">
       <if test="id != null ">`id` = #{id},</if>
       <if test="schemeCode != null  and  schemeCode != ''">`scheme_code` = #{schemeCode},</if>
@@ -327,7 +348,11 @@
       <if test="schemeType != null  and  schemeType != ''">`scheme_type` = #{schemeType},</if>
       <if test="schemeLevel != null  and  schemeLevel != ''">`scheme_level` = #{schemeLevel},</if>
       <if test="dangerLevel != null  and  dangerLevel != ''">`danger_level` = #{dangerLevel},</if>
-      <if test="isChange != null  and  isChange != ''">`is_change` = #{isChange},</if>
+      <if test="keySpecialProcesses != null  and  keySpecialProcesses != ''">`key_special_processes` =
+        #{keySpecialProcesses},
+      </if>
+      <if test="briefDescription != null  and  briefDescription != ''">`brief_description` = #{briefDescription},</if>
+      <if test="mainMeasure != null  and  mainMeasure != ''">`main_measure` = #{mainMeasure},</if>
       <if test="planPreparationTime != null ">`plan_preparation_time` = #{planPreparationTime},</if>
       <if test="planImplementTime != null ">`plan_implement_time` = #{planImplementTime},</if>
       <if test="listPassTime != null ">`list_pass_time` = #{listPassTime},</if>
@@ -359,8 +384,8 @@
     </where>
   </update>
 
-  <update id="updateQqchConstructionListList">
-    update qqch_construction_list
+  <update id="updateQqchDangerConstructionListList">
+    update qqch_danger_construction_list
     <trim prefix="set" suffixOverrides=",">
       <trim prefix="id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
@@ -402,9 +427,19 @@
           when `id`=#{item.id} then #{item.dangerLevel}
         </foreach>
       </trim>
-      <trim prefix="is_change  = case" suffix="end,">
+      <trim prefix="key_special_processes  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.isChange}
+          when `id`=#{item.id} then #{item.keySpecialProcesses}
+        </foreach>
+      </trim>
+      <trim prefix="brief_description  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.briefDescription}
+        </foreach>
+      </trim>
+      <trim prefix="main_measure  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.mainMeasure}
         </foreach>
       </trim>
       <trim prefix="plan_preparation_time  = case" suffix="end,">
@@ -539,8 +574,8 @@
     </foreach>
   </update>
 
-  <update id="deleteQqchConstructionList">
-    update `qqch_construction_list` set del_flag = 1
+  <update id="deleteQqchDangerConstructionList">
+    update `qqch_danger_construction_list` set del_flag = 1
     <where>
       <if test="id != null ">and `id` = #{id}</if>
       <if test="schemeCode != null  and schemeCode != ''">and `scheme_code` = #{schemeCode}</if>
@@ -550,7 +585,11 @@
       <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
       <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
       <if test="dangerLevel != null  and dangerLevel != ''">and `danger_level` = #{dangerLevel}</if>
-      <if test="isChange != null  and isChange != ''">and `is_change` = #{isChange}</if>
+      <if test="keySpecialProcesses != null  and keySpecialProcesses != ''">and `key_special_processes` =
+        #{keySpecialProcesses}
+      </if>
+      <if test="briefDescription != null  and briefDescription != ''">and `brief_description` = #{briefDescription}</if>
+      <if test="mainMeasure != null  and mainMeasure != ''">and `main_measure` = #{mainMeasure}</if>
       <if test="planPreparationTime != null ">and `plan_preparation_time` = #{planPreparationTime}</if>
       <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
       <if test="listPassTime != null ">and `list_pass_time` = #{listPassTime}</if>
@@ -579,55 +618,13 @@
     </where>
   </update>
 
-  <update id="deleteQqchConstructionListByPks">
-    update `qqch_construction_list` set del_flag = 1
+  <update id="deleteQqchDangerConstructionListByPks">
+    update `qqch_danger_construction_list` set del_flag = 1
     <where>
       `id` in
-      <foreach item="id" collection="qqchConstructionListPkList" open="(" separator="," close=")">
+      <foreach item="id" collection="qqchDangerConstructionListPkList" open="(" separator="," close=")">
         #{id}
       </foreach>
     </where>
   </update>
-
-  <select id="getBigDangerLevelConstructionList" resultMap="QqchConstructionListResultMap">
-    <include refid="selectQqchConstructionListVo"/>
-    <where>
-      del_flag = "0"
-      <if test="id != null ">and `id` = #{id}</if>
-      <if test="schemeCode != null  and schemeCode != ''">and `scheme_code` = #{schemeCode}</if>
-      <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
-      <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
-      <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
-      <if test="schemeType != null  and schemeType != ''">and `scheme_type` = #{schemeType}</if>
-      <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
-      and `danger_level` in ('1','2')
-      <if test="isChange != null  and isChange != ''">and `is_change` = #{isChange}</if>
-      <if test="planPreparationTime != null ">and `plan_preparation_time` = #{planPreparationTime}</if>
-      <if test="planImplementTime != null ">and `plan_implement_time` = #{planImplementTime}</if>
-      <if test="listPassTime != null ">and `list_pass_time` = #{listPassTime}</if>
-      <if test="contactPerson != null  and contactPerson != ''">and `contact_person` = #{contactPerson}</if>
-      <if test="version != null ">and `version` = #{version}</if>
-      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-      <if test="regionId != null ">and `region_id` = #{regionId}</if>
-      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-      <if test="projectId != null ">and `project_id` = #{projectId}</if>
-      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-      <if test="createTime != null ">and `create_time` = #{createTime}</if>
-      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-      <if test="delTime != null ">and `del_time` = #{delTime}</if>
-      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-    </where>
-    order by create_time desc
-  </select>
 </mapper>

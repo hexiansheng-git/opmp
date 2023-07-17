@@ -6,11 +6,11 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,33 +38,23 @@ public class QqchConstructionListController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchConstructionList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(
-        @Validated(ValidationGroups.Select.class) @RequestBody QqchConstructionList qqchConstructionListParam) {
-        List<QqchConstructionList> qqchConstructionListList = qqchConstructionListService
-            .getQqchConstructionListList(qqchConstructionListParam);
-        return AjaxResult.success(qqchConstructionListList);
+    public AjaxResult getList() {
+        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList();
+        return AjaxResult.success(qqchConstructionListVo);
     }
 
     @PreAuthorize(hasPermi = "qqchConstructionList:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody List<QqchConstructionList> qqchConstructionListListParam) {
-        qqchConstructionListService.batchSave(qqchConstructionListListParam);
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionListVo qqchConstructionListVo) {
+        qqchConstructionListService.batchSave(qqchConstructionListVo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchConstructionList:remove")
-    @PostMapping("/remove")
-    public AjaxResult deleteQqchConstructionListByPks(Long[] ids) {
-        List<Long> qqchConstructionListPkList = Arrays.asList(ids);
-        return toAjax(qqchConstructionListService.deleteQqchConstructionListByPks(qqchConstructionListPkList));
-    }
-
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchConstructionList qqchConstructionListParam)
-        throws IOException {
-        List<QqchConstructionList> qqchConstructionListList = qqchConstructionListService
-            .getQqchConstructionListList(qqchConstructionListParam);
+    public void export(HttpServletResponse response) throws IOException {
+        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList();
+        List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
         ExcelUtils<QqchConstructionList> util = new ExcelUtils<>(QqchConstructionList.class);
         util.exportExcel(response, qqchConstructionListList, DateUtils.getDate());
     }

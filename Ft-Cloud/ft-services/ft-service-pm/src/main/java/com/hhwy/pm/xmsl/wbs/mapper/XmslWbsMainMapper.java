@@ -16,6 +16,15 @@ public interface XmslWbsMainMapper {
 
     List<XmslWbsMain> getXmslWbsMainList(XmslWbsMain xmslWbsMain);
 
+    /**
+     * 获取最新数据
+     * @param xmslWbsMain
+     * @return
+     */
+    XmslWbsMain getLast(XmslWbsMain xmslWbsMain);
+
+    Long getXmslWbsMainCount(XmslWbsMain xmslWbsMain);
+
     int insertXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     int insertXmslWbsMainList(@Param("xmslWbsMainList") List<XmslWbsMain> xmslWbsMainList);

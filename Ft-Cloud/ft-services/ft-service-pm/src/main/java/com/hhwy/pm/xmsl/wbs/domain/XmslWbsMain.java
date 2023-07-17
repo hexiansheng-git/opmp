@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.util.Date;
 
@@ -16,7 +17,7 @@ import java.util.Date;
  * @date 2023-07-13 18:02:49
  * @remark
  */
-public class XmslWbsMain extends BaseEntity {
+public class XmslWbsMain extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

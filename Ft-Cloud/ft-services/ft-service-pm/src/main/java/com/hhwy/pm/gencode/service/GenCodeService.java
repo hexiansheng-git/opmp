@@ -90,7 +90,7 @@ public class GenCodeService {
         Date date = new Date();
         GenCode genCode = new GenCode();
         String middle = "";
-        if (StringUtils.isBlank(format)) {
+        if (StringUtils.isNotBlank(format)) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
             middle = simpleDateFormat.format(date);
         }

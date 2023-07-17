@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 
 /**
@@ -10,8 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstruc
  */
 public interface IQqchMajorConstructionComparisonService {
 
-    QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(
-        QqchMajorConstructionComparison qqchMajorConstructionComparison);
+    QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList();
 
     void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo);
 }
