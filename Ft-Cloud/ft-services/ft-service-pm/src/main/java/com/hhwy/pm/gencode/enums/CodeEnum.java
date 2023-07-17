@@ -1,4 +1,4 @@
-package com.hhwy.gencode.enums;
+package com.hhwy.pm.gencode.enums;
 
 /**
  * 生成编码 Enum

@@ -1,9 +1,10 @@
-package com.hhwy.gencode.service;
+package com.hhwy.pm.gencode.service;
 
 import com.hhwy.common.core.utils.SecurityUtils;
-import com.hhwy.gencode.domain.GenCode;
-import com.hhwy.gencode.enums.CodeEnum;
-import com.hhwy.gencode.mapper.GenCodeMapper;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.pm.gencode.domain.GenCode;
+import com.hhwy.pm.gencode.enums.CodeEnum;
+import com.hhwy.pm.gencode.mapper.GenCodeMapper;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -86,13 +87,15 @@ public class GenCodeService {
     public List<String> genCode(String prefix, String format, int digit, int num, boolean submitFlag) {
         List<String> resList = new ArrayList<>(num);
         String userId = String.valueOf(SecurityUtils.getUserId());
-
         Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
-        String middle = simpleDateFormat.format(date);
         GenCode genCode = new GenCode();
-        genCode.setPrefix(prefix);
+        String middle = "";
+        if (StringUtils.isBlank(format)) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+            middle = simpleDateFormat.format(date);
+        }
         genCode.setMiddle(middle);
+        genCode.setPrefix(prefix);
         // genCode.setCreateDate(date);
         int count = 0;
 
@@ -117,7 +120,6 @@ public class GenCodeService {
                     iData.setUpdateTime(date);
                     iData.setUpdateBy(userId);
                     this.codeMapper.insertGenCode(iData);
-
                 } else {
                     // 如果数据不为空 更新
                     GenCode code = genCodes.get(0);

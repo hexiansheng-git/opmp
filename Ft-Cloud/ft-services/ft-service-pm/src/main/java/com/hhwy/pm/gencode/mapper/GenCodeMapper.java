@@ -1,11 +1,11 @@
-package com.hhwy.gencode.mapper;
+package com.hhwy.pm.gencode.mapper;
 
 /**
 * @author Administrator
  * @Entity com.mu.order.domain.GenCode
 */
 
-import com.hhwy.gencode.domain.GenCode;
+import com.hhwy.pm.gencode.domain.GenCode;
 
 import java.util.List;
 
