@@ -14,6 +14,8 @@ import com.hhwy.system.core.service.IMenuService;
 import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;
 import com.hhwy.system.service.ISysPmService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.hssf.record.PageBreakRecord;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -81,16 +83,27 @@ public class SysPmController {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setMenuType("menu");
         List<SysMenu> list = this.menuService.selectMenuTreeList(sysMenu, sysUser);
-        List<SysMenu> resList = new ArrayList<>();
-        for(SysMenu item:list){
-            String title = item.getTitle();
-            if(title.equals(name)){
-                resList.add(item);
-            }
-        }
+
+        List<SysMenu> resList = this.findChildTree(list, name);
         return AjaxResult.success(resList);
     }
 
+    public List<SysMenu> findChildTree(List<SysMenu> list,String name){
+        for(SysMenu item:list){
+            String menuTitle = item.getTitle();
+            if(name.equals(menuTitle)){
+                return item.getChildren();
+            }else {
+                if(CollectionUtils.isNotEmpty(item.getChildren())){
+                    List<SysMenu> l = this.findChildTree(item.getChildren(), name);
+                    if(CollectionUtils.isNotEmpty(l)){
+                        return  l;
+                    }
+                }
+            }
+        }
+        return null;
+    }
 
 
 }
