@@ -20,11 +20,6 @@ public class CommonBaseEntity extends BaseEntity {
 
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
-
-    @NotNull(message = "页码不能为空", groups = {ValidationGroups.Select.class})
-    private Integer pageNum;
-    @NotNull(message = "页数不能为空", groups = {ValidationGroups.Select.class})
-    private Integer pageSize;
     private String orderByColumn;
     private String isAsc = "asc";
 
@@ -142,23 +137,6 @@ public class CommonBaseEntity extends BaseEntity {
     public String getOrderBy() {
         return StringUtils.isEmpty(this.orderByColumn) ? "" : StringUtils.toUnderScoreCase(this.orderByColumn) + " " + this.isAsc;
     }
-
-    public Integer getPageNum() {
-        return this.pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public Integer getPageSize() {
-        return this.pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
     public String getOrderByColumn() {
         return this.orderByColumn;
     }

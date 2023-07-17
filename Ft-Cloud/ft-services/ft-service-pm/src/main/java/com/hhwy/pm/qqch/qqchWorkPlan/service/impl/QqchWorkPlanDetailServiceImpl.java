@@ -94,8 +94,6 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
         if (detailList != null && detailList.size() > 0) {
             // 集合类型转化 设置id 设置purchaseId
             List<QqchWorkPlanDetail> insertOrUpdateData = detailList.stream().map(item -> {
-                Long id =IdWorker.createId();
-                item.setId(id);
                 item.setMainId(mainId);
                 EntityUtils.setCreateUpdateInfo(item);
                 return item;
