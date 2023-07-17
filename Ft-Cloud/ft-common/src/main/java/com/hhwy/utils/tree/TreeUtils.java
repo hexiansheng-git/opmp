@@ -83,50 +83,42 @@ public class TreeUtils {
     }
 
     /**
-     * 拆分树列表：将需要新增的数据和需要修改的数据放到两个集合中
-     * @param nodes 需要拆分的树列表
+     * 拆分树列表
      * @param <T>
+     * @param nodes 需要拆分的树列表
      * @return
      */
-    public static <T> Map<String,List<T>> splitTreeList(List<T> nodes){
+    public static <T> List<T> splitTreeList(List<T> nodes){
         return splitTreeList(nodes,idField,parentIdField,childrenName);
     }
 
     /**
-     * 拆分树列表：将需要新增的数据和需要修改的数据放到两个集合中
+     * 拆分树列表
+     * @param <T>
      * @param nodes 需要拆分的树列表
      * @param idField 主键字段名
      * @param parentIdField 关联主键id字段名
      * @param childrenName 子集字段名
-     * @param <T>
      * @return
      */
-    public static <T> Map<String,List<T>> splitTreeList(List<T> nodes, String idField,String parentIdField,String childrenName){
-        List<T> insertList = new ArrayList<>();
-        List<T> updateList = new ArrayList<>();
+    public static <T> List<T> splitTreeList(List<T> nodes, String idField, String parentIdField, String childrenName){
+        List<T> resultList = new ArrayList<>();
         for (T node : nodes) {
-            split(node,idField,parentIdField,childrenName,insertList,updateList);
+            split(node,idField,parentIdField,childrenName,resultList);
         }
-        Map<String,List<T>> resultMap = new HashMap<>();
-        resultMap.put("insertList",insertList);
-        resultMap.put("updateList",updateList);
-        return resultMap;
+        return resultList;
     }
 
-    private static <T> void split(T node,String idField,String parentIdField,String childrenName,List<T> insertList,List<T> updateList){
-        Object id = getFieldValue(node, idField);
-        if(id == null){
-            id = IdWorker.createId();
-            setFieldValue(node,idField,id);
-            insertList.add(node);
-        }else{
-            updateList.add(node);
-        }
+    private static <T> void split(T node, String idField, String parentIdField, String childrenName, List<T> resultList){
+        Long id = IdWorker.createId();
+        setFieldValue(node,idField,id);
+        resultList.add(node);
+
         List<T> children = (List<T>) getFieldValue(node, childrenName);
         if(!CollectionUtils.isEmpty(children)){
             for (T child : children) {
                 setFieldValue(child,parentIdField,id);
-                split(child,idField,parentIdField,childrenName,insertList,updateList);
+                split(child,idField,parentIdField,childrenName, resultList);
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.hhwy.gencode.domain;
+package com.hhwy.pm.gencode.domain;
 
 import lombok.Data;
 import lombok.ToString;

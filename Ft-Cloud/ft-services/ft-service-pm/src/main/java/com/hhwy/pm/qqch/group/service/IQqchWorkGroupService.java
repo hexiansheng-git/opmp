@@ -10,9 +10,26 @@ import java.util.List;
  */
 public interface IQqchWorkGroupService {
 
-    QqchWorkGroup getQqchWorkGroup(QqchWorkGroup qqchWorkGroup);
+    /**
+     * 根据id获取工作小组信息
+     * @param id
+     * @return
+     */
+    QqchWorkGroup getQqchWorkGroupById(Long id);
 
+    /**
+     * 台账（历史记录）
+     * @param qqchWorkGroup
+     * @return
+     */
     List<QqchWorkGroup> getQqchWorkGroupList(QqchWorkGroup qqchWorkGroup);
+
+    /**
+     * 调整
+     * @param id
+     * @return
+     */
+    QqchWorkGroup adjustQqchWorkGroup(Long id);
 
     /**
      * 新增工作小组
@@ -34,13 +51,4 @@ public interface IQqchWorkGroupService {
      * @return
      */
     int deleteQqchWorkGroup(QqchWorkGroup qqchWorkGroup);
-
-    int deleteQqchWorkGroupByPks(List<Long> qqchWorkGroupPkList);
-
-    /**
-     * 根据id获取工作小组信息
-     * @param id
-     * @return
-     */
-    QqchWorkGroup getQqchWorkGroupById(Long id);
 }

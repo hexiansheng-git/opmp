@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.mapper;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -31,4 +32,6 @@ public interface QqchMajorConstructionComparisonMapper {
 
     int deleteQqchMajorConstructionComparisonByPks(
         @Param("qqchMajorConstructionComparisonPkList") List<Long> qqchMajorConstructionComparisonPkList);
+
+    BigDecimal getMaxVersion();
 }

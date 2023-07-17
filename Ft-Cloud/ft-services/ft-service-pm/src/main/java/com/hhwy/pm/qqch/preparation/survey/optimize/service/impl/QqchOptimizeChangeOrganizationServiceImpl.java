@@ -82,14 +82,9 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
      */
     @Transactional
     public void editQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList){
-        Map<String, List<QqchOptimizeChangeOrganization>> map = TreeUtils.splitTreeList(qqchOptimizeChangeOrganizationList);
-        List<QqchOptimizeChangeOrganization> insertList = map.get("insertList");
-        List<QqchOptimizeChangeOrganization> updateList = map.get("updateList");
+        List<QqchOptimizeChangeOrganization> insertList = TreeUtils.splitTreeList(qqchOptimizeChangeOrganizationList);
         if(insertList.size() > 0){
             this.insertQqchOptimizeChangeOrganizationList(insertList);
-        }
-        if(updateList.size() > 0){
-            this.updateQqchOptimizeChangeOrganizationList(updateList);
         }
     }
 

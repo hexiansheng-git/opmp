@@ -8,10 +8,13 @@ import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -33,36 +36,22 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
         return qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
     }
 
-    @Transactional
-    public int insertQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember) {
-        qqchWorkGroupMember.setId(IdWorker.createId());
-        qqchWorkGroupMember.setCreateUser(SecurityUtils.getUserName());
-        qqchWorkGroupMember.setCreateTime(DateUtils.getNowDate());
-        return qqchWorkGroupMemberMapper.insertQqchWorkGroupMember(qqchWorkGroupMember);
-    }
-
     /**
      * 编辑数据
      * @param qqchWorkGroupMemberList
      * @param qqchWorkGroup
      */
+    @Transactional
     public void editQqchWorkGroupMemberList(List<QqchWorkGroupMember> qqchWorkGroupMemberList, QqchWorkGroup qqchWorkGroup) {
-        List<QqchWorkGroupMember> insertList = new ArrayList<>();
-        List<QqchWorkGroupMember> updateList = new ArrayList<>();
-        for (QqchWorkGroupMember qqchWorkGroupMember : qqchWorkGroupMemberList) {
-            Long id = qqchWorkGroupMember.getId();
-            if(id == null){
-                insertList.add(qqchWorkGroupMember);
-            }else{
-                updateList.add(qqchWorkGroupMember);
-            }
-        }
-        if(insertList.size() > 0){
-            this.insertQqchWorkGroupMemberList(insertList, qqchWorkGroup);
-        }
-        if(updateList.size() > 0){
-            this.updateQqchWorkGroupMemberList(updateList);
-        }
+
+        //删除旧数据
+        Long workGroupId = qqchWorkGroup.getId();
+        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
+        qqchWorkGroupMember.setWorkGroupId(workGroupId);
+        qqchWorkGroupMemberMapper.deleteQqchWorkGroupMember(qqchWorkGroupMember);
+
+        //插入新数据
+        this.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList,qqchWorkGroup);
     }
 
     /**
@@ -86,27 +75,6 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
             qqchWorkGroupMember.setCreateTime(DateUtils.getNowDate());
         }
         return qqchWorkGroupMemberMapper.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList);
-    }
-
-    @Transactional
-    public int updateQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember) {
-        qqchWorkGroupMember.setUpdateUser(SecurityUtils.getUserName());
-        qqchWorkGroupMember.setUpdateTime(DateUtils.getNowDate());
-        return qqchWorkGroupMemberMapper.updateQqchWorkGroupMember(qqchWorkGroupMember);
-    }
-
-    /**
-     * 批量修改工作小组成员
-     * @param qqchWorkGroupMemberList
-     * @return
-     */
-    @Transactional
-    public int updateQqchWorkGroupMemberList(List<QqchWorkGroupMember> qqchWorkGroupMemberList) {
-        for (QqchWorkGroupMember qqchWorkGroupMember : qqchWorkGroupMemberList) {
-            qqchWorkGroupMember.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchWorkGroupMember.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchWorkGroupMemberMapper.updateQqchWorkGroupMemberList(qqchWorkGroupMemberList);
     }
 
     /**

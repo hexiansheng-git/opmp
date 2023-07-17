@@ -33,14 +33,14 @@ public class QqchBlueprintManageInventoryController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:list")
     @GetMapping
-    public AjaxResult getQqchBlueprintManageInventory(@Validated(ValidationGroups.Get.class) @RequestBody QqchBlueprintManageInventory qqchBlueprintManageInventoryParam) {
+    public AjaxResult getQqchBlueprintManageInventory(@Validated(ValidationGroups.Get.class) QqchBlueprintManageInventory qqchBlueprintManageInventoryParam) {
         QqchBlueprintManageInventory qqchBlueprintManageInventory = qqchBlueprintManageInventoryService.getQqchBlueprintManageInventory(qqchBlueprintManageInventoryParam);
         return AjaxResult.success(qqchBlueprintManageInventory);
     }
 
     @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:list")
     @GetMapping("/list")
-    public AjaxResult getQqchBlueprintManageInventoryList(@Validated(ValidationGroups.Select.class) @RequestBody QqchBlueprintManageInventory qqchBlueprintManageInventoryParam) {
+    public AjaxResult getQqchBlueprintManageInventoryList(@Validated(ValidationGroups.Select.class) QqchBlueprintManageInventory qqchBlueprintManageInventoryParam) {
         startPage();
         List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList = qqchBlueprintManageInventoryService.getQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryParam);
         return getDataTableAjaxResult(qqchBlueprintManageInventoryList);

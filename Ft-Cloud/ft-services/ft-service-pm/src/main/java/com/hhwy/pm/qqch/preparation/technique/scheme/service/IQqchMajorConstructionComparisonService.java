@@ -1,7 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 
 /**
  * @author zhenglili
@@ -10,10 +10,8 @@ import java.util.List;
  */
 public interface IQqchMajorConstructionComparisonService {
 
-    List<QqchMajorConstructionComparison> getQqchMajorConstructionComparisonList(
+    QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(
         QqchMajorConstructionComparison qqchMajorConstructionComparison);
 
-    void batchSave(List<QqchMajorConstructionComparison> qqchMajorConstructionComparisonList);
-
-    int deleteQqchMajorConstructionComparisonByPks(List<Long> qqchMajorConstructionComparisonPkList);
+    void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo);
 }

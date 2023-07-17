@@ -1,0 +1,597 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper">
+    <resultMap type="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan" id="QqchWorkPlanResultMap">
+        <result property="id" column="id"/>
+        <result property="version" column="version"/>
+        <result property="planApprovalUnit" column="plan_approval_unit"/>
+        <result property="exigencyStatus" column="exigency_status"/>
+        <result property="taskTemplate" column="task_template"/>
+        <result property="workStartTime" column="work_start_time"/>
+        <result property="submitFirst" column="submit_first"/>
+        <result property="contentFirst" column="content_first"/>
+        <result property="submitSecond" column="submit_second"/>
+        <result property="contentSecond" column="content_second"/>
+        <result property="submitThird" column="submit_third"/>
+        <result property="contentThird" column="content_third"/>
+        <result property="valid" column="valid"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+    </resultMap>
+    <sql id="selectQqchWorkPlanVo">
+        select `id`
+             , `version`
+             , `plan_approval_unit`
+             , `exigency_status`
+             , `task_template`
+             , `work_start_time`
+             , `submit_first`
+             , `content_first`
+             , `submit_second`
+             , `content_second`
+             , `submit_third`
+             , `content_third`
+             , `valid`
+             , `file_group_id`
+             , `remark`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+             , `task_status`
+        from qqch_work_plan
+    </sql>
+    <select id="getQqchWorkPlan" resultMap="QqchWorkPlanResultMap">
+        <include refid="selectQqchWorkPlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="planApprovalUnit != null  and planApprovalUnit != ''">and `plan_approval_unit` =
+                #{planApprovalUnit}
+            </if>
+            <if test="exigencyStatus != null  and exigencyStatus != ''">and `exigency_status` = #{exigencyStatus}</if>
+            <if test="taskTemplate != null  and taskTemplate != ''">and `task_template` = #{taskTemplate}</if>
+            <if test="workStartTime != null ">and `work_start_time` = #{workStartTime}</if>
+            <if test="submitFirst != null ">and `submit_first` = #{submitFirst}</if>
+            <if test="contentFirst != null  and contentFirst != ''">and `content_first` = #{contentFirst}</if>
+            <if test="submitSecond != null ">and `submit_second` = #{submitSecond}</if>
+            <if test="contentSecond != null  and contentSecond != ''">and `content_second` = #{contentSecond}</if>
+            <if test="submitThird != null ">and `submit_third` = #{submitThird}</if>
+            <if test="contentThird != null  and contentThird != ''">and `content_third` = #{contentThird}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchWorkPlanList" resultMap="QqchWorkPlanResultMap">
+        <include refid="selectQqchWorkPlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="planApprovalUnit != null  and planApprovalUnit != ''">and `plan_approval_unit` =
+                #{planApprovalUnit}
+            </if>
+            <if test="exigencyStatus != null  and exigencyStatus != ''">and `exigency_status` = #{exigencyStatus}</if>
+            <if test="taskTemplate != null  and taskTemplate != ''">and `task_template` = #{taskTemplate}</if>
+            <if test="workStartTime != null ">and `work_start_time` = #{workStartTime}</if>
+            <if test="submitFirst != null ">and `submit_first` = #{submitFirst}</if>
+            <if test="contentFirst != null  and contentFirst != ''">and `content_first` = #{contentFirst}</if>
+            <if test="submitSecond != null ">and `submit_second` = #{submitSecond}</if>
+            <if test="contentSecond != null  and contentSecond != ''">and `content_second` = #{contentSecond}</if>
+            <if test="submitThird != null ">and `submit_third` = #{submitThird}</if>
+            <if test="contentThird != null  and contentThird != ''">and `content_third` = #{contentThird}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchWorkPlan" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_work_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="planApprovalUnit != null  and planApprovalUnit != ''">`plan_approval_unit`,</if>
+            <if test="exigencyStatus != null  and exigencyStatus != ''">`exigency_status`,</if>
+            <if test="taskTemplate != null  and taskTemplate != ''">`task_template`,</if>
+            <if test="workStartTime != null ">`work_start_time`,</if>
+            <if test="submitFirst != null ">`submit_first`,</if>
+            <if test="contentFirst != null  and contentFirst != ''">`content_first`,</if>
+            <if test="submitSecond != null ">`submit_second`,</if>
+            <if test="contentSecond != null  and contentSecond != ''">`content_second`,</if>
+            <if test="submitThird != null ">`submit_third`,</if>
+            <if test="contentThird != null  and contentThird != ''">`content_third`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="planApprovalUnit != null  and planApprovalUnit != ''">#{planApprovalUnit},</if>
+            <if test="exigencyStatus != null  and exigencyStatus != ''">#{exigencyStatus},</if>
+            <if test="taskTemplate != null  and taskTemplate != ''">#{taskTemplate},</if>
+            <if test="workStartTime != null ">#{workStartTime},</if>
+            <if test="submitFirst != null ">#{submitFirst},</if>
+            <if test="contentFirst != null  and contentFirst != ''">#{contentFirst},</if>
+            <if test="submitSecond != null ">#{submitSecond},</if>
+            <if test="contentSecond != null  and contentSecond != ''">#{contentSecond},</if>
+            <if test="submitThird != null ">#{submitThird},</if>
+            <if test="contentThird != null  and contentThird != ''">#{contentThird},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchWorkPlan -->
+    <insert id="insertQqchWorkPlanList">
+        insert into qqch_work_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `version`,
+            `plan_approval_unit`,
+            `exigency_status`,
+            `task_template`,
+            `work_start_time`,
+            `submit_first`,
+            `content_first`,
+            `submit_second`,
+            `content_second`,
+            `submit_third`,
+            `content_third`,
+            `valid`,
+            `file_group_id`,
+            `remark`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+        </trim>
+        values
+        <foreach collection="qqchWorkPlanList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.version},
+                #{item.planApprovalUnit},
+                #{item.exigencyStatus},
+                #{item.taskTemplate},
+                #{item.workStartTime},
+                #{item.submitFirst},
+                #{item.contentFirst},
+                #{item.submitSecond},
+                #{item.contentSecond},
+                #{item.submitThird},
+                #{item.contentThird},
+                #{item.valid},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchWorkPlan">
+        update qqch_work_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="planApprovalUnit != null  and  planApprovalUnit != ''">`plan_approval_unit` =
+                #{planApprovalUnit},
+            </if>
+            <if test="exigencyStatus != null  and  exigencyStatus != ''">`exigency_status` = #{exigencyStatus},</if>
+            <if test="taskTemplate != null  and  taskTemplate != ''">`task_template` = #{taskTemplate},</if>
+            <if test="workStartTime != null ">`work_start_time` = #{workStartTime},</if>
+            <if test="submitFirst != null ">`submit_first` = #{submitFirst},</if>
+            <if test="contentFirst != null  and  contentFirst != ''">`content_first` = #{contentFirst},</if>
+            <if test="submitSecond != null ">`submit_second` = #{submitSecond},</if>
+            <if test="contentSecond != null  and  contentSecond != ''">`content_second` = #{contentSecond},</if>
+            <if test="submitThird != null ">`submit_third` = #{submitThird},</if>
+            <if test="contentThird != null  and  contentThird != ''">`content_third` = #{contentThird},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateQqchWorkPlanList">
+        update qqch_work_plan
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="plan_approval_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planApprovalUnit}
+                </foreach>
+            </trim>
+            <trim prefix="exigency_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.exigencyStatus}
+                </foreach>
+            </trim>
+            <trim prefix="task_template  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskTemplate}
+                </foreach>
+            </trim>
+            <trim prefix="work_start_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workStartTime}
+                </foreach>
+            </trim>
+            <trim prefix="submit_first  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.submitFirst}
+                </foreach>
+            </trim>
+            <trim prefix="content_first  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contentFirst}
+                </foreach>
+            </trim>
+            <trim prefix="submit_second  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.submitSecond}
+                </foreach>
+            </trim>
+            <trim prefix="content_second  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contentSecond}
+                </foreach>
+            </trim>
+            <trim prefix="submit_third  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.submitThird}
+                </foreach>
+            </trim>
+            <trim prefix="content_third  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contentThird}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteQqchWorkPlan">
+        update `qqch_work_plan` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="planApprovalUnit != null  and planApprovalUnit != ''">and `plan_approval_unit` =
+                #{planApprovalUnit}
+            </if>
+            <if test="exigencyStatus != null  and exigencyStatus != ''">and `exigency_status` = #{exigencyStatus}</if>
+            <if test="taskTemplate != null  and taskTemplate != ''">and `task_template` = #{taskTemplate}</if>
+            <if test="workStartTime != null ">and `work_start_time` = #{workStartTime}</if>
+            <if test="submitFirst != null ">and `submit_first` = #{submitFirst}</if>
+            <if test="contentFirst != null  and contentFirst != ''">and `content_first` = #{contentFirst}</if>
+            <if test="submitSecond != null ">and `submit_second` = #{submitSecond}</if>
+            <if test="contentSecond != null  and contentSecond != ''">and `content_second` = #{contentSecond}</if>
+            <if test="submitThird != null ">and `submit_third` = #{submitThird}</if>
+            <if test="contentThird != null  and contentThird != ''">and `content_third` = #{contentThird}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+    </update>
+
+    <update id="deleteQqchWorkPlanByPks">
+        update `qqch_work_plan` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="qqchWorkPlanPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

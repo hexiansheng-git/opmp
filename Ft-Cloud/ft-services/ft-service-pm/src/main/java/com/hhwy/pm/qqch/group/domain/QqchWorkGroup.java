@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.group.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import com.hhwy.common.core.annotation.Excel;
@@ -38,7 +40,7 @@ public class QqchWorkGroup extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "版本")
-    private String version;
+    private BigDecimal version;
     /**
      * 字段描述：是否有效
      */
@@ -191,6 +193,14 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
+    /**
+     * 字段描述：流程状态（5已完成）
+     */
+    private String taskStatus;
+    /**
+     * 字段描述：当前处理人
+     */
+    private String currentProcessor;
     /**
      * 字段描述：预留字段1
      */

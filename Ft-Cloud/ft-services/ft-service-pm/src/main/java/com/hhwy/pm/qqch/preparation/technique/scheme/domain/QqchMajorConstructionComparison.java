@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import lombok.Data;
@@ -46,6 +47,12 @@ public class QqchMajorConstructionComparison extends BaseEntity {
     @JsonProperty
     @Excel(name = "分部分项")
     private String subItem;
+    /**
+     * 字段描述：所属WBS编码
+     */
+    @JsonProperty
+    @Excel(name = "所属WBS编码")
+    private String affiliationWbsCode;
     /**
      * 字段描述：所属WBS
      */
@@ -100,6 +107,18 @@ public class QqchMajorConstructionComparison extends BaseEntity {
     @JsonProperty
     @Excel(name = "排序")
     private String sort;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：备注
      */

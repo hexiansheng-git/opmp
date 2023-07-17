@@ -37,6 +37,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         if (!CollectionUtils.isEmpty(qqchConstructionListList)) {
             for (QqchConstructionList qqchConstructionList : qqchConstructionListList) {
                 if (qqchConstructionList.getId() == null) {
+                    // TODO 方案编号 = 项目编码+三位流水号
                     qqchConstructionList.setId(IdWorker.createId());
                     qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     qqchConstructionList.setCreateUserName(SecurityUtils.getUserName());

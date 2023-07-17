@@ -1,0 +1,225 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.gencode.mapper.GenCodeMapper">
+    <resultMap type="com.hhwy.pm.gencode.domain.GenCode" id="GenCodeResult">
+        <result property="id" column="id"/>
+        <result property="prefix" column="prefix"/>
+        <result property="middle" column="middle"/>
+        <result property="count" column="count"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="deleteBy" column="delete_by"/>
+        <result property="deleteTime" column="delete_time"/>
+        <result property="deleteFlag" column="delete_flag"/>
+    </resultMap>
+
+    <sql id="selectGenCodeVo">
+        select `id`,
+               `prefix`,
+               `middle`,
+               `count`,
+               `create_time`,
+               `create_by`,
+               `update_time`,
+               `update_by`,
+               `delete_by`,
+               `delete_time`,
+               `delete_flag`
+        from `gen_code`
+    </sql>
+
+    <select id="selectGenCodeList" parameterType="com.hhwy.pm.gencode.domain.GenCode" resultMap="GenCodeResult">
+        <include refid="selectGenCodeVo"/>
+        <where>
+            <if test="prefix != null  and prefix != ''">and `prefix` = #{prefix}</if>
+            <if test="middle != null  and middle != ''">and `middle` = #{middle}</if>
+            <if test="count != null ">and `count` = #{count}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="createDate != null">
+                and DATE_FORMAT( create_time, '%Y-%m-%d' ) = DATE_FORMAT( #{createDate} , '%Y-%m-%d' )
+            </if>
+            <if test="deleteBy != null  and deleteBy != ''">and `delete_by` = #{deleteBy}</if>
+            <if test="deleteTime != null ">and `delete_time` = #{deleteTime}</if>
+            <if test="deleteFlag != null  and deleteFlag != ''">and `delete_flag` = #{deleteFlag}</if>
+        </where>
+        order by `id` desc
+    </select>
+
+    <select id="selectGenCodeById" parameterType="Long" resultMap="GenCodeResult">
+        <include refid="selectGenCodeVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertGenCode" parameterType="com.hhwy.pm.gencode.domain.GenCode" useGeneratedKeys="true" keyProperty="id">
+        insert into `gen_code`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="prefix != null">`prefix`,</if>
+            <if test="middle != null">`middle`,</if>
+            <if test="count != null">`count`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="createBy != null">`create_by`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="updateBy != null">`update_by`,</if>
+            <if test="deleteBy != null">`delete_by`,</if>
+            <if test="deleteTime != null">`delete_time`,</if>
+            <if test="deleteFlag != null and deleteFlag != ''">`delete_flag`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="prefix != null">#{prefix},</if>
+            <if test="middle != null">#{middle},</if>
+            <if test="count != null">#{count},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="deleteBy != null">#{deleteBy},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+            <if test="deleteFlag != null and deleteFlag != ''">#{deleteFlag},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert into `gen_code` (
+        `prefix`,
+        `middle`,
+        `count`,
+        `create_time`,
+        `create_by`,
+        `update_time`,
+        `update_by`,
+        `delete_by`,
+        `delete_time`,
+        `delete_flag`,
+        )values
+        <foreach collection="dataList" separator="," item="item" index="index">
+            (
+            #{item.prefix},
+            #{item.middle},
+            #{item.count},
+            #{item.createTime},
+            #{item.createBy},
+            #{item.updateTime},
+            #{item.updateBy},
+            #{item.deleteBy},
+            #{item.deleteTime},
+            #{item.deleteFlag}
+            )
+
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `gen_code`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="prefix =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.prefix != null ">
+                        when `id` = #{item.id} then #{item.prefix}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="middle =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.middle != null ">
+                        when `id` = #{item.id} then #{item.middle}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="count =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.count != null ">
+                        when `id` = #{item.id} then #{item.count}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_by =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createBy != null ">
+                        when `id` = #{item.id} then #{item.createBy}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_by =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateBy != null ">
+                        when `id` = #{item.id} then #{item.updateBy}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="delete_by =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deleteBy != null ">
+                        when `id` = #{item.id} then #{item.deleteBy}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="delete_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deleteTime != null ">
+                        when `id` = #{item.id} then #{item.deleteTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="delete_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deleteFlag != null  and deleteFlag != ''">
+                        when `id` = #{item.id} then #{item.deleteFlag}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index">
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="updateGenCode" parameterType="com.hhwy.pm.gencode.domain.GenCode">
+        update `gen_code`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="prefix != null">`prefix` = #{prefix},</if>
+            <if test="middle != null">`middle` = #{middle},</if>
+            <if test="count != null">`count` = #{count},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="createBy != null">`create_by` = #{createBy},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="updateBy != null">`update_by` = #{updateBy},</if>
+            <if test="deleteBy != null">`delete_by` = #{deleteBy},</if>
+            <if test="deleteTime != null">`delete_time` = #{deleteTime},</if>
+            <if test="deleteFlag != null and deleteFlag != ''">`delete_flag` = #{deleteFlag},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteGenCodeById" parameterType="Long">
+        delete
+        from `gen_code`
+        where `id` = #{id}
+    </delete>
+
+    <delete id="deleteGenCodeByIds" parameterType="String">
+        delete from `gen_code` where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+</mapper>

@@ -14,10 +14,6 @@ public interface IQqchWorkGroupMemberService {
 
     List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember);
 
-    int insertQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember);
-
-    int updateQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember);
-
     /**
      * 批量删除工作小组成员
      * @param qqchWorkGroupMemberPkList
