@@ -30,8 +30,8 @@ public interface SystemServiceApi {
     AjaxResult dictType(@RequestParam("dictType") String dictType);
 
     /**
-     * 前期策划获取菜单信息
+     * 根据菜单名称 获取向下的树形结构，目前只支持第一层级
      */
     @GetMapping("/syspm/menu/qqch")
-    AjaxResult getQqchMenu();
+    AjaxResult getQqchMenu(@RequestParam("name") String name);
 }
