@@ -620,8 +620,4 @@
       </foreach>
     </where>
   </update>
-
-  <select id="getMaxVersion" resultType="java.math.BigDecimal">
-    select max(version) from qqch_major_construction_comparison where del_flag = '0' and valid = '1' order by version desc;
-  </select>
 </mapper>

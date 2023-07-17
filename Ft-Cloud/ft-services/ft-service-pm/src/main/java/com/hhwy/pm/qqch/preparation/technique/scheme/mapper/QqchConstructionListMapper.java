@@ -27,4 +27,6 @@ public interface QqchConstructionListMapper {
     int deleteQqchConstructionList(QqchConstructionList qqchConstructionList);
 
     int deleteQqchConstructionListByPks(@Param("qqchConstructionListPkList") List<Long> qqchConstructionListPkList);
+
+    List<QqchConstructionList> getBigDangerLevelConstructionList(QqchConstructionList qqchConstructionList);
 }

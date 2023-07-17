@@ -1,18 +1,18 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
 /**
- * @author zhenglili
- * @date 2023-07-13 14:27:03
- * @remark 3.4.1重大施工方案比选
+ * @author zhenlili
+ * @date 2023-07-17 15:29:49
+ * @remark qqch_key_difficult_construction_brief
  */
 @Data
-public class QqchMajorConstructionComparisonVo {
+public class QqchKeyDifficultConstructionBriefVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class QqchMajorConstructionComparisonVo {
     private BigDecimal version;
 
     /**
-     * 字段描述：重大施工方案比选集合
+     * 字段描述：重难点分项施工方案简述集合
      */
-    private List<QqchMajorConstructionComparison> treeList;
+    private List<QqchKeyDifficultConstructionBrief> list;
 }

@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 
 /**
  * @author zhenglili
@@ -10,9 +9,7 @@ import java.util.List;
  */
 public interface IQqchConstructionListService {
 
-    List<QqchConstructionList> getQqchConstructionListList(QqchConstructionList qqchConstructionList);
+    QqchConstructionListVo getQqchConstructionListList();
 
-    void batchSave(List<QqchConstructionList> qqchConstructionListList);
-
-    int deleteQqchConstructionListByPks(List<Long> qqchConstructionListPkList);
+    void batchSave(QqchConstructionListVo qqchConstructionListVo);
 }

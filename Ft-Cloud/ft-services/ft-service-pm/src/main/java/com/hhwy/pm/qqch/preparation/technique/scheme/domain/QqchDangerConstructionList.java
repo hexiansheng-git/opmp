@@ -12,11 +12,11 @@ import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-13 14:40:32
- * @remark 3.4.2施工方案清单
+ * @date 2023-07-17 14:26:41
+ * @remark qqch_danger_construction_list
  */
 @Data
-public class QqchConstructionList extends BaseEntity {
+public class QqchDangerConstructionList extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +42,6 @@ public class QqchConstructionList extends BaseEntity {
      * 字段描述：关联WBS编码
      */
     @JsonProperty
-    @Excel(name = "关联WBS编码")
     private String wbsCode;
     /**
      * 字段描述：关联WBS
@@ -69,11 +68,23 @@ public class QqchConstructionList extends BaseEntity {
     @Excel(name = "危大等级（字典类型danger_level）")
     private String dangerLevel;
     /**
-     * 字段描述：设计变更是否引起施工方案变更 0:否；1:是
+     * 字段描述：关键和特殊过程
      */
     @JsonProperty
-    @Excel(name = "设计变更是否引起施工方案变更 0:否；1:是")
-    private String isChange;
+    @Excel(name = "关键和特殊过程")
+    private String keySpecialProcesses;
+    /**
+     * 字段描述：简要说明
+     */
+    @JsonProperty
+    @Excel(name = "简要说明")
+    private String briefDescription;
+    /**
+     * 字段描述：主要措施
+     */
+    @JsonProperty
+    @Excel(name = "主要措施")
+    private String mainMeasure;
     /**
      * 字段描述：计划编制时间
      */
