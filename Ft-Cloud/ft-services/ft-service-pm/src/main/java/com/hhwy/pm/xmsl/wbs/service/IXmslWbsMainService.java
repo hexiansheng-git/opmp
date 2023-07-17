@@ -12,7 +12,15 @@ public interface IXmslWbsMainService {
                                                                                                                                                     
     XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain);
 
+    XmslWbsMain getById(Long mainId);
+
     List<XmslWbsMain> getXmslWbsMainList(XmslWbsMain xmslWbsMain);
+
+    XmslWbsMain getEffect();
+
+    Long getXmslWbsMainCount(XmslWbsMain xmslWbsMain);
+
+    XmslWbsMain getLast();
 
     int insertXmslWbsMain(XmslWbsMain xmslWbsMain);
 

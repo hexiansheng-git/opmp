@@ -136,7 +136,47 @@
     </select>
 
     <select id="getXmslWbsList" resultMap="XmslWbsResultMap">
-        <include refid="selectXmslWbsVo"/>
+        select
+        `id`
+        ,`main_id`
+        ,`code`
+        ,`parent_id`
+        ,`have_children`
+        ,`ancestors`
+        ,`ancestors_name`
+        ,`part_code`
+        ,`name`
+        ,`list_code`
+        ,`standard_id`
+        ,`standard_code`
+        ,`standard_name`
+        ,`node_type`
+        ,`unit`
+        ,`level`
+        ,`status`
+        ,`design_quanlity`
+        ,`check_quanlity`
+        ,`remark`
+        ,`region_id`
+        ,`region_name`
+        ,`project_id`
+        ,`project_name`
+        ,`user_id`
+        ,`dept_id`
+        ,`create_user`
+        ,`create_user_name`
+        ,`create_time`
+        ,`update_user`
+        ,`update_time`
+        ,`del_user`
+        ,`del_time`
+        ,`del_flag`
+        ,`pt_var1`
+        ,`pt_var2`
+        ,`pt_var3`
+        ,`pt_var4`
+        ,`pt_var5`
+        from ${params.tableName}
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
@@ -180,6 +220,10 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
+    </select>
+
+    <select id="hasEffectWbs" resultType="int">
+        select count(1) from xmsl_wbs_main where valid = 1 limit 1
     </select>
 
     <insert id="insertXmslWbs" useGeneratedKeys="true" keyProperty="id">
@@ -660,6 +704,15 @@
             `id` in
             <foreach item="id" collection="xmslWbsPkList" open="(" separator="," close=")">
                 #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="deleteByParentIds">
+        update `xmsl_wbs` set del_flag = 1
+        <where>
+            <foreach item="id" collection="list" separator="or">
+                FIND_IN_SET(#{id},ancestors);
             </foreach>
         </where>
     </update>

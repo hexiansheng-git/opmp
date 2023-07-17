@@ -1,13 +1,16 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
+import cn.hutool.core.lang.Assert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.utils.validation.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * wbs
@@ -33,50 +37,31 @@ public class XmslWbsController extends BaseController {
 
 
     @PreAuthorize(hasPermi = "xmslWbs:list")
-    @GetMapping
+    @PostMapping
     public AjaxResult getXmslWbs(@Validated(ValidationGroups.Get.class) @RequestBody XmslWbs xmslWbsParam) {
         XmslWbs xmslWbs = xmslWbsService.getXmslWbs(xmslWbsParam);
         return AjaxResult.success(xmslWbs);
     }
 
     @PreAuthorize(hasPermi = "xmslWbs:list")
-    @GetMapping("/list")
-    public AjaxResult getXmslWbsList(@Validated(ValidationGroups.Select.class) @RequestBody XmslWbs xmslWbsParam) {
-        startPage();
-        List<XmslWbs> xmslWbsList = xmslWbsService.getXmslWbsList(xmslWbsParam);
-        return getDataTableAjaxResult(xmslWbsList);
+    @PostMapping("/list")
+    public AjaxResult getXmslWbsList(@Validated(ValidationGroups.Select.class) @RequestBody XmslWbs wbs) {
+        Map map = xmslWbsService.listData(wbs);
+        return AjaxResult.success(map);
+    }
+
+    @GetMapping("/hasEffectData")
+    public AjaxResult hasEffectData() {
+        int count = xmslWbsService.hasEffectWbs();
+        return AjaxResult.success(count);
     }
 
     @PreAuthorize(hasPermi = "xmslWbs:add")
-    @PostMapping("/add")
-    public AjaxResult insertXmslWbs(@Validated(ValidationGroups.Save.class) @RequestBody XmslWbs xmslWbsParam) {
-        xmslWbsService.insertXmslWbs(xmslWbsParam);
-        return AjaxResult.success(xmslWbsParam);
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbs:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertXmslWbsList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslWbs> xmslWbsListParam) {
-        xmslWbsService.insertXmslWbsList(xmslWbsListParam);
-        return AjaxResult.success(xmslWbsListParam);
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbs:update")
-    @PostMapping("/update")
-    public AjaxResult updateXmslWbs(@Validated(ValidationGroups.Update.class) @RequestBody XmslWbs xmslWbsParam) {
-        return toAjax(xmslWbsService.updateXmslWbs(xmslWbsParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbs:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateXmslWbsList(@Validated(ValidationGroups.Update.class) @RequestBody List<XmslWbs> xmslWbsListParam) {
-        return toAjax(xmslWbsService.updateXmslWbsList(xmslWbsListParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbs:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteXmslWbs(@Validated(ValidationGroups.Delete.class) @RequestBody XmslWbs xmslWbsParam) {
-        return toAjax(xmslWbsService.deleteXmslWbs(xmslWbsParam));
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody XmslWbsDto dto) {
+        ValidationUtil.getValidator().validate(dto.getList().get(0),ValidationGroups.Save.class);
+        xmslWbsService.save(dto);
+        return AjaxResult.success();
     }
 
     @PreAuthorize(hasPermi = "xmslWbs:remove")

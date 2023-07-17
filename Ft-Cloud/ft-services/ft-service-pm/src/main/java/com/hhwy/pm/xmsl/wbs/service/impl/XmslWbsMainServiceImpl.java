@@ -3,6 +3,8 @@ package com.hhwy.pm.xmsl.wbs.service.impl;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.utils.Constant;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +29,38 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService{
         return xmslWbsMainMapper.getXmslWbsMain(xmslWbsMain);
     }
 
+    @Override
+    public XmslWbsMain getById(Long mainId) {
+        if(mainId == null)
+            return null;
+        XmslWbsMain query = new XmslWbsMain();
+        query.setId(mainId);
+        XmslWbsMain main = xmslWbsMainMapper.getXmslWbsMain(query);
+        return main;
+    }
+
+    @Override
+    public XmslWbsMain getEffect() {
+        XmslWbsMain query = new XmslWbsMain();
+        query.setValid(Constant.YES_INT);
+        return xmslWbsMainMapper.getLast(query);
+    }
+
+    @Override
+    public Long getXmslWbsMainCount(XmslWbsMain xmslWbsMain) {
+        return xmslWbsMainMapper.getXmslWbsMainCount(xmslWbsMain);
+    }
+
     public List<XmslWbsMain> getXmslWbsMainList(XmslWbsMain xmslWbsMain) {
         return xmslWbsMainMapper.getXmslWbsMainList(xmslWbsMain);
+    }
+
+    @Override
+    public XmslWbsMain getLast() {
+        XmslWbsMain query = new XmslWbsMain();
+        query.setValid(Constant.YES_INT);
+        XmslWbsMain main = xmslWbsMainMapper.getLast(query);
+        return main;
     }
 
     @Transactional
