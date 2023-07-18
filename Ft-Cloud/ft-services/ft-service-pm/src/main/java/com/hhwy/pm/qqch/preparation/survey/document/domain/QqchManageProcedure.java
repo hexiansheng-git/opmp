@@ -83,6 +83,12 @@ public class QqchManageProcedure extends BaseEntity {
     @Excel(name = "备注/描述")
     private String remark;
     /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private Integer sort;
+    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)

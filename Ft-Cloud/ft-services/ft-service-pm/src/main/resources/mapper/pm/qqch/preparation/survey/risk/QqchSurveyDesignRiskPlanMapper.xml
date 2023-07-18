@@ -12,9 +12,10 @@
         <result property="occurReason" column="occur_reason"/>
         <result property="riskGrade" column="risk_grade"/>
         <result property="controlMeasure" column="control_measure"/>
-        <result property="remark" column="remark"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
+        <result property="remark" column="remark"/>
+        <result property="sort" column="sort"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -42,9 +43,10 @@
              ,`occur_reason`
              ,`risk_grade`
              ,`control_measure`
-             ,`remark`
              ,`version`
              ,`valid`
+             ,`remark`
+             ,`sort`
              ,`region_id`
              ,`region_name`
              ,`project_id`
@@ -135,7 +137,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchSurveyDesignRiskPlan" useGeneratedKeys="true" keyProperty="id">
@@ -147,9 +149,10 @@
             <if test="occurReason != null  and occurReason != ''">`occur_reason`,</if>
             <if test="riskGrade != null  and riskGrade != ''">`risk_grade`,</if>
             <if test="controlMeasure != null  and controlMeasure != ''">`control_measure`,</if>
-            <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="sort != null ">`sort`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -176,9 +179,10 @@
             <if test="occurReason != null  and occurReason != ''">#{occurReason},</if>
             <if test="riskGrade != null  and riskGrade != ''">#{riskGrade},</if>
             <if test="controlMeasure != null  and controlMeasure != ''">#{controlMeasure},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="version != null">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="sort != null">#{sort},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -210,9 +214,10 @@
             `occur_reason`,
             `risk_grade`,
             `control_measure`,
-            `remark`,
             `version`,
             `valid`,
+            `remark`,
+            `sort`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -240,9 +245,10 @@
                 #{item.occurReason},
                 #{item.riskGrade},
                 #{item.controlMeasure},
-                #{item.remark},
                 #{item.version},
                 #{item.valid},
+                #{item.remark},
+                #{item.sort},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -274,9 +280,10 @@
             <if test="occurReason != null  and  occurReason != ''">`occur_reason` = #{occurReason},</if>
             <if test="riskGrade != null  and  riskGrade != ''">`risk_grade` = #{riskGrade},</if>
             <if test="controlMeasure != null  and  controlMeasure != ''">`control_measure` = #{controlMeasure},</if>
-            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="version != null">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="sort != null">`sort` = #{sort},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -323,11 +330,6 @@
                     when `id`=#{item.id} then #{item.controlMeasure}
                 </foreach>
             </trim>
-            <trim prefix="remark  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
             <trim prefix="version  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.version}
@@ -336,6 +338,16 @@
             <trim prefix="valid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+           <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">

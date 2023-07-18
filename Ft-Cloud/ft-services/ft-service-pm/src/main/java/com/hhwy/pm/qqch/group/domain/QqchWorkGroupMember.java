@@ -38,7 +38,7 @@ public class QqchWorkGroupMember extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "工作小组id")
-    @NotNull(message = "工作小组id不能为空！",groups = ValidationGroups.Select.class)
+//    @NotNull(message = "工作小组id不能为空！",groups = ValidationGroups.Select.class)
     private Long workGroupId;
     /**
      * 字段描述：临时小组职务
@@ -58,6 +58,7 @@ public class QqchWorkGroupMember extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "负责人id")
+//    @NotNull(message = "负责人id不能为空！",groups = ValidationGroups.Select.class)
     private Long directorId;
     /**
      * 字段描述：所属单位

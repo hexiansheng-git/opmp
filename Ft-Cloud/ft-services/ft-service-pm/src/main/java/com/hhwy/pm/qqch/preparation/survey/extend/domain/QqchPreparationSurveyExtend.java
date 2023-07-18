@@ -32,17 +32,16 @@ public class QqchPreparationSurveyExtend extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：优化程序策划附件组id
+     * 字段描述：模块标识（页面唯一标识）1： 2： ...
      */
     @JsonProperty
-    @Excel(name = "优化程序策划附件组id")
-    private String optimizeProcedurePlanGroupId;
+    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
+    private String moduleIdentity;
     /**
-     * 字段描述：变更程序策划附件组id
+     * 字段描述：附件组id
      */
     @JsonProperty
-    @Excel(name = "变更程序策划附件组id")
-    private String changeProcedurePlanGroupId;
+    private String fileGroupId;
     /**
      * 字段描述：版本
      */

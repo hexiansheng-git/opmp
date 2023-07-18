@@ -8,6 +8,7 @@ import com.hhwy.pm.xmsl.project.domain.XmslProjectEngineeringAmount;
 import com.hhwy.pm.xmsl.project.domain.vo.XmslProjectEngineeringAmountExportVo;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectEngineeringAmountMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectEngineeringAmountService;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
         xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmount(xmslProjectEngineeringAmount);
 
         //插入新数据
+//        ListTreeUtil.formatList()
         List<XmslProjectEngineeringAmount> insertList = TreeUtils.splitTreeList(xmslProjectEngineeringAmountList);
         if(!CollectionUtils.isEmpty(insertList)){
             this.insertProjectEngineeringAmountList(insertList, xmslProjectBasicInfo);
