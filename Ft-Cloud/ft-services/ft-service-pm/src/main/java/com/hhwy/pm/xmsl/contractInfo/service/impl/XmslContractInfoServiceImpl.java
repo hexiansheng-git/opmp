@@ -51,14 +51,14 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if(CollectionUtils.isNotEmpty(xmslContractInsureList)){
             xmslContractInfo1.setXmslContractInsureList(xmslContractInsureList);
         }
-        //1.2 签订信息
+        //1.2签订信息
         XmslContractSign xmslContractSign = new XmslContractSign();
         xmslContractSign.setMasterId(xmslContractInfo.getId());
         List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSign);
         if(CollectionUtils.isNotEmpty(xmslContractSignList)){
             xmslContractInfo1.setXmslContractSignList(xmslContractSignList);
         }
-        //1.3  项目支付信息
+        //1.3项目支付信息
         XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
         xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
         List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
