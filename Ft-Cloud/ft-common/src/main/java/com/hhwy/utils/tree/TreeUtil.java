@@ -11,7 +11,7 @@ public class TreeUtil {
     /**
      * 根据pid，构建树节点
      */
-    public static <T extends TreeNode> List<T> build(List<T> treeNodes, Long pid) {
+    public static <T extends TreeNode<T>> List<T> build(List<T> treeNodes, Long pid) {
         if (CollectionUtils.isEmpty(treeNodes)) {
             return null;
         }
@@ -19,7 +19,7 @@ public class TreeUtil {
             treeVO.setChildren(
                     treeNodes.stream().filter((item) -> treeVO.getId().equals(item.getPid())).collect(Collectors.toList()));
         });
-        List<T> collect = null;
+        List<T> collect;
         if (pid == null) {
             collect = treeNodes.stream().filter((item) -> item.getPid() == null)
                     .collect(Collectors.toList());

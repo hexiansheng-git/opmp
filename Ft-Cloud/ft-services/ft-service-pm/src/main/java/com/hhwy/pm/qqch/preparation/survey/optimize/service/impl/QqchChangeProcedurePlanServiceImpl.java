@@ -7,7 +7,10 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
+import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchChangeProcedurePlanMapper;
@@ -29,6 +32,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     private QqchChangeProcedurePlanMapper qqchChangeProcedurePlanMapper;
 
     @Autowired
+    private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
+
+    @Autowired
     private CommonMapper commonMapper;
 
 
@@ -44,6 +50,12 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
 
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(version);
         qqchChangeProcedurePlanVo.setQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
+
+        //获取附件组id（页面标识和版本号控制）
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.CHANGE_PROCEDURE_PLAN, version);
+        if(qqchPreparationSurveyExtend != null){
+            qqchChangeProcedurePlanVo.setFileGroupId(qqchPreparationSurveyExtend.getFileGroupId());
+        }
 
         //TODO 获取确认状态
 
@@ -61,6 +73,19 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         QqchChangeProcedurePlan qqchChangeProcedurePlan = new QqchChangeProcedurePlan();
         qqchChangeProcedurePlan.setVersion(qqchChangeProcedurePlanVo.getVersion());
         qqchChangeProcedurePlanMapper.deleteQqchChangeProcedurePlan(qqchChangeProcedurePlan);
+
+        //维护附件
+        String fileGroupId = qqchChangeProcedurePlanVo.getFileGroupId();
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, qqchChangeProcedurePlanVo.getVersion());
+        if(qqchPreparationSurveyExtend == null){
+            qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
+            qqchPreparationSurveyExtend.setVersion(qqchChangeProcedurePlanVo.getVersion());
+            qqchPreparationSurveyExtend.setValid(Valid.YES);
+            qqchChangeProcedurePlanVo.setFileGroupId(fileGroupId);
+            qqchPreparationSurveyExtendService.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        }else {
+            qqchPreparationSurveyExtendService.updateQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        }
 
         //插入新数据
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanVo.getQqchChangeProcedurePlanList();

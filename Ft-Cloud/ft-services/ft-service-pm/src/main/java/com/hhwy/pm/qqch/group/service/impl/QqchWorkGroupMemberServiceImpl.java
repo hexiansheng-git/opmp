@@ -80,20 +80,11 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
 
     /**
      * 获取工作小组成员历史
-     * @param directorId 成员id
+     * @param qqchWorkGroupMember
      * @return
      */
     @Override
-    public List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(Long directorId) {
-        List<QqchWorkGroupMember> qqchWorkGroupMemberList = new ArrayList<>();
-        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
-        qqchWorkGroupMember.setTemporaryGroupDuty("2");
-        qqchWorkGroupMember.setDirector("测试负责人");
-        qqchWorkGroupMember.setDirectorId(1234L);
-        qqchWorkGroupMember.setAffiliatedUnit("海外事业部");
-        qqchWorkGroupMember.setPostDuty("副总工程师");
-        qqchWorkGroupMember.setPlanResponsibility("总体负责前期策划工作");
-        qqchWorkGroupMemberList.add(qqchWorkGroupMember);
-        return qqchWorkGroupMemberList;
+    public List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(QqchWorkGroupMember qqchWorkGroupMember) {
+        return qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
     }
 }

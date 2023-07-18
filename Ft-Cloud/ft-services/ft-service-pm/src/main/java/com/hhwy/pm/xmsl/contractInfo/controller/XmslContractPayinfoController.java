@@ -5,6 +5,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.excel.Util;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractPayinfoVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
@@ -30,6 +33,8 @@ public class XmslContractPayinfoController extends BaseController {
 
     @Autowired
     private IXmslContractPayinfoService xmslContractPayinfoService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     private static final  String type="rate_type";
 
@@ -98,22 +103,17 @@ public class XmslContractPayinfoController extends BaseController {
         try {
             ExcelUtils<XmslContractPayinfoVo> util = new ExcelUtils<>(XmslContractPayinfoVo.class);
             List<XmslContractPayinfoVo> xmslContractPayinfoVos = util.importExcel(file.getInputStream());
-            //查询 折算汇率类型 字典项数据
-            //List<Map> date=xmslContractPayinfoService.selDictDate(type);
-          //TODO  处理字典项 目前先写死，后期需修改
+            //字典项处理
             for (XmslContractPayinfoVo xmslContractPayinfoVo : xmslContractPayinfoVos) {
                 String rateType = xmslContractPayinfoVo.getRateType();
-                if(rateType.equals("固定汇率")){
-                    xmslContractPayinfoVo.setRateType("1");
-                }else if(rateType.equals("实时汇率")){
-                    xmslContractPayinfoVo.setRateType("2");
-                }else {
-                    return AjaxResult.error("导入的折算汇率类型不存在，折算汇率类型分为固定利率和实时汇率");
-                }
+                Util util1 = new Util();
+                String value = util1.reverseDict("rate_type", rateType);
+                xmslContractPayinfoVo.setRateType(value);
             }
             return AjaxResult.success(xmslContractPayinfoVos);
         }catch (Exception e){
             throw new RuntimeException("导入失败！");
         }
     }
+
 }

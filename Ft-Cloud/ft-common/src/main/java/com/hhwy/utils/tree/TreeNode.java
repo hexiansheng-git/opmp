@@ -5,12 +5,10 @@
 
 package com.hhwy.utils.tree;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Data

@@ -1,5 +1,8 @@
 package com.hhwy.utils.tree;
 
+import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -35,25 +38,6 @@ public class ListTreeUtil {
         return tree;
     }
 
-    /**
-     * 树形列表转线性列表
-     *
-     * @param source      数据源
-     * @param getChildren 如何拿到子节点列表
-     * @param setChildren 如何设置子节点列表
-     * @param <T>         节点类型
-     * @return 线性列表
-     */
-    public static <T> List<T> formatList(List<T> source, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
-        List<T> list = new ArrayList<>();
-        for (T node : source) {
-            list.add(node);
-            recur(list, getChildren.apply(node), getChildren, setChildren);
-            setChildren.accept(node, null);
-        }
-        return list;
-    }
-
     private static <T> void recur(T rootNode, List<T> children, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
         for (T node : children) {
             if (checkParent.test(rootNode, node)) {
@@ -67,14 +51,76 @@ public class ListTreeUtil {
         }
     }
 
-    private static <T> void recur(List<T> list, List<T> children, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
-        if (children == null) return;
-        for (T node : children) {
-            list.add(node);
-            List<T> c = getChildren.apply(node);
-            if (c != null && c.size() > 0) {
-                recur(list, c, getChildren, setChildren);
-                setChildren.accept(node, null);
+
+    /**
+     * 树形列表转线性列表
+     * @param source 数据源
+     * @param setId 如何设置id
+     * @param setPid 如何设置pid
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T> 节点类型
+     * @return
+     */
+    public static <T> List<T> formatList(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        for (T node : source) {
+            recur(node, resultList, setId, setPid, getChildren, setChildren);
+        }
+        return resultList;
+    }
+
+    private static <T> void recur(T node, List<T> resultList, BiConsumer<T,Long> setId, BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        Long id = IdWorker.createId();
+        setId.accept(node,id);
+        resultList.add(node);
+
+        List<T> children = getChildren.apply(node);
+        setChildren.accept(node, null);
+
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                setPid.accept(child,id);
+                recur(child,resultList, setId,setPid, getChildren, setChildren);
+            }
+        }
+    }
+
+    /**
+     * 树形列表转线性列表，加排序号
+     * @param source 数据源
+     * @param setId 如何设置id
+     * @param setPid 如何设置pid
+     * @param setSort 如何设置排序号
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T> 节点类型
+     * @return
+     */
+    public static <T> List<T> formatList(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, BiConsumer<T,Integer> setSort, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        int sort = 1;
+        for (T node : source) {
+            setSort.accept(node,sort++);
+            recur(node, resultList, setId, setPid, setSort, getChildren, setChildren);
+        }
+        return resultList;
+    }
+
+    private static <T> void recur(T node, List<T> resultList, BiConsumer<T,Long> setId, BiConsumer<T,Long> setPid, BiConsumer<T,Integer> setSort, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        Long id = IdWorker.createId();
+        int sort = 1;
+        setId.accept(node,id);
+        resultList.add(node);
+
+        List<T> children = getChildren.apply(node);
+        setChildren.accept(node, null);
+
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                setPid.accept(child,id);
+                setSort.accept(child,sort++);
+                recur(child, resultList, setId, setPid, setSort, getChildren, setChildren);
             }
         }
     }

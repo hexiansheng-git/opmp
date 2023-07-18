@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.group.service;
 
-
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 
 import java.util.List;
@@ -14,8 +13,8 @@ public interface IQqchWorkGroupMemberService {
 
     /**
      * 获取工作小组成员历史
-     * @param directorId 成员id
+     * @param qqchWorkGroupMember
      * @return
      */
-    List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(Long directorId);
+    List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(QqchWorkGroupMember qqchWorkGroupMember);
 }
