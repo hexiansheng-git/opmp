@@ -15,9 +15,11 @@ import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;
 import com.hhwy.system.service.ISysPmService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.hssf.record.PageBreakRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -59,7 +61,7 @@ public class SysPmController {
      * @return
      */
     @GetMapping("/reverseDict")
-    public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictValue") String dictLabel) {
+    public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictLabel") String dictLabel) {
         List<SysDictData> list = dictService.selectDictValueByTypeAndLabel(dictType, dictLabel);
         return AjaxResult.success(list);
     }
