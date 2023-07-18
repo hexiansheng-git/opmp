@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeProcedurePlanService;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -60,17 +57,5 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.confirm(qqchOptimizeProcedurePlanVo);
         return AjaxResult.success(qqchOptimizeProcedurePlanVo);
-    }
-
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:remove")
-    @PostMapping("/remove/{ids}")
-    public AjaxResult deleteQqchOptimizeProcedurePlanByPks(@PathVariable Long[] ids) {
-        List<Long> qqchOptimizeProcedurePlanPkList = Arrays.asList(ids);
-        return toAjax(qqchOptimizeProcedurePlanService.deleteQqchOptimizeProcedurePlanByPks(qqchOptimizeProcedurePlanPkList));
     }
 }

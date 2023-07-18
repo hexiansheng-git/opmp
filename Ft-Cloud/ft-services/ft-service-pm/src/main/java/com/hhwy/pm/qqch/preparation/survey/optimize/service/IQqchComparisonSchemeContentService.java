@@ -1,9 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
-
-import java.util.List;
-
 /**
  * @author han
  * @date 2023-07-07 19:02:54
@@ -11,5 +7,4 @@ import java.util.List;
  */
 public interface IQqchComparisonSchemeContentService {
 
-    List<QqchComparisonSchemeContent> getQqchComparisonSchemeContentList(QqchComparisonSchemeContent qqchComparisonSchemeContent);
 }

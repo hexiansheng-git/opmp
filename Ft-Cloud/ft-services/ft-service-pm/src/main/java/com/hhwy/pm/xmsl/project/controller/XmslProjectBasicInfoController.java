@@ -36,16 +36,7 @@ public class XmslProjectBasicInfoController extends BaseController{
     @GetMapping("getProjectBasicInfoById")
     @Validated(ValidationGroups.Get.class)
     public AjaxResult getProjectBasicInfoById(@NotNull(message = "id不能为空",groups = ValidationGroups.Get.class) Long id){
-        if(id == null){
-            return AjaxResult.error("id不能为空！");
-        }
         XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfoById(id);
-        return AjaxResult.success(xmslProjectBasicInfo);
-    }
-
-    @GetMapping
-    public AjaxResult getProjectBasicInfo(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
-        XmslProjectBasicInfo xmslProjectBasicInfo =  projectBasicInfoService.getProjectBasicInfo(xmslProjectBasicInfoParam);
         return AjaxResult.success(xmslProjectBasicInfo);
     }
 

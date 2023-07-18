@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchChangeProcedurePlanService;
 import org.springframework.web.bind.annotation.*;
@@ -61,17 +58,5 @@ public class QqchChangeProcedurePlanController extends BaseController {
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.confirm(qqchChangeProcedurePlanVo);
         return AjaxResult.success(qqchChangeProcedurePlanVo);
-    }
-
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:remove")
-    @PostMapping("/remove/{ids}")
-    public AjaxResult deleteQqchChangeProcedurePlanByPks(@PathVariable Long[] ids) {
-        List<Long> qqchChangeProcedurePlanPkList = Arrays.asList(ids);
-        return toAjax(qqchChangeProcedurePlanService.deleteQqchChangeProcedurePlanByPks(qqchChangeProcedurePlanPkList));
     }
 }

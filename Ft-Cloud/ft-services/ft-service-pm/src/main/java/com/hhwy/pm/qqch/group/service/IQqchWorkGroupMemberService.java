@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.group.service;
 
+
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
+
 import java.util.List;
 
 /**
@@ -10,14 +12,10 @@ import java.util.List;
  */
 public interface IQqchWorkGroupMemberService {
 
-    QqchWorkGroupMember getQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember);
-
-    List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember);
-
     /**
-     * 批量删除工作小组成员
-     * @param qqchWorkGroupMemberPkList
+     * 获取工作小组成员历史
+     * @param directorId 成员id
      * @return
      */
-    int deleteQqchWorkGroupMemberByPks(List<Long> qqchWorkGroupMemberPkList);
+    List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(Long directorId);
 }

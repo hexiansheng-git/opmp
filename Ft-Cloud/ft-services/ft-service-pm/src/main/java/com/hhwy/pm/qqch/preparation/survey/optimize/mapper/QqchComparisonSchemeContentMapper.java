@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
@@ -16,7 +17,7 @@ public interface QqchComparisonSchemeContentMapper {
 
     QqchComparisonSchemeContent getQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent);
 
-    List<QqchComparisonSchemeContent> getQqchComparisonSchemeContentList(QqchComparisonSchemeContent qqchComparisonSchemeContent);
+    List<QqchComparisonSchemeContent> getQqchComparisonSchemeContentList(@Param("version") BigDecimal version);
 
     int insertQqchComparisonSchemeContent(QqchComparisonSchemeContent qqchComparisonSchemeContent);
 

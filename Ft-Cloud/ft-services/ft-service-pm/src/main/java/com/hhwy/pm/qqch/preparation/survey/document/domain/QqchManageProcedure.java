@@ -1,7 +1,11 @@
 package com.hhwy.pm.qqch.preparation.survey.document.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -60,6 +64,18 @@ public class QqchManageProcedure extends BaseEntity {
     @JsonProperty
     @Excel(name = "责任人")
     private String director;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：备注/描述
      */
@@ -180,4 +196,9 @@ public class QqchManageProcedure extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：子集
+     */
+    private List<QqchManageProcedure> children;
 }

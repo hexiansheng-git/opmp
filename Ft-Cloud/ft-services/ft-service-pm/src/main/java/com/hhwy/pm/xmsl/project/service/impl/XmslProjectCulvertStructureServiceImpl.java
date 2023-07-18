@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -12,6 +11,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -36,24 +36,23 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
      */
     @Transactional
     public void editProjectCulvertStructureList(List<XmslProjectCulvertStructure> xmslProjectCulvertStructureList, XmslProjectBasicInfo xmslProjectBasicInfo){
-        List<XmslProjectCulvertStructure> insertList = new ArrayList<>();
-        List<XmslProjectCulvertStructure> updateList = new ArrayList<>();
-        for (XmslProjectCulvertStructure xmslProjectCulvertStructure : xmslProjectCulvertStructureList) {
-            Long projectCulvertStructureId = xmslProjectCulvertStructure.getId();
-            if(projectCulvertStructureId == null){
-                insertList.add(xmslProjectCulvertStructure);
-            }else{
-                updateList.add(xmslProjectCulvertStructure);
-            }
-        }
-        if(insertList.size() > 0){
-            this.insertProjectCulvertStructureList(insertList, xmslProjectBasicInfo);
-        }
-        if(updateList.size() > 0){
-            this.updateProjectCulvertStructureList(updateList);
+        //删除旧数据
+        XmslProjectCulvertStructure xmslProjectCulvertStructure = new XmslProjectCulvertStructure();
+        xmslProjectCulvertStructure.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
+        xmslProjectCulvertStructureMapper.deleteProjectCulvertStructure(xmslProjectCulvertStructure);
+
+        //插入新数据
+        if(!CollectionUtils.isEmpty(xmslProjectCulvertStructureList)){
+            this.insertProjectCulvertStructureList(xmslProjectCulvertStructureList, xmslProjectBasicInfo);
         }
     }
 
+    /**
+     * 批量插入
+     * @param xmslProjectCulvertStructureList
+     * @param xmslProjectBasicInfo
+     * @return
+     */
     @Transactional
     public int insertProjectCulvertStructureList(List<XmslProjectCulvertStructure> xmslProjectCulvertStructureList, XmslProjectBasicInfo xmslProjectBasicInfo) {
         for (XmslProjectCulvertStructure xmslProjectCulvertStructure : xmslProjectCulvertStructureList) {
@@ -69,15 +68,6 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
             xmslProjectCulvertStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectCulvertStructureMapper.insertProjectCulvertStructureList(xmslProjectCulvertStructureList);
-    }
-
-    @Transactional
-    public int updateProjectCulvertStructureList(List<XmslProjectCulvertStructure> xmslProjectCulvertStructureList) {
-        for (XmslProjectCulvertStructure xmslProjectCulvertStructure : xmslProjectCulvertStructureList) {
-            xmslProjectCulvertStructure.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectCulvertStructure.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslProjectCulvertStructureMapper.updateProjectCulvertStructureList(xmslProjectCulvertStructureList);
     }
     
     @Transactional

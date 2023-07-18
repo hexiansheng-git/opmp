@@ -1,9 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service;
 
-import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructionSituation;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
-
-import java.util.List;
 
 /**
  * @author han
@@ -14,10 +11,9 @@ public interface IQqchDesignConstructionSituationService {
 
     /**
      * 边设计边施工情况台账
-     * @param qqchDesignConstructionSituation
      * @return
      */
-    QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo(QqchDesignConstructionSituation qqchDesignConstructionSituation);
+    QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo();
 
     /**
      * 保存
@@ -32,11 +28,4 @@ public interface IQqchDesignConstructionSituationService {
      * @return
      */
     void confirm(QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo);
-
-    /**
-     * 批量删除
-     * @param qqchDesignConstructionSituationPkList
-     * @return
-     */
-    int deleteQqchDesignConstructionSituationByPks(List<Long> qqchDesignConstructionSituationPkList);
 }

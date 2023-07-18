@@ -28,26 +28,4 @@ public interface IQqchComparisonSchemeService {
      * @return
      */
     void confirm(QqchComparisonSchemeVo qqchComparisonSchemeVo);
-
-    /**
-     * 删除方案
-     * @param schemeId 方案id
-     * @return
-     */
-    int deleteQqchComparisonSchemeById(Long schemeId);
-
-    /**
-     * 删除行
-     * @param schemeId
-     * @param sorts
-     * @return
-     */
-    int deleteLine(Long schemeId, String[] sorts);
-
-    /**
-     * 删除列（多列）
-     * @param headerIds
-     * @return
-     */
-    int deleteColumn(Long[] headerIds);
 }

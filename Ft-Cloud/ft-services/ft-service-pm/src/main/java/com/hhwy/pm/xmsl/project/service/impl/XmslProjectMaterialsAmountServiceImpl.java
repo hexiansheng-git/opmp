@@ -12,6 +12,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -35,21 +36,14 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
      */
     @Transactional
     public void editProjectMaterialsAmountList(List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList, XmslProjectBasicInfo xmslProjectBasicInfo){
-        List<XmslProjectMaterialsAmount> insertList = new ArrayList<>();
-        List<XmslProjectMaterialsAmount> updateList = new ArrayList<>();
-        for (XmslProjectMaterialsAmount xmslProjectMaterialsAmount : xmslProjectMaterialsAmountList) {
-            Long projectMaterialsAmountId = xmslProjectMaterialsAmount.getId();
-            if(projectMaterialsAmountId == null){
-                insertList.add(xmslProjectMaterialsAmount);
-            }else{
-                updateList.add(xmslProjectMaterialsAmount);
-            }
-        }
-        if(insertList.size() > 0){
-            this.insertProjectMaterialsAmountList(insertList, xmslProjectBasicInfo);
-        }
-        if(updateList.size() > 0){
-            this.updateProjectMaterialsAmountList(updateList);
+        //删除旧数据
+        XmslProjectMaterialsAmount xmslProjectMaterialsAmount = new XmslProjectMaterialsAmount();
+        xmslProjectMaterialsAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
+        xmslProjectMaterialsAmountMapper.deleteProjectMaterialsAmount(xmslProjectMaterialsAmount);
+
+        //插入新数据
+        if(!CollectionUtils.isEmpty(xmslProjectMaterialsAmountList)){
+            this.insertProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
         }
     }
 
@@ -75,20 +69,6 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
         return xmslProjectMaterialsAmountMapper.insertProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
     }
 
-    /**
-     * 批量修改
-     * @param xmslProjectMaterialsAmountList
-     * @return
-     */
-    @Transactional
-    public int updateProjectMaterialsAmountList(List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList) {
-        for (XmslProjectMaterialsAmount xmslProjectMaterialsAmount : xmslProjectMaterialsAmountList) {
-            xmslProjectMaterialsAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectMaterialsAmount.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslProjectMaterialsAmountMapper.updateProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
-    }
-    
     @Transactional
     public int deleteProjectMaterialsAmount(XmslProjectMaterialsAmount xmslProjectMaterialsAmount) {
         xmslProjectMaterialsAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));

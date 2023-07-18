@@ -12,6 +12,8 @@
         <result property="director" column="director"/>
         <result property="directorId" column="director_id"/>
         <result property="workContent" column="work_content"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -39,6 +41,8 @@
              ,`director`
              ,`director_id`
              ,`work_content`
+             ,`version`
+             ,`valid`
              ,`region_id`
              ,`region_name`
              ,`project_id`
@@ -70,6 +74,8 @@
             <if test="director != null  and director != ''">and `director` = #{director}</if>
             <if test="directorId != null ">and `director_id` = #{directorId}</if>
             <if test="workContent != null  and workContent != ''">and `work_content` = #{workContent}</if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -94,7 +100,7 @@
 
     <select id="getQqchChangeProcedurePlanList" resultMap="QqchChangeProcedurePlanResultMap">
         <include refid="selectQqchChangeProcedurePlanVo"/>
-        where del_flag = '0'
+        where del_flag = '0' and version = #{version}
     </select>
 
     <insert id="insertQqchChangeProcedurePlan" useGeneratedKeys="true" keyProperty="id">
@@ -106,6 +112,8 @@
             <if test="director != null  and director != ''">`director`,</if>
             <if test="directorId != null ">`director_id`,</if>
             <if test="workContent != null  and workContent != ''">`work_content`,</if>
+            <if test="version != null">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -132,6 +140,8 @@
             <if test="director != null  and director != ''">#{director},</if>
             <if test="directorId != null ">#{directorId},</if>
             <if test="workContent != null  and workContent != ''">#{workContent},</if>
+            <if test="version != null">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -163,6 +173,8 @@
             `director`,
             `director_id`,
             `work_content`,
+            `version`,
+            `valid`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -190,6 +202,8 @@
                 #{item.director},
                 #{item.directorId},
                 #{item.workContent},
+                #{item.version},
+                #{item.valid},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -219,6 +233,8 @@
             <if test="director != null  and  director != ''">`director` = #{director},</if>
             <if test="directorId != null ">`director_id` = #{directorId},</if>
             <if test="workContent != null  and  workContent != ''">`work_content` = #{workContent},</if>
+            <if test="version != null">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -263,6 +279,16 @@
             <trim prefix="work_content  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.workContent}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -342,6 +368,8 @@
             <if test="director != null  and director != ''">and `director` = #{director}</if>
             <if test="directorId != null ">and `director_id` = #{directorId}</if>
             <if test="workContent != null  and workContent != ''">and `work_content` = #{workContent}</if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>

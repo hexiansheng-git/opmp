@@ -1,8 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.document.service;
 
-import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchManageProcedure;
-
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedureVo;
 
 /**
  * @author han
@@ -11,19 +9,23 @@ import java.util.List;
  */
 public interface IQqchManageProcedureService {
 
-    QqchManageProcedure getQqchManageProcedure(QqchManageProcedure qqchManageProcedure);
+    /**
+     * 获取管理程序Vo
+     * @return
+     */
+    QqchManageProcedureVo getQqchManageProcedureVo();
 
-    List<QqchManageProcedure> getQqchManageProcedureList(QqchManageProcedure qqchManageProcedure);
+    /**
+     * 保存
+     * @param qqchManageProcedureVo
+     * @return
+     */
+    void save(QqchManageProcedureVo qqchManageProcedureVo);
 
-    int insertQqchManageProcedure(QqchManageProcedure qqchManageProcedure);
-
-    int insertQqchManageProcedureList(List<QqchManageProcedure> qqchManageProcedureList);
-
-    int updateQqchManageProcedure(QqchManageProcedure qqchManageProcedure);
-
-    int updateQqchManageProcedureList(List<QqchManageProcedure> qqchManageProcedureList);
-
-    int deleteQqchManageProcedure(QqchManageProcedure qqchManageProcedure);
-
-    int deleteQqchManageProcedureByPks(List<Long> qqchManageProcedurePkList);
+    /**
+     * 确认
+     * @param qqchManageProcedureVo
+     * @return
+     */
+    void confirm(QqchManageProcedureVo qqchManageProcedureVo);
 }

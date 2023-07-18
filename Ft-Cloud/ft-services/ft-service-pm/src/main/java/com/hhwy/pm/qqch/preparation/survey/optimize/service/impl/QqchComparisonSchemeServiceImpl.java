@@ -1,13 +1,14 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeHeader;
@@ -42,23 +43,28 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     @Autowired
     private QqchComparisonSchemeContentMapper qqchComparisonSchemeContentMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     /**
      * 获取方案集合
      * @return
      */
+    @Override
     public QqchComparisonSchemeVo getQqchComparisonSchemeVo() {
         QqchComparisonSchemeVo qqchComparisonSchemeVo = new QqchComparisonSchemeVo();
 
-        List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeMapper.getQqchComparisonSchemeList();
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_comparison_scheme");
+        qqchComparisonSchemeVo.setVersion(version);
+
+        List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeMapper.getQqchComparisonSchemeList(version);
 
         //获取所有表头
-        QqchComparisonSchemeHeader qqchComparisonSchemeHeader = new QqchComparisonSchemeHeader();
-        List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList = qqchComparisonSchemeHeaderMapper.getQqchComparisonSchemeHeaderList(qqchComparisonSchemeHeader);
+        List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList = qqchComparisonSchemeHeaderMapper.getQqchComparisonSchemeHeaderList(version);
 
         //获取所有单元格
-        QqchComparisonSchemeContent qqchComparisonSchemeContent = new QqchComparisonSchemeContent();
-        List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeContentMapper.getQqchComparisonSchemeContentList(qqchComparisonSchemeContent);
+        List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeContentMapper.getQqchComparisonSchemeContentList(version);
 
         //表头单元格组装
         for (QqchComparisonSchemeHeader comparisonSchemeHeader : qqchComparisonSchemeHeaderList) {
@@ -87,7 +93,6 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
         }
 
         qqchComparisonSchemeVo.setQqchComparisonSchemeList(qqchComparisonSchemeList);
-        qqchComparisonSchemeVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         //TODO 获取确认状态
 
@@ -100,8 +105,13 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchComparisonSchemeVo qqchComparisonSchemeVo) {
-        this.editQqchComparisonSchemeList(qqchComparisonSchemeVo.getQqchComparisonSchemeList());
+        //删除旧数据
+        this.deleteOldDataByVersion(qqchComparisonSchemeVo.getVersion());
+
+        //插入新数据
+        this.insertQqchComparisonSchemeList(qqchComparisonSchemeVo.getQqchComparisonSchemeList(),qqchComparisonSchemeVo.getVersion());
     }
 
     /**
@@ -112,36 +122,10 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     @Override
     @Transactional
     public void confirm(QqchComparisonSchemeVo qqchComparisonSchemeVo) {
-        this.editQqchComparisonSchemeList(qqchComparisonSchemeVo.getQqchComparisonSchemeList());
+        this.save(qqchComparisonSchemeVo);
 
         //TODO 修改确认状态
 
-    }
-
-    /**
-     * 批量编辑
-     * @param qqchComparisonSchemeList
-     * @return
-     */
-    @Transactional
-    public int editQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList) {
-        List<QqchComparisonScheme> insertList = new ArrayList<>();
-        List<QqchComparisonScheme> updateList = new ArrayList<>();
-        for (QqchComparisonScheme qqchComparisonScheme : qqchComparisonSchemeList) {
-            Long id = qqchComparisonScheme.getId();
-            if(id == null){
-                insertList.add(qqchComparisonScheme);
-            }else{
-                updateList.add(qqchComparisonScheme);
-            }
-        }
-        if(insertList.size() > 0){
-            this.insertQqchComparisonSchemeList(insertList);
-        }
-        if(updateList.size() > 0){
-            this.updateQqchComparisonSchemeList(updateList);
-        }
-        return 1;
     }
 
     /**
@@ -150,17 +134,19 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
      * @return
      */
     @Transactional
-    public int insertQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList) {
+    public int insertQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList, BigDecimal version) {
         for (QqchComparisonScheme qqchComparisonScheme : qqchComparisonSchemeList) {
             Long schemeId = IdWorker.createId();
 
             //插入表头
             List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList = qqchComparisonScheme.getQqchComparisonSchemeHeaderList();
             if(!CollectionUtils.isEmpty(qqchComparisonSchemeHeaderList)){
-                qqchComparisonSchemeHeaderService.insertQqchComparisonSchemeHeaderList(qqchComparisonSchemeHeaderList,schemeId);
+                qqchComparisonSchemeHeaderService.insertQqchComparisonSchemeHeaderList(qqchComparisonSchemeHeaderList, schemeId, version);
             }
 
             qqchComparisonScheme.setId(schemeId);
+            qqchComparisonScheme.setVersion(version);
+            qqchComparisonScheme.setValid(Valid.YES);
             qqchComparisonScheme.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchComparisonScheme.setCreateUserName(SecurityUtils.getUserName());
             qqchComparisonScheme.setCreateTime(DateUtils.getNowDate());
@@ -169,82 +155,30 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     }
 
     /**
-     * 批量修改方案
-     * @param qqchComparisonSchemeList
-     * @return
+     * 根据版本删除旧数据
+     * @param version 版本
      */
     @Transactional
-    public int updateQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList) {
-        for (QqchComparisonScheme qqchComparisonScheme : qqchComparisonSchemeList) {
-            Long schemeId = qqchComparisonScheme.getId();
-
-            //编辑表头
-            List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList = qqchComparisonScheme.getQqchComparisonSchemeHeaderList();
-            if(!CollectionUtils.isEmpty(qqchComparisonSchemeHeaderList)){
-                qqchComparisonSchemeHeaderService.editQqchComparisonSchemeHeaderList(qqchComparisonSchemeHeaderList,schemeId);
-            }
-
-            qqchComparisonScheme.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchComparisonScheme.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchComparisonSchemeMapper.updateQqchComparisonSchemeList(qqchComparisonSchemeList);
-    }
-
-    /**
-     * 删除方案
-     * @param schemeId 方案id
-     * @return
-     */
-    @Override
-    @Transactional
-    public int deleteQqchComparisonSchemeById(Long schemeId) {
-
+    public void deleteOldDataByVersion(BigDecimal version) {
         //删除表头
         QqchComparisonSchemeHeader qqchComparisonSchemeHeader = new QqchComparisonSchemeHeader();
-        qqchComparisonSchemeHeader.setSchemeId(schemeId);
+        qqchComparisonSchemeHeader.setVersion(version);
         qqchComparisonSchemeHeader.setDelUser(SecurityUtils.getUserName());
         qqchComparisonSchemeHeader.setDelTime(DateUtils.getNowDate());
         qqchComparisonSchemeHeaderMapper.deleteQqchComparisonSchemeHeader(qqchComparisonSchemeHeader);
 
         //删除单元格
         QqchComparisonSchemeContent qqchComparisonSchemeContent = new QqchComparisonSchemeContent();
-        qqchComparisonSchemeContent.setSchemeId(schemeId);
+        qqchComparisonSchemeContent.setVersion(version);
         qqchComparisonSchemeContent.setDelUser(SecurityUtils.getUserName());
         qqchComparisonSchemeContent.setDelTime(DateUtils.getNowDate());
         qqchComparisonSchemeContentMapper.deleteQqchComparisonSchemeContent(qqchComparisonSchemeContent);
 
         //删除方案
         QqchComparisonScheme qqchComparisonScheme = new QqchComparisonScheme();
-        qqchComparisonScheme.setId(schemeId);
+        qqchComparisonScheme.setVersion(version);
         qqchComparisonScheme.setDelUser(SecurityUtils.getUserName());
         qqchComparisonScheme.setDelTime(DateUtils.getNowDate());
-        return qqchComparisonSchemeMapper.deleteQqchComparisonScheme(qqchComparisonScheme);
-    }
-
-    /**
-     * 删除行
-     * @param schemeId
-     * @param sorts
-     * @return
-     */
-    @Override
-    public int deleteLine(Long schemeId, String[] sorts) {
-        //删除单元格
-        return qqchComparisonSchemeContentMapper.deleteBySchemeIdAndSorts(schemeId,sorts);
-    }
-
-    /**
-     * 删除列（多列）
-     * @param headerIds
-     * @return
-     */
-    @Override
-    @Transactional
-    public int deleteColumn(Long[] headerIds) {
-        //删除单元格
-        qqchComparisonSchemeContentMapper.deleteByHeaderIds(headerIds);
-
-        //删除表头
-        return qqchComparisonSchemeHeaderMapper.deleteQqchComparisonSchemeHeaderByPks(Arrays.asList(headerIds));
+        qqchComparisonSchemeMapper.deleteQqchComparisonScheme(qqchComparisonScheme);
     }
 }

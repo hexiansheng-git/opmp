@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import org.apache.ibatis.annotations.Param;
@@ -15,7 +16,7 @@ public interface QqchComparisonSchemeMapper {
 
     QqchComparisonScheme getQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
 
-    List<QqchComparisonScheme> getQqchComparisonSchemeList();
+    List<QqchComparisonScheme> getQqchComparisonSchemeList(@Param("version") BigDecimal version);
 
     int insertQqchComparisonScheme(QqchComparisonScheme qqchComparisonScheme);
 

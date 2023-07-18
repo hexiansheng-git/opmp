@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
@@ -20,7 +21,7 @@ public interface QqchOptimizeProcedurePlanMapper {
      * 获取优化程序策划集合
      * @return
      */
-    List<QqchOptimizeProcedurePlan> getQqchOptimizeProcedurePlanList();
+    List<QqchOptimizeProcedurePlan> getQqchOptimizeProcedurePlanList(@Param("version") BigDecimal version);
 
     int insertQqchOptimizeProcedurePlan(QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan);
 

@@ -1,9 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service;
 
-import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
-
-import java.util.List;
 
 /**
  * @author han
@@ -14,10 +11,9 @@ public interface IQqchCompleteDesignHandoverService {
 
     /**
      * 完整设计交接情况台账
-     * @param qqchCompleteDesignHandover
      * @return
      */
-    QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(QqchCompleteDesignHandover qqchCompleteDesignHandover);
+    QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo();
 
     /**
      * 保存
@@ -32,11 +28,4 @@ public interface IQqchCompleteDesignHandoverService {
      * @return
      */
     void confirm(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo);
-
-    /**
-     * 批量删除
-     * @param qqchCompleteDesignHandoverPkList
-     * @return
-     */
-    int deleteQqchCompleteDesignHandoverByPks(List<Long> qqchCompleteDesignHandoverPkList);
 }

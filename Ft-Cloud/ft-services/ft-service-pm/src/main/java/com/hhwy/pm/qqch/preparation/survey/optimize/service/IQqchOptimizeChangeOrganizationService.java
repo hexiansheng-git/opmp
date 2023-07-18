@@ -2,8 +2,6 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 
-import java.util.List;
-
 /**
  * @author han
  * @date 2023-07-07 18:35:50
@@ -29,11 +27,4 @@ public interface IQqchOptimizeChangeOrganizationService {
      * @return
      */
     void confirm(QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo);
-
-    /**
-     * 批量删除
-     * @param qqchOptimizeChangeOrganizationPkList
-     * @return
-     */
-    int deleteQqchOptimizeChangeOrganizationByPks(List<Long> qqchOptimizeChangeOrganizationPkList);
 }

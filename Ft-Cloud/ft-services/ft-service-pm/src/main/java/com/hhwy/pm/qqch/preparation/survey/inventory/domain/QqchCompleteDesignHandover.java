@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.survey.inventory.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -61,6 +62,18 @@ public class QqchCompleteDesignHandover extends BaseEntity {
     @JsonProperty
     @Excel(name = "计划完成日期", dateFormat = "yyyy-MM-dd")
     private Date planCompleteDate;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：备注/描述
      */

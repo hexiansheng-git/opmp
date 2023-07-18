@@ -1,10 +1,12 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanMapper;
@@ -14,7 +16,6 @@ import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -28,14 +29,21 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     @Autowired
     private QqchSurveyDesignRiskPlanMapper qqchSurveyDesignRiskPlanMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     /**
      * 勘察设计风险策划Vo
-     * @param qqchSurveyDesignRiskPlan
      * @return
      */
-    public QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan) {
+    public QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo() {
         QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = new QqchSurveyDesignRiskPlanVo();
+
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_survey_design_risk_plan");
+        qqchSurveyDesignRiskPlanVo.setVersion(version);
+
+        QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
         List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList = qqchSurveyDesignRiskPlanMapper.getQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlan);
         List<QqchSurveyDesignRiskPlan> treeList = new ArrayList<>();
         if(!CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
@@ -49,7 +57,6 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
         qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(treeList);
 
         //TODO 获取确认情况
-        qqchSurveyDesignRiskPlanVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         return qqchSurveyDesignRiskPlanVo;
     }
@@ -61,7 +68,13 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      */
     @Override
     public void save(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
-        this.editQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanVo.getQqchSurveyDesignRiskPlanList());
+        //删除旧数据
+        QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
+        qqchSurveyDesignRiskPlan.setVersion(qqchSurveyDesignRiskPlan.getVersion());
+        qqchSurveyDesignRiskPlanMapper.deleteQqchSurveyDesignRiskPlan(qqchSurveyDesignRiskPlan);
+
+        //插入新数据
+        this.insertQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanVo.getQqchSurveyDesignRiskPlanList(), qqchSurveyDesignRiskPlanVo.getVersion());
     }
 
     /**
@@ -71,59 +84,25 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      */
     @Override
     public void confirm(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
-        this.editQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanVo.getQqchSurveyDesignRiskPlanList());
+        this.save(qqchSurveyDesignRiskPlanVo);
         //TODO 修改确认状态
-    }
-
-    /**
-     * 编辑树列表
-     * @param qqchSurveyDesignRiskPlanList
-     */
-    @Transactional
-    public void editQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList){
-        List<QqchSurveyDesignRiskPlan> insertList = TreeUtils.splitTreeList(qqchSurveyDesignRiskPlanList);
-        if(!CollectionUtils.isEmpty(insertList)){
-            this.insertQqchSurveyDesignRiskPlanList(insertList);
-        }
     }
 
     /**
      * 批量插入
      * @param qqchSurveyDesignRiskPlanList
-     * @return
+     * @param version
      */
     @Transactional
-    public int insertQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList) {
-        for (QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan : qqchSurveyDesignRiskPlanList) {
-            qqchSurveyDesignRiskPlan.setId(IdWorker.createId());
+    public void insertQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList, BigDecimal version) {
+        List<QqchSurveyDesignRiskPlan> insertList = TreeUtils.splitTreeList(qqchSurveyDesignRiskPlanList);
+        for (QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan : insertList) {
+            qqchSurveyDesignRiskPlan.setVersion(version);
+            qqchSurveyDesignRiskPlan.setValid(Valid.YES);
             qqchSurveyDesignRiskPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchSurveyDesignRiskPlan.setCreateUserName(SecurityUtils.getUserName());
             qqchSurveyDesignRiskPlan.setCreateTime(DateUtils.getNowDate());
         }
-        return qqchSurveyDesignRiskPlanMapper.insertQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
-    }
-
-    /**
-     * 批量修改
-     * @param qqchSurveyDesignRiskPlanList
-     * @return
-     */
-    @Transactional
-    public int updateQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList) {
-        for (QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan : qqchSurveyDesignRiskPlanList) {
-            qqchSurveyDesignRiskPlan.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchSurveyDesignRiskPlan.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchSurveyDesignRiskPlanMapper.updateQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
-    }
-
-    /**
-     * 批量删除
-     * @param qqchSurveyDesignRiskPlanPkList
-     * @return
-     */
-    @Transactional
-    public int deleteQqchSurveyDesignRiskPlanByPks(List<Long> qqchSurveyDesignRiskPlanPkList) {
-        return qqchSurveyDesignRiskPlanMapper.deleteQqchSurveyDesignRiskPlanByPks(qqchSurveyDesignRiskPlanPkList);
+        qqchSurveyDesignRiskPlanMapper.insertQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
     }
 }

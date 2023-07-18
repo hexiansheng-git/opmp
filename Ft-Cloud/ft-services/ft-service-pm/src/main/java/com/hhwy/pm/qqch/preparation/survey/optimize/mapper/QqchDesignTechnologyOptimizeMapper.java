@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import org.apache.ibatis.annotations.Param;
@@ -19,7 +20,7 @@ public interface QqchDesignTechnologyOptimizeMapper {
      * 获取设计技术优化要点集合
      * @return
      */
-    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList();
+    List<QqchDesignTechnologyOptimize> getQqchDesignTechnologyOptimizeList(@Param("version") BigDecimal version);
 
     int insertQqchDesignTechnologyOptimize(QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize);
 

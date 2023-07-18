@@ -1,10 +1,11 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo;
 
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -17,10 +18,19 @@ import java.util.List;
 @AllArgsConstructor
 public class QqchCompleteDesignHandoverVo {
     private static final long serialVersionUID = 1L;
+
     /**
-     * 字段描述：模块确认情况
+     * 字段描述：阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
      */
-    private QqchModuleConfirmCase qqchModuleConfirmCase;
+    private String stageIdentity;
+    /**
+     * 字段描述：确认状态（0：未确认，1：已确认）
+     */
+    private String confirmStatus;
+    /**
+     * 字段描述：版本
+     */
+    private BigDecimal version;
     /**
      * 字段描述：完整设计交接情况集合
      */

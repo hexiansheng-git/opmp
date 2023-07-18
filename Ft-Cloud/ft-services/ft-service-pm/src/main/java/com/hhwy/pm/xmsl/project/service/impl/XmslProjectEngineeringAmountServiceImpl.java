@@ -1,8 +1,6 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
 import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
@@ -39,12 +37,24 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
      */
     @Transactional
     public void editProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList, XmslProjectBasicInfo xmslProjectBasicInfo){
+        //删除旧数据
+        XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
+        xmslProjectEngineeringAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
+        xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmount(xmslProjectEngineeringAmount);
+
+        //插入新数据
         List<XmslProjectEngineeringAmount> insertList = TreeUtils.splitTreeList(xmslProjectEngineeringAmountList);
         if(!CollectionUtils.isEmpty(insertList)){
             this.insertProjectEngineeringAmountList(insertList, xmslProjectBasicInfo);
         }
     }
 
+    /**
+     * 批量插入
+     * @param xmslProjectEngineeringAmountList
+     * @param xmslProjectBasicInfo
+     * @return
+     */
     @Transactional
     public int insertProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList, XmslProjectBasicInfo xmslProjectBasicInfo) {
         for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
@@ -59,15 +69,6 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
             xmslProjectEngineeringAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectEngineeringAmountMapper.insertProjectEngineeringAmountList(xmslProjectEngineeringAmountList);
-    }
-
-    @Transactional
-    public int updateProjectEngineeringAmountList(List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList) {
-        for (XmslProjectEngineeringAmount xmslProjectEngineeringAmount : xmslProjectEngineeringAmountList) {
-            xmslProjectEngineeringAmount.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectEngineeringAmount.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslProjectEngineeringAmountMapper.updateProjectEngineeringAmountList(xmslProjectEngineeringAmountList);
     }
     
     @Transactional

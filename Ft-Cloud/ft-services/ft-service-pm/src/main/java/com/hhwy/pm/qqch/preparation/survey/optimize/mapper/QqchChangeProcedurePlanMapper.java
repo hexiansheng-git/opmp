@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
 import org.apache.ibatis.annotations.Param;
@@ -18,8 +19,9 @@ public interface QqchChangeProcedurePlanMapper {
     /**
      * 获取变更程序策划集合
      * @return
+     * @param version 版本
      */
-    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList();
+    List<QqchChangeProcedurePlan> getQqchChangeProcedurePlanList(@Param("version") BigDecimal version);
 
     int insertQqchChangeProcedurePlan(QqchChangeProcedurePlan qqchChangeProcedurePlan);
 

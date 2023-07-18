@@ -1,10 +1,14 @@
 package com.hhwy.pm.qqch.preparation.survey.document.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchBlueprintManageInventory;
+import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchBlueprintManageInventoryVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchBlueprintManageInventoryMapper;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchBlueprintManageInventoryService;
 import org.springframework.stereotype.Service;
@@ -23,58 +27,74 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
     @Autowired
     private QqchBlueprintManageInventoryMapper qqchBlueprintManageInventoryMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     public QqchBlueprintManageInventory getQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
         return qqchBlueprintManageInventoryMapper.getQqchBlueprintManageInventory(qqchBlueprintManageInventory);
     }
 
-    public List<QqchBlueprintManageInventory> getQqchBlueprintManageInventoryList(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
-        return qqchBlueprintManageInventoryMapper.getQqchBlueprintManageInventoryList(qqchBlueprintManageInventory);
+    /**
+     * 勘察设计图纸管理清单Vo
+     * @return
+     */
+    public QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo() {
+        QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = new QqchBlueprintManageInventoryVo();
+
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_blueprint_manage_inventory");
+        qqchBlueprintManageInventoryVo.setVersion(version);
+
+        QqchBlueprintManageInventory qqchBlueprintManageInventory = new QqchBlueprintManageInventory();
+        qqchBlueprintManageInventory.setVersion(version);
+        List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList = qqchBlueprintManageInventoryMapper.getQqchBlueprintManageInventoryList(qqchBlueprintManageInventory);
+        qqchBlueprintManageInventoryVo.setQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryList);
+
+        return qqchBlueprintManageInventoryVo;
     }
 
-    @Transactional
-    public int insertQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
-        qqchBlueprintManageInventory.setId(IdWorker.createId());
-        qqchBlueprintManageInventory.setCreateUser(SecurityUtils.getUserName());
-        qqchBlueprintManageInventory.setCreateTime(DateUtils.getNowDate());
-        return qqchBlueprintManageInventoryMapper.insertQqchBlueprintManageInventory(qqchBlueprintManageInventory);
+    /**
+     * 保存
+     * @param qqchBlueprintManageInventoryVo
+     * @return
+     */
+    @Override
+    public void save(QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
+        //删除旧数据
+        QqchBlueprintManageInventory qqchBlueprintManageInventory = new QqchBlueprintManageInventory();
+        qqchBlueprintManageInventory.setVersion(qqchBlueprintManageInventoryVo.getVersion());
+        qqchBlueprintManageInventoryMapper.deleteQqchBlueprintManageInventory(qqchBlueprintManageInventory);
+
+        //插入新数据
+        this.insertQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryVo.getQqchBlueprintManageInventoryList(),qqchBlueprintManageInventoryVo.getVersion());
     }
 
+    /**
+     * 确认
+     * @param qqchBlueprintManageInventoryVo
+     * @return
+     */
+    @Override
+    public void confirm(QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
+        this.save(qqchBlueprintManageInventoryVo);
+        //TODO 修改确认状态
+    }
+
+    /**
+     * 批量插入
+     * @param qqchBlueprintManageInventoryList
+     * @param version
+     */
     @Transactional
-    public int insertQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList) {
+    public void insertQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList, BigDecimal version) {
         for (QqchBlueprintManageInventory qqchBlueprintManageInventory : qqchBlueprintManageInventoryList) {
             qqchBlueprintManageInventory.setId(IdWorker.createId());
-            qqchBlueprintManageInventory.setCreateUser(SecurityUtils.getUserName());
+            qqchBlueprintManageInventory.setVersion(version);
+            qqchBlueprintManageInventory.setValid(Valid.NO);
+            qqchBlueprintManageInventory.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchBlueprintManageInventory.setCreateUserName(SecurityUtils.getUserName());
             qqchBlueprintManageInventory.setCreateTime(DateUtils.getNowDate());
         }
-        return qqchBlueprintManageInventoryMapper.insertQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryList);
-    }
-
-    @Transactional
-    public int updateQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
-        qqchBlueprintManageInventory.setUpdateUser(SecurityUtils.getUserName());
-        qqchBlueprintManageInventory.setUpdateTime(DateUtils.getNowDate());
-        return qqchBlueprintManageInventoryMapper.updateQqchBlueprintManageInventory(qqchBlueprintManageInventory);
-    }
-
-    @Transactional
-    public int updateQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList) {
-        for (QqchBlueprintManageInventory qqchBlueprintManageInventory : qqchBlueprintManageInventoryList) {
-            qqchBlueprintManageInventory.setUpdateUser(SecurityUtils.getUserName());
-            qqchBlueprintManageInventory.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchBlueprintManageInventoryMapper.updateQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryList);
-    }
-
-    @Transactional
-    public int deleteQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
-        qqchBlueprintManageInventory.setUpdateUser(SecurityUtils.getUserName());
-        qqchBlueprintManageInventory.setUpdateTime(DateUtils.getNowDate());
-        return qqchBlueprintManageInventoryMapper.deleteQqchBlueprintManageInventory(qqchBlueprintManageInventory);
-    }
-
-    @Transactional
-    public int deleteQqchBlueprintManageInventoryByPks(List<Long> qqchBlueprintManageInventoryPkList) {
-        return qqchBlueprintManageInventoryMapper.deleteQqchBlueprintManageInventoryByPks(qqchBlueprintManageInventoryPkList);
+        qqchBlueprintManageInventoryMapper.insertQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryList);
     }
 }

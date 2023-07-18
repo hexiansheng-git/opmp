@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchDesignTechnologyOptimizeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchDesignTechnologyOptimizeService;
 import org.springframework.web.bind.annotation.*;
@@ -60,17 +57,5 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.confirm(qqchDesignTechnologyOptimizeVo);
         return AjaxResult.success(qqchDesignTechnologyOptimizeVo);
-    }
-
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:remove")
-    @PostMapping("/remove/{ids}")
-    public AjaxResult deleteQqchDesignTechnologyOptimizeByPks(@PathVariable Long[] ids) {
-        List<Long> qqchDesignTechnologyOptimizePkList = Arrays.asList(ids);
-        return toAjax(qqchDesignTechnologyOptimizeService.deleteQqchDesignTechnologyOptimizeByPks(qqchDesignTechnologyOptimizePkList));
     }
 }

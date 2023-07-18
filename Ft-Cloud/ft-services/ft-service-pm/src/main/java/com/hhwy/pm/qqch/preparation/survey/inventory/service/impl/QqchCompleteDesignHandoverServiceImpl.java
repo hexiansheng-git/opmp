@@ -1,11 +1,12 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service.impl;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchCompleteDesignHandoverMapper;
@@ -26,18 +27,25 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     @Autowired
     private QqchCompleteDesignHandoverMapper qqchCompleteDesignHandoverMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
     /**
      * 完整设计交接情况台账
-     * @param qqchCompleteDesignHandover
      * @return
      */
-    public QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(QqchCompleteDesignHandover qqchCompleteDesignHandover) {
+    public QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo() {
         QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = new QqchCompleteDesignHandoverVo();
+
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_complete_design_handover");
+        qqchCompleteDesignHandoverVo.setVersion(version);
+
+        QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
+        qqchCompleteDesignHandover.setVersion(version);
         List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList = qqchCompleteDesignHandoverMapper.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandover);
         qqchCompleteDesignHandoverVo.setQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
 
         //TODO 获取确认状态
-        qqchCompleteDesignHandoverVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         return qqchCompleteDesignHandoverVo;
     }
@@ -49,7 +57,13 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
      */
     @Override
     public void save(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
-        this.editQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverVo.getQqchCompleteDesignHandoverList());
+        //删除旧数据
+        QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
+        qqchCompleteDesignHandover.setVersion(qqchCompleteDesignHandoverVo.getVersion());
+        qqchCompleteDesignHandoverMapper.deleteQqchCompleteDesignHandover(qqchCompleteDesignHandover);
+
+        //插入新数据
+        this.insertQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverVo.getQqchCompleteDesignHandoverList(), qqchCompleteDesignHandoverVo.getVersion());
     }
 
     /**
@@ -60,51 +74,28 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     @Override
     @Transactional
     public void confirm(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
-        this.editQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverVo.getQqchCompleteDesignHandoverList());
+        this.save(qqchCompleteDesignHandoverVo);
 
         //TODO 修改确认状态
 
     }
 
     /**
-     * 批量编辑
-     * @param qqchCompleteDesignHandoverListParam
+     * 批量插入
+     * @param qqchCompleteDesignHandoverList
+     * @param version
      * @return
      */
     @Transactional
-    public int editQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverListParam) {
-        List<QqchCompleteDesignHandover> insertList = new ArrayList<>();
-        List<QqchCompleteDesignHandover> updateList = new ArrayList<>();
-        for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverListParam) {
-            Long id = qqchCompleteDesignHandover.getId();
-            if(id == null){
-                qqchCompleteDesignHandover.setId(IdWorker.createId());
-                qqchCompleteDesignHandover.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                qqchCompleteDesignHandover.setCreateUserName(SecurityUtils.getUserName());
-                qqchCompleteDesignHandover.setCreateTime(DateUtils.getNowDate());
-                insertList.add(qqchCompleteDesignHandover);
-            }else {
-                qqchCompleteDesignHandover.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                qqchCompleteDesignHandover.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(qqchCompleteDesignHandover);
-            }
+    public void insertQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList, BigDecimal version) {
+        for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
+            qqchCompleteDesignHandover.setId(IdWorker.createId());
+            qqchCompleteDesignHandover.setVersion(version);
+            qqchCompleteDesignHandover.setValid(Valid.YES);
+            qqchCompleteDesignHandover.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchCompleteDesignHandover.setCreateUserName(SecurityUtils.getUserName());
+            qqchCompleteDesignHandover.setCreateTime(DateUtils.getNowDate());
         }
-        if(insertList.size() > 0){
-            qqchCompleteDesignHandoverMapper.insertQqchCompleteDesignHandoverList(insertList);
-        }
-        if(updateList.size() > 0){
-            qqchCompleteDesignHandoverMapper.updateQqchCompleteDesignHandoverList(updateList);
-        }
-        return 1;
-    }
-
-    /**
-     * 批量删除
-     * @param qqchCompleteDesignHandoverPkList
-     * @return
-     */
-    @Transactional
-    public int deleteQqchCompleteDesignHandoverByPks(List<Long> qqchCompleteDesignHandoverPkList) {
-        return qqchCompleteDesignHandoverMapper.deleteQqchCompleteDesignHandoverByPks(qqchCompleteDesignHandoverPkList);
+        qqchCompleteDesignHandoverMapper.insertQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
     }
 }
