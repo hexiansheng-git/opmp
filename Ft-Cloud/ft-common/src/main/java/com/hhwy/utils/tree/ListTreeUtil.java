@@ -1,5 +1,8 @@
 package com.hhwy.utils.tree;
 
+import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -44,14 +47,17 @@ public class ListTreeUtil {
      * @param <T>         节点类型
      * @return 线性列表
      */
-    public static <T> List<T> formatList(List<T> source, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
-        List<T> list = new ArrayList<>();
+    public static <T> List<T> formatList(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
         for (T node : source) {
-            list.add(node);
-            recur(list, getChildren.apply(node), getChildren, setChildren);
+//            Long id = RandomUtils.nextLong();
+            Long id = IdWorker.createId();
+            setId.accept(node, id);
+            resultList.add(node);
+            recur(resultList,id,setId,setPid, getChildren.apply(node), getChildren, setChildren);
             setChildren.accept(node, null);
         }
-        return list;
+        return resultList;
     }
 
     private static <T> void recur(T rootNode, List<T> children, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
@@ -67,13 +73,17 @@ public class ListTreeUtil {
         }
     }
 
-    private static <T> void recur(List<T> list, List<T> children, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+    private static <T> void recur(List<T> resultList, Long pid, BiConsumer<T,Long> setId, BiConsumer<T,Long> setPid, List<T> children, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
         if (children == null) return;
         for (T node : children) {
-            list.add(node);
+            Long id = IdWorker.createId();
+//            Long id = RandomUtils.nextLong();
+            setId.accept(node,id);
+            setPid.accept(node,pid);
+            resultList.add(node);
             List<T> c = getChildren.apply(node);
-            if (c != null && c.size() > 0) {
-                recur(list, c, getChildren, setChildren);
+            if (!CollectionUtils.isEmpty(c)) {
+                recur(resultList, id,setId,setPid, c, getChildren, setChildren);
                 setChildren.accept(node, null);
             }
         }
