@@ -29,7 +29,20 @@ public interface CommonMapper {
      * @return
      */
     Long selectCanAdjustOnly(@Param("tableName") String tableName);
+    /**
+     * 查询单据是否能够被调整(一条数据只能调整一次)
+     *
+     * @param tableName projectId
+     * @param tableName
+     * @return
+     */
+    Long selectCanAdjustOnlyValid(@Param("tableName") String tableName);
 
+    /**生效的最大版本的单据id
+     * @param businessId
+     * @param tableName
+     * @return
+     */
     Integer deleteDetailsByMainId(@Param("mainId") Long businessId, @Param("tableName") String tableName);
 
 

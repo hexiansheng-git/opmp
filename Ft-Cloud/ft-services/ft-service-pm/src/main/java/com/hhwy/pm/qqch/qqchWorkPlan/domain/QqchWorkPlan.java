@@ -16,9 +16,13 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author hwj
@@ -42,6 +46,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "版本")
+    @NotNull(message = "版本不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private BigDecimal version;
     /**
      * 字段描述：策划审批单位
@@ -60,6 +65,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
      */
     @JsonProperty
     @Excel(name = "任务模板")
+    @NotBlank(message = "任务模板不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String taskTemplate;
     /**
      * 字段描述：开工令下发日期

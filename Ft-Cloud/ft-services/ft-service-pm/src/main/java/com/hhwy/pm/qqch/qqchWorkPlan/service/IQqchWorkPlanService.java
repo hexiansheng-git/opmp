@@ -25,10 +25,12 @@ public interface IQqchWorkPlanService {
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);
 
     Long insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
+    Long submitQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
     int insertQqchWorkPlanList(List<QqchWorkPlan> qqchWorkPlanList);
 
     int updateQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
+    Long adjustQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
     int updateQqchWorkPlanList(List<QqchWorkPlan> qqchWorkPlanList);
 

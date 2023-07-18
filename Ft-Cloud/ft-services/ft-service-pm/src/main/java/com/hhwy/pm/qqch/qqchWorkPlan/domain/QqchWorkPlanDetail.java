@@ -16,9 +16,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author hwj
@@ -51,12 +55,9 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     @JsonProperty
     @Excel(name = "主数据id  （qqch_work_plan）")
     private Long mainId;
-    /**
-     * 字段描述：显示顺序
-     */
-    @JsonProperty
-    @Excel(name = "显示顺序")
-    private Integer orderNum;
+    /*策划项name*/
+    @NotBlank(message = "策划项名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    private String itemName;
     /**
      * 字段描述：工作说明
      */

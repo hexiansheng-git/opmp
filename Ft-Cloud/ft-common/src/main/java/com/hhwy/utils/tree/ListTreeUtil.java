@@ -60,6 +60,29 @@ public class ListTreeUtil {
         return resultList;
     }
 
+    /**
+     * 把父类pid置为null
+     *
+     * @param source      数据源
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T>         节点类型
+     * @return 线性列表
+     */
+    public static <T> List<T> formatListPidNull(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        for (T node : source) {
+//            Long id = RandomUtils.nextLong();
+            Long id = IdWorker.createId();
+            setId.accept(node, id);
+            setPid.accept(node, null);
+            resultList.add(node);
+            recur(resultList,id,setId,setPid, getChildren.apply(node), getChildren, setChildren);
+            setChildren.accept(node, null);
+        }
+        return resultList;
+    }
+
     private static <T> void recur(T rootNode, List<T> children, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
         for (T node : children) {
             if (checkParent.test(rootNode, node)) {

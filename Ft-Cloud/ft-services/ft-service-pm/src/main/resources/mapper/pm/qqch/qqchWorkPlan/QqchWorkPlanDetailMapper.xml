@@ -4,11 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanDetailMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail" id="QqchWorkPlanDetailResultMap">
+    <resultMap type="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail"
+               id="QqchWorkPlanDetailResultMap">
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
         <result property="mainId" column="main_id"/>
-        <result property="orderNum" column="order_num"/>
+        <result property="itemName" column="item_name"/>
+        <result property="sort" column="sort"/>
         <result property="workExplain" column="work_explain"/>
         <result property="isFirst" column="is_first"/>
         <result property="editorFirst" column="editor_first"/>
@@ -48,7 +50,8 @@
         select `id`
              , `pid`
              , `main_id`
-             , `order_num`
+             , `item_name`
+             , `sort`
              , `work_explain`
              , `is_first`
              , `editor_first`
@@ -92,7 +95,8 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
-            <if test="orderNum != null ">and `order_num` = #{orderNum}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="workExplain != null  and workExplain != ''">and `work_explain` = #{workExplain}</if>
             <if test="isFirst != null  and isFirst != ''">and `is_first` = #{isFirst}</if>
             <if test="editorFirst != null  and editorFirst != ''">and `editor_first` = #{editorFirst}</if>
@@ -142,7 +146,8 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
-            <if test="orderNum != null ">and `order_num` = #{orderNum}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="workExplain != null  and workExplain != ''">and `work_explain` = #{workExplain}</if>
             <if test="isFirst != null  and isFirst != ''">and `is_first` = #{isFirst}</if>
             <if test="editorFirst != null  and editorFirst != ''">and `editor_first` = #{editorFirst}</if>
@@ -191,7 +196,8 @@
             <if test="id != null ">`id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="mainId != null ">`main_id`,</if>
-            <if test="orderNum != null ">`order_num`,</if>
+            <if test="itemName != null  and itemName != ''">`item_name`,</if>
+            <if test="sort != null ">`sort`,</if>
             <if test="workExplain != null  and workExplain != ''">`work_explain`,</if>
             <if test="isFirst != null  and isFirst != ''">`is_first`,</if>
             <if test="editorFirst != null  and editorFirst != ''">`editor_first`,</if>
@@ -231,7 +237,8 @@
             <if test="id != null ">#{id},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="mainId != null ">#{mainId},</if>
-            <if test="orderNum != null ">#{orderNum},</if>
+            <if test="itemName != null  and itemName != ''">#{itemName},</if>
+            <if test="sort != null ">#{sort},</if>
             <if test="workExplain != null  and workExplain != ''">#{workExplain},</if>
             <if test="isFirst != null  and isFirst != ''">#{isFirst},</if>
             <if test="editorFirst != null  and editorFirst != ''">#{editorFirst},</if>
@@ -276,7 +283,8 @@
             `id`,
             `pid`,
             `main_id`,
-            `order_num`,
+            `item_name`,
+            `sort`,
             `work_explain`,
             `is_first`,
             `editor_first`,
@@ -317,7 +325,8 @@
                 #{item.id},
                 #{item.pid},
                 #{item.mainId},
-                #{item.orderNum},
+                #{item.itemName},
+                #{item.sort},
                 #{item.workExplain},
                 #{item.isFirst},
                 #{item.editorFirst},
@@ -361,7 +370,8 @@
             <if test="id != null ">`id` = #{id},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="mainId != null ">`main_id` = #{mainId},</if>
-            <if test="orderNum != null ">`order_num` = #{orderNum},</if>
+            <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
             <if test="workExplain != null  and  workExplain != ''">`work_explain` = #{workExplain},</if>
             <if test="isFirst != null  and  isFirst != ''">`is_first` = #{isFirst},</if>
             <if test="editorFirst != null  and  editorFirst != ''">`editor_first` = #{editorFirst},</if>
@@ -424,9 +434,14 @@
                     when `id`=#{item.id} then #{item.mainId}
                 </foreach>
             </trim>
-            <trim prefix="order_num  = case" suffix="end,">
+            <trim prefix="item_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.orderNum}
+                    when `id`=#{item.id} then #{item.itemName}
+                </foreach>
+            </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="work_explain  = case" suffix="end,">
@@ -612,7 +627,8 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
-            <if test="orderNum != null ">and `order_num` = #{orderNum}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="workExplain != null  and workExplain != ''">and `work_explain` = #{workExplain}</if>
             <if test="isFirst != null  and isFirst != ''">and `is_first` = #{isFirst}</if>
             <if test="editorFirst != null  and editorFirst != ''">and `editor_first` = #{editorFirst}</if>
