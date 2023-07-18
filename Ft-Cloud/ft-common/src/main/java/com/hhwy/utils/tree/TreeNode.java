@@ -17,5 +17,6 @@ import java.util.List;
 public class TreeNode<T> extends CommonBaseEntity {
     private Long id;
     private Long pid;
+    private Integer sort;
     private List<T> children =new ArrayList<>();
 }
