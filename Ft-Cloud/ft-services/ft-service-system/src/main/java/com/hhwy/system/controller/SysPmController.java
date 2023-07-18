@@ -58,7 +58,7 @@ public class SysPmController {
      * @return
      */
     @GetMapping("/reverseDict")
-    public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictValue") String dictLabel) {
+    public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictLabel") String dictLabel) {
         List<SysDictData> list = dictService.selectDictValueByTypeAndLabel(dictType, dictLabel);
         return AjaxResult.success(list);
     }
@@ -83,7 +83,6 @@ public class SysPmController {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setMenuType("menu");
         List<SysMenu> list = this.menuService.selectMenuTreeList(sysMenu, sysUser);
-
         List<SysMenu> resList = this.findChildTree(list, name);
         return AjaxResult.success(resList);
     }
