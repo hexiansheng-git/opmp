@@ -11,6 +11,7 @@ import java.util.List;
  * @date 2023-07-13 09:50:00
  * @remark 列表转树工具类
  */
+@Deprecated
 public class TreeUtils {
 
     private static final String ID_FIELD = "id";

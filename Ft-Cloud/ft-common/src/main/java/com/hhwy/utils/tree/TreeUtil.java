@@ -1,14 +1,10 @@
 package com.hhwy.utils.tree;
 
 import com.alibaba.excel.util.CollectionUtils;
-import com.alibaba.fastjson.JSON;
 import com.hhwy.utils.idworker.IdWorker;
-import io.jsonwebtoken.lang.Assert;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TreeUtil {
@@ -35,25 +31,36 @@ public class TreeUtil {
     }
     /**
      * 树形list转list
-     * @param list
+     * @param source
      * @return
      */
-    public static <T extends TreeNode> List<T> treeTolist(List<T> list) {
-        if (CollectionUtils.isEmpty(list)) {
-            return null;
-        }
-        Long id = IdWorker.createId();
+    public static <T extends TreeNode<T>> List<T> treeToList(List<T> source) {
         List<T> result = new ArrayList<>();
-        for (T t : list) {
-            List<T> c = t.getChildren();
-            t.setId(id);
-            result.add(t);
-            if (!CollectionUtils.isEmpty(c)) {
-                c.stream().forEach(item->item.setPid(id));
-                result.addAll(treeTolist(c));
-                t.setChildren(null);
-            }
+        if (CollectionUtils.isEmpty(source)) {
+            return result;
+        }
+
+        int sort = 1;
+        for (T node : source) {
+            node.setSort(sort++);
+            split(node,result);
         }
         return result;
+    }
+
+    private static <T extends TreeNode<T>> void split(T node, List<T> resultList){
+        Long id = IdWorker.createId();
+        int sort = 1;
+        List<T> children = node.getChildren();
+        node.setId(id);
+        node.setChildren(null);
+        resultList.add(node);
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                child.setPid(id);
+                child.setSort(sort++);
+                split(child,resultList);
+            }
+        }
     }
 }

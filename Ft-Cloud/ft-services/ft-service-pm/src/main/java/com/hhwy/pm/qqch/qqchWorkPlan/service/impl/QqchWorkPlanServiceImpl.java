@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrganization;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
@@ -19,8 +17,6 @@ import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import com.hhwy.utils.tree.TreeUtils;
-import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,7 +118,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 获取前端传入的设备明细
         List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
         if (!ObjectNullUtil.isEmpty(detailList)) {
-            detailListLast = TreeUtil.treeTolist(detailList);
+            detailListLast = TreeUtil.treeToList(detailList);
         }
 
         qqchWorkPlan.setId(IdWorker.createId());
@@ -155,7 +151,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 获取前端传入的设备明细
         List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
         if (!ObjectNullUtil.isEmpty(detailList)) {
-            detailListLast = TreeUtil.treeTolist(detailList);
+            detailListLast = TreeUtil.treeToList(detailList);
         }
 //        Boolean aBoolean = JyDetailsUtil.jyDetails(detailList, ValidationGroups.Update.class);
         // 修改
