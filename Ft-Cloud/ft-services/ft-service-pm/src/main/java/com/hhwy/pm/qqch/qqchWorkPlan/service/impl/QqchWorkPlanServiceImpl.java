@@ -206,7 +206,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         if (!ObjectNullUtil.isEmpty(detailList)) {
             detailListLast = TreeUtil.treeToList(detailList);
         }
-        JyDetailsUtil.jyDetails(detailListLast, ValidationGroups.Save.class);
+//        JyDetailsUtil.jyDetails(detailListLast, ValidationGroups.Save.class);
         qqchWorkPlan.setId(IdWorker.createId());
         EntityUtils.setCreateUpdateInfo(qqchWorkPlan);
         // 设置版本号码
@@ -224,6 +224,13 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
      * @return
      */
     public Long submitQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
+        List<QqchWorkPlanDetail> detailListLast = null;
+        // 获取前端传入的设备明细
+        List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
+        if (!ObjectNullUtil.isEmpty(detailList)) {
+            detailListLast = TreeUtil.treeToList(detailList);
+        }
+        JyDetailsUtil.jyDetails(detailListLast, ValidationGroups.Save.class);
         if (ObjectNullUtil.isEmpty(qqchWorkPlan.getId())) {
             qqchWorkPlan.setId(this.insertQqchWorkPlan(qqchWorkPlan));
         } else {
@@ -252,7 +259,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         if (!ObjectNullUtil.isEmpty(detailList)) {
             detailListLast = TreeUtil.treeToList(detailList);
         }
-        JyDetailsUtil.jyDetails(detailListLast, ValidationGroups.Update.class);
+//        JyDetailsUtil.jyDetails(detailListLast, ValidationGroups.Update.class);
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());

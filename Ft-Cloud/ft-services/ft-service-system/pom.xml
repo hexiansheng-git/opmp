@@ -25,7 +25,6 @@
             <groupId>com.hhwy</groupId>
             <artifactId>ft-common</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>
