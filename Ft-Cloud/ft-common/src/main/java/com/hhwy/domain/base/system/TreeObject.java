@@ -20,26 +20,26 @@ public class TreeObject {
      * @param list
      * @return
      */
-    public static List getDeptTree(List<TreeUtil> list) {
-        List<TreeUtil> newData = new ArrayList<>();
-        /* List<TreeUtil> list = myCommonMapper.getDeptTree(where);*/
+    public static List getDeptTree(List<SysTreeUtil> list) {
+        List<SysTreeUtil> newData = new ArrayList<>();
+        /* List<SysTreeUtil> list = myCommonMapper.getDeptTree(where);*/
         if(!ObjectNullUtil.isEmpty(list)){
             //把部门信息放到map中
-            Map<String,TreeUtil> map = new HashMap<>();
+            Map<String,SysTreeUtil> map = new HashMap<>();
             list.stream().forEach(temp -> {
                 map.put(temp.getId() + "", temp);
             });
-            for(TreeUtil temp : list){
+            for(SysTreeUtil temp : list){
                 if(!map.containsKey(temp.getPId() + "")){
                     //顶级节点
                     newData.add(temp);
                 }
             }
-            for(TreeUtil temp : list){
-                TreeUtil parent = map.get(temp.getPId() + "");
+            for(SysTreeUtil temp : list){
+                SysTreeUtil parent = map.get(temp.getPId() + "");
                 if(!ObjectNullUtil.isEmpty(parent)){ // 不等于null，也就意味着有父节点
                     if(parent.getChildren() == null){
-                        parent.setChildren(new ArrayList<TreeUtil>());
+                        parent.setChildren(new ArrayList<SysTreeUtil>());
                     }
                     parent.getChildren().add(temp); // 添加到父节点的ChildList集合下
                     map.put(temp.getPId() + "",parent);  // 把放好的数据放回到map中

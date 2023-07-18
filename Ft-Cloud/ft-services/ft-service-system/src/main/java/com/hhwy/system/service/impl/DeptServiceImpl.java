@@ -7,7 +7,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.domain.base.system.TreeObject;
-import com.hhwy.domain.base.system.TreeUtil;
+import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysUser;
@@ -38,10 +38,16 @@ public class DeptServiceImpl implements IDeptService {
     public static final String DATA_SCOPE_ALL = "1";//全部数据权限
 
     @Override
-    public List<TreeUtil> getDeptByTree() {
-        List<TreeUtil> list = deptMapper.getDeptByTree();
-        List<TreeUtil> deptTree = TreeObject.getDeptTree(list);
+    public List<SysTreeUtil> getDeptByTree() {
+        List<SysTreeUtil> list = deptMapper.getDeptByTree();
+        List<SysTreeUtil> deptTree = TreeObject.getDeptTree(list);
         return deptTree;
+    }
+
+    @Override
+    public List<SysTreeUtil> getRegionInfo() {
+
+        return null;
     }
 
 }

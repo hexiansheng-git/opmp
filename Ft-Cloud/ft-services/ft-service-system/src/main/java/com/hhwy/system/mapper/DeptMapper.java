@@ -1,6 +1,6 @@
 package com.hhwy.system.mapper;
 
-import com.hhwy.domain.base.system.TreeUtil;
+import com.hhwy.domain.base.system.SysTreeUtil;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -14,7 +14,7 @@ public interface DeptMapper {
             "from sys_dept where del_flag=0 " +
             "order by order_num" +
             "</script>"})
-    List<TreeUtil> getDeptByTree();
+    List<SysTreeUtil> getDeptByTree();
 
 
 }

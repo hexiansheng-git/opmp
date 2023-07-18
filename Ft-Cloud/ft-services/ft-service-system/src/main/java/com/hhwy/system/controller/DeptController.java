@@ -31,4 +31,14 @@ public class DeptController {
     public AjaxResult getDeptByTree(@RequestBody(required = false) Map map){
         return AjaxResult.success("查询成功!", deptService.getDeptByTree());
     }
+
+    /**
+     * 查询区域信息接口
+     * @param map
+     * @return
+     */
+    @PostMapping("/getRegionInfo")
+    public AjaxResult getRegionInfo(@RequestBody(required = false) Map map){
+        return AjaxResult.success("查询成功!", deptService.getRegionInfo());
+    }
 }
