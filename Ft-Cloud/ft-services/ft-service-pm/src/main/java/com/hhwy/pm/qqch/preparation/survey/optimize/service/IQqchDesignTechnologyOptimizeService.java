@@ -2,8 +2,6 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchDesignTechnologyOptimizeVo;
 
-import java.util.List;
-
 /**
  * @author han
  * @date 2023-07-07 18:35:48
@@ -28,11 +26,4 @@ public interface IQqchDesignTechnologyOptimizeService {
      * @param qqchDesignTechnologyOptimizeVo
      */
     void confirm(QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo);
-
-    /**
-     * 批量删除
-     * @param qqchDesignTechnologyOptimizePkList
-     * @return
-     */
-    int deleteQqchDesignTechnologyOptimizeByPks(List<Long> qqchDesignTechnologyOptimizePkList);
 }

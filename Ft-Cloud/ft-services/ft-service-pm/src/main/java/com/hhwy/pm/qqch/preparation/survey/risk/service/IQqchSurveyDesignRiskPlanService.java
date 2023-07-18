@@ -14,10 +14,9 @@ public interface IQqchSurveyDesignRiskPlanService {
 
     /**
      * 勘察设计风险策划Vo
-     * @param qqchSurveyDesignRiskPlan
      * @return
      */
-    QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan);
+    QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo();
 
     /**
      * 保存
@@ -32,11 +31,4 @@ public interface IQqchSurveyDesignRiskPlanService {
      * @return
      */
     void confirm(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo);
-
-    /**
-     * 批量删除
-     * @param qqchSurveyDesignRiskPlanPkList
-     * @return
-     */
-    int deleteQqchSurveyDesignRiskPlanByPks(List<Long> qqchSurveyDesignRiskPlanPkList);
 }

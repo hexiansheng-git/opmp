@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +28,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QqchWorkPlanDetail extends CommonBaseEntity {
+public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -269,6 +270,4 @@ public class QqchWorkPlanDetail extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "第三阶段编制人姓名")
     private String editorThirdName;
-
-    private List<QqchWorkPlanDetail> children;
 }

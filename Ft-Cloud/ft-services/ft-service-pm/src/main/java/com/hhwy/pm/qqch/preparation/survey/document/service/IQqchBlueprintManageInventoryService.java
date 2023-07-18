@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.document.service;
 
 import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchBlueprintManageInventory;
+import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchBlueprintManageInventoryVo;
 
 import java.util.List;
 
@@ -11,19 +12,23 @@ import java.util.List;
  */
 public interface IQqchBlueprintManageInventoryService {
 
-    QqchBlueprintManageInventory getQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory);
+    /**
+     * 勘察设计图纸管理清单台账
+     * @return
+     */
+    QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo();
 
-    List<QqchBlueprintManageInventory> getQqchBlueprintManageInventoryList(QqchBlueprintManageInventory qqchBlueprintManageInventory);
+    /**
+     * 保存
+     * @param qqchBlueprintManageInventoryVo
+     * @return
+     */
+    void save(QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo);
 
-    int insertQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory);
-
-    int insertQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList);
-
-    int updateQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory);
-
-    int updateQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList);
-
-    int deleteQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory);
-
-    int deleteQqchBlueprintManageInventoryByPks(List<Long> qqchBlueprintManageInventoryPkList);
+    /**
+     * 确认
+     * @param qqchBlueprintManageInventoryVo
+     * @return
+     */
+    void confirm(QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo);
 }

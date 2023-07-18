@@ -41,11 +41,19 @@ public class QqchWorkPlanController extends BaseController {
         return AjaxResult.success(qqchWorkPlan);
     }
 
+    /**获取详情数据
+     * @param map
+     * @return
+     */
     @GetMapping("/baseInfo")
     public AjaxResult baseInfo(@RequestParam Map<String, String> map) {
         return AjaxResult.success(qqchWorkPlanService.baseInfo(map));
     }
 
+    /**台账
+     * @param qqchWorkPlanParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchWorkPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchWorkPlanList(@Validated(ValidationGroups.Select.class) QqchWorkPlan qqchWorkPlanParam) {
@@ -54,11 +62,14 @@ public class QqchWorkPlanController extends BaseController {
         return getDataTableAjaxResult(qqchWorkPlanList);
     }
 
+    /**新增数据
+     * @param qqchWorkPlanParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchWorkPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchWorkPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
-        qqchWorkPlanService.insertQqchWorkPlan(qqchWorkPlanParam);
-        return AjaxResult.success(qqchWorkPlanParam);
+        return AjaxResult.success(qqchWorkPlanService.insertQqchWorkPlan(qqchWorkPlanParam));
     }
 
     @PreAuthorize(hasPermi = "qqchWorkPlan:add")
@@ -68,9 +79,23 @@ public class QqchWorkPlanController extends BaseController {
         return AjaxResult.success(qqchWorkPlanListParam);
     }
 
+    /**修改数据
+     * @param qqchWorkPlanParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchWorkPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchWorkPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
+        return toAjax(qqchWorkPlanService.updateQqchWorkPlan(qqchWorkPlanParam));
+    }
+
+    /**调整
+     * @param qqchWorkPlanParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchWorkPlan:update")
+    @PostMapping("/update1")
+    public AjaxResult updateQqchWorkPlan1(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
         return toAjax(qqchWorkPlanService.updateQqchWorkPlan(qqchWorkPlanParam));
     }
 

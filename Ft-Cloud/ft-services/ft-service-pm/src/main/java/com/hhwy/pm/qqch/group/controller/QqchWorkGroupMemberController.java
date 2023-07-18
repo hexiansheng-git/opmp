@@ -25,4 +25,17 @@ import com.hhwy.utils.validation.ValidationGroups;
 @RequestMapping("/qqchWorkGroupMember")
 public class QqchWorkGroupMemberController extends BaseController {
 
+    @Autowired
+    private IQqchWorkGroupMemberService qqchWorkGroupMemberService;
+
+    /**
+     * 获取工作小组成员历史
+     * @param directorId 成员id
+     * @return
+     */
+    @GetMapping("history")
+    public AjaxResult getEstablishPreliminaryPlanHistory(Long directorId){
+        List<QqchWorkGroupMember> workGroupMemberList = qqchWorkGroupMemberService.getEstablishPreliminaryPlanHistory(directorId);
+        return AjaxResult.success(workGroupMemberList);
+    }
 }

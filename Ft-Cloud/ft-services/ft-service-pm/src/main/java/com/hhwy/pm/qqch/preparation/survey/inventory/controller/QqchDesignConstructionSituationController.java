@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
-import java.util.Arrays;
-import java.util.List;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructionSituation;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchDesignConstructionSituationService;
@@ -26,16 +25,18 @@ public class QqchDesignConstructionSituationController extends BaseController {
     @Autowired
     private IQqchDesignConstructionSituationService qqchDesignConstructionSituationService;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     /**
      * 边设计边施工情况台账
-     * @param qqchDesignConstructionSituationParam
      * @return
      */
     @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:list")
     @GetMapping("/list")
-    public AjaxResult getQqchDesignConstructionSituationList(@Validated(ValidationGroups.Select.class) @RequestBody QqchDesignConstructionSituation qqchDesignConstructionSituationParam) {
-        QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = qqchDesignConstructionSituationService.getQqchDesignConstructionSituationVo(qqchDesignConstructionSituationParam);
+    public AjaxResult getQqchDesignConstructionSituationList() {
+        QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = qqchDesignConstructionSituationService.getQqchDesignConstructionSituationVo();
         return AjaxResult.success(qqchDesignConstructionSituationVo);
     }
 
@@ -61,17 +62,5 @@ public class QqchDesignConstructionSituationController extends BaseController {
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         qqchDesignConstructionSituationService.confirm(qqchDesignConstructionSituationVo);
         return AjaxResult.success(qqchDesignConstructionSituationVo);
-    }
-
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:remove")
-    @PostMapping("/remove/{ids}")
-    public AjaxResult deleteQqchDesignConstructionSituationByPks(@PathVariable Long[] ids) {
-        List<Long> qqchDesignConstructionSituationPkList = Arrays.asList(ids);
-        return toAjax(qqchDesignConstructionSituationService.deleteQqchDesignConstructionSituationByPks(qqchDesignConstructionSituationPkList));
     }
 }

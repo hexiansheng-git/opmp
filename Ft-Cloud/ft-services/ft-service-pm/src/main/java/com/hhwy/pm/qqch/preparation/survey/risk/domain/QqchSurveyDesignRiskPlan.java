@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -62,6 +64,18 @@ public class QqchSurveyDesignRiskPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "管控措施")
     private String controlMeasure;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：备注/描述
      */

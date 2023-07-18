@@ -1,12 +1,13 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchChangeProcedurePlanMapper;
@@ -27,6 +28,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     @Autowired
     private QqchChangeProcedurePlanMapper qqchChangeProcedurePlanMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     /**
      * 获取变更程序策划
@@ -35,11 +39,13 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     public QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo() {
         QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = new QqchChangeProcedurePlanVo();
 
-        List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList();
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_change_procedure_plan");
+        qqchChangeProcedurePlanVo.setVersion(version);
+
+        List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(version);
         qqchChangeProcedurePlanVo.setQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
 
         //TODO 获取确认状态
-        qqchChangeProcedurePlanVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         return qqchChangeProcedurePlanVo;
     }
@@ -51,8 +57,14 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     @Override
     @Transactional
     public void save(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
+        //删除旧数据
+        QqchChangeProcedurePlan qqchChangeProcedurePlan = new QqchChangeProcedurePlan();
+        qqchChangeProcedurePlan.setVersion(qqchChangeProcedurePlanVo.getVersion());
+        qqchChangeProcedurePlanMapper.deleteQqchChangeProcedurePlan(qqchChangeProcedurePlan);
+
+        //插入新数据
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanVo.getQqchChangeProcedurePlanList();
-        this.editQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
+        this.insertQqchChangeProcedurePlanList(qqchChangeProcedurePlanList, qqchChangeProcedurePlanVo.getVersion());
     }
 
     /**
@@ -63,49 +75,26 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     @Override
     @Transactional
     public void confirm(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
-        this.editQqchChangeProcedurePlanList(qqchChangeProcedurePlanVo.getQqchChangeProcedurePlanList());
+        this.save(qqchChangeProcedurePlanVo);
 
         //TODO 修改确认状态
     }
 
     /**
-     * 批量编辑
+     * 批量插入
      * @param qqchChangeProcedurePlanList
+     * @param version
      */
     @Transactional
-    public void editQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList){
-        List<QqchChangeProcedurePlan> insertList = new ArrayList<>();
-        List<QqchChangeProcedurePlan> updateList = new ArrayList<>();
+    public void insertQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList, BigDecimal version){
         for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
-            Long id = qqchChangeProcedurePlan.getId();
-            if(id == null){
-                qqchChangeProcedurePlan.setId(IdWorker.createId());
-                qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-                qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
-                qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());
-                insertList.add(qqchChangeProcedurePlan);
-            }else {
-                qqchChangeProcedurePlan.setUpdateUser(SecurityUtils.getUserName());
-                qqchChangeProcedurePlan.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(qqchChangeProcedurePlan);
-            }
+            qqchChangeProcedurePlan.setId(IdWorker.createId());
+            qqchChangeProcedurePlan.setVersion(version);
+            qqchChangeProcedurePlan.setValid(Valid.YES);
+            qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
+            qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
+            qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());
         }
-        if(insertList.size() > 0){
-            qqchChangeProcedurePlanMapper.insertQqchChangeProcedurePlanList(insertList);
-        }
-        if(updateList.size() > 0){
-            qqchChangeProcedurePlanMapper.updateQqchChangeProcedurePlanList(updateList);
-        }
+        qqchChangeProcedurePlanMapper.insertQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
     }
-
-    /**
-     * 批量删除
-     * @param qqchChangeProcedurePlanPkList
-     * @return
-     */
-    @Transactional
-    public int deleteQqchChangeProcedurePlanByPks(List<Long> qqchChangeProcedurePlanPkList) {
-        return qqchChangeProcedurePlanMapper.deleteQqchChangeProcedurePlanByPks(qqchChangeProcedurePlanPkList);
-    }
-
 }

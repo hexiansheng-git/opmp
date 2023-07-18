@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -69,6 +71,18 @@ public class QqchOptimizeChangeOrganization extends BaseEntity {
     @JsonProperty
     @Excel(name = "人员id")
     private Long memberId;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：所属区域id
      */

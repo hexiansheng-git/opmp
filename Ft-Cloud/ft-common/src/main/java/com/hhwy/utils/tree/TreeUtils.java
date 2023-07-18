@@ -4,20 +4,19 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author zhenglili
  * @date 2023-07-13 09:50:00
  * @remark 列表转树工具类
  */
+@Deprecated
 public class TreeUtils {
 
-    private static String idField = "id";
-    private static String parentIdField = "pid";
-    private static String childrenName = "children";
+    private static final String ID_FIELD = "id";
+    private static final String PARENT_ID_FIELD = "pid";
+    private static final String CHILDREN_NAME = "children";
 
     /**
      * 对应id字段名称为id,父id字段名称为pid,子集合名称为children的专用方法
@@ -27,7 +26,7 @@ public class TreeUtils {
      * @return
      */
     public static <T> List<T> listToTree(List<T> nodes) {
-        return listToTreeGeneric(nodes, parentIdField, idField, childrenName);
+        return listToTreeGeneric(nodes, PARENT_ID_FIELD, ID_FIELD, CHILDREN_NAME);
     }
 
     /**
@@ -89,7 +88,7 @@ public class TreeUtils {
      * @return
      */
     public static <T> List<T> splitTreeList(List<T> nodes){
-        return splitTreeList(nodes,idField,parentIdField,childrenName);
+        return splitTreeList(nodes, ID_FIELD, PARENT_ID_FIELD, CHILDREN_NAME);
     }
 
     /**

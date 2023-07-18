@@ -1,7 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
-import java.util.Arrays;
-import java.util.List;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeChangeOrganizationService;
 import org.springframework.web.bind.annotation.*;
@@ -59,17 +57,5 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo){
         qqchOptimizeChangeOrganizationService.confirm(qqchOptimizeChangeOrganizationVo);
         return AjaxResult.success(qqchOptimizeChangeOrganizationVo);
-    }
-
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:remove")
-    @PostMapping("/remove/{ids}")
-    public AjaxResult deleteQqchOptimizeChangeOrganizationByPks(@PathVariable Long[] ids) {
-        List<Long> qqchOptimizeChangeOrganizationPkList = Arrays.asList(ids);
-        return toAjax(qqchOptimizeChangeOrganizationService.deleteQqchOptimizeChangeOrganizationByPks(qqchOptimizeChangeOrganizationPkList));
     }
 }

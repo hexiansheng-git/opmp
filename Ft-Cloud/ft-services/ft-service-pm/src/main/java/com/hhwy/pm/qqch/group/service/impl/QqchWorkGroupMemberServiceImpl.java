@@ -8,13 +8,10 @@ import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
-import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -27,14 +24,6 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
     @Autowired
     private QqchWorkGroupMemberMapper qqchWorkGroupMemberMapper;
 
-
-    public QqchWorkGroupMember getQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember) {
-        return qqchWorkGroupMemberMapper.getQqchWorkGroupMember(qqchWorkGroupMember);
-    }
-
-    public List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember) {
-        return qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
-    }
 
     /**
      * 编辑数据
@@ -90,12 +79,21 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
     }
 
     /**
-     * 批量删除工作小组成员
-     * @param qqchWorkGroupMemberPkList
+     * 获取工作小组成员历史
+     * @param directorId 成员id
      * @return
      */
-    @Transactional
-    public int deleteQqchWorkGroupMemberByPks(List<Long> qqchWorkGroupMemberPkList) {
-        return qqchWorkGroupMemberMapper.deleteQqchWorkGroupMemberByPks(qqchWorkGroupMemberPkList);
+    @Override
+    public List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(Long directorId) {
+        List<QqchWorkGroupMember> qqchWorkGroupMemberList = new ArrayList<>();
+        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
+        qqchWorkGroupMember.setTemporaryGroupDuty("2");
+        qqchWorkGroupMember.setDirector("测试负责人");
+        qqchWorkGroupMember.setDirectorId(1234L);
+        qqchWorkGroupMember.setAffiliatedUnit("海外事业部");
+        qqchWorkGroupMember.setPostDuty("副总工程师");
+        qqchWorkGroupMember.setPlanResponsibility("总体负责前期策划工作");
+        qqchWorkGroupMemberList.add(qqchWorkGroupMember);
+        return qqchWorkGroupMemberList;
     }
 }

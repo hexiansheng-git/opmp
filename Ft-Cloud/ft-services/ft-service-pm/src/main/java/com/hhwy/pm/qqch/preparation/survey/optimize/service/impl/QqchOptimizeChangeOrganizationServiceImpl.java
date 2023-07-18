@@ -1,12 +1,13 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrganization;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeChangeOrganizationMapper;
@@ -28,6 +29,9 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     @Autowired
     private QqchOptimizeChangeOrganizationMapper qqchOptimizeChangeOrganizationMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     /**
      * 优化变更组织策划台账
@@ -37,7 +41,10 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     public QqchOptimizeChangeOrganizationVo getQqchOptimizeChangeOrganizationVo() {
         QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = new QqchOptimizeChangeOrganizationVo();
 
-        List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(new QqchOptimizeChangeOrganization());
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_optimize_change_organization");
+        qqchOptimizeChangeOrganizationVo.setVersion(version);
+
+        List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(version);
         //转树列表
         List<QqchOptimizeChangeOrganization> treeList = ListTreeUtil.formatTree(
                 qqchOptimizeChangeOrganizationList,
@@ -48,7 +55,6 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
         qqchOptimizeChangeOrganizationVo.setTreeList(treeList);
 
         //TODO 获取确认状态
-        qqchOptimizeChangeOrganizationVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         return qqchOptimizeChangeOrganizationVo;
     }
@@ -58,8 +64,15 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
      * @param qqchOptimizeChangeOrganizationVo
      */
     @Override
+    @Transactional
     public void save(QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo) {
-        this.editQqchOptimizeChangeOrganizationList(qqchOptimizeChangeOrganizationVo.getTreeList());
+        //删除旧数据
+        QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization = new QqchOptimizeChangeOrganization();
+        qqchOptimizeChangeOrganization.setVersion(qqchOptimizeChangeOrganizationVo.getVersion());
+        qqchOptimizeChangeOrganizationMapper.deleteQqchOptimizeChangeOrganization(qqchOptimizeChangeOrganization);
+
+        //插入新数据
+        this.insertQqchOptimizeChangeOrganizationList(qqchOptimizeChangeOrganizationVo.getTreeList(),qqchOptimizeChangeOrganization.getVersion());
     }
 
     /**
@@ -70,56 +83,27 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     @Override
     @Transactional
     public void confirm(QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo) {
-        this.editQqchOptimizeChangeOrganizationList(qqchOptimizeChangeOrganizationVo.getTreeList());
+        this.save(qqchOptimizeChangeOrganizationVo);
 
         //TODO 修改确认状态
     }
 
     /**
-     * 批量编辑（新增和修改）
+     * 批量新增
      * @param qqchOptimizeChangeOrganizationList
+     * @param version
      * @return
      */
     @Transactional
-    public void editQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList){
+    public void insertQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList, BigDecimal version){
         List<QqchOptimizeChangeOrganization> insertList = TreeUtils.splitTreeList(qqchOptimizeChangeOrganizationList);
-        if(insertList.size() > 0){
-            this.insertQqchOptimizeChangeOrganizationList(insertList);
-        }
-    }
-
-    /**
-     * 批量插入
-     * @param qqchOptimizeChangeOrganizationList
-     */
-    public void insertQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList){
-        for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : qqchOptimizeChangeOrganizationList) {
+        for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : insertList) {
+            qqchOptimizeChangeOrganization.setVersion(version);
+            qqchOptimizeChangeOrganization.setValid(Valid.YES);
             qqchOptimizeChangeOrganization.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchOptimizeChangeOrganization.setCreateUserName(SecurityUtils.getUserName());
             qqchOptimizeChangeOrganization.setCreateTime(DateUtils.getNowDate());
         }
-        qqchOptimizeChangeOrganizationMapper.insertQqchOptimizeChangeOrganizationList(qqchOptimizeChangeOrganizationList);
-    }
-
-    /**
-     * 批量修改
-     * @param qqchOptimizeChangeOrganizationList
-     */
-    public void updateQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList){
-        for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : qqchOptimizeChangeOrganizationList) {
-            qqchOptimizeChangeOrganization.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchOptimizeChangeOrganization.setUpdateTime(DateUtils.getNowDate());
-        }
-        qqchOptimizeChangeOrganizationMapper.updateQqchOptimizeChangeOrganizationList(qqchOptimizeChangeOrganizationList);
-    }
-
-    /**
-     * 批量删除
-     * @param qqchOptimizeChangeOrganizationPkList
-     * @return
-     */
-    @Transactional
-    public int deleteQqchOptimizeChangeOrganizationByPks(List<Long> qqchOptimizeChangeOrganizationPkList) {
-        return qqchOptimizeChangeOrganizationMapper.deleteQqchOptimizeChangeOrganizationByPks(qqchOptimizeChangeOrganizationPkList);
+        qqchOptimizeChangeOrganizationMapper.insertQqchOptimizeChangeOrganizationList(insertList);
     }
 }

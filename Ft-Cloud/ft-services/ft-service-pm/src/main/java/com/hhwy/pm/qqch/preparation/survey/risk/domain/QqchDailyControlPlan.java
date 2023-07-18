@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+
+import java.math.BigDecimal;
 import java.util.Date;
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -65,6 +67,18 @@ public class QqchDailyControlPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注/描述")
     private String remark;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：所属区域id
      */

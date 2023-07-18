@@ -96,10 +96,11 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         return xmslProjectBasicInfo;
     }
 
-    public XmslProjectBasicInfo getProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
-        return xmslProjectBasicInfoMapper.getProjectBasicInfo(xmslProjectBasicInfo);
-    }
-
+    /**
+     * 获取项目集合
+     * @param xmslProjectBasicInfo
+     * @return
+     */
     public List<XmslProjectBasicInfo> getProjectBasicInfoList(XmslProjectBasicInfo xmslProjectBasicInfo) {
         return xmslProjectBasicInfoMapper.getProjectBasicInfoList(xmslProjectBasicInfo);
     }
@@ -153,27 +154,19 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public int updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
-        if(!CollectionUtils.isEmpty(xmslProjectBridgeStructureList)){
-            projectBridgeStructureService.editProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
-        }
+        projectBridgeStructureService.editProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
 
         //主要涵洞结构形式
         List<XmslProjectCulvertStructure> xmslProjectCulvertStructureList = xmslProjectBasicInfo.getXmslProjectCulvertStructureList();
-        if(!CollectionUtils.isEmpty(xmslProjectCulvertStructureList)){
-            projectCulvertStructureService.editProjectCulvertStructureList(xmslProjectCulvertStructureList, xmslProjectBasicInfo);
-        }
+        projectCulvertStructureService.editProjectCulvertStructureList(xmslProjectCulvertStructureList, xmslProjectBasicInfo);
 
         //主要工程数量
         List<XmslProjectEngineeringAmount> xmslProjectEngineeringAmountList = xmslProjectBasicInfo.getXmslProjectEngineeringAmountList();
-        if(!CollectionUtils.isEmpty(xmslProjectEngineeringAmountList)){
-            projectEngineeringAmountService.editProjectEngineeringAmountList(xmslProjectEngineeringAmountList, xmslProjectBasicInfo);
-        }
+        projectEngineeringAmountService.editProjectEngineeringAmountList(xmslProjectEngineeringAmountList, xmslProjectBasicInfo);
 
         //主要材料数量
         List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList = xmslProjectBasicInfo.getXmslProjectMaterialsAmountList();
-        if(!CollectionUtils.isEmpty(xmslProjectMaterialsAmountList)){
-            projectMaterialsAmountService.editProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
-        }
+        projectMaterialsAmountService.editProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
 
         xmslProjectBasicInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());

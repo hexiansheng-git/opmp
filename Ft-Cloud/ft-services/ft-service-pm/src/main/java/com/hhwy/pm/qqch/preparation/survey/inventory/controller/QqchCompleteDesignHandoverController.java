@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
@@ -30,13 +27,12 @@ public class QqchCompleteDesignHandoverController extends BaseController {
 
     /**
      * 完整设计交接情况台账
-     * @param qqchCompleteDesignHandoverParam
      * @return
      */
     @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:list")
     @GetMapping("/list")
-    public AjaxResult getQqchCompleteDesignHandoverList(@Validated(ValidationGroups.Select.class) @RequestBody QqchCompleteDesignHandover qqchCompleteDesignHandoverParam) {
-        QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverVo(qqchCompleteDesignHandoverParam);
+    public AjaxResult getQqchCompleteDesignHandoverList() {
+        QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverVo();
         return AjaxResult.success(qqchCompleteDesignHandoverVo);
     }
 
@@ -62,17 +58,5 @@ public class QqchCompleteDesignHandoverController extends BaseController {
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         qqchCompleteDesignHandoverService.confirm(qqchCompleteDesignHandoverVo);
         return AjaxResult.success(qqchCompleteDesignHandoverVo);
-    }
-
-    /**
-     * 批量删除
-     * @param ids
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:remove")
-    @PostMapping("/remove/{ids}")
-    public AjaxResult deleteQqchCompleteDesignHandoverByPks(@PathVariable Long[] ids) {
-        List<Long> qqchCompleteDesignHandoverPkList = Arrays.asList(ids);
-        return toAjax(qqchCompleteDesignHandoverService.deleteQqchCompleteDesignHandoverByPks(qqchCompleteDesignHandoverPkList));
     }
 }

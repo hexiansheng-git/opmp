@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrganization;
@@ -16,7 +17,7 @@ public interface QqchOptimizeChangeOrganizationMapper {
 
     QqchOptimizeChangeOrganization getQqchOptimizeChangeOrganization(QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization);
 
-    List<QqchOptimizeChangeOrganization> getQqchOptimizeChangeOrganizationList(QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization);
+    List<QqchOptimizeChangeOrganization> getQqchOptimizeChangeOrganizationList(@Param("version") BigDecimal version);
 
     int insertQqchOptimizeChangeOrganization(QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization);
 

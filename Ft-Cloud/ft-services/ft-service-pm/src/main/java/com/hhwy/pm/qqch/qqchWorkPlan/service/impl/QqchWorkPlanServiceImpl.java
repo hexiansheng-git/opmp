@@ -16,7 +16,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
-import com.hhwy.utils.tree.TreeUtils;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,16 +53,13 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
         if (ONE.equals(type)) {
             /*此项目中的最大版本*/
-            Long versionMax = wzchCommonMapper.selectCanAdjustOnly("qqch_work_plan");
-            BigDecimal versionCode = null;
-            if (ObjectNullUtil.isEmpty(versionMax)) {//代表 新增
-                versionCode = new BigDecimal("1.0");
+            Long idMax = wzchCommonMapper.selectCanAdjustOnly("qqch_work_plan");
+            if (ObjectNullUtil.isEmpty(idMax)) {//代表 新增
 //                busData.setId(IdWorker.createId());
-                busData.setVersion(versionCode);
+                busData.setVersion(new BigDecimal("1.0"));
             } else {//代表编辑
-                versionCode = new BigDecimal(versionMax);
                 QqchWorkPlan workPlan = new QqchWorkPlan();
-                workPlan.setVersion(versionCode);
+                workPlan.setId(idMax);
                 QqchWorkPlan plan = this.getQqchWorkPlan(workPlan);
                 BeanUtils.copyProperties(plan,busData);
                 QqchWorkPlanDetail detail = new QqchWorkPlanDetail();
@@ -70,11 +67,11 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 detail.setDelFlag("0");
                 List<QqchWorkPlanDetail> detailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(detail);
                 if (!ObjectNullUtil.isEmpty(detailList)) {
-                    List<QqchWorkPlanDetail> planDetailsTree = TreeUtils.listToTree(detailList);
+                    List<QqchWorkPlanDetail> planDetailsTree = TreeUtil.build(detailList,null);
                     busData.setDetailList(planDetailsTree);
                 }
             }
-            busData.setVersionStr("v" + versionCode);
+            busData.setVersionStr("v" + busData.getVersion());
             // 设置创建信息
             EntityUtils.setCreateUpdateInfo(busData);
             return busData;
@@ -89,7 +86,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             detail.setDelFlag("0");
             List<QqchWorkPlanDetail> detailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(detail);
             if (!ObjectNullUtil.isEmpty(detailList)) {
-                List<QqchWorkPlanDetail> planDetailsTree = TreeUtils.listToTree(detailList);
+                List<QqchWorkPlanDetail> planDetailsTree = TreeUtil.build(detailList,null);
                 busData.setDetailList(planDetailsTree);
             }
             // 如果用户的操作类型是调整就需要将单据编号的版本+1
@@ -117,8 +114,13 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
     @Transactional
     public Long insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
+        List<QqchWorkPlanDetail> detailListLast = null;
         // 获取前端传入的设备明细
         List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
+        if (!ObjectNullUtil.isEmpty(detailList)) {
+            detailListLast = TreeUtil.treeToList(detailList);
+        }
+
         qqchWorkPlan.setId(IdWorker.createId());
         EntityUtils.setCreateUpdateInfo(qqchWorkPlan);
         // 设置版本号码
@@ -127,7 +129,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlan.setValid("0");
         qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
         // 明细
-        qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailList, qqchWorkPlan.getId());
+        qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast, qqchWorkPlan.getId());
         return qqchWorkPlan.getId();
     }
 
@@ -143,9 +145,19 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
     @Transactional
     public int updateQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
-        qqchWorkPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchWorkPlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
+        EntityUtils.setUpdateInfo(qqchWorkPlan);
+        // 获取前端传入的明细
+        List<QqchWorkPlanDetail> detailListLast = null;
+        // 获取前端传入的设备明细
+        List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
+        if (!ObjectNullUtil.isEmpty(detailList)) {
+            detailListLast = TreeUtil.treeToList(detailList);
+        }
+//        Boolean aBoolean = JyDetailsUtil.jyDetails(detailList, ValidationGroups.Update.class);
+        // 修改
+        qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
+        qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        return 1;
     }
 
     @Transactional

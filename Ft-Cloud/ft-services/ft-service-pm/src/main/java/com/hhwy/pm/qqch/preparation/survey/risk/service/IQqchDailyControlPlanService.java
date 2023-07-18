@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service;
 
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchDailyControlPlan;
+import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchDailyControlPlanVo;
 
 import java.util.List;
 
@@ -11,19 +12,23 @@ import java.util.List;
  */
 public interface IQqchDailyControlPlanService {
 
-    QqchDailyControlPlan getQqchDailyControlPlan(QqchDailyControlPlan qqchDailyControlPlan);
+    /**
+     * 获取日常管控策划Vo
+     * @return
+     */
+    QqchDailyControlPlanVo getQqchDailyControlPlanVo();
 
-    List<QqchDailyControlPlan> getQqchDailyControlPlanList(QqchDailyControlPlan qqchDailyControlPlan);
+    /**
+     * 保存
+     * @param qqchDailyControlPlanVo
+     * @return
+     */
+    void save(QqchDailyControlPlanVo qqchDailyControlPlanVo);
 
-    int insertQqchDailyControlPlan(QqchDailyControlPlan qqchDailyControlPlan);
-
-    int insertQqchDailyControlPlanList(List<QqchDailyControlPlan> qqchDailyControlPlanList);
-
-    int updateQqchDailyControlPlan(QqchDailyControlPlan qqchDailyControlPlan);
-
-    int updateQqchDailyControlPlanList(List<QqchDailyControlPlan> qqchDailyControlPlanList);
-
-    int deleteQqchDailyControlPlan(QqchDailyControlPlan qqchDailyControlPlan);
-
-    int deleteQqchDailyControlPlanByPks(List<Long> qqchDailyControlPlanPkList);
+    /**
+     * 确认
+     * @param qqchDailyControlPlanVo
+     * @return
+     */
+    void confirm(QqchDailyControlPlanVo qqchDailyControlPlanVo);
 }

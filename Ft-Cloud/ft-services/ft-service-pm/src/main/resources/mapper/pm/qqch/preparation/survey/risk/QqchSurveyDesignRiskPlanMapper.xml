@@ -13,6 +13,8 @@
         <result property="riskGrade" column="risk_grade"/>
         <result property="controlMeasure" column="control_measure"/>
         <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -41,6 +43,8 @@
              ,`risk_grade`
              ,`control_measure`
              ,`remark`
+             ,`version`
+             ,`valid`
              ,`region_id`
              ,`region_name`
              ,`project_id`
@@ -74,6 +78,8 @@
             <if test="riskGrade != null  and riskGrade != ''">and `risk_grade` = #{riskGrade}</if>
             <if test="controlMeasure != null  and controlMeasure != ''">and `control_measure` = #{controlMeasure}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -108,6 +114,8 @@
             <if test="riskGrade != null  and riskGrade != ''">and `risk_grade` = #{riskGrade}</if>
             <if test="controlMeasure != null  and controlMeasure != ''">and `control_measure` = #{controlMeasure}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -140,6 +148,8 @@
             <if test="riskGrade != null  and riskGrade != ''">`risk_grade`,</if>
             <if test="controlMeasure != null  and controlMeasure != ''">`control_measure`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="version != null">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -167,6 +177,8 @@
             <if test="riskGrade != null  and riskGrade != ''">#{riskGrade},</if>
             <if test="controlMeasure != null  and controlMeasure != ''">#{controlMeasure},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="version != null">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -199,6 +211,8 @@
             `risk_grade`,
             `control_measure`,
             `remark`,
+            `version`,
+            `valid`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -227,6 +241,8 @@
                 #{item.riskGrade},
                 #{item.controlMeasure},
                 #{item.remark},
+                #{item.version},
+                #{item.valid},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -259,6 +275,8 @@
             <if test="riskGrade != null  and  riskGrade != ''">`risk_grade` = #{riskGrade},</if>
             <if test="controlMeasure != null  and  controlMeasure != ''">`control_measure` = #{controlMeasure},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="version != null">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -308,6 +326,16 @@
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -389,6 +417,8 @@
             <if test="riskGrade != null  and riskGrade != ''">and `risk_grade` = #{riskGrade}</if>
             <if test="controlMeasure != null  and controlMeasure != ''">and `control_measure` = #{controlMeasure}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>

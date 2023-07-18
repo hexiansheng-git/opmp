@@ -9,6 +9,8 @@
         <result property="id" column="id"/>
         <result property="optimizeProcedurePlanGroupId" column="optimize_procedure_plan_group_id"/>
         <result property="changeProcedurePlanGroupId" column="change_procedure_plan_group_id"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -33,6 +35,8 @@
               `id`
              ,`optimize_procedure_plan_group_id`
              ,`change_procedure_plan_group_id`
+             ,`version`
+             ,`valid`
              ,`region_id`
              ,`region_name`
              ,`project_id`
@@ -64,6 +68,8 @@
             <if test="changeProcedurePlanGroupId != null  and changeProcedurePlanGroupId != ''">and
                 `change_procedure_plan_group_id` = #{changeProcedurePlanGroupId}
             </if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -96,6 +102,8 @@
             <if test="changeProcedurePlanGroupId != null  and changeProcedurePlanGroupId != ''">and
                 `change_procedure_plan_group_id` = #{changeProcedurePlanGroupId}
             </if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -128,6 +136,8 @@
             <if test="changeProcedurePlanGroupId != null  and changeProcedurePlanGroupId != ''">
                 `change_procedure_plan_group_id`,
             </if>
+            <if test="version != null">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -155,6 +165,8 @@
             <if test="changeProcedurePlanGroupId != null  and changeProcedurePlanGroupId != ''">
                 #{changeProcedurePlanGroupId},
             </if>
+            <if test="version != null">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -183,6 +195,8 @@
             `id`,
             `optimize_procedure_plan_group_id`,
             `change_procedure_plan_group_id`,
+            `version`,
+            `valid`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -207,6 +221,8 @@
                 #{item.id},
                 #{item.optimizeProcedurePlanGroupId},
                 #{item.changeProcedurePlanGroupId},
+                #{item.version},
+                #{item.valid},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -237,6 +253,8 @@
             <if test="changeProcedurePlanGroupId != null  and  changeProcedurePlanGroupId != ''">
                 `change_procedure_plan_group_id` = #{changeProcedurePlanGroupId},
             </if>
+            <if test="version != null">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -266,6 +284,16 @@
             <trim prefix="change_procedure_plan_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.changeProcedurePlanGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
@@ -345,6 +373,8 @@
             <if test="changeProcedurePlanGroupId != null  and changeProcedurePlanGroupId != ''">and
                 `change_procedure_plan_group_id` = #{changeProcedurePlanGroupId}
             </if>
+            <if test="version != null">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="projectId != null ">and `project_id` = #{projectId}</if>

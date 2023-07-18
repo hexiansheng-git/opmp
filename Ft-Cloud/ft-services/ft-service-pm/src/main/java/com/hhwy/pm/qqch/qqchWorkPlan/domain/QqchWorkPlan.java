@@ -64,14 +64,14 @@ public class QqchWorkPlan extends CommonBaseEntity {
     /**
      * 字段描述：开工令下发日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "开工令下发日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date workStartTime;
     /**
      * 字段描述：第一阶段提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "第一阶段提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitFirst;
@@ -84,7 +84,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
     /**
      * 字段描述：第二阶段提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "第二阶段提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitSecond;
@@ -97,7 +97,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
     /**
      * 字段描述：第三阶段提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "第三阶段提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitThird;
@@ -173,7 +173,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
@@ -186,7 +186,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
@@ -199,7 +199,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
     /**
      * 字段描述：数据删除系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;

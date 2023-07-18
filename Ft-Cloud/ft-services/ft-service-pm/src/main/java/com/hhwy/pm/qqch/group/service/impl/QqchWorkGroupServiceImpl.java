@@ -1,14 +1,17 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,9 +53,12 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Override
     public QqchWorkGroup adjustQqchWorkGroup(Long id) {
         QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
+
         if(id == null){
             //第一次新增
             qqchWorkGroup.setVersion(BigDecimal.valueOf(1.0));
+            qqchWorkGroup.setEffective(Valid.NO);
+            qqchWorkGroup.setQqchWorkGroupMemberList(new ArrayList<>());
             return qqchWorkGroup;
         }
 
@@ -63,9 +69,16 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         //获取调整数据
         qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
         qqchWorkGroup.setId(null);
+        qqchWorkGroup.setEffective(Valid.NO);
         BigDecimal version = qqchWorkGroup.getVersion();
         version = version.add(BigDecimal.valueOf(1));
         qqchWorkGroup.setVersion(version);
+
+        //获取小组成员数据
+        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
+        qqchWorkGroupMember.setWorkGroupId(id);
+        List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+        qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
 
         return qqchWorkGroup;
     }
@@ -108,8 +121,12 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             qqchWorkGroupMemberService.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList,qqchWorkGroup);
         }
 
+        if(StringUtils.isBlank(qqchWorkGroup.getEffective())){
+            qqchWorkGroup.setEffective(Valid.NO);//是否有效默认为否
+        }
         qqchWorkGroup.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setCreateUserName(SecurityUtils.getUserName());
+        qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setCreateTime(DateUtils.getNowDate());
         return qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
     }
@@ -122,11 +139,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Transactional
     public int updateQqchWorkGroup(QqchWorkGroup qqchWorkGroup) {
 
-        //修改工作小组成员
+        //工作小组成员
         List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroup.getQqchWorkGroupMemberList();
-        if(!CollectionUtils.isEmpty(qqchWorkGroupMemberList)){
-            qqchWorkGroupMemberService.editQqchWorkGroupMemberList(qqchWorkGroupMemberList,qqchWorkGroup);
-        }
+        qqchWorkGroupMemberService.editQqchWorkGroupMemberList(qqchWorkGroupMemberList,qqchWorkGroup);
 
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());

@@ -2,12 +2,14 @@ package com.hhwy.pm.common.mapper;
 
 import java.math.BigDecimal;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 /**
  * 通用持久层
  *
  * @author mls
  */
+@Repository
 public interface CommonMapper {
 
     /**

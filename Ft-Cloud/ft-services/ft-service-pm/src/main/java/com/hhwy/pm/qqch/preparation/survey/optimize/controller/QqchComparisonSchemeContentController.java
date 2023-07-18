@@ -1,14 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
-import java.util.List;
-import java.io.IOException;
-
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeContentService;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -25,12 +18,4 @@ public class QqchComparisonSchemeContentController extends BaseController {
 
     @Autowired
     private IQqchComparisonSchemeContentService qqchComparisonSchemeContentService;
-
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchComparisonSchemeContent qqchComparisonSchemeContentParam) throws IOException {
-        List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeContentService.getQqchComparisonSchemeContentList(qqchComparisonSchemeContentParam);
-        ExcelUtils<QqchComparisonSchemeContent> util = new ExcelUtils<>(QqchComparisonSchemeContent.class);
-        util.exportExcel(response, qqchComparisonSchemeContentList, DateUtils.getDate());
-    }
 }

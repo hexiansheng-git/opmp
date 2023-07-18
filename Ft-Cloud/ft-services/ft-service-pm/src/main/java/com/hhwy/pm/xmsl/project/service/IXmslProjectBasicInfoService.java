@@ -17,13 +17,26 @@ public interface IXmslProjectBasicInfoService {
      * @return
      */
     XmslProjectBasicInfo getProjectBasicInfoById(Long id);
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-    XmslProjectBasicInfo getProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
+    /**
+     * 项目台账
+     * @param xmslProjectBasicInfo
+     * @return
+     */
     List<XmslProjectBasicInfo> getProjectBasicInfoList(XmslProjectBasicInfo xmslProjectBasicInfo);
 
+    /**
+     * 新增项目信息
+     * @param xmslProjectBasicInfo
+     * @return
+     */
     int insertProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
+    /**
+     * 修改项目信息
+     * @param xmslProjectBasicInfo
+     * @return
+     */
     int updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
     int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);

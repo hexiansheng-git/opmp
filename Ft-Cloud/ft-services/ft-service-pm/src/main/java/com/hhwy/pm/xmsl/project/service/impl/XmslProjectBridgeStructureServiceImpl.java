@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -9,6 +8,7 @@ import com.hhwy.pm.xmsl.project.domain.XmslProjectBridgeStructure;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectBridgeStructureMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBridgeStructureService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,21 +36,14 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
      */
     @Transactional
     public void editProjectBridgeStructureList(List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList, XmslProjectBasicInfo xmslProjectBasicInfo){
-        List<XmslProjectBridgeStructure> insertList = new ArrayList<>();
-        List<XmslProjectBridgeStructure> updateList = new ArrayList<>();
-        for (XmslProjectBridgeStructure xmslProjectBridgeStructure : xmslProjectBridgeStructureList) {
-            Long projectBridgeStructureId = xmslProjectBridgeStructure.getId();
-            if(projectBridgeStructureId == null){
-                insertList.add(xmslProjectBridgeStructure);
-            }else{
-                updateList.add(xmslProjectBridgeStructure);
-            }
-        }
-        if(insertList.size() > 0){
-            this.insertProjectBridgeStructureList(insertList, xmslProjectBasicInfo);
-        }
-        if(updateList.size() > 0){
-            this.updateProjectBridgeStructureList(updateList);
+        //删除旧数据
+        XmslProjectBridgeStructure xmslProjectBridgeStructure = new XmslProjectBridgeStructure();
+        xmslProjectBridgeStructure.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
+        xmslProjectBridgeStructureMapper.deleteProjectBridgeStructure(xmslProjectBridgeStructure);
+
+        //插入新数据
+        if(CollectionUtils.isNotEmpty(xmslProjectBridgeStructureList)){
+            this.insertProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
         }
     }
 
@@ -75,15 +68,6 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
             xmslProjectBridgeStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectBridgeStructureMapper.insertProjectBridgeStructureList(xmslProjectBridgeStructureList);
-    }
-
-    @Transactional
-    public int updateProjectBridgeStructureList(List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList) {
-        for (XmslProjectBridgeStructure xmslProjectBridgeStructure : xmslProjectBridgeStructureList) {
-            xmslProjectBridgeStructure.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectBridgeStructure.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslProjectBridgeStructureMapper.updateProjectBridgeStructureList(xmslProjectBridgeStructureList);
     }
 
     @Override

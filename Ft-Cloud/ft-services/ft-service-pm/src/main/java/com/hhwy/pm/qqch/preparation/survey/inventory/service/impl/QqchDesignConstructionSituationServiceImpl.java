@@ -1,11 +1,12 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service.impl;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructionSituation;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchDesignConstructionSituationMapper;
@@ -26,19 +27,27 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     @Autowired
     private QqchDesignConstructionSituationMapper qqchDesignConstructionSituationMapper;
 
+    @Autowired
+    private CommonMapper commonMapper;
+
 
     /**
      * 边设计边施工情况台账
-     * @param qqchDesignConstructionSituation
      * @return
      */
-    public QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo(QqchDesignConstructionSituation qqchDesignConstructionSituation) {
+    public QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo() {
         QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = new QqchDesignConstructionSituationVo();
+
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_design_construction_situation");
+        qqchDesignConstructionSituationVo.setVersion(version);
+
+        QqchDesignConstructionSituation qqchDesignConstructionSituation = new QqchDesignConstructionSituation();
+        qqchDesignConstructionSituation.setVersion(version);
         List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList = qqchDesignConstructionSituationMapper.getQqchDesignConstructionSituationList(qqchDesignConstructionSituation);
+
         qqchDesignConstructionSituationVo.setQqchDesignConstructionSituationList(qqchDesignConstructionSituationList);
 
         //TODO 获取确认状态
-        qqchDesignConstructionSituationVo.setQqchModuleConfirmCase(new QqchModuleConfirmCase());
 
         return qqchDesignConstructionSituationVo;
     }
@@ -50,7 +59,13 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
      */
     @Override
     public void save(QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
-        this.editQqchDesignConstructionSituationList(qqchDesignConstructionSituationVo.getQqchDesignConstructionSituationList());
+        //删除旧数据
+        QqchDesignConstructionSituation qqchDesignConstructionSituation = new QqchDesignConstructionSituation();
+        qqchDesignConstructionSituation.setVersion(qqchDesignConstructionSituationVo.getVersion());
+        qqchDesignConstructionSituationMapper.deleteQqchDesignConstructionSituation(qqchDesignConstructionSituation);
+
+        //插入新数据
+        this.insertQqchDesignConstructionSituationList(qqchDesignConstructionSituationVo.getQqchDesignConstructionSituationList(), qqchDesignConstructionSituation.getVersion());
     }
 
     /**
@@ -61,7 +76,7 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     @Override
     @Transactional
     public void confirm(QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
-        this.editQqchDesignConstructionSituationList(qqchDesignConstructionSituationVo.getQqchDesignConstructionSituationList());
+        this.save(qqchDesignConstructionSituationVo);
 
         //TODO 修改确认状态
     }
@@ -69,40 +84,18 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     /**
      * 批量编辑
      * @param qqchDesignConstructionSituationList
+     * @param version
      */
     @Transactional
-    public void editQqchDesignConstructionSituationList(List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList){
-        List<QqchDesignConstructionSituation> insertList = new ArrayList<>();
-        List<QqchDesignConstructionSituation> updateList = new ArrayList<>();
+    public void insertQqchDesignConstructionSituationList(List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList, BigDecimal version){
         for (QqchDesignConstructionSituation qqchDesignConstructionSituation : qqchDesignConstructionSituationList) {
-            Long id = qqchDesignConstructionSituation.getId();
-            if(id == null){
-                qqchDesignConstructionSituation.setId(IdWorker.createId());
-                qqchDesignConstructionSituation.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                qqchDesignConstructionSituation.setCreateUserName(SecurityUtils.getUserName());
-                qqchDesignConstructionSituation.setCreateTime(DateUtils.getNowDate());
-                insertList.add(qqchDesignConstructionSituation);
-            }else{
-                qqchDesignConstructionSituation.setUpdateUser(String.valueOf(SecurityUtils.getUserName()));
-                qqchDesignConstructionSituation.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(qqchDesignConstructionSituation);
-            }
+            qqchDesignConstructionSituation.setId(IdWorker.createId());
+            qqchDesignConstructionSituation.setVersion(version);
+            qqchDesignConstructionSituation.setValid(Valid.YES);
+            qqchDesignConstructionSituation.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchDesignConstructionSituation.setCreateUserName(SecurityUtils.getUserName());
+            qqchDesignConstructionSituation.setCreateTime(DateUtils.getNowDate());
         }
-        if(insertList.size() > 0){
-            qqchDesignConstructionSituationMapper.insertQqchDesignConstructionSituationList(insertList);
-        }
-        if(updateList.size() > 0){
-            qqchDesignConstructionSituationMapper.updateQqchDesignConstructionSituationList(updateList);
-        }
-    }
-
-    /**
-     * 批量删除
-     * @param qqchDesignConstructionSituationPkList
-     * @return
-     */
-    @Transactional
-    public int deleteQqchDesignConstructionSituationByPks(List<Long> qqchDesignConstructionSituationPkList) {
-        return qqchDesignConstructionSituationMapper.deleteQqchDesignConstructionSituationByPks(qqchDesignConstructionSituationPkList);
+        qqchDesignConstructionSituationMapper.insertQqchDesignConstructionSituationList(qqchDesignConstructionSituationList);
     }
 }
