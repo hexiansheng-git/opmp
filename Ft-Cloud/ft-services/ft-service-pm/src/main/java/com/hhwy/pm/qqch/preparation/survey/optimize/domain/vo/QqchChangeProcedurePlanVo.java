@@ -32,6 +32,10 @@ public class QqchChangeProcedurePlanVo {
      */
     private BigDecimal version;
     /**
+     * 字段描述：附件组id
+     */
+    private String fileGroupId;
+    /**
      * 字段描述：变更程序策划集合
      */
     private List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList;

@@ -32,6 +32,10 @@ public class QqchOptimizeProcedurePlanVo {
      */
     private BigDecimal version;
     /**
+     * 字段描述：附件组id
+     */
+    private String fileGroupId;
+    /**
      * 字段描述：优化程序策划集合
      */
     private List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList;

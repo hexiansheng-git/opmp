@@ -15,7 +15,7 @@ public interface IQqchPreparationSurveyExtendService {
      * 获取扩展数据
      * @return
      */
-    QqchPreparationSurveyExtend getQqchPreparationSurveyExtend();
+    QqchPreparationSurveyExtend getQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
 
     List<QqchPreparationSurveyExtend> getQqchPreparationSurveyExtendList(QqchPreparationSurveyExtend qqchPreparationSurveyExtend);
 

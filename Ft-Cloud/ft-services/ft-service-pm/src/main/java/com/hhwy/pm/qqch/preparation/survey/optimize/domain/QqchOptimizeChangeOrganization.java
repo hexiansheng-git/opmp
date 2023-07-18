@@ -51,7 +51,7 @@ public class QqchOptimizeChangeOrganization extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String sort;
+    private Integer sort;
     /**
      * 字段描述：项目职位
      */

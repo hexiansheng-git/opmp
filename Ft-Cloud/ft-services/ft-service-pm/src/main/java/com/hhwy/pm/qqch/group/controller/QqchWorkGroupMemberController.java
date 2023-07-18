@@ -1,19 +1,14 @@
 package com.hhwy.pm.qqch.group.controller;
 
-import java.util.Arrays;
 import java.util.List;
-import java.io.IOException;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
 
 /**
  * @author han
@@ -30,12 +25,13 @@ public class QqchWorkGroupMemberController extends BaseController {
 
     /**
      * 获取工作小组成员历史
-     * @param directorId 成员id
+     * @param qqchWorkGroupMember
      * @return
      */
     @GetMapping("history")
-    public AjaxResult getEstablishPreliminaryPlanHistory(Long directorId){
-        List<QqchWorkGroupMember> workGroupMemberList = qqchWorkGroupMemberService.getEstablishPreliminaryPlanHistory(directorId);
-        return AjaxResult.success(workGroupMemberList);
+    public AjaxResult getEstablishPreliminaryPlanHistory(@Validated(ValidationGroups.Select.class) QqchWorkGroupMember qqchWorkGroupMember){
+        startPage();
+        List<QqchWorkGroupMember> workGroupMemberList = qqchWorkGroupMemberService.getEstablishPreliminaryPlanHistory(qqchWorkGroupMember);
+        return getDataTableAjaxResult(workGroupMemberList);
     }
 }

@@ -15,9 +15,12 @@ import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;
 import com.hhwy.system.service.ISysPmService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.poi.hssf.record.PageBreakRecord;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +61,7 @@ public class SysPmController {
      * @return
      */
     @GetMapping("/reverseDict")
-    public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictValue") String dictLabel) {
+    public AjaxResult reverseDictList(@RequestParam("dictType") String dictType, @RequestParam("dictLabel") String dictLabel) {
         List<SysDictData> list = dictService.selectDictValueByTypeAndLabel(dictType, dictLabel);
         return AjaxResult.success(list);
     }
@@ -83,7 +86,6 @@ public class SysPmController {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setMenuType("menu");
         List<SysMenu> list = this.menuService.selectMenuTreeList(sysMenu, sysUser);
-
         List<SysMenu> resList = this.findChildTree(list, name);
         return AjaxResult.success(resList);
     }
@@ -105,5 +107,17 @@ public class SysPmController {
         return null;
     }
 
+    @RequestMapping({"/importDict"})
+    public AjaxResult importDict(MultipartFile file) {
+        AjaxResult resu = null;
+        try {
+            dictService.importDict(file);
+            resu = AjaxResult.success("导入成功");
+        }catch (Exception var4) {
+            var4.printStackTrace();
+            resu = AjaxResult.error("导入失败"+var4.getMessage());
+        }
+        return resu;
+    }
 
 }

@@ -21,6 +21,10 @@
             <groupId>com.hhwy</groupId>
             <artifactId>ft-service-system-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.hhwy</groupId>
+            <artifactId>ft-common</artifactId>
+        </dependency>
 
     </dependencies>
 
