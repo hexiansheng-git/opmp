@@ -45,6 +45,34 @@ public class XmslContractListController extends BaseController {
         return AjaxResult.success(treeList);
     }
 
+    /**
+     *   懒加载列表
+     * @param xmslContractListParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "xmslContractList:list")
+    @GetMapping("/lazylist")
+    public AjaxResult getXmslContractList2(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
+        List<XmslContractList> list  = xmslContractListService.getXmslContractList2(xmslContractListParam);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     *   获取生效的清单列表
+     *
+     * @param xmslContractListParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "xmslContractList:list")
+    @GetMapping("/getEffectList")
+    public AjaxResult getEffectList(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
+        List<XmslContractList> list  = xmslContractListService.getEffectList(xmslContractListParam);
+        return AjaxResult.success(list);
+    }
+
+
+
+
     @PreAuthorize(hasPermi = "xmslContractList:list")
     @GetMapping("/list")
     public AjaxResult getXmslContractListList(@Validated(ValidationGroups.Select.class)  XmslContractList xmslContractListParam) {

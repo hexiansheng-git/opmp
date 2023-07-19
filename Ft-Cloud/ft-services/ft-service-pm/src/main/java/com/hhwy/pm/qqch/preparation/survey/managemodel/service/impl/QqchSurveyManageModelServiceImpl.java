@@ -60,7 +60,7 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
     @Transactional
     public int insertQqchSurveyManageModel(MasterEntity masterEntity) {
         List<SonEntity> sonEntityList = masterEntity.getSonEntityList();
-        ArrayList<QqchSurveyManageModel> list = new ArrayList<>();
+        List<QqchSurveyManageModel> list = new ArrayList<>();
         for (SonEntity sonEntity : sonEntityList) {
             QqchSurveyManageModel qqchSurveyManageModel = new QqchSurveyManageModel();
             qqchSurveyManageModel.setManageModel(sonEntity.getManageModel());
@@ -107,7 +107,34 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
         //TODO 修改确认状态
     }
 
-    private void save(MasterEntity masterEntity) {
+    private int save(MasterEntity masterEntity) {
+        //删除旧数据
+        List<SonEntity> sonEntityList = masterEntity.getSonEntityList();
+        if(CollectionUtils.isNotEmpty(sonEntityList)){
+            List<Long> idsList = new ArrayList<>();
+            for (SonEntity sonEntity : sonEntityList) {
+                idsList.add(sonEntity.getId());
+            }
+            QqchSurveyManageModel qqchSurveyManageModel=new QqchSurveyManageModel();
+            qqchSurveyManageModel.setIds(idsList.toArray(new Long[]{}));
+
+            qqchSurveyManageModelMapper.deleteQqchSurveyManageModel(qqchSurveyManageModel);
+        }
+        //重新添加新数据
+        List<QqchSurveyManageModel> list = new ArrayList<>();
+        for (SonEntity sonEntity : sonEntityList) {
+            QqchSurveyManageModel qqchSurveyManageModel = new QqchSurveyManageModel();
+            qqchSurveyManageModel.setManageModel(sonEntity.getManageModel());
+            qqchSurveyManageModel.setAdvantage(sonEntity.getAdvantage());
+            qqchSurveyManageModel.setDisadvantage(sonEntity.getDisadvantage());
+            qqchSurveyManageModel.setRemark(sonEntity.getRemark());
+            qqchSurveyManageModel.setId(IdWorker.createId());
+            qqchSurveyManageModel.setCreateUser(SecurityUtils.getUserName());
+            qqchSurveyManageModel.setCreateTime(DateUtils.getNowDate());
+            qqchSurveyManageModel.setResults(masterEntity.getResults());
+            list.add(qqchSurveyManageModel);
+        }
+        return qqchSurveyManageModelMapper.insertQqchSurveyManageModelList(list);
     }
 
 }

@@ -2,8 +2,10 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
+import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractListMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -26,6 +28,8 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     @Autowired
     private XmslContractListMapper xmslContractListMapper;
+    @Autowired
+    private XmslContractInfoMapper xmslContractInfoMapper;
 
 
     public List<XmslContractList> getXmslContractList(XmslContractList xmslContractList) {
@@ -34,8 +38,32 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         return treeList;
     }
 
+    @Override
+    public List<XmslContractList> getXmslContractList2(XmslContractList xmslContractListParam) {
+        List<XmslContractList> xmslContractList1 = xmslContractListMapper.getXmslContractList(xmslContractListParam);
+        return xmslContractList1;
+    }
+
     public List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList) {
         return xmslContractListMapper.getXmslContractListList(xmslContractList);
+    }
+
+    /**
+     *  获取生效的清单列表
+     *
+     * @param xmslContractListParam
+     * @return
+     */
+    @Override
+    public List<XmslContractList> getEffectList(XmslContractList xmslContractListParam) {
+        //查询生效的数据 masterId
+        XmslContractInfo xmslContractInfo = new XmslContractInfo();
+        xmslContractInfo.setValid("1");
+        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+        XmslContractList xmslContractList = new XmslContractList();
+        xmslContractList.setMasterId(xmslContractInfo1.getId());
+        List<XmslContractList> xmslContractList2 = this.getXmslContractList2(xmslContractList);
+        return xmslContractList2;
     }
 
     @Transactional
@@ -116,4 +144,6 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     public int deleteXmslContractListByPks(List<Long> xmslContractListPkList) {
         return xmslContractListMapper.deleteXmslContractListByPks(xmslContractListPkList);
     }
+
+
 }
