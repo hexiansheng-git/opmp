@@ -32,14 +32,14 @@ public class XmslContractInfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInfo:list")
     @GetMapping
-    public AjaxResult getXmslContractInfo(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
+    public AjaxResult getXmslContractInfo(@Validated(ValidationGroups.Get.class)  XmslContractInfo xmslContractInfoParam) {
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfoParam);
         return AjaxResult.success(xmslContractInfo);
     }
 
     @PreAuthorize(hasPermi = "xmslContractInfo:list")
     @GetMapping("/list")
-    public AjaxResult getXmslContractInfoList(@Validated(ValidationGroups.Select.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
+    public AjaxResult getXmslContractInfoList(@Validated(ValidationGroups.Select.class)  XmslContractInfo xmslContractInfoParam) {
         startPage();
         List<XmslContractInfo> xmslContractInfoList = xmslContractInfoService.getXmslContractInfoList(xmslContractInfoParam);
         return getDataTableAjaxResult(xmslContractInfoList);

@@ -35,14 +35,14 @@ public class XmslContractSignController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractSign:list")
     @GetMapping
-    public AjaxResult getXmslContractSign(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractSign xmslContractSignParam) {
+    public AjaxResult getXmslContractSign(@Validated(ValidationGroups.Get.class)  XmslContractSign xmslContractSignParam) {
         XmslContractSign xmslContractSign = xmslContractSignService.getXmslContractSign(xmslContractSignParam);
         return AjaxResult.success(xmslContractSign);
     }
 
     @PreAuthorize(hasPermi = "xmslContractSign:list")
     @GetMapping("/list")
-    public AjaxResult getXmslContractSignList(@Validated(ValidationGroups.Select.class) @RequestBody XmslContractSign xmslContractSignParam) {
+    public AjaxResult getXmslContractSignList(@Validated(ValidationGroups.Select.class)  XmslContractSign xmslContractSignParam) {
         startPage();
         List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSignParam);
         return getDataTableAjaxResult(xmslContractSignList);

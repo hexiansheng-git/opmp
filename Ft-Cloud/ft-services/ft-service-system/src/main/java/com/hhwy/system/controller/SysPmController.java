@@ -7,9 +7,9 @@ package com.hhwy.system.controller;/*
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.system.api.domain.SysUser;
-import com.hhwy.system.core.domain.SysDictData;
 import com.hhwy.system.core.service.IMenuService;
 import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;

@@ -6,7 +6,6 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.excel.Util;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractPayinfoVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
@@ -33,22 +32,21 @@ public class XmslContractPayinfoController extends BaseController {
 
     @Autowired
     private IXmslContractPayinfoService xmslContractPayinfoService;
-    @Autowired
-    private SystemServiceApi systemServiceApi;
+
 
     private static final  String type="rate_type";
 
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:list")
     @GetMapping
-    public AjaxResult getXmslContractPayinfo(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractPayinfo xmslContractPayinfoParam) {
+    public AjaxResult getXmslContractPayinfo(@Validated(ValidationGroups.Get.class)  XmslContractPayinfo xmslContractPayinfoParam) {
         XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoService.getXmslContractPayinfo(xmslContractPayinfoParam);
         return AjaxResult.success(xmslContractPayinfo);
     }
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:list")
     @GetMapping("/list")
-    public AjaxResult getXmslContractPayinfoList(@Validated(ValidationGroups.Select.class) @RequestBody XmslContractPayinfo xmslContractPayinfoParam) {
+    public AjaxResult getXmslContractPayinfoList(@Validated(ValidationGroups.Select.class)  XmslContractPayinfo xmslContractPayinfoParam) {
         startPage();
         List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfoParam);
         return getDataTableAjaxResult(xmslContractPayinfoList);
@@ -107,7 +105,7 @@ public class XmslContractPayinfoController extends BaseController {
             for (XmslContractPayinfoVo xmslContractPayinfoVo : xmslContractPayinfoVos) {
                 String rateType = xmslContractPayinfoVo.getRateType();
                 Util util1 = new Util();
-                String value = util1.reverseDict("rate_type", rateType);
+                String value = util1.reverseDict(type, rateType);
                 xmslContractPayinfoVo.setRateType(value);
             }
             return AjaxResult.success(xmslContractPayinfoVos);

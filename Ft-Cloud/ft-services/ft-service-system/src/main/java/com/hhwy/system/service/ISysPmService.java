@@ -4,7 +4,7 @@ package com.hhwy.system.service;/*
  * @Date: $
  **/
 
-import com.hhwy.system.core.domain.SysDictData;
+import com.hhwy.system.api.domain.SysDictData;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

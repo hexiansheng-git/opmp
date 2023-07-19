@@ -177,7 +177,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                             <if test="version != null  and version != ''"> and `version` = #{version}</if>
                     </where>
-        order by create_time desc
+        order by version desc limit 1
     </select>
 
     <select id="getXmslContractInfoList" resultMap="XmslContractInfoResultMap">

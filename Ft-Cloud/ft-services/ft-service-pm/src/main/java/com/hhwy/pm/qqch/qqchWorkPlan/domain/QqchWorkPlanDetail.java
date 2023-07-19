@@ -55,6 +55,9 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     @JsonProperty
     @Excel(name = "主数据id  （qqch_work_plan）")
     private Long mainId;
+
+    @NotBlank(message = "策划项id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    private Long itemId;
     /*策划项name*/
     @NotBlank(message = "策划项名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String itemName;
