@@ -14,6 +14,8 @@ public interface IXmslContractListService {
 
     List<XmslContractList> getXmslContractList(XmslContractList xmslContractList);
 
+    List<XmslContractList> getXmslContractList2(XmslContractList xmslContractListParam);
+
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 
     int insertXmslContractList(XmslContractList xmslContractList);
@@ -26,4 +28,7 @@ public interface IXmslContractListService {
     int deleteXmslContractList(XmslContractList xmslContractList);
 
     int deleteXmslContractListByPks(List<Long> xmslContractListPkList);
+
+
+    List<XmslContractList> getEffectList(XmslContractList xmslContractListParam);
 }

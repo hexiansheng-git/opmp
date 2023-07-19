@@ -1,11 +1,11 @@
-package com.hhwy.pm.qqch.preparation.survey.managemodel.domain;
+package com.hhwy.pm.qqch.preparation.survey.organization.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,46 +15,64 @@ import java.util.Date;
 
 /**
  * @author ldd
- * @date 2023-07-18 15:25:50
- * @remark qqch_survey_manage_model
+ * @date 2023-07-19 15:37:23
+ * @remark qqch_survey_organization
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QqchSurveyManageModel extends BaseEntity {
+public class QqchSurveyOrganization extends TreeNode<QqchSurveyOrganization> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键id
+     * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键id")
+    @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：管理模式
+     * 字段描述：父id
      */
     @JsonProperty
-    @Excel(name = "管理模式")
-    private String manageModel;
+    @Excel(name = "父id")
+    private Long pid;
     /**
-     * 字段描述：优点
+     * 字段描述：勘察设计分组
      */
     @JsonProperty
-    @Excel(name = "优点")
-    private String advantage;
+    @Excel(name = "勘察设计分组")
+    private String surveyDesignGroup;
     /**
-     * 字段描述：缺点
+     * 字段描述：组内角色
      */
     @JsonProperty
-    @Excel(name = "缺点")
-    private String disadvantage;
+    @Excel(name = "组内角色")
+    private String groupRole;
     /**
-     * 字段描述：比选结果
+     * 字段描述：岗位职责
      */
     @JsonProperty
-    @Excel(name = "比选结果")
-    private String results;
+    @Excel(name = "岗位职责")
+    private String postDuty;
+    /**
+     * 字段描述：管理单位
+     */
+    @JsonProperty
+    @Excel(name = "管理单位")
+    private String manageUnit;
+    /**
+     * 字段描述：项目部人员编制
+     */
+    @JsonProperty
+    @Excel(name = "项目部人员编制")
+    private String staffEstablish;
+    /**
+     * 字段描述：协作单位人员要求
+     */
+    @JsonProperty
+    @Excel(name = "协作单位人员要求")
+    private String actorPersonAsk;
     /**
      * 字段描述：附件组id
      */
@@ -193,8 +211,5 @@ public class QqchSurveyManageModel extends BaseEntity {
     @JsonProperty
     @Excel(name = "部门id")
     private Long deptId;
-
-    private Long[]  ids;
-
 
 }
