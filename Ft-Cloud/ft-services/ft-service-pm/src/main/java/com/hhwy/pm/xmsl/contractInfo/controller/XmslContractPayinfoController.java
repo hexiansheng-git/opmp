@@ -6,7 +6,6 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.excel.Util;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractPayinfoVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
@@ -33,8 +32,7 @@ public class XmslContractPayinfoController extends BaseController {
 
     @Autowired
     private IXmslContractPayinfoService xmslContractPayinfoService;
-    @Autowired
-    private SystemServiceApi systemServiceApi;
+
 
     private static final  String type="rate_type";
 
@@ -107,7 +105,7 @@ public class XmslContractPayinfoController extends BaseController {
             for (XmslContractPayinfoVo xmslContractPayinfoVo : xmslContractPayinfoVos) {
                 String rateType = xmslContractPayinfoVo.getRateType();
                 Util util1 = new Util();
-                String value = util1.reverseDict("rate_type", rateType);
+                String value = util1.reverseDict(type, rateType);
                 xmslContractPayinfoVo.setRateType(value);
             }
             return AjaxResult.success(xmslContractPayinfoVos);

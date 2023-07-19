@@ -369,7 +369,7 @@ public class XmslContractInfo extends CommonBaseEntity {
     @Excel(name = "是否有效（0无效 1有效）")
     private String valid;
 
-    private  String version;
+    private  BigDecimal version;
 
     //投保险种
     private List<XmslContractInsure> xmslContractInsureList;
