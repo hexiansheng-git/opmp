@@ -89,7 +89,13 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
      */
     @Transactional
     public void insertQqchManageProcedureList(List<QqchManageProcedure> qqchManageProcedureList, BigDecimal version) {
-        List<QqchManageProcedure> insertList = TreeUtils.splitTreeList(qqchManageProcedureList);
+        List<QqchManageProcedure> insertList = ListTreeUtil.formatList(
+                qqchManageProcedureList,
+                QqchManageProcedure::setId,
+                QqchManageProcedure::setPid,
+                QqchManageProcedure::setSort,
+                QqchManageProcedure::getChildren,
+                QqchManageProcedure::setChildren);
         for (QqchManageProcedure qqchManageProcedure : insertList) {
             qqchManageProcedure.setVersion(version);
             qqchManageProcedure.setValid(Valid.NO);

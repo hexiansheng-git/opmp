@@ -12,7 +12,6 @@ import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPl
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchSurveyDesignRiskPlanService;
 import com.hhwy.utils.tree.ListTreeUtil;
-import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +94,13 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      */
     @Transactional
     public void insertQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList, BigDecimal version) {
-        List<QqchSurveyDesignRiskPlan> insertList = TreeUtils.splitTreeList(qqchSurveyDesignRiskPlanList);
+        List<QqchSurveyDesignRiskPlan> insertList = ListTreeUtil.formatList(
+                qqchSurveyDesignRiskPlanList,
+                QqchSurveyDesignRiskPlan::setId,
+                QqchSurveyDesignRiskPlan::setPid,
+                QqchSurveyDesignRiskPlan::setSort,
+                QqchSurveyDesignRiskPlan::getChildren,
+                QqchSurveyDesignRiskPlan::setChildren);
         for (QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan : insertList) {
             qqchSurveyDesignRiskPlan.setVersion(version);
             qqchSurveyDesignRiskPlan.setValid(Valid.YES);

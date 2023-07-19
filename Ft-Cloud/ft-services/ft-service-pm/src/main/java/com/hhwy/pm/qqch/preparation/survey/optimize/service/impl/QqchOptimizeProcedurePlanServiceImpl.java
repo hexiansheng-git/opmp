@@ -1,11 +1,15 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -34,6 +39,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
 
     @Autowired
     private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     @Autowired
     private CommonMapper commonMapper;
@@ -51,6 +59,10 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         qqchOptimizeProcedurePlanVo.setVersion(version);
 
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList(version);
+        if(CollectionUtils.isEmpty(qqchOptimizeProcedurePlanList)){
+            //数据库中没有数据，需要初始化
+            qqchOptimizeProcedurePlanList = this.getInitializeData();
+        }
         qqchOptimizeProcedurePlanVo.setQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
 
         //获取附件组id（页面标识和版本号控制）
@@ -62,6 +74,35 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         //TODO 获取确认状态
 
         return qqchOptimizeProcedurePlanVo;
+    }
+
+    /**
+     * 获取初始化数据
+     * @return
+     */
+    public List<QqchOptimizeProcedurePlan> getInitializeData() {
+        List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = new ArrayList<>();
+        QqchOptimizeProcedurePlan data1 = new QqchOptimizeProcedurePlan();
+        data1.setLinkName("设计优化小组建立");
+        data1.setWorkContent("确定优化意向，判断决策优化点");
+
+        QqchOptimizeProcedurePlan data2 = new QqchOptimizeProcedurePlan();
+        data2.setLinkName("设计优化提出及资料准备");
+        data2.setWorkContent("提出申请，整理优化资料，提请专家论证");
+
+        QqchOptimizeProcedurePlan data3 = new QqchOptimizeProcedurePlan();
+        data3.setLinkName("设计优化论证评审");
+        data3.setWorkContent("专家论证，评审技术可行性、经济合理性");
+
+        QqchOptimizeProcedurePlan data4 = new QqchOptimizeProcedurePlan();
+        data4.setLinkName("设计优化落实");
+        data4.setWorkContent("跟踪落实，推动落地");
+
+        qqchOptimizeProcedurePlanList.add(data1);
+        qqchOptimizeProcedurePlanList.add(data2);
+        qqchOptimizeProcedurePlanList.add(data3);
+        qqchOptimizeProcedurePlanList.add(data4);
+        return qqchOptimizeProcedurePlanList;
     }
 
     /**

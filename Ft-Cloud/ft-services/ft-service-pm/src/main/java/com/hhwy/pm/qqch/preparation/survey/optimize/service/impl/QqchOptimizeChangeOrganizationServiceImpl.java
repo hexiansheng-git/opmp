@@ -13,7 +13,6 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChange
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeChangeOrganizationMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeChangeOrganizationService;
 import com.hhwy.utils.tree.ListTreeUtil;
-import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,7 +95,13 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
      */
     @Transactional
     public void insertQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList, BigDecimal version){
-        List<QqchOptimizeChangeOrganization> insertList = TreeUtils.splitTreeList(qqchOptimizeChangeOrganizationList);
+        List<QqchOptimizeChangeOrganization> insertList = ListTreeUtil.formatList(
+                qqchOptimizeChangeOrganizationList,
+                QqchOptimizeChangeOrganization::setId,
+                QqchOptimizeChangeOrganization::setPid,
+                QqchOptimizeChangeOrganization::setSort,
+                QqchOptimizeChangeOrganization::getChildren,
+                QqchOptimizeChangeOrganization::setChildren);
         for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : insertList) {
             qqchOptimizeChangeOrganization.setVersion(version);
             qqchOptimizeChangeOrganization.setValid(Valid.YES);
