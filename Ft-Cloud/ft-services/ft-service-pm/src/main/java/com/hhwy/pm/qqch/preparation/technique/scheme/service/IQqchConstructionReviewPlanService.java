@@ -1,8 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionReviewPlanVo;
-import java.util.List;
 
 /**
  * @author zhenlili
@@ -11,21 +9,11 @@ import java.util.List;
  */
 public interface IQqchConstructionReviewPlanService {
 
-    QqchConstructionReviewPlan getQqchConstructionReviewPlan(QqchConstructionReviewPlan qqchConstructionReviewPlan);
-
     QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList();
 
     void syncData();
 
-    int insertQqchConstructionReviewPlan(QqchConstructionReviewPlan qqchConstructionReviewPlan);
-
     void batchSave(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
 
-    int updateQqchConstructionReviewPlan(QqchConstructionReviewPlan qqchConstructionReviewPlan);
-
-    int updateQqchConstructionReviewPlanList(List<QqchConstructionReviewPlan> qqchConstructionReviewPlanList);
-
-    int deleteQqchConstructionReviewPlan(QqchConstructionReviewPlan qqchConstructionReviewPlan);
-
-    int deleteQqchConstructionReviewPlanByPks(List<Long> qqchConstructionReviewPlanPkList);
+    void confirm(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
 }

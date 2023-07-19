@@ -29,7 +29,12 @@ public class QqchConstructionReviewPlanVo {
     private BigDecimal version;
 
     /**
+     * 字段描述：确认状态（0：未确认，1：已确认）
+     */
+    private String confirmStatus;
+
+    /**
      * 字段描述：施工方案编审计划集合
      */
-    private List<QqchConstructionReviewPlan> treeList;
+    private List<QqchConstructionReviewPlan> list;
 }

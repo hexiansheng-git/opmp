@@ -3,12 +3,9 @@ package com.hhwy.pm.qqch.preparation.technique.difficulty.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysis;
-import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysisVo;
+import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.service.IQqchTechKeyDifficultAnalysisService;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,15 +30,14 @@ public class QqchTechKeyDifficultAnalysisController extends BaseController {
     /**
      * 查询列表
      *
-     * @param qqchTechKeyDifficultAnalysisParam
+     * @param
      * @return
      */
     @PreAuthorize(hasPermi = "qqchTechKeyDifficultAnalysis:list")
     @GetMapping("/getList")
-    public AjaxResult getList(
-        @Validated(ValidationGroups.Select.class) @RequestBody QqchTechKeyDifficultAnalysis qqchTechKeyDifficultAnalysisParam) {
+    public AjaxResult getList() {
         QqchTechKeyDifficultAnalysisVo qqchTechKeyDifficultAnalysisList = qqchTechKeyDifficultAnalysisService
-            .getQqchTechKeyDifficultAnalysisList(qqchTechKeyDifficultAnalysisParam);
+            .getQqchTechKeyDifficultAnalysisList();
         return AjaxResult.success(qqchTechKeyDifficultAnalysisList);
     }
 
@@ -57,14 +53,6 @@ public class QqchTechKeyDifficultAnalysisController extends BaseController {
         @Validated(ValidationGroups.Save.class) @RequestBody QqchTechKeyDifficultAnalysisVo qqchTechKeyDifficultAnalysisVoParam) {
         qqchTechKeyDifficultAnalysisService.batchSave(qqchTechKeyDifficultAnalysisVoParam);
         return AjaxResult.success();
-    }
-
-    @PreAuthorize(hasPermi = "qqchTechKeyDifficultAnalysis:remove")
-    @PostMapping("/remove")
-    public AjaxResult deleteQqchTechKeyDifficultAnalysisByPks(Long[] ids) {
-        List<Long> qqchTechKeyDifficultAnalysisPkList = Arrays.asList(ids);
-        return toAjax(qqchTechKeyDifficultAnalysisService
-            .deleteQqchTechKeyDifficultAnalysisByPks(qqchTechKeyDifficultAnalysisPkList));
     }
 
 }

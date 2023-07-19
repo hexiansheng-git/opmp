@@ -8,6 +8,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
@@ -27,13 +28,6 @@ public class QqchConstructionReviewPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "主键id")
     private Long id;
-    /**
-     * 字段描述：父id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
     /**
      * 字段描述：方案等级
      */
@@ -241,4 +235,6 @@ public class QqchConstructionReviewPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<QqchConstructionReviewPlan> children;
 }

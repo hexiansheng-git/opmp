@@ -5,10 +5,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.tree.TreeNode;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -17,7 +16,7 @@ import lombok.Data;
  * @remark 3.4.1重大施工方案比选
  */
 @Data
-public class QqchMajorConstructionComparison extends BaseEntity {
+public class QqchMajorConstructionComparison extends TreeNode<QqchMajorConstructionComparison> {
 
     private static final long serialVersionUID = 1L;
 
@@ -106,7 +105,7 @@ public class QqchMajorConstructionComparison extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String sort;
+    private Integer sort;
     /**
      * 字段描述：版本
      */
@@ -239,9 +238,4 @@ public class QqchMajorConstructionComparison extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
-    /**
-     * 子集合
-     */
-    private List<QqchMajorConstructionComparison> children;
 }

@@ -1,18 +1,18 @@
-package com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo;
+package com.hhwy.pm.qqch.preparation.technique.manage.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeComparison;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-13 14:40:32
- * @remark 3.4.2施工方案清单
+ * @date 2023-07-11 15:17:31
+ * @remark 3.3.1技术管理模式比选
  */
 @Data
-public class QqchConstructionListVo {
+public class QqchTechManageModeComparisonVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,13 +29,7 @@ public class QqchConstructionListVo {
     private BigDecimal version;
 
     /**
-     * 项目编码
+     * 技术管理模式比选集合
      */
-    @JsonProperty
-    private String projectCode;
-
-    /**
-     * 字段描述：施工方案清单集合
-     */
-    private List<QqchConstructionList> list;
+    private List<QqchTechManageModeComparison> list;
 }

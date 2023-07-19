@@ -13,17 +13,7 @@ public interface IQqchDangerConstructionListService {
 
     QqchDangerConstructionListVo getQqchDangerConstructionListList();
 
-    void syncData();
-
-    int insertQqchDangerConstructionList(QqchDangerConstructionList qqchDangerConstructionList);
-
-    int insertQqchDangerConstructionListList(List<QqchDangerConstructionList> qqchDangerConstructionListList);
-
-    int updateQqchDangerConstructionList(QqchDangerConstructionList qqchDangerConstructionList);
-
     int updateQqchDangerConstructionListList(List<QqchDangerConstructionList> qqchDangerConstructionListList);
 
-    int deleteQqchDangerConstructionList(QqchDangerConstructionList qqchDangerConstructionList);
-
-    int deleteQqchDangerConstructionListByPks(List<Long> qqchDangerConstructionListPkList);
+    void syncData();
 }

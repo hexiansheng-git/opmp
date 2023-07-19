@@ -10,6 +10,8 @@
     <result property="type" column="type"/>
     <result property="keyDifficult" column="key_difficult"/>
     <result property="sort" column="sort"/>
+    <result property="version" column="version"/>
+    <result property="valid" column="valid"/>
     <result property="remark" column="remark"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
@@ -32,31 +34,33 @@
   </resultMap>
   <sql id="selectQqchTechKeyDifficultAnalysisVo">
     select
-        `id`
-       ,`type`
-       ,`key_difficult`
-       ,`sort`
-       ,`remark`
-       ,`region_id`
-       ,`region_name`
-       ,`project_id`
-       ,`project_name`
-       ,`dept_id`
-       ,`create_user`
-       ,`create_user_name`
-       ,`create_time`
-       ,`update_user`
-       ,`update_time`
-       ,`del_user`
-       ,`del_time`
-       ,`del_flag`
-       ,`pt_var1`
-       ,`pt_var2`
-       ,`pt_var3`
-       ,`pt_var4`
-       ,`pt_var5`
+      `id`
+      ,`type`
+      ,`key_difficult`
+      ,`sort`
+      ,`version`
+      ,`valid`
+      ,`remark`
+      ,`region_id`
+      ,`region_name`
+      ,`project_id`
+      ,`project_name`
+      ,`dept_id`
+      ,`create_user`
+      ,`create_user_name`
+      ,`create_time`
+      ,`update_user`
+      ,`update_time`
+      ,`del_user`
+      ,`del_time`
+      ,`del_flag`
+      ,`pt_var1`
+      ,`pt_var2`
+      ,`pt_var3`
+      ,`pt_var4`
+      ,`pt_var5`
     from qqch_tech_key_difficult_analysis
-    </sql>
+  </sql>
   <select id="getQqchTechKeyDifficultAnalysis" resultMap="QqchTechKeyDifficultAnalysisResultMap">
     <include refid="selectQqchTechKeyDifficultAnalysisVo"/>
     <where>
@@ -64,7 +68,9 @@
       <if test="id != null ">and `id` = #{id}</if>
       <if test="type != null  and type != ''">and `type` = #{type}</if>
       <if test="keyDifficult != null  and keyDifficult != ''">and `key_difficult` = #{keyDifficult}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null ">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -85,7 +91,7 @@
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
-    order by create_time desc
+    order by sort
   </select>
 
   <select id="getQqchTechKeyDifficultAnalysisList" resultMap="QqchTechKeyDifficultAnalysisResultMap">
@@ -95,7 +101,9 @@
       <if test="id != null ">and `id` = #{id}</if>
       <if test="type != null  and type != ''">and `type` = #{type}</if>
       <if test="keyDifficult != null  and keyDifficult != ''">and `key_difficult` = #{keyDifficult}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null ">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -125,7 +133,9 @@
       <if test="id != null ">`id`,</if>
       <if test="type != null  and type != ''">`type`,</if>
       <if test="keyDifficult != null  and keyDifficult != ''">`key_difficult`,</if>
-      <if test="sort != null  and sort != ''">`sort`,</if>
+      <if test="sort != null ">`sort`,</if>
+      <if test="version != null ">`version`,</if>
+      <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -150,7 +160,9 @@
       <if test="id != null ">#{id},</if>
       <if test="type != null  and type != ''">#{type},</if>
       <if test="keyDifficult != null  and keyDifficult != ''">#{keyDifficult},</if>
-      <if test="sort != null  and sort != ''">#{sort},</if>
+      <if test="sort != null ">#{sort},</if>
+      <if test="version != null ">#{version},</if>
+      <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -181,6 +193,8 @@
       `type`,
       `key_difficult`,
       `sort`,
+      `version`,
+      `valid`,
       `remark`,
       `region_id`,
       `region_name`,
@@ -207,6 +221,8 @@
         #{item.type},
         #{item.keyDifficult},
         #{item.sort},
+        #{item.version},
+        #{item.valid},
         #{item.remark},
         #{item.regionId},
         #{item.regionName},
@@ -235,7 +251,9 @@
       <if test="id != null ">`id` = #{id},</if>
       <if test="type != null  and  type != ''">`type` = #{type},</if>
       <if test="keyDifficult != null  and  keyDifficult != ''">`key_difficult` = #{keyDifficult},</if>
-      <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+      <if test="sort != null ">`sort` = #{sort},</if>
+      <if test="version != null ">`version` = #{version},</if>
+      <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -282,6 +300,16 @@
       <trim prefix="sort  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.sort}
+        </foreach>
+      </trim>
+      <trim prefix="version  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.version}
+        </foreach>
+      </trim>
+      <trim prefix="valid  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.valid}
         </foreach>
       </trim>
       <trim prefix="remark  = case" suffix="end,">
@@ -392,7 +420,9 @@
       <if test="id != null ">and `id` = #{id}</if>
       <if test="type != null  and type != ''">and `type` = #{type}</if>
       <if test="keyDifficult != null  and keyDifficult != ''">and `key_difficult` = #{keyDifficult}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null ">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>

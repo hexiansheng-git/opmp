@@ -1,18 +1,18 @@
-package com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo;
+package com.hhwy.pm.qqch.preparation.technique.clause.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-13 14:40:32
- * @remark 3.4.2施工方案清单
+ * @date 2023-07-10 14:36:27
+ * @remark 3.1.2合同要求提交的技术文件成果识别
  */
 @Data
-public class QqchConstructionListVo {
+public class QqchContractTechAchievementIdentifyVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,13 +29,7 @@ public class QqchConstructionListVo {
     private BigDecimal version;
 
     /**
-     * 项目编码
+     * 字段描述：合同要求提交的技术文件成果识别集合
      */
-    @JsonProperty
-    private String projectCode;
-
-    /**
-     * 字段描述：施工方案清单集合
-     */
-    private List<QqchConstructionList> list;
+    private List<QqchContractTechAchievementIdentify> treeList;
 }

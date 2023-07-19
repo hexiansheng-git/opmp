@@ -29,14 +29,12 @@ public class XmslBidWinHandoverInfoController extends BaseController {
     /**
      * 查询列表
      *
-     * @param xmslBidWinHandoverInfoParam
+     * @param
      * @return
      */
     @GetMapping("/getList")
-    public AjaxResult getXmslBidWinHandoverInfo(
-        @Validated(ValidationGroups.Get.class) @RequestBody XmslBidWinHandoverInfo xmslBidWinHandoverInfoParam) {
-        XmslBidWinHandoverInfo xmslBidWinHandoverInfo = xmslBidWinHandoverInfoService
-            .getXmslBidWinHandoverInfo(xmslBidWinHandoverInfoParam);
+    public AjaxResult getXmslBidWinHandoverInfo() {
+        XmslBidWinHandoverInfo xmslBidWinHandoverInfo = xmslBidWinHandoverInfoService.getXmslBidWinHandoverInfo();
         return AjaxResult.success(xmslBidWinHandoverInfo);
     }
 //

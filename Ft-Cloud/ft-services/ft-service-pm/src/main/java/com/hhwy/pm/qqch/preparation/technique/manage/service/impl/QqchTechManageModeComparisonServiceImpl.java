@@ -2,16 +2,19 @@ package com.hhwy.pm.qqch.preparation.technique.manage.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeComparison;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchTechManageModeComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchTechManageModeComparisonService;
 import com.hhwy.utils.idworker.IdWorker;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -23,58 +26,50 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
 
     @Autowired
     private QqchTechManageModeComparisonMapper qqchTechManageModeComparisonMapper;
+    @Autowired
+    private CommonMapper commonMapper;
 
-    public List<QqchTechManageModeComparison> getQqchTechManageModeComparisonList(
-        QqchTechManageModeComparison qqchTechManageModeComparison) {
-        return qqchTechManageModeComparisonMapper.getQqchTechManageModeComparisonList(qqchTechManageModeComparison);
+    public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList() {
+        QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
+        // 获取最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_manage_mode_comparison");
+
+        QqchTechManageModeComparison qryParam = new QqchTechManageModeComparison();
+        qryParam.setVersion(maxVersion);
+        List<QqchTechManageModeComparison> list = qqchTechManageModeComparisonMapper
+            .getQqchTechManageModeComparisonList(qryParam);
+        vo.setList(list);
+        return vo;
     }
 
     @Transactional
-    public void batchSave(List<QqchTechManageModeComparison> qqchTechManageModeComparisonList) {
+    public void batchSave(QqchTechManageModeComparisonVo voParam) {
+        if (voParam.getVersion() == null) {
+            // 获取最大版本号
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_manage_mode_comparison");
+            voParam.setVersion(maxVersion);
+        }
 
-        // 拟选模式为单选，先将数据库中所有数据的拟选模式初始化为0
-        QqchTechManageModeComparison updateParam = new QqchTechManageModeComparison();
-        updateParam.setSelectMode("0");
-        this.updateQqchTechManageModeComparison(updateParam);
+        // 先批量删除当前版本所有数据
+        QqchTechManageModeComparison deleteParam = new QqchTechManageModeComparison();
+        deleteParam.setVersion(voParam.getVersion());
+        deleteParam.setDelFlag("1");
+        qqchTechManageModeComparisonMapper.updateQqchTechManageModeComparison(deleteParam);
 
         List<QqchTechManageModeComparison> insertList = new ArrayList<>();
-        List<QqchTechManageModeComparison> updateList = new ArrayList<>();
 
-        // 技术重点
-        if (!CollectionUtils.isEmpty(qqchTechManageModeComparisonList)) {
-            for (QqchTechManageModeComparison qqchTechManageModeComparison : qqchTechManageModeComparisonList) {
-                if (qqchTechManageModeComparison.getId() == null) {
-                    qqchTechManageModeComparison.setId(IdWorker.createId());
-                    qqchTechManageModeComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    qqchTechManageModeComparison.setCreateUserName(SecurityUtils.getUserName());
-                    qqchTechManageModeComparison.setCreateTime(DateUtils.getNowDate());
-                    insertList.add(qqchTechManageModeComparison);
-                } else {
-                    qqchTechManageModeComparison.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    qqchTechManageModeComparison.setUpdateTime(DateUtils.getNowDate());
-                    updateList.add(qqchTechManageModeComparison);
-                }
-            }
+        for (QqchTechManageModeComparison qqchTechManageModeComparison : voParam.getList()) {
+            qqchTechManageModeComparison.setId(IdWorker.createId());
+            qqchTechManageModeComparison.setVersion(voParam.getVersion());
+            qqchTechManageModeComparison.setValid(Valid.YES);
+            qqchTechManageModeComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchTechManageModeComparison.setCreateUserName(SecurityUtils.getUserName());
+            qqchTechManageModeComparison.setCreateTime(DateUtils.getNowDate());
+            insertList.add(qqchTechManageModeComparison);
         }
 
         if (insertList.size() > 0) {
             qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(insertList);
         }
-        if (updateList.size() > 0) {
-            qqchTechManageModeComparisonMapper.updateQqchTechManageModeComparisonList(updateList);
-        }
-    }
-
-    @Transactional
-    public int updateQqchTechManageModeComparison(QqchTechManageModeComparison qqchTechManageModeComparison) {
-        qqchTechManageModeComparison.setUpdateUser(SecurityUtils.getUserName());
-        qqchTechManageModeComparison.setUpdateTime(DateUtils.getNowDate());
-        return qqchTechManageModeComparisonMapper.updateQqchTechManageModeComparison(qqchTechManageModeComparison);
-    }
-
-    @Transactional
-    public int deleteQqchTechManageModeComparisonByPks(List<Long> qqchTechManageModeComparisonPkList) {
-        return qqchTechManageModeComparisonMapper
-            .deleteQqchTechManageModeComparisonByPks(qqchTechManageModeComparisonPkList);
     }
 }

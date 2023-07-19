@@ -2,11 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.difficulty.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysis;
-import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysisVo;
+import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.mapper.QqchTechKeyDifficultAnalysisMapper;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.service.IQqchTechKeyDifficultAnalysisService;
 import com.hhwy.utils.idworker.IdWorker;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +27,19 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
     @Autowired
     private QqchTechKeyDifficultAnalysisMapper qqchTechKeyDifficultAnalysisMapper;
+    @Autowired
+    private CommonMapper commonMapper;
 
-    public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(
-        QqchTechKeyDifficultAnalysis qqchTechKeyDifficultAnalysis) {
+    public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList() {
         QqchTechKeyDifficultAnalysisVo keyDifficultAnalysisVo = new QqchTechKeyDifficultAnalysisVo();
 
+        // 获取最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
+
+        QqchTechKeyDifficultAnalysis qryParam = new QqchTechKeyDifficultAnalysis();
+        qryParam.setVersion(maxVersion);
         List<QqchTechKeyDifficultAnalysis> list = qqchTechKeyDifficultAnalysisMapper
-            .getQqchTechKeyDifficultAnalysisList(qqchTechKeyDifficultAnalysis);
+            .getQqchTechKeyDifficultAnalysisList(qryParam);
 
         List<QqchTechKeyDifficultAnalysis> keyList = new ArrayList<>();
         List<QqchTechKeyDifficultAnalysis> difficultList = new ArrayList<>();
@@ -48,47 +57,51 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
         keyDifficultAnalysisVo.setKeyAnalysisList(keyList);
         keyDifficultAnalysisVo.setDifficultAnalysisList(difficultList);
-
         return keyDifficultAnalysisVo;
     }
 
     @Transactional
-    public void batchSave(QqchTechKeyDifficultAnalysisVo qqchTechKeyDifficultAnalysisVo) {
+    public void batchSave(QqchTechKeyDifficultAnalysisVo voParam) {
+        if (voParam.getVersion() == null) {
+            // 获取最大版本号
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
+            voParam.setVersion(maxVersion);
+        }
+
+        // 先批量删除当前版本所有数据
+        QqchTechKeyDifficultAnalysis deleteParam = new QqchTechKeyDifficultAnalysis();
+        deleteParam.setVersion(voParam.getVersion());
+        deleteParam.setDelFlag("1");
+        qqchTechKeyDifficultAnalysisMapper.updateQqchTechKeyDifficultAnalysis(deleteParam);
+
         List<QqchTechKeyDifficultAnalysis> insertList = new ArrayList<>();
-        List<QqchTechKeyDifficultAnalysis> updateList = new ArrayList<>();
 
         // 技术重点
-        if (!CollectionUtils.isEmpty(qqchTechKeyDifficultAnalysisVo.getKeyAnalysisList())) {
-            for (QqchTechKeyDifficultAnalysis key : qqchTechKeyDifficultAnalysisVo.getKeyAnalysisList()) {
-                if (key.getId() == null) {
-                    key.setType("1");
-                    key.setId(IdWorker.createId());
-                    key.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    key.setCreateUserName(SecurityUtils.getUserName());
-                    key.setCreateTime(DateUtils.getNowDate());
-                    insertList.add(key);
-                } else {
-                    key.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    key.setUpdateTime(DateUtils.getNowDate());
-                    updateList.add(key);
-                }
+        if (!CollectionUtils.isEmpty(voParam.getKeyAnalysisList())) {
+            for (QqchTechKeyDifficultAnalysis key : voParam.getKeyAnalysisList()) {
+                key.setType("1");
+                key.setId(IdWorker.createId());
+                key.setVersion(voParam.getVersion());
+                key.setValid(Valid.YES);
+                key.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                key.setCreateUserName(SecurityUtils.getUserName());
+                key.setCreateTime(DateUtils.getNowDate());
+                insertList.add(key);
             }
         }
 
         // 技术难点
-        if (!CollectionUtils.isEmpty(qqchTechKeyDifficultAnalysisVo.getDifficultAnalysisList())) {
-            for (QqchTechKeyDifficultAnalysis difficult : qqchTechKeyDifficultAnalysisVo.getDifficultAnalysisList()) {
+        if (!CollectionUtils.isEmpty(voParam.getDifficultAnalysisList())) {
+            for (QqchTechKeyDifficultAnalysis difficult : voParam.getDifficultAnalysisList()) {
                 if (difficult.getId() == null) {
                     difficult.setType("2");
                     difficult.setId(IdWorker.createId());
+                    difficult.setVersion(voParam.getVersion());
+                    difficult.setValid(Valid.YES);
                     difficult.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     difficult.setCreateUserName(SecurityUtils.getUserName());
                     difficult.setCreateTime(DateUtils.getNowDate());
                     insertList.add(difficult);
-                } else {
-                    difficult.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    difficult.setUpdateTime(DateUtils.getNowDate());
-                    updateList.add(difficult);
                 }
             }
         }
@@ -96,15 +109,5 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
         if (insertList.size() > 0) {
             qqchTechKeyDifficultAnalysisMapper.insertQqchTechKeyDifficultAnalysisList(insertList);
         }
-        if (updateList.size() > 0) {
-            qqchTechKeyDifficultAnalysisMapper.updateQqchTechKeyDifficultAnalysisList(updateList);
-        }
-    }
-
-
-    @Transactional
-    public int deleteQqchTechKeyDifficultAnalysisByPks(List<Long> qqchTechKeyDifficultAnalysisPkList) {
-        return qqchTechKeyDifficultAnalysisMapper
-            .deleteQqchTechKeyDifficultAnalysisByPks(qqchTechKeyDifficultAnalysisPkList);
     }
 }

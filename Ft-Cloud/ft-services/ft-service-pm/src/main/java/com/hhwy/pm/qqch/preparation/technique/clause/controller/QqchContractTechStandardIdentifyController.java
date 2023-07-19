@@ -3,11 +3,9 @@ package com.hhwy.pm.qqch.preparation.technique.clause.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechStandardIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,40 +27,31 @@ public class QqchContractTechStandardIdentifyController extends BaseController {
     @Autowired
     private IQqchContractTechStandardIdentifyService qqchContractTechStandardIdentifyService;
 
-    @PreAuthorize(hasPermi = "qqchContractTechStandardIdentify:remove")
-    @PostMapping("/remove")
-    public AjaxResult deleteQqchContractTechStandardIdentifyByPks(Long[] ids) {
-        List<Long> qqchContractTechStandardIdentifyPkList = Arrays.asList(ids);
-        return toAjax(qqchContractTechStandardIdentifyService
-            .deleteQqchContractTechStandardIdentifyByPks(qqchContractTechStandardIdentifyPkList));
-    }
-
     /**
      * 查询列表
      *
-     * @param qqchContractTechStandardIdentifyParam
+     * @param
      * @return
      */
     @PreAuthorize(hasPermi = "qqchContractTechStandardIdentify:list")
     @GetMapping("/getTreeList")
-    public AjaxResult getTreeList(
-        @Validated(ValidationGroups.Select.class) @RequestBody QqchContractTechStandardIdentify qqchContractTechStandardIdentifyParam) {
-        List<QqchContractTechStandardIdentify> treeList = qqchContractTechStandardIdentifyService
-            .getTreeList(qqchContractTechStandardIdentifyParam);
-        return AjaxResult.success(treeList);
+    public AjaxResult getTreeList() {
+        QqchContractTechStandardIdentifyVo qqchContractTechStandardIdentifyVo = qqchContractTechStandardIdentifyService
+            .getTreeList();
+        return AjaxResult.success(qqchContractTechStandardIdentifyVo);
     }
 
     /**
      * 批量保存
      *
-     * @param qqchContractTechStandardIdentifyListParam
+     * @param qqchContractTechStandardIdentifyVo
      * @return
      */
     @PreAuthorize(hasPermi = "qqchContractTechStandardIdentify:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyListParam) {
-        qqchContractTechStandardIdentifyService.batchSave(qqchContractTechStandardIdentifyListParam);
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchContractTechStandardIdentifyVo qqchContractTechStandardIdentifyVo) {
+        qqchContractTechStandardIdentifyService.batchSave(qqchContractTechStandardIdentifyVo);
         return AjaxResult.success();
     }
 

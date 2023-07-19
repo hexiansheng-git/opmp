@@ -1,18 +1,18 @@
-package com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo;
+package com.hhwy.pm.qqch.preparation.technique.manage.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-13 14:40:32
- * @remark 3.4.2施工方案清单
+ * @date 2023-07-11 15:23:27
+ * @remark 3.3.2岗位设置
  */
 @Data
-public class QqchConstructionListVo {
+public class QqchPostSettingVo {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,13 +29,7 @@ public class QqchConstructionListVo {
     private BigDecimal version;
 
     /**
-     * 项目编码
+     * 岗位设置集合
      */
-    @JsonProperty
-    private String projectCode;
-
-    /**
-     * 字段描述：施工方案清单集合
-     */
-    private List<QqchConstructionList> list;
+    private List<QqchPostSetting> treeList;
 }

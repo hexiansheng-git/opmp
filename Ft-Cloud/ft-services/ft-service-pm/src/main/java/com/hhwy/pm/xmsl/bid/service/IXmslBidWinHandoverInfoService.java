@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface IXmslBidWinHandoverInfoService {
 
-    XmslBidWinHandoverInfo getXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo);
+    XmslBidWinHandoverInfo getXmslBidWinHandoverInfo();
 
     List<XmslBidWinHandoverInfo> getXmslBidWinHandoverInfoList(XmslBidWinHandoverInfo xmslBidWinHandoverInfo);
 

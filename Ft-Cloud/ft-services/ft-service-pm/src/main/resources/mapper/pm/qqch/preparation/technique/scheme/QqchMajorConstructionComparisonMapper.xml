@@ -102,7 +102,7 @@
         #{convenienceCompare}
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -125,7 +125,7 @@
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
-    order by create_time desc
+    order by sort
   </select>
 
   <select id="getQqchMajorConstructionComparisonList" resultMap="QqchMajorConstructionComparisonResultMap">
@@ -149,7 +149,7 @@
         #{convenienceCompare}
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -172,7 +172,7 @@
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
-    order by sort desc
+    order by sort
   </select>
 
   <insert id="insertQqchMajorConstructionComparison" useGeneratedKeys="true" keyProperty="id">
@@ -191,7 +191,7 @@
       <if test="qualityCompare != null  and qualityCompare != ''">`quality_compare`,</if>
       <if test="convenienceCompare != null  and convenienceCompare != ''">`convenience_compare`,</if>
       <if test="selectScheme != null  and selectScheme != ''">`select_scheme`,</if>
-      <if test="sort != null  and sort != ''">`sort`,</if>
+      <if test="sort != null">`sort`,</if>
       <if test="version != null ">`version`,</if>
       <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
@@ -228,7 +228,7 @@
       <if test="qualityCompare != null  and qualityCompare != ''">#{qualityCompare},</if>
       <if test="convenienceCompare != null  and convenienceCompare != ''">#{convenienceCompare},</if>
       <if test="selectScheme != null  and selectScheme != ''">#{selectScheme},</if>
-      <if test="sort != null  and sort != ''">#{sort},</if>
+      <if test="sort != null">#{sort},</if>
       <if test="version != null ">#{version},</if>
       <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
@@ -353,7 +353,7 @@
         #{convenienceCompare},
       </if>
       <if test="selectScheme != null  and  selectScheme != ''">`select_scheme` = #{selectScheme},</if>
-      <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+      <if test="sort != null">`sort` = #{sort},</if>
       <if test="version != null ">`version` = #{version},</if>
       <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
@@ -586,7 +586,7 @@
         #{convenienceCompare}
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>

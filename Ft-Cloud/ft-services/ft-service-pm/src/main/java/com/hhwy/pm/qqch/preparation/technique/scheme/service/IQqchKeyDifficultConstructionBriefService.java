@@ -5,7 +5,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultC
 /**
  * @author zhenlili
  * @date 2023-07-17 15:29:49
- * @remark
+ * @remark 3.4.4重难点分项施工方案简述
  */
 public interface IQqchKeyDifficultConstructionBriefService {
 
