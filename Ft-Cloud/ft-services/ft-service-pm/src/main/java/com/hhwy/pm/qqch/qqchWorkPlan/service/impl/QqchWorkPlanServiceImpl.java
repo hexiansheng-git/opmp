@@ -159,6 +159,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 sysMenuList.stream().forEach(item -> {
                     QqchWorkPlanDetail qqchWorkPlanDetail = new QqchWorkPlanDetail();
                     qqchWorkPlanDetail.setId(item.getMenuId());
+                    qqchWorkPlanDetail.setItemId(item.getMenuId());
                     qqchWorkPlanDetail.setPid(item.getParentId());
                     qqchWorkPlanDetail.setItemName(item.getTitle());
                     qqchWorkPlanDetail.setSort(item.getSortCode() != null ? item.getSortCode().intValue() : null);
