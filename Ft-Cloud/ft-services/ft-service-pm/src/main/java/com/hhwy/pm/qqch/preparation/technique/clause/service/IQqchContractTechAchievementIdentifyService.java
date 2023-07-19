@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.clause.service;
 
-import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechAchievementIdentifyVo;
 
 /**
  * @author zhenglili
@@ -10,10 +9,7 @@ import java.util.List;
  */
 public interface IQqchContractTechAchievementIdentifyService {
 
-    int deleteQqchContractTechAchievementIdentifyByPks(List<Long> qqchContractTechAchievementIdentifyPkList);
+    QqchContractTechAchievementIdentifyVo getTreeList();
 
-    List<QqchContractTechAchievementIdentify> getTreeList(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify);
-
-    void batchSave(List<QqchContractTechAchievementIdentify> qqchContractTechAchievementIdentifyList);
+    void batchSave(QqchContractTechAchievementIdentifyVo qqchContractTechAchievementIdentifyVo);
 }

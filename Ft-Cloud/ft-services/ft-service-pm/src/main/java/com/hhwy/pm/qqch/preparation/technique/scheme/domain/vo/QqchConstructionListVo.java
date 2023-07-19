@@ -29,6 +29,12 @@ public class QqchConstructionListVo {
     private BigDecimal version;
 
     /**
+     * 项目编码
+     */
+    @JsonProperty
+    private String projectCode;
+
+    /**
      * 字段描述：施工方案清单集合
      */
     private List<QqchConstructionList> list;

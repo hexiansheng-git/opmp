@@ -1,0 +1,34 @@
+package com.hhwy.enums;
+
+/**
+ * 流程enum
+ *
+ * @author mls
+ */
+public enum FlowEnum {
+
+
+    /**********************前期策划开始************************/
+    QQCH_REVIEW("qqch_receive", "qqch_receive_process");
+
+    /**********************前期策划结束************************/
+
+
+    public String getTableName() {
+        return this.tableName;
+    }
+
+    public String getProcessKey() {
+        return this.processKey;
+    }
+
+    private final String tableName;
+
+    private final String processKey;
+
+
+    FlowEnum(String tableName, String processKey) {
+        this.tableName = tableName;
+        this.processKey = processKey;
+    }
+}

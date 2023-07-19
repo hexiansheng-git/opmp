@@ -5,7 +5,7 @@ package com.hhwy.system.service.impl;/*
  **/
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.system.core.domain.SysDictData;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.core.domain.SysDictType;
 import com.hhwy.system.core.service.ISysDictDataService;
 import com.hhwy.system.core.service.ISysDictTypeService;

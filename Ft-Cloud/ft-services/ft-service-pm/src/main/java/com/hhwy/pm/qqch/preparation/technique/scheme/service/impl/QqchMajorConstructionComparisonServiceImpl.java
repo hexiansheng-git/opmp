@@ -3,11 +3,12 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
-import com.hhwy.utils.tree.TreeUtils;
+import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,14 +40,16 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         qryParam.setVersion(maxVersion);
         List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper
             .getQqchMajorConstructionComparisonList(qryParam);
-        vo.setTreeList(TreeUtils.listToTree(list));
+        vo.setTreeList(TreeUtil.build(list, null));
         return vo;
     }
 
     @Transactional
     public void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo) {
         if (qqchMajorConstructionComparisonVo.getVersion() == null) {
-            throw new RuntimeException("版本号不能为空！");
+            // 获取最大版本号
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_major_construction_comparison");
+            qqchMajorConstructionComparisonVo.setVersion(maxVersion);
         }
 
         // 先批量删除当前版本所有数据
@@ -60,13 +63,13 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         }
 
         // 树转list
-        List<QqchMajorConstructionComparison> insertList = TreeUtils
-            .splitTreeList(qqchMajorConstructionComparisonVo.getTreeList());
+        List<QqchMajorConstructionComparison> insertList = TreeUtil
+            .treeToList(qqchMajorConstructionComparisonVo.getTreeList());
 
         if (!CollectionUtils.isEmpty(insertList)) {
             for (QqchMajorConstructionComparison insert : insertList) {
                 insert.setVersion(qqchMajorConstructionComparisonVo.getVersion());
-                insert.setValid("1");
+                insert.setValid(Valid.YES);
                 insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 insert.setCreateUserName(SecurityUtils.getUserName());
                 insert.setCreateTime(DateUtils.getNowDate());

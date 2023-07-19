@@ -1,0 +1,35 @@
+package com.hhwy.pm.qqch.preparation.technique.clause.domain.vo;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
+import java.math.BigDecimal;
+import java.util.List;
+import lombok.Data;
+
+/**
+ * @author zhenglili
+ * @date 2023-07-10 14:36:27
+ * @remark 3.1.2合同要求提交的技术文件成果识别
+ */
+@Data
+public class QqchContractTechAchievementIdentifyVo {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
+     */
+    @JsonProperty
+    private String stageIdentity;
+
+    /**
+     * 版本状态
+     */
+    @JsonProperty
+    private BigDecimal version;
+
+    /**
+     * 字段描述：合同要求提交的技术文件成果识别集合
+     */
+    private List<QqchContractTechAchievementIdentify> treeList;
+}

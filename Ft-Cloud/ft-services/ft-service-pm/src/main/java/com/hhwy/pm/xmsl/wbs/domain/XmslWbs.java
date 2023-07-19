@@ -25,6 +25,13 @@ import java.util.Date;
 public class XmslWbs extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    public XmslWbs() {
+    }
+
+    public XmslWbs(String id) {
+        this.id = id;
+    }
+
     /**
      * 字段描述：主键id
      */
@@ -275,6 +282,9 @@ public class XmslWbs extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    //序号
+    private Integer sort;
 
 
     @JsonIgnore

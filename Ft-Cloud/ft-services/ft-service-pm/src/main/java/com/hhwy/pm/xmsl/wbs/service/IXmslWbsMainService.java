@@ -9,7 +9,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
  * @remark 
  */
 public interface IXmslWbsMainService {
-                                                                                                                                                    
+
     XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     XmslWbsMain getById(Long mainId);
@@ -20,7 +20,17 @@ public interface IXmslWbsMainService {
 
     Long getXmslWbsMainCount(XmslWbsMain xmslWbsMain);
 
+    /**
+     * 获取生效数据|最新版本数据
+     * @return
+     */
     XmslWbsMain getLast();
+
+    /**
+     * 获取当前调整中的数据
+     * @return
+     */
+    XmslWbsMain getAdjustInfo();
 
     int insertXmslWbsMain(XmslWbsMain xmslWbsMain);
 
@@ -33,4 +43,15 @@ public interface IXmslWbsMainService {
     int deleteXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     int deleteXmslWbsMainByPks(List<Long> xmslWbsMainPkList);
+
+    /**
+     * 完成流程
+     * @param id
+     */
+    void finishFlow(Long id);
+
+    /**
+     * 生效wbs塞入redis
+     */
+    void initWbs2Redis();
 }

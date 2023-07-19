@@ -1,8 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.difficulty.service;
 
-import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysis;
-import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysisVo;
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 
 /**
  * @author zhenglili
@@ -11,10 +9,7 @@ import java.util.List;
  */
 public interface IQqchTechKeyDifficultAnalysisService {
 
-    QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(
-        QqchTechKeyDifficultAnalysis qqchTechKeyDifficultAnalysis);
+    QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList();
 
     void batchSave(QqchTechKeyDifficultAnalysisVo qqchTechKeyDifficultAnalysisVo);
-
-    int deleteQqchTechKeyDifficultAnalysisByPks(List<Long> qqchTechKeyDifficultAnalysisPkList);
 }

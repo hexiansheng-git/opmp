@@ -16,16 +16,31 @@ public interface IXmslWbsService {
 
     XmslWbs getXmslWbs(XmslWbs xmslWbs);
 
+    List<XmslWbs> getByMainId(Long mainId);
 
     Map listData(XmslWbs xmslWbs);
 
+    /**
+     * 查询wbs，根据params.tname决定查询历史还是wbs
+     * @param xmslWbs
+     * @return
+     */
+    List<XmslWbs> getXmslWbsListByTname(XmslWbs xmslWbs);
+
+    /**
+     * 强制查询wbs
+     * @param xmslWbs
+     * @return
+     */
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
+
+    Long countByWbs(XmslWbs wbs);
 
     /**
      * 判断是否有生效的wbs
-     * @return 0:没有，1>：有
+     * @return { hasEffect 是否有生效,hasChange :是否有调整  }
      */
-    int hasEffectWbs();
+    Map hasEffectWbs();
 
     void save(XmslWbsDto dto);
 

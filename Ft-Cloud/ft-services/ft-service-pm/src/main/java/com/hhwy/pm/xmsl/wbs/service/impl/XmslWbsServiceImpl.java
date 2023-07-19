@@ -46,38 +46,46 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     }
 
     @Override
-    public Map listData(XmslWbs xmslWbs) {
-        if(xmslWbs.getParentId() == null)
-            xmslWbs.setParentId("-1L");
-        //判断查询历史还是查询当前
-        Long mainId = null;
-        boolean isHistory = false;
-        if(xmslWbs.getMainId() == null){
-            XmslWbsMain wbsMain = wbsMainService.getEffect();
-            if(wbsMain == null)
-                return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId","");
-            xmslWbs.setMainId(wbsMain.getId());
-            isHistory = false;
-        }else{
-            XmslWbsMain main = wbsMainService.getById(xmslWbs.getMainId());
-            Assert.notNull(main,"主数据获取失败,mainId有误");
-            isHistory = main.getValid()==Constant.NO_INT;
-        }
-        mainId = xmslWbs.getMainId();
-        xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
-        xmslWbs.getParams().put("tableName",isHistory?"xmsl_wbs_history":"xmsl_wbs");
-        List<XmslWbs> list = xmslWbsMapper.getXmslWbsList(xmslWbs);
-        return ObjectUtils.toMap("list",list,"mainId",mainId);
+    public List<XmslWbs> getByMainId(Long mainId) {
+        XmslWbs query = new XmslWbs();
+        query.setMainId(mainId);
+        List<XmslWbs> list = xmslWbsMapper.getXmslWbsList(query);
+        return list;
     }
 
-    public List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs) {
+    @Override
+    public Map listData(XmslWbs xmslWbs) {
+        if(StringUtils.isBlank(xmslWbs.getParentId()) )
+            xmslWbs.setParentId("-1");
+        //判断查询历史还是查询当前
+        XmslWbsMain main = wbsMainService.getById(xmslWbs.getMainId());
+        xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
+        xmslWbs.getParams().put("tableName",main.getValid()==Constant.NO_INT?"xmsl_wbs_history":"xmsl_wbs");
+        List<XmslWbs> list = xmslWbsMapper.getXmslWbsList(xmslWbs);
+        return ObjectUtils.toMap("list",list,"mainId",main.getId());
+    }
+
+    @Override
+    public List<XmslWbs> getXmslWbsListByTname(XmslWbs xmslWbs) {
         return xmslWbsMapper.getXmslWbsList(xmslWbs);
     }
 
     @Override
-    public int hasEffectWbs() {
-        int count = xmslWbsMapper.hasEffectWbs();
-        return count>0?1:0;
+    public List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs) {
+        xmslWbs.setParams(ObjectUtils.toMap("tableName","xmsl_wbs"));
+        return getXmslWbsListByTname(xmslWbs);
+    }
+
+    @Override
+    public Long countByWbs(XmslWbs wbs) {
+        return this.xmslWbsMapper.countByWbs(wbs);
+    }
+
+    @Override
+    public Map hasEffectWbs() {
+        XmslWbsMain main = wbsMainService.getEffect();
+        Long count = wbsMainService.getXmslWbsMainCount(new XmslWbsMain());
+        return ObjectUtils.toMap("hasEffect",main!=null?1:0,"hasChange",count>1?1:0);
     }
 
     @Override

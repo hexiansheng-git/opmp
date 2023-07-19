@@ -7,7 +7,6 @@
   <resultMap type="com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan"
     id="QqchConstructionReviewPlanResultMap">
     <result property="id" column="id"/>
-    <result property="pid" column="pid"/>
     <result property="schemeLevel" column="scheme_level"/>
     <result property="schemeCode" column="scheme_code"/>
     <result property="schemeName" column="scheme_name"/>
@@ -45,7 +44,6 @@
   <sql id="selectQqchConstructionReviewPlanVo">
     select
       `id`
-      ,`pid`
       ,`scheme_level`
       ,`scheme_code`
       ,`scheme_name`
@@ -86,7 +84,6 @@
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
-      <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
       <if test="schemeCode != null  and schemeCode != ''">and `scheme_code` = #{schemeCode}</if>
       <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
@@ -133,7 +130,6 @@
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
-      <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
       <if test="schemeCode != null  and schemeCode != ''">and `scheme_code` = #{schemeCode}</if>
       <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>
@@ -179,7 +175,6 @@
     insert into qqch_construction_review_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null ">`id`,</if>
-      <if test="pid != null ">`pid`,</if>
       <if test="schemeLevel != null  and schemeLevel != ''">`scheme_level`,</if>
       <if test="schemeCode != null  and schemeCode != ''">`scheme_code`,</if>
       <if test="schemeName != null  and schemeName != ''">`scheme_name`,</if>
@@ -216,7 +211,6 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null ">#{id},</if>
-      <if test="pid != null ">#{pid},</if>
       <if test="schemeLevel != null  and schemeLevel != ''">#{schemeLevel},</if>
       <if test="schemeCode != null  and schemeCode != ''">#{schemeCode},</if>
       <if test="schemeName != null  and schemeName != ''">#{schemeName},</if>
@@ -258,7 +252,6 @@
     insert into qqch_construction_review_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
-      `pid`,
       `scheme_level`,
       `scheme_code`,
       `scheme_name`,
@@ -296,7 +289,6 @@
     <foreach collection="qqchConstructionReviewPlanList" item="item" separator=",">
       <trim prefix="(" suffix=")" suffixOverrides=",">
         #{item.id},
-        #{item.pid},
         #{item.schemeLevel},
         #{item.schemeCode},
         #{item.schemeName},
@@ -337,7 +329,6 @@
     update qqch_construction_review_plan
     <trim prefix="SET" suffixOverrides=",">
       <if test="id != null ">`id` = #{id},</if>
-      <if test="pid != null ">`pid` = #{pid},</if>
       <if test="schemeLevel != null  and  schemeLevel != ''">`scheme_level` = #{schemeLevel},</if>
       <if test="schemeCode != null  and  schemeCode != ''">`scheme_code` = #{schemeCode},</if>
       <if test="schemeName != null  and  schemeName != ''">`scheme_name` = #{schemeName},</if>
@@ -387,11 +378,6 @@
       <trim prefix="id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.id}
-        </foreach>
-      </trim>
-      <trim prefix="pid  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.pid}
         </foreach>
       </trim>
       <trim prefix="scheme_level  = case" suffix="end,">
@@ -570,7 +556,6 @@
     update `qqch_construction_review_plan` set del_flag = 1
     <where>
       <if test="id != null ">and `id` = #{id}</if>
-      <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="schemeLevel != null  and schemeLevel != ''">and `scheme_level` = #{schemeLevel}</if>
       <if test="schemeCode != null  and schemeCode != ''">and `scheme_code` = #{schemeCode}</if>
       <if test="schemeName != null  and schemeName != ''">and `scheme_name` = #{schemeName}</if>

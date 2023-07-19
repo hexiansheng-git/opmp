@@ -2,11 +2,9 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-  namespace="com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper">
+<mapper namespace="com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper">
 
-  <resultMap
-    type="com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify"
+  <resultMap type="com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify"
     id="QqchContractTechStandardIdentifyResultMap">
     <result property="id" column="id"/>
     <result property="pid" column="pid"/>
@@ -16,6 +14,8 @@
     <result property="standardSource" column="standard_source"/>
     <result property="priorityLevel" column="priority_level"/>
     <result property="sort" column="sort"/>
+    <result property="version" column="version"/>
+    <result property="valid" column="valid"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
     <result property="projectId" column="project_id"/>
@@ -36,35 +36,37 @@
     <result property="ptVar5" column="pt_var5"/>
   </resultMap>
   <sql id="selectQqchContractTechStandardIdentifyVo">
-      select
-          `id`
-         ,`pid`
-         ,`standard_type`
-         ,`standard_name`
-         ,`standard_num`
-         ,`standard_source`
-         ,`priority_level`
-         ,`sort`
-         ,`region_id`
-         ,`region_name`
-         ,`project_id`
-         ,`project_name`
-         ,`dept_id`
-         ,`create_user`
-         ,`create_user_name`
-         ,`create_time`
-         ,`update_user`
-         ,`update_time`
-         ,`del_user`
-         ,`del_time`
-         ,`del_flag`
-         ,`pt_var1`
-         ,`pt_var2`
-         ,`pt_var3`
-         ,`pt_var4`
-         ,`pt_var5`
+    select
+      `id`
+      ,`pid`
+      ,`standard_type`
+      ,`standard_name`
+      ,`standard_num`
+      ,`standard_source`
+      ,`priority_level`
+      ,`sort`
+      ,`version`
+      ,`valid`
+      ,`region_id`
+      ,`region_name`
+      ,`project_id`
+      ,`project_name`
+      ,`dept_id`
+      ,`create_user`
+      ,`create_user_name`
+      ,`create_time`
+      ,`update_user`
+      ,`update_time`
+      ,`del_user`
+      ,`del_time`
+      ,`del_flag`
+      ,`pt_var1`
+      ,`pt_var2`
+      ,`pt_var3`
+      ,`pt_var4`
+      ,`pt_var5`
     from qqch_contract_tech_standard_identify
-    </sql>
+   </sql>
   <select id="getQqchContractTechStandardIdentify" resultMap="QqchContractTechStandardIdentifyResultMap">
     <include refid="selectQqchContractTechStandardIdentifyVo"/>
     <where>
@@ -76,7 +78,9 @@
       <if test="standardNum != null  and standardNum != ''">and `standard_num` = #{standardNum}</if>
       <if test="standardSource != null  and standardSource != ''">and `standard_source` = #{standardSource}</if>
       <if test="priorityLevel != null  and priorityLevel != ''">and `priority_level` = #{priorityLevel}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -96,7 +100,7 @@
       <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
-    order by create_time desc
+    order by sort
   </select>
 
   <select id="getQqchContractTechStandardIdentifyList" resultMap="QqchContractTechStandardIdentifyResultMap">
@@ -110,7 +114,9 @@
       <if test="standardNum != null  and standardNum != ''">and `standard_num` = #{standardNum}</if>
       <if test="standardSource != null  and standardSource != ''">and `standard_source` = #{standardSource}</if>
       <if test="priorityLevel != null  and priorityLevel != ''">and `priority_level` = #{priorityLevel}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -143,7 +149,9 @@
       <if test="standardNum != null  and standardNum != ''">`standard_num`,</if>
       <if test="standardSource != null  and standardSource != ''">`standard_source`,</if>
       <if test="priorityLevel != null  and priorityLevel != ''">`priority_level`,</if>
-      <if test="sort != null  and sort != ''">`sort`,</if>
+      <if test="sort != null">`sort`,</if>
+      <if test="version != null ">`version`,</if>
+      <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
       <if test="projectId != null ">`project_id`,</if>
@@ -171,7 +179,9 @@
       <if test="standardNum != null  and standardNum != ''">#{standardNum},</if>
       <if test="standardSource != null  and standardSource != ''">#{standardSource},</if>
       <if test="priorityLevel != null  and priorityLevel != ''">#{priorityLevel},</if>
-      <if test="sort != null  and sort != ''">#{sort},</if>
+      <if test="sort != null">#{sort},</if>
+      <if test="version != null ">#{version},</if>
+      <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
       <if test="projectId != null ">#{projectId},</if>
@@ -205,6 +215,8 @@
       `standard_source`,
       `priority_level`,
       `sort`,
+      `version`,
+      `valid`,
       `region_id`,
       `region_name`,
       `project_id`,
@@ -234,6 +246,8 @@
         #{item.standardSource},
         #{item.priorityLevel},
         #{item.sort},
+        #{item.version},
+        #{item.valid},
         #{item.regionId},
         #{item.regionName},
         #{item.projectId},
@@ -265,7 +279,9 @@
       <if test="standardNum != null  and  standardNum != ''">`standard_num` = #{standardNum},</if>
       <if test="standardSource != null  and  standardSource != ''">`standard_source` = #{standardSource},</if>
       <if test="priorityLevel != null  and  priorityLevel != ''">`priority_level` = #{priorityLevel},</if>
-      <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+      <if test="sort != null">`sort` = #{sort},</if>
+      <if test="version != null ">`version` = #{version},</if>
+      <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
       <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -331,6 +347,16 @@
       <trim prefix="sort  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.sort}
+        </foreach>
+      </trim>
+      <trim prefix="version  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.version}
+        </foreach>
+      </trim>
+      <trim prefix="valid  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.valid}
         </foreach>
       </trim>
       <trim prefix="region_id  = case" suffix="end,">
@@ -440,7 +466,9 @@
       <if test="standardNum != null  and standardNum != ''">and `standard_num` = #{standardNum}</if>
       <if test="standardSource != null  and standardSource != ''">and `standard_source` = #{standardSource}</if>
       <if test="priorityLevel != null  and priorityLevel != ''">and `priority_level` = #{priorityLevel}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
+      <if test="version != null ">and `version` = #{version}</if>
+      <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
