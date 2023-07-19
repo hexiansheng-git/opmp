@@ -24,6 +24,12 @@ public enum MyDownTemplateEnum {
             map.put("isSpecial", isSpecialList);
             return map;
         }
+    },
+    importCampsiteStationPlanning("importCampsiteStationPlanning.xls", "营地场站规划导入") {
+        @Override
+        public Map<String, List> pullLists() {
+            return new HashMap<>();
+        }
     }
     ;
 

@@ -3,11 +3,9 @@ package com.hhwy.pm.qqch.preparation.technique.clause.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechAchievementIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechAchievementIdentifyService;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,40 +27,31 @@ public class QqchContractTechAchievementIdentifyController extends BaseControlle
     @Autowired
     private IQqchContractTechAchievementIdentifyService qqchContractTechAchievementIdentifyService;
 
-    @PreAuthorize(hasPermi = "qqchContractTechAchievementIdentify:remove")
-    @PostMapping("/remove")
-    public AjaxResult deleteQqchContractTechAchievementIdentifyByPks(Long[] ids) {
-        List<Long> qqchContractTechAchievementIdentifyPkList = Arrays.asList(ids);
-        return toAjax(qqchContractTechAchievementIdentifyService
-            .deleteQqchContractTechAchievementIdentifyByPks(qqchContractTechAchievementIdentifyPkList));
-    }
-
     /**
      * 查询列表
      *
-     * @param qqchContractTechAchievementIdentifyParam
+     * @param
      * @return
      */
     @PreAuthorize(hasPermi = "qqchContractTechAchievementIdentify:list")
     @GetMapping("/getTreeList")
-    public AjaxResult getTreeList(
-        @Validated(ValidationGroups.Select.class) @RequestBody QqchContractTechAchievementIdentify qqchContractTechAchievementIdentifyParam) {
-        List<QqchContractTechAchievementIdentify> treeList =
-            qqchContractTechAchievementIdentifyService.getTreeList(qqchContractTechAchievementIdentifyParam);
-        return AjaxResult.success(treeList);
+    public AjaxResult getTreeList() {
+        QqchContractTechAchievementIdentifyVo qqchContractTechAchievementIdentifyVo = qqchContractTechAchievementIdentifyService
+            .getTreeList();
+        return AjaxResult.success(qqchContractTechAchievementIdentifyVo);
     }
 
     /**
      * 批量保存
      *
-     * @param qqchContractTechAchievementIdentifyParam
+     * @param qqchContractTechAchievementIdentifyVo
      * @return
      */
     @PreAuthorize(hasPermi = "qqchContractTechAchievementIdentify:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody List<QqchContractTechAchievementIdentify> qqchContractTechAchievementIdentifyParam) {
-        qqchContractTechAchievementIdentifyService.batchSave(qqchContractTechAchievementIdentifyParam);
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchContractTechAchievementIdentifyVo qqchContractTechAchievementIdentifyVo) {
+        qqchContractTechAchievementIdentifyService.batchSave(qqchContractTechAchievementIdentifyVo);
         return AjaxResult.success();
     }
 }

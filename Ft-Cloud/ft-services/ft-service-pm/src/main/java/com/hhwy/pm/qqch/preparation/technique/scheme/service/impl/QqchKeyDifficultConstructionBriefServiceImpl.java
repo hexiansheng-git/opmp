@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchKeyDifficultConstructionBriefMapper;
@@ -19,7 +20,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * @author zhenlili
  * @date 2023-07-17 15:29:49
- * @remark
+ * @remark 3.4.4重难点分项施工方案简述
  */
 @Service
 public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDifficultConstructionBriefService {
@@ -47,7 +48,8 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
     @Transactional
     public void batchSave(QqchKeyDifficultConstructionBriefVo qqchKeyDifficultConstructionBriefVo) {
         if (qqchKeyDifficultConstructionBriefVo.getVersion() == null) {
-            throw new RuntimeException("版本号不能为空！");
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
+            qqchKeyDifficultConstructionBriefVo.setVersion(maxVersion);
         }
 
         // 先批量删除当前版本所有数据
@@ -62,7 +64,6 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
 
         List<QqchKeyDifficultConstructionBrief> insertList = new ArrayList<>();
 
-        // 技术重点
         for (QqchKeyDifficultConstructionBrief brief : qqchKeyDifficultConstructionBriefVo.getList()) {
             brief.setId(IdWorker.createId());
             brief.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
@@ -70,7 +71,7 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
             brief.setCreateTime(DateUtils.getNowDate());
 
             brief.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());
-            brief.setValid("1");
+            brief.setValid(Valid.YES);
             insertList.add(brief);
         }
 

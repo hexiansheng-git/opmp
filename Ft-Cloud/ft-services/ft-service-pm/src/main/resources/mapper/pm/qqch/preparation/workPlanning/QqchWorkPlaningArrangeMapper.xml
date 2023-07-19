@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.workPlanning.mapper.QqchWorkPlaningArrangeMapper">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+    <resultMap type="com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange" id="QqchWorkPlaningArrangeResultMap">
+                    <result property="id" column="id" />
+                    <result property="obstacleNumber" column="obstacle_number" />
+                    <result property="obstacleType" column="obstacle_type" />
+                    <result property="pileCode" column="pile_code" />
+                    <result property="normalWidth" column="normal_width" />
+                    <result property="normalWaterLevel" column="normal_water_level" />
+                    <result property="floodSeasonWidth" column="flood_season_width" />
+                    <result property="floodSeasonWaterLevel" column="flood_season_water_level" />
+                    <result property="planCrossWay" column="plan_cross_way" />
+                    <result property="planBridgeLength" column="plan_bridge_length" />
+                    <result property="materialUsage" column="material_usage" />
+                    <result property="version" column="version" />
+                    <result property="valid" column="valid" />
+                    <result property="createUser" column="create_user" />
+                    <result property="createUserName" column="create_user_name" />
+                    <result property="createTime" column="create_time" />
+                    <result property="updateUser" column="update_user" />
+                    <result property="updateTime" column="update_time" />
+                    <result property="delUser" column="del_user" />
+                    <result property="delTime" column="del_time" />
+                    <result property="delFlag" column="del_flag" />
+                    <result property="ptVar1" column="pt_var1" />
+                    <result property="ptVar2" column="pt_var2" />
+                    <result property="ptVar3" column="pt_var3" />
+            </resultMap>
+    <sql id="selectQqchWorkPlaningArrangeVo">
+        select
+                                                            `id`
+                                                         ,`obstacle_number`
+                                                         ,`obstacle_type`
+                                                         ,`pile_code`
+                                                         ,`normal_width`
+                                                         ,`normal_water_level`
+                                                         ,`flood_season_width`
+                                                         ,`flood_season_water_level`
+                                                         ,`plan_cross_way`
+                                                         ,`plan_bridge_length`
+                                                         ,`material_usage`
+                                                         ,`version`
+                                                         ,`valid`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                    from qqch_work_planing_arrange
+    </sql>
+    <select id="getQqchWorkPlaningArrange" resultMap="QqchWorkPlaningArrangeResultMap">
+        <include refid="selectQqchWorkPlaningArrangeVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="obstacleNumber != null  and obstacleNumber != ''"> and `obstacle_number` = #{obstacleNumber}</if>
+                            <if test="obstacleType != null  and obstacleType != ''"> and `obstacle_type` = #{obstacleType}</if>
+                            <if test="pileCode != null  and pileCode != ''"> and `pile_code` = #{pileCode}</if>
+                            <if test="normalWidth != null  and normalWidth != ''"> and `normal_width` = #{normalWidth}</if>
+                            <if test="normalWaterLevel != null  and normalWaterLevel != ''"> and `normal_water_level` = #{normalWaterLevel}</if>
+                            <if test="floodSeasonWidth != null  and floodSeasonWidth != ''"> and `flood_season_width` = #{floodSeasonWidth}</if>
+                            <if test="floodSeasonWaterLevel != null  and floodSeasonWaterLevel != ''"> and `flood_season_water_level` = #{floodSeasonWaterLevel}</if>
+                            <if test="planCrossWay != null  and planCrossWay != ''"> and `plan_cross_way` = #{planCrossWay}</if>
+                            <if test="planBridgeLength != null  and planBridgeLength != ''"> and `plan_bridge_length` = #{planBridgeLength}</if>
+                            <if test="materialUsage != null  and materialUsage != ''"> and `material_usage` = #{materialUsage}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchWorkPlaningArrangeList" resultMap="QqchWorkPlaningArrangeResultMap">
+        <include refid="selectQqchWorkPlaningArrangeVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="obstacleNumber != null  and obstacleNumber != ''"> and `obstacle_number` = #{obstacleNumber}</if>
+                            <if test="obstacleType != null  and obstacleType != ''"> and `obstacle_type` = #{obstacleType}</if>
+                            <if test="pileCode != null  and pileCode != ''"> and `pile_code` = #{pileCode}</if>
+                            <if test="normalWidth != null  and normalWidth != ''"> and `normal_width` = #{normalWidth}</if>
+                            <if test="normalWaterLevel != null  and normalWaterLevel != ''"> and `normal_water_level` = #{normalWaterLevel}</if>
+                            <if test="floodSeasonWidth != null  and floodSeasonWidth != ''"> and `flood_season_width` = #{floodSeasonWidth}</if>
+                            <if test="floodSeasonWaterLevel != null  and floodSeasonWaterLevel != ''"> and `flood_season_water_level` = #{floodSeasonWaterLevel}</if>
+                            <if test="planCrossWay != null  and planCrossWay != ''"> and `plan_cross_way` = #{planCrossWay}</if>
+                            <if test="planBridgeLength != null  and planBridgeLength != ''"> and `plan_bridge_length` = #{planBridgeLength}</if>
+                            <if test="materialUsage != null  and materialUsage != ''"> and `material_usage` = #{materialUsage}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchWorkPlaningArrange"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_work_planing_arrange
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">`id`,</if>
+                            <if test="obstacleNumber != null  and obstacleNumber != ''">`obstacle_number`,</if>
+                            <if test="obstacleType != null  and obstacleType != ''">`obstacle_type`,</if>
+                            <if test="pileCode != null  and pileCode != ''">`pile_code`,</if>
+                            <if test="normalWidth != null  and normalWidth != ''">`normal_width`,</if>
+                            <if test="normalWaterLevel != null  and normalWaterLevel != ''">`normal_water_level`,</if>
+                            <if test="floodSeasonWidth != null  and floodSeasonWidth != ''">`flood_season_width`,</if>
+                            <if test="floodSeasonWaterLevel != null  and floodSeasonWaterLevel != ''">`flood_season_water_level`,</if>
+                            <if test="planCrossWay != null  and planCrossWay != ''">`plan_cross_way`,</if>
+                            <if test="planBridgeLength != null  and planBridgeLength != ''">`plan_bridge_length`,</if>
+                            <if test="materialUsage != null  and materialUsage != ''">`material_usage`,</if>
+                            <if test="version != null ">`version`,</if>
+                            <if test="valid != null  and valid != ''">`valid`,</if>
+                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+                            <if test="createTime != null ">`create_time`,</if>
+                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+                            <if test="updateTime != null ">`update_time`,</if>
+                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+                            <if test="delTime != null ">`del_time`,</if>
+                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">#{id},</if>
+                            <if test="obstacleNumber != null  and obstacleNumber != ''">#{obstacleNumber},</if>
+                            <if test="obstacleType != null  and obstacleType != ''">#{obstacleType},</if>
+                            <if test="pileCode != null  and pileCode != ''">#{pileCode},</if>
+                            <if test="normalWidth != null  and normalWidth != ''">#{normalWidth},</if>
+                            <if test="normalWaterLevel != null  and normalWaterLevel != ''">#{normalWaterLevel},</if>
+                            <if test="floodSeasonWidth != null  and floodSeasonWidth != ''">#{floodSeasonWidth},</if>
+                            <if test="floodSeasonWaterLevel != null  and floodSeasonWaterLevel != ''">#{floodSeasonWaterLevel},</if>
+                            <if test="planCrossWay != null  and planCrossWay != ''">#{planCrossWay},</if>
+                            <if test="planBridgeLength != null  and planBridgeLength != ''">#{planBridgeLength},</if>
+                            <if test="materialUsage != null  and materialUsage != ''">#{materialUsage},</if>
+                            <if test="version != null ">#{version},</if>
+                            <if test="valid != null  and valid != ''">#{valid},</if>
+                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+                            <if test="createTime != null ">#{createTime},</if>
+                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+                            <if test="updateTime != null ">#{updateTime},</if>
+                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+                            <if test="delTime != null ">#{delTime},</if>
+                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+                    </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchWorkPlaningArrange -->
+    <insert id="insertQqchWorkPlaningArrangeList">
+        insert into qqch_work_planing_arrange
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                `id`,
+                                                                `obstacle_number`,
+                                                                `obstacle_type`,
+                                                                `pile_code`,
+                                                                `normal_width`,
+                                                                `normal_water_level`,
+                                                                `flood_season_width`,
+                                                                `flood_season_water_level`,
+                                                                `plan_cross_way`,
+                                                                `plan_bridge_length`,
+                                                                `material_usage`,
+                                                                `version`,
+                                                                `valid`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                                            `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                    </trim>
+        values
+        <foreach collection="qqchWorkPlaningArrangeList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                            #{item.id},
+                                                                                #{item.obstacleNumber},
+                                                                                #{item.obstacleType},
+                                                                                #{item.pileCode},
+                                                                                #{item.normalWidth},
+                                                                                #{item.normalWaterLevel},
+                                                                                #{item.floodSeasonWidth},
+                                                                                #{item.floodSeasonWaterLevel},
+                                                                                #{item.planCrossWay},
+                                                                                #{item.planBridgeLength},
+                                                                                #{item.materialUsage},
+                                                                                #{item.version},
+                                                                                #{item.valid},
+                                                                                #{item.createUser},
+                                                                                #{item.createUserName},
+                                                                                #{item.createTime},
+                                                                                #{item.updateUser},
+                                                                                #{item.updateTime},
+                                                                                #{item.delUser},
+                                                                                #{item.delTime},
+                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar2},
+                                                                                #{item.ptVar3},
+                                                </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchWorkPlaningArrange">
+        update qqch_work_planing_arrange
+        <trim prefix="SET" suffixOverrides=",">
+                            <if test="id != null ">`id` = #{id},</if>
+                            <if test="obstacleNumber != null  and  obstacleNumber != ''">`obstacle_number` = #{obstacleNumber},</if>
+                            <if test="obstacleType != null  and  obstacleType != ''">`obstacle_type` = #{obstacleType},</if>
+                            <if test="pileCode != null  and  pileCode != ''">`pile_code` = #{pileCode},</if>
+                            <if test="normalWidth != null  and  normalWidth != ''">`normal_width` = #{normalWidth},</if>
+                            <if test="normalWaterLevel != null  and  normalWaterLevel != ''">`normal_water_level` = #{normalWaterLevel},</if>
+                            <if test="floodSeasonWidth != null  and  floodSeasonWidth != ''">`flood_season_width` = #{floodSeasonWidth},</if>
+                            <if test="floodSeasonWaterLevel != null  and  floodSeasonWaterLevel != ''">`flood_season_water_level` = #{floodSeasonWaterLevel},</if>
+                            <if test="planCrossWay != null  and  planCrossWay != ''">`plan_cross_way` = #{planCrossWay},</if>
+                            <if test="planBridgeLength != null  and  planBridgeLength != ''">`plan_bridge_length` = #{planBridgeLength},</if>
+                            <if test="materialUsage != null  and  materialUsage != ''">`material_usage` = #{materialUsage},</if>
+                            <if test="version != null ">`version` = #{version},</if>
+                            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+                            <if test="createTime != null ">`create_time` = #{createTime},</if>
+                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+                            <if test="delTime != null ">`del_time` = #{delTime},</if>
+                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+                    </trim>
+        <where>
+                                                                        <if test="id != null "> and `id` = #{id}</if>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+    </update>
+
+            <update id="updateQqchWorkPlaningArrangeList">
+            update qqch_work_planing_arrange
+            <trim prefix="set" suffixOverrides=",">
+                                    <trim prefix="id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="obstacle_number  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.obstacleNumber}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="obstacle_type  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.obstacleType}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pile_code  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.pileCode}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="normal_width  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.normalWidth}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="normal_water_level  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.normalWaterLevel}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="flood_season_width  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.floodSeasonWidth}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="flood_season_water_level  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.floodSeasonWaterLevel}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="plan_cross_way  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.planCrossWay}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="plan_bridge_length  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.planBridgeLength}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="material_usage  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.materialUsage}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="version  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.version}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="valid  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.valid}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUserName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_flag  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delFlag}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var1  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar1}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var2  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar2}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var3  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar3}
+                        </foreach>
+                    </trim>
+                            </trim>
+            where `id` in
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </update>
+    
+            <update id="deleteQqchWorkPlaningArrange">
+            update `qqch_work_planing_arrange` set del_flag = 1
+            <where>
+                                    <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="obstacleNumber != null  and obstacleNumber != ''"> and `obstacle_number` = #{obstacleNumber}</if>
+                                    <if test="obstacleType != null  and obstacleType != ''"> and `obstacle_type` = #{obstacleType}</if>
+                                    <if test="pileCode != null  and pileCode != ''"> and `pile_code` = #{pileCode}</if>
+                                    <if test="normalWidth != null  and normalWidth != ''"> and `normal_width` = #{normalWidth}</if>
+                                    <if test="normalWaterLevel != null  and normalWaterLevel != ''"> and `normal_water_level` = #{normalWaterLevel}</if>
+                                    <if test="floodSeasonWidth != null  and floodSeasonWidth != ''"> and `flood_season_width` = #{floodSeasonWidth}</if>
+                                    <if test="floodSeasonWaterLevel != null  and floodSeasonWaterLevel != ''"> and `flood_season_water_level` = #{floodSeasonWaterLevel}</if>
+                                    <if test="planCrossWay != null  and planCrossWay != ''"> and `plan_cross_way` = #{planCrossWay}</if>
+                                    <if test="planBridgeLength != null  and planBridgeLength != ''"> and `plan_bridge_length` = #{planBridgeLength}</if>
+                                    <if test="materialUsage != null  and materialUsage != ''"> and `material_usage` = #{materialUsage}</if>
+                                    <if test="version != null "> and `version` = #{version}</if>
+                                    <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            </where>
+        </update>
+
+                    <update id="deleteQqchWorkPlaningArrangeByPks">
+                update `qqch_work_planing_arrange` set del_flag = 1
+                <where>
+                    `id` in
+                    <foreach item="id" collection="qqchWorkPlaningArrangePkList" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </where>
+            </update>
+            </mapper>

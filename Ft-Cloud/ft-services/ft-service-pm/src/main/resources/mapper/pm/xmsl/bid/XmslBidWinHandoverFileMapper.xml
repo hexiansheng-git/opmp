@@ -69,7 +69,7 @@
       <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
       <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
       <if test="feedback != null  and feedback != ''">and `feedback` = #{feedback}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
       <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -130,7 +130,7 @@
       <if test="fileName != null  and fileName != ''">and `file_name` = #{fileName}</if>
       <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
       <if test="feedback != null  and feedback != ''">and `feedback` = #{feedback}</if>
-      <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
+      <if test="sort != null">and `sort` = #{sort}</if>
       <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -163,7 +163,7 @@
       <if test="fileName != null  and fileName != ''">`file_name`,</if>
       <if test="importance != null  and importance != ''">`importance`,</if>
       <if test="feedback != null  and feedback != ''">`feedback`,</if>
-      <if test="sort != null  and sort != ''">`sort`,</if>
+      <if test="sort != null">`sort`,</if>
       <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
@@ -191,7 +191,7 @@
       <if test="fileName != null  and fileName != ''">#{fileName},</if>
       <if test="importance != null  and importance != ''">#{importance},</if>
       <if test="feedback != null  and feedback != ''">#{feedback},</if>
-      <if test="sort != null  and sort != ''">#{sort},</if>
+      <if test="sort != null">#{sort},</if>
       <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
@@ -285,7 +285,7 @@
       <if test="fileName != null  and  fileName != ''">`file_name` = #{fileName},</if>
       <if test="importance != null  and  importance != ''">`importance` = #{importance},</if>
       <if test="feedback != null  and  feedback != ''">`feedback` = #{feedback},</if>
-      <if test="sort != null  and sort != ''">`sort` = #{sort},</if>
+      <if test="sort != null">`sort` = #{sort},</if>
       <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>

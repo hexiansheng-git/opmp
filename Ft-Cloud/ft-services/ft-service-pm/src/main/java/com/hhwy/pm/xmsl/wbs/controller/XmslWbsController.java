@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
 import cn.hutool.core.lang.Assert;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -11,6 +12,7 @@ import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.utils.validation.ValidationUtil;
+import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -31,10 +33,8 @@ import java.util.Map;
 @RestController
 @RequestMapping("/xmslWbs")
 public class XmslWbsController extends BaseController {
-
     @Autowired
     private IXmslWbsService xmslWbsService;
-
 
     @PreAuthorize(hasPermi = "xmslWbs:list")
     @PostMapping
@@ -50,16 +50,11 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success(map);
     }
 
-    @GetMapping("/hasEffectData")
-    public AjaxResult hasEffectData() {
-        int count = xmslWbsService.hasEffectWbs();
-        return AjaxResult.success(count);
-    }
-
     @PreAuthorize(hasPermi = "xmslWbs:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody XmslWbsDto dto) {
-        ValidationUtil.getValidator().validate(dto.getList().get(0),ValidationGroups.Save.class);
+    public AjaxResult save(@RequestBody XmslWbsDto dto) {
+        if(dto.getSubmitFlag() != null && dto.getSubmitFlag() == 1)
+            ValidationUtil.getValidator().validate(dto,ValidationGroups.Save.class);
         xmslWbsService.save(dto);
         return AjaxResult.success();
     }
@@ -71,10 +66,11 @@ public class XmslWbsController extends BaseController {
         return toAjax(xmslWbsService.deleteXmslWbsByPks(xmslWbsPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, XmslWbs xmslWbsParam) throws IOException {
-        List<XmslWbs> xmslWbsList = xmslWbsService.getXmslWbsList(xmslWbsParam);
-        ExcelUtils<XmslWbs> util = new ExcelUtils<>(XmslWbs.class);
-        util.exportExcel(response, xmslWbsList, DateUtils.getDate());
-    }
+//    @GetMapping("/export")
+//    public void export(HttpServletResponse response, XmslWbs xmslWbsParam) throws IOException {
+//        List<XmslWbs> xmslWbsList = xmslWbsService.getXmslWbsListByTname(xmslWbsParam);
+//        ExcelUtils<XmslWbs> util = new ExcelUtils<>(XmslWbs.class);
+//        util.exportExcel(response, xmslWbsList, DateUtils.getDate());
+//    }
+
 }

@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service;
 
-import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeComparison;
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
 
 /**
  * @author zhenglili
@@ -10,10 +9,7 @@ import java.util.List;
  */
 public interface IQqchTechManageModeComparisonService {
 
-    List<QqchTechManageModeComparison> getQqchTechManageModeComparisonList(
-        QqchTechManageModeComparison qqchTechManageModeComparison);
+    QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList();
 
-    void batchSave(List<QqchTechManageModeComparison> qqchTechManageModeComparisonList);
-
-    int deleteQqchTechManageModeComparisonByPks(List<Long> qqchTechManageModeComparisonPkList);
+    void batchSave(QqchTechManageModeComparisonVo qqchTechManageModeComparisonVo);
 }

@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
@@ -35,7 +36,6 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
     public QqchConstructionListVo getQqchConstructionListList() {
         QqchConstructionListVo vo = new QqchConstructionListVo();
-
         // 获取最大版本号
         BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
         vo.setVersion(maxVersion);
@@ -50,7 +50,9 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
         if (qqchConstructionListVo.getVersion() == null) {
-            throw new RuntimeException("版本号不能为空！");
+            // 获取最大版本号
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+            qqchConstructionListVo.setVersion(maxVersion);
         }
 
         // 先批量删除当前版本所有数据
@@ -65,12 +67,11 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
         List<QqchConstructionList> insertList = new ArrayList<>();
 
-        // 技术重点
         for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
             // 方案编号 = 项目编码 + 三位流水号
             String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
             String newCode = code.replace(CodeEnum.QQCH_CONSTRUCTION_LIST.prefix(), "");
-            qqchConstructionList.setSchemeCode(qqchConstructionList.getSchemeCode() + newCode);
+            qqchConstructionList.setSchemeCode(qqchConstructionListVo.getProjectCode() + newCode);
 
             qqchConstructionList.setId(IdWorker.createId());
             qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
@@ -78,7 +79,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             qqchConstructionList.setCreateTime(DateUtils.getNowDate());
 
             qqchConstructionList.setVersion(qqchConstructionListVo.getVersion());
-            qqchConstructionList.setValid("1");
+            qqchConstructionList.setValid(Valid.YES);
             insertList.add(qqchConstructionList);
         }
 

@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.clause.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechStandardIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
-import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import java.util.ArrayList;
+import com.hhwy.utils.tree.TreeUtil;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,80 +26,66 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
 
     @Autowired
     private QqchContractTechStandardIdentifyMapper qqchContractTechStandardIdentifyMapper;
-
-    @Transactional
-    public int deleteQqchContractTechStandardIdentifyByPks(List<Long> qqchContractTechStandardIdentifyPkList) {
-        return qqchContractTechStandardIdentifyMapper
-            .deleteQqchContractTechStandardIdentifyByPks(qqchContractTechStandardIdentifyPkList);
-    }
+    @Autowired
+    private CommonMapper commonMapper;
 
     /**
      * 树列表查询
      *
-     * @param qqchContractTechStandardIdentify
+     * @param
      * @return
      */
-    public List<QqchContractTechStandardIdentify> getTreeList(
-        QqchContractTechStandardIdentify qqchContractTechStandardIdentify) {
+    public QqchContractTechStandardIdentifyVo getTreeList() {
+        QqchContractTechStandardIdentifyVo vo = new QqchContractTechStandardIdentifyVo();
+
+        // 获取最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
+        vo.setVersion(maxVersion);
+
+        QqchContractTechStandardIdentify qryParam = new QqchContractTechStandardIdentify();
+        qryParam.setVersion(maxVersion);
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
-            .getQqchContractTechStandardIdentifyList(qqchContractTechStandardIdentify);
-        return TreeUtils.listToTree(list);
+            .getQqchContractTechStandardIdentifyList(qryParam);
+        vo.setTreeList(TreeUtil.build(list, null));
+        return vo;
     }
 
     /**
      * 批量保存
      *
-     * @param qqchContractTechStandardIdentifyList
+     * @param voParam
      */
     @Transactional
-    public void batchSave(List<QqchContractTechStandardIdentify> qqchContractTechStandardIdentifyList) {
-        if (CollectionUtils.isEmpty(qqchContractTechStandardIdentifyList)) {
+    public void batchSave(QqchContractTechStandardIdentifyVo voParam) {
+        if (voParam.getVersion() == null) {
+            // 获取最大版本号
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
+            voParam.setVersion(maxVersion);
+        }
+
+        // 先批量删除当前版本所有数据
+        QqchContractTechStandardIdentify deleteParam = new QqchContractTechStandardIdentify();
+        deleteParam.setVersion(voParam.getVersion());
+        deleteParam.setDelFlag("1");
+        qqchContractTechStandardIdentifyMapper.updateQqchContractTechStandardIdentify(deleteParam);
+
+        if (CollectionUtils.isEmpty(voParam.getTreeList())) {
             return;
         }
 
-        List<QqchContractTechStandardIdentify> insertList = new ArrayList<>();
-        List<QqchContractTechStandardIdentify> updateList = new ArrayList<>();
-        for (QqchContractTechStandardIdentify qqchContractTechStandardIdentify : qqchContractTechStandardIdentifyList) {
-            this.recursionSubset(qqchContractTechStandardIdentify, insertList, updateList);
-        }
+        // 树转list
+        List<QqchContractTechStandardIdentify> insertList = TreeUtil.treeToList(voParam.getTreeList());
 
-        if (insertList.size() > 0) {
-            qqchContractTechStandardIdentifyMapper.insertQqchContractTechStandardIdentifyList(insertList);
-        }
-        if (updateList.size() > 0) {
-            qqchContractTechStandardIdentifyMapper.updateQqchContractTechStandardIdentifyList(updateList);
-        }
-    }
-
-    /**
-     * 递归处理子节点
-     *
-     * @param qqchContractTechStandardIdentify
-     * @param insertList
-     * @param updateList
-     */
-    public void recursionSubset(QqchContractTechStandardIdentify qqchContractTechStandardIdentify,
-        List<QqchContractTechStandardIdentify> insertList, List<QqchContractTechStandardIdentify> updateList) {
-        Long id = qqchContractTechStandardIdentify.getId();
-        if (id == null) {
-            id = IdWorker.createId();
-            qqchContractTechStandardIdentify.setId(id);
-            qqchContractTechStandardIdentify.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchContractTechStandardIdentify.setCreateUserName(SecurityUtils.getUserName());
-            qqchContractTechStandardIdentify.setCreateTime(DateUtils.getNowDate());
-            insertList.add(qqchContractTechStandardIdentify);
-        } else {
-            qqchContractTechStandardIdentify.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchContractTechStandardIdentify.setUpdateTime(DateUtils.getNowDate());
-            updateList.add(qqchContractTechStandardIdentify);
-        }
-
-        List<QqchContractTechStandardIdentify> children = qqchContractTechStandardIdentify.getChildren();
-        if (!CollectionUtils.isEmpty(children)) {
-            for (QqchContractTechStandardIdentify child : children) {
-                child.setPid(id);
-                this.recursionSubset(child, insertList, updateList);
+        if (!CollectionUtils.isEmpty(insertList)) {
+            for (QqchContractTechStandardIdentify insert : insertList) {
+                insert.setVersion(voParam.getVersion());
+                insert.setValid(Valid.YES);
+                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                insert.setCreateUserName(SecurityUtils.getUserName());
+                insert.setCreateTime(DateUtils.getNowDate());
             }
         }
+        // 全量入库
+        qqchContractTechStandardIdentifyMapper.insertQqchContractTechStandardIdentifyList(insertList);
     }
 }

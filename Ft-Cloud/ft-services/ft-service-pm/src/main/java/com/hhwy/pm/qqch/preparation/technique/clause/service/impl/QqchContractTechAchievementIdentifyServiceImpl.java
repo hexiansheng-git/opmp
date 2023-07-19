@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.clause.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
+import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechAchievementIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechAchievementIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechAchievementIdentifyService;
-import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtils;
-import java.util.ArrayList;
+import com.hhwy.utils.tree.TreeUtil;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,140 +26,60 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
 
     @Autowired
     private QqchContractTechAchievementIdentifyMapper qqchContractTechAchievementIdentifyMapper;
-
-
-    public QqchContractTechAchievementIdentify getQqchContractTechAchievementIdentify(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
-        return qqchContractTechAchievementIdentifyMapper
-            .getQqchContractTechAchievementIdentify(qqchContractTechAchievementIdentify);
-    }
-
-    public List<QqchContractTechAchievementIdentify> getQqchContractTechAchievementIdentifyList(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
-        return qqchContractTechAchievementIdentifyMapper
-            .getQqchContractTechAchievementIdentifyList(qqchContractTechAchievementIdentify);
-    }
-
-    @Transactional
-    public int insertQqchContractTechAchievementIdentify(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
-        qqchContractTechAchievementIdentify.setId(IdWorker.createId());
-        qqchContractTechAchievementIdentify.setCreateUser(SecurityUtils.getUserName());
-        qqchContractTechAchievementIdentify.setCreateTime(DateUtils.getNowDate());
-        return qqchContractTechAchievementIdentifyMapper
-            .insertQqchContractTechAchievementIdentify(qqchContractTechAchievementIdentify);
-    }
-
-    @Transactional
-    public int insertQqchContractTechAchievementIdentifyList(
-        List<QqchContractTechAchievementIdentify> qqchContractTechAchievementIdentifyList) {
-        for (QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify : qqchContractTechAchievementIdentifyList) {
-            qqchContractTechAchievementIdentify.setId(IdWorker.createId());
-            qqchContractTechAchievementIdentify.setCreateUser(SecurityUtils.getUserName());
-            qqchContractTechAchievementIdentify.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchContractTechAchievementIdentifyMapper
-            .insertQqchContractTechAchievementIdentifyList(qqchContractTechAchievementIdentifyList);
-    }
-
-    @Transactional
-    public int updateQqchContractTechAchievementIdentify(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
-        qqchContractTechAchievementIdentify.setUpdateUser(SecurityUtils.getUserName());
-        qqchContractTechAchievementIdentify.setUpdateTime(DateUtils.getNowDate());
-        return qqchContractTechAchievementIdentifyMapper
-            .updateQqchContractTechAchievementIdentify(qqchContractTechAchievementIdentify);
-    }
-
-    @Transactional
-    public int updateQqchContractTechAchievementIdentifyList(
-        List<QqchContractTechAchievementIdentify> qqchContractTechAchievementIdentifyList) {
-        for (QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify : qqchContractTechAchievementIdentifyList) {
-            qqchContractTechAchievementIdentify.setUpdateUser(SecurityUtils.getUserName());
-            qqchContractTechAchievementIdentify.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchContractTechAchievementIdentifyMapper
-            .updateQqchContractTechAchievementIdentifyList(qqchContractTechAchievementIdentifyList);
-    }
-
-    @Transactional
-    public int deleteQqchContractTechAchievementIdentify(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
-        qqchContractTechAchievementIdentify.setUpdateUser(SecurityUtils.getUserName());
-        qqchContractTechAchievementIdentify.setUpdateTime(DateUtils.getNowDate());
-        return qqchContractTechAchievementIdentifyMapper
-            .deleteQqchContractTechAchievementIdentify(qqchContractTechAchievementIdentify);
-    }
-
-    @Transactional
-    public int deleteQqchContractTechAchievementIdentifyByPks(List<Long> qqchContractTechAchievementIdentifyPkList) {
-        return qqchContractTechAchievementIdentifyMapper
-            .deleteQqchContractTechAchievementIdentifyByPks(qqchContractTechAchievementIdentifyPkList);
-    }
+    @Autowired
+    private CommonMapper commonMapper;
 
     /**
      * 树查询
      *
-     * @param qqchContractTechAchievementIdentify
+     * @param
      * @return
      */
-    public List<QqchContractTechAchievementIdentify> getTreeList(
-        QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify) {
+    public QqchContractTechAchievementIdentifyVo getTreeList() {
+        QqchContractTechAchievementIdentifyVo vo = new QqchContractTechAchievementIdentifyVo();
+
+        // 获取最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_achievement_identify");
+        vo.setVersion(maxVersion);
+
+        QqchContractTechAchievementIdentify qryParam = new QqchContractTechAchievementIdentify();
+        qryParam.setVersion(maxVersion);
         List<QqchContractTechAchievementIdentify> list = qqchContractTechAchievementIdentifyMapper
-            .getQqchContractTechAchievementIdentifyList(qqchContractTechAchievementIdentify);
-        return TreeUtils.listToTree(list);
+            .getQqchContractTechAchievementIdentifyList(qryParam);
+        vo.setTreeList(TreeUtil.build(list, null));
+        return vo;
     }
 
     @Transactional
-    public void batchSave(List<QqchContractTechAchievementIdentify> qqchContractTechAchievementIdentifyList) {
-        if (CollectionUtils.isEmpty(qqchContractTechAchievementIdentifyList)) {
+    public void batchSave(QqchContractTechAchievementIdentifyVo voParam) {
+        if (voParam.getVersion() == null) {
+            // 获取最大版本号
+            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_achievement_identify");
+            voParam.setVersion(maxVersion);
+        }
+
+        // 先批量删除当前版本所有数据
+        QqchContractTechAchievementIdentify deleteParam = new QqchContractTechAchievementIdentify();
+        deleteParam.setVersion(voParam.getVersion());
+        deleteParam.setDelFlag("1");
+        qqchContractTechAchievementIdentifyMapper.updateQqchContractTechAchievementIdentify(deleteParam);
+
+        if (CollectionUtils.isEmpty(voParam.getTreeList())) {
             return;
         }
 
-        List<QqchContractTechAchievementIdentify> insertList = new ArrayList<>();
-        List<QqchContractTechAchievementIdentify> updateList = new ArrayList<>();
-        for (QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify : qqchContractTechAchievementIdentifyList) {
-            this.recursionSubset(qqchContractTechAchievementIdentify, insertList, updateList);
-        }
-
-        if (insertList.size() > 0) {
-            qqchContractTechAchievementIdentifyMapper.insertQqchContractTechAchievementIdentifyList(insertList);
-        }
-        if (updateList.size() > 0) {
-            qqchContractTechAchievementIdentifyMapper.updateQqchContractTechAchievementIdentifyList(updateList);
-        }
-    }
-
-    /**
-     * 递归处理子节点
-     *
-     * @param qqchContractTechAchievementIdentify
-     * @param insertList
-     * @param updateList
-     */
-    public void recursionSubset(QqchContractTechAchievementIdentify qqchContractTechAchievementIdentify,
-        List<QqchContractTechAchievementIdentify> insertList,
-        List<QqchContractTechAchievementIdentify> updateList) {
-        Long id = qqchContractTechAchievementIdentify.getId();
-        if (id == null) {
-            id = IdWorker.createId();
-            qqchContractTechAchievementIdentify.setId(id);
-            qqchContractTechAchievementIdentify.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchContractTechAchievementIdentify.setCreateUserName(SecurityUtils.getUserName());
-            qqchContractTechAchievementIdentify.setCreateTime(DateUtils.getNowDate());
-            insertList.add(qqchContractTechAchievementIdentify);
-        } else {
-            qqchContractTechAchievementIdentify.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchContractTechAchievementIdentify.setUpdateTime(DateUtils.getNowDate());
-            updateList.add(qqchContractTechAchievementIdentify);
-        }
-
-        List<QqchContractTechAchievementIdentify> children = qqchContractTechAchievementIdentify.getChildren();
-        if (!CollectionUtils.isEmpty(children)) {
-            for (QqchContractTechAchievementIdentify child : children) {
-                child.setPid(id);
-                this.recursionSubset(child, insertList, updateList);
+        // 树转list
+        List<QqchContractTechAchievementIdentify> insertList = TreeUtil.treeToList(voParam.getTreeList());
+        if (!CollectionUtils.isEmpty(insertList)) {
+            for (QqchContractTechAchievementIdentify insert : insertList) {
+                insert.setVersion(voParam.getVersion());
+                insert.setValid(Valid.YES);
+                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                insert.setCreateUserName(SecurityUtils.getUserName());
+                insert.setCreateTime(DateUtils.getNowDate());
             }
         }
+        // 全量入库
+        qqchContractTechAchievementIdentifyMapper.insertQqchContractTechAchievementIdentifyList(insertList);
     }
 }

@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service;
 
-import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
-import java.util.List;
+import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 
 /**
  * @author zhenglili
@@ -10,9 +9,7 @@ import java.util.List;
  */
 public interface IQqchPostSettingService {
 
-    List<QqchPostSetting> getQqchPostSettingList(QqchPostSetting qqchPostSetting);
+    QqchPostSettingVo getQqchPostSettingList(String PostType);
 
-    void batchSave(List<QqchPostSetting> qqchPostSettingList, String postType);
-
-    int deleteQqchPostSettingByPks(List<Long> qqchPostSettingPkList);
+    void batchSave(QqchPostSettingVo qqchPostSettingVo, String postType);
 }

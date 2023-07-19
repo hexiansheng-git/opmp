@@ -31,7 +31,8 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
     @Autowired
     private XmslBidWinHandoverFileMapper xmslBidWinHandoverFileMapper;
 
-    public XmslBidWinHandoverInfo getXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo) {
+    public XmslBidWinHandoverInfo getXmslBidWinHandoverInfo() {
+        XmslBidWinHandoverInfo xmslBidWinHandoverInfo = new XmslBidWinHandoverInfo();
         XmslBidWinHandoverInfo result = xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
 
         XmslBidWinHandoverFile xmslBidWinHandoverFile = new XmslBidWinHandoverFile();

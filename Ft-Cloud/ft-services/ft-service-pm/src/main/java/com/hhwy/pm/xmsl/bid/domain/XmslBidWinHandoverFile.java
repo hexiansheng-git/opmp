@@ -56,7 +56,7 @@ public class XmslBidWinHandoverFile extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String sort;
+    private Integer sort;
     /**
      * 字段描述：附件组id
      */

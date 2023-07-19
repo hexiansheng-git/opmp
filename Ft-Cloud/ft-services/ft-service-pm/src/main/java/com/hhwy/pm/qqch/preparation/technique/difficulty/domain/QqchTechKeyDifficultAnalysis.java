@@ -6,13 +6,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-10 14:20:39
- * @remark
+ * @date 2023-07-18 11:28:00
+ * @remark qqch_tech_key_difficult_analysis
  */
 @Data
 public class QqchTechKeyDifficultAnalysis extends BaseEntity {
@@ -43,7 +44,19 @@ public class QqchTechKeyDifficultAnalysis extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String sort;
+    private Integer sort;
+    /**
+     * 字段描述：版本
+     */
+    @JsonProperty
+    @Excel(name = "版本")
+    private BigDecimal version;
+    /**
+     * 字段描述：是否有效 1-有效 0-失效
+     */
+    @JsonProperty
+    @Excel(name = "是否有效 1-有效 0-失效")
+    private String valid;
     /**
      * 字段描述：备注
      */
