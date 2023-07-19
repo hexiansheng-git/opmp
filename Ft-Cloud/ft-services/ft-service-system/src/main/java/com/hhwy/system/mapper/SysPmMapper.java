@@ -4,7 +4,7 @@ package com.hhwy.system.mapper;/*
  * @Date: $
  **/
 
-import com.hhwy.system.core.domain.SysDictData;
+import com.hhwy.system.api.domain.SysDictData;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

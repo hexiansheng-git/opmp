@@ -37,14 +37,14 @@ public class XmslContractGeneralController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:list")
     @GetMapping
-    public AjaxResult getXmslContractGeneral(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractGeneral xmslContractGeneralParam) {
+    public AjaxResult getXmslContractGeneral(@Validated(ValidationGroups.Get.class)  XmslContractGeneral xmslContractGeneralParam) {
         List<XmslContractGeneral> treeVOS = xmslContractGeneralService.getXmslContractGeneral(xmslContractGeneralParam);
         return AjaxResult.success(treeVOS);
     }
 
     @PreAuthorize(hasPermi = "xmslContractGeneral:list")
     @GetMapping("/list")
-    public AjaxResult getXmslContractGeneralList(@Validated(ValidationGroups.Select.class) @RequestBody XmslContractGeneral xmslContractGeneralParam) {
+    public AjaxResult getXmslContractGeneralList(@Validated(ValidationGroups.Select.class)  XmslContractGeneral xmslContractGeneralParam) {
         startPage();
         List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneralParam);
         return getDataTableAjaxResult(xmslContractGeneralList);
