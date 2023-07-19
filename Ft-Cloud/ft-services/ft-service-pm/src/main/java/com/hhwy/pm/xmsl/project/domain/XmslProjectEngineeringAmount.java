@@ -79,7 +79,7 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String sort;
+    private Integer sort;
     /**
      * 字段描述：备注/描述
      */

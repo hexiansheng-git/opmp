@@ -86,7 +86,6 @@ public class SysPmController {
         SysMenu sysMenu = new SysMenu();
         sysMenu.setMenuType("menu");
         List<SysMenu> list = this.menuService.selectMenuTreeList(sysMenu, sysUser);
-
         List<SysMenu> resList = this.findChildTree(list, name);
         return AjaxResult.success(resList);
     }

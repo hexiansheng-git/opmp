@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.extend.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -26,31 +27,34 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
 
 
     /**
+     * 根据页面标识和版本获取扩展数据
+     * @return
+     */
+    public QqchPreparationSurveyExtend getQqchPreparationSurveyExtend(String moduleIdentity, BigDecimal version){
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
+        qqchPreparationSurveyExtend.setModuleIdentity(moduleIdentity);
+        qqchPreparationSurveyExtend.setVersion(version);
+        return  qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+    }
+
+    /**
      * 获取扩展数据
      * @return
      */
     @Override
-    public QqchPreparationSurveyExtend getQqchPreparationSurveyExtend() {
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend();
-        if(qqchPreparationSurveyExtend == null){
-            //数据库中不存在数据
-            qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
-            qqchPreparationSurveyExtend.setId(IdWorker.createId());
-            qqchPreparationSurveyExtend.setChangeProcedurePlanGroupId(StringUtils.valueOf(IdWorker.createId()));
-            qqchPreparationSurveyExtend.setOptimizeProcedurePlanGroupId(StringUtils.valueOf(IdWorker.createId()));
-            qqchPreparationSurveyExtend.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
-            qqchPreparationSurveyExtend.setCreateUserName(SecurityUtils.getUserName());
-            qqchPreparationSurveyExtend.setCreateTime(DateUtils.getNowDate());
-            qqchPreparationSurveyExtendMapper.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-        }
-
-        return qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend();
+    public QqchPreparationSurveyExtend getQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {
+        return qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
     }
 
     public List<QqchPreparationSurveyExtend> getQqchPreparationSurveyExtendList(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {
         return qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtendList(qqchPreparationSurveyExtend);
     }
 
+    /**
+     * 插入数据
+     * @param qqchPreparationSurveyExtend
+     * @return
+     */
     @Transactional
     public int insertQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {
         qqchPreparationSurveyExtend.setId(IdWorker.createId());
@@ -71,9 +75,14 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
         return qqchPreparationSurveyExtendMapper.insertQqchPreparationSurveyExtendList(qqchPreparationSurveyExtendList);
     }
 
+    /**
+     * 修改数据
+     * @param qqchPreparationSurveyExtend
+     * @return
+     */
     @Transactional
     public int updateQqchPreparationSurveyExtend(QqchPreparationSurveyExtend qqchPreparationSurveyExtend) {
-        qqchPreparationSurveyExtend.setUpdateUser(SecurityUtils.getUserName());
+        qqchPreparationSurveyExtend.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchPreparationSurveyExtend.setUpdateTime(DateUtils.getNowDate());
         return qqchPreparationSurveyExtendMapper.updateQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
     }

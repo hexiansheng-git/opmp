@@ -5,6 +5,7 @@ import java.util.List;
 import java.io.IOException;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import org.springframework.web.bind.annotation.*;
@@ -68,15 +69,18 @@ public class QqchWorkPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchWorkPlan:add")
     @PostMapping("/add")
-    public AjaxResult insertQqchWorkPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
+    public AjaxResult insertQqchWorkPlan(@RequestBody QqchWorkPlan qqchWorkPlanParam) {
         return AjaxResult.success(qqchWorkPlanService.insertQqchWorkPlan(qqchWorkPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWorkPlan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchWorkPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchWorkPlan> qqchWorkPlanListParam) {
-        qqchWorkPlanService.insertQqchWorkPlanList(qqchWorkPlanListParam);
-        return AjaxResult.success(qqchWorkPlanListParam);
+    /**提交数据
+     * @param qqchWorkPlanParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchWorkPlan:submit")
+    @PostMapping("/submit")
+    public AjaxResult submitQqchWorkPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
+        return AjaxResult.success(qqchWorkPlanService.submitQqchWorkPlan(qqchWorkPlanParam));
     }
 
     /**修改数据
@@ -85,7 +89,7 @@ public class QqchWorkPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchWorkPlan:update")
     @PostMapping("/update")
-    public AjaxResult updateQqchWorkPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
+    public AjaxResult updateQqchWorkPlan(@RequestBody QqchWorkPlan qqchWorkPlanParam) {
         return toAjax(qqchWorkPlanService.updateQqchWorkPlan(qqchWorkPlanParam));
     }
 
@@ -93,10 +97,24 @@ public class QqchWorkPlanController extends BaseController {
      * @param qqchWorkPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchWorkPlan:update")
-    @PostMapping("/update1")
-    public AjaxResult updateQqchWorkPlan1(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
-        return toAjax(qqchWorkPlanService.updateQqchWorkPlan(qqchWorkPlanParam));
+    @PreAuthorize(hasPermi = "qqchWorkPlan:adjust")
+    @PostMapping("/adjust")
+    public AjaxResult adjustQqchWorkPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
+        return AjaxResult.success(qqchWorkPlanService.adjustQqchWorkPlan(qqchWorkPlanParam));
+    }
+
+    /**
+     * 监听器
+     */
+    @PostMapping("/listener")
+    @ResponseBody
+    public AjaxResult listener(@RequestBody Map<String, Object> map) {
+//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);
+//        Map varMap = delegateTask.getVariables();
+//        String businessId = (String)varMap.get("businessId");
+//        xcsbCheckEquInfoXzAndZlService.listener(Long.parseLong(businessId));
+        //xcsbCheckEquInfoXzAndZlService.listener(Long.parseLong((String)map.get("businessId")));
+        return AjaxResult.success("成功");
     }
 
     @PreAuthorize(hasPermi = "qqchWorkPlan:update")
@@ -123,5 +141,11 @@ public class QqchWorkPlanController extends BaseController {
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlanParam);
         ExcelUtils<QqchWorkPlan> util = new ExcelUtils<>(QqchWorkPlan.class);
         util.exportExcel(response, qqchWorkPlanList, DateUtils.getDate());
+    }
+    @PreAuthorize(hasPermi = "qqchWorkPlan:add")
+    @PostMapping("/batchAdd")
+    public AjaxResult insertQqchWorkPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchWorkPlan> qqchWorkPlanListParam) {
+        qqchWorkPlanService.insertQqchWorkPlanList(qqchWorkPlanListParam);
+        return AjaxResult.success(qqchWorkPlanListParam);
     }
 }

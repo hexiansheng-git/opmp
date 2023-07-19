@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.system.mapper.UserMapper">
+    <select id="selectByUserIds" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select * from sys_user where user_id in
+        <foreach item="id" collection="userIdList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectByIdCards" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select * from sys_user where id_card in
+        <foreach item="id" collection="idCardList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    <select id="selectSysUserInfo" parameterType="com.hhwy.system.api.domain.SysUser" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select * from sys_user where user_name=#{userName} and del_flag='0'
+    </select>
+
+    <insert id="insertBathUser" keyProperty="id">
+        insert into sys_user(dept_id, user_name, nick_name, email, phone_number,sex,id_card,
+        password,status,pt_var_4,pt_var_5,create_time, del_flag,pt_var_1)
+        values
+        <foreach collection="list" item="info" separator=",">
+            (#{info.deptId}, #{info.userName}, #{info.nickName}, #{info.email},
+            #{info.phoneNumber}, #{info.sex},#{info.idCard},#{info.password},#{info.status},#{info.ptVar4},#{info.ptVar5},#{info.createTime},#{info.delFlag},#{info.ptVar1}  )
+        </foreach>
+    </insert>
+
+    <update id="bathUpdate" parameterType="list">
+        update `sys_user`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="phone_number =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.phoneNumber != null ">
+                        when `user_id` = #{item.userId} then #{item.phoneNumber}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="nick_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.nickName != null ">
+                        when `user_id` = #{item.userId} then #{item.nickName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.userName != null ">
+                        when `user_id` = #{item.userId} then #{item.userName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="id_card =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.idCard != null ">
+                        when `user_id` = #{item.userId} then #{item.idCard}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var_5 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar5 != null ">
+                        when `user_id` = #{item.userId} then #{item.ptVar5}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var_1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `user_id` = #{item.userId} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="status =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.status != null ">
+                        when `user_id` = #{item.userId} then #{item.status}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="password =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.password != null ">
+                        when `user_id` = #{item.userId} then #{item.password}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="email =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.email != null ">
+                        when `user_id` = #{item.userId} then #{item.email}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `user_id` = #{item.userId} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var_4 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar4 != null ">
+                        when `user_id` = #{item.userId} then #{item.ptVar4}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `user_id` = #{item.userId} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `user_id` = #{item.userId}
+        </foreach>
+    </update>
+
+    <select id="select4AByUserNames" parameterType="map" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select * from sys_user where  del_flag='0'
+        and user_name in
+        <foreach item="item" collection="userNames.split(',')" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="selectBy4AList" resultMap="com.hhwy.system.core.mapper.SysUserMapper.SysUserResult">
+        select * from sys_user where del_flag='0' and pt_var_5 in
+        <foreach item="id" collection="fourAList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>
