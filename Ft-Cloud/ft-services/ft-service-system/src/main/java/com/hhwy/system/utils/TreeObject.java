@@ -1,5 +1,6 @@
-package com.hhwy.domain.base.system;
+package com.hhwy.system.utils;
 
+import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 
 import java.util.ArrayList;

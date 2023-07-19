@@ -2,7 +2,7 @@ package com.hhwy.system.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.service.TokenService;
-import com.hhwy.domain.base.system.UserInfo;
+import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.domain.base.system.UserPostInfo;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
@@ -39,8 +39,8 @@ public class UserServiceImpl implements IUserService {
     private static Long max_size = 20l;
 
     @Override
-    public List<UserInfo> getUserInfoBy(UserInfo userInfo) {
-        List<UserInfo> list = userMapper.getUserInfoBy(userInfo);
+    public List<SelfUserInfo> getUserInfoBy(SelfUserInfo selfUserInfo) {
+        List<SelfUserInfo> list = userMapper.getUserInfoBy(selfUserInfo);
         if(CollectionUtils.isEmpty(list)){
             return new ArrayList<>();
         }
@@ -85,8 +85,8 @@ public class UserServiceImpl implements IUserService {
     }
     //查询最近选择的用户信息
     @Override
-    public List<UserInfo> getRecentSelectUser() {
-        List<UserInfo> list = new ArrayList<>();
+    public List<SelfUserInfo> getRecentSelectUser() {
+        List<SelfUserInfo> list = new ArrayList<>();
 
         //获取当前用户信息
         LoginUser loginUser = this.tokenService.getLoginUser();
@@ -97,9 +97,9 @@ public class UserServiceImpl implements IUserService {
             return  list;
         }
         //拿着用户id查询用户信息
-        UserInfo queryUserInfo = new UserInfo();
-        queryUserInfo.setUserIds(userIds);
-        return this.getUserInfoBy(queryUserInfo);
+        SelfUserInfo querySelfUserInfo = new SelfUserInfo();
+        querySelfUserInfo.setUserIds(userIds);
+        return this.getUserInfoBy(querySelfUserInfo);
     }
 
     @Override
