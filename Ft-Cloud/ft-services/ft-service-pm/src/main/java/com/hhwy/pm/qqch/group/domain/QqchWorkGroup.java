@@ -14,6 +14,8 @@ import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -65,6 +67,7 @@ public class QqchWorkGroup extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "策划编制负责人")
+    @NotNull(message = "请选择策划编制负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String planEstablishDirector;
     /**
      * 字段描述：策划编制负责人id
@@ -235,5 +238,6 @@ public class QqchWorkGroup extends BaseEntity {
     /**
      *  字段描述：工作小组成员
      */
+    @Valid
     private List<QqchWorkGroupMember> qqchWorkGroupMemberList;
 }

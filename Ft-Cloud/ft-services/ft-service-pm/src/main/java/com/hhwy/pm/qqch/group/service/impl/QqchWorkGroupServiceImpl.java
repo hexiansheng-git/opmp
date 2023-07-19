@@ -12,11 +12,14 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -146,6 +149,25 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
         return qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+    }
+
+    /**
+     * 提交
+     * @param qqchWorkGroup
+     * @return
+     */
+    @Override
+    public void submit(QqchWorkGroup qqchWorkGroup) {
+        Long id = qqchWorkGroup.getId();
+        if(id == null || id == 0){
+            //插入数据
+            this.insertQqchWorkGroup(qqchWorkGroup);
+        } else {
+            //修改数据
+            this.updateQqchWorkGroup(qqchWorkGroup);
+        }
+
+        //TODO 发起流程
     }
 
     /**
