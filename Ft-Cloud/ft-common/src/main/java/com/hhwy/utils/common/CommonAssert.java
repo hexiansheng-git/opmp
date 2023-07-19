@@ -2,6 +2,8 @@ package com.hhwy.utils.common;
 
 import io.jsonwebtoken.lang.Assert;
 
+import java.util.Collection;
+
 /**
  * @author mls
  */
@@ -22,6 +24,30 @@ public class CommonAssert extends Assert {
             throw new IllegalArgumentException(msg);
         }
     }
+
+
+
+    public static void notEmpty(Collection list) {
+        notEmpty(list, "集合不能为空");
+    }
+
+    public static void notEmpty(Collection list, String msg) {
+        if (list == null || list.size() == 0) {
+            throw new IllegalArgumentException(msg);
+        }
+    }
+    
+
+    public static void notEmpty(Object[] objects) {
+        notEmpty(objects, "集合不能为空");
+    }
+
+    public static void notEmpty(Object[] objects, String msg) {
+        if (objects == null || objects.length == 0) {
+            throw new IllegalArgumentException(msg);
+        }
+    }
+
 
 
 }
