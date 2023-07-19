@@ -87,6 +87,14 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         return last;
     }
 
+    @Override
+    public XmslWbsMain getAdjustInfo() {
+        XmslWbsMain query = new XmslWbsMain();
+        query.setValid(Constant.NO_INT);
+        XmslWbsMain main = xmslWbsMainMapper.getLast(query);
+        return main;
+    }
+
     @Transactional
     public int insertXmslWbsMain(XmslWbsMain xmslWbsMain) {
         xmslWbsMain.setId(IdWorker.createId());

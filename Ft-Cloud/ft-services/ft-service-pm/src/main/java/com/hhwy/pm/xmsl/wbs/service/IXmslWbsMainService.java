@@ -10,8 +10,6 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
  */
 public interface IXmslWbsMainService {
 
-
-
     XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     XmslWbsMain getById(Long mainId);
@@ -28,6 +26,11 @@ public interface IXmslWbsMainService {
      */
     XmslWbsMain getLast();
 
+    /**
+     * 获取当前调整中的数据
+     * @return
+     */
+    XmslWbsMain getAdjustInfo();
 
     int insertXmslWbsMain(XmslWbsMain xmslWbsMain);
 

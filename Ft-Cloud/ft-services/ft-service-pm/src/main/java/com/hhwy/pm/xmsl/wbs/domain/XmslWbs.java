@@ -283,6 +283,9 @@ public class XmslWbs extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+    //序号
+    private Integer sort;
+
 
     @JsonIgnore
     public Long getMainId() {

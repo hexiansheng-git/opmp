@@ -54,48 +54,39 @@ public class XmslWbsMainController extends BaseController {
     @PreAuthorize(hasAnyPermi = {"xmslWbsMain:detail","xmslWbsMain:edit"})
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody XmslWbsMain xmslWbsMainParam) {
+        XmslWbsMain wbsMain = null;
         if(xmslWbsMainParam.getId() == null){
-            XmslWbsMain wbsMain = xmslWbsMainService.getLast();
-            //是否有调整记录
-            Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
-            if(wbsMain != null)
-                wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
-            return AjaxResult.success(wbsMain);
+            wbsMain =xmslWbsMainService.getLast();
+        }else{
+            wbsMain = xmslWbsMainService.getById(xmslWbsMainParam.getId());
         }
-        XmslWbsMain wbsMain = xmslWbsMainService.getById(xmslWbsMainParam.getId());
+        //是否有调整记录
+        Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
+        if(wbsMain != null)
+            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
         return AjaxResult.success(wbsMain);
     }
 
-    @PreAuthorize(hasPermi = "xmslWbsMain:add")
-    @PostMapping("/add")
-    public AjaxResult insertXmslWbsMain(@Validated(ValidationGroups.Save.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
-        xmslWbsMainService.insertXmslWbsMain(xmslWbsMainParam);
-        return AjaxResult.success(xmslWbsMainParam);
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbsMain:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertXmslWbsMainList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslWbsMain> xmslWbsMainListParam) {
-        xmslWbsMainService.insertXmslWbsMainList(xmslWbsMainListParam);
-        return AjaxResult.success(xmslWbsMainListParam);
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbsMain:update")
-    @PostMapping("/update")
-    public AjaxResult updateXmslWbsMain(@Validated(ValidationGroups.Update.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
-        return toAjax(xmslWbsMainService.updateXmslWbsMain(xmslWbsMainParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbsMain:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateXmslWbsMainList(@Validated(ValidationGroups.Update.class) @RequestBody List<XmslWbsMain> xmslWbsMainListParam) {
-        return toAjax(xmslWbsMainService.updateXmslWbsMainList(xmslWbsMainListParam));
+    /**
+     * 获取当前调整数据
+     * @return
+     */
+    @PreAuthorize(hasAnyPermi = {"xmslWbsMain:adjust"})
+    @GetMapping("/adjustInfo")
+    public AjaxResult adjustInfo() {
+        XmslWbsMain wbsMain = this.xmslWbsMainService.getAdjustInfo();
+        if(wbsMain == null)
+            return AjaxResult.success("",wbsMain);
+        //是否有调整记录
+        Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
+        if(wbsMain != null)
+            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
+        return AjaxResult.success(wbsMain);
     }
 
     @PreAuthorize(hasPermi = "xmslWbsMain:remove")
     @PostMapping("/delete")
     public AjaxResult deleteXmslWbsMain(@Validated(ValidationGroups.Delete.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
-
         return toAjax(xmslWbsMainService.deleteXmslWbsMain(xmslWbsMainParam));
     }
 

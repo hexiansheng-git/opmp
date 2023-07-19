@@ -15,5 +15,7 @@ public class XmslWbsDto {
     private String delIds;
     //wbs_main_id
     private Long mainId;
+    //提交标志
+    private Integer submitFlag;
 
 }

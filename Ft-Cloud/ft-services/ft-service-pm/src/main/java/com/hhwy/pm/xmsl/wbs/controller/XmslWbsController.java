@@ -52,8 +52,9 @@ public class XmslWbsController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslWbs:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody XmslWbsDto dto) {
-        ValidationUtil.getValidator().validate(dto.getList().get(0),ValidationGroups.Save.class);
+    public AjaxResult save(@RequestBody XmslWbsDto dto) {
+        if(dto.getSubmitFlag() != null && dto.getSubmitFlag() == 1)
+            ValidationUtil.getValidator().validate(dto,ValidationGroups.Save.class);
         xmslWbsService.save(dto);
         return AjaxResult.success();
     }

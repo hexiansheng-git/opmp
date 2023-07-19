@@ -99,8 +99,7 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null ">and `valid` = #{valid}</if>
-            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}
-            </if>
+            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}</if>
             <if test="publishUserId != null ">and `publish_user_id` = #{publishUserId}</if>
             <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
