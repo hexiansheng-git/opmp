@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.workPlanning.mapper.QqchWorkPlanningPrjImgMapper">
+                                                                                                                                                                                                                                                                        
+    <resultMap type="com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg" id="QqchWorkPlanningPrjImgResultMap">
+                    <result property="id" column="id" />
+                    <result property="fileId" column="file_id" />
+                    <result property="version" column="version" />
+                    <result property="createUser" column="create_user" />
+                    <result property="createUserName" column="create_user_name" />
+                    <result property="createTime" column="create_time" />
+                    <result property="updateUser" column="update_user" />
+                    <result property="updateTime" column="update_time" />
+                    <result property="delUser" column="del_user" />
+                    <result property="delTime" column="del_time" />
+                    <result property="delFlag" column="del_flag" />
+                    <result property="ptVar1" column="pt_var1" />
+        <result property="valid" column="valid"></result>
+            </resultMap>
+    <sql id="selectQqchWorkPlanningPrjImgVo">
+        select
+                                                            `id`
+                                                         ,`file_id`
+                                                         ,`version`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,valid
+                                    from qqch_work_planning_prj_img
+    </sql>
+    <select id="getQqchWorkPlanningPrjImg" resultMap="QqchWorkPlanningPrjImgResultMap">
+        <include refid="selectQqchWorkPlanningPrjImgVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="fileId != null  and fileId != ''"> and `file_id` = #{fileId}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchWorkPlanningPrjImgList" resultMap="QqchWorkPlanningPrjImgResultMap">
+        <include refid="selectQqchWorkPlanningPrjImgVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="fileId != null  and fileId != ''"> and `file_id` = #{fileId}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchWorkPlanningPrjImg"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_work_planning_prj_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">`id`,</if>
+                            <if test="fileId != null  and fileId != ''">`file_id`,</if>
+                            <if test="version != null ">`version`,</if>
+                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+                            <if test="createTime != null ">`create_time`,</if>
+                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+                            <if test="updateTime != null ">`update_time`,</if>
+                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+                            <if test="delTime != null ">`del_time`,</if>
+                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
+                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">#{id},</if>
+                            <if test="fileId != null  and fileId != ''">#{fileId},</if>
+                            <if test="version != null ">#{version},</if>
+                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+                            <if test="createTime != null ">#{createTime},</if>
+                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+                            <if test="updateTime != null ">#{updateTime},</if>
+                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+                            <if test="delTime != null ">#{delTime},</if>
+                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
+                    </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchWorkPlanningPrjImg -->
+    <insert id="insertQqchWorkPlanningPrjImgList">
+        insert into qqch_work_planning_prj_img
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                `id`,
+                                                                `file_id`,
+                                                                `version`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                                            `pt_var1`,
+            `valid`,
+                                    </trim>
+        values
+        <foreach collection="qqchWorkPlanningPrjImgList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                            #{item.id},
+                                                                                #{item.fileId},
+                                                                                #{item.version},
+                                                                                #{item.createUser},
+                                                                                #{item.createUserName},
+                                                                                #{item.createTime},
+                                                                                #{item.updateUser},
+                                                                                #{item.updateTime},
+                                                                                #{item.delUser},
+                                                                                #{item.delTime},
+                                                                                                                    #{item.ptVar1},
+                #{item.valid},
+                                                </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchWorkPlanningPrjImg">
+        update qqch_work_planning_prj_img
+        <trim prefix="SET" suffixOverrides=",">
+                            <if test="id != null ">`id` = #{id},</if>
+                            <if test="fileId != null  and  fileId != ''">`file_id` = #{fileId},</if>
+                            <if test="version != null ">`version` = #{version},</if>
+                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+                            <if test="createTime != null ">`create_time` = #{createTime},</if>
+                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+                            <if test="delTime != null ">`del_time` = #{delTime},</if>
+                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+                    </trim>
+        <where>
+                                                                        <if test="id != null "> and `id` = #{id}</if>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+    </update>
+
+            <update id="updateQqchWorkPlanningPrjImgList">
+            update qqch_work_planning_prj_img
+            <trim prefix="set" suffixOverrides=",">
+                                    <trim prefix="id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="file_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.fileId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="version  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.version}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUserName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_flag  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delFlag}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var1  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar1}
+                        </foreach>
+                    </trim>
+                <trim prefix="valid  = case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when `id`=#{item.id} then #{item.valid}
+                    </foreach>
+                </trim>
+                            </trim>
+            where `id` in
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </update>
+    
+            <update id="deleteQqchWorkPlanningPrjImg">
+            update `qqch_work_planning_prj_img` set del_flag = 1
+            <where>
+                                    <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="fileId != null  and fileId != ''"> and `file_id` = #{fileId}</if>
+                                    <if test="version != null "> and `version` = #{version}</if>
+                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            </where>
+        </update>
+
+                    <update id="deleteQqchWorkPlanningPrjImgByPks">
+                update `qqch_work_planning_prj_img` set del_flag = 1
+                <where>
+                    `id` in
+                    <foreach item="id" collection="qqchWorkPlanningPrjImgPkList" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </where>
+            </update>
+            </mapper>
