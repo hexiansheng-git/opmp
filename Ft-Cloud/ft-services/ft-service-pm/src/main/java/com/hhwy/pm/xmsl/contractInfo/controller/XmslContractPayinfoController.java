@@ -39,14 +39,14 @@ public class XmslContractPayinfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:list")
     @GetMapping
-    public AjaxResult getXmslContractPayinfo(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractPayinfo xmslContractPayinfoParam) {
+    public AjaxResult getXmslContractPayinfo(@Validated(ValidationGroups.Get.class)  XmslContractPayinfo xmslContractPayinfoParam) {
         XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoService.getXmslContractPayinfo(xmslContractPayinfoParam);
         return AjaxResult.success(xmslContractPayinfo);
     }
 
     @PreAuthorize(hasPermi = "xmslContractPayinfo:list")
     @GetMapping("/list")
-    public AjaxResult getXmslContractPayinfoList(@Validated(ValidationGroups.Select.class) @RequestBody XmslContractPayinfo xmslContractPayinfoParam) {
+    public AjaxResult getXmslContractPayinfoList(@Validated(ValidationGroups.Select.class)  XmslContractPayinfo xmslContractPayinfoParam) {
         startPage();
         List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfoParam);
         return getDataTableAjaxResult(xmslContractPayinfoList);

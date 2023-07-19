@@ -35,14 +35,14 @@ public class XmslContractInsureController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInsure:list")
     @GetMapping
-    public AjaxResult getXmslContractInsure(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractInsure xmslContractInsureParam) {
+    public AjaxResult getXmslContractInsure(@Validated(ValidationGroups.Get.class)  XmslContractInsure xmslContractInsureParam) {
         XmslContractInsure xmslContractInsure = xmslContractInsureService.getXmslContractInsure(xmslContractInsureParam);
         return AjaxResult.success(xmslContractInsure);
     }
 
     @PreAuthorize(hasPermi = "xmslContractInsure:list")
     @GetMapping("/list")
-    public AjaxResult getXmslContractInsureList(@Validated(ValidationGroups.Select.class) @RequestBody XmslContractInsure xmslContractInsureParam) {
+    public AjaxResult getXmslContractInsureList(@Validated(ValidationGroups.Select.class)  XmslContractInsure xmslContractInsureParam) {
         startPage();
         List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsureParam);
         return getDataTableAjaxResult(xmslContractInsureList);

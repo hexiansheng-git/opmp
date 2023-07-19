@@ -103,7 +103,11 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
 
     @Override
     public void confirm(MasterEntity masterEntity) {
+        this.save(masterEntity);
+        //TODO 修改确认状态
+    }
 
+    private void save(MasterEntity masterEntity) {
     }
 
 }
