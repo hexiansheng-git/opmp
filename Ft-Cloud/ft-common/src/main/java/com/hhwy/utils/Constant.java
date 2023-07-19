@@ -31,7 +31,8 @@ public class Constant {
     /** 是否-是 **/
     public static final Integer YES_INT=1;
 
-
+    /** 是否含有历史记录按钮 **/
+    public static final String HISTORY_NOTE_FIELD_NAME= "historyNote";
 
 
 

@@ -8,7 +8,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -26,6 +28,7 @@ public class XmslWbsMain extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键id")
+    @NotNull(message = "id不能为空！",groups = {ValidationGroups.Delete.class,ValidationGroups.Update.class})
     private Long id;
     /**
      * 字段描述：项目id

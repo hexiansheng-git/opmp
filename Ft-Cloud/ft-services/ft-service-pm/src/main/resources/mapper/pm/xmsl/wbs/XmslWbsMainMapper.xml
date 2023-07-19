@@ -80,15 +80,14 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null ">and `valid` = #{valid}</if>
-            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}
-            </if>
+            <if test="publishUserName != null  and publishUserName != ''">and `publish_user_name` = #{publishUserName}</if>
             <if test="publishUserId != null ">and `publish_user_id` = #{publishUserId}</if>
             <if test="publishDate != null ">and `publish_date` = #{publishDate}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
         </where>
-        order by create_time desc
+        order by version desc
     </select>
 
     <select id="getLast" resultMap="XmslWbsMainResultMap">
@@ -262,6 +261,24 @@
         </foreach>
     </update>
 
+    <update id="updateValid" parameterType="Long">
+        update xmsl_wbs_main set valid = if(id=#{id},1,0)
+    </update>
+
+    <!-- 插入wbs到历史 -->
+    <update id="insertWbsToHistory">
+        insert into xmsl_wbs_history(`id`, `main_id`, `code`, `parent_id`, `have_children`, `ancestors`, `ancestors_name`, `part_code`, `name`, `list_code`, `standard_id`, `standard_code`, `standard_name`, `node_type`, `unit`, `level`, `status`, `design_quanlity`, `check_quanlity`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `user_id`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5`,sort)
+        select `id`, main_id, `code`, `parent_id`, `have_children`, `ancestors`, `ancestors_name`, `part_code`, `name`, `list_code`, `standard_id`, `standard_code`, `standard_name`, `node_type`, `unit`, `level`, `status`, `design_quanlity`, `check_quanlity`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `user_id`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5`,sort from xmsl_wbs
+        where del_flag = 0
+    </update>
+
+    <!-- 插入历史到wbs -->
+    <update id="insertHistoryToWbs" parameterType="Long">
+        insert into xmsl_wbs(`id`, `main_id`, `code`, `parent_id`, `have_children`, `ancestors`, `ancestors_name`, `part_code`, `name`, `list_code`, `standard_id`, `standard_code`, `standard_name`, `node_type`, `unit`, `level`, `status`, `design_quanlity`, `check_quanlity`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `user_id`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5`,sort)
+        select `id`, main_id, `code`, `parent_id`, `have_children`, `ancestors`, `ancestors_name`, `part_code`, `name`, `list_code`, `standard_id`, `standard_code`, `standard_name`, `node_type`, `unit`, `level`, `status`, `design_quanlity`, `check_quanlity`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `user_id`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5`,sort from xmsl_wbs_history
+        where del_flag = 0 and main_id = #{mainId}
+    </update>
+
     <delete id="deleteXmslWbsMain">
         delete from `xmsl_wbs_main`
         <where>
@@ -289,4 +306,12 @@
             </foreach>
         </where>
     </delete>
+
+    <delete id="deleteWbs">
+        delete from `xmsl_wbs`
+    </delete>
+    <delete id="deleteWbsHitoryByMainId">
+        delete from `xmsl_wbs_history` where main_id = #{mainId}
+    </delete>
+   
 </mapper>

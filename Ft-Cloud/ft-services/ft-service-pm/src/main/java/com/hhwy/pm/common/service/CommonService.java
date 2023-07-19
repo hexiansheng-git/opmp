@@ -4,8 +4,11 @@ import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.utils.exception.CustomBusinessException;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.annotation.Resource;
+
 /**
  * 物资策划通用业务类
  *
@@ -48,4 +51,5 @@ public class CommonService {
         Assert.notNull(tableName, "表名称不能为空");
         this.commonMapper.deleteDetailsByMainId(mainId, tableName);
     }
+
 }

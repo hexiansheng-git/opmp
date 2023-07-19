@@ -19,6 +19,8 @@ public interface XmslWbsMapper {
 
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
 
+    Long countByWbs(XmslWbs wbs);
+
     /**
      * 判断当前是否有生效的wbs
      * @return

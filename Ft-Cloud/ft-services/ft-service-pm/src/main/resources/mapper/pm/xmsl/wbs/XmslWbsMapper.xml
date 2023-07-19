@@ -132,7 +132,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by id
     </select>
 
     <select id="getXmslWbsList" resultMap="XmslWbsResultMap">
@@ -220,6 +220,16 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
+    </select>
+
+    <select id="countByWbs" resultType="Long" parameterType="com.hhwy.pm.xmsl.wbs.domain.XmslWbs">
+        select count(1) from xmsl_wbs
+        <where>
+            del_flag = 0
+            <if test="mainId != null">
+                and main_id = #{mainId}
+            </if>
+        </where>
     </select>
 
     <select id="hasEffectWbs" resultType="int">
