@@ -1,9 +1,8 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service;
 
-import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchDailyControlPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchDailyControlPlanVo;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * @author han
@@ -15,8 +14,9 @@ public interface IQqchDailyControlPlanService {
     /**
      * 获取日常管控策划Vo
      * @return
+     * @param version
      */
-    QqchDailyControlPlanVo getQqchDailyControlPlanVo();
+    QqchDailyControlPlanVo getQqchDailyControlPlanVo(BigDecimal version);
 
     /**
      * 保存

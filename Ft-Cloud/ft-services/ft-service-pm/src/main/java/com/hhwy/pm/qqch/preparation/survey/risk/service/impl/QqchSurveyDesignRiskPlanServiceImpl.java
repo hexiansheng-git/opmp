@@ -3,8 +3,13 @@ package com.hhwy.pm.qqch.preparation.survey.risk.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
@@ -29,35 +34,65 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     private QqchSurveyDesignRiskPlanMapper qqchSurveyDesignRiskPlanMapper;
 
     @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
     private CommonMapper commonMapper;
 
 
     /**
      * 勘察设计风险策划Vo
      * @return
+     * @param version
      */
-    public QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo() {
+    public QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(BigDecimal version) {
         QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = new QqchSurveyDesignRiskPlanVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_survey_design_risk_plan");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_survey_design_risk_plan");
+        }
         qqchSurveyDesignRiskPlanVo.setVersion(version);
 
         QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
+        qqchSurveyDesignRiskPlan.setVersion(version);
         List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList = qqchSurveyDesignRiskPlanMapper.getQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlan);
-        List<QqchSurveyDesignRiskPlan> treeList = new ArrayList<>();
-        if(!CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
-            treeList = ListTreeUtil.formatTree(
-                    qqchSurveyDesignRiskPlanList,
-                    o -> o.getPid() == null,
-                    (r,n) -> r.getId().equals(n.getPid()),
-                    QqchSurveyDesignRiskPlan::getChildren,
-                    QqchSurveyDesignRiskPlan::setChildren);
+        if(CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
+            qqchSurveyDesignRiskPlanList = this.getInitializeData();
+            qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
+            return qqchSurveyDesignRiskPlanVo;
         }
+
+        List<QqchSurveyDesignRiskPlan> treeList = ListTreeUtil.formatTree(
+                qqchSurveyDesignRiskPlanList,
+                o -> o.getPid() == null,
+                (r,n) -> r.getId().equals(n.getPid()),
+                QqchSurveyDesignRiskPlan::getChildren,
+                QqchSurveyDesignRiskPlan::setChildren);
         qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(treeList);
 
         //TODO 获取确认情况
 
         return qqchSurveyDesignRiskPlanVo;
+    }
+
+    /**
+     * 获取初始化数据
+     * @return
+     */
+    public List<QqchSurveyDesignRiskPlan> getInitializeData(){
+        List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList = new ArrayList<>();
+
+        AjaxResult result = systemServiceApi.dictType(DictType.SURVEY_DESIGN_RISK_PLAN_INITIALIZE);
+        List<Map<String,Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
+
+        for (Map<String, Object> map : dictDataList) {
+            String dictLabel = (String) map.get("dictLabel");
+            QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
+            qqchSurveyDesignRiskPlan.setRiskIdentificationItem(dictLabel);
+            qqchSurveyDesignRiskPlanList.add(qqchSurveyDesignRiskPlan);
+        }
+
+        return qqchSurveyDesignRiskPlanList;
     }
 
     /**
@@ -108,6 +143,6 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
             qqchSurveyDesignRiskPlan.setCreateUserName(SecurityUtils.getUserName());
             qqchSurveyDesignRiskPlan.setCreateTime(DateUtils.getNowDate());
         }
-        qqchSurveyDesignRiskPlanMapper.insertQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
+        qqchSurveyDesignRiskPlanMapper.insertQqchSurveyDesignRiskPlanList(insertList);
     }
 }

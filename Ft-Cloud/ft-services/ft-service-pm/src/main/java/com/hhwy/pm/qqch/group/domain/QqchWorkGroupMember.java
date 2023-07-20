@@ -46,14 +46,14 @@ public class QqchWorkGroupMember extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "临时小组职务")
-    @NotNull(message = "请选择临时小组职务！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotBlank(message = "请选择临时小组职务！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String temporaryGroupDuty;
     /**
      * 字段描述：负责人
      */
     @JsonProperty
     @Excel(name = "负责人")
-    @NotNull(message = "请选择负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotBlank(message = "请选择负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String director;
     /**
      * 字段描述：负责人id
@@ -67,6 +67,7 @@ public class QqchWorkGroupMember extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "所属单位")
+    @NotBlank(message = "请填写所属单位！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String affiliatedUnit;
     /**
      * 字段描述：岗位职务
@@ -97,7 +98,7 @@ public class QqchWorkGroupMember extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "手机号")
-    @NotBlank(message = "请输入手机号！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotBlank(message = "请填写手机号！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String mobile;
     /**
      * 字段描述：微信号

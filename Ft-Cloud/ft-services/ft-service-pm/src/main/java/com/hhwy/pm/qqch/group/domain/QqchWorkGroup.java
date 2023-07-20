@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -67,7 +68,7 @@ public class QqchWorkGroup extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "策划编制负责人")
-    @NotNull(message = "请选择策划编制负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotBlank(message = "请选择策划编制负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String planEstablishDirector;
     /**
      * 字段描述：策划编制负责人id
@@ -112,6 +113,14 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注/描述")
     private String remark;
+    /**
+     * 字段描述：流程状态（5已完成）
+     */
+    private String taskStatus;
+    /**
+     * 字段描述：当前处理人
+     */
+    private String currentProcessor;
     /**
      * 字段描述：所属区域id
      */
@@ -196,14 +205,6 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
-    /**
-     * 字段描述：流程状态（5已完成）
-     */
-    private String taskStatus;
-    /**
-     * 字段描述：当前处理人
-     */
-    private String currentProcessor;
     /**
      * 字段描述：预留字段1
      */

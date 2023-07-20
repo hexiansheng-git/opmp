@@ -50,12 +50,15 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     /**
      * 获取方案集合
      * @return
+     * @param version
      */
     @Override
-    public QqchComparisonSchemeVo getQqchComparisonSchemeVo() {
+    public QqchComparisonSchemeVo getQqchComparisonSchemeVo(BigDecimal version) {
         QqchComparisonSchemeVo qqchComparisonSchemeVo = new QqchComparisonSchemeVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_comparison_scheme");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_comparison_scheme");
+        }
         qqchComparisonSchemeVo.setVersion(version);
 
         List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeMapper.getQqchComparisonSchemeList(version);

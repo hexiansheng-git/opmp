@@ -35,13 +35,16 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
     /**
      * 获取设计技术优化要点集合
      * @return
+     * @param version
      */
     @Override
     @Transactional
-    public QqchDesignTechnologyOptimizeVo getQqchDesignTechnologyOptimizeVo() {
+    public QqchDesignTechnologyOptimizeVo getQqchDesignTechnologyOptimizeVo(BigDecimal version) {
         QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo = new QqchDesignTechnologyOptimizeVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_design_technology_optimize");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_design_technology_optimize");
+        }
         qqchDesignTechnologyOptimizeVo.setVersion(version);
 
         List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeMapper.getQqchDesignTechnologyOptimizeList(version);

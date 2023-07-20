@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -14,7 +15,6 @@ import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
-import com.hhwy.pm.qqch.preparation.survey.extend.mapper.QqchPreparationSurveyExtendMapper;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
@@ -50,12 +50,15 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     /**
      * 获取优化程序策划集合
      * @return
+     * @param version
      */
     @Override
-    public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo() {
+    public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo(BigDecimal version) {
         QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = new QqchOptimizeProcedurePlanVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_optimize_procedure_plan");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_optimize_procedure_plan");
+        }
         qqchOptimizeProcedurePlanVo.setVersion(version);
 
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList(version);
@@ -82,26 +85,19 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
      */
     public List<QqchOptimizeProcedurePlan> getInitializeData() {
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = new ArrayList<>();
-        QqchOptimizeProcedurePlan data1 = new QqchOptimizeProcedurePlan();
-        data1.setLinkName("设计优化小组建立");
-        data1.setWorkContent("确定优化意向，判断决策优化点");
 
-        QqchOptimizeProcedurePlan data2 = new QqchOptimizeProcedurePlan();
-        data2.setLinkName("设计优化提出及资料准备");
-        data2.setWorkContent("提出申请，整理优化资料，提请专家论证");
+        AjaxResult result = systemServiceApi.dictType(DictType.OPTIMIZE_PROCEDURE_PLAN_INITIALIZE);
+        List<Map<String,Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
 
-        QqchOptimizeProcedurePlan data3 = new QqchOptimizeProcedurePlan();
-        data3.setLinkName("设计优化论证评审");
-        data3.setWorkContent("专家论证，评审技术可行性、经济合理性");
+        for (Map<String, Object> map : dictDataList) {
+            String dictValue = (String) map.get("dictValue");
+            String dictLabel = (String) map.get("dictLabel");
+            QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan = new QqchOptimizeProcedurePlan();
+            qqchOptimizeProcedurePlan.setLinkName(dictLabel);
+            qqchOptimizeProcedurePlan.setWorkContent(dictValue);
+            qqchOptimizeProcedurePlanList.add(qqchOptimizeProcedurePlan);
+        }
 
-        QqchOptimizeProcedurePlan data4 = new QqchOptimizeProcedurePlan();
-        data4.setLinkName("设计优化落实");
-        data4.setWorkContent("跟踪落实，推动落地");
-
-        qqchOptimizeProcedurePlanList.add(data1);
-        qqchOptimizeProcedurePlanList.add(data2);
-        qqchOptimizeProcedurePlanList.add(data3);
-        qqchOptimizeProcedurePlanList.add(data4);
         return qqchOptimizeProcedurePlanList;
     }
 

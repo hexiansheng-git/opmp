@@ -12,6 +12,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-13 10:09:03
@@ -25,9 +27,6 @@ public class QqchDesignConstructionSituationController extends BaseController {
     @Autowired
     private IQqchDesignConstructionSituationService qqchDesignConstructionSituationService;
 
-    @Autowired
-    private CommonMapper commonMapper;
-
 
     /**
      * 边设计边施工情况台账
@@ -35,8 +34,8 @@ public class QqchDesignConstructionSituationController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:list")
     @GetMapping("/list")
-    public AjaxResult getQqchDesignConstructionSituationList() {
-        QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = qqchDesignConstructionSituationService.getQqchDesignConstructionSituationVo();
+    public AjaxResult getQqchDesignConstructionSituationList(BigDecimal version) {
+        QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = qqchDesignConstructionSituationService.getQqchDesignConstructionSituationVo(version);
         return AjaxResult.success(qqchDesignConstructionSituationVo);
     }
 

@@ -11,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-11 17:11:14
@@ -31,8 +33,8 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:list")
     @GetMapping("/list")
-    public AjaxResult getQqchCompleteDesignHandoverList() {
-        QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverVo();
+    public AjaxResult getQqchCompleteDesignHandoverList(BigDecimal version) {
+        QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverVo(version);
         return AjaxResult.success(qqchCompleteDesignHandoverVo);
     }
 

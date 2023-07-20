@@ -1,11 +1,16 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -19,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -35,20 +41,29 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
 
     @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
     private CommonMapper commonMapper;
 
 
     /**
      * 获取变更程序策划
      * @return
+     * @param version
      */
-    public QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo() {
+    public QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo(BigDecimal version) {
         QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = new QqchChangeProcedurePlanVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_change_procedure_plan");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_change_procedure_plan");
+        }
         qqchChangeProcedurePlanVo.setVersion(version);
 
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(version);
+        if(CollectionUtils.isEmpty(qqchChangeProcedurePlanList)){
+            qqchChangeProcedurePlanList = this.getInitializeData();
+        }
         qqchChangeProcedurePlanVo.setQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
 
         //获取附件组id（页面标识和版本号控制）
@@ -60,6 +75,25 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         //TODO 获取确认状态
 
         return qqchChangeProcedurePlanVo;
+    }
+
+    /**
+     * 获取初始化数据
+     * @return
+     */
+    public List<QqchChangeProcedurePlan> getInitializeData(){
+        List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = new ArrayList<>();
+        AjaxResult result = systemServiceApi.dictType(DictType.CHANGE_PROCEDURE_PLAN_INITIALIZE);
+        List<Map<String,Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
+        for (Map<String, Object> map : dictDataList) {
+            String dictValue = (String) map.get("dictValue");
+            String dictLabel = (String) map.get("dictLabel");
+            QqchChangeProcedurePlan qqchChangeProcedurePlan = new QqchChangeProcedurePlan();
+            qqchChangeProcedurePlan.setLinkName(dictLabel);
+            qqchChangeProcedurePlan.setWorkContent(dictValue);
+            qqchChangeProcedurePlanList.add(qqchChangeProcedurePlan);
+        }
+        return qqchChangeProcedurePlanList;
     }
 
     /**

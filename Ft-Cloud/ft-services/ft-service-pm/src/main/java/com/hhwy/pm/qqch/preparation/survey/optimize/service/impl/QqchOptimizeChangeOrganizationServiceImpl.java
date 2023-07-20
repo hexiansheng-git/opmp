@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrganization;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
@@ -35,12 +36,16 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     /**
      * 优化变更组织策划台账
      * @return
+     * @param version
      */
     @Override
-    public QqchOptimizeChangeOrganizationVo getQqchOptimizeChangeOrganizationVo() {
+    public QqchOptimizeChangeOrganizationVo getQqchOptimizeChangeOrganizationVo(BigDecimal version) {
         QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = new QqchOptimizeChangeOrganizationVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_optimize_change_organization");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_optimize_change_organization");
+        }
+
         qqchOptimizeChangeOrganizationVo.setVersion(version);
 
         List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(version);
@@ -85,6 +90,7 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
         this.save(qqchOptimizeChangeOrganizationVo);
 
         //TODO 修改确认状态
+        qqchOptimizeChangeOrganizationVo.setConfirmStatus(ConfirmStatus.CONFIRMED);
     }
 
     /**

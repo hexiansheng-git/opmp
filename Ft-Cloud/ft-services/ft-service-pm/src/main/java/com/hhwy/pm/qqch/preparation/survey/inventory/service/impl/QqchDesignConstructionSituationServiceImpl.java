@@ -34,11 +34,14 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     /**
      * 边设计边施工情况台账
      * @return
+     * @param version
      */
-    public QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo() {
+    public QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo(BigDecimal version) {
         QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = new QqchDesignConstructionSituationVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_design_construction_situation");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_design_construction_situation");
+        }
         qqchDesignConstructionSituationVo.setVersion(version);
 
         QqchDesignConstructionSituation qqchDesignConstructionSituation = new QqchDesignConstructionSituation();

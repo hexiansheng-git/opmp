@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.inventory.service;
 
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-13 10:09:03
@@ -12,8 +14,9 @@ public interface IQqchDesignConstructionSituationService {
     /**
      * 边设计边施工情况台账
      * @return
+     * @param version
      */
-    QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo();
+    QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo(BigDecimal version);
 
     /**
      * 保存

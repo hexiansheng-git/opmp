@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.inventory.service;
 
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-11 17:11:14
@@ -12,8 +14,9 @@ public interface IQqchCompleteDesignHandoverService {
     /**
      * 完整设计交接情况台账
      * @return
+     * @param version
      */
-    QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo();
+    QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(BigDecimal version);
 
     /**
      * 保存
