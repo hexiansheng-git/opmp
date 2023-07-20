@@ -1,8 +1,10 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.service;
 
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zq
@@ -17,7 +19,7 @@ public interface IQqchWorkPlanningBuildPlanService {
 
     int insertQqchWorkPlanningBuildPlan(QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan);
 
-    int insertQqchWorkPlanningBuildPlanList(List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList);
+    int insertQqchWorkPlanningBuildPlanList(QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo);
 
     int updateQqchWorkPlanningBuildPlan(QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan);
 
@@ -26,4 +28,13 @@ public interface IQqchWorkPlanningBuildPlanService {
     int deleteQqchWorkPlanningBuildPlan(QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan);
 
     int deleteQqchWorkPlanningBuildPlanByPks(List<Long> qqchWorkPlanningBuildPlanPkList);
+
+    List<QqchWorkPlanningBuildPlan> getQqchWorkPlanningBuildPlanListHistory(QqchWorkPlanningBuildPlan plan);
+
+    /**
+     * 最大版本且有效
+     * @param plan
+     * @return
+     */
+    List<QqchWorkPlanningBuildPlan> getMaxVVData(QqchWorkPlanningBuildPlan plan);
 }

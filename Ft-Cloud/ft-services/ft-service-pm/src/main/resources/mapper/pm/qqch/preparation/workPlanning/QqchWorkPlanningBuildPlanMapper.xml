@@ -436,4 +436,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </foreach>
                 </where>
             </update>
-            </mapper>
+
+    <select id="getQqchWorkPlanningBuildPlanListHistory" parameterType="com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan" resultMap="QqchWorkPlanningBuildPlanResultMap">
+        <include refid="selectQqchWorkPlanningBuildPlanVo"></include>
+        <where>
+            del_flag = '0' and valid = '1'
+            <if test="version != null"> and #{version} >= version</if>
+        </where>
+    </select>
+</mapper>

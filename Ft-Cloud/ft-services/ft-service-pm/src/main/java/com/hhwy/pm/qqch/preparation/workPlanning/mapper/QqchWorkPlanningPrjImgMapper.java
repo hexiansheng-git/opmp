@@ -27,4 +27,8 @@ public interface QqchWorkPlanningPrjImgMapper {
     int deleteQqchWorkPlanningPrjImg(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg);
 
             int deleteQqchWorkPlanningPrjImgByPks(@Param("qqchWorkPlanningPrjImgPkList") List<Long> qqchWorkPlanningPrjImgPkList);
-    }
+
+    QqchWorkPlanningPrjImg getQqchWorkPlanningPrjIsValid(QqchWorkPlanningPrjImg img);
+
+    QqchWorkPlanningPrjImg getQqchWorkPlanningPrjHistory(QqchWorkPlanningPrjImg img);
+}

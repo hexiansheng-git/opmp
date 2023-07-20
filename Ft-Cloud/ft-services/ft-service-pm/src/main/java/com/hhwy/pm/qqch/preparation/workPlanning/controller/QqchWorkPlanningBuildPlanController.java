@@ -1,12 +1,19 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.controller;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
 import cn.hutool.poi.excel.ExcelUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.hhwy.pm.common.service.CommonService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +41,8 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
 
     @Autowired
     private IQqchWorkPlanningBuildPlanService qqchWorkPlanningBuildPlanService;
+    @Autowired
+    private CommonService commonService;
 
 
     @PreAuthorize(hasPermi = "qqchWorkPlanningBuildPlan:list")
@@ -60,10 +69,10 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchWorkPlanningBuildPlan:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertQqchWorkPlanningBuildPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanListParam) {
+    public AjaxResult insertQqchWorkPlanningBuildPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo) {
         try{
-            qqchWorkPlanningBuildPlanService.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanListParam);
-            return AjaxResult.success(qqchWorkPlanningBuildPlanListParam);
+            qqchWorkPlanningBuildPlanService.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanVo);
+            return AjaxResult.success(qqchWorkPlanningBuildPlanVo);
         }catch (Exception e){
          e.printStackTrace();
          return AjaxResult.error(e.getMessage());
@@ -115,6 +124,22 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
             ExcelUtils<QqchWorkPlanningBuildPlan> util = new ExcelUtils<>(QqchWorkPlanningBuildPlan.class);
             List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlans = util.importExcel(file.getInputStream());
             return AjaxResult.success(qqchWorkPlanningBuildPlans);
+        }catch (Exception e){
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    @PostMapping("/detail")
+    @ResponseBody
+    public AjaxResult detail(QqchWorkPlanningBuildPlan plan){
+        try{
+            List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = null;
+            if(ObjectNullUtil.isEmpty(plan.getVersion())){//直接版本号最大且有效版本
+                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanService.getMaxVVData(plan);
+            }else{//历史版本的详情
+                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanService.getQqchWorkPlanningBuildPlanList(plan);
+            }
+            return AjaxResult.success(qqchWorkPlanningBuildPlanList);
         }catch (Exception e){
             throw new RuntimeException("导入失败！");
         }

@@ -9,6 +9,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,9 +60,15 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
     }
 
     @GetMapping("/detail")
-    public AjaxResult detail(){
+    public AjaxResult detail(QqchWorkPlanningPrjImg  img){
         try{
-            QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjImg(new QqchWorkPlanningPrjImg());
+            QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg = null;
+            if(ObjectNullUtil.isEmpty(img.getVersion())){
+                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjIsValid(img);//拿版本号最大且有效的
+            }else{
+                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjHistory(img);
+            }
+
             return AjaxResult.success(qqchWorkPlanningPrjImg);
         }catch (CustomBusinessException e){
             e.printStackTrace();
