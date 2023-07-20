@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
     @Autowired
     private QqchWorkGroupMemberMapper qqchWorkGroupMemberMapper;
+
+    @Autowired
+    private XmslContractInfoMapper xmslContractInfoMapper;
 
 
     /**
@@ -132,6 +137,26 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setCreateTime(DateUtils.getNowDate());
         return qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
+    }
+
+    /**
+     * 设置策划主导单位和策划审批单位
+     * @param qqchWorkGroup
+     */
+    public void setPlanUnit(QqchWorkGroup qqchWorkGroup){
+        //获取合同关联项目信息-项目分类
+        XmslContractInfo validMaxVersionContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+
+        if(validMaxVersionContractInfo == null){
+            return;
+        }
+        //项目分类
+        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
+
+        //策划主导单位：I、II类项目，显示组织机构海外事业部层级名称 ；III、IV类型项目，显示项目所属单位名称
+
+        //策划审批单位：I、II、III类项目，显示组织机构海外事业部层级名称 ；IV类型项目，显示项目所属单位名称
+
     }
 
     /**
