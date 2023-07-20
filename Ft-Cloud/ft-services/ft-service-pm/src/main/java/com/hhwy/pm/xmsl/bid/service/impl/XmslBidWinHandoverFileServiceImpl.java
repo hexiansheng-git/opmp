@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author zhenglili
  * @date 2023-07-06 15:18:31
- * @remark
+ * @remark 中标项目移交文件
  */
 @Service
 public class XmslBidWinHandoverFileServiceImpl implements IXmslBidWinHandoverFileService {

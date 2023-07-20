@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -45,10 +46,6 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
         return result;
     }
 
-    public List<XmslBidWinHandoverInfo> getXmslBidWinHandoverInfoList(XmslBidWinHandoverInfo xmslBidWinHandoverInfo) {
-        return xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfoList(xmslBidWinHandoverInfo);
-    }
-
     @Transactional
     public void save(XmslBidWinHandoverInfo xmslBidWinHandoverInfo) {
         XmslBidWinHandoverInfo infoParam = new XmslBidWinHandoverInfo();
@@ -68,69 +65,25 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
             xmslBidWinHandoverInfoMapper.updateXmslBidWinHandoverInfo(info);
         }
 
+        // 清空数据库表中标项目移交文件数据
+        XmslBidWinHandoverFile deleteParam = new XmslBidWinHandoverFile();
+        deleteParam.setDelFlag("1");
+        xmslBidWinHandoverFileMapper.updateXmslBidWinHandoverFile(deleteParam);
+
         // 中标项目移交文件
-        if (xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList() != null
-            && xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList().size() != 0) {
+        if (!CollectionUtils.isEmpty(xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList())) {
             List<XmslBidWinHandoverFile> insertList = new ArrayList<>();
-            List<XmslBidWinHandoverFile> updateList = new ArrayList<>();
             for (XmslBidWinHandoverFile bidWinHandoverFile : xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList()) {
-                if (bidWinHandoverFile.getId() == null) {
-                    bidWinHandoverFile.setId(IdWorker.createId());
-                    bidWinHandoverFile.setHandoverInfoId(info.getId());
-                    bidWinHandoverFile.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    bidWinHandoverFile.setCreateUserName(SecurityUtils.getUserName());
-                    bidWinHandoverFile.setCreateTime(DateUtils.getNowDate());
-                    insertList.add(bidWinHandoverFile);
-                } else {
-                    bidWinHandoverFile.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    bidWinHandoverFile.setUpdateTime(DateUtils.getNowDate());
-                    updateList.add(bidWinHandoverFile);
-                }
+                bidWinHandoverFile.setId(IdWorker.createId());
+                bidWinHandoverFile.setHandoverInfoId(info.getId());
+                bidWinHandoverFile.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                bidWinHandoverFile.setCreateUserName(SecurityUtils.getUserName());
+                bidWinHandoverFile.setCreateTime(DateUtils.getNowDate());
+                insertList.add(bidWinHandoverFile);
             }
             if (insertList.size() > 0) {
                 xmslBidWinHandoverFileMapper.insertXmslBidWinHandoverFileList(insertList);
             }
-            if (updateList.size() > 0) {
-                xmslBidWinHandoverFileMapper.updateXmslBidWinHandoverFileList(updateList);
-            }
         }
-    }
-
-    @Transactional
-    public int insertXmslBidWinHandoverInfoList(List<XmslBidWinHandoverInfo> xmslBidWinHandoverInfoList) {
-        for (XmslBidWinHandoverInfo xmslBidWinHandoverInfo : xmslBidWinHandoverInfoList) {
-            xmslBidWinHandoverInfo.setId(IdWorker.createId());
-            xmslBidWinHandoverInfo.setCreateUser(SecurityUtils.getUserName());
-            xmslBidWinHandoverInfo.setCreateTime(DateUtils.getNowDate());
-        }
-        return xmslBidWinHandoverInfoMapper.insertXmslBidWinHandoverInfoList(xmslBidWinHandoverInfoList);
-    }
-
-    @Transactional
-    public int updateXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo) {
-        xmslBidWinHandoverInfo.setUpdateUser(SecurityUtils.getUserName());
-        xmslBidWinHandoverInfo.setUpdateTime(DateUtils.getNowDate());
-        return xmslBidWinHandoverInfoMapper.updateXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
-    }
-
-    @Transactional
-    public int updateXmslBidWinHandoverInfoList(List<XmslBidWinHandoverInfo> xmslBidWinHandoverInfoList) {
-        for (XmslBidWinHandoverInfo xmslBidWinHandoverInfo : xmslBidWinHandoverInfoList) {
-            xmslBidWinHandoverInfo.setUpdateUser(SecurityUtils.getUserName());
-            xmslBidWinHandoverInfo.setUpdateTime(DateUtils.getNowDate());
-        }
-        return xmslBidWinHandoverInfoMapper.updateXmslBidWinHandoverInfoList(xmslBidWinHandoverInfoList);
-    }
-
-    @Transactional
-    public int deleteXmslBidWinHandoverInfo(XmslBidWinHandoverInfo xmslBidWinHandoverInfo) {
-        xmslBidWinHandoverInfo.setUpdateUser(SecurityUtils.getUserName());
-        xmslBidWinHandoverInfo.setUpdateTime(DateUtils.getNowDate());
-        return xmslBidWinHandoverInfoMapper.deleteXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
-    }
-
-    @Transactional
-    public int deleteXmslBidWinHandoverInfoByPks(List<Long> xmslBidWinHandoverInfoPkList) {
-        return xmslBidWinHandoverInfoMapper.deleteXmslBidWinHandoverInfoByPks(xmslBidWinHandoverInfoPkList);
     }
 }
