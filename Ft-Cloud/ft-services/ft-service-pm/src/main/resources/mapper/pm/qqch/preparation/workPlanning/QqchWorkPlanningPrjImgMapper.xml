@@ -37,23 +37,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     from qqch_work_planning_prj_img
     </sql>
     <select id="getQqchWorkPlanningPrjImg" resultMap="QqchWorkPlanningPrjImgResultMap">
-        <include refid="selectQqchWorkPlanningPrjImgVo" />
+        select
+        `id`
+        ,`file_id`
+        ,`version`
+        ,`create_user`
+        ,`create_user_name`
+        ,`create_time`
+        ,`update_user`
+        ,`update_time`
+        ,`del_user`
+        ,`del_time`
+        ,`del_flag`
+        ,`pt_var1`
+        ,valid
+        from qqch_work_planning_prj_img
         <where>
             del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="fileId != null  and fileId != ''"> and `file_id` = #{fileId}</if>
-                            <if test="version != null "> and `version` = #{version}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="fileId != null  and fileId != ''"> and `file_id` = #{fileId}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                    </where>
+        </where>
         order by create_time desc
     </select>
 
@@ -273,4 +287,33 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </foreach>
                 </where>
             </update>
-            </mapper>
+
+    <select id="getQqchWorkPlanningPrjIsValid" parameterType="com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg" resultMap="QqchWorkPlanningPrjImgResultMap">
+         select
+        `id`
+        ,`file_id`
+        ,`version`
+        ,`create_user`
+        ,`create_user_name`
+        ,`create_time`
+        ,`update_user`
+        ,`update_time`
+        ,`del_user`
+        ,`del_time`
+        ,`del_flag`
+        ,`pt_var1`
+        ,valid
+        from qqch_work_planning_prj_img where del_flag = '0' and valid = '1' order by version desc limit 1
+    </select>
+
+    <select id="getQqchWorkPlanningPrjHistory" parameterType="com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg" resultMap="QqchWorkPlanningPrjImgResultMap">
+    select `id`,`file_id`,`version`,`create_user`,`create_user_name` ,`create_time`
+        ,`update_user`,`update_time`,`del_user`,`del_time`,`del_flag`,`pt_var1`,valid
+        from qqch_work_planning_prj_img
+        <where>
+            del_flag = '0' and valid = '1'
+            <if test="version != null"> and #{version} >= version </if>
+        </where>
+        order by version desc limit 1
+    </select>
+</mapper>

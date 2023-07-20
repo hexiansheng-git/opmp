@@ -7,8 +7,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -101,131 +105,16 @@ public class QqchWorkPlanningPrjImg extends BaseEntity {
     @Excel(name = "保存标识")
     private String valid;
 
-    public String getValid() {
-        return valid;
-    }
+    @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
+    private String submitFlag;
 
-    public void setValid(String valid) {
-        this.valid = valid;
-    }
+    /**
+     * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
+     */
+    @JsonProperty
+    private String stageIdentity;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public String getFileId() {
-        return fileId;
-    }
-
-    @JsonIgnore
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
-    }
-
-    @JsonIgnore
-    public BigDecimal getVersion() {
-        return version;
-    }
-
-    @JsonIgnore
-    public void setVersion(BigDecimal version) {
-        this.version = version;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
+    @JsonProperty
+    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
+    private String moduleIdentity;
 }

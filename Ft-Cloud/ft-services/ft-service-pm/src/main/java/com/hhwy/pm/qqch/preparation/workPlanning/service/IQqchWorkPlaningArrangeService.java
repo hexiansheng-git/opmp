@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.service;
 
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrangeVo;
 
 import java.util.List;
 
@@ -17,7 +18,7 @@ public interface IQqchWorkPlaningArrangeService {
 
     int insertQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange);
 
-    int insertQqchWorkPlaningArrangeList(List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList);
+    int insertQqchWorkPlaningArrangeList(QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo);
 
     int updateQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange);
 
@@ -26,4 +27,8 @@ public interface IQqchWorkPlaningArrangeService {
     int deleteQqchWorkPlaningArrange(QqchWorkPlaningArrange qqchWorkPlaningArrange);
 
             int deleteQqchWorkPlaningArrangeByPks(List<Long> qqchWorkPlaningArrangePkList);
-    }
+
+    List<QqchWorkPlaningArrange> getMaxVVData(QqchWorkPlaningArrange arrangeVo);
+
+    List<QqchWorkPlaningArrange> getQqchWorkPlaningArrangeListHistory(QqchWorkPlaningArrange arrangeVo);
+}

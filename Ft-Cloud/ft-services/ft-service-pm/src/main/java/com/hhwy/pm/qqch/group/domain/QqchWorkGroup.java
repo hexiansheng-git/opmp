@@ -84,6 +84,12 @@ public class QqchWorkGroup extends BaseEntity {
     @Excel(name = "策划主导单位")
     private String planDominantUnit;
     /**
+     * 字段描述：策划主导单位id
+     */
+    @JsonProperty
+    @Excel(name = "策划主导单位id")
+    private Long planDominantUnitId;
+    /**
      * 字段描述：联系方式
      */
     @JsonProperty
@@ -95,6 +101,12 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "策划审批单位")
     private String planApprovalUnit;
+    /**
+     * 字段描述：策划审批单位id
+     */
+    @JsonProperty
+    @Excel(name = "策划审批单位id")
+    private Long planApprovalUnitId;
     /**
      * 字段描述：项目概述
      */
