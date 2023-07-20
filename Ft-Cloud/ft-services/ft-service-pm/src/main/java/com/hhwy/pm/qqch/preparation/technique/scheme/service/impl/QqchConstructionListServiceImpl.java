@@ -12,7 +12,6 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionList
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,8 +64,6 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             return;
         }
 
-        List<QqchConstructionList> insertList = new ArrayList<>();
-
         for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
             // 方案编号 = 项目编码 + 三位流水号
             String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
@@ -80,11 +77,9 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
             qqchConstructionList.setVersion(qqchConstructionListVo.getVersion());
             qqchConstructionList.setValid(Valid.YES);
-            insertList.add(qqchConstructionList);
         }
 
-        if (insertList.size() > 0) {
-            qqchConstructionListMapper.insertQqchConstructionListList(insertList);
-        }
+        qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
+
     }
 }

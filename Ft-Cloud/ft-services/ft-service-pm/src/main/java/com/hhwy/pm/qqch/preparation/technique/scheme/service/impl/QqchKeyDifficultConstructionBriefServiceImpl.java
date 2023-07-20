@@ -10,7 +10,6 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchKeyDifficultCons
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,8 +61,6 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
             return;
         }
 
-        List<QqchKeyDifficultConstructionBrief> insertList = new ArrayList<>();
-
         for (QqchKeyDifficultConstructionBrief brief : qqchKeyDifficultConstructionBriefVo.getList()) {
             brief.setId(IdWorker.createId());
             brief.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
@@ -72,11 +69,10 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
 
             brief.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());
             brief.setValid(Valid.YES);
-            insertList.add(brief);
         }
 
-        if (insertList.size() > 0) {
-            qqchKeyDifficultConstructionBriefMapper.insertQqchKeyDifficultConstructionBriefList(insertList);
-        }
+        qqchKeyDifficultConstructionBriefMapper
+            .insertQqchKeyDifficultConstructionBriefList(qqchKeyDifficultConstructionBriefVo.getList());
+
     }
 }
