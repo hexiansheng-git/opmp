@@ -1,19 +1,18 @@
 package com.hhwy.system.service;
 
-import com.hhwy.domain.base.system.UserInfo;
+import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.system.api.domain.SysUser;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
 
 public interface IUserService {
 
-    List<UserInfo> getUserInfoBy(UserInfo userInfo);
+    List<SelfUserInfo> getUserInfoBy(SelfUserInfo selfUserInfo);
 
     int updateRecentSelectUser(List<String> userIds);
 
-    List<UserInfo> getRecentSelectUser();
+    List<SelfUserInfo> getRecentSelectUser();
 
     /**
      *根据userIds查询用户信息

@@ -1,6 +1,6 @@
 package com.hhwy.system.mapper;
 
-import com.hhwy.domain.base.system.UserInfo;
+import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.domain.base.system.UserPostInfo;
 import com.hhwy.system.api.domain.SysUser;
 import org.apache.ibatis.annotations.Param;
@@ -38,7 +38,7 @@ public interface UserMapper {
             "    </foreach> " +
             "</if> " +
             "</script>"})
-    List<UserInfo> getUserInfoBy(@Param("userInfo") UserInfo userInfo);
+    List<SelfUserInfo> getUserInfoBy(@Param("userInfo") SelfUserInfo selfUserInfo);
 
     @Select({"<script>" +
             "select  " +

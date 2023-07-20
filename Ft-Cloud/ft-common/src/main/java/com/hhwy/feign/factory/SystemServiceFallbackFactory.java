@@ -18,7 +18,7 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
 
     @Override
     public SystemServiceApi create(Throwable throwable) {
-        log.error("Demo服务调用失败:{}", throwable.getMessage());
+        log.error("系统服务调用失败:{}", throwable.getMessage());
         return new SystemServiceApi() {
             @Override
             public AjaxResult resolveDict(String dictType, String dictValue) {

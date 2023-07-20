@@ -3,7 +3,7 @@ package com.hhwy.system.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
-import com.hhwy.domain.base.system.UserInfo;
+import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
 import com.hhwy.system.mapper.UserMapper;
@@ -48,18 +48,18 @@ public class UserController extends BaseController {
     //根据组织机构获取人员
 //    @CustomLogger(title = "公共接口-根据组织机构获取人员", businessType = CustomBusinessType.SELECT)
     @PostMapping("/getUserInfoBy")
-    public AjaxResult getUserInfoBy(@RequestBody UserInfo userInfo){
-        return AjaxResult.success("查询成功!", iUserService.getUserInfoBy(userInfo));
+    public AjaxResult getUserInfoBy(@RequestBody SelfUserInfo selfUserInfo){
+        return AjaxResult.success("查询成功!", iUserService.getUserInfoBy(selfUserInfo));
     }
 
     //获取同部门的人员
 //    @CustomLogger(title = "公共接口-获取同部门人员信息", businessType = CustomBusinessType.SELECT)
     @PostMapping("/getUserInfoBySameDept")
-    public AjaxResult getUserInfoBySameDept(@RequestBody UserInfo userInfo){
+    public AjaxResult getUserInfoBySameDept(@RequestBody SelfUserInfo selfUserInfo){
         //获取当前登录人的部门id
         LoginUser loginUser = this.tokenService.getLoginUser();
-        userInfo.setDeptId(loginUser.getSysUser().getDeptId());
-        return AjaxResult.success("查询成功!", iUserService.getUserInfoBy(userInfo));
+        selfUserInfo.setDeptId(loginUser.getSysUser().getDeptId());
+        return AjaxResult.success("查询成功!", iUserService.getUserInfoBy(selfUserInfo));
     }
 
     //最近选择的用户RecentSelectUser

@@ -12,7 +12,7 @@ import java.util.Set;
  * @Date :  14:13
  * @Version : V1.0
  **/
-public class UserInfo implements Serializable {
+public class SelfUserInfo implements Serializable {
 
     @JsonSerialize(using= ToStringSerializer.class)
     private Long userId;

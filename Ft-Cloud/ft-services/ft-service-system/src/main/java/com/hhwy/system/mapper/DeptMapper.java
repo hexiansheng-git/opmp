@@ -15,6 +15,7 @@ public interface DeptMapper {
             "order by order_num" +
             "</script>"})
     List<SysTreeUtil> getDeptByTree();
+    List<SysTreeUtil> selectRegionInfo();
 
 
 }
