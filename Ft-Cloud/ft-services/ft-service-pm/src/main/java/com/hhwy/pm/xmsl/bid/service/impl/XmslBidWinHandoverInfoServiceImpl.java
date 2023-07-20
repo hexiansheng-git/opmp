@@ -9,12 +9,10 @@ import com.hhwy.pm.xmsl.bid.mapper.XmslBidWinHandoverInfoMapper;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -72,18 +70,15 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
 
         // 中标项目移交文件
         if (!CollectionUtils.isEmpty(xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList())) {
-            List<XmslBidWinHandoverFile> insertList = new ArrayList<>();
             for (XmslBidWinHandoverFile bidWinHandoverFile : xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList()) {
                 bidWinHandoverFile.setId(IdWorker.createId());
                 bidWinHandoverFile.setHandoverInfoId(info.getId());
                 bidWinHandoverFile.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 bidWinHandoverFile.setCreateUserName(SecurityUtils.getUserName());
                 bidWinHandoverFile.setCreateTime(DateUtils.getNowDate());
-                insertList.add(bidWinHandoverFile);
             }
-            if (insertList.size() > 0) {
-                xmslBidWinHandoverFileMapper.insertXmslBidWinHandoverFileList(insertList);
-            }
+            xmslBidWinHandoverFileMapper
+                .insertXmslBidWinHandoverFileList(xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList());
         }
     }
 }

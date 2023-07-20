@@ -6,11 +6,11 @@ import com.hhwy.pm.xmsl.implement.domain.XmslKeyPersonCommunication;
 import com.hhwy.pm.xmsl.implement.mapper.XmslKeyPersonCommunicationMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslKeyPersonCommunicationService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -30,32 +30,19 @@ public class XmslKeyPersonCommunicationServiceImpl implements IXmslKeyPersonComm
 
     @Transactional
     public void save(List<XmslKeyPersonCommunication> xmslKeyPersonCommunicationList) {
-        if (xmslKeyPersonCommunicationList == null || xmslKeyPersonCommunicationList.size() == 0) {
-            return;
-        }
+        // 先清空旧数据
+        XmslKeyPersonCommunication deleteParam = new XmslKeyPersonCommunication();
+        deleteParam.setDelFlag("1");
+        xmslKeyPersonCommunicationMapper.updateXmslKeyPersonCommunication(deleteParam);
 
-        List<XmslKeyPersonCommunication> insertList = new ArrayList<>();
-        List<XmslKeyPersonCommunication> updateList = new ArrayList<>();
-        for (XmslKeyPersonCommunication xmslKeyPersonCommunication : xmslKeyPersonCommunicationList) {
-            xmslKeyPersonCommunication.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            if (xmslKeyPersonCommunication.getId() == null) {
+        if (!CollectionUtils.isEmpty(xmslKeyPersonCommunicationList)) {
+            for (XmslKeyPersonCommunication xmslKeyPersonCommunication : xmslKeyPersonCommunicationList) {
                 xmslKeyPersonCommunication.setId(IdWorker.createId());
                 xmslKeyPersonCommunication.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslKeyPersonCommunication.setCreateUserName(SecurityUtils.getUserName());
                 xmslKeyPersonCommunication.setCreateTime(DateUtils.getNowDate());
-                insertList.add(xmslKeyPersonCommunication);
-            } else {
-                xmslKeyPersonCommunication.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                xmslKeyPersonCommunication.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(xmslKeyPersonCommunication);
             }
-        }
-
-        if (insertList.size() > 0) {
-            xmslKeyPersonCommunicationMapper.insertXmslKeyPersonCommunicationList(insertList);
-        }
-        if (updateList.size() > 0) {
-            xmslKeyPersonCommunicationMapper.updateXmslKeyPersonCommunicationList(updateList);
+            xmslKeyPersonCommunicationMapper.insertXmslKeyPersonCommunicationList(xmslKeyPersonCommunicationList);
         }
     }
 

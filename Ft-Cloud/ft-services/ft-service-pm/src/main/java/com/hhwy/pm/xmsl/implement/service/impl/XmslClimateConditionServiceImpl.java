@@ -6,11 +6,11 @@ import com.hhwy.pm.xmsl.implement.domain.XmslClimateCondition;
 import com.hhwy.pm.xmsl.implement.mapper.XmslClimateConditionMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslClimateConditionService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -30,31 +30,19 @@ public class XmslClimateConditionServiceImpl implements IXmslClimateConditionSer
 
     @Transactional
     public void save(List<XmslClimateCondition> xmslClimateConditionList) {
-        if (xmslClimateConditionList == null || xmslClimateConditionList.size() == 0) {
-            return;
-        }
+        // 先清空旧数据
+        XmslClimateCondition deleteParam = new XmslClimateCondition();
+        deleteParam.setDelFlag("1");
+        xmslClimateConditionMapper.updateXmslClimateCondition(deleteParam);
 
-        List<XmslClimateCondition> insertList = new ArrayList<>();
-        List<XmslClimateCondition> updateList = new ArrayList<>();
-        for (XmslClimateCondition xmslClimateCondition : xmslClimateConditionList) {
-            if (xmslClimateCondition.getId() == null) {
+        if (!CollectionUtils.isEmpty(xmslClimateConditionList)) {
+            for (XmslClimateCondition xmslClimateCondition : xmslClimateConditionList) {
                 xmslClimateCondition.setId(IdWorker.createId());
                 xmslClimateCondition.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslClimateCondition.setCreateUserName(SecurityUtils.getUserName());
                 xmslClimateCondition.setCreateTime(DateUtils.getNowDate());
-                insertList.add(xmslClimateCondition);
-            } else {
-                xmslClimateCondition.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                xmslClimateCondition.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(xmslClimateCondition);
             }
-        }
-
-        if (insertList.size() > 0) {
-            xmslClimateConditionMapper.insertXmslClimateConditionList(insertList);
-        }
-        if (updateList.size() > 0) {
-            xmslClimateConditionMapper.updateXmslClimateConditionList(updateList);
+            xmslClimateConditionMapper.insertXmslClimateConditionList(xmslClimateConditionList);
         }
     }
 

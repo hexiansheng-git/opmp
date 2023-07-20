@@ -6,11 +6,11 @@ import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.mapper.XmslTerrainLandformsMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -29,30 +29,19 @@ public class XmslTerrainLandformsServiceImpl implements IXmslTerrainLandformsSer
 
     @Transactional
     public void save(List<XmslTerrainLandforms> xmslTerrainLandformsList) {
-        if (xmslTerrainLandformsList == null || xmslTerrainLandformsList.size() == 0) {
-            return;
-        }
-        List<XmslTerrainLandforms> insertList = new ArrayList<>();
-        List<XmslTerrainLandforms> updateList = new ArrayList<>();
-        for (XmslTerrainLandforms xmslTerrainLandforms : xmslTerrainLandformsList) {
-            if (xmslTerrainLandforms.getId() == null) {
+        // 先清空旧数据
+        XmslTerrainLandforms deleteParam = new XmslTerrainLandforms();
+        deleteParam.setDelFlag("1");
+        xmslTerrainLandformsMapper.updateXmslTerrainLandforms(deleteParam);
+
+        if (!CollectionUtils.isEmpty(xmslTerrainLandformsList)) {
+            for (XmslTerrainLandforms xmslTerrainLandforms : xmslTerrainLandformsList) {
                 xmslTerrainLandforms.setId(IdWorker.createId());
                 xmslTerrainLandforms.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslTerrainLandforms.setCreateUserName(SecurityUtils.getUserName());
                 xmslTerrainLandforms.setCreateTime(DateUtils.getNowDate());
-                insertList.add(xmslTerrainLandforms);
-            } else {
-                xmslTerrainLandforms.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                xmslTerrainLandforms.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(xmslTerrainLandforms);
             }
-        }
-
-        if (insertList.size() > 0) {
-            xmslTerrainLandformsMapper.insertXmslTerrainLandformsList(insertList);
-        }
-        if (updateList.size() > 0) {
-            xmslTerrainLandformsMapper.updateXmslTerrainLandformsList(updateList);
+            xmslTerrainLandformsMapper.insertXmslTerrainLandformsList(xmslTerrainLandformsList);
         }
     }
 

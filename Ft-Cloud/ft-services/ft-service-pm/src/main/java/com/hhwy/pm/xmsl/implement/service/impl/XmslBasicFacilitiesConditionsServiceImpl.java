@@ -6,11 +6,11 @@ import com.hhwy.pm.xmsl.implement.domain.XmslBasicFacilitiesConditions;
 import com.hhwy.pm.xmsl.implement.mapper.XmslBasicFacilitiesConditionsMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslBasicFacilitiesConditionsService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -30,30 +30,20 @@ public class XmslBasicFacilitiesConditionsServiceImpl implements IXmslBasicFacil
 
     @Transactional
     public void save(List<XmslBasicFacilitiesConditions> xmslBasicFacilitiesConditionsList) {
-        if (xmslBasicFacilitiesConditionsList == null || xmslBasicFacilitiesConditionsList.size() == 0) {
-            return;
-        }
-        List<XmslBasicFacilitiesConditions> insertList = new ArrayList<>();
-        List<XmslBasicFacilitiesConditions> updateList = new ArrayList<>();
-        for (XmslBasicFacilitiesConditions xmslBasicFacilitiesConditions : xmslBasicFacilitiesConditionsList) {
-            if (xmslBasicFacilitiesConditions.getId() == null) {
+        // 先清空旧数据
+        XmslBasicFacilitiesConditions deleteParam = new XmslBasicFacilitiesConditions();
+        deleteParam.setDelFlag("1");
+        xmslBasicFacilitiesConditionsMapper.updateXmslBasicFacilitiesConditions(deleteParam);
+
+        if (!CollectionUtils.isEmpty(xmslBasicFacilitiesConditionsList)) {
+            for (XmslBasicFacilitiesConditions xmslBasicFacilitiesConditions : xmslBasicFacilitiesConditionsList) {
                 xmslBasicFacilitiesConditions.setId(IdWorker.createId());
                 xmslBasicFacilitiesConditions.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslBasicFacilitiesConditions.setCreateUserName(SecurityUtils.getUserName());
                 xmslBasicFacilitiesConditions.setCreateTime(DateUtils.getNowDate());
-                insertList.add(xmslBasicFacilitiesConditions);
-            } else {
-                xmslBasicFacilitiesConditions.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                xmslBasicFacilitiesConditions.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(xmslBasicFacilitiesConditions);
             }
-        }
-
-        if (insertList.size() > 0) {
-            xmslBasicFacilitiesConditionsMapper.insertXmslBasicFacilitiesConditionsList(insertList);
-        }
-        if (updateList.size() > 0) {
-            xmslBasicFacilitiesConditionsMapper.updateXmslBasicFacilitiesConditionsList(updateList);
+            xmslBasicFacilitiesConditionsMapper
+                .insertXmslBasicFacilitiesConditionsList(xmslBasicFacilitiesConditionsList);
         }
     }
 
