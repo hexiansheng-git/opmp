@@ -49,18 +49,17 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
         XmslBidWinHandoverInfo infoParam = new XmslBidWinHandoverInfo();
         XmslBidWinHandoverInfo handoverInfo = xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfo(infoParam);
 
-        XmslBidWinHandoverInfo info = new XmslBidWinHandoverInfo();
         if (handoverInfo == null || handoverInfo.getId() == null) {
-            info.setId(IdWorker.createId());
-            info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            info.setCreateUserName(SecurityUtils.getUserName());
-            info.setCreateTime(DateUtils.getNowDate());
-            xmslBidWinHandoverInfoMapper.insertXmslBidWinHandoverInfo(info);
+            xmslBidWinHandoverInfo.setId(IdWorker.createId());
+            xmslBidWinHandoverInfo.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslBidWinHandoverInfo.setCreateUserName(SecurityUtils.getUserName());
+            xmslBidWinHandoverInfo.setCreateTime(DateUtils.getNowDate());
+            xmslBidWinHandoverInfoMapper.insertXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
         } else {
-            info.setId(handoverInfo.getId());
-            info.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            info.setUpdateTime(DateUtils.getNowDate());
-            xmslBidWinHandoverInfoMapper.updateXmslBidWinHandoverInfo(info);
+            xmslBidWinHandoverInfo.setId(handoverInfo.getId());
+            xmslBidWinHandoverInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslBidWinHandoverInfo.setUpdateTime(DateUtils.getNowDate());
+            xmslBidWinHandoverInfoMapper.updateXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
         }
 
         // 清空数据库表中标项目移交文件数据
@@ -72,7 +71,7 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
         if (!CollectionUtils.isEmpty(xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList())) {
             for (XmslBidWinHandoverFile bidWinHandoverFile : xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList()) {
                 bidWinHandoverFile.setId(IdWorker.createId());
-                bidWinHandoverFile.setHandoverInfoId(info.getId());
+                bidWinHandoverFile.setHandoverInfoId(xmslBidWinHandoverInfo.getId());
                 bidWinHandoverFile.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 bidWinHandoverFile.setCreateUserName(SecurityUtils.getUserName());
                 bidWinHandoverFile.setCreateTime(DateUtils.getNowDate());
