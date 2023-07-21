@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructionSituation;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchDesignConstructionSituationMapper;
@@ -28,6 +29,9 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     @Autowired
     private QqchDesignConstructionSituationMapper qqchDesignConstructionSituationMapper;
 
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
 
     /**
      * 边设计边施工情况台账
@@ -45,8 +49,6 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
         List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList = qqchDesignConstructionSituationMapper.getQqchDesignConstructionSituationList(qqchDesignConstructionSituation);
 
         qqchDesignConstructionSituationVo.setQqchDesignConstructionSituationList(qqchDesignConstructionSituationList);
-
-        //TODO 获取确认状态
 
         return qqchDesignConstructionSituationVo;
     }
@@ -79,7 +81,10 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
 
         String buttonMark = qqchDesignConstructionSituationVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchDesignConstructionSituationVo.getMenuId();
+            String stageIdentity = qqchDesignConstructionSituationVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

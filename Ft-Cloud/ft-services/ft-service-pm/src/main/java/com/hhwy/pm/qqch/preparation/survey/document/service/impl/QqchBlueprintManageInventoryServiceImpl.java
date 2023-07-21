@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchBlueprintManageInventory;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchBlueprintManageInventoryVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchBlueprintManageInventoryMapper;
@@ -27,6 +28,9 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
 
     @Autowired
     private QqchBlueprintManageInventoryMapper qqchBlueprintManageInventoryMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
 
     public QqchBlueprintManageInventory getQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
@@ -79,7 +83,10 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
 
         String buttonMark = qqchBlueprintManageInventoryVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchBlueprintManageInventoryVo.getMenuId();
+            String stageIdentity = qqchBlueprintManageInventoryVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

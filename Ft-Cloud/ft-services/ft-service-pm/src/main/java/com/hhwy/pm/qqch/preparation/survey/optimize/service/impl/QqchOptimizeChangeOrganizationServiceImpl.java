@@ -8,6 +8,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrganization;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeChangeOrganizationMapper;
@@ -28,6 +29,9 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
 
     @Autowired
     private QqchOptimizeChangeOrganizationMapper qqchOptimizeChangeOrganizationMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
 
     /**
@@ -51,8 +55,6 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
                 QqchOptimizeChangeOrganization::getChildren,
                 QqchOptimizeChangeOrganization::setChildren);
         qqchOptimizeChangeOrganizationVo.setTreeList(treeList);
-
-        //TODO 获取确认状态
 
         return qqchOptimizeChangeOrganizationVo;
     }
@@ -85,7 +87,10 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
 
         String buttonMark = qqchOptimizeChangeOrganizationVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchOptimizeChangeOrganizationVo.getMenuId();
+            String stageIdentity = qqchOptimizeChangeOrganizationVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

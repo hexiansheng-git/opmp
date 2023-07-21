@@ -8,6 +8,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchDesignTechnologyOptimizeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchDesignTechnologyOptimizeMapper;
@@ -29,6 +30,9 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
     @Autowired
     private QqchDesignTechnologyOptimizeMapper qqchDesignTechnologyOptimizeMapper;
 
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
 
     /**
      * 获取设计技术优化要点集合
@@ -45,8 +49,6 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
 
         List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeMapper.getQqchDesignTechnologyOptimizeList(version);
         qqchDesignTechnologyOptimizeVo.setQqchDesignTechnologyOptimizeList(qqchDesignTechnologyOptimizeList);
-
-        //TODO 获取确认状态
 
         return qqchDesignTechnologyOptimizeVo;
     }
@@ -78,7 +80,10 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
 
         String buttonMark = qqchDesignTechnologyOptimizeVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchDesignTechnologyOptimizeVo.getMenuId();
+            String stageIdentity = qqchDesignTechnologyOptimizeVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

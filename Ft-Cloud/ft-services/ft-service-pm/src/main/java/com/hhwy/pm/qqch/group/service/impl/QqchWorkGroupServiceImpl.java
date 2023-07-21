@@ -14,14 +14,11 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
-import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -84,6 +81,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             //获取调整数据
             qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
             qqchWorkGroup.setId(null);
+            qqchWorkGroup.setTaskStatus("0");
             qqchWorkGroup.setEffective(Valid.NO);
             BigDecimal version = qqchWorkGroup.getVersion();
             version = version.add(BigDecimal.valueOf(1));

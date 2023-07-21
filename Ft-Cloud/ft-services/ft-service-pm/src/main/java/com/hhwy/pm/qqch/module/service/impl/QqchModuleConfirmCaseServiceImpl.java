@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.module.mapper.QqchModuleConfirmCaseMapper;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -30,6 +31,34 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
 
     public List<QqchModuleConfirmCase> getQqchModuleConfirmCaseList(QqchModuleConfirmCase qqchModuleConfirmCase) {
         return qqchModuleConfirmCaseMapper.getQqchModuleConfirmCaseList(qqchModuleConfirmCase);
+    }
+
+    /**
+     * 插入一条确认记录
+     * @param menuId 页面菜单id
+     * @param stageIdentity 阶段标识
+     */
+    public void addConfirmRecord(String menuId,String stageIdentity){
+        //查询是否存在确认记录
+        QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();
+        qqchModuleConfirmCase.setModuleIdentity(menuId);
+        qqchModuleConfirmCase.setStageIdentity(stageIdentity);
+        qqchModuleConfirmCase = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCase(qqchModuleConfirmCase);
+        if(qqchModuleConfirmCase == null){
+            //插入确认记录
+            qqchModuleConfirmCase = new QqchModuleConfirmCase();
+            qqchModuleConfirmCase.setId(IdWorker.createId());
+            qqchModuleConfirmCase.setModuleIdentity(menuId);
+            qqchModuleConfirmCase.setStageIdentity(stageIdentity);
+            qqchModuleConfirmCase.setConfirmStatus(ConfirmStatus.CONFIRMED);
+            qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchModuleConfirmCase.setConfirmUserName(SecurityUtils.getUserName());
+            qqchModuleConfirmCase.setConfirmTime(DateUtils.getNowDate());
+            qqchModuleConfirmCase.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchModuleConfirmCase.setCreateUserName(SecurityUtils.getUserName());
+            qqchModuleConfirmCase.setCreateTime(DateUtils.getNowDate());
+            qqchModuleConfirmCaseMapper.insertQqchModuleConfirmCase(qqchModuleConfirmCase);
+        }
     }
 
     @Transactional

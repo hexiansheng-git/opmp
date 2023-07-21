@@ -14,6 +14,7 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
@@ -40,6 +41,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
 
     @Autowired
     private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
     @Autowired
     private SystemServiceApi systemServiceApi;
@@ -140,7 +144,10 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
 
         String buttonMark = qqchOptimizeProcedurePlanVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchOptimizeProcedurePlanVo.getMenuId();
+            String stageIdentity = qqchOptimizeProcedurePlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

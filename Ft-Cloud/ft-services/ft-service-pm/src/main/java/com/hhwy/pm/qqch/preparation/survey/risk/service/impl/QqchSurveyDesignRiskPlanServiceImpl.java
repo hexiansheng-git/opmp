@@ -12,6 +12,7 @@ import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanMapper;
@@ -33,6 +34,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
 
     @Autowired
     private QqchSurveyDesignRiskPlanMapper qqchSurveyDesignRiskPlanMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
     @Autowired
     private SystemServiceApi systemServiceApi;
@@ -118,7 +122,10 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
 
         String buttonMark = qqchSurveyDesignRiskPlanVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchSurveyDesignRiskPlanVo.getMenuId();
+            String stageIdentity = qqchSurveyDesignRiskPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

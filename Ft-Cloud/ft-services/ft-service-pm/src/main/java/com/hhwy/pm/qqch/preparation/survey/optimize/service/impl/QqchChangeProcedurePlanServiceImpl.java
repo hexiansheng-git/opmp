@@ -14,6 +14,7 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
@@ -42,6 +43,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
 
     @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
     private SystemServiceApi systemServiceApi;
 
 
@@ -67,8 +71,6 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         if(qqchPreparationSurveyExtend != null){
             qqchChangeProcedurePlanVo.setFileGroupId(qqchPreparationSurveyExtend.getFileGroupId());
         }
-
-        //TODO 获取确认状态
 
         return qqchChangeProcedurePlanVo;
     }
@@ -134,7 +136,10 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
 
         String buttonMark = qqchChangeProcedurePlanVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchChangeProcedurePlanVo.getMenuId();
+            String stageIdentity = qqchChangeProcedurePlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

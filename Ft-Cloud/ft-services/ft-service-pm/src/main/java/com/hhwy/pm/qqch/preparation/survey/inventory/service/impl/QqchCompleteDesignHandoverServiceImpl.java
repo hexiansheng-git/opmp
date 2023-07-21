@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchCompleteDesignHandoverMapper;
@@ -28,6 +29,9 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     @Autowired
     private QqchCompleteDesignHandoverMapper qqchCompleteDesignHandoverMapper;
 
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
 
     /**
      * 完整设计交接情况台账
@@ -44,8 +48,6 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
         qqchCompleteDesignHandover.setVersion(version);
         List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList = qqchCompleteDesignHandoverMapper.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandover);
         qqchCompleteDesignHandoverVo.setQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
-
-        //TODO 获取确认状态
 
         return qqchCompleteDesignHandoverVo;
     }
@@ -78,7 +80,10 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
 
         String buttonMark = qqchCompleteDesignHandoverVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchCompleteDesignHandoverVo.getMenuId();
+            String stageIdentity = qqchCompleteDesignHandoverVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchManageProcedure;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedureVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMapper;
@@ -27,6 +28,9 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
 
     @Autowired
     private QqchManageProcedureMapper qqchManageProcedureMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
 
     /**
@@ -81,7 +85,10 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
 
         String buttonMark = qqchManageProcedureVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchManageProcedureVo.getMenuId();
+            String stageIdentity = qqchManageProcedureVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 

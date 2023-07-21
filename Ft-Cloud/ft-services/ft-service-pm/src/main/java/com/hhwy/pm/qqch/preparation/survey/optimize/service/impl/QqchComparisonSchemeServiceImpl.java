@@ -9,6 +9,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeHeader;
@@ -43,6 +44,9 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
 
     @Autowired
     private QqchComparisonSchemeContentMapper qqchComparisonSchemeContentMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
 
     /**
@@ -125,7 +129,10 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
 
         String buttonMark = qqchComparisonSchemeVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
-            //确认 TODO 修改确认状态
+            //插入确认状态
+            String menuId = qqchComparisonSchemeVo.getMenuId();
+            String stageIdentity = qqchComparisonSchemeVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 
