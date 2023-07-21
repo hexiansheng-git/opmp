@@ -10,6 +10,7 @@
     <result property="workType" column="work_type"/>
     <result property="unit" column="unit"/>
     <result property="salary" column="salary"/>
+    <result property="currency" column="currency"/>
     <result property="remark" column="remark"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
@@ -37,6 +38,7 @@
     ,`work_type`
     ,`unit`
     ,`salary`
+    ,`currency`
     ,`remark`
     ,`region_id`
     ,`region_name`
@@ -63,6 +65,7 @@
       <if test="workType != null  and workType != ''">and `work_type` = #{workType}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="salary != null  and salary != ''">and `salary` = #{salary}</if>
+      <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -92,6 +95,7 @@
     ,`work_type`
     ,`unit`
     ,`salary`
+    ,`currency`
     ,`remark`
     ,`region_id`
     ,`region_name`
@@ -118,6 +122,7 @@
       <if test="workType != null  and workType != ''">and `work_type` = #{workType}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="salary != null  and salary != ''">and `salary` = #{salary}</if>
+      <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -148,6 +153,7 @@
       <if test="workType != null  and workType != ''">`work_type`,</if>
       <if test="unit != null  and unit != ''">`unit`,</if>
       <if test="salary != null  and salary != ''">`salary`,</if>
+      <if test="currency != null  and currency != ''">`currency`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -173,6 +179,7 @@
       <if test="workType != null  and workType != ''">#{workType},</if>
       <if test="unit != null  and unit != ''">#{unit},</if>
       <if test="salary != null  and salary != ''">#{salary},</if>
+      <if test="currency != null  and currency != ''">#{currency},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -203,6 +210,7 @@
       `work_type`,
       `unit`,
       `salary`,
+      `currency`,
       `remark`,
       `region_id`,
       `region_name`,
@@ -229,6 +237,7 @@
         #{item.workType},
         #{item.unit},
         #{item.salary},
+        #{item.currency},
         #{item.remark},
         #{item.regionId},
         #{item.regionName},
@@ -258,6 +267,7 @@
       <if test="workType != null  and  workType != ''">`work_type` = #{workType},</if>
       <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
       <if test="salary != null  and  salary != ''">`salary` = #{salary},</if>
+      <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -304,6 +314,11 @@
       <trim prefix="salary  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.salary}
+        </foreach>
+      </trim>
+      <trim prefix="currency  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.currency}
         </foreach>
       </trim>
       <trim prefix="remark  = case" suffix="end,">

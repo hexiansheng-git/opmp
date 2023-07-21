@@ -41,14 +41,23 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         XmslLocalWorkerSupply xmslLocalWorkerSupply = new XmslLocalWorkerSupply();
         List<XmslLocalWorkerSupply> localWorkerSupplyList = xmslLocalWorkerSupplyMapper
             .getXmslLocalWorkerSupplyList(xmslLocalWorkerSupply);
+        if (!CollectionUtils.isEmpty(localWorkerSupplyList)) {
+            result.setCurrencyWorker(localWorkerSupplyList.get(0).getCurrency());
+        }
 
         XmslLocalMaterialsSupply xmslLocalMaterialsSupply = new XmslLocalMaterialsSupply();
         List<XmslLocalMaterialsSupply> localMaterialsSupplyList = xmslLocalMaterialsSupplyMapper
             .getXmslLocalMaterialsSupplyList(xmslLocalMaterialsSupply);
+        if (!CollectionUtils.isEmpty(localMaterialsSupplyList)) {
+            result.setCurrencyMaterials(localMaterialsSupplyList.get(0).getCurrency());
+        }
 
         XmslLocalEquipmentSupply xmslLocalEquipmentSupply = new XmslLocalEquipmentSupply();
         List<XmslLocalEquipmentSupply> localEquipmentSupplyList =
             xmslLocalEquipmentSupplyMapper.getXmslLocalEquipmentSupplyList(xmslLocalEquipmentSupply);
+        if (!CollectionUtils.isEmpty(localEquipmentSupplyList)) {
+            result.setCurrencyEquipment(localEquipmentSupplyList.get(0).getCurrency());
+        }
 
         result.setLocalWorkerSupplyList(localWorkerSupplyList);
         result.setLocalMaterialsSupplyList(localMaterialsSupplyList);
@@ -77,6 +86,7 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         if (!CollectionUtils.isEmpty(localResourceSupply.getLocalWorkerSupplyList())) {
             for (XmslLocalWorkerSupply work : localResourceSupply.getLocalWorkerSupplyList()) {
                 work.setId(IdWorker.createId());
+                work.setCurrency(localResourceSupply.getCurrencyWorker());
                 work.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 work.setCreateUserName(SecurityUtils.getUserName());
                 work.setCreateTime(DateUtils.getNowDate());
@@ -88,6 +98,7 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         if (!CollectionUtils.isEmpty(localResourceSupply.getLocalMaterialsSupplyList())) {
             for (XmslLocalMaterialsSupply materials : localResourceSupply.getLocalMaterialsSupplyList()) {
                 materials.setId(IdWorker.createId());
+                materials.setCurrency(localResourceSupply.getCurrencyMaterials());
                 materials.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 materials.setCreateUserName(SecurityUtils.getUserName());
                 materials.setCreateTime(DateUtils.getNowDate());
@@ -100,6 +111,7 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         if (!CollectionUtils.isEmpty(localResourceSupply.getLocalEquipmentSupplyList())) {
             for (XmslLocalEquipmentSupply equipment : localResourceSupply.getLocalEquipmentSupplyList()) {
                 equipment.setId(IdWorker.createId());
+                equipment.setCurrency(localResourceSupply.getCurrencyEquipment());
                 equipment.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 equipment.setCreateUserName(SecurityUtils.getUserName());
                 equipment.setCreateTime(DateUtils.getNowDate());

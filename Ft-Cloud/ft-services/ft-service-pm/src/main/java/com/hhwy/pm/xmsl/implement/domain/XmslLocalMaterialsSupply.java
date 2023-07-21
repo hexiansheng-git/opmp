@@ -50,6 +50,12 @@ public class XmslLocalMaterialsSupply extends BaseEntity {
     @Excel(name = "价格")
     private String price;
     /**
+     * 字段描述：币种
+     */
+    @JsonProperty
+    @Excel(name = "币种")
+    private String currency;
+    /**
      * 字段描述：备注
      */
     @JsonProperty
