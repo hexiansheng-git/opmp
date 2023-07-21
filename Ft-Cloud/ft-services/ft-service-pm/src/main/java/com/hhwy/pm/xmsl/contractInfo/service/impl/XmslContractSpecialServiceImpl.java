@@ -57,6 +57,13 @@ public class XmslContractSpecialServiceImpl implements IXmslContractSpecialServi
             this.recursionSubset(xmslContractSpecial, insertList, updateList);
         }
         if (insertList.size() > 0) {
+            insertList.forEach(q->{
+                if (q.getPid() != null) {
+                    q.setPid(q.getPid());
+                } else {
+                    q.setPid(0l);
+                }
+            });
             xmslContractSpecialMapper.insertXmslContractSpecialList(insertList);
         }
         if (updateList.size() > 0) {

@@ -20,7 +20,8 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-19 15:37:23
- * @remark
+ * @remark  2.1.2 项目部勘察设计组织机构
+
  */
 @Validated
 @RestController
@@ -59,6 +60,12 @@ public class QqchSurveyOrganizationController extends BaseController {
         return AjaxResult.success(qqchSurveyOrganizationParam);
     }
 
+    /**
+     * 批增
+     *
+     * @param qqchSurveyOrganizationListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchSurveyOrganization:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSurveyOrganizationList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchSurveyOrganization> qqchSurveyOrganizationListParam) {

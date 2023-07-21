@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-19 15:37:23
- * @remark
+ * @remark 2.1.2 项目部勘察设计组织机构
  */
 public interface IQqchSurveyOrganizationService {
 

@@ -64,6 +64,13 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         }
 
         if (insertList.size() > 0) {
+            insertList.forEach(q->{
+                if (q.getPid() != null) {
+                    q.setPid(q.getPid());
+                } else {
+                    q.setPid(0l);
+                }
+            });
             xmslContractGeneralMapper.insertXmslContractGeneralList(insertList);
         }
         if (updateList.size() > 0) {
