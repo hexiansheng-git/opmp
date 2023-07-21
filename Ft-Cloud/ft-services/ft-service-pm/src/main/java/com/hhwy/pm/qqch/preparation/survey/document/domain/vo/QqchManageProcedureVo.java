@@ -33,6 +33,14 @@ public class QqchManageProcedureVo {
      */
     private BigDecimal version;
     /**
+     * 字段描述：菜单id
+     */
+    private String menuId;
+    /**
+     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
+     */
+    private String buttonMark;
+    /**
      * 字段描述：管理程序集合
      */
     private List<QqchManageProcedure> qqchManageProcedureList;

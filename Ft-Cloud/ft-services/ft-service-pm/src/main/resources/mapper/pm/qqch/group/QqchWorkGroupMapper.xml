@@ -20,6 +20,7 @@
         <result property="projectOverview" column="project_overview"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
+        <result property="taskStatus" column="task_status"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -40,42 +41,66 @@
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
 
-    <select id="getQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
+    <sql id="selectQqchWorkGroupVo">
         select
-        `id`
-        ,`version`
-        ,`effective`
-        ,`issue_date`
-        ,`process_name`
-        ,`plan_establish_director`
-        ,`plan_establish_director_id`
-        ,`plan_dominant_unit`
-        ,`plan_dominant_unit_id`
-        ,`contact_way`
-        ,`plan_approval_unit`
-        ,`plan_approval_unit_id`
-        ,`project_overview`
-        ,`file_group_id`
-        ,`remark`
-        ,`region_id`
-        ,`region_name`
-        ,`project_id`
-        ,`project_name`
-        ,`dept_id`
-        ,`create_user`
-        ,`create_user_name`
-        ,`create_time`
-        ,`update_user`
-        ,`update_time`
-        ,`del_user`
-        ,`del_time`
-        ,`del_flag`
-        ,`pt_var1`
-        ,`pt_var2`
-        ,`pt_var3`
-        ,`pt_var4`
-        ,`pt_var5`
+              `id`
+             ,`version`
+             ,`effective`
+             ,`issue_date`
+             ,`process_name`
+             ,`plan_establish_director`
+             ,`plan_establish_director_id`
+             ,`plan_dominant_unit`
+             ,`plan_dominant_unit_id`
+             ,`contact_way`
+             ,`plan_approval_unit`
+             ,`plan_approval_unit_id`
+             ,`project_overview`
+             ,`file_group_id`
+             ,`remark`
+             ,`task_status`
+             ,`region_id`
+             ,`region_name`
+             ,`project_id`
+             ,`project_name`
+             ,`dept_id`
+             ,`create_user`
+             ,`create_user_name`
+             ,`create_time`
+             ,`update_user`
+             ,`update_time`
+             ,`del_user`
+             ,`del_time`
+             ,`del_flag`
+             ,`pt_var1`
+             ,`pt_var2`
+             ,`pt_var3`
+             ,`pt_var4`
+             ,`pt_var5`
         from qqch_work_group
+    </sql>
+
+    <select id="getValidMaxVersionQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
+        <include refid="selectQqchWorkGroupVo" />
+        where del_flag = '0' and effective = '1'
+        order by version desc
+        limit 1
+    </select>
+
+    <select id="getNoValidMaxVersionQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
+        <include refid="selectQqchWorkGroupVo" />
+        where del_flag = '0' and effective = '0'
+        order by version desc
+        limit 1
+    </select>
+
+    <select id="getWorkGroupCount" resultType="java.lang.Integer">
+        select count(*) from qqch_work_group
+        where del_flag = '0'
+    </select>
+
+    <select id="getQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
+        <include refid="selectQqchWorkGroupVo" />
         <where>
             del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
@@ -121,41 +146,7 @@
     </select>
 
     <select id="getQqchWorkGroupList" resultMap="QqchWorkGroupResultMap">
-        select
-        `id`
-        ,`version`
-        ,`effective`
-        ,`issue_date`
-        ,`process_name`
-        ,`plan_establish_director`
-        ,`plan_establish_director_id`
-        ,`plan_dominant_unit`
-        ,`plan_dominant_unit_id`
-        ,`contact_way`
-        ,`plan_approval_unit`
-        ,`plan_approval_unit_id`
-        ,`project_overview`
-        ,`file_group_id`
-        ,`remark`
-        ,`region_id`
-        ,`region_name`
-        ,`project_id`
-        ,`project_name`
-        ,`dept_id`
-        ,`create_user`
-        ,`create_user_name`
-        ,`create_time`
-        ,`update_user`
-        ,`update_time`
-        ,`del_user`
-        ,`del_time`
-        ,`del_flag`
-        ,`pt_var1`
-        ,`pt_var2`
-        ,`pt_var3`
-        ,`pt_var4`
-        ,`pt_var5`
-        from qqch_work_group
+        <include refid="selectQqchWorkGroupVo" />
         <where>
             del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
@@ -200,7 +191,6 @@
         </where>
         order by version desc
     </select>
-
     <insert id="insertQqchWorkGroup" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_work_group
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -219,6 +209,7 @@
             <if test="projectOverview != null  and projectOverview != ''">`project_overview`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -254,6 +245,7 @@
             <if test="projectOverview != null  and projectOverview != ''">#{projectOverview},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -294,6 +286,7 @@
             `project_overview`,
             `file_group_id`,
             `remark`,
+            `task_status`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -330,6 +323,7 @@
                 #{item.projectOverview},
                 #{item.fileGroupId},
                 #{item.remark},
+                #{item.taskStatus},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},
@@ -378,6 +372,7 @@
             <if test="projectOverview != null  and  projectOverview != ''">`project_overview` = #{projectOverview},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -473,6 +468,11 @@
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">

@@ -14,14 +14,11 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
-import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -60,33 +57,42 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      */
     @Override
     public QqchWorkGroup adjustQqchWorkGroup(Long id) {
-        QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
+        QqchWorkGroup qqchWorkGroup;
 
         if(id == null){
             //第一次新增
+            qqchWorkGroup = new QqchWorkGroup();
             qqchWorkGroup.setVersion(BigDecimal.valueOf(1.0));
             qqchWorkGroup.setEffective(Valid.NO);
+            qqchWorkGroup.setHistoryMark("0");
             qqchWorkGroup.setQqchWorkGroupMemberList(new ArrayList<>());
+            this.setPlanUnit(qqchWorkGroup);
             return qqchWorkGroup;
         }
 
-        /*
-        调整
-         */
-        qqchWorkGroup.setId(id);
-        //获取调整数据
-        qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
-        qqchWorkGroup.setId(null);
-        qqchWorkGroup.setEffective(Valid.NO);
-        BigDecimal version = qqchWorkGroup.getVersion();
-        version = version.add(BigDecimal.valueOf(1));
-        qqchWorkGroup.setVersion(version);
+        //判断当前是否存在正在调整的数据（最新未生效版本数据）
+        qqchWorkGroup = qqchWorkGroupMapper.getNoValidMaxVersionQqchWorkGroup();
+        if(qqchWorkGroup == null){
+            qqchWorkGroup = new QqchWorkGroup();
+            /*
+            调整
+             */
+            qqchWorkGroup.setId(id);
+            //获取调整数据
+            qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+            qqchWorkGroup.setId(null);
+            qqchWorkGroup.setTaskStatus("0");
+            qqchWorkGroup.setEffective(Valid.NO);
+            BigDecimal version = qqchWorkGroup.getVersion();
+            version = version.add(BigDecimal.valueOf(1));
+            qqchWorkGroup.setVersion(version);
 
-        //获取小组成员数据
-        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
-        qqchWorkGroupMember.setWorkGroupId(id);
-        List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
-        qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
+            //获取小组成员数据
+            QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
+            qqchWorkGroupMember.setWorkGroupId(id);
+            List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+            qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
+        }
 
         return qqchWorkGroup;
     }
@@ -100,17 +106,50 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     public QqchWorkGroup getQqchWorkGroupById(Long id) {
 
         QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
-        qqchWorkGroup.setId(id);
-        qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
 
-        //获取工作小组成员
-        QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
-        qqchWorkGroupMember.setWorkGroupId(id);
-        List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+        if(id == null){
+            //点击页面进入，查询当前最新生效版本
+            qqchWorkGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
+            if(qqchWorkGroup == null){
+                //获取最新（未生效）版本（理论上最多只存在一条数据）
+                qqchWorkGroup = qqchWorkGroupMapper.getNoValidMaxVersionQqchWorkGroup();
+                if(qqchWorkGroup == null){
+                    qqchWorkGroup = this.adjustQqchWorkGroup(null);
+                }
+            }
+        }else {
+            //直接查询
+            qqchWorkGroup.setId(id);
+            qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+        }
 
-        qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
+        //判断是否存在历史记录
+        int count = qqchWorkGroupMapper.getWorkGroupCount();
+        if(count > 1){
+            qqchWorkGroup.setHistoryMark("1");
+        }
+
+        //设置工作小组
+        this.setWorkGroupMember(qqchWorkGroup);
 
         return qqchWorkGroup;
+    }
+
+    /**
+     * 设置工作小组
+     * @param qqchWorkGroup
+     */
+    public void setWorkGroupMember(QqchWorkGroup qqchWorkGroup){
+        Long id = qqchWorkGroup.getId();
+        if(id != null){
+            //获取工作小组成员
+            QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
+            qqchWorkGroupMember.setWorkGroupId(id);
+            List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+            qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
+        }else {
+            qqchWorkGroup.setQqchWorkGroupMemberList(new ArrayList<>());
+        }
     }
 
     /**
@@ -147,16 +186,28 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         //获取合同关联项目信息-项目分类
         XmslContractInfo validMaxVersionContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
 
-        if(validMaxVersionContractInfo == null){
-            return;
-        }
+//        if(validMaxVersionContractInfo == null){
+//            return;
+//        }
         //项目分类
-        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
+//        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
 
         //策划主导单位：I、II类项目，显示组织机构海外事业部层级名称 ；III、IV类型项目，显示项目所属单位名称
+//        if("1".equals(projectCategory) || "2".equals(projectCategory)){
+//            qqchWorkGroup.setPlanDominantUnit("海外事业部");
+//        }else {
+//            qqchWorkGroup.setPlanDominantUnit("项目名称");
+//        }
 
         //策划审批单位：I、II、III类项目，显示组织机构海外事业部层级名称 ；IV类型项目，显示项目所属单位名称
+//        if("4".equals(projectCategory)){
+//            qqchWorkGroup.setPlanApprovalUnit("项目名称");
+//        }else {
+//            qqchWorkGroup.setPlanApprovalUnit("海外事业部");
+//        }
 
+        qqchWorkGroup.setPlanDominantUnit("海外事业部");
+        qqchWorkGroup.setPlanApprovalUnit("项目名称");
     }
 
     /**
@@ -184,6 +235,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Override
     public void submit(QqchWorkGroup qqchWorkGroup) {
         Long id = qqchWorkGroup.getId();
+        qqchWorkGroup.setTaskStatus("5");
+        qqchWorkGroup.setEffective("1");
         if(id == null || id == 0){
             //插入数据
             this.insertQqchWorkGroup(qqchWorkGroup);

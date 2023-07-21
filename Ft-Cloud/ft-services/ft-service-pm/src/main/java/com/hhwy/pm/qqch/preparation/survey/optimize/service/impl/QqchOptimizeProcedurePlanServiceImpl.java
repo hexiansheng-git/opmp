@@ -11,15 +11,17 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeProcedurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeProcedurePlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,10 +43,10 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
 
     @Autowired
-    private SystemServiceApi systemServiceApi;
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
     @Autowired
-    private CommonMapper commonMapper;
+    private SystemServiceApi systemServiceApi;
 
 
     /**
@@ -56,9 +58,8 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo(BigDecimal version) {
         QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = new QqchOptimizeProcedurePlanVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_optimize_procedure_plan");
-        }
+        version = VersionUtil.getVersion("qqch_optimize_procedure_plan",version);
+
         qqchOptimizeProcedurePlanVo.setVersion(version);
 
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList(version);
@@ -141,7 +142,13 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     public void confirm(QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         this.save(qqchOptimizeProcedurePlanVo);
 
-        //TODO 修改确认状态
+        String buttonMark = qqchOptimizeProcedurePlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchOptimizeProcedurePlanVo.getMenuId();
+            String stageIdentity = qqchOptimizeProcedurePlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     /**
@@ -154,7 +161,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         for (QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan : qqchOptimizeProcedurePlanList) {
             qqchOptimizeProcedurePlan.setId(IdWorker.createId());
             qqchOptimizeProcedurePlan.setVersion(version);
-            qqchOptimizeProcedurePlan.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchOptimizeProcedurePlan.setValid(Valid.YES);
+            }
             qqchOptimizeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchOptimizeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
             qqchOptimizeProcedurePlan.setCreateTime(DateUtils.getNowDate());

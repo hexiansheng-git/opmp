@@ -32,5 +32,13 @@
 
     <select id="selectMaxVersion" resultType="java.math.BigDecimal">
         select ifnull(max(version), 1) from ${tableName} where del_flag = '0' and valid = '1' order by version desc;
-  </select>
+    </select>
+    <select id="selectLessOrEqualAssignVersion" resultType="java.math.BigDecimal">
+        select version
+        from ${tableName}
+        where del_flag = '0' and version &lt;= #{version}
+        group by version
+        order by version desc
+        limit 1
+    </select>
 </mapper>
