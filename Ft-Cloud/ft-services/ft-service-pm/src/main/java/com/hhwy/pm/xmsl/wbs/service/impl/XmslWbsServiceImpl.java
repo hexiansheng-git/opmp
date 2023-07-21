@@ -14,9 +14,7 @@ import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.redisson.misc.Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +106,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             }
             String id = getSnowId(temp.getId(),idRepalceMap);
             temp.setId(id);
-            //替换祖级id
+//            //替换祖级id
             String[] ances = temp.getAncestors().split(",");
             List<String> anceList = new ArrayList<>(ances.length);
             for (int i = 0; i < ances.length; i++) {

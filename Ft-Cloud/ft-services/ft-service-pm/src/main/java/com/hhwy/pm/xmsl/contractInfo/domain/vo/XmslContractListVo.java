@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 @Data
-public class XmslContractListVo {
+public class XmslContractListVo extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -24,7 +25,7 @@ public class XmslContractListVo {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键")
-    private Long id;
+    private String id;
     /**
      * 字段描述：主表id（xmsl_contract_payinfo）
      */
@@ -271,4 +272,5 @@ public class XmslContractListVo {
     private String ptVar5;
 
     private List<XmslContractListVo> children;
+
 }

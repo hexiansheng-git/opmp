@@ -1,22 +1,29 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractListMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author ldd
@@ -68,7 +75,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     @Transactional
     public int insertXmslContractList(XmslContractList xmslContractList) {
-        xmslContractList.setId(IdWorker.createId());
+        xmslContractList.setId(IdWorker.createId()+"");
         xmslContractList.setCreateUser(SecurityUtils.getUserName());
         xmslContractList.setCreateTime(DateUtils.getNowDate());
         return xmslContractListMapper.insertXmslContractList(xmslContractList);
@@ -109,9 +116,9 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
      * @param updateList
      */
     private void recursionSubset(XmslContractListVo xmslContractList, List<XmslContractListVo> insertList, List<XmslContractListVo> updateList) {
-        Long id = xmslContractList.getId();
+        String id =xmslContractList.getId() ;
         if (id == null) {
-            id = IdWorker.createId();
+            id = IdWorker.createId()+"";
             xmslContractList.setId(id);
             xmslContractList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             xmslContractList.setCreateUserName(SecurityUtils.getUserName());
@@ -126,17 +133,54 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         List<XmslContractListVo> children = xmslContractList.getChildren();
         if (!CollectionUtils.isEmpty(children)) {
             for (XmslContractListVo child : children) {
-                child.setPid(id);
+                child.setPid(Long.valueOf(id));
                 this.recursionSubset(child, insertList, updateList);
             }
         }
     }
 
     @Transactional
-    public int updateXmslContractList(XmslContractList xmslContractList) {
-        xmslContractList.setUpdateUser(SecurityUtils.getUserName());
-        xmslContractList.setUpdateTime(DateUtils.getNowDate());
-        return xmslContractListMapper.updateXmslContractList(xmslContractList);
+    public void updateXmslContractList(XmslContractListDto dto) {
+        List<XmslContractListVo> list = dto.getList();
+        List<XmslContractListVo> addList = new ArrayList<>();
+        List<XmslContractListVo> updateList = new ArrayList<>();
+        //前端新增数据的ID都为uid,需要替换为后端生成的id
+        Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
+        list.parallelStream().forEach(temp->{
+            if(temp.getId().length()< 21){
+                new AddBaseInfoUtil<>().updateBaseEntity(temp);
+                updateList.add(temp);
+                return;
+            }
+            String id = getSnowId(temp.getId(),idRepalceMap);
+            temp.setId(id);
+//            //替换祖级id
+            String[] ances = temp.getAncestors().split(",");
+            List<String> anceList = new ArrayList<>(ances.length);
+            for (int i = 0; i < ances.length; i++) {
+                String snowId = getSnowId(ances[i],idRepalceMap);
+                anceList.add(snowId);
+            }
+            new AddBaseInfoUtil<>().addBaseEntity(temp);
+            String charStr = StringUtils.isBlank(temp.getAncestors())?"":",";
+            temp.setAncestors(temp.getAncestors()+charStr+temp.getId());
+            addList.add(temp);
+        });
+        if(CollectionUtils.isNotEmpty(addList))
+            this.xmslContractListMapper.insertXmslContractListList(addList);
+        if(CollectionUtils.isNotEmpty(updateList))
+            this.xmslContractListMapper.updateXmslContractListList(updateList);
+        //删除
+        if(StringUtils.isNotBlank(dto.getDelIds())){
+            this.xmslContractListMapper.deleteByIds(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
+        }
+    }
+
+    private String getSnowId(String id, Map<String, String> idRepalceMap) {
+        if(id.length() < 21)
+            return id;
+        String temp = idRepalceMap.get(id);
+        return temp == null?IdWorker.createId()+"":temp;
     }
 
 

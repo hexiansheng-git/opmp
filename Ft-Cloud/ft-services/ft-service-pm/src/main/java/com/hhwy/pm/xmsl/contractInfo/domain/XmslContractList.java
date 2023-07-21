@@ -34,7 +34,7 @@ public class XmslContractList extends BaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    private Long id;
+    private String id;
     /**
      * 字段描述：主表id（xmsl_contract_payinfo）
      */

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
@@ -97,8 +98,9 @@ public class XmslContractListController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractList:update")
     @PostMapping("/update")
-    public AjaxResult updateXmslContractList(@Validated(ValidationGroups.Update.class) @RequestBody XmslContractList xmslContractListParam) {
-        return toAjax(xmslContractListService.updateXmslContractList(xmslContractListParam));
+    public AjaxResult updateXmslContractList(@Validated(ValidationGroups.Update.class) @RequestBody XmslContractListDto dto) {
+        xmslContractListService.updateXmslContractList(dto);
+        return AjaxResult.success();
     }
 
 
@@ -123,7 +125,7 @@ public class XmslContractListController extends BaseController {
      * @param xmslContractListParam
      * @throws IOException
      */
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody XmslContractList xmslContractListParam) throws IOException {
         try{
              InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("template/exportXmslContractList.xlsx");
@@ -140,7 +142,7 @@ public class XmslContractListController extends BaseController {
      *
      * @throws IOException
      */
-    @GetMapping("/import")
+    @PostMapping("/import")
     public AjaxResult importDate(@RequestPart("file") MultipartFile file) {
         ExcelUtils<ImportXmslContractListVo> util = new ExcelUtils<>(ImportXmslContractListVo.class);
         try {
