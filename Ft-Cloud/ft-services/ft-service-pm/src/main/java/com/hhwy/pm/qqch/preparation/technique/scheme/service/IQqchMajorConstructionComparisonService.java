@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -9,7 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstruc
  */
 public interface IQqchMajorConstructionComparisonService {
 
-    QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList();
+    QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(BigDecimal version);
 
     void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo);
 }

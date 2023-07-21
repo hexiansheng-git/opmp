@@ -34,14 +34,15 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     @Autowired
     private QqchConstructionListMapper qqchConstructionListMapper;
 
-    public QqchDangerConstructionListVo getQqchDangerConstructionListList() {
+    public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version) {
         QqchDangerConstructionListVo vo = new QqchDangerConstructionListVo();
-
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_danger_construction_list");
-        vo.setVersion(maxVersion);
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_danger_construction_list");
+        }
+        vo.setVersion(version);
         QqchDangerConstructionList qryParam = new QqchDangerConstructionList();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchDangerConstructionList> list = qqchDangerConstructionListMapper
             .getQqchDangerConstructionListList(qryParam);
         vo.setList(list);
@@ -60,7 +61,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     @Transactional
     public void syncData() {
         // 获取当前数据库表数据
-        QqchDangerConstructionListVo dbVo = this.getQqchDangerConstructionListList();
+        QqchDangerConstructionListVo dbVo = this.getQqchDangerConstructionListList(null);
         List<QqchDangerConstructionList> dbList = dbVo.getList();
 
         // 获取方案清单最大版本号

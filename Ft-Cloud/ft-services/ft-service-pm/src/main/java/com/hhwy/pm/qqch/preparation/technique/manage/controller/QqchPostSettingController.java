@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,15 +30,15 @@ public class QqchPostSettingController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchPostSetting:list")
     @GetMapping("/getTechDeptList")
-    public AjaxResult getTechDeptList() {
-        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getQqchPostSettingList("1");
+    public AjaxResult getTechDeptList(BigDecimal version) {
+        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getQqchPostSettingList("1", version);
         return AjaxResult.success(qqchPostSettingVo);
     }
 
     @PreAuthorize(hasPermi = "qqchPostSetting:list")
     @GetMapping("/getWorkAreaList")
-    public AjaxResult getWorkAreaList() {
-        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getQqchPostSettingList("2");
+    public AjaxResult getWorkAreaList(BigDecimal version) {
+        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getQqchPostSettingList("2", version);
         return AjaxResult.success(qqchPostSettingVo);
     }
 

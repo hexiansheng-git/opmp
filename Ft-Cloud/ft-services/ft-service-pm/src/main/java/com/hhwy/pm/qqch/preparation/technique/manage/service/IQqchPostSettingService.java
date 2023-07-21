@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -9,7 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo
  */
 public interface IQqchPostSettingService {
 
-    QqchPostSettingVo getQqchPostSettingList(String PostType);
+    QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version);
 
     void batchSave(QqchPostSettingVo qqchPostSettingVo, String postType);
 }

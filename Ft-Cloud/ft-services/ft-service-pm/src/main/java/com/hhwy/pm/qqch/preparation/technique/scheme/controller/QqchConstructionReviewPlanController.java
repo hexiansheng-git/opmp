@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionReviewPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author zhenlili
+ * @author zhenglili
  * @date 2023-07-17 15:32:17
  * @remark 3.4.5施工方案编审计划
  */
@@ -29,9 +30,9 @@ public class QqchConstructionReviewPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchConstructionReviewPlan:list")
     @GetMapping("/getList")
-    public AjaxResult getList() {
+    public AjaxResult getList(BigDecimal version) {
         QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo = qqchConstructionReviewPlanService
-            .getQqchConstructionReviewPlanList();
+            .getQqchConstructionReviewPlanList(version);
         return AjaxResult.success(qqchConstructionReviewPlanVo);
     }
 

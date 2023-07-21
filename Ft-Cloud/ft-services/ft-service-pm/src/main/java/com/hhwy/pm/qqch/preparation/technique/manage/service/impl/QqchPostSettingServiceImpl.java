@@ -29,15 +29,16 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
     @Autowired
     private CommonMapper commonMapper;
 
-    public QqchPostSettingVo getQqchPostSettingList(String PostType) {
+    public QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version) {
         QqchPostSettingVo vo = new QqchPostSettingVo();
 
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_post_setting");
+        if (version == null) {
+            version = commonMapper.selectMaxVersion("qqch_post_setting");
+        }
 
         QqchPostSetting qqchPostSetting = new QqchPostSetting();
         qqchPostSetting.setPostType(PostType);
-        qqchPostSetting.setVersion(maxVersion);
+        qqchPostSetting.setVersion(version);
         List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSetting);
         vo.setTreeList(TreeUtil.build(list, null));
         return vo;
@@ -45,12 +46,6 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
     @Transactional
     public void batchSave(QqchPostSettingVo voParam, String postType) {
-        if (voParam.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_post_setting");
-            voParam.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchPostSetting deleteParam = new QqchPostSetting();
         deleteParam.setPostType(postType);

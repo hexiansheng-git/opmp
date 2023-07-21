@@ -22,9 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 /**
- * @author zhenlili
+ * @author zhenglili
  * @date 2023-07-17 15:32:17
- * @remark
+ * @remark 施工方案编审计划
  */
 @Service
 public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionReviewPlanService {
@@ -36,8 +36,14 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     @Autowired
     private CommonMapper commonMapper;
 
-    public QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList() {
+    public QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList(BigDecimal version) {
         QqchConstructionReviewPlanVo vo = new QqchConstructionReviewPlanVo();
+
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_construction_review_plan");
+        }
+        vo.setVersion(version);
 
         List<QqchConstructionReviewPlan> onePlanList = this.getPlanListBySchemeLevel("1");
         List<QqchConstructionReviewPlan> twoPlanList = this.getPlanListBySchemeLevel("2");
@@ -72,10 +78,10 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     @Transactional
     public void syncData() {
         // 获取当前数据库表数据
-        List<QqchConstructionReviewPlan> dbList = this.getQqchConstructionReviewPlanList().getList();
+        List<QqchConstructionReviewPlan> dbList = this.getQqchConstructionReviewPlanList(null).getList();
 
         // 获取方案清单数据
-        QqchConstructionListVo listVo = qqchConstructionListService.getQqchConstructionListList();
+        QqchConstructionListVo listVo = qqchConstructionListService.getQqchConstructionListList(null);
 
         // 构造新的list
         List<QqchConstructionReviewPlan> insertList = new ArrayList<>();
@@ -110,12 +116,6 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
     @Transactional
     public void batchSave(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
-        if (qqchConstructionReviewPlanVo.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_review_plan");
-            qqchConstructionReviewPlanVo.setVersion(maxVersion);
-        }
-
         if (CollectionUtils.isEmpty(qqchConstructionReviewPlanVo.getList())) {
             return;
         }
@@ -159,6 +159,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
     /**
      * 确认
+     *
      * @param qqchConstructionReviewPlanVo
      * @return
      */

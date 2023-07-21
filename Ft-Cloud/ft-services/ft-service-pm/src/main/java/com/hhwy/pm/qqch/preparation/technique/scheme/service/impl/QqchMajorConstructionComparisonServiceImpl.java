@@ -29,15 +29,16 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
     @Autowired
     private CommonMapper commonMapper;
 
-    public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList() {
+    public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(BigDecimal version) {
         QqchMajorConstructionComparisonVo vo = new QqchMajorConstructionComparisonVo();
-
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_major_construction_comparison");
-        vo.setVersion(maxVersion);
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_major_construction_comparison");
+        }
+        vo.setVersion(version);
 
         QqchMajorConstructionComparison qryParam = new QqchMajorConstructionComparison();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper
             .getQqchMajorConstructionComparisonList(qryParam);
         vo.setTreeList(TreeUtil.build(list, null));
@@ -46,12 +47,6 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
 
     @Transactional
     public void batchSave(QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo) {
-        if (qqchMajorConstructionComparisonVo.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_major_construction_comparison");
-            qqchMajorConstructionComparisonVo.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchMajorConstructionComparison deleteParam = new QqchMajorConstructionComparison();
         deleteParam.setVersion(qqchMajorConstructionComparisonVo.getVersion());

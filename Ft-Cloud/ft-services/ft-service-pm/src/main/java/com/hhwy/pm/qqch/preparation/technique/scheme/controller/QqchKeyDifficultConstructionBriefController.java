@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author zhenlili
+ * @author zhenglili
  * @date 2023-07-17 15:29:49
  * @remark 3.4.4重难点分项施工方案简述
  */
@@ -29,9 +30,9 @@ public class QqchKeyDifficultConstructionBriefController extends BaseController 
 
     @PreAuthorize(hasPermi = "qqchKeyDifficultConstructionBrief:list")
     @GetMapping("/getList")
-    public AjaxResult getList() {
+    public AjaxResult getList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo qqchKeyDifficultConstructionBriefVo = qqchKeyDifficultConstructionBriefService
-            .getQqchKeyDifficultConstructionBriefList();
+            .getQqchKeyDifficultConstructionBriefList(version);
         return AjaxResult.success(qqchKeyDifficultConstructionBriefVo);
     }
 

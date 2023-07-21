@@ -33,14 +33,16 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Autowired
     private GenCodeService genCodeService;
 
-    public QqchConstructionListVo getQqchConstructionListList() {
+    public QqchConstructionListVo getQqchConstructionListList(BigDecimal version) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
-        vo.setVersion(maxVersion);
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_construction_list");
+        }
+        vo.setVersion(version);
 
         QqchConstructionList qryParam = new QqchConstructionList();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
         vo.setList(list);
         return vo;
@@ -48,12 +50,6 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
-        if (qqchConstructionListVo.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
-            qqchConstructionListVo.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchConstructionList deleteParam = new QqchConstructionList();
         deleteParam.setVersion(qqchConstructionListVo.getVersion());

@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionLi
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +39,9 @@ public class QqchConstructionListController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchConstructionList:list")
     @GetMapping("/getList")
-    public AjaxResult getList() {
-        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList();
+    public AjaxResult getList(BigDecimal version) {
+        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
+            .getQqchConstructionListList(version);
         return AjaxResult.success(qqchConstructionListVo);
     }
 
@@ -52,8 +54,9 @@ public class QqchConstructionListController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response) throws IOException {
-        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList();
+    public void export(HttpServletResponse response, BigDecimal version) throws IOException {
+        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
+            .getQqchConstructionListList(version);
         List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
         ExcelUtils<QqchConstructionList> util = new ExcelUtils<>(QqchConstructionList.class);
         util.exportExcel(response, qqchConstructionListList, DateUtils.getDate());

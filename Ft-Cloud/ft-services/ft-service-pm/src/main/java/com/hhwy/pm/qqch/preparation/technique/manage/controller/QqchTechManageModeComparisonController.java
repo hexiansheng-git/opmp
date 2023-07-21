@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchTechManageModeComparisonService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +30,9 @@ public class QqchTechManageModeComparisonController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchTechManageModeComparison:list")
     @GetMapping("/getList")
-    public AjaxResult getList() {
+    public AjaxResult getList(BigDecimal version) {
         QqchTechManageModeComparisonVo qqchTechManageModeComparisonVo = qqchTechManageModeComparisonService
-            .getQqchTechManageModeComparisonList();
+            .getQqchTechManageModeComparisonList(version);
         return AjaxResult.success(qqchTechManageModeComparisonVo);
     }
 

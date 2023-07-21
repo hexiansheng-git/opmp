@@ -35,15 +35,16 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
      * @param
      * @return
      */
-    public QqchContractTechStandardIdentifyVo getTreeList() {
+    public QqchContractTechStandardIdentifyVo getTreeList(BigDecimal version) {
         QqchContractTechStandardIdentifyVo vo = new QqchContractTechStandardIdentifyVo();
-
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
-        vo.setVersion(maxVersion);
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
+        }
+        vo.setVersion(version);
 
         QqchContractTechStandardIdentify qryParam = new QqchContractTechStandardIdentify();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qryParam);
         vo.setTreeList(TreeUtil.build(list, null));
@@ -57,12 +58,6 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
      */
     @Transactional
     public void batchSave(QqchContractTechStandardIdentifyVo voParam) {
-        if (voParam.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
-            voParam.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchContractTechStandardIdentify deleteParam = new QqchContractTechStandardIdentify();
         deleteParam.setVersion(voParam.getVersion());

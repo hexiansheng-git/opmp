@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstru
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,9 @@ public class QqchDangerConstructionListController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchDangerConstructionList:list")
     @GetMapping("/getList")
-    public AjaxResult getList() {
+    public AjaxResult getList(BigDecimal version) {
         QqchDangerConstructionListVo qqchDangerConstructionListVo = qqchDangerConstructionListService
-            .getQqchDangerConstructionListList();
+            .getQqchDangerConstructionListList(version);
         return AjaxResult.success(qqchDangerConstructionListVo);
     }
 
@@ -62,10 +63,10 @@ public class QqchDangerConstructionListController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchDangerConstructionList qqchDangerConstructionListParam)
+    public void export(HttpServletResponse response, BigDecimal version)
         throws IOException {
         QqchDangerConstructionListVo qqchDangerConstructionListVo = qqchDangerConstructionListService
-            .getQqchDangerConstructionListList();
+            .getQqchDangerConstructionListList(version);
         ExcelUtils<QqchDangerConstructionList> util = new ExcelUtils<>(QqchDangerConstructionList.class);
         util.exportExcel(response, qqchDangerConstructionListVo.getList(), DateUtils.getDate());
     }

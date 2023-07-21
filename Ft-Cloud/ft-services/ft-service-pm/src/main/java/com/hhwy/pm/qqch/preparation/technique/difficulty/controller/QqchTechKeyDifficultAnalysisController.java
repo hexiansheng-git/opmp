@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.service.IQqchTechKeyDifficultAnalysisService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,9 +36,9 @@ public class QqchTechKeyDifficultAnalysisController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchTechKeyDifficultAnalysis:list")
     @GetMapping("/getList")
-    public AjaxResult getList() {
+    public AjaxResult getList(BigDecimal version) {
         QqchTechKeyDifficultAnalysisVo qqchTechKeyDifficultAnalysisList = qqchTechKeyDifficultAnalysisService
-            .getQqchTechKeyDifficultAnalysisList();
+            .getQqchTechKeyDifficultAnalysisList(version);
         return AjaxResult.success(qqchTechKeyDifficultAnalysisList);
     }
 

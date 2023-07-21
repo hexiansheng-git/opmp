@@ -35,15 +35,15 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
      * @param
      * @return
      */
-    public QqchContractTechAchievementIdentifyVo getTreeList() {
+    public QqchContractTechAchievementIdentifyVo getTreeList(BigDecimal version) {
         QqchContractTechAchievementIdentifyVo vo = new QqchContractTechAchievementIdentifyVo();
-
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_achievement_identify");
-        vo.setVersion(maxVersion);
+        if (version == null) {
+            version = commonMapper.selectMaxVersion("qqch_contract_tech_achievement_identify");
+        }
+        vo.setVersion(version);
 
         QqchContractTechAchievementIdentify qryParam = new QqchContractTechAchievementIdentify();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchContractTechAchievementIdentify> list = qqchContractTechAchievementIdentifyMapper
             .getQqchContractTechAchievementIdentifyList(qryParam);
         vo.setTreeList(TreeUtil.build(list, null));
@@ -52,12 +52,6 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
 
     @Transactional
     public void batchSave(QqchContractTechAchievementIdentifyVo voParam) {
-        if (voParam.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_contract_tech_achievement_identify");
-            voParam.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchContractTechAchievementIdentify deleteParam = new QqchContractTechAchievementIdentify();
         deleteParam.setVersion(voParam.getVersion());

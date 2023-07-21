@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.difficulty.service;
 
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -9,7 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDi
  */
 public interface IQqchTechKeyDifficultAnalysisService {
 
-    QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList();
+    QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(BigDecimal version);
 
     void batchSave(QqchTechKeyDifficultAnalysisVo qqchTechKeyDifficultAnalysisVo);
 }

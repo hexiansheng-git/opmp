@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -11,7 +12,7 @@ import java.util.List;
  */
 public interface IQqchDangerConstructionListService {
 
-    QqchDangerConstructionListVo getQqchDangerConstructionListList();
+    QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version);
 
     int updateQqchDangerConstructionListList(List<QqchDangerConstructionList> qqchDangerConstructionListList);
 

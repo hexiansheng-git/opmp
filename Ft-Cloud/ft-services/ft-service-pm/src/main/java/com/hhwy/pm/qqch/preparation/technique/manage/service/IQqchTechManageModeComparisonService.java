@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -9,7 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageMod
  */
 public interface IQqchTechManageModeComparisonService {
 
-    QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList();
+    QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version);
 
     void batchSave(QqchTechManageModeComparisonVo qqchTechManageModeComparisonVo);
 }

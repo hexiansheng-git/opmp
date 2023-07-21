@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 /**
- * @author zhenlili
+ * @author zhenglili
  * @date 2023-07-17 15:29:49
  * @remark 3.4.4重难点分项施工方案简述
  */
@@ -29,15 +29,16 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
     @Autowired
     private CommonMapper commonMapper;
 
-    public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList() {
+    public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo vo = new QqchKeyDifficultConstructionBriefVo();
-
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
-        vo.setVersion(maxVersion);
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
+        }
+        vo.setVersion(version);
 
         QqchKeyDifficultConstructionBrief qryParam = new QqchKeyDifficultConstructionBrief();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchKeyDifficultConstructionBrief> list = qqchKeyDifficultConstructionBriefMapper
             .getQqchKeyDifficultConstructionBriefList(qryParam);
         vo.setList(list);
@@ -46,11 +47,6 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
 
     @Transactional
     public void batchSave(QqchKeyDifficultConstructionBriefVo qqchKeyDifficultConstructionBriefVo) {
-        if (qqchKeyDifficultConstructionBriefVo.getVersion() == null) {
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
-            qqchKeyDifficultConstructionBriefVo.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchKeyDifficultConstructionBrief deleteParam = new QqchKeyDifficultConstructionBrief();
         deleteParam.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());

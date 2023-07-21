@@ -29,13 +29,14 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
     @Autowired
     private CommonMapper commonMapper;
 
-    public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList() {
+    public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_manage_mode_comparison");
+        if (version == null) {
+            version = commonMapper.selectMaxVersion("qqch_tech_manage_mode_comparison");
+        }
 
         QqchTechManageModeComparison qryParam = new QqchTechManageModeComparison();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchTechManageModeComparison> list = qqchTechManageModeComparisonMapper
             .getQqchTechManageModeComparisonList(qryParam);
         vo.setList(list);
@@ -44,12 +45,6 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
 
     @Transactional
     public void batchSave(QqchTechManageModeComparisonVo voParam) {
-        if (voParam.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_manage_mode_comparison");
-            voParam.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchTechManageModeComparison deleteParam = new QqchTechManageModeComparison();
         deleteParam.setVersion(voParam.getVersion());

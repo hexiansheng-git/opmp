@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechStandardIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,9 +36,9 @@ public class QqchContractTechStandardIdentifyController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchContractTechStandardIdentify:list")
     @GetMapping("/getTreeList")
-    public AjaxResult getTreeList() {
+    public AjaxResult getTreeList(BigDecimal version) {
         QqchContractTechStandardIdentifyVo qqchContractTechStandardIdentifyVo = qqchContractTechStandardIdentifyService
-            .getTreeList();
+            .getTreeList(version);
         return AjaxResult.success(qqchContractTechStandardIdentifyVo);
     }
 

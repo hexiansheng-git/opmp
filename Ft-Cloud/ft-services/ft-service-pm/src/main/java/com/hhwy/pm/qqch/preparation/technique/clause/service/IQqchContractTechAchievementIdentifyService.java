@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.clause.service;
 
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechAchievementIdentifyVo;
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -9,7 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechA
  */
 public interface IQqchContractTechAchievementIdentifyService {
 
-    QqchContractTechAchievementIdentifyVo getTreeList();
+    QqchContractTechAchievementIdentifyVo getTreeList(BigDecimal version);
 
     void batchSave(QqchContractTechAchievementIdentifyVo qqchContractTechAchievementIdentifyVo);
 }

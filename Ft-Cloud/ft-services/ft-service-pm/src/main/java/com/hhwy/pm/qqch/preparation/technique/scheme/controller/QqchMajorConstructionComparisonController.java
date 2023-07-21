@@ -6,6 +6,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
 import com.hhwy.utils.validation.ValidationGroups;
+import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,9 +30,9 @@ public class QqchMajorConstructionComparisonController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchMajorConstructionComparison:list")
     @GetMapping("/getTreeList")
-    public AjaxResult getTreeList() {
+    public AjaxResult getTreeList(BigDecimal version) {
         QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo = qqchMajorConstructionComparisonService
-            .getQqchMajorConstructionComparisonList();
+            .getQqchMajorConstructionComparisonList(version);
         return AjaxResult.success(qqchMajorConstructionComparisonVo);
     }
 

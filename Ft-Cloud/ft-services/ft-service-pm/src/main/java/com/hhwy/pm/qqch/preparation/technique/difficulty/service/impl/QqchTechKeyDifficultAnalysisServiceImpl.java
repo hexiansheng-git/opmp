@@ -30,14 +30,16 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
     @Autowired
     private CommonMapper commonMapper;
 
-    public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList() {
+    public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(BigDecimal version) {
         QqchTechKeyDifficultAnalysisVo keyDifficultAnalysisVo = new QqchTechKeyDifficultAnalysisVo();
-
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
+        if (version == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
+        }
+        keyDifficultAnalysisVo.setVersion(version);
 
         QqchTechKeyDifficultAnalysis qryParam = new QqchTechKeyDifficultAnalysis();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         List<QqchTechKeyDifficultAnalysis> list = qqchTechKeyDifficultAnalysisMapper
             .getQqchTechKeyDifficultAnalysisList(qryParam);
 
@@ -62,12 +64,6 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
     @Transactional
     public void batchSave(QqchTechKeyDifficultAnalysisVo voParam) {
-        if (voParam.getVersion() == null) {
-            // 获取最大版本号
-            BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
-            voParam.setVersion(maxVersion);
-        }
-
         // 先批量删除当前版本所有数据
         QqchTechKeyDifficultAnalysis deleteParam = new QqchTechKeyDifficultAnalysis();
         deleteParam.setVersion(voParam.getVersion());
