@@ -1,4 +1,4 @@
-package com.hhwy.pm.common;
+package com.hhwy.pm.common.controller;
 
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -39,6 +39,17 @@ public class CommonController {
             e.printStackTrace();
             throw new BaseException("查询项目异常");
         }
+    }
+
+    /**
+     * 检验菜单是否有编辑权限
+     * @param menuId
+     * @return
+     */
+    @GetMapping("checkIsEditable")
+    public AjaxResult checkIsEditable(String menuId){
+        boolean isEditable = commonService.checkIsEditable(menuId);
+        return AjaxResult.success(isEditable);
     }
 
 }

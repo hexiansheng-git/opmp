@@ -70,25 +70,6 @@ public class ListTreeUtil {
         return resultList;
     }
 
-    /**
-     * 树形列表转线性列表(并把第一层pid转为null)
-     * @param source 数据源
-     * @param setId 如何设置id
-     * @param setPid 如何设置pid
-     * @param getChildren 如何拿到子节点列表
-     * @param setChildren 如何设置子节点列表
-     * @param <T> 节点类型
-     * @return
-     */
-    public static <T> List<T> formatListPidNull(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
-        List<T> resultList = new ArrayList<>();
-        for (T node : source) {
-            setPid.accept(node,null);
-            recur(node, resultList, setId, setPid, getChildren, setChildren);
-        }
-        return resultList;
-    }
-
     private static <T> void recur(T node, List<T> resultList, BiConsumer<T,Long> setId, BiConsumer<T,Long> setPid, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
         Long id = IdWorker.createId();
         setId.accept(node,id);
@@ -141,6 +122,43 @@ public class ListTreeUtil {
                 setSort.accept(child,sort++);
                 recur(child, resultList, setId, setPid, setSort, getChildren, setChildren);
             }
+        }
+    }
+
+
+    /**
+     * 树形列表转线性列表(并把第一层pid转为null，把叶子节点标识加到ptVar1里面)
+     * @param source 数据源
+     * @param setId 如何设置id
+     * @param setPid 如何设置pid
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T> 节点类型
+     * @return
+     */
+    public static <T> List<T> formatListPidNull(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, BiConsumer<T,String> setPtVar1, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        for (T node : source) {
+            setPid.accept(node,null);
+            recurnew(node, resultList, setId, setPid,setPtVar1, getChildren, setChildren);
+        }
+        return resultList;
+    }
+    private static <T> void recurnew(T node, List<T> resultList, BiConsumer<T,Long> setId, BiConsumer<T,Long> setPid,BiConsumer<T,String> setPtVar1, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        Long id = IdWorker.createId();
+        setId.accept(node,id);
+        resultList.add(node);
+
+        List<T> children = getChildren.apply(node);
+        setChildren.accept(node, null);
+
+        if (!CollectionUtils.isEmpty(children)) {
+            for (T child : children) {
+                setPid.accept(child, id);
+                recurnew(child, resultList, setId, setPid, setPtVar1, getChildren, setChildren);
+            }
+        } else {
+            setPtVar1.accept(node,"1");//是叶子节点
         }
     }
 }

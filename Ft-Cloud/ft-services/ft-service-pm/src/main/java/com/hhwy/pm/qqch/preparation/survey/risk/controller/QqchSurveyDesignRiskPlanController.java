@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-13 11:39:34
@@ -30,8 +32,8 @@ public class QqchSurveyDesignRiskPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:list")
     @GetMapping("/list")
-    public AjaxResult getQqchSurveyDesignRiskPlanVo() {
-        QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = qqchSurveyDesignRiskPlanService.getQqchSurveyDesignRiskPlanVo();
+    public AjaxResult getQqchSurveyDesignRiskPlanVo(BigDecimal version) {
+        QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = qqchSurveyDesignRiskPlanService.getQqchSurveyDesignRiskPlanVo(version);
         return AjaxResult.success(qqchSurveyDesignRiskPlanVo);
     }
 

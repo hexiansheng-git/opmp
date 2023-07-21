@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-07 18:35:34
@@ -31,8 +33,8 @@ public class QqchChangeProcedurePlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:list")
     @GetMapping("/list")
-    public AjaxResult getQqchChangeProcedurePlanVo() {
-        QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = qqchChangeProcedurePlanService.getQqchChangeProcedurePlanVo();
+    public AjaxResult getQqchChangeProcedurePlanVo(BigDecimal version) {
+        QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = qqchChangeProcedurePlanService.getQqchChangeProcedurePlanVo(version);
         return AjaxResult.success(qqchChangeProcedurePlanVo);
     }
 

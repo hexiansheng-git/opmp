@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-07 18:35:50
@@ -30,8 +32,8 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:list")
     @GetMapping("/treeList")
-    public AjaxResult getQqchOptimizeChangeOrganizationVo() {
-        QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = qqchOptimizeChangeOrganizationService.getQqchOptimizeChangeOrganizationVo();
+    public AjaxResult getQqchOptimizeChangeOrganizationVo(BigDecimal version) {
+        QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = qqchOptimizeChangeOrganizationService.getQqchOptimizeChangeOrganizationVo(version);
         return AjaxResult.success(qqchOptimizeChangeOrganizationVo);
     }
 
@@ -44,7 +46,7 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo) {
         qqchOptimizeChangeOrganizationService.save(qqchOptimizeChangeOrganizationVo);
-        return AjaxResult.success(qqchOptimizeChangeOrganizationVo);
+        return AjaxResult.success();
     }
 
     /**

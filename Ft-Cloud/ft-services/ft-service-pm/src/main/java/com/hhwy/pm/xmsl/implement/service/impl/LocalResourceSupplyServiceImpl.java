@@ -11,11 +11,11 @@ import com.hhwy.pm.xmsl.implement.mapper.XmslLocalMaterialsSupplyMapper;
 import com.hhwy.pm.xmsl.implement.mapper.XmslLocalWorkerSupplyMapper;
 import com.hhwy.pm.xmsl.implement.service.ILocalResourceSupplyService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -58,82 +58,54 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
 
     @Transactional
     public void save(LocalResourceSupply localResourceSupply) {
+        // 先清库旧数据，当地工人供应情况
+        XmslLocalWorkerSupply workerDeleteParam = new XmslLocalWorkerSupply();
+        workerDeleteParam.setDelFlag("1");
+        xmslLocalWorkerSupplyMapper.updateXmslLocalWorkerSupply(workerDeleteParam);
+
+        // 先清库旧数据，当地物资供应情况
+        XmslLocalMaterialsSupply materialsDeleteParam = new XmslLocalMaterialsSupply();
+        materialsDeleteParam.setDelFlag("1");
+        xmslLocalMaterialsSupplyMapper.updateXmslLocalMaterialsSupply(materialsDeleteParam);
+
+        // 先清库旧数据，当地设备供应情况
+        XmslLocalEquipmentSupply equipmentDeleteParam = new XmslLocalEquipmentSupply();
+        equipmentDeleteParam.setDelFlag("1");
+        xmslLocalEquipmentSupplyMapper.updateXmslLocalEquipmentSupply(equipmentDeleteParam);
 
         // 当地工人供应情况集合
-        if (localResourceSupply.getLocalWorkerSupplyList() != null
-            && localResourceSupply.getLocalWorkerSupplyList().size() != 0) {
-            List<XmslLocalWorkerSupply> insertWorkerList = new ArrayList<>();
-            List<XmslLocalWorkerSupply> updateWorkerList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(localResourceSupply.getLocalWorkerSupplyList())) {
             for (XmslLocalWorkerSupply work : localResourceSupply.getLocalWorkerSupplyList()) {
-                if (work.getId() == null) {
-                    work.setId(IdWorker.createId());
-                    work.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    work.setCreateUserName(SecurityUtils.getUserName());
-                    work.setCreateTime(DateUtils.getNowDate());
-                    insertWorkerList.add(work);
-                } else {
-                    work.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    work.setUpdateTime(DateUtils.getNowDate());
-                    updateWorkerList.add(work);
-                }
+                work.setId(IdWorker.createId());
+                work.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                work.setCreateUserName(SecurityUtils.getUserName());
+                work.setCreateTime(DateUtils.getNowDate());
             }
-            if (insertWorkerList.size() > 0) {
-                xmslLocalWorkerSupplyMapper.insertXmslLocalWorkerSupplyList(insertWorkerList);
-            }
-            if (updateWorkerList.size() > 0) {
-                xmslLocalWorkerSupplyMapper.updateXmslLocalWorkerSupplyList(updateWorkerList);
-            }
-
+            xmslLocalWorkerSupplyMapper.insertXmslLocalWorkerSupplyList(localResourceSupply.getLocalWorkerSupplyList());
         }
 
         // 当地物资供应情况集合
-        if (localResourceSupply.getLocalMaterialsSupplyList() != null
-            && localResourceSupply.getLocalMaterialsSupplyList().size() != 0) {
-            List<XmslLocalMaterialsSupply> insertMaterialsList = new ArrayList<>();
-            List<XmslLocalMaterialsSupply> updateMaterialsList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(localResourceSupply.getLocalMaterialsSupplyList())) {
             for (XmslLocalMaterialsSupply materials : localResourceSupply.getLocalMaterialsSupplyList()) {
-                if (materials.getId() == null) {
-                    materials.setId(IdWorker.createId());
-                    materials.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    materials.setCreateTime(DateUtils.getNowDate());
-                    insertMaterialsList.add(materials);
-                } else {
-                    materials.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    materials.setUpdateTime(DateUtils.getNowDate());
-                    updateMaterialsList.add(materials);
-                }
+                materials.setId(IdWorker.createId());
+                materials.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                materials.setCreateUserName(SecurityUtils.getUserName());
+                materials.setCreateTime(DateUtils.getNowDate());
             }
-            if (insertMaterialsList.size() > 0) {
-                xmslLocalMaterialsSupplyMapper.insertXmslLocalMaterialsSupplyList(insertMaterialsList);
-            }
-            if (updateMaterialsList.size() > 0) {
-                xmslLocalMaterialsSupplyMapper.updateXmslLocalMaterialsSupplyList(updateMaterialsList);
-            }
+            xmslLocalMaterialsSupplyMapper
+                .insertXmslLocalMaterialsSupplyList(localResourceSupply.getLocalMaterialsSupplyList());
         }
 
         // 当地设备供应情况集合
-        if (localResourceSupply.getLocalEquipmentSupplyList() != null
-            && localResourceSupply.getLocalEquipmentSupplyList().size() != 0) {
-            List<XmslLocalEquipmentSupply> insertEquipmentList = new ArrayList<>();
-            List<XmslLocalEquipmentSupply> updateEquipmentList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(localResourceSupply.getLocalEquipmentSupplyList())) {
             for (XmslLocalEquipmentSupply equipment : localResourceSupply.getLocalEquipmentSupplyList()) {
-                if (equipment.getId() == null) {
-                    equipment.setId(IdWorker.createId());
-                    equipment.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    equipment.setCreateTime(DateUtils.getNowDate());
-                    insertEquipmentList.add(equipment);
-                } else {
-                    equipment.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    equipment.setUpdateTime(DateUtils.getNowDate());
-                    updateEquipmentList.add(equipment);
-                }
+                equipment.setId(IdWorker.createId());
+                equipment.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                equipment.setCreateUserName(SecurityUtils.getUserName());
+                equipment.setCreateTime(DateUtils.getNowDate());
             }
-            if (insertEquipmentList.size() > 0) {
-                xmslLocalEquipmentSupplyMapper.insertXmslLocalEquipmentSupplyList(insertEquipmentList);
-            }
-            if (updateEquipmentList.size() > 0) {
-                xmslLocalEquipmentSupplyMapper.updateXmslLocalEquipmentSupplyList(updateEquipmentList);
-            }
+            xmslLocalEquipmentSupplyMapper
+                .insertXmslLocalEquipmentSupplyList(localResourceSupply.getLocalEquipmentSupplyList());
         }
     }
 

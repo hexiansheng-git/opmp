@@ -13,8 +13,10 @@
         <result property="planEstablishDirector" column="plan_establish_director"/>
         <result property="planEstablishDirectorId" column="plan_establish_director_id"/>
         <result property="planDominantUnit" column="plan_dominant_unit"/>
+        <result property="planDominantUnitId" column="plan_dominant_unit_id"/>
         <result property="contactWay" column="contact_way"/>
         <result property="planApprovalUnit" column="plan_approval_unit"/>
+        <result property="planApprovalUnitId" column="plan_approval_unit_id"/>
         <result property="projectOverview" column="project_overview"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
@@ -48,8 +50,10 @@
         ,`plan_establish_director`
         ,`plan_establish_director_id`
         ,`plan_dominant_unit`
+        ,`plan_dominant_unit_id`
         ,`contact_way`
         ,`plan_approval_unit`
+        ,`plan_approval_unit_id`
         ,`project_overview`
         ,`file_group_id`
         ,`remark`
@@ -126,8 +130,10 @@
         ,`plan_establish_director`
         ,`plan_establish_director_id`
         ,`plan_dominant_unit`
+        ,`plan_dominant_unit_id`
         ,`contact_way`
         ,`plan_approval_unit`
+        ,`plan_approval_unit_id`
         ,`project_overview`
         ,`file_group_id`
         ,`remark`
@@ -206,8 +212,10 @@
             <if test="planEstablishDirector != null  and planEstablishDirector != ''">`plan_establish_director`,</if>
             <if test="planEstablishDirectorId != null ">`plan_establish_director_id`,</if>
             <if test="planDominantUnit != null  and planDominantUnit != ''">`plan_dominant_unit`,</if>
+            <if test="planDominantUnitId != null">`plan_dominant_unit_id`,</if>
             <if test="contactWay != null  and contactWay != ''">`contact_way`,</if>
             <if test="planApprovalUnit != null  and planApprovalUnit != ''">`plan_approval_unit`,</if>
+            <if test="planApprovalUnitId != null">`plan_approval_unit_id`,</if>
             <if test="projectOverview != null  and projectOverview != ''">`project_overview`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
@@ -239,8 +247,10 @@
             <if test="planEstablishDirector != null  and planEstablishDirector != ''">#{planEstablishDirector},</if>
             <if test="planEstablishDirectorId != null ">#{planEstablishDirectorId},</if>
             <if test="planDominantUnit != null  and planDominantUnit != ''">#{planDominantUnit},</if>
+            <if test="planDominantUnitId != null">#{planDominantUnitId},</if>
             <if test="contactWay != null  and contactWay != ''">#{contactWay},</if>
             <if test="planApprovalUnit != null  and planApprovalUnit != ''">#{planApprovalUnit},</if>
+            <if test="planApprovalUnitId != null">#{planApprovalUnitId},</if>
             <if test="projectOverview != null  and projectOverview != ''">#{projectOverview},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
@@ -277,8 +287,10 @@
             `plan_establish_director`,
             `plan_establish_director_id`,
             `plan_dominant_unit`,
+            `plan_dominant_unit_id`,
             `contact_way`,
             `plan_approval_unit`,
+            `plan_approval_unit_id`,
             `project_overview`,
             `file_group_id`,
             `remark`,
@@ -311,8 +323,10 @@
                 #{item.planEstablishDirector},
                 #{item.planEstablishDirectorId},
                 #{item.planDominantUnit},
+                #{item.planDominantUnitId},
                 #{item.contactWay},
                 #{item.planApprovalUnit},
+                #{item.planApprovalUnitId},
                 #{item.projectOverview},
                 #{item.fileGroupId},
                 #{item.remark},
@@ -351,9 +365,15 @@
             <if test="planDominantUnit != null  and  planDominantUnit != ''">`plan_dominant_unit` =
                 #{planDominantUnit},
             </if>
+            <if test="planDominantUnitId != null">`plan_dominant_unit_id` =
+                #{planDominantUnitId},
+            </if>
             <if test="contactWay != null  and  contactWay != ''">`contact_way` = #{contactWay},</if>
             <if test="planApprovalUnit != null  and  planApprovalUnit != ''">`plan_approval_unit` =
                 #{planApprovalUnit},
+            </if>
+            <if test="planApprovalUnitId != null">`plan_approval_unit_id` =
+                #{planApprovalUnitId},
             </if>
             <if test="projectOverview != null  and  projectOverview != ''">`project_overview` = #{projectOverview},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
@@ -420,6 +440,11 @@
                     when `id`=#{item.id} then #{item.planDominantUnit}
                 </foreach>
             </trim>
+            <trim prefix="plan_dominant_unit_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planDominantUnitId}
+                </foreach>
+            </trim>
             <trim prefix="contact_way  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.contactWay}
@@ -428,6 +453,11 @@
             <trim prefix="plan_approval_unit  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.planApprovalUnit}
+                </foreach>
+            </trim>
+            <trim prefix="plan_approval_unit_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planApprovalUnitId}
                 </foreach>
             </trim>
             <trim prefix="project_overview  = case" suffix="end,">

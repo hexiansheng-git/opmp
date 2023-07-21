@@ -66,7 +66,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/add")
-    public AjaxResult insertQqchWorkGroup(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkGroup qqchWorkGroupParam) {
+    public AjaxResult insertQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroupParam) {
         qqchWorkGroupService.insertQqchWorkGroup(qqchWorkGroupParam);
         return AjaxResult.success(qqchWorkGroupParam);
     }
@@ -77,8 +77,19 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/update")
-    public AjaxResult updateQqchWorkGroup(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkGroup qqchWorkGroupParam) {
+    public AjaxResult updateQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroupParam) {
         return toAjax(qqchWorkGroupService.updateQqchWorkGroup(qqchWorkGroupParam));
+    }
+
+    /**
+     * 提交
+     * @param qqchWorkGroup
+     * @return
+     */
+    @PostMapping("/submit")
+    public AjaxResult submit(@Validated({ValidationGroups.Update.class,ValidationGroups.Save.class}) @RequestBody QqchWorkGroup qqchWorkGroup) {
+        qqchWorkGroupService.submit(qqchWorkGroup);
+        return AjaxResult.success(qqchWorkGroup);
     }
 
     /**

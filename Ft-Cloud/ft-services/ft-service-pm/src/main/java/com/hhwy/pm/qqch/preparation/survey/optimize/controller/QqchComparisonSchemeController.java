@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-07 18:35:38
@@ -30,8 +32,8 @@ public class QqchComparisonSchemeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchComparisonScheme:list")
     @GetMapping("/list")
-    public AjaxResult getQqchComparisonSchemeVo() {
-        QqchComparisonSchemeVo qqchComparisonSchemeVo = qqchComparisonSchemeService.getQqchComparisonSchemeVo();
+    public AjaxResult getQqchComparisonSchemeVo(BigDecimal version) {
+        QqchComparisonSchemeVo qqchComparisonSchemeVo = qqchComparisonSchemeService.getQqchComparisonSchemeVo(version);
         return AjaxResult.success(qqchComparisonSchemeVo);
     }
 

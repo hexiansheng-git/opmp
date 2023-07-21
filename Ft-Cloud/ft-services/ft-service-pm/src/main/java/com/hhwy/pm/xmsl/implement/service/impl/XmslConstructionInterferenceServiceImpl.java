@@ -6,11 +6,11 @@ import com.hhwy.pm.xmsl.implement.domain.XmslConstructionInterference;
 import com.hhwy.pm.xmsl.implement.mapper.XmslConstructionInterferenceMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslConstructionInterferenceService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -31,30 +31,19 @@ public class XmslConstructionInterferenceServiceImpl implements
 
     @Transactional
     public void save(List<XmslConstructionInterference> xmslConstructionInterferenceList) {
-        if (xmslConstructionInterferenceList == null || xmslConstructionInterferenceList.size() == 0) {
-            return;
-        }
-        List<XmslConstructionInterference> insertList = new ArrayList<>();
-        List<XmslConstructionInterference> updateList = new ArrayList<>();
-        for (XmslConstructionInterference xmslConstructionInterference : xmslConstructionInterferenceList) {
-            if (xmslConstructionInterference.getId() == null) {
+        // 先清空旧数据
+        XmslConstructionInterference deleteParam = new XmslConstructionInterference();
+        deleteParam.setDelFlag("1");
+        xmslConstructionInterferenceMapper.updateXmslConstructionInterference(deleteParam);
+
+        if (!CollectionUtils.isEmpty(xmslConstructionInterferenceList)) {
+            for (XmslConstructionInterference xmslConstructionInterference : xmslConstructionInterferenceList) {
                 xmslConstructionInterference.setId(IdWorker.createId());
                 xmslConstructionInterference.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslConstructionInterference.setCreateUserName(SecurityUtils.getUserName());
                 xmslConstructionInterference.setCreateTime(DateUtils.getNowDate());
-                insertList.add(xmslConstructionInterference);
-            } else {
-                xmslConstructionInterference.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                xmslConstructionInterference.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(xmslConstructionInterference);
             }
-        }
-
-        if (insertList.size() > 0) {
-            xmslConstructionInterferenceMapper.insertXmslConstructionInterferenceList(insertList);
-        }
-        if (updateList.size() > 0) {
-            xmslConstructionInterferenceMapper.updateXmslConstructionInterferenceList(updateList);
+            xmslConstructionInterferenceMapper.insertXmslConstructionInterferenceList(xmslConstructionInterferenceList);
         }
     }
 

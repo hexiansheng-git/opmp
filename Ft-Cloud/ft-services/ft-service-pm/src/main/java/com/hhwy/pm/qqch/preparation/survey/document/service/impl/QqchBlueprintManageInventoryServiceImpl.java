@@ -38,11 +38,14 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
     /**
      * 勘察设计图纸管理清单Vo
      * @return
+     * @param version
      */
-    public QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo() {
+    public QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo(BigDecimal version) {
         QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = new QqchBlueprintManageInventoryVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_blueprint_manage_inventory");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_blueprint_manage_inventory");
+        }
         qqchBlueprintManageInventoryVo.setVersion(version);
 
         QqchBlueprintManageInventory qqchBlueprintManageInventory = new QqchBlueprintManageInventory();

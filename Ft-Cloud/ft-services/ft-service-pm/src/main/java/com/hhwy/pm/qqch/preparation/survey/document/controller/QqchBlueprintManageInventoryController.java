@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-13 11:40:34
@@ -29,8 +31,8 @@ public class QqchBlueprintManageInventoryController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:list")
     @GetMapping("/list")
-    public AjaxResult getQqchBlueprintManageInventoryList() {
-        QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = qqchBlueprintManageInventoryService.getQqchBlueprintManageInventoryVo();
+    public AjaxResult getQqchBlueprintManageInventoryList(BigDecimal version) {
+        QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = qqchBlueprintManageInventoryService.getQqchBlueprintManageInventoryVo(version);
         return AjaxResult.success(qqchBlueprintManageInventoryVo);
     }
 

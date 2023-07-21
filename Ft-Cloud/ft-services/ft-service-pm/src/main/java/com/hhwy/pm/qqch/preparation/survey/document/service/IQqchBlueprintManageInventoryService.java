@@ -1,9 +1,8 @@
 package com.hhwy.pm.qqch.preparation.survey.document.service;
 
-import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchBlueprintManageInventory;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchBlueprintManageInventoryVo;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * @author han
@@ -15,8 +14,9 @@ public interface IQqchBlueprintManageInventoryService {
     /**
      * 勘察设计图纸管理清单台账
      * @return
+     * @param version
      */
-    QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo();
+    QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo(BigDecimal version);
 
     /**
      * 保存

@@ -27,4 +27,6 @@ public interface QqchWorkPlanningBuildPlanMapper {
     int deleteQqchWorkPlanningBuildPlan(QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan);
 
     int deleteQqchWorkPlanningBuildPlanByPks(@Param("qqchWorkPlanningBuildPlanPkList") List<Long> qqchWorkPlanningBuildPlanPkList);
-    }
+
+    List<QqchWorkPlanningBuildPlan> getQqchWorkPlanningBuildPlanListHistory(QqchWorkPlanningBuildPlan plan);
+}

@@ -9,11 +9,11 @@ import com.hhwy.pm.xmsl.implement.mapper.XmslBadGeologySurveyMapper;
 import com.hhwy.pm.xmsl.implement.mapper.XmslMainTypicalGeologySurveyMapper;
 import com.hhwy.pm.xmsl.implement.service.IGeologicalConditionService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -48,59 +48,37 @@ public class GeologicalConditionServiceImpl implements IGeologicalConditionServi
 
     @Transactional
     public void save(GeologicalCondition geologicalCondition) {
+        // 先清空旧数据,主线典型地质勘察
+        XmslMainTypicalGeologySurvey mainDeleteParam = new XmslMainTypicalGeologySurvey();
+        mainDeleteParam.setDelFlag("1");
+        xmslMainTypicalGeologySurveyMapper.updateXmslMainTypicalGeologySurvey(mainDeleteParam);
+
+        // 先清空旧数据,不良地质调查
+        XmslBadGeologySurvey badDeleteParam = new XmslBadGeologySurvey();
+        badDeleteParam.setDelFlag("1");
+        xmslBadGeologySurveyMapper.updateXmslBadGeologySurvey(badDeleteParam);
 
         // 主线典型地质勘察
-        if (geologicalCondition.getMainTypicalGeologySurveyList() != null
-            && geologicalCondition.getMainTypicalGeologySurveyList().size() != 0) {
-            List<XmslMainTypicalGeologySurvey> insertMainList = new ArrayList<>();
-            List<XmslMainTypicalGeologySurvey> updateMainList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(geologicalCondition.getMainTypicalGeologySurveyList())) {
             for (XmslMainTypicalGeologySurvey main : geologicalCondition.getMainTypicalGeologySurveyList()) {
-                if (main.getId() == null) {
-                    main.setId(IdWorker.createId());
-                    main.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    main.setCreateUserName(SecurityUtils.getUserName());
-                    main.setCreateTime(DateUtils.getNowDate());
-                    insertMainList.add(main);
-                } else {
-                    main.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    main.setUpdateTime(DateUtils.getNowDate());
-                    updateMainList.add(main);
-                }
+                main.setId(IdWorker.createId());
+                main.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                main.setCreateUserName(SecurityUtils.getUserName());
+                main.setCreateTime(DateUtils.getNowDate());
             }
-            if (insertMainList.size() > 0) {
-                xmslMainTypicalGeologySurveyMapper.insertXmslMainTypicalGeologySurveyList(insertMainList);
-            }
-            if (updateMainList.size() > 0) {
-                xmslMainTypicalGeologySurveyMapper.updateXmslMainTypicalGeologySurveyList(updateMainList);
-            }
-
+            xmslMainTypicalGeologySurveyMapper
+                .insertXmslMainTypicalGeologySurveyList(geologicalCondition.getMainTypicalGeologySurveyList());
         }
 
         // 不良地质调查集合
-        if (geologicalCondition.getBadGeologySurveyList() != null
-            && geologicalCondition.getBadGeologySurveyList().size() != 0) {
-            List<XmslBadGeologySurvey> insertBadList = new ArrayList<>();
-            List<XmslBadGeologySurvey> updateBadList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(geologicalCondition.getBadGeologySurveyList())) {
             for (XmslBadGeologySurvey bad : geologicalCondition.getBadGeologySurveyList()) {
-                if (bad.getId() == null) {
-                    bad.setId(IdWorker.createId());
-                    bad.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    bad.setCreateUserName(SecurityUtils.getUserName());
-                    bad.setCreateTime(DateUtils.getNowDate());
-                    insertBadList.add(bad);
-                } else {
-                    bad.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    bad.setUpdateTime(DateUtils.getNowDate());
-                    updateBadList.add(bad);
-                }
+                bad.setId(IdWorker.createId());
+                bad.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                bad.setCreateUserName(SecurityUtils.getUserName());
+                bad.setCreateTime(DateUtils.getNowDate());
             }
-
-            if (insertBadList.size() > 0) {
-                xmslBadGeologySurveyMapper.insertXmslBadGeologySurveyList(insertBadList);
-            }
-            if (updateBadList.size() > 0) {
-                xmslBadGeologySurveyMapper.updateXmslBadGeologySurveyList(updateBadList);
-            }
+            xmslBadGeologySurveyMapper.insertXmslBadGeologySurveyList(geologicalCondition.getBadGeologySurveyList());
         }
     }
 

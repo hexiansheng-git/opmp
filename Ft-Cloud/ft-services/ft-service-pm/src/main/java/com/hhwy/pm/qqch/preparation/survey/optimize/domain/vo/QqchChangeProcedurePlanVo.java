@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo;
 
+import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +27,7 @@ public class QqchChangeProcedurePlanVo {
     /**
      * 字段描述：确认状态（0：未确认，1：已确认）
      */
-    private String confirmStatus;
+    private String confirmStatus = ConfirmStatus.UNCONFIRMED;
     /**
      * 字段描述：版本
      */

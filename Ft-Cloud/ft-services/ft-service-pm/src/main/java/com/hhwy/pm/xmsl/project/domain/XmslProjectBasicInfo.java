@@ -14,6 +14,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -53,6 +54,7 @@ public class XmslProjectBasicInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目名称")
+    @NotBlank(message = "请选择项目！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String projectName;
     /**
      * 字段描述：项目简称（中文）

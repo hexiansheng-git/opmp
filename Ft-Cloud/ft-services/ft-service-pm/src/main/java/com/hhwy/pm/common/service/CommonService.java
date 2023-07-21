@@ -52,4 +52,21 @@ public class CommonService {
         this.commonMapper.deleteDetailsByMainId(mainId, tableName);
     }
 
+    /**
+     * 检验菜单是否有编辑权限
+     * @param menuId 菜单id
+     * @return
+     */
+    public boolean checkIsEditable(String menuId) {
+        boolean isEditable = true;
+        //TODO 获取当前阶段
+
+        //TODO 获取当前登录人信息
+
+        //TODO 获取该菜单当前阶段的编制人信息
+
+        //TODO 获取该菜单当前阶段的确认状态
+
+        return isEditable;
+    }
 }

@@ -1,16 +1,20 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
-import com.hhwy.pm.qqch.preparation.survey.extend.mapper.QqchPreparationSurveyExtendMapper;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.impl.QqchPreparationSurveyExtendServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
@@ -20,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -36,21 +41,31 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     private QqchPreparationSurveyExtendServiceImpl qqchPreparationSurveyExtendService;
 
     @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
     private CommonMapper commonMapper;
 
 
     /**
      * 获取优化程序策划集合
      * @return
+     * @param version
      */
     @Override
-    public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo() {
+    public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo(BigDecimal version) {
         QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = new QqchOptimizeProcedurePlanVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_optimize_procedure_plan");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_optimize_procedure_plan");
+        }
         qqchOptimizeProcedurePlanVo.setVersion(version);
 
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList(version);
+        if(CollectionUtils.isEmpty(qqchOptimizeProcedurePlanList)){
+            //数据库中没有数据，需要初始化
+            qqchOptimizeProcedurePlanList = this.getInitializeData();
+        }
         qqchOptimizeProcedurePlanVo.setQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
 
         //获取附件组id（页面标识和版本号控制）
@@ -62,6 +77,28 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         //TODO 获取确认状态
 
         return qqchOptimizeProcedurePlanVo;
+    }
+
+    /**
+     * 获取初始化数据
+     * @return
+     */
+    public List<QqchOptimizeProcedurePlan> getInitializeData() {
+        List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = new ArrayList<>();
+
+        AjaxResult result = systemServiceApi.dictType(DictType.OPTIMIZE_PROCEDURE_PLAN_INITIALIZE);
+        List<Map<String,Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
+
+        for (Map<String, Object> map : dictDataList) {
+            String dictValue = (String) map.get("dictValue");
+            String dictLabel = (String) map.get("dictLabel");
+            QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan = new QqchOptimizeProcedurePlan();
+            qqchOptimizeProcedurePlan.setLinkName(dictLabel);
+            qqchOptimizeProcedurePlan.setWorkContent(dictValue);
+            qqchOptimizeProcedurePlanList.add(qqchOptimizeProcedurePlan);
+        }
+
+        return qqchOptimizeProcedurePlanList;
     }
 
     /**

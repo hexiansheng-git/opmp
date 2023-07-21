@@ -13,7 +13,7 @@ public class TreeUtil {
      */
     public static <T extends TreeNode<T>> List<T> build(List<T> treeNodes, Long pid) {
         if (CollectionUtils.isEmpty(treeNodes)) {
-            return null;
+            return new ArrayList<>();
         }
         treeNodes.stream().forEach(treeVO -> {
             treeVO.setChildren(

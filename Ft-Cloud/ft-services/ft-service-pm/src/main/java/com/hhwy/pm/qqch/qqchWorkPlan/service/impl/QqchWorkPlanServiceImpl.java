@@ -154,7 +154,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         List<QqchWorkPlanDetail> list = new ArrayList<>();
         List<SysMenu> menuList = JSONArray.parseArray(JSON.toJSONString(ajaxResult.get("data")), SysMenu.class);
         if (!ObjectNullUtil.isEmpty(menuList)) {
-            List<SysMenu> sysMenuList = ListTreeUtil.formatListPidNull(menuList,SysMenu::setMenuId,SysMenu::setParentId,SysMenu::getChildren, SysMenu::setChildren);
+            List<SysMenu> sysMenuList = ListTreeUtil.formatListPidNull(menuList,SysMenu::setMenuId,SysMenu::setParentId,SysMenu::setPtVar1,SysMenu::getChildren, SysMenu::setChildren);
             if (!ObjectNullUtil.isEmpty(sysMenuList)) {
                 sysMenuList.stream().forEach(item -> {
                     QqchWorkPlanDetail qqchWorkPlanDetail = new QqchWorkPlanDetail();
@@ -162,6 +162,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     qqchWorkPlanDetail.setItemId(item.getMenuId());
                     qqchWorkPlanDetail.setPid(item.getParentId());
                     qqchWorkPlanDetail.setItemName(item.getTitle());
+                    qqchWorkPlanDetail.setPtVar1(item.getPtVar1());
                     qqchWorkPlanDetail.setSort(item.getSortCode() != null ? item.getSortCode().intValue() : null);
                     list.add(qqchWorkPlanDetail);
                 });

@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-07 18:35:50
@@ -12,8 +14,9 @@ public interface IQqchOptimizeChangeOrganizationService {
     /**
      * 优化变更组织策划台账
      * @return
+     * @param version
      */
-    QqchOptimizeChangeOrganizationVo getQqchOptimizeChangeOrganizationVo();
+    QqchOptimizeChangeOrganizationVo getQqchOptimizeChangeOrganizationVo(BigDecimal version);
 
     /**
      * 保存

@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-07 18:35:53
@@ -12,8 +14,9 @@ public interface IQqchOptimizeProcedurePlanService {
     /**
      * 获取优化程序策划集合
      * @return
+     * @param version
      */
-    QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo();
+    QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo(BigDecimal version);
 
     /**
      * 保存

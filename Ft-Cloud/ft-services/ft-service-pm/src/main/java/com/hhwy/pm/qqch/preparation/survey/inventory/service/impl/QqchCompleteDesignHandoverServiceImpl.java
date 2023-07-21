@@ -33,11 +33,14 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     /**
      * 完整设计交接情况台账
      * @return
+     * @param version
      */
-    public QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo() {
+    public QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(BigDecimal version) {
         QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = new QqchCompleteDesignHandoverVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_complete_design_handover");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_complete_design_handover");
+        }
         qqchCompleteDesignHandoverVo.setVersion(version);
 
         QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();

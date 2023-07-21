@@ -12,7 +12,6 @@ import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedur
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMapper;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
 import com.hhwy.utils.tree.ListTreeUtil;
-import com.hhwy.utils.tree.TreeUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,11 +33,14 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
     /**
      * 获取管理程序Vo
      * @return
+     * @param version
      */
-    public QqchManageProcedureVo getQqchManageProcedureVo() {
+    public QqchManageProcedureVo getQqchManageProcedureVo(BigDecimal version) {
         QqchManageProcedureVo qqchManageProcedureVo = new QqchManageProcedureVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_manage_procedure");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_manage_procedure");
+        }
         qqchManageProcedureVo.setVersion(version);
 
         QqchManageProcedure qqchManageProcedure = new QqchManageProcedure();
@@ -46,7 +48,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
         List<QqchManageProcedure> qqchManageProcedureList = qqchManageProcedureMapper.getQqchManageProcedureList(qqchManageProcedure);
         List<QqchManageProcedure> treeList = ListTreeUtil.formatTree(
                 qqchManageProcedureList,
-                o -> o.getId() == null,
+                o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
                 QqchManageProcedure::getChildren,
                 QqchManageProcedure::setChildren);
@@ -89,7 +91,13 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
      */
     @Transactional
     public void insertQqchManageProcedureList(List<QqchManageProcedure> qqchManageProcedureList, BigDecimal version) {
-        List<QqchManageProcedure> insertList = TreeUtils.splitTreeList(qqchManageProcedureList);
+        List<QqchManageProcedure> insertList = ListTreeUtil.formatList(
+                qqchManageProcedureList,
+                QqchManageProcedure::setId,
+                QqchManageProcedure::setPid,
+                QqchManageProcedure::setSort,
+                QqchManageProcedure::getChildren,
+                QqchManageProcedure::setChildren);
         for (QqchManageProcedure qqchManageProcedure : insertList) {
             qqchManageProcedure.setVersion(version);
             qqchManageProcedure.setValid(Valid.NO);

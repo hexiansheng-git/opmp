@@ -1,9 +1,8 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service;
 
-import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPlanVo;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 /**
  * @author han
@@ -15,8 +14,9 @@ public interface IQqchSurveyDesignRiskPlanService {
     /**
      * 勘察设计风险策划Vo
      * @return
+     * @param version
      */
-    QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo();
+    QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(BigDecimal version);
 
     /**
      * 保存

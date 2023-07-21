@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-07 18:35:38
@@ -12,8 +14,9 @@ public interface IQqchComparisonSchemeService {
     /**
      * 获取方案集合
      * @return
+     * @param version
      */
-    QqchComparisonSchemeVo getQqchComparisonSchemeVo();
+    QqchComparisonSchemeVo getQqchComparisonSchemeVo(BigDecimal version);
 
     /**
      * 保存

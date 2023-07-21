@@ -6,11 +6,11 @@ import com.hhwy.pm.xmsl.implement.domain.XmslMainStructureHydrology;
 import com.hhwy.pm.xmsl.implement.mapper.XmslMainStructureHydrologyMapper;
 import com.hhwy.pm.xmsl.implement.service.IXmslMainStructureHydrologyService;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -30,30 +30,19 @@ public class XmslMainStructureHydrologyServiceImpl implements IXmslMainStructure
 
     @Transactional
     public void save(List<XmslMainStructureHydrology> xmslMainStructureHydrologyList) {
-        if (xmslMainStructureHydrologyList == null || xmslMainStructureHydrologyList.size() == 0) {
-            return;
-        }
-        List<XmslMainStructureHydrology> insertList = new ArrayList<>();
-        List<XmslMainStructureHydrology> updateList = new ArrayList<>();
-        for (XmslMainStructureHydrology xmslMainStructureHydrology : xmslMainStructureHydrologyList) {
-            if (xmslMainStructureHydrology.getId() == null) {
+        // 先清空旧数据
+        XmslMainStructureHydrology deleteParam = new XmslMainStructureHydrology();
+        deleteParam.setDelFlag("1");
+        xmslMainStructureHydrologyMapper.updateXmslMainStructureHydrology(deleteParam);
+
+        if (!CollectionUtils.isEmpty(xmslMainStructureHydrologyList)) {
+            for (XmslMainStructureHydrology xmslMainStructureHydrology : xmslMainStructureHydrologyList) {
                 xmslMainStructureHydrology.setId(IdWorker.createId());
                 xmslMainStructureHydrology.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 xmslMainStructureHydrology.setCreateUserName(SecurityUtils.getUserName());
                 xmslMainStructureHydrology.setCreateTime(DateUtils.getNowDate());
-                insertList.add(xmslMainStructureHydrology);
-            } else {
-                xmslMainStructureHydrology.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                xmslMainStructureHydrology.setUpdateTime(DateUtils.getNowDate());
-                updateList.add(xmslMainStructureHydrology);
             }
-        }
-
-        if (insertList.size() > 0) {
-            xmslMainStructureHydrologyMapper.insertXmslMainStructureHydrologyList(insertList);
-        }
-        if (updateList.size() > 0) {
-            xmslMainStructureHydrologyMapper.updateXmslMainStructureHydrologyList(updateList);
+            xmslMainStructureHydrologyMapper.insertXmslMainStructureHydrologyList(xmslMainStructureHydrologyList);
         }
     }
 

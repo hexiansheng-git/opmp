@@ -46,6 +46,13 @@ public interface IQqchWorkGroupService {
     int updateQqchWorkGroup(QqchWorkGroup qqchWorkGroup);
 
     /**
+     * 提交
+     * @param qqchWorkGroup
+     * @return
+     */
+    void submit(QqchWorkGroup qqchWorkGroup);
+
+    /**
      * 删除工作小组
      * @param qqchWorkGroup
      * @return

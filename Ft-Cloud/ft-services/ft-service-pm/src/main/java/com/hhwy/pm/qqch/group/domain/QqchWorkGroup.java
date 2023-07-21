@@ -14,6 +14,9 @@ import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -65,6 +68,7 @@ public class QqchWorkGroup extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "策划编制负责人")
+    @NotBlank(message = "请选择策划编制负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String planEstablishDirector;
     /**
      * 字段描述：策划编制负责人id
@@ -80,6 +84,12 @@ public class QqchWorkGroup extends BaseEntity {
     @Excel(name = "策划主导单位")
     private String planDominantUnit;
     /**
+     * 字段描述：策划主导单位id
+     */
+    @JsonProperty
+    @Excel(name = "策划主导单位id")
+    private Long planDominantUnitId;
+    /**
      * 字段描述：联系方式
      */
     @JsonProperty
@@ -91,6 +101,12 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "策划审批单位")
     private String planApprovalUnit;
+    /**
+     * 字段描述：策划审批单位id
+     */
+    @JsonProperty
+    @Excel(name = "策划审批单位id")
+    private Long planApprovalUnitId;
     /**
      * 字段描述：项目概述
      */
@@ -109,6 +125,14 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注/描述")
     private String remark;
+    /**
+     * 字段描述：流程状态（5已完成）
+     */
+    private String taskStatus;
+    /**
+     * 字段描述：当前处理人
+     */
+    private String currentProcessor;
     /**
      * 字段描述：所属区域id
      */
@@ -194,14 +218,6 @@ public class QqchWorkGroup extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：流程状态（5已完成）
-     */
-    private String taskStatus;
-    /**
-     * 字段描述：当前处理人
-     */
-    private String currentProcessor;
-    /**
      * 字段描述：预留字段1
      */
     @JsonProperty
@@ -235,5 +251,6 @@ public class QqchWorkGroup extends BaseEntity {
     /**
      *  字段描述：工作小组成员
      */
+    @Valid
     private List<QqchWorkGroupMember> qqchWorkGroupMemberList;
 }

@@ -12,11 +12,16 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author han
@@ -34,6 +39,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
     @Autowired
     private QqchWorkGroupMemberMapper qqchWorkGroupMemberMapper;
+
+    @Autowired
+    private XmslContractInfoMapper xmslContractInfoMapper;
 
 
     /**
@@ -132,6 +140,26 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     }
 
     /**
+     * 设置策划主导单位和策划审批单位
+     * @param qqchWorkGroup
+     */
+    public void setPlanUnit(QqchWorkGroup qqchWorkGroup){
+        //获取合同关联项目信息-项目分类
+        XmslContractInfo validMaxVersionContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+
+        if(validMaxVersionContractInfo == null){
+            return;
+        }
+        //项目分类
+        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
+
+        //策划主导单位：I、II类项目，显示组织机构海外事业部层级名称 ；III、IV类型项目，显示项目所属单位名称
+
+        //策划审批单位：I、II、III类项目，显示组织机构海外事业部层级名称 ；IV类型项目，显示项目所属单位名称
+
+    }
+
+    /**
      * 修改工作小组
      * @param qqchWorkGroup
      * @return
@@ -146,6 +174,25 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
         return qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+    }
+
+    /**
+     * 提交
+     * @param qqchWorkGroup
+     * @return
+     */
+    @Override
+    public void submit(QqchWorkGroup qqchWorkGroup) {
+        Long id = qqchWorkGroup.getId();
+        if(id == null || id == 0){
+            //插入数据
+            this.insertQqchWorkGroup(qqchWorkGroup);
+        } else {
+            //修改数据
+            this.updateQqchWorkGroup(qqchWorkGroup);
+        }
+
+        //TODO 发起流程
     }
 
     /**

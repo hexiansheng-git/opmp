@@ -11,6 +11,11 @@ import java.util.List;
  * @remark
  */
 public interface XmslContractInfoMapper {
+    /**
+     * 获取最新有效版本的合同信息
+     * @return
+     */
+    XmslContractInfo getValidMaxVersionContractInfo();
 
     XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo);
 

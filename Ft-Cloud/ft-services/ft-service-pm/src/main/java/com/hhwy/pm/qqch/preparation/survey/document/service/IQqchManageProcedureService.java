@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.survey.document.service;
 
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedureVo;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-13 11:40:23
@@ -12,8 +14,9 @@ public interface IQqchManageProcedureService {
     /**
      * 获取管理程序Vo
      * @return
+     * @param version
      */
-    QqchManageProcedureVo getQqchManageProcedureVo();
+    QqchManageProcedureVo getQqchManageProcedureVo(BigDecimal version);
 
     /**
      * 保存

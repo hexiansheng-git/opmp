@@ -1,10 +1,15 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchDailyControlPlan;
@@ -15,6 +20,7 @@ import org.springframework.stereotype.Service;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author han
@@ -28,25 +34,56 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
     private QqchDailyControlPlanMapper qqchDailyControlPlanMapper;
 
     @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
     private CommonMapper commonMapper;
 
 
     /**
      * 获取日常管控策划Vo
      * @return
+     * @param version
      */
-    public QqchDailyControlPlanVo getQqchDailyControlPlanVo() {
+    public QqchDailyControlPlanVo getQqchDailyControlPlanVo(BigDecimal version) {
         QqchDailyControlPlanVo qqchDailyControlPlanVo = new QqchDailyControlPlanVo();
 
-        BigDecimal version = commonMapper.selectMaxVersion("qqch_daily_control_plan");
+        if(version == null){
+            version = commonMapper.selectMaxVersion("qqch_daily_control_plan");
+        }
         qqchDailyControlPlanVo.setVersion(version);
 
         QqchDailyControlPlan qqchDailyControlPlan = new QqchDailyControlPlan();
         qqchDailyControlPlan.setVersion(version);
         List<QqchDailyControlPlan> qqchDailyControlPlanList = qqchDailyControlPlanMapper.getQqchDailyControlPlanList(qqchDailyControlPlan);
+        if(CollectionUtils.isEmpty(qqchDailyControlPlanList)){
+            qqchDailyControlPlanList = this.getInitializeData();
+        }
         qqchDailyControlPlanVo.setQqchDailyControlPlanList(qqchDailyControlPlanList);
+        
+        //TODO 获取确认状态
 
         return qqchDailyControlPlanVo;
+    }
+
+    /**
+     * 获取初始化数据
+     * @return
+     */
+    public List<QqchDailyControlPlan> getInitializeData() {
+        List<QqchDailyControlPlan> qqchDailyControlPlanList = new ArrayList<>();
+        
+        AjaxResult result = systemServiceApi.dictType(DictType.DAILY_CONTROL_PLAN_INITIALIZE);
+        List<Map<String,Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
+
+        for (Map<String, Object> map : dictDataList) {
+            String dictLabel = (String) map.get("dictLabel");
+            QqchDailyControlPlan qqchDailyControlPlan = new QqchDailyControlPlan();
+            qqchDailyControlPlan.setControlMeasure(dictLabel);
+            qqchDailyControlPlanList.add(qqchDailyControlPlan);
+        }
+        
+        return qqchDailyControlPlanList;
     }
 
     /**

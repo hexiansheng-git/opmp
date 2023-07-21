@@ -10,6 +10,8 @@ import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
 
+import java.math.BigDecimal;
+
 /**
  * @author han
  * @date 2023-07-13 11:39:57
@@ -29,8 +31,8 @@ public class QqchDailyControlPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchDailyControlPlan:list")
     @GetMapping("/list")
-    public AjaxResult getQqchDailyControlPlanList() {
-        QqchDailyControlPlanVo qqchDailyControlPlanVo = qqchDailyControlPlanService.getQqchDailyControlPlanVo();
+    public AjaxResult getQqchDailyControlPlanList(BigDecimal version) {
+        QqchDailyControlPlanVo qqchDailyControlPlanVo = qqchDailyControlPlanService.getQqchDailyControlPlanVo(version);
         return AjaxResult.success(qqchDailyControlPlanVo);
     }
 

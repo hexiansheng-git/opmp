@@ -10,11 +10,11 @@ import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchTechManageModeCo
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchTechManageModeComparisonService;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -56,7 +56,9 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         deleteParam.setDelFlag("1");
         qqchTechManageModeComparisonMapper.updateQqchTechManageModeComparison(deleteParam);
 
-        List<QqchTechManageModeComparison> insertList = new ArrayList<>();
+        if (CollectionUtils.isEmpty(voParam.getList())) {
+            return;
+        }
 
         for (QqchTechManageModeComparison qqchTechManageModeComparison : voParam.getList()) {
             qqchTechManageModeComparison.setId(IdWorker.createId());
@@ -65,11 +67,8 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
             qqchTechManageModeComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchTechManageModeComparison.setCreateUserName(SecurityUtils.getUserName());
             qqchTechManageModeComparison.setCreateTime(DateUtils.getNowDate());
-            insertList.add(qqchTechManageModeComparison);
         }
 
-        if (insertList.size() > 0) {
-            qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(insertList);
-        }
+        qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(voParam.getList());
     }
 }

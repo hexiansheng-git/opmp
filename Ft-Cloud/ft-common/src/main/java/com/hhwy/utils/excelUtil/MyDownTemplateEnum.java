@@ -30,6 +30,12 @@ public enum MyDownTemplateEnum {
         public Map<String, List> pullLists() {
             return new HashMap<>();
         }
+    },
+    importPlanningArrange("importPlanningArrange.xls", "便道部署") {
+        @Override
+        public Map<String, List> pullLists() {
+            return new HashMap<>();
+        }
     }
     ;
 

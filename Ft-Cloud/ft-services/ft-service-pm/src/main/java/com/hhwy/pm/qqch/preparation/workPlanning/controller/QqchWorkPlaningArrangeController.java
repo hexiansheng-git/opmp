@@ -1,11 +1,15 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.controller;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrangeVo;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlaningArrangeService;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author zq
@@ -58,9 +63,14 @@ public class QqchWorkPlaningArrangeController extends BaseController{
 
     @PreAuthorize(hasPermi = "qqchWorkPlaningArrange:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertQqchWorkPlaningArrangeList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeListParam){
-        qqchWorkPlaningArrangeService.insertQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeListParam);
-        return AjaxResult.success(qqchWorkPlaningArrangeListParam);
+    public AjaxResult insertQqchWorkPlaningArrangeList(@Validated(ValidationGroups.Save.class) @RequestBody QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeListParam){
+        try{
+            qqchWorkPlaningArrangeService.insertQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeListParam);
+            return AjaxResult.success(qqchWorkPlaningArrangeListParam);
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
     }
 
     @PreAuthorize(hasPermi = "qqchWorkPlaningArrange:update")
@@ -93,5 +103,40 @@ public class QqchWorkPlaningArrangeController extends BaseController{
         List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeService.getQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeParam);
         ExcelUtils<QqchWorkPlaningArrange> util = new ExcelUtils<>(QqchWorkPlaningArrange.class);
         util.exportExcel(response, qqchWorkPlaningArrangeList, DateUtils.getDate());
+    }
+
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchWorkPlaningArrange:importData")
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file){
+        try{
+            ExcelUtils<QqchWorkPlaningArrange> util = new ExcelUtils<>(QqchWorkPlaningArrange.class);
+            List<QqchWorkPlaningArrange> list = util.importExcel(file.getInputStream());
+            return AjaxResult.success(list);
+        }catch (Exception e){
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    @PostMapping("/detail")
+    @ResponseBody
+    public AjaxResult detail(QqchWorkPlaningArrange arrangeVo){
+        try{
+            List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = null;
+            if(ObjectNullUtil.isEmpty(arrangeVo.getVersion())){//直接版本号最大且有效版本
+                qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeService.getMaxVVData(arrangeVo);
+            }else{//历史版本的详情
+                qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeService.getQqchWorkPlaningArrangeList(arrangeVo);
+            }
+            return AjaxResult.success(qqchWorkPlaningArrangeList);
+        } catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
     }
 }
