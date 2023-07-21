@@ -10,12 +10,13 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchDailyControlPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchDailyControlPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchDailyControlPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchDailyControlPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,9 +37,6 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
     @Autowired
     private SystemServiceApi systemServiceApi;
 
-    @Autowired
-    private CommonMapper commonMapper;
-
 
     /**
      * 获取日常管控策划Vo
@@ -48,9 +46,7 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
     public QqchDailyControlPlanVo getQqchDailyControlPlanVo(BigDecimal version) {
         QqchDailyControlPlanVo qqchDailyControlPlanVo = new QqchDailyControlPlanVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_daily_control_plan");
-        }
+        version = VersionUtil.getVersion("qqch_daily_control_plan",version);
         qqchDailyControlPlanVo.setVersion(version);
 
         QqchDailyControlPlan qqchDailyControlPlan = new QqchDailyControlPlan();
@@ -110,7 +106,11 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
     @Override
     public void confirm(QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         this.save(qqchDailyControlPlanVo);
-        //TODO 修改确认状态
+
+        String buttonMark = qqchDailyControlPlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -123,7 +123,9 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
         for (QqchDailyControlPlan qqchDailyControlPlan : qqchDailyControlPlanList) {
             qqchDailyControlPlan.setId(IdWorker.createId());
             qqchDailyControlPlan.setVersion(version);
-            qqchDailyControlPlan.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchDailyControlPlan.setValid(Valid.YES);
+            }
             qqchDailyControlPlan.setCreateUser(SecurityUtils.getUserName());
             qqchDailyControlPlan.setCreateTime(DateUtils.getNowDate());
         }

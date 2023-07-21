@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchCompleteDesignHandoverMapper;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,8 +28,6 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     @Autowired
     private QqchCompleteDesignHandoverMapper qqchCompleteDesignHandoverMapper;
 
-    @Autowired
-    private CommonMapper commonMapper;
 
     /**
      * 完整设计交接情况台账
@@ -38,9 +37,7 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     public QqchCompleteDesignHandoverVo getQqchCompleteDesignHandoverVo(BigDecimal version) {
         QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = new QqchCompleteDesignHandoverVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_complete_design_handover");
-        }
+        version = VersionUtil.getVersion("qqch_complete_design_handover",version);
         qqchCompleteDesignHandoverVo.setVersion(version);
 
         QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
@@ -79,8 +76,10 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     public void confirm(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         this.save(qqchCompleteDesignHandoverVo);
 
-        //TODO 修改确认状态
-
+        String buttonMark = qqchCompleteDesignHandoverVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -94,7 +93,9 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
         for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
             qqchCompleteDesignHandover.setId(IdWorker.createId());
             qqchCompleteDesignHandover.setVersion(version);
-            qqchCompleteDesignHandover.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchCompleteDesignHandover.setValid(Valid.YES);
+            }
             qqchCompleteDesignHandover.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchCompleteDesignHandover.setCreateUserName(SecurityUtils.getUserName());
             qqchCompleteDesignHandover.setCreateTime(DateUtils.getNowDate());

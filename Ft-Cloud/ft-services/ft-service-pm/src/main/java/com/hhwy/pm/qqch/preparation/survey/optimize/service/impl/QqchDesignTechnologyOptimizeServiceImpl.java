@@ -6,12 +6,13 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchDesignTechnologyOptimize;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchDesignTechnologyOptimizeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchDesignTechnologyOptimizeMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchDesignTechnologyOptimizeService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +29,6 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
     @Autowired
     private QqchDesignTechnologyOptimizeMapper qqchDesignTechnologyOptimizeMapper;
 
-    @Autowired
-    private CommonMapper commonMapper;
-
 
     /**
      * 获取设计技术优化要点集合
@@ -42,9 +40,7 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
     public QqchDesignTechnologyOptimizeVo getQqchDesignTechnologyOptimizeVo(BigDecimal version) {
         QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo = new QqchDesignTechnologyOptimizeVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_design_technology_optimize");
-        }
+        version = VersionUtil.getVersion("qqch_design_technology_optimize",version);
         qqchDesignTechnologyOptimizeVo.setVersion(version);
 
         List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList = qqchDesignTechnologyOptimizeMapper.getQqchDesignTechnologyOptimizeList(version);
@@ -80,8 +76,10 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
     public void confirm(QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo){
         this.save(qqchDesignTechnologyOptimizeVo);
 
-        //TODO 修改确认状态
-
+        String buttonMark = qqchDesignTechnologyOptimizeVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -95,7 +93,9 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
         for (QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize : qqchDesignTechnologyOptimizeList) {
             qqchDesignTechnologyOptimize.setId(IdWorker.createId());
             qqchDesignTechnologyOptimize.setVersion(version);
-            qqchDesignTechnologyOptimize.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchDesignTechnologyOptimize.setValid(Valid.YES);
+            }
             qqchDesignTechnologyOptimize.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchDesignTechnologyOptimize.setCreateUserName(SecurityUtils.getUserName());
             qqchDesignTechnologyOptimize.setCreateTime(DateUtils.getNowDate());

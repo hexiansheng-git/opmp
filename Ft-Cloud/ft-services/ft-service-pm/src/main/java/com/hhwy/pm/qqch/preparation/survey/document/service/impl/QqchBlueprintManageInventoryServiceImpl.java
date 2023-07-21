@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchBlueprintManageInventory;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchBlueprintManageInventoryVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchBlueprintManageInventoryMapper;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchBlueprintManageInventoryService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +28,6 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
     @Autowired
     private QqchBlueprintManageInventoryMapper qqchBlueprintManageInventoryMapper;
 
-    @Autowired
-    private CommonMapper commonMapper;
-
 
     public QqchBlueprintManageInventory getQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
         return qqchBlueprintManageInventoryMapper.getQqchBlueprintManageInventory(qqchBlueprintManageInventory);
@@ -43,9 +41,7 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
     public QqchBlueprintManageInventoryVo getQqchBlueprintManageInventoryVo(BigDecimal version) {
         QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = new QqchBlueprintManageInventoryVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_blueprint_manage_inventory");
-        }
+        version = VersionUtil.getVersion("qqch_blueprint_manage_inventory",version);
         qqchBlueprintManageInventoryVo.setVersion(version);
 
         QqchBlueprintManageInventory qqchBlueprintManageInventory = new QqchBlueprintManageInventory();
@@ -80,7 +76,11 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
     @Override
     public void confirm(QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
         this.save(qqchBlueprintManageInventoryVo);
-        //TODO 修改确认状态
+
+        String buttonMark = qqchBlueprintManageInventoryVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -93,7 +93,9 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
         for (QqchBlueprintManageInventory qqchBlueprintManageInventory : qqchBlueprintManageInventoryList) {
             qqchBlueprintManageInventory.setId(IdWorker.createId());
             qqchBlueprintManageInventory.setVersion(version);
-            qqchBlueprintManageInventory.setValid(Valid.NO);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchBlueprintManageInventory.setValid(Valid.YES);
+            }
             qqchBlueprintManageInventory.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchBlueprintManageInventory.setCreateUserName(SecurityUtils.getUserName());
             qqchBlueprintManageInventory.setCreateTime(DateUtils.getNowDate());

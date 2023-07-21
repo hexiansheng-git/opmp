@@ -7,7 +7,7 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeC
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeHeaderMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +44,6 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     @Autowired
     private QqchComparisonSchemeContentMapper qqchComparisonSchemeContentMapper;
 
-    @Autowired
-    private CommonMapper commonMapper;
-
 
     /**
      * 获取方案集合
@@ -56,9 +54,7 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     public QqchComparisonSchemeVo getQqchComparisonSchemeVo(BigDecimal version) {
         QqchComparisonSchemeVo qqchComparisonSchemeVo = new QqchComparisonSchemeVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_comparison_scheme");
-        }
+        version = VersionUtil.getVersion("qqch_comparison_scheme",version);
         qqchComparisonSchemeVo.setVersion(version);
 
         List<QqchComparisonScheme> qqchComparisonSchemeList = qqchComparisonSchemeMapper.getQqchComparisonSchemeList(version);
@@ -127,8 +123,10 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
     public void confirm(QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         this.save(qqchComparisonSchemeVo);
 
-        //TODO 修改确认状态
-
+        String buttonMark = qqchComparisonSchemeVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -149,7 +147,9 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
 
             qqchComparisonScheme.setId(schemeId);
             qqchComparisonScheme.setVersion(version);
-            qqchComparisonScheme.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchComparisonScheme.setValid(Valid.YES);
+            }
             qqchComparisonScheme.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchComparisonScheme.setCreateUserName(SecurityUtils.getUserName());
             qqchComparisonScheme.setCreateTime(DateUtils.getNowDate());

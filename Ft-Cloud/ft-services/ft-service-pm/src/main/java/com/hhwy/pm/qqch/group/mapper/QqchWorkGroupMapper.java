@@ -12,6 +12,23 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface QqchWorkGroupMapper {
+    /**
+     * 获取最大有效版本数据
+     * @return
+     */
+    QqchWorkGroup getValidMaxVersionQqchWorkGroup();
+
+    /**
+     * 获取最大未生效版本数据
+     * @return
+     */
+    QqchWorkGroup getNoValidMaxVersionQqchWorkGroup();
+
+    /**
+     * 获取前期策划小组数据数量
+     * @return
+     */
+    int getWorkGroupCount();
 
     QqchWorkGroup getQqchWorkGroup(QqchWorkGroup qqchWorkGroup);
 

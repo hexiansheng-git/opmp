@@ -31,8 +31,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @GetMapping("/getById")
-//    @Validated(ValidationGroups.Get.class)
-    public AjaxResult getQqchWorkGroupById(@NotNull(message = "id不能为空",groups = ValidationGroups.Get.class) Long id){
+    public AjaxResult getQqchWorkGroupById(Long id){
         QqchWorkGroup qqchWorkGroup = qqchWorkGroupService.getQqchWorkGroupById(id);
         return AjaxResult.success(qqchWorkGroup);
     }

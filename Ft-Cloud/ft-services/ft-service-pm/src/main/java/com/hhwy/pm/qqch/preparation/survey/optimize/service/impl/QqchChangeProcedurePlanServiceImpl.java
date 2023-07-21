@@ -11,7 +11,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePl
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchChangeProcedurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchChangeProcedurePlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,9 +44,6 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     @Autowired
     private SystemServiceApi systemServiceApi;
 
-    @Autowired
-    private CommonMapper commonMapper;
-
 
     /**
      * 获取变更程序策划
@@ -55,9 +53,7 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     public QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo(BigDecimal version) {
         QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = new QqchChangeProcedurePlanVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_change_procedure_plan");
-        }
+        version = VersionUtil.getVersion("qqch_change_procedure_plan",version);
         qqchChangeProcedurePlanVo.setVersion(version);
 
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(version);
@@ -136,7 +132,10 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     public void confirm(QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         this.save(qqchChangeProcedurePlanVo);
 
-        //TODO 修改确认状态
+        String buttonMark = qqchChangeProcedurePlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -149,7 +148,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
             qqchChangeProcedurePlan.setId(IdWorker.createId());
             qqchChangeProcedurePlan.setVersion(version);
-            qqchChangeProcedurePlan.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchChangeProcedurePlan.setValid(Valid.YES);
+            }
             qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
             qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());

@@ -33,6 +33,14 @@ public class QqchDailyControlPlanVo {
      */
     private BigDecimal version;
     /**
+     * 字段描述：菜单id
+     */
+    private String menuId;
+    /**
+     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
+     */
+    private String buttonMark;
+    /**
      * 字段描述：日常管控策划集合
      */
     private List<QqchDailyControlPlan> qqchDailyControlPlanList;

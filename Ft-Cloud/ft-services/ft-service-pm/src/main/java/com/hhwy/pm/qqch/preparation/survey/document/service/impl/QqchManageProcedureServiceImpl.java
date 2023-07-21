@@ -5,12 +5,13 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchManageProcedure;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedureVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMapper;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,6 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
     @Autowired
     private QqchManageProcedureMapper qqchManageProcedureMapper;
 
-    @Autowired
-    private CommonMapper commonMapper;
 
     /**
      * 获取管理程序Vo
@@ -38,9 +37,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
     public QqchManageProcedureVo getQqchManageProcedureVo(BigDecimal version) {
         QqchManageProcedureVo qqchManageProcedureVo = new QqchManageProcedureVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_manage_procedure");
-        }
+        version = VersionUtil.getVersion("qqch_manage_procedure",version);
         qqchManageProcedureVo.setVersion(version);
 
         QqchManageProcedure qqchManageProcedure = new QqchManageProcedure();
@@ -81,7 +78,11 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
     @Override
     public void confirm(QqchManageProcedureVo qqchManageProcedureVo) {
         this.save(qqchManageProcedureVo);
-        //TODO 修改确认状态
+
+        String buttonMark = qqchManageProcedureVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //确认 TODO 修改确认状态
+        }
     }
 
     /**
@@ -100,7 +101,9 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
                 QqchManageProcedure::setChildren);
         for (QqchManageProcedure qqchManageProcedure : insertList) {
             qqchManageProcedure.setVersion(version);
-            qqchManageProcedure.setValid(Valid.NO);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchManageProcedure.setValid(Valid.YES);
+            }
             qqchManageProcedure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchManageProcedure.setCreateUserName(SecurityUtils.getUserName());
             qqchManageProcedure.setCreateTime(DateUtils.getNowDate());
