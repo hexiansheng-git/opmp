@@ -450,8 +450,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
                                     <trim prefix="chinese_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            <if test="item.regionName != null ">
-                            when `id`=#{item.id} then #{item.regionName}
+                            <if test="item.chineseName != null ">
+                            when `id`=#{item.id} then #{item.chineseName}
                             </if>
                         </foreach>
                     </trim>
@@ -747,4 +747,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </foreach>
                 </where>
             </update>
-            </mapper>
+
+    <update id="deleteByIds">
+        update `xmsl_contract_list` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="list" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

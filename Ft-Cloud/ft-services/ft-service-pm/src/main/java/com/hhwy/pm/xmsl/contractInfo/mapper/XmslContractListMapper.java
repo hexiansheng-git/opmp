@@ -4,6 +4,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -28,4 +29,6 @@ public interface XmslContractListMapper {
     int deleteXmslContractList(XmslContractList xmslContractList);
 
     int deleteXmslContractListByPks(@Param("xmslContractListPkList") List<Long> xmslContractListPkList);
+
+    void deleteByIds(@Param("list") Collection<Long> list);
 }

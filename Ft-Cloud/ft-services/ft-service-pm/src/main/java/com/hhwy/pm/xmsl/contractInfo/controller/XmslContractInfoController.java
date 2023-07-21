@@ -99,7 +99,7 @@ public class XmslContractInfoController extends BaseController {
         return toAjax(xmslContractInfoService.deleteXmslContractInfoByPks(xmslContractInfoPkList));
     }
 
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response, XmslContractInfo xmslContractInfoParam) throws IOException {
         List<XmslContractInfo> xmslContractInfoList = xmslContractInfoService.getXmslContractInfoList(xmslContractInfoParam);
         ExcelUtils<XmslContractInfo> util = new ExcelUtils<>(XmslContractInfo.class);

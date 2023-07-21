@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface IXmslContractListService {
 
     int insertXmslContractListList(List<XmslContractListVo> xmslContractListList);
 
-    int updateXmslContractList(XmslContractList xmslContractList);
+    void updateXmslContractList(XmslContractListDto dto);
 
 
     int deleteXmslContractList(XmslContractList xmslContractList);

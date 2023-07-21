@@ -22,7 +22,7 @@ public interface QqchSurveyWorkPlanMapper {
 
     int updateQqchSurveyWorkPlan(QqchSurveyWorkPlan qqchSurveyWorkPlan);
 
-     int updateQqchSurveyWorkPlanList(@Param("qqchSurveyWorkPlanList") List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList);
+     int updateQqchSurveyWorkPlanList(@Param("list") List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList);
     
     int deleteQqchSurveyWorkPlan(QqchSurveyWorkPlan qqchSurveyWorkPlan);
 

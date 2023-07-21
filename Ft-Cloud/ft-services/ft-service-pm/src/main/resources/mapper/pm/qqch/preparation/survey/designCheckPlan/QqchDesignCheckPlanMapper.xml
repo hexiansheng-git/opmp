@@ -2,20 +2,20 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.mapper.QqchSurveyWorkPlanMapper">
+<mapper namespace="com.hhwy.pm.qqch.preparation.survey.designCheckPlan.mapper.QqchDesignCheckPlanMapper">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-    <resultMap type="com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlan" id="QqchSurveyWorkPlanResultMap">
+    <resultMap type="com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.QqchDesignCheckPlan" id="QqchDesignCheckPlanResultMap">
                     <result property="id" column="id" />
-                    <result property="pid" column="pid" />
+                    <result property="designResultName" column="design_result_name" />
                     <result property="planWbsId" column="plan_wbs_id" />
                     <result property="planWbsPid" column="plan_wbs_pid" />
                     <result property="planWbsCode" column="plan_wbs_code" />
                     <result property="planWbsName" column="plan_wbs_name" />
-                    <result property="workContent" column="work_content" />
-                    <result property="unit" column="unit" />
-                    <result property="workNum" column="work_num" />
-                    <result property="startTime" column="start_time" />
-                    <result property="endTime" column="end_time" />
+                    <result property="planStartTime" column="plan_start_time" />
+                    <result property="planEndTime" column="plan_end_time" />
+                    <result property="reviewSubject" column="review_subject" />
+                    <result property="planReviewTime" column="plan_review_time" />
+                    <result property="planCheckTime" column="plan_check_time" />
                     <result property="version" column="version" />
                     <result property="valid" column="valid" />
                     <result property="fileGroupId" column="file_group_id" />
@@ -40,19 +40,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     <result property="ptVar5" column="pt_var5" />
                     <result property="taskStatus" column="task_status" />
             </resultMap>
-    <sql id="selectQqchSurveyWorkPlanVo">
+    <sql id="selectQqchDesignCheckPlanVo">
         select
                                                             `id`
-                                                         ,`pid`
+                                                         ,`design_result_name`
                                                          ,`plan_wbs_id`
                                                          ,`plan_wbs_pid`
                                                          ,`plan_wbs_code`
                                                          ,`plan_wbs_name`
-                                                         ,`work_content`
-                                                         ,`unit`
-                                                         ,`work_num`
-                                                         ,`start_time`
-                                                         ,`end_time`
+                                                         ,`plan_start_time`
+                                                         ,`plan_end_time`
+                                                         ,`review_subject`
+                                                         ,`plan_review_time`
+                                                         ,`plan_check_time`
                                                          ,`version`
                                                          ,`valid`
                                                          ,`file_group_id`
@@ -76,23 +76,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                          ,`pt_var4`
                                                          ,`pt_var5`
                                                          ,`task_status`
-                                    from qqch_survey_work_plan
+                                    from qqch_design_check_plan
     </sql>
-    <select id="getQqchSurveyWorkPlan" resultMap="QqchSurveyWorkPlanResultMap">
-        <include refid="selectQqchSurveyWorkPlanVo" />
+    <select id="getQqchDesignCheckPlan" resultMap="QqchDesignCheckPlanResultMap">
+        <include refid="selectQqchDesignCheckPlanVo" />
         <where>
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
-                            <if test="pid != null "> and `pid` = #{pid}</if>
+                            <if test="designResultName != null  and designResultName != ''"> and `design_result_name` = #{designResultName}</if>
                             <if test="planWbsId != null "> and `plan_wbs_id` = #{planWbsId}</if>
                             <if test="planWbsPid != null "> and `plan_wbs_pid` = #{planWbsPid}</if>
                             <if test="planWbsCode != null  and planWbsCode != ''"> and `plan_wbs_code` = #{planWbsCode}</if>
                             <if test="planWbsName != null  and planWbsName != ''"> and `plan_wbs_name` = #{planWbsName}</if>
-                            <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
-                            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
-                            <if test="workNum != null  and workNum != ''"> and `work_num` = #{workNum}</if>
-                            <if test="startTime != null "> and `start_time` = #{startTime}</if>
-                            <if test="endTime != null "> and `end_time` = #{endTime}</if>
+                            <if test="planStartTime != null "> and `plan_start_time` = #{planStartTime}</if>
+                            <if test="planEndTime != null "> and `plan_end_time` = #{planEndTime}</if>
+                            <if test="reviewSubject != null  and reviewSubject != ''"> and `review_subject` = #{reviewSubject}</if>
+                            <if test="planReviewTime != null "> and `plan_review_time` = #{planReviewTime}</if>
+                            <if test="planCheckTime != null "> and `plan_check_time` = #{planCheckTime}</if>
                             <if test="version != null "> and `version` = #{version}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
@@ -120,21 +120,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
-    <select id="getQqchSurveyWorkPlanList" resultMap="QqchSurveyWorkPlanResultMap">
-        <include refid="selectQqchSurveyWorkPlanVo" />
+    <select id="getQqchDesignCheckPlanList" resultMap="QqchDesignCheckPlanResultMap">
+        <include refid="selectQqchDesignCheckPlanVo" />
         <where>
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
-                            <if test="pid != null "> and `pid` = #{pid}</if>
+                            <if test="designResultName != null  and designResultName != ''"> and `design_result_name` = #{designResultName}</if>
                             <if test="planWbsId != null "> and `plan_wbs_id` = #{planWbsId}</if>
                             <if test="planWbsPid != null "> and `plan_wbs_pid` = #{planWbsPid}</if>
                             <if test="planWbsCode != null  and planWbsCode != ''"> and `plan_wbs_code` = #{planWbsCode}</if>
                             <if test="planWbsName != null  and planWbsName != ''"> and `plan_wbs_name` = #{planWbsName}</if>
-                            <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
-                            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
-                            <if test="workNum != null  and workNum != ''"> and `work_num` = #{workNum}</if>
-                            <if test="startTime != null "> and `start_time` = #{startTime}</if>
-                            <if test="endTime != null "> and `end_time` = #{endTime}</if>
+                            <if test="planStartTime != null "> and `plan_start_time` = #{planStartTime}</if>
+                            <if test="planEndTime != null "> and `plan_end_time` = #{planEndTime}</if>
+                            <if test="reviewSubject != null  and reviewSubject != ''"> and `review_subject` = #{reviewSubject}</if>
+                            <if test="planReviewTime != null "> and `plan_review_time` = #{planReviewTime}</if>
+                            <if test="planCheckTime != null "> and `plan_check_time` = #{planCheckTime}</if>
                             <if test="version != null "> and `version` = #{version}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
@@ -162,20 +162,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
-    <insert id="insertQqchSurveyWorkPlan"  useGeneratedKeys="true" keyProperty="id"  >
-        insert into qqch_survey_work_plan
+    <insert id="insertQqchDesignCheckPlan"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_design_check_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
                             <if test="id != null ">`id`,</if>
-                            <if test="pid != null ">`pid`,</if>
+                            <if test="designResultName != null  and designResultName != ''">`design_result_name`,</if>
                             <if test="planWbsId != null ">`plan_wbs_id`,</if>
                             <if test="planWbsPid != null ">`plan_wbs_pid`,</if>
                             <if test="planWbsCode != null  and planWbsCode != ''">`plan_wbs_code`,</if>
                             <if test="planWbsName != null  and planWbsName != ''">`plan_wbs_name`,</if>
-                            <if test="workContent != null  and workContent != ''">`work_content`,</if>
-                            <if test="unit != null  and unit != ''">`unit`,</if>
-                            <if test="workNum != null  and workNum != ''">`work_num`,</if>
-                            <if test="startTime != null ">`start_time`,</if>
-                            <if test="endTime != null ">`end_time`,</if>
+                            <if test="planStartTime != null ">`plan_start_time`,</if>
+                            <if test="planEndTime != null ">`plan_end_time`,</if>
+                            <if test="reviewSubject != null  and reviewSubject != ''">`review_subject`,</if>
+                            <if test="planReviewTime != null ">`plan_review_time`,</if>
+                            <if test="planCheckTime != null ">`plan_check_time`,</if>
                             <if test="version != null ">`version`,</if>
                             <if test="valid != null  and valid != ''">`valid`,</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
@@ -202,16 +202,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                             <if test="id != null ">#{id},</if>
-                            <if test="pid != null ">#{pid},</if>
+                            <if test="designResultName != null  and designResultName != ''">#{designResultName},</if>
                             <if test="planWbsId != null ">#{planWbsId},</if>
                             <if test="planWbsPid != null ">#{planWbsPid},</if>
                             <if test="planWbsCode != null  and planWbsCode != ''">#{planWbsCode},</if>
                             <if test="planWbsName != null  and planWbsName != ''">#{planWbsName},</if>
-                            <if test="workContent != null  and workContent != ''">#{workContent},</if>
-                            <if test="unit != null  and unit != ''">#{unit},</if>
-                            <if test="workNum != null  and workNum != ''">#{workNum},</if>
-                            <if test="startTime != null ">#{startTime},</if>
-                            <if test="endTime != null ">#{endTime},</if>
+                            <if test="planStartTime != null ">#{planStartTime},</if>
+                            <if test="planEndTime != null ">#{planEndTime},</if>
+                            <if test="reviewSubject != null  and reviewSubject != ''">#{reviewSubject},</if>
+                            <if test="planReviewTime != null ">#{planReviewTime},</if>
+                            <if test="planCheckTime != null ">#{planCheckTime},</if>
                             <if test="version != null ">#{version},</if>
                             <if test="valid != null  and valid != ''">#{valid},</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
@@ -238,21 +238,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchSurveyWorkPlan -->
-    <insert id="insertQqchSurveyWorkPlanList">
-        insert into qqch_survey_work_plan
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchDesignCheckPlan -->
+    <insert id="insertQqchDesignCheckPlanList">
+        insert into qqch_design_check_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                                `id`,
-                                                                `pid`,
+                                                `id`,
+                                                                `design_result_name`,
                                                                 `plan_wbs_id`,
                                                                 `plan_wbs_pid`,
                                                                 `plan_wbs_code`,
                                                                 `plan_wbs_name`,
-                                                                `work_content`,
-                                                                `unit`,
-                                                                `work_num`,
-                                                                `start_time`,
-                                                                `end_time`,
+                                                                `plan_start_time`,
+                                                                `plan_end_time`,
+                                                                `review_subject`,
+                                                                `plan_review_time`,
+                                                                `plan_check_time`,
                                                                 `version`,
                                                                 `valid`,
                                                                 `file_group_id`,
@@ -269,7 +269,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `update_time`,
                                                                 `del_user`,
                                                                 `del_time`,
-                                                                 `pt_var1`,
+                                                                                            `pt_var1`,
                                                                 `pt_var2`,
                                                                 `pt_var3`,
                                                                 `pt_var4`,
@@ -277,19 +277,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `task_status`,
                                     </trim>
         values
-        <foreach collection="qqchSurveyWorkPlanList" item="item" separator=",">
+        <foreach collection="qqchDesignCheckPlanList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                                                             #{item.id},
-                                                                                #{item.pid},
+                                                                                #{item.designResultName},
                                                                                 #{item.planWbsId},
                                                                                 #{item.planWbsPid},
                                                                                 #{item.planWbsCode},
                                                                                 #{item.planWbsName},
-                                                                                #{item.workContent},
-                                                                                #{item.unit},
-                                                                                #{item.workNum},
-                                                                                #{item.startTime},
-                                                                                #{item.endTime},
+                                                                                #{item.planStartTime},
+                                                                                #{item.planEndTime},
+                                                                                #{item.reviewSubject},
+                                                                                #{item.planReviewTime},
+                                                                                #{item.planCheckTime},
                                                                                 #{item.version},
                                                                                 #{item.valid},
                                                                                 #{item.fileGroupId},
@@ -316,20 +316,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
-    <update id="updateQqchSurveyWorkPlan">
-        update qqch_survey_work_plan
+    <update id="updateQqchDesignCheckPlan">
+        update qqch_design_check_plan
         <trim prefix="SET" suffixOverrides=",">
                             <if test="id != null ">`id` = #{id},</if>
-                            <if test="pid != null ">`pid` = #{pid},</if>
+                            <if test="designResultName != null  and  designResultName != ''">`design_result_name` = #{designResultName},</if>
                             <if test="planWbsId != null ">`plan_wbs_id` = #{planWbsId},</if>
                             <if test="planWbsPid != null ">`plan_wbs_pid` = #{planWbsPid},</if>
                             <if test="planWbsCode != null  and  planWbsCode != ''">`plan_wbs_code` = #{planWbsCode},</if>
                             <if test="planWbsName != null  and  planWbsName != ''">`plan_wbs_name` = #{planWbsName},</if>
-                            <if test="workContent != null  and  workContent != ''">`work_content` = #{workContent},</if>
-                            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
-                            <if test="workNum != null  and  workNum != ''">`work_num` = #{workNum},</if>
-                            <if test="startTime != null ">`start_time` = #{startTime},</if>
-                            <if test="endTime != null ">`end_time` = #{endTime},</if>
+                            <if test="planStartTime != null ">`plan_start_time` = #{planStartTime},</if>
+                            <if test="planEndTime != null ">`plan_end_time` = #{planEndTime},</if>
+                            <if test="reviewSubject != null  and  reviewSubject != ''">`review_subject` = #{reviewSubject},</if>
+                            <if test="planReviewTime != null ">`plan_review_time` = #{planReviewTime},</if>
+                            <if test="planCheckTime != null ">`plan_check_time` = #{planCheckTime},</if>
                             <if test="version != null ">`version` = #{version},</if>
                             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
                             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
@@ -359,17 +359,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </where>
     </update>
 
-            <update id="updateQqchSurveyWorkPlanList">
-            update qqch_survey_work_plan
+            <update id="updateQqchDesignCheckPlanList">
+            update qqch_design_check_plan
             <trim prefix="set" suffixOverrides=",">
                                     <trim prefix="id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
                             when `id`=#{item.id} then #{item.id}
                         </foreach>
                     </trim>
-                                    <trim prefix="pid  = case" suffix="end,">
+                                    <trim prefix="design_result_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.pid}
+                            when `id`=#{item.id} then #{item.designResultName}
                         </foreach>
                     </trim>
                                     <trim prefix="plan_wbs_id  = case" suffix="end,">
@@ -392,29 +392,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             when `id`=#{item.id} then #{item.planWbsName}
                         </foreach>
                     </trim>
-                                    <trim prefix="work_content  = case" suffix="end,">
+                                    <trim prefix="plan_start_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.workContent}
+                            when `id`=#{item.id} then #{item.planStartTime}
                         </foreach>
                     </trim>
-                                    <trim prefix="unit  = case" suffix="end,">
+                                    <trim prefix="plan_end_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.unit}
+                            when `id`=#{item.id} then #{item.planEndTime}
                         </foreach>
                     </trim>
-                                    <trim prefix="work_num  = case" suffix="end,">
+                                    <trim prefix="review_subject  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.workNum}
+                            when `id`=#{item.id} then #{item.reviewSubject}
                         </foreach>
                     </trim>
-                                    <trim prefix="start_time  = case" suffix="end,">
+                                    <trim prefix="plan_review_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.startTime}
+                            when `id`=#{item.id} then #{item.planReviewTime}
                         </foreach>
                     </trim>
-                                    <trim prefix="end_time  = case" suffix="end,">
+                                    <trim prefix="plan_check_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.endTime}
+                            when `id`=#{item.id} then #{item.planCheckTime}
                         </foreach>
                     </trim>
                                     <trim prefix="version  = case" suffix="end,">
@@ -534,25 +534,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
                             </trim>
             where `id` in
-            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
                 #{item.id}
             </foreach>
         </update>
     
-            <update id="deleteQqchSurveyWorkPlan">
-            update `qqch_survey_work_plan` set del_flag = 1
+            <update id="deleteQqchDesignCheckPlan">
+            update `qqch_design_check_plan` set del_flag = 1
             <where>
                                     <if test="id != null "> and `id` = #{id}</if>
-                                    <if test="pid != null "> and `pid` = #{pid}</if>
+                                    <if test="designResultName != null  and designResultName != ''"> and `design_result_name` = #{designResultName}</if>
                                     <if test="planWbsId != null "> and `plan_wbs_id` = #{planWbsId}</if>
                                     <if test="planWbsPid != null "> and `plan_wbs_pid` = #{planWbsPid}</if>
                                     <if test="planWbsCode != null  and planWbsCode != ''"> and `plan_wbs_code` = #{planWbsCode}</if>
                                     <if test="planWbsName != null  and planWbsName != ''"> and `plan_wbs_name` = #{planWbsName}</if>
-                                    <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
-                                    <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
-                                    <if test="workNum != null  and workNum != ''"> and `work_num` = #{workNum}</if>
-                                    <if test="startTime != null "> and `start_time` = #{startTime}</if>
-                                    <if test="endTime != null "> and `end_time` = #{endTime}</if>
+                                    <if test="planStartTime != null "> and `plan_start_time` = #{planStartTime}</if>
+                                    <if test="planEndTime != null "> and `plan_end_time` = #{planEndTime}</if>
+                                    <if test="reviewSubject != null  and reviewSubject != ''"> and `review_subject` = #{reviewSubject}</if>
+                                    <if test="planReviewTime != null "> and `plan_review_time` = #{planReviewTime}</if>
+                                    <if test="planCheckTime != null "> and `plan_check_time` = #{planCheckTime}</if>
                                     <if test="version != null "> and `version` = #{version}</if>
                                     <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                                     <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
@@ -579,11 +579,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </where>
         </update>
 
-                    <update id="deleteQqchSurveyWorkPlanByPks">
-                update `qqch_survey_work_plan` set del_flag = 1
+                    <update id="deleteQqchDesignCheckPlanByPks">
+                update `qqch_design_check_plan` set del_flag = 1
                 <where>
                     `id` in
-                    <foreach item="id" collection="qqchSurveyWorkPlanPkList" open="(" separator="," close=")">
+                    <foreach item="id" collection="qqchDesignCheckPlanPkList" open="(" separator="," close=")">
                         #{id}
                     </foreach>
                 </where>
