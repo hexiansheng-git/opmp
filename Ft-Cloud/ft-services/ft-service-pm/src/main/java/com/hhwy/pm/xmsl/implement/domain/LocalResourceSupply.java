@@ -10,6 +10,20 @@ import lombok.Data;
  */
 @Data
 public class LocalResourceSupply {
+    /**
+     * 当地工人供应情况-币种
+     */
+    private String currencyWorker;
+
+    /**
+     * 当地物资供应情况-币种
+     */
+    private String currencyMaterials;
+
+    /**
+     * 当地设备供应情况-币种
+     */
+    private String currencyEquipment;
 
     /**
      * 当地工人供应情况集合

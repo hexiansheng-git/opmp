@@ -50,7 +50,7 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
     }
 
     /**
-     * 确认
+     * 确认 或 提交
      * @param qqchOptimizeChangeOrganizationVo
      * @return
      */

@@ -56,7 +56,7 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
         deleteParam.setPostType(postType);
         deleteParam.setVersion(voParam.getVersion());
         deleteParam.setDelFlag("1");
-        qqchPostSettingMapper.updateQqchPostSetting(deleteParam);
+        qqchPostSettingMapper.deleteQqchPostSetting(deleteParam);
 
         if (CollectionUtils.isEmpty(voParam.getTreeList())) {
             return;

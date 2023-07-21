@@ -11,6 +11,7 @@
     <result property="standards" column="standards"/>
     <result property="unit" column="unit"/>
     <result property="price" column="price"/>
+    <result property="currency" column="currency"/>
     <result property="remark" column="remark"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
@@ -39,6 +40,7 @@
     ,`standards`
     ,`unit`
     ,`price`
+    ,`currency`
     ,`remark`
     ,`region_id`
     ,`region_name`
@@ -66,6 +68,7 @@
       <if test="standards != null  and standards != ''">and `standards` = #{standards}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="price != null  and price != ''">and `price` = #{price}</if>
+      <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -96,6 +99,7 @@
     ,`standards`
     ,`unit`
     ,`price`
+    ,`currency`
     ,`remark`
     ,`region_id`
     ,`region_name`
@@ -123,6 +127,7 @@
       <if test="standards != null  and standards != ''">and `standards` = #{standards}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="price != null  and price != ''">and `price` = #{price}</if>
+      <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -154,6 +159,7 @@
       <if test="standards != null  and standards != ''">`standards`,</if>
       <if test="unit != null  and unit != ''">`unit`,</if>
       <if test="price != null  and price != ''">`price`,</if>
+      <if test="currency != null  and currency != ''">`currency`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -180,6 +186,7 @@
       <if test="standards != null  and standards != ''">#{standards},</if>
       <if test="unit != null  and unit != ''">#{unit},</if>
       <if test="price != null  and price != ''">#{price},</if>
+      <if test="currency != null  and currency != ''">#{currency},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -211,6 +218,7 @@
       `standards`,
       `unit`,
       `price`,
+      `currency`,
       `remark`,
       `region_id`,
       `region_name`,
@@ -238,6 +246,7 @@
         #{item.standards},
         #{item.unit},
         #{item.price},
+        #{item.currency},
         #{item.remark},
         #{item.regionId},
         #{item.regionName},
@@ -268,6 +277,7 @@
       <if test="standards != null  and  standards != ''">`standards` = #{standards},</if>
       <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
       <if test="price != null  and  price != ''">`price` = #{price},</if>
+      <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -319,6 +329,11 @@
       <trim prefix="price  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.price}
+        </foreach>
+      </trim>
+      <trim prefix="currency  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.currency}
         </foreach>
       </trim>
       <trim prefix="remark  = case" suffix="end,">

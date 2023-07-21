@@ -33,6 +33,14 @@ public class QqchComparisonSchemeVo {
      */
     private BigDecimal version;
     /**
+     * 字段描述：菜单id
+     */
+    private String menuId;
+    /**
+     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
+     */
+    private String buttonMark;
+    /**
      * 字段描述：优重大设计方案比选-方案集合
      */
     private List<QqchComparisonScheme> qqchComparisonSchemeList;

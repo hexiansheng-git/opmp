@@ -5,12 +5,14 @@ import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructionSituation;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchDesignConstructionSituationMapper;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchDesignConstructionSituationService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +30,7 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     private QqchDesignConstructionSituationMapper qqchDesignConstructionSituationMapper;
 
     @Autowired
-    private CommonMapper commonMapper;
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
 
     /**
@@ -39,9 +41,7 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     public QqchDesignConstructionSituationVo getQqchDesignConstructionSituationVo(BigDecimal version) {
         QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = new QqchDesignConstructionSituationVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_design_construction_situation");
-        }
+        version = VersionUtil.getVersion("qqch_design_construction_situation",version);
         qqchDesignConstructionSituationVo.setVersion(version);
 
         QqchDesignConstructionSituation qqchDesignConstructionSituation = new QqchDesignConstructionSituation();
@@ -49,8 +49,6 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
         List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList = qqchDesignConstructionSituationMapper.getQqchDesignConstructionSituationList(qqchDesignConstructionSituation);
 
         qqchDesignConstructionSituationVo.setQqchDesignConstructionSituationList(qqchDesignConstructionSituationList);
-
-        //TODO 获取确认状态
 
         return qqchDesignConstructionSituationVo;
     }
@@ -81,7 +79,13 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     public void confirm(QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         this.save(qqchDesignConstructionSituationVo);
 
-        //TODO 修改确认状态
+        String buttonMark = qqchDesignConstructionSituationVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchDesignConstructionSituationVo.getMenuId();
+            String stageIdentity = qqchDesignConstructionSituationVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     /**
@@ -94,7 +98,9 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
         for (QqchDesignConstructionSituation qqchDesignConstructionSituation : qqchDesignConstructionSituationList) {
             qqchDesignConstructionSituation.setId(IdWorker.createId());
             qqchDesignConstructionSituation.setVersion(version);
-            qqchDesignConstructionSituation.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchDesignConstructionSituation.setValid(Valid.YES);
+            }
             qqchDesignConstructionSituation.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchDesignConstructionSituation.setCreateUserName(SecurityUtils.getUserName());
             qqchDesignConstructionSituation.setCreateTime(DateUtils.getNowDate());

@@ -44,6 +44,12 @@ public class XmslLocalWorkerSupply extends BaseEntity {
     @Excel(name = "薪水")
     private String salary;
     /**
+     * 字段描述：币种
+     */
+    @JsonProperty
+    @Excel(name = "币种")
+    private String currency;
+    /**
      * 字段描述：备注
      */
     @JsonProperty

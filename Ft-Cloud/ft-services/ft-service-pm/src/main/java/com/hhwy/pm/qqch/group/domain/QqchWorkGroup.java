@@ -128,7 +128,7 @@ public class QqchWorkGroup extends BaseEntity {
     /**
      * 字段描述：流程状态（5已完成）
      */
-    private String taskStatus;
+    private String taskStatus = "0";
     /**
      * 字段描述：当前处理人
      */
@@ -247,6 +247,11 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：历史记录标识，1：有历史记录，0：无历史记录
+     */
+    private String historyMark = "0";
 
     /**
      *  字段描述：工作小组成员

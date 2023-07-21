@@ -10,12 +10,14 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchSurveyDesignRiskPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,10 +36,10 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     private QqchSurveyDesignRiskPlanMapper qqchSurveyDesignRiskPlanMapper;
 
     @Autowired
-    private SystemServiceApi systemServiceApi;
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
     @Autowired
-    private CommonMapper commonMapper;
+    private SystemServiceApi systemServiceApi;
 
 
     /**
@@ -48,9 +50,7 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     public QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(BigDecimal version) {
         QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = new QqchSurveyDesignRiskPlanVo();
 
-        if(version == null){
-            version = commonMapper.selectMaxVersion("qqch_survey_design_risk_plan");
-        }
+        version = VersionUtil.getVersion("qqch_survey_design_risk_plan",version);
         qqchSurveyDesignRiskPlanVo.setVersion(version);
 
         QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
@@ -119,7 +119,14 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     @Override
     public void confirm(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
         this.save(qqchSurveyDesignRiskPlanVo);
-        //TODO 修改确认状态
+
+        String buttonMark = qqchSurveyDesignRiskPlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchSurveyDesignRiskPlanVo.getMenuId();
+            String stageIdentity = qqchSurveyDesignRiskPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     /**
@@ -138,7 +145,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
                 QqchSurveyDesignRiskPlan::setChildren);
         for (QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan : insertList) {
             qqchSurveyDesignRiskPlan.setVersion(version);
-            qqchSurveyDesignRiskPlan.setValid(Valid.YES);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchSurveyDesignRiskPlan.setValid(Valid.YES);
+            }
             qqchSurveyDesignRiskPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchSurveyDesignRiskPlan.setCreateUserName(SecurityUtils.getUserName());
             qqchSurveyDesignRiskPlan.setCreateTime(DateUtils.getNowDate());

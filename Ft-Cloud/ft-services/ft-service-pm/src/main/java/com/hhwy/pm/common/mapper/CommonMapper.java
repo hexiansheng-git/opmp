@@ -47,11 +47,18 @@ public interface CommonMapper {
 
 
     /**
-     * 根据表名，查询最大版本号，如果查不到，版本号赋默认值1.0
+     * 根据表名，查询最大有效版本号，如果查不到，版本号赋默认值1.0
      *
      * @param tableName
      * @return
      */
     BigDecimal selectMaxVersion(@Param("tableName") String tableName);
 
+    /**
+     * 查询表中最接近（小于等于）指定版本的版本号
+     * @param tableName
+     * @param version
+     * @return
+     */
+    BigDecimal selectLessOrEqualAssignVersion(@Param("tableName") String tableName,@Param("version") BigDecimal version);
 }

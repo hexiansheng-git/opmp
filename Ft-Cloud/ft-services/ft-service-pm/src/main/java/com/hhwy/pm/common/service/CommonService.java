@@ -57,7 +57,7 @@ public class CommonService {
      * @param menuId 菜单id
      * @return
      */
-    public boolean checkIsEditable(String menuId) {
+    public boolean  checkIsEditable(String menuId) {
         boolean isEditable = true;
         //TODO 获取当前阶段
 
