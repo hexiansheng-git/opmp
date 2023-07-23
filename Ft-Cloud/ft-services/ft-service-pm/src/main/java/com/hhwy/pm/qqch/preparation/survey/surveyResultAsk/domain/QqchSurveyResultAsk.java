@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.Date;
  * <p>
  * 2.3.2 勘察成果验收内容形式审查要求
  */
-public class QqchSurveyResultAsk extends BaseEntity {
+public class QqchSurveyResultAsk extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

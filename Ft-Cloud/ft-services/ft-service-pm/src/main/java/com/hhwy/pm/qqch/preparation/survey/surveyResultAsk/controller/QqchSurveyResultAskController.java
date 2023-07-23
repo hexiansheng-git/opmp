@@ -38,10 +38,16 @@ public class QqchSurveyResultAskController extends BaseController {
         return AjaxResult.success(qqchSurveyResultAsk);
     }
 
+    /**
+     * 列表查询
+     *
+     * @param qqchSurveyResultAskParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchSurveyResultAsk:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyResultAskList(@Validated(ValidationGroups.Select.class) QqchSurveyResultAsk qqchSurveyResultAskParam) {
-        startPage();
+        //startPage();
         List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskService.getQqchSurveyResultAskList(qqchSurveyResultAskParam);
         return getDataTableAjaxResult(qqchSurveyResultAskList);
     }

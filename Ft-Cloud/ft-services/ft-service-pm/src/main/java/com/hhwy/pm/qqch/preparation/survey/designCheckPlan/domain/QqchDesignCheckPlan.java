@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.Date;
  *
  *  2.3.3 设计成果验收计划
  */
-public class QqchDesignCheckPlan extends BaseEntity {
+public class QqchDesignCheckPlan extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

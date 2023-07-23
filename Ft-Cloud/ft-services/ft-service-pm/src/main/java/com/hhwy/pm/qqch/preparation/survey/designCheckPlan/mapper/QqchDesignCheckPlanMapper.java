@@ -22,9 +22,9 @@ public interface QqchDesignCheckPlanMapper {
 
     int updateQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan);
 
-            int updateQqchDesignCheckPlanList(@Param("qqchDesignCheckPlanList") List<QqchDesignCheckPlan> qqchDesignCheckPlanList);
+    int updateQqchDesignCheckPlanList(@Param("list") List<QqchDesignCheckPlan> qqchDesignCheckPlanList);
     
     int deleteQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan);
 
-            int deleteQqchDesignCheckPlanByPks(@Param("qqchDesignCheckPlanPkList") List<Long> qqchDesignCheckPlanPkList);
+    int deleteQqchDesignCheckPlanByPks(@Param("qqchDesignCheckPlanPkList") List<Long> qqchDesignCheckPlanPkList);
     }
