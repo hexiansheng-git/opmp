@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchKeyDifficultConstructionBriefMapper;
@@ -26,6 +28,8 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
 
     @Autowired
     private QqchKeyDifficultConstructionBriefMapper qqchKeyDifficultConstructionBriefMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo vo = new QqchKeyDifficultConstructionBriefVo();
@@ -65,5 +69,12 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
         qqchKeyDifficultConstructionBriefMapper
             .insertQqchKeyDifficultConstructionBriefList(qqchKeyDifficultConstructionBriefVo.getList());
 
+        String buttonMark = qqchKeyDifficultConstructionBriefVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchKeyDifficultConstructionBriefVo.getMenuId();
+            String stageIdentity = qqchKeyDifficultConstructionBriefVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

@@ -11,7 +11,6 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstruc
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -45,9 +44,9 @@ public class QqchDangerConstructionListController extends BaseController {
     @PreAuthorize(hasPermi = "qqchDangerConstructionList:update")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Update.class) @RequestBody List<QqchDangerConstructionList> qqchDangerConstructionListListParam) {
-        return toAjax(qqchDangerConstructionListService
-            .updateQqchDangerConstructionListList(qqchDangerConstructionListListParam));
+        @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerConstructionListVo qqchDangerConstructionListVo) {
+        qqchDangerConstructionListService.batchSave(qqchDangerConstructionListVo);
+        return AjaxResult.success();
     }
 
     /**

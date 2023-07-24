@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.manage.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchPostSettingMapper;
@@ -26,6 +28,8 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
     @Autowired
     private QqchPostSettingMapper qqchPostSettingMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version) {
         QqchPostSettingVo vo = new QqchPostSettingVo();
@@ -65,6 +69,14 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
         if (insertList.size() > 0) {
             qqchPostSettingMapper.insertQqchPostSettingList(insertList);
+        }
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
 }

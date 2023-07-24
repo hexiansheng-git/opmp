@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.manage.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeComparison;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchTechManageModeComparisonMapper;
@@ -26,6 +28,8 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
 
     @Autowired
     private QqchTechManageModeComparisonMapper qqchTechManageModeComparisonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
@@ -61,5 +65,13 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         }
 
         qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(voParam.getList());
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

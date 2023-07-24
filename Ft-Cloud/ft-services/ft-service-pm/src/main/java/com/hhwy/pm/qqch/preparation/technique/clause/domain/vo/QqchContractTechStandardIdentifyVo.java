@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.clause.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,6 +28,21 @@ public class QqchContractTechStandardIdentifyVo {
      */
     @JsonProperty
     private BigDecimal version;
+
+    /**
+     * 字段描述：确认状态（0：未确认，1：已确认）
+     */
+    private String confirmStatus = ConfirmStatus.UNCONFIRMED;
+
+    /**
+     * 字段描述：菜单id
+     */
+    private String menuId;
+
+    /**
+     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
+     */
+    private String buttonMark;
 
     /**
      * 字段描述：合同执行技术标准识别集合

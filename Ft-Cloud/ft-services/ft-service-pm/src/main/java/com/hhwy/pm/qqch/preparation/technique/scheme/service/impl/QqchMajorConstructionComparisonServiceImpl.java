@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
@@ -26,6 +28,8 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
 
     @Autowired
     private QqchMajorConstructionComparisonMapper qqchMajorConstructionComparisonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(BigDecimal version) {
         QqchMajorConstructionComparisonVo vo = new QqchMajorConstructionComparisonVo();
@@ -68,5 +72,13 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
 
         // 全量入库
         qqchMajorConstructionComparisonMapper.insertQqchMajorConstructionComparisonList(insertList);
+
+        String buttonMark = qqchMajorConstructionComparisonVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchMajorConstructionComparisonVo.getMenuId();
+            String stageIdentity = qqchMajorConstructionComparisonVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

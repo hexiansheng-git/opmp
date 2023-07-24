@@ -3,7 +3,9 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
@@ -34,6 +36,8 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     private CommonMapper commonMapper;
     @Autowired
     private QqchConstructionListMapper qqchConstructionListMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version) {
         QqchDangerConstructionListVo vo = new QqchDangerConstructionListVo();
@@ -49,12 +53,21 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     }
 
     @Transactional
-    public int updateQqchDangerConstructionListList(List<QqchDangerConstructionList> qqchDangerConstructionListList) {
-        for (QqchDangerConstructionList qqchDangerConstructionList : qqchDangerConstructionListList) {
+    public void batchSave(QqchDangerConstructionListVo qqchDangerConstructionListVo) {
+        for (QqchDangerConstructionList qqchDangerConstructionList : qqchDangerConstructionListVo.getList()) {
             qqchDangerConstructionList.setUpdateUser(SecurityUtils.getUserName());
             qqchDangerConstructionList.setUpdateTime(DateUtils.getNowDate());
         }
-        return qqchDangerConstructionListMapper.updateQqchDangerConstructionListList(qqchDangerConstructionListList);
+
+        qqchDangerConstructionListMapper.updateQqchDangerConstructionListList(qqchDangerConstructionListVo.getList());
+
+        String buttonMark = qqchDangerConstructionListVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchDangerConstructionListVo.getMenuId();
+            String stageIdentity = qqchDangerConstructionListVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 
     @Transactional

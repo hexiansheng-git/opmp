@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.clause.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechAchievementIdentify;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechAchievementIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechAchievementIdentifyMapper;
@@ -26,6 +28,8 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
 
     @Autowired
     private QqchContractTechAchievementIdentifyMapper qqchContractTechAchievementIdentifyMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     /**
      * 树查询
@@ -71,5 +75,13 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
         }
         // 全量入库
         qqchContractTechAchievementIdentifyMapper.insertQqchContractTechAchievementIdentifyList(insertList);
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

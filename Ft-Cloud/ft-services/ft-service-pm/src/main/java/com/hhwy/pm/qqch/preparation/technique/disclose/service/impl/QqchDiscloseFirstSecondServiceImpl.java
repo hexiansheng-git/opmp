@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.disclose.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.QqchDiscloseFirstSecond;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseFirstSecondVo;
 import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseFirstSecondMapper;
@@ -26,6 +28,8 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
 
     @Autowired
     private QqchDiscloseFirstSecondMapper qqchDiscloseFirstSecondMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchDiscloseFirstSecondVo getQqchDiscloseFirstSecondList(BigDecimal version) {
         QqchDiscloseFirstSecondVo vo = new QqchDiscloseFirstSecondVo();
@@ -65,5 +69,14 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
 
         // 全量入库
         qqchDiscloseFirstSecondMapper.insertQqchDiscloseFirstSecondList(insertList);
+
+
+        String buttonMark = qqchDiscloseFirstSecondVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchDiscloseFirstSecondVo.getMenuId();
+            String stageIdentity = qqchDiscloseFirstSecondVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

@@ -26,4 +26,6 @@ public interface IQqchModuleConfirmCaseService {
     int deleteQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     int deleteQqchModuleConfirmCaseByPks(List<Long> qqchModuleConfirmCasePkList);
+
+    void addConfirmRecord(String menuId, String stageIdentity);
 }

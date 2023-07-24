@@ -3,7 +3,9 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
@@ -36,6 +38,8 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     private IQqchConstructionListService qqchConstructionListService;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList(BigDecimal version) {
         QqchConstructionReviewPlanVo vo = new QqchConstructionReviewPlanVo();
@@ -120,8 +124,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> updateList = new ArrayList<>();
 
         for (QqchConstructionReviewPlan plan : qqchConstructionReviewPlanVo.getList()) {
-            List<QqchConstructionReviewPlan> planList = plan.getChildren();
-            for (QqchConstructionReviewPlan update : planList) {
+            for (QqchConstructionReviewPlan update : plan.getChildren()) {
                 update.setUpdateUser(SecurityUtils.getUserName());
                 update.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(update);
@@ -130,6 +133,14 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
         // 数据更新
         qqchConstructionReviewPlanMapper.updateQqchConstructionReviewPlanList(updateList);
+
+        String buttonMark = qqchConstructionReviewPlanVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchConstructionReviewPlanVo.getMenuId();
+            String stageIdentity = qqchConstructionReviewPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 
     @Transactional
@@ -149,17 +160,5 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> planList = qqchConstructionReviewPlanMapper
             .getQqchConstructionReviewPlanList(qryParam);
         return planList;
-    }
-
-    /**
-     * 确认
-     *
-     * @param qqchConstructionReviewPlanVo
-     * @return
-     */
-    @Override
-    public void confirm(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
-        this.batchSave(qqchConstructionReviewPlanVo);
-        // TODO 修改确认状态
     }
 }

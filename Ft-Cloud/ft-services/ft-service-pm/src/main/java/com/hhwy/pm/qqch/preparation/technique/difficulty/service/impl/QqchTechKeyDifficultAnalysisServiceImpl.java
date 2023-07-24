@@ -2,8 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.difficulty.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysis;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.mapper.QqchTechKeyDifficultAnalysisMapper;
@@ -29,7 +30,7 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
     @Autowired
     private QqchTechKeyDifficultAnalysisMapper qqchTechKeyDifficultAnalysisMapper;
     @Autowired
-    private CommonMapper commonMapper;
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(BigDecimal version) {
         QqchTechKeyDifficultAnalysisVo keyDifficultAnalysisVo = new QqchTechKeyDifficultAnalysisVo();
@@ -103,6 +104,14 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
         if (insertList.size() > 0) {
             qqchTechKeyDifficultAnalysisMapper.insertQqchTechKeyDifficultAnalysisList(insertList);
+        }
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
 }

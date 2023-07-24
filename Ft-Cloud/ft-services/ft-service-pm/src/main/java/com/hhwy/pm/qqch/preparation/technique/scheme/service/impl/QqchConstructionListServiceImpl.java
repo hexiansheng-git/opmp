@@ -4,7 +4,9 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
@@ -30,6 +32,8 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     private QqchConstructionListMapper qqchConstructionListMapper;
     @Autowired
     private GenCodeService genCodeService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchConstructionListVo getQqchConstructionListList(BigDecimal version) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
@@ -72,5 +76,12 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
         qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
 
+        String buttonMark = qqchConstructionListVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchConstructionListVo.getMenuId();
+            String stageIdentity = qqchConstructionListVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }
