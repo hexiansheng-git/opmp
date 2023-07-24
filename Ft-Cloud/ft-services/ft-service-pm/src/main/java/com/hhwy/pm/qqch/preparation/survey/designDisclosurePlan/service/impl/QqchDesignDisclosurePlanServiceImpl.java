@@ -81,8 +81,12 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
                 }
             }
         }
-        qqchDesignDisclosurePlanMapper.insertQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanList);
-        qqchDesignDisclosurePlanMapper.updateQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanList);
+        if(CollectionUtils.isNotEmpty(insertList)){
+            qqchDesignDisclosurePlanMapper.insertQqchDesignDisclosurePlanList(insertList);
+        }
+        if(CollectionUtils.isNotEmpty(updateList)){
+            qqchDesignDisclosurePlanMapper.updateQqchDesignDisclosurePlanList(updateList);
+        }
         return 1;
     }
 

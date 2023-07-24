@@ -236,7 +236,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertQqchSurveyResultPlanList">
         insert into qqch_survey_result_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                `id`,
+                                                                `id`,
                                                                 `name`,
                                                                 `plan_id`,
                                                                 `plan_wbs_code`,

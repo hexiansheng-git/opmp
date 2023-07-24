@@ -195,7 +195,7 @@
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
         </where>
-        order by version desc limit 1
+        order by version desc
     </select>
 
     <select id="getXmslContractInfoList" resultMap="XmslContractInfoResultMap">

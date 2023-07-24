@@ -2,20 +2,16 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSign;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInsureService;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractSignService;
+import com.hhwy.pm.xmsl.contractInfo.service.*;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,6 +30,14 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     private IXmslContractPayinfoService xmslContractPayinfoService;
     @Autowired
     private IXmslContractSignService xmslContractSignService;
+    @Autowired
+    private CommonMapper commonMapper;
+    @Autowired
+    private IXmslContractListService xmslContractListService;
+    @Autowired
+    private  IXmslContractGeneralService xmslContractGeneralService;
+    @Autowired
+    private IXmslContractSpecialService xmslContractSpecialService;
 
 
     /**
@@ -43,6 +47,8 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo) {
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
+        xmslContractInfo.setVersion(maxVersion);
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
         //1.1投保险种
         XmslContractInsure xmslContractInsure = new XmslContractInsure();
@@ -131,6 +137,32 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
     @Transactional
     public int deleteXmslContractInfo(XmslContractInfo xmslContractInfo) {
+        //删除对应子表数据
+        //1.1投保险种
+        XmslContractInsure xmslContractInsure = new XmslContractInsure();
+        xmslContractInsure.setMasterId(xmslContractInfo.getId());
+        xmslContractInsureService.deleteXmslContractInsure(xmslContractInsure);
+        //1.2 签订信息
+        XmslContractSign xmslContractSign = new XmslContractSign();
+        xmslContractSign.setMasterId(xmslContractInfo.getId());
+        xmslContractSignService.deleteXmslContractSign(xmslContractSign);
+        //1.3  项目支付信息
+        XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+        xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
+        xmslContractPayinfoService.deleteXmslContractPayinfo(xmslContractPayinfo);
+        //1.4 主合同清单
+        XmslContractList xmslContractList = new XmslContractList();
+        xmslContractList.setMasterId(xmslContractInfo.getId());
+        xmslContractListService.deleteXmslContractList(xmslContractList);
+        //1.5 通用条件
+        XmslContractGeneral xmslContractGeneral = new XmslContractGeneral();
+        xmslContractGeneral.setMasterId(xmslContractInfo.getId());
+        xmslContractGeneralService.deleteXmslContractGeneral(xmslContractGeneral);
+        //1.6 特殊条件
+        XmslContractSpecial xmslContractSpecial = new XmslContractSpecial();
+        xmslContractSpecial.setMasterId(xmslContractInfo.getId());
+        xmslContractSpecialService.deleteXmslContractSpecial(xmslContractSpecial);
+        //删除子表
         xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
         xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
         return xmslContractInfoMapper.deleteXmslContractInfo(xmslContractInfo);

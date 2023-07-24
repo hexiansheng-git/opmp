@@ -80,8 +80,12 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
                 }
             }
         }
-         qqchSurveyResultAskMapper.insertQqchSurveyResultAskList(qqchSurveyResultAskList);
-         qqchSurveyResultAskMapper.updateQqchSurveyResultAskList(qqchSurveyResultAskList);
+        if(CollectionUtils.isNotEmpty(insertList)) {
+            qqchSurveyResultAskMapper.insertQqchSurveyResultAskList(insertList);
+        }
+        if(CollectionUtils.isNotEmpty(updateList)){
+            qqchSurveyResultAskMapper.updateQqchSurveyResultAskList(updateList);
+        }
         return 1;
     }
 

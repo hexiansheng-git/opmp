@@ -81,8 +81,12 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
                 }
             }
         }
-         qqchSurveyResultPlanMapper.insertQqchSurveyResultPlanList(insertList);
-         qqchSurveyResultPlanMapper.updateQqchSurveyResultPlanList(updateList);
+        if(CollectionUtils.isNotEmpty(insertList)){
+            qqchSurveyResultPlanMapper.insertQqchSurveyResultPlanList(insertList);
+        }
+         if(CollectionUtils.isNotEmpty(updateList)){
+             qqchSurveyResultPlanMapper.updateQqchSurveyResultPlanList(updateList);
+         }
         return 1;
     }
 

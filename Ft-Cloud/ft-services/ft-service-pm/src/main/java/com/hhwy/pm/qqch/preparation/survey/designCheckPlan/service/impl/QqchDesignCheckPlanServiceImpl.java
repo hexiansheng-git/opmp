@@ -12,7 +12,6 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,17 +19,17 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-07-21 16:48:41
- * @remark  2.3.3 设计成果验收计划
+ * @remark 2.3.3 设计成果验收计划
  */
 @Service
-public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanService{
+public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanService {
 
     @Autowired
     private QqchDesignCheckPlanMapper qqchDesignCheckPlanMapper;
     @Autowired
     private CommonMapper commonMapper;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                        
+
     public QqchDesignCheckPlan getQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
         return qqchDesignCheckPlanMapper.getQqchDesignCheckPlan(qqchDesignCheckPlan);
     }
@@ -42,7 +41,7 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
      * @return
      */
     public List<QqchDesignCheckPlan> getQqchDesignCheckPlanList(QqchDesignCheckPlan qqchDesignCheckPlan) {
-        BigDecimal version=new BigDecimal(1);
+        BigDecimal version = new BigDecimal(1);
         if (qqchDesignCheckPlan.getVersion() == null) {
             // 获取最大版本号
             version = commonMapper.selectMaxVersion("qqch_design_check_plan");
@@ -61,7 +60,8 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
     }
 
     /**
-     *  批量新增 修改
+     * 批量新增 修改
+     *
      * @param qqchDesignCheckPlanList
      * @return
      */
@@ -69,20 +69,24 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
     public int insertQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
         List<QqchDesignCheckPlan> insertList = new ArrayList<>();
         List<QqchDesignCheckPlan> updateList = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(qqchDesignCheckPlanList)){
+        if (CollectionUtils.isNotEmpty(qqchDesignCheckPlanList)) {
             for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
-                if(qqchDesignCheckPlan.getId()==null){
+                if (qqchDesignCheckPlan.getId() == null) {
                     qqchDesignCheckPlan.setId(IdWorker.createId());
                     EntityUtils.setCreateUpdateInfo(qqchDesignCheckPlan);
                     insertList.add(qqchDesignCheckPlan);
-                }else {
+                } else {
                     EntityUtils.setUpdateInfo(qqchDesignCheckPlan);
                     updateList.add(qqchDesignCheckPlan);
                 }
             }
         }
-         qqchDesignCheckPlanMapper.insertQqchDesignCheckPlanList(qqchDesignCheckPlanList);
-        qqchDesignCheckPlanMapper.updateQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+        if (CollectionUtils.isNotEmpty(insertList)) {
+            qqchDesignCheckPlanMapper.insertQqchDesignCheckPlanList(insertList);
+        }
+        if (CollectionUtils.isNotEmpty(updateList)) {
+            qqchDesignCheckPlanMapper.updateQqchDesignCheckPlanList(updateList);
+        }
         return 1;
     }
 
@@ -93,15 +97,15 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
         return qqchDesignCheckPlanMapper.updateQqchDesignCheckPlan(qqchDesignCheckPlan);
     }
 
-            @Transactional
-        public int updateQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
-            for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
-                qqchDesignCheckPlan.setUpdateUser(SecurityUtils.getUserName());
-                qqchDesignCheckPlan.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchDesignCheckPlanMapper.updateQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+    @Transactional
+    public int updateQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
+        for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
+            qqchDesignCheckPlan.setUpdateUser(SecurityUtils.getUserName());
+            qqchDesignCheckPlan.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchDesignCheckPlanMapper.updateQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+    }
+
     @Transactional
     public int deleteQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
         qqchDesignCheckPlan.setUpdateUser(SecurityUtils.getUserName());
@@ -109,8 +113,8 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
         return qqchDesignCheckPlanMapper.deleteQqchDesignCheckPlan(qqchDesignCheckPlan);
     }
 
-            @Transactional
-        public int deleteQqchDesignCheckPlanByPks(List<Long> qqchDesignCheckPlanPkList) {
-            return qqchDesignCheckPlanMapper.deleteQqchDesignCheckPlanByPks(qqchDesignCheckPlanPkList);
-        }
+    @Transactional
+    public int deleteQqchDesignCheckPlanByPks(List<Long> qqchDesignCheckPlanPkList) {
+        return qqchDesignCheckPlanMapper.deleteQqchDesignCheckPlanByPks(qqchDesignCheckPlanPkList);
     }
+}
