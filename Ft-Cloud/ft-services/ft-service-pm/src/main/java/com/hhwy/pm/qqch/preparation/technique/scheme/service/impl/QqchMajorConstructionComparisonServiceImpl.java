@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructionComparison;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,14 +29,11 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
     @Autowired
     private QqchMajorConstructionComparisonMapper qqchMajorConstructionComparisonMapper;
     @Autowired
-    private CommonMapper commonMapper;
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(BigDecimal version) {
         QqchMajorConstructionComparisonVo vo = new QqchMajorConstructionComparisonVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_major_construction_comparison");
-        }
+        version = VersionUtil.getVersion("qqch_major_construction_comparison", version);
         vo.setVersion(version);
 
         QqchMajorConstructionComparison qryParam = new QqchMajorConstructionComparison();
@@ -73,5 +72,13 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
 
         // 全量入库
         qqchMajorConstructionComparisonMapper.insertQqchMajorConstructionComparisonList(insertList);
+
+        String buttonMark = qqchMajorConstructionComparisonVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchMajorConstructionComparisonVo.getMenuId();
+            String stageIdentity = qqchMajorConstructionComparisonVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

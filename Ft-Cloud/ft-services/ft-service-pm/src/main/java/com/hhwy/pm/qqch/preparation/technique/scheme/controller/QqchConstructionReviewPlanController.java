@@ -50,18 +50,4 @@ public class QqchConstructionReviewPlanController extends BaseController {
         qqchConstructionReviewPlanService.batchSave(qqchConstructionReviewPlanVo);
         return AjaxResult.success();
     }
-
-    /**
-     * 确认
-     *
-     * @param qqchConstructionReviewPlanVo
-     * @return
-     */
-    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:add")
-    @PostMapping("/confirm")
-    public AjaxResult confirm(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
-        qqchConstructionReviewPlanService.confirm(qqchConstructionReviewPlanVo);
-        return AjaxResult.success();
-    }
 }

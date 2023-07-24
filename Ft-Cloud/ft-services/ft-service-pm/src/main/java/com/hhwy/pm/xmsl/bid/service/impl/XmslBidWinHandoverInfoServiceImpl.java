@@ -1,7 +1,10 @@
 package com.hhwy.pm.xmsl.bid.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverFile;
 import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverInfo;
 import com.hhwy.pm.xmsl.bid.mapper.XmslBidWinHandoverFileMapper;
@@ -9,7 +12,10 @@ import com.hhwy.pm.xmsl.bid.mapper.XmslBidWinHandoverInfoMapper;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
 import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +24,7 @@ import org.springframework.util.CollectionUtils;
 /**
  * @author zhenglili
  * @date 2023-07-06 15:13:41
- * @remark
+ * @remark 中标项目移交信息
  */
 @Service
 public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInfoService {
@@ -29,18 +35,30 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
     private IXmslBidWinHandoverFileService xmslBidWinHandoverFileService;
     @Autowired
     private XmslBidWinHandoverFileMapper xmslBidWinHandoverFileMapper;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     public XmslBidWinHandoverInfo getXmslBidWinHandoverInfo() {
         XmslBidWinHandoverInfo xmslBidWinHandoverInfo = new XmslBidWinHandoverInfo();
-        XmslBidWinHandoverInfo result = xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
+
+        XmslBidWinHandoverInfo result = new XmslBidWinHandoverInfo();
+        XmslBidWinHandoverInfo info = xmslBidWinHandoverInfoMapper.getXmslBidWinHandoverInfo(xmslBidWinHandoverInfo);
 
         XmslBidWinHandoverFile xmslBidWinHandoverFile = new XmslBidWinHandoverFile();
-        if (result != null && result.getId() != null) {
+
+        List<XmslBidWinHandoverFile> fileList;
+
+        // 若中标项目移交信息无数据，则移交文件获取初始化数据
+        if (info == null || info.getId() == null) {
+            fileList = this.getInitializeData();
+        } else {
+            BeanUtils.copyProperties(info, result);
+
             xmslBidWinHandoverFile.setHandoverInfoId(xmslBidWinHandoverInfo.getId());
-            List<XmslBidWinHandoverFile> fileList =
+            fileList =
                 xmslBidWinHandoverFileService.getXmslBidWinHandoverFileList(xmslBidWinHandoverFile);
-            result.setXmslBidWinHandoverFileList(fileList);
         }
+        result.setXmslBidWinHandoverFileList(fileList);
         return result;
     }
 
@@ -79,5 +97,28 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
             xmslBidWinHandoverFileMapper
                 .insertXmslBidWinHandoverFileList(xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList());
         }
+    }
+
+    /**
+     * 获取初始化数据
+     *
+     * @return
+     */
+    public List<XmslBidWinHandoverFile> getInitializeData() {
+        List<XmslBidWinHandoverFile> fileList = new ArrayList<>();
+
+        // 移交资料初始化数据字典
+        AjaxResult result = systemServiceApi.dictType(DictType.HANDOVER_FILE_INIT_DATA);
+        List<Map<String, Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
+
+        for (Map<String, Object> map : dictDataList) {
+            String dictLabel = (String) map.get("dictLabel");
+            XmslBidWinHandoverFile xmslBidWinHandoverFile = new XmslBidWinHandoverFile();
+            xmslBidWinHandoverFile.setFileName(dictLabel);
+            xmslBidWinHandoverFile.setImportance("2");
+            fileList.add(xmslBidWinHandoverFile);
+        }
+
+        return fileList;
     }
 }

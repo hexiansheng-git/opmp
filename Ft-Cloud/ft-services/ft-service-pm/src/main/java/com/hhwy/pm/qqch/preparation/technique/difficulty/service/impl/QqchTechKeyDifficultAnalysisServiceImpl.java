@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.difficulty.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysis;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.mapper.QqchTechKeyDifficultAnalysisMapper;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.service.IQqchTechKeyDifficultAnalysisService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -28,14 +30,12 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
     @Autowired
     private QqchTechKeyDifficultAnalysisMapper qqchTechKeyDifficultAnalysisMapper;
     @Autowired
-    private CommonMapper commonMapper;
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(BigDecimal version) {
         QqchTechKeyDifficultAnalysisVo keyDifficultAnalysisVo = new QqchTechKeyDifficultAnalysisVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
-        }
+        version = VersionUtil.getVersion("qqch_tech_key_difficult_analysis", version);
+
         keyDifficultAnalysisVo.setVersion(version);
 
         QqchTechKeyDifficultAnalysis qryParam = new QqchTechKeyDifficultAnalysis();
@@ -104,6 +104,14 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
         if (insertList.size() > 0) {
             qqchTechKeyDifficultAnalysisMapper.insertQqchTechKeyDifficultAnalysisList(insertList);
+        }
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
 }

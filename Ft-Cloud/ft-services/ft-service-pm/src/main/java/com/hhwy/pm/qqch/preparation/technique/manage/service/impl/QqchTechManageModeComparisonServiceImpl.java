@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.manage.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeComparison;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchTechManageModeComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchTechManageModeComparisonService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,13 +29,11 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
     @Autowired
     private QqchTechManageModeComparisonMapper qqchTechManageModeComparisonMapper;
     @Autowired
-    private CommonMapper commonMapper;
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
-        if (version == null) {
-            version = commonMapper.selectMaxVersion("qqch_tech_manage_mode_comparison");
-        }
+        version = VersionUtil.getVersion("qqch_tech_manage_mode_comparison", version);
 
         QqchTechManageModeComparison qryParam = new QqchTechManageModeComparison();
         qryParam.setVersion(version);
@@ -65,5 +65,13 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         }
 
         qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(voParam.getList());
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

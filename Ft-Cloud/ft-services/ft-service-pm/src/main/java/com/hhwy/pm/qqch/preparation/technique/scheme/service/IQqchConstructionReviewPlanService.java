@@ -15,6 +15,4 @@ public interface IQqchConstructionReviewPlanService {
     void syncData();
 
     void batchSave(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
-
-    void confirm(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
 }

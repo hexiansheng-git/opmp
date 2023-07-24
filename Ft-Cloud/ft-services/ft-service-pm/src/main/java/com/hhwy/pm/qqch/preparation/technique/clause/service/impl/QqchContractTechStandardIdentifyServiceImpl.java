@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.clause.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechStandardIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,7 +29,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
     @Autowired
     private QqchContractTechStandardIdentifyMapper qqchContractTechStandardIdentifyMapper;
     @Autowired
-    private CommonMapper commonMapper;
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     /**
      * 树列表查询
@@ -37,10 +39,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
      */
     public QqchContractTechStandardIdentifyVo getTreeList(BigDecimal version) {
         QqchContractTechStandardIdentifyVo vo = new QqchContractTechStandardIdentifyVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
-        }
+        version = VersionUtil.getVersion("qqch_contract_tech_standard_identify", version);
         vo.setVersion(version);
 
         QqchContractTechStandardIdentify qryParam = new QqchContractTechStandardIdentify();
@@ -82,5 +81,13 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         }
         // 全量入库
         qqchContractTechStandardIdentifyMapper.insertQqchContractTechStandardIdentifyList(insertList);
+
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }

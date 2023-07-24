@@ -3,7 +3,9 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
@@ -11,6 +13,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionR
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionReviewPlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,20 +38,18 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     private IQqchConstructionListService qqchConstructionListService;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList(BigDecimal version) {
         QqchConstructionReviewPlanVo vo = new QqchConstructionReviewPlanVo();
-
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_construction_review_plan");
-        }
+        version = VersionUtil.getVersion("qqch_construction_review_plan", version);
         vo.setVersion(version);
 
-        List<QqchConstructionReviewPlan> onePlanList = this.getPlanListBySchemeLevel("1");
-        List<QqchConstructionReviewPlan> twoPlanList = this.getPlanListBySchemeLevel("2");
-        List<QqchConstructionReviewPlan> threePlanList = this.getPlanListBySchemeLevel("3");
-        List<QqchConstructionReviewPlan> fourPlanList = this.getPlanListBySchemeLevel("4");
+        List<QqchConstructionReviewPlan> onePlanList = this.getPlanListBySchemeLevel("1", version);
+        List<QqchConstructionReviewPlan> twoPlanList = this.getPlanListBySchemeLevel("2", version);
+        List<QqchConstructionReviewPlan> threePlanList = this.getPlanListBySchemeLevel("3", version);
+        List<QqchConstructionReviewPlan> fourPlanList = this.getPlanListBySchemeLevel("4", version);
 
         List<QqchConstructionReviewPlan> newList = new ArrayList<>();
 
@@ -123,8 +124,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> updateList = new ArrayList<>();
 
         for (QqchConstructionReviewPlan plan : qqchConstructionReviewPlanVo.getList()) {
-            List<QqchConstructionReviewPlan> planList = plan.getChildren();
-            for (QqchConstructionReviewPlan update : planList) {
+            for (QqchConstructionReviewPlan update : plan.getChildren()) {
                 update.setUpdateUser(SecurityUtils.getUserName());
                 update.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(update);
@@ -133,6 +133,14 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
         // 数据更新
         qqchConstructionReviewPlanMapper.updateQqchConstructionReviewPlanList(updateList);
+
+        String buttonMark = qqchConstructionReviewPlanVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchConstructionReviewPlanVo.getMenuId();
+            String stageIdentity = qqchConstructionReviewPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 
     @Transactional
@@ -142,30 +150,15 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         // 先批量删除当前版本所有数据
         QqchConstructionReviewPlan deleteParam = new QqchConstructionReviewPlan();
         deleteParam.setVersion(maxVersion);
-        deleteParam.setDelFlag("1");
-        return qqchConstructionReviewPlanMapper.updateQqchConstructionReviewPlan(deleteParam);
+        return qqchConstructionReviewPlanMapper.deleteQqchConstructionReviewPlan(deleteParam);
     }
 
-    public List<QqchConstructionReviewPlan> getPlanListBySchemeLevel(String schemeLevel) {
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_review_plan");
+    public List<QqchConstructionReviewPlan> getPlanListBySchemeLevel(String schemeLevel, BigDecimal version) {
         QqchConstructionReviewPlan qryParam = new QqchConstructionReviewPlan();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         qryParam.setSchemeLevel(schemeLevel);
         List<QqchConstructionReviewPlan> planList = qqchConstructionReviewPlanMapper
             .getQqchConstructionReviewPlanList(qryParam);
         return planList;
-    }
-
-    /**
-     * 确认
-     *
-     * @param qqchConstructionReviewPlanVo
-     * @return
-     */
-    @Override
-    public void confirm(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
-        this.batchSave(qqchConstructionReviewPlanVo);
-        // TODO 修改确认状态
     }
 }

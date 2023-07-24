@@ -13,4 +13,6 @@ public class DictType {
     public static final String SURVEY_DESIGN_RISK_PLAN_INITIALIZE = "survey_design_risk_plan_initialize";
     /*日常管控策划初始化*/
     public static final String DAILY_CONTROL_PLAN_INITIALIZE = "daily_control_plan_initialize";
+    /*移交文件初始化数据*/
+    public static final String HANDOVER_FILE_INIT_DATA = "handover_file_init_data";
 }

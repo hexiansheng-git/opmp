@@ -2,14 +2,16 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,16 +31,13 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Autowired
     private QqchConstructionListMapper qqchConstructionListMapper;
     @Autowired
-    private CommonMapper commonMapper;
-    @Autowired
     private GenCodeService genCodeService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     public QqchConstructionListVo getQqchConstructionListList(BigDecimal version) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_construction_list");
-        }
+        version = VersionUtil.getVersion("qqch_construction_list", version);
         vo.setVersion(version);
 
         QqchConstructionList qryParam = new QqchConstructionList();
@@ -77,5 +76,12 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
         qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
 
+        String buttonMark = qqchConstructionListVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = qqchConstructionListVo.getMenuId();
+            String stageIdentity = qqchConstructionListVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 }
