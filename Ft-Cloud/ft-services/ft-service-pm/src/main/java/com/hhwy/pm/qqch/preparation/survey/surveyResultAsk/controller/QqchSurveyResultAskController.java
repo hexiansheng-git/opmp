@@ -1,20 +1,16 @@
 package com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk;
+import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAskVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.IQqchSurveyResultAskService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,13 +27,6 @@ public class QqchSurveyResultAskController extends BaseController {
     private IQqchSurveyResultAskService qqchSurveyResultAskService;
 
 
-    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:list")
-    @GetMapping
-    public AjaxResult getQqchSurveyResultAsk(@Validated(ValidationGroups.Get.class) QqchSurveyResultAsk qqchSurveyResultAskParam) {
-        QqchSurveyResultAsk qqchSurveyResultAsk = qqchSurveyResultAskService.getQqchSurveyResultAsk(qqchSurveyResultAskParam);
-        return AjaxResult.success(qqchSurveyResultAsk);
-    }
-
     /**
      * 列表查询
      *
@@ -52,49 +41,32 @@ public class QqchSurveyResultAskController extends BaseController {
         return getDataTableAjaxResult(qqchSurveyResultAskList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchSurveyResultAsk(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultAsk qqchSurveyResultAskParam) {
-        qqchSurveyResultAskService.insertQqchSurveyResultAsk(qqchSurveyResultAskParam);
-        return AjaxResult.success(qqchSurveyResultAskParam);
-    }
 
+    /**
+     *  批量新增
+     *
+     * @param qqchSurveyResultAskVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchSurveyResultAsk:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertQqchSurveyResultAskList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchSurveyResultAsk> qqchSurveyResultAskListParam) {
-        qqchSurveyResultAskService.insertQqchSurveyResultAskList(qqchSurveyResultAskListParam);
-        return AjaxResult.success(qqchSurveyResultAskListParam);
+    public AjaxResult insertQqchSurveyResultAskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultAskVo qqchSurveyResultAskVo) {
+        qqchSurveyResultAskService.save(qqchSurveyResultAskVo);
+        return AjaxResult.success(qqchSurveyResultAskVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchSurveyResultAsk(@Validated(ValidationGroups.Update.class) @RequestBody QqchSurveyResultAsk qqchSurveyResultAskParam) {
-        return toAjax(qqchSurveyResultAskService.updateQqchSurveyResultAsk(qqchSurveyResultAskParam));
+    /**
+     *  确认
+     *
+     * @param qqchSurveyResultAskVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:confirm")
+    @PostMapping("/confirm")
+    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultAskVo qqchSurveyResultAskVo) {
+        qqchSurveyResultAskService.confirm(qqchSurveyResultAskVo);
+        return AjaxResult.success(qqchSurveyResultAskVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateQqchSurveyResultAskList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSurveyResultAsk> qqchSurveyResultAskListParam) {
-        return toAjax(qqchSurveyResultAskService.updateQqchSurveyResultAskList(qqchSurveyResultAskListParam));
-    }
 
-    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchSurveyResultAsk(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSurveyResultAsk qqchSurveyResultAskParam) {
-        return toAjax(qqchSurveyResultAskService.deleteQqchSurveyResultAsk(qqchSurveyResultAskParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchSurveyResultAsk:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteQqchSurveyResultAskByPks(@PathVariable Long[] ids) {
-        List<Long> qqchSurveyResultAskPkList = Arrays.asList(ids);
-        return toAjax(qqchSurveyResultAskService.deleteQqchSurveyResultAskByPks(qqchSurveyResultAskPkList));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchSurveyResultAsk qqchSurveyResultAskParam) throws IOException {
-        List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskService.getQqchSurveyResultAskList(qqchSurveyResultAskParam);
-        ExcelUtils<QqchSurveyResultAsk> util = new ExcelUtils<>(QqchSurveyResultAsk.class);
-        util.exportExcel(response, qqchSurveyResultAskList, DateUtils.getDate());
-    }
 }

@@ -2,17 +2,22 @@ package com.hhwy.pm.qqch.preparation.survey.managemodel.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.SonEntity;
-import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.MasterEntity;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.MasterEntityVo;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModel;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.SonEntity;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.mapper.QqchSurveyManageModelMapper;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +31,9 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
 
     @Autowired
     private QqchSurveyManageModelMapper qqchSurveyManageModelMapper;
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
-
-    public QqchSurveyManageModel getQqchSurveyManageModel(QqchSurveyManageModel qqchSurveyManageModel) {
-        return qqchSurveyManageModelMapper.getQqchSurveyManageModel(qqchSurveyManageModel);
-    }
 
     /**
      *  总体勘察设计经营模式确定 列表查询
@@ -38,6 +41,8 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
      * @return
      */
     public MasterEntity getQqchSurveyManageModelList(QqchSurveyManageModel qqchSurveyManageModel) {
+        BigDecimal version = VersionUtil.getVersion("qqch_survey_manage_model",qqchSurveyManageModel.getVersion());
+        qqchSurveyManageModel.setVersion(version);
         List<QqchSurveyManageModel> qqchSurveyManageModelList = qqchSurveyManageModelMapper.getQqchSurveyManageModelList(qqchSurveyManageModel);
         MasterEntity masterEntity = new MasterEntity();
         if(CollectionUtils.isNotEmpty(qqchSurveyManageModelList)){
@@ -57,82 +62,56 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
         return masterEntity;
     }
 
-    @Transactional
-    public int insertQqchSurveyManageModel(MasterEntity masterEntity) {
-        List<SonEntity> sonEntityList = masterEntity.getSonEntityList();
-        List<QqchSurveyManageModel> list = new ArrayList<>();
-        for (SonEntity sonEntity : sonEntityList) {
-            QqchSurveyManageModel qqchSurveyManageModel = new QqchSurveyManageModel();
-            qqchSurveyManageModel.setManageModel(sonEntity.getManageModel());
-            qqchSurveyManageModel.setAdvantage(sonEntity.getAdvantage());
-            qqchSurveyManageModel.setDisadvantage(sonEntity.getDisadvantage());
-            qqchSurveyManageModel.setRemark(sonEntity.getRemark());
-            qqchSurveyManageModel.setId(IdWorker.createId());
-            qqchSurveyManageModel.setCreateUser(SecurityUtils.getUserName());
-            qqchSurveyManageModel.setCreateTime(DateUtils.getNowDate());
-            qqchSurveyManageModel.setResults(masterEntity.getResults());
-            list.add(qqchSurveyManageModel);
+
+    /**
+     *  确认状态
+     *
+     * @param masterEntityVo
+     */
+    @Override
+    public void confirm(MasterEntityVo masterEntityVo) {
+        this.save(masterEntityVo);
+        String buttonMark = masterEntityVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = masterEntityVo.getMenuId();
+            String stageIdentity = masterEntityVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
-        return qqchSurveyManageModelMapper.insertQqchSurveyManageModelList(list);
-    }
-
-    @Transactional
-    public int insertQqchSurveyManageModelList(List<QqchSurveyManageModel> qqchSurveyManageModelList) {
-        for (QqchSurveyManageModel qqchSurveyManageModel : qqchSurveyManageModelList) {
-            qqchSurveyManageModel.setId(IdWorker.createId());
-            qqchSurveyManageModel.setCreateUser(SecurityUtils.getUserName());
-            qqchSurveyManageModel.setCreateTime(DateUtils.getNowDate());
-        }
-        return qqchSurveyManageModelMapper.insertQqchSurveyManageModelList(qqchSurveyManageModelList);
-    }
-
-    @Transactional
-    public int updateQqchSurveyManageModel(QqchSurveyManageModel qqchSurveyManageModel) {
-        qqchSurveyManageModel.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyManageModel.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyManageModelMapper.updateQqchSurveyManageModel(qqchSurveyManageModel);
-    }
-
-
-    @Transactional
-    public int deleteQqchSurveyManageModel(QqchSurveyManageModel qqchSurveyManageModel) {
-        qqchSurveyManageModel.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyManageModel.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyManageModelMapper.deleteQqchSurveyManageModel(qqchSurveyManageModel);
     }
 
     @Override
-    public void confirm(MasterEntity masterEntity) {
-        this.save(masterEntity);
-        //TODO 修改确认状态
+    public int save(MasterEntityVo masterEntityVo) {
+        //删除旧数据
+        QqchSurveyManageModel qqchSurveyManageModel = new QqchSurveyManageModel();
+        qqchSurveyManageModel.setVersion(masterEntityVo.getVersion());
+        qqchSurveyManageModelMapper.deleteQqchSurveyManageModel(qqchSurveyManageModel);
+        //插入新数据
+        return   this.insertQqchCompleteDesignHandoverList(masterEntityVo.getMasterEntityList(), masterEntityVo.getVersion());
     }
 
-    private int save(MasterEntity masterEntity) {
-        //删除旧数据
-        List<SonEntity> sonEntityList = masterEntity.getSonEntityList();
-        if(CollectionUtils.isNotEmpty(sonEntityList)){
-            List<Long> idsList = new ArrayList<>();
-            for (SonEntity sonEntity : sonEntityList) {
-                idsList.add(sonEntity.getId());
-            }
-            QqchSurveyManageModel qqchSurveyManageModel=new QqchSurveyManageModel();
-            qqchSurveyManageModel.setIds(idsList.toArray(new Long[]{}));
 
-            qqchSurveyManageModelMapper.deleteQqchSurveyManageModel(qqchSurveyManageModel);
-        }
-        //重新添加新数据
+    private int insertQqchCompleteDesignHandoverList(List<MasterEntity> masterEntityList, BigDecimal version) {
         List<QqchSurveyManageModel> list = new ArrayList<>();
-        for (SonEntity sonEntity : sonEntityList) {
-            QqchSurveyManageModel qqchSurveyManageModel = new QqchSurveyManageModel();
-            qqchSurveyManageModel.setManageModel(sonEntity.getManageModel());
-            qqchSurveyManageModel.setAdvantage(sonEntity.getAdvantage());
-            qqchSurveyManageModel.setDisadvantage(sonEntity.getDisadvantage());
-            qqchSurveyManageModel.setRemark(sonEntity.getRemark());
-            qqchSurveyManageModel.setId(IdWorker.createId());
-            qqchSurveyManageModel.setCreateUser(SecurityUtils.getUserName());
-            qqchSurveyManageModel.setCreateTime(DateUtils.getNowDate());
-            qqchSurveyManageModel.setResults(masterEntity.getResults());
-            list.add(qqchSurveyManageModel);
+        for (MasterEntity masterEntity : masterEntityList) {
+            List<SonEntity> sonEntityList = masterEntity.getSonEntityList();
+            for (SonEntity sonEntity : sonEntityList) {
+                QqchSurveyManageModel qqchSurveyManageModel = new QqchSurveyManageModel();
+                qqchSurveyManageModel.setId(IdWorker.createId());
+                qqchSurveyManageModel.setVersion(version);
+                if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                    qqchSurveyManageModel.setValid(Valid.YES);
+                }
+                qqchSurveyManageModel.setManageModel(sonEntity.getManageModel());
+                qqchSurveyManageModel.setAdvantage(sonEntity.getAdvantage());
+                qqchSurveyManageModel.setDisadvantage(sonEntity.getDisadvantage());
+                qqchSurveyManageModel.setRemark(sonEntity.getRemark());
+                qqchSurveyManageModel.setId(IdWorker.createId());
+                qqchSurveyManageModel.setCreateUser(SecurityUtils.getUserName());
+                qqchSurveyManageModel.setCreateTime(DateUtils.getNowDate());
+                qqchSurveyManageModel.setResults(masterEntity.getResults());
+                list.add(qqchSurveyManageModel);
+            }
         }
         return qqchSurveyManageModelMapper.insertQqchSurveyManageModelList(list);
     }

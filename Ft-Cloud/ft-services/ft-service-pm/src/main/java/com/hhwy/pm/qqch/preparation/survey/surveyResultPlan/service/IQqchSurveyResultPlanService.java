@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service;
 
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlan;
+import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlanVo;
 
 import java.util.List;
 
@@ -11,19 +12,12 @@ import java.util.List;
  */
 public interface IQqchSurveyResultPlanService {
 
-    QqchSurveyResultPlan getQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan);
+
 
     List<QqchSurveyResultPlan> getQqchSurveyResultPlanList(QqchSurveyResultPlan qqchSurveyResultPlan);
 
-    int insertQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan);
 
-    int insertQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList);
+    void save(QqchSurveyResultPlanVo qqchSurveyResultPlanVo);
 
-    int updateQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan);
-
-    int updateQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList);
-
-    int deleteQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan);
-
-    int deleteQqchSurveyResultPlanByPks(List<Long> qqchSurveyResultPlanPkList);
+    void confirm(QqchSurveyResultPlanVo qqchSurveyResultPlanVo);
 }

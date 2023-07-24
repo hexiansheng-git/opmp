@@ -3,7 +3,11 @@ package com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk;
+import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAskVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.mapper.QqchSurveyResultAskMapper;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.IQqchSurveyResultAskService;
 import com.hhwy.utils.EntityUtils;
@@ -29,11 +33,8 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
     private QqchSurveyResultAskMapper qqchSurveyResultAskMapper;
     @Autowired
     private CommonMapper commonMapper;
-
-
-    public QqchSurveyResultAsk getQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk) {
-        return qqchSurveyResultAskMapper.getQqchSurveyResultAsk(qqchSurveyResultAsk);
-    }
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     /**
      *  列表查询
@@ -51,13 +52,56 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
         return qqchSurveyResultAskMapper.getQqchSurveyResultAskList(qqchSurveyResultAsk);
     }
 
-    @Transactional
-    public int insertQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk) {
-        qqchSurveyResultAsk.setId(IdWorker.createId());
-        qqchSurveyResultAsk.setCreateUser(SecurityUtils.getUserName());
-        qqchSurveyResultAsk.setCreateTime(DateUtils.getNowDate());
-        return qqchSurveyResultAskMapper.insertQqchSurveyResultAsk(qqchSurveyResultAsk);
+    /*
+     * 新增
+     */
+    @Override
+    public void save(QqchSurveyResultAskVo qqchSurveyResultAskVo) {
+        //删除旧数据
+        QqchSurveyResultAsk qqchSurveyResultAsk = new QqchSurveyResultAsk();
+        qqchSurveyResultAsk.setVersion(qqchSurveyResultAskVo.getVersion());
+        qqchSurveyResultAskMapper.deleteQqchSurveyResultAsk(qqchSurveyResultAsk);
+        //插入新数据
+        this.insertQqchSurveyResultAskList(qqchSurveyResultAskVo.getQqchSurveyResultAskList(), qqchSurveyResultAskVo.getVersion());
     }
+
+
+
+
+    /**
+     *  确认
+     * @param qqchSurveyResultAskVo
+     * @return
+     */
+    @Override
+    public void confirm(QqchSurveyResultAskVo qqchSurveyResultAskVo) {
+        this.save(qqchSurveyResultAskVo);
+        String buttonMark = qqchSurveyResultAskVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchSurveyResultAskVo.getMenuId();
+            String stageIdentity = qqchSurveyResultAskVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
+    }
+
+
+
+    private int insertQqchSurveyResultAskList(List<QqchSurveyResultAsk> qqchSurveyResultAskList, BigDecimal version) {
+        for (QqchSurveyResultAsk qqchSurveyResultAsk : qqchSurveyResultAskList) {
+            qqchSurveyResultAsk.setVersion(version);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchSurveyResultAsk.setId(IdWorker.createId());
+                qqchSurveyResultAsk.setValid(Valid.YES);
+            }
+            qqchSurveyResultAsk.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchSurveyResultAsk.setCreateUserName(SecurityUtils.getUserName());
+            qqchSurveyResultAsk.setCreateTime(DateUtils.getNowDate());
+        }
+        return qqchSurveyResultAskMapper.insertQqchSurveyResultAskList(qqchSurveyResultAskList);
+    }
+
+
 
     /**
      *  批量新增、修改
@@ -65,7 +109,7 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
      * @return
      */
     @Transactional
-    public int insertQqchSurveyResultAskList(List<QqchSurveyResultAsk> qqchSurveyResultAskList) {
+    public int batchAdd(List<QqchSurveyResultAsk> qqchSurveyResultAskList) {
         List<QqchSurveyResultAsk> insertList = new ArrayList<>();
         List<QqchSurveyResultAsk> updateList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(qqchSurveyResultAskList)){
@@ -89,31 +133,5 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
         return 1;
     }
 
-    @Transactional
-    public int updateQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk) {
-        qqchSurveyResultAsk.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyResultAsk.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyResultAskMapper.updateQqchSurveyResultAsk(qqchSurveyResultAsk);
-    }
 
-    @Transactional
-    public int updateQqchSurveyResultAskList(List<QqchSurveyResultAsk> qqchSurveyResultAskList) {
-        for (QqchSurveyResultAsk qqchSurveyResultAsk : qqchSurveyResultAskList) {
-            qqchSurveyResultAsk.setUpdateUser(SecurityUtils.getUserName());
-            qqchSurveyResultAsk.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchSurveyResultAskMapper.updateQqchSurveyResultAskList(qqchSurveyResultAskList);
-    }
-
-    @Transactional
-    public int deleteQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk) {
-        qqchSurveyResultAsk.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyResultAsk.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyResultAskMapper.deleteQqchSurveyResultAsk(qqchSurveyResultAsk);
-    }
-
-    @Transactional
-    public int deleteQqchSurveyResultAskByPks(List<Long> qqchSurveyResultAskPkList) {
-        return qqchSurveyResultAskMapper.deleteQqchSurveyResultAskByPks(qqchSurveyResultAskPkList);
-    }
 }
