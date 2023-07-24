@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionR
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionReviewPlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -38,17 +39,13 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
 
     public QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList(BigDecimal version) {
         QqchConstructionReviewPlanVo vo = new QqchConstructionReviewPlanVo();
-
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_construction_review_plan");
-        }
+        version = VersionUtil.getVersion("qqch_construction_review_plan", version);
         vo.setVersion(version);
 
-        List<QqchConstructionReviewPlan> onePlanList = this.getPlanListBySchemeLevel("1");
-        List<QqchConstructionReviewPlan> twoPlanList = this.getPlanListBySchemeLevel("2");
-        List<QqchConstructionReviewPlan> threePlanList = this.getPlanListBySchemeLevel("3");
-        List<QqchConstructionReviewPlan> fourPlanList = this.getPlanListBySchemeLevel("4");
+        List<QqchConstructionReviewPlan> onePlanList = this.getPlanListBySchemeLevel("1", version);
+        List<QqchConstructionReviewPlan> twoPlanList = this.getPlanListBySchemeLevel("2", version);
+        List<QqchConstructionReviewPlan> threePlanList = this.getPlanListBySchemeLevel("3", version);
+        List<QqchConstructionReviewPlan> fourPlanList = this.getPlanListBySchemeLevel("4", version);
 
         List<QqchConstructionReviewPlan> newList = new ArrayList<>();
 
@@ -142,15 +139,12 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         // 先批量删除当前版本所有数据
         QqchConstructionReviewPlan deleteParam = new QqchConstructionReviewPlan();
         deleteParam.setVersion(maxVersion);
-        deleteParam.setDelFlag("1");
-        return qqchConstructionReviewPlanMapper.updateQqchConstructionReviewPlan(deleteParam);
+        return qqchConstructionReviewPlanMapper.deleteQqchConstructionReviewPlan(deleteParam);
     }
 
-    public List<QqchConstructionReviewPlan> getPlanListBySchemeLevel(String schemeLevel) {
-        // 获取最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_review_plan");
+    public List<QqchConstructionReviewPlan> getPlanListBySchemeLevel(String schemeLevel, BigDecimal version) {
         QqchConstructionReviewPlan qryParam = new QqchConstructionReviewPlan();
-        qryParam.setVersion(maxVersion);
+        qryParam.setVersion(version);
         qryParam.setSchemeLevel(schemeLevel);
         List<QqchConstructionReviewPlan> planList = qqchConstructionReviewPlanMapper
             .getQqchConstructionReviewPlanList(qryParam);

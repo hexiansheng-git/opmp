@@ -2,12 +2,12 @@ package com.hhwy.pm.qqch.preparation.technique.manage.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchPostSettingMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,15 +26,11 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
     @Autowired
     private QqchPostSettingMapper qqchPostSettingMapper;
-    @Autowired
-    private CommonMapper commonMapper;
 
     public QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version) {
         QqchPostSettingVo vo = new QqchPostSettingVo();
-
-        if (version == null) {
-            version = commonMapper.selectMaxVersion("qqch_post_setting");
-        }
+        version = VersionUtil.getVersion("qqch_post_setting",version);
+        vo.setVersion(version);
 
         QqchPostSetting qqchPostSetting = new QqchPostSetting();
         qqchPostSetting.setPostType(PostType);
@@ -50,7 +46,6 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
         QqchPostSetting deleteParam = new QqchPostSetting();
         deleteParam.setPostType(postType);
         deleteParam.setVersion(voParam.getVersion());
-        deleteParam.setDelFlag("1");
         qqchPostSettingMapper.deleteQqchPostSetting(deleteParam);
 
         if (CollectionUtils.isEmpty(voParam.getTreeList())) {

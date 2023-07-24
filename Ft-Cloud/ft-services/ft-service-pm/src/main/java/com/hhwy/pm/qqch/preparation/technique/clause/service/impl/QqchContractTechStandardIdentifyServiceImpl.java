@@ -2,12 +2,12 @@ package com.hhwy.pm.qqch.preparation.technique.clause.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStandardIdentify;
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechStandardIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,8 +26,6 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
 
     @Autowired
     private QqchContractTechStandardIdentifyMapper qqchContractTechStandardIdentifyMapper;
-    @Autowired
-    private CommonMapper commonMapper;
 
     /**
      * 树列表查询
@@ -37,10 +35,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
      */
     public QqchContractTechStandardIdentifyVo getTreeList(BigDecimal version) {
         QqchContractTechStandardIdentifyVo vo = new QqchContractTechStandardIdentifyVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_contract_tech_standard_identify");
-        }
+        version = VersionUtil.getVersion("qqch_contract_tech_standard_identify", version);
         vo.setVersion(version);
 
         QqchContractTechStandardIdentify qryParam = new QqchContractTechStandardIdentify();

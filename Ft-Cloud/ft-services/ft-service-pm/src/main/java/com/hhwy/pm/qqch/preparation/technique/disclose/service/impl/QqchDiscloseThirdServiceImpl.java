@@ -2,7 +2,6 @@ package com.hhwy.pm.qqch.preparation.technique.disclose.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.QqchDiscloseThird;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.QqchDiscloseThirdDetail;
@@ -10,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseThi
 import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseThirdDetailMapper;
 import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseThirdMapper;
 import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseThirdService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -32,16 +32,10 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
     private QqchDiscloseThirdMapper qqchDiscloseThirdMapper;
     @Autowired
     private QqchDiscloseThirdDetailMapper qqchDiscloseThirdDetailMapper;
-    @Autowired
-    private CommonMapper commonMapper;
 
     public QqchDiscloseThirdVo getQqchDiscloseThirdList(BigDecimal version) {
         QqchDiscloseThirdVo vo = new QqchDiscloseThirdVo();
-
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_disclose_third");
-        }
+        version = VersionUtil.getVersion("qqch_disclose_third", version);
         vo.setVersion(version);
 
         QqchDiscloseThird qryParam = new QqchDiscloseThird();

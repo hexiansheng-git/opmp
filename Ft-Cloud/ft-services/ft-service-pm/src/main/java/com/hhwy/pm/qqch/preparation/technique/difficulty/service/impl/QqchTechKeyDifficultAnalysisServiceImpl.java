@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDiffi
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo.QqchTechKeyDifficultAnalysisVo;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.mapper.QqchTechKeyDifficultAnalysisMapper;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.service.IQqchTechKeyDifficultAnalysisService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -32,10 +33,8 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
     public QqchTechKeyDifficultAnalysisVo getQqchTechKeyDifficultAnalysisList(BigDecimal version) {
         QqchTechKeyDifficultAnalysisVo keyDifficultAnalysisVo = new QqchTechKeyDifficultAnalysisVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_tech_key_difficult_analysis");
-        }
+        version = VersionUtil.getVersion("qqch_tech_key_difficult_analysis", version);
+
         keyDifficultAnalysisVo.setVersion(version);
 
         QqchTechKeyDifficultAnalysis qryParam = new QqchTechKeyDifficultAnalysis();

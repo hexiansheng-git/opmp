@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstru
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchDangerConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,11 +37,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
 
     public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version) {
         QqchDangerConstructionListVo vo = new QqchDangerConstructionListVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_danger_construction_list");
-        }
+        version = VersionUtil.getVersion("qqch_danger_construction_list", version);
         vo.setVersion(version);
+
         QqchDangerConstructionList qryParam = new QqchDangerConstructionList();
         qryParam.setVersion(version);
         List<QqchDangerConstructionList> list = qqchDangerConstructionListMapper

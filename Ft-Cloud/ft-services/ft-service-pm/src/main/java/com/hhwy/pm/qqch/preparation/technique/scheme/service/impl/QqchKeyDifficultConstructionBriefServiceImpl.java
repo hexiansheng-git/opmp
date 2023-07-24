@@ -2,12 +2,12 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchKeyDifficultConstructionBriefMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,15 +26,10 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
 
     @Autowired
     private QqchKeyDifficultConstructionBriefMapper qqchKeyDifficultConstructionBriefMapper;
-    @Autowired
-    private CommonMapper commonMapper;
 
     public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo vo = new QqchKeyDifficultConstructionBriefVo();
-        if (version == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
-        }
+        version = VersionUtil.getVersion("qqch_key_difficult_construction_brief", version);
         vo.setVersion(version);
 
         QqchKeyDifficultConstructionBrief qryParam = new QqchKeyDifficultConstructionBrief();
