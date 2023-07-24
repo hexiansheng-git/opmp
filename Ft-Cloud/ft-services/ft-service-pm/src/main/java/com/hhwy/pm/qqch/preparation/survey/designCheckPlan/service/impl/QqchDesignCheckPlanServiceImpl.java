@@ -2,14 +2,19 @@ package com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.QqchDesignCheckPlan;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.mapper.QqchDesignCheckPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.IQqchDesignCheckPlanService;
+import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,15 +27,30 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
 
     @Autowired
     private QqchDesignCheckPlanMapper qqchDesignCheckPlanMapper;
+    @Autowired
+    private CommonMapper commonMapper;
 
                                                                                                                                                                                                                                                                                                                                                                                                                                         
     public QqchDesignCheckPlan getQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
         return qqchDesignCheckPlanMapper.getQqchDesignCheckPlan(qqchDesignCheckPlan);
     }
 
+    /**
+     * 列表查询
+     *
+     * @param qqchDesignCheckPlan
+     * @return
+     */
     public List<QqchDesignCheckPlan> getQqchDesignCheckPlanList(QqchDesignCheckPlan qqchDesignCheckPlan) {
+        BigDecimal version=new BigDecimal(1);
+        if (qqchDesignCheckPlan.getVersion() == null) {
+            // 获取最大版本号
+            version = commonMapper.selectMaxVersion("qqch_design_check_plan");
+        }
+        qqchDesignCheckPlan.setVersion(version);
         return qqchDesignCheckPlanMapper.getQqchDesignCheckPlanList(qqchDesignCheckPlan);
     }
+
 
     @Transactional
     public int insertQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
@@ -40,14 +60,30 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
         return qqchDesignCheckPlanMapper.insertQqchDesignCheckPlan(qqchDesignCheckPlan);
     }
 
+    /**
+     *  批量新增 修改
+     * @param qqchDesignCheckPlanList
+     * @return
+     */
     @Transactional
     public int insertQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
-        for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
-            qqchDesignCheckPlan.setId(IdWorker.createId());
-            qqchDesignCheckPlan.setCreateUser(SecurityUtils.getUserName());
-            qqchDesignCheckPlan.setCreateTime(DateUtils.getNowDate());
+        List<QqchDesignCheckPlan> insertList = new ArrayList<>();
+        List<QqchDesignCheckPlan> updateList = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(qqchDesignCheckPlanList)){
+            for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
+                if(qqchDesignCheckPlan.getId()==null){
+                    qqchDesignCheckPlan.setId(IdWorker.createId());
+                    EntityUtils.setCreateUpdateInfo(qqchDesignCheckPlan);
+                    insertList.add(qqchDesignCheckPlan);
+                }else {
+                    EntityUtils.setUpdateInfo(qqchDesignCheckPlan);
+                    updateList.add(qqchDesignCheckPlan);
+                }
+            }
         }
-        return qqchDesignCheckPlanMapper.insertQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+         qqchDesignCheckPlanMapper.insertQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+        qqchDesignCheckPlanMapper.updateQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+        return 1;
     }
 
     @Transactional

@@ -364,177 +364,245 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <trim prefix="set" suffixOverrides=",">
                                     <trim prefix="id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.id != null ">
                             when `id`=#{item.id} then #{item.id}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="design_result_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.designResultName != null ">
                             when `id`=#{item.id} then #{item.designResultName}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_wbs_id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planWbsId != null ">
                             when `id`=#{item.id} then #{item.planWbsId}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_wbs_pid  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planWbsPid != null ">
                             when `id`=#{item.id} then #{item.planWbsPid}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_wbs_code  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planWbsCode != null ">
                             when `id`=#{item.id} then #{item.planWbsCode}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_wbs_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planWbsName != null ">
                             when `id`=#{item.id} then #{item.planWbsName}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_start_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planStartTime != null ">
                             when `id`=#{item.id} then #{item.planStartTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_end_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planEndTime != null ">
                             when `id`=#{item.id} then #{item.planEndTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="review_subject  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.reviewSubject != null ">
                             when `id`=#{item.id} then #{item.reviewSubject}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_review_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planReviewTime != null ">
                             when `id`=#{item.id} then #{item.planReviewTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="plan_check_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.planCheckTime != null ">
                             when `id`=#{item.id} then #{item.planCheckTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="version  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.version != null ">
                             when `id`=#{item.id} then #{item.version}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="valid  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.valid != null ">
                             when `id`=#{item.id} then #{item.valid}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="file_group_id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.fileGroupId != null ">
                             when `id`=#{item.id} then #{item.fileGroupId}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="remark  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.remark != null ">
                             when `id`=#{item.id} then #{item.remark}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="region_id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.regionId != null ">
                             when `id`=#{item.id} then #{item.regionId}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="region_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.regionName != null ">
                             when `id`=#{item.id} then #{item.regionName}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="project_id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.projectId != null ">
                             when `id`=#{item.id} then #{item.projectId}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="project_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.projectName != null ">
                             when `id`=#{item.id} then #{item.projectName}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="dept_id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.deptId != null ">
                             when `id`=#{item.id} then #{item.deptId}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="create_user  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.createUser != null ">
                             when `id`=#{item.id} then #{item.createUser}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="create_user_name  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.createUserName != null ">
                             when `id`=#{item.id} then #{item.createUserName}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="create_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.createTime != null ">
                             when `id`=#{item.id} then #{item.createTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="update_user  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.updateUser != null ">
                             when `id`=#{item.id} then #{item.updateUser}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="update_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.updateTime != null ">
                             when `id`=#{item.id} then #{item.updateTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="del_user  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.delUser != null ">
                             when `id`=#{item.id} then #{item.delUser}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="del_time  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.delTime != null ">
                             when `id`=#{item.id} then #{item.delTime}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="del_flag  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.delFlag != null ">
                             when `id`=#{item.id} then #{item.delFlag}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="pt_var1  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
                             when `id`=#{item.id} then #{item.ptVar1}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="pt_var2  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
                             when `id`=#{item.id} then #{item.ptVar2}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="pt_var3  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
                             when `id`=#{item.id} then #{item.ptVar3}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="pt_var4  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar4 != null ">
                             when `id`=#{item.id} then #{item.ptVar4}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="pt_var5  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar5 != null ">
                             when `id`=#{item.id} then #{item.ptVar5}
+                            </if>
                         </foreach>
                     </trim>
                                     <trim prefix="task_status  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
+                            <if test="item.taskStatus != null ">
                             when `id`=#{item.id} then #{item.taskStatus}
+                            </if>
                         </foreach>
                     </trim>
                             </trim>
             where `id` in
-            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
                 #{item.id}
             </foreach>
         </update>

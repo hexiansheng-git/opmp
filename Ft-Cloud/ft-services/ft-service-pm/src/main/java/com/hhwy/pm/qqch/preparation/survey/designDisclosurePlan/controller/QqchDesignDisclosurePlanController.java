@@ -38,10 +38,16 @@ public class QqchDesignDisclosurePlanController extends BaseController {
         return AjaxResult.success(qqchDesignDisclosurePlan);
     }
 
+    /**
+     * 列表接口
+     *
+     * @param qqchDesignDisclosurePlanParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignDisclosurePlanList(@Validated(ValidationGroups.Select.class) QqchDesignDisclosurePlan qqchDesignDisclosurePlanParam) {
-        startPage();
+       // startPage();
         List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList = qqchDesignDisclosurePlanService.getQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanParam);
         return getDataTableAjaxResult(qqchDesignDisclosurePlanList);
     }
@@ -53,6 +59,12 @@ public class QqchDesignDisclosurePlanController extends BaseController {
         return AjaxResult.success(qqchDesignDisclosurePlanParam);
     }
 
+    /**
+     *  新增，修改接口
+     *
+     * @param qqchDesignDisclosurePlanListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchDesignDisclosurePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanListParam) {

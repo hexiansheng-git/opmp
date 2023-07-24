@@ -38,10 +38,16 @@ public class QqchSurveyResultPlanController extends BaseController {
         return AjaxResult.success(qqchSurveyResultPlan);
     }
 
+    /**
+     *  列表查询
+     *
+     * @param qqchSurveyResultPlanParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchSurveyResultPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyResultPlanList(@Validated(ValidationGroups.Select.class) QqchSurveyResultPlan qqchSurveyResultPlanParam) {
-        startPage();
+        //startPage();
         List<QqchSurveyResultPlan> qqchSurveyResultPlanList = qqchSurveyResultPlanService.getQqchSurveyResultPlanList(qqchSurveyResultPlanParam);
         return getDataTableAjaxResult(qqchSurveyResultPlanList);
     }
@@ -53,6 +59,11 @@ public class QqchSurveyResultPlanController extends BaseController {
         return AjaxResult.success(qqchSurveyResultPlanParam);
     }
 
+    /**
+     *  批量新增 修改
+     * @param qqchSurveyResultPlanListParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchSurveyResultPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSurveyResultPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchSurveyResultPlan> qqchSurveyResultPlanListParam) {

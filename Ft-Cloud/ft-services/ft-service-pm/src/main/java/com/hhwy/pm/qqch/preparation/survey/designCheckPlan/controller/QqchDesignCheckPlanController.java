@@ -38,10 +38,16 @@ public class QqchDesignCheckPlanController extends BaseController {
         return AjaxResult.success(qqchDesignCheckPlan);
     }
 
+    /**
+     *  列表查询
+     *
+     * @param qqchDesignCheckPlanParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchDesignCheckPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignCheckPlanList(@Validated(ValidationGroups.Select.class) QqchDesignCheckPlan qqchDesignCheckPlanParam) {
-        startPage();
+       // startPage();
         List<QqchDesignCheckPlan> qqchDesignCheckPlanList = qqchDesignCheckPlanService.getQqchDesignCheckPlanList(qqchDesignCheckPlanParam);
         return getDataTableAjaxResult(qqchDesignCheckPlanList);
     }

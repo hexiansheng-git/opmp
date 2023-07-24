@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -18,7 +19,7 @@ import java.util.Date;
  * <p>
  * 2.3.1 勘测成果清单及计划
  */
-public class QqchSurveyResultPlan extends BaseEntity {
+public class QqchSurveyResultPlan extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
