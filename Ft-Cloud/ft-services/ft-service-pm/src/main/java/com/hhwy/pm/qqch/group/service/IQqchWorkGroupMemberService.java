@@ -17,4 +17,6 @@ public interface IQqchWorkGroupMemberService {
      * @return
      */
     List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(QqchWorkGroupMember qqchWorkGroupMember);
+
+    List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember);
 }
