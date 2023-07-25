@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service;
 
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk;
+import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAskVo;
 
 import java.util.List;
 
@@ -11,19 +12,10 @@ import java.util.List;
  */
 public interface IQqchSurveyResultAskService {
 
-    QqchSurveyResultAsk getQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk);
-
     List<QqchSurveyResultAsk> getQqchSurveyResultAskList(QqchSurveyResultAsk qqchSurveyResultAsk);
 
-    int insertQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk);
 
-    int insertQqchSurveyResultAskList(List<QqchSurveyResultAsk> qqchSurveyResultAskList);
+    void save(QqchSurveyResultAskVo qqchSurveyResultAskVo);
 
-    int updateQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk);
-
-    int updateQqchSurveyResultAskList(List<QqchSurveyResultAsk> qqchSurveyResultAskList);
-
-    int deleteQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk);
-
-    int deleteQqchSurveyResultAskByPks(List<Long> qqchSurveyResultAskPkList);
+    void confirm(QqchSurveyResultAskVo qqchSurveyResultAskVo);
 }

@@ -2,18 +2,21 @@ package com.hhwy.pm.qqch.preparation.survey.organization.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganization;
+import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.organization.mapper.QqchSurveyOrganizationMapper;
 import com.hhwy.pm.qqch.preparation.survey.organization.service.IQqchSurveyOrganizationService;
-import com.hhwy.utils.EntityUtils;
-import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -26,11 +29,11 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
 
     @Autowired
     private QqchSurveyOrganizationMapper qqchSurveyOrganizationMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
-    public QqchSurveyOrganization getQqchSurveyOrganization(QqchSurveyOrganization qqchSurveyOrganization) {
-        return qqchSurveyOrganizationMapper.getQqchSurveyOrganization(qqchSurveyOrganization);
-    }
+
 
     /**
      *   列表查询
@@ -39,6 +42,8 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
      * @return
      */
     public List<QqchSurveyOrganization> getQqchSurveyOrganizationList(QqchSurveyOrganization qqchSurveyOrganization) {
+        BigDecimal version = VersionUtil.getVersion("qqch_survey_organization",qqchSurveyOrganization.getVersion());
+        qqchSurveyOrganization.setVersion(version);
         List<QqchSurveyOrganization> qqchSurveyOrganizationList = qqchSurveyOrganizationMapper.getQqchSurveyOrganizationList(qqchSurveyOrganization);
         if(CollectionUtils.isNotEmpty(qqchSurveyOrganizationList)){
             List<QqchSurveyOrganization> build = TreeUtil.build(qqchSurveyOrganizationList, 0l);
@@ -47,99 +52,57 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
         return qqchSurveyOrganizationList;
     }
 
-    @Transactional
-    public int insertQqchSurveyOrganization(QqchSurveyOrganization qqchSurveyOrganization) {
-        qqchSurveyOrganization.setId(IdWorker.createId());
-        qqchSurveyOrganization.setCreateUser(SecurityUtils.getUserName());
-        qqchSurveyOrganization.setCreateTime(DateUtils.getNowDate());
-        return qqchSurveyOrganizationMapper.insertQqchSurveyOrganization(qqchSurveyOrganization);
-    }
 
     /**
      *  批增
      *
-     * @param qqchSurveyOrganizationList
+     * @param qqchSurveyOrganizationVo
      * @return
      */
     @Transactional
-    public int insertQqchSurveyOrganizationList(List<QqchSurveyOrganization> qqchSurveyOrganizationList) {
-        if(CollectionUtils.isEmpty(qqchSurveyOrganizationList)){
-            return 0;
-        }
-
-        List<QqchSurveyOrganization> insertList = new ArrayList<>();
-        List<QqchSurveyOrganization> updateList = new ArrayList<>();
-        for (QqchSurveyOrganization qqchSurveyOrganization : qqchSurveyOrganizationList) {
-            this.recursionSubset(qqchSurveyOrganization, insertList, updateList);
-        }
-        if (insertList.size() > 0) {
-            insertList.forEach(q->{
-                if (q.getPid() != null) {
-                    q.setPid(q.getPid());
-                } else {
-                    q.setPid(0l);
-                }
-            });
-            qqchSurveyOrganizationMapper.insertQqchSurveyOrganizationList(insertList);
-        }
-        if (updateList.size() > 0) {
-            qqchSurveyOrganizationMapper.updateQqchSurveyOrganizationList(updateList);
-        }
-        return 1;
+    public int save(QqchSurveyOrganizationVo qqchSurveyOrganizationVo) {
+        //删除旧数据
+        QqchSurveyOrganization qqchSurveyManageModel = new QqchSurveyOrganization();
+        qqchSurveyManageModel.setVersion(qqchSurveyOrganizationVo.getVersion());
+        qqchSurveyOrganizationMapper.deleteQqchSurveyOrganization(qqchSurveyManageModel);
+        //插入新数据
+        return  this.insertQqchSurveyOrganizationList(qqchSurveyOrganizationVo.getQqchSurveyOrganizationList(), qqchSurveyOrganizationVo.getVersion());
     }
 
     /**
-     *  递归处理
-     *
-     * @param qqchSurveyOrganization
-     * @param insertList
-     * @param updateList
+     *  确认
+     * @param qqchSurveyOrganizationVo
+     * @return
      */
-    private void recursionSubset(QqchSurveyOrganization qqchSurveyOrganization, List<QqchSurveyOrganization> insertList, List<QqchSurveyOrganization> updateList) {
-        Long id = qqchSurveyOrganization.getId();
-        if (id == null) {
-            id = IdWorker.createId();
-            qqchSurveyOrganization.setId(id);
-            EntityUtils.setCreateUpdateInfo(qqchSurveyOrganization);
-            insertList.add(qqchSurveyOrganization);
-        } else {
-            EntityUtils.setUpdateInfo(qqchSurveyOrganization);
-            updateList.add(qqchSurveyOrganization);
+    @Override
+    public void confirm(QqchSurveyOrganizationVo qqchSurveyOrganizationVo) {
+        this.save(qqchSurveyOrganizationVo);
+        String buttonMark = qqchSurveyOrganizationVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchSurveyOrganizationVo.getMenuId();
+            String stageIdentity = qqchSurveyOrganizationVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
-        List<QqchSurveyOrganization> children = qqchSurveyOrganization.getChildren();
-        if (!CollectionUtils.isEmpty(children)) {
-            for (QqchSurveyOrganization child : children) {
-                child.setPid(id);
-                this.recursionSubset(child, insertList, updateList);
+    }
+
+
+    private int insertQqchSurveyOrganizationList(List<QqchSurveyOrganization> qqchSurveyOrganizationList, BigDecimal version) {
+        List<QqchSurveyOrganization> insertList = TreeUtil.treeToList(qqchSurveyOrganizationList);
+        for (QqchSurveyOrganization qqchSurveyOrganization : insertList) {
+            qqchSurveyOrganization.setVersion(version);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchSurveyOrganization.setValid(Valid.YES);
+            }
+            qqchSurveyOrganization.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchSurveyOrganization.setCreateUserName(SecurityUtils.getUserName());
+            qqchSurveyOrganization.setCreateTime(DateUtils.getNowDate());
+            if(qqchSurveyOrganization.getPid()==null){
+                qqchSurveyOrganization.setPid(0l);
             }
         }
+        return qqchSurveyOrganizationMapper.insertQqchSurveyOrganizationList(insertList);
     }
 
-    @Transactional
-    public int updateQqchSurveyOrganization(QqchSurveyOrganization qqchSurveyOrganization) {
-        qqchSurveyOrganization.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyOrganization.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyOrganizationMapper.updateQqchSurveyOrganization(qqchSurveyOrganization);
-    }
 
-    @Transactional
-    public int updateQqchSurveyOrganizationList(List<QqchSurveyOrganization> qqchSurveyOrganizationList) {
-        for (QqchSurveyOrganization qqchSurveyOrganization : qqchSurveyOrganizationList) {
-            qqchSurveyOrganization.setUpdateUser(SecurityUtils.getUserName());
-            qqchSurveyOrganization.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchSurveyOrganizationMapper.updateQqchSurveyOrganizationList(qqchSurveyOrganizationList);
-    }
-
-    @Transactional
-    public int deleteQqchSurveyOrganization(QqchSurveyOrganization qqchSurveyOrganization) {
-        qqchSurveyOrganization.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyOrganization.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyOrganizationMapper.deleteQqchSurveyOrganization(qqchSurveyOrganization);
-    }
-
-    @Transactional
-    public int deleteQqchSurveyOrganizationByPks(List<Long> qqchSurveyOrganizationPkList) {
-        return qqchSurveyOrganizationMapper.deleteQqchSurveyOrganizationByPks(qqchSurveyOrganizationPkList);
-    }
 }

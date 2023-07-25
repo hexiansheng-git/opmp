@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.service;
 
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.QqchDesignDisclosurePlan;
+import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.vo.QqchDesignDisclosurePlanVo;
 
 import java.util.List;
 
@@ -11,19 +12,10 @@ import java.util.List;
  */
 public interface IQqchDesignDisclosurePlanService {
 
-    QqchDesignDisclosurePlan getQqchDesignDisclosurePlan(QqchDesignDisclosurePlan qqchDesignDisclosurePlan);
 
     List<QqchDesignDisclosurePlan> getQqchDesignDisclosurePlanList(QqchDesignDisclosurePlan qqchDesignDisclosurePlan);
 
-    int insertQqchDesignDisclosurePlan(QqchDesignDisclosurePlan qqchDesignDisclosurePlan);
+    void confirm(QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo);
 
-    int insertQqchDesignDisclosurePlanList(List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList);
-
-    int updateQqchDesignDisclosurePlan(QqchDesignDisclosurePlan qqchDesignDisclosurePlan);
-
-    int updateQqchDesignDisclosurePlanList(List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList);
-
-    int deleteQqchDesignDisclosurePlan(QqchDesignDisclosurePlan qqchDesignDisclosurePlan);
-
-    int deleteQqchDesignDisclosurePlanByPks(List<Long> qqchDesignDisclosurePlanPkList);
+    void save(QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo);
 }

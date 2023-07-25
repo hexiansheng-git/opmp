@@ -30,4 +30,6 @@ public interface IQqchWorkPlanningPrjImgService {
     QqchWorkPlanningPrjImg getQqchWorkPlanningPrjIsValid(QqchWorkPlanningPrjImg img);
 
     QqchWorkPlanningPrjImg getQqchWorkPlanningPrjHistory(QqchWorkPlanningPrjImg img);
+
+    void listener(Long businessId);
 }

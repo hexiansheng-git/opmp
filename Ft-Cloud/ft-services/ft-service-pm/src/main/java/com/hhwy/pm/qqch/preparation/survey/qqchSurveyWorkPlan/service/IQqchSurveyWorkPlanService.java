@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service;
 
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlan;
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlanVo;
 
 import java.util.List;
 
@@ -11,19 +12,12 @@ import java.util.List;
  */
 public interface IQqchSurveyWorkPlanService {
                                                                                                                                                                                                                                                                                                                                                                                                                                         
-    QqchSurveyWorkPlan getQqchSurveyWorkPlan(QqchSurveyWorkPlan qqchSurveyWorkPlan);
+
 
     List<QqchSurveyWorkPlan> getQqchSurveyWorkPlanList(QqchSurveyWorkPlan qqchSurveyWorkPlan);
 
-    int insertQqchSurveyWorkPlan(QqchSurveyWorkPlan qqchSurveyWorkPlan);
 
-    int insertQqchSurveyWorkPlanList(List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList);
+    void save(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
 
-    int updateQqchSurveyWorkPlan(QqchSurveyWorkPlan qqchSurveyWorkPlan);
-
-            int updateQqchSurveyWorkPlanList(List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList);
-    
-    int deleteQqchSurveyWorkPlan(QqchSurveyWorkPlan qqchSurveyWorkPlan);
-
-            int deleteQqchSurveyWorkPlanByPks(List<Long> qqchSurveyWorkPlanPkList);
-    }
+    void confirm(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo);
+}

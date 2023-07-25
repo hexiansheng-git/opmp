@@ -3,18 +3,18 @@ package com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlan;
+import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.mapper.QqchSurveyResultPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service.IQqchSurveyResultPlanService;
-import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,11 +29,9 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
     private QqchSurveyResultPlanMapper qqchSurveyResultPlanMapper;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
-
-    public QqchSurveyResultPlan getQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan) {
-        return qqchSurveyResultPlanMapper.getQqchSurveyResultPlan(qqchSurveyResultPlan);
-    }
 
     /**
      *  列表查询
@@ -51,70 +49,52 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
         return qqchSurveyResultPlanMapper.getQqchSurveyResultPlanList(qqchSurveyResultPlan);
     }
 
-    @Transactional
-    public int insertQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan) {
-        qqchSurveyResultPlan.setId(IdWorker.createId());
-        qqchSurveyResultPlan.setCreateUser(SecurityUtils.getUserName());
-        qqchSurveyResultPlan.setCreateTime(DateUtils.getNowDate());
-        return qqchSurveyResultPlanMapper.insertQqchSurveyResultPlan(qqchSurveyResultPlan);
+    /**
+     *  批增
+     *
+     * @param qqchSurveyResultPlanVo
+     */
+    @Override
+    public void save(QqchSurveyResultPlanVo qqchSurveyResultPlanVo) {
+        //删除旧数据
+        QqchSurveyResultPlan qqchSurveyResultPlan = new QqchSurveyResultPlan();
+        qqchSurveyResultPlan.setVersion(qqchSurveyResultPlan.getVersion());
+        qqchSurveyResultPlanMapper.deleteQqchSurveyResultPlan(qqchSurveyResultPlan);
+        //插入新数据
+        this.insertQqchSurveyResultPlanList(qqchSurveyResultPlanVo.getQqchSurveyResultPlanList(), qqchSurveyResultPlanVo.getVersion());
     }
 
     /**
-     *  批量新增修改
+     *  确认
      *
-     * @param qqchSurveyResultPlanList
-     * @return
+     * @param qqchSurveyResultPlanVo
      */
-    @Transactional
-    public int insertQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList) {
-       List<QqchSurveyResultPlan> insertList = new ArrayList<>();
-       List<QqchSurveyResultPlan> updateList = new ArrayList<>();
-        if(CollectionUtils.isNotEmpty(qqchSurveyResultPlanList)){
-            for (QqchSurveyResultPlan qqchSurveyResultPlan : qqchSurveyResultPlanList) {
-                if(qqchSurveyResultPlan.getId()==null){
-                    qqchSurveyResultPlan.setId(IdWorker.createId());
-                    EntityUtils.setCreateUpdateInfo(qqchSurveyResultPlan);
-                    insertList.add(qqchSurveyResultPlan);
-                }else {
-                    EntityUtils.setUpdateInfo(qqchSurveyResultPlan);
-                    updateList.add(qqchSurveyResultPlan);
-                }
-            }
+    @Override
+    public void confirm(QqchSurveyResultPlanVo qqchSurveyResultPlanVo) {
+        this.save(qqchSurveyResultPlanVo);
+        String buttonMark = qqchSurveyResultPlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchSurveyResultPlanVo.getMenuId();
+            String stageIdentity = qqchSurveyResultPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
-        if(CollectionUtils.isNotEmpty(insertList)){
-            qqchSurveyResultPlanMapper.insertQqchSurveyResultPlanList(insertList);
-        }
-         if(CollectionUtils.isNotEmpty(updateList)){
-             qqchSurveyResultPlanMapper.updateQqchSurveyResultPlanList(updateList);
-         }
-        return 1;
     }
 
-    @Transactional
-    public int updateQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan) {
-        qqchSurveyResultPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyResultPlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyResultPlanMapper.updateQqchSurveyResultPlan(qqchSurveyResultPlan);
-    }
 
-    @Transactional
-    public int updateQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList) {
+    private void insertQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList, BigDecimal version) {
         for (QqchSurveyResultPlan qqchSurveyResultPlan : qqchSurveyResultPlanList) {
-            qqchSurveyResultPlan.setUpdateUser(SecurityUtils.getUserName());
-            qqchSurveyResultPlan.setUpdateTime(DateUtils.getNowDate());
+            qqchSurveyResultPlan.setVersion(version);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchSurveyResultPlan.setId(IdWorker.createId());
+                qqchSurveyResultPlan.setValid(Valid.YES);
+            }
+            qqchSurveyResultPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchSurveyResultPlan.setCreateUserName(SecurityUtils.getUserName());
+            qqchSurveyResultPlan.setCreateTime(DateUtils.getNowDate());
         }
-        return qqchSurveyResultPlanMapper.updateQqchSurveyResultPlanList(qqchSurveyResultPlanList);
+        qqchSurveyResultPlanMapper.insertQqchSurveyResultPlanList(qqchSurveyResultPlanList);
     }
 
-    @Transactional
-    public int deleteQqchSurveyResultPlan(QqchSurveyResultPlan qqchSurveyResultPlan) {
-        qqchSurveyResultPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchSurveyResultPlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchSurveyResultPlanMapper.deleteQqchSurveyResultPlan(qqchSurveyResultPlan);
-    }
 
-    @Transactional
-    public int deleteQqchSurveyResultPlanByPks(List<Long> qqchSurveyResultPlanPkList) {
-        return qqchSurveyResultPlanMapper.deleteQqchSurveyResultPlanByPks(qqchSurveyResultPlanPkList);
-    }
 }

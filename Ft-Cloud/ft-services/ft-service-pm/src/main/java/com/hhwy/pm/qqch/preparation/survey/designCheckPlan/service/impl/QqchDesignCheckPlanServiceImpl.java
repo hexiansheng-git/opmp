@@ -3,7 +3,11 @@ package com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.QqchDesignCheckPlan;
+import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.vo.QqchDesignCheckPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.mapper.QqchDesignCheckPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.IQqchDesignCheckPlanService;
 import com.hhwy.utils.EntityUtils;
@@ -12,6 +16,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +33,9 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
     private QqchDesignCheckPlanMapper qqchDesignCheckPlanMapper;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
-
-    public QqchDesignCheckPlan getQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
-        return qqchDesignCheckPlanMapper.getQqchDesignCheckPlan(qqchDesignCheckPlan);
-    }
 
     /**
      * 列表查询
@@ -50,14 +53,52 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
         return qqchDesignCheckPlanMapper.getQqchDesignCheckPlanList(qqchDesignCheckPlan);
     }
 
-
-    @Transactional
-    public int insertQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
-        qqchDesignCheckPlan.setId(IdWorker.createId());
-        qqchDesignCheckPlan.setCreateUser(SecurityUtils.getUserName());
-        qqchDesignCheckPlan.setCreateTime(DateUtils.getNowDate());
-        return qqchDesignCheckPlanMapper.insertQqchDesignCheckPlan(qqchDesignCheckPlan);
+    /**
+     *  新增
+     * @param qqchDesignCheckPlanVo
+     */
+    @Override
+    public void save(QqchDesignCheckPlanVo qqchDesignCheckPlanVo) {
+        //删除旧数据
+        QqchDesignCheckPlan qqchDesignCheckPlan = new QqchDesignCheckPlan();
+        qqchDesignCheckPlan.setVersion(qqchDesignCheckPlanVo.getVersion());
+        qqchDesignCheckPlanMapper.deleteQqchDesignCheckPlan(qqchDesignCheckPlan);
+        //插入新数据
+        this.insertQqchDesignCheckPlanList(qqchDesignCheckPlanVo.getQqchDesignCheckPlanList(), qqchDesignCheckPlanVo.getVersion());
     }
+
+    /**
+     *  确认
+     *
+     * @param qqchDesignCheckPlanVo
+     */
+    @Override
+    public void confirm(QqchDesignCheckPlanVo qqchDesignCheckPlanVo) {
+        this.save(qqchDesignCheckPlanVo);
+        String buttonMark = qqchDesignCheckPlanVo.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认状态
+            String menuId = qqchDesignCheckPlanVo.getMenuId();
+            String stageIdentity = qqchDesignCheckPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
+    }
+
+
+    private void insertQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList, BigDecimal version) {
+        for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
+            qqchDesignCheckPlan.setVersion(version);
+            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+                qqchDesignCheckPlan.setId(IdWorker.createId());
+                qqchDesignCheckPlan.setValid(Valid.YES);
+            }
+            qqchDesignCheckPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchDesignCheckPlan.setCreateUserName(SecurityUtils.getUserName());
+            qqchDesignCheckPlan.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchDesignCheckPlanMapper.insertQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+    }
+
 
     /**
      * 批量新增 修改
@@ -66,7 +107,7 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
      * @return
      */
     @Transactional
-    public int insertQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
+    public int batchAdd(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
         List<QqchDesignCheckPlan> insertList = new ArrayList<>();
         List<QqchDesignCheckPlan> updateList = new ArrayList<>();
         if (CollectionUtils.isNotEmpty(qqchDesignCheckPlanList)) {
@@ -90,31 +131,5 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
         return 1;
     }
 
-    @Transactional
-    public int updateQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
-        qqchDesignCheckPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchDesignCheckPlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchDesignCheckPlanMapper.updateQqchDesignCheckPlan(qqchDesignCheckPlan);
-    }
 
-    @Transactional
-    public int updateQqchDesignCheckPlanList(List<QqchDesignCheckPlan> qqchDesignCheckPlanList) {
-        for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
-            qqchDesignCheckPlan.setUpdateUser(SecurityUtils.getUserName());
-            qqchDesignCheckPlan.setUpdateTime(DateUtils.getNowDate());
-        }
-        return qqchDesignCheckPlanMapper.updateQqchDesignCheckPlanList(qqchDesignCheckPlanList);
-    }
-
-    @Transactional
-    public int deleteQqchDesignCheckPlan(QqchDesignCheckPlan qqchDesignCheckPlan) {
-        qqchDesignCheckPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchDesignCheckPlan.setUpdateTime(DateUtils.getNowDate());
-        return qqchDesignCheckPlanMapper.deleteQqchDesignCheckPlan(qqchDesignCheckPlan);
-    }
-
-    @Transactional
-    public int deleteQqchDesignCheckPlanByPks(List<Long> qqchDesignCheckPlanPkList) {
-        return qqchDesignCheckPlanMapper.deleteQqchDesignCheckPlanByPks(qqchDesignCheckPlanPkList);
-    }
 }

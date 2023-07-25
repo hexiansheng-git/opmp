@@ -3,15 +3,14 @@ package com.hhwy.pm.qqch.preparation.survey.managemodel.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.MasterEntity;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.MasterEntityVo;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModel;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author ldd
@@ -28,12 +27,6 @@ public class QqchSurveyManageModelController extends BaseController{
 
                                                                                                                                                                                                                                                                                 
 
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:list")
-    @GetMapping
-    public AjaxResult getQqchSurveyManageModel(@Validated(ValidationGroups.Get.class)  QqchSurveyManageModel qqchSurveyManageModelParam){
-        QqchSurveyManageModel qqchSurveyManageModel =  qqchSurveyManageModelService.getQqchSurveyManageModel(qqchSurveyManageModelParam);
-        return AjaxResult.success(qqchSurveyManageModel);
-    }
 
     /**
      *  总体勘察设计经营模式确定 列表查询
@@ -43,55 +36,33 @@ public class QqchSurveyManageModelController extends BaseController{
     @PreAuthorize(hasPermi = "qqchSurveyManageModel:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyManageModelList(@Validated(ValidationGroups.Select.class) QqchSurveyManageModel qqchSurveyManageModelParam){
-        //startPage();
         MasterEntity masterEntity = qqchSurveyManageModelService.getQqchSurveyManageModelList(qqchSurveyManageModelParam);
         return AjaxResult.success(masterEntity);
     }
 
     /**
      *  新增
-     * @param masterEntity
+     * @param masterEntityVo
      * @return
      */
     @PreAuthorize(hasPermi = "qqchSurveyManageModel:add")
     @PostMapping("/add")
-    public AjaxResult insertQqchSurveyManageModel(@Validated(ValidationGroups.Save.class) @RequestBody MasterEntity masterEntity){
-        qqchSurveyManageModelService.insertQqchSurveyManageModel(masterEntity);
-        return AjaxResult.success(masterEntity);
+    public AjaxResult insertQqchSurveyManageModel(@Validated(ValidationGroups.Save.class) @RequestBody MasterEntityVo masterEntityVo){
+        qqchSurveyManageModelService.save(masterEntityVo);
+        return AjaxResult.success(masterEntityVo);
     }
 
     /**
      *  确认
-     * @param masterEntity
+     * @param masterEntityVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:add")
+    @PreAuthorize(hasPermi = "qqchSurveyManageModel:confirm")
     @PostMapping("/confirm")
-    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody MasterEntity masterEntity){
-        qqchSurveyManageModelService.confirm(masterEntity);
-        return AjaxResult.success(masterEntity);
+    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody MasterEntityVo masterEntityVo){
+        qqchSurveyManageModelService.confirm(masterEntityVo);
+        return AjaxResult.success(masterEntityVo);
     }
 
-
-
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchSurveyManageModelList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchSurveyManageModel> qqchSurveyManageModelListParam){
-        qqchSurveyManageModelService.insertQqchSurveyManageModelList(qqchSurveyManageModelListParam);
-        return AjaxResult.success(qqchSurveyManageModelListParam);
-    }
-
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchSurveyManageModel(@Validated(ValidationGroups.Update.class) @RequestBody QqchSurveyManageModel qqchSurveyManageModelParam){
-        return toAjax(qqchSurveyManageModelService.updateQqchSurveyManageModel(qqchSurveyManageModelParam));
-    }
-
-    
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchSurveyManageModel(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSurveyManageModel qqchSurveyManageModelParam){
-        return toAjax(qqchSurveyManageModelService.deleteQqchSurveyManageModel(qqchSurveyManageModelParam));
-    }
 
 }
