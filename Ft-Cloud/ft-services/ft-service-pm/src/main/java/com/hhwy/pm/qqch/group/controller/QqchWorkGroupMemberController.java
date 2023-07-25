@@ -49,15 +49,14 @@ public class QqchWorkGroupMemberController extends BaseController {
      * @return
      */
     @GetMapping("getValidMaxVersionWorkGroupMemberList")
-    public AjaxResult getValidMaxVersionWorkGroupMemberList() {
+    public AjaxResult getValidMaxVersionWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember) {
         List<QqchWorkGroupMember> workGroupMemberList = new ArrayList<>();
 
         //获取当前最新生效版本的工作小组
         QqchWorkGroup validMaxVersionQqchWorkGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
         if(validMaxVersionQqchWorkGroup != null){
-            startPage();
-            QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
             qqchWorkGroupMember.setWorkGroupId(validMaxVersionQqchWorkGroup.getId());
+            startPage();
             workGroupMemberList = qqchWorkGroupMemberService.getQqchWorkGroupMemberList(qqchWorkGroupMember);
         }
         return getDataTableAjaxResult(workGroupMemberList);

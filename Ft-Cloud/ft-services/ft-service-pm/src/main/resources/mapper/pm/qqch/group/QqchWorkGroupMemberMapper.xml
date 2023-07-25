@@ -157,7 +157,7 @@
             <if test="temporaryGroupDuty != null  and temporaryGroupDuty != ''">and `temporary_group_duty` =
                 #{temporaryGroupDuty}
             </if>
-            <if test="director != null  and director != ''">and `director` = #{director}</if>
+            <if test="director != null  and director != ''">and `director` like concat('%' , #{director} , '%')</if>
             <if test="directorId != null ">and `director_id` = #{directorId}</if>
             <if test="affiliatedUnit != null  and affiliatedUnit != ''">and `affiliated_unit` = #{affiliatedUnit}</if>
             <if test="postDuty != null  and postDuty != ''">and `post_duty` = #{postDuty}</if>
