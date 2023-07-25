@@ -61,6 +61,11 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
         }
     }
 
+    @Override
+    public List<QqchModuleConfirmCase> getModuleConfirmInfo(QqchModuleConfirmCase qqchModuleConfirmCase) {
+        return qqchModuleConfirmCaseMapper.getModuleConfirmInfo(qqchModuleConfirmCase);
+    }
+
     @Transactional
     public int insertQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase) {
         qqchModuleConfirmCase.setId(IdWorker.createId());

@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.module.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
+import java.util.List;
+
 import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -36,6 +38,7 @@ public class QqchModuleConfirmCase extends BaseEntity {
     @JsonProperty
     @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
     private String moduleIdentity;
+    private List<String> moduleIdentityList;
     /**
      * 字段描述：模块名称
      */
@@ -66,6 +69,7 @@ public class QqchModuleConfirmCase extends BaseEntity {
     @JsonProperty
     @Excel(name = "确认人id")
     private String confirmUser;
+    private List<String> confirmUserList;
     /**
      * 字段描述：确认人名称
      */

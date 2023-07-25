@@ -41,9 +41,16 @@ public interface IQqchReviewService {
      */
     Review reviewInfo(Map<String, String> map);
 
-    void incrFinishNum(String stage);
+    void updateFinishNum(String stageIdentity, Long moduleIdentity);
 
     public void canAdjust();
 
     void listener(Long id);
+
+
+    /**
+     * 获取到了那个阶段
+     * @return
+     */
+    String getStage();
 }
