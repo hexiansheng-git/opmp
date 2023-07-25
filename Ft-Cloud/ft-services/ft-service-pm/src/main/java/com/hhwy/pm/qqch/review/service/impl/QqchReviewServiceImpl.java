@@ -79,7 +79,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     @Override
-    public int savePlan(Long workPlanId) {
+    public void savePlan(Long workPlanId) {
         HashMap<String, String> param = new HashMap<>();
         param.put("id", workPlanId + "");
         param.put("type", "2");
@@ -164,10 +164,13 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         // 如果之前有数据的话
         if (!CollectionUtils.isEmpty(qqchReviewList)) {
             this.checkData(qqchReviewList, iData);
-            return this.updateQqchReviewList(qqchReviewList);
+            this.updateQqchReviewList(qqchReviewList);
+            this.updateFinishNum(null,null);
         }
+        this.reviewMapper.insertQqchReviewList(iData);
+        
 
-        return this.reviewMapper.insertQqchReviewList(iData);
+        return ;
     }
 
     private void checkData(List<Review> qqchReviewList, List<Review> iData) {
