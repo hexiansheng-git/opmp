@@ -117,4 +117,7 @@ public class QqchWorkPlanningPrjImg extends BaseEntity {
     @JsonProperty
     @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
     private String moduleIdentity;
+
+    //菜单id
+    private String menuId;
 }

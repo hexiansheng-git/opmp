@@ -68,6 +68,12 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
             }else{
                 qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjHistory(img);
             }
+            if(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg)){
+                qqchWorkPlanningPrjImg =new QqchWorkPlanningPrjImg();
+                qqchWorkPlanningPrjImg.setVersion(new BigDecimal(0));
+            }
+            //查询阶段 接口待提供
+
 
             return AjaxResult.success(qqchWorkPlanningPrjImg);
         }catch (CustomBusinessException e){
@@ -76,6 +82,20 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
         }catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 监听器（不确定格式，临时这样写，后续会改）
+     * @param businessId
+     */
+    @PostMapping("/listener")
+    @ResponseBody
+    public void listener(Long businessId){
+        try{
+            qqchWorkPlanningPrjImgService.listener(businessId);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

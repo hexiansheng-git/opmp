@@ -10,6 +10,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.zaxxer.hikari.metrics.IMetricsTracker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,31 +40,33 @@ public class QqchWorkPlanningPrjImgServiceImpl implements IQqchWorkPlanningPrjIm
 
     @Transactional
     public int insertQqchWorkPlanningPrjImg(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg) {
+        qqchWorkPlanningPrjImg.setId(IdWorker.createId());
+        qqchWorkPlanningPrjImg.setCreateUser(SecurityUtils.getUserName());
+        qqchWorkPlanningPrjImg.setCreateTime(DateUtils.getNowDate());
+        qqchWorkPlanningPrjImg.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningPrjImg.getVersion());
+
         //判断是确认还是保存
         if("0".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//保存
-            //先删除旧的 再添加新的
-            QqchWorkPlanningPrjImg temp = new QqchWorkPlanningPrjImg();
-            temp.setVersion(qqchWorkPlanningPrjImg.getVersion());
-            qqchWorkPlanningPrjImgMapper.deleteQqchWorkPlanningPrjImg(temp);
-
-            qqchWorkPlanningPrjImg.setId(IdWorker.createId());
-            qqchWorkPlanningPrjImg.setCreateUser(SecurityUtils.getUserName());
-            qqchWorkPlanningPrjImg.setCreateTime(DateUtils.getNowDate());
-            qqchWorkPlanningPrjImg.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningPrjImg.getVersion());
-
-            if(!InitVersionConstant.INIT_VERSION.equals(String.valueOf(qqchWorkPlanningPrjImg.getVersion()))){
-                qqchWorkPlanningPrjImg.setValid("0");
-            }else{
-                qqchWorkPlanningPrjImg.setValid("1");
+            qqchWorkPlanningPrjImg.setValid("1");
+            if(!InitVersionConstant.INIT_VERSION.equals(qqchWorkPlanningPrjImg.getVersion())){
+                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"当前版本非初始版本，不可编辑！");
             }
-
-            qqchWorkPlanningPrjImgMapper.insertQqchWorkPlanningPrjImg(qqchWorkPlanningPrjImg);
-            return 1;
-        }else{//确认
+        }else if("1".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//确认
             //新增一条确认记录
+            qqchWorkPlanningPrjImg.setValid("1");
 
-            return 1;
+        }else if("2".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//提交
+            qqchWorkPlanningPrjImg.setValid("0");
+        }else{
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
         }
+        //先删除旧的 再添加新的
+        QqchWorkPlanningPrjImg temp = new QqchWorkPlanningPrjImg();
+        temp.setVersion(qqchWorkPlanningPrjImg.getVersion());
+        qqchWorkPlanningPrjImgMapper.deleteQqchWorkPlanningPrjImg(temp);
+
+        qqchWorkPlanningPrjImgMapper.insertQqchWorkPlanningPrjImg(qqchWorkPlanningPrjImg);
+        return 1;
     }
 
     @Transactional
@@ -112,5 +115,13 @@ public class QqchWorkPlanningPrjImgServiceImpl implements IQqchWorkPlanningPrjIm
     @Override
     public QqchWorkPlanningPrjImg getQqchWorkPlanningPrjHistory(QqchWorkPlanningPrjImg img) {
         return qqchWorkPlanningPrjImgMapper.getQqchWorkPlanningPrjHistory(img);
+    }
+
+    @Override
+    public void listener(Long businessId) {
+        QqchWorkPlanningPrjImg img = new QqchWorkPlanningPrjImg();
+        img.setId(businessId);
+        img.setValid("1");
+        qqchWorkPlanningPrjImgMapper.updateQqchWorkPlanningPrjImg(img);
     }
 }
