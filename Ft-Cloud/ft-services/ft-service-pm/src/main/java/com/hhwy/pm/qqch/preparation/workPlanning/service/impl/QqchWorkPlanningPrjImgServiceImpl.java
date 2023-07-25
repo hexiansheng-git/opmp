@@ -46,10 +46,11 @@ public class QqchWorkPlanningPrjImgServiceImpl implements IQqchWorkPlanningPrjIm
         qqchWorkPlanningPrjImg.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningPrjImg.getVersion());
 
         //判断是确认还是保存
-        if("0".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//保存
-            qqchWorkPlanningPrjImg.setValid("1");
-            if(!InitVersionConstant.INIT_VERSION.equals(qqchWorkPlanningPrjImg.getVersion())){
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"当前版本非初始版本，不可编辑！");
+        if("0".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//保存（判断是业务保存还是变更保存）
+            if(qqchWorkPlanningPrjImg.getVersion().equals(InitVersionConstant.INIT_VERSION)){//业务保存
+                qqchWorkPlanningPrjImg.setValid("1");
+            }else{//变更保存
+                qqchWorkPlanningPrjImg.setValid("0");
             }
         }else if("1".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//确认
             //新增一条确认记录

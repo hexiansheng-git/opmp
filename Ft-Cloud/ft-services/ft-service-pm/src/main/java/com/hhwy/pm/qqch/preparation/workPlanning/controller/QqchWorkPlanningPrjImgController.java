@@ -9,7 +9,9 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,15 +66,12 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
     @GetMapping("/detail")
     public AjaxResult detail(QqchWorkPlanningPrjImg  img){
         try{
-            QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg = null;
-            if(ObjectNullUtil.isEmpty(img.getVersion())){
-                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjIsValid(img);//拿版本号最大且有效的
-            }else{
-                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjHistory(img);//查询对应版本且有效的数据
-            }
+            BigDecimal version = VersionUtil.getVersion("qqch_work_planning_prj_img", img.getVersion());
+            img.setVersion(version);
+            QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjImg(img);
             if(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg)){
                 qqchWorkPlanningPrjImg =new QqchWorkPlanningPrjImg();
-                qqchWorkPlanningPrjImg.setVersion(new BigDecimal(0));
+                qqchWorkPlanningPrjImg.setVersion(new BigDecimal(InitVersionConstant.INIT_VERSION));
             }
             //查询阶段
             String stage = iQqchReviewService.getStage();
