@@ -86,9 +86,9 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
 
     private void insertQqchDesignDisclosurePlanList(List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList, BigDecimal version) {
         for (QqchDesignDisclosurePlan qqchDesignDisclosurePlan : qqchDesignDisclosurePlanList) {
+            qqchDesignDisclosurePlan.setId(IdWorker.createId());
             qqchDesignDisclosurePlan.setVersion(version);
             if(version.compareTo(BigDecimal.valueOf(1)) == 0){
-                qqchDesignDisclosurePlan.setId(IdWorker.createId());
                 qqchDesignDisclosurePlan.setValid(Valid.YES);
             }
             qqchDesignDisclosurePlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

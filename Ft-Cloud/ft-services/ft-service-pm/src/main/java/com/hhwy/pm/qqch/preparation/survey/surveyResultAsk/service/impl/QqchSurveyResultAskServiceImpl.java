@@ -89,9 +89,9 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
 
     private int insertQqchSurveyResultAskList(List<QqchSurveyResultAsk> qqchSurveyResultAskList, BigDecimal version) {
         for (QqchSurveyResultAsk qqchSurveyResultAsk : qqchSurveyResultAskList) {
+            qqchSurveyResultAsk.setId(IdWorker.createId());
             qqchSurveyResultAsk.setVersion(version);
             if(version.compareTo(BigDecimal.valueOf(1)) == 0){
-                qqchSurveyResultAsk.setId(IdWorker.createId());
                 qqchSurveyResultAsk.setValid(Valid.YES);
             }
             qqchSurveyResultAsk.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
