@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:40:02
- * @remark
+ * @remark 工艺工法申报计划
  */
 @Repository
 public interface QqchCraftDeclarePlanMapper {

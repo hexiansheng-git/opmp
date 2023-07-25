@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * @author han
  * @date 2023-07-25 11:24:02
- * @remark qqch_project_linkup_manage
+ * @remark 技术管理项目沟通管理
  */
 @Data
 @NoArgsConstructor

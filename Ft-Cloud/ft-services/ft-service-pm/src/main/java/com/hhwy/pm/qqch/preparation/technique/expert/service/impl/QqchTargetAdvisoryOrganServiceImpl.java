@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:56:43
- * @remark
+ * @remark 外部目标咨询机构选择
  */
 @Service
 public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOrganService {

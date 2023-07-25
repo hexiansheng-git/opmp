@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:53:45
- * @remark
+ * @remark 技术管理相关方管理
  */
 public interface IQqchInterestedPartyManageService {
 

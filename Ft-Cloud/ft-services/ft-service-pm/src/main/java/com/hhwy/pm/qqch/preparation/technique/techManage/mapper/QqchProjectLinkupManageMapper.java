@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 11:24:02
- * @remark
+ * @remark 技术管理项目沟通管理
  */
 @Repository
 public interface QqchProjectLinkupManageMapper {

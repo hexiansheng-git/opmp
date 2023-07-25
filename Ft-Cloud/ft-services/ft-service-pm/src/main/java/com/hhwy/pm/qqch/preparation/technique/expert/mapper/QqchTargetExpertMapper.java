@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:56:35
- * @remark
+ * @remark 内外部目标专家选择
  */
 @Repository
 public interface QqchTargetExpertMapper {

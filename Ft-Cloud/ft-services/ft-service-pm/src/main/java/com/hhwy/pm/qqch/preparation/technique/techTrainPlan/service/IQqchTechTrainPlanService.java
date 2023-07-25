@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:57:39
- * @remark
+ * @remark 技术培训策划
  */
 public interface IQqchTechTrainPlanService {
 

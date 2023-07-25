@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:39:47
- * @remark
+ * @remark 四新应用及创新计划
  */
 @Service
 public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanService {

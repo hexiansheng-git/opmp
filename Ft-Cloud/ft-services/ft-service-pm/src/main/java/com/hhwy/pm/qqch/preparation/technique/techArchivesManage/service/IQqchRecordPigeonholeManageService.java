@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:49:08
- * @remark
+ * @remark 技术档案归档管理
  */
 public interface IQqchRecordPigeonholeManageService {
 

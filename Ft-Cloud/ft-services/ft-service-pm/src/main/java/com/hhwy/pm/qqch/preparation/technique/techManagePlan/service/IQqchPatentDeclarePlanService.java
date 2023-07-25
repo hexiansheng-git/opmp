@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:40:39
- * @remark
+ * @remark 专利申报计划
  */
 public interface IQqchPatentDeclarePlanService {
 

@@ -1,21 +1,22 @@
 package com.hhwy.pm.qqch.preparation.technique.expert.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 /**
  * @author han
  * @date 2023-07-25 10:56:43
- * @remark qqch_target_advisory_organ
+ * @remark 外部目标咨询机构选择
  */
 @Data
 @NoArgsConstructor

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:45:57
- * @remark
+ * @remark BIM技术策划
  */
 public interface IQqchBimTechPlanService {
 

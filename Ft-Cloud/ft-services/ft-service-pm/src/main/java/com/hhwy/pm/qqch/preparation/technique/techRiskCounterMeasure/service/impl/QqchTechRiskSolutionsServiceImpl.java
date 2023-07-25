@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:55:16
- * @remark
+ * @remark 技术风险及应对措施
  */
 @Service
 public class QqchTechRiskSolutionsServiceImpl implements IQqchTechRiskSolutionsService {

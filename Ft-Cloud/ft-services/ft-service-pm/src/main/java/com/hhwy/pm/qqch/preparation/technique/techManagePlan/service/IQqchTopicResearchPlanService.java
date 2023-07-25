@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-07-25 10:39:25
- * @remark
+ * @remark 课题研究计划
  */
 public interface IQqchTopicResearchPlanService {
 
