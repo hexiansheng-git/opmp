@@ -311,7 +311,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ,`update_user`,`update_time`,`del_user`,`del_time`,`del_flag`,`pt_var1`,valid
         from qqch_work_planning_prj_img
         <where>
-            del_flag = '0'
+            del_flag = '0' and is_valid = '1'
             <if test="version != null"> and version = #{version} </if>
         </where>
         order by version desc limit 1

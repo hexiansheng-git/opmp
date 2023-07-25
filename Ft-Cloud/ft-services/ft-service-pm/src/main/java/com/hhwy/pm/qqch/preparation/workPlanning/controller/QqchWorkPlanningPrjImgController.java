@@ -8,6 +8,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -34,8 +35,9 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
     @Autowired
     private IQqchWorkPlanningPrjImgService qqchWorkPlanningPrjImgService;
 
+    @Autowired
+    private IQqchReviewService iQqchReviewService;
 
-                                                                                                                                                                
 
     @PreAuthorize(hasPermi = "qqchWorkPlanningPrjImg:list")
     @GetMapping
@@ -66,15 +68,15 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
             if(ObjectNullUtil.isEmpty(img.getVersion())){
                 qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjIsValid(img);//拿版本号最大且有效的
             }else{
-                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjHistory(img);
+                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjHistory(img);//查询对应版本且有效的数据
             }
             if(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg)){
                 qqchWorkPlanningPrjImg =new QqchWorkPlanningPrjImg();
                 qqchWorkPlanningPrjImg.setVersion(new BigDecimal(0));
             }
-            //查询阶段 接口待提供
-
-
+            //查询阶段
+            String stage = iQqchReviewService.getStage();
+            qqchWorkPlanningPrjImg.setStageIdentity(stage);
             return AjaxResult.success(qqchWorkPlanningPrjImg);
         }catch (CustomBusinessException e){
             e.printStackTrace();
