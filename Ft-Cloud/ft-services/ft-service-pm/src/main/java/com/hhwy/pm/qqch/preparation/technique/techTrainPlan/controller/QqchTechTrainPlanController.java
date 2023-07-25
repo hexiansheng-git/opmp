@@ -1,0 +1,94 @@
+package com.hhwy.pm.qqch.preparation.technique.techTrainPlan.controller;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.QqchTechTrainPlan;
+import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.service.IQqchTechTrainPlanService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author han
+ * @date 2023-07-25 10:57:39
+ * @remark
+ */
+@Validated
+@RestController
+@RequestMapping("/qqchTechTrainPlan")
+public class QqchTechTrainPlanController extends BaseController {
+
+    @Autowired
+    private IQqchTechTrainPlanService qqchTechTrainPlanService;
+
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
+    @GetMapping
+    public AjaxResult getQqchTechTrainPlan(@Validated(ValidationGroups.Get.class) QqchTechTrainPlan qqchTechTrainPlanParam) {
+        QqchTechTrainPlan qqchTechTrainPlan = qqchTechTrainPlanService.getQqchTechTrainPlan(qqchTechTrainPlanParam);
+        return AjaxResult.success(qqchTechTrainPlan);
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
+    @GetMapping("/list")
+    public AjaxResult getQqchTechTrainPlanList(@Validated(ValidationGroups.Select.class) QqchTechTrainPlan qqchTechTrainPlanParam) {
+        startPage();
+        List<QqchTechTrainPlan> qqchTechTrainPlanList = qqchTechTrainPlanService.getQqchTechTrainPlanList(qqchTechTrainPlanParam);
+        return getDataTableAjaxResult(qqchTechTrainPlanList);
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
+    @PostMapping("/add")
+    public AjaxResult insertQqchTechTrainPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
+        qqchTechTrainPlanService.insertQqchTechTrainPlan(qqchTechTrainPlanParam);
+        return AjaxResult.success(qqchTechTrainPlanParam);
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
+    @PostMapping("/batchAdd")
+    public AjaxResult insertQqchTechTrainPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTechTrainPlan> qqchTechTrainPlanListParam) {
+        qqchTechTrainPlanService.insertQqchTechTrainPlanList(qqchTechTrainPlanListParam);
+        return AjaxResult.success(qqchTechTrainPlanListParam);
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
+    @PostMapping("/update")
+    public AjaxResult updateQqchTechTrainPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
+        return toAjax(qqchTechTrainPlanService.updateQqchTechTrainPlan(qqchTechTrainPlanParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchTechTrainPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTechTrainPlan> qqchTechTrainPlanListParam) {
+        return toAjax(qqchTechTrainPlanService.updateQqchTechTrainPlanList(qqchTechTrainPlanListParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteQqchTechTrainPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
+        return toAjax(qqchTechTrainPlanService.deleteQqchTechTrainPlan(qqchTechTrainPlanParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteQqchTechTrainPlanByPks(@PathVariable Long[] ids) {
+        List<Long> qqchTechTrainPlanPkList = Arrays.asList(ids);
+        return toAjax(qqchTechTrainPlanService.deleteQqchTechTrainPlanByPks(qqchTechTrainPlanPkList));
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, QqchTechTrainPlan qqchTechTrainPlanParam) throws IOException {
+        List<QqchTechTrainPlan> qqchTechTrainPlanList = qqchTechTrainPlanService.getQqchTechTrainPlanList(qqchTechTrainPlanParam);
+        ExcelUtils<QqchTechTrainPlan> util = new ExcelUtils<>(QqchTechTrainPlan.class);
+        util.exportExcel(response, qqchTechTrainPlanList, DateUtils.getDate());
+    }
+}
