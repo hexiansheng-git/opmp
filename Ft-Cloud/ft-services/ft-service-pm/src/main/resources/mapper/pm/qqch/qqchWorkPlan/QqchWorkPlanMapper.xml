@@ -74,6 +74,7 @@
              , `pt_var4`
              , `pt_var5`
              , `task_status`
+             , concat('V',`version`) as versionStr
         from qqch_work_plan
     </sql>
     <select id="getQqchWorkPlan" resultMap="QqchWorkPlanResultMap">
@@ -161,7 +162,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
         </where>
-        order by create_time desc
+        order by version desc
     </select>
 
     <select id="getQqchWorkPlanListCount" resultType="java.lang.Integer">
