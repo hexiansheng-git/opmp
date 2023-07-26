@@ -42,4 +42,13 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
             qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(qqchSummaryEvaluation);
         }
     }
+
+    @Transactional
+    public void submit(QqchSummaryEvaluation qqchSummaryEvaluation) {
+        qqchSummaryEvaluation.setTaskStatus("5");
+        // 保存数据
+        this.save(qqchSummaryEvaluation);
+
+        // todo 发起流程
+    }
 }

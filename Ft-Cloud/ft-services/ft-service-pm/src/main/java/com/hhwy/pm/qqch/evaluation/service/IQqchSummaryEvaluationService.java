@@ -12,4 +12,6 @@ public interface IQqchSummaryEvaluationService {
     QqchSummaryEvaluation getQqchSummaryEvaluation(QqchSummaryEvaluation qqchSummaryEvaluation);
 
     void save(QqchSummaryEvaluation qqchSummaryEvaluation);
+
+    void submit(QqchSummaryEvaluation qqchSummaryEvaluation);
 }

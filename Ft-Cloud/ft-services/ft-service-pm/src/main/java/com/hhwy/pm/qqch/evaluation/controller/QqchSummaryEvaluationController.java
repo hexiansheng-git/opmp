@@ -38,8 +38,22 @@ public class QqchSummaryEvaluationController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchSummaryEvaluation:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSummaryEvaluation qqchSummaryEvaluationParam) {
+    public AjaxResult save(
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchSummaryEvaluation qqchSummaryEvaluationParam) {
         qqchSummaryEvaluationService.save(qqchSummaryEvaluationParam);
+        return AjaxResult.success(qqchSummaryEvaluationParam);
+    }
+
+    /**
+     * 提交
+     *
+     * @param qqchSummaryEvaluationParam
+     * @return
+     */
+    @PostMapping("/submit")
+    public AjaxResult submit(@Validated({ValidationGroups.Update.class,
+        ValidationGroups.Save.class}) @RequestBody QqchSummaryEvaluation qqchSummaryEvaluationParam) {
+        qqchSummaryEvaluationService.submit(qqchSummaryEvaluationParam);
         return AjaxResult.success(qqchSummaryEvaluationParam);
     }
 }
