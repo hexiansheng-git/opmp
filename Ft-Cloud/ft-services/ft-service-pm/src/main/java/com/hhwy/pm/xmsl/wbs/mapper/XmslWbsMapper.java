@@ -17,6 +17,15 @@ public interface XmslWbsMapper {
 
     XmslWbs getXmslWbs(XmslWbs xmslWbs);
 
+    /**
+     * 最新数据
+     * @param xmslWbs
+     * @return
+     */
+    List<XmslWbs> latestWbsList(XmslWbs xmslWbs);
+
+    List<XmslWbs> latestWbsId(XmslWbs xmslWbs);
+
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
 
     Long countByWbs(XmslWbs wbs);
