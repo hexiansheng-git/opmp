@@ -111,7 +111,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchOrganizationList" useGeneratedKeys="true" keyProperty="id">

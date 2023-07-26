@@ -31,7 +31,7 @@ public class QqchOrganizationListVo {
     /**
      * 字段描述：确认状态（0：未确认，1：已确认）
      */
-    private String confirmStatus = ConfirmStatus.UNCONFIRMED;
+//    private String confirmStatus = ConfirmStatus.UNCONFIRMED;
     /**
      * 字段描述：版本
      */

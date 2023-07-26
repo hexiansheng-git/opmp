@@ -54,7 +54,7 @@ public class QqchOrganizationListController extends BaseController{
      */
     @PreAuthorize(hasPermi = "qqchOrganizationList:add")
     @PostMapping("/save")
-    public AjaxResult insertQqchWorkPlanningPrjImg(@Validated(ValidationGroups.Save.class) @RequestBody QqchOrganizationListVo qqchOrganizationListVo){
+    public AjaxResult insertQqchWorkPlanningPrjImg(@Validated(ValidationGroups.Update.class) @RequestBody QqchOrganizationListVo qqchOrganizationListVo){
         try{
             return AjaxResult.success(qqchOrganizationListService.insertQqchOrganizationListVo(qqchOrganizationListVo));
         }catch (CustomBusinessException e){

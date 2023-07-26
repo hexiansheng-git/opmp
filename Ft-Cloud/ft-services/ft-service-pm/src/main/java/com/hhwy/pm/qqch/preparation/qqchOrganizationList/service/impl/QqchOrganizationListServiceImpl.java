@@ -15,11 +15,13 @@ import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyEx
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +43,8 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
     private QqchOrganizationListMapper qqchOrganizationListMapper;
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchOrganizationList getQqchOrganizationList(QqchOrganizationList qqchOrganizationList) {
@@ -65,8 +69,9 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         organizationListVo.setVersion(version);
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
         qqchOrganizationList.setVersion(version);
-        dateList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
-        //差初始化数据 F1 F2
+        List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
+        dateList = TreeUtil.build(qqchOrganizationListList, null);
+        //初始化数据 F1 F2。。。。
         if (dateList.size() == 0) {
             //获取字典项 组织架构设置
             AjaxResult resultQualified = systemServiceApi.dictType("organization_cat");
@@ -82,6 +87,8 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
             dateList = dateList.stream().sorted(Comparator.comparing(QqchOrganizationList::getSort)).collect(Collectors.toList());
         }
         organizationListVo.setDataList(dateList);
+        //查询阶段
+        organizationListVo.setStageIdentity(qqchReviewService.getStage());
         return organizationListVo;
     }
 
@@ -134,6 +141,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
     @Transactional
     public int insertQqchOrganizationListVo(QqchOrganizationListVo qqchOrganizationListVo) {
         List<QqchOrganizationList> dataList = qqchOrganizationListVo.getDataList();
+        List<QqchOrganizationList> organizationLists = TreeUtil.treeToList(dataList);
         if (ObjectNullUtil.isEmpty(dataList)) {
             return 1;
         } else {
@@ -145,7 +153,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         String valid = "";//是否有效
         //判断是确认还是保存
         if("0".equals(qqchOrganizationListVo.getButtonMark())){//保存（判断是业务保存还是变更保存）
-            if(qqchOrganizationListVo.getVersion().equals(InitVersionConstant.INIT_VERSION)){//业务保存
+            if(qqchOrganizationListVo.getVersion().intValue()==new BigDecimal(InitVersionConstant.INIT_VERSION).intValue()){//业务保存
                 valid = "1";
             }else{//变更保存
                 valid = "0";
@@ -159,10 +167,10 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
         }
         String finalValid = valid;
-        qqchOrganizationListVo.getDataList().stream().forEach(item->{
+
+        organizationLists.stream().forEach(item->{
             item.setVersion(qqchOrganizationListVo.getVersion());
             item.setValid(finalValid);
-            item.setId(IdWorker.createId());
             item.setCreateUser(SecurityUtils.getSysUser().getUserId()+"");
             item.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             item.setCreateTime(DateUtils.getNowDate());
@@ -172,7 +180,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         temp.setVersion(qqchOrganizationListVo.getVersion());
         qqchOrganizationListMapper.deleteQqchOrganizationList(temp);
 
-        qqchOrganizationListMapper.insertQqchOrganizationListList(qqchOrganizationListVo.getDataList());
+        qqchOrganizationListMapper.insertQqchOrganizationListList(organizationLists);
         return 1;
     }
 }
