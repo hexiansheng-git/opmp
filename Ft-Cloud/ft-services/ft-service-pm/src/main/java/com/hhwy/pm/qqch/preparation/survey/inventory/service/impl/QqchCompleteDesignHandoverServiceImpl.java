@@ -98,7 +98,7 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
         for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
             qqchCompleteDesignHandover.setId(IdWorker.createId());
             qqchCompleteDesignHandover.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchCompleteDesignHandover.setValid(Valid.YES);
             }
             qqchCompleteDesignHandover.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

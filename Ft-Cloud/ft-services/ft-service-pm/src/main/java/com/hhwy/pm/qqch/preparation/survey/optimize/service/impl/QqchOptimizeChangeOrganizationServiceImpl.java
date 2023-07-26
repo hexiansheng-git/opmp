@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -15,9 +12,12 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeChangeOrg
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeChangeOrganizationService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -111,7 +111,7 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
                 QqchOptimizeChangeOrganization::setChildren);
         for (QqchOptimizeChangeOrganization qqchOptimizeChangeOrganization : insertList) {
             qqchOptimizeChangeOrganization.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchOptimizeChangeOrganization.setValid(Valid.YES);
             }
             qqchOptimizeChangeOrganization.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));

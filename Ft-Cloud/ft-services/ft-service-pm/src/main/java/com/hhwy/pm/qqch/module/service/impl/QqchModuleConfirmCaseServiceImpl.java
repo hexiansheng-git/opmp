@@ -1,17 +1,18 @@
 package com.hhwy.pm.qqch.module.service.impl;
 
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.module.mapper.QqchModuleConfirmCaseMapper;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author han
@@ -39,6 +40,8 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
      * @param stageIdentity 阶段标识
      */
     public void addConfirmRecord(String menuId,String stageIdentity){
+        CommonAssert.notBlank(menuId,"菜单id不能为空！");
+        CommonAssert.notBlank(stageIdentity,"阶段不能为空！");
         //查询是否存在确认记录
         QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();
         qqchModuleConfirmCase.setModuleIdentity(menuId);
