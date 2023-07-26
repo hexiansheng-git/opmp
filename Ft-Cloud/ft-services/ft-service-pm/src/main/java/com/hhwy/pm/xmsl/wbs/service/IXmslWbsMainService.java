@@ -50,8 +50,4 @@ public interface IXmslWbsMainService {
      */
     void finishFlow(Long id);
 
-    /**
-     * 生效wbs塞入redis
-     */
-    void initWbs2Redis();
 }

@@ -19,6 +19,15 @@ public interface IXmslWbsService {
     List<XmslWbs> getByMainId(Long mainId);
 
     /**
+     * 查询生效版本wbs
+     * @param xmslWbs
+     * @return
+     */
+    List<XmslWbs> latestWbsList(XmslWbs xmslWbs);
+
+    List<XmslWbs> latestWbsListSortLevel();
+
+    /**
      * 台账也数据
      * @param xmslWbs
      * @return {list,mainId}
@@ -45,6 +54,25 @@ public interface IXmslWbsService {
      * @return
      */
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
+
+    /**
+     * 获取wbs的所有子级
+     * @param ids wbsId数组
+     * @return
+     */
+    List<XmslWbs> childListByIds(Long[] ids);
+    List<XmslWbs> childListById(Long id);
+
+    /**
+     * 处理wbs祖级信息(祖级id,祖级名称)
+     *
+     */
+    void handlerAncestors();
+
+    /**
+     * 初始化wbs到redis（异步）
+     */
+    public void initWbs2Redis();
 
     Long countByWbs(XmslWbs wbs);
 

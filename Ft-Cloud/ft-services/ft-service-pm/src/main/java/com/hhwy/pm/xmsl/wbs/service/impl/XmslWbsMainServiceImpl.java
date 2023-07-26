@@ -7,6 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.util.PageObjectUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
@@ -17,6 +18,7 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -41,11 +43,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     @Autowired
     private XmslWbsMainMapper xmslWbsMainMapper;
     @Resource
-    private TokenService tokenService;
-    @Resource
     private IXmslWbsService wbsService;
-    @Resource
-    private RedisUtils redisUtils;
 
 
     public XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain) {
@@ -157,38 +155,13 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.deleteWbs();
         xmslWbsMainMapper.insertHistoryToWbs(id);
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
+        //2、处理祖级ID、祖级名称
+        wbsService.handlerAncestors();
         //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
         //3、wbs塞入redis
-        initWbs2Redis();
+        wbsService.initWbs2Redis();
     }
 
-    //塞wbs到缓存 wbs::项目id  wbsId  wbsjson
-    public void initWbs2Redis(){
-        String tenantKey = tokenService.getTenantKey();
-        ThreadPoolUtil.execute(()->{
-            String key = WbsRedisUtils.getKey(tenantKey);
-            try{
-                if(RedissonLockUtil.lock(key)){
-                    Long count = wbsService.countByWbs(new XmslWbs());
-                    int limitSize = 3;
-                    Long pages = count/limitSize+(count%limitSize>0?1:0);
-                    Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
-                    redisUtils.delete(key);
-                    for (int i = 0; i < pages.intValue(); i++) {
-                        PageHelper.startPage(i+1,limitSize,false);
-                        List<XmslWbs> allList = wbsService.getXmslWbsList(new XmslWbs());
-                        //遍历塞入map
-                        allList.parallelStream().forEach(r->{
-                            redisMap.put(r.getId(),JSONObject.toJSONString(r));
-                        });
-                        redisUtils.hPutAll(key,redisMap);
-                        redisMap.clear();
-                    }
-                }
-            }finally {
-                RedissonLockUtil.unlock(key);
-            }
-        });
-    }
+
 }
