@@ -1,15 +1,15 @@
 package com.hhwy.pm.qqch.group.controller;
 
-import java.util.List;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
-import org.springframework.web.bind.annotation.*;
-import javax.validation.constraints.NotNull;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author han
@@ -26,7 +26,7 @@ public class QqchWorkGroupController extends BaseController {
 
 
     /**
-     * 根据id获取工作小组信息
+     * 根据id获取工作小组信息（详情）
      * @param id
      * @return
      */

@@ -22,6 +22,7 @@
     <result property="finalDate" column="final_date"/>
     <result property="finalOverview" column="final_overview"/>
     <result property="finalFileGroupId" column="final_file_group_id"/>
+    <result property="taskStatus" column="task_status"/>
     <result property="regionId" column="region_id"/>
     <result property="regionName" column="region_name"/>
     <result property="projectId" column="project_id"/>
@@ -60,6 +61,7 @@
       ,`final_date`
       ,`final_overview`
       ,`final_file_group_id`
+      ,task_status
       ,`region_id`
       ,`region_name`
       ,`project_id`
@@ -106,6 +108,7 @@
       <if test="finalOverview != null  and finalOverview != ''">and `final_overview` = #{finalOverview}</if>
       <if test="finalFileGroupId != null  and finalFileGroupId != ''">and `final_file_group_id` = #{finalFileGroupId}
       </if>
+      <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -154,6 +157,7 @@
       <if test="finalOverview != null  and finalOverview != ''">and `final_overview` = #{finalOverview}</if>
       <if test="finalFileGroupId != null  and finalFileGroupId != ''">and `final_file_group_id` = #{finalFileGroupId}
       </if>
+      <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>
@@ -196,6 +200,7 @@
       <if test="finalDate != null ">`final_date`,</if>
       <if test="finalOverview != null  and finalOverview != ''">`final_overview`,</if>
       <if test="finalFileGroupId != null  and finalFileGroupId != ''">`final_file_group_id`,</if>
+      <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
       <if test="regionId != null ">`region_id`,</if>
       <if test="regionName != null  and regionName != ''">`region_name`,</if>
       <if test="projectId != null ">`project_id`,</if>
@@ -233,6 +238,7 @@
       <if test="finalDate != null ">#{finalDate},</if>
       <if test="finalOverview != null  and finalOverview != ''">#{finalOverview},</if>
       <if test="finalFileGroupId != null  and finalFileGroupId != ''">#{finalFileGroupId},</if>
+      <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
       <if test="regionId != null ">#{regionId},</if>
       <if test="regionName != null  and regionName != ''">#{regionName},</if>
       <if test="projectId != null ">#{projectId},</if>
@@ -275,6 +281,7 @@
       `final_date`,
       `final_overview`,
       `final_file_group_id`,
+      `task_status`,
       `region_id`,
       `region_name`,
       `project_id`,
@@ -313,6 +320,7 @@
         #{item.finalDate},
         #{item.finalOverview},
         #{item.finalFileGroupId},
+        #{item.taskStatus},
         #{item.regionId},
         #{item.regionName},
         #{item.projectId},
@@ -358,6 +366,7 @@
       <if test="finalDate != null ">`final_date` = #{finalDate},</if>
       <if test="finalOverview != null  and  finalOverview != ''">`final_overview` = #{finalOverview},</if>
       <if test="finalFileGroupId != null  and  finalFileGroupId != ''">`final_file_group_id` = #{finalFileGroupId},</if>
+      <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
       <if test="projectId != null ">`project_id` = #{projectId},</if>
@@ -468,6 +477,11 @@
       <trim prefix="final_file_group_id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.finalFileGroupId}
+        </foreach>
+      </trim>
+      <trim prefix="task_status  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.taskStatus}
         </foreach>
       </trim>
       <trim prefix="region_id  = case" suffix="end,">
@@ -592,6 +606,7 @@
       <if test="finalOverview != null  and finalOverview != ''">and `final_overview` = #{finalOverview}</if>
       <if test="finalFileGroupId != null  and finalFileGroupId != ''">and `final_file_group_id` = #{finalFileGroupId}
       </if>
+      <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
       <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
       <if test="projectId != null ">and `project_id` = #{projectId}</if>

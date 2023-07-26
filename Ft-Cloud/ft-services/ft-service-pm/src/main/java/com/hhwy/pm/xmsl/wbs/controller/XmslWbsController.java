@@ -50,6 +50,13 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success(map);
     }
 
+
+    @PostMapping("/latestList")
+    public AjaxResult latestList(@RequestBody XmslWbs wbs) {
+        List<XmslWbs> list = xmslWbsService.latestData(wbs);
+        return AjaxResult.success(list);
+    }
+
     @PreAuthorize(hasPermi = "xmslWbs:add")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody XmslWbsDto dto) {
