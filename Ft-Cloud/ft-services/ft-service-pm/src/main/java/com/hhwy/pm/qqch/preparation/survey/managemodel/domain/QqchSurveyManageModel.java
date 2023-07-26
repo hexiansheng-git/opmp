@@ -50,10 +50,10 @@ public class QqchSurveyManageModel extends BaseEntity {
     @Excel(name = "缺点")
     private String disadvantage;
     /**
-     * 字段描述：比选结果
+     * 字段描述：拟选模式 0-未选中1选中
      */
     @JsonProperty
-    @Excel(name = "比选结果")
+    @Excel(name = "拟选模式")
     private String results;
     /**
      * 字段描述：附件组id

@@ -7,8 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class MasterEntityVo {
-
+public class QqchSurveyManageModelVo {
     /**
      * 字段描述：阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
      */
@@ -33,5 +32,5 @@ public class MasterEntityVo {
     /**
      * 字段描述：完整设计交接情况集合
      */
-    private List<MasterEntity> masterEntityList;
+    private List<QqchSurveyManageModel> qqchSurveyManageModelList;
 }
