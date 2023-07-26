@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.group.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
@@ -117,11 +118,19 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                 if(qqchWorkGroup == null){
                     qqchWorkGroup = this.adjustQqchWorkGroup(null);
                 }
+            }else {
+                qqchWorkGroup.setAdjustMark(CommonYesNo.YES);
             }
         }else {
             //直接查询
             qqchWorkGroup.setId(id);
             qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+
+            //获取最新生效数据
+            QqchWorkGroup validMaxVersionWorkGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
+            if(id.equals(validMaxVersionWorkGroup.getId())){
+                qqchWorkGroup.setAdjustMark(CommonYesNo.YES);
+            }
         }
 
         //判断是否存在历史记录
