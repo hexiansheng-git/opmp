@@ -74,6 +74,7 @@
              , `pt_var4`
              , `pt_var5`
              , `task_status`
+             , concat('V',`version`) as versionStr
         from qqch_work_plan
     </sql>
     <select id="getQqchWorkPlan" resultMap="QqchWorkPlanResultMap">

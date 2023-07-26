@@ -108,7 +108,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     busData.setDetailList(planDetailsTree);
                 }
             }
-            busData.setVersionStr("v" + busData.getVersion());
+            busData.setVersionStr("V" + busData.getVersion());
             // 设置创建信息
             EntityUtils.setCreateUpdateInfo(busData);
         } else {
@@ -132,14 +132,14 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     EntityUtils.setCreateInfo(busData);
                     BigDecimal versionCode = busData.getVersion().add(BigDecimal.ONE);
                     busData.setVersion(versionCode);
-                    busData.setVersionStr("v" + versionCode);
+                    busData.setVersionStr("V" + versionCode);
                     busData.setTaskStatus("0");
                     busData.setValid("0");
                     //获取最新的菜单，并整合原来的数据
                     List<QqchWorkPlanDetail> tree = buildTreeList(detailList, 1);
                     busData.setDetailList(tree);
                 } else {
-                    busData.setVersionStr("v" + busData.getVersion().toString());
+                    busData.setVersionStr("V" + busData.getVersion().toString());
                     if (!ObjectNullUtil.isEmpty(detailList)) {
                         List<QqchWorkPlanDetail> planDetailsTree = TreeUtil.build(detailList, null);
                         busData.setDetailList(planDetailsTree);
@@ -155,14 +155,13 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 detail.setMainId(busId);
                 detail.setDelFlag("0");
                 List<QqchWorkPlanDetail> detailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(detail);
-                busData.setVersionStr("v" + busData.getVersion().toString());
+                busData.setVersionStr("V" + busData.getVersion().toString());
                 if (!ObjectNullUtil.isEmpty(detailList)) {
                     List<QqchWorkPlanDetail> planDetailsTree = TreeUtil.build(detailList, null);
                     busData.setDetailList(planDetailsTree);
                 }
             }
         }
-
         /*查询台账数量*/
         int listCount = qqchWorkPlanMapper.getQqchWorkPlanListCount(new QqchWorkPlan());
         if (listCount > 1) {
