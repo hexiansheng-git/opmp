@@ -29,4 +29,7 @@ public interface QqchModuleConfirmCaseMapper {
     int deleteQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     int deleteQqchModuleConfirmCaseByPks(@Param("qqchModuleConfirmCasePkList") List<Long> qqchModuleConfirmCasePkList);
+
+    List<QqchModuleConfirmCase> getModuleConfirmInfo(QqchModuleConfirmCase qqchModuleConfirmCase);
+    
 }

@@ -190,7 +190,7 @@
             <if test="editorThirdName != null  and editorThirdName != ''">and `editor_third_name` = #{editorThirdName}
             </if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchWorkPlanDetail" useGeneratedKeys="true" keyProperty="id">

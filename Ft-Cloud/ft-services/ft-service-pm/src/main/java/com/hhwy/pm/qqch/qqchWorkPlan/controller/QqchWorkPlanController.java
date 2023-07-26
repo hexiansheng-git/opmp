@@ -83,7 +83,7 @@ public class QqchWorkPlanController extends BaseController {
         return AjaxResult.success(qqchWorkPlanService.submitQqchWorkPlan(qqchWorkPlanParam));
     }
 
-    /**修改数据
+    /**编辑数据
      * @param qqchWorkPlanParam
      * @return
      */
@@ -101,6 +101,16 @@ public class QqchWorkPlanController extends BaseController {
     @PostMapping("/adjust")
     public AjaxResult adjustQqchWorkPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
         return AjaxResult.success(qqchWorkPlanService.adjustQqchWorkPlan(qqchWorkPlanParam));
+    }
+
+    /**删除
+     * @param qqchWorkPlanParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchWorkPlan:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteQqchWorkPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
+        return toAjax(qqchWorkPlanService.deleteQqchWorkPlan(qqchWorkPlanParam));
     }
 
     /**
@@ -121,12 +131,6 @@ public class QqchWorkPlanController extends BaseController {
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchWorkPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchWorkPlan> qqchWorkPlanListParam) {
         return toAjax(qqchWorkPlanService.updateQqchWorkPlanList(qqchWorkPlanListParam));
-    }
-
-    @PreAuthorize(hasPermi = "qqchWorkPlan:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchWorkPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWorkPlan qqchWorkPlanParam) {
-        return toAjax(qqchWorkPlanService.deleteQqchWorkPlan(qqchWorkPlanParam));
     }
 
     @PreAuthorize(hasPermi = "qqchWorkPlan:remove")

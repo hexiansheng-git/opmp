@@ -58,4 +58,11 @@ public interface IQqchWorkGroupService {
      * @return
      */
     int deleteQqchWorkGroup(QqchWorkGroup qqchWorkGroup);
+
+    /**
+     * 获取最大有效版本数据
+     * @return
+     */
+    QqchWorkGroup getValidMaxVersionQqchWorkGroup();
+
 }

@@ -14,6 +14,9 @@ public interface IQqchModuleConfirmCaseService {
     QqchModuleConfirmCase getQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     List<QqchModuleConfirmCase> getQqchModuleConfirmCaseList(QqchModuleConfirmCase qqchModuleConfirmCase);
+    
+    
+    List<QqchModuleConfirmCase> getModuleConfirmInfo(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     int insertQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 

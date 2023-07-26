@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.qqchWorkPlan.mapper;
 import java.util.List;
 
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
+import io.swagger.models.auth.In;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -15,6 +16,7 @@ public interface QqchWorkPlanMapper {
     QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);
+    int getQqchWorkPlanListCount(QqchWorkPlan qqchWorkPlan);
 
     int insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 

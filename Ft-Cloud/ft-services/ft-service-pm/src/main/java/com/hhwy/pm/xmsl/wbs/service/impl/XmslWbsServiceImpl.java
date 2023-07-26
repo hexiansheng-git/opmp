@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.wbs.service.impl;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.convert.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -14,6 +15,9 @@ import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.redisUtil.RedisUtils;
+import liquibase.exception.CustomChangeException;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +28,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wk
@@ -37,6 +42,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     private XmslWbsMapper xmslWbsMapper;
     @Resource
     private IXmslWbsMainService wbsMainService;
+    @Resource
+    private RedisUtils redisUtils;
 
 
     public XmslWbs getXmslWbs(XmslWbs xmslWbs) {
@@ -60,7 +67,44 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
         xmslWbs.getParams().put("tableName",main.getValid()==Constant.NO_INT?"xmsl_wbs_history":"xmsl_wbs");
         List<XmslWbs> list = xmslWbsMapper.getXmslWbsList(xmslWbs);
+        //清单信息获取
+
         return ObjectUtils.toMap("list",list,"mainId",main.getId());
+    }
+
+    @Override
+    public List<XmslWbs> latestData(XmslWbs wbs) {
+        if(StringUtils.isBlank(wbs.getParentId()) )
+            wbs.setParentId("-1");
+        boolean hasCondition = StringUtils.isNotBlank(wbs.getCode()) || StringUtils.isNotBlank(wbs.getName());
+        if(hasCondition && (StringUtils.trim(wbs.getCode())+StringUtils.trim(wbs.getCode())).length() < 3)
+            throw new RuntimeException("搜索参数过小");
+        if(!hasCondition){
+            List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
+            return list;
+        }
+        //如果是懒加载,找出满足条件的id，扔redis
+        String key = "wbs::lazySearch_"+SecurityUtils.getTenantKey();
+        //获取ids
+        Set<String> idSet = null;
+        if(!redisUtils.hasKey(key) ){
+            List<XmslWbs> list = xmslWbsMapper.latestWbsId(wbs);
+            final Set<String> resuIdSet = new ConcurrentHashSet<>();
+            list.parallelStream().forEach(r->{
+                resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
+            });
+            if(resuIdSet.size() < 1)
+                resuIdSet.add("-1");
+            redisUtils.sAdd(key,resuIdSet.toArray(new String[]{}));
+            redisUtils.expire(key,10, TimeUnit.MINUTES);
+            idSet = resuIdSet;
+        }else{
+            idSet = redisUtils.sMembers(key);
+        }
+        wbs.setParams(wbs.getParams()==null?new HashMap<>():wbs.getParams());
+        wbs.getParams().put("ids",idSet);
+        List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
+        return list;
     }
 
     @Override

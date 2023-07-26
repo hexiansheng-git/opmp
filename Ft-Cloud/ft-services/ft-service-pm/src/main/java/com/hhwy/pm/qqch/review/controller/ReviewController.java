@@ -159,11 +159,7 @@ public class ReviewController extends BaseController {
     @PostMapping("/incr")
     @ResponseBody
     public AjaxResult incr(@RequestBody Map<String, Object> map) {
-//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);
-//        Map varMap = delegateTask.getVariables();
-//        String businessId = (String)varMap.get("businessId");
-//        xcsbCheckEquInfoXzAndZlService.listener(Long.parseLong(businessId));
-        qqchReviewService.incrFinishNum("1");
+        String stage = this.qqchReviewService.getStage();
         return AjaxResult.success("成功");
     }
 

@@ -1,15 +1,11 @@
 package com.hhwy.pm.qqch.group.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,6 +14,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -247,6 +246,11 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：是否可调整标识，1：可调整，0：不可调整
+     */
+    private String adjustMark = "0";
 
     /**
      * 字段描述：历史记录标识，1：有历史记录，0：无历史记录

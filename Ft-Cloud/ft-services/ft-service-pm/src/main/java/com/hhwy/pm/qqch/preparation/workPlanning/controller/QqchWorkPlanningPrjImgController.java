@@ -8,7 +8,10 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +37,9 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
     @Autowired
     private IQqchWorkPlanningPrjImgService qqchWorkPlanningPrjImgService;
 
+    @Autowired
+    private IQqchReviewService iQqchReviewService;
 
-                                                                                                                                                                
 
     @PreAuthorize(hasPermi = "qqchWorkPlanningPrjImg:list")
     @GetMapping
@@ -62,13 +66,16 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
     @GetMapping("/detail")
     public AjaxResult detail(QqchWorkPlanningPrjImg  img){
         try{
-            QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg = null;
-            if(ObjectNullUtil.isEmpty(img.getVersion())){
-                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjIsValid(img);//拿版本号最大且有效的
-            }else{
-                qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjHistory(img);
+            BigDecimal version = VersionUtil.getVersion("qqch_work_planning_prj_img", img.getVersion());
+            img.setVersion(version);
+            QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg = qqchWorkPlanningPrjImgService.getQqchWorkPlanningPrjImg(img);
+            if(ObjectNullUtil.isEmpty(qqchWorkPlanningPrjImg)){
+                qqchWorkPlanningPrjImg =new QqchWorkPlanningPrjImg();
+                qqchWorkPlanningPrjImg.setVersion(new BigDecimal(InitVersionConstant.INIT_VERSION));
             }
-
+            //查询阶段
+            String stage = iQqchReviewService.getStage();
+            qqchWorkPlanningPrjImg.setStageIdentity(stage);
             return AjaxResult.success(qqchWorkPlanningPrjImg);
         }catch (CustomBusinessException e){
             e.printStackTrace();
@@ -76,6 +83,20 @@ public class QqchWorkPlanningPrjImgController extends BaseController{
         }catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 监听器（不确定格式，临时这样写，后续会改）
+     * @param businessId
+     */
+    @PostMapping("/listener")
+    @ResponseBody
+    public void listener(Long businessId){
+        try{
+            qqchWorkPlanningPrjImgService.listener(businessId);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

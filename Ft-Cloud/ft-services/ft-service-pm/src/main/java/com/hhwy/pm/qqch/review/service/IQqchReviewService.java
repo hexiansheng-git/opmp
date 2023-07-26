@@ -21,10 +21,12 @@ public interface IQqchReviewService {
 
     /**
      * 保存信息
-     * @param review 
+     *
+     * @param review
      * @return
      */
-    int savePlan(Long workPlanId);
+    void savePlan(Long workPlanId);
+
     int insertQqchReviewList(List<Review> reviewList);
 
     int updateQqchReview(Review review);
@@ -36,14 +38,28 @@ public interface IQqchReviewService {
     int deleteQqchReviewByPks(List<Long> qqchReviewPkList);
 
     /**
-     * @param map 
+     * @param map
      * @return
      */
     Review reviewInfo(Map<String, String> map);
 
-    void incrFinishNum(String stage);
+    /**
+     * 确认更新阶段确认功能数量
+     *
+     * @param stageIdentity  阶段
+     * @param moduleIdentity 模块唯一Id
+     */
+    void updateFinishNum(String stageIdentity, Long moduleIdentity);
 
     public void canAdjust();
 
     void listener(Long id);
+
+
+    /**
+     * 获取到了那个阶段
+     *
+     * @return
+     */
+    String getStage();
 }

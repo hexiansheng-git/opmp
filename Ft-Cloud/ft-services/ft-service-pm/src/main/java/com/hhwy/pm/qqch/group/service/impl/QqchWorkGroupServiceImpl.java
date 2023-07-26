@@ -1,11 +1,9 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
@@ -14,11 +12,15 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author han
@@ -116,11 +118,19 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                 if(qqchWorkGroup == null){
                     qqchWorkGroup = this.adjustQqchWorkGroup(null);
                 }
+            }else {
+                qqchWorkGroup.setAdjustMark(CommonYesNo.YES);
             }
         }else {
             //直接查询
             qqchWorkGroup.setId(id);
             qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+
+            //获取最新生效数据
+            QqchWorkGroup validMaxVersionWorkGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
+            if(id.equals(validMaxVersionWorkGroup.getId())){
+                qqchWorkGroup.setAdjustMark(CommonYesNo.YES);
+            }
         }
 
         //判断是否存在历史记录
@@ -264,5 +274,14 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
         return qqchWorkGroupMapper.deleteQqchWorkGroup(qqchWorkGroup);
+    }
+
+    /**
+     * 获取最大有效版本数据
+     * @return
+     */
+    @Override
+    public QqchWorkGroup getValidMaxVersionQqchWorkGroup() {
+        return qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
     }
 }

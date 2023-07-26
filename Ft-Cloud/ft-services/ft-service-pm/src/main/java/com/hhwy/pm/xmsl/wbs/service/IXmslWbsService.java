@@ -18,7 +18,19 @@ public interface IXmslWbsService {
 
     List<XmslWbs> getByMainId(Long mainId);
 
+    /**
+     * 台账也数据
+     * @param xmslWbs
+     * @return {list,mainId}
+     */
     Map listData(XmslWbs xmslWbs);
+
+    /**
+     * 获取最新数据，支持搜索
+     * @param wbs
+     * @return
+     */
+    List<XmslWbs> latestData(XmslWbs wbs);
 
     /**
      * 查询wbs，根据params.tname决定查询历史还是wbs

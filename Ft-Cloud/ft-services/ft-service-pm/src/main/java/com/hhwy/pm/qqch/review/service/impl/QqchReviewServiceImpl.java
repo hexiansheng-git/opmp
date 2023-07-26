@@ -8,8 +8,11 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
+import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.mapper.ReviewMapper;
@@ -53,6 +56,11 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     @Resource
     private IQqchWorkPlanService workPlanService;
 
+    @Resource
+    private IQqchWorkPlanDetailService workPlanDetailService;
+    
+    @Resource
+    private IQqchModuleConfirmCaseService moduleConfirmCaseService;
 
     public Review getQqchReview(Review review) {
         return reviewMapper.getQqchReview(review);
@@ -71,7 +79,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     @Override
-    public int savePlan(Long workPlanId) {
+    public void savePlan(Long workPlanId) {
         HashMap<String, String> param = new HashMap<>();
         param.put("id", workPlanId + "");
         param.put("type", "2");
@@ -156,10 +164,13 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         // 如果之前有数据的话
         if (!CollectionUtils.isEmpty(qqchReviewList)) {
             this.checkData(qqchReviewList, iData);
-            return this.updateQqchReviewList(qqchReviewList);
+            this.updateQqchReviewList(qqchReviewList);
+            this.updateFinishNum(null,null);
         }
+        this.reviewMapper.insertQqchReviewList(iData);
+        
 
-        return this.reviewMapper.insertQqchReviewList(iData);
+        return ;
     }
 
     private void checkData(List<Review> qqchReviewList, List<Review> iData) {
@@ -258,19 +269,61 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void incrFinishNum(String stage) {
+    public void updateFinishNum(String stageIdentity, Long moduleIdentity) {
 
         try {
-            if (RedissonLockUtil.lock(stage)) {
-                Review review = new Review();
-                review.setStage(stage);
-                Review qqchReview = this.getQqchReview(review);
-                Integer finishNum = qqchReview.getFinishNum();
-                qqchReview.setFinishNum(++finishNum);
-                this.updateQqchReview(review);
+            if (RedissonLockUtil.lock(stageIdentity)) {
+                QqchWorkPlanDetail where = new QqchWorkPlanDetail();
+                where.setItemId(moduleIdentity);
+                switch (stageIdentity) {
+                    case "1":
+                        where.setIsFirst("1");
+                        break;
+                    case "2":
+                        where.setIsSecond("1");
+                        break;
+                    case "3":
+                        where.setIsThird("1");
+                        break;
+                    default:
+                }
+                // 查询工作计划的数据
+                List<QqchWorkPlanDetail> qqchWorkPlanDetailList = workPlanDetailService.getQqchWorkPlanDetailList(where);
+                // 模块Id
+                List<String> moduleIdentityList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getItemId).map(String::valueOf).filter(Objects::nonNull).distinct().collect(toList());
+                // 编制人
+                List<String> editFirstList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorFirst).filter(Objects::nonNull).distinct().collect(toList());
+                List<String> editSecondList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorSecond).filter(Objects::nonNull).distinct().collect(toList());
+                List<String> editThirdList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorThird).filter(Objects::nonNull).distinct().collect(toList());
+                
+                ArrayList<String> allConfirmList = new ArrayList<>(editFirstList);
+                allConfirmList.addAll(editSecondList);
+                allConfirmList.addAll(editThirdList);
+
+                QqchModuleConfirmCase moduleWhere = new QqchModuleConfirmCase();
+                moduleWhere.setConfirmStatus("1");
+                moduleWhere.setModuleIdentityList(moduleIdentityList);
+                moduleWhere.setConfirmUserList(allConfirmList);
+                // 根据阶段 模块Id 模块负责人去记录表中查询记录数量
+                List<QqchModuleConfirmCase> qqchModuleConfirmCaseList = moduleConfirmCaseService.getModuleConfirmInfo(moduleWhere);
+                // 查询到之后根据阶段分组 其中数组数量就是确认数量
+                Map<String, List<QqchModuleConfirmCase>> stageMap = qqchModuleConfirmCaseList.stream().collect(Collectors.groupingBy(QqchModuleConfirmCase::getStageIdentity));
+                
+                List<Review> qqchReviewList = this.reviewMapper.getQqchReviewList(new Review());
+                Map<String, List<Review>> reviewStageMap = qqchReviewList.stream().collect(Collectors.groupingBy(Review::getPlanStage));
+                for (String stage : stageMap.keySet()) {
+                    List<QqchModuleConfirmCase> qqchModuleConfirmCases = stageMap.get(stage);
+                    List<Review> reviews = reviewStageMap.get(stage);
+                    if (!CollectionUtils.isEmpty(reviews)){
+                        Review review = reviews.get(0);
+                        review.setFinishNum(qqchModuleConfirmCases.size());
+                        EntityUtils.setUpdateInfo(review);
+                    }
+                }
+                this.reviewMapper.updateQqchReviewList(qqchReviewList);
             }
         } finally {
-            RedissonLockUtil.unlock(stage);
+            RedissonLockUtil.unlock(stageIdentity);
         }
 
     }
@@ -290,6 +343,20 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         Review qqchReview = this.getQqchReview(new Review(id));
         qqchReview.setTaskStatus("5");
         this.updateQqchReview(qqchReview);
+    }
+
+    @Override
+    public String getStage() {
+        Review where = new Review();
+        List<Review> qqchReviewList = this.getQqchReviewList(where).stream().sorted(Comparator.comparing(Review::getPlanStage)).collect(toList());
+        for (Review review : qqchReviewList) {
+            String taskStatus = review.getTaskStatus();
+            if (!"5".equals(taskStatus)){
+                return review.getPlanStage();
+            }
+        }
+        // 已经结束 不用查询阶段
+        return "end";
     }
 
 
