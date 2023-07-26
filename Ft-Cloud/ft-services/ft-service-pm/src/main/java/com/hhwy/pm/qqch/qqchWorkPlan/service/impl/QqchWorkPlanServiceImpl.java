@@ -16,6 +16,7 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
@@ -382,7 +383,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
     @Transactional
     public int deleteQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
-        EntityUtils.setUpdateInfo(qqchWorkPlan);
+        qqchWorkPlan.setDelUser(SecurityUtils.getSysUser().getUserId()+"");
         return qqchWorkPlanMapper.deleteQqchWorkPlan(qqchWorkPlan);
     }
 
