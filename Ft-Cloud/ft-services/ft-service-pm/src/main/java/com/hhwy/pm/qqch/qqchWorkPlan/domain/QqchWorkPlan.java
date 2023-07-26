@@ -72,14 +72,14 @@ public class QqchWorkPlan extends CommonBaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "开工令下发日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "开工令下发日期", dateFormat = "yyyy-MM-dd")
     private Date workStartTime;
     /**
      * 字段描述：第一阶段提交日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "第一阶段提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "第一阶段提交日期", dateFormat = "yyyy-MM-dd")
     private Date submitFirst;
     /**
      * 字段描述：第一阶段工作内容
@@ -92,7 +92,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "第二阶段提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "第二阶段提交日期", dateFormat = "yyyy-MM-dd")
     private Date submitSecond;
     /**
      * 字段描述：第二阶段工作内容
@@ -105,7 +105,7 @@ public class QqchWorkPlan extends CommonBaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "第三阶段提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "第三阶段提交日期", dateFormat = "yyyy-MM-dd")
     private Date submitThird;
     /**
      * 字段描述：第三阶段工作内容

@@ -56,7 +56,7 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     @Excel(name = "主数据id  （qqch_work_plan）")
     private Long mainId;
 
-    @NotBlank(message = "策划项id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotNull(message = "策划项id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private Long itemId;
     /*策划项name*/
     @NotBlank(message = "策划项名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
@@ -82,7 +82,7 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     /**
      * 字段描述：第一阶段计划完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "第一阶段计划完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date finishTimeFirst;
@@ -101,7 +101,7 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     /**
      * 字段描述：第二阶段计划完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "第二阶段计划完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date finishTimeSecond;
@@ -120,7 +120,7 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     /**
      * 字段描述：第三阶段计划完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "第三阶段计划完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date finishTimeThird;

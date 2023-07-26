@@ -42,7 +42,7 @@ public class EntityUtils {
             t.setCreateUser(userId);
             t.setCreateUserName(userName);
             t.setCreateTime(date);
-            t.setDeptId(deptId);
+//            t.setDeptId(deptId);
             // 删除标识
             t.setDelFlag("0");
         } catch (Exception e) {
