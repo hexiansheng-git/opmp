@@ -1,14 +1,18 @@
-package com.hhwy.pm.qqch.preparation.survey.managemodel.domain;
+package com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.vo;
 
 import com.hhwy.pm.qqch.constant.ConfirmStatus;
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyDesignTeams;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
-public class MasterEntityVo {
-
+@AllArgsConstructor
+@NoArgsConstructor
+public class QqchSurveyDesignTeamsVo {
     /**
      * 字段描述：阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
      */
@@ -33,5 +37,5 @@ public class MasterEntityVo {
     /**
      * 字段描述：完整设计交接情况集合
      */
-    private List<MasterEntity> masterEntityList;
+    private List<QqchSurveyDesignTeams> qqchSurveyDesignTeamsList;
 }

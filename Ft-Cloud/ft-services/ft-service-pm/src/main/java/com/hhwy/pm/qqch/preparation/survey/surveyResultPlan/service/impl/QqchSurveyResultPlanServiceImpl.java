@@ -84,9 +84,9 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
 
     private void insertQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList, BigDecimal version) {
         for (QqchSurveyResultPlan qqchSurveyResultPlan : qqchSurveyResultPlanList) {
+            qqchSurveyResultPlan.setId(IdWorker.createId());
             qqchSurveyResultPlan.setVersion(version);
             if(version.compareTo(BigDecimal.valueOf(1)) == 0){
-                qqchSurveyResultPlan.setId(IdWorker.createId());
                 qqchSurveyResultPlan.setValid(Valid.YES);
             }
             qqchSurveyResultPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

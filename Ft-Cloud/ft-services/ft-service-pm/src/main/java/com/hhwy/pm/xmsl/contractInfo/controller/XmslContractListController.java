@@ -64,7 +64,6 @@ public class XmslContractListController extends BaseController {
      * @param xmslContractListParam
      * @return
      */
-    @PreAuthorize(hasPermi = "xmslContractList:list")
     @GetMapping("/getEffectList")
     public AjaxResult getEffectList(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
         List<XmslContractList> list  = xmslContractListService.getEffectList(xmslContractListParam);

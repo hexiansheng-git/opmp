@@ -67,10 +67,13 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         XmslContractInfo xmslContractInfo = new XmslContractInfo();
         xmslContractInfo.setValid("1");
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
-        XmslContractList xmslContractList = new XmslContractList();
-        xmslContractList.setMasterId(xmslContractInfo1.getId());
-        List<XmslContractList> xmslContractList2 = this.getXmslContractList2(xmslContractList);
-        return xmslContractList2;
+        if(xmslContractInfo1!=null){
+            XmslContractList xmslContractList = new XmslContractList();
+            xmslContractList.setMasterId(xmslContractInfo1.getId());
+            List<XmslContractList> xmslContractList2 = this.getXmslContractList2(xmslContractList);
+            return xmslContractList2;
+        }
+        return null;
     }
 
     @Transactional

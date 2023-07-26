@@ -1,8 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.managemodel.service;
 
-import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.MasterEntity;
-import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.MasterEntityVo;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModel;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModelVo;
 
 /**
  * @author ldd
@@ -12,11 +11,11 @@ import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageMo
 public interface IQqchSurveyManageModelService {
 
 
-    MasterEntity getQqchSurveyManageModelList(QqchSurveyManageModel qqchSurveyManageModel);
+    QqchSurveyManageModelVo  getQqchSurveyManageModelList(QqchSurveyManageModel qqchSurveyManageModel);
 
 
-    void confirm(MasterEntityVo masterEntityVo);
+    void confirm(QqchSurveyManageModelVo qqchSurveyManageModelVo);
 
 
-    int save(MasterEntityVo masterEntityVo);
+    int save(QqchSurveyManageModelVo qqchSurveyManageModelVo);
 }

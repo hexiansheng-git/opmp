@@ -1,60 +1,108 @@
-package com.hhwy.pm.qqch.preparation.survey.managemodel.domain;
+package com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ldd
- * @date 2023-07-18 15:25:50
- * @remark qqch_survey_manage_model
+ * @date 2023-07-25 11:08:53
+ * @remark qqch_survey_design_teams
+ * 2.1.3 勘察设计队伍配置
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QqchSurveyManageModel extends BaseEntity {
+public class QqchSurveyDesignTeams extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键id
+     * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键id")
+    @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：管理模式
+     * 字段描述：班组id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "班组id")
+    private Long teamId;
+    /**
+     * 字段描述：班组编号
      */
     @JsonProperty
-    @Excel(name = "管理模式")
+    @Excel(name = "班组编号")
+    private String teamNumber;
+    /**
+     * 字段描述：班组名称
+     */
+    @JsonProperty
+    @Excel(name = "班组名称")
+    private String teamName;
+    /**
+     * 字段描述：经营模式
+     */
+    @JsonProperty
+    @Excel(name = "经营模式")
     private String manageModel;
     /**
-     * 字段描述：优点
+     * 字段描述：施工部署id
      */
     @JsonProperty
-    @Excel(name = "优点")
-    private String advantage;
+    @Excel(name = "施工部署id")
+    private String constructionId;
     /**
-     * 字段描述：缺点
+     * 字段描述：工作内容
      */
     @JsonProperty
-    @Excel(name = "缺点")
-    private String disadvantage;
+    @Excel(name = "工作内容")
+    private String workContent;
     /**
-     * 字段描述：拟选模式 0-未选中1选中
+     * 字段描述：关联计划wbs的id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "关联计划wbs的id")
+    private Long wbsId;
+    /**
+     * 字段描述：关联计划wbs的name
      */
     @JsonProperty
-    @Excel(name = "拟选模式")
-    private String results;
+    @Excel(name = "关联计划wbs的name")
+    private String wbsName;
+    /**
+     * 字段描述：进场时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty
+    @Excel(name = "进场时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date enterTime;
+    /**
+     * 字段描述：勘察设计大纲提交时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonProperty
+    @Excel(name = "勘察设计大纲提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date submitTime;
+    /**
+     * 字段描述：退场时间
+     */
+    @JsonProperty
+    @Excel(name = "退场时间")
+    private String exitTime;
     /**
      * 字段描述：附件组id
      */
@@ -67,6 +115,39 @@ public class QqchSurveyManageModel extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注/描述")
     private String remark;
+    /**
+     * 字段描述：所属区域id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "所属区域id")
+    private Long regionId;
+    /**
+     * 字段描述：所属区域名称
+     */
+    @JsonProperty
+    @Excel(name = "所属区域名称")
+    private String regionName;
+    /**
+     * 字段描述：项目id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "项目id")
+    private Long projectId;
+    /**
+     * 字段描述：项目名称
+     */
+    @JsonProperty
+    @Excel(name = "项目名称")
+    private String projectName;
+    /**
+     * 字段描述：部门id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "部门id")
+    private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
@@ -149,6 +230,12 @@ public class QqchSurveyManageModel extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
     /**
+     * 字段描述：流程状态（5已完成）
+     */
+    @JsonProperty
+    @Excel(name = "流程状态（5已完成）")
+    private String taskStatus;
+    /**
      * 字段描述：版本
      */
     @JsonProperty
@@ -160,41 +247,8 @@ public class QqchSurveyManageModel extends BaseEntity {
     @JsonProperty
     @Excel(name = "是否有效 1-有效 0-失效")
     private String valid;
-    /**
-     * 字段描述：所属区域id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "所属区域id")
-    private Long regionId;
-    /**
-     * 字段描述：所属区域名称
-     */
-    @JsonProperty
-    @Excel(name = "所属区域名称")
-    private String regionName;
-    /**
-     * 字段描述：项目id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "项目id")
-    private Long projectId;
-    /**
-     * 字段描述：项目名称
-     */
-    @JsonProperty
-    @Excel(name = "项目名称")
-    private String projectName;
-    /**
-     * 字段描述：部门id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @Excel(name = "部门id")
-    private Long deptId;
 
-    private Long[]  ids;
-
+    private List<QqchSurveyPersonPlan> qqchSurveyPersonPlanList;
+    private List<QqchSurveyEquPlan> qqchSurveyEquPlanList;
 
 }

@@ -50,26 +50,28 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         xmslContractInfo.setVersion(maxVersion);
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
-        //1.1投保险种
-        XmslContractInsure xmslContractInsure = new XmslContractInsure();
-        xmslContractInsure.setMasterId(xmslContractInfo.getId());
-        List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsure);
-        if(CollectionUtils.isNotEmpty(xmslContractInsureList)){
-            xmslContractInfo1.setXmslContractInsureList(xmslContractInsureList);
-        }
-        //1.2签订信息
-        XmslContractSign xmslContractSign = new XmslContractSign();
-        xmslContractSign.setMasterId(xmslContractInfo.getId());
-        List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSign);
-        if(CollectionUtils.isNotEmpty(xmslContractSignList)){
-            xmslContractInfo1.setXmslContractSignList(xmslContractSignList);
-        }
-        //1.3项目支付信息
-        XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
-        xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
-        List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
-        if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
-            xmslContractInfo1.setXmslContractPayinfoList(xmslContractPayinfoList);
+        if(xmslContractInfo1!=null){
+            //1.1投保险种
+            XmslContractInsure xmslContractInsure = new XmslContractInsure();
+            xmslContractInsure.setMasterId(xmslContractInfo.getId());
+            List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsure);
+            if(CollectionUtils.isNotEmpty(xmslContractInsureList)){
+                xmslContractInfo1.setXmslContractInsureList(xmslContractInsureList);
+            }
+            //1.2签订信息
+            XmslContractSign xmslContractSign = new XmslContractSign();
+            xmslContractSign.setMasterId(xmslContractInfo.getId());
+            List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSign);
+            if(CollectionUtils.isNotEmpty(xmslContractSignList)){
+                xmslContractInfo1.setXmslContractSignList(xmslContractSignList);
+            }
+            //1.3项目支付信息
+            XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+            xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
+            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
+            if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
+                xmslContractInfo1.setXmslContractPayinfoList(xmslContractPayinfoList);
+            }
         }
         return xmslContractInfo1;
     }
