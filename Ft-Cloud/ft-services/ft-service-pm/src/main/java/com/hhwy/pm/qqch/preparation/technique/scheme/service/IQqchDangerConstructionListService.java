@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -15,4 +17,6 @@ public interface IQqchDangerConstructionListService {
     void batchSave(QqchDangerConstructionListVo qqchDangerConstructionListVo);
 
     void syncData();
+
+    List<QqchDangerConstructionList> getByWbsCodes(String[] wbsCodes);
 }

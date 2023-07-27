@@ -77,4 +77,9 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
+
+    @Override
+    public List<QqchKeyDifficultConstructionBrief> getByWbsCodes(String[] wbsCodes) {
+        return qqchKeyDifficultConstructionBriefMapper.getByWbsCodes(wbsCodes);
+    }
 }

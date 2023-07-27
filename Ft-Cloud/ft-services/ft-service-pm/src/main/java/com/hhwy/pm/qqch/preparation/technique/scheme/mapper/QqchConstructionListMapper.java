@@ -29,4 +29,6 @@ public interface QqchConstructionListMapper {
     int deleteQqchConstructionListByPks(@Param("qqchConstructionListPkList") List<Long> qqchConstructionListPkList);
 
     List<QqchConstructionList> getBigDangerLevelConstructionList(QqchConstructionList qqchConstructionList);
+
+    List<QqchConstructionList> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes);
 }

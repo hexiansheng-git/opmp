@@ -114,4 +114,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             qqchDangerConstructionListMapper.insertQqchDangerConstructionListList(insertList);
         }
     }
+
+    @Override
+    public List<QqchDangerConstructionList> getByWbsCodes(String[] wbsCodes) {
+        return qqchDangerConstructionListMapper.getByWbsCodes(wbsCodes);
+    }
 }

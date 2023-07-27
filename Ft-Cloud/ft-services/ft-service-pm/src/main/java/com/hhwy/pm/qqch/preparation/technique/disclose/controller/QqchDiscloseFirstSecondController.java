@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseFirstSecondVo;
+import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.RelateProjectVo;
 import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseFirstSecondService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
@@ -42,5 +43,17 @@ public class QqchDiscloseFirstSecondController extends BaseController {
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDiscloseFirstSecondVo qqchDiscloseFirstSecondVo) {
         qqchDiscloseFirstSecondService.batchSave(qqchDiscloseFirstSecondVo);
         return AjaxResult.success(qqchDiscloseFirstSecondVo);
+    }
+
+    /**
+     * 根据关联wbs，查询wbs本级以及所有下级关联项目危大工程方案、重难点施工方案简述关联的wbs、以及关联的施工方案。
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/getRelateProjectByWbs")
+    public AjaxResult getRelateProjectByWbs(Long id) {
+        RelateProjectVo relateProjectVo = qqchDiscloseFirstSecondService.getRelateProjectByWbs(id);
+        return AjaxResult.success(relateProjectVo);
     }
 }

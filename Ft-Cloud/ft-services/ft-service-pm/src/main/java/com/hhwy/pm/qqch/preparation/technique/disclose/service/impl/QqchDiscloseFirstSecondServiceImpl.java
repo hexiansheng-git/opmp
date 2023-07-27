@@ -7,12 +7,23 @@ import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.QqchDiscloseFirstSecond;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseFirstSecondVo;
+import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.RelateProjectVo;
 import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseFirstSecondMapper;
 import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseFirstSecondService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +41,14 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
     private QqchDiscloseFirstSecondMapper qqchDiscloseFirstSecondMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslWbsService xmslWbsService;
+    @Autowired
+    private IQqchDangerConstructionListService qqchDangerConstructionListService;
+    @Autowired
+    private IQqchKeyDifficultConstructionBriefService qqchKeyDifficultConstructionBriefService;
+    @Autowired
+    private IQqchConstructionListService qqchConstructionListService;
 
     public QqchDiscloseFirstSecondVo getQqchDiscloseFirstSecondList(BigDecimal version) {
         QqchDiscloseFirstSecondVo vo = new QqchDiscloseFirstSecondVo();
@@ -70,7 +89,6 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         // 全量入库
         qqchDiscloseFirstSecondMapper.insertQqchDiscloseFirstSecondList(insertList);
 
-
         String buttonMark = qqchDiscloseFirstSecondVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
@@ -78,5 +96,72 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
             String stageIdentity = qqchDiscloseFirstSecondVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    /**
+     * 根据关联wbs，查询wbs本级以及所有下级关联项目危大工程方案、重难点施工方案简述关联的wbs、以及关联的施工方案。
+     *
+     * @param id
+     * @return
+     */
+    public RelateProjectVo getRelateProjectByWbs(Long id) {
+        RelateProjectVo vo = new RelateProjectVo();
+        if (id == null) {
+            return vo;
+        }
+
+        // 查询本级以及所有子级wbs
+        List<XmslWbs> wbsList = xmslWbsService.childListByIds(new Long[]{id});
+        // wbs编号
+        List<String> codeList = wbsList.stream().map(XmslWbs::getCode).collect(Collectors.toList());
+        String[] codes = codeList.toArray(new String[codeList.size()]);
+
+        // 根据wbs查询关联危大工程方案清单
+        List<QqchDangerConstructionList> dangerList = qqchDangerConstructionListService.getByWbsCodes(codes);
+        // 根据wbs查询关联重难点施工方案简述
+        List<QqchKeyDifficultConstructionBrief> keyDifficultList = qqchKeyDifficultConstructionBriefService
+            .getByWbsCodes(codes);
+        // 根据wbs查询关联施工方案清单
+        List<QqchConstructionList> constructionList = qqchConstructionListService.getByWbsCodes(codes);
+
+        // 危大工程关联wbs编号
+        List<String> dangerWbsCodeList =
+            dangerList.stream().map(QqchDangerConstructionList::getWbsCode).collect(Collectors.toList());
+        // 危大工程关联wbs名称
+        List<String> dangerWbsNameList =
+            dangerList.stream().map(QqchDangerConstructionList::getWbsName).collect(Collectors.toList());
+        // 重难点施工方案简述关联wbs编号
+        List<String> keyDifficultWbsCodeList =
+            keyDifficultList.stream().map(QqchKeyDifficultConstructionBrief::getWbsCode)
+                .collect(Collectors.toList());
+        // 重难点施工方案简述关联wbs名称
+        List<String> keyDifficultWbsNameList =
+            keyDifficultList.stream().map(QqchKeyDifficultConstructionBrief::getWbsName).collect(Collectors.toList());
+        // 施工方案名称
+        List<String> constructionNameList = constructionList.stream().map(QqchConstructionList::getSchemeName)
+            .collect(Collectors.toList());
+
+        String[] dangerWbsCodeArray = dangerWbsCodeList.toArray(new String[dangerWbsCodeList.size()]);
+        String[] dangerWbsNameArray = dangerWbsNameList.toArray(new String[dangerWbsNameList.size()]);
+        String[] keyDifficultWbsCodeArray = keyDifficultWbsCodeList.toArray(new String[keyDifficultWbsCodeList.size()]);
+        String[] keyDifficultWbsNameArray = keyDifficultWbsNameList.toArray(new String[keyDifficultWbsNameList.size()]);
+        String[] constructionNameArray = constructionNameList.toArray(new String[constructionNameList.size()]);
+
+        if (!ObjectNullUtil.isEmpty(dangerWbsCodeArray)) {
+            vo.setDangerProjectCode(dangerWbsCodeArray.toString());
+        }
+        if (!ObjectNullUtil.isEmpty(dangerWbsNameArray)) {
+            vo.setDangerProject(dangerWbsNameArray.toString());
+        }
+        if (!ObjectNullUtil.isEmpty(keyDifficultWbsCodeArray)) {
+            vo.setKeyDifficultProjectCode(keyDifficultWbsCodeArray.toString());
+        }
+        if (!ObjectNullUtil.isEmpty(keyDifficultWbsNameArray)) {
+            vo.setKeyDifficultProject(keyDifficultWbsNameArray.toString());
+        }
+        if (!ObjectNullUtil.isEmpty(constructionNameArray)) {
+            vo.setSchemeQuery(constructionNameArray.toString());
+        }
+        return vo;
     }
 }

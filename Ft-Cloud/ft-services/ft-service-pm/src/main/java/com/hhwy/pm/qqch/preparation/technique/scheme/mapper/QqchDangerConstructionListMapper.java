@@ -30,4 +30,6 @@ public interface QqchDangerConstructionListMapper {
 
     int deleteQqchDangerConstructionListByPks(
         @Param("qqchDangerConstructionListPkList") List<Long> qqchDangerConstructionListPkList);
+
+    List<QqchDangerConstructionList> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes);
 }
