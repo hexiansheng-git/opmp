@@ -631,4 +631,14 @@
     </where>
     order by create_time desc
   </select>
+
+  <select id="getByWbsCodes" parameterType="java.lang.String" resultMap="QqchConstructionListResultMap">
+    <include refid="selectQqchConstructionListVo"/>
+    where
+    del_flag = "0"
+    and wbsCode in
+    <foreach collection="wbsCodes" index="index" item="wbsCode" separator="," open="(" close=")">
+      #{wbsCode}
+    </foreach>
+  </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.disclose.service;
 
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseFirstSecondVo;
+import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.RelateProjectVo;
 import java.math.BigDecimal;
 
 /**
@@ -13,4 +14,6 @@ public interface IQqchDiscloseFirstSecondService {
     QqchDiscloseFirstSecondVo getQqchDiscloseFirstSecondList(BigDecimal version);
 
     void batchSave(QqchDiscloseFirstSecondVo qqchDiscloseFirstSecondVo);
+
+    RelateProjectVo getRelateProjectByWbs(Long id);
 }

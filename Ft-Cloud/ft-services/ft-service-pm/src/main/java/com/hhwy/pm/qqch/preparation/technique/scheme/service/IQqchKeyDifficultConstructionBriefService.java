@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -13,4 +15,7 @@ public interface IQqchKeyDifficultConstructionBriefService {
     QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version);
 
     void batchSave(QqchKeyDifficultConstructionBriefVo qqchKeyDifficultConstructionBriefVo);
+
+    List<QqchKeyDifficultConstructionBrief> getByWbsCodes(String[] wbsCodes);
+
 }

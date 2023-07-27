@@ -31,4 +31,6 @@ public interface QqchKeyDifficultConstructionBriefMapper {
 
     int deleteQqchKeyDifficultConstructionBriefByPks(
         @Param("qqchKeyDifficultConstructionBriefPkList") List<Long> qqchKeyDifficultConstructionBriefPkList);
+
+    List<QqchKeyDifficultConstructionBrief> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes);
 }

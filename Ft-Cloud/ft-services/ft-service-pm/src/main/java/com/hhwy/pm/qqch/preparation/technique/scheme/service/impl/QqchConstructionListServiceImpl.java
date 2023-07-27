@@ -84,4 +84,9 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
+
+    @Override
+    public List<QqchConstructionList> getByWbsCodes(String[] wbsCodes) {
+        return qqchConstructionListMapper.getByWbsCodes(wbsCodes);
+    }
 }

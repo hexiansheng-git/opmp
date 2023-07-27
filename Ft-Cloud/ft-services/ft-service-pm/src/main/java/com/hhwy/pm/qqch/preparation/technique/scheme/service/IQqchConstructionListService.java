@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service;
 
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -13,4 +15,7 @@ public interface IQqchConstructionListService {
     QqchConstructionListVo getQqchConstructionListList(BigDecimal version);
 
     void batchSave(QqchConstructionListVo qqchConstructionListVo);
+
+    List<QqchConstructionList> getByWbsCodes(String[] wbsCodes);
+
 }
