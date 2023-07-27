@@ -94,7 +94,7 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
         List<QqchSurveyOrganization> insertList = TreeUtil.treeToList(qqchSurveyOrganizationList);
         for (QqchSurveyOrganization qqchSurveyOrganization : insertList) {
             qqchSurveyOrganization.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSurveyOrganization.setValid(Valid.YES);
             }
             qqchSurveyOrganization.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

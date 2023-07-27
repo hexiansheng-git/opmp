@@ -161,7 +161,7 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         for (QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan : qqchOptimizeProcedurePlanList) {
             qqchOptimizeProcedurePlan.setId(IdWorker.createId());
             qqchOptimizeProcedurePlan.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchOptimizeProcedurePlan.setValid(Valid.YES);
             }
             qqchOptimizeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));

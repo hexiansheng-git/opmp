@@ -97,7 +97,7 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
         for (QqchDesignCheckPlan qqchDesignCheckPlan : qqchDesignCheckPlanList) {
             qqchDesignCheckPlan.setId(IdWorker.createId());
             qqchDesignCheckPlan.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchDesignCheckPlan.setValid(Valid.YES);
             }
             qqchDesignCheckPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

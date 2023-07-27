@@ -98,7 +98,7 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
         for (QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize : qqchDesignTechnologyOptimizeList) {
             qqchDesignTechnologyOptimize.setId(IdWorker.createId());
             qqchDesignTechnologyOptimize.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchDesignTechnologyOptimize.setValid(Valid.YES);
             }
             qqchDesignTechnologyOptimize.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));

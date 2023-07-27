@@ -98,7 +98,7 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
         for (QqchDesignConstructionSituation qqchDesignConstructionSituation : qqchDesignConstructionSituationList) {
             qqchDesignConstructionSituation.setId(IdWorker.createId());
             qqchDesignConstructionSituation.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchDesignConstructionSituation.setValid(Valid.YES);
             }
             qqchDesignConstructionSituation.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

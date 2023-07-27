@@ -10,6 +10,8 @@
         <result property="technologyName" column="technology_name"/>
         <result property="appOrInnovate" column="app_or_innovate"/>
         <result property="type" column="type"/>
+        <result property="director" column="director"/>
+        <result property="directorId" column="director_id"/>
         <result property="relatedStaff" column="related_staff"/>
         <result property="relatedStaffId" column="related_staff_id"/>
         <result property="contactWay" column="contact_way"/>
@@ -43,6 +45,8 @@
              , `technology_name`
              , `app_or_innovate`
              , `type`
+             , `director`
+             , `director_id`
              , `related_staff`
              , `related_staff_id`
              , `contact_way`
@@ -146,7 +150,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchAppInnovatePlan" useGeneratedKeys="true" keyProperty="id">
@@ -156,6 +160,8 @@
             <if test="technologyName != null  and technologyName != ''">`technology_name`,</if>
             <if test="appOrInnovate != null  and appOrInnovate != ''">`app_or_innovate`,</if>
             <if test="type != null  and type != ''">`type`,</if>
+            <if test="director != null  and director != ''">`director`,</if>
+            <if test="directorId != null  and directorId != ''">`director_id`,</if>
             <if test="relatedStaff != null  and relatedStaff != ''">`related_staff`,</if>
             <if test="relatedStaffId != null  and relatedStaffId != ''">`related_staff_id`,</if>
             <if test="contactWay != null  and contactWay != ''">`contact_way`,</if>
@@ -189,6 +195,8 @@
             <if test="technologyName != null  and technologyName != ''">#{technologyName},</if>
             <if test="appOrInnovate != null  and appOrInnovate != ''">#{appOrInnovate},</if>
             <if test="type != null  and type != ''">#{type},</if>
+            <if test="director != null  and director != ''">#{director},</if>
+            <if test="directorId != null  and directorId != ''">#{directorId},</if>
             <if test="relatedStaff != null  and relatedStaff != ''">#{relatedStaff},</if>
             <if test="relatedStaffId != null  and relatedStaffId != ''">#{relatedStaffId},</if>
             <if test="contactWay != null  and contactWay != ''">#{contactWay},</if>
@@ -227,6 +235,8 @@
             `technology_name`,
             `app_or_innovate`,
             `type`,
+            `director`,
+            `director_id`,
             `related_staff`,
             `related_staff_id`,
             `contact_way`,
@@ -261,6 +271,8 @@
                 #{item.technologyName},
                 #{item.appOrInnovate},
                 #{item.type},
+                #{item.director},
+                #{item.directorId},
                 #{item.relatedStaff},
                 #{item.relatedStaffId},
                 #{item.contactWay},
@@ -297,6 +309,8 @@
             <if test="technologyName != null  and  technologyName != ''">`technology_name` = #{technologyName},</if>
             <if test="appOrInnovate != null  and  appOrInnovate != ''">`app_or_innovate` = #{appOrInnovate},</if>
             <if test="type != null  and  type != ''">`type` = #{type},</if>
+            <if test="director != null  and  director != ''">`director` = #{director},</if>
+            <if test="directorId != null  and  directorId != ''">`director_id` = #{directorId},</if>
             <if test="relatedStaff != null  and  relatedStaff != ''">`related_staff` = #{relatedStaff},</if>
             <if test="relatedStaffId != null  and  relatedStaffId != ''">`related_staff_id` = #{relatedStaffId},</if>
             <if test="contactWay != null  and  contactWay != ''">`contact_way` = #{contactWay},</if>
@@ -340,6 +354,16 @@
             <trim prefix="type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.type}
+                </foreach>
+            </trim>
+           <trim prefix="director  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.director}
+                </foreach>
+            </trim>
+           <trim prefix="director_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.directorId}
                 </foreach>
             </trim>
             <trim prefix="related_staff  = case" suffix="end,">

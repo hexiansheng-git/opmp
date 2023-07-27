@@ -1,10 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -19,10 +14,15 @@ import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanM
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchSurveyDesignRiskPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -145,7 +145,7 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
                 QqchSurveyDesignRiskPlan::setChildren);
         for (QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan : insertList) {
             qqchSurveyDesignRiskPlan.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSurveyDesignRiskPlan.setValid(Valid.YES);
             }
             qqchSurveyDesignRiskPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

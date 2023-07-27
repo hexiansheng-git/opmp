@@ -1,9 +1,14 @@
 package com.hhwy.pm.xmsl.wbs.service.impl;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
+import com.alibaba.fastjson.JSONObject;
+import com.github.pagehelper.PageHelper;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
@@ -13,12 +18,20 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
+import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import jodd.util.ArraysUtil;
 import liquibase.exception.CustomChangeException;
+import lombok.extern.java.Log;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +39,11 @@ import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 /**
  * @author wk
@@ -37,17 +52,31 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 public class XmslWbsServiceImpl implements IXmslWbsService {
-
+    private Logger logger= LoggerFactory.getLogger(XmslWbsServiceImpl.class);
     @Autowired
     private XmslWbsMapper xmslWbsMapper;
     @Resource
     private IXmslWbsMainService wbsMainService;
     @Resource
     private RedisUtils redisUtils;
+    @Resource
+    private TokenService tokenService;
 
 
     public XmslWbs getXmslWbs(XmslWbs xmslWbs) {
         return xmslWbsMapper.getXmslWbs(xmslWbs);
+    }
+
+    @Override
+    public List<XmslWbs> latestWbsList(XmslWbs xmslWbs) {
+        return xmslWbsMapper.latestWbsList(xmslWbs);
+    }
+
+    @Override
+    public List<XmslWbs> latestWbsListSortLevel() {
+        XmslWbs query = new XmslWbs();
+        query.setParams(ObjectUtils.toMap("sortLevel","1"));
+        return xmslWbsMapper.latestWbsList(query);
     }
 
     @Override
@@ -119,8 +148,125 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     }
 
     @Override
+    public List<XmslWbs> childListByIds(Long[] ids) {
+        if(ArrayUtils.isEmpty(ids))
+            return new ArrayList<>(2);
+        List<XmslWbs> list = xmslWbsMapper.getByIds(ids);
+        if(CollectionUtils.isEmpty(list))
+            return new ArrayList<>(2);
+        Set<Long> childIdSet = new HashSet<>();
+        for (int i = 0; i < ids.length; i++) {
+            Long[] tempIds = WbsRedisUtils.getChildWbsId(ids[i]+"");
+            childIdSet.addAll(Arrays.asList(tempIds));
+        }
+        List<XmslWbs> wbsList = xmslWbsMapper.getByIds(childIdSet.toArray(new Long[]{}));
+        return wbsList;
+    }
+
+    @Override
+    public List<XmslWbs> childListById(Long id) {
+        return this.childListByIds(new Long[]{id});
+    }
+
+    @Override
     public Long countByWbs(XmslWbs wbs) {
         return this.xmslWbsMapper.countByWbs(wbs);
+    }
+
+    @Override
+    public void handlerAncestors() {
+        long begin = System.currentTimeMillis();
+        try{
+            List<XmslWbs> list = this.xmslWbsMapper.latestWbsSimpleAllList();
+            //祖级id、名称map
+            Map<String,List<String>> parentIdMap = new HashMap<>(list.size());
+            Map<String,List<String>> parentNameMap = new HashMap<>(list.size());
+            Map<String,String> idNameMap = new HashMap<>(list.size());
+            //是否为父级
+            Function<String,Boolean> isParentFunc = (s)->{return StringUtils.isBlank(s) || StringUtils.equalsAny(s,"-1","0");};
+            //遍历，获取祖级id、名称
+            for (int i = 0; i < list.size(); i++) {
+                XmslWbs temp = list.get(i);
+                idNameMap.put(temp.getId(),temp.getName().trim());
+                //若有父级，则放入parentIdMap、parentNameMap
+                if(isParentFunc.apply(temp.getParentId())){
+                    parentIdMap.put(temp.getId(),ListUtil.toList(temp.getId()));
+                    parentNameMap.put(temp.getId(),ListUtil.toList(temp.getName()));
+                    continue;
+                }
+                String pid = temp.getParentId();
+                String pname = idNameMap.get(pid);
+                if(StringUtils.isBlank(pname))
+                    logger.warn("WBS同步祖级名称ID时，未找到父级名称,子级ID:{},父级ID:{}",temp.getId(),pid);
+                List<String> pidList = ListUtils.defaultIfNull(parentIdMap.get(pid),new ArrayList<>());
+                List<String> pnameList = ListUtils.defaultIfNull(parentNameMap.get(pid),new ArrayList<>());
+                parentIdMap.put(temp.getId(),copyAndAdd(pidList,temp.getId()));
+                parentNameMap.put(temp.getId(),copyAndAdd(pnameList,temp.getName()));
+            }
+            //填充祖级id、名称
+            for (int i = 0; i < list.size(); i++) {
+                XmslWbs temp = list.get(i);
+                if(isParentFunc.apply(temp.getParentId())){
+                    temp.setAncestors(temp.getId());
+                    temp.setAncestorsName(temp.getName());
+                    continue;
+                }
+                temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()),","));
+                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()),","));
+            }
+            xmslWbsMapper.updateXmslWbsAncestorList(list);
+        }finally{
+            long usemills = System.currentTimeMillis()-begin;
+            logger.debug("WBS同步祖级名称ID，耗时:{}毫秒",usemills);
+        }
+    }
+
+    @Override
+    public void initWbs2Redis(){
+        String tenantKey = tokenService.getTenantKey();
+        ThreadPoolUtil.execute(()->{
+            String key = WbsRedisUtils.getKey(tenantKey);
+            String childKey = WbsRedisUtils.getChildKey(tenantKey);
+            try{
+                if(RedissonLockUtil.lock(key)){
+                    Long count = xmslWbsMapper.countByWbs(new XmslWbs());
+                    int limitSize = 3;
+                    Long pages = count/limitSize+(count%limitSize>0?1:0);
+                    Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
+                    Map<String,String> childRedisMap = new ConcurrentHashMap<>(limitSize);
+                    redisUtils.delete(key);
+                    for (int i = 0; i < pages.intValue(); i++) {
+                        PageHelper.startPage(i+1,limitSize,false);
+                        List<XmslWbs> allList = this.latestWbsListSortLevel();
+                        //遍历塞入map
+                        allList.parallelStream().forEach(r->{
+                            redisMap.put(r.getId(), JSONObject.toJSONString(r));
+                            String ancestor = r.getAncestors();
+                            if(com.hhwy.common.core.utils.StringUtils.isBlank(ancestor))
+                                return;
+                            String[] pids = ancestor.split(",");
+                            for (int j = 0; j < pids.length; j++) {
+                                if(com.hhwy.common.core.utils.StringUtils.equals(pids[j],r.getId()))
+                                    continue;
+                                ObjectUtils.addStr2MapList(childRedisMap,pids[j],r.getId());
+                            }
+                        });
+                        redisUtils.hPutAll(key,redisMap);
+                        redisMap.clear();
+                    }
+                    redisUtils.delete(childKey);
+                    redisUtils.hPutAll(childKey,childRedisMap);
+                }
+            }finally {
+                RedissonLockUtil.unlock(key);
+            }
+        });
+    }
+
+    private List<String> copyAndAdd(List<String> list,String str){
+        List<String> result = new ArrayList<>(list);
+        result.add(str);
+        return result;
     }
 
     @Override

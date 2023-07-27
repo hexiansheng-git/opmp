@@ -99,7 +99,7 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
         for (QqchSurveyResultAsk qqchSurveyResultAsk : qqchSurveyResultAskList) {
             qqchSurveyResultAsk.setId(IdWorker.createId());
             qqchSurveyResultAsk.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSurveyResultAsk.setValid(Valid.YES);
             }
             qqchSurveyResultAsk.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

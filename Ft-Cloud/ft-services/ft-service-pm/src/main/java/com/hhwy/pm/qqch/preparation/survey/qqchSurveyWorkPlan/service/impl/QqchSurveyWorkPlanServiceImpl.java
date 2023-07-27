@@ -74,7 +74,7 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         List<QqchSurveyWorkPlan> insertList = TreeUtil.treeToList(qqchSurveyWorkPlanList);
         for (QqchSurveyWorkPlan    qqchSurveyWorkPlan : insertList) {
             qqchSurveyWorkPlan.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSurveyWorkPlan.setValid(Valid.YES);
             }
             qqchSurveyWorkPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
