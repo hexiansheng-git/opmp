@@ -14,7 +14,7 @@ public interface IQqchSurveyManageModelService {
     QqchSurveyManageModelVo  getQqchSurveyManageModelList(QqchSurveyManageModel qqchSurveyManageModel);
 
 
-    void confirm(QqchSurveyManageModelVo qqchSurveyManageModelVo);
+    QqchSurveyManageModelVo confirm(QqchSurveyManageModelVo qqchSurveyManageModelVo);
 
 
     int save(QqchSurveyManageModelVo qqchSurveyManageModelVo);

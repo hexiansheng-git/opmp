@@ -59,8 +59,8 @@ public class QqchSurveyManageModelController extends BaseController{
     @PreAuthorize(hasPermi = "qqchSurveyManageModel:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyManageModelVo qqchSurveyManageModelVo){
-        qqchSurveyManageModelService.confirm(qqchSurveyManageModelVo);
-        return AjaxResult.success(qqchSurveyManageModelVo);
+     QqchSurveyManageModelVo   qqchSurveyManageModelVo1= qqchSurveyManageModelService.confirm(qqchSurveyManageModelVo);
+        return AjaxResult.success(qqchSurveyManageModelVo1);
     }
 
 

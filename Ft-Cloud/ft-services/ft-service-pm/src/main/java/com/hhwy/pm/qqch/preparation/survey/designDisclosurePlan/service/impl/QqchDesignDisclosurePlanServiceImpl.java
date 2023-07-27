@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.QqchDesig
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.domain.vo.QqchDesignDisclosurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.mapper.QqchDesignDisclosurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.designDisclosurePlan.service.IQqchDesignDisclosurePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,6 +36,8 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
     private CommonMapper commonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     /**
@@ -43,14 +46,19 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
      * @param qqchDesignDisclosurePlan
      * @return
      */
-    public List<QqchDesignDisclosurePlan> getQqchDesignDisclosurePlanList(QqchDesignDisclosurePlan qqchDesignDisclosurePlan) {
+    public QqchDesignDisclosurePlanVo getQqchDesignDisclosurePlanList(QqchDesignDisclosurePlan qqchDesignDisclosurePlan) {
         BigDecimal version=new BigDecimal(1);
         if (qqchDesignDisclosurePlan.getVersion() == null) {
             // 获取最大版本号
             version = commonMapper.selectMaxVersion("qqch_design_disclosure_plan");
         }
         qqchDesignDisclosurePlan.setVersion(version);
-        return qqchDesignDisclosurePlanMapper.getQqchDesignDisclosurePlanList(qqchDesignDisclosurePlan);
+        List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList = qqchDesignDisclosurePlanMapper.getQqchDesignDisclosurePlanList(qqchDesignDisclosurePlan);
+        QqchDesignDisclosurePlanVo vo = new QqchDesignDisclosurePlanVo();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanList);
+        return vo;
     }
 
     /**

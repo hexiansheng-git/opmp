@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface IQqchSurveyResultAskService {
 
-    List<QqchSurveyResultAsk> getQqchSurveyResultAskList(QqchSurveyResultAsk qqchSurveyResultAsk);
+    QqchSurveyResultAskVo getQqchSurveyResultAskList(QqchSurveyResultAsk qqchSurveyResultAsk);
 
 
     void save(QqchSurveyResultAskVo qqchSurveyResultAskVo);

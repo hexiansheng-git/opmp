@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResu
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAskVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.mapper.QqchSurveyResultAskMapper;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.IQqchSurveyResultAskService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,6 +36,8 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
     private CommonMapper commonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     /**
      *  列表查询
@@ -42,14 +45,19 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
      * @param qqchSurveyResultAsk
      * @return
      */
-    public List<QqchSurveyResultAsk> getQqchSurveyResultAskList(QqchSurveyResultAsk qqchSurveyResultAsk) {
+    public QqchSurveyResultAskVo getQqchSurveyResultAskList(QqchSurveyResultAsk qqchSurveyResultAsk) {
         BigDecimal version=new BigDecimal(1);
         if (qqchSurveyResultAsk.getVersion() == null) {
             // 获取最大版本号
             version = commonMapper.selectMaxVersion("qqch_survey_result_ask");
         }
         qqchSurveyResultAsk.setVersion(version);
-        return qqchSurveyResultAskMapper.getQqchSurveyResultAskList(qqchSurveyResultAsk);
+        List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskMapper.getQqchSurveyResultAskList(qqchSurveyResultAsk);
+        QqchSurveyResultAskVo vo = new QqchSurveyResultAskVo();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setQqchSurveyResultAskList(qqchSurveyResultAskList);
+        return vo;
     }
 
     /*

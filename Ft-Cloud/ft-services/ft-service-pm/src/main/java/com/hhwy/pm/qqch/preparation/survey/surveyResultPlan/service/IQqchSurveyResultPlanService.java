@@ -3,8 +3,6 @@ package com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlan;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlanVo;
 
-import java.util.List;
-
 /**
  * @author ldd
  * @date 2023-07-21 16:45:04
@@ -14,7 +12,7 @@ public interface IQqchSurveyResultPlanService {
 
 
 
-    List<QqchSurveyResultPlan> getQqchSurveyResultPlanList(QqchSurveyResultPlan qqchSurveyResultPlan);
+    QqchSurveyResultPlanVo getQqchSurveyResultPlanList(QqchSurveyResultPlan qqchSurveyResultPlan);
 
 
     void save(QqchSurveyResultPlanVo qqchSurveyResultPlanVo);

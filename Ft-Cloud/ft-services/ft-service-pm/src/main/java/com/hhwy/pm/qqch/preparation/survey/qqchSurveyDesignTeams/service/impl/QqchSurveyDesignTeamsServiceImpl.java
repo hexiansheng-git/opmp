@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.mapper.QqchSurv
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.mapper.QqchSurveyEquPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.mapper.QqchSurveyPersonPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.service.IQqchSurveyDesignTeamsService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -39,6 +40,8 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
     private QqchSurveyEquPlanMapper qqchSurveyEquPlanMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     /**
      *  列表接口
@@ -61,6 +64,7 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
             surveyDesignTeams.setQqchSurveyPersonPlanList(qqchSurveyPersonPlanList);
             surveyDesignTeams.setQqchSurveyEquPlanList(qqchSurveyEquPlanList);
         }
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setQqchSurveyDesignTeamsList(qqchSurveyDesignTeamsList);
         return vo;
     }

@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * @author ldd
  * @date 2023-07-21 16:45:52
@@ -36,9 +34,8 @@ public class QqchSurveyResultAskController extends BaseController {
     @PreAuthorize(hasPermi = "qqchSurveyResultAsk:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyResultAskList(@Validated(ValidationGroups.Select.class) QqchSurveyResultAsk qqchSurveyResultAskParam) {
-        //startPage();
-        List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskService.getQqchSurveyResultAskList(qqchSurveyResultAskParam);
-        return getDataTableAjaxResult(qqchSurveyResultAskList);
+        QqchSurveyResultAskVo vo = qqchSurveyResultAskService.getQqchSurveyResultAskList(qqchSurveyResultAskParam);
+        return AjaxResult.success(vo);
     }
 
 
