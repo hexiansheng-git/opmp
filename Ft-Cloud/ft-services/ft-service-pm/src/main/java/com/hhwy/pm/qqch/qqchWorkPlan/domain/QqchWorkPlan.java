@@ -253,8 +253,6 @@ public class QqchWorkPlan extends CommonBaseEntity {
     private String taskStatus;
 
     private String versionStr;
-    /*是否显示历史记录 0否 1是*/
-    private Integer isShowRecord= 0;
 
 
     private List<QqchWorkPlanDetail> detailList=new ArrayList<>();

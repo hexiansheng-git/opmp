@@ -98,6 +98,16 @@ public class CommonBaseEntity extends BaseEntity {
 
     private Long deptId;
 
+    /*是否显示历史记录 0否 1是*/
+    private Integer isShowRecord= 0;
+
+    public Integer getIsShowRecord() {
+        return isShowRecord;
+    }
+
+    public void setIsShowRecord(Integer isShowRecord) {
+        this.isShowRecord = isShowRecord;
+    }
 
     public String getIsFirstNode() {
         return isFirstNode;
