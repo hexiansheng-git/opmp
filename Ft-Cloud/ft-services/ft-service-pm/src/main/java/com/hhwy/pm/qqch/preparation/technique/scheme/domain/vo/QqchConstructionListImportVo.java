@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.preparation.technique.scheme.domain;
+package com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,11 +12,11 @@ import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-07-17 14:26:41
- * @remark qqch_danger_construction_list
+ * @date 2023-07-13 14:40:32
+ * @remark 3.4.2施工方案清单
  */
 @Data
-public class QqchDangerConstructionList extends BaseEntity {
+public class QqchConstructionListImportVo extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,6 +42,7 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：关联WBS编码
      */
     @JsonProperty
+    @Excel(name = "关联WBS编号")
     private String wbsCode;
     /**
      * 字段描述：关联WBS
@@ -68,23 +69,11 @@ public class QqchDangerConstructionList extends BaseEntity {
     @Excel(name = "危大等级（字典类型danger_level）", dictType = "danger_level")
     private String dangerLevel;
     /**
-     * 字段描述：关键和特殊过程
+     * 字段描述：设计变更是否引起施工方案变更 0:否；1:是
      */
     @JsonProperty
-    @Excel(name = "关键和特殊过程")
-    private String keySpecialProcesses;
-    /**
-     * 字段描述：简要说明
-     */
-    @JsonProperty
-    @Excel(name = "简要说明")
-    private String briefDescription;
-    /**
-     * 字段描述：主要措施
-     */
-    @JsonProperty
-    @Excel(name = "主要措施")
-    private String mainMeasure;
+    @Excel(name = "设计变更是否引起施工方案变更", dictType = "common_yes")
+    private String isChange;
     /**
      * 字段描述：计划编制时间
      */
@@ -110,7 +99,6 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：项目联系人
      */
     @JsonProperty
-    @Excel(name = "项目联系人")
     private String contactPerson;
     /**
      * 字段描述：版本
