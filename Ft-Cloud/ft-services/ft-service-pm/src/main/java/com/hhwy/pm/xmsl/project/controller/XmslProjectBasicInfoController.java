@@ -1,20 +1,21 @@
 package com.hhwy.pm.xmsl.project.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author han
@@ -37,6 +38,17 @@ public class XmslProjectBasicInfoController extends BaseController{
     @Validated(ValidationGroups.Get.class)
     public AjaxResult getProjectBasicInfoById(@NotNull(message = "id不能为空",groups = ValidationGroups.Get.class) Long id){
         XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfoById(id);
+        return AjaxResult.success(xmslProjectBasicInfo);
+    }
+
+    /**
+     * 获取项目信息
+     * @param projectBasicInfo
+     * @return
+     */
+    @GetMapping("getProjectBasicInfo")
+    public AjaxResult getProjectBasicInfo(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
+        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfo(projectBasicInfo);
         return AjaxResult.success(xmslProjectBasicInfo);
     }
 

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.QqchBimTechPlan;
+import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.vo.QqchBimTechPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.service.IQqchBimTechPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchBimTechPlanController extends BaseController {
         return AjaxResult.success(qqchBimTechPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchBimTechPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchBimTechPlan> qqchBimTechPlanListParam) {
-        qqchBimTechPlanService.insertQqchBimTechPlanList(qqchBimTechPlanListParam);
-        return AjaxResult.success(qqchBimTechPlanListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchBimTechPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchBimTechPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchBimTechPlan qqchBimTechPlanParam) {
@@ -90,5 +84,29 @@ public class QqchBimTechPlanController extends BaseController {
         List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanService.getQqchBimTechPlanList(qqchBimTechPlanParam);
         ExcelUtils<QqchBimTechPlan> util = new ExcelUtils<>(QqchBimTechPlan.class);
         util.exportExcel(response, qqchBimTechPlanList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取BIM技术策划Vo
+     * @param qqchBimTechPlan
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchBimTechPlan:list")
+    @GetMapping("/getQqchBimTechPlanVo")
+    public AjaxResult getQqchBimTechPlanVo(@Validated(ValidationGroups.Select.class) QqchBimTechPlan qqchBimTechPlan) {
+        QqchBimTechPlanVo qqchBimTechPlanVo = qqchBimTechPlanService.getQqchBimTechPlanVo(qqchBimTechPlan);
+        return AjaxResult.success(qqchBimTechPlanVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchBimTechPlanVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchBimTechPlan:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchBimTechPlanVo qqchBimTechPlanVo) {
+        qqchBimTechPlanService.save(qqchBimTechPlanVo);
+        return AjaxResult.success();
     }
 }

@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.vo;
 
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.QqchBimTechPlan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,6 +36,10 @@ public class QqchBimTechPlanVo {
      * 字段描述：按钮标识（0：保存，1：确认，2：提交）
      */
     private String buttonMark;
+    /**
+     * 字段描述：本项目是否应用BIM技术（1：是，0：否）
+     */
+    private String bimMark = CommonYesNo.NO;
     /**
      * 字段描述：BIM技术策划集合
      */

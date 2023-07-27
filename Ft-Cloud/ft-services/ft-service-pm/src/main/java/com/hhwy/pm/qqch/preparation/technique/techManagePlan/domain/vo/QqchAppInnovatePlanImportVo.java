@@ -24,19 +24,19 @@ public class QqchAppInnovatePlanImportVo {
      * 字段描述：四新”技术名称
      */
     @JsonProperty
-    @Excel(name = "四新”技术名称")
+    @Excel(name = "“四新”技术名称")
     private String technologyName;
     /**
      * 字段描述：应用/创新（字典项：app_or_innovate）
      */
     @JsonProperty
-    @Excel(name = "应用/创新（字典项：app_or_innovate）")
+    @Excel(name = "应用/创新",dictType = "app_or_innovate")
     private String appOrInnovate;
     /**
      * 字段描述：四新”类型（字典项：four_news_type）
      */
     @JsonProperty
-    @Excel(name = "四新”类型（字典项：four_news_type）")
+    @Excel(name = "“四新”类型",dictType = "four_news_type")
     private String type;
     /**
      * 字段描述：开始时间

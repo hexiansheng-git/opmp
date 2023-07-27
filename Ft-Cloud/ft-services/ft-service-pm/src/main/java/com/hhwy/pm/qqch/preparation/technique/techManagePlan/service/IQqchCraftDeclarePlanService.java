@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchCraftDeclarePlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanVo;
 
 import java.util.List;
 
@@ -17,8 +19,6 @@ public interface IQqchCraftDeclarePlanService {
 
     int insertQqchCraftDeclarePlan(QqchCraftDeclarePlan qqchCraftDeclarePlan);
 
-    int insertQqchCraftDeclarePlanList(List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList);
-
     int updateQqchCraftDeclarePlan(QqchCraftDeclarePlan qqchCraftDeclarePlan);
 
     int updateQqchCraftDeclarePlanList(List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList);
@@ -26,4 +26,25 @@ public interface IQqchCraftDeclarePlanService {
     int deleteQqchCraftDeclarePlan(QqchCraftDeclarePlan qqchCraftDeclarePlan);
 
     int deleteQqchCraftDeclarePlanByPks(List<Long> qqchCraftDeclarePlanPkList);
+
+    /**
+     * 获取工艺工法申报计划Vo
+     * @param qqchCraftDeclarePlan
+     * @return
+     */
+    QqchCraftDeclarePlanVo getQqchCraftDeclarePlanVo(QqchCraftDeclarePlan qqchCraftDeclarePlan);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchCraftDeclarePlanVo
+     * @return
+     */
+    void save(QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo);
+
+    /**
+     * 获取导出数据
+     * @param qqchCraftDeclarePlan
+     * @return
+     */
+    List<QqchCraftDeclarePlanExportVo> getQqchCraftDeclarePlanExportVoList(QqchCraftDeclarePlan qqchCraftDeclarePlan);
 }

@@ -6,14 +6,19 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchCraftDeclarePlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanImportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchCraftDeclarePlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,13 +58,6 @@ public class QqchCraftDeclarePlanController extends BaseController {
         return AjaxResult.success(qqchCraftDeclarePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchCraftDeclarePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchCraftDeclarePlan> qqchCraftDeclarePlanListParam) {
-        qqchCraftDeclarePlanService.insertQqchCraftDeclarePlanList(qqchCraftDeclarePlanListParam);
-        return AjaxResult.success(qqchCraftDeclarePlanListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchCraftDeclarePlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchCraftDeclarePlan qqchCraftDeclarePlanParam) {
@@ -85,10 +83,57 @@ public class QqchCraftDeclarePlanController extends BaseController {
         return toAjax(qqchCraftDeclarePlanService.deleteQqchCraftDeclarePlanByPks(qqchCraftDeclarePlanPkList));
     }
 
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("/import")
+    public AjaxResult importData(@RequestPart("file") MultipartFile file){
+        ExcelUtils<QqchCraftDeclarePlanImportVo> util = new ExcelUtils<>(QqchCraftDeclarePlanImportVo.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<QqchCraftDeclarePlanImportVo> qqchCraftDeclarePlanImportVoList = util.importExcel(inputStream);
+            return AjaxResult.success(qqchCraftDeclarePlanImportVoList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param qqchCraftDeclarePlan
+     * @throws IOException
+     */
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchCraftDeclarePlan qqchCraftDeclarePlanParam) throws IOException {
-        List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList = qqchCraftDeclarePlanService.getQqchCraftDeclarePlanList(qqchCraftDeclarePlanParam);
-        ExcelUtils<QqchCraftDeclarePlan> util = new ExcelUtils<>(QqchCraftDeclarePlan.class);
-        util.exportExcel(response, qqchCraftDeclarePlanList, DateUtils.getDate());
+    public void export(HttpServletResponse response, QqchCraftDeclarePlan qqchCraftDeclarePlan) throws IOException {
+        List<QqchCraftDeclarePlanExportVo> qqchCraftDeclarePlanExportVoList = qqchCraftDeclarePlanService.getQqchCraftDeclarePlanExportVoList(qqchCraftDeclarePlan);
+        ExcelUtils<QqchCraftDeclarePlanExportVo> util = new ExcelUtils<>(QqchCraftDeclarePlanExportVo.class);
+        util.exportExcel(response, qqchCraftDeclarePlanExportVoList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取工艺工法申报计划Vo
+     * @param qqchCraftDeclarePlan
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:list")
+    @GetMapping("getQqchCraftDeclarePlanVo")
+    public AjaxResult getQqchCraftDeclarePlanVo(@Validated(ValidationGroups.Get.class) QqchCraftDeclarePlan qqchCraftDeclarePlan) {
+        QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo = qqchCraftDeclarePlanService.getQqchCraftDeclarePlanVo(qqchCraftDeclarePlan);
+        return AjaxResult.success(qqchCraftDeclarePlanVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchCraftDeclarePlanVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:update")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo) {
+        qqchCraftDeclarePlanService.save(qqchCraftDeclarePlanVo);
+        return AjaxResult.success();
     }
 }

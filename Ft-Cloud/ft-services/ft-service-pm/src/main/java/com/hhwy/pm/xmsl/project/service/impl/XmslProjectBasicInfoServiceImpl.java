@@ -1,7 +1,5 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.*;
@@ -9,10 +7,13 @@ import com.hhwy.pm.xmsl.project.mapper.*;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author han
@@ -65,6 +66,17 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
             throw new RuntimeException("获取项目信息失败！");
         }
 
+        this.setProjectSublistInfo(xmslProjectBasicInfo);
+
+        return xmslProjectBasicInfo;
+    }
+
+    /**
+     * 设置子表信息
+     * @param xmslProjectBasicInfo
+     */
+    public void setProjectSublistInfo(XmslProjectBasicInfo xmslProjectBasicInfo){
+        Long id = xmslProjectBasicInfo.getId();
         //主要桥梁结构形式
         XmslProjectBridgeStructure xmslProjectBridgeStructure = new XmslProjectBridgeStructure();
         xmslProjectBridgeStructure.setProjectBasicInfoId(id);
@@ -92,8 +104,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         xmslProjectMaterialsAmount.setProjectBasicInfoId(id);
         List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList = xmslProjectMaterialsAmountMapper.getProjectMaterialsAmountList(xmslProjectMaterialsAmount);
         xmslProjectBasicInfo.setXmslProjectMaterialsAmountList(xmslProjectMaterialsAmountList);
-
-        return xmslProjectBasicInfo;
     }
 
     /**
@@ -183,5 +193,12 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     @Transactional
     public int deleteProjectBasicInfoByPks(List<Long> projectBasicInfoPkList) {
         return xmslProjectBasicInfoMapper.deleteProjectBasicInfoByPks(projectBasicInfoPkList);
+    }
+
+    @Override
+    public XmslProjectBasicInfo getProjectBasicInfo(XmslProjectBasicInfo projectBasicInfo) {
+        XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(projectBasicInfo);
+        this.setProjectSublistInfo(xmslProjectBasicInfo);
+        return xmslProjectBasicInfo;
     }
 }

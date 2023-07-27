@@ -34,6 +34,17 @@ public enum MyDownTemplateEnum {
             return new HashMap<>();
         }
     },
+    importQqchAppInnovatePlan("importQqchAppInnovatePlan.xlsx","四新应用及创新计划导入") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            List<String> appOrInnovateList = handleDict("app_or_innovate");
+            map.put("app_or_innovate", appOrInnovateList);
+            List<String> fourNewsTypeList = handleDict("four_news_type");
+            map.put("four_news_type", fourNewsTypeList);
+            return map;
+        }
+    },
     importConstructionList("importConstructionList.xls", "方案清单导入") {
         @Override
         public Map<String, List> pullLists() {
