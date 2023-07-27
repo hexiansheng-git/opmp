@@ -248,6 +248,11 @@ public class QqchWorkGroup extends BaseEntity {
     private String ptVar5;
 
     /**
+     * 字段描述：版本字符串
+     */
+    private String versionStr;
+
+    /**
      * 字段描述：是否可调整标识，1：可调整，0：不可调整
      */
     private String adjustMark = "0";

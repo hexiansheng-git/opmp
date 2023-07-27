@@ -42,7 +42,7 @@ public class QqchConstructionList extends BaseEntity {
      * 字段描述：关联WBS编码
      */
     @JsonProperty
-    @Excel(name = "关联WBS编码")
+    @Excel(name = "关联WBS编号")
     private String wbsCode;
     /**
      * 字段描述：关联WBS
@@ -54,25 +54,25 @@ public class QqchConstructionList extends BaseEntity {
      * 字段描述：方案类型（字典类型scheme_type）
      */
     @JsonProperty
-    @Excel(name = "方案类型（字典类型scheme_type）")
+    @Excel(name = "方案类型", dictType = "scheme_type")
     private String schemeType;
     /**
      * 字段描述：方案分级（字典类型scheme_level）
      */
     @JsonProperty
-    @Excel(name = "方案分级（字典类型scheme_level）")
+    @Excel(name = "方案分级", dictType = "scheme_level")
     private String schemeLevel;
     /**
      * 字段描述：危大等级（字典类型danger_level）
      */
     @JsonProperty
-    @Excel(name = "危大等级（字典类型danger_level）")
+    @Excel(name = "危大等级", dictType = "danger_level")
     private String dangerLevel;
     /**
      * 字段描述：设计变更是否引起施工方案变更 0:否；1:是
      */
     @JsonProperty
-    @Excel(name = "设计变更是否引起施工方案变更 0:否；1:是")
+    @Excel(name = "设计变更是否引起施工方案变更", dictType = "common_yes")
     private String isChange;
     /**
      * 字段描述：计划编制时间

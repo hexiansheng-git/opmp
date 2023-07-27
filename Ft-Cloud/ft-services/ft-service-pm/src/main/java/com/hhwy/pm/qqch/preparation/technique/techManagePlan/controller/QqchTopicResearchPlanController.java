@@ -6,14 +6,19 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchTopicResearchPlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanImportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchTopicResearchPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,13 +58,6 @@ public class QqchTopicResearchPlanController extends BaseController {
         return AjaxResult.success(qqchTopicResearchPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTopicResearchPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTopicResearchPlan> qqchTopicResearchPlanListParam) {
-        qqchTopicResearchPlanService.insertQqchTopicResearchPlanList(qqchTopicResearchPlanListParam);
-        return AjaxResult.success(qqchTopicResearchPlanListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTopicResearchPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchTopicResearchPlan qqchTopicResearchPlanParam) {
@@ -85,10 +83,56 @@ public class QqchTopicResearchPlanController extends BaseController {
         return toAjax(qqchTopicResearchPlanService.deleteQqchTopicResearchPlanByPks(qqchTopicResearchPlanPkList));
     }
 
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("/import")
+    public AjaxResult importData(@RequestPart("file") MultipartFile file){
+        ExcelUtils<QqchTopicResearchPlanImportVo> util = new ExcelUtils<>(QqchTopicResearchPlanImportVo.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<QqchTopicResearchPlanImportVo> qqchTopicResearchPlanImportVoList = util.importExcel(inputStream);
+            return AjaxResult.success(qqchTopicResearchPlanImportVoList);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param qqchTopicResearchPlan
+     * @throws IOException
+     */
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchTopicResearchPlan qqchTopicResearchPlanParam) throws IOException {
-        List<QqchTopicResearchPlan> qqchTopicResearchPlanList = qqchTopicResearchPlanService.getQqchTopicResearchPlanList(qqchTopicResearchPlanParam);
-        ExcelUtils<QqchTopicResearchPlan> util = new ExcelUtils<>(QqchTopicResearchPlan.class);
-        util.exportExcel(response, qqchTopicResearchPlanList, DateUtils.getDate());
+    public void export(HttpServletResponse response, QqchTopicResearchPlan qqchTopicResearchPlan) throws IOException {
+        List<QqchTopicResearchPlanExportVo> qqchTopicResearchPlanExportVoList = qqchTopicResearchPlanService.getQqchTopicResearchPlanExportVoList(qqchTopicResearchPlan);
+        ExcelUtils<QqchTopicResearchPlanExportVo> util = new ExcelUtils<>(QqchTopicResearchPlanExportVo.class);
+        util.exportExcel(response, qqchTopicResearchPlanExportVoList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取课题研究计划Vo
+     * @param qqchTopicResearchPlan
+     * @return
+     */
+    @GetMapping("/getQqchTopicResearchPlanVo")
+    public AjaxResult getQqchTopicResearchPlanVo(@Validated(ValidationGroups.Select.class) QqchTopicResearchPlan qqchTopicResearchPlan){
+        QqchTopicResearchPlanVo qqchTopicResearchPlanVo = qqchTopicResearchPlanService.getQqchTopicResearchPlanVo(qqchTopicResearchPlan);
+        return AjaxResult.success(qqchTopicResearchPlanVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTopicResearchPlanVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTopicResearchPlanVo qqchTopicResearchPlanVo) {
+        qqchTopicResearchPlanService.save(qqchTopicResearchPlanVo);
+        return AjaxResult.success();
     }
 }

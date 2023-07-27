@@ -100,7 +100,7 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
         for (QqchBlueprintManageInventory qqchBlueprintManageInventory : qqchBlueprintManageInventoryList) {
             qqchBlueprintManageInventory.setId(IdWorker.createId());
             qqchBlueprintManageInventory.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchBlueprintManageInventory.setValid(Valid.YES);
             }
             qqchBlueprintManageInventory.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

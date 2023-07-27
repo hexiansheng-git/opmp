@@ -2,16 +2,20 @@ package com.hhwy.pm.xmsl.wbs.controller;
 
 import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.utils.validation.ValidationUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,6 +54,15 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success(map);
     }
 
+    @PostMapping("/getChildrenByIds")
+    public AjaxResult getByIds(@RequestBody Map map) {
+        String ids = ObjectUtils.nvlString(map.get("ids"));
+        if(StringUtils.isBlank(ids))
+            return AjaxResult.error("参数缺失");
+        List<XmslWbs> wbsList = xmslWbsService.childListByIds(Convert.toLongArray(ids));
+        return AjaxResult.success(wbsList);
+    }
+
 
     @PostMapping("/latestList")
     public AjaxResult latestList(@RequestBody XmslWbs wbs) {
@@ -63,6 +76,30 @@ public class XmslWbsController extends BaseController {
         if(dto.getSubmitFlag() != null && dto.getSubmitFlag() == 1)
             ValidationUtil.getValidator().validate(dto,ValidationGroups.Save.class);
         xmslWbsService.save(dto);
+        return AjaxResult.success();
+    }
+
+    /**
+     * 处理祖级名称、id
+     * @return
+     */
+    @PostMapping("/handlerAncestor")
+    public AjaxResult handlerAncestor() {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        xmslWbsService.handlerAncestors();
+        return AjaxResult.success();
+    }
+
+    /**
+     * 处理祖级名称、id
+     * @return
+     */
+    @PostMapping("/initWbs2Redis")
+    public AjaxResult initWbs2Redis() {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        xmslWbsService.initWbs2Redis();
         return AjaxResult.success();
     }
 

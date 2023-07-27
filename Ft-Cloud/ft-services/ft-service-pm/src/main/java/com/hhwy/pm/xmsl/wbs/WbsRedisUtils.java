@@ -1,8 +1,10 @@
 package com.hhwy.pm.xmsl.wbs;
 
 
+import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -22,11 +24,18 @@ public class WbsRedisUtils {
     static{
         redisUtils = SpringUtils.getBean(RedisUtils.class);
     }
-    //hashMap  wbs::项目id  wbsId  wbsjson
-    public static final String KEY = "WBS:";
+    //hashMap  wbs::租户标志  wbsId  wbsjson
+    public static final String KEY = "WBS::";
+    //hashMap  WBS::child_id::租户标志   wbsId  子级Id(多个以逗号拼接)
+    public static final String CHILD_KEY = "WBS::child_id::";
 
-    public static List<XmslWbs> allWbs(String prjId){
-        String key = WbsRedisUtils.getKey(prjId);
+    /**
+     * 获取某项目下所有的wbs
+     * @param tenantKey
+     * @return
+     */
+    public static List<XmslWbs> allWbs(String tenantKey){
+        String key = WbsRedisUtils.getKey(tenantKey);
         Map<Object, Object> map = redisUtils.hGetAll(key);
         if(MapUtils.isEmpty(map))
             return new ArrayList<>(2);
@@ -37,8 +46,45 @@ public class WbsRedisUtils {
         });
         return wbsList;
     }
-
-    public static String getKey(String prjId){
-        return WbsRedisUtils.KEY + prjId;
+    public static List<XmslWbs> allWbs(){
+        String tenantKey = SecurityUtils.getTenantKey();
+        return WbsRedisUtils.allWbs(tenantKey);
     }
+
+    /**
+     * 获取指定wbs的所有子级
+     * @param tenantKey
+     * @param wbsId
+     * @return
+     */
+    public static Long[] getChildWbsId(String tenantKey,String wbsId){
+        String key = getChildKey(tenantKey);
+        Object childIdObj = redisUtils.hGet(key,wbsId);
+        if(ObjectUtils.isEmpty(childIdObj))
+            return null;
+        return Convert.toLongArray(childIdObj);
+    }
+    public static Long[] getChildWbsId(String wbsId){
+        String tenantKey = SecurityUtils.getTenantKey();
+        return WbsRedisUtils.getChildWbsId(tenantKey,wbsId);
+    }
+
+    /**
+     * 获取wbs redisKey
+     * @param tenantKey
+     * @return
+     */
+    public static String getKey(String tenantKey){
+        return WbsRedisUtils.KEY + tenantKey;
+    }
+
+    /**
+     * 子级wbskey
+     * @param tenantKey
+     * @return
+     */
+    public static String getChildKey(String tenantKey){
+        return WbsRedisUtils.CHILD_KEY + tenantKey;
+    }
+
 }

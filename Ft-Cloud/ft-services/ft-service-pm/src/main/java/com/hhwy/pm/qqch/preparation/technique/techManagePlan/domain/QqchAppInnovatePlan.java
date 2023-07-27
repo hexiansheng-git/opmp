@@ -50,6 +50,14 @@ public class QqchAppInnovatePlan extends BaseEntity {
     @Excel(name = "四新”类型（字典项：four_news_type）")
     private String type;
     /**
+     * 字段描述：负责人（带联系方式）
+     */
+    private String director;
+    /**
+     * 字段描述：负责人id
+     */
+    private String directorId;
+    /**
      * 字段描述：相关人员
      */
     @JsonProperty

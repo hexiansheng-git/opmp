@@ -14,8 +14,8 @@ public class VersionUtil {
 
     /**
      * 获取版本
-     * @param tableName
-     * @param version
+     * @param tableName 数据库表名
+     * @param version 版本号
      * @return
      */
     public static BigDecimal getVersion(String tableName,BigDecimal version){

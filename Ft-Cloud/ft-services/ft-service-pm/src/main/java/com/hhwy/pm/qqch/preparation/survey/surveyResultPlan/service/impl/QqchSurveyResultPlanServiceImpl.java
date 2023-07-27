@@ -86,7 +86,7 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
         for (QqchSurveyResultPlan qqchSurveyResultPlan : qqchSurveyResultPlanList) {
             qqchSurveyResultPlan.setId(IdWorker.createId());
             qqchSurveyResultPlan.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSurveyResultPlan.setValid(Valid.YES);
             }
             qqchSurveyResultPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

@@ -476,6 +476,13 @@ public class ObjectUtils {
         list.add(val);
     }
 
+
+    public static <T,T1> void addStr2MapList(Map<T,String> map, T key, String val){
+        String str = map.get(key);
+        String prefix = StringUtils.isBlank(str)?"":str+",";
+        map.put(key,prefix+val);
+    }
+
     /**
      * 拼接url,而不会产生多余的/
      * (www.XX.com/ , /getUser) > www.XX.com/getUser

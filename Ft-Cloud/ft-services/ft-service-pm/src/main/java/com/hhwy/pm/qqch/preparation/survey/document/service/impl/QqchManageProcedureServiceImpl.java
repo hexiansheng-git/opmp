@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.document.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -14,9 +11,12 @@ import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMa
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -108,7 +108,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
                 QqchManageProcedure::setChildren);
         for (QqchManageProcedure qqchManageProcedure : insertList) {
             qqchManageProcedure.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchManageProcedure.setValid(Valid.YES);
             }
             qqchManageProcedure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

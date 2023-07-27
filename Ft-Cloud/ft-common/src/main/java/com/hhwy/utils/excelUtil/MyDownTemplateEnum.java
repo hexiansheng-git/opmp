@@ -1,11 +1,8 @@
 package com.hhwy.utils.excelUtil;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.SystemServiceApi;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +32,24 @@ public enum MyDownTemplateEnum {
         @Override
         public Map<String, List> pullLists() {
             return new HashMap<>();
+        }
+    },
+    importConstructionList("importConstructionList.xls", "方案清单导入") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            List<String> schemeTypeList = handleDict("scheme_type");
+            map.put("schemeType", schemeTypeList);
+
+            List<String> schemeLevelList = handleDict("scheme_level");
+            map.put("schemeLevel", schemeLevelList);
+
+            List<String> dangerLevelList = handleDict("danger_level");
+            map.put("dangerLevel", dangerLevelList);
+
+            List<String> commonYesList = handleDict("common_yes");
+            map.put("commonYes", commonYesList);
+            return map;
         }
     }
     ;

@@ -1,10 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.risk.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -18,11 +13,18 @@ import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchDailyControlPlanVo
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchDailyControlPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchDailyControlPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import org.springframework.stereotype.Service;;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+;
 
 /**
  * @author han
@@ -130,7 +132,7 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
         for (QqchDailyControlPlan qqchDailyControlPlan : qqchDailyControlPlanList) {
             qqchDailyControlPlan.setId(IdWorker.createId());
             qqchDailyControlPlan.setVersion(version);
-            if(version.compareTo(BigDecimal.valueOf(1)) == 0){
+            if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchDailyControlPlan.setValid(Valid.YES);
             }
             qqchDailyControlPlan.setCreateUser(SecurityUtils.getUserName());

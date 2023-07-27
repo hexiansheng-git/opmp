@@ -24,9 +24,13 @@ public interface XmslWbsMapper {
      */
     List<XmslWbs> latestWbsList(XmslWbs xmslWbs);
 
+    List<XmslWbs> latestWbsSimpleAllList();
+
     List<XmslWbs> latestWbsId(XmslWbs xmslWbs);
 
     List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs);
+
+    List<XmslWbs> getByIds(@Param("ids") Long[] ids);
 
     Long countByWbs(XmslWbs wbs);
 
@@ -42,7 +46,9 @@ public interface XmslWbsMapper {
 
     int updateXmslWbs(XmslWbs xmslWbs);
 
-    int updateXmslWbsList(@Param("xmslWbsList") List<XmslWbs> xmslWbsList);
+    int updateXmslWbsList(List<XmslWbs> xmslWbsList);
+
+    int updateXmslWbsAncestorList(List<XmslWbs> list);
 
     int deleteXmslWbs(XmslWbs xmslWbs);
 

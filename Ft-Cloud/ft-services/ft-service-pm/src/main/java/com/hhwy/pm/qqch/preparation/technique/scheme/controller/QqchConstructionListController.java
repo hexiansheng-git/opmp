@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -70,10 +71,10 @@ public class QqchConstructionListController extends BaseController {
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        ExcelUtils<QqchConstructionList> util = new ExcelUtils<>(QqchConstructionList.class);
+        ExcelUtils<QqchConstructionListImportVo> util = new ExcelUtils<>(QqchConstructionListImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<QqchConstructionList> list = util.importExcel(inputStream);
+            List<QqchConstructionListImportVo> list = util.importExcel(inputStream);
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
