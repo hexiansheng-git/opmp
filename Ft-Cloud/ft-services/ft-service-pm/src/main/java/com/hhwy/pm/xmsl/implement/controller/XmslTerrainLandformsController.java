@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
+import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +32,12 @@ public class XmslTerrainLandformsController extends BaseController {
 
     @Autowired
     private IXmslTerrainLandformsService xmslTerrainLandformsService;
+
+    @GetMapping("/getAllList")
+    public AjaxResult getAllList() {
+        ImplementVo implementVo = xmslTerrainLandformsService.getAllList();
+        return AjaxResult.success(implementVo);
+    }
 
     @GetMapping("/getList")
     public AjaxResult getList(XmslTerrainLandforms xmslTerrainLandformsParam) {
