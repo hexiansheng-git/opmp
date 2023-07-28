@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchPigeonholeDutyDivision;
+import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchPigeonholeDutyDivisionVo;
 
 import java.util.List;
 
@@ -26,4 +27,6 @@ public interface IQqchPigeonholeDutyDivisionService {
     int deleteQqchPigeonholeDutyDivision(QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision);
 
     int deleteQqchPigeonholeDutyDivisionByPks(List<Long> qqchPigeonholeDutyDivisionPkList);
+
+    QqchPigeonholeDutyDivisionVo getQqchPigeonholeDutyDivisionVo(QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision);
 }

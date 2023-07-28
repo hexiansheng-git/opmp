@@ -46,13 +46,6 @@ public interface IXmslProjectBasicInfoService {
     XmslProjectBasicInfo getProjectBasicInfo(XmslProjectBasicInfo projectBasicInfo);
 
     /**
-     * 获取项目信息详情（带子表）
-     * @param projectBasicInfo
-     * @return
-     */
-    XmslProjectBasicInfo getProjectBasicInfoWithSublist(XmslProjectBasicInfo projectBasicInfo);
-
-    /**
      * 获取项目信息详情（不带子表）
      * @param projectBasicInfo
      * @return

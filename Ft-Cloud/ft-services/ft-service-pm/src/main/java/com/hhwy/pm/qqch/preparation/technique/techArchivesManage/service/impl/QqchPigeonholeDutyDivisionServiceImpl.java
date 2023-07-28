@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchPigeonholeDutyDivision;
+import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchPigeonholeDutyDivisionVo;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.mapper.QqchPigeonholeDutyDivisionMapper;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service.IQqchPigeonholeDutyDivisionService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -76,5 +77,11 @@ public class QqchPigeonholeDutyDivisionServiceImpl implements IQqchPigeonholeDut
     @Transactional
     public int deleteQqchPigeonholeDutyDivisionByPks(List<Long> qqchPigeonholeDutyDivisionPkList) {
         return qqchPigeonholeDutyDivisionMapper.deleteQqchPigeonholeDutyDivisionByPks(qqchPigeonholeDutyDivisionPkList);
+    }
+
+    @Override
+    public QqchPigeonholeDutyDivisionVo getQqchPigeonholeDutyDivisionVo(QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision) {
+        QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo = new QqchPigeonholeDutyDivisionVo();
+        return qqchPigeonholeDutyDivisionVo;
     }
 }

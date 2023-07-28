@@ -46,9 +46,9 @@ public class XmslProjectBasicInfoController extends BaseController{
      * @param projectBasicInfo
      * @return
      */
-    @GetMapping("getProjectBasicInfoWithSublist")
-    public AjaxResult getProjectBasicInfoWithSublist(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
-        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfoWithSublist(projectBasicInfo);
+    @GetMapping("getProjectBasicInfo")
+    public AjaxResult getProjectBasicInfo(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
+        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfo(projectBasicInfo);
         return AjaxResult.success(xmslProjectBasicInfo);
     }
 
