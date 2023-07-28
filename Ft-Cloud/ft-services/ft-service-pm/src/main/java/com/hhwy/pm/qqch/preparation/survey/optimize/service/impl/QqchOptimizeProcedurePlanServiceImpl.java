@@ -1,10 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -21,12 +16,18 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeProcedure
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeProcedurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeProcedurePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -48,6 +49,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 获取优化程序策划集合
@@ -59,15 +63,11 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = new QqchOptimizeProcedurePlanVo();
 
         version = VersionUtil.getVersion("qqch_optimize_procedure_plan",version);
-
-        qqchOptimizeProcedurePlanVo.setVersion(version);
-
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList(version);
         if(CollectionUtils.isEmpty(qqchOptimizeProcedurePlanList)){
             //数据库中没有数据，需要初始化
             qqchOptimizeProcedurePlanList = this.getInitializeData();
         }
-        qqchOptimizeProcedurePlanVo.setQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
 
         //获取附件组id（页面标识和版本号控制）
         QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
@@ -75,8 +75,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
             qqchOptimizeProcedurePlanVo.setFileGroupId(qqchPreparationSurveyExtend.getFileGroupId());
         }
 
-        //TODO 获取确认状态
-
+        qqchOptimizeProcedurePlanVo.setVersion(version);
+        qqchOptimizeProcedurePlanVo.setStageIdentity(qqchReviewService.getStage());
+        qqchOptimizeProcedurePlanVo.setQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList);
         return qqchOptimizeProcedurePlanVo;
     }
 

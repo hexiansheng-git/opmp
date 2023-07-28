@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchOptimizeChangeOrg
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchOptimizeChangeOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchOptimizeChangeOrganizationMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchOptimizeChangeOrganizationService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 优化变更组织策划台账
@@ -44,9 +48,8 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
         QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = new QqchOptimizeChangeOrganizationVo();
 
         version = VersionUtil.getVersion("qqch_optimize_change_organization",version);
-
         List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList = qqchOptimizeChangeOrganizationMapper.getQqchOptimizeChangeOrganizationList(version);
-        qqchOptimizeChangeOrganizationVo.setVersion(version);
+
         //转树列表
         List<QqchOptimizeChangeOrganization> treeList = ListTreeUtil.formatTree(
                 qqchOptimizeChangeOrganizationList,
@@ -54,8 +57,10 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
                 (r, n) -> r.getId().equals(n.getPid()),
                 QqchOptimizeChangeOrganization::getChildren,
                 QqchOptimizeChangeOrganization::setChildren);
-        qqchOptimizeChangeOrganizationVo.setTreeList(treeList);
 
+        qqchOptimizeChangeOrganizationVo.setVersion(version);
+        qqchOptimizeChangeOrganizationVo.setStageIdentity(qqchReviewService.getStage());
+        qqchOptimizeChangeOrganizationVo.setTreeList(treeList);
         return qqchOptimizeChangeOrganizationVo;
     }
 

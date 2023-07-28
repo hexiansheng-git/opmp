@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePl
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchChangeProcedurePlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchChangeProcedurePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +49,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 获取变更程序策划
@@ -58,13 +62,10 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = new QqchChangeProcedurePlanVo();
 
         version = VersionUtil.getVersion("qqch_change_procedure_plan",version);
-        qqchChangeProcedurePlanVo.setVersion(version);
-
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(version);
         if(CollectionUtils.isEmpty(qqchChangeProcedurePlanList)){
             qqchChangeProcedurePlanList = this.getInitializeData();
         }
-        qqchChangeProcedurePlanVo.setQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
 
         //获取附件组id（页面标识和版本号控制）
         QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.CHANGE_PROCEDURE_PLAN, version);
@@ -72,6 +73,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
             qqchChangeProcedurePlanVo.setFileGroupId(qqchPreparationSurveyExtend.getFileGroupId());
         }
 
+        qqchChangeProcedurePlanVo.setVersion(version);
+        qqchChangeProcedurePlanVo.setStageIdentity(qqchReviewService.getStage());
+        qqchChangeProcedurePlanVo.setQqchChangeProcedurePlanList(qqchChangeProcedurePlanList);
         return qqchChangeProcedurePlanVo;
     }
 

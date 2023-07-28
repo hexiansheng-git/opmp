@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchDailyControlPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchDailyControlPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchDailyControlPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchDailyControlPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 获取日常管控策划Vo
@@ -53,18 +57,16 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
         QqchDailyControlPlanVo qqchDailyControlPlanVo = new QqchDailyControlPlanVo();
 
         version = VersionUtil.getVersion("qqch_daily_control_plan",version);
-        qqchDailyControlPlanVo.setVersion(version);
-
         QqchDailyControlPlan qqchDailyControlPlan = new QqchDailyControlPlan();
         qqchDailyControlPlan.setVersion(version);
         List<QqchDailyControlPlan> qqchDailyControlPlanList = qqchDailyControlPlanMapper.getQqchDailyControlPlanList(qqchDailyControlPlan);
         if(CollectionUtils.isEmpty(qqchDailyControlPlanList)){
             qqchDailyControlPlanList = this.getInitializeData();
         }
-        qqchDailyControlPlanVo.setQqchDailyControlPlanList(qqchDailyControlPlanList);
-        
-        //TODO 获取确认状态
 
+        qqchDailyControlPlanVo.setVersion(version);
+        qqchDailyControlPlanVo.setStageIdentity(qqchReviewService.getStage());
+        qqchDailyControlPlanVo.setQqchDailyControlPlanList(qqchDailyControlPlanList);
         return qqchDailyControlPlanVo;
     }
 
@@ -94,6 +96,7 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         //删除旧数据
         QqchDailyControlPlan qqchDailyControlPlan = new QqchDailyControlPlan();
@@ -110,6 +113,7 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
      * @return
      */
     @Override
+    @Transactional
     public void confirm(QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         this.save(qqchDailyControlPlanVo);
 
