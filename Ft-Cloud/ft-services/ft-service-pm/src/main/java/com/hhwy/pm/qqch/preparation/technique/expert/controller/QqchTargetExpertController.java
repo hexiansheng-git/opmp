@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetExpert;
+import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetExpertVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetExpertService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchTargetExpertController extends BaseController {
         return AjaxResult.success(qqchTargetExpertParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTargetExpertList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTargetExpert> qqchTargetExpertListParam) {
-        qqchTargetExpertService.insertQqchTargetExpertList(qqchTargetExpertListParam);
-        return AjaxResult.success(qqchTargetExpertListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchTargetExpert:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTargetExpert(@Validated(ValidationGroups.Update.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
@@ -90,5 +84,29 @@ public class QqchTargetExpertController extends BaseController {
         List<QqchTargetExpert> qqchTargetExpertList = qqchTargetExpertService.getQqchTargetExpertList(qqchTargetExpertParam);
         ExcelUtils<QqchTargetExpert> util = new ExcelUtils<>(QqchTargetExpert.class);
         util.exportExcel(response, qqchTargetExpertList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取内外部目标专家选择Vo
+     * @param qqchTargetExpert
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
+    @GetMapping("getQqchTargetExpertVo")
+    public AjaxResult getQqchTargetExpertVo(@Validated(ValidationGroups.Select.class) QqchTargetExpert qqchTargetExpert) {
+        QqchTargetExpertVo qqchTargetExpertVo = qqchTargetExpertService.getQqchTargetExpertVo(qqchTargetExpert);
+        return AjaxResult.success(qqchTargetExpertVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTargetExpertVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetExpertVo qqchTargetExpertVo) {
+        qqchTargetExpertService.save(qqchTargetExpertVo);
+        return AjaxResult.success();
     }
 }

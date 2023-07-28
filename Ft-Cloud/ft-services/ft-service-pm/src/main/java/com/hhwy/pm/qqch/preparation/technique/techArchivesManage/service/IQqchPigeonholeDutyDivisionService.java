@@ -18,8 +18,6 @@ public interface IQqchPigeonholeDutyDivisionService {
 
     int insertQqchPigeonholeDutyDivision(QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision);
 
-    int insertQqchPigeonholeDutyDivisionList(List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList);
-
     int updateQqchPigeonholeDutyDivision(QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision);
 
     int updateQqchPigeonholeDutyDivisionList(List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList);
@@ -28,5 +26,17 @@ public interface IQqchPigeonholeDutyDivisionService {
 
     int deleteQqchPigeonholeDutyDivisionByPks(List<Long> qqchPigeonholeDutyDivisionPkList);
 
+    /**
+     * 获取技术档案归档责任分工Vo
+     * @param qqchPigeonholeDutyDivision
+     * @return
+     */
     QqchPigeonholeDutyDivisionVo getQqchPigeonholeDutyDivisionVo(QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision);
+
+    /**
+     *保存/确认/提交
+     * @param qqchPigeonholeDutyDivisionVo
+     * @return
+     */
+    void save(QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo);
 }

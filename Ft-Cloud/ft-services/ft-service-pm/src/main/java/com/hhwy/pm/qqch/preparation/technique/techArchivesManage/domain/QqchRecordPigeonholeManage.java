@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -200,4 +201,9 @@ public class QqchRecordPigeonholeManage extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：子集
+     */
+    private List<QqchRecordPigeonholeManage> children;
 }

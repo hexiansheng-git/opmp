@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -10,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppIn
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAppInnovatePlanService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -90,12 +90,12 @@ public class QqchAppInnovatePlanController extends BaseController {
      */
     @PostMapping("/import")
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
-        ExcelUtils<QqchAppInnovatePlanImportVo> util = new ExcelUtils<>(QqchAppInnovatePlanImportVo.class);
+        FtExcelUtil<QqchAppInnovatePlanImportVo> util = new FtExcelUtil<>(QqchAppInnovatePlanImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchAppInnovatePlanImportVo> qqchAppInnovatePlanImportVoList = util.importExcel(inputStream);
             return AjaxResult.success(qqchAppInnovatePlanImportVoList);
-        } catch (Exception e) {
+        }catch (Exception e){
             throw new RuntimeException("导入失败！");
         }
     }
@@ -109,8 +109,8 @@ public class QqchAppInnovatePlanController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchAppInnovatePlan qqchAppInnovatePlan) throws IOException {
         List<QqchAppInnovatePlanExportVo> qqchAppInnovatePlanExportVoList = qqchAppInnovatePlanService.getQqchAppInnovatePlanExportVoList(qqchAppInnovatePlan);
-        ExcelUtils<QqchAppInnovatePlanExportVo> util = new ExcelUtils<>(QqchAppInnovatePlanExportVo.class);
-        util.exportExcel(response, qqchAppInnovatePlanExportVoList, DateUtils.getDate());
+        FtExcelUtil<QqchAppInnovatePlanExportVo> util = new FtExcelUtil<>(QqchAppInnovatePlanExportVo.class);
+        util.exportExcel(response,qqchAppInnovatePlanExportVoList, DateUtils.getDate());
     }
 
     /**

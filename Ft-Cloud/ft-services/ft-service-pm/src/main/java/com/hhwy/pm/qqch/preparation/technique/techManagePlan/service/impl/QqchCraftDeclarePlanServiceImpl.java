@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraft
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchCraftDeclarePlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchCraftDeclarePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
@@ -35,6 +36,9 @@ public class QqchCraftDeclarePlanServiceImpl implements IQqchCraftDeclarePlanSer
 
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchCraftDeclarePlan getQqchCraftDeclarePlan(QqchCraftDeclarePlan qqchCraftDeclarePlan) {
@@ -115,12 +119,13 @@ public class QqchCraftDeclarePlanServiceImpl implements IQqchCraftDeclarePlanSer
         QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo = new QqchCraftDeclarePlanVo();
 
         BigDecimal version = qqchCraftDeclarePlan.getVersion();
-        version = VersionUtil.getVersion("qqch_app_innovate_plan",version);
+        version = VersionUtil.getVersion("qqch_craft_declare_plan",version);
 
         qqchCraftDeclarePlan.setVersion(version);
         List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList = qqchCraftDeclarePlanMapper.getQqchCraftDeclarePlanList(qqchCraftDeclarePlan);
 
         qqchCraftDeclarePlanVo.setVersion(version);
+        qqchCraftDeclarePlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchCraftDeclarePlanVo.setQqchCraftDeclarePlanList(qqchCraftDeclarePlanList);
         return qqchCraftDeclarePlanVo;
     }

@@ -49,7 +49,7 @@ public class QqchAdvancedVindicatePlanBudget extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "预算")
-    private String budget;
+    private BigDecimal budget;
     /**
      * 字段描述：备注
      */

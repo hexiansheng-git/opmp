@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -66,7 +67,7 @@ public class QqchTechRiskSolutions extends BaseEntity {
      * 字段描述：风险等级（字典项：risk_grade）
      */
     @JsonProperty
-    @Excel(name = "风险等级（字典项：risk_grade）")
+    @Excel(name = "风险等级（字典项：tech_risk_grade）")
     private String riskGrade;
     /**
      * 字段描述：风控措施
@@ -218,4 +219,9 @@ public class QqchTechRiskSolutions extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    /**
+     * 字段描述：子集
+     */
+    private List<QqchTechRiskSolutions> children;
 }
