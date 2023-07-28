@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -9,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,7 +60,7 @@ public class QqchConstructionListController extends BaseController {
         QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
             .getQqchConstructionListList(qqchConstructionListParamVo);
         List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
-        ExcelUtils<QqchConstructionList> util = new ExcelUtils<>(QqchConstructionList.class);
+        FtExcelUtil<QqchConstructionList> util = new FtExcelUtil<>(QqchConstructionList.class);
         util.exportExcel(response, qqchConstructionListList, DateUtils.getDate());
     }
 
@@ -72,7 +72,7 @@ public class QqchConstructionListController extends BaseController {
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        ExcelUtils<QqchConstructionListImportVo> util = new ExcelUtils<>(QqchConstructionListImportVo.class);
+        FtExcelUtil<QqchConstructionListImportVo> util = new FtExcelUtil<>(QqchConstructionListImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchConstructionListImportVo> list = util.importExcel(inputStream);
