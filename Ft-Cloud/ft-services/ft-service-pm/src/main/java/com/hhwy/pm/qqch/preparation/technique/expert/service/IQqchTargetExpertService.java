@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.expert.service;
 
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetExpert;
+import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetExpertVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchTargetExpertService {
 
     int insertQqchTargetExpert(QqchTargetExpert qqchTargetExpert);
 
-    int insertQqchTargetExpertList(List<QqchTargetExpert> qqchTargetExpertList);
-
     int updateQqchTargetExpert(QqchTargetExpert qqchTargetExpert);
 
     int updateQqchTargetExpertList(List<QqchTargetExpert> qqchTargetExpertList);
@@ -26,4 +25,18 @@ public interface IQqchTargetExpertService {
     int deleteQqchTargetExpert(QqchTargetExpert qqchTargetExpert);
 
     int deleteQqchTargetExpertByPks(List<Long> qqchTargetExpertPkList);
+
+    /**
+     * 获取内外部目标专家选择Vo
+     * @param qqchTargetExpert
+     * @return
+     */
+    QqchTargetExpertVo getQqchTargetExpertVo(QqchTargetExpert qqchTargetExpert);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTargetExpertVo
+     * @return
+     */
+    void save(QqchTargetExpertVo qqchTargetExpertVo);
 }

@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,37 +24,37 @@ public class QqchCraftDeclarePlanImportVo {
      * 字段描述：区域中心
      */
     @JsonProperty
-    @Excel(name = "区域中心")
+    @FtExcel(name = "区域中心")
     private String regionalCenter;
     /**
      * 字段描述：工艺工法名称
      */
     @JsonProperty
-    @Excel(name = "工艺工法名称")
+    @FtExcel(name = "工艺工法名称")
     private String craftName;
     /**
      * 字段描述：工法等级（字典项：craft_grade）
      */
     @JsonProperty
-    @Excel(name = "工法等级",dictType = "craft_grade")
+    @FtExcel(name = "工法等级",dictType = "craft_grade")
     private String craftGrade;
     /**
      * 字段描述：工法简介
      */
     @JsonProperty
-    @Excel(name = "工法简介")
+    @FtExcel(name = "工法简介")
     private String craftIntro;
     /**
      * 字段描述：拟报送时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "拟报送时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "拟报送时间", dateFormat = "yyyy-MM-dd")
     private Date simulateSubmissionTime;
     /**
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
 }

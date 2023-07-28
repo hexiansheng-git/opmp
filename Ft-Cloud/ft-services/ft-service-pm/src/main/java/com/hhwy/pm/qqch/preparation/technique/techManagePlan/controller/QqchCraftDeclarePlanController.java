@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -10,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraft
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchCraftDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchCraftDeclarePlanService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -90,7 +90,7 @@ public class QqchCraftDeclarePlanController extends BaseController {
      */
     @PostMapping("/import")
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
-        ExcelUtils<QqchCraftDeclarePlanImportVo> util = new ExcelUtils<>(QqchCraftDeclarePlanImportVo.class);
+        FtExcelUtil<QqchCraftDeclarePlanImportVo> util = new FtExcelUtil<>(QqchCraftDeclarePlanImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchCraftDeclarePlanImportVo> qqchCraftDeclarePlanImportVoList = util.importExcel(inputStream);
@@ -109,7 +109,7 @@ public class QqchCraftDeclarePlanController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchCraftDeclarePlan qqchCraftDeclarePlan) throws IOException {
         List<QqchCraftDeclarePlanExportVo> qqchCraftDeclarePlanExportVoList = qqchCraftDeclarePlanService.getQqchCraftDeclarePlanExportVoList(qqchCraftDeclarePlan);
-        ExcelUtils<QqchCraftDeclarePlanExportVo> util = new ExcelUtils<>(QqchCraftDeclarePlanExportVo.class);
+        FtExcelUtil<QqchCraftDeclarePlanExportVo> util = new FtExcelUtil<>(QqchCraftDeclarePlanExportVo.class);
         util.exportExcel(response, qqchCraftDeclarePlanExportVoList, DateUtils.getDate());
     }
 

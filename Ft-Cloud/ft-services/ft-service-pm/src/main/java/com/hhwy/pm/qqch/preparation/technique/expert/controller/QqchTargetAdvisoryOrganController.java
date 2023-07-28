@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetAdvisoryOrgan;
+import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetAdvisoryOrganVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetAdvisoryOrganService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchTargetAdvisoryOrganController extends BaseController {
         return AjaxResult.success(qqchTargetAdvisoryOrganParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTargetAdvisoryOrganList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganListParam) {
-        qqchTargetAdvisoryOrganService.insertQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganListParam);
-        return AjaxResult.success(qqchTargetAdvisoryOrganListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTargetAdvisoryOrgan(@Validated(ValidationGroups.Update.class) @RequestBody QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrganParam) {
@@ -90,5 +84,29 @@ public class QqchTargetAdvisoryOrganController extends BaseController {
         List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList = qqchTargetAdvisoryOrganService.getQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganParam);
         ExcelUtils<QqchTargetAdvisoryOrgan> util = new ExcelUtils<>(QqchTargetAdvisoryOrgan.class);
         util.exportExcel(response, qqchTargetAdvisoryOrganList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取外部目标咨询机构选择Vo
+     * @param qqchTargetAdvisoryOrgan
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:list")
+    @GetMapping("getQqchTargetAdvisoryOrganVo")
+    public AjaxResult getQqchTargetAdvisoryOrganVo(@Validated(ValidationGroups.Get.class) QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan) {
+        QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo = qqchTargetAdvisoryOrganService.getQqchTargetAdvisoryOrganVo(qqchTargetAdvisoryOrgan);
+        return AjaxResult.success(qqchTargetAdvisoryOrganVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTargetAdvisoryOrganVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo) {
+        qqchTargetAdvisoryOrganService.save(qqchTargetAdvisoryOrganVo);
+        return AjaxResult.success();
     }
 }

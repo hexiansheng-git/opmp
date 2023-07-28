@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvan
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchAdvancedVindicatePlanBudgetMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchAdvancedVindicatePlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
@@ -37,6 +38,9 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
 
     @Autowired
     private QqchAdvancedVindicatePlanBudgetMapper qqchAdvancedVindicatePlanBudgetMapper;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchAdvancedVindicatePlan getQqchAdvancedVindicatePlan(QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) {
@@ -93,10 +97,10 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
 
         for (QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan : qqchAdvancedVindicatePlanList) {
             Long id = qqchAdvancedVindicatePlan.getId();
-            Map<String, String> vintageBudgetMap = qqchAdvancedVindicatePlan.getVintageBudgetMap();
-            for (Map.Entry<String, String> next : vintageBudgetMap.entrySet()) {
+            Map<String, BigDecimal> vintageBudgetMap = qqchAdvancedVindicatePlan.getVintageBudgetMap();
+            for (Map.Entry<String, BigDecimal> next : vintageBudgetMap.entrySet()) {
                 String key = next.getKey();
-                String value = next.getValue();
+                BigDecimal value = next.getValue();
                 QqchAdvancedVindicatePlanBudget qqchAdvancedVindicatePlanBudget = new QqchAdvancedVindicatePlanBudget();
                 qqchAdvancedVindicatePlanBudget.setId(IdWorker.createId());
                 qqchAdvancedVindicatePlanBudget.setMasterId(id);
@@ -158,7 +162,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo = new QqchAdvancedVindicatePlanVo();
 
         BigDecimal version = qqchAdvancedVindicatePlan.getVersion();
-        version = VersionUtil.getVersion("qqch_app_innovate_plan",version);
+        version = VersionUtil.getVersion("qqch_advanced_vindicate_plan",version);
 
         qqchAdvancedVindicatePlan.setVersion(version);
         List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanMapper.getQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlan);
@@ -170,6 +174,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         List<String> vintageList = this.getVintageListByVersion(version);
 
         qqchAdvancedVindicatePlanVo.setVersion(version);
+        qqchAdvancedVindicatePlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchAdvancedVindicatePlanVo.setVintageList(vintageList);
         qqchAdvancedVindicatePlanVo.setQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanList);
         return qqchAdvancedVindicatePlanVo;
@@ -188,7 +193,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
 
         for (QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan : qqchAdvancedVindicatePlanList) {
             Long id = qqchAdvancedVindicatePlan.getId();
-            Map<String,String> vintageBudgetMap = new HashMap<>();
+            Map<String,BigDecimal> vintageBudgetMap = new HashMap<>();
 
             for (QqchAdvancedVindicatePlanBudget advancedVindicatePlanBudget : qqchAdvancedVindicatePlanBudgetList) {
                 if(id.equals(advancedVindicatePlanBudget.getMasterId())){

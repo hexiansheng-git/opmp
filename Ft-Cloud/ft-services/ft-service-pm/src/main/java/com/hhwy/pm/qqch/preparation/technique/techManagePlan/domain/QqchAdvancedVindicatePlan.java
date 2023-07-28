@@ -228,5 +228,5 @@ public class QqchAdvancedVindicatePlan extends BaseEntity {
     private String ptVar5;
 
     /* 年份预算键值对集合 */
-    private Map<String,String> vintageBudgetMap;
+    private Map<String,BigDecimal> vintageBudgetMap;
 }

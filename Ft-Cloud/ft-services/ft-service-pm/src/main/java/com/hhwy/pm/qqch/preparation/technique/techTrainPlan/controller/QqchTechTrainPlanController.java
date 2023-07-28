@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.QqchTechTrainPlan;
+import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.vo.QqchTechTrainPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.service.IQqchTechTrainPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchTechTrainPlanController extends BaseController {
         return AjaxResult.success(qqchTechTrainPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTechTrainPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTechTrainPlan> qqchTechTrainPlanListParam) {
-        qqchTechTrainPlanService.insertQqchTechTrainPlanList(qqchTechTrainPlanListParam);
-        return AjaxResult.success(qqchTechTrainPlanListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTechTrainPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
@@ -90,5 +84,29 @@ public class QqchTechTrainPlanController extends BaseController {
         List<QqchTechTrainPlan> qqchTechTrainPlanList = qqchTechTrainPlanService.getQqchTechTrainPlanList(qqchTechTrainPlanParam);
         ExcelUtils<QqchTechTrainPlan> util = new ExcelUtils<>(QqchTechTrainPlan.class);
         util.exportExcel(response, qqchTechTrainPlanList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取技术培训策划Vo
+     * @param qqchTechTrainPlan
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
+    @GetMapping("getQqchTechTrainPlanVo")
+    public AjaxResult getQqchTechTrainPlanVo(@Validated(ValidationGroups.Select.class) QqchTechTrainPlan qqchTechTrainPlan) {
+        QqchTechTrainPlanVo qqchTechTrainPlanVo = qqchTechTrainPlanService.getQqchTechTrainPlanVo(qqchTechTrainPlan);
+        return AjaxResult.success(qqchTechTrainPlanVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTechTrainPlanVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechTrainPlanVo qqchTechTrainPlanVo) {
+        qqchTechTrainPlanService.save(qqchTechTrainPlanVo);
+        return AjaxResult.success();
     }
 }

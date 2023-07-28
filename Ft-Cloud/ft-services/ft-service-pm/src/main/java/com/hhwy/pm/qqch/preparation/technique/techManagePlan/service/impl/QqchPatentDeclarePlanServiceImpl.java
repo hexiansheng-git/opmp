@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPaten
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchPatentDeclarePlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchPatentDeclarePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
@@ -30,6 +31,9 @@ public class QqchPatentDeclarePlanServiceImpl implements IQqchPatentDeclarePlanS
 
     @Autowired
     private QqchPatentDeclarePlanMapper qqchPatentDeclarePlanMapper;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchPatentDeclarePlan getQqchPatentDeclarePlan(QqchPatentDeclarePlan qqchPatentDeclarePlan) {
@@ -110,12 +114,13 @@ public class QqchPatentDeclarePlanServiceImpl implements IQqchPatentDeclarePlanS
         QqchPatentDeclarePlanVo qqchPatentDeclarePlanVo = new QqchPatentDeclarePlanVo();
 
         BigDecimal version = qqchPatentDeclarePlan.getVersion();
-        version = VersionUtil.getVersion("qqch_app_innovate_plan",version);
+        version = VersionUtil.getVersion("qqch_patent_declare_plan",version);
 
         qqchPatentDeclarePlan.setVersion(version);
         List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList = qqchPatentDeclarePlanMapper.getQqchPatentDeclarePlanList(qqchPatentDeclarePlan);
 
         qqchPatentDeclarePlanVo.setVersion(version);
+        qqchPatentDeclarePlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchPatentDeclarePlanVo.setQqchPatentDeclarePlanList(qqchPatentDeclarePlanList);
         return qqchPatentDeclarePlanVo;
     }

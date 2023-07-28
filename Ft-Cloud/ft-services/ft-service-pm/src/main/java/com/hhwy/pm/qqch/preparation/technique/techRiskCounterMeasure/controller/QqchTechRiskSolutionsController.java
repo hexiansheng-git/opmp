@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.QqchTechRiskSolutions;
+import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.vo.QqchTechRiskSolutionsVo;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.service.IQqchTechRiskSolutionsService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchTechRiskSolutionsController extends BaseController {
         return AjaxResult.success(qqchTechRiskSolutionsParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTechRiskSolutionsList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTechRiskSolutions> qqchTechRiskSolutionsListParam) {
-        qqchTechRiskSolutionsService.insertQqchTechRiskSolutionsList(qqchTechRiskSolutionsListParam);
-        return AjaxResult.success(qqchTechRiskSolutionsListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchTechRiskSolutions:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTechRiskSolutions(@Validated(ValidationGroups.Update.class) @RequestBody QqchTechRiskSolutions qqchTechRiskSolutionsParam) {
@@ -90,5 +84,29 @@ public class QqchTechRiskSolutionsController extends BaseController {
         List<QqchTechRiskSolutions> qqchTechRiskSolutionsList = qqchTechRiskSolutionsService.getQqchTechRiskSolutionsList(qqchTechRiskSolutionsParam);
         ExcelUtils<QqchTechRiskSolutions> util = new ExcelUtils<>(QqchTechRiskSolutions.class);
         util.exportExcel(response, qqchTechRiskSolutionsList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取技术风险及应对措施Vo
+     * @param qqchTechRiskSolutions
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:list")
+    @GetMapping("getQqchTechRiskSolutionsVo")
+    public AjaxResult getQqchTechRiskSolutionsVo(@Validated(ValidationGroups.Select.class) QqchTechRiskSolutions qqchTechRiskSolutions) {
+        QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo = qqchTechRiskSolutionsService.getQqchTechRiskSolutionsVo(qqchTechRiskSolutions);
+        return AjaxResult.success(qqchTechRiskSolutionsVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTechRiskSolutionsVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo) {
+        qqchTechRiskSolutionsService.save(qqchTechRiskSolutionsVo);
+        return AjaxResult.success();
     }
 }

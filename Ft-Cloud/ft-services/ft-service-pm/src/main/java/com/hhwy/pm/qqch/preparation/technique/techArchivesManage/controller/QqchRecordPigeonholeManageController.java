@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchRecordPigeonholeManage;
+import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchRecordPigeonholeManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service.IQqchRecordPigeonholeManageService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchRecordPigeonholeManageController extends BaseController {
         return AjaxResult.success(qqchRecordPigeonholeManageParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchRecordPigeonholeManageList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageListParam) {
-        qqchRecordPigeonholeManageService.insertQqchRecordPigeonholeManageList(qqchRecordPigeonholeManageListParam);
-        return AjaxResult.success(qqchRecordPigeonholeManageListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:update")
     @PostMapping("/update")
     public AjaxResult updateQqchRecordPigeonholeManage(@Validated(ValidationGroups.Update.class) @RequestBody QqchRecordPigeonholeManage qqchRecordPigeonholeManageParam) {
@@ -90,5 +84,29 @@ public class QqchRecordPigeonholeManageController extends BaseController {
         List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageList = qqchRecordPigeonholeManageService.getQqchRecordPigeonholeManageList(qqchRecordPigeonholeManageParam);
         ExcelUtils<QqchRecordPigeonholeManage> util = new ExcelUtils<>(QqchRecordPigeonholeManage.class);
         util.exportExcel(response, qqchRecordPigeonholeManageList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取技术档案归档管理Vo
+     * @param qqchRecordPigeonholeManage
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:list")
+    @GetMapping("getQqchRecordPigeonholeManageVo")
+    public AjaxResult getQqchRecordPigeonholeManageVo(@Validated(ValidationGroups.Select.class) QqchRecordPigeonholeManage qqchRecordPigeonholeManage) {
+        QqchRecordPigeonholeManageVo qqchRecordPigeonholeManageVo = qqchRecordPigeonholeManageService.getQqchRecordPigeonholeManageVo(qqchRecordPigeonholeManage);
+        return AjaxResult.success(qqchRecordPigeonholeManageVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchRecordPigeonholeManageVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchRecordPigeonholeManageVo qqchRecordPigeonholeManageVo) {
+        qqchRecordPigeonholeManageService.save(qqchRecordPigeonholeManageVo);
+        return AjaxResult.success();
     }
 }

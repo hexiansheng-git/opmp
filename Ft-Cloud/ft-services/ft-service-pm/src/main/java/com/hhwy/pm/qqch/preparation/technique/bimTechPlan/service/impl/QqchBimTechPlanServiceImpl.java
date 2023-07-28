@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.vo.QqchBimTechP
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.mapper.QqchBimTechPlanExtendMapper;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.mapper.QqchBimTechPlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.service.IQqchBimTechPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
@@ -40,6 +41,9 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
 
     @Autowired
     private QqchBimTechPlanExtendMapper qqchBimTechPlanExtendMapper;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchBimTechPlan getQqchBimTechPlan(QqchBimTechPlan qqchBimTechPlan) {
@@ -124,7 +128,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
         QqchBimTechPlanVo qqchBimTechPlanVo = new QqchBimTechPlanVo();
 
         BigDecimal version = qqchBimTechPlanVo.getVersion();
-        version = VersionUtil.getVersion("qqch_app_innovate_plan",version);
+        version = VersionUtil.getVersion("qqch_bim_tech_plan",version);
 
         //获取当前项目是否应用bim技术
         String bimMark = qqchBimTechPlanExtendMapper.getBimMark(version);
@@ -137,6 +141,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
 
         qqchBimTechPlanVo.setBimMark(bimMark);
         qqchBimTechPlanVo.setVersion(version);
+        qqchBimTechPlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchBimTechPlanVo.setQqchBimTechPlanList(qqchBimTechPlanList);
         return qqchBimTechPlanVo;
     }

@@ -2,14 +2,22 @@ package com.hhwy.pm.qqch.preparation.technique.expert.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetAdvisoryOrgan;
+import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetAdvisoryOrganVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.mapper.QqchTargetAdvisoryOrganMapper;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetAdvisoryOrganService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,6 +30,12 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
 
     @Autowired
     private QqchTargetAdvisoryOrganMapper qqchTargetAdvisoryOrganMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchTargetAdvisoryOrgan getQqchTargetAdvisoryOrgan(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan) {
@@ -41,13 +55,25 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
     }
 
     @Transactional
-    public int insertQqchTargetAdvisoryOrganList(List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList) {
-        for (QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan : qqchTargetAdvisoryOrganList) {
-            qqchTargetAdvisoryOrgan.setId(IdWorker.createId());
-            qqchTargetAdvisoryOrgan.setCreateUser(SecurityUtils.getUserName());
-            qqchTargetAdvisoryOrgan.setCreateTime(DateUtils.getNowDate());
+    public void insertQqchTargetAdvisoryOrganList(List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList, BigDecimal version) {
+        //删除旧数据
+        QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan = new QqchTargetAdvisoryOrgan();
+        qqchTargetAdvisoryOrgan.setVersion(version);
+        qqchTargetAdvisoryOrganMapper.deleteQqchTargetAdvisoryOrgan(qqchTargetAdvisoryOrgan);
+
+        String valid = Valid.NO;
+        if(version.compareTo(BigDecimal.ONE) == 0){
+            valid = Valid.YES;
         }
-        return qqchTargetAdvisoryOrganMapper.insertQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganList);
+        for (QqchTargetAdvisoryOrgan targetAdvisoryOrgan : qqchTargetAdvisoryOrganList) {
+            targetAdvisoryOrgan.setId(IdWorker.createId());
+            targetAdvisoryOrgan.setValid(valid);
+            targetAdvisoryOrgan.setVersion(version);
+            targetAdvisoryOrgan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            targetAdvisoryOrgan.setCreateUserName(SecurityUtils.getUserName());
+            targetAdvisoryOrgan.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchTargetAdvisoryOrganMapper.insertQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganList);
     }
 
     @Transactional
@@ -76,5 +102,52 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
     @Transactional
     public int deleteQqchTargetAdvisoryOrganByPks(List<Long> qqchTargetAdvisoryOrganPkList) {
         return qqchTargetAdvisoryOrganMapper.deleteQqchTargetAdvisoryOrganByPks(qqchTargetAdvisoryOrganPkList);
+    }
+
+    /**
+     * 获取外部目标咨询机构选择Vo
+     * @param qqchTargetAdvisoryOrgan
+     * @return
+     */
+    @Override
+    public QqchTargetAdvisoryOrganVo getQqchTargetAdvisoryOrganVo(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan) {
+        QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo = new QqchTargetAdvisoryOrganVo();
+
+        BigDecimal version = qqchTargetAdvisoryOrgan.getVersion();
+        version = VersionUtil.getVersion("qqch_target_advisory_organ",version);
+
+        qqchTargetAdvisoryOrgan.setVersion(version);
+        List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList = qqchTargetAdvisoryOrganMapper.getQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrgan);
+
+        qqchTargetAdvisoryOrganVo.setVersion(version);
+        qqchTargetAdvisoryOrganVo.setStageIdentity(qqchReviewService.getStage());
+        qqchTargetAdvisoryOrganVo.setQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganList);
+        return qqchTargetAdvisoryOrganVo;
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTargetAdvisoryOrganVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void save(QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo) {
+        String buttonMark = qqchTargetAdvisoryOrganVo.getButtonMark();
+        ButtonMarkUtil.checkButtonMark(buttonMark);
+
+        BigDecimal version = qqchTargetAdvisoryOrganVo.getVersion();
+        List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList = qqchTargetAdvisoryOrganVo.getQqchTargetAdvisoryOrganList();
+
+        //处理数据
+        this.insertQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganList,version);
+
+        //处理确认状态是确认
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认记录
+            String menuId = qqchTargetAdvisoryOrganVo.getMenuId();
+            String stageIdentity = qqchTargetAdvisoryOrganVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 }
