@@ -45,10 +45,19 @@ public class QqchConstructionListVo {
     private String buttonMark;
 
     /**
-     * 项目编码
+     * 字段描述：项目编码（保存时生成方案编号用）
      */
-    @JsonProperty
     private String projectCode;
+
+    /**
+     * 字段描述：方案名称（筛选条件）
+     */
+    private String schemeName;
+
+    /**
+     * 字段描述：方案类型（字典类型scheme_type）（筛选条件）
+     */
+    private String schemeType;
 
     /**
      * 字段描述：施工方案清单集合

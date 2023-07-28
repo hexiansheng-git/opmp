@@ -30,7 +30,6 @@ public class QqchConstructionListImportVo extends BaseEntity {
      * 字段描述：方案编号
      */
     @JsonProperty
-    @Excel(name = "方案编号")
     private String schemeCode;
     /**
      * 字段描述：方案名称
@@ -79,14 +78,12 @@ public class QqchConstructionListImportVo extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "计划编制时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date planPreparationTime;
     /**
      * 字段描述：计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date planImplementTime;
     /**
      * 字段描述：清单通过时间
