@@ -38,8 +38,9 @@ public class QqchConstructionReviewPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchDangerConstructionList:add")
     @PostMapping("/syncData")
-    public AjaxResult syncData() {
-        qqchConstructionReviewPlanService.syncData();
+    public AjaxResult syncData(
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
+        qqchConstructionReviewPlanService.syncData(qqchConstructionReviewPlanVo);
         return AjaxResult.success();
     }
 

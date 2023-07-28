@@ -16,7 +16,7 @@ public interface IQqchDangerConstructionListService {
 
     void batchSave(QqchDangerConstructionListVo qqchDangerConstructionListVo);
 
-    void syncData();
+    void syncData(QqchDangerConstructionListVo qqchDangerConstructionListVo);
 
     List<QqchDangerConstructionList> getByWbsCodes(String[] wbsCodes);
 }

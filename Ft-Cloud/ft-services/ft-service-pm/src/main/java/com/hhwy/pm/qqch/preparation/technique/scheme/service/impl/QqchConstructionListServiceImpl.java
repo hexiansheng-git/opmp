@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -34,6 +35,8 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     private GenCodeService genCodeService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private CommonMapper commonMapper;
 
     public QqchConstructionListVo getQqchConstructionListList(BigDecimal version) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
@@ -87,6 +90,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
     @Override
     public List<QqchConstructionList> getByWbsCodes(String[] wbsCodes) {
-        return qqchConstructionListMapper.getByWbsCodes(wbsCodes);
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        return qqchConstructionListMapper.getByWbsCodes(wbsCodes,maxVersion);
     }
 }

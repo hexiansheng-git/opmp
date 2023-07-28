@@ -19,11 +19,11 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultCo
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
-import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -141,27 +141,11 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         List<String> constructionNameList = constructionList.stream().map(QqchConstructionList::getSchemeName)
             .collect(Collectors.toList());
 
-        String[] dangerWbsCodeArray = dangerWbsCodeList.toArray(new String[dangerWbsCodeList.size()]);
-        String[] dangerWbsNameArray = dangerWbsNameList.toArray(new String[dangerWbsNameList.size()]);
-        String[] keyDifficultWbsCodeArray = keyDifficultWbsCodeList.toArray(new String[keyDifficultWbsCodeList.size()]);
-        String[] keyDifficultWbsNameArray = keyDifficultWbsNameList.toArray(new String[keyDifficultWbsNameList.size()]);
-        String[] constructionNameArray = constructionNameList.toArray(new String[constructionNameList.size()]);
-
-        if (!ObjectNullUtil.isEmpty(dangerWbsCodeArray)) {
-            vo.setDangerProjectCode(dangerWbsCodeArray.toString());
-        }
-        if (!ObjectNullUtil.isEmpty(dangerWbsNameArray)) {
-            vo.setDangerProject(dangerWbsNameArray.toString());
-        }
-        if (!ObjectNullUtil.isEmpty(keyDifficultWbsCodeArray)) {
-            vo.setKeyDifficultProjectCode(keyDifficultWbsCodeArray.toString());
-        }
-        if (!ObjectNullUtil.isEmpty(keyDifficultWbsNameArray)) {
-            vo.setKeyDifficultProject(keyDifficultWbsNameArray.toString());
-        }
-        if (!ObjectNullUtil.isEmpty(constructionNameArray)) {
-            vo.setSchemeQuery(constructionNameArray.toString());
-        }
+        vo.setDangerProjectCode(StringUtils.join(dangerWbsCodeList.toArray(), ","));
+        vo.setDangerProject(StringUtils.join(dangerWbsNameList.toArray(), ","));
+        vo.setKeyDifficultProjectCode(StringUtils.join(keyDifficultWbsCodeList.toArray(), ","));
+        vo.setKeyDifficultProject(StringUtils.join(keyDifficultWbsNameList.toArray(), ","));
+        vo.setSchemeQuery(StringUtils.join(constructionNameList.toArray(), ","));
         return vo;
     }
 }

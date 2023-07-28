@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.mapper;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,5 +31,6 @@ public interface QqchConstructionListMapper {
 
     List<QqchConstructionList> getBigDangerLevelConstructionList(QqchConstructionList qqchConstructionList);
 
-    List<QqchConstructionList> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes);
+    List<QqchConstructionList> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes,
+        @Param("maxVersion") BigDecimal maxVersion);
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.mapper;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultConstructionBrief;
+import java.math.BigDecimal;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -32,5 +33,6 @@ public interface QqchKeyDifficultConstructionBriefMapper {
     int deleteQqchKeyDifficultConstructionBriefByPks(
         @Param("qqchKeyDifficultConstructionBriefPkList") List<Long> qqchKeyDifficultConstructionBriefPkList);
 
-    List<QqchKeyDifficultConstructionBrief> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes);
+    List<QqchKeyDifficultConstructionBrief> getByWbsCodes(@Param("wbsCodes") String[] wbsCodes,
+        @Param("maxVersion") BigDecimal maxVersion);
 }

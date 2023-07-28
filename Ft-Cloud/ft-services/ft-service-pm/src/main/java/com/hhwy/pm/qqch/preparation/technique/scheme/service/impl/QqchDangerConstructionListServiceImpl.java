@@ -71,7 +71,10 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     }
 
     @Transactional
-    public void syncData() {
+    public void syncData(QqchDangerConstructionListVo qqchDangerConstructionListVo) {
+        // 先保存数据
+        this.batchSave(qqchDangerConstructionListVo);
+
         // 获取当前数据库表数据
         QqchDangerConstructionListVo dbVo = this.getQqchDangerConstructionListList(null);
         List<QqchDangerConstructionList> dbList = dbVo.getList();
@@ -117,6 +120,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
 
     @Override
     public List<QqchDangerConstructionList> getByWbsCodes(String[] wbsCodes) {
-        return qqchDangerConstructionListMapper.getByWbsCodes(wbsCodes);
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_danger_construction_list");
+        return qqchDangerConstructionListMapper.getByWbsCodes(wbsCodes, maxVersion);
     }
 }

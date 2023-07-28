@@ -12,7 +12,7 @@ public interface IQqchConstructionReviewPlanService {
 
     QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList(BigDecimal version);
 
-    void syncData();
+    void syncData(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
 
     void batchSave(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo);
 }
