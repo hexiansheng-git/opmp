@@ -201,4 +201,26 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         this.setProjectSublistInfo(xmslProjectBasicInfo);
         return xmslProjectBasicInfo;
     }
+
+    /**
+     * 获取项目信息详情（带子表）
+     * @param projectBasicInfo
+     * @return
+     */
+    @Override
+    public XmslProjectBasicInfo getProjectBasicInfoWithSublist(XmslProjectBasicInfo projectBasicInfo) {
+        XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(projectBasicInfo);
+        this.setProjectSublistInfo(xmslProjectBasicInfo);
+        return xmslProjectBasicInfo;
+    }
+
+    /**
+     * 获取项目信息详情（不带子表）
+     * @param projectBasicInfo
+     * @return
+     */
+    @Override
+    public XmslProjectBasicInfo getProjectBasicInfoWithoutSublist(XmslProjectBasicInfo projectBasicInfo) {
+        return xmslProjectBasicInfoMapper.getProjectBasicInfo(projectBasicInfo);
+    }
 }

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchPigeonholeDutyDivision;
+import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchPigeonholeDutyDivisionVo;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service.IQqchPigeonholeDutyDivisionService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,17 @@ public class QqchPigeonholeDutyDivisionController extends BaseController {
         List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList = qqchPigeonholeDutyDivisionService.getQqchPigeonholeDutyDivisionList(qqchPigeonholeDutyDivisionParam);
         ExcelUtils<QqchPigeonholeDutyDivision> util = new ExcelUtils<>(QqchPigeonholeDutyDivision.class);
         util.exportExcel(response, qqchPigeonholeDutyDivisionList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取技术档案归档责任分工Vo
+     * @param qqchPigeonholeDutyDivision
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:list")
+    @GetMapping("getQqchPigeonholeDutyDivisionVo")
+    public AjaxResult getQqchPigeonholeDutyDivisionVo(@Validated(ValidationGroups.Get.class) QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision) {
+        QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo = qqchPigeonholeDutyDivisionService.getQqchPigeonholeDutyDivisionVo(qqchPigeonholeDutyDivision);
+        return AjaxResult.success(qqchPigeonholeDutyDivisionVo);
     }
 }

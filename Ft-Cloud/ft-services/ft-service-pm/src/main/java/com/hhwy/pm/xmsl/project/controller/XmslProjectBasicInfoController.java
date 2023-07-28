@@ -42,13 +42,24 @@ public class XmslProjectBasicInfoController extends BaseController{
     }
 
     /**
-     * 获取项目信息
+     * 获取项目信息详情（带子表）
      * @param projectBasicInfo
      * @return
      */
-    @GetMapping("getProjectBasicInfo")
-    public AjaxResult getProjectBasicInfo(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
-        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfo(projectBasicInfo);
+    @GetMapping("getProjectBasicInfoWithSublist")
+    public AjaxResult getProjectBasicInfoWithSublist(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
+        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfoWithSublist(projectBasicInfo);
+        return AjaxResult.success(xmslProjectBasicInfo);
+    }
+
+    /**
+     * 获取项目信息详情（不带子表）
+     * @param projectBasicInfo
+     * @return
+     */
+    @GetMapping("getProjectBasicInfoWithoutSublist")
+    public AjaxResult getProjectBasicInfoWithoutSublist(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
+        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfoWithoutSublist(projectBasicInfo);
         return AjaxResult.success(xmslProjectBasicInfo);
     }
 
