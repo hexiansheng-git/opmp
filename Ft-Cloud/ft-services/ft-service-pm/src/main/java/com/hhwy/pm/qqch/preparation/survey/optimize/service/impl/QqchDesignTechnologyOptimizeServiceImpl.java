@@ -16,6 +16,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -99,6 +100,9 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
      */
     @Transactional
     public void insertQqchDesignTechnologyOptimizeList(List<QqchDesignTechnologyOptimize> qqchDesignTechnologyOptimizeList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchDesignTechnologyOptimizeList)){
+            return;
+        }
         for (QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize : qqchDesignTechnologyOptimizeList) {
             qqchDesignTechnologyOptimize.setId(IdWorker.createId());
             qqchDesignTechnologyOptimize.setVersion(version);

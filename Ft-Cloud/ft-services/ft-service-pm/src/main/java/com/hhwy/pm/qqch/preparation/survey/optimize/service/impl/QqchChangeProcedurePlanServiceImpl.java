@@ -154,6 +154,9 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
      */
     @Transactional
     public void insertQqchChangeProcedurePlanList(List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList, BigDecimal version){
+        if(CollectionUtils.isEmpty(qqchChangeProcedurePlanList)){
+            return;
+        }
         for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
             qqchChangeProcedurePlan.setId(IdWorker.createId());
             qqchChangeProcedurePlan.setVersion(version);

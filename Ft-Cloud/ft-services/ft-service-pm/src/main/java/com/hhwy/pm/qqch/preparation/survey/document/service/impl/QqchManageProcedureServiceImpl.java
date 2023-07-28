@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedure
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -106,6 +107,9 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
      */
     @Transactional
     public void insertQqchManageProcedureList(List<QqchManageProcedure> qqchManageProcedureList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchManageProcedureList)){
+            return;
+        }
         List<QqchManageProcedure> insertList = ListTreeUtil.formatList(
                 qqchManageProcedureList,
                 QqchManageProcedure::setId,

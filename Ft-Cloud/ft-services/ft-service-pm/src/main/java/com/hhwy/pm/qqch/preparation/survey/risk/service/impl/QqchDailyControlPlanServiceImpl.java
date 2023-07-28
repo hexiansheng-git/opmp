@@ -133,6 +133,9 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
      */
     @Transactional
     public void insertQqchDailyControlPlanList(List<QqchDailyControlPlan> qqchDailyControlPlanList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchDailyControlPlanList)){
+            return;
+        }
         for (QqchDailyControlPlan qqchDailyControlPlan : qqchDailyControlPlanList) {
             qqchDailyControlPlan.setId(IdWorker.createId());
             qqchDailyControlPlan.setVersion(version);

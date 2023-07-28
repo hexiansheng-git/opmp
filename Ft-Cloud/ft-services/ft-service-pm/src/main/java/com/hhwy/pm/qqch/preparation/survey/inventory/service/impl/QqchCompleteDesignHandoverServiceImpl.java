@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesign
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +101,9 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
      */
     @Transactional
     public void insertQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchCompleteDesignHandoverList)){
+            return;
+        }
         for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
             qqchCompleteDesignHandover.setId(IdWorker.createId());
             qqchCompleteDesignHandover.setVersion(version);

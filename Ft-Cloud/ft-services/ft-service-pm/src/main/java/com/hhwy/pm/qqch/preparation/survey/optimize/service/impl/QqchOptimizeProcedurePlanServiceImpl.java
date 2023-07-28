@@ -159,6 +159,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
      */
     @Transactional
     public void insertQqchOptimizeProcedurePlanList(List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchOptimizeProcedurePlanList)){
+            return;
+        }
         for (QqchOptimizeProcedurePlan qqchOptimizeProcedurePlan : qqchOptimizeProcedurePlanList) {
             qqchOptimizeProcedurePlan.setId(IdWorker.createId());
             qqchOptimizeProcedurePlan.setVersion(version);

@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -10,10 +7,13 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeC
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeHeader;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeHeaderMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeHeaderService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -37,15 +37,16 @@ public class QqchComparisonSchemeHeaderServiceImpl implements IQqchComparisonSch
      * @param version
      */
     public void insertQqchComparisonSchemeHeaderList(List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList, Long schemeId, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchComparisonSchemeHeaderList)){
+            return;
+        }
         int sort = 1;
         for (QqchComparisonSchemeHeader qqchComparisonSchemeHeader : qqchComparisonSchemeHeaderList) {
             Long headerId = IdWorker.createId();
 
             //插入单元格
             List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeHeader.getQqchComparisonSchemeContentList();
-            if(!CollectionUtils.isEmpty(qqchComparisonSchemeContentList)){
-                qqchComparisonSchemeContentService.insertQqchComparisonSchemeContentList(qqchComparisonSchemeContentList, schemeId , headerId, version);
-            }
+            qqchComparisonSchemeContentService.insertQqchComparisonSchemeContentList(qqchComparisonSchemeContentList, schemeId , headerId, version);
 
             qqchComparisonSchemeHeader.setId(headerId);
             qqchComparisonSchemeHeader.setSchemeId(schemeId);

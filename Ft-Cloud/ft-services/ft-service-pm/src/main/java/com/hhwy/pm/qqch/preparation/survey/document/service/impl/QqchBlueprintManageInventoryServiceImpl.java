@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchBlueprintManage
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,6 +103,9 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
      */
     @Transactional
     public void insertQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchBlueprintManageInventoryList)){
+            return;
+        }
         for (QqchBlueprintManageInventory qqchBlueprintManageInventory : qqchBlueprintManageInventoryList) {
             qqchBlueprintManageInventory.setId(IdWorker.createId());
             qqchBlueprintManageInventory.setVersion(version);

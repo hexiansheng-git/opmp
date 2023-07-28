@@ -16,6 +16,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -107,6 +108,9 @@ public class QqchOptimizeChangeOrganizationServiceImpl implements IQqchOptimizeC
      */
     @Transactional
     public void insertQqchOptimizeChangeOrganizationList(List<QqchOptimizeChangeOrganization> qqchOptimizeChangeOrganizationList, BigDecimal version){
+        if(CollectionUtils.isEmpty(qqchOptimizeChangeOrganizationList)){
+            return;
+        }
         List<QqchOptimizeChangeOrganization> insertList = ListTreeUtil.formatList(
                 qqchOptimizeChangeOrganizationList,
                 QqchOptimizeChangeOrganization::setId,

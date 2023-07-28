@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +63,9 @@ public class QqchTechRiskSolutionsServiceImpl implements IQqchTechRiskSolutionsS
         qqchTechRiskSolutions.setVersion(version);
         qqchTechRiskSolutionsMapper.deleteQqchTechRiskSolutions(qqchTechRiskSolutions);
 
+        if(CollectionUtils.isEmpty(qqchTechRiskSolutionsList)){
+            return;
+        }
         List<QqchTechRiskSolutions> insertList = ListTreeUtil.formatList(
                 qqchTechRiskSolutionsList,
                 QqchTechRiskSolutions::setId,

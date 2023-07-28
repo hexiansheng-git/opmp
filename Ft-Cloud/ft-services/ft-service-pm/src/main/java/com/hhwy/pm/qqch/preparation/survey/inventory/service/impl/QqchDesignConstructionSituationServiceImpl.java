@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchDesignConstruc
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -99,6 +100,9 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
      */
     @Transactional
     public void insertQqchDesignConstructionSituationList(List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList, BigDecimal version){
+        if(CollectionUtils.isEmpty(qqchDesignConstructionSituationList)){
+            return;
+        }
         for (QqchDesignConstructionSituation qqchDesignConstructionSituation : qqchDesignConstructionSituationList) {
             qqchDesignConstructionSituation.setId(IdWorker.createId());
             qqchDesignConstructionSituation.setVersion(version);

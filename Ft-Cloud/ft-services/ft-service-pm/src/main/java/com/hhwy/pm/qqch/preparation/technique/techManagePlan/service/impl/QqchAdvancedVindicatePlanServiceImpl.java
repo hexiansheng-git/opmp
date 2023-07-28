@@ -15,6 +15,7 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -66,6 +67,9 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         qqchAdvancedVindicatePlan.setVersion(version);
         qqchAdvancedVindicatePlanMapper.deleteQqchAdvancedVindicatePlan(qqchAdvancedVindicatePlan);
 
+        if(CollectionUtils.isEmpty(qqchAdvancedVindicatePlanList)){
+            return;
+        }
         int sort = 1;
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
@@ -93,33 +97,35 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
      * @param version
      */
     public void disposeBudgetData(List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList, BigDecimal version){
-        List<QqchAdvancedVindicatePlanBudget> qqchAdvancedVindicatePlanBudgetList = new ArrayList<>();
+        //删除旧数据
+        QqchAdvancedVindicatePlanBudget qqchAdvancedVindicatePlanBudget = new QqchAdvancedVindicatePlanBudget();
+        qqchAdvancedVindicatePlanBudget.setVersion(version);
+        qqchAdvancedVindicatePlanBudgetMapper.deleteQqchAdvancedVindicatePlanBudget(qqchAdvancedVindicatePlanBudget);
 
+        List<QqchAdvancedVindicatePlanBudget> qqchAdvancedVindicatePlanBudgetList = new ArrayList<>();
         for (QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan : qqchAdvancedVindicatePlanList) {
             Long id = qqchAdvancedVindicatePlan.getId();
             Map<String, BigDecimal> vintageBudgetMap = qqchAdvancedVindicatePlan.getVintageBudgetMap();
             for (Map.Entry<String, BigDecimal> next : vintageBudgetMap.entrySet()) {
                 String key = next.getKey();
                 BigDecimal value = next.getValue();
-                QqchAdvancedVindicatePlanBudget qqchAdvancedVindicatePlanBudget = new QqchAdvancedVindicatePlanBudget();
-                qqchAdvancedVindicatePlanBudget.setId(IdWorker.createId());
-                qqchAdvancedVindicatePlanBudget.setMasterId(id);
-                qqchAdvancedVindicatePlanBudget.setVintage(key);
-                qqchAdvancedVindicatePlanBudget.setBudget(value);
-                qqchAdvancedVindicatePlanBudget.setVersion(version);
-                qqchAdvancedVindicatePlanBudget.setValid(Valid.YES);
-                qqchAdvancedVindicatePlanBudget.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                qqchAdvancedVindicatePlanBudget.setCreateUserName(SecurityUtils.getUserName());
-                qqchAdvancedVindicatePlanBudget.setCreateTime(DateUtils.getNowDate());
-                qqchAdvancedVindicatePlanBudgetList.add(qqchAdvancedVindicatePlanBudget);
+                QqchAdvancedVindicatePlanBudget advancedVindicatePlanBudget = new QqchAdvancedVindicatePlanBudget();
+                advancedVindicatePlanBudget.setId(IdWorker.createId());
+                advancedVindicatePlanBudget.setMasterId(id);
+                advancedVindicatePlanBudget.setVintage(key);
+                advancedVindicatePlanBudget.setBudget(value);
+                advancedVindicatePlanBudget.setVersion(version);
+                advancedVindicatePlanBudget.setValid(Valid.YES);
+                advancedVindicatePlanBudget.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                advancedVindicatePlanBudget.setCreateUserName(SecurityUtils.getUserName());
+                advancedVindicatePlanBudget.setCreateTime(DateUtils.getNowDate());
+                qqchAdvancedVindicatePlanBudgetList.add(advancedVindicatePlanBudget);
             }
         }
 
-        //删除旧数据
-        QqchAdvancedVindicatePlanBudget qqchAdvancedVindicatePlanBudget = new QqchAdvancedVindicatePlanBudget();
-        qqchAdvancedVindicatePlanBudget.setVersion(version);
-        qqchAdvancedVindicatePlanBudgetMapper.deleteQqchAdvancedVindicatePlanBudget(qqchAdvancedVindicatePlanBudget);
-
+        if(CollectionUtils.isEmpty(qqchAdvancedVindicatePlanList)){
+            return;
+        }
         //插入新数据
         qqchAdvancedVindicatePlanBudgetMapper.insertQqchAdvancedVindicatePlanBudgetList(qqchAdvancedVindicatePlanBudgetList);
     }

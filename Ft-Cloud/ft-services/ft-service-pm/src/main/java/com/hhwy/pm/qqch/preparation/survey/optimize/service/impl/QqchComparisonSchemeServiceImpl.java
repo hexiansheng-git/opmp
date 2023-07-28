@@ -145,15 +145,16 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
      * @return
      */
     @Transactional
-    public int insertQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList, BigDecimal version) {
+    public void insertQqchComparisonSchemeList(List<QqchComparisonScheme> qqchComparisonSchemeList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchComparisonSchemeList)){
+            return;
+        }
         for (QqchComparisonScheme qqchComparisonScheme : qqchComparisonSchemeList) {
             Long schemeId = IdWorker.createId();
 
             //插入表头
             List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList = qqchComparisonScheme.getQqchComparisonSchemeHeaderList();
-            if(!CollectionUtils.isEmpty(qqchComparisonSchemeHeaderList)){
-                qqchComparisonSchemeHeaderService.insertQqchComparisonSchemeHeaderList(qqchComparisonSchemeHeaderList, schemeId, version);
-            }
+            qqchComparisonSchemeHeaderService.insertQqchComparisonSchemeHeaderList(qqchComparisonSchemeHeaderList, schemeId, version);
 
             qqchComparisonScheme.setId(schemeId);
             qqchComparisonScheme.setVersion(version);
@@ -164,7 +165,7 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
             qqchComparisonScheme.setCreateUserName(SecurityUtils.getUserName());
             qqchComparisonScheme.setCreateTime(DateUtils.getNowDate());
         }
-        return qqchComparisonSchemeMapper.insertQqchComparisonSchemeList(qqchComparisonSchemeList);
+        qqchComparisonSchemeMapper.insertQqchComparisonSchemeList(qqchComparisonSchemeList);
     }
 
     /**

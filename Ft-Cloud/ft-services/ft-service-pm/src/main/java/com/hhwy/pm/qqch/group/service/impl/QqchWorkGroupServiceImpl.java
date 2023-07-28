@@ -16,7 +16,6 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -181,9 +180,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         //新增工作小组成员
         List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroup.getQqchWorkGroupMemberList();
-        if(!CollectionUtils.isEmpty(qqchWorkGroupMemberList)){
-            qqchWorkGroupMemberService.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList,qqchWorkGroup);
-        }
+        qqchWorkGroupMemberService.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList,qqchWorkGroup);
 
         if(StringUtils.isBlank(qqchWorkGroup.getEffective())){
             qqchWorkGroup.setEffective(Valid.NO);//是否有效默认为否

@@ -1,18 +1,19 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeContentMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeContentService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -36,6 +37,9 @@ public class QqchComparisonSchemeContentServiceImpl implements IQqchComparisonSc
      */
     @Transactional
     public void insertQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList, Long schemeId, Long headerId, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchComparisonSchemeContentList)){
+            return;
+        }
         int sort = 1;
         for (QqchComparisonSchemeContent qqchComparisonSchemeContent : qqchComparisonSchemeContentList) {
             qqchComparisonSchemeContent.setId(IdWorker.createId());

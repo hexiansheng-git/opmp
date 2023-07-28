@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +63,9 @@ public class QqchRecordPigeonholeManageServiceImpl implements IQqchRecordPigeonh
         qqchRecordPigeonholeManage.setVersion(version);
         qqchRecordPigeonholeManageMapper.deleteQqchRecordPigeonholeManage(qqchRecordPigeonholeManage);
 
+        if(CollectionUtils.isEmpty(qqchRecordPigeonholeManageList)){
+            return;
+        }
         List<QqchRecordPigeonholeManage> insertList = ListTreeUtil.formatList(
                 qqchRecordPigeonholeManageList,
                 QqchRecordPigeonholeManage::setId,

@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,6 +65,9 @@ public class QqchTopicResearchPlanServiceImpl implements IQqchTopicResearchPlanS
         qqchTopicResearchPlan.setVersion(version);
         qqchTopicResearchPlanMapper.deleteQqchTopicResearchPlan(qqchTopicResearchPlan);
 
+        if(CollectionUtils.isEmpty(qqchTopicResearchPlanList)){
+            return;
+        }
         int sort = 1;
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){

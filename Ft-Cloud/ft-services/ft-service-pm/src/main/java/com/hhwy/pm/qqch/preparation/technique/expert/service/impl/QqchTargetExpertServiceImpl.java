@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +62,9 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
         qqchTargetExpert.setVersion(version);
         qqchTargetExpertMapper.deleteQqchTargetExpert(qqchTargetExpert);
 
+        if(CollectionUtils.isEmpty(qqchTargetExpertList)){
+            return;
+        }
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;

@@ -7,6 +7,7 @@ import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +51,10 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
      * @return
      */
     @Transactional
-    public int insertQqchWorkGroupMemberList(List<QqchWorkGroupMember> qqchWorkGroupMemberList, QqchWorkGroup qqchWorkGroup) {
+    public void insertQqchWorkGroupMemberList(List<QqchWorkGroupMember> qqchWorkGroupMemberList, QqchWorkGroup qqchWorkGroup) {
+        if(CollectionUtils.isEmpty(qqchWorkGroupMemberList)){
+            return;
+        }
         for (QqchWorkGroupMember qqchWorkGroupMember : qqchWorkGroupMemberList) {
             qqchWorkGroupMember.setId(IdWorker.createId());
             qqchWorkGroupMember.setWorkGroupId(qqchWorkGroup.getId());
@@ -63,7 +67,7 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
             qqchWorkGroupMember.setCreateUserName(SecurityUtils.getUserName());
             qqchWorkGroupMember.setCreateTime(DateUtils.getNowDate());
         }
-        return qqchWorkGroupMemberMapper.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList);
+        qqchWorkGroupMemberMapper.insertQqchWorkGroupMemberList(qqchWorkGroupMemberList);
     }
 
     /**

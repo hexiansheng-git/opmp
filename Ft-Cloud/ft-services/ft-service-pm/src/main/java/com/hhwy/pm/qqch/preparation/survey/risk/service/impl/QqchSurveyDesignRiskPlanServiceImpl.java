@@ -103,6 +103,7 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
         //删除旧数据
         QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
@@ -138,6 +139,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      */
     @Transactional
     public void insertQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
+            return;
+        }
         List<QqchSurveyDesignRiskPlan> insertList = ListTreeUtil.formatList(
                 qqchSurveyDesignRiskPlanList,
                 QqchSurveyDesignRiskPlan::setId,
