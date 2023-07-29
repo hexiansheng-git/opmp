@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.bimTechPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -130,10 +131,12 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
 
         BigDecimal version = qqchBimTechPlanVo.getVersion();
         version = VersionUtil.getVersion("qqch_bim_tech_plan",version);
+        qqchBimTechPlanVo.setVersion(version);
+        qqchBimTechPlanVo.setStageIdentity(qqchReviewService.getStage());
 
         //获取当前项目是否应用bim技术
         String bimMark = qqchBimTechPlanExtendMapper.getBimMark(version);
-        if(CommonYesNo.NO.equals(bimMark)){
+        if(StringUtils.isBlank(bimMark) || CommonYesNo.NO.equals(bimMark)){
             return qqchBimTechPlanVo;
         }
 
@@ -141,8 +144,6 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
         List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanMapper.getQqchBimTechPlanList(qqchBimTechPlan);
 
         qqchBimTechPlanVo.setBimMark(bimMark);
-        qqchBimTechPlanVo.setVersion(version);
-        qqchBimTechPlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchBimTechPlanVo.setQqchBimTechPlanList(qqchBimTechPlanList);
         return qqchBimTechPlanVo;
     }

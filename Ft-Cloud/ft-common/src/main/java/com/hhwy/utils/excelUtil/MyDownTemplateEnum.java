@@ -45,6 +45,15 @@ public enum MyDownTemplateEnum {
             return map;
         }
     },
+    importQqchCraftDeclarePlan("importQqchCraftDeclarePlan.xlsx","工艺工法申报计划导入模板") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            List<String> craftGradeList = handleDict("craft_grade");
+            map.put("craft_grade", craftGradeList);
+            return map;
+        }
+    },
     importConstructionList("importConstructionList.xls", "方案清单导入") {
         @Override
         public Map<String, List> pullLists() {

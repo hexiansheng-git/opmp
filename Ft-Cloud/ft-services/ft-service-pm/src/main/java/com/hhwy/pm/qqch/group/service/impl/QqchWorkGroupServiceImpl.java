@@ -66,26 +66,21 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         if(id == null){
             //第一次新增
-            qqchWorkGroup = new QqchWorkGroup();
-            qqchWorkGroup.setVersion(BigDecimal.valueOf(1.0));
-            qqchWorkGroup.setVersionStr("v1.0");
-            qqchWorkGroup.setEffective(Valid.NO);
-            qqchWorkGroup.setHistoryMark(CommonYesNo.NO);
-            qqchWorkGroup.setQqchWorkGroupMemberList(new ArrayList<>());
-            this.setPlanUnit(qqchWorkGroup);
-            return qqchWorkGroup;
+            return this.InitWorkGroup();
         }
 
         //判断当前是否存在正在调整的数据（最新未生效版本数据）
         qqchWorkGroup = qqchWorkGroupMapper.getNoValidMaxVersionQqchWorkGroup();
         if(qqchWorkGroup == null){
             qqchWorkGroup = new QqchWorkGroup();
-            /*
-            调整
-             */
+
+            /* 调整 */
             qqchWorkGroup.setId(id);
             //获取调整数据
             qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+            //设置工作小组成员数据
+            this.setWorkGroupMember(qqchWorkGroup);
+
             qqchWorkGroup.setId(null);
             qqchWorkGroup.setTaskStatus("0");
             qqchWorkGroup.setEffective(Valid.NO);
@@ -93,14 +88,23 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             version = version.add(BigDecimal.valueOf(1));
             qqchWorkGroup.setVersionStr("v" + version);
             qqchWorkGroup.setVersion(version);
-
-            //获取小组成员数据
-            QqchWorkGroupMember qqchWorkGroupMember = new QqchWorkGroupMember();
-            qqchWorkGroupMember.setWorkGroupId(id);
-            List<QqchWorkGroupMember> qqchWorkGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
-            qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
         }
 
+        return qqchWorkGroup;
+    }
+
+    /**
+     * 首次新增，初始化数据
+      * @return
+     */
+    public QqchWorkGroup InitWorkGroup(){
+        QqchWorkGroup qqchWorkGroup = new QqchWorkGroup();
+        qqchWorkGroup.setVersion(BigDecimal.valueOf(1.0));
+        qqchWorkGroup.setVersionStr("v1.0");
+        qqchWorkGroup.setEffective(Valid.NO);
+        qqchWorkGroup.setHistoryMark(CommonYesNo.NO);
+        qqchWorkGroup.setQqchWorkGroupMemberList(new ArrayList<>());
+        this.setPlanUnit(qqchWorkGroup);
         return qqchWorkGroup;
     }
 
@@ -121,7 +125,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                 //获取最新（未生效）版本（理论上最多只存在一条数据）
                 qqchWorkGroup = qqchWorkGroupMapper.getNoValidMaxVersionQqchWorkGroup();
                 if(qqchWorkGroup == null){
-                    qqchWorkGroup = this.adjustQqchWorkGroup(null);
+                    qqchWorkGroup = this.InitWorkGroup();
                 }
             }else {
                 qqchWorkGroup.setAdjustMark(CommonYesNo.YES);

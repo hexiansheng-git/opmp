@@ -31,8 +31,10 @@ public class DownloadTemplateController {
         throws Exception {
 
         // 读取文件流（可从jar包取）
-        InputStream inStream = this.getClass().getClassLoader()
-            .getResourceAsStream("template/" + fileName);
+        InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("template/" + fileName);
+        if(inStream == null){
+            throw new RuntimeException("找不到指定文件!");
+        }
         OutputStream outputStream = response.getOutputStream();
 
         // 设置输出的格式

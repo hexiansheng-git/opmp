@@ -92,7 +92,7 @@ public class DownTemplate {
     public void downloadTemplateWithSuffix(HttpServletRequest request, HttpServletResponse response, String templateName,String exportName) throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("template/" + templateName);
         if(inputStream == null){
-            return;
+            throw new RuntimeException("找不到对应文件！");
         }
 
         Workbook workBook;

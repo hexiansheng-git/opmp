@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchPatentDeclarePlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanVo;
@@ -32,6 +34,9 @@ public class QqchPatentDeclarePlanServiceImpl implements IQqchPatentDeclarePlanS
 
     @Autowired
     private QqchPatentDeclarePlanMapper qqchPatentDeclarePlanMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
     @Autowired
     private IQqchReviewService qqchReviewService;
@@ -143,7 +148,16 @@ public class QqchPatentDeclarePlanServiceImpl implements IQqchPatentDeclarePlanS
         BigDecimal version = qqchPatentDeclarePlanVo.getVersion();
         List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList = qqchPatentDeclarePlanVo.getQqchPatentDeclarePlanList();
 
+        //处理数据
         this.insertQqchPatentDeclarePlanList(qqchPatentDeclarePlanList,version);
+
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认记录
+            String menuId = qqchPatentDeclarePlanVo.getMenuId();
+            String stageIdentity = qqchPatentDeclarePlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 
     /**
