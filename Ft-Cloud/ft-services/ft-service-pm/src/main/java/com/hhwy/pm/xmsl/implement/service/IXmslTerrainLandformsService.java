@@ -19,4 +19,7 @@ public interface IXmslTerrainLandformsService {
 
     ImplementVo getAllList();
 
+    void batchSave(ImplementVo implementVo);
+
+
 }

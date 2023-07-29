@@ -56,7 +56,7 @@ public class ImplementVo {
     private LocalResourceSupply localResourceSupply;
 
     /**
-     * 当地政策要点
+     * 当地政策要点/社会和人文条件说明/气候条件附件
      */
     private XmslExtend xmslExtend;
 

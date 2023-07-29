@@ -102,4 +102,26 @@ public class XmslTerrainLandformsServiceImpl implements IXmslTerrainLandformsSer
             keyPersonCommunicationService.getXmslKeyPersonCommunicationList(new XmslKeyPersonCommunication()));
         return implementVo;
     }
+
+    @Transactional
+    public void batchSave(ImplementVo implementVo) {
+        //地形地貌
+        this.save(implementVo.getTerrainLandformsList());
+        // 地质条件
+        geologicalConditionService.save(implementVo.getGeologicalCondition());
+        // 主要构造物水文条件
+        mainStructureHydrologyService.save(implementVo.getMainStructureHydrologyList());
+        // 气候条件
+        climateConditionService.save(implementVo.getClimateConditionList());
+        // 水、电、交通、通讯条件
+        basicFacilitiesConditionsService.save(implementVo.getBasicFacilitiesConditionsList());
+        // 施工干扰
+        constructionInterferenceService.save(implementVo.getConstructionInterferenceList());
+        // 当地资源供应
+        localResourceSupplyService.save(implementVo.getLocalResourceSupply());
+        // 当地政策要点/社会和人文条件说明/气候条件附件
+        extendService.save(implementVo.getXmslExtend());
+        // 重要干系人识别及沟通
+        keyPersonCommunicationService.save(implementVo.getKeyPersonCommunicationList());
+    }
 }

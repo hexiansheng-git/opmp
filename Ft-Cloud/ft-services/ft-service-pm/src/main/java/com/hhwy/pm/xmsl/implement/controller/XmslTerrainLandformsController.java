@@ -39,6 +39,12 @@ public class XmslTerrainLandformsController extends BaseController {
         return AjaxResult.success(implementVo);
     }
 
+    @PostMapping("/batchSave")
+    public AjaxResult batchSave(@RequestBody ImplementVo implementVo) {
+        xmslTerrainLandformsService.batchSave(implementVo);
+        return AjaxResult.success("保存成功！");
+    }
+
     @GetMapping("/getList")
     public AjaxResult getList(XmslTerrainLandforms xmslTerrainLandformsParam) {
         List<XmslTerrainLandforms> xmslTerrainLandformsList = xmslTerrainLandformsService
