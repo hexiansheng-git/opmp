@@ -1,9 +1,14 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
+import org.apache.ibatis.annotations.Param;
 
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -39,4 +44,10 @@ public interface IQqchAdvancedVindicatePlanService {
      * @return
      */
     void save(QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo);
+
+//    List<List<String>> getHead(BigDecimal version);
+
+    List<Map<String, Object>> getQqchAdvancedVindicatePlanExportVoList(QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan);
+
+    void export(HttpServletResponse response, QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan);
 }

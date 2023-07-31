@@ -1,22 +1,28 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
+import com.hhwy.utils.excelUtil.EasyExcelUtil;
+import com.hhwy.utils.excelUtil.ExcelHeadStyle;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * @author han
@@ -80,10 +86,8 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchAdvancedVindicatePlan qqchAdvancedVindicatePlanParam) throws IOException {
-        List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanService.getQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanParam);
-        ExcelUtils<QqchAdvancedVindicatePlan> util = new ExcelUtils<>(QqchAdvancedVindicatePlan.class);
-        util.exportExcel(response, qqchAdvancedVindicatePlanList, DateUtils.getDate());
+    public void export(HttpServletResponse response, QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) throws IOException {
+        qqchAdvancedVindicatePlanService.export(response,qqchAdvancedVindicatePlan);
     }
 
     /**
