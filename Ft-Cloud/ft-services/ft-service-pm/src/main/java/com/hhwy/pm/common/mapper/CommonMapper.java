@@ -29,6 +29,7 @@ public interface CommonMapper {
      * @return
      */
     Long selectCanAdjustOnly(@Param("tableName") String tableName);
+
     /**
      * 查询单据是否能够被调整(一条数据只能调整一次)
      *
@@ -38,7 +39,9 @@ public interface CommonMapper {
      */
     Long selectCanAdjustOnlyValid(@Param("tableName") String tableName);
 
-    /**生效的最大版本的单据id
+    /**
+     * 生效的最大版本的单据id
+     *
      * @param businessId
      * @param tableName
      * @return
@@ -56,9 +59,12 @@ public interface CommonMapper {
 
     /**
      * 查询表中最接近（小于等于）指定版本的版本号
+     *
      * @param tableName
      * @param version
      * @return
      */
-    BigDecimal selectLessOrEqualAssignVersion(@Param("tableName") String tableName,@Param("version") BigDecimal version);
+    BigDecimal selectLessOrEqualAssignVersion(@Param("tableName") String tableName, @Param("version") BigDecimal version);
+
+    void deleteByVersion(@Param("tn") String tn, @Param("version") BigDecimal version);
 }

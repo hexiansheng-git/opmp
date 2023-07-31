@@ -2,11 +2,23 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureOrgMapper">
+<mapper namespace="com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheAnalyseMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg" id="QqchMeasureOrgResultMap">
+    <resultMap type="com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse" id="QqchScheAnalyseResultMap">
         <result property="id" column="id"/>
-        <result property="orgType" column="org_type"/>
+        <result property="score" column="score"/>
+        <result property="diffMaxScore" column="diff_max_score"/>
+        <result property="diffMinScore" column="diff_min_score"/>
+        <result property="lineMaxScore" column="line_max_score"/>
+        <result property="lineMinScore" column="line_min_score"/>
+        <result property="sumMaxScore" column="sum_max_score"/>
+        <result property="sumMinScore" column="sum_min_score"/>
+        <result property="contFlag" column="cont_flag"/>
+        <result property="roadMaxScore" column="road_max_score"/>
+        <result property="roadMinScore" column="road_min_score"/>
+        <result property="buildMaxScore" column="build_max_score"/>
+        <result property="buildMinScore" column="build_min_score"/>
+        <result property="importance" column="importance"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
         <result property="deptId" column="dept_id"/>
@@ -18,15 +30,28 @@
         <result property="delUser" column="del_user"/>
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
+        <result property="remark" column="remark"/>
         <result property="ptVar1" column="pt_var1"/>
         <result property="ptVar2" column="pt_var2"/>
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectQqchMeasureOrgVo">
+    <sql id="selectQqchScheAnalyseVo">
         select `id`
-             , `org_type`
+             , `score`
+             , `diff_max_score`
+             , `diff_min_score`
+             , `line_max_score`
+             , `line_min_score`
+             , `sum_max_score`
+             , `sum_min_score`
+             , `cont_flag`
+             , `road_max_score`
+             , `road_min_score`
+             , `build_max_score`
+             , `build_min_score`
+             , `importance`
              , `version`
              , `valid`
              , `dept_id`
@@ -38,19 +63,32 @@
              , `del_user`
              , `del_time`
              , `del_flag`
+             , `remark`
              , `pt_var1`
              , `pt_var2`
              , `pt_var3`
              , `pt_var4`
              , `pt_var5`
-        from qqch_measure_org
+        from qqch_sche_analyse
     </sql>
-    <select id="getQqchMeasureOrg" resultMap="QqchMeasureOrgResultMap">
-        <include refid="selectQqchMeasureOrgVo"/>
+    <select id="getQqchScheAnalyse" resultMap="QqchScheAnalyseResultMap">
+        <include refid="selectQqchScheAnalyseVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="orgType != null  and orgType != ''">and `org_type` = #{orgType}</if>
+            <if test="score != null ">and `score` = #{score}</if>
+            <if test="diffMaxScore != null ">and `diff_max_score` = #{diffMaxScore}</if>
+            <if test="diffMinScore != null ">and `diff_min_score` = #{diffMinScore}</if>
+            <if test="lineMaxScore != null ">and `line_max_score` = #{lineMaxScore}</if>
+            <if test="lineMinScore != null ">and `line_min_score` = #{lineMinScore}</if>
+            <if test="sumMaxScore != null ">and `sum_max_score` = #{sumMaxScore}</if>
+            <if test="sumMinScore != null ">and `sum_min_score` = #{sumMinScore}</if>
+            <if test="contFlag != null  and contFlag != ''">and `cont_flag` = #{contFlag}</if>
+            <if test="roadMaxScore != null ">and `road_max_score` = #{roadMaxScore}</if>
+            <if test="roadMinScore != null ">and `road_min_score` = #{roadMinScore}</if>
+            <if test="buildMaxScore != null ">and `build_max_score` = #{buildMaxScore}</if>
+            <if test="buildMinScore != null ">and `build_min_score` = #{buildMinScore}</if>
+            <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -62,6 +100,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
@@ -71,12 +110,24 @@
         order by create_time desc
     </select>
 
-    <select id="getQqchMeasureOrgList" resultMap="QqchMeasureOrgResultMap">
-        <include refid="selectQqchMeasureOrgVo"/>
+    <select id="getQqchScheAnalyseList" resultMap="QqchScheAnalyseResultMap">
+        <include refid="selectQqchScheAnalyseVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="orgType != null  and orgType != ''">and `org_type` = #{orgType}</if>
+            <if test="score != null ">and `score` = #{score}</if>
+            <if test="diffMaxScore != null ">and `diff_max_score` = #{diffMaxScore}</if>
+            <if test="diffMinScore != null ">and `diff_min_score` = #{diffMinScore}</if>
+            <if test="lineMaxScore != null ">and `line_max_score` = #{lineMaxScore}</if>
+            <if test="lineMinScore != null ">and `line_min_score` = #{lineMinScore}</if>
+            <if test="sumMaxScore != null ">and `sum_max_score` = #{sumMaxScore}</if>
+            <if test="sumMinScore != null ">and `sum_min_score` = #{sumMinScore}</if>
+            <if test="contFlag != null  and contFlag != ''">and `cont_flag` = #{contFlag}</if>
+            <if test="roadMaxScore != null ">and `road_max_score` = #{roadMaxScore}</if>
+            <if test="roadMinScore != null ">and `road_min_score` = #{roadMinScore}</if>
+            <if test="buildMaxScore != null ">and `build_max_score` = #{buildMaxScore}</if>
+            <if test="buildMinScore != null ">and `build_min_score` = #{buildMinScore}</if>
+            <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -88,6 +139,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
@@ -97,11 +149,23 @@
         order by create_time desc
     </select>
 
-    <insert id="insertQqchMeasureOrg" useGeneratedKeys="true" keyProperty="id">
-        insert into qqch_measure_org
+    <insert id="insertQqchScheAnalyse" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_sche_analyse
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="orgType != null  and orgType != ''">`org_type`,</if>
+            <if test="score != null ">`score`,</if>
+            <if test="diffMaxScore != null ">`diff_max_score`,</if>
+            <if test="diffMinScore != null ">`diff_min_score`,</if>
+            <if test="lineMaxScore != null ">`line_max_score`,</if>
+            <if test="lineMinScore != null ">`line_min_score`,</if>
+            <if test="sumMaxScore != null ">`sum_max_score`,</if>
+            <if test="sumMinScore != null ">`sum_min_score`,</if>
+            <if test="contFlag != null  and contFlag != ''">`cont_flag`,</if>
+            <if test="roadMaxScore != null ">`road_max_score`,</if>
+            <if test="roadMinScore != null ">`road_min_score`,</if>
+            <if test="buildMaxScore != null ">`build_max_score`,</if>
+            <if test="buildMinScore != null ">`build_min_score`,</if>
+            <if test="importance != null  and importance != ''">`importance`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="deptId != null ">`dept_id`,</if>
@@ -113,6 +177,7 @@
             <if test="delUser != null  and delUser != ''">`del_user`,</if>
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
             <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
             <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
@@ -121,7 +186,19 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="orgType != null  and orgType != ''">#{orgType},</if>
+            <if test="score != null ">#{score},</if>
+            <if test="diffMaxScore != null ">#{diffMaxScore},</if>
+            <if test="diffMinScore != null ">#{diffMinScore},</if>
+            <if test="lineMaxScore != null ">#{lineMaxScore},</if>
+            <if test="lineMinScore != null ">#{lineMinScore},</if>
+            <if test="sumMaxScore != null ">#{sumMaxScore},</if>
+            <if test="sumMinScore != null ">#{sumMinScore},</if>
+            <if test="contFlag != null  and contFlag != ''">#{contFlag},</if>
+            <if test="roadMaxScore != null ">#{roadMaxScore},</if>
+            <if test="roadMinScore != null ">#{roadMinScore},</if>
+            <if test="buildMaxScore != null ">#{buildMaxScore},</if>
+            <if test="buildMinScore != null ">#{buildMinScore},</if>
+            <if test="importance != null  and importance != ''">#{importance},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="deptId != null ">#{deptId},</if>
@@ -133,6 +210,7 @@
             <if test="delUser != null  and delUser != ''">#{delUser},</if>
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
             <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
             <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
@@ -141,12 +219,24 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchMeasureOrg -->
-    <insert id="insertQqchMeasureOrgList">
-        insert into qqch_measure_org
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchScheAnalyse -->
+    <insert id="insertQqchScheAnalyseList">
+        insert into qqch_sche_analyse
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `org_type`,
+            `score`,
+            `diff_max_score`,
+            `diff_min_score`,
+            `line_max_score`,
+            `line_min_score`,
+            `sum_max_score`,
+            `sum_min_score`,
+            `cont_flag`,
+            `road_max_score`,
+            `road_min_score`,
+            `build_max_score`,
+            `build_min_score`,
+            `importance`,
             `version`,
             `valid`,
             `dept_id`,
@@ -157,6 +247,7 @@
             `update_time`,
             `del_user`,
             `del_time`,
+            `remark`,
             `pt_var1`,
             `pt_var2`,
             `pt_var3`,
@@ -164,10 +255,22 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="qqchMeasureOrgList" item="item" separator=",">
+        <foreach collection="qqchScheAnalyseList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.orgType},
+                #{item.score},
+                #{item.diffMaxScore},
+                #{item.diffMinScore},
+                #{item.lineMaxScore},
+                #{item.lineMinScore},
+                #{item.sumMaxScore},
+                #{item.sumMinScore},
+                #{item.contFlag},
+                #{item.roadMaxScore},
+                #{item.roadMinScore},
+                #{item.buildMaxScore},
+                #{item.buildMinScore},
+                #{item.importance},
                 #{item.version},
                 #{item.valid},
                 #{item.deptId},
@@ -178,6 +281,7 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
+                #{item.remark},
                 #{item.ptVar1},
                 #{item.ptVar2},
                 #{item.ptVar3},
@@ -187,11 +291,23 @@
         </foreach>
     </insert>
 
-    <update id="updateQqchMeasureOrg">
-        update qqch_measure_org
+    <update id="updateQqchScheAnalyse">
+        update qqch_sche_analyse
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="orgType != null  and  orgType != ''">`org_type` = #{orgType},</if>
+            <if test="score != null ">`score` = #{score},</if>
+            <if test="diffMaxScore != null ">`diff_max_score` = #{diffMaxScore},</if>
+            <if test="diffMinScore != null ">`diff_min_score` = #{diffMinScore},</if>
+            <if test="lineMaxScore != null ">`line_max_score` = #{lineMaxScore},</if>
+            <if test="lineMinScore != null ">`line_min_score` = #{lineMinScore},</if>
+            <if test="sumMaxScore != null ">`sum_max_score` = #{sumMaxScore},</if>
+            <if test="sumMinScore != null ">`sum_min_score` = #{sumMinScore},</if>
+            <if test="contFlag != null  and  contFlag != ''">`cont_flag` = #{contFlag},</if>
+            <if test="roadMaxScore != null ">`road_max_score` = #{roadMaxScore},</if>
+            <if test="roadMinScore != null ">`road_min_score` = #{roadMinScore},</if>
+            <if test="buildMaxScore != null ">`build_max_score` = #{buildMaxScore},</if>
+            <if test="buildMinScore != null ">`build_min_score` = #{buildMinScore},</if>
+            <if test="importance != null  and  importance != ''">`importance` = #{importance},</if>
             <if test="version != null ">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
@@ -203,6 +319,7 @@
             <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -214,17 +331,77 @@
         </where>
     </update>
 
-    <update id="updateQqchMeasureOrgList">
-        update qqch_measure_org
+    <update id="updateQqchScheAnalyseList">
+        update qqch_sche_analyse
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="org_type  = case" suffix="end,">
+            <trim prefix="score  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.orgType}
+                    when `id`=#{item.id} then #{item.score}
+                </foreach>
+            </trim>
+            <trim prefix="diff_max_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.diffMaxScore}
+                </foreach>
+            </trim>
+            <trim prefix="diff_min_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.diffMinScore}
+                </foreach>
+            </trim>
+            <trim prefix="line_max_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.lineMaxScore}
+                </foreach>
+            </trim>
+            <trim prefix="line_min_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.lineMinScore}
+                </foreach>
+            </trim>
+            <trim prefix="sum_max_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sumMaxScore}
+                </foreach>
+            </trim>
+            <trim prefix="sum_min_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sumMinScore}
+                </foreach>
+            </trim>
+            <trim prefix="cont_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contFlag}
+                </foreach>
+            </trim>
+            <trim prefix="road_max_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.roadMaxScore}
+                </foreach>
+            </trim>
+            <trim prefix="road_min_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.roadMinScore}
+                </foreach>
+            </trim>
+            <trim prefix="build_max_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.buildMaxScore}
+                </foreach>
+            </trim>
+            <trim prefix="build_min_score  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.buildMinScore}
+                </foreach>
+            </trim>
+            <trim prefix="importance  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.importance}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">
@@ -282,6 +459,11 @@
                     when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.ptVar1}
@@ -314,11 +496,23 @@
         </foreach>
     </update>
 
-    <update id="deleteQqchMeasureOrg">
-        update `qqch_measure_org` set del_flag = 1
+    <update id="deleteQqchScheAnalyse">
+        update `qqch_sche_analyse` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="orgType != null  and orgType != ''">and `org_type` = #{orgType}</if>
+            <if test="score != null ">and `score` = #{score}</if>
+            <if test="diffMaxScore != null ">and `diff_max_score` = #{diffMaxScore}</if>
+            <if test="diffMinScore != null ">and `diff_min_score` = #{diffMinScore}</if>
+            <if test="lineMaxScore != null ">and `line_max_score` = #{lineMaxScore}</if>
+            <if test="lineMinScore != null ">and `line_min_score` = #{lineMinScore}</if>
+            <if test="sumMaxScore != null ">and `sum_max_score` = #{sumMaxScore}</if>
+            <if test="sumMinScore != null ">and `sum_min_score` = #{sumMinScore}</if>
+            <if test="contFlag != null  and contFlag != ''">and `cont_flag` = #{contFlag}</if>
+            <if test="roadMaxScore != null ">and `road_max_score` = #{roadMaxScore}</if>
+            <if test="roadMinScore != null ">and `road_min_score` = #{roadMinScore}</if>
+            <if test="buildMaxScore != null ">and `build_max_score` = #{buildMaxScore}</if>
+            <if test="buildMinScore != null ">and `build_min_score` = #{buildMinScore}</if>
+            <if test="importance != null  and importance != ''">and `importance` = #{importance}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -330,6 +524,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
@@ -338,11 +533,11 @@
         </where>
     </update>
 
-    <update id="deleteQqchMeasureOrgByPks">
-        update `qqch_measure_org` set del_flag = 1
+    <update id="deleteQqchScheAnalyseByPks">
+        update `qqch_sche_analyse` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchMeasureOrgPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="qqchScheAnalysePkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

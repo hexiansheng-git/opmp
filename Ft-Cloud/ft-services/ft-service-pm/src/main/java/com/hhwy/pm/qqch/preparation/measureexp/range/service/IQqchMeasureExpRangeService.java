@@ -1,15 +1,17 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service;
 
 import java.util.List;
+
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
+import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
 
 /**
  * @author mls
  * @date 2023-07-25 18:01:34
- * @remark 
+ * @remark
  */
 public interface IQqchMeasureExpRangeService {
-                                                                                                                                                                                                                                                                                        
+
     QqchMeasureExpRange getQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
     List<QqchMeasureExpRange> getQqchMeasureExpRangeList(QqchMeasureExpRange qqchMeasureExpRange);
@@ -20,9 +22,17 @@ public interface IQqchMeasureExpRangeService {
 
     int updateQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
-            int updateQqchMeasureExpRangeList(List<QqchMeasureExpRange> qqchMeasureExpRangeList);
-    
+    int updateQqchMeasureExpRangeList(List<QqchMeasureExpRange> qqchMeasureExpRangeList);
+
     int deleteQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange);
 
-            int deleteQqchMeasureExpRangeByPks(List<Long> qqchMeasureExpRangePkList);
-    }
+    int deleteQqchMeasureExpRangeByPks(List<Long> qqchMeasureExpRangePkList);
+
+    List<QqchMeasureExpRange> getQqchMeasureExpRangeListByVersion(QqchMeasureExpRange qqchMeasureExpRangeParam);
+    
+
+    void saveTreeList(List<QqchMeasureExpRange> expRangeList);
+
+    void saveAll(QqchMeasureExpDTO expVO);
+    
+}

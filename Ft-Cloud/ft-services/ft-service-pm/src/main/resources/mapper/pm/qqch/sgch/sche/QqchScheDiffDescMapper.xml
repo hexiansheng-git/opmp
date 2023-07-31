@@ -2,11 +2,11 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureOrgMapper">
+<mapper namespace="com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheDiffDescMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg" id="QqchMeasureOrgResultMap">
+    <resultMap type="com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiffDesc" id="QqchScheDiffDescResultMap">
         <result property="id" column="id"/>
-        <result property="orgType" column="org_type"/>
+        <result property="diffDesc" column="diff_desc"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
         <result property="deptId" column="dept_id"/>
@@ -24,9 +24,9 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectQqchMeasureOrgVo">
+    <sql id="selectQqchScheDiffDescVo">
         select `id`
-             , `org_type`
+             , `diff_desc`
              , `version`
              , `valid`
              , `dept_id`
@@ -43,14 +43,14 @@
              , `pt_var3`
              , `pt_var4`
              , `pt_var5`
-        from qqch_measure_org
+        from qqch_sche_diff_desc
     </sql>
-    <select id="getQqchMeasureOrg" resultMap="QqchMeasureOrgResultMap">
-        <include refid="selectQqchMeasureOrgVo"/>
+    <select id="getQqchScheDiffDesc" resultMap="QqchScheDiffDescResultMap">
+        <include refid="selectQqchScheDiffDescVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="orgType != null  and orgType != ''">and `org_type` = #{orgType}</if>
+            <if test="diffDesc != null  and diffDesc != ''">and `diff_desc` = #{diffDesc}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -71,12 +71,12 @@
         order by create_time desc
     </select>
 
-    <select id="getQqchMeasureOrgList" resultMap="QqchMeasureOrgResultMap">
-        <include refid="selectQqchMeasureOrgVo"/>
+    <select id="getQqchScheDiffDescList" resultMap="QqchScheDiffDescResultMap">
+        <include refid="selectQqchScheDiffDescVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="orgType != null  and orgType != ''">and `org_type` = #{orgType}</if>
+            <if test="diffDesc != null  and diffDesc != ''">and `diff_desc` = #{diffDesc}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -97,11 +97,11 @@
         order by create_time desc
     </select>
 
-    <insert id="insertQqchMeasureOrg" useGeneratedKeys="true" keyProperty="id">
-        insert into qqch_measure_org
+    <insert id="insertQqchScheDiffDesc" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_sche_diff_desc
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="orgType != null  and orgType != ''">`org_type`,</if>
+            <if test="diffDesc != null  and diffDesc != ''">`diff_desc`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="deptId != null ">`dept_id`,</if>
@@ -121,7 +121,7 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="orgType != null  and orgType != ''">#{orgType},</if>
+            <if test="diffDesc != null  and diffDesc != ''">#{diffDesc},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="deptId != null ">#{deptId},</if>
@@ -141,12 +141,12 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchMeasureOrg -->
-    <insert id="insertQqchMeasureOrgList">
-        insert into qqch_measure_org
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchScheDiffDesc -->
+    <insert id="insertQqchScheDiffDescList">
+        insert into qqch_sche_diff_desc
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `org_type`,
+            `diff_desc`,
             `version`,
             `valid`,
             `dept_id`,
@@ -164,10 +164,10 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="qqchMeasureOrgList" item="item" separator=",">
+        <foreach collection="qqchScheDiffDescList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.orgType},
+                #{item.diffDesc},
                 #{item.version},
                 #{item.valid},
                 #{item.deptId},
@@ -187,11 +187,11 @@
         </foreach>
     </insert>
 
-    <update id="updateQqchMeasureOrg">
-        update qqch_measure_org
+    <update id="updateQqchScheDiffDesc">
+        update qqch_sche_diff_desc
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="orgType != null  and  orgType != ''">`org_type` = #{orgType},</if>
+            <if test="diffDesc != null  and  diffDesc != ''">`diff_desc` = #{diffDesc},</if>
             <if test="version != null ">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
@@ -214,17 +214,17 @@
         </where>
     </update>
 
-    <update id="updateQqchMeasureOrgList">
-        update qqch_measure_org
+    <update id="updateQqchScheDiffDescList">
+        update qqch_sche_diff_desc
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="org_type  = case" suffix="end,">
+            <trim prefix="diff_desc  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.orgType}
+                    when `id`=#{item.id} then #{item.diffDesc}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">
@@ -314,11 +314,11 @@
         </foreach>
     </update>
 
-    <update id="deleteQqchMeasureOrg">
-        update `qqch_measure_org` set del_flag = 1
+    <update id="deleteQqchScheDiffDesc">
+        update `qqch_sche_diff_desc` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="orgType != null  and orgType != ''">and `org_type` = #{orgType}</if>
+            <if test="diffDesc != null  and diffDesc != ''">and `diff_desc` = #{diffDesc}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -338,11 +338,11 @@
         </where>
     </update>
 
-    <update id="deleteQqchMeasureOrgByPks">
-        update `qqch_measure_org` set del_flag = 1
+    <update id="deleteQqchScheDiffDescByPks">
+        update `qqch_sche_diff_desc` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchMeasureOrgPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="qqchScheDiffDescPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

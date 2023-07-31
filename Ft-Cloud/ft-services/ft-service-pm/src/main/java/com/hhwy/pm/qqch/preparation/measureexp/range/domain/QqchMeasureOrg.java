@@ -1,25 +1,27 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.domain;
 
+
+import java.util.Date;
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 import lombok.ToString;
 
-import java.math.BigDecimal;
-import java.util.Date;
-
 /**
  * @author mls
- * @date 2023-07-25 18:01:34
- * @remark qqch_measure_exp_range
+ * @date 2023-07-25 18:01:39
+ * @remark qqch_measure_org
  */
 @Data
 @ToString
-public class QqchMeasureExpRange extends CompileEntity<QqchMeasureExpRange> {
+public class QqchMeasureOrg extends CompileEntity<QqchMeasureOrg> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -30,36 +32,11 @@ public class QqchMeasureExpRange extends CompileEntity<QqchMeasureExpRange> {
     @FtExcel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：父级Id
-     */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    @FtExcel(name = "父级Id")
-    private Long pid;
-    /**
-     * 字段描述：数据类型:1-测量管理计划 2-实验管理计划
+     * 字段描述：测量工作范围:1-分包;2-自营
      */
     @JsonProperty
-    @FtExcel(name = "数据类型:1-测量管理计划 2-实验管理计划")
-    private String dataType;
-    /**
-     * 字段描述：工作范围
-     */
-    @JsonProperty
-    @FtExcel(name = "工作范围")
-    private String workRange;
-    /**
-     * 字段描述：工作范围描述
-     */
-    @JsonProperty
-    @FtExcel(name = "工作范围描述")
-    private String workRangeDesc;
-    /**
-     * 字段描述：备注
-     */
-    @JsonProperty
-    @FtExcel(name = "备注")
-    private String remark;
+    @FtExcel(name = "测量工作范围:1-分包;2-自营 ")
+    private String orgType;
     /**
      * 字段描述：版本
      */

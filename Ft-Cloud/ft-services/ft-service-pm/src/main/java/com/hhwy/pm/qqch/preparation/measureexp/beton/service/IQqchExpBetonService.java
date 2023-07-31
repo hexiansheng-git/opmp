@@ -1,15 +1,16 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.service;
 
 import java.util.List;
+
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
 
 /**
  * @author mls
  * @date 2023-07-25 18:31:38
- * @remark 
+ * @remark
  */
 public interface IQqchExpBetonService {
-                                                                                                                                                                                                                                                                                                                                                    
+
     QqchExpBeton getQqchExpBeton(QqchExpBeton qqchExpBeton);
 
     List<QqchExpBeton> getQqchExpBetonList(QqchExpBeton qqchExpBeton);
@@ -20,9 +21,9 @@ public interface IQqchExpBetonService {
 
     int updateQqchExpBeton(QqchExpBeton qqchExpBeton);
 
-            int updateQqchExpBetonList(List<QqchExpBeton> qqchExpBetonList);
-    
+    int updateQqchExpBetonList(List<QqchExpBeton> qqchExpBetonList);
+
     int deleteQqchExpBeton(QqchExpBeton qqchExpBeton);
 
-            int deleteQqchExpBetonByPks(List<Long> qqchExpBetonPkList);
-    }
+    int deleteQqchExpBetonByPks(List<Long> qqchExpBetonPkList);
+}
