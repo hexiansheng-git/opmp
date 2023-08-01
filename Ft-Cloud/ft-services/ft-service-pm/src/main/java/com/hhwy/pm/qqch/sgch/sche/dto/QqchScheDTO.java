@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.sche.dto;
 
 import com.hhwy.pm.qqch.sgch.sche.domain.*;
+import com.hhwy.pm.qqch.sgch.sche.vo.ScheFactorsVO;
 import com.hhwy.utils.JsonUtils;
 import lombok.Data;
 import lombok.ToString;
@@ -31,9 +32,13 @@ public class QqchScheDTO implements Serializable {
      */
     private List<QqchScheAnalyse> analyseList;
     /**
-     * 影响因素
+     * 影响因素入参
      */
     private List<QqchScheFactors> factorsList;
+    /**
+     * 影响因素出参
+     */
+    private ScheFactorsVO scheFactorsVO;
     /**
      * 纠偏措施
      */
