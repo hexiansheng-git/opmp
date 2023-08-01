@@ -62,7 +62,8 @@ public interface IXmslWbsService {
      */
     List<XmslWbs> childListByIds(Long[] ids);
     List<XmslWbs> childListById(Long id);
-
+    List<XmslWbs> childListByIds(Long[] ids,boolean containSelf);
+    
     /**
      * 处理wbs祖级信息(祖级id,祖级名称)
      *

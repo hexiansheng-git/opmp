@@ -55,11 +55,25 @@ public class XmslWbsController extends BaseController {
     }
 
     @PostMapping("/getChildrenByIds")
-    public AjaxResult getByIds(@RequestBody Map map) {
+    public AjaxResult getChildrenByIds(@RequestBody Map map) {
         String ids = ObjectUtils.nvlString(map.get("ids"));
         if(StringUtils.isBlank(ids))
             return AjaxResult.error("参数缺失");
         List<XmslWbs> wbsList = xmslWbsService.childListByIds(Convert.toLongArray(ids));
+        return AjaxResult.success(wbsList);
+    }
+
+    /**
+     * 获取指定wbs的子级，也会将传入的wbs返回
+     * @param map {ids}
+     * @return
+     */
+    @PostMapping("/getChildrenByIdsWithSelf")
+    public AjaxResult getChildrenByIdsWithSelf(@RequestBody Map map) {
+        String ids = ObjectUtils.nvlString(map.get("ids"));
+        if(StringUtils.isBlank(ids))
+            return AjaxResult.error("参数缺失");
+        List<XmslWbs> wbsList = xmslWbsService.childListByIds(Convert.toLongArray(ids),true);
         return AjaxResult.success(wbsList);
     }
 
