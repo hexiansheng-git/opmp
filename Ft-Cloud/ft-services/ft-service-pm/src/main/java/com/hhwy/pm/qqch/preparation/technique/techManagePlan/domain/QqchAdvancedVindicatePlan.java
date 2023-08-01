@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,195 +34,164 @@ public class QqchAdvancedVindicatePlan extends BaseEntity {
      * 字段描述：单位名称
      */
     @JsonProperty
-    @ExcelProperty(value = "单位名称")
     private String unitName;
     /**
      * 字段描述：研发课题名称
      */
     @JsonProperty
-    @ExcelProperty(value = "研发课题名称")
     private String researchTopicName;
     /**
      * 字段描述：课题编号
      */
     @JsonProperty
-    @ExcelProperty(value = "课题编号")
     private String topicCode;
     /**
      * 字段描述：课题类别
      */
     @JsonProperty
-    @ExcelProperty(value = "课题类别")
     private String topicType;
     /**
      * 字段描述：起始日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @ExcelProperty(value = "起始日期")
     private Date startDate;
     /**
      * 字段描述：完成日期
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @ExcelProperty(value = "完成日期")
     private Date endDate;
     /**
      * 字段描述：合计
      */
     @JsonProperty
-    @ExcelProperty(value = "合计")
     private BigDecimal total;
     /**
      * 字段描述：拟定研发人员
      */
     @JsonProperty
-    @ExcelProperty(value = "拟定研发人员")
     private String simulateResearchStaff;
     /**
      * 字段描述：计划取得研发成果（外部证据）（专利、工法、查新、论文等各几项）
      */
     @JsonProperty
-    @ExcelProperty(value = "计划取得研发成果（外部证据）（专利、工法、查新、论文等各几项）")
     private String extrinsicEvidence;
     /**
      * 字段描述：备注
      */
     @JsonProperty
-    @ExcelProperty(value = "备注")
     private String remark;
     /**
      * 字段描述：排序
      */
     @JsonProperty
-    @ExcelProperty(value = "排序")
     private Integer sort;
     /**
      * 字段描述：版本
      */
     @JsonProperty
-    @ExcelProperty(value = "版本")
     private BigDecimal version;
     /**
      * 字段描述：是否有效 1-有效 0-失效
      */
     @JsonProperty
-    @ExcelProperty(value = "是否有效 1-有效 0-失效")
     private String valid;
     /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @ExcelProperty(value = "所属区域id")
     private Long regionId;
     /**
      * 字段描述：所属区域名称
      */
     @JsonProperty
-    @ExcelProperty(value = "所属区域名称")
     private String regionName;
     /**
      * 字段描述：项目id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @ExcelProperty(value = "项目id")
     private Long projectId;
     /**
      * 字段描述：项目名称
      */
     @JsonProperty
-    @ExcelProperty(value = "项目名称")
     private String projectName;
     /**
      * 字段描述：部门id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @ExcelProperty(value = "部门id")
     private Long deptId;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @ExcelProperty(value = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @ExcelProperty(value = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @ExcelProperty(value = "数据创建系统时间")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @ExcelProperty(value = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @ExcelProperty(value = "数据修改系统时间")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @ExcelProperty(value = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @ExcelProperty(value = "数据删除系统时间")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @ExcelProperty(value = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @ExcelProperty(value = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @ExcelProperty(value = "预留字段2")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    @ExcelProperty(value = "预留字段3")
     private String ptVar3;
     /**
      * 字段描述：预留字段4
      */
     @JsonProperty
-    @ExcelProperty(value = "预留字段4")
     private String ptVar4;
     /**
      * 字段描述：预留字段5
      */
     @JsonProperty
-    @ExcelProperty(value = "预留字段5")
     private String ptVar5;
 
     /* 年份预算键值对集合 */

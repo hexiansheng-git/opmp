@@ -15,7 +15,7 @@ import java.util.List;
  **/
 public class AutoHeadColumnWidthStyleStrategy extends AbstractColumnWidthStyleStrategy {
     @Override
-    protected void setColumnWidth(WriteSheetHolder writeSheetHolder, List<WriteCellData<?>> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
+    public void setColumnWidth(WriteSheetHolder writeSheetHolder, List<WriteCellData<?>> cellDataList, Cell cell, Head head, Integer relativeRowIndex, Boolean isHead) {
         //表头自适应列宽
         if (isHead) {
             int length = cell.getStringCellValue().getBytes().length;

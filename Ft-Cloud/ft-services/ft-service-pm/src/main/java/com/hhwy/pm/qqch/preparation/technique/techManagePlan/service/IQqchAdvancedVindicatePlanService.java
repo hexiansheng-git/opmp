@@ -1,14 +1,14 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
-import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.math.BigDecimal;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author han
@@ -32,6 +32,21 @@ public interface IQqchAdvancedVindicatePlanService {
     int deleteQqchAdvancedVindicatePlanByPks(List<Long> qqchAdvancedVindicatePlanPkList);
 
     /**
+     * 导入
+     * @param file
+     * @return
+     */
+    List<QqchAdvancedVindicatePlanImportVo> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException;
+
+    /**
+     * 导出
+     * @param response
+     * @param qqchAdvancedVindicatePlan
+     * @throws IOException
+     */
+    void export(HttpServletResponse response, QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan);
+
+    /**
      * 获取高新维护计划Vo
      * @param qqchAdvancedVindicatePlan
      * @return
@@ -44,10 +59,4 @@ public interface IQqchAdvancedVindicatePlanService {
      * @return
      */
     void save(QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo);
-
-//    List<List<String>> getHead(BigDecimal version);
-
-    List<Map<String, Object>> getQqchAdvancedVindicatePlanExportVoList(QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan);
-
-    void export(HttpServletResponse response, QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan);
 }
