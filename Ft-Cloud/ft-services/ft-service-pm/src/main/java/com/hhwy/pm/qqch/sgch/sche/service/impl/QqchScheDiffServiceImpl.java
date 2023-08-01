@@ -2,14 +2,16 @@ package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.aspect.CompileAspect;
+import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheDiffMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheDiffService;
 import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -20,7 +22,10 @@ import java.util.List;
 @Service
 public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
 
-    @Autowired
+
+    private static final String TN = "qqch_sche_diff";
+
+    @Resource
     private QqchScheDiffMapper qqchScheDiffMapper;
 
 
@@ -32,7 +37,7 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
         return qqchScheDiffMapper.getQqchScheDiffList(qqchScheDiff);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchScheDiff(QqchScheDiff qqchScheDiff) {
         qqchScheDiff.setId(IdWorker.createId());
         qqchScheDiff.setCreateUser(SecurityUtils.getUserName());
@@ -40,7 +45,7 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
         return qqchScheDiffMapper.insertQqchScheDiff(qqchScheDiff);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchScheDiffList(List<QqchScheDiff> qqchScheDiffList) {
         for (QqchScheDiff qqchScheDiff : qqchScheDiffList) {
             qqchScheDiff.setId(IdWorker.createId());
@@ -50,14 +55,14 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
         return qqchScheDiffMapper.insertQqchScheDiffList(qqchScheDiffList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateQqchScheDiff(QqchScheDiff qqchScheDiff) {
         qqchScheDiff.setUpdateUser(SecurityUtils.getUserName());
         qqchScheDiff.setUpdateTime(DateUtils.getNowDate());
         return qqchScheDiffMapper.updateQqchScheDiff(qqchScheDiff);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateQqchScheDiffList(List<QqchScheDiff> qqchScheDiffList) {
         for (QqchScheDiff qqchScheDiff : qqchScheDiffList) {
             qqchScheDiff.setUpdateUser(SecurityUtils.getUserName());
@@ -66,15 +71,44 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
         return qqchScheDiffMapper.updateQqchScheDiffList(qqchScheDiffList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteQqchScheDiff(QqchScheDiff qqchScheDiff) {
         qqchScheDiff.setUpdateUser(SecurityUtils.getUserName());
         qqchScheDiff.setUpdateTime(DateUtils.getNowDate());
         return qqchScheDiffMapper.deleteQqchScheDiff(qqchScheDiff);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteQqchScheDiffByPks(List<Long> qqchScheDiffPkList) {
         return qqchScheDiffMapper.deleteQqchScheDiffByPks(qqchScheDiffPkList);
+    }
+
+    @Override
+    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
+    public void saveList(List<QqchScheDiff> dealSaveDto) {
+        this.checkData(dealSaveDto);
+        for (QqchScheDiff qqchScheDiff : dealSaveDto) {
+            qqchScheDiff.setId(IdWorker.createId());
+        }
+        this.qqchScheDiffMapper.insertQqchScheDiffList(dealSaveDto);
+    }
+
+    @Override
+    @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
+    public List<QqchScheDiff> getList(QqchScheDiff dealSaveDto) {
+        List<QqchScheDiff> qqchScheDiffList = this.qqchScheDiffMapper.getQqchScheDiffList(dealSaveDto);
+        return qqchScheDiffList;
+    }
+
+    /**
+     * 校验数据
+     *
+     * @param dealSaveDto
+     */
+    private void checkData(List<QqchScheDiff> dealSaveDto) {
+
+        // 主要是校验
+
+
     }
 }

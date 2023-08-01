@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
@@ -8,20 +7,16 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
-import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author wk
@@ -75,8 +70,12 @@ public class XmslWbsMainController extends BaseController {
     @GetMapping("/adjustInfo")
     public AjaxResult adjustInfo() {
         XmslWbsMain wbsMain = this.xmslWbsMainService.getAdjustInfo();
-        if(wbsMain == null)
+        if(wbsMain == null){
+            Long id = xmslWbsMainService.initAdjust();
+            if(id != null)
+                wbsMain = this.xmslWbsMainService.getById(id);
             return AjaxResult.success("",wbsMain);
+        }
         //是否有调整记录
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
         if(wbsMain != null)
@@ -88,13 +87,6 @@ public class XmslWbsMainController extends BaseController {
     @PostMapping("/delete")
     public AjaxResult deleteXmslWbsMain(@Validated(ValidationGroups.Delete.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
         return toAjax(xmslWbsMainService.deleteXmslWbsMain(xmslWbsMainParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbsMain:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteXmslWbsMainByPks(@PathVariable Long[] ids) {
-        List<Long> xmslWbsMainPkList = Arrays.asList(ids);
-        return toAjax(xmslWbsMainService.deleteXmslWbsMainByPks(xmslWbsMainPkList));
     }
 
     @GetMapping("/export")
@@ -109,11 +101,11 @@ public class XmslWbsMainController extends BaseController {
      * @param map
      * @return
      */
-    @PostMapping("/finishFlow")
-    public AjaxResult finishFlow(@RequestBody Map map){
-        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
-        Map varMap = delegateTask.getVariables();
-        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
-        return AjaxResult.success();
-    }
+//    @PostMapping("/finishFlow")
+//    public AjaxResult finishFlow(@RequestBody Map map){
+//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
+//        Map varMap = delegateTask.getVariables();
+//        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
+//        return AjaxResult.success();
+//    }
 }

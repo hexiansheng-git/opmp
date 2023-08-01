@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,7 +18,9 @@ import java.util.Date;
  * @date 2023-07-31 11:22:52
  * @remark qqch_sche_factors
  */
-public class QqchScheFactors extends BaseEntity {
+@Data
+@ToString
+public class QqchScheFactors extends CompileEntity<QqchScheFactors> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,7 +41,7 @@ public class QqchScheFactors extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "影响因素描述")
-    private BigDecimal factorsDesc;
+    private String factorsDesc;
     /**
      * 字段描述：修正分值
      */
@@ -151,213 +155,4 @@ public class QqchScheFactors extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public String getFactorsType() {
-        return factorsType;
-    }
-
-    @JsonIgnore
-    public void setFactorsType(String factorsType) {
-        this.factorsType = factorsType;
-    }
-
-    @JsonIgnore
-    public BigDecimal getFactorsDesc() {
-        return factorsDesc;
-    }
-
-    @JsonIgnore
-    public void setFactorsDesc(BigDecimal factorsDesc) {
-        this.factorsDesc = factorsDesc;
-    }
-
-    @JsonIgnore
-    public BigDecimal getScore() {
-        return score;
-    }
-
-    @JsonIgnore
-    public void setScore(BigDecimal score) {
-        this.score = score;
-    }
-
-    @JsonIgnore
-    public BigDecimal getVersion() {
-        return version;
-    }
-
-    @JsonIgnore
-    public void setVersion(BigDecimal version) {
-        this.version = version;
-    }
-
-    @JsonIgnore
-    public String getValid() {
-        return valid;
-    }
-
-    @JsonIgnore
-    public void setValid(String valid) {
-        this.valid = valid;
-    }
-
-    @JsonIgnore
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    @JsonIgnore
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
 }

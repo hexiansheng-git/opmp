@@ -1,6 +1,10 @@
 package com.hhwy.pm.common.service;
 
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.constant.ConfirmStatus;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +23,12 @@ import javax.annotation.Resource;
 public class CommonService {
     @Resource
     private CommonMapper commonMapper;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     /**
      * 校验单据能否被调整 (单条数据只能调整一次)
@@ -60,12 +70,23 @@ public class CommonService {
     public boolean  checkIsEditable(String menuId) {
         boolean isEditable = true;
         //TODO 获取当前阶段
+        String currentStage = qqchReviewService.getStage();
 
         //TODO 获取当前登录人信息
+        Long userId = SecurityUtils.getUserId();
 
         //TODO 获取该菜单当前阶段的编制人信息
+        Long compilePersonId = 111L;
+
+        if(!userId.equals(compilePersonId)){
+            isEditable = false;
+        }
 
         //TODO 获取该菜单当前阶段的确认状态
+        String confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, compilePersonId.toString());
+        if(ConfirmStatus.CONFIRMED.equals(confirmStatus)){
+            isEditable = false;
+        }
 
         return isEditable;
     }

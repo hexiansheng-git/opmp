@@ -26,4 +26,9 @@ public interface IQqchScheAnalyseService {
     int deleteQqchScheAnalyse(QqchScheAnalyse qqchScheAnalyse);
 
     int deleteQqchScheAnalyseByPks(List<Long> qqchScheAnalysePkList);
+
+    void saveList(List<QqchScheAnalyse> dealSaveDto);
+
+    List<QqchScheAnalyse> getList(QqchScheAnalyse dealSaveDto);
+    
 }

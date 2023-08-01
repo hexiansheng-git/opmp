@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.aspect.CompileAspect;
+import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheFactors;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheFactorsMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheFactorsService;
@@ -23,6 +25,8 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
     @Autowired
     private QqchScheFactorsMapper qqchScheFactorsMapper;
 
+    private final static String TN = "qqch_sche_factors";
+
 
     public QqchScheFactors getQqchScheFactors(QqchScheFactors qqchScheFactors) {
         return qqchScheFactorsMapper.getQqchScheFactors(qqchScheFactors);
@@ -32,7 +36,7 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
         return qqchScheFactorsMapper.getQqchScheFactorsList(qqchScheFactors);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchScheFactors(QqchScheFactors qqchScheFactors) {
         qqchScheFactors.setId(IdWorker.createId());
         qqchScheFactors.setCreateUser(SecurityUtils.getUserName());
@@ -40,7 +44,7 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
         return qqchScheFactorsMapper.insertQqchScheFactors(qqchScheFactors);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchScheFactorsList(List<QqchScheFactors> qqchScheFactorsList) {
         for (QqchScheFactors qqchScheFactors : qqchScheFactorsList) {
             qqchScheFactors.setId(IdWorker.createId());
@@ -50,14 +54,14 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
         return qqchScheFactorsMapper.insertQqchScheFactorsList(qqchScheFactorsList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateQqchScheFactors(QqchScheFactors qqchScheFactors) {
         qqchScheFactors.setUpdateUser(SecurityUtils.getUserName());
         qqchScheFactors.setUpdateTime(DateUtils.getNowDate());
         return qqchScheFactorsMapper.updateQqchScheFactors(qqchScheFactors);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateQqchScheFactorsList(List<QqchScheFactors> qqchScheFactorsList) {
         for (QqchScheFactors qqchScheFactors : qqchScheFactorsList) {
             qqchScheFactors.setUpdateUser(SecurityUtils.getUserName());
@@ -66,15 +70,36 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
         return qqchScheFactorsMapper.updateQqchScheFactorsList(qqchScheFactorsList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteQqchScheFactors(QqchScheFactors qqchScheFactors) {
         qqchScheFactors.setUpdateUser(SecurityUtils.getUserName());
         qqchScheFactors.setUpdateTime(DateUtils.getNowDate());
         return qqchScheFactorsMapper.deleteQqchScheFactors(qqchScheFactors);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteQqchScheFactorsByPks(List<Long> qqchScheFactorsPkList) {
         return qqchScheFactorsMapper.deleteQqchScheFactorsByPks(qqchScheFactorsPkList);
+    }
+
+    @Override
+    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
+    public void saveList(List<QqchScheFactors> dealSaveDto) {
+        this.checkData(dealSaveDto);
+        for (QqchScheFactors qqchScheFactors : dealSaveDto) {
+            qqchScheFactors.setId(IdWorker.createId());
+        }
+        this.qqchScheFactorsMapper.insertQqchScheFactorsList(dealSaveDto);
+    }
+
+    @Override
+    @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
+    public List<QqchScheFactors> getList(QqchScheFactors dealSaveDto) {
+        List<QqchScheFactors> qqchScheFactorsList = this.getQqchScheFactorsList(dealSaveDto);
+        return qqchScheFactorsList;
+    }
+
+    private void checkData(List<QqchScheFactors> dealSaveDto) {
+        
     }
 }

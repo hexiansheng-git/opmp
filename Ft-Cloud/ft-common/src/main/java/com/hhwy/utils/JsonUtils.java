@@ -1,6 +1,7 @@
 package com.hhwy.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.excel.FtExcel;
 
 import java.lang.reflect.Field;
@@ -29,7 +30,7 @@ public class JsonUtils {
         List<String> strings = Arrays.asList(ignoreField);
         for (Field field : fields) {
             String fieldName = field.getName();
-            FtExcel annotation = field.getAnnotation(FtExcel.class);
+            Excel annotation = field.getAnnotation(Excel.class);
             if (strings.contains(fieldName) || annotation == null) {
                 continue;
             }
