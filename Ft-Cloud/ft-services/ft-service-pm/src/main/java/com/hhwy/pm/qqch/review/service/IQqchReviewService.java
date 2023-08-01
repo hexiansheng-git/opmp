@@ -49,7 +49,7 @@ public interface IQqchReviewService {
      * @param stageIdentity  阶段
      * @param moduleIdentity 模块唯一Id
      */
-    void updateFinishNum(String stageIdentity, Long moduleIdentity);
+    void updateFinishNum(String stageIdentity, String moduleIdentity);
 
     public void canAdjust();
 
