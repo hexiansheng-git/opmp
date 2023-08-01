@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service;
 
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanVo;
 
 import java.util.List;
@@ -30,5 +31,10 @@ public interface IQqchLabourDemandPlanService {
 
     void save(QqchLabourDemandPlanVo qqchLabourDemandPlanVo);
 
-    void selectCount(QqchLabourDemandPlanVo qqchLabourDemandPlanVo);
+    List<QqchLabourDemandPlanDto> selectCount(QqchLabourDemandPlan qqchLabourDemandPlan);
+
+
+    List<String> getAllWorkType(QqchLabourDemandPlanVo qqchLabourDemandPlanVo);
+
+
 }

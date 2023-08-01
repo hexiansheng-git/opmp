@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanVo;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.IQqchLabourDemandPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -99,15 +100,32 @@ public class QqchLabourDemandPlanController extends BaseController{
     }
 
     /**
-     *  查询统计
+     *  全部工种
      * @param qqchLabourDemandPlanVo
+     * @return
+     */
+    @PostMapping("/getAllWorkType")
+    public AjaxResult getAllWorkType(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlanVo qqchLabourDemandPlanVo){
+        List<String> list=qqchLabourDemandPlanService.getAllWorkType(qqchLabourDemandPlanVo);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     *  查询统计
+     * @param
      * @return
      */
     @PreAuthorize(hasPermi = "qqchLabourDemandPlan:selectCount")
     @PostMapping("/selectCount")
-    public AjaxResult select(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlanVo qqchLabourDemandPlanVo){
-        qqchLabourDemandPlanService.selectCount(qqchLabourDemandPlanVo);
-        return AjaxResult.success();
+    public AjaxResult select(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlan){
+        if(qqchLabourDemandPlan.getStartTime()==null||qqchLabourDemandPlan.getEndTime()==null){
+            return  AjaxResult.error("开始时间或者结束时间不能为空");
+        }
+        if(qqchLabourDemandPlan.getJobNames().size()==0){
+            return  AjaxResult.error("至少传一种工种");
+        }
+        List<QqchLabourDemandPlanDto> list= qqchLabourDemandPlanService.selectCount(qqchLabourDemandPlan);
+        return AjaxResult.success(list);
     }
 
 

@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain;
+package com.hhwy.pm.qqch.sgch.sbzx.qqchTrafficCar.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,17 +12,18 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author ldd
- * @date 2023-07-31 16:38:26
- * @remark qqch_labour_demand_plan
+ * @date 2023-08-01 16:35:15
+ * @remark qqch_traffic_car
+ *
+ * 1.7.2 交通车辆
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
+public class QqchTrafficCar extends TreeNode<QqchTrafficCar> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,58 +33,94 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     @JsonProperty
     @Excel(name = "主键")
     private Long id;
-
+    /**
+     * 字段描述：父id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "父id")
     private Long pid;
     /**
-     * 字段描述：工种名称
+     * 字段描述：部署
      */
     @JsonProperty
-    @Excel(name = "工种名称")
-    private String jobName;
+    @Excel(name = "部署")
+    private String arrange;
     /**
-     * 字段描述：作业班组
+     * 字段描述：归属
      */
     @JsonProperty
-    @Excel(name = "作业班组")
-    private String workTeam;
+    @Excel(name = "归属")
+    private String belongTo;
     /**
-     * 字段描述：中方人数
+     * 字段描述：外键id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "外键id")
+    private Long outId;
+    /**
+     * 字段描述：设备编码
      */
     @JsonProperty
-    @Excel(name = "中方人数")
-    private BigDecimal chinaNum;
+    @Excel(name = "设备编码")
+    private String equCode;
     /**
-     * 字段描述：外方数量
+     * 字段描述：设备名称
      */
     @JsonProperty
-    @Excel(name = "外方数量")
-    private BigDecimal outNum;
+    @Excel(name = "设备名称")
+    private String equName;
     /**
-     * 字段描述：总数
+     * 字段描述：规格型号
      */
     @JsonProperty
-    @Excel(name = "总数")
-    private BigDecimal total;
+    @Excel(name = "规格型号")
+    private String spec;
     /**
-     * 字段描述：外方人员比例
+     * 字段描述：额定功率
      */
     @JsonProperty
-    @Excel(name = "外方人员比例")
-    private BigDecimal outProportion;
+    @Excel(name = "额定功率")
+    private String ratedPower;
     /**
-     * 字段描述：进场日期
+     * 字段描述：单位
+     */
+    @JsonProperty
+    @Excel(name = "单位")
+    private String unit;
+    /**
+     * 字段描述：数量
+     */
+    @JsonProperty
+    @Excel(name = "数量")
+    private BigDecimal num;
+    /**
+     * 字段描述：设备来源 （字典项equ_sourse）
+     */
+    @JsonProperty
+    @Excel(name = "设备来源")
+    private String equSourse;
+    /**
+     * 字段描述：进场时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "进场日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "进场时间", dateFormat = "yyyy-MM-dd")
     private Date entryDate;
     /**
-     * 字段描述：退场日期
+     * 字段描述：退场时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "退场日期", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "退场时间", dateFormat = "yyyy-MM-dd")
     private Date exitDate;
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private Integer sort;
     /**
      * 字段描述：附件组id
      */
@@ -228,10 +265,5 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     @JsonProperty
     @Excel(name = "是否有效 1-有效 0-失效")
     private String valid;
-
-    private String startTime;
-    private String endTime;
-    private List<String> jobNames;
-    private List<String> times;
 
 }
