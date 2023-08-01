@@ -56,8 +56,8 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     @Excel(name = "主数据id  （qqch_work_plan）")
     private Long mainId;
 
-    @NotNull(message = "策划项id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
-    private Long itemId;
+    @NotBlank(message = "策划项id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    private String itemId;
     /*策划项name*/
     @NotBlank(message = "策划项名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String itemName;
@@ -224,7 +224,7 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "是否是叶子节点")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
