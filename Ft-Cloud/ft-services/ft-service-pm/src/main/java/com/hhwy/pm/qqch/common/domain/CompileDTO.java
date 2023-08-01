@@ -28,6 +28,25 @@ public class CompileDTO<T> {
     private String submitFlag;
     private T dto;
 
+
+    public static <T> T dealListDto(BigDecimal version, String submitFlag, T dto) {
+        CompileDTO<T> tCompileDTO = new CompileDTO<>();
+        tCompileDTO.setVersion(version);
+        tCompileDTO.setDto(dto);
+        return tCompileDTO.dealListDto();
+    }
+
+
+    public T dealListDto() {
+        if (dto instanceof CompileEntity) {
+            CompileEntity compileEntity = (CompileEntity) dto;
+            compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
+            return (T) compileEntity;
+        }
+        return dto;
+    }
+
+
     public static <T> T dealSaveDto(BigDecimal version, String submitFlag, T dto) {
         CompileDTO<T> tCompileDTO = new CompileDTO<>();
         tCompileDTO.setVersion(version);
@@ -42,7 +61,7 @@ public class CompileDTO<T> {
             EntityUtils.setCreateUpdateInfo(compileEntity);
             compileEntity.setSubmitFlag(submitFlag);
             compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
-            setValid(compileEntity);
+            if (StringUtils.isNotEmpty(submitFlag)) setValid(compileEntity);
             return (T) compileEntity;
         }
 
@@ -57,7 +76,7 @@ public class CompileDTO<T> {
                 o.setSubmitFlag(submitFlag);
                 o.setVersion(version);
                 o.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
-                setValid(o);
+                if (StringUtils.isNotEmpty(submitFlag)) setValid(o);
             }
             return (T) compileEntities;
         }

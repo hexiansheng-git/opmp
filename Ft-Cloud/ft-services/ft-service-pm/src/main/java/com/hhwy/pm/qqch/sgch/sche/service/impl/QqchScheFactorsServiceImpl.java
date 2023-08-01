@@ -7,12 +7,18 @@ import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheFactors;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheFactorsMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheFactorsService;
+import com.hhwy.pm.qqch.sgch.sche.vo.ScheFactorsVO;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -94,12 +100,28 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public List<QqchScheFactors> getList(QqchScheFactors dealSaveDto) {
+    public ScheFactorsVO getList(QqchScheFactors dealSaveDto) {
         List<QqchScheFactors> qqchScheFactorsList = this.getQqchScheFactorsList(dealSaveDto);
-        return qqchScheFactorsList;
+
+        LinkedHashMap<String, String> factorsTypeMap = DictUtil.getDictDataName("factors_type");
+        List<ScheFactorsVO.ScheFactorsHeader> headers = new ArrayList<>();
+        factorsTypeMap.forEach((k,v)->{
+            ScheFactorsVO.ScheFactorsHeader scheFactorsHeader = new ScheFactorsVO.ScheFactorsHeader();
+            scheFactorsHeader.setHeaderValue(k);
+            scheFactorsHeader.setHeaderName(v);
+            headers.add(scheFactorsHeader);
+        });
+
+        ScheFactorsVO res = new ScheFactorsVO();
+        // 表头
+        res.setHeaderList(headers);
+        // 数据
+        res.setFactorsList(qqchScheFactorsList);
+
+        return res;
     }
 
     private void checkData(List<QqchScheFactors> dealSaveDto) {
-        
+
     }
 }

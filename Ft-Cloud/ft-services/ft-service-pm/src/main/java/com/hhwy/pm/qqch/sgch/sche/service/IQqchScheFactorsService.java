@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.sche.service;
 
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheFactors;
+import com.hhwy.pm.qqch.sgch.sche.vo.ScheFactorsVO;
 
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface IQqchScheFactorsService {
 
     void saveList(List<QqchScheFactors> dealSaveDto);
 
-    List<QqchScheFactors> getList(QqchScheFactors dealSaveDto);
+    ScheFactorsVO getList(QqchScheFactors dealSaveDto);
 }
