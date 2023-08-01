@@ -36,9 +36,9 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
 
     /**
      * 根据菜单id，阶段，确认人id获取确认状态
-     * @param menuId
-     * @param stage
-     * @param confirmUser
+     * @param menuId 菜单id
+     * @param stage 阶段
+     * @param confirmUser 确认人id
      * @return
      */
     public String getConfirmStatus(String menuId,String stage,String confirmUser){

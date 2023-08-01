@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstru
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchDangerConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
@@ -38,6 +39,8 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     private QqchConstructionListMapper qqchConstructionListMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version) {
         QqchDangerConstructionListVo vo = new QqchDangerConstructionListVo();
@@ -48,6 +51,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
         qryParam.setVersion(version);
         List<QqchDangerConstructionList> list = qqchDangerConstructionListMapper
             .getQqchDangerConstructionListList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
         return vo;
     }

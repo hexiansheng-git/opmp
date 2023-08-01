@@ -34,16 +34,16 @@ public class QqchScheServiceImpl implements IQqchScheService {
     @Override
     public QqchScheDTO list(QqchScheDTO dto) {
         QqchScheDTO qqchScheDTO = new QqchScheDTO();
-        // 保存说明
-        qqchScheDTO.setDiffDesc(diffDescService.getDesc(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffDesc())));
-        // 保差异化计算方法
-        qqchScheDTO.setDiffList(diffService.getList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), new QqchScheDiff())));
-        // 保存进度分析要素
-        qqchScheDTO.setAnalyseList(analyseService.getList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), new QqchScheAnalyse())));
-        // 保存进度影响要素
-        qqchScheDTO.setFactorsList(factorsService.getList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(),new QqchScheFactors())));
-        // 保存纠偏措施
-        qqchScheDTO.setCorrList(corrService.getList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), new QqchScheCorr())));
+        // 说明
+        qqchScheDTO.setDiffDesc(diffDescService.getDesc(CompileDTO.dealListDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffDesc())));
+        // 差异化计算方法
+        qqchScheDTO.setDiffList(diffService.getList(CompileDTO.dealListDto(dto.getVersion(), dto.getSubmitFlag(), new QqchScheDiff())));
+        // 进度分析要素
+        qqchScheDTO.setAnalyseList(analyseService.getList(CompileDTO.dealListDto(dto.getVersion(), dto.getSubmitFlag(), new QqchScheAnalyse())));
+        // 进度影响要素
+        qqchScheDTO.setScheFactorsVO(factorsService.getList(CompileDTO.dealListDto(dto.getVersion(), dto.getSubmitFlag(),new QqchScheFactors())));
+        // 纠偏措施
+        qqchScheDTO.setCorrList(corrService.getList(CompileDTO.dealListDto(dto.getVersion(), dto.getSubmitFlag(), new QqchScheCorr())));
         return qqchScheDTO;
 
     }

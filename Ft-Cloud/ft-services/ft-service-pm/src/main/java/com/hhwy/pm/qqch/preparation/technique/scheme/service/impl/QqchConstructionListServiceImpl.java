@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
@@ -37,6 +38,8 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchConstructionListVo getQqchConstructionListList(QqchConstructionListVo paramVo) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
@@ -49,6 +52,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         qryParam.setSchemeName(paramVo.getSchemeName());
         qryParam.setSchemeLevel(paramVo.getSchemeType());
         List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
         return vo;
     }

@@ -71,24 +71,31 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         //判断当前是否存在正在调整的数据（最新未生效版本数据）
         qqchWorkGroup = qqchWorkGroupMapper.getNoValidMaxVersionQqchWorkGroup();
-        if(qqchWorkGroup == null){
-            qqchWorkGroup = new QqchWorkGroup();
-
-            /* 调整 */
-            qqchWorkGroup.setId(id);
-            //获取调整数据
-            qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+        if(qqchWorkGroup != null) {
+            //设置历史记录按钮
+            this.setHistoryMark(qqchWorkGroup);
             //设置工作小组成员数据
             this.setWorkGroupMember(qqchWorkGroup);
-
-            qqchWorkGroup.setId(null);
-            qqchWorkGroup.setTaskStatus("0");
-            qqchWorkGroup.setEffective(Valid.NO);
-            BigDecimal version = qqchWorkGroup.getVersion();
-            version = version.add(BigDecimal.valueOf(1));
-            qqchWorkGroup.setVersionStr("v" + version);
-            qqchWorkGroup.setVersion(version);
+            return qqchWorkGroup;
         }
+
+        /* 调整 */
+        qqchWorkGroup = new QqchWorkGroup();
+        qqchWorkGroup.setId(id);
+        //获取调整数据
+        qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
+        //设置历史记录按钮
+        this.setHistoryMark(qqchWorkGroup);
+        //设置工作小组成员数据
+        this.setWorkGroupMember(qqchWorkGroup);
+        qqchWorkGroup.setId(null);
+        qqchWorkGroup.setTaskStatus("0");
+        qqchWorkGroup.setEffective(Valid.NO);
+        BigDecimal version = qqchWorkGroup.getVersion();
+        version = version.add(BigDecimal.ONE);
+        qqchWorkGroup.setVersionStr("v" + version);
+        qqchWorkGroup.setVersion(version);
+
 
         return qqchWorkGroup;
     }
@@ -128,6 +135,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                     qqchWorkGroup = this.InitWorkGroup();
                 }
             }else {
+                //设置调整按钮
                 qqchWorkGroup.setAdjustMark(CommonYesNo.YES);
             }
         }else {
@@ -143,11 +151,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             }
         }
 
-        //判断是否存在历史记录
-        int count = qqchWorkGroupMapper.getWorkGroupCount();
-        if(count > 1){
-            qqchWorkGroup.setHistoryMark("1");
-        }
+        //设置历史记录按钮
+        this.setHistoryMark(qqchWorkGroup);
 
         //设置工作小组
         this.setWorkGroupMember(qqchWorkGroup);
@@ -169,6 +174,17 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             qqchWorkGroup.setQqchWorkGroupMemberList(qqchWorkGroupMemberList);
         }else {
             qqchWorkGroup.setQqchWorkGroupMemberList(new ArrayList<>());
+        }
+    }
+
+    /**
+     * 设置历史记录按钮
+     * @param qqchWorkGroup
+     */
+    public void setHistoryMark(QqchWorkGroup qqchWorkGroup){
+        int count = qqchWorkGroupMapper.getWorkGroupCount();
+        if(count > 0){
+            qqchWorkGroup.setHistoryMark(CommonYesNo.YES);
         }
     }
 

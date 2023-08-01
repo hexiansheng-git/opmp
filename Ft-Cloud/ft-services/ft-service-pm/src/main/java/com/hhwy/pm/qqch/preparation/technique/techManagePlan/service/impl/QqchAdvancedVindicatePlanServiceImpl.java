@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.impl;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.util.IoUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -10,7 +12,9 @@ import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlanBudget;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.listener.AdvancedVindicatePlanImportListener;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchAdvancedVindicatePlanBudgetMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchAdvancedVindicatePlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
@@ -21,16 +25,24 @@ import com.hhwy.utils.excelUtil.ExcelHeadStyle;
 import com.hhwy.utils.excelUtil.HeadVo;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import io.seata.common.util.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -278,27 +290,156 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         }
     }
 
-//    @Override
-//    public List<List<String>> getHead(BigDecimal version){
-//        List<List<String>> list = new ArrayList<>();
-//        Field[] declaredFields = QqchAdvancedVindicatePlanExportVo.class.getDeclaredFields();
-//        for (Field declaredField : declaredFields) {
-//            ExcelProperty excelProperty = declaredField.getAnnotation(ExcelProperty.class);
-//            String[] value = excelProperty.value();
-//            List<String> head = new ArrayList<>(Arrays.asList(value));
-//            list.add(head);
-//        }
-//
-//        version = VersionUtil.getVersion("qqch_advanced_vindicate_plan",version);
-//        List<String> vintageListByVersion = getVintageListByVersion(version);
-//        for (String s : vintageListByVersion) {
-//            List<String> vintageList = new ArrayList<>();
-//            vintageList.add("研发费用预算（万元）");
-//            vintageList.add(s);
-//            list.add(vintageList);
-//        }
-//        return list;
-//    }
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @Override
+    public List<QqchAdvancedVindicatePlanImportVo> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException {
+        return this.makeData(file);
+    }
+
+
+    /**
+     * 返回导入的所有数据
+     * [file]
+     * @return {@link List< Map< String, String>>}
+     * @throws
+     * @author 李庆伟
+     * @date 2022/5/30 11:16
+     */
+    private List<QqchAdvancedVindicatePlanImportVo> makeData(MultipartFile file) throws FileNotFoundException, IllegalAccessException {
+        InputStream inputStream = null;//转换成输入流
+        try {
+            inputStream = file.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(inputStream == null){
+            throw new FileNotFoundException("文件不存在！");
+        }
+        byte[] stream = new byte[0];
+        try {
+            stream = IoUtils.toByteArray(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(stream == null || stream.length == 0){
+            return null;
+        }
+        List<QqchAdvancedVindicatePlanImportVo> dataList = parseExcelToData(stream);//从动态获取全部列和数据体，默认从第一行开始解析数据
+        try {
+            inputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dataList;
+    }
+
+    /**
+     * 动态获取全部列和数据体
+     * [stream, parseRowNumber]
+     * @return {@link List< Map< String, String>>}
+     * @throws
+     * @date 2022/5/30 11:29
+     */
+    private List<QqchAdvancedVindicatePlanImportVo> parseExcelToData(byte[] stream) throws IllegalAccessException {
+        AdvancedVindicatePlanImportListener readListener = new AdvancedVindicatePlanImportListener();
+        //两行表头
+        EasyExcelFactory.read(new ByteArrayInputStream(stream)).registerReadListener(readListener).headRowNumber(2).sheet(0).doRead();
+        List<Map<Integer, String>> headList = readListener.getHeadList();
+        if(CollectionUtils.isEmpty(headList)){
+            throw new RuntimeException("Excel表头不能为空");
+        }
+        List<Map<Integer, String>> dataList = readListener.getDataList();
+        if(CollectionUtils.isEmpty(dataList)){
+            throw new RuntimeException("Excel数据内容不能为空");
+        }
+        //获取头部,取最后一次解析的列头数据
+        Map<Integer, String> headMap = headList.get(headList.size() -1);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        //封装数据体
+        List<QqchAdvancedVindicatePlanImportVo> importVoList = new ArrayList<>();
+        for (Map<Integer, String> dataRow : dataList) {
+            QqchAdvancedVindicatePlanImportVo importVo = new QqchAdvancedVindicatePlanImportVo();
+            Field[] fields = importVo.getClass().getDeclaredFields();
+
+            //预算map
+            Map<String,BigDecimal> vintageBudgetMap = new HashMap<>();
+
+            for (Map.Entry<Integer, String> next : dataRow.entrySet()) {
+                Integer key = next.getKey();
+                String value = next.getValue();
+
+                //获取这一列数据的表头
+                String head = headMap.get(key);
+
+                boolean isColumn = false;
+                for (Field field : fields) {
+                    //判断当前字段注解是否ExcelProperty
+                    boolean annotationPresent = field.isAnnotationPresent(ExcelProperty.class);
+                    if(!annotationPresent){
+                        break;
+                    }
+                    ExcelProperty property = field.getAnnotation(ExcelProperty.class);
+                    String propertyValue = property.value()[0];
+                    if(head.equals(propertyValue)){
+                        field.setAccessible(true);
+                        Class<?> type = field.getType();
+                        String typeName = field.getType().getSimpleName();
+                        if("Date".equals(typeName)){
+                            Date date = null;
+                            if(StringUtils.isNotBlank(value)){
+                                date = this.StringToDate(value,df);
+                            }
+                            field.set(importVo, date);
+                        }else if("BigDecimal".equals(typeName)) {
+                            BigDecimal total = null;
+                            if(StringUtils.isNotBlank(value)){
+                                total = BigDecimal.valueOf(Long.parseLong(value));
+                            }
+                            field.set(importVo, total);
+                        }else {
+                            field.set(importVo, value);
+                        }
+                        isColumn = true;
+                        break;
+                    }
+                }
+
+                if(!isColumn){
+                    if(StringUtils.isNotBlank(value)){
+                        try {
+                            long budget = Long.parseLong(value);
+                            vintageBudgetMap.put(head,BigDecimal.valueOf(budget));
+                        }catch (InputMismatchException e){
+                            throw new InputMismatchException("数据类型不正确！");
+                        }
+                    }
+                }
+            }
+            importVo.setVintageBudgetMap(vintageBudgetMap);
+            importVoList.add(importVo);
+        }
+
+        return importVoList;
+    }
+
+    /**
+     * 日期类型转换
+     * @param dateFormat
+     * @param df
+     * @return
+     */
+    public Date StringToDate(String dateFormat,DateFormat df){
+        try {
+            return df.parse(dateFormat);
+        } catch (ParseException e) {
+            throw new RuntimeException("日期类型不正确");
+        }
+    }
+
 
     /**
      * 导出
@@ -321,7 +462,8 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
             keys.add(headVoList.get(i).getKey());
         }
 
-        List<Map<String, Object>> list = getQqchAdvancedVindicatePlanExportVoList(qqchAdvancedVindicatePlan);
+        List<Map<String, Object>> list = this.getQqchAdvancedVindicatePlanExportVoList(qqchAdvancedVindicatePlan);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         //存放所有导出的数据
         List<List<Object>> objs = new ArrayList<>();
         for (Map<String, Object> map : list) {
@@ -331,7 +473,12 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
                 if(o == null){
                     obj.add("");
                 }else {
-                    obj.add(o);
+                    if(o instanceof Date){
+                        String format = df.format(o);
+                        obj.add(format);
+                    }else {
+                        obj.add(o);
+                    }
                 }
             }
             objs.add(obj);
@@ -339,14 +486,19 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         try {
             EasyExcel.write(response.getOutputStream())
                     .head(heads)
-                    .registerWriteHandler(ExcelHeadStyle.getHorizontalCellStyleStrategy(response,"111"))
-                    .sheet("明细")
+                    .registerWriteHandler(ExcelHeadStyle.getHorizontalCellStyleStrategy(response,DateUtils.getDate()))
+                    .sheet(DateUtils.getDate())
                     .doWrite(objs);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 获取表头
+     * @param version
+     * @return
+     */
     private List<HeadVo> getHead(BigDecimal version) {
         List<HeadVo> headVoList = new ArrayList<>();
         Field[] fields = QqchAdvancedVindicatePlanExportVo.class.getDeclaredFields();
@@ -388,8 +540,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
      * @param qqchAdvancedVindicatePlan
      * @return
      */
-    @Override
-    public List<Map<String, Object>> getQqchAdvancedVindicatePlanExportVoList(QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) {
+    private List<Map<String, Object>> getQqchAdvancedVindicatePlanExportVoList(QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) {
         List<QqchAdvancedVindicatePlanExportVo> qqchAdvancedVindicatePlanExportVoList = new ArrayList<>();
         BigDecimal version = qqchAdvancedVindicatePlan.getVersion();
         version = VersionUtil.getVersion("qqch_advanced_vindicate_plan",version);
@@ -409,7 +560,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
      * @param qqchAdvancedVindicatePlanExportVoList
      * @return
      */
-    public List<Map<String, Object>> getKeysAndValues(List<QqchAdvancedVindicatePlanExportVo> qqchAdvancedVindicatePlanExportVoList) {
+    private List<Map<String, Object>> getKeysAndValues(List<QqchAdvancedVindicatePlanExportVo> qqchAdvancedVindicatePlanExportVoList) {
         List<Map<String, Object>> list = new ArrayList<>();
         for (QqchAdvancedVindicatePlanExportVo exportVo : qqchAdvancedVindicatePlanExportVoList) {
             Class<? extends QqchAdvancedVindicatePlanExportVo> userClass = exportVo.getClass();

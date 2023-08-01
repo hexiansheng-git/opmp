@@ -17,7 +17,7 @@ import java.util.Date;
  * @create: 2022-11-11
  **/
 public class MyDateConverter implements Converter<Date>{
-    private static  final String PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
+    private static final String PATTERN_YYYY_MM_DD = "yyyy-MM-dd";
 
     @Override
     public Class<?> supportJavaTypeKey() {

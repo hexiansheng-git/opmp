@@ -269,7 +269,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateFinishNum(String stageIdentity, Long moduleIdentity) {
+    public void updateFinishNum(String stageIdentity, String moduleIdentity) {
 
         try {
             if (RedissonLockUtil.lock(stageIdentity)) {

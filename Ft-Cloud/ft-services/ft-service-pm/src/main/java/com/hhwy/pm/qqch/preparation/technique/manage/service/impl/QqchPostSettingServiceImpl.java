@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchPostSetting;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchPostSettingVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchPostSettingMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchPostSettingService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
@@ -30,6 +31,8 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
     private QqchPostSettingMapper qqchPostSettingMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version) {
         QqchPostSettingVo vo = new QqchPostSettingVo();
@@ -40,6 +43,7 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
         qqchPostSetting.setPostType(PostType);
         qqchPostSetting.setVersion(version);
         List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSetting);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setTreeList(TreeUtil.build(list, null));
         return vo;
     }

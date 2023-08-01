@@ -14,6 +14,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
@@ -44,6 +45,7 @@ public class CompileAspectImpl {
         String tableName = compileAspect.tableName();
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
+            if (arg == null) continue;
             // 如果参数类型属于前期策划编制模块
             if (arg instanceof CompileEntity) {
 
@@ -110,7 +112,7 @@ public class CompileAspectImpl {
                 if (o instanceof CompileEntity) {
                     List<CompileEntity> compileEntityList = (List<CompileEntity>) result;
                     // 集合转树形结构
-                    return TreeUtil.build(compileEntityList, 0L);
+                    return TreeUtil.build(compileEntityList, null);
                 }
             }
         }

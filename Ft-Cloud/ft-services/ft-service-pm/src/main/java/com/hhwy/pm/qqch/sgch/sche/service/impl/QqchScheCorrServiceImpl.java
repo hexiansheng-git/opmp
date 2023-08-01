@@ -93,7 +93,7 @@ public class QqchScheCorrServiceImpl implements IQqchScheCorrService {
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
+    @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchScheCorr> getList(QqchScheCorr dealSaveDto) {
         List<QqchScheCorr> qqchScheCorrList = this.getQqchScheCorrList(dealSaveDto);
         return qqchScheCorrList;

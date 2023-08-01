@@ -9,10 +9,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.SystemServiceApi;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zq
@@ -27,20 +24,20 @@ public class DictUtil {
     }
 
 
-    public static Map<String, String> getDictData(String dictType) {
+    public static LinkedHashMap<String, String> getDictData(String dictType) {
         AjaxResult result = systemServiceApi.dictType(dictType);
-        List<Map> list = (List<Map>) result.get("data");
-        Map<String, String> dictTypesMap = new HashMap<>();
+        List<LinkedHashMap> list = (List<LinkedHashMap>) result.get("data");
+        LinkedHashMap<String, String> dictTypesMap = new LinkedHashMap<>();
         list.stream().forEach(temp -> {
             dictTypesMap.put(temp.get("dictLabel").toString(), temp.get("dictValue").toString());
         });
         return dictTypesMap;
     }
 
-    public static Map<String, String> getDictDataName(String dictType) {
+    public static LinkedHashMap<String, String> getDictDataName(String dictType) {
         AjaxResult result = systemServiceApi.dictType(dictType);
-        List<Map> list = (List<Map>) result.get("data");
-        Map<String, String> dictTypesMap = new HashMap<>();
+        List<LinkedHashMap> list = (List<LinkedHashMap>) result.get("data");
+        LinkedHashMap<String, String> dictTypesMap = new LinkedHashMap<>();
         list.stream().forEach(temp -> {
             dictTypesMap.put(temp.get("dictValue").toString(), temp.get("dictLabel").toString());
         });

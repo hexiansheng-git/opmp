@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseThi
 import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseThirdDetailMapper;
 import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseThirdMapper;
 import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseThirdService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
@@ -36,6 +37,8 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
     private QqchDiscloseThirdDetailMapper qqchDiscloseThirdDetailMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchDiscloseThirdVo getQqchDiscloseThirdList(BigDecimal version) {
         QqchDiscloseThirdVo vo = new QqchDiscloseThirdVo();
@@ -64,6 +67,7 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
             }
         }
 
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setTreeList(TreeUtil.build(list, null));
         vo.setAllDetailTreeList(TreeUtil.build(deTailList, null));
         return vo;

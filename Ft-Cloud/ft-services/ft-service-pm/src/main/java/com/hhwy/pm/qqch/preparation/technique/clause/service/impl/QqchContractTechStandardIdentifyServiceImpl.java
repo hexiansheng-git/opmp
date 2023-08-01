@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.clause.domain.QqchContractTechStan
 import com.hhwy.pm.qqch.preparation.technique.clause.domain.vo.QqchContractTechStandardIdentifyVo;
 import com.hhwy.pm.qqch.preparation.technique.clause.mapper.QqchContractTechStandardIdentifyMapper;
 import com.hhwy.pm.qqch.preparation.technique.clause.service.IQqchContractTechStandardIdentifyService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
@@ -30,6 +31,8 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
     private QqchContractTechStandardIdentifyMapper qqchContractTechStandardIdentifyMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     /**
      * 树列表查询
@@ -46,6 +49,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         qryParam.setVersion(version);
         List<QqchContractTechStandardIdentify> list = qqchContractTechStandardIdentifyMapper
             .getQqchContractTechStandardIdentifyList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setTreeList(TreeUtil.build(list, null));
         return vo;
     }
