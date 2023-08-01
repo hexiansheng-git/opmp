@@ -1,28 +1,23 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 
-import com.alibaba.excel.EasyExcel;
-import com.alibaba.excel.annotation.ExcelProperty;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
-import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
-import com.hhwy.utils.excelUtil.EasyExcelUtil;
-import com.hhwy.utils.excelUtil.ExcelHeadStyle;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author han
@@ -85,6 +80,30 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
         return toAjax(qqchAdvancedVindicatePlanService.deleteQqchAdvancedVindicatePlanByPks(qqchAdvancedVindicatePlanPkList));
     }
 
+    /**
+     * 导入
+     * @param file
+     * @return
+     */
+    @PostMapping("/import")
+    public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
+        List<QqchAdvancedVindicatePlanImportVo> qqchAdvancedVindicatePlanImportVoList = null;
+        try {
+            qqchAdvancedVindicatePlanImportVoList = qqchAdvancedVindicatePlanService.importExcel(file);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("文件不存在");
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+        return AjaxResult.success(qqchAdvancedVindicatePlanImportVoList);
+    }
+
+    /**
+     * 导出
+     * @param response
+     * @param qqchAdvancedVindicatePlan
+     * @throws IOException
+     */
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) throws IOException {
         qqchAdvancedVindicatePlanService.export(response,qqchAdvancedVindicatePlan);

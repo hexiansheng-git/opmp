@@ -69,23 +69,26 @@ public class CommonService {
      */
     public boolean  checkIsEditable(String menuId) {
         boolean isEditable = true;
-        //TODO 获取当前阶段
+        //获取当前阶段
         String currentStage = qqchReviewService.getStage();
+        if("end".equals(currentStage)){
+            return false;
+        }
 
-        //TODO 获取当前登录人信息
+        //获取当前登录人信息
         Long userId = SecurityUtils.getUserId();
 
         //TODO 获取该菜单当前阶段的编制人信息
         Long compilePersonId = 111L;
 
         if(!userId.equals(compilePersonId)){
-            isEditable = false;
+            return false;
         }
 
-        //TODO 获取该菜单当前阶段的确认状态
+        //获取该菜单当前阶段的确认状态
         String confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, compilePersonId.toString());
         if(ConfirmStatus.CONFIRMED.equals(confirmStatus)){
-            isEditable = false;
+            return false;
         }
 
         return isEditable;

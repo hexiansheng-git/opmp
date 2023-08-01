@@ -1,9 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.alibaba.excel.annotation.ExcelProperty;
 import com.hhwy.utils.excelUtil.MyDateConverter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,14 +21,8 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QqchAdvancedVindicatePlanExportVo {
+public class QqchAdvancedVindicatePlanImportVo {
 
-    /**
-     * 字段描述：单位名称
-     */
-    @JsonProperty
-    @ExcelProperty(value = "单位名称",index = 1)
-    private String unitName;
     /**
      * 字段描述：研发课题名称
      */
@@ -53,7 +47,7 @@ public class QqchAdvancedVindicatePlanExportVo {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @DateTimeFormat("yyyy-MM-dd")
-    @ExcelProperty(value = {"研发日期","起始日期"},index = 5,converter = MyDateConverter.class)
+    @ExcelProperty(value = "起始日期",index = 5,converter = MyDateConverter.class)
     private Date startDate;
     /**
      * 字段描述：完成日期
@@ -61,13 +55,13 @@ public class QqchAdvancedVindicatePlanExportVo {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @DateTimeFormat("yyyy-MM-dd")
-    @ExcelProperty(value = {"研发日期","完成日期"},index = 6,converter = MyDateConverter.class)
+    @ExcelProperty(value = "完成日期",index = 6,converter = MyDateConverter.class)
     private Date endDate;
     /**
      * 字段描述：合计
      */
     @JsonProperty
-    @ExcelProperty(value = {"研发费用预算（万元）","合计"},index = 7)
+    @ExcelProperty(value = "合计",index = 7)
     private BigDecimal total;
     /**
      * 字段描述：拟定研发人员
