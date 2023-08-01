@@ -62,6 +62,7 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
         QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();
         qqchModuleConfirmCase.setModuleIdentity(menuId);
         qqchModuleConfirmCase.setStageIdentity(stageIdentity);
+        qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserId()));
         qqchModuleConfirmCase = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCase(qqchModuleConfirmCase);
         if(qqchModuleConfirmCase == null){
             //插入确认记录
