@@ -1,17 +1,17 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,9 +39,10 @@ public class QqchConstructionListController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchConstructionList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(BigDecimal version) {
+    public AjaxResult getList(
+        @Validated(ValidationGroups.Select.class) QqchConstructionListVo qqchConstructionListParamVo) {
         QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
-            .getQqchConstructionListList(version);
+            .getQqchConstructionListList(qqchConstructionListParamVo);
         return AjaxResult.success(qqchConstructionListVo);
     }
 
@@ -54,11 +55,12 @@ public class QqchConstructionListController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response, BigDecimal version) throws IOException {
+    public void export(HttpServletResponse response, QqchConstructionListVo qqchConstructionListParamVo)
+        throws IOException {
         QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
-            .getQqchConstructionListList(version);
+            .getQqchConstructionListList(qqchConstructionListParamVo);
         List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
-        ExcelUtils<QqchConstructionList> util = new ExcelUtils<>(QqchConstructionList.class);
+        FtExcelUtil<QqchConstructionList> util = new FtExcelUtil<>(QqchConstructionList.class);
         util.exportExcel(response, qqchConstructionListList, DateUtils.getDate());
     }
 
@@ -70,10 +72,10 @@ public class QqchConstructionListController extends BaseController {
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        ExcelUtils<QqchConstructionList> util = new ExcelUtils<>(QqchConstructionList.class);
+        FtExcelUtil<QqchConstructionListImportVo> util = new FtExcelUtil<>(QqchConstructionListImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<QqchConstructionList> list = util.importExcel(inputStream);
+            List<QqchConstructionListImportVo> list = util.importExcel(inputStream);
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

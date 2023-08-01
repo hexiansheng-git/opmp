@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchPigeonholeDutyDivision;
+import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchPigeonholeDutyDivisionVo;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service.IQqchPigeonholeDutyDivisionService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchPigeonholeDutyDivisionController extends BaseController {
         return AjaxResult.success(qqchPigeonholeDutyDivisionParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchPigeonholeDutyDivisionList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionListParam) {
-        qqchPigeonholeDutyDivisionService.insertQqchPigeonholeDutyDivisionList(qqchPigeonholeDutyDivisionListParam);
-        return AjaxResult.success(qqchPigeonholeDutyDivisionListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:update")
     @PostMapping("/update")
     public AjaxResult updateQqchPigeonholeDutyDivision(@Validated(ValidationGroups.Update.class) @RequestBody QqchPigeonholeDutyDivision qqchPigeonholeDutyDivisionParam) {
@@ -90,5 +84,29 @@ public class QqchPigeonholeDutyDivisionController extends BaseController {
         List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList = qqchPigeonholeDutyDivisionService.getQqchPigeonholeDutyDivisionList(qqchPigeonholeDutyDivisionParam);
         ExcelUtils<QqchPigeonholeDutyDivision> util = new ExcelUtils<>(QqchPigeonholeDutyDivision.class);
         util.exportExcel(response, qqchPigeonholeDutyDivisionList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取技术档案归档责任分工Vo
+     * @param qqchPigeonholeDutyDivision
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:list")
+    @GetMapping("getQqchPigeonholeDutyDivisionVo")
+    public AjaxResult getQqchPigeonholeDutyDivisionVo(@Validated(ValidationGroups.Get.class) QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision) {
+        QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo = qqchPigeonholeDutyDivisionService.getQqchPigeonholeDutyDivisionVo(qqchPigeonholeDutyDivision);
+        return AjaxResult.success(qqchPigeonholeDutyDivisionVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchPigeonholeDutyDivisionVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo) {
+        qqchPigeonholeDutyDivisionService.save(qqchPigeonholeDutyDivisionVo);
+        return AjaxResult.success();
     }
 }

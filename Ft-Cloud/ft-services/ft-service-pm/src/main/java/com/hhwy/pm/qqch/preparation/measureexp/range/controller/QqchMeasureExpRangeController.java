@@ -1,17 +1,27 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.controller;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
+import java.util.Map;
 
+import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg;
+import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
+import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
+import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
+import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 
 import org.springframework.validation.annotation.Validated;
@@ -21,72 +31,90 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 /**
  * @author mls
  * @date 2023-07-25 18:01:34
- * @remark 
+ * @remark
  */
 @Validated
 @RestController
 @RequestMapping("/qqchMeasureExpRange")
-public class QqchMeasureExpRangeController extends BaseController{
+public class QqchMeasureExpRangeController extends BaseController {
 
-    @Autowired
+    @Resource
     private IQqchMeasureExpRangeService qqchMeasureExpRangeService;
 
-                                                                                                                                                                                                                                                                                        
+
+    @Resource
+    private IQqchMeasureOrgService orgService;
+
+    @Resource
+    private IQqchMeasureExpPersonService personService;
+
 
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:list")
     @GetMapping
-    public AjaxResult getQqchMeasureExpRange(@Validated(ValidationGroups.Get.class)  QqchMeasureExpRange qqchMeasureExpRangeParam){
-        QqchMeasureExpRange qqchMeasureExpRange =  qqchMeasureExpRangeService.getQqchMeasureExpRange(qqchMeasureExpRangeParam);
+    public AjaxResult getQqchMeasureExpRange(@Validated(ValidationGroups.Get.class) QqchMeasureExpRange qqchMeasureExpRangeParam) {
+        QqchMeasureExpRange qqchMeasureExpRange = qqchMeasureExpRangeService.getQqchMeasureExpRange(qqchMeasureExpRangeParam);
         return AjaxResult.success(qqchMeasureExpRange);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:list")
     @GetMapping("/list")
-    public AjaxResult getQqchMeasureExpRangeList(@Validated(ValidationGroups.Select.class) QqchMeasureExpRange qqchMeasureExpRangeParam){
-        startPage();
-        List<QqchMeasureExpRange> qqchMeasureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeList(qqchMeasureExpRangeParam);
-        return getDataTableAjaxResult(qqchMeasureExpRangeList);
+    public AjaxResult getQqchMeasureExpRangeList(@Validated(ValidationGroups.Select.class) QqchMeasureExpRange qqchMeasureExpRangeParam) {
+        Map<String, Object> res = new HashMap<>();
+        List<QqchMeasureOrg> measureOrgListByVersion = orgService.getQqchMeasureOrgListByVersion(new QqchMeasureOrg());
+        List<QqchMeasureExpRange> measureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeListByVersion(qqchMeasureExpRangeParam);
+        List<QqchMeasureExpPerson> measureExpPersonList = personService.getQqchMeasureExpPersonListByVersionCode(new QqchMeasureExpPerson());
+        res.put("measureOrg", CollectionUtils.isEmpty(measureOrgListByVersion) ? new QqchMeasureExpRange() : measureOrgListByVersion.get(0));
+        res.put("measureExpRange", measureExpRangeList);
+        res.put("measureExpPersonList", measureExpPersonList);
+        return AjaxResult.success(res);
     }
 
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpDTO expVO) {
+        qqchMeasureExpRangeService.saveAll(expVO);
+        return AjaxResult.success("success");
+    }
+
+
+    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/add")
-    public AjaxResult insertQqchMeasureExpRange(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam){
+    public AjaxResult insertQqchMeasureExpRange(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam) {
         qqchMeasureExpRangeService.insertQqchMeasureExpRange(qqchMeasureExpRangeParam);
         return AjaxResult.success(qqchMeasureExpRangeParam);
     }
 
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertQqchMeasureExpRangeList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchMeasureExpRange> qqchMeasureExpRangeListParam){
+    public AjaxResult insertQqchMeasureExpRangeList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchMeasureExpRange> qqchMeasureExpRangeListParam) {
         qqchMeasureExpRangeService.insertQqchMeasureExpRangeList(qqchMeasureExpRangeListParam);
         return AjaxResult.success(qqchMeasureExpRangeListParam);
     }
 
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
     @PostMapping("/update")
-    public AjaxResult updateQqchMeasureExpRange(@Validated(ValidationGroups.Update.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam){
+    public AjaxResult updateQqchMeasureExpRange(@Validated(ValidationGroups.Update.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam) {
         return toAjax(qqchMeasureExpRangeService.updateQqchMeasureExpRange(qqchMeasureExpRangeParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateQqchMeasureExpRangeList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMeasureExpRange> qqchMeasureExpRangeListParam){
-            return toAjax(qqchMeasureExpRangeService.updateQqchMeasureExpRangeList(qqchMeasureExpRangeListParam));
-        }
-    
+    @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchMeasureExpRangeList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMeasureExpRange> qqchMeasureExpRangeListParam) {
+        return toAjax(qqchMeasureExpRangeService.updateQqchMeasureExpRangeList(qqchMeasureExpRangeListParam));
+    }
+
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteQqchMeasureExpRange(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam){
+    public AjaxResult deleteQqchMeasureExpRange(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam) {
         return toAjax(qqchMeasureExpRangeService.deleteQqchMeasureExpRange(qqchMeasureExpRangeParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteQqchMeasureExpRangeByPks(@PathVariable Long[] ids){
-            List<Long> qqchMeasureExpRangePkList = Arrays.asList(ids);
-            return toAjax(qqchMeasureExpRangeService.deleteQqchMeasureExpRangeByPks(qqchMeasureExpRangePkList));
-        }
-    
+    @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteQqchMeasureExpRangeByPks(@PathVariable Long[] ids) {
+        List<Long> qqchMeasureExpRangePkList = Arrays.asList(ids);
+        return toAjax(qqchMeasureExpRangeService.deleteQqchMeasureExpRangeByPks(qqchMeasureExpRangePkList));
+    }
+
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchMeasureExpRange qqchMeasureExpRangeParam) throws IOException {
         List<QqchMeasureExpRange> qqchMeasureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeList(qqchMeasureExpRangeParam);

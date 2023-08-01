@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -12,11 +9,16 @@ import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructi
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchDesignConstructionSituationMapper;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchDesignConstructionSituationService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -32,6 +34,9 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 边设计边施工情况台账
@@ -42,14 +47,13 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
         QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = new QqchDesignConstructionSituationVo();
 
         version = VersionUtil.getVersion("qqch_design_construction_situation",version);
-        qqchDesignConstructionSituationVo.setVersion(version);
-
         QqchDesignConstructionSituation qqchDesignConstructionSituation = new QqchDesignConstructionSituation();
         qqchDesignConstructionSituation.setVersion(version);
         List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList = qqchDesignConstructionSituationMapper.getQqchDesignConstructionSituationList(qqchDesignConstructionSituation);
 
+        qqchDesignConstructionSituationVo.setVersion(version);
+        qqchDesignConstructionSituationVo.setStageIdentity(qqchReviewService.getStage());
         qqchDesignConstructionSituationVo.setQqchDesignConstructionSituationList(qqchDesignConstructionSituationList);
-
         return qqchDesignConstructionSituationVo;
     }
 
@@ -59,6 +63,7 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         //删除旧数据
         QqchDesignConstructionSituation qqchDesignConstructionSituation = new QqchDesignConstructionSituation();
@@ -95,6 +100,9 @@ public class QqchDesignConstructionSituationServiceImpl implements IQqchDesignCo
      */
     @Transactional
     public void insertQqchDesignConstructionSituationList(List<QqchDesignConstructionSituation> qqchDesignConstructionSituationList, BigDecimal version){
+        if(CollectionUtils.isEmpty(qqchDesignConstructionSituationList)){
+            return;
+        }
         for (QqchDesignConstructionSituation qqchDesignConstructionSituation : qqchDesignConstructionSituationList) {
             qqchDesignConstructionSituation.setId(IdWorker.createId());
             qqchDesignConstructionSituation.setVersion(version);

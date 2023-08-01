@@ -3,11 +3,11 @@ package com.hhwy.utils.excelUtil;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.enums.WriteDirectionEnum;
-import com.alibaba.excel.metadata.BaseRowModel;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.alibaba.excel.write.metadata.fill.FillWrapper;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
@@ -33,16 +33,15 @@ public class ExcelUtilByTemplate {
      * @param list
      * @param name
      * @param sheetName
-     * @param model
      * @throws Exception
      */
-    public static void exportExcel(HttpServletResponse response, List list,
-                                   String name, String sheetName, BaseRowModel model) throws Exception{
+    public static void exportExcel(HttpServletResponse response, List<T> list,
+                                   String name, String sheetName, Class<T> entityClass) throws Exception{
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmm");
         String date = sdf.format(new Date());
         String fileName = new String(name.getBytes()) + date + ".xlsx";
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
-        EasyExcel.write(response.getOutputStream(), model.getClass()).sheet(sheetName).doWrite(list);
+        EasyExcel.write(response.getOutputStream(), entityClass).sheet(sheetName).doWrite(list);
     }
     /**
      * 导出复杂表头的Excel 先单组数据填充，再多组数据填充

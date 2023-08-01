@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,62 +25,62 @@ public class QqchTopicResearchPlanImportVo {
      * 字段描述：课题名称
      */
     @JsonProperty
-    @Excel(name = "课题名称")
+    @FtExcel(name = "课题名称")
     private String topicName;
     /**
      * 字段描述：依托工程相关主要参数  主要研究内容、主要创新点（如果有）
      */
     @JsonProperty
-    @Excel(name = "依托工程相关主要参数  主要研究内容、主要创新点（如果有）")
+    @FtExcel(name = "依托工程相关主要参数  主要研究内容、主要创新点（如果有）")
     private String keyParameter;
     /**
      * 字段描述：五项考核指标  基本要求：局级优秀论文1篇、省部级工法1篇、专利1个
      */
     @JsonProperty
-    @Excel(name = "五项考核指标  基本要求：局级优秀论文1篇、省部级工法1篇、专利1个")
+    @FtExcel(name = "五项考核指标  基本要求：局级优秀论文1篇、省部级工法1篇、专利1个")
     private String assessTarget;
     /**
      * 字段描述：课题立项时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "课题立项时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "课题立项时间", dateFormat = "yyyy-MM-dd")
     private Date topicApprovalTime;
     /**
      * 字段描述：计划研发时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划研发时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划研发时间", dateFormat = "yyyy-MM-dd")
     private Date planDevelopmentTime;
     /**
      * 字段描述：申请费用
      */
     @JsonProperty
-    @Excel(name = "申请费用")
+    @FtExcel(name = "申请费用")
     private BigDecimal applyCost;
     /**
      * 字段描述：项目自筹
      */
     @JsonProperty
-    @Excel(name = "项目自筹")
+    @FtExcel(name = "项目自筹")
     private String projectFunds;
     /**
      * 字段描述：阶段性工作计划
      */
     @JsonProperty
-    @Excel(name = "阶段性工作计划")
+    @FtExcel(name = "阶段性工作计划")
     private String stageWorkPlan;
     /**
      * 字段描述：配套科研成果
      */
     @JsonProperty
-    @Excel(name = "配套科研成果")
+    @FtExcel(name = "配套科研成果")
     private String matchedResearchAchievement;
     /**
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techManage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchInterestedPartyManage;
+import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchInterestedPartyManageVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchInterestedPartyManageService {
 
     int insertQqchInterestedPartyManage(QqchInterestedPartyManage qqchInterestedPartyManage);
 
-    int insertQqchInterestedPartyManageList(List<QqchInterestedPartyManage> qqchInterestedPartyManageList);
-
     int updateQqchInterestedPartyManage(QqchInterestedPartyManage qqchInterestedPartyManage);
 
     int updateQqchInterestedPartyManageList(List<QqchInterestedPartyManage> qqchInterestedPartyManageList);
@@ -26,4 +25,18 @@ public interface IQqchInterestedPartyManageService {
     int deleteQqchInterestedPartyManage(QqchInterestedPartyManage qqchInterestedPartyManage);
 
     int deleteQqchInterestedPartyManageByPks(List<Long> qqchInterestedPartyManagePkList);
+
+    /**
+     * 获取技术管理相关方管理Vo
+     * @param qqchInterestedPartyManage
+     * @return
+     */
+    QqchInterestedPartyManageVo getQqchInterestedPartyManageVo(QqchInterestedPartyManage qqchInterestedPartyManage);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchInterestedPartyManageVo
+     * @return
+     */
+    void save(QqchInterestedPartyManageVo qqchInterestedPartyManageVo);
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchRecordPigeonholeManage;
+import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchRecordPigeonholeManageVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchRecordPigeonholeManageService {
 
     int insertQqchRecordPigeonholeManage(QqchRecordPigeonholeManage qqchRecordPigeonholeManage);
 
-    int insertQqchRecordPigeonholeManageList(List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageList);
-
     int updateQqchRecordPigeonholeManage(QqchRecordPigeonholeManage qqchRecordPigeonholeManage);
 
     int updateQqchRecordPigeonholeManageList(List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageList);
@@ -26,4 +25,18 @@ public interface IQqchRecordPigeonholeManageService {
     int deleteQqchRecordPigeonholeManage(QqchRecordPigeonholeManage qqchRecordPigeonholeManage);
 
     int deleteQqchRecordPigeonholeManageByPks(List<Long> qqchRecordPigeonholeManagePkList);
+
+    /**
+     * 获取技术档案归档管理Vo
+     * @param qqchRecordPigeonholeManage
+     * @return
+     */
+    QqchRecordPigeonholeManageVo getQqchRecordPigeonholeManageVo(QqchRecordPigeonholeManage qqchRecordPigeonholeManage);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchRecordPigeonholeManageVo
+     * @return
+     */
+    void save(QqchRecordPigeonholeManageVo qqchRecordPigeonholeManageVo);
 }

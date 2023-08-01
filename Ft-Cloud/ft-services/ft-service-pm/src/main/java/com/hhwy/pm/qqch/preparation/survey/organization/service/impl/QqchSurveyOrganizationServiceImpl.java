@@ -9,9 +9,9 @@ import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganiz
 import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.organization.mapper.QqchSurveyOrganizationMapper;
 import com.hhwy.pm.qqch.preparation.survey.organization.service.IQqchSurveyOrganizationService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +31,8 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
     private QqchSurveyOrganizationMapper qqchSurveyOrganizationMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
 
@@ -41,15 +43,16 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
      * @param qqchSurveyOrganization
      * @return
      */
-    public List<QqchSurveyOrganization> getQqchSurveyOrganizationList(QqchSurveyOrganization qqchSurveyOrganization) {
+    public QqchSurveyOrganizationVo getQqchSurveyOrganizationList(QqchSurveyOrganization qqchSurveyOrganization) {
         BigDecimal version = VersionUtil.getVersion("qqch_survey_organization",qqchSurveyOrganization.getVersion());
         qqchSurveyOrganization.setVersion(version);
         List<QqchSurveyOrganization> qqchSurveyOrganizationList = qqchSurveyOrganizationMapper.getQqchSurveyOrganizationList(qqchSurveyOrganization);
-        if(CollectionUtils.isNotEmpty(qqchSurveyOrganizationList)){
-            List<QqchSurveyOrganization> build = TreeUtil.build(qqchSurveyOrganizationList, 0l);
-            return build;
-        }
-        return qqchSurveyOrganizationList;
+        List<QqchSurveyOrganization> build = TreeUtil.build(qqchSurveyOrganizationList, 0l);
+        QqchSurveyOrganizationVo vo = new QqchSurveyOrganizationVo();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setQqchSurveyOrganizationList(build);
+        return vo;
     }
 
 

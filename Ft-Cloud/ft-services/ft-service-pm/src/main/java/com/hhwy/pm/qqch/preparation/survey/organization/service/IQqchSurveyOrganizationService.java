@@ -14,7 +14,7 @@ public interface IQqchSurveyOrganizationService {
 
     
 
-    List<QqchSurveyOrganization> getQqchSurveyOrganizationList(QqchSurveyOrganization qqchSurveyOrganization);
+    QqchSurveyOrganizationVo getQqchSurveyOrganizationList(QqchSurveyOrganization qqchSurveyOrganization);
 
 
     int save(QqchSurveyOrganizationVo qqchSurveyOrganizationVo);

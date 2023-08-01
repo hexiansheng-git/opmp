@@ -39,6 +39,22 @@ public class ExcelUtilController {
         downTemplate.downloadExcel(request,response,templateName + ".xls",name+".xls");
     }
 
+    /**
+     * 下载模板，.xls或.xlsx
+     * @param templateName 模板名称，带后缀
+     * @param exportName 导出名称，不带后缀
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping( "/downloadTemplateWithSuffix")
+    public void downloadTemplateTest(@RequestParam String templateName,
+                                     @RequestParam String exportName,
+                                    HttpServletRequest request,
+                                    HttpServletResponse response) throws Exception {
+        downTemplate.downloadTemplateWithSuffix(request,response,templateName,exportName);
+    }
+
 
     /**
      * 下载模板

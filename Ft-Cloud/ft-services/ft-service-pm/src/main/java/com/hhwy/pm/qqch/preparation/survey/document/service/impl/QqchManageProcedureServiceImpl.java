@@ -9,8 +9,10 @@ import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchManageProcedure;
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchManageProcedureVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMapper;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,9 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 获取管理程序Vo
@@ -42,11 +47,10 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
         QqchManageProcedureVo qqchManageProcedureVo = new QqchManageProcedureVo();
 
         version = VersionUtil.getVersion("qqch_manage_procedure",version);
-        qqchManageProcedureVo.setVersion(version);
-
         QqchManageProcedure qqchManageProcedure = new QqchManageProcedure();
         qqchManageProcedure.setVersion(version);
         List<QqchManageProcedure> qqchManageProcedureList = qqchManageProcedureMapper.getQqchManageProcedureList(qqchManageProcedure);
+        //转换树列表
         List<QqchManageProcedure> treeList = ListTreeUtil.formatTree(
                 qqchManageProcedureList,
                 o -> o.getPid() == null,
@@ -55,6 +59,8 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
                 QqchManageProcedure::setChildren);
         qqchManageProcedureVo.setQqchManageProcedureList(treeList);
 
+        qqchManageProcedureVo.setVersion(version);
+        qqchManageProcedureVo.setStageIdentity(qqchReviewService.getStage());
         return qqchManageProcedureVo;
     }
 
@@ -64,6 +70,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchManageProcedureVo qqchManageProcedureVo) {
         //删除旧数据
         QqchManageProcedure qqchManageProcedure = new QqchManageProcedure();
@@ -80,6 +87,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
      * @return
      */
     @Override
+    @Transactional
     public void confirm(QqchManageProcedureVo qqchManageProcedureVo) {
         this.save(qqchManageProcedureVo);
 
@@ -99,6 +107,9 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
      */
     @Transactional
     public void insertQqchManageProcedureList(List<QqchManageProcedure> qqchManageProcedureList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchManageProcedureList)){
+            return;
+        }
         List<QqchManageProcedure> insertList = ListTreeUtil.formatList(
                 qqchManageProcedureList,
                 QqchManageProcedure::setId,

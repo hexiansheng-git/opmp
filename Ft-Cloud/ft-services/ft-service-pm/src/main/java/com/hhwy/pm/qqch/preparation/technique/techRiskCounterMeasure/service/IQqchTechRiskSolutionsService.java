@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.QqchTechRiskSolutions;
+import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.vo.QqchTechRiskSolutionsVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchTechRiskSolutionsService {
 
     int insertQqchTechRiskSolutions(QqchTechRiskSolutions qqchTechRiskSolutions);
 
-    int insertQqchTechRiskSolutionsList(List<QqchTechRiskSolutions> qqchTechRiskSolutionsList);
-
     int updateQqchTechRiskSolutions(QqchTechRiskSolutions qqchTechRiskSolutions);
 
     int updateQqchTechRiskSolutionsList(List<QqchTechRiskSolutions> qqchTechRiskSolutionsList);
@@ -26,4 +25,18 @@ public interface IQqchTechRiskSolutionsService {
     int deleteQqchTechRiskSolutions(QqchTechRiskSolutions qqchTechRiskSolutions);
 
     int deleteQqchTechRiskSolutionsByPks(List<Long> qqchTechRiskSolutionsPkList);
+
+    /**
+     * 获取技术风险及应对措施Vo
+     * @param qqchTechRiskSolutions
+     * @return
+     */
+    QqchTechRiskSolutionsVo getQqchTechRiskSolutionsVo(QqchTechRiskSolutions qqchTechRiskSolutions);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTechRiskSolutionsVo
+     * @return
+     */
+    void save(QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo);
 }

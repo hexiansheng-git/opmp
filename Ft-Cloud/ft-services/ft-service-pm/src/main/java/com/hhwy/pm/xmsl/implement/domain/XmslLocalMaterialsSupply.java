@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
@@ -48,7 +49,7 @@ public class XmslLocalMaterialsSupply extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "价格")
-    private String price;
+    private BigDecimal price;
     /**
      * 字段描述：币种
      */

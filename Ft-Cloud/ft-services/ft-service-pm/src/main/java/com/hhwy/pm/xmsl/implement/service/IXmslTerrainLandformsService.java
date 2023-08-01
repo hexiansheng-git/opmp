@@ -1,7 +1,8 @@
 package com.hhwy.pm.xmsl.implement.service;
 
-import java.util.List;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
+import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -15,4 +16,10 @@ public interface IXmslTerrainLandformsService {
     void save(List<XmslTerrainLandforms> xmslTerrainLandformsList);
 
     int deleteXmslTerrainLandformsByPks(List<Long> xmslTerrainLandformsPkList);
+
+    ImplementVo getAllList();
+
+    void batchSave(ImplementVo implementVo);
+
+
 }

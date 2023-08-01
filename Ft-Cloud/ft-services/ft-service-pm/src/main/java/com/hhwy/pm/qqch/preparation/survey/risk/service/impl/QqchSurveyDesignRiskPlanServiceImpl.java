@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.vo.QqchSurveyDesignRiskPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchSurveyDesignRiskPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     @Autowired
     private SystemServiceApi systemServiceApi;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 勘察设计风险策划Vo
@@ -51,8 +55,6 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
         QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = new QqchSurveyDesignRiskPlanVo();
 
         version = VersionUtil.getVersion("qqch_survey_design_risk_plan",version);
-        qqchSurveyDesignRiskPlanVo.setVersion(version);
-
         QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
         qqchSurveyDesignRiskPlan.setVersion(version);
         List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList = qqchSurveyDesignRiskPlanMapper.getQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlan);
@@ -61,17 +63,17 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
             qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
             return qqchSurveyDesignRiskPlanVo;
         }
-
+        //转换树列表
         List<QqchSurveyDesignRiskPlan> treeList = ListTreeUtil.formatTree(
                 qqchSurveyDesignRiskPlanList,
                 o -> o.getPid() == null,
                 (r,n) -> r.getId().equals(n.getPid()),
                 QqchSurveyDesignRiskPlan::getChildren,
                 QqchSurveyDesignRiskPlan::setChildren);
+
+        qqchSurveyDesignRiskPlanVo.setVersion(version);
+        qqchSurveyDesignRiskPlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(treeList);
-
-        //TODO 获取确认情况
-
         return qqchSurveyDesignRiskPlanVo;
     }
 
@@ -101,6 +103,7 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
         //删除旧数据
         QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
@@ -136,6 +139,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      */
     @Transactional
     public void insertQqchSurveyDesignRiskPlanList(List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
+            return;
+        }
         List<QqchSurveyDesignRiskPlan> insertList = ListTreeUtil.formatList(
                 qqchSurveyDesignRiskPlanList,
                 QqchSurveyDesignRiskPlan::setId,

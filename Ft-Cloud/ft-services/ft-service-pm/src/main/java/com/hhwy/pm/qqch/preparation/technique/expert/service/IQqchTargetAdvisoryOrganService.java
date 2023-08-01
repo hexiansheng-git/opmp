@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.expert.service;
 
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetAdvisoryOrgan;
+import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetAdvisoryOrganVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchTargetAdvisoryOrganService {
 
     int insertQqchTargetAdvisoryOrgan(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan);
 
-    int insertQqchTargetAdvisoryOrganList(List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList);
-
     int updateQqchTargetAdvisoryOrgan(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan);
 
     int updateQqchTargetAdvisoryOrganList(List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList);
@@ -26,4 +25,18 @@ public interface IQqchTargetAdvisoryOrganService {
     int deleteQqchTargetAdvisoryOrgan(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan);
 
     int deleteQqchTargetAdvisoryOrganByPks(List<Long> qqchTargetAdvisoryOrganPkList);
+
+    /**
+     * 获取外部目标咨询机构选择Vo
+     * @param qqchTargetAdvisoryOrgan
+     * @return
+     */
+    QqchTargetAdvisoryOrganVo getQqchTargetAdvisoryOrganVo(QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTargetAdvisoryOrganVo
+     * @return
+     */
+    void save(QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo);
 }

@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,19 +24,19 @@ public class QqchAppInnovatePlanExportVo {
      * 字段描述：四新”技术名称
      */
     @JsonProperty
-    @Excel(name = "四新”技术名称")
+    @FtExcel(name = "“四新”技术名称")
     private String technologyName;
     /**
      * 字段描述：应用/创新（字典项：app_or_innovate）
      */
     @JsonProperty
-    @Excel(name = "应用/创新",dictType = "app_or_innovate")
+    @FtExcel(name = "应用/创新",dictType = "app_or_innovate")
     private String appOrInnovate;
     /**
      * 字段描述：四新”类型（字典项：four_news_type）
      */
     @JsonProperty
-    @Excel(name = "四新”类型",dictType = "four_news_type")
+    @FtExcel(name = "“四新”类型",dictType = "four_news_type")
     private String type;
     /**
      * 字段描述：负责人（带联系方式）
@@ -46,26 +46,26 @@ public class QqchAppInnovatePlanExportVo {
      * 字段描述：相关人员
      */
     @JsonProperty
-    @Excel(name = "相关人员")
+    @FtExcel(name = "相关人员")
     private String relatedStaff;
     /**
      * 字段描述：开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "开始时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "开始时间", dateFormat = "yyyy-MM-dd")
     private Date startTime;
     /**
      * 字段描述：结束时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "结束时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "结束时间", dateFormat = "yyyy-MM-dd")
     private Date endTime;
     /**
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
 }

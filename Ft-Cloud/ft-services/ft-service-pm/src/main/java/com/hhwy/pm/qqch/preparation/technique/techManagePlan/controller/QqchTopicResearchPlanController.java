@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopic
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchTopicResearchPlanService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -90,7 +91,7 @@ public class QqchTopicResearchPlanController extends BaseController {
      */
     @PostMapping("/import")
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
-        ExcelUtils<QqchTopicResearchPlanImportVo> util = new ExcelUtils<>(QqchTopicResearchPlanImportVo.class);
+        FtExcelUtil<QqchTopicResearchPlanImportVo> util = new FtExcelUtil<>(QqchTopicResearchPlanImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchTopicResearchPlanImportVo> qqchTopicResearchPlanImportVoList = util.importExcel(inputStream);
@@ -109,7 +110,7 @@ public class QqchTopicResearchPlanController extends BaseController {
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchTopicResearchPlan qqchTopicResearchPlan) throws IOException {
         List<QqchTopicResearchPlanExportVo> qqchTopicResearchPlanExportVoList = qqchTopicResearchPlanService.getQqchTopicResearchPlanExportVoList(qqchTopicResearchPlan);
-        ExcelUtils<QqchTopicResearchPlanExportVo> util = new ExcelUtils<>(QqchTopicResearchPlanExportVo.class);
+        FtExcelUtil<QqchTopicResearchPlanExportVo> util = new FtExcelUtil<>(QqchTopicResearchPlanExportVo.class);
         util.exportExcel(response, qqchTopicResearchPlanExportVoList, DateUtils.getDate());
     }
 

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techManage.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchProjectLinkupManage;
+import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchProjectLinkupManageVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchProjectLinkupManageService {
 
     int insertQqchProjectLinkupManage(QqchProjectLinkupManage qqchProjectLinkupManage);
 
-    int insertQqchProjectLinkupManageList(List<QqchProjectLinkupManage> qqchProjectLinkupManageList);
-
     int updateQqchProjectLinkupManage(QqchProjectLinkupManage qqchProjectLinkupManage);
 
     int updateQqchProjectLinkupManageList(List<QqchProjectLinkupManage> qqchProjectLinkupManageList);
@@ -26,4 +25,18 @@ public interface IQqchProjectLinkupManageService {
     int deleteQqchProjectLinkupManage(QqchProjectLinkupManage qqchProjectLinkupManage);
 
     int deleteQqchProjectLinkupManageByPks(List<Long> qqchProjectLinkupManagePkList);
+
+    /**
+     * 获取技术管理项目沟通管理Vo
+     * @param qqchProjectLinkupManage
+     * @return
+     */
+    QqchProjectLinkupManageVo getQqchProjectLinkupManageVo(QqchProjectLinkupManage qqchProjectLinkupManage);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchProjectLinkupManageVo
+     * @return
+     */
+    void save(QqchProjectLinkupManageVo qqchProjectLinkupManageVo);
 }

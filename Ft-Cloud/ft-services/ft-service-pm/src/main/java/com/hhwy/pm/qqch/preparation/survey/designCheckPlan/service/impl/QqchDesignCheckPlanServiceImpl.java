@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.QqchDesignChec
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.domain.vo.QqchDesignCheckPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.mapper.QqchDesignCheckPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.designCheckPlan.service.IQqchDesignCheckPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,6 +36,8 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
     private CommonMapper commonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     /**
@@ -43,14 +46,19 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
      * @param qqchDesignCheckPlan
      * @return
      */
-    public List<QqchDesignCheckPlan> getQqchDesignCheckPlanList(QqchDesignCheckPlan qqchDesignCheckPlan) {
+    public QqchDesignCheckPlanVo getQqchDesignCheckPlanList(QqchDesignCheckPlan qqchDesignCheckPlan) {
         BigDecimal version = new BigDecimal(1);
         if (qqchDesignCheckPlan.getVersion() == null) {
             // 获取最大版本号
             version = commonMapper.selectMaxVersion("qqch_design_check_plan");
         }
         qqchDesignCheckPlan.setVersion(version);
-        return qqchDesignCheckPlanMapper.getQqchDesignCheckPlanList(qqchDesignCheckPlan);
+        List<QqchDesignCheckPlan> qqchDesignCheckPlanList = qqchDesignCheckPlanMapper.getQqchDesignCheckPlanList(qqchDesignCheckPlan);
+        QqchDesignCheckPlanVo vo = new QqchDesignCheckPlanVo();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setQqchDesignCheckPlanList(qqchDesignCheckPlanList);
+        return vo;
     }
 
     /**

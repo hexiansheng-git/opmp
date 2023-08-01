@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.mapper.QqchSummaryEvaluationMapper;
 import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +46,16 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
 
     @Transactional
     public void submit(QqchSummaryEvaluation qqchSummaryEvaluation) {
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getInitialUnitId(), "初评单位不能为空");
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getInitialPersonId(), "评价人不能为空");
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getInitialDate(), "评价时间不能为空");
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getInitialFileGroupId(), "策划评价报告不能为空");
+
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getFinalUnitId(), "初评单位不能为空");
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getFinalPersonId(), "评价人不能为空");
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getFinalDate(), "评价时间不能为空");
+        CommonAssert.isEmpty(qqchSummaryEvaluation.getFinalFileGroupId(), "策划评价报告不能为空");
+
         qqchSummaryEvaluation.setTaskStatus("5");
         // 保存数据
         this.save(qqchSummaryEvaluation);

@@ -1,13 +1,15 @@
 package com.hhwy.pm.common.download;
 
 import com.alibaba.cloud.commons.io.IOUtils;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.io.OutputStream;
+
 
 /**
  * @author zhenglili
@@ -29,8 +31,10 @@ public class DownloadTemplateController {
         throws Exception {
 
         // 读取文件流（可从jar包取）
-        InputStream inStream = this.getClass().getClassLoader()
-            .getResourceAsStream("template/" + fileName);
+        InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("template/" + fileName);
+        if(inStream == null){
+            throw new RuntimeException("找不到指定文件!");
+        }
         OutputStream outputStream = response.getOutputStream();
 
         // 设置输出的格式

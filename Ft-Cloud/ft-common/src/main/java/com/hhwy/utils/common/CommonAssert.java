@@ -26,7 +26,6 @@ public class CommonAssert extends Assert {
     }
 
 
-
     public static void notEmpty(Collection list) {
         notEmpty(list, "集合不能为空");
     }
@@ -36,7 +35,7 @@ public class CommonAssert extends Assert {
             throw new IllegalArgumentException(msg);
         }
     }
-    
+
 
     public static void notEmpty(Object[] objects) {
         notEmpty(objects, "集合不能为空");
@@ -44,10 +43,15 @@ public class CommonAssert extends Assert {
 
     public static void notEmpty(Object[] objects, String msg) {
         if (objects == null || objects.length == 0) {
-            throw new IllegalArgumentException(msg);
+
         }
     }
 
+    public static void isEmpty(Object obj, String msg) {
+        if (obj == null) {
+            throw new IllegalArgumentException(msg);
+        }
+    }
 
 
 }

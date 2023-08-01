@@ -77,7 +77,10 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     }
 
     @Transactional
-    public void syncData() {
+    public void syncData(QqchConstructionReviewPlanVo qqchConstructionReviewPlanVo) {
+        // 先保存数据
+        this.batchSave(qqchConstructionReviewPlanVo);
+
         // 获取当前数据库表数据
         List<QqchConstructionReviewPlan> dbList = this.getQqchConstructionReviewPlanList(null).getList();
 

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchInterestedPartyManage;
+import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchInterestedPartyManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techManage.service.IQqchInterestedPartyManageService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchInterestedPartyManageController extends BaseController {
         return AjaxResult.success(qqchInterestedPartyManageParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchInterestedPartyManageList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchInterestedPartyManage> qqchInterestedPartyManageListParam) {
-        qqchInterestedPartyManageService.insertQqchInterestedPartyManageList(qqchInterestedPartyManageListParam);
-        return AjaxResult.success(qqchInterestedPartyManageListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchInterestedPartyManage:update")
     @PostMapping("/update")
     public AjaxResult updateQqchInterestedPartyManage(@Validated(ValidationGroups.Update.class) @RequestBody QqchInterestedPartyManage qqchInterestedPartyManageParam) {
@@ -90,5 +84,29 @@ public class QqchInterestedPartyManageController extends BaseController {
         List<QqchInterestedPartyManage> qqchInterestedPartyManageList = qqchInterestedPartyManageService.getQqchInterestedPartyManageList(qqchInterestedPartyManageParam);
         ExcelUtils<QqchInterestedPartyManage> util = new ExcelUtils<>(QqchInterestedPartyManage.class);
         util.exportExcel(response, qqchInterestedPartyManageList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取技术管理相关方管理Vo
+     * @param qqchInterestedPartyManage
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:list")
+    @GetMapping("getQqchInterestedPartyManageVo")
+    public AjaxResult getQqchInterestedPartyManageVo(@Validated(ValidationGroups.Select.class) QqchInterestedPartyManage qqchInterestedPartyManage) {
+        QqchInterestedPartyManageVo qqchInterestedPartyManageVo = qqchInterestedPartyManageService.getQqchInterestedPartyManageVo(qqchInterestedPartyManage);
+        return AjaxResult.success(qqchInterestedPartyManageVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchInterestedPartyManageVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchInterestedPartyManageVo qqchInterestedPartyManageVo) {
+        qqchInterestedPartyManageService.save(qqchInterestedPartyManageVo);
+        return AjaxResult.success();
     }
 }

@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyW
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.domain.QqchSurveyWorkPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.mapper.QqchSurveyWorkPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.IQqchSurveyWorkPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +30,21 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
     private QqchSurveyWorkPlanMapper qqchSurveyWorkPlanMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
 
-    public List<QqchSurveyWorkPlan> getQqchSurveyWorkPlanList(QqchSurveyWorkPlan qqchSurveyWorkPlan) {
+    public QqchSurveyWorkPlanVo getQqchSurveyWorkPlanList(QqchSurveyWorkPlan qqchSurveyWorkPlan) {
         BigDecimal version = VersionUtil.getVersion("qqch_survey_work_plan",qqchSurveyWorkPlan.getVersion());
         qqchSurveyWorkPlan.setVersion(version);
         List<QqchSurveyWorkPlan> qqchSurveyWorkPlanList = qqchSurveyWorkPlanMapper.getQqchSurveyWorkPlanList(qqchSurveyWorkPlan);
         List<QqchSurveyWorkPlan> qqchSurveyWorkPlans = TreeUtil.build(qqchSurveyWorkPlanList, 0l);
-        return  qqchSurveyWorkPlans;
+        QqchSurveyWorkPlanVo vo = new QqchSurveyWorkPlanVo();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setQqchSurveyWorkPlanList(qqchSurveyWorkPlanList);
+        return  vo;
     }
 
     @Override

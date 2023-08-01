@@ -26,7 +26,7 @@ public class QqchWorkGroupController extends BaseController {
 
 
     /**
-     * 根据id获取工作小组信息（详情）
+     * 点击菜单 或 根据id获取工作小组信息（详情）
      * @param id
      * @return
      */

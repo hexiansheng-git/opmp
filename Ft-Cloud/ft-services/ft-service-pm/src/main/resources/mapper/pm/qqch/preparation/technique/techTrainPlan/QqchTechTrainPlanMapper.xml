@@ -95,6 +95,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
+        limit 1
     </select>
 
     <select id="getQqchTechTrainPlanList" resultMap="QqchTechTrainPlanResultMap">
@@ -130,7 +131,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchTechTrainPlan" useGeneratedKeys="true" keyProperty="id">

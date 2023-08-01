@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -12,11 +9,16 @@ import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHa
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.mapper.QqchCompleteDesignHandoverMapper;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -32,6 +34,9 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     /**
      * 完整设计交接情况台账
@@ -42,13 +47,13 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
         QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = new QqchCompleteDesignHandoverVo();
 
         version = VersionUtil.getVersion("qqch_complete_design_handover",version);
-        qqchCompleteDesignHandoverVo.setVersion(version);
-
         QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
         qqchCompleteDesignHandover.setVersion(version);
         List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList = qqchCompleteDesignHandoverMapper.getQqchCompleteDesignHandoverList(qqchCompleteDesignHandover);
-        qqchCompleteDesignHandoverVo.setQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
 
+        qqchCompleteDesignHandoverVo.setVersion(version);
+        qqchCompleteDesignHandoverVo.setStageIdentity(qqchReviewService.getStage());
+        qqchCompleteDesignHandoverVo.setQqchCompleteDesignHandoverList(qqchCompleteDesignHandoverList);
         return qqchCompleteDesignHandoverVo;
     }
 
@@ -58,6 +63,7 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         //删除旧数据
         QqchCompleteDesignHandover qqchCompleteDesignHandover = new QqchCompleteDesignHandover();
@@ -95,6 +101,9 @@ public class QqchCompleteDesignHandoverServiceImpl implements IQqchCompleteDesig
      */
     @Transactional
     public void insertQqchCompleteDesignHandoverList(List<QqchCompleteDesignHandover> qqchCompleteDesignHandoverList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchCompleteDesignHandoverList)){
+            return;
+        }
         for (QqchCompleteDesignHandover qqchCompleteDesignHandover : qqchCompleteDesignHandoverList) {
             qqchCompleteDesignHandover.setId(IdWorker.createId());
             qqchCompleteDesignHandover.setVersion(version);

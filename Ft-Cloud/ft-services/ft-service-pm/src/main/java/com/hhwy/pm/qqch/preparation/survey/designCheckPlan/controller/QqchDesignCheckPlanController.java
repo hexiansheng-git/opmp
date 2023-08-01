@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * @author ldd
  * @date 2023-07-21 16:48:41
@@ -36,8 +34,8 @@ public class QqchDesignCheckPlanController extends BaseController {
     @PreAuthorize(hasPermi = "qqchDesignCheckPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignCheckPlanList(@Validated(ValidationGroups.Select.class) QqchDesignCheckPlan qqchDesignCheckPlanParam) {
-        List<QqchDesignCheckPlan> qqchDesignCheckPlanList = qqchDesignCheckPlanService.getQqchDesignCheckPlanList(qqchDesignCheckPlanParam);
-        return getDataTableAjaxResult(qqchDesignCheckPlanList);
+        QqchDesignCheckPlanVo qqchDesignCheckPlanVo = qqchDesignCheckPlanService.getQqchDesignCheckPlanList(qqchDesignCheckPlanParam);
+        return AjaxResult.success(qqchDesignCheckPlanVo);
     }
 
 

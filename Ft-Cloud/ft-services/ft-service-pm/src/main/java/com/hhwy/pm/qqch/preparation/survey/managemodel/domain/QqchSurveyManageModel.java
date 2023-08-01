@@ -54,7 +54,7 @@ public class QqchSurveyManageModel extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "拟选模式")
-    private String results;
+    private Boolean results;
     /**
      * 字段描述：附件组id
      */

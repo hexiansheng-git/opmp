@@ -1,8 +1,5 @@
 package com.hhwy.pm.qqch.preparation.survey.document.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -12,11 +9,16 @@ import com.hhwy.pm.qqch.preparation.survey.document.domain.QqchBlueprintManageIn
 import com.hhwy.pm.qqch.preparation.survey.document.domain.vo.QqchBlueprintManageInventoryVo;
 import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchBlueprintManageInventoryMapper;
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchBlueprintManageInventoryService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -32,6 +34,9 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
 
     public QqchBlueprintManageInventory getQqchBlueprintManageInventory(QqchBlueprintManageInventory qqchBlueprintManageInventory) {
         return qqchBlueprintManageInventoryMapper.getQqchBlueprintManageInventory(qqchBlueprintManageInventory);
@@ -46,13 +51,13 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
         QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = new QqchBlueprintManageInventoryVo();
 
         version = VersionUtil.getVersion("qqch_blueprint_manage_inventory",version);
-        qqchBlueprintManageInventoryVo.setVersion(version);
-
         QqchBlueprintManageInventory qqchBlueprintManageInventory = new QqchBlueprintManageInventory();
         qqchBlueprintManageInventory.setVersion(version);
         List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList = qqchBlueprintManageInventoryMapper.getQqchBlueprintManageInventoryList(qqchBlueprintManageInventory);
-        qqchBlueprintManageInventoryVo.setQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryList);
 
+        qqchBlueprintManageInventoryVo.setVersion(version);
+        qqchBlueprintManageInventoryVo.setStageIdentity(qqchReviewService.getStage());
+        qqchBlueprintManageInventoryVo.setQqchBlueprintManageInventoryList(qqchBlueprintManageInventoryList);
         return qqchBlueprintManageInventoryVo;
     }
 
@@ -62,6 +67,7 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
      * @return
      */
     @Override
+    @Transactional
     public void save(QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
         //删除旧数据
         QqchBlueprintManageInventory qqchBlueprintManageInventory = new QqchBlueprintManageInventory();
@@ -97,6 +103,9 @@ public class QqchBlueprintManageInventoryServiceImpl implements IQqchBlueprintMa
      */
     @Transactional
     public void insertQqchBlueprintManageInventoryList(List<QqchBlueprintManageInventory> qqchBlueprintManageInventoryList, BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchBlueprintManageInventoryList)){
+            return;
+        }
         for (QqchBlueprintManageInventory qqchBlueprintManageInventory : qqchBlueprintManageInventoryList) {
             qqchBlueprintManageInventory.setId(IdWorker.createId());
             qqchBlueprintManageInventory.setVersion(version);

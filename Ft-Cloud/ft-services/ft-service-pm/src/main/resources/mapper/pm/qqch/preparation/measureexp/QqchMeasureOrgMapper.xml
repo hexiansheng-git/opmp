@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.measureexp.org.mapper.QqchMeasureOrgMapper">
+<mapper namespace="com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureOrgMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.preparation.measureexp.org.domain.QqchMeasureOrg" id="QqchMeasureOrgResultMap">
+    <resultMap type="com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg" id="QqchMeasureOrgResultMap">
         <result property="id" column="id"/>
         <result property="orgType" column="org_type"/>
         <result property="version" column="version"/>

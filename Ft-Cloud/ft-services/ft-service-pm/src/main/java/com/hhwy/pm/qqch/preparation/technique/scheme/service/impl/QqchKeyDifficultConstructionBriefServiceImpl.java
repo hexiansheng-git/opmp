@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -30,6 +31,8 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
     private QqchKeyDifficultConstructionBriefMapper qqchKeyDifficultConstructionBriefMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private CommonMapper commonMapper;
 
     public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo vo = new QqchKeyDifficultConstructionBriefVo();
@@ -76,5 +79,11 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
             String stageIdentity = qqchKeyDifficultConstructionBriefVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    @Override
+    public List<QqchKeyDifficultConstructionBrief> getByWbsCodes(String[] wbsCodes) {
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_key_difficult_construction_brief");
+        return qqchKeyDifficultConstructionBriefMapper.getByWbsCodes(wbsCodes, maxVersion);
     }
 }

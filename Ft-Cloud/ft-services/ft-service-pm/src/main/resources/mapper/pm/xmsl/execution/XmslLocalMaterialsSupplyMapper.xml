@@ -67,7 +67,7 @@
       <if test="name != null  and name != ''">and `name` = #{name}</if>
       <if test="standards != null  and standards != ''">and `standards` = #{standards}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
-      <if test="price != null  and price != ''">and `price` = #{price}</if>
+      <if test="price != null">and `price` = #{price}</if>
       <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -126,7 +126,7 @@
       <if test="name != null  and name != ''">and `name` = #{name}</if>
       <if test="standards != null  and standards != ''">and `standards` = #{standards}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
-      <if test="price != null  and price != ''">and `price` = #{price}</if>
+      <if test="price != null">and `price` = #{price}</if>
       <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -158,7 +158,7 @@
       <if test="name != null  and name != ''">`name`,</if>
       <if test="standards != null  and standards != ''">`standards`,</if>
       <if test="unit != null  and unit != ''">`unit`,</if>
-      <if test="price != null  and price != ''">`price`,</if>
+      <if test="price != null">`price`,</if>
       <if test="currency != null  and currency != ''">`currency`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
       <if test="regionId != null ">`region_id`,</if>
@@ -185,7 +185,7 @@
       <if test="name != null  and name != ''">#{name},</if>
       <if test="standards != null  and standards != ''">#{standards},</if>
       <if test="unit != null  and unit != ''">#{unit},</if>
-      <if test="price != null  and price != ''">#{price},</if>
+      <if test="price != null">#{price},</if>
       <if test="currency != null  and currency != ''">#{currency},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
       <if test="regionId != null ">#{regionId},</if>
@@ -276,7 +276,7 @@
       <if test="name != null  and  name != ''">`name` = #{name},</if>
       <if test="standards != null  and  standards != ''">`standards` = #{standards},</if>
       <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
-      <if test="price != null  and  price != ''">`price` = #{price},</if>
+      <if test="price != null">`price` = #{price},</if>
       <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>

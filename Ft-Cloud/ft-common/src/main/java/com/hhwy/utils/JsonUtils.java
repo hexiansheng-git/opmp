@@ -1,6 +1,7 @@
 package com.hhwy.utils;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.excel.FtExcel;
 
 import java.lang.reflect.Field;
@@ -22,12 +23,14 @@ public class JsonUtils {
         Map<String, String> map = new LinkedHashMap<>();
 
 
-        String[] ignoreField = {"createUser","masterId", "createUserName", "delFlag", "delTime", "ptVar1", "ptVar2", "ptVar3", "ptVar4",
+        String[] ignoreField = {  
+                "valid",
+                "createUser","masterId", "createUserName", "delFlag", "delTime", "ptVar1", "ptVar2", "ptVar3", "ptVar4",
                 "ptVar5", "ptVar6", "version", "updateUser","delUser", "updateUserName", "fileGroupId", "params", "deptId", "dataSource"};
         List<String> strings = Arrays.asList(ignoreField);
         for (Field field : fields) {
             String fieldName = field.getName();
-            FtExcel annotation = field.getAnnotation(FtExcel.class);
+            Excel annotation = field.getAnnotation(Excel.class);
             if (strings.contains(fieldName) || annotation == null) {
                 continue;
             }

@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchCraftDeclarePlan;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,7 +16,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QqchCraftDeclarePlanVo extends BaseEntity {
+public class QqchCraftDeclarePlanVo {
     private static final long serialVersionUID = 1L;
 
     /**

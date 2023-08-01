@@ -11,6 +11,7 @@ import com.hhwy.pm.xmsl.implement.mapper.XmslLocalMaterialsSupplyMapper;
 import com.hhwy.pm.xmsl.implement.mapper.XmslLocalWorkerSupplyMapper;
 import com.hhwy.pm.xmsl.implement.service.ILocalResourceSupplyService;
 import com.hhwy.utils.idworker.IdWorker;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,11 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         XmslLocalMaterialsSupply xmslLocalMaterialsSupply = new XmslLocalMaterialsSupply();
         List<XmslLocalMaterialsSupply> localMaterialsSupplyList = xmslLocalMaterialsSupplyMapper
             .getXmslLocalMaterialsSupplyList(xmslLocalMaterialsSupply);
+        for (XmslLocalMaterialsSupply localMaterialsSupply : localMaterialsSupplyList) {
+            if (localMaterialsSupply.getPrice() != null) {
+                localMaterialsSupply.setPrice(new BigDecimal(String.format("%.2f", localMaterialsSupply.getPrice())));
+            }
+        }
         if (!CollectionUtils.isEmpty(localMaterialsSupplyList)) {
             result.setCurrencyMaterials(localMaterialsSupplyList.get(0).getCurrency());
         }
@@ -55,6 +61,11 @@ public class LocalResourceSupplyServiceImpl implements ILocalResourceSupplyServi
         XmslLocalEquipmentSupply xmslLocalEquipmentSupply = new XmslLocalEquipmentSupply();
         List<XmslLocalEquipmentSupply> localEquipmentSupplyList =
             xmslLocalEquipmentSupplyMapper.getXmslLocalEquipmentSupplyList(xmslLocalEquipmentSupply);
+        for (XmslLocalEquipmentSupply localEquipmentSupply : localEquipmentSupplyList) {
+            if (localEquipmentSupply.getPrice() != null) {
+                localEquipmentSupply.setPrice(new BigDecimal(String.format("%.2f", localEquipmentSupply.getPrice())));
+            }
+        }
         if (!CollectionUtils.isEmpty(localEquipmentSupplyList)) {
             result.setCurrencyEquipment(localEquipmentSupplyList.get(0).getCurrency());
         }

@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyRes
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.domain.QqchSurveyResultPlanVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.mapper.QqchSurveyResultPlanMapper;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service.IQqchSurveyResultPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
     private CommonMapper commonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     /**
@@ -39,14 +42,19 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
      * @param qqchSurveyResultPlan
      * @return
      */
-    public List<QqchSurveyResultPlan> getQqchSurveyResultPlanList(QqchSurveyResultPlan qqchSurveyResultPlan) {
+    public QqchSurveyResultPlanVo getQqchSurveyResultPlanList(QqchSurveyResultPlan qqchSurveyResultPlan) {
         BigDecimal version=new BigDecimal(1);
         if (qqchSurveyResultPlan.getVersion() == null) {
             // 获取最大版本号
              version = commonMapper.selectMaxVersion("qqch_survey_result_plan");
         }
          qqchSurveyResultPlan.setVersion(version);
-        return qqchSurveyResultPlanMapper.getQqchSurveyResultPlanList(qqchSurveyResultPlan);
+        List<QqchSurveyResultPlan> qqchSurveyResultPlanList = qqchSurveyResultPlanMapper.getQqchSurveyResultPlanList(qqchSurveyResultPlan);
+        QqchSurveyResultPlanVo vo = new QqchSurveyResultPlanVo();
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setQqchSurveyResultPlanList(qqchSurveyResultPlanList);
+        return vo;
     }
 
     /**

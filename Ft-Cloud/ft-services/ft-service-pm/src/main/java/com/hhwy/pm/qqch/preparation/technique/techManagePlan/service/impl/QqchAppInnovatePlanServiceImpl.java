@@ -10,9 +10,11 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppIn
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchAppInnovatePlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAppInnovatePlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,9 @@ public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanServi
 
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchAppInnovatePlan getQqchAppInnovatePlan(QqchAppInnovatePlan qqchAppInnovatePlan) {
@@ -60,6 +65,9 @@ public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanServi
         qqchAppInnovatePlan.setVersion(version);
         qqchAppInnovatePlanMapper.deleteQqchAppInnovatePlan(qqchAppInnovatePlan);
 
+        if(CollectionUtils.isEmpty(qqchAppInnovatePlanList)){
+            return;
+        }
         int sort = 1;
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
@@ -121,6 +129,7 @@ public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanServi
         List<QqchAppInnovatePlan> qqchAppInnovatePlanList = qqchAppInnovatePlanMapper.getQqchAppInnovatePlanList(qqchAppInnovatePlan);
 
         qqchAppInnovatePlanVo.setVersion(version);
+        qqchAppInnovatePlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchAppInnovatePlanVo.setQqchAppInnovatePlanList(qqchAppInnovatePlanList);
         return qqchAppInnovatePlanVo;
     }

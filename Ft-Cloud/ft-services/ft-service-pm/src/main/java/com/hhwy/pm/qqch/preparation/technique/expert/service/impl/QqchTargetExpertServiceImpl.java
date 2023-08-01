@@ -2,14 +2,23 @@ package com.hhwy.pm.qqch.preparation.technique.expert.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetExpert;
+import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetExpertVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.mapper.QqchTargetExpertMapper;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetExpertService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,6 +31,12 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
 
     @Autowired
     private QqchTargetExpertMapper qqchTargetExpertMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchTargetExpert getQqchTargetExpert(QqchTargetExpert qqchTargetExpert) {
@@ -41,13 +56,28 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
     }
 
     @Transactional
-    public int insertQqchTargetExpertList(List<QqchTargetExpert> qqchTargetExpertList) {
-        for (QqchTargetExpert qqchTargetExpert : qqchTargetExpertList) {
-            qqchTargetExpert.setId(IdWorker.createId());
-            qqchTargetExpert.setCreateUser(SecurityUtils.getUserName());
-            qqchTargetExpert.setCreateTime(DateUtils.getNowDate());
+    public void insertQqchTargetExpertList(List<QqchTargetExpert> qqchTargetExpertList, BigDecimal version) {
+        //删除旧数据
+        QqchTargetExpert qqchTargetExpert = new QqchTargetExpert();
+        qqchTargetExpert.setVersion(version);
+        qqchTargetExpertMapper.deleteQqchTargetExpert(qqchTargetExpert);
+
+        if(CollectionUtils.isEmpty(qqchTargetExpertList)){
+            return;
         }
-        return qqchTargetExpertMapper.insertQqchTargetExpertList(qqchTargetExpertList);
+        String valid = Valid.NO;
+        if(version.compareTo(BigDecimal.ONE) == 0){
+            valid = Valid.YES;
+        }
+        for (QqchTargetExpert targetExpert : qqchTargetExpertList) {
+            targetExpert.setId(IdWorker.createId());
+            targetExpert.setValid(valid);
+            targetExpert.setVersion(version);
+            targetExpert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            targetExpert.setCreateUserName(SecurityUtils.getUserName());
+            targetExpert.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchTargetExpertMapper.insertQqchTargetExpertList(qqchTargetExpertList);
     }
 
     @Transactional
@@ -76,5 +106,51 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
     @Transactional
     public int deleteQqchTargetExpertByPks(List<Long> qqchTargetExpertPkList) {
         return qqchTargetExpertMapper.deleteQqchTargetExpertByPks(qqchTargetExpertPkList);
+    }
+
+    /**
+     * 获取内外部目标专家选择Vo
+     * @param qqchTargetExpert
+     * @return
+     */
+    @Override
+    public QqchTargetExpertVo getQqchTargetExpertVo(QqchTargetExpert qqchTargetExpert) {
+        QqchTargetExpertVo qqchTargetExpertVo = new QqchTargetExpertVo();
+
+        BigDecimal version = qqchTargetExpert.getVersion();
+        version = VersionUtil.getVersion("qqch_target_expert",version);
+
+        qqchTargetExpert.setVersion(version);
+        List<QqchTargetExpert> qqchTargetExpertList = qqchTargetExpertMapper.getQqchTargetExpertList(qqchTargetExpert);
+
+        qqchTargetExpertVo.setVersion(version);
+        qqchTargetExpertVo.setStageIdentity(qqchReviewService.getStage());
+        qqchTargetExpertVo.setQqchTargetExpertList(qqchTargetExpertList);
+        return qqchTargetExpertVo;
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchTargetExpertVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void save(QqchTargetExpertVo qqchTargetExpertVo) {
+        String buttonMark = qqchTargetExpertVo.getButtonMark();
+        ButtonMarkUtil.checkButtonMark(buttonMark);
+
+        BigDecimal version = qqchTargetExpertVo.getVersion();
+        List<QqchTargetExpert> qqchTargetExpertList = qqchTargetExpertVo.getQqchTargetExpertList();
+
+        this.insertQqchTargetExpertList(qqchTargetExpertList,version);
+
+        //处理确认状态是确认
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认记录
+            String menuId = qqchTargetExpertVo.getMenuId();
+            String stageIdentity = qqchTargetExpertVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 }

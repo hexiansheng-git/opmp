@@ -9,10 +9,12 @@ import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageMo
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModelVo;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.mapper.QqchSurveyManageModelMapper;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -28,6 +30,8 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
     private QqchSurveyManageModelMapper qqchSurveyManageModelMapper;
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     /**
@@ -40,6 +44,7 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
         BigDecimal version = VersionUtil.getVersion("qqch_survey_manage_model",qqchSurveyManageModel.getVersion());
         qqchSurveyManageModel.setVersion(version);
         vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
         List<QqchSurveyManageModel> qqchSurveyManageModelList = qqchSurveyManageModelMapper.getQqchSurveyManageModelList(qqchSurveyManageModel);
         vo.setQqchSurveyManageModelList(qqchSurveyManageModelList);
         return vo;
@@ -52,7 +57,7 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
      * @param qqchSurveyManageModelVo
      */
     @Override
-    public void confirm(QqchSurveyManageModelVo qqchSurveyManageModelVo) {
+    public QqchSurveyManageModelVo confirm(QqchSurveyManageModelVo qqchSurveyManageModelVo) {
         this.save(qqchSurveyManageModelVo);
         String buttonMark = qqchSurveyManageModelVo.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
@@ -60,7 +65,9 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
             String menuId = qqchSurveyManageModelVo.getMenuId();
             String stageIdentity = qqchSurveyManageModelVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+            qqchSurveyManageModelVo.setConfirmStatus("1");
         }
+        return  qqchSurveyManageModelVo;
     }
 
     @Override

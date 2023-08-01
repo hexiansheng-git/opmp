@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -34,14 +35,19 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     private GenCodeService genCodeService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private CommonMapper commonMapper;
 
-    public QqchConstructionListVo getQqchConstructionListList(BigDecimal version) {
+    public QqchConstructionListVo getQqchConstructionListList(QqchConstructionListVo paramVo) {
         QqchConstructionListVo vo = new QqchConstructionListVo();
-        version = VersionUtil.getVersion("qqch_construction_list", version);
+
+        BigDecimal version = VersionUtil.getVersion("qqch_construction_list", paramVo.getVersion());
         vo.setVersion(version);
 
         QqchConstructionList qryParam = new QqchConstructionList();
         qryParam.setVersion(version);
+        qryParam.setSchemeName(paramVo.getSchemeName());
+        qryParam.setSchemeLevel(paramVo.getSchemeType());
         List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
         vo.setList(list);
         return vo;
@@ -83,5 +89,11 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             String stageIdentity = qqchConstructionListVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    @Override
+    public List<QqchConstructionList> getByWbsCodes(String[] wbsCodes) {
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        return qqchConstructionListMapper.getByWbsCodes(wbsCodes, maxVersion);
     }
 }

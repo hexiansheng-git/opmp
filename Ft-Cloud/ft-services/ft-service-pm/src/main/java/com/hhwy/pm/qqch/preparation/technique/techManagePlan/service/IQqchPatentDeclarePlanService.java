@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service;
 
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchPatentDeclarePlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanExportVo;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanVo;
 
 import java.util.List;
 
@@ -17,8 +19,6 @@ public interface IQqchPatentDeclarePlanService {
 
     int insertQqchPatentDeclarePlan(QqchPatentDeclarePlan qqchPatentDeclarePlan);
 
-    int insertQqchPatentDeclarePlanList(List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList);
-
     int updateQqchPatentDeclarePlan(QqchPatentDeclarePlan qqchPatentDeclarePlan);
 
     int updateQqchPatentDeclarePlanList(List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList);
@@ -26,4 +26,25 @@ public interface IQqchPatentDeclarePlanService {
     int deleteQqchPatentDeclarePlan(QqchPatentDeclarePlan qqchPatentDeclarePlan);
 
     int deleteQqchPatentDeclarePlanByPks(List<Long> qqchPatentDeclarePlanPkList);
+
+    /**
+     * 获取专利申报计划Vo
+     * @param qqchPatentDeclarePlan
+     * @return
+     */
+    QqchPatentDeclarePlanVo getQqchPatentDeclarePlanVo(QqchPatentDeclarePlan qqchPatentDeclarePlan);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchPatentDeclarePlanVo
+     * @return
+     */
+    void save(QqchPatentDeclarePlanVo qqchPatentDeclarePlanVo);
+
+    /**
+     * 获取导出数据
+     * @param qqchPatentDeclarePlan
+     * @return
+     */
+    List<QqchPatentDeclarePlanExportVo> getQqchPatentDeclarePlanExportVoList(QqchPatentDeclarePlan qqchPatentDeclarePlan);
 }
