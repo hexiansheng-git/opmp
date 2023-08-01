@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchMajorConstructio
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchMajorConstructionComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
@@ -30,6 +31,8 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
     private QqchMajorConstructionComparisonMapper qqchMajorConstructionComparisonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchMajorConstructionComparisonVo getQqchMajorConstructionComparisonList(BigDecimal version) {
         QqchMajorConstructionComparisonVo vo = new QqchMajorConstructionComparisonVo();
@@ -40,6 +43,7 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         qryParam.setVersion(version);
         List<QqchMajorConstructionComparison> list = qqchMajorConstructionComparisonMapper
             .getQqchMajorConstructionComparisonList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setTreeList(TreeUtil.build(list, null));
         return vo;
     }

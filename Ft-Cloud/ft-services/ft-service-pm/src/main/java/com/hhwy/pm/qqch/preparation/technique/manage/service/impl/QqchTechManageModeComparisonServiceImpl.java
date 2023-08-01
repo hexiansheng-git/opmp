@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeCo
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.vo.QqchTechManageModeComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.manage.mapper.QqchTechManageModeComparisonMapper;
 import com.hhwy.pm.qqch.preparation.technique.manage.service.IQqchTechManageModeComparisonService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
@@ -30,6 +31,8 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
     private QqchTechManageModeComparisonMapper qqchTechManageModeComparisonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
@@ -39,6 +42,7 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         qryParam.setVersion(version);
         List<QqchTechManageModeComparison> list = qqchTechManageModeComparisonMapper
             .getQqchTechManageModeComparisonList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
         return vo;
     }

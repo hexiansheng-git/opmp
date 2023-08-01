@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultCons
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchKeyDifficultConstructionBriefVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchKeyDifficultConstructionBriefMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
@@ -33,6 +34,8 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchKeyDifficultConstructionBriefVo getQqchKeyDifficultConstructionBriefList(BigDecimal version) {
         QqchKeyDifficultConstructionBriefVo vo = new QqchKeyDifficultConstructionBriefVo();
@@ -43,6 +46,7 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
         qryParam.setVersion(version);
         List<QqchKeyDifficultConstructionBrief> list = qqchKeyDifficultConstructionBriefMapper
             .getQqchKeyDifficultConstructionBriefList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
         return vo;
     }

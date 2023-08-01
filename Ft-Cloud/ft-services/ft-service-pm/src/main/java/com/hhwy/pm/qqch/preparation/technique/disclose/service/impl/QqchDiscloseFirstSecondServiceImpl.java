@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchKeyDifficultCons
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
@@ -49,6 +50,8 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
     private IQqchKeyDifficultConstructionBriefService qqchKeyDifficultConstructionBriefService;
     @Autowired
     private IQqchConstructionListService qqchConstructionListService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchDiscloseFirstSecondVo getQqchDiscloseFirstSecondList(BigDecimal version) {
         QqchDiscloseFirstSecondVo vo = new QqchDiscloseFirstSecondVo();
@@ -58,6 +61,7 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         QqchDiscloseFirstSecond qryParam = new QqchDiscloseFirstSecond();
         qryParam.setVersion(version);
         List<QqchDiscloseFirstSecond> list = qqchDiscloseFirstSecondMapper.getQqchDiscloseFirstSecondList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setTreeList(TreeUtil.build(list, null));
         return vo;
     }
@@ -111,7 +115,7 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         }
 
         // 查询本级以及所有子级wbs
-        List<XmslWbs> wbsList = xmslWbsService.childListByIds(new Long[]{id});
+        List<XmslWbs> wbsList = xmslWbsService.childListByIds(new Long[]{id}, true);
         // wbs编号
         List<String> codeList = wbsList.stream().map(XmslWbs::getCode).collect(Collectors.toList());
         String[] codes = codeList.toArray(new String[codeList.size()]);

@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionR
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionReviewPlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
@@ -40,6 +41,8 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     private CommonMapper commonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     public QqchConstructionReviewPlanVo getQqchConstructionReviewPlanList(BigDecimal version) {
         QqchConstructionReviewPlanVo vo = new QqchConstructionReviewPlanVo();
@@ -72,6 +75,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         planFour.setSchemeLevel("IV级施工方案");
         planFour.setChildren(fourPlanList);
         newList.add(planFour);
+        vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(newList);
         return vo;
     }
