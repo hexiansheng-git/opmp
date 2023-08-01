@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -260,7 +261,7 @@ public class QqchWorkGroup extends BaseEntity {
     /**
      * 字段描述：历史记录标识，1：有历史记录，0：无历史记录
      */
-    private String historyMark = "0";
+    private String historyMark = CommonYesNo.NO;
 
     /**
      *  字段描述：工作小组成员
