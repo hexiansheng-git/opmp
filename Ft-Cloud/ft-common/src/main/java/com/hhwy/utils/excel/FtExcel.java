@@ -18,9 +18,17 @@ public @interface FtExcel {
 
     /**
      * 小数位数
+     *
      * @return
      */
     int decimalScale() default 2;
+
+    /**
+     * 是否是序号列(导入树形结构数据时使用)
+     *
+     * @return
+     */
+    boolean serialNumFlag() default false;
 
     String dateFormat() default "";
 

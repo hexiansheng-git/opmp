@@ -43,19 +43,15 @@ public class QqchScheController extends BaseController {
     }
 
 
-
     @PreAuthorize(hasPermi = "qqchScheDiff:save")
     @PostMapping("/importCorr")
     public AjaxResult importCorr(@RequestParam("file") MultipartFile file) {
         FtExcelUtil<QqchScheCorr> excelUtil = new FtExcelUtil<>(QqchScheCorr.class);
         try {
-            List<QqchScheCorr> qqchScheCorrs = excelUtil.importExcel(file.getInputStream());
-
-            System.out.println(qqchScheCorrs);
+            List<QqchScheCorr> qqchScheCorrs = excelUtil.importTreeExcel(file.getInputStream());
+            return AjaxResult.success(qqchScheCorrs);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-        return AjaxResult.success("success");
     }
 }
