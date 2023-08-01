@@ -14,8 +14,9 @@ public interface IQqchModuleConfirmCaseService {
     QqchModuleConfirmCase getQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     List<QqchModuleConfirmCase> getQqchModuleConfirmCaseList(QqchModuleConfirmCase qqchModuleConfirmCase);
-    
-    
+
+    String getConfirmStatus(String menuId,String stage,String confirmUser);
+
     List<QqchModuleConfirmCase> getModuleConfirmInfo(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     int insertQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);

@@ -4,7 +4,6 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
-import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,13 +28,20 @@ public class CompileDTO<T> {
     private String submitFlag;
     private T dto;
 
-    
+    public static <T> T dealSaveDto(BigDecimal version, String submitFlag, T dto) {
+        CompileDTO<T> tCompileDTO = new CompileDTO<>();
+        tCompileDTO.setVersion(version);
+        tCompileDTO.setSubmitFlag(submitFlag);
+        tCompileDTO.setDto(dto);
+        return tCompileDTO.dealSaveDto();
+    }
 
     public T dealSaveDto() {
         if (dto instanceof CompileEntity) {
             CompileEntity compileEntity = (CompileEntity) dto;
             EntityUtils.setCreateUpdateInfo(compileEntity);
-            compileEntity.setVersion(ObjectNullUtil.isEmpty(compileEntity.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : compileEntity.getVersion());
+            compileEntity.setSubmitFlag(submitFlag);
+            compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
             setValid(compileEntity);
             return (T) compileEntity;
         }
@@ -44,6 +50,7 @@ public class CompileDTO<T> {
         List list;
         if (dto != null && dto instanceof List && (list = (List) dto).size() > 0 && list.get(0) instanceof CompileEntity) {
             List<CompileEntity> compileEntities = (List<CompileEntity>) dto;
+            // 不用管是不是树形结构  就先转一下
             compileEntities = TreeUtil.treeToList(compileEntities);
             EntityUtils.setCreateUpdateInfo(compileEntities);
             for (CompileEntity o : compileEntities) {

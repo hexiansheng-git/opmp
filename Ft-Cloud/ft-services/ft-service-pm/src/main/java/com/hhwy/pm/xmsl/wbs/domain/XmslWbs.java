@@ -129,7 +129,7 @@ public class XmslWbs extends BaseEntity {
      * 字段描述：单位
      */
     @JsonProperty
-    @Excel(name = "单位,字典:xmsl_wbs_unit")
+    @Excel(name = "单位,字典:xmsl_wbs_unit 暂时废弃")
     private String unit;
     /**
      * 字段描述：层级
@@ -147,13 +147,13 @@ public class XmslWbs extends BaseEntity {
      * 字段描述：设计量
      */
     @JsonProperty
-    @Excel(name = "设计量")
+    @Excel(name = "设计量 暂时废弃")
     private BigDecimal designQuanlity;
     /**
      * 字段描述：复核量
      */
     @JsonProperty
-    @Excel(name = "复核量")
+    @Excel(name = "复核量 暂时废弃")
     private BigDecimal checkQuanlity;
     /**
      * 字段描述：备注/描述

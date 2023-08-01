@@ -1,11 +1,10 @@
 package com.hhwy.pm.qqch.preparation.qqchOrganizationList.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
-import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author hwj
@@ -15,6 +14,8 @@ import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 public interface IQqchOrganizationListService {
 
     QqchOrganizationList getQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
+
+    List<QqchOrganizationList>  getQqchOrganizationListList2(QqchOrganizationList qqchOrganizationList);
 
     List<QqchOrganizationList> getQqchOrganizationListList(QqchOrganizationList qqchOrganizationList);
 
@@ -33,6 +34,7 @@ public interface IQqchOrganizationListService {
     int deleteQqchOrganizationListByPks(List<Long> qqchOrganizationListPkList);
 
     int insertQqchOrganizationListVo(QqchOrganizationListVo qqchOrganizationListVo);
+
 
 
 }

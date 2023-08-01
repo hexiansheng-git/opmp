@@ -1,7 +1,7 @@
 package com.hhwy.utils.tree;
 
-import com.alibaba.excel.util.CollectionUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;

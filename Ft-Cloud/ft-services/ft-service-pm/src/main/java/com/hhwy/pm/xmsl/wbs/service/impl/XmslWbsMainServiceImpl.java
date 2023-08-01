@@ -10,6 +10,8 @@ import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.factory.SystemServiceFallbackFactory;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -23,14 +25,18 @@ import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * @author wk
@@ -39,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
-
+    private static final Logger log = LoggerFactory.getLogger(XmslWbsMainServiceImpl.class);
     @Autowired
     private XmslWbsMainMapper xmslWbsMainMapper;
     @Resource
@@ -91,6 +97,46 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         query.setValid(Constant.NO_INT);
         XmslWbsMain main = xmslWbsMainMapper.getLast(query);
         return main;
+    }
+
+    @Override
+    @Transactional
+    public Long initAdjust() {
+        //仅在有生效数据的情况下，进行调整
+        XmslWbsMain query = new XmslWbsMain();
+        query.setValid(Constant.YES_INT);
+        Long count = xmslWbsMainMapper.getXmslWbsMainCount(query);
+        if(count < 1)
+            return null;
+        Long mainId = null;
+        try{
+            if(RedissonLockUtil.lock(SecurityUtils.getTenantKey()+"wbsAdjust")){
+                Integer maxVersion = this.xmslWbsMainMapper.getMaxVersion()+1;
+                //1、插入历史汇总信息
+                XmslWbsMain wbsMain = new XmslWbsMain();
+                wbsMain.setId(IdWorker.createId());
+                wbsMain.setVersion(maxVersion);
+                new AddBaseInfoUtil<>(wbsMain);
+                wbsMain.setDelFlag(Constant.NO_INT+"");
+                wbsMain.setValid(Constant.NO_INT);
+                this.xmslWbsMainMapper.insertXmslWbsMain(wbsMain);
+                mainId = wbsMain.getId();
+                //2、先同步前三级到历史，其他层级交给线程处理
+                xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",wbsMain.getId(),"levels",new Integer[]{1,2,3}));
+                ThreadPoolUtil.execute(()->{
+                    try{
+                        for (int i = 4; i < 10; i++) {
+                            xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",wbsMain.getId(),"levels",new Integer[]{i}));
+                        }
+                    }catch(Exception e){
+                        log.info("异步处理wbs层级数据出错:{}",e.getMessage());
+                    }
+                });
+            }
+        }finally {
+            RedissonLockUtil.unlock(SecurityUtils.getTenantKey()+"wbsAdjust");
+        }
+        return mainId;
     }
 
     @Transactional
@@ -151,7 +197,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         for (int i = 0; i < list.size(); i++) {
             new AddBaseInfoUtil<>().updateBaseEntity(list.get(i));
         }
-        this.xmslWbsMainMapper.insertWbsToHistory();
+        this.xmslWbsMainMapper.insertWbsToHistory(new HashMap());
         this.xmslWbsMainMapper.deleteWbs();
         xmslWbsMainMapper.insertHistoryToWbs(id);
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);

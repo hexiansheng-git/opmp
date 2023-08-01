@@ -32,6 +32,11 @@ public interface IXmslWbsMainService {
      */
     XmslWbsMain getAdjustInfo();
 
+    /**
+     * 初始化调整
+     */
+    Long initAdjust();
+
     int insertXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     int insertXmslWbsMainList(List<XmslWbsMain> xmslWbsMainList);

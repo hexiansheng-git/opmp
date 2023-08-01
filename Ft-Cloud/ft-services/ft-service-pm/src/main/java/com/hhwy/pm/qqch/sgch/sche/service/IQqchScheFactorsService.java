@@ -26,4 +26,8 @@ public interface IQqchScheFactorsService {
     int deleteQqchScheFactors(QqchScheFactors qqchScheFactors);
 
     int deleteQqchScheFactorsByPks(List<Long> qqchScheFactorsPkList);
+
+    void saveList(List<QqchScheFactors> dealSaveDto);
+
+    List<QqchScheFactors> getList(QqchScheFactors dealSaveDto);
 }

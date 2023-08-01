@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -16,7 +17,7 @@ import java.util.Date;
  * @date 2023-07-31 11:22:46
  * @remark qqch_sche_analyse
  */
-public class QqchScheAnalyse extends BaseEntity {
+public class QqchScheAnalyse extends CompileEntity<QqchScheAnalyse> {
     private static final long serialVersionUID = 1L;
 
     /**

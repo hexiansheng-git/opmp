@@ -1,35 +1,30 @@
 package com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.impl;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
-import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchChangeProcedurePlan;
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
-import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.mapper.QqchOrganizationListMapper;
+import com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.IQqchOrganizationListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.qqch.preparation.qqchOrganizationList.mapper.QqchOrganizationListMapper;
-import com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.IQqchOrganizationListService;
-import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
-import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author hwj
@@ -49,6 +44,11 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
 
     public QqchOrganizationList getQqchOrganizationList(QqchOrganizationList qqchOrganizationList) {
         return qqchOrganizationListMapper.getQqchOrganizationList(qqchOrganizationList);
+    }
+
+    @Override
+    public List<QqchOrganizationList> getQqchOrganizationListList2(QqchOrganizationList qqchOrganizationList) {
+        return qqchOrganizationListMapper.getQqchOrganizationListList2(qqchOrganizationList);
     }
 
     public List<QqchOrganizationList> getQqchOrganizationListList(QqchOrganizationList qqchOrganizationList) {

@@ -26,4 +26,12 @@ public interface IQqchScheDiffDescService {
     int deleteQqchScheDiffDesc(QqchScheDiffDesc qqchScheDiffDesc);
 
     int deleteQqchScheDiffDescByPks(List<Long> qqchScheDiffDescPkList);
+
+    /**保存
+     * 
+     * @param qqchScheDiffDesc 
+     */
+    void save(QqchScheDiffDesc qqchScheDiffDesc);
+
+    QqchScheDiffDesc getDesc(QqchScheDiffDesc dealSaveDto);
 }

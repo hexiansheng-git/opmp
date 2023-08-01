@@ -24,13 +24,20 @@ public interface XmslWbsMainMapper {
      */
     XmslWbsMain getLast(XmslWbsMain xmslWbsMain);
 
+    Integer getMaxVersion();
+
     Long getXmslWbsMainCount(XmslWbsMain xmslWbsMain);
 
     int insertXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     int insertXmslWbsMainList(@Param("xmslWbsMainList") List<XmslWbsMain> xmslWbsMainList);
 
-    int insertWbsToHistory();
+    /**
+     * 插入wbs导入历史
+     * @param map {levels}
+     * @return
+     */
+    int insertWbsToHistory(Map map);
 
     int insertHistoryToWbs(Long mainId);
 
