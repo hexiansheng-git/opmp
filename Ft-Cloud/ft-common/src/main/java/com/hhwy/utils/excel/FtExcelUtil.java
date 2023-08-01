@@ -816,12 +816,16 @@ public class FtExcelUtil<T> {
         this.init(list, sheetName, FtExcel.Type.IMPORT);
         List<Object[]> fieldsAnno = this.fields;
         String serFieldName = null;
+        String childrenFieldName = null;
+        String serStr = null;
 
         for (Object[] objects : fieldsAnno) {
             FtExcel ftExcel = (FtExcel) objects[1];
             if (ftExcel.serialNumFlag()) {
                 // 如果当前的字段是序号列  就先存起来 等下用
                 serFieldName = ((Field) objects[0]).getName();
+                serStr = ftExcel.serialStr();
+                childrenFieldName = ftExcel.childrenFieldName();
                 break;
             }
         }
@@ -848,7 +852,7 @@ public class FtExcelUtil<T> {
             if (!(t instanceof TreeNode)) throw new RuntimeException("请继承TreeNode");
             // 序号
             String serNum = init.getFieldVal(serFieldName, t) + "";
-            String[] split = serNum.split("\\.");
+            String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
             // 
             List<T> lenList = lengthMap.get(split.length);
             // 如果当前数据为空 就new一个  然后
@@ -859,6 +863,8 @@ public class FtExcelUtil<T> {
         }
 
         // 由大到小
+        String finalSerStr = serStr;
+        String finalChildrenFieldName = childrenFieldName;
         lengthMap.keySet().stream().sorted(Comparator.comparing(Integer::intValue).reversed()).forEach(length -> {
             List<T> lengthList = lengthMap.get(length);
             if (length == 1) {
@@ -866,13 +872,13 @@ public class FtExcelUtil<T> {
             } else {
                 for (T t : lengthList) {
                     String serNum = init.getFieldVal(finalSerFieldName, t) + "";
-                    String parentSerNum = getStrBefore(serNum, ".");
+                    String parentSerNum = getStrBefore(serNum, finalSerStr);
                     ts.stream().filter(item -> parentSerNum.equals(init.getFieldVal(finalSerFieldName, item))).findFirst().ifPresent(i -> {
                         TreeNode treeNode = (TreeNode) i;
                         List children = treeNode.getChildren();
                         children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
                         children.add(t);
-                        init.setFieldVal("children", children, i);
+                        init.setFieldVal(finalChildrenFieldName, children, i);
                     });
                 }
             }

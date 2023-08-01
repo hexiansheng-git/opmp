@@ -30,6 +30,20 @@ public @interface FtExcel {
      */
     boolean serialNumFlag() default false;
 
+    /**
+     * 序号根据什么分割 如果是1.2.1,此值传 '.'; 如果是1-2-1,此值传 '-'
+     *
+     * @return
+     */
+    String serialStr() default ".";
+
+    /**
+     * 子节点字段名称
+     *
+     * @return
+     */
+    String childrenFieldName() default "children";
+
     String dateFormat() default "";
 
     String readConverterExp() default "";
