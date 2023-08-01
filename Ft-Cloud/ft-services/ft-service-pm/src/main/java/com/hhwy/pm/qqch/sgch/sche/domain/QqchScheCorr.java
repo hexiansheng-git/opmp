@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import lombok.Data;
 import lombok.ToString;
@@ -16,13 +15,12 @@ import java.util.Date;
 
 /**
  * @author mls
- * @date 2023-07-31 11:22:50
- * @remark qqch_sche_diff_desc
+ * @date 2023-07-31 15:17:21
+ * @remark qqch_sche_corr
  */
 @Data
 @ToString
-public class QqchScheDiffDesc extends CompileEntity<QqchScheDiffDesc> {
-    
+public class QqchScheCorr extends CompileEntity<QqchScheCorr> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -33,11 +31,24 @@ public class QqchScheDiffDesc extends CompileEntity<QqchScheDiffDesc> {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：纠偏措施说明
+     * 字段描述：父级id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "父级id")
+    private Long pid;
+    /**
+     * 字段描述：措施项
      */
     @JsonProperty
-    @Excel(name = "纠偏措施说明")
-    private String diffDesc;
+    @Excel(name = "措施项")
+    private String item;
+    /**
+     * 字段描述：具体措施
+     */
+    @JsonProperty
+    @Excel(name = "具体措施")
+    private String itemDesc;
     /**
      * 字段描述：版本
      */
@@ -108,6 +119,12 @@ public class QqchScheDiffDesc extends CompileEntity<QqchScheDiffDesc> {
     @JsonProperty
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
+    /**
+     * 字段描述：备注
+     */
+    @JsonProperty
+    @Excel(name = "备注")
+    private String remark;
     /**
      * 字段描述：预留字段1
      */

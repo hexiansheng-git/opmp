@@ -26,4 +26,14 @@ public interface IQqchScheDiffService {
     int deleteQqchScheDiff(QqchScheDiff qqchScheDiff);
 
     int deleteQqchScheDiffByPks(List<Long> qqchScheDiffPkList);
+
+    /**
+     * 保存列表
+     *
+     * @param dealSaveDto
+     */
+    void saveList(List<QqchScheDiff> dealSaveDto);
+
+    List<QqchScheDiff> getList(QqchScheDiff dealSaveDto);
+    
 }
