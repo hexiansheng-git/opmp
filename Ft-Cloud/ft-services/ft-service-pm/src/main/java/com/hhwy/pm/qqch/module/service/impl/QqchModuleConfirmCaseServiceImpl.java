@@ -35,6 +35,22 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
     }
 
     /**
+     * 根据菜单id，阶段，确认人id获取确认状态
+     * @param menuId
+     * @param stage
+     * @param confirmUser
+     * @return
+     */
+    public String getConfirmStatus(String menuId,String stage,String confirmUser){
+        QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();
+        qqchModuleConfirmCase.setModuleIdentity(menuId);
+        qqchModuleConfirmCase.setStageIdentity(stage);
+        qqchModuleConfirmCase.setConfirmUser(confirmUser);
+        QqchModuleConfirmCase moduleConfirmInfo = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCase(qqchModuleConfirmCase);
+        return moduleConfirmInfo.getConfirmStatus();
+    }
+
+    /**
      * 插入一条确认记录
      * @param menuId 页面菜单id
      * @param stageIdentity 阶段标识
