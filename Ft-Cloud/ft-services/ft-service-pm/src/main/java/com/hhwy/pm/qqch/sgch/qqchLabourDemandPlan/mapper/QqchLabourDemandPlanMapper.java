@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.mapper;
 
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface QqchLabourDemandPlanMapper {
     int deleteQqchLabourDemandPlan(QqchLabourDemandPlan qqchLabourDemandPlan);
 
      int deleteQqchLabourDemandPlanByPks(@Param("qqchLabourDemandPlanPkList") List<Long> qqchLabourDemandPlanPkList);
-    }
+
+    List<QqchLabourDemandPlanDto> selectCount(QqchLabourDemandPlan qqchLabourDemandPlan);
+}

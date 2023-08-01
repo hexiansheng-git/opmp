@@ -24,7 +24,7 @@ public class QqchScheCorr extends CompileEntity<QqchScheCorr> {
     /**
      * 序号  导入用
      */
-    @FtExcel(name = "序号")
+    @FtExcel(name = "序号",serialNumFlag = true)
     private String serialNum;
     /**
      * 字段描述：主键id

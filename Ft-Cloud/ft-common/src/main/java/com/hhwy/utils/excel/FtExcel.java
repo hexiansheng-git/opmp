@@ -18,9 +18,31 @@ public @interface FtExcel {
 
     /**
      * 小数位数
+     *
      * @return
      */
     int decimalScale() default 2;
+
+    /**
+     * 是否是序号列(导入树形结构数据时使用)
+     *
+     * @return
+     */
+    boolean serialNumFlag() default false;
+
+    /**
+     * 序号根据什么分割 如果是1.2.1,此值传 '.'; 如果是1-2-1,此值传 '-'
+     *
+     * @return
+     */
+    String serialStr() default ".";
+
+    /**
+     * 子节点字段名称
+     *
+     * @return
+     */
+    String childrenFieldName() default "children";
 
     String dateFormat() default "";
 

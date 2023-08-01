@@ -4,9 +4,9 @@ import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.reflect.ReflectUtils;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.field.FieldUtils;
+import com.hhwy.utils.tree.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
@@ -302,10 +302,10 @@ public class FtExcelUtil<T> {
 
     public void setCellVo(Object value, FtExcel attr, Cell cell) {
         //20230703 bigdecimal字段导出带出很多0问题
-        if(value instanceof  BigDecimal){
+        if (value instanceof BigDecimal) {
             cell.setCellType(CellType.STRING);
-            cell.setCellValue(value==null?"":new DecimalFormat("0.0000").format((BigDecimal)value));
-            return ;
+            cell.setCellValue(value == null ? "" : new DecimalFormat("0.0000").format((BigDecimal) value));
+            return;
         }
         if (FtExcel.ColumnType.STRING == attr.cellType()) {
             cell.setCellType(CellType.NUMERIC);
@@ -669,7 +669,7 @@ public class FtExcelUtil<T> {
 
     }
 
-    
+
     public static void getSelectDatas(Sheet sheet, List<String> dataList, int columnIndex) {
         if (CollectionUtils.isEmpty(dataList)) return;
         // 示例为第一个单元格
@@ -810,5 +810,91 @@ public class FtExcelUtil<T> {
         return list;
     }
 
+
+    public List<T> importTreeExcel(InputStream inputStream) throws Exception {
+        List<T> ts = importExcel(inputStream);
+        this.init(list, sheetName, FtExcel.Type.IMPORT);
+        List<Object[]> fieldsAnno = this.fields;
+        String serFieldName = null;
+        String childrenFieldName = null;
+        String serStr = null;
+
+        for (Object[] objects : fieldsAnno) {
+            FtExcel ftExcel = (FtExcel) objects[1];
+            if (ftExcel.serialNumFlag()) {
+                // 如果当前的字段是序号列  就先存起来 等下用
+                serFieldName = ((Field) objects[0]).getName();
+                serStr = ftExcel.serialStr();
+                childrenFieldName = ftExcel.childrenFieldName();
+                break;
+            }
+        }
+        // 没有指定序号列 抛出异常
+        if (serFieldName == null) throw new RuntimeException("请指定序号列");
+        // 
+        FieldUtils init = FieldUtils.init();
+
+        // 树形结果
+        List<T> res = new ArrayList<>();
+        String finalSerFieldName = serFieldName;
+
+
+        // 根据序号拍个序先 不大好用
+//        ts.sort((o1, o2) -> {
+//            Integer length1 = String.valueOf(init.getFieldVal(finalSerFieldName, o1)).split("\\.").length;
+//            Integer length2 = String.valueOf(init.getFieldVal(finalSerFieldName, o2)).split("\\.").length;
+//            return length1.compareTo(length2) == 0 ? -1 : length1.compareTo(length2);
+//        });
+
+        HashMap<Integer, List<T>> lengthMap = new HashMap<>();
+        for (T t : ts) {
+            // 如果是属于TreeNode才继续进行
+            if (!(t instanceof TreeNode)) throw new RuntimeException("请继承TreeNode");
+            // 序号
+            String serNum = init.getFieldVal(serFieldName, t) + "";
+            String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
+            // 
+            List<T> lenList = lengthMap.get(split.length);
+            // 如果当前数据为空 就new一个  然后
+            lenList = CollectionUtils.isEmpty(lenList) ? new ArrayList<>() : lenList;
+            lenList.add(t);
+            // 放入map 等会儿用
+            lengthMap.put(split.length, lenList);
+        }
+
+        // 由大到小
+        String finalSerStr = serStr;
+        String finalChildrenFieldName = childrenFieldName;
+        lengthMap.keySet().stream().sorted(Comparator.comparing(Integer::intValue).reversed()).forEach(length -> {
+            List<T> lengthList = lengthMap.get(length);
+            if (length == 1) {
+                res.addAll(lengthList);
+            } else {
+                for (T t : lengthList) {
+                    String serNum = init.getFieldVal(finalSerFieldName, t) + "";
+                    String parentSerNum = getStrBefore(serNum, finalSerStr);
+                    ts.stream().filter(item -> parentSerNum.equals(init.getFieldVal(finalSerFieldName, item))).findFirst().ifPresent(i -> {
+                        TreeNode treeNode = (TreeNode) i;
+                        List children = treeNode.getChildren();
+                        children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
+                        children.add(t);
+                        init.setFieldVal(finalChildrenFieldName, children, i);
+                    });
+                }
+            }
+        });
+        return res;
+    }
+
+    public static void main(String[] args) {
+
+    }
+
+
+    private String getStrBefore(String strOrig, String str) {
+        int lastIndex = strOrig.lastIndexOf(str);
+        return strOrig.substring(0, lastIndex);
+
+    }
 
 }
