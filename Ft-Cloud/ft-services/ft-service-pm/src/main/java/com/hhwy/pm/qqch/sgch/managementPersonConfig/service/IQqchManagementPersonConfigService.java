@@ -28,4 +28,7 @@ public interface IQqchManagementPersonConfigService {
             int deleteQqchManagementPersonConfigByPks(List<Long> qqchManagementPersonConfigPkList);
 
     void save(QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
+
+
+    QqchManagementPersonConfigVo synchData();
 }

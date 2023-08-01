@@ -1,8 +1,9 @@
 package com.hhwy.pm.qqch.preparation.qqchOrganizationList.mapper;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author hwj
@@ -13,7 +14,9 @@ public interface QqchOrganizationListMapper {
                                                                                                                                                     
     QqchOrganizationList getQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
+
     List<QqchOrganizationList> getQqchOrganizationListList(QqchOrganizationList qqchOrganizationList);
+    List<QqchOrganizationList>  getQqchOrganizationListList2(QqchOrganizationList qqchOrganizationList);
 
     int insertQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
