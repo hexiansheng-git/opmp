@@ -147,6 +147,16 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
 
     @Override
     public List<XmslWbs> childListByIds(Long[] ids) {
+        return childListByIds(ids,false);
+    }
+
+    @Override
+    public List<XmslWbs> childListById(Long id) {
+        return this.childListByIds(new Long[]{id});
+    }
+
+    @Override
+    public List<XmslWbs> childListByIds(Long[] ids,boolean containSelf) {
         if(ArrayUtils.isEmpty(ids))
             return new ArrayList<>(2);
         List<XmslWbs> list = xmslWbsMapper.getByIds(ids);
@@ -157,13 +167,10 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             Long[] tempIds = WbsRedisUtils.getChildWbsId(ids[i]+"");
             childIdSet.addAll(Arrays.asList(tempIds));
         }
+        if(containSelf)
+            childIdSet.addAll(Arrays.asList(ids));
         List<XmslWbs> wbsList = xmslWbsMapper.getByIds(childIdSet.toArray(new Long[]{}));
         return wbsList;
-    }
-
-    @Override
-    public List<XmslWbs> childListById(Long id) {
-        return this.childListByIds(new Long[]{id});
     }
 
     @Override

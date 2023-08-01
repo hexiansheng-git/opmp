@@ -27,6 +27,15 @@ public class QqchManagementPersonConfigController extends BaseController{
     @Autowired
     private IQqchManagementPersonConfigService qqchManagementPersonConfigService;
 
+    /**
+     *  同步项目组织数据
+     */
+    @GetMapping("/synchData")
+    public AjaxResult getInitData(){
+        QqchManagementPersonConfigVo qqchManagementPersonConfigVo=qqchManagementPersonConfigService.synchData();
+        return AjaxResult.success(qqchManagementPersonConfigVo);
+    }
+
 
     /**
      *  列表接口
