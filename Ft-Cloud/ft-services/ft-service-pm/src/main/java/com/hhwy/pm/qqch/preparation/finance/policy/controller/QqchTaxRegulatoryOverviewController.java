@@ -43,7 +43,7 @@ public class QqchTaxRegulatoryOverviewController extends BaseController {
     }
 
     /**
-     * 保存/确认
+     * 保存/确认/提交
      *
      * @param qqchTaxRegulatoryOverviewVo
      * @return

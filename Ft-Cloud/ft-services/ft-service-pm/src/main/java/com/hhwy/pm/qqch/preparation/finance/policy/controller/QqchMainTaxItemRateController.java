@@ -42,7 +42,7 @@ public class QqchMainTaxItemRateController extends BaseController {
     }
 
     /**
-     * 保存/确认
+     * 保存/确认/提交
      *
      * @param qqchMainTaxItemRateVo
      * @return

@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchTaxLaw;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchTaxRegulatoryOverview;
@@ -69,6 +70,10 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
 
         if (dbOverview == null) {
             overview.setId(IdWorker.createId());
+            overview.setVersion(voParam.getVersion());
+            if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                overview.setValid(Valid.YES);
+            }
             overview.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             overview.setCreateUserName(SecurityUtils.getUserName());
             overview.setCreateTime(DateUtils.getNowDate());
@@ -87,7 +92,7 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
 
         // 税法
         if (!CollectionUtils.isEmpty(voParam.getList())) {
-            qqchTaxLawService.insertQqchTaxLawList(voParam.getList());
+            qqchTaxLawService.insertQqchTaxLawList(voParam.getList(), voParam.getVersion());
         }
 
         String buttonMark = voParam.getButtonMark();

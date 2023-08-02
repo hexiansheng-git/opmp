@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchMainTaxItemRate;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.vo.QqchMainTaxItemRateVo;
@@ -52,11 +53,15 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
         // 清空数据库表中数据
         QqchMainTaxItemRate deleteParam = new QqchMainTaxItemRate();
         deleteParam.setVersion(voParam.getVersion());
-        this.deleteQqchMainTaxItemRate(deleteParam);
+        qqchMainTaxItemRateMapper.deleteQqchMainTaxItemRate(deleteParam);
 
         if (!CollectionUtils.isEmpty(voParam.getList())) {
             for (QqchMainTaxItemRate qqchMainTaxItemRate : voParam.getList()) {
                 qqchMainTaxItemRate.setId(IdWorker.createId());
+                qqchMainTaxItemRate.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchMainTaxItemRate.setValid(Valid.YES);
+                }
                 qqchMainTaxItemRate.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 qqchMainTaxItemRate.setCreateUserName(SecurityUtils.getUserName());
                 qqchMainTaxItemRate.setCreateTime(DateUtils.getNowDate());
@@ -71,10 +76,5 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
-    }
-
-    @Transactional
-    public int deleteQqchMainTaxItemRate(QqchMainTaxItemRate qqchMainTaxItemRate) {
-        return qqchMainTaxItemRateMapper.deleteQqchMainTaxItemRate(qqchMainTaxItemRate);
     }
 }

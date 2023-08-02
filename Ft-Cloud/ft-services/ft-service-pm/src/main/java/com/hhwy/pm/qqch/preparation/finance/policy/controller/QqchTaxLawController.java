@@ -57,14 +57,6 @@ public class QqchTaxLawController extends BaseController {
         return AjaxResult.success(qqchTaxLawParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxLaw:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchTaxLawList(
-        @Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxLaw> qqchTaxLawListParam) {
-        qqchTaxLawService.insertQqchTaxLawList(qqchTaxLawListParam);
-        return AjaxResult.success(qqchTaxLawListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchTaxLaw:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTaxLaw(

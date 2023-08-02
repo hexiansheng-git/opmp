@@ -2,10 +2,12 @@ package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchTaxLaw;
 import com.hhwy.pm.qqch.preparation.finance.policy.mapper.QqchTaxLawMapper;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchTaxLawService;
 import com.hhwy.utils.idworker.IdWorker;
+import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,9 +41,13 @@ public class QqchTaxLawServiceImpl implements IQqchTaxLawService {
     }
 
     @Transactional
-    public int insertQqchTaxLawList(List<QqchTaxLaw> qqchTaxLawList) {
+    public int insertQqchTaxLawList(List<QqchTaxLaw> qqchTaxLawList, BigDecimal version) {
         for (QqchTaxLaw qqchTaxLaw : qqchTaxLawList) {
             qqchTaxLaw.setId(IdWorker.createId());
+            qqchTaxLaw.setVersion(version);
+            if (qqchTaxLaw.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                qqchTaxLaw.setValid(Valid.YES);
+            }
             qqchTaxLaw.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchTaxLaw.setCreateUserName(SecurityUtils.getUserName());
             qqchTaxLaw.setCreateTime(DateUtils.getNowDate());

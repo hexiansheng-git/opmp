@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.finance.policy.service;
 
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchTaxLaw;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface IQqchTaxLawService {
 
     int insertQqchTaxLaw(QqchTaxLaw qqchTaxLaw);
 
-    int insertQqchTaxLawList(List<QqchTaxLaw> qqchTaxLawList);
+    int insertQqchTaxLawList(List<QqchTaxLaw> qqchTaxLawList, BigDecimal version);
 
     int updateQqchTaxLaw(QqchTaxLaw qqchTaxLaw);
 
