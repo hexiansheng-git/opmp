@@ -64,21 +64,24 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
         qqchModuleConfirmCase.setStageIdentity(stageIdentity);
         qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserId()));
         qqchModuleConfirmCase = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCase(qqchModuleConfirmCase);
-        if(qqchModuleConfirmCase == null){
-            //插入确认记录
-            qqchModuleConfirmCase = new QqchModuleConfirmCase();
-            qqchModuleConfirmCase.setId(IdWorker.createId());
-            qqchModuleConfirmCase.setModuleIdentity(menuId);
-            qqchModuleConfirmCase.setStageIdentity(stageIdentity);
-            qqchModuleConfirmCase.setConfirmStatus(ConfirmStatus.CONFIRMED);
-            qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchModuleConfirmCase.setConfirmUserName(SecurityUtils.getUserName());
-            qqchModuleConfirmCase.setConfirmTime(DateUtils.getNowDate());
-            qqchModuleConfirmCase.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchModuleConfirmCase.setCreateUserName(SecurityUtils.getUserName());
-            qqchModuleConfirmCase.setCreateTime(DateUtils.getNowDate());
-            qqchModuleConfirmCaseMapper.insertQqchModuleConfirmCase(qqchModuleConfirmCase);
+
+        if(qqchModuleConfirmCase != null){
+            throw new RuntimeException("该页面已确认完成，请勿重复确认！");
         }
+
+        //插入确认记录
+        qqchModuleConfirmCase = new QqchModuleConfirmCase();
+        qqchModuleConfirmCase.setId(IdWorker.createId());
+        qqchModuleConfirmCase.setModuleIdentity(menuId);
+        qqchModuleConfirmCase.setStageIdentity(stageIdentity);
+        qqchModuleConfirmCase.setConfirmStatus(ConfirmStatus.CONFIRMED);
+        qqchModuleConfirmCase.setConfirmUser(String.valueOf(SecurityUtils.getUserId()));
+        qqchModuleConfirmCase.setConfirmUserName(SecurityUtils.getUserName());
+        qqchModuleConfirmCase.setConfirmTime(DateUtils.getNowDate());
+        qqchModuleConfirmCase.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        qqchModuleConfirmCase.setCreateUserName(SecurityUtils.getUserName());
+        qqchModuleConfirmCase.setCreateTime(DateUtils.getNowDate());
+        qqchModuleConfirmCaseMapper.insertQqchModuleConfirmCase(qqchModuleConfirmCase);
     }
 
     @Override

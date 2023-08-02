@@ -107,6 +107,16 @@ public class QqchOtherContractItem extends BaseEntity {
     @Excel(name = "备注/描述")
     private String remark;
     /**
+     * 字段描述：数据来源（1：选择，2：手动新增）
+     */
+    @JsonProperty
+    private String source;
+    /**
+     * 字段描述：叶子节点（1：是，0：否）
+     */
+    @JsonProperty
+    private String leaf;
+    /**
      * 字段描述：排序
      */
     @JsonProperty

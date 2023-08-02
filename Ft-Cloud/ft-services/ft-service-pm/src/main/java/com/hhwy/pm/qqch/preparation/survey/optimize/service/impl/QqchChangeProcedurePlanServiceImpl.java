@@ -157,12 +157,14 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         if(CollectionUtils.isEmpty(qqchChangeProcedurePlanList)){
             return;
         }
+        String valid = Valid.NO;
+        if(version.compareTo(BigDecimal.ONE) == 0){
+            valid = Valid.YES;
+        }
         for (QqchChangeProcedurePlan qqchChangeProcedurePlan : qqchChangeProcedurePlanList) {
             qqchChangeProcedurePlan.setId(IdWorker.createId());
             qqchChangeProcedurePlan.setVersion(version);
-            if(version.compareTo(BigDecimal.ONE) == 0){
-                qqchChangeProcedurePlan.setValid(Valid.YES);
-            }
+            qqchChangeProcedurePlan.setValid(valid);
             qqchChangeProcedurePlan.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchChangeProcedurePlan.setCreateUserName(SecurityUtils.getUserName());
             qqchChangeProcedurePlan.setCreateTime(DateUtils.getNowDate());

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.costControl.masterContract.service;
 
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchOtherContractItem;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchOtherContractItemVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchOtherContractItemService {
 
     int insertQqchOtherContractItem(QqchOtherContractItem qqchOtherContractItem);
 
-    int insertQqchOtherContractItemList(List<QqchOtherContractItem> qqchOtherContractItemList);
-
     int updateQqchOtherContractItem(QqchOtherContractItem qqchOtherContractItem);
 
     int updateQqchOtherContractItemList(List<QqchOtherContractItem> qqchOtherContractItemList);
@@ -26,4 +25,18 @@ public interface IQqchOtherContractItemService {
     int deleteQqchOtherContractItem(QqchOtherContractItem qqchOtherContractItem);
 
     int deleteQqchOtherContractItemByPks(List<Long> qqchOtherContractItemPkList);
+
+    /**
+     * 获取其他合同事项分析Vo
+     * @param qqchOtherContractItem
+     * @return
+     */
+    QqchOtherContractItemVo getQqchOtherContractItemVo(QqchOtherContractItem qqchOtherContractItem);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchOtherContractItemVo
+     * @return
+     */
+    void save(QqchOtherContractItemVo qqchOtherContractItemVo);
 }

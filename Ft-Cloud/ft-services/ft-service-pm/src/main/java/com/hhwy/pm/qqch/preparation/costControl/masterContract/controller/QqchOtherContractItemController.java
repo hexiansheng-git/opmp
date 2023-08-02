@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchOtherContractItem;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchOtherContractItemVo;
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.service.IQqchOtherContractItemService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchOtherContractItemController extends BaseController {
         return AjaxResult.success(qqchOtherContractItemParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchOtherContractItemList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchOtherContractItem> qqchOtherContractItemListParam) {
-        qqchOtherContractItemService.insertQqchOtherContractItemList(qqchOtherContractItemListParam);
-        return AjaxResult.success(qqchOtherContractItemListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchOtherContractItem:update")
     @PostMapping("/update")
     public AjaxResult updateQqchOtherContractItem(@Validated(ValidationGroups.Update.class) @RequestBody QqchOtherContractItem qqchOtherContractItemParam) {
@@ -90,5 +84,29 @@ public class QqchOtherContractItemController extends BaseController {
         List<QqchOtherContractItem> qqchOtherContractItemList = qqchOtherContractItemService.getQqchOtherContractItemList(qqchOtherContractItemParam);
         ExcelUtils<QqchOtherContractItem> util = new ExcelUtils<>(QqchOtherContractItem.class);
         util.exportExcel(response, qqchOtherContractItemList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取其他合同事项分析Vo
+     * @param qqchOtherContractItem
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchOtherContractItem:list")
+    @GetMapping("getQqchOtherContractItemVo")
+    public AjaxResult getQqchOtherContractItemVo(@Validated(ValidationGroups.Get.class) QqchOtherContractItem qqchOtherContractItem) {
+        QqchOtherContractItemVo qqchOtherContractItemVo = qqchOtherContractItemService.getQqchOtherContractItemVo(qqchOtherContractItem);
+        return AjaxResult.success(qqchOtherContractItemVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchOtherContractItemVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchOtherContractItem:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOtherContractItemVo qqchOtherContractItemVo) {
+        qqchOtherContractItemService.save(qqchOtherContractItemVo);
+        return AjaxResult.success();
     }
 }

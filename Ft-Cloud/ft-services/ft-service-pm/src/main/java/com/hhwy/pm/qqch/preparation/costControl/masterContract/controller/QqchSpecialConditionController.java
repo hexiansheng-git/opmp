@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchSpecialCondition;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchSpecialConditionVo;
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.service.IQqchSpecialConditionService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchSpecialConditionController extends BaseController {
         return AjaxResult.success(qqchSpecialConditionParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchSpecialConditionList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchSpecialCondition> qqchSpecialConditionListParam) {
-        qqchSpecialConditionService.insertQqchSpecialConditionList(qqchSpecialConditionListParam);
-        return AjaxResult.success(qqchSpecialConditionListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSpecialCondition(@Validated(ValidationGroups.Update.class) @RequestBody QqchSpecialCondition qqchSpecialConditionParam) {
@@ -90,5 +84,29 @@ public class QqchSpecialConditionController extends BaseController {
         List<QqchSpecialCondition> qqchSpecialConditionList = qqchSpecialConditionService.getQqchSpecialConditionList(qqchSpecialConditionParam);
         ExcelUtils<QqchSpecialCondition> util = new ExcelUtils<>(QqchSpecialCondition.class);
         util.exportExcel(response, qqchSpecialConditionList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取专用条件梳理Vo
+     * @param qqchSpecialCondition
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSpecialCondition:list")
+    @GetMapping("getQqchSpecialConditionVo")
+    public AjaxResult getQqchSpecialConditionVo(@Validated(ValidationGroups.Get.class) QqchSpecialCondition qqchSpecialCondition) {
+        QqchSpecialConditionVo qqchSpecialConditionVo = qqchSpecialConditionService.getQqchSpecialConditionVo(qqchSpecialCondition);
+        return AjaxResult.success(qqchSpecialConditionVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchSpecialConditionVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialConditionVo qqchSpecialConditionVo) {
+        qqchSpecialConditionService.save(qqchSpecialConditionVo);
+        return AjaxResult.success();
     }
 }

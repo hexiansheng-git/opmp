@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.costControl.masterContract.service;
 
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchSpecialCondition;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchSpecialConditionVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchSpecialConditionService {
 
     int insertQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition);
 
-    int insertQqchSpecialConditionList(List<QqchSpecialCondition> qqchSpecialConditionList);
-
     int updateQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition);
 
     int updateQqchSpecialConditionList(List<QqchSpecialCondition> qqchSpecialConditionList);
@@ -26,4 +25,18 @@ public interface IQqchSpecialConditionService {
     int deleteQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition);
 
     int deleteQqchSpecialConditionByPks(List<Long> qqchSpecialConditionPkList);
+
+    /**
+     * 获取专用条件梳理Vo
+     * @param qqchSpecialCondition
+     * @return
+     */
+    QqchSpecialConditionVo getQqchSpecialConditionVo(QqchSpecialCondition qqchSpecialCondition);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchSpecialConditionVo
+     * @return
+     */
+    void save(QqchSpecialConditionVo qqchSpecialConditionVo);
 }

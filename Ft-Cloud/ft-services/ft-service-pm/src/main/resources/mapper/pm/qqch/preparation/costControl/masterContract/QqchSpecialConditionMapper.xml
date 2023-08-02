@@ -19,6 +19,8 @@
         <result property="dutyDeptDirector" column="duty_dept_director"/>
         <result property="directorId" column="director_id"/>
         <result property="remark" column="remark"/>
+        <result property="source" column="source"/>
+        <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
@@ -54,6 +56,8 @@
              , `duty_dept_director`
              , `director_id`
              , `remark`
+             , `source`
+             , `leaf`
              , `sort`
              , `version`
              , `valid`
@@ -99,6 +103,8 @@
             </if>
             <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
@@ -147,6 +153,8 @@
             </if>
             <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
@@ -187,6 +195,8 @@
             <if test="dutyDeptDirector != null  and dutyDeptDirector != ''">`duty_dept_director`,</if>
             <if test="directorId != null  and directorId != ''">`director_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="source != null  and source != ''">`source`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
@@ -222,6 +232,8 @@
             <if test="dutyDeptDirector != null  and dutyDeptDirector != ''">#{dutyDeptDirector},</if>
             <if test="directorId != null  and directorId != ''">#{directorId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
@@ -262,6 +274,8 @@
             `duty_dept_director`,
             `director_id`,
             `remark`,
+            `source`,
+            `leaf`,
             `sort`,
             `version`,
             `valid`,
@@ -298,6 +312,8 @@
                 #{item.dutyDeptDirector},
                 #{item.directorId},
                 #{item.remark},
+                #{item.source},
+                #{item.leaf},
                 #{item.sort},
                 #{item.version},
                 #{item.valid},
