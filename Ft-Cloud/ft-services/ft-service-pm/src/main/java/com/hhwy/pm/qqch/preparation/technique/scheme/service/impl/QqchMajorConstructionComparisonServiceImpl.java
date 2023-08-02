@@ -67,7 +67,9 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         if (!CollectionUtils.isEmpty(insertList)) {
             for (QqchMajorConstructionComparison insert : insertList) {
                 insert.setVersion(qqchMajorConstructionComparisonVo.getVersion());
-                insert.setValid(Valid.YES);
+                if (qqchMajorConstructionComparisonVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    insert.setValid(Valid.YES);
+                }
                 insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 insert.setCreateUserName(SecurityUtils.getUserName());
                 insert.setCreateTime(DateUtils.getNowDate());

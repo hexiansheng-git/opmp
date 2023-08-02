@@ -81,7 +81,9 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             qqchConstructionList.setCreateTime(DateUtils.getNowDate());
 
             qqchConstructionList.setVersion(qqchConstructionListVo.getVersion());
-            qqchConstructionList.setValid(Valid.YES);
+            if (qqchConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                qqchConstructionList.setValid(Valid.YES);
+            }
         }
 
         qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());

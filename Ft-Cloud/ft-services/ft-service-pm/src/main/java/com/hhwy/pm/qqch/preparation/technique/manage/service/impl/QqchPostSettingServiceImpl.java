@@ -36,7 +36,7 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
 
     public QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version) {
         QqchPostSettingVo vo = new QqchPostSettingVo();
-        version = VersionUtil.getVersion("qqch_post_setting",version);
+        version = VersionUtil.getVersion("qqch_post_setting", version);
         vo.setVersion(version);
 
         QqchPostSetting qqchPostSetting = new QqchPostSetting();
@@ -65,7 +65,9 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
         for (QqchPostSetting insert : insertList) {
             insert.setPostType(postType);
             insert.setVersion(voParam.getVersion());
-            insert.setValid(Valid.YES);
+            if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                insert.setValid(Valid.YES);
+            }
             insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             insert.setCreateUserName(SecurityUtils.getUserName());
             insert.setCreateTime(DateUtils.getNowDate());

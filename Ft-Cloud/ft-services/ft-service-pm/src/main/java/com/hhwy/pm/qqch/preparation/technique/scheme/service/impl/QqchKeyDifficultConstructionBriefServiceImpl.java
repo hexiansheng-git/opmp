@@ -70,7 +70,9 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
             brief.setCreateTime(DateUtils.getNowDate());
 
             brief.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());
-            brief.setValid(Valid.YES);
+            if (qqchKeyDifficultConstructionBriefVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                brief.setValid(Valid.YES);
+            }
         }
 
         qqchKeyDifficultConstructionBriefMapper

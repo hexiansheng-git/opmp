@@ -99,7 +99,9 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         List<QqchDiscloseThird> newMainList = TreeUtil.treeToList(treeList);
         for (QqchDiscloseThird newMain : newMainList) {
             newMain.setVersion(qqchDiscloseThirdVo.getVersion());
-            newMain.setValid(Valid.YES);
+            if (qqchDiscloseThirdVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                newMain.setValid(Valid.YES);
+            }
             newMain.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             newMain.setCreateUserName(SecurityUtils.getUserName());
             newMain.setCreateTime(DateUtils.getNowDate());
@@ -112,7 +114,10 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
             if (!CollectionUtils.isEmpty(detailList)) {
                 for (QqchDiscloseThirdDetail detail : detailList) {
                     detail.setMasterId(qqchDiscloseThird.getId());
-                    detail.setValid(Valid.YES);
+                    detail.setVersion(qqchDiscloseThirdVo.getVersion());
+                    if (qqchDiscloseThirdVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                        detail.setValid(Valid.YES);
+                    }
                     detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     detail.setCreateUserName(SecurityUtils.getUserName());
                     detail.setCreateTime(DateUtils.getNowDate());

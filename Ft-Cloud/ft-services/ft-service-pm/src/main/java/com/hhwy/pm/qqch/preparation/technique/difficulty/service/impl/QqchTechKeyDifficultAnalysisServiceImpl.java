@@ -76,13 +76,17 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
 
         List<QqchTechKeyDifficultAnalysis> insertList = new ArrayList<>();
 
+        int sort = 1;
         // 技术重点
         if (!CollectionUtils.isEmpty(voParam.getKeyAnalysisList())) {
             for (QqchTechKeyDifficultAnalysis key : voParam.getKeyAnalysisList()) {
                 key.setType("1");
                 key.setId(IdWorker.createId());
                 key.setVersion(voParam.getVersion());
-                key.setValid(Valid.YES);
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    key.setValid(Valid.YES);
+                }
+                key.setSort(sort++);
                 key.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 key.setCreateUserName(SecurityUtils.getUserName());
                 key.setCreateTime(DateUtils.getNowDate());
@@ -97,7 +101,10 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
                     difficult.setType("2");
                     difficult.setId(IdWorker.createId());
                     difficult.setVersion(voParam.getVersion());
-                    difficult.setValid(Valid.YES);
+                    if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                        difficult.setValid(Valid.YES);
+                    }
+                    difficult.setSort(sort++);
                     difficult.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     difficult.setCreateUserName(SecurityUtils.getUserName());
                     difficult.setCreateTime(DateUtils.getNowDate());

@@ -83,7 +83,9 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         if (!CollectionUtils.isEmpty(insertList)) {
             for (QqchDiscloseFirstSecond insert : insertList) {
                 insert.setVersion(qqchDiscloseFirstSecondVo.getVersion());
-                insert.setValid(Valid.YES);
+                if (qqchDiscloseFirstSecondVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    insert.setValid(Valid.YES);
+                }
                 insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 insert.setCreateUserName(SecurityUtils.getUserName());
                 insert.setCreateTime(DateUtils.getNowDate());

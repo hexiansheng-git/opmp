@@ -71,7 +71,9 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
         if (!CollectionUtils.isEmpty(insertList)) {
             for (QqchContractTechAchievementIdentify insert : insertList) {
                 insert.setVersion(voParam.getVersion());
-                insert.setValid(Valid.YES);
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    insert.setValid(Valid.YES);
+                }
                 insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 insert.setCreateUserName(SecurityUtils.getUserName());
                 insert.setCreateTime(DateUtils.getNowDate());

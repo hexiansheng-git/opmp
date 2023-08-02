@@ -1,7 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.domain.vo;
 
+import com.hhwy.pm.qqch.common.domain.PreparationEntity;
 import com.hhwy.pm.qqch.preparation.technique.manage.domain.QqchTechManageModeComparison;
-import java.math.BigDecimal;
 import java.util.List;
 import lombok.Data;
 
@@ -11,29 +11,9 @@ import lombok.Data;
  * @remark 3.3.1技术管理模式比选
  */
 @Data
-public class QqchTechManageModeComparisonVo {
+public class QqchTechManageModeComparisonVo extends PreparationEntity {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
-     */
-    private String stageIdentity;
-
-    /**
-     * 版本状态
-     */
-    private BigDecimal version;
-
-    /**
-     * 字段描述：菜单id
-     */
-    private String menuId;
-
-    /**
-     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
-     */
-    private String buttonMark;
 
     /**
      * 技术管理模式比选集合

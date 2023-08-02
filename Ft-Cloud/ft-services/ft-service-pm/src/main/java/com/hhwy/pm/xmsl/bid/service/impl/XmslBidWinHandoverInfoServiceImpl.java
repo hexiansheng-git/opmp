@@ -85,11 +85,13 @@ public class XmslBidWinHandoverInfoServiceImpl implements IXmslBidWinHandoverInf
         deleteParam.setDelFlag("1");
         xmslBidWinHandoverFileMapper.updateXmslBidWinHandoverFile(deleteParam);
 
+        int sort = 1;
         // 中标项目移交文件
         if (!CollectionUtils.isEmpty(xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList())) {
             for (XmslBidWinHandoverFile bidWinHandoverFile : xmslBidWinHandoverInfo.getXmslBidWinHandoverFileList()) {
                 bidWinHandoverFile.setId(IdWorker.createId());
                 bidWinHandoverFile.setHandoverInfoId(xmslBidWinHandoverInfo.getId());
+                bidWinHandoverFile.setSort(sort++);
                 bidWinHandoverFile.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 bidWinHandoverFile.setCreateUserName(SecurityUtils.getUserName());
                 bidWinHandoverFile.setCreateTime(DateUtils.getNowDate());

@@ -59,10 +59,14 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
             return;
         }
 
+        int sort = 1;
         for (QqchTechManageModeComparison qqchTechManageModeComparison : voParam.getList()) {
             qqchTechManageModeComparison.setId(IdWorker.createId());
             qqchTechManageModeComparison.setVersion(voParam.getVersion());
-            qqchTechManageModeComparison.setValid(Valid.YES);
+            if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                qqchTechManageModeComparison.setValid(Valid.YES);
+            }
+            qqchTechManageModeComparison.setSort(sort++);
             qqchTechManageModeComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchTechManageModeComparison.setCreateUserName(SecurityUtils.getUserName());
             qqchTechManageModeComparison.setCreateTime(DateUtils.getNowDate());
