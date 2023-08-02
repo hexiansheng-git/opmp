@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.preparation.technique.difficulty.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.qqch.preparation.technique.difficulty.domain.QqchTechKeyDifficultAnalysis;
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,13 +16,11 @@ public class QqchTechKeyDifficultAnalysisVo {
     /**
      * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
      */
-    @JsonProperty
     private String stageIdentity;
 
     /**
      * 版本状态
      */
-    @JsonProperty
     private BigDecimal version;
 
     /**
