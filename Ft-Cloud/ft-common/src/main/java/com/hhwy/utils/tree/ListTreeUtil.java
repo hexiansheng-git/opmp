@@ -1,5 +1,6 @@
 package com.hhwy.utils.tree;
 
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
 
@@ -122,6 +123,48 @@ public class ListTreeUtil {
                 setSort.accept(child,sort++);
                 recur(child, resultList, setId, setPid, setSort, getChildren, setChildren);
             }
+        }
+    }
+
+    /**
+     * 树形列表转线性列表，加排序号，加叶子节点
+     * @param source 数据源
+     * @param setId 如何设置id
+     * @param setPid 如何设置pid
+     * @param setSort 如何设置排序号
+     * @param setLeaf 如何设置叶子节点
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T> 节点类型
+     * @return
+     */
+    public static <T> List<T> formatList(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid, BiConsumer<T,Integer> setSort,BiConsumer<T,String> setLeaf, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        int sort = 1;
+        for (T node : source) {
+            setSort.accept(node,sort++);
+            recur(node, resultList, setId, setPid, setSort,setLeaf, getChildren, setChildren);
+        }
+        return resultList;
+    }
+
+    private static <T> void recur(T node, List<T> resultList, BiConsumer<T,Long> setId, BiConsumer<T,Long> setPid, BiConsumer<T,Integer> setSort,BiConsumer<T,String> setLeaf, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        Long id = IdWorker.createId();
+        int sort = 1;
+        setId.accept(node,id);
+        resultList.add(node);
+
+        List<T> children = getChildren.apply(node);
+        setChildren.accept(node, null);
+
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                setPid.accept(child,id);
+                setSort.accept(child,sort++);
+                recur(child, resultList, setId, setPid, setSort,setLeaf, getChildren, setChildren);
+            }
+        }else {
+            setLeaf.accept(node, CommonYesNo.YES);
         }
     }
 

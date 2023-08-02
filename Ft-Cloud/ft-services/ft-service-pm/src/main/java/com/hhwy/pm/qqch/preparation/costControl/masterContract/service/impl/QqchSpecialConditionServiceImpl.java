@@ -1,0 +1,175 @@
+package com.hhwy.pm.qqch.preparation.costControl.masterContract.service.impl;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchSpecialCondition;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchSpecialConditionVo;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.mapper.QqchSpecialConditionMapper;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.service.IQqchSpecialConditionService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
+import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
+import io.seata.common.util.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+/**
+ * @author han
+ * @date 2023-08-02 11:39:48
+ * @remark 专用条件梳理
+ */
+@Service
+public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionService {
+
+    @Autowired
+    private QqchSpecialConditionMapper qqchSpecialConditionMapper;
+
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+
+
+    public QqchSpecialCondition getQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition) {
+        return qqchSpecialConditionMapper.getQqchSpecialCondition(qqchSpecialCondition);
+    }
+
+    public List<QqchSpecialCondition> getQqchSpecialConditionList(QqchSpecialCondition qqchSpecialCondition) {
+        return qqchSpecialConditionMapper.getQqchSpecialConditionList(qqchSpecialCondition);
+    }
+
+    @Transactional
+    public int insertQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition) {
+        qqchSpecialCondition.setId(IdWorker.createId());
+        qqchSpecialCondition.setCreateUser(SecurityUtils.getUserName());
+        qqchSpecialCondition.setCreateTime(DateUtils.getNowDate());
+        return qqchSpecialConditionMapper.insertQqchSpecialCondition(qqchSpecialCondition);
+    }
+
+    @Transactional
+    public void insertQqchSpecialConditionList(List<QqchSpecialCondition> qqchSpecialConditionList, BigDecimal version) {
+        //删除旧数据
+        QqchSpecialCondition qqchSpecialCondition = new QqchSpecialCondition();
+        qqchSpecialCondition.setVersion(version);
+        qqchSpecialConditionMapper.deleteQqchSpecialCondition(qqchSpecialCondition);
+
+        if(CollectionUtils.isEmpty(qqchSpecialConditionList)){
+            return;
+        }
+
+        List<QqchSpecialCondition> insertList = ListTreeUtil.formatList(
+                qqchSpecialConditionList,
+                QqchSpecialCondition::setId,
+                QqchSpecialCondition::setPid,
+                QqchSpecialCondition::setSort,
+                QqchSpecialCondition::setLeaf,
+                QqchSpecialCondition::getChildren,
+                QqchSpecialCondition::setChildren);
+
+        String valid = Valid.NO;
+        if(version.compareTo(BigDecimal.ONE) == 0){
+            valid = Valid.YES;
+        }
+        for (QqchSpecialCondition specialCondition : insertList) {
+            specialCondition.setValid(valid);
+            specialCondition.setVersion(version);
+            specialCondition.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            specialCondition.setCreateUserName(SecurityUtils.getUserName());
+            specialCondition.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchSpecialConditionMapper.insertQqchSpecialConditionList(insertList);
+    }
+
+    @Transactional
+    public int updateQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition) {
+        qqchSpecialCondition.setUpdateUser(SecurityUtils.getUserName());
+        qqchSpecialCondition.setUpdateTime(DateUtils.getNowDate());
+        return qqchSpecialConditionMapper.updateQqchSpecialCondition(qqchSpecialCondition);
+    }
+
+    @Transactional
+    public int updateQqchSpecialConditionList(List<QqchSpecialCondition> qqchSpecialConditionList) {
+        for (QqchSpecialCondition qqchSpecialCondition : qqchSpecialConditionList) {
+            qqchSpecialCondition.setUpdateUser(SecurityUtils.getUserName());
+            qqchSpecialCondition.setUpdateTime(DateUtils.getNowDate());
+        }
+        return qqchSpecialConditionMapper.updateQqchSpecialConditionList(qqchSpecialConditionList);
+    }
+
+    @Transactional
+    public int deleteQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition) {
+        qqchSpecialCondition.setUpdateUser(SecurityUtils.getUserName());
+        qqchSpecialCondition.setUpdateTime(DateUtils.getNowDate());
+        return qqchSpecialConditionMapper.deleteQqchSpecialCondition(qqchSpecialCondition);
+    }
+
+    @Transactional
+    public int deleteQqchSpecialConditionByPks(List<Long> qqchSpecialConditionPkList) {
+        return qqchSpecialConditionMapper.deleteQqchSpecialConditionByPks(qqchSpecialConditionPkList);
+    }
+
+    /**
+     * 获取专用条件梳理Vo
+     * @param qqchSpecialCondition
+     * @return
+     */
+    @Override
+    public QqchSpecialConditionVo getQqchSpecialConditionVo(QqchSpecialCondition qqchSpecialCondition) {
+        QqchSpecialConditionVo qqchSpecialConditionVo = new QqchSpecialConditionVo();
+
+        BigDecimal version = qqchSpecialCondition.getVersion();
+        version = VersionUtil.getVersion("qqch_special_condition",version);
+
+        qqchSpecialCondition.setVersion(version);
+        List<QqchSpecialCondition> qqchSpecialConditionList = qqchSpecialConditionMapper.getQqchSpecialConditionList(qqchSpecialCondition);
+
+        //转树列表
+        List<QqchSpecialCondition> treeList = ListTreeUtil.formatTree(
+                qqchSpecialConditionList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchSpecialCondition::getChildren,
+                QqchSpecialCondition::setChildren);
+
+        qqchSpecialConditionVo.setVersion(version);
+        qqchSpecialConditionVo.setStageIdentity(qqchReviewService.getStage());
+        qqchSpecialConditionVo.setQqchSpecialConditionList(treeList);
+        return qqchSpecialConditionVo;
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchSpecialConditionVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void save(QqchSpecialConditionVo qqchSpecialConditionVo) {
+        String buttonMark = qqchSpecialConditionVo.getButtonMark();
+        ButtonMarkUtil.checkButtonMark(buttonMark);
+
+        BigDecimal version = qqchSpecialConditionVo.getVersion();
+        List<QqchSpecialCondition> qqchSpecialConditionList = qqchSpecialConditionVo.getQqchSpecialConditionList();
+
+        //处理数据
+        this.insertQqchSpecialConditionList(qqchSpecialConditionList,version);
+
+        //处理确认状态是确认
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认记录
+            String menuId = qqchSpecialConditionVo.getMenuId();
+            String stageIdentity = qqchSpecialConditionVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
+    }
+}

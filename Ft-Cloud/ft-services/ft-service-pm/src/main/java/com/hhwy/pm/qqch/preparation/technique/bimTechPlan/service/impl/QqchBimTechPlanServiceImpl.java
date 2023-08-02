@@ -129,7 +129,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
     public QqchBimTechPlanVo getQqchBimTechPlanVo(QqchBimTechPlan qqchBimTechPlan) {
         QqchBimTechPlanVo qqchBimTechPlanVo = new QqchBimTechPlanVo();
 
-        BigDecimal version = qqchBimTechPlanVo.getVersion();
+        BigDecimal version = qqchBimTechPlan.getVersion();
         version = VersionUtil.getVersion("qqch_bim_tech_plan",version);
         qqchBimTechPlanVo.setVersion(version);
         qqchBimTechPlanVo.setStageIdentity(qqchReviewService.getStage());
@@ -140,7 +140,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
             return qqchBimTechPlanVo;
         }
 
-        qqchBimTechPlanVo.setVersion(version);
+        qqchBimTechPlan.setVersion(version);
         List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanMapper.getQqchBimTechPlanList(qqchBimTechPlan);
 
         qqchBimTechPlanVo.setBimMark(bimMark);
