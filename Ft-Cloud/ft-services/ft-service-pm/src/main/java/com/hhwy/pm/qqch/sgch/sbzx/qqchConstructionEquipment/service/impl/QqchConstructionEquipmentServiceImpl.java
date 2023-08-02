@@ -25,10 +25,10 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-08-01 16:22:12
- * @remark 
+ * @remark
  */
 @Service
-public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEquipmentService{
+public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEquipmentService {
 
     @Autowired
     private QqchConstructionEquipmentMapper qqchConstructionEquipmentMapper;
@@ -37,14 +37,15 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+
     public QqchConstructionEquipment getQqchConstructionEquipment(QqchConstructionEquipment qqchConstructionEquipment) {
         return qqchConstructionEquipmentMapper.getQqchConstructionEquipment(qqchConstructionEquipment);
     }
 
 
     /**
-     *  列表
+     * 列表
+     *
      * @param qqchConstructionEquipment
      * @return
      */
@@ -62,7 +63,8 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
     }
 
     /**
-     *  保存/确认/提交
+     * 保存/确认/提交
+     *
      * @param qqchConstructionEquipmentVo
      * @return
      */
@@ -111,7 +113,6 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
     }
 
 
-
     @Transactional
     public int insertQqchConstructionEquipment(QqchConstructionEquipment qqchConstructionEquipment) {
         qqchConstructionEquipment.setId(IdWorker.createId());
@@ -121,8 +122,6 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
     }
 
 
-
-
     @Transactional
     public int updateQqchConstructionEquipment(QqchConstructionEquipment qqchConstructionEquipment) {
         qqchConstructionEquipment.setUpdateUser(SecurityUtils.getUserName());
@@ -130,15 +129,15 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
         return qqchConstructionEquipmentMapper.updateQqchConstructionEquipment(qqchConstructionEquipment);
     }
 
-            @Transactional
-        public int updateQqchConstructionEquipmentList(List<QqchConstructionEquipment> qqchConstructionEquipmentList) {
-            for (QqchConstructionEquipment qqchConstructionEquipment : qqchConstructionEquipmentList) {
-                qqchConstructionEquipment.setUpdateUser(SecurityUtils.getUserName());
-                qqchConstructionEquipment.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchConstructionEquipmentMapper.updateQqchConstructionEquipmentList(qqchConstructionEquipmentList);
+    @Transactional
+    public int updateQqchConstructionEquipmentList(List<QqchConstructionEquipment> qqchConstructionEquipmentList) {
+        for (QqchConstructionEquipment qqchConstructionEquipment : qqchConstructionEquipmentList) {
+            qqchConstructionEquipment.setUpdateUser(SecurityUtils.getUserName());
+            qqchConstructionEquipment.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchConstructionEquipmentMapper.updateQqchConstructionEquipmentList(qqchConstructionEquipmentList);
+    }
+
     @Transactional
     public int deleteQqchConstructionEquipment(QqchConstructionEquipment qqchConstructionEquipment) {
         qqchConstructionEquipment.setUpdateUser(SecurityUtils.getUserName());
@@ -146,10 +145,10 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
         return qqchConstructionEquipmentMapper.deleteQqchConstructionEquipment(qqchConstructionEquipment);
     }
 
-            @Transactional
-        public int deleteQqchConstructionEquipmentByPks(List<Long> qqchConstructionEquipmentPkList) {
-            return qqchConstructionEquipmentMapper.deleteQqchConstructionEquipmentByPks(qqchConstructionEquipmentPkList);
-        }
+    @Transactional
+    public int deleteQqchConstructionEquipmentByPks(List<Long> qqchConstructionEquipmentPkList) {
+        return qqchConstructionEquipmentMapper.deleteQqchConstructionEquipmentByPks(qqchConstructionEquipmentPkList);
+    }
 
 
 }

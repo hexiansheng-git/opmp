@@ -83,13 +83,15 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
         qqchSurveyDesignTeams.setVersion(qqchSurveyDesignTeamsVo.getVersion());
         //1
        QqchSurveyDesignTeams qqchSurveyDesignTeams1 = qqchSurveyDesignTeamsMapper.getQqchSurveyDesignTeams(qqchSurveyDesignTeams);
-        QqchSurveyPersonPlan qqchSurveyPersonPlan = new QqchSurveyPersonPlan();
-        qqchSurveyPersonPlan.setMasterId(qqchSurveyDesignTeams1.getId());
-        qqchSurveyPersonPlanMapper.deleteQqchSurveyPersonPlan(qqchSurveyPersonPlan);
+        if(qqchSurveyDesignTeams1!=null){
+            QqchSurveyPersonPlan qqchSurveyPersonPlan = new QqchSurveyPersonPlan();
+            qqchSurveyPersonPlan.setMasterId(qqchSurveyDesignTeams1.getId());
+            qqchSurveyPersonPlanMapper.deleteQqchSurveyPersonPlan(qqchSurveyPersonPlan);
 
-        QqchSurveyEquPlan qqchSurveyEquPlan=new QqchSurveyEquPlan();
-        qqchSurveyEquPlan.setMasterId(qqchSurveyDesignTeams1.getId());
-        qqchSurveyEquPlanMapper.deleteQqchSurveyEquPlan(qqchSurveyEquPlan);
+            QqchSurveyEquPlan qqchSurveyEquPlan=new QqchSurveyEquPlan();
+            qqchSurveyEquPlan.setMasterId(qqchSurveyDesignTeams1.getId());
+            qqchSurveyEquPlanMapper.deleteQqchSurveyEquPlan(qqchSurveyEquPlan);
+        }
         //2
         qqchSurveyDesignTeamsMapper.deleteQqchSurveyDesignTeams(qqchSurveyDesignTeams);
         //插入新数据
