@@ -144,7 +144,7 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
         }
         String finalValid = valid;
 
-        dataList.stream().forEach(item->{
+        qqchDocTechMaes.stream().forEach(item->{
             item.setVersion(qqchDocTechVo.getVersion());
             item.setValid(finalValid);
             item.setCreateUser(SecurityUtils.getSysUser().getUserId()+"");
@@ -156,7 +156,7 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
         temp.setVersion(qqchDocTechVo.getVersion());
         qqchDocTechMaeMapper.deleteQqchDocTechMae(temp);
 
-        qqchDocTechMaeMapper.insertQqchDocTechMaeList(dataList);
+        qqchDocTechMaeMapper.insertQqchDocTechMaeList(qqchDocTechMaes);
         return 1;
     }
 }
