@@ -140,7 +140,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
             return qqchBimTechPlanVo;
         }
 
-        qqchBimTechPlanVo.setVersion(version);
+        qqchBimTechPlan.setVersion(version);
         List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanMapper.getQqchBimTechPlanList(qqchBimTechPlan);
 
         qqchBimTechPlanVo.setBimMark(bimMark);

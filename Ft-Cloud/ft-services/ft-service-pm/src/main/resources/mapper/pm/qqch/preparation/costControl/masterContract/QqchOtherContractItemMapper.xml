@@ -19,6 +19,8 @@
         <result property="riskSolutions" column="risk_solutions"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
+        <result property="source" column="source"/>
+        <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
@@ -55,6 +57,8 @@
              , `risk_solutions`
              , `file_group_id`
              , `remark`
+             , `source`
+             , `leaf`
              , `sort`
              , `version`
              , `valid`
@@ -102,6 +106,8 @@
             <if test="riskSolutions != null  and riskSolutions != ''">and `risk_solutions` = #{riskSolutions}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
@@ -152,6 +158,8 @@
             <if test="riskSolutions != null  and riskSolutions != ''">and `risk_solutions` = #{riskSolutions}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
@@ -193,6 +201,8 @@
             <if test="riskSolutions != null  and riskSolutions != ''">`risk_solutions`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="source != null  and source != ''">`source`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
@@ -229,6 +239,8 @@
             <if test="riskSolutions != null  and riskSolutions != ''">#{riskSolutions},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
@@ -270,6 +282,8 @@
             `risk_solutions`,
             `file_group_id`,
             `remark`,
+            `source`,
+            `leaf`,
             `sort`,
             `version`,
             `valid`,
@@ -307,6 +321,8 @@
                 #{item.riskSolutions},
                 #{item.fileGroupId},
                 #{item.remark},
+                #{item.source},
+                #{item.leaf},
                 #{item.sort},
                 #{item.version},
                 #{item.valid},

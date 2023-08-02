@@ -1,15 +1,19 @@
 package com.hhwy.pm.qqch.preparation.doc.techmae.service;
 
+import java.math.BigDecimal;
 import java.util.List;
+
+import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTechVo;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae;
+import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMaeV0;
 
 /**
  * @author mls
  * @date 2023-07-25 18:25:47
- * @remark 
+ * @remark
  */
 public interface IQqchDocTechMaeService {
-                                                                                                                                                                                                                                                                            
+
     QqchDocTechMae getQqchDocTechMae(QqchDocTechMae qqchDocTechMae);
 
     List<QqchDocTechMae> getQqchDocTechMaeList(QqchDocTechMae qqchDocTechMae);
@@ -20,9 +24,13 @@ public interface IQqchDocTechMaeService {
 
     int updateQqchDocTechMae(QqchDocTechMae qqchDocTechMae);
 
-            int updateQqchDocTechMaeList(List<QqchDocTechMae> qqchDocTechMaeList);
-    
+    int updateQqchDocTechMaeList(List<QqchDocTechMae> qqchDocTechMaeList);
+
     int deleteQqchDocTechMae(QqchDocTechMae qqchDocTechMae);
 
-            int deleteQqchDocTechMaeByPks(List<Long> qqchDocTechMaePkList);
-    }
+    int deleteQqchDocTechMaeByPks(List<Long> qqchDocTechMaePkList);
+
+    QqchDocTechMaeV0 geteQqchDocTechMaeVo(BigDecimal version);
+
+    int inserteQqchDocTechMaeVo(QqchDocTechMaeV0 qqchDocTechVo);
+}

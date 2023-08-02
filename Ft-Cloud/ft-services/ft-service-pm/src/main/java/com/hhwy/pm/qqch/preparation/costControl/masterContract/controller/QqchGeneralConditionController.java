@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchGeneralCondition;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchGeneralConditionVo;
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.service.IQqchGeneralConditionService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +54,6 @@ public class QqchGeneralConditionController extends BaseController {
         return AjaxResult.success(qqchGeneralConditionParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchGeneralConditionList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchGeneralCondition> qqchGeneralConditionListParam) {
-        qqchGeneralConditionService.insertQqchGeneralConditionList(qqchGeneralConditionListParam);
-        return AjaxResult.success(qqchGeneralConditionListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchGeneralCondition:update")
     @PostMapping("/update")
     public AjaxResult updateQqchGeneralCondition(@Validated(ValidationGroups.Update.class) @RequestBody QqchGeneralCondition qqchGeneralConditionParam) {
@@ -90,5 +84,29 @@ public class QqchGeneralConditionController extends BaseController {
         List<QqchGeneralCondition> qqchGeneralConditionList = qqchGeneralConditionService.getQqchGeneralConditionList(qqchGeneralConditionParam);
         ExcelUtils<QqchGeneralCondition> util = new ExcelUtils<>(QqchGeneralCondition.class);
         util.exportExcel(response, qqchGeneralConditionList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取通用条件梳理Vo
+     * @param qqchGeneralCondition
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchGeneralCondition:list")
+    @GetMapping("getQqchGeneralConditionVo")
+    public AjaxResult getQqchGeneralConditionVo(@Validated(ValidationGroups.Get.class) QqchGeneralCondition qqchGeneralCondition) {
+        QqchGeneralConditionVo qqchGeneralConditionVo = qqchGeneralConditionService.getQqchGeneralConditionVo(qqchGeneralCondition);
+        return AjaxResult.success(qqchGeneralConditionVo);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param qqchGeneralConditionVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchGeneralCondition:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchGeneralConditionVo qqchGeneralConditionVo) {
+        qqchGeneralConditionService.save(qqchGeneralConditionVo);
+        return AjaxResult.success();
     }
 }

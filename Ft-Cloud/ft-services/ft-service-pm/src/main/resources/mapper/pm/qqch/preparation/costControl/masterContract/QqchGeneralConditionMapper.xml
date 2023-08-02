@@ -16,6 +16,8 @@
         <result property="riskGrade" column="risk_grade"/>
         <result property="analyseSolutions" column="analyse_solutions"/>
         <result property="remark" column="remark"/>
+        <result property="source" column="source"/>
+        <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
@@ -48,6 +50,8 @@
              , `risk_grade`
              , `analyse_solutions`
              , `remark`
+             , `source`
+             , `leaf`
              , `sort`
              , `version`
              , `valid`
@@ -88,6 +92,8 @@
                 #{analyseSolutions}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
@@ -131,6 +137,8 @@
                 #{analyseSolutions}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
@@ -168,6 +176,8 @@
             <if test="riskGrade != null  and riskGrade != ''">`risk_grade`,</if>
             <if test="analyseSolutions != null  and analyseSolutions != ''">`analyse_solutions`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="source != null  and source != ''">`source`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
@@ -200,6 +210,8 @@
             <if test="riskGrade != null  and riskGrade != ''">#{riskGrade},</if>
             <if test="analyseSolutions != null  and analyseSolutions != ''">#{analyseSolutions},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
@@ -237,6 +249,8 @@
             `risk_grade`,
             `analyse_solutions`,
             `remark`,
+            `source`,
+            `leaf`,
             `sort`,
             `version`,
             `valid`,
@@ -270,6 +284,8 @@
                 #{item.riskGrade},
                 #{item.analyseSolutions},
                 #{item.remark},
+                #{item.source},
+                #{item.leaf},
                 #{item.sort},
                 #{item.version},
                 #{item.valid},

@@ -8,15 +8,16 @@ import java.util.List;
 /**
  * @author hwj
  * @date 2023-07-24 17:02:12
- * @remark 
+ * @remark
  */
 public interface QqchOrganizationListMapper {
-                                                                                                                                                    
+
     QqchOrganizationList getQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
 
     List<QqchOrganizationList> getQqchOrganizationListList(QqchOrganizationList qqchOrganizationList);
-    List<QqchOrganizationList>  getQqchOrganizationListList2(QqchOrganizationList qqchOrganizationList);
+
+    List<QqchOrganizationList> getQqchOrganizationListList2(QqchOrganizationList qqchOrganizationList);
 
     int insertQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
@@ -24,9 +25,9 @@ public interface QqchOrganizationListMapper {
 
     int updateQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
-            int updateQqchOrganizationListList(@Param("qqchOrganizationListList") List<QqchOrganizationList> qqchOrganizationListList);
-    
+    int updateQqchOrganizationListList(@Param("qqchOrganizationListList") List<QqchOrganizationList> qqchOrganizationListList);
+
     int deleteQqchOrganizationList(QqchOrganizationList qqchOrganizationList);
 
-            int deleteQqchOrganizationListByPks(@Param("qqchOrganizationListPkList") List<Long> qqchOrganizationListPkList);
-    }
+    int deleteQqchOrganizationListByPks(@Param("qqchOrganizationListPkList") List<Long> qqchOrganizationListPkList);
+}

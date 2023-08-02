@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.costControl.masterContract.service;
 
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.QqchGeneralCondition;
+import com.hhwy.pm.qqch.preparation.costControl.masterContract.domain.vo.QqchGeneralConditionVo;
 
 import java.util.List;
 
@@ -17,8 +18,6 @@ public interface IQqchGeneralConditionService {
 
     int insertQqchGeneralCondition(QqchGeneralCondition qqchGeneralCondition);
 
-    int insertQqchGeneralConditionList(List<QqchGeneralCondition> qqchGeneralConditionList);
-
     int updateQqchGeneralCondition(QqchGeneralCondition qqchGeneralCondition);
 
     int updateQqchGeneralConditionList(List<QqchGeneralCondition> qqchGeneralConditionList);
@@ -26,4 +25,18 @@ public interface IQqchGeneralConditionService {
     int deleteQqchGeneralCondition(QqchGeneralCondition qqchGeneralCondition);
 
     int deleteQqchGeneralConditionByPks(List<Long> qqchGeneralConditionPkList);
+
+    /**
+     * 获取通用条件梳理Vo
+     * @param qqchGeneralCondition
+     * @return
+     */
+    QqchGeneralConditionVo getQqchGeneralConditionVo(QqchGeneralCondition qqchGeneralCondition);
+
+    /**
+     * 保存/确认/提交
+     * @param qqchGeneralConditionVo
+     * @return
+     */
+    void save(QqchGeneralConditionVo qqchGeneralConditionVo);
 }
