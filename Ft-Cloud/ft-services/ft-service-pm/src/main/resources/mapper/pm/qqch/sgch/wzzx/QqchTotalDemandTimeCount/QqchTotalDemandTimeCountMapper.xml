@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.mapper.QqchTotalDemandTimeCountMapper">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    <resultMap type="com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount" id="QqchTotalDemandTimeCountResultMap">
+                    <result property="id" column="id" />
+                    <result property="demandId" column="demand_id" />
+                    <result property="materialCode" column="material_code" />
+                    <result property="year" column="year" />
+                    <result property="janNum" column="jan_num" />
+                    <result property="febNum" column="feb_num" />
+                    <result property="marNum" column="mar_num" />
+                    <result property="aprNum" column="apr_num" />
+                    <result property="mayNum" column="may_num" />
+                    <result property="junNum" column="jun_num" />
+                    <result property="julNum" column="jul_num" />
+                    <result property="augNum" column="aug_num" />
+                    <result property="septNum" column="sept_num" />
+                    <result property="octNum" column="oct_num" />
+                    <result property="novNum" column="nov_num" />
+                    <result property="decNum" column="dec_num" />
+                    <result property="fileGroupId" column="file_group_id" />
+                    <result property="remark" column="remark" />
+                    <result property="regionId" column="region_id" />
+                    <result property="regionName" column="region_name" />
+                    <result property="projectId" column="project_id" />
+                    <result property="projectName" column="project_name" />
+                    <result property="deptId" column="dept_id" />
+                    <result property="createUser" column="create_user" />
+                    <result property="createUserName" column="create_user_name" />
+                    <result property="createTime" column="create_time" />
+                    <result property="updateUser" column="update_user" />
+                    <result property="updateTime" column="update_time" />
+                    <result property="delUser" column="del_user" />
+                    <result property="delTime" column="del_time" />
+                    <result property="delFlag" column="del_flag" />
+                    <result property="ptVar1" column="pt_var1" />
+                    <result property="ptVar2" column="pt_var2" />
+                    <result property="ptVar3" column="pt_var3" />
+                    <result property="ptVar4" column="pt_var4" />
+                    <result property="ptVar5" column="pt_var5" />
+                    <result property="taskStatus" column="task_status" />
+                    <result property="version" column="version" />
+                    <result property="valid" column="valid" />
+            </resultMap>
+    <sql id="selectQqchTotalDemandTimeCountVo">
+        select
+                                                            `id`
+                                                         ,`demand_id`
+                                                         ,`material_code`
+                                                         ,`year`
+                                                         ,`jan_num`
+                                                         ,`feb_num`
+                                                         ,`mar_num`
+                                                         ,`apr_num`
+                                                         ,`may_num`
+                                                         ,`jun_num`
+                                                         ,`jul_num`
+                                                         ,`aug_num`
+                                                         ,`sept_num`
+                                                         ,`oct_num`
+                                                         ,`nov_num`
+                                                         ,`dec_num`
+                                                         ,`file_group_id`
+                                                         ,`remark`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                                         ,`task_status`
+                                                         ,`version`
+                                                         ,`valid`
+                                    from qqch_total_demand_time_count
+    </sql>
+    <select id="getQqchTotalDemandTimeCount" resultMap="QqchTotalDemandTimeCountResultMap">
+        <include refid="selectQqchTotalDemandTimeCountVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="demandId != null "> and `demand_id` = #{demandId}</if>
+                            <if test="materialCode != null  and materialCode != ''"> and `material_code` = #{materialCode}</if>
+                            <if test="year != null  and year != ''"> and `year` = #{year}</if>
+                            <if test="janNum != null "> and `jan_num` = #{janNum}</if>
+                            <if test="febNum != null "> and `feb_num` = #{febNum}</if>
+                            <if test="marNum != null "> and `mar_num` = #{marNum}</if>
+                            <if test="aprNum != null "> and `apr_num` = #{aprNum}</if>
+                            <if test="mayNum != null "> and `may_num` = #{mayNum}</if>
+                            <if test="junNum != null "> and `jun_num` = #{junNum}</if>
+                            <if test="julNum != null "> and `jul_num` = #{julNum}</if>
+                            <if test="augNum != null "> and `aug_num` = #{augNum}</if>
+                            <if test="septNum != null "> and `sept_num` = #{septNum}</if>
+                            <if test="octNum != null "> and `oct_num` = #{octNum}</if>
+                            <if test="novNum != null "> and `nov_num` = #{novNum}</if>
+                            <if test="decNum != null "> and `dec_num` = #{decNum}</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchTotalDemandTimeCountList" resultMap="QqchTotalDemandTimeCountResultMap">
+        <include refid="selectQqchTotalDemandTimeCountVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="demandId != null "> and `demand_id` = #{demandId}</if>
+                            <if test="materialCode != null  and materialCode != ''"> and `material_code` = #{materialCode}</if>
+                            <if test="year != null  and year != ''"> and `year` = #{year}</if>
+                            <if test="janNum != null "> and `jan_num` = #{janNum}</if>
+                            <if test="febNum != null "> and `feb_num` = #{febNum}</if>
+                            <if test="marNum != null "> and `mar_num` = #{marNum}</if>
+                            <if test="aprNum != null "> and `apr_num` = #{aprNum}</if>
+                            <if test="mayNum != null "> and `may_num` = #{mayNum}</if>
+                            <if test="junNum != null "> and `jun_num` = #{junNum}</if>
+                            <if test="julNum != null "> and `jul_num` = #{julNum}</if>
+                            <if test="augNum != null "> and `aug_num` = #{augNum}</if>
+                            <if test="septNum != null "> and `sept_num` = #{septNum}</if>
+                            <if test="octNum != null "> and `oct_num` = #{octNum}</if>
+                            <if test="novNum != null "> and `nov_num` = #{novNum}</if>
+                            <if test="decNum != null "> and `dec_num` = #{decNum}</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchTotalDemandTimeCount"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_total_demand_time_count
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">`id`,</if>
+                            <if test="demandId != null ">`demand_id`,</if>
+                            <if test="materialCode != null  and materialCode != ''">`material_code`,</if>
+                            <if test="year != null  and year != ''">`year`,</if>
+                            <if test="janNum != null ">`jan_num`,</if>
+                            <if test="febNum != null ">`feb_num`,</if>
+                            <if test="marNum != null ">`mar_num`,</if>
+                            <if test="aprNum != null ">`apr_num`,</if>
+                            <if test="mayNum != null ">`may_num`,</if>
+                            <if test="junNum != null ">`jun_num`,</if>
+                            <if test="julNum != null ">`jul_num`,</if>
+                            <if test="augNum != null ">`aug_num`,</if>
+                            <if test="septNum != null ">`sept_num`,</if>
+                            <if test="octNum != null ">`oct_num`,</if>
+                            <if test="novNum != null ">`nov_num`,</if>
+                            <if test="decNum != null ">`dec_num`,</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+                            <if test="remark != null  and remark != ''">`remark`,</if>
+                            <if test="regionId != null ">`region_id`,</if>
+                            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+                            <if test="projectId != null ">`project_id`,</if>
+                            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+                            <if test="deptId != null ">`dept_id`,</if>
+                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+                            <if test="createTime != null ">`create_time`,</if>
+                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+                            <if test="updateTime != null ">`update_time`,</if>
+                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+                            <if test="delTime != null ">`del_time`,</if>
+                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+                            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+                            <if test="version != null ">`version`,</if>
+                            <if test="valid != null  and valid != ''">`valid`,</if>
+                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">#{id},</if>
+                            <if test="demandId != null ">#{demandId},</if>
+                            <if test="materialCode != null  and materialCode != ''">#{materialCode},</if>
+                            <if test="year != null  and year != ''">#{year},</if>
+                            <if test="janNum != null ">#{janNum},</if>
+                            <if test="febNum != null ">#{febNum},</if>
+                            <if test="marNum != null ">#{marNum},</if>
+                            <if test="aprNum != null ">#{aprNum},</if>
+                            <if test="mayNum != null ">#{mayNum},</if>
+                            <if test="junNum != null ">#{junNum},</if>
+                            <if test="julNum != null ">#{julNum},</if>
+                            <if test="augNum != null ">#{augNum},</if>
+                            <if test="septNum != null ">#{septNum},</if>
+                            <if test="octNum != null ">#{octNum},</if>
+                            <if test="novNum != null ">#{novNum},</if>
+                            <if test="decNum != null ">#{decNum},</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+                            <if test="remark != null  and remark != ''">#{remark},</if>
+                            <if test="regionId != null ">#{regionId},</if>
+                            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+                            <if test="projectId != null ">#{projectId},</if>
+                            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+                            <if test="deptId != null ">#{deptId},</if>
+                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+                            <if test="createTime != null ">#{createTime},</if>
+                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+                            <if test="updateTime != null ">#{updateTime},</if>
+                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+                            <if test="delTime != null ">#{delTime},</if>
+                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+                            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+                            <if test="version != null ">#{version},</if>
+                            <if test="valid != null  and valid != ''">#{valid},</if>
+                    </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchTotalDemandTimeCount -->
+    <insert id="insertQqchTotalDemandTimeCountList">
+        insert into qqch_total_demand_time_count
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                `id`,
+                                                                `demand_id`,
+                                                                `material_code`,
+                                                                `year`,
+                                                                `jan_num`,
+                                                                `feb_num`,
+                                                                `mar_num`,
+                                                                `apr_num`,
+                                                                `may_num`,
+                                                                `jun_num`,
+                                                                `jul_num`,
+                                                                `aug_num`,
+                                                                `sept_num`,
+                                                                `oct_num`,
+                                                                `nov_num`,
+                                                                `dec_num`,
+                                                                `file_group_id`,
+                                                                `remark`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `dept_id`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                                            `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `pt_var4`,
+                                                                `pt_var5`,
+                                                                `task_status`,
+                                                                `version`,
+                                                                `valid`,
+                                    </trim>
+        values
+        <foreach collection="qqchTotalDemandTimeCountList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                            #{item.id},
+                                                                                #{item.demandId},
+                                                                                #{item.materialCode},
+                                                                                #{item.year},
+                                                                                #{item.janNum},
+                                                                                #{item.febNum},
+                                                                                #{item.marNum},
+                                                                                #{item.aprNum},
+                                                                                #{item.mayNum},
+                                                                                #{item.junNum},
+                                                                                #{item.julNum},
+                                                                                #{item.augNum},
+                                                                                #{item.septNum},
+                                                                                #{item.octNum},
+                                                                                #{item.novNum},
+                                                                                #{item.decNum},
+                                                                                #{item.fileGroupId},
+                                                                                #{item.remark},
+                                                                                #{item.regionId},
+                                                                                #{item.regionName},
+                                                                                #{item.projectId},
+                                                                                #{item.projectName},
+                                                                                #{item.deptId},
+                                                                                #{item.createUser},
+                                                                                #{item.createUserName},
+                                                                                #{item.createTime},
+                                                                                #{item.updateUser},
+                                                                                #{item.updateTime},
+                                                                                #{item.delUser},
+                                                                                #{item.delTime},
+                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar2},
+                                                                                #{item.ptVar3},
+                                                                                #{item.ptVar4},
+                                                                                #{item.ptVar5},
+                                                                                #{item.taskStatus},
+                                                                                #{item.version},
+                                                                                #{item.valid},
+                                                </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchTotalDemandTimeCount">
+        update qqch_total_demand_time_count
+        <trim prefix="SET" suffixOverrides=",">
+                            <if test="id != null ">`id` = #{id},</if>
+                            <if test="demandId != null ">`demand_id` = #{demandId},</if>
+                            <if test="materialCode != null  and  materialCode != ''">`material_code` = #{materialCode},</if>
+                            <if test="year != null  and  year != ''">`year` = #{year},</if>
+                            <if test="janNum != null ">`jan_num` = #{janNum},</if>
+                            <if test="febNum != null ">`feb_num` = #{febNum},</if>
+                            <if test="marNum != null ">`mar_num` = #{marNum},</if>
+                            <if test="aprNum != null ">`apr_num` = #{aprNum},</if>
+                            <if test="mayNum != null ">`may_num` = #{mayNum},</if>
+                            <if test="junNum != null ">`jun_num` = #{junNum},</if>
+                            <if test="julNum != null ">`jul_num` = #{julNum},</if>
+                            <if test="augNum != null ">`aug_num` = #{augNum},</if>
+                            <if test="septNum != null ">`sept_num` = #{septNum},</if>
+                            <if test="octNum != null ">`oct_num` = #{octNum},</if>
+                            <if test="novNum != null ">`nov_num` = #{novNum},</if>
+                            <if test="decNum != null ">`dec_num` = #{decNum},</if>
+                            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+                            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+                            <if test="regionId != null ">`region_id` = #{regionId},</if>
+                            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+                            <if test="projectId != null ">`project_id` = #{projectId},</if>
+                            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+                            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+                            <if test="createTime != null ">`create_time` = #{createTime},</if>
+                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+                            <if test="delTime != null ">`del_time` = #{delTime},</if>
+                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+                            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+                            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+                            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+                            <if test="version != null ">`version` = #{version},</if>
+                            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+                    </trim>
+        <where>
+                                                                        <if test="id != null "> and `id` = #{id}</if>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+    </update>
+
+            <update id="updateQqchTotalDemandTimeCountList">
+            update qqch_total_demand_time_count
+            <trim prefix="set" suffixOverrides=",">
+                                    <trim prefix="id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="demand_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.demandId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="material_code  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.materialCode}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="year  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.year}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="jan_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.janNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="feb_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.febNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="mar_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.marNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="apr_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.aprNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="may_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.mayNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="jun_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.junNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="jul_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.julNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="aug_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.augNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="sept_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.septNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="oct_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.octNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="nov_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.novNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dec_num  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.decNum}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="file_group_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.fileGroupId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="remark  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.remark}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="region_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.regionId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="region_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.regionName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dept_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.deptId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUserName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_flag  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delFlag}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var1  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar1}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var2  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar2}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var3  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar3}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var4  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar4}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var5  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar5}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="task_status  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.taskStatus}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="version  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.version}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="valid  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.valid}
+                        </foreach>
+                    </trim>
+                            </trim>
+            where `id` in
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </update>
+    
+            <update id="deleteQqchTotalDemandTimeCount">
+            update `qqch_total_demand_time_count` set del_flag = 1
+            <where>
+                                    <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="demandId != null "> and `demand_id` = #{demandId}</if>
+                                    <if test="materialCode != null  and materialCode != ''"> and `material_code` = #{materialCode}</if>
+                                    <if test="year != null  and year != ''"> and `year` = #{year}</if>
+                                    <if test="janNum != null "> and `jan_num` = #{janNum}</if>
+                                    <if test="febNum != null "> and `feb_num` = #{febNum}</if>
+                                    <if test="marNum != null "> and `mar_num` = #{marNum}</if>
+                                    <if test="aprNum != null "> and `apr_num` = #{aprNum}</if>
+                                    <if test="mayNum != null "> and `may_num` = #{mayNum}</if>
+                                    <if test="junNum != null "> and `jun_num` = #{junNum}</if>
+                                    <if test="julNum != null "> and `jul_num` = #{julNum}</if>
+                                    <if test="augNum != null "> and `aug_num` = #{augNum}</if>
+                                    <if test="septNum != null "> and `sept_num` = #{septNum}</if>
+                                    <if test="octNum != null "> and `oct_num` = #{octNum}</if>
+                                    <if test="novNum != null "> and `nov_num` = #{novNum}</if>
+                                    <if test="decNum != null "> and `dec_num` = #{decNum}</if>
+                                    <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                                    <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                                    <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                                    <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                                    <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                                    <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                                    <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                                    <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                                    <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                                    <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+                                    <if test="version != null "> and `version` = #{version}</if>
+                                    <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            </where>
+        </update>
+
+                    <update id="deleteQqchTotalDemandTimeCountByPks">
+                update `qqch_total_demand_time_count` set del_flag = 1
+                <where>
+                    `id` in
+                    <foreach item="id" collection="qqchTotalDemandTimeCountPkList" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </where>
+            </update>
+            </mapper>
