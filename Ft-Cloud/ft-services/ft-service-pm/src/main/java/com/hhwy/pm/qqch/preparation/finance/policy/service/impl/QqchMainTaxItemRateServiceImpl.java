@@ -54,7 +54,6 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
         deleteParam.setVersion(voParam.getVersion());
         this.deleteQqchMainTaxItemRate(deleteParam);
 
-        // 税法
         if (!CollectionUtils.isEmpty(voParam.getList())) {
             for (QqchMainTaxItemRate qqchMainTaxItemRate : voParam.getList()) {
                 qqchMainTaxItemRate.setId(IdWorker.createId());
