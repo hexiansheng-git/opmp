@@ -15,9 +15,12 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import javax.validation.constraints.NotBlank;
 
 /**
  * @author hwj
@@ -41,6 +44,7 @@ public class QqchOrganizationList extends TreeNode<QqchOrganizationList> {
      */
     @JsonProperty
     @Excel(name = "组织架构")
+    @NotBlank(message = "组织架构不能为空", groups = {ValidationGroups.Save.class})
     private String organization;
     /**
      * 字段描述：父类id

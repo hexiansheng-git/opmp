@@ -4,6 +4,9 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.mapper.QqchOrganizationListMapper;
@@ -15,6 +18,8 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +45,8 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
     private SystemServiceApi systemServiceApi;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
     public QqchOrganizationList getQqchOrganizationList(QqchOrganizationList qqchOrganizationList) {
@@ -147,7 +154,8 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         } else {
             //校验数据必填
             if("1".equals(qqchOrganizationListVo.getButtonMark())||"2".equals(qqchOrganizationListVo.getButtonMark())){//确认
-
+                List<QqchOrganizationList> collect = organizationLists.stream().filter(item -> item.getPid() != null).collect(Collectors.toList());
+                JyDetailsUtil.jyDetails(collect, ValidationGroups.Save.class);
             }
         }
         String valid = "";//是否有效
@@ -160,7 +168,10 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
             }
         }else if("1".equals(qqchOrganizationListVo.getButtonMark())){//确认
             valid = "1";
-            //新增一条确认记录
+            //插入确认状态
+            String menuId = qqchOrganizationListVo.getMenuId();
+            String stageIdentity = qqchOrganizationListVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }else if("2".equals(qqchOrganizationListVo.getButtonMark())){//提交
             valid = "0";
         }else{
