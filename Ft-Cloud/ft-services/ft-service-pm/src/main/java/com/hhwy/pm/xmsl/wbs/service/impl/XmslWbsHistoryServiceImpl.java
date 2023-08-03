@@ -9,6 +9,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -59,10 +60,10 @@ public class XmslWbsHistoryServiceImpl implements IXmslWbsHistoryService {
 
     @Transactional
     public int updateXmslWbsHistoryList(List<XmslWbsHistory> xmslWbsHistoryList) {
-        for (XmslWbsHistory xmslWbsHistory : xmslWbsHistoryList) {
-            xmslWbsHistory.setUpdateUser(SecurityUtils.getUserName());
-            xmslWbsHistory.setUpdateTime(DateUtils.getNowDate());
-        }
+//        for (XmslWbsHistory xmslWbsHistory : xmslWbsHistoryList) {
+//            xmslWbsHistory.setUpdateUser(SecurityUtils.getUserName());
+//            xmslWbsHistory.setUpdateTime(DateUtils.getNowDate());
+//        }
         return xmslWbsHistoryMapper.updateXmslWbsHistoryList(xmslWbsHistoryList);
     }
 
@@ -76,5 +77,12 @@ public class XmslWbsHistoryServiceImpl implements IXmslWbsHistoryService {
     @Transactional
     public int deleteXmslWbsHistoryByPks(List<Long> xmslWbsHistoryPkList) {
         return xmslWbsHistoryMapper.deleteXmslWbsHistoryByPks(xmslWbsHistoryPkList);
+    }
+
+    @Override
+    public int deleteByParentIds(List<Long> list) {
+        if(CollectionUtils.isEmpty(list))
+            return 0;
+        return xmslWbsHistoryMapper.deleteByParentIds(list);
     }
 }

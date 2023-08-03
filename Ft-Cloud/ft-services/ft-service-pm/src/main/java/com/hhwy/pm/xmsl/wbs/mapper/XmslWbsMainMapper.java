@@ -58,4 +58,13 @@ public interface XmslWbsMainMapper {
 
     int deleteWbs();
     int deleteWbsHitoryByMainId(Long mainId);
+
+    /**
+     * 逻辑删除wbsMain
+     * @param id
+     * @return
+     */
+    int deleteLogic(Long id);
+    int deleteHistoryLogic(Long id);
+    int deleteRelation(Long id);
 }
