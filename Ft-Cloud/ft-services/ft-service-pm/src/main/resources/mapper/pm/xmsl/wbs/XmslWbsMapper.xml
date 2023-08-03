@@ -910,10 +910,9 @@
 
     <update id="deleteByParentIds">
         update `xmsl_wbs` set del_flag = 1
-        <where>
-            <foreach item="id" collection="list" separator="or">
-                FIND_IN_SET(#{id},ancestors);
-            </foreach>
-        </where>
+        where
+        <foreach item="id" collection="list" separator="or" >
+            FIND_IN_SET(#{id},ancestors);
+        </foreach>
     </update>
 </mapper>
