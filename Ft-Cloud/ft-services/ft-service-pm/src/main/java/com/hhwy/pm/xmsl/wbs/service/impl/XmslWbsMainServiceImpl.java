@@ -119,6 +119,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 new AddBaseInfoUtil<>(wbsMain);
                 wbsMain.setDelFlag(Constant.NO_INT+"");
                 wbsMain.setValid(Constant.NO_INT);
+                wbsMain.setPtVar3((maxVersion-1)+"");
                 this.xmslWbsMainMapper.insertXmslWbsMain(wbsMain);
                 mainId = wbsMain.getId();
                 //2、先同步前三级到历史，其他层级交给线程处理
