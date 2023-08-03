@@ -93,6 +93,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
 
     @Override
     public Map listData(XmslWbs xmslWbs) {
+        try{
+            Long.valueOf(xmslWbs.getParentId());
+        }catch(Exception e){
+            return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId",xmslWbs.getMainId());
+        }
         if(StringUtils.isBlank(xmslWbs.getParentId()) )
             xmslWbs.setParentId("-1");
         //判断查询历史还是查询当前

@@ -175,11 +175,12 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     }
 
     @Transactional
-    public int deleteXmslWbsMain(XmslWbsMain xmslWbsMain) {
-        xmslWbsMain.setUpdateUser(SecurityUtils.getUserName());
-        xmslWbsMain.setUpdateTime(DateUtils.getNowDate());
-        int result = xmslWbsMainMapper.deleteXmslWbsMain(xmslWbsMain);
-        return result;
+    public void deleteXmslWbsMain(XmslWbsMain xmslWbsMain) {
+        XmslWbsMain wbsMain = this.getById(xmslWbsMain.getId());
+        Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效数据无法删除");
+        xmslWbsMainMapper.deleteLogic(wbsMain.getId());
+        xmslWbsMainMapper.deleteHistoryLogic(wbsMain.getId());
+        xmslWbsMainMapper.deleteRelation(wbsMain.getId());
     }
 
     @Transactional
@@ -204,11 +205,16 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
         //2、处理祖级ID、祖级名称
         wbsService.handlerAncestors();
-        //2、修改main表状态
+        //3、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
-        //3、wbs塞入redis
+        //4、wbs清单关联关系
+
+        //5、wbs塞入redis
         wbsService.initWbs2Redis();
     }
 
+    private void syncListRelation(){
+
+    }
 
 }
