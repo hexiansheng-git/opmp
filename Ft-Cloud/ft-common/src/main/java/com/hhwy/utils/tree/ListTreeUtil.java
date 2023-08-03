@@ -52,6 +52,34 @@ public class ListTreeUtil {
         }
     }
 
+    /**
+     * 树形列表转线性列表（不维护id和pid，平铺数据）
+     * @param source 数据源
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T> 节点类型
+     * @return
+     */
+    public static <T> List<T> formatList(List<T> source, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        for (T node : source) {
+            recur(node, resultList, getChildren, setChildren);
+        }
+        return resultList;
+    }
+
+    private static <T> void recur(T node, List<T> resultList, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
+        resultList.add(node);
+
+        List<T> children = getChildren.apply(node);
+        setChildren.accept(node, null);
+
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                recur(child,resultList, getChildren, setChildren);
+            }
+        }
+    }
 
     /**
      * 树形列表转线性列表
