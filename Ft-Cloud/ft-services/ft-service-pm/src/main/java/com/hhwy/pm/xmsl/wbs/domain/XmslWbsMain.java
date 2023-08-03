@@ -92,7 +92,7 @@ public class XmslWbsMain extends CommonBaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
 
     @JsonIgnore

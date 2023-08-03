@@ -10,9 +10,11 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
@@ -23,6 +25,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,7 +35,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -56,6 +58,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     private RedisUtils redisUtils;
     @Resource
     private TokenService tokenService;
+    @Resource
+    private IXmslWbsHistoryService wbsHistoryService;
+
 
 
     public XmslWbs getXmslWbs(XmslWbs xmslWbs) {
@@ -289,14 +294,16 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         //1、主表数据
         saveMain(dto);
         //2、明细数据
-        List<XmslWbs> list = dto.getList();
+        List<XmslWbsHistory> list = dto.getList();
         if(CollectionUtils.isEmpty(list) && StringUtils.isBlank(dto.getDelIds()))
             throw new CustomBusinessException("要保存的数据为空");
-        List<XmslWbs> addList = new ArrayList<>();
-        List<XmslWbs> updateList = new ArrayList<>();
+        List<XmslWbsHistory> addList = new ArrayList<>();
+        List<XmslWbsHistory> updateList = new ArrayList<>();
         //前端新增数据的ID都为uid,需要替换为后端生成的id
         Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
-        list.parallelStream().forEach(temp->{
+        list.sort((r, r1) -> {return r.getLevel() > r1.getLevel() ? 1 : -1;});
+        for (int i = 0; i < list.size(); i++) {
+            XmslWbsHistory temp = list.get(i);
             temp.setMainId(dto.getMainId());
             if(temp.getId().length() < 21){
                 new AddBaseInfoUtil<>().updateBaseEntity(temp);
@@ -304,26 +311,21 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 return;
             }
             String id = getSnowId(temp.getId(),idRepalceMap);
+            idRepalceMap.put(temp.getId(),id);
             temp.setId(id);
-//            //替换祖级id
-//            String[] ances = temp.getAncestors().split(",");
-//            List<String> anceList = new ArrayList<>(ances.length);
-//            for (int i = 0; i < ances.length; i++) {
-//                String snowId = getSnowId(ances[i],idRepalceMap);
-//                anceList.add(snowId);
-//            }
+            String tempPid = idRepalceMap.get(temp.getParentId());
+            if (StringUtils.isNotBlank(tempPid))
+                temp.setParentId(tempPid);
             new AddBaseInfoUtil<>().addBaseEntity(temp);
-//            String charStr = StringUtils.isBlank(temp.getAncestors())?"":",";
-//            temp.setAncestors(temp.getAncestors()+charStr+temp.getId());
             addList.add(temp);
-        });
-        if(ObjectUtils.isNotEmpty(addList))
-            this.xmslWbsMapper.insertXmslWbsList(addList);
-        if(ObjectUtils.isNotEmpty(updateList))
-            this.xmslWbsMapper.updateXmslWbsList(updateList);
+        }
+        if(CollectionUtils.isNotEmpty(addList))
+            wbsHistoryService.insertXmslWbsHistoryList(addList);
+        if(CollectionUtils.isNotEmpty(updateList))
+            wbsHistoryService.updateXmslWbsHistoryList(updateList);
         //删除
         if(StringUtils.isNotBlank(dto.getDelIds())){
-            this.xmslWbsMapper.deleteByParentIds(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
+            wbsHistoryService.deleteXmslWbsHistoryByPks(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
         }
     }
 
@@ -363,8 +365,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             return;
         }
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());
-        Assert.isNull(wbsMain,"mainId有误，获取主数据失败");
-        Assert.isTrue(wbsMain.getValid()==Constant.YES_INT,"已生效的数据无法编辑");
+        Assert.notNull(wbsMain,"mainId有误，获取主数据失败");
+        Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
     }
 
     public String getSnowId(String id,Map<String,String> idRepalceMap){

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wk
@@ -101,11 +102,13 @@ public class XmslWbsMainController extends BaseController {
      * @param map
      * @return
      */
-//    @PostMapping("/finishFlow")
-//    public AjaxResult finishFlow(@RequestBody Map map){
+    @PostMapping("/finishFlow")
+    public AjaxResult finishFlow(@RequestBody Map map){
+        Long businessId = ObjectUtils.nvlLong(((Map)((Map)map.get("execution")).get("variables")).get("businessId")) ;
 //        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
 //        Map varMap = delegateTask.getVariables();
 //        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
-//        return AjaxResult.success();
-//    }
+        xmslWbsMainService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
 }

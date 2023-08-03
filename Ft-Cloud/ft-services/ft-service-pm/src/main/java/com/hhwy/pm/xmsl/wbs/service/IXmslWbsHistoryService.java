@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.wbs.service;
 
 
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,4 +28,6 @@ public interface IXmslWbsHistoryService {
     int deleteXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
     int deleteXmslWbsHistoryByPks(List<Long> xmslWbsHistoryPkList);
+
+    int deleteByParentIds(List<Long> list);
 }
