@@ -76,9 +76,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             }
             //最大有效版本号为1.0 说明不存在历史版本
             if(maxVersion.compareTo(new BigDecimal(1.0))==0){
-                xmslContractInfo1.setHistoricalVersion(false);
+                xmslContractInfo1.setIsShowRecord(0);
             }else {
-                xmslContractInfo1.setHistoricalVersion(true);
+                xmslContractInfo1.setIsShowRecord(1);
             }
         }
         return xmslContractInfo1;

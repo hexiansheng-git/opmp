@@ -371,8 +371,6 @@ public class XmslContractInfo extends CommonBaseEntity {
 
     private  BigDecimal version;
 
-    private Boolean historicalVersion;
-
     //投保险种
     private List<XmslContractInsure> xmslContractInsureList;
     //签订信息
