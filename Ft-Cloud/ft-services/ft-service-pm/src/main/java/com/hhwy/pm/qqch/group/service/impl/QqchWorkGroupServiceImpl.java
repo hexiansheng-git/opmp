@@ -72,6 +72,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         //判断当前是否存在正在调整的数据（最新未生效版本数据）
         qqchWorkGroup = qqchWorkGroupMapper.getNoValidMaxVersionQqchWorkGroup();
         if(qqchWorkGroup != null) {
+            //设置版本字符串
+            qqchWorkGroup.setVersionStr("v" + qqchWorkGroup.getVersion());
             //设置历史记录按钮
             this.setHistoryMark(qqchWorkGroup);
             //设置工作小组成员数据
