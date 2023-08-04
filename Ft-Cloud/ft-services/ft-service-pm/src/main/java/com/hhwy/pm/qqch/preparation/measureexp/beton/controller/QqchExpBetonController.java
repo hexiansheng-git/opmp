@@ -1,95 +1,97 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
-import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.validation.ValidationGroups;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
- * @author mls
- * @date 2023-07-25 18:31:38
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:12:49
+ * @remark 3.7.5混凝土配合比
  */
 @Validated
 @RestController
 @RequestMapping("/qqchExpBeton")
-public class QqchExpBetonController extends BaseController{
+public class QqchExpBetonController extends BaseController {
 
     @Autowired
     private IQqchExpBetonService qqchExpBetonService;
 
-                                                                                                                                                                                                                                                                                                                                                    
-
+    /**
+     * 树列表
+     *
+     * @param version
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchExpBeton:list")
-    @GetMapping
-    public AjaxResult getQqchExpBeton(@Validated(ValidationGroups.Get.class)  QqchExpBeton qqchExpBetonParam){
-        QqchExpBeton qqchExpBeton =  qqchExpBetonService.getQqchExpBeton(qqchExpBetonParam);
-        return AjaxResult.success(qqchExpBeton);
+    @GetMapping("/getTreeList")
+    public AjaxResult getTreeList(BigDecimal version) {
+        QqchExpBetonVo qqchExpBetonVo = qqchExpBetonService.getTreeList(version);
+        return AjaxResult.success(qqchExpBetonVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchExpBeton:list")
-    @GetMapping("/list")
-    public AjaxResult getQqchExpBetonList(@Validated(ValidationGroups.Select.class) QqchExpBeton qqchExpBetonParam){
-        startPage();
-        List<QqchExpBeton> qqchExpBetonList = qqchExpBetonService.getQqchExpBetonList(qqchExpBetonParam);
-        return getDataTableAjaxResult(qqchExpBetonList);
-    }
-
+    /**
+     * 保存/确认/提交
+     *
+     * @param qqchExpBetonVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchExpBeton:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchExpBeton(@Validated(ValidationGroups.Save.class) @RequestBody QqchExpBeton qqchExpBetonParam){
-        qqchExpBetonService.insertQqchExpBeton(qqchExpBetonParam);
-        return AjaxResult.success(qqchExpBetonParam);
+    @PostMapping("/batchSave")
+    public AjaxResult batchSave(@Validated(ValidationGroups.Save.class) @RequestBody QqchExpBetonVo qqchExpBetonVo) {
+        qqchExpBetonService.batchSave(qqchExpBetonVo);
+        return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchExpBeton:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchExpBetonList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchExpBeton> qqchExpBetonListParam){
-        qqchExpBetonService.insertQqchExpBetonList(qqchExpBetonListParam);
-        return AjaxResult.success(qqchExpBetonListParam);
-    }
-
-    @PreAuthorize(hasPermi = "qqchExpBeton:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchExpBeton(@Validated(ValidationGroups.Update.class) @RequestBody QqchExpBeton qqchExpBetonParam){
-        return toAjax(qqchExpBetonService.updateQqchExpBeton(qqchExpBetonParam));
-    }
-
-            @PreAuthorize(hasPermi = "qqchExpBeton:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateQqchExpBetonList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchExpBeton> qqchExpBetonListParam){
-            return toAjax(qqchExpBetonService.updateQqchExpBetonList(qqchExpBetonListParam));
-        }
-    
-    @PreAuthorize(hasPermi = "qqchExpBeton:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchExpBeton(@Validated(ValidationGroups.Delete.class) @RequestBody QqchExpBeton qqchExpBetonParam){
-        return toAjax(qqchExpBetonService.deleteQqchExpBeton(qqchExpBetonParam));
-    }
-
-            @PreAuthorize(hasPermi = "qqchExpBeton:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteQqchExpBetonByPks(@PathVariable Long[] ids){
-            List<Long> qqchExpBetonPkList = Arrays.asList(ids);
-            return toAjax(qqchExpBetonService.deleteQqchExpBetonByPks(qqchExpBetonPkList));
-        }
-    
+    /**
+     * 树列表导出 TODO
+     *
+     * @param response
+     * @param version
+     * @throws IOException
+     */
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchExpBeton qqchExpBetonParam) throws IOException {
-        List<QqchExpBeton> qqchExpBetonList = qqchExpBetonService.getQqchExpBetonList(qqchExpBetonParam);
-        ExcelUtils<QqchExpBeton> util = new ExcelUtils<>(QqchExpBeton.class);
+    public void export(HttpServletResponse response, BigDecimal version) throws IOException {
+        List<QqchExpBeton> qqchExpBetonList = qqchExpBetonService.getTreeList(version).getTreeList();
+        FtExcelUtil<QqchExpBeton> util = new FtExcelUtil<>(QqchExpBeton.class);
         util.exportExcel(response, qqchExpBetonList, DateUtils.getDate());
+    }
+
+    /**
+     * 树列表导出导入 TODO
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/importExcel")
+    public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
+        FtExcelUtil<QqchExpBetonVo> util = new FtExcelUtil<>(QqchExpBetonVo.class);
+        try {
+            InputStream inputStream = file.getInputStream();
+            List<QqchExpBetonVo> list = util.importExcel(inputStream);
+            return AjaxResult.success(list);
+        } catch (Exception e) {
+            throw new RuntimeException("导入失败！");
+        }
     }
 }

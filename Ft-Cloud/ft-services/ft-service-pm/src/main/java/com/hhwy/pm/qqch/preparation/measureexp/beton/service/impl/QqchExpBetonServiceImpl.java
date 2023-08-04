@@ -1,79 +1,96 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.service.impl;
 
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.mapper.QqchExpBetonMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
-import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
-import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.tree.TreeUtil;
+import java.math.BigDecimal;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 /**
- * @author mls
- * @date 2023-07-25 18:31:38
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:12:49
+ * @remark 3.7.5混凝土配合比
  */
 @Service
-public class QqchExpBetonServiceImpl implements IQqchExpBetonService{
+public class QqchExpBetonServiceImpl implements IQqchExpBetonService {
 
     @Autowired
     private QqchExpBetonMapper qqchExpBetonMapper;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
-                                                                                                                                                                                                                                                                                                                                                    
-    public QqchExpBeton getQqchExpBeton(QqchExpBeton qqchExpBeton) {
-        return qqchExpBetonMapper.getQqchExpBeton(qqchExpBeton);
+    /**
+     * 树列表
+     *
+     * @param version
+     * @return
+     */
+    public QqchExpBetonVo getTreeList(BigDecimal version) {
+        QqchExpBetonVo vo = new QqchExpBetonVo();
+        version = VersionUtil.getVersion("qqch_exp_beton", version);
+        vo.setVersion(version);
+
+        QqchExpBeton qryParam = new QqchExpBeton();
+        qryParam.setVersion(version);
+        List<QqchExpBeton> list = qqchExpBetonMapper.getQqchExpBetonList(qryParam);
+        vo.setStageIdentity(qqchReviewService.getStage());
+        vo.setTreeList(TreeUtil.build(list, null));
+        return vo;
     }
 
-    public List<QqchExpBeton> getQqchExpBetonList(QqchExpBeton qqchExpBeton) {
-        return qqchExpBetonMapper.getQqchExpBetonList(qqchExpBeton);
-    }
-
+    /**
+     * 保存/确认/提交
+     *
+     * @param voParam
+     */
     @Transactional
-    public int insertQqchExpBeton(QqchExpBeton qqchExpBeton) {
-        qqchExpBeton.setId(IdWorker.createId());
-        qqchExpBeton.setCreateUser(SecurityUtils.getUserName());
-        qqchExpBeton.setCreateTime(DateUtils.getNowDate());
-        return qqchExpBetonMapper.insertQqchExpBeton(qqchExpBeton);
-    }
+    public void batchSave(QqchExpBetonVo voParam) {
+        // 先批量删除当前版本所有数据
+        QqchExpBeton deleteParam = new QqchExpBeton();
+        deleteParam.setVersion(voParam.getVersion());
+        qqchExpBetonMapper.deleteQqchExpBeton(deleteParam);
 
-    @Transactional
-    public int insertQqchExpBetonList(List<QqchExpBeton> qqchExpBetonList) {
-        for (QqchExpBeton qqchExpBeton : qqchExpBetonList) {
-            qqchExpBeton.setId(IdWorker.createId());
-            qqchExpBeton.setCreateUser(SecurityUtils.getUserName());
-            qqchExpBeton.setCreateTime(DateUtils.getNowDate());
+        if (CollectionUtils.isEmpty(voParam.getTreeList())) {
+            return;
         }
-        return qqchExpBetonMapper.insertQqchExpBetonList(qqchExpBetonList);
-    }
 
-    @Transactional
-    public int updateQqchExpBeton(QqchExpBeton qqchExpBeton) {
-        qqchExpBeton.setUpdateUser(SecurityUtils.getUserName());
-        qqchExpBeton.setUpdateTime(DateUtils.getNowDate());
-        return qqchExpBetonMapper.updateQqchExpBeton(qqchExpBeton);
-    }
-
-            @Transactional
-        public int updateQqchExpBetonList(List<QqchExpBeton> qqchExpBetonList) {
-            for (QqchExpBeton qqchExpBeton : qqchExpBetonList) {
-                qqchExpBeton.setUpdateUser(SecurityUtils.getUserName());
-                qqchExpBeton.setUpdateTime(DateUtils.getNowDate());
+        // 树转list
+        List<QqchExpBeton> insertList = TreeUtil.treeToList(voParam.getTreeList());
+        if (!CollectionUtils.isEmpty(insertList)) {
+            for (QqchExpBeton insert : insertList) {
+                insert.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    insert.setValid(Valid.YES);
+                }
+                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                insert.setCreateUserName(SecurityUtils.getUserName());
+                insert.setCreateTime(DateUtils.getNowDate());
             }
-            return qqchExpBetonMapper.updateQqchExpBetonList(qqchExpBetonList);
         }
-    
-    @Transactional
-    public int deleteQqchExpBeton(QqchExpBeton qqchExpBeton) {
-        qqchExpBeton.setUpdateUser(SecurityUtils.getUserName());
-        qqchExpBeton.setUpdateTime(DateUtils.getNowDate());
-        return qqchExpBetonMapper.deleteQqchExpBeton(qqchExpBeton);
-    }
+        // 全量入库
+        qqchExpBetonMapper.insertQqchExpBetonList(insertList);
 
-            @Transactional
-        public int deleteQqchExpBetonByPks(List<Long> qqchExpBetonPkList) {
-            return qqchExpBetonMapper.deleteQqchExpBetonByPks(qqchExpBetonPkList);
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
+}

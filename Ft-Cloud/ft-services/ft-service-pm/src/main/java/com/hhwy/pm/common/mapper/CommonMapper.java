@@ -64,7 +64,26 @@ public interface CommonMapper {
      * @param version
      * @return
      */
-    BigDecimal selectLessOrEqualAssignVersion(@Param("tableName") String tableName, @Param("version") BigDecimal version);
+    BigDecimal selectLessOrEqualAssignVersion(@Param("tableName") String tableName,
+        @Param("version") BigDecimal version);
 
     void deleteByVersion(@Param("tn") String tn, @Param("version") BigDecimal version);
+
+    /**
+     * 根据表名，查询最大有效版本号，如果查不到，版本号赋默认值1.0 适用于多个功能公用一个表，通过类型区分
+     *
+     * @param tableName
+     * @return
+     */
+    BigDecimal selectMaxVersionByType(@Param("tableName") String tableName, @Param("type") String type);
+
+    /**
+     * 查询表中最接近（小于等于）指定版本的版本号 适用于多个功能公用一个表，通过类型区分
+     *
+     * @param tableName
+     * @param version
+     * @return
+     */
+    BigDecimal selectLessOrEqualAssignVersionByType(@Param("tableName") String tableName,
+        @Param("version") BigDecimal version, @Param("type") String type);
 }

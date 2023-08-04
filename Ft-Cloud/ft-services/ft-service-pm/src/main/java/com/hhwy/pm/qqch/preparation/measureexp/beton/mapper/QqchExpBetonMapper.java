@@ -1,16 +1,16 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.mapper;
 
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
 
 /**
- * @author mls
- * @date 2023-07-25 18:31:38
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:12:49
+ * @remark 3.7.5混凝土配合比
  */
 public interface QqchExpBetonMapper {
-                                                                                                                                                                                                                                                                                                                                                    
+
     QqchExpBeton getQqchExpBeton(QqchExpBeton qqchExpBeton);
 
     List<QqchExpBeton> getQqchExpBetonList(QqchExpBeton qqchExpBeton);
@@ -21,9 +21,9 @@ public interface QqchExpBetonMapper {
 
     int updateQqchExpBeton(QqchExpBeton qqchExpBeton);
 
-            int updateQqchExpBetonList(@Param("qqchExpBetonList") List<QqchExpBeton> qqchExpBetonList);
-    
+    int updateQqchExpBetonList(@Param("list") List<QqchExpBeton> qqchExpBetonList);
+
     int deleteQqchExpBeton(QqchExpBeton qqchExpBeton);
 
-            int deleteQqchExpBetonByPks(@Param("qqchExpBetonPkList") List<Long> qqchExpBetonPkList);
-    }
+    int deleteQqchExpBetonByPks(@Param("qqchExpBetonPkList") List<Long> qqchExpBetonPkList);
+}
