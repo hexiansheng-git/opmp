@@ -5,13 +5,17 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquExperimentExportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquVo;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -113,7 +117,15 @@ public class QqchMeasureExpEquController extends BaseController {
     @GetMapping("/exportExperiment")
     public void exportExperiment(HttpServletResponse response, BigDecimal version) {
         QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "2");
-        FtExcelUtil<QqchMeasureExpEqu> util = new FtExcelUtil<>(QqchMeasureExpEqu.class);
-        util.exportExcel(response, qqchMeasureExpEquVo.getExperimentList(), DateUtils.getDate());
+
+        List<QqchMeasureExpEquExperimentExportVo> exportList = new ArrayList<>();
+        for (QqchMeasureExpEqu equVo : qqchMeasureExpEquVo.getExperimentList()) {
+            QqchMeasureExpEquExperimentExportVo experimentExportVo = new QqchMeasureExpEquExperimentExportVo();
+            BeanUtils.copyProperties(equVo, experimentExportVo);
+            exportList.add(experimentExportVo);
+        }
+        FtExcelUtil<QqchMeasureExpEquExperimentExportVo> util = new FtExcelUtil<>(
+            QqchMeasureExpEquExperimentExportVo.class);
+        util.exportExcel(response, exportList, DateUtils.getDate());
     }
 }
