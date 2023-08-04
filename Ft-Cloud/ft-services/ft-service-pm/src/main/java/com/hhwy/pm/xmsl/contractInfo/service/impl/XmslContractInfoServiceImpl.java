@@ -48,6 +48,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo) {
+        //查询最大有效版本号，如果查不到，版本号赋默认值1.0
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         xmslContractInfo.setVersion(maxVersion);
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
@@ -72,6 +73,12 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
             if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
                 xmslContractInfo1.setXmslContractPayinfoList(xmslContractPayinfoList);
+            }
+            //最大有效版本号为1.0 说明不存在历史版本
+            if(maxVersion.compareTo(new BigDecimal(1.0))==0){
+                xmslContractInfo1.setHistoricalVersion(false);
+            }else {
+                xmslContractInfo1.setHistoricalVersion(true);
             }
         }
         return xmslContractInfo1;
