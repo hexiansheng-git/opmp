@@ -108,17 +108,17 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
                 qqchQualityProblemControl.setCreateTime(DateUtils.getNowDate());
 
                 if (!CollectionUtils.isEmpty(dbList)) {
-                    for (QqchQualityProblemControl problemControl : dbList) {
-                        if (problemControl.getProblemCode().equals(qqchQualityProblemControl.getProblemCode())) {
-                            qqchQualityProblemControl.setCauseAnalysis(problemControl.getCauseAnalysis());
-                            qqchQualityProblemControl.setControlMeasures(problemControl.getControlMeasures());
-                            qqchQualityProblemControl.setSchemeFinalizeTime(problemControl.getSchemeFinalizeTime());
+                    for (QqchQualityProblemControl db : dbList) {
+                        if (db.getProblemCode().equals(qqchQualityProblemControl.getProblemCode())) {
+                            qqchQualityProblemControl.setCauseAnalysis(db.getCauseAnalysis());
+                            qqchQualityProblemControl.setControlMeasures(db.getControlMeasures());
+                            qqchQualityProblemControl.setSchemeFinalizeTime(db.getSchemeFinalizeTime());
                             qqchQualityProblemControl
-                                .setThirdDiscloseFinishTime(problemControl.getThirdDiscloseFinishTime());
-                            qqchQualityProblemControl.setTechnicalTrainTime(problemControl.getTechnicalTrainTime());
-                            qqchQualityProblemControl.setPlanImplementTime(problemControl.getPlanImplementTime());
-                            qqchQualityProblemControl.setDirectorId(problemControl.getDirectorId());
-                            qqchQualityProblemControl.setDirector(problemControl.getDirector());
+                                .setThirdDiscloseFinishTime(db.getThirdDiscloseFinishTime());
+                            qqchQualityProblemControl.setTechnicalTrainTime(db.getTechnicalTrainTime());
+                            qqchQualityProblemControl.setPlanImplementTime(db.getPlanImplementTime());
+                            qqchQualityProblemControl.setDirectorId(db.getDirectorId());
+                            qqchQualityProblemControl.setDirector(db.getDirector());
                         }
                     }
                 }

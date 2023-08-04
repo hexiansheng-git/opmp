@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.problem.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -69,11 +70,6 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
      */
     @Transactional
     public void batchSave(QqchQualityProblemListVo voParam) {
-        // 查询数据库中质量通病清单
-        QqchQualityProblemList problemList = new QqchQualityProblemList();
-        problemList.setVersion(voParam.getVersion());
-        List<QqchQualityProblemList> dbList = qqchQualityProblemListMapper.getQqchQualityProblemListList(problemList);
-
         // 清空数据库表中数据
         QqchQualityProblemList deleteParam = new QqchQualityProblemList();
         deleteParam.setVersion(voParam.getVersion());
@@ -84,15 +80,8 @@ public class QqchQualityProblemListServiceImpl implements IQqchQualityProblemLis
 
         if (!CollectionUtils.isEmpty(voParam.getList())) {
             for (QqchQualityProblemList qqchQualityProblemList : voParam.getList()) {
-                if (!CollectionUtils.isEmpty(dbList)) {
-                    for (QqchQualityProblemList db : dbList) {
-                        if (db.getProblemName().equals(qqchQualityProblemList.getProblemName())) {
-                            qqchQualityProblemList.setProblemCode(db.getProblemCode());
-                        } else {
-                            String problemCode = UUID.randomUUID().toString().replaceAll("-", "");
-                            qqchQualityProblemList.setProblemCode(problemCode);
-                        }
-                    }
+                if (StringUtils.isBlank(qqchQualityProblemList.getProblemCode())) {
+                    qqchQualityProblemList.setProblemCode(UUID.randomUUID().toString().replaceAll("-", ""));
                 }
                 qqchQualityProblemList.setId(IdWorker.createId());
                 qqchQualityProblemList.setVersion(voParam.getVersion());
