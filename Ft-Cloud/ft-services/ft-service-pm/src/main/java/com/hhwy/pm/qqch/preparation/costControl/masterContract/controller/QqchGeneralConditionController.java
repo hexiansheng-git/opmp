@@ -103,9 +103,9 @@ public class QqchGeneralConditionController extends BaseController {
      * @param qqchGeneralConditionVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:add")
+    @PreAuthorize(hasPermi = "qqchGeneralCondition:save")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchGeneralConditionVo qqchGeneralConditionVo) {
+    public AjaxResult save(@RequestBody QqchGeneralConditionVo qqchGeneralConditionVo) {
         qqchGeneralConditionService.save(qqchGeneralConditionVo);
         return AjaxResult.success();
     }

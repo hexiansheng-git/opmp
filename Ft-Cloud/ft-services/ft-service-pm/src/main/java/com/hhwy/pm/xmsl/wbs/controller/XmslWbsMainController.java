@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wk
@@ -59,7 +61,7 @@ public class XmslWbsMainController extends BaseController {
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
         if(wbsMain != null)
             wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
-        return AjaxResult.success(wbsMain);
+        return AjaxResult.success(wbsMain==null?new HashMap<>(2):wbsMain);
     }
 
     /**
@@ -86,7 +88,8 @@ public class XmslWbsMainController extends BaseController {
     @PreAuthorize(hasPermi = "xmslWbsMain:remove")
     @PostMapping("/delete")
     public AjaxResult deleteXmslWbsMain(@Validated(ValidationGroups.Delete.class) @RequestBody XmslWbsMain xmslWbsMainParam) {
-        return toAjax(xmslWbsMainService.deleteXmslWbsMain(xmslWbsMainParam));
+        xmslWbsMainService.deleteXmslWbsMain(xmslWbsMainParam);
+        return AjaxResult.success();
     }
 
     @GetMapping("/export")
@@ -101,11 +104,13 @@ public class XmslWbsMainController extends BaseController {
      * @param map
      * @return
      */
-//    @PostMapping("/finishFlow")
-//    public AjaxResult finishFlow(@RequestBody Map map){
+    @PostMapping("/finishFlow")
+    public AjaxResult finishFlow(@RequestBody Map map){
+        Long businessId = ObjectUtils.nvlLong(((Map)((Map)map.get("execution")).get("variables")).get("businessId")) ;
 //        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
 //        Map varMap = delegateTask.getVariables();
 //        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
-//        return AjaxResult.success();
-//    }
+        xmslWbsMainService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
 }

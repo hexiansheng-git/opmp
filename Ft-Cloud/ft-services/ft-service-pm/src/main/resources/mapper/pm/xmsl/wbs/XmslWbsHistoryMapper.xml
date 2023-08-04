@@ -602,7 +602,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -659,5 +659,13 @@
                 #{id}
             </foreach>
         </where>
+    </update>
+
+    <update id="deleteByParentIds">
+        update `xmsl_wbs_history` set del_flag = 1
+        where
+        <foreach item="id" collection="list" separator="or" >
+            FIND_IN_SET(#{id},ancestors);
+        </foreach>
     </update>
 </mapper>

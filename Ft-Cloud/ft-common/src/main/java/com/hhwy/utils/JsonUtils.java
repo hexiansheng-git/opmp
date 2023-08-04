@@ -42,4 +42,27 @@ public class JsonUtils {
     }
 
 
+    public static void soutFtJsonStr(Class<?> aClass) {
+        Field[] fields = aClass.getDeclaredFields();
+        Map<String, String> map = new LinkedHashMap<>();
+
+
+        String[] ignoreField = {
+                "valid",
+                "createUser","masterId", "createUserName", "delFlag", "delTime", "ptVar1", "ptVar2", "ptVar3", "ptVar4",
+                "ptVar5", "ptVar6", "version", "updateUser","delUser", "updateUserName", "fileGroupId", "params", "deptId", "dataSource"};
+        List<String> strings = Arrays.asList(ignoreField);
+        for (Field field : fields) {
+            String fieldName = field.getName();
+            FtExcel annotation = field.getAnnotation(FtExcel.class);
+            if (strings.contains(fieldName) || annotation == null) {
+                continue;
+            }
+            map.put(fieldName, annotation.name());
+        }
+        String s = JSONObject.toJSONString(map);
+        System.out.println(s);
+
+    }
+
 }

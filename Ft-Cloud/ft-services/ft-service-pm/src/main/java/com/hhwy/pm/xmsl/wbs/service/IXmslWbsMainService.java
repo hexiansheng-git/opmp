@@ -45,7 +45,7 @@ public interface IXmslWbsMainService {
 
     int updateXmslWbsMainList(List<XmslWbsMain> xmslWbsMainList);
     
-    int deleteXmslWbsMain(XmslWbsMain xmslWbsMain);
+    void deleteXmslWbsMain(XmslWbsMain xmslWbsMain);
 
     int deleteXmslWbsMainByPks(List<Long> xmslWbsMainPkList);
 

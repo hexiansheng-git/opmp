@@ -22,9 +22,11 @@ public interface XmslWbsHistoryMapper {
 
     int updateXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
-    int updateXmslWbsHistoryList(@Param("xmslWbsHistoryList") List<XmslWbsHistory> xmslWbsHistoryList);
+    int updateXmslWbsHistoryList(@Param("list") List<XmslWbsHistory> xmslWbsHistoryList);
 
     int deleteXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
     int deleteXmslWbsHistoryByPks(@Param("xmslWbsHistoryPkList") List<Long> xmslWbsHistoryPkList);
+
+    int deleteByParentIds(@Param("list")List<Long> list);
 }

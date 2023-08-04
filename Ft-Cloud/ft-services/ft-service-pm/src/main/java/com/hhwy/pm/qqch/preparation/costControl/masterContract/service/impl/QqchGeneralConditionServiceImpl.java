@@ -11,9 +11,12 @@ import com.hhwy.pm.qqch.preparation.costControl.masterContract.mapper.QqchGenera
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.service.IQqchGeneralConditionService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
+import com.hhwy.pm.qqch.utils.DataCheckUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,27 +70,18 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
             return;
         }
 
-        List<QqchGeneralCondition> insertList = ListTreeUtil.formatList(
-                qqchGeneralConditionList,
-                QqchGeneralCondition::setId,
-                QqchGeneralCondition::setPid,
-                QqchGeneralCondition::setSort,
-                QqchGeneralCondition::setLeaf,
-                QqchGeneralCondition::getChildren,
-                QqchGeneralCondition::setChildren);
-
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
         }
-        for (QqchGeneralCondition generalCondition : insertList) {
+        for (QqchGeneralCondition generalCondition : qqchGeneralConditionList) {
             generalCondition.setValid(valid);
             generalCondition.setVersion(version);
             generalCondition.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             generalCondition.setCreateUserName(SecurityUtils.getUserName());
             generalCondition.setCreateTime(DateUtils.getNowDate());
         }
-        qqchGeneralConditionMapper.insertQqchGeneralConditionList(insertList);
+        qqchGeneralConditionMapper.insertQqchGeneralConditionList(qqchGeneralConditionList);
     }
 
     @Transactional
@@ -161,8 +155,25 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
         BigDecimal version = qqchGeneralConditionVo.getVersion();
         List<QqchGeneralCondition> qqchGeneralConditionList = qqchGeneralConditionVo.getQqchGeneralConditionList();
 
+        List<QqchGeneralCondition> tileList = ListTreeUtil.formatList(
+                qqchGeneralConditionList,
+                QqchGeneralCondition::setId,
+                QqchGeneralCondition::setPid,
+                QqchGeneralCondition::setSort,
+                QqchGeneralCondition::setLeaf,
+                QqchGeneralCondition::getChildren,
+                QqchGeneralCondition::setChildren);
+
+        //校验唯一
+        DataCheckUtil.checkSingle(qqchGeneralConditionList,QqchGeneralCondition::getGeneralCode);
+
+        //校验非空
+        if(!ButtonMark.SAVE.equals(buttonMark)){
+            JyDetailsUtil.jyDetails(tileList, ValidationGroups.Save.class);
+        }
+
         //处理数据
-        this.insertQqchGeneralConditionList(qqchGeneralConditionList,version);
+        this.insertQqchGeneralConditionList(tileList,version);
 
         //处理确认状态是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
@@ -171,5 +182,9 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
             String stageIdentity = qqchGeneralConditionVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
+    }
+
+    public void checkData(){
+
     }
 }

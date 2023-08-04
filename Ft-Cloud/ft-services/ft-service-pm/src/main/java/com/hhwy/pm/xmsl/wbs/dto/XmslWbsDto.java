@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.wbs.dto;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import java.util.List;
 @Data
 public class XmslWbsDto {
     @Valid
-    private List<XmslWbs> list;
+    private List<XmslWbsHistory> list;
     private String delIds;
     //wbs_main_id
     private Long mainId;

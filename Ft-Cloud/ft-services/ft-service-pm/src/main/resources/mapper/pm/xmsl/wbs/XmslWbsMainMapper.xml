@@ -309,6 +309,17 @@
         </where>
     </delete>
 
+    <update id="deleteLogic">
+        update `xmsl_wbs_main` set del_flag = 1 where id = #{id}
+    </update>
+    <update id="deleteHistoryLogic">
+        update `xmsl_wbs_history` set del_flag = 1 where main_id = #{id}
+    </update>
+    <update id="deleteRelation">
+        delete from `xmsl_wbs_list_relation` where main_id = #{id}
+    </update>
+
+
     <delete id="deleteXmslWbsMainByPks">
         delete from `xmsl_wbs_main`
         <where>

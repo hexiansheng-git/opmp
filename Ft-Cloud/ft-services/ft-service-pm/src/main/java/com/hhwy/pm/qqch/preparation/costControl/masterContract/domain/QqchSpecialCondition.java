@@ -5,10 +5,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -60,6 +62,7 @@ public class QqchSpecialCondition extends BaseEntity {
      * 字段描述：有利性分析（字典项：advantage_analyse）
      */
     @JsonProperty
+    @NotBlank(message = "有利性分析不能为空！",groups = ValidationGroups.Save.class)
     private String advantageAnalyse;
     /**
      * 字段描述：风险等级（字典项：condition_risk_grade）
