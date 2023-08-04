@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.xmsl.wbs.mapper.XmslWbsListRelationMapper">
+
+    <resultMap type="com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation"
+               id="XmslWbsListRelationResultMap">
+        <result property="mainId" column="main_id"/>
+        <result property="wbsId" column="wbs_id"/>
+        <result property="listCode" column="list_code"/>
+        <result property="listId" column="list_id"/>
+    </resultMap>
+    <sql id="selectXmslWbsListRelationVo">
+        select
+                                                    `main_id`
+                                                 ,`wbs_id`
+                                                 ,`list_code`
+                                                 ,`list_id`
+                                    from xmsl_wbs_list_relation
+    </sql>
+    <select id="getXmslWbsListRelation" resultMap="XmslWbsListRelationResultMap">
+        <include refid="selectXmslWbsListRelationVo"/>
+        <where>
+            del_flag = "0"
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getXmslWbsListRelationList" resultMap="XmslWbsListRelationResultMap">
+        <include refid="selectXmslWbsListRelationVo"/>
+        <where>
+            del_flag = "0"
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertXmslWbsListRelation" useGeneratedKeys="true" keyProperty="list_id">
+        insert into xmsl_wbs_list_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mainId != null ">`main_id`,</if>
+            <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="listCode != null  and listCode != ''">`list_code`,</if>
+            <if test="listId != null ">`list_id`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mainId != null ">#{mainId},</if>
+            <if test="wbsId != null ">#{wbsId},</if>
+            <if test="listCode != null  and listCode != ''">#{listCode},</if>
+            <if test="listId != null ">#{listId},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertXmslWbsListRelation -->
+    <insert id="insertXmslWbsListRelationList">
+        insert into xmsl_wbs_list_relation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `main_id`,
+            `wbs_id`,
+            `list_code`,
+            `list_id`,
+        </trim>
+        values
+        <foreach collection="xmslWbsListRelationList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.mainId},
+                #{item.wbsId},
+                #{item.listCode},
+                #{item.listId},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateXmslWbsListRelation">
+        update xmsl_wbs_list_relation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mainId != null ">`main_id` = #{mainId},</if>
+            <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
+            <if test="listId != null ">`list_id` = #{listId},</if>
+        </trim>
+        <where>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+        </where>
+    </update>
+
+    <update id="updateXmslWbsListRelationList">
+        update xmsl_wbs_list_relation
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="main_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `list_id`=#{item.listId} then #{item.mainId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `list_id`=#{item.listId} then #{item.wbsId}
+                </foreach>
+            </trim>
+            <trim prefix="list_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `list_id`=#{item.listId} then #{item.listCode}
+                </foreach>
+            </trim>
+            <trim prefix="list_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `list_id`=#{item.listId} then #{item.listId}
+                </foreach>
+            </trim>
+        </trim>
+        where `list_id` in
+        <foreach collection="listIdList" index="index" item="item" separator="," open="(" close=")">
+            #{item.listId}
+        </foreach>
+    </update>
+
+    <delete id="deleteXmslWbsListRelation">
+        delete from `xmsl_wbs_list_relation`
+        <where>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+        </where>
+    </delete>
+
+    <delete id="deleteXmslWbsListRelationByPks">
+        delete from `xmsl_wbs_list_relation`
+        <where>
+            `list_id` in
+            <foreach item="listId" collection="xmslWbsListRelationPkList" open="(" separator="," close=")">
+                #{listId}
+            </foreach>
+        </where>
+    </delete>
+</mapper>

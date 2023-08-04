@@ -14,6 +14,7 @@ import com.hhwy.feign.factory.SystemServiceFallbackFactory;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
@@ -32,6 +33,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -195,19 +197,26 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         if(main.getValid() == Constant.YES_INT)
             return ;
         //1、wbs迁移到历史数据、历史数据迁移到wbs
-        List<XmslWbs> list = wbsService.getByMainId(id);
-        for (int i = 0; i < list.size(); i++) {
-            new AddBaseInfoUtil<>().updateBaseEntity(list.get(i));
-        }
-        this.xmslWbsMainMapper.insertWbsToHistory(new HashMap());
+        this.xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",id));
         this.xmslWbsMainMapper.deleteWbs();
         xmslWbsMainMapper.insertHistoryToWbs(id);
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
-        //2、处理祖级ID、祖级名称
+        //2、处理祖级ID、祖级名称(wbs清单关联关系)
+        List<XmslWbsListRelation> relationList = new ArrayList<>();
+        Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
+            if(StringUtils.isBlank(r.getListCode()))
+                return r;
+            String[] listCodes = r.getListCode().split(",");
+
+//            Long wbsId, String listCode, Long listId
+//            XmslWbsListRelation relation = new XmslWbsListRelation(id,);
+            return r;
+        };
         wbsService.handlerAncestors();
         //3、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
-        //4、wbs清单关联关系
+        //4、
+
 
         //5、wbs塞入redis
         wbsService.initWbs2Redis();
