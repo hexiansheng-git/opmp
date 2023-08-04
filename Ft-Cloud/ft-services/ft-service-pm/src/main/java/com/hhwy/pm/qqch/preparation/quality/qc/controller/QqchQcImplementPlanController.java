@@ -1,10 +1,10 @@
-package com.hhwy.pm.qqch.preparation.quality.problem.controller;
+package com.hhwy.pm.qqch.preparation.quality.qc.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.preparation.quality.problem.domain.vo.QqchQualityProblemTrainVo;
-import com.hhwy.pm.qqch.preparation.quality.problem.service.IQqchQualityProblemTrainService;
+import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcImplementPlanVo;
+import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +17,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhenglili
- * @date 2023-08-03 14:30:51
- * @remark 9.2.3 质量通病培训策划
+ * @date 2023-08-04 10:30:39
+ * @remark 9.6.2 QC实施计划
  */
 @Validated
 @RestController
-@RequestMapping("/qqchQualityProblemTrain")
-public class QqchQualityProblemTrainController extends BaseController {
+@RequestMapping("/qqchQcImplementPlan")
+public class QqchQcImplementPlanController extends BaseController {
 
     @Autowired
-    private IQqchQualityProblemTrainService qqchQualityProblemTrainService;
+    private IQqchQcImplementPlanService qqchQcImplementPlanService;
 
     /**
      * 列表
@@ -34,25 +34,24 @@ public class QqchQualityProblemTrainController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityProblemTrain:list")
+    @PreAuthorize(hasPermi = "qqchQcImplementPlan:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
-        QqchQualityProblemTrainVo qqchQualityProblemTrainVo = qqchQualityProblemTrainService
-            .getQqchQualityProblemTrainList(version);
-        return AjaxResult.success(qqchQualityProblemTrainVo);
+        QqchQcImplementPlanVo qqchQcImplementPlanVo = qqchQcImplementPlanService.getQqchQcImplementPlanList(version);
+        return AjaxResult.success(qqchQcImplementPlanVo);
     }
 
     /**
      * 保存/确认/提交
      *
-     * @param qqchQualityProblemTrainVo
+     * @param qqchQcImplementPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityProblemTrain:add")
+    @PreAuthorize(hasPermi = "qqchQcImplementPlan:update")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchQualityProblemTrainVo qqchQualityProblemTrainVo) {
-        qqchQualityProblemTrainService.batchSave(qqchQualityProblemTrainVo);
+        @Validated(ValidationGroups.Update.class) @RequestBody QqchQcImplementPlanVo qqchQcImplementPlanVo) {
+        qqchQcImplementPlanService.updateQqchQcImplementPlan(qqchQcImplementPlanVo);
         return AjaxResult.success();
     }
 }
