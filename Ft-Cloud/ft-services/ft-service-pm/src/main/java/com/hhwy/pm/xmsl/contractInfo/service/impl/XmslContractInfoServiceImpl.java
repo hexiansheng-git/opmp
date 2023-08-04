@@ -11,6 +11,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -88,6 +89,25 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      */
     @Transactional
     public int insertXmslContractInfo(XmslContractInfo xmslContractInfo) {
+        //删除旧数据
+        XmslContractInfo info = new XmslContractInfo();
+        info.setVersion(xmslContractInfo.getVersion());
+        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(info);
+        if(xmslContractInfo1!=null){
+            //1.1投保险种
+            XmslContractInsure xmslContractInsure = new XmslContractInsure();
+            xmslContractInsure.setMasterId(xmslContractInfo1.getId());
+            xmslContractInsureService.deleteXmslContractInsure(xmslContractInsure);
+            //1.2 签订信息
+            XmslContractSign xmslContractSign = new XmslContractSign();
+            xmslContractSign.setMasterId(xmslContractInfo1.getId());
+            xmslContractSignService.deleteXmslContractSign(xmslContractSign);
+            //1.3  项目支付信息
+            XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+            xmslContractPayinfo.setMasterId(xmslContractInfo1.getId());
+            xmslContractPayinfoService.deleteXmslContractPayinfo(xmslContractPayinfo);
+            xmslContractInfoMapper.deleteXmslContractInfo(info);
+        }
         xmslContractInfo.setId(IdWorker.createId());
         this.addSonTable(xmslContractInfo);
         xmslContractInfo.setCreateUser(SecurityUtils.getUserName());

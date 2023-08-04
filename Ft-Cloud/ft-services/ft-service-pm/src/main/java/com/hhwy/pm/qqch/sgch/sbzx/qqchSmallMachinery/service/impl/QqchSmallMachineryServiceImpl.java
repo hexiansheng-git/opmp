@@ -96,6 +96,7 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
             valid = Valid.YES;
         }
         for (QqchSmallMachinery smallMachinery : qqchSmallMachineryList) {
+            smallMachinery.setId(IdWorker.createId());
             smallMachinery.setValid(valid);
             smallMachinery.setVersion(version);
             smallMachinery.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

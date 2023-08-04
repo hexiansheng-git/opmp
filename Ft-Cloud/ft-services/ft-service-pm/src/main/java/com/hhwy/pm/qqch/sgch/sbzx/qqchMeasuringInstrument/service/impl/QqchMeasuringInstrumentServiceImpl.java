@@ -99,6 +99,7 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
             valid = Valid.YES;
         }
         for (QqchMeasuringInstrument measuringInstrument : qqchMeasuringInstrumentList) {
+            measuringInstrument.setId(IdWorker.createId());
             measuringInstrument.setValid(valid);
             measuringInstrument.setVersion(version);
             measuringInstrument.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

@@ -1,26 +1,26 @@
 package com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.service.IQqchTotalDemandTimeCountService;
-import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.service.IQqchTotalDemandTimeCountService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author ldd
  * @date 2023-08-02 10:55:17
- * @remark 
+ * @remark  1.6 物资总需计划
  */
 @Validated
 @RestController

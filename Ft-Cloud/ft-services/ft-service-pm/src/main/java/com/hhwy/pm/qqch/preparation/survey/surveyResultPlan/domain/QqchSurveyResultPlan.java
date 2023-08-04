@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.math.BigDecimal;
@@ -57,7 +56,7 @@ public class QqchSurveyResultPlan extends CommonBaseEntity {
     /**
      * 字段描述：初稿提交日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "初稿提交日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date submitDate;
@@ -70,21 +69,21 @@ public class QqchSurveyResultPlan extends CommonBaseEntity {
     /**
      * 字段描述：评审完成日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "评审完成日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date reviewCompleteDate;
     /**
      * 字段描述：主监理计划批复日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "主监理计划批复日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date planApprovalDate;
     /**
      * 字段描述：工点部位计划施工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "工点部位计划施工日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date planConstructionDate;
