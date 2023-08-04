@@ -235,7 +235,7 @@
     </select>
 
     <select id="latestWbsSimpleAllList" resultMap="XmslWbsResultMap">
-        select `id`,`parent_id`,`name`,`level` from xmsl_wbs
+        select `id`,`parent_id`,`name`,`level`,list_code from xmsl_wbs
         <where>
             del_flag = "0"
         </where>

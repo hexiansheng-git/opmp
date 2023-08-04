@@ -5,6 +5,7 @@ import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * wbs
@@ -63,12 +64,19 @@ public interface IXmslWbsService {
     List<XmslWbs> childListByIds(Long[] ids);
     List<XmslWbs> childListById(Long id);
     List<XmslWbs> childListByIds(Long[] ids,boolean containSelf);
-    
+
+    /**
+     * 获取wbs简要信息
+     * @return
+     */
+    List<XmslWbs> latestWbsSimpleAllList();
+
     /**
      * 处理wbs祖级信息(祖级id,祖级名称)
      *
      */
     void handlerAncestors();
+    void handlerAncestors(Function<XmslWbs,XmslWbs> func);
 
     /**
      * 初始化wbs到redis（异步）

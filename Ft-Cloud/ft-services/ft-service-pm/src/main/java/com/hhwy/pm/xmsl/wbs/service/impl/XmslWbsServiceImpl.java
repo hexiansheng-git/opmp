@@ -93,13 +93,16 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
 
     @Override
     public Map listData(XmslWbs xmslWbs) {
-        try{
-            Long.valueOf(xmslWbs.getParentId());
-        }catch(Exception e){
-            return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId",xmslWbs.getMainId());
-        }
-        if(StringUtils.isBlank(xmslWbs.getParentId()) )
+        if(StringUtils.isBlank(xmslWbs.getParentId()) ){
             xmslWbs.setParentId("-1");
+        }else{
+            try{
+                Long.valueOf(xmslWbs.getParentId());
+            }catch(Exception e){
+                return ObjectUtils.toMap("list",new ArrayList<>(2),"mainId",xmslWbs.getMainId());
+            }
+        }
+
         //判断查询历史还是查询当前
         XmslWbsMain main = wbsMainService.getById(xmslWbs.getMainId());
         xmslWbs.setParams(xmslWbs.getParams()==null?new HashMap<>(1):xmslWbs.getParams());
@@ -189,7 +192,17 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     }
 
     @Override
+    public List<XmslWbs> latestWbsSimpleAllList() {
+        return xmslWbsMapper.latestWbsSimpleAllList();
+    }
+
+    @Override
     public void handlerAncestors() {
+
+    }
+
+    @Override
+    public void handlerAncestors(Function<XmslWbs,XmslWbs> func) {
         long begin = System.currentTimeMillis();
         try{
             List<XmslWbs> list = this.xmslWbsMapper.latestWbsSimpleAllList();
@@ -202,6 +215,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             //遍历，获取祖级id、名称
             for (int i = 0; i < list.size(); i++) {
                 XmslWbs temp = list.get(i);
+                if(func != null){
+                    func.apply(temp);
+                }
                 idNameMap.put(temp.getId(),temp.getName().trim());
                 //若有父级，则放入parentIdMap、parentNameMap
                 if(isParentFunc.apply(temp.getParentId())){
@@ -310,6 +326,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
             temp.setMainId(dto.getMainId());
+            //若wbs有子级，清除清单编号。20230804 玉涛需求
+            if(temp.getHaveChildren() == Constant.YES_INT){
+                temp.setListCode(null);
+                temp.setListIds(null);
+            }
             if(temp.getId().length() < 21){
                 new AddBaseInfoUtil<>().updateBaseEntity(temp);
                 updateList.add(temp);
