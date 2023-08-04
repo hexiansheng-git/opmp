@@ -1,11 +1,13 @@
 package com.hhwy.utils.validation;
 
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.utils.exception.CustomBusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * 子表校验
@@ -97,5 +99,32 @@ public class JyDetailsUtil {
         return true;
     }
 
-
+    /**
+     * 树列表平铺后只校验叶子节点数据
+     * @param detailList
+     * @param getLeaf 如何获取叶子节点
+     * @param groups
+     * @return
+     * @param <T>
+     */
+    public static <T> Boolean jyDetails(List<T> detailList, Function<T, String> getLeaf,Class<?>... groups) {
+        StringBuilder str = new StringBuilder();
+        for (T t : detailList) {
+            String leaf = getLeaf.apply(t);
+            if(CommonYesNo.YES.equals(leaf)){
+                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
+                if (!beanValidationResult.isSuccess()) {
+                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
+                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
+                        str.append(errorMessage.getMessage()).append(",");
+                    }
+                }
+            }
+        }
+        if (!"".contentEquals(str)) {
+            log.error(str.toString());
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, str.toString());
+        }
+        return true;
+    }
 }
