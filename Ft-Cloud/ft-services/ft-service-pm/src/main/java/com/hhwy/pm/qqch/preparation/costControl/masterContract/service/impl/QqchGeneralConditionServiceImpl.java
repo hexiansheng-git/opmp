@@ -165,11 +165,11 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
                 QqchGeneralCondition::setChildren);
 
         //校验唯一
-        DataCheckUtil.checkSingle(qqchGeneralConditionList,QqchGeneralCondition::getGeneralCode);
+        DataCheckUtil.checkSingle(tileList,QqchGeneralCondition::getGeneralCode);
 
         //校验非空
         if(!ButtonMark.SAVE.equals(buttonMark)){
-            JyDetailsUtil.jyDetails(tileList, ValidationGroups.Save.class);
+            JyDetailsUtil.jyDetails(tileList,QqchGeneralCondition::getLeaf, ValidationGroups.Save.class);
         }
 
         //处理数据

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.QqchSubpackageInventory;
+import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.vo.SubpackageInventoryCollectVo;
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.service.IQqchSubpackageInventoryService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-08-03 13:35:47
- * @remark
+ * @remark 分包清单
  */
 @Validated
 @RestController
@@ -90,5 +91,17 @@ public class QqchSubpackageInventoryController extends BaseController {
         List<QqchSubpackageInventory> qqchSubpackageInventoryList = qqchSubpackageInventoryService.getQqchSubpackageInventoryList(qqchSubpackageInventoryParam);
         ExcelUtils<QqchSubpackageInventory> util = new ExcelUtils<>(QqchSubpackageInventory.class);
         util.exportExcel(response, qqchSubpackageInventoryList, DateUtils.getDate());
+    }
+
+    /**
+     * 分包清单汇总
+     * @param qqchSubpackageInventory
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSubpackageInventory:list")
+    @GetMapping("/collectList")
+    public AjaxResult getSubpackageInventoryCollectVoList(@Validated(ValidationGroups.Select.class) QqchSubpackageInventory qqchSubpackageInventory) {
+        List<SubpackageInventoryCollectVo> subpackageInventoryCollectVoList = qqchSubpackageInventoryService.getSubpackageInventoryCollectVoList(qqchSubpackageInventory);
+        return AjaxResult.success(subpackageInventoryCollectVoList);
     }
 }

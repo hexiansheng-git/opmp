@@ -14,6 +14,8 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,27 +69,18 @@ public class QqchOtherContractItemServiceImpl implements IQqchOtherContractItemS
             return;
         }
 
-        List<QqchOtherContractItem> insertList = ListTreeUtil.formatList(
-                qqchOtherContractItemList,
-                QqchOtherContractItem::setId,
-                QqchOtherContractItem::setPid,
-                QqchOtherContractItem::setSort,
-                QqchOtherContractItem::setLeaf,
-                QqchOtherContractItem::getChildren,
-                QqchOtherContractItem::setChildren);
-
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
         }
-        for (QqchOtherContractItem otherContractItem : insertList) {
+        for (QqchOtherContractItem otherContractItem : qqchOtherContractItemList) {
             otherContractItem.setValid(valid);
             otherContractItem.setVersion(version);
             otherContractItem.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             otherContractItem.setCreateUserName(SecurityUtils.getUserName());
             otherContractItem.setCreateTime(DateUtils.getNowDate());
         }
-       qqchOtherContractItemMapper.insertQqchOtherContractItemList(insertList);
+       qqchOtherContractItemMapper.insertQqchOtherContractItemList(qqchOtherContractItemList);
     }
 
     @Transactional
@@ -160,6 +153,20 @@ public class QqchOtherContractItemServiceImpl implements IQqchOtherContractItemS
 
         BigDecimal version = qqchOtherContractItemVo.getVersion();
         List<QqchOtherContractItem> qqchOtherContractItemList = qqchOtherContractItemVo.getQqchOtherContractItemList();
+
+        List<QqchOtherContractItem> tileList = ListTreeUtil.formatList(
+                qqchOtherContractItemList,
+                QqchOtherContractItem::setId,
+                QqchOtherContractItem::setPid,
+                QqchOtherContractItem::setSort,
+                QqchOtherContractItem::setLeaf,
+                QqchOtherContractItem::getChildren,
+                QqchOtherContractItem::setChildren);
+
+        //校验非空
+        if(!ButtonMark.SAVE.equals(buttonMark)){
+            JyDetailsUtil.jyDetails(tileList, QqchOtherContractItem::getLeaf, ValidationGroups.Save.class);
+        }
 
         //处理数据
         this.insertQqchOtherContractItemList(qqchOtherContractItemList,version);

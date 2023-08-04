@@ -61,23 +61,24 @@ public class QqchWorkGroupController extends BaseController {
 
     /**
      * 新增工作小组
-     * @param qqchWorkGroupParam
+     * @param qqchWorkGroup
      * @return
      */
     @PostMapping("/add")
-    public AjaxResult insertQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroupParam) {
-        qqchWorkGroupService.insertQqchWorkGroup(qqchWorkGroupParam);
-        return AjaxResult.success(qqchWorkGroupParam);
+    public AjaxResult insertQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
+        qqchWorkGroupService.insertQqchWorkGroup(qqchWorkGroup);
+        return AjaxResult.success(qqchWorkGroup.getId());
     }
 
     /**
      * 修改工作小组
-     * @param qqchWorkGroupParam
+     * @param qqchWorkGroup
      * @return
      */
     @PostMapping("/update")
-    public AjaxResult updateQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroupParam) {
-        return toAjax(qqchWorkGroupService.updateQqchWorkGroup(qqchWorkGroupParam));
+    public AjaxResult updateQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
+        qqchWorkGroupService.updateQqchWorkGroup(qqchWorkGroup);
+        return AjaxResult.success(qqchWorkGroup.getId());
     }
 
     /**
@@ -88,7 +89,7 @@ public class QqchWorkGroupController extends BaseController {
     @PostMapping("/submit")
     public AjaxResult submit(@Validated({ValidationGroups.Update.class,ValidationGroups.Save.class}) @RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.submit(qqchWorkGroup);
-        return AjaxResult.success(qqchWorkGroup);
+        return AjaxResult.success(qqchWorkGroup.getId());
     }
 
     /**

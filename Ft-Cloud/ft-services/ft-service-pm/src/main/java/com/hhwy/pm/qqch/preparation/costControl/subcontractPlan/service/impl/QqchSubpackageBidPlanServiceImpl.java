@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -31,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * @author han
@@ -347,12 +350,16 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         //分包清单
         List<QqchSubpackageInventory> qqchSubpackageInventoryList = qqchSubpackageBidPlan.getQqchSubpackageInventoryList();
         //分包清单平铺
-        List<QqchSubpackageInventory> inventoryTileList = ListTreeUtil.formatList(
+        List<QqchSubpackageInventory> inventoryTileList = this.formatList(
                 qqchSubpackageInventoryList,
                 QqchSubpackageInventory::setId,
                 QqchSubpackageInventory::setPid,
                 QqchSubpackageInventory::setSort,
                 QqchSubpackageInventory::setLeaf,
+                QqchSubpackageInventory::getLevel,
+                QqchSubpackageInventory::setLevel,
+                QqchSubpackageInventory::getMasterContractInventoryCode,
+                QqchSubpackageInventory::setUpMasterContractInventoryCode,
                 QqchSubpackageInventory::getChildren,
                 QqchSubpackageInventory::setChildren);
 
@@ -365,6 +372,81 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         }
         inventoryList.addAll(inventoryTileList);
     }
+
+    /**
+     * 树形列表转线性列表，加排序号，加叶子节点
+     * @param source 数据源
+     * @param setId 如何设置id
+     * @param setPid 如何设置pid
+     * @param setSort 如何设置排序号
+     * @param setLeaf 如何设置叶子节点
+     * @param setLevel 如何设置层级
+     * @param getMasterContractInventoryCode 如何获取主合同清单编码
+     * @param setUpMasterContractInventoryCode 如何设置上级主合同清单编码
+     * @param getChildren 如何拿到子节点列表
+     * @param setChildren 如何设置子节点列表
+     * @param <T> 节点类型
+     * @return
+     */
+    private <T> List<T> formatList(
+            List<T> source,
+            BiConsumer<T,Long> setId,
+            BiConsumer<T,Long> setPid,
+            BiConsumer<T,Integer> setSort,
+            BiConsumer<T,String> setLeaf,
+            Function<T, Integer> getLevel,
+            BiConsumer<T,Integer> setLevel,
+            Function<T, String> getMasterContractInventoryCode,
+            BiConsumer<T,String> setUpMasterContractInventoryCode,
+            Function<T, List<T>> getChildren,
+            BiConsumer<T, List<T>> setChildren) {
+        List<T> resultList = new ArrayList<>();
+        int sort = 1;
+        for (T node : source) {
+            setSort.accept(node,sort++);
+            setLevel.accept(node,1);
+            recur(node, resultList, setId, setPid, setSort, setLeaf,getLevel, setLevel,getMasterContractInventoryCode, setUpMasterContractInventoryCode, getChildren, setChildren);
+        }
+        return resultList;
+    }
+
+    private <T> void recur(
+            T node,
+            List<T> resultList,
+            BiConsumer<T,Long> setId,
+            BiConsumer<T,Long> setPid,
+            BiConsumer<T,Integer> setSort,
+            BiConsumer<T,String> setLeaf,
+            Function<T, Integer> getLevel,
+            BiConsumer<T,Integer> setLevel,
+            Function<T, String> getMasterContractInventoryCode,
+            BiConsumer<T,String> setUpMasterContractInventoryCode,
+            Function<T, List<T>> getChildren,
+            BiConsumer<T, List<T>> setChildren) {
+        Long id = IdWorker.createId();
+        int sort = 1;
+        setId.accept(node,id);
+        resultList.add(node);
+
+        Integer parentLevel = getLevel.apply(node);
+        Integer myLevel = parentLevel + 1;
+        String masterContractInventoryCode = getMasterContractInventoryCode.apply(node);
+        List<T> children = getChildren.apply(node);
+        setChildren.accept(node, null);
+
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                setPid.accept(child,id);
+                setUpMasterContractInventoryCode.accept(child,masterContractInventoryCode);
+                setSort.accept(child,sort++);
+                setLevel.accept(child,myLevel);
+                recur(child, resultList, setId, setPid, setSort, setLeaf,getLevel, setLevel, getMasterContractInventoryCode, setUpMasterContractInventoryCode, getChildren, setChildren);
+            }
+        }else {
+            setLeaf.accept(node, CommonYesNo.YES);
+        }
+    }
+
 
     /**
      * 处理人员策划

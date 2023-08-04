@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.service;
 
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.QqchSubpackageInventory;
+import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.vo.SubpackageInventoryCollectVo;
 
 import java.util.List;
 
@@ -26,4 +27,11 @@ public interface IQqchSubpackageInventoryService {
     int deleteQqchSubpackageInventory(QqchSubpackageInventory qqchSubpackageInventory);
 
     int deleteQqchSubpackageInventoryByPks(List<Long> qqchSubpackageInventoryPkList);
+
+    /**
+     * 分包清单汇总
+     * @param qqchSubpackageInventory
+     * @return
+     */
+    List<SubpackageInventoryCollectVo> getSubpackageInventoryCollectVoList(QqchSubpackageInventory qqchSubpackageInventory);
 }

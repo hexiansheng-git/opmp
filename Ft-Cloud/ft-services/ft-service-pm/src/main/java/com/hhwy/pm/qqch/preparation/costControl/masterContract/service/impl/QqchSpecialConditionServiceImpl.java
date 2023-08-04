@@ -11,9 +11,12 @@ import com.hhwy.pm.qqch.preparation.costControl.masterContract.mapper.QqchSpecia
 import com.hhwy.pm.qqch.preparation.costControl.masterContract.service.IQqchSpecialConditionService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
+import com.hhwy.pm.qqch.utils.DataCheckUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,27 +70,18 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
             return;
         }
 
-        List<QqchSpecialCondition> insertList = ListTreeUtil.formatList(
-                qqchSpecialConditionList,
-                QqchSpecialCondition::setId,
-                QqchSpecialCondition::setPid,
-                QqchSpecialCondition::setSort,
-                QqchSpecialCondition::setLeaf,
-                QqchSpecialCondition::getChildren,
-                QqchSpecialCondition::setChildren);
-
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
         }
-        for (QqchSpecialCondition specialCondition : insertList) {
+        for (QqchSpecialCondition specialCondition : qqchSpecialConditionList) {
             specialCondition.setValid(valid);
             specialCondition.setVersion(version);
             specialCondition.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             specialCondition.setCreateUserName(SecurityUtils.getUserName());
             specialCondition.setCreateTime(DateUtils.getNowDate());
         }
-        qqchSpecialConditionMapper.insertQqchSpecialConditionList(insertList);
+        qqchSpecialConditionMapper.insertQqchSpecialConditionList(qqchSpecialConditionList);
     }
 
     @Transactional
@@ -161,8 +155,25 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
         BigDecimal version = qqchSpecialConditionVo.getVersion();
         List<QqchSpecialCondition> qqchSpecialConditionList = qqchSpecialConditionVo.getQqchSpecialConditionList();
 
+        List<QqchSpecialCondition> tileList = ListTreeUtil.formatList(
+                qqchSpecialConditionList,
+                QqchSpecialCondition::setId,
+                QqchSpecialCondition::setPid,
+                QqchSpecialCondition::setSort,
+                QqchSpecialCondition::setLeaf,
+                QqchSpecialCondition::getChildren,
+                QqchSpecialCondition::setChildren);
+
+        //校验唯一
+        DataCheckUtil.checkSingle(tileList,QqchSpecialCondition::getSpecialCode);
+
+        //校验非空
+        if(!ButtonMark.SAVE.equals(buttonMark)){
+            JyDetailsUtil.jyDetails(tileList, QqchSpecialCondition::getLeaf, ValidationGroups.Save.class);
+        }
+
         //处理数据
-        this.insertQqchSpecialConditionList(qqchSpecialConditionList,version);
+        this.insertQqchSpecialConditionList(tileList,version);
 
         //处理确认状态是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
