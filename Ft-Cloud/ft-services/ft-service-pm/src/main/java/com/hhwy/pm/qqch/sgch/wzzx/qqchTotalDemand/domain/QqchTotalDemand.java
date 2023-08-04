@@ -88,7 +88,7 @@ public class QqchTotalDemand extends CommonBaseEntity {
     @Excel(name = "非自采量")
     private BigDecimal nonSelfAmount;
     /**
-     * 字段描述：类型
+     * 字段描述：类型 (字典项 material_type1)
      */
     @JsonProperty
     @Excel(name = "类型")

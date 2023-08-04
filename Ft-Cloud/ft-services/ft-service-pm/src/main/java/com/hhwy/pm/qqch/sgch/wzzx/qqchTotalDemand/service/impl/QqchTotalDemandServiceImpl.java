@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 /**
  * @author ldd
  * @date 2023-08-02 10:55:15
- * @remark 
+ * @remark
  */
 @Service
 public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
@@ -42,7 +42,7 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
     @Autowired
     private IQqchTotalDemandTimeCountService qqchTotalDemandTimeCountService;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+
     public QqchTotalDemand getQqchTotalDemand(QqchTotalDemand qqchTotalDemand) {
         return qqchTotalDemandMapper.getQqchTotalDemand(qqchTotalDemand);
     }
@@ -102,7 +102,13 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         //删除旧数据
         QqchTotalDemand qqchTotalDemand = new QqchTotalDemand();
         qqchTotalDemand.setVersion(version);
-        qqchTotalDemandMapper.deleteQqchTotalDemand(qqchTotalDemand);
+        QqchTotalDemand demand = qqchTotalDemandMapper.getQqchTotalDemand(qqchTotalDemand);
+        if(demand!=null){
+            QqchTotalDemandTimeCount qqchTotalDemandTimeCount = new QqchTotalDemandTimeCount();
+            qqchTotalDemandTimeCount.setDemandId(demand.getId());
+            qqchTotalDemandTimeCountService.deleteQqchTotalDemandTimeCount(qqchTotalDemandTimeCount);
+            qqchTotalDemandMapper.deleteQqchTotalDemand(qqchTotalDemand);
+        }
 
         if (CollectionUtils.isEmpty(qqchTotalDemandList)) {
             return;
@@ -112,11 +118,26 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
             valid = Valid.YES;
         }
         for (QqchTotalDemand totalDemand : qqchTotalDemandList) {
+            totalDemand.setId(IdWorker.createId());
             totalDemand.setValid(valid);
             totalDemand.setVersion(version);
             totalDemand.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             totalDemand.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             totalDemand.setCreateTime(DateUtils.getNowDate());
+            List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountList = totalDemand.getQqchTotalDemandTimeCountList();
+
+            if(CollectionUtils.isNotEmpty(qqchTotalDemandTimeCountList)){
+                for (QqchTotalDemandTimeCount qqchTotalDemandTimeCount : qqchTotalDemandTimeCountList) {
+                    qqchTotalDemandTimeCount.setId(IdWorker.createId());
+                    qqchTotalDemandTimeCount.setDemandId(totalDemand.getId());
+                    qqchTotalDemandTimeCount.setValid(valid);
+                    qqchTotalDemandTimeCount.setVersion(version);
+                    qqchTotalDemandTimeCount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    qqchTotalDemandTimeCount.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+                    qqchTotalDemandTimeCount.setCreateTime(DateUtils.getNowDate());
+                }
+                qqchTotalDemandTimeCountService.insertQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountList);
+            }
         }
         qqchTotalDemandMapper.insertQqchTotalDemandList(qqchTotalDemandList);
     }
@@ -138,15 +159,15 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         return qqchTotalDemandMapper.updateQqchTotalDemand(qqchTotalDemand);
     }
 
-            @Transactional
-        public int updateQqchTotalDemandList(List<QqchTotalDemand> qqchTotalDemandList) {
-            for (QqchTotalDemand qqchTotalDemand : qqchTotalDemandList) {
-                qqchTotalDemand.setUpdateUser(SecurityUtils.getUserName());
-                qqchTotalDemand.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchTotalDemandMapper.updateQqchTotalDemandList(qqchTotalDemandList);
+    @Transactional
+    public int updateQqchTotalDemandList(List<QqchTotalDemand> qqchTotalDemandList) {
+        for (QqchTotalDemand qqchTotalDemand : qqchTotalDemandList) {
+            qqchTotalDemand.setUpdateUser(SecurityUtils.getUserName());
+            qqchTotalDemand.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchTotalDemandMapper.updateQqchTotalDemandList(qqchTotalDemandList);
+    }
+
     @Transactional
     public int deleteQqchTotalDemand(QqchTotalDemand qqchTotalDemand) {
         qqchTotalDemand.setUpdateUser(SecurityUtils.getUserName());
@@ -154,10 +175,10 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         return qqchTotalDemandMapper.deleteQqchTotalDemand(qqchTotalDemand);
     }
 
-            @Transactional
-        public int deleteQqchTotalDemandByPks(List<Long> qqchTotalDemandPkList) {
-            return qqchTotalDemandMapper.deleteQqchTotalDemandByPks(qqchTotalDemandPkList);
-        }
+    @Transactional
+    public int deleteQqchTotalDemandByPks(List<Long> qqchTotalDemandPkList) {
+        return qqchTotalDemandMapper.deleteQqchTotalDemandByPks(qqchTotalDemandPkList);
+    }
 
 
 }

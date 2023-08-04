@@ -39,7 +39,7 @@ public class QqchSurveyResultPlanController extends BaseController {
     }
 
     /**
-     *  批量新增 修改
+     *  批量新增
      * @param qqchSurveyResultPlanVo
      * @return
      */

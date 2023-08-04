@@ -29,7 +29,7 @@ public class CompileDTO<T> {
     private T dto;
 
 
-    public static <T> T dealListDto(BigDecimal version, String submitFlag, T dto) {
+    public static <T> T dealListDto(BigDecimal version, T dto) {
         CompileDTO<T> tCompileDTO = new CompileDTO<>();
         tCompileDTO.setVersion(version);
         tCompileDTO.setDto(dto);
