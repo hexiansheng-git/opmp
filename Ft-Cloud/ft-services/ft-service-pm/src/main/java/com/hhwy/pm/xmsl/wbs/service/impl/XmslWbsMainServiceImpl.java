@@ -207,7 +207,6 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             if(StringUtils.isBlank(r.getListCode()))
                 return r;
             String[] listCodes = r.getListCode().split(",");
-
 //            Long wbsId, String listCode, Long listId
 //            XmslWbsListRelation relation = new XmslWbsListRelation(id,);
             return r;
@@ -215,7 +214,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         wbsService.handlerAncestors();
         //3、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
-        //4、
+        //4、挂接清单数据
 
 
         //5、wbs塞入redis
