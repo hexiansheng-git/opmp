@@ -35,7 +35,7 @@ public class FieldUtils {
     }
 
     /**
-     * 获取指定字段的值 (循环中禁止直接使用此方法)
+     * 获取指定字段的值
      *
      * @param fieldName 字段名称
      * @param t         实体
@@ -61,7 +61,7 @@ public class FieldUtils {
 
 
     /**
-     * 设置指定字段的值 (循环中禁止直接使用此方法)
+     * 设置指定字段的值
      *
      * @param fieldName 字段名称
      * @param v         字段要赋的值
