@@ -19,6 +19,8 @@ public interface IXmslContractListService {
 
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 
+    List<XmslContractList> getByIds(Long[] ids);
+
     int insertXmslContractList(XmslContractList xmslContractList);
 
     int insertXmslContractListList(List<XmslContractListVo> xmslContractListList);

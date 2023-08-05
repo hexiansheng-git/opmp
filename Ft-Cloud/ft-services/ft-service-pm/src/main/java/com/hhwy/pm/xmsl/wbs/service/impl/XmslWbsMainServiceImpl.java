@@ -5,18 +5,22 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.util.PageObjectUtil;
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
@@ -26,6 +30,7 @@ import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
@@ -52,6 +54,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private XmslWbsMainMapper xmslWbsMainMapper;
     @Resource
     private IXmslWbsService wbsService;
+    @Resource
+    private IXmslWbsListRelationService wbsListRelationService;
 
 
     public XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain) {
@@ -197,32 +201,34 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         if(main.getValid() == Constant.YES_INT)
             return ;
         //1、wbs迁移到历史数据、历史数据迁移到wbs
-        this.xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",id));
-        this.xmslWbsMainMapper.deleteWbs();
+        XmslWbsMain effect = this.getEffect();
+        if(effect != null){
+            this.xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",effect.getId()));
+            this.xmslWbsMainMapper.deleteWbs();    
+        }        
         xmslWbsMainMapper.insertHistoryToWbs(id);
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
-        //2、处理祖级ID、祖级名称(wbs清单关联关系)
-        List<XmslWbsListRelation> relationList = new ArrayList<>();
-        Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
-            if(StringUtils.isBlank(r.getListCode()))
-                return r;
-            String[] listCodes = r.getListCode().split(",");
-//            Long wbsId, String listCode, Long listId
-//            XmslWbsListRelation relation = new XmslWbsListRelation(id,);
-            return r;
-        };
-        wbsService.handlerAncestors();
-        //3、修改main表状态
+        //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
-        //4、挂接清单数据
-
-
-        //5、wbs塞入redis
+        //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据
+        ThreadPoolUtil.getThreadPool().execute(()->{
+            List<XmslWbsListRelation> relationList = new ArrayList<>();
+            Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
+                if(StringUtils.isBlank(r.getListCode()))
+                    return r;
+                Long[] listIds = Convert.toLongArray(r.getListIds());
+                String[] listCodes = Convert.toStrArray(r.getListCode());
+                for (int i = 0; i < listCodes.length; i++) {
+                    XmslWbsListRelation temp = new XmslWbsListRelation(id,Long.valueOf(r.getId()),listCodes[i],ArrayUtils.get(listIds,i));
+                    relationList.add(temp);
+                }
+                return r;
+            };
+            wbsService.handlerAncestors(iteratFunc);
+            wbsListRelationService.insertXmslWbsListRelationList(relationList);
+        });
+        //4、wbs塞入redis
         wbsService.initWbs2Redis();
-    }
-
-    private void syncListRelation(){
-
     }
 
 }

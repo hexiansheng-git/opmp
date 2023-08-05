@@ -198,7 +198,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
 
     @Override
     public void handlerAncestors() {
-
+        handlerAncestors(null);
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -40,10 +41,8 @@ public class XmslWbsListRelationServiceImpl implements IXmslWbsListRelationServi
 
     @Transactional
     public int insertXmslWbsListRelationList(List<XmslWbsListRelation> xmslWbsListRelationList) {
-        for (XmslWbsListRelation xmslWbsListRelation : xmslWbsListRelationList) {
-            xmslWbsListRelation.setCreateUser(SecurityUtils.getUserName());
-            xmslWbsListRelation.setCreateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslWbsListRelationList))
+            return 0;
         return xmslWbsListRelationMapper.insertXmslWbsListRelationList(xmslWbsListRelationList);
     }
 

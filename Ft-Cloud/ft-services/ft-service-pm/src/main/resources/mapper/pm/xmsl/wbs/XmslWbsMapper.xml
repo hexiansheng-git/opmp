@@ -45,6 +45,7 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
+        <result property="listIds" column="list_ids"/>
     </resultMap>
     <sql id="selectXmslWbsVo">
         select
@@ -58,6 +59,7 @@
          ,`part_code`
          ,`name`
          ,`list_code`
+         ,`list_ids`
          ,`standard_id`
          ,`standard_code`
          ,`standard_name`
@@ -149,6 +151,7 @@
         ,`part_code`
         ,`name`
         ,`list_code`
+        ,`list_ids`
         ,`standard_id`
         ,`standard_code`
         ,`standard_name`
@@ -532,7 +535,8 @@
             `pt_var3`,
             `pt_var4`,
             `pt_var5`,
-            `sort`
+            `sort`,
+            `list_ids`
         </trim>
         values
         <foreach collection="xmslWbsList" item="item" separator=",">
@@ -575,7 +579,8 @@
                 #{item.ptVar3},
                 #{item.ptVar4},
                 #{item.ptVar5},
-                #{item.sort}
+                #{item.sort},
+                #{item.listIds}
             </trim>
         </foreach>
     </insert>
@@ -593,6 +598,7 @@
             <if test="partCode != null  and  partCode != ''">`part_code` = #{partCode},</if>
             <if test="name != null  and  name != ''">`name` = #{name},</if>
             <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
+            <if test="listIds != null  and  listIds != ''">`list_ids` = #{listIds},</if>
             <if test="standardId != null ">`standard_id` = #{standardId},</if>
             <if test="standardCode != null  and  standardCode != ''">`standard_code` = #{standardCode},</if>
             <if test="standardName != null  and  standardName != ''">`standard_name` = #{standardName},</if>

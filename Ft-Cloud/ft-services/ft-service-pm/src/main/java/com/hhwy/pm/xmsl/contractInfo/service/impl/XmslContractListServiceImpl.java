@@ -14,6 +14,7 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -74,6 +75,13 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             return xmslContractList2;
         }
         return null;
+    }
+
+    @Override
+    public List<XmslContractList> getByIds(Long[] ids) {
+        if(ArrayUtils.isEmpty(ids))
+            return new ArrayList<>(2);
+        return xmslContractListMapper.getByIds(ids);
     }
 
     @Transactional

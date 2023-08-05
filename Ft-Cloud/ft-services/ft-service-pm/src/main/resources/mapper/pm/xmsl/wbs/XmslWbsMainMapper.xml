@@ -127,6 +127,7 @@
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
             <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
             <if test="createTime != null ">`create_time`,</if>
+            <if test="delFlag != null ">`del_flag`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -140,6 +141,7 @@
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
             <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
             <if test="createTime != null ">#{createTime},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
         </trim>
     </insert>
 
