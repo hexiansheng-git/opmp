@@ -1,28 +1,16 @@
 package com.hhwy.pm.qqch.preparation.measureexp.equ.service;
 
-import java.util.List;
-import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquVo;
+import java.math.BigDecimal;
 
 /**
- * @author mls
- * @date 2023-07-25 18:00:16
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:12:29
+ * @remark 3.6.4测量仪器设备配置计划、3.7.4试验仪器设备配置计划
  */
 public interface IQqchMeasureExpEquService {
-                                                                                                                                                                                                                                                                                                                                                    
-    QqchMeasureExpEqu getQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
 
-    List<QqchMeasureExpEqu> getQqchMeasureExpEquList(QqchMeasureExpEqu qqchMeasureExpEqu);
+    QqchMeasureExpEquVo getQqchMeasureExpEquList(BigDecimal version, String type);
 
-    int insertQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
-
-    int insertQqchMeasureExpEquList(List<QqchMeasureExpEqu> qqchMeasureExpEquList);
-
-    int updateQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
-
-            int updateQqchMeasureExpEquList(List<QqchMeasureExpEqu> qqchMeasureExpEquList);
-    
-    int deleteQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
-
-            int deleteQqchMeasureExpEquByPks(List<Long> qqchMeasureExpEquPkList);
-    }
+    void insertQqchMeasureExpEquList(QqchMeasureExpEquVo qqchMeasureExpEquVo);
+}

@@ -1,29 +1,25 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.service;
 
-import java.util.List;
-
-import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
+import java.math.BigDecimal;
 
 /**
- * @author mls
- * @date 2023-07-25 18:31:38
- * @remark
+ * @author zhenglili
+ * @date 2023-08-04 16:12:49
+ * @remark 3.7.5混凝土配合比
  */
 public interface IQqchExpBetonService {
 
-    QqchExpBeton getQqchExpBeton(QqchExpBeton qqchExpBeton);
+    /**
+     * 树列表
+     * @param version
+     * @return
+     */
+    QqchExpBetonVo getTreeList(BigDecimal version);
 
-    List<QqchExpBeton> getQqchExpBetonList(QqchExpBeton qqchExpBeton);
-
-    int insertQqchExpBeton(QqchExpBeton qqchExpBeton);
-
-    int insertQqchExpBetonList(List<QqchExpBeton> qqchExpBetonList);
-
-    int updateQqchExpBeton(QqchExpBeton qqchExpBeton);
-
-    int updateQqchExpBetonList(List<QqchExpBeton> qqchExpBetonList);
-
-    int deleteQqchExpBeton(QqchExpBeton qqchExpBeton);
-
-    int deleteQqchExpBetonByPks(List<Long> qqchExpBetonPkList);
+    /**
+     * 保存/确认/提交
+     * @param qqchExpBetonVo
+     */
+    void batchSave(QqchExpBetonVo qqchExpBetonVo);
 }

@@ -21,6 +21,8 @@
         <result property="belongWbsCode" column="belong_wbs_code"/>
         <result property="remark" column="remark"/>
         <result property="source" column="source"/>
+        <result property="upMasterContractInventoryCode" column="up_master_contract_inventory_code"/>
+        <result property="level" column="level"/>
         <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
         <result property="version" column="version"/>
@@ -60,6 +62,8 @@
              , `belong_wbs_code`
              , `remark`
              , `source`
+             , `up_master_contract_inventory_code`
+             , `level`
              , `leaf`
              , `sort`
              , `version`
@@ -111,6 +115,8 @@
             <if test="belongWbsCode != null  and belongWbsCode != ''">and `belong_wbs_code` = #{belongWbsCode}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="upMasterContractInventoryCode != null  and upMasterContractInventoryCode != ''">and `up_master_contract_inventory_code` = #{upMasterContractInventoryCode}</if>
+            <if test="level != null">and `level` = #{level}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
@@ -165,6 +171,8 @@
             <if test="belongWbsCode != null  and belongWbsCode != ''">and `belong_wbs_code` = #{belongWbsCode}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="source != null  and source != ''">and `source` = #{source}</if>
+            <if test="upMasterContractInventoryCode != null  and upMasterContractInventoryCode != ''">and `up_master_contract_inventory_code` = #{upMasterContractInventoryCode}</if>
+            <if test="level != null">and `level` = #{level}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="version != null ">and `version` = #{version}</if>
@@ -215,6 +223,8 @@
             <if test="belongWbsCode != null  and belongWbsCode != ''">`belong_wbs_code`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="source != null  and source != ''">`source`,</if>
+            <if test="upMasterContractInventoryCode != null  and upMasterContractInventoryCode != ''">`up_master_contract_inventory_code`,</if>
+            <if test="level != null">`level`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="version != null ">`version`,</if>
@@ -260,6 +270,8 @@
             <if test="belongWbsCode != null  and belongWbsCode != ''">#{belongWbsCode},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="source != null  and source != ''">#{source},</if>
+            <if test="upMasterContractInventoryCode != null  and upMasterContractInventoryCode != ''">#{upMasterContractInventoryCode},</if>
+            <if test="level != null">#{level},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="version != null ">#{version},</if>
@@ -304,6 +316,8 @@
             `belong_wbs_code`,
             `remark`,
             `source`,
+            `up_master_contract_inventory_code`,
+            `level`,
             `leaf`,
             `sort`,
             `version`,
@@ -344,6 +358,8 @@
                 #{item.belongWbsCode},
                 #{item.remark},
                 #{item.source},
+                #{item.upMasterContractInventoryCode},
+                #{item.level},
                 #{item.leaf},
                 #{item.sort},
                 #{item.version},

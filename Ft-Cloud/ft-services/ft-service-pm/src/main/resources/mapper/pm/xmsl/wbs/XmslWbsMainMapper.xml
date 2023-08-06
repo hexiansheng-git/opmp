@@ -127,6 +127,7 @@
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
             <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
             <if test="createTime != null ">`create_time`,</if>
+            <if test="delFlag != null ">`del_flag`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -140,6 +141,7 @@
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
             <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
             <if test="createTime != null ">#{createTime},</if>
+            <if test="delFlag != null ">#{delFlag},</if>
         </trim>
     </insert>
 
@@ -274,7 +276,7 @@
             <when test="mainId != null">#{mainId}</when>
             <otherwise>main_id</otherwise>
         </choose>
-        , `code`, `parent_id`, `have_children`, `ancestors`, `ancestors_name`, `part_code`, `name`, `list_code`, `standard_id`, `standard_code`, `standard_name`, `node_type`, `unit`, `level`, `status`, `design_quanlity`, `check_quanlity`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `user_id`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5`,sort from xmsl_wbs
+        , `code`, `parent_id`, `have_children`, `ancestors`, `ancestors_name`, `part_code`, `name`, `list_code`, `standard_id`, `standard_code`, `standard_name`, `node_type`, `unit`, `level`, `status`, `design_quanlity`, `check_quanlity`, `remark`, `region_id`, `region_name`, `project_id`, `project_name`, `user_id`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, 1, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5`,sort from xmsl_wbs
         <where>
             <if test="levels != null">
                 `level` in

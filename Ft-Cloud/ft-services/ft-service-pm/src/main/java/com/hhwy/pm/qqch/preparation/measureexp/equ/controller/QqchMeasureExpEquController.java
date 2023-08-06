@@ -1,95 +1,131 @@
 package com.hhwy.pm.qqch.preparation.measureexp.equ.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
-import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquExperimentExportVo;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquVo;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.validation.ValidationGroups;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author mls
- * @date 2023-07-25 18:00:16
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:12:29
+ * @remark 3.6.4测量仪器设备配置计划、3.7.4试验仪器设备配置计划
  */
 @Validated
 @RestController
 @RequestMapping("/qqchMeasureExpEqu")
-public class QqchMeasureExpEquController extends BaseController{
+public class QqchMeasureExpEquController extends BaseController {
 
     @Autowired
     private IQqchMeasureExpEquService qqchMeasureExpEquService;
 
-                                                                                                                                                                                                                                                                                                                                                    
-
+    /**
+     * 测量仪器设备配置计划列表
+     *
+     * @param version
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchMeasureExpEqu:list")
-    @GetMapping
-    public AjaxResult getQqchMeasureExpEqu(@Validated(ValidationGroups.Get.class)  QqchMeasureExpEqu qqchMeasureExpEquParam){
-        QqchMeasureExpEqu qqchMeasureExpEqu =  qqchMeasureExpEquService.getQqchMeasureExpEqu(qqchMeasureExpEquParam);
-        return AjaxResult.success(qqchMeasureExpEqu);
+    @GetMapping("/getMeasureList")
+    public AjaxResult getMeasureList(BigDecimal version) {
+        QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "1");
+        return AjaxResult.success(qqchMeasureExpEquVo);
     }
 
+    /**
+     * 试验仪器设备配置计划列表
+     *
+     * @param version
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchMeasureExpEqu:list")
-    @GetMapping("/list")
-    public AjaxResult getQqchMeasureExpEquList(@Validated(ValidationGroups.Select.class) QqchMeasureExpEqu qqchMeasureExpEquParam){
-        startPage();
-        List<QqchMeasureExpEqu> qqchMeasureExpEquList = qqchMeasureExpEquService.getQqchMeasureExpEquList(qqchMeasureExpEquParam);
-        return getDataTableAjaxResult(qqchMeasureExpEquList);
+    @GetMapping("/getExperimentList")
+    public AjaxResult getExperimentList(BigDecimal version) {
+        QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "2");
+        return AjaxResult.success(qqchMeasureExpEquVo);
     }
 
+    /**
+     * 测量仪器设备配置计划保存/确认/提交
+     *
+     * @param qqchMeasureExpEquVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchMeasureExpEqu:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchMeasureExpEqu(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpEqu qqchMeasureExpEquParam){
-        qqchMeasureExpEquService.insertQqchMeasureExpEqu(qqchMeasureExpEquParam);
-        return AjaxResult.success(qqchMeasureExpEquParam);
+    @PostMapping("/batchSaveMeasure")
+    public AjaxResult batchSaveMeasure(
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpEquVo qqchMeasureExpEquVo) {
+        qqchMeasureExpEquVo.setType("1");
+        qqchMeasureExpEquService.insertQqchMeasureExpEquList(qqchMeasureExpEquVo);
+        return AjaxResult.success();
     }
 
+    /**
+     * 试验仪器设备配置计划保存/确认/提交
+     *
+     * @param qqchMeasureExpEquVo
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchMeasureExpEqu:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchMeasureExpEquList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchMeasureExpEqu> qqchMeasureExpEquListParam){
-        qqchMeasureExpEquService.insertQqchMeasureExpEquList(qqchMeasureExpEquListParam);
-        return AjaxResult.success(qqchMeasureExpEquListParam);
+    @PostMapping("/batchSaveExperiment")
+    public AjaxResult batchSaveExperiment(
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpEquVo qqchMeasureExpEquVo) {
+        qqchMeasureExpEquVo.setType("2");
+        qqchMeasureExpEquService.insertQqchMeasureExpEquList(qqchMeasureExpEquVo);
+        return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpEqu:update")
-    @PostMapping("/update")
-    public AjaxResult updateQqchMeasureExpEqu(@Validated(ValidationGroups.Update.class) @RequestBody QqchMeasureExpEqu qqchMeasureExpEquParam){
-        return toAjax(qqchMeasureExpEquService.updateQqchMeasureExpEqu(qqchMeasureExpEquParam));
+    /**
+     * 导出测量仪器设备配置计划
+     *
+     * @param response
+     * @param version
+     * @throws IOException
+     */
+    @GetMapping("/exportMeasure")
+    public void exportMeasure(HttpServletResponse response, BigDecimal version) {
+        QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "1");
+        FtExcelUtil<QqchMeasureExpEqu> util = new FtExcelUtil<>(QqchMeasureExpEqu.class);
+        util.exportExcel(response, qqchMeasureExpEquVo.getMeasureList(), DateUtils.getDate());
     }
 
-            @PreAuthorize(hasPermi = "qqchMeasureExpEqu:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateQqchMeasureExpEquList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMeasureExpEqu> qqchMeasureExpEquListParam){
-            return toAjax(qqchMeasureExpEquService.updateQqchMeasureExpEquList(qqchMeasureExpEquListParam));
+    /**
+     * 导出试验仪器设备配置计划
+     *
+     * @param response
+     * @param version
+     * @throws IOException
+     */
+    @GetMapping("/exportExperiment")
+    public void exportExperiment(HttpServletResponse response, BigDecimal version) {
+        QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "2");
+
+        List<QqchMeasureExpEquExperimentExportVo> exportList = new ArrayList<>();
+        for (QqchMeasureExpEqu equVo : qqchMeasureExpEquVo.getExperimentList()) {
+            QqchMeasureExpEquExperimentExportVo experimentExportVo = new QqchMeasureExpEquExperimentExportVo();
+            BeanUtils.copyProperties(equVo, experimentExportVo);
+            exportList.add(experimentExportVo);
         }
-    
-    @PreAuthorize(hasPermi = "qqchMeasureExpEqu:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteQqchMeasureExpEqu(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureExpEqu qqchMeasureExpEquParam){
-        return toAjax(qqchMeasureExpEquService.deleteQqchMeasureExpEqu(qqchMeasureExpEquParam));
-    }
-
-            @PreAuthorize(hasPermi = "qqchMeasureExpEqu:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteQqchMeasureExpEquByPks(@PathVariable Long[] ids){
-            List<Long> qqchMeasureExpEquPkList = Arrays.asList(ids);
-            return toAjax(qqchMeasureExpEquService.deleteQqchMeasureExpEquByPks(qqchMeasureExpEquPkList));
-        }
-    
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchMeasureExpEqu qqchMeasureExpEquParam) throws IOException {
-        List<QqchMeasureExpEqu> qqchMeasureExpEquList = qqchMeasureExpEquService.getQqchMeasureExpEquList(qqchMeasureExpEquParam);
-        ExcelUtils<QqchMeasureExpEqu> util = new ExcelUtils<>(QqchMeasureExpEqu.class);
-        util.exportExcel(response, qqchMeasureExpEquList, DateUtils.getDate());
+        FtExcelUtil<QqchMeasureExpEquExperimentExportVo> util = new FtExcelUtil<>(
+            QqchMeasureExpEquExperimentExportVo.class);
+        util.exportExcel(response, exportList, DateUtils.getDate());
     }
 }

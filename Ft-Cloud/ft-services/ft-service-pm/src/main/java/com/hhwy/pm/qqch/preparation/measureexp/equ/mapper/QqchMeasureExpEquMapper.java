@@ -1,17 +1,16 @@
 package com.hhwy.pm.qqch.preparation.measureexp.equ.mapper;
 
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 /**
- * @author mls
- * @date 2023-07-25 18:00:16
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:12:29
+ * @remark 3.6.4测量仪器设备配置计划、3.7.4试验仪器设备配置计划
  */
 public interface QqchMeasureExpEquMapper {
-                                                                                                                                                                                                                                                                                                                                                    
+
     QqchMeasureExpEqu getQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
 
     List<QqchMeasureExpEqu> getQqchMeasureExpEquList(QqchMeasureExpEqu qqchMeasureExpEqu);
@@ -22,9 +21,9 @@ public interface QqchMeasureExpEquMapper {
 
     int updateQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
 
-            int updateQqchMeasureExpEquList(@Param("qqchMeasureExpEquList") List<QqchMeasureExpEqu> qqchMeasureExpEquList);
-    
+    int updateQqchMeasureExpEquList(@Param("list") List<QqchMeasureExpEqu> qqchMeasureExpEquList);
+
     int deleteQqchMeasureExpEqu(QqchMeasureExpEqu qqchMeasureExpEqu);
 
-            int deleteQqchMeasureExpEquByPks(@Param("qqchMeasureExpEquPkList") List<Long> qqchMeasureExpEquPkList);
-    }
+    int deleteQqchMeasureExpEquByPks(@Param("qqchMeasureExpEquPkList") List<Long> qqchMeasureExpEquPkList);
+}

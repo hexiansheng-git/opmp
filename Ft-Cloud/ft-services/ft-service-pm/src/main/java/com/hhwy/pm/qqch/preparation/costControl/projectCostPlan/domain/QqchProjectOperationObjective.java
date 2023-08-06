@@ -63,7 +63,7 @@ public class QqchProjectOperationObjective extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "应对措施")
-    private Long solutions;
+    private String solutions;
     /**
      * 字段描述：责任部门
      */

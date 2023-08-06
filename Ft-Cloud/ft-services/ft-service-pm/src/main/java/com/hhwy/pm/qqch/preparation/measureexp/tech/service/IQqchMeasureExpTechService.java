@@ -1,28 +1,16 @@
 package com.hhwy.pm.qqch.preparation.measureexp.tech.service;
 
-import java.util.List;
-import com.hhwy.pm.qqch.preparation.measureexp.tech.domain.QqchMeasureExpTech;
+import com.hhwy.pm.qqch.preparation.measureexp.tech.domain.vo.QqchMeasureExpTechVo;
+import java.math.BigDecimal;
 
 /**
- * @author mls
- * @date 2023-07-25 18:01:36
- * @remark 
+ * @author zhenglili
+ * @date 2023-08-04 16:09:57
+ * @remark 3.6.3测量技术方案计划、3.7.3试验方案计划
  */
 public interface IQqchMeasureExpTechService {
-                                                                                                                                                                                                                                                                                                                
-    QqchMeasureExpTech getQqchMeasureExpTech(QqchMeasureExpTech qqchMeasureExpTech);
 
-    List<QqchMeasureExpTech> getQqchMeasureExpTechList(QqchMeasureExpTech qqchMeasureExpTech);
+    QqchMeasureExpTechVo getQqchMeasureExpTechList(BigDecimal version, String type);
 
-    int insertQqchMeasureExpTech(QqchMeasureExpTech qqchMeasureExpTech);
-
-    int insertQqchMeasureExpTechList(List<QqchMeasureExpTech> qqchMeasureExpTechList);
-
-    int updateQqchMeasureExpTech(QqchMeasureExpTech qqchMeasureExpTech);
-
-            int updateQqchMeasureExpTechList(List<QqchMeasureExpTech> qqchMeasureExpTechList);
-    
-    int deleteQqchMeasureExpTech(QqchMeasureExpTech qqchMeasureExpTech);
-
-            int deleteQqchMeasureExpTechByPks(List<Long> qqchMeasureExpTechPkList);
-    }
+    void insertQqchMeasureExpTechList(QqchMeasureExpTechVo qqchMeasureExpTechVo);
+}

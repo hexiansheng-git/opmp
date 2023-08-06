@@ -166,7 +166,7 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
         DataCheckUtil.checkSingle(tileList,QqchKeyInventoryContent::getInventoryCode);
 
         //处理数据
-        this.insertQqchKeyInventoryContentList(qqchKeyInventoryContentList,version);
+        this.insertQqchKeyInventoryContentList(tileList,version);
 
         //处理确认状态是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
