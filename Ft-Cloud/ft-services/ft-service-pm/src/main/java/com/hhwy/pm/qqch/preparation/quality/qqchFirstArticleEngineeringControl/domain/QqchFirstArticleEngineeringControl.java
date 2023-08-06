@@ -33,6 +33,15 @@ public class QqchFirstArticleEngineeringControl extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "主键")
     private Long id;
+
+    /**
+     * 字段描述：清单id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "清单id"    )
+    private Long listId;
+
     /**
      * 字段描述：首件名称
      */

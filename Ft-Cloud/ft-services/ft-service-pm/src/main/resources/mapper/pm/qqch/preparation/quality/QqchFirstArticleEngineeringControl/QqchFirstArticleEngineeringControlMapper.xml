@@ -3,9 +3,10 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.mapper.QqchFirstArticleEngineeringControlMapper">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
     <resultMap type="com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.domain.QqchFirstArticleEngineeringControl" id="QqchFirstArticleEngineeringControlResultMap">
                     <result property="id" column="id" />
+                    <result property="listId" column="list_id" />
                     <result property="name" column="name" />
                     <result property="wbsId" column="wbs_id" />
                     <result property="wbsName" column="wbs_name" />
@@ -52,6 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectQqchFirstArticleEngineeringControlVo">
         select
                                                             `id`
+                                                         ,`list_id`
                                                          ,`name`
                                                          ,`wbs_id`
                                                          ,`wbs_name`
@@ -101,6 +103,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
+                            <if test="listId != null "> and `list_id` = #{listId}</if>
                             <if test="name != null  and name != ''"> and `name` = #{name}</if>
                             <if test="wbsId != null "> and `wbs_id` = #{wbsId}</if>
                             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
@@ -152,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
+                            <if test="listId != null "> and `list_id` = #{listId}</if>
                             <if test="name != null  and name != ''"> and `name` = #{name}</if>
                             <if test="wbsId != null "> and `wbs_id` = #{wbsId}</if>
                             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
@@ -202,6 +206,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into qqch_first_article_engineering_control
         <trim prefix="(" suffix=")" suffixOverrides=",">
                             <if test="id != null ">`id`,</if>
+                            <if test="listId != null ">`list_id`,</if>
                             <if test="name != null  and name != ''">`name`,</if>
                             <if test="wbsId != null ">`wbs_id`,</if>
                             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
@@ -247,6 +252,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                             <if test="id != null ">#{id},</if>
+                            <if test="listId != null ">#{listId},</if>
                             <if test="name != null  and name != ''">#{name},</if>
                             <if test="wbsId != null ">#{wbsId},</if>
                             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
@@ -297,6 +303,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into qqch_first_article_engineering_control
         <trim prefix="(" suffix=")" suffixOverrides=",">
                                                 `id`,
+                                                                `list_id`,
                                                                 `name`,
                                                                 `wbs_id`,
                                                                 `wbs_name`,
@@ -343,6 +350,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach collection="qqchFirstArticleEngineeringControlList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                                                             #{item.id},
+                                                                                #{item.listId},
                                                                                 #{item.name},
                                                                                 #{item.wbsId},
                                                                                 #{item.wbsName},
@@ -392,6 +400,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update qqch_first_article_engineering_control
         <trim prefix="SET" suffixOverrides=",">
                             <if test="id != null ">`id` = #{id},</if>
+                            <if test="listId != null ">`list_id` = #{listId},</if>
                             <if test="name != null  and  name != ''">`name` = #{name},</if>
                             <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
                             <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
@@ -437,7 +446,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
         <where>
                                                                         <if test="id != null "> and `id` = #{id}</if>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
     </update>
 
             <update id="updateQqchFirstArticleEngineeringControlList">
@@ -446,6 +455,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <trim prefix="id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
                             when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="list_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.listId}
                         </foreach>
                     </trim>
                                     <trim prefix="name  = case" suffix="end,">
@@ -669,6 +683,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             update `qqch_first_article_engineering_control` set del_flag = 1
             <where>
                                     <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="listId != null "> and `list_id` = #{listId}</if>
                                     <if test="name != null  and name != ''"> and `name` = #{name}</if>
                                     <if test="wbsId != null "> and `wbs_id` = #{wbsId}</if>
                                     <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
