@@ -54,6 +54,14 @@ public class XmslContractList extends BaseEntity {
      */
     @JsonProperty
     private String ancestors;
+
+    /**
+     * 字段描述：是否包含子级，0:否,1:是
+     */
+    @JsonProperty
+    @Excel(name = "是否包含子级，0:否,1:是")
+    private Integer haveChildren;
+
     /**
      * 字段描述：清单编号
      */

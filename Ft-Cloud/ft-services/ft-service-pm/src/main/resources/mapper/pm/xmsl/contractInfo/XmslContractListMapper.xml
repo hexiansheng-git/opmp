@@ -9,6 +9,7 @@
         <result property="masterId" column="master_id"/>
         <result property="pid" column="pid"/>
         <result property="ancestors" column="ancestors"/>
+        <result property="haveChildren" column="have_children"/>
         <result property="code" column="code"/>
         <result property="chineseName" column="chinese_name"/>
         <result property="foreignName" column="foreign_name"/>
@@ -51,6 +52,7 @@
                                                          ,`master_id`
                                                          ,`pid`
                                                          ,`ancestors`
+                                                         ,`have_children`
                                                          ,`code`
                                                          ,`chinese_name`
                                                          ,`foreign_name`
@@ -96,6 +98,7 @@
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
             <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
             <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
@@ -143,6 +146,7 @@
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="haveChildren != null and haveChildren != ''">and `have_children` = #{haveChildren}</if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
             <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
             <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
@@ -203,6 +207,7 @@
             <if test="masterId != null ">`master_id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
+            <if test="haveChildren != null  and haveChildren != ''">`have_children`,</if>
             <if test="code != null  and code != ''">`code`,</if>
             <if test="chineseName != null  and chineseName != ''">`chinese_name`,</if>
             <if test="foreignName != null  and foreignName != ''">`foreign_name`,</if>
@@ -244,6 +249,7 @@
             <if test="masterId != null ">#{masterId},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
+            <if test="haveChildren != null  and haveChildren != ''">#{haveChildren},</if>
             <if test="code != null  and code != ''">#{code},</if>
             <if test="chineseName != null  and chineseName != ''">#{chineseName},</if>
             <if test="foreignName != null  and foreignName != ''">#{foreignName},</if>
@@ -290,6 +296,7 @@
             `master_id`,
             `pid`,
             `ancestors`,
+            `have_children`,
             `code`,
             `chinese_name`,
             `foreign_name`,
@@ -332,6 +339,7 @@
                 #{item.masterId},
                 #{item.pid},
                 #{item.ancestors},
+                #{item.haveChildren},
                 #{item.code},
                 #{item.chineseName},
                 #{item.foreignName},
@@ -377,6 +385,7 @@
             <if test="masterId != null ">`master_id` = #{masterId},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
+            <if test="haveChildren != null  and  haveChildren != ''">`have_children` = #{haveChildren},</if>
             <if test="code != null  and  code != ''">`code` = #{code},</if>
             <if test="chineseName != null  and  chineseName != ''">`chinese_name` = #{chineseName},</if>
             <if test="foreignName != null  and  foreignName != ''">`foreign_name` = #{foreignName},</if>
@@ -435,6 +444,9 @@
                     </if>
                 </foreach>
             </trim>
+
+
+
             <trim prefix="pid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     <if test="item.pid != null ">
@@ -449,6 +461,15 @@
                     </if>
                 </foreach>
             </trim>
+
+            <trim prefix="have_children  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.haveChildren != null ">
+                        when `id`=#{item.id} then #{item.haveChildren}
+                    </if>
+                </foreach>
+            </trim>
+
             <trim prefix="code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     <if test="item.code != null ">
@@ -708,6 +729,7 @@
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
             <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
             <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
