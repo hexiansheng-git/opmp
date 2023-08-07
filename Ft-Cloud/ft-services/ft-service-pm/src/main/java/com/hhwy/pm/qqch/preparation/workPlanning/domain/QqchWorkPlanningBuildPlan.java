@@ -175,4 +175,5 @@ public class QqchWorkPlanningBuildPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段3")
     private String ptVar3;
+
 }
