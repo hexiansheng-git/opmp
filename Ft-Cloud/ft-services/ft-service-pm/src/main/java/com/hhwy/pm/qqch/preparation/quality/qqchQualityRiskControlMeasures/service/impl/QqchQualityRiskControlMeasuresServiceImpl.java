@@ -144,7 +144,7 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
             riskControlMeasures.setValid(valid);
             riskControlMeasures.setVersion(version);
             riskControlMeasures.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            riskControlMeasures.setCreateUserName(SecurityUtils.getUserName());
+            riskControlMeasures.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             riskControlMeasures.setCreateTime(DateUtils.getNowDate());
         }
         qqchQualityRiskControlMeasuresMapper.insertQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresList);
