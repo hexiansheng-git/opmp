@@ -52,6 +52,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         qryParam.setVersion(version);
         qryParam.setSchemeName(paramVo.getSchemeName());
         qryParam.setSchemeLevel(paramVo.getSchemeType());
+        qryParam.setWbsCode(paramVo.getWbsCode());
         List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
@@ -60,8 +61,6 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
-
-        QqchConstructionListVo paramVo = new QqchConstructionListVo();
         // 先批量删除当前版本所有数据
         QqchConstructionList deleteParam = new QqchConstructionList();
         deleteParam.setVersion(qqchConstructionListVo.getVersion());

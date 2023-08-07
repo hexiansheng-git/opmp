@@ -31,6 +31,11 @@ public class QqchConstructionListVo extends PreparationEntity {
     private String schemeType;
 
     /**
+     * 字段描述：关联WBS编码（筛选条件）
+     */
+    private String wbsCode;
+
+    /**
      * 字段描述：施工方案清单集合
      */
     private List<QqchConstructionList> list;
