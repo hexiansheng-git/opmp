@@ -37,4 +37,8 @@ public interface IQqchWorkPlanningBuildPlanService {
      * @return
      */
     List<QqchWorkPlanningBuildPlan> getMaxVVData(QqchWorkPlanningBuildPlan plan);
+
+    QqchWorkPlanningBuildPlanVo detail(QqchWorkPlanningBuildPlan plan);
+
+    void listener(Long businessId);
 }

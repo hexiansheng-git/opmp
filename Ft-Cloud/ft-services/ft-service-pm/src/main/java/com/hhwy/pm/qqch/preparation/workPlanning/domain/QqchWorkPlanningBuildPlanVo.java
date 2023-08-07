@@ -32,4 +32,6 @@ public class QqchWorkPlanningBuildPlanVo {
     private String moduleIdentity;
 
     private List<QqchWorkPlanningBuildPlan> dataList;
+    //菜单id
+    private String menuId;
 }

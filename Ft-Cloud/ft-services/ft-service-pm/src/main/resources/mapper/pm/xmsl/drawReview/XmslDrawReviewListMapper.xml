@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewListMapper">
+
+    <resultMap type="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList"
+               id="XmslDrawReviewListResultMap">
+        <result property="listCode" column="list_code"/>
+        <result property="mainId" column="main_id"/>
+        <result property="listId" column="list_id"/>
+        <result property="contractListId" column="contract_list_id"/>
+        <result property="pid" column="pid"/>
+        <result property="ancestors" column="ancestors"/>
+        <result property="chineseName" column="chinese_name"/>
+        <result property="foreignName" column="foreign_name"/>
+        <result property="listType" column="list_type"/>
+        <result property="unitCode" column="unit_code"/>
+        <result property="unit" column="unit"/>
+        <result property="winNum" column="win_num"/>
+        <result property="checkNum" column="check_num"/>
+        <result property="imageProgress" column="image_progress"/>
+        <result property="remark" column="remark"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+    <sql id="selectXmslDrawReviewListVo">
+        select
+                `list_code`
+             ,`main_id`
+             ,`list_id`
+             ,`contract_list_id`
+             ,`pid`
+             ,`ancestors`
+             ,`chinese_name`
+             ,`foreign_name`
+             ,`list_type`
+             ,`unit_code`
+             ,`unit`
+             ,`win_num`
+             ,`check_num`
+             ,`image_progress`
+             ,`remark`
+             ,`create_user`
+             ,`create_user_name`
+             ,`create_time`
+             ,`update_user`
+             ,`update_time`
+             ,`del_user`
+             ,`del_time`
+             ,`del_flag`
+             ,`pt_var1`
+             ,`pt_var2`
+             ,`pt_var3`
+             ,`pt_var4`
+             ,`pt_var5`
+    from xmsl_draw_review_list
+    </sql>
+    <select id="getXmslDrawReviewList" resultMap="XmslDrawReviewListResultMap">
+        <include refid="selectXmslDrawReviewListVo"/>
+        <where>
+            del_flag = "0"
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="contractListId != null ">and `contract_list_id` = #{contractListId}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
+            <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
+            <if test="listType != null  and listType != ''">and `list_type` = #{listType}</if>
+            <if test="unitCode != null  and unitCode != ''">and `unit_code` = #{unitCode}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="winNum != null ">and `win_num` = #{winNum}</if>
+            <if test="checkNum != null ">and `check_num` = #{checkNum}</if>
+            <if test="imageProgress != null  and imageProgress != ''">and `image_progress` = #{imageProgress}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getXmslDrawReviewListList" resultMap="XmslDrawReviewListResultMap">
+        <include refid="selectXmslDrawReviewListVo"/>
+        <where>
+            del_flag = "0"
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="contractListId != null ">and `contract_list_id` = #{contractListId}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
+            <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
+            <if test="listType != null  and listType != ''">and `list_type` = #{listType}</if>
+            <if test="unitCode != null  and unitCode != ''">and `unit_code` = #{unitCode}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="winNum != null ">and `win_num` = #{winNum}</if>
+            <if test="checkNum != null ">and `check_num` = #{checkNum}</if>
+            <if test="imageProgress != null  and imageProgress != ''">and `image_progress` = #{imageProgress}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertXmslDrawReviewList" useGeneratedKeys="true" keyProperty="main_id">
+        insert into xmsl_draw_review_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="listCode != null  and listCode != ''">`list_code`,</if>
+            <if test="mainId != null ">`main_id`,</if>
+            <if test="listId != null ">`list_id`,</if>
+            <if test="contractListId != null ">`contract_list_id`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
+            <if test="chineseName != null  and chineseName != ''">`chinese_name`,</if>
+            <if test="foreignName != null  and foreignName != ''">`foreign_name`,</if>
+            <if test="listType != null  and listType != ''">`list_type`,</if>
+            <if test="unitCode != null  and unitCode != ''">`unit_code`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="winNum != null ">`win_num`,</if>
+            <if test="checkNum != null ">`check_num`,</if>
+            <if test="imageProgress != null  and imageProgress != ''">`image_progress`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="listCode != null  and listCode != ''">#{listCode},</if>
+            <if test="mainId != null ">#{mainId},</if>
+            <if test="listId != null ">#{listId},</if>
+            <if test="contractListId != null ">#{contractListId},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
+            <if test="chineseName != null  and chineseName != ''">#{chineseName},</if>
+            <if test="foreignName != null  and foreignName != ''">#{foreignName},</if>
+            <if test="listType != null  and listType != ''">#{listType},</if>
+            <if test="unitCode != null  and unitCode != ''">#{unitCode},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="winNum != null ">#{winNum},</if>
+            <if test="checkNum != null ">#{checkNum},</if>
+            <if test="imageProgress != null  and imageProgress != ''">#{imageProgress},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertXmslDrawReviewList -->
+    <insert id="insertXmslDrawReviewListList">
+        insert into xmsl_draw_review_list
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `list_code`,
+            `main_id`,
+            `list_id`,
+            `contract_list_id`,
+            `pid`,
+            `ancestors`,
+            `chinese_name`,
+            `foreign_name`,
+            `list_type`,
+            `unit_code`,
+            `unit`,
+            `win_num`,
+            `check_num`,
+            `image_progress`,
+            `remark`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="xmslDrawReviewListList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.listCode},
+                #{item.mainId},
+                #{item.listId},
+                #{item.contractListId},
+                #{item.pid},
+                #{item.ancestors},
+                #{item.chineseName},
+                #{item.foreignName},
+                #{item.listType},
+                #{item.unitCode},
+                #{item.unit},
+                #{item.winNum},
+                #{item.checkNum},
+                #{item.imageProgress},
+                #{item.remark},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateXmslDrawReviewList">
+        update xmsl_draw_review_list
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
+            <if test="mainId != null ">`main_id` = #{mainId},</if>
+            <if test="listId != null ">`list_id` = #{listId},</if>
+            <if test="contractListId != null ">`contract_list_id` = #{contractListId},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
+            <if test="chineseName != null  and  chineseName != ''">`chinese_name` = #{chineseName},</if>
+            <if test="foreignName != null  and  foreignName != ''">`foreign_name` = #{foreignName},</if>
+            <if test="listType != null  and  listType != ''">`list_type` = #{listType},</if>
+            <if test="unitCode != null  and  unitCode != ''">`unit_code` = #{unitCode},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="winNum != null ">`win_num` = #{winNum},</if>
+            <if test="checkNum != null ">`check_num` = #{checkNum},</if>
+            <if test="imageProgress != null  and  imageProgress != ''">`image_progress` = #{imageProgress},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+        </where>
+    </update>
+
+    <update id="updateXmslDrawReviewListList">
+        update xmsl_draw_review_list
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="list_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.listCode}
+                </foreach>
+            </trim>
+            <trim prefix="main_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.mainId}
+                </foreach>
+            </trim>
+            <trim prefix="list_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.listId}
+                </foreach>
+            </trim>
+            <trim prefix="contract_list_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.contractListId}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="ancestors  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.ancestors}
+                </foreach>
+            </trim>
+            <trim prefix="chinese_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.chineseName}
+                </foreach>
+            </trim>
+            <trim prefix="foreign_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.foreignName}
+                </foreach>
+            </trim>
+            <trim prefix="list_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.listType}
+                </foreach>
+            </trim>
+            <trim prefix="unit_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.unitCode}
+                </foreach>
+            </trim>
+            <trim prefix="unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.unit}
+                </foreach>
+            </trim>
+            <trim prefix="win_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.winNum}
+                </foreach>
+            </trim>
+            <trim prefix="check_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.checkNum}
+                </foreach>
+            </trim>
+            <trim prefix="image_progress  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.imageProgress}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `main_id` in
+        <foreach collection="mainIdList" index="index" item="item" separator="," open="(" close=")">
+            #{item.mainId}
+        </foreach>
+    </update>
+
+    <update id="deleteXmslDrawReviewList">
+        update `xmsl_draw_review_list` set del_flag = 1
+        <where>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="contractListId != null ">and `contract_list_id` = #{contractListId}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
+            <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
+            <if test="listType != null  and listType != ''">and `list_type` = #{listType}</if>
+            <if test="unitCode != null  and unitCode != ''">and `unit_code` = #{unitCode}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="winNum != null ">and `win_num` = #{winNum}</if>
+            <if test="checkNum != null ">and `check_num` = #{checkNum}</if>
+            <if test="imageProgress != null  and imageProgress != ''">and `image_progress` = #{imageProgress}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteXmslDrawReviewListByPks">
+        update `xmsl_draw_review_list` set del_flag = 1
+        <where>
+            `main_id` in
+            <foreach item="mainId" collection="xmslDrawReviewListPkList" open="(" separator="," close=")">
+                #{mainId}
+            </foreach>
+        </where>
+    </update>
+</mapper>

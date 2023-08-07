@@ -125,15 +125,10 @@ public class QqchWorkPlaningArrangeController extends BaseController{
 
     @PostMapping("/detail")
     @ResponseBody
-    public AjaxResult detail(QqchWorkPlaningArrange arrangeVo){
+    public AjaxResult detail(QqchWorkPlaningArrange arrange){
         try{
-            List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = null;
-            if(ObjectNullUtil.isEmpty(arrangeVo.getVersion())){//直接版本号最大且有效版本
-                qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeService.getMaxVVData(arrangeVo);
-            }else{//历史版本的详情
-                qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeService.getQqchWorkPlaningArrangeList(arrangeVo);
-            }
-            return AjaxResult.success(qqchWorkPlaningArrangeList);
+            QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo = qqchWorkPlaningArrangeService.detail(arrange);
+            return AjaxResult.success(qqchWorkPlaningArrangeVo);
         } catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
