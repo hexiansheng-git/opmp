@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,15 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.doc.dwg.service.IQqchDocDwgService;
+import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.mapper.QqchWorkPlanningBuildPlanMapper;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -36,8 +42,13 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
     private QqchWorkPlanningBuildPlanMapper qqchWorkPlanningBuildPlanMapper;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchReviewService iQqchReviewService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
-                                                                                                                                                                                                                                                                                                                
     public QqchWorkPlanningBuildPlan getQqchWorkPlanningBuildPlan(QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan) {
         return qqchWorkPlanningBuildPlanMapper.getQqchWorkPlanningBuildPlan(qqchWorkPlanningBuildPlan);
     }
@@ -56,6 +67,7 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
 
     @Transactional
     public int insertQqchWorkPlanningBuildPlanList(QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo) {
+        List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = new ArrayList<>();
         //判断是确认还是保存
         if("0".equals(qqchWorkPlanningBuildPlanVo.getSubmitFlag())){
             //先删除旧的 再添加新的
@@ -63,11 +75,11 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
             temp.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
             qqchWorkPlanningBuildPlanMapper.deleteQqchWorkPlanningBuildPlan(temp);
             String valid = "1";
-            if(!InitVersionConstant.INIT_VERSION.equals(String.valueOf(qqchWorkPlanningBuildPlanVo.getVersion()))){
+            if(new BigDecimal(InitVersionConstant.INIT_VERSION).compareTo(qqchWorkPlanningBuildPlanVo.getVersion()) != 0){
                 valid = "0";
             }
             if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getDataList())){
-                List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanVo.getDataList();
+                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanVo.getDataList();
                 for (QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan : qqchWorkPlanningBuildPlanList) {
                     qqchWorkPlanningBuildPlan.setId(IdWorker.createId());
                     qqchWorkPlanningBuildPlan.setCreateUser(SecurityUtils.getUserName());
@@ -77,17 +89,54 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
 
                     qqchWorkPlanningBuildPlan.setValid(valid);
                 }
-                qqchWorkPlanningBuildPlanMapper.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanList);
-                return 1;
+            }else{
+                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
+            }
+        }else if("1".equals(qqchWorkPlanningBuildPlanVo.getSubmitFlag())){//确认
+            //确认
+            //新增一条确认记录
+            String valid = "1";
+            if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getDataList())){
+               qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanVo.getDataList();
+                for (QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan : qqchWorkPlanningBuildPlanList) {
+                    qqchWorkPlanningBuildPlan.setId(IdWorker.createId());
+                    qqchWorkPlanningBuildPlan.setCreateUser(SecurityUtils.getUserName());
+                    qqchWorkPlanningBuildPlan.setCreateTime(DateUtils.getNowDate());
+                    qqchWorkPlanningBuildPlan.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
+                    qqchWorkPlanningBuildPlan.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningBuildPlanVo.getVersion());
+
+                    qqchWorkPlanningBuildPlan.setValid(valid);
+                }
+                qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlanningBuildPlanVo.getMenuId(),qqchWorkPlanningBuildPlanVo.getStageIdentity());
+                qqchReviewService.updateFinishNum(qqchWorkPlanningBuildPlanVo.getStageIdentity(),qqchWorkPlanningBuildPlanVo.getModuleIdentity());
+            }else{
+                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
+            }
+        }else if("2".equals(qqchWorkPlanningBuildPlanVo.getSubmitFlag())){////提交
+            String valid = "0";
+            if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getDataList())){
+                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanVo.getDataList();
+                for (QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan : qqchWorkPlanningBuildPlanList) {
+                    qqchWorkPlanningBuildPlan.setId(IdWorker.createId());
+                    qqchWorkPlanningBuildPlan.setCreateUser(SecurityUtils.getUserName());
+                    qqchWorkPlanningBuildPlan.setCreateTime(DateUtils.getNowDate());
+                    qqchWorkPlanningBuildPlan.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
+                    qqchWorkPlanningBuildPlan.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningBuildPlanVo.getVersion());
+                    qqchWorkPlanningBuildPlan.setValid(valid);
+                }
             }else{
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
             }
         }else{
-            //确认
-            //新增一条确认记录
-
-            return 1;
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
         }
+        ////先删除旧的 再添加新的
+        QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan = new QqchWorkPlanningBuildPlan();
+        qqchWorkPlanningBuildPlan.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
+        qqchWorkPlanningBuildPlanMapper.deleteQqchWorkPlanningBuildPlan(qqchWorkPlanningBuildPlan);
+        qqchWorkPlanningBuildPlanMapper.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanList);
+
+        return 1;
     }
 
     @Transactional
@@ -130,5 +179,31 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
         plan.setVersion(version);
         List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = getQqchWorkPlanningBuildPlanList(plan);
         return qqchWorkPlanningBuildPlanList;
+    }
+
+    @Override
+    public QqchWorkPlanningBuildPlanVo detail(QqchWorkPlanningBuildPlan plan) {
+        List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = null;
+        if(ObjectNullUtil.isEmpty(plan.getVersion())){//直接版本号最大且有效版本
+            qqchWorkPlanningBuildPlanList = getMaxVVData(plan);
+        }else{//历史版本的详情
+            qqchWorkPlanningBuildPlanList = getQqchWorkPlanningBuildPlanList(plan);
+        }
+        QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo = new QqchWorkPlanningBuildPlanVo();
+        qqchWorkPlanningBuildPlanVo.setDataList(qqchWorkPlanningBuildPlanList);
+        if(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanList)){
+            qqchWorkPlanningBuildPlanVo.setVersion(new BigDecimal(0));
+        }else{
+            qqchWorkPlanningBuildPlanVo.setVersion(qqchWorkPlanningBuildPlanList.get(0).getVersion());
+        }
+        //查询阶段
+        String stage = iQqchReviewService.getStage();
+        qqchWorkPlanningBuildPlanVo.setStageIdentity(stage);
+        return qqchWorkPlanningBuildPlanVo;
+    }
+
+    @Override
+    public void listener(Long businessId) {
+
     }
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
@@ -59,6 +60,8 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
+
+        QqchConstructionListVo paramVo = new QqchConstructionListVo();
         // 先批量删除当前版本所有数据
         QqchConstructionList deleteParam = new QqchConstructionList();
         deleteParam.setVersion(qqchConstructionListVo.getVersion());
@@ -70,11 +73,12 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         }
 
         for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
-            // 方案编号 = 项目编码 + 三位流水号
-            String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
-            String newCode = code.replace(CodeEnum.QQCH_CONSTRUCTION_LIST.prefix(), "");
-            qqchConstructionList.setSchemeCode(qqchConstructionListVo.getProjectCode() + newCode);
-
+            if (StringUtils.isBlank(qqchConstructionList.getSchemeCode())) {
+                // 方案编号 = 项目编码 + 三位流水号
+                String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
+                String newCode = code.replace(CodeEnum.QQCH_CONSTRUCTION_LIST.prefix(), "");
+                qqchConstructionList.setSchemeCode(qqchConstructionListVo.getProjectCode() + newCode);
+            }
             qqchConstructionList.setId(IdWorker.createId());
             qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchConstructionList.setCreateUserName(SecurityUtils.getUserName());

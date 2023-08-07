@@ -2,10 +2,12 @@ package com.hhwy.pm.qqch.preparation.workPlanning.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
 import com.hhwy.pm.qqch.preparation.workPlanning.mapper.QqchWorkPlanningPrjImgMapper;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningPrjImgService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
@@ -28,8 +30,11 @@ public class QqchWorkPlanningPrjImgServiceImpl implements IQqchWorkPlanningPrjIm
 
     @Autowired
     private QqchWorkPlanningPrjImgMapper qqchWorkPlanningPrjImgMapper;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
-                                                                                                                                                                
     public QqchWorkPlanningPrjImg getQqchWorkPlanningPrjImg(QqchWorkPlanningPrjImg qqchWorkPlanningPrjImg) {
         return qqchWorkPlanningPrjImgMapper.getQqchWorkPlanningPrjImg(qqchWorkPlanningPrjImg);
     }
@@ -47,7 +52,7 @@ public class QqchWorkPlanningPrjImgServiceImpl implements IQqchWorkPlanningPrjIm
 
         //判断是确认还是保存
         if("0".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//保存（判断是业务保存还是变更保存）
-            if(qqchWorkPlanningPrjImg.getVersion().equals(InitVersionConstant.INIT_VERSION)){//业务保存
+            if(qqchWorkPlanningPrjImg.getVersion().compareTo(new BigDecimal(InitVersionConstant.INIT_VERSION)) ==0){//业务保存
                 qqchWorkPlanningPrjImg.setValid("1");
             }else{//变更保存
                 qqchWorkPlanningPrjImg.setValid("0");
@@ -55,6 +60,8 @@ public class QqchWorkPlanningPrjImgServiceImpl implements IQqchWorkPlanningPrjIm
         }else if("1".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//确认
             //新增一条确认记录
             qqchWorkPlanningPrjImg.setValid("1");
+            qqchReviewService.updateFinishNum(qqchWorkPlanningPrjImg.getStageIdentity(),qqchWorkPlanningPrjImg.getModuleIdentity());
+            qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlanningPrjImg.getMenuId(),qqchWorkPlanningPrjImg.getStageIdentity());
 
         }else if("2".equals(qqchWorkPlanningPrjImg.getSubmitFlag())){//提交
             qqchWorkPlanningPrjImg.setValid("0");
