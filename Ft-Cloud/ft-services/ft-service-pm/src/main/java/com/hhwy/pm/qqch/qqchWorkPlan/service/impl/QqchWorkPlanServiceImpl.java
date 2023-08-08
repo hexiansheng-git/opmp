@@ -25,6 +25,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -191,7 +192,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     qqchWorkPlanDetail.setItemId(item.getPath());
                     qqchWorkPlanDetail.setPid(item.getParentId());
                     qqchWorkPlanDetail.setItemName(item.getTitle());
-                    qqchWorkPlanDetail.setPtVar1(item.getPtVar1());
+                    qqchWorkPlanDetail.setPtVar1(item.getPtVar1());//是否叶子节点
                     qqchWorkPlanDetail.setSort(item.getSortCode() != null ? item.getSortCode().intValue() : null);
                     list.add(qqchWorkPlanDetail);
                 });
@@ -204,13 +205,21 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         if (!ObjectNullUtil.isEmpty(list)) {
             Map<String, List<QqchWorkPlanDetail>> finalCollect = collect;
             list.stream().forEach(item -> {
-                Long idItem = item.getId();
-                Long pidItem = item.getPid();
+                Long id = item.getId();
+                Long pid = item.getPid();
+                String itemId = item.getItemId();
+                String itemName = item.getItemName();
+                String ptVar1 = item.getPtVar1();//是否叶子节点
+                Integer sort = item.getSort();
                 List<QqchWorkPlanDetail> details = finalCollect.get(item.getItemName());
                 if (!ObjectNullUtil.isEmpty(details)) {
                     BeanUtils.copyProperties(details.get(0), item);
-                    item.setId(idItem);
-                    item.setPid(pidItem);
+                    item.setId(id);
+                    item.setPid(pid);
+                    item.setItemId(itemId);
+                    item.setItemName(itemName);
+                    item.setSort(sort);
+                    item.setPtVar1(ptVar1);//是否叶子节点
                 }
             });
             List<QqchWorkPlanDetail> tree = ListTreeUtil.formatTree(list, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), QqchWorkPlanDetail::getChildren, QqchWorkPlanDetail::setChildren);
