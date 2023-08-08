@@ -159,6 +159,12 @@ public class ISysPmServiceImpl implements ISysPmService {
         dictData.setDictSort(Long.valueOf(sort+"")); //排序
         dictData.setDictType(dictType);
         //父级
+        if(dictDataMap.get(parentName) == null && i > 0){
+            SysDictData parentDict = parse(codes,names,remarks,i-1,dictDataMap,dictSortMap,dictType,dictName);
+            dictData.setParentId(parentDict.getDictDataId());
+        }else if(dictDataMap.get(parentName) != null){
+            dictData.setParentId(dictDataMap.get(parentName).getDictDataId());
+        }
         dictData.setCreateTime(DateUtils.addSeconds(new Date(), dictDataMap.size()*2));
         sysDictDataService.insertDictData(dictData);
         dictDataMap.put(nowName, dictData);
