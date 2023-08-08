@@ -13,6 +13,7 @@ import com.hhwy.pm.common.service.CommonService;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -133,15 +134,24 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
     @ResponseBody
     public AjaxResult detail(QqchWorkPlanningBuildPlan plan){
         try{
-            List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = null;
-            if(ObjectNullUtil.isEmpty(plan.getVersion())){//直接版本号最大且有效版本
-                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanService.getMaxVVData(plan);
-            }else{//历史版本的详情
-                qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanService.getQqchWorkPlanningBuildPlanList(plan);
-            }
-            return AjaxResult.success(qqchWorkPlanningBuildPlanList);
+            QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo = qqchWorkPlanningBuildPlanService.detail(plan);
+            return AjaxResult.success(qqchWorkPlanningBuildPlanVo);
         }catch (Exception e){
             throw new RuntimeException("导入失败！");
+        }
+    }
+
+    /**
+     * 监听器（不确定格式，临时这样写，后续会改）
+     * @param businessId
+     */
+    @PostMapping("/listener")
+    @ResponseBody
+    public void listener(Long businessId){
+        try{
+            qqchWorkPlanningBuildPlanService.listener(businessId);
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 }

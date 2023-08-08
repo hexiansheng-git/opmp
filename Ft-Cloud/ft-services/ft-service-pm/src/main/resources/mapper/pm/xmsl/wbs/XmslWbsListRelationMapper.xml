@@ -13,11 +13,11 @@
     </resultMap>
     <sql id="selectXmslWbsListRelationVo">
         select
-                                                    `main_id`
-                                                 ,`wbs_id`
-                                                 ,`list_code`
-                                                 ,`list_id`
-                                    from xmsl_wbs_list_relation
+            `main_id`
+             ,`wbs_id`
+             ,`list_code`
+             ,`list_id`
+        from xmsl_wbs_list_relation
     </sql>
     <select id="getXmslWbsListRelation" resultMap="XmslWbsListRelationResultMap">
         <include refid="selectXmslWbsListRelationVo"/>

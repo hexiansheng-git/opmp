@@ -51,7 +51,7 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
     public void save(QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
         //删除旧数据
         QqchSurveyWorkPlan qqchSurveyWorkPlan = new QqchSurveyWorkPlan();
-        qqchSurveyWorkPlan.setVersion(qqchSurveyWorkPlan.getVersion());
+        qqchSurveyWorkPlan.setVersion(qqchSurveyWorkPlanVo.getVersion());
         qqchSurveyWorkPlanMapper.deleteQqchSurveyWorkPlan(qqchSurveyWorkPlan);
         //插入新数据
         this.insertQqchSurveyWorkPlanList(qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList(), qqchSurveyWorkPlanVo.getVersion());

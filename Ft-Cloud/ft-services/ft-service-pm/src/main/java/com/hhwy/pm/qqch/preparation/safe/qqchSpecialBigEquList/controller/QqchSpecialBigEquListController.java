@@ -1,0 +1,97 @@
+package com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.controller;
+
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.QqchSpecialBigEquList;
+import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.domain.vo.QqchSpecialBigEquListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSpecialBigEquList.service.IQqchSpecialBigEquListService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author ldd
+ * @date 2023-08-08 11:39:00
+ * @remark
+ */
+@Validated
+@RestController
+@RequestMapping("/qqchSpecialBigEquList")
+public class QqchSpecialBigEquListController extends BaseController {
+
+    @Autowired
+    private IQqchSpecialBigEquListService qqchSpecialBigEquListService;
+
+
+    /**
+     *  列表页面
+     * @param qqchSpecialBigEquListParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:list")
+    @GetMapping("/list")
+    public AjaxResult getQqchSpecialBigEquListList(@Validated(ValidationGroups.Select.class) QqchSpecialBigEquList qqchSpecialBigEquListParam) {
+        QqchSpecialBigEquListVo vo = qqchSpecialBigEquListService.getQqchSpecialBigEquListList(qqchSpecialBigEquListParam);
+        return AjaxResult.success(vo);
+    }
+
+    /**
+     *  保存/确认/提交
+     * @param vo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:save")
+    @PostMapping("/save")
+    public AjaxResult insertQqchSpecialBigEquListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigEquListVo vo) {
+        qqchSpecialBigEquListService.save(vo);
+        return AjaxResult.success();
+    }
+
+
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:list")
+    @GetMapping
+    public AjaxResult getQqchSpecialBigEquList(@Validated(ValidationGroups.Get.class) QqchSpecialBigEquList qqchSpecialBigEquListParam) {
+        QqchSpecialBigEquList qqchSpecialBigEquList = qqchSpecialBigEquListService.getQqchSpecialBigEquList(qqchSpecialBigEquListParam);
+        return AjaxResult.success(qqchSpecialBigEquList);
+    }
+
+
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:add")
+    @PostMapping("/add")
+    public AjaxResult insertQqchSpecialBigEquList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigEquList qqchSpecialBigEquListParam) {
+        qqchSpecialBigEquListService.insertQqchSpecialBigEquList(qqchSpecialBigEquListParam);
+        return AjaxResult.success(qqchSpecialBigEquListParam);
+    }
+
+
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:update")
+    @PostMapping("/update")
+    public AjaxResult updateQqchSpecialBigEquList(@Validated(ValidationGroups.Update.class) @RequestBody QqchSpecialBigEquList qqchSpecialBigEquListParam) {
+        return toAjax(qqchSpecialBigEquListService.updateQqchSpecialBigEquList(qqchSpecialBigEquListParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchSpecialBigEquListList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSpecialBigEquList> qqchSpecialBigEquListListParam) {
+        return toAjax(qqchSpecialBigEquListService.updateQqchSpecialBigEquListList(qqchSpecialBigEquListListParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteQqchSpecialBigEquList(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSpecialBigEquList qqchSpecialBigEquListParam) {
+        return toAjax(qqchSpecialBigEquListService.deleteQqchSpecialBigEquList(qqchSpecialBigEquListParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchSpecialBigEquList:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteQqchSpecialBigEquListByPks(@PathVariable Long[] ids) {
+        List<Long> qqchSpecialBigEquListPkList = Arrays.asList(ids);
+        return toAjax(qqchSpecialBigEquListService.deleteQqchSpecialBigEquListByPks(qqchSpecialBigEquListPkList));
+    }
+
+}

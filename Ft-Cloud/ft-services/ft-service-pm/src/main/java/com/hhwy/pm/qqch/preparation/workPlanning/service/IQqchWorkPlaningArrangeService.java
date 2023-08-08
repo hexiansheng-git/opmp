@@ -31,4 +31,6 @@ public interface IQqchWorkPlaningArrangeService {
     List<QqchWorkPlaningArrange> getMaxVVData(QqchWorkPlaningArrange arrangeVo);
 
     List<QqchWorkPlaningArrange> getQqchWorkPlaningArrangeListHistory(QqchWorkPlaningArrange arrangeVo);
+
+    QqchWorkPlaningArrangeVo detail(QqchWorkPlaningArrange arrange);
 }

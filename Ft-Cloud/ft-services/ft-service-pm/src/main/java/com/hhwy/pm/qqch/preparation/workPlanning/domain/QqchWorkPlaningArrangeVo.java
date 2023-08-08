@@ -44,4 +44,6 @@ public class QqchWorkPlaningArrangeVo extends BaseEntity {
     private String moduleIdentity;
 
     private List<QqchWorkPlaningArrange> dataList;
+
+    private String menuId;
 }
