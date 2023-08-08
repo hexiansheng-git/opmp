@@ -54,13 +54,6 @@ public class QqchExtendApplyWorkGroupController extends BaseController {
         return AjaxResult.success(qqchExtendApplyWorkGroupParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertQqchExtendApplyWorkGroupList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchExtendApplyWorkGroup> qqchExtendApplyWorkGroupListParam) {
-        qqchExtendApplyWorkGroupService.insertQqchExtendApplyWorkGroupList(qqchExtendApplyWorkGroupListParam);
-        return AjaxResult.success(qqchExtendApplyWorkGroupListParam);
-    }
-
     @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:update")
     @PostMapping("/update")
     public AjaxResult updateQqchExtendApplyWorkGroup(@Validated(ValidationGroups.Update.class) @RequestBody QqchExtendApplyWorkGroup qqchExtendApplyWorkGroupParam) {
