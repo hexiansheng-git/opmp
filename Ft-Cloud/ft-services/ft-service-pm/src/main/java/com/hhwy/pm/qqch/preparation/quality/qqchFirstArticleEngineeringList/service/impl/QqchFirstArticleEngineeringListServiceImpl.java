@@ -115,7 +115,6 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList = vo.getQqchFirstArticleEngineeringListList();
 
         this.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList, version);
-
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             //插入确认记录
