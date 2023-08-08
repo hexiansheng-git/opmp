@@ -6,6 +6,9 @@ import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.safe.danger.domain.QqchDangerList;
+import com.hhwy.pm.qqch.preparation.safe.danger.domain.vo.QqchDangerListVo;
+import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
@@ -41,6 +44,8 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchDangerListService qqchDangerListService;
 
     public QqchDangerConstructionListVo getQqchDangerConstructionListList(BigDecimal version) {
         QqchDangerConstructionListVo vo = new QqchDangerConstructionListVo();
@@ -58,12 +63,28 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
 
     @Transactional
     public void batchSave(QqchDangerConstructionListVo qqchDangerConstructionListVo) {
+        // 危大工程清单
+        QqchDangerListVo qqchDangerListVo = new QqchDangerListVo();
+        List<QqchDangerList> list = new ArrayList<>();
         for (QqchDangerConstructionList qqchDangerConstructionList : qqchDangerConstructionListVo.getList()) {
             qqchDangerConstructionList.setUpdateUser(SecurityUtils.getUserName());
             qqchDangerConstructionList.setUpdateTime(DateUtils.getNowDate());
+
+            QqchDangerList qqchDangerList = new QqchDangerList();
+            qqchDangerList.setSchemeCode(qqchDangerConstructionList.getSchemeCode());
+            qqchDangerList.setSchemeName(qqchDangerConstructionList.getSchemeName());
+            qqchDangerList.setDangerLevel(qqchDangerConstructionList.getDangerLevel());
+            qqchDangerList.setWbsCode(qqchDangerConstructionList.getWbsCode());
+            qqchDangerList.setWbsName(qqchDangerConstructionList.getWbsName());
+            list.add(qqchDangerList);
+            qqchDangerListVo.setList(list);
+            qqchDangerListVo.setVersion(qqchDangerConstructionListVo.getVersion());
         }
 
         qqchDangerConstructionListMapper.updateQqchDangerConstructionListList(qqchDangerConstructionListVo.getList());
+
+        // 同步到8.3.1 危大工程清单
+        qqchDangerListService.syncData(qqchDangerListVo);
 
         String buttonMark = qqchDangerConstructionListVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
@@ -111,7 +132,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             insertList.add(insert);
         }
 
-        // 先批量表中数据
+        // 先批量删除表中数据
         QqchDangerConstructionList deleteParam = new QqchDangerConstructionList();
         deleteParam.setVersion(dbVo.getVersion());
         deleteParam.setDelFlag("1");
