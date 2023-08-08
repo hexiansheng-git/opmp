@@ -58,6 +58,6 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo){
         qqchOptimizeChangeOrganizationService.confirm(qqchOptimizeChangeOrganizationVo);
-        return AjaxResult.success(qqchOptimizeChangeOrganizationVo);
+        return AjaxResult.success("确认成功！");
     }
 }

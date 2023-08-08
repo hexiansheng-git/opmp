@@ -46,7 +46,7 @@ public class QqchComparisonSchemeController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.save(qqchComparisonSchemeVo);
-        return AjaxResult.success(qqchComparisonSchemeVo);
+        return AjaxResult.success();
     }
 
     /**
@@ -58,6 +58,6 @@ public class QqchComparisonSchemeController extends BaseController {
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.confirm(qqchComparisonSchemeVo);
-        return AjaxResult.success(qqchComparisonSchemeVo);
+        return AjaxResult.success("确认成功！");
     }
 }

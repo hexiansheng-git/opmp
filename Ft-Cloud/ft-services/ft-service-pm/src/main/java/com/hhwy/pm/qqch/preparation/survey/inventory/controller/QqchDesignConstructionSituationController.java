@@ -1,16 +1,14 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
-import com.hhwy.pm.common.mapper.CommonMapper;
-import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchDesignConstructionSituation;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchDesignConstructionSituationService;
-import org.springframework.web.bind.annotation.*;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -46,7 +44,7 @@ public class QqchDesignConstructionSituationController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:update")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         qqchDesignConstructionSituationService.save(qqchDesignConstructionSituationVo);
         return AjaxResult.success(qqchDesignConstructionSituationVo);
     }

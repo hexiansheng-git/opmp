@@ -58,6 +58,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
         QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
         qqchSurveyDesignRiskPlan.setVersion(version);
         List<QqchSurveyDesignRiskPlan> qqchSurveyDesignRiskPlanList = qqchSurveyDesignRiskPlanMapper.getQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlan);
+
+        qqchSurveyDesignRiskPlanVo.setVersion(version);
+        qqchSurveyDesignRiskPlanVo.setStageIdentity(qqchReviewService.getStage());
         if(CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
             qqchSurveyDesignRiskPlanList = this.getInitializeData();
             qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
@@ -71,8 +74,6 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
                 QqchSurveyDesignRiskPlan::getChildren,
                 QqchSurveyDesignRiskPlan::setChildren);
 
-        qqchSurveyDesignRiskPlanVo.setVersion(version);
-        qqchSurveyDesignRiskPlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(treeList);
         return qqchSurveyDesignRiskPlanVo;
     }

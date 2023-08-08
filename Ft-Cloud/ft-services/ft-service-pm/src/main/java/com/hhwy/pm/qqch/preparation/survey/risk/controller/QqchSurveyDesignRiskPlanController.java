@@ -44,7 +44,7 @@ public class QqchSurveyDesignRiskPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:update")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
         qqchSurveyDesignRiskPlanService.save(qqchSurveyDesignRiskPlanVo);
         return AjaxResult.success(qqchSurveyDesignRiskPlanVo);
     }
