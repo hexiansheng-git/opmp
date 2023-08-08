@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileDTO;
 import com.hhwy.pm.qqch.sgch.milestone.domain.QqchMilestone;
 import com.hhwy.pm.qqch.sgch.milestone.mapper.QqchMilestoneMapper;
 import com.hhwy.pm.qqch.sgch.milestone.service.IQqchMilestoneService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -84,8 +86,14 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public List<QqchMilestone> list(QqchMilestone qqchMilestoneParam) {
-        return this.qqchMilestoneMapper.getQqchMilestoneList(qqchMilestoneParam);
+    public CompileDTO list(QqchMilestone qqchMilestoneParam) {
+
+        CompileDTO compileDTO = new CompileDTO();
+        List<QqchMilestone> qqchMilestoneList = this.qqchMilestoneMapper.getQqchMilestoneList(qqchMilestoneParam);
+        compileDTO.setDto(qqchMilestoneList);
+        compileDTO.setVersion(BigDecimal.ONE);
+        compileDTO.setStageIdentity("1");
+        return compileDTO;
     }
 
     @Override

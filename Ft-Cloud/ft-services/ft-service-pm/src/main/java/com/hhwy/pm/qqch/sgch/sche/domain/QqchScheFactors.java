@@ -125,11 +125,11 @@ public class QqchScheFactors extends CompileEntity<QqchScheFactors> {
     @Excel(name = "备注")
     private String remark;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：行号
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
-    private String ptVar1;
+    @Excel(name = "行号")
+    private BigDecimal rowNum;
     /**
      * 字段描述：预留字段2
      */

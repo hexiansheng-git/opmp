@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -28,6 +30,16 @@ public class CompileDTO<T> {
     private String submitFlag;
     private T dto;
 
+
+    /**
+     * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
+     */
+    @JsonProperty
+    private String stageIdentity;
+
+    @JsonProperty
+    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
+    private String moduleIdentity;
 
     public static <T> T dealListDto(BigDecimal version, T dto) {
         CompileDTO<T> tCompileDTO = new CompileDTO<>();

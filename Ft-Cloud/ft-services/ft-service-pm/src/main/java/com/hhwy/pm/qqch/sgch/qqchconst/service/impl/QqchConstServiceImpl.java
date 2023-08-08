@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +163,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public List<QqchConst> list(QqchConst dto) {
+    public CompileDTO<List<QqchConst>> list(QqchConst dto) {
         List<QqchConst> qqchConstList = this.qqchConstMapper.getQqchConstList(dto);
         List<QqchConstJob> jobList = this.jobService.list(CompileDTO.dealListDto(dto.getVersion(), new QqchConstJob()));
         Map<Long, List<QqchConstJob>> jobListMap = jobList.stream().collect(Collectors.groupingBy(QqchConstJob::getMasterId));
@@ -183,6 +184,15 @@ public class QqchConstServiceImpl implements IQqchConstService {
             qqchConst.setFacilityPlanList(facilityPlansRes);
 
         }
-        return TreeUtil.build(qqchConstList,null);
+
+        CompileDTO<List<QqchConst>> compileDTO = new CompileDTO<List<QqchConst>>();
+
+        List<QqchConst> build = TreeUtil.build(qqchConstList, null);
+        compileDTO.setVersion(new BigDecimal("1.0"));
+        compileDTO.setDto(build);
+        compileDTO.setStageIdentity("1");
+        compileDTO.setModuleIdentity("133");
+        
+        return compileDTO;
     }
 }

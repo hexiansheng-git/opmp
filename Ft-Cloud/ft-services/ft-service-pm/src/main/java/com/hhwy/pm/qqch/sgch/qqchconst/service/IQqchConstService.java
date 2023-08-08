@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.service;
 
+import com.hhwy.pm.qqch.common.domain.CompileDTO;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 
 import java.util.List;
@@ -29,5 +30,5 @@ public interface IQqchConstService {
 
     void save(List<QqchConst> qqchConsts);
 
-    List<QqchConst> list(QqchConst qqchConst);
+    CompileDTO list(QqchConst qqchConst);
 }
