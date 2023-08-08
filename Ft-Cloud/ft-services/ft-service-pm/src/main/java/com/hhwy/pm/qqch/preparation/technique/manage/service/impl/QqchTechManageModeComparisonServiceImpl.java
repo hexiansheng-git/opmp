@@ -37,6 +37,7 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
     public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
         version = VersionUtil.getVersion("qqch_tech_manage_mode_comparison", version);
+        vo.setVersion(version);
 
         QqchTechManageModeComparison qryParam = new QqchTechManageModeComparison();
         qryParam.setVersion(version);
