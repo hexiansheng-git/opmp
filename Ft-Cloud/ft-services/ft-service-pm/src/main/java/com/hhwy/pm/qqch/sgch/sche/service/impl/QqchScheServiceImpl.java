@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
+import com.hhwy.pm.qqch.common.aspect.CompileAspect;
+import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileDTO;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr;
@@ -9,8 +11,12 @@ import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
 import com.hhwy.pm.qqch.sgch.sche.service.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 进度差异化管控策划Service
@@ -32,6 +38,7 @@ public class QqchScheServiceImpl implements IQqchScheService {
     private IQqchScheCorrService corrService;
 
     @Override
+    @CompileAspect(type = CompileOptEnum.LIST, tableName = "qqch_sche_diff")
     public QqchScheDTO list(QqchScheDTO dto) {
         QqchScheDTO qqchScheDTO = new QqchScheDTO();
         // 说明
@@ -44,6 +51,9 @@ public class QqchScheServiceImpl implements IQqchScheService {
         qqchScheDTO.setScheFactorsVO(factorsService.getList(CompileDTO.dealListDto(dto.getVersion(), new QqchScheFactors())));
         // 纠偏措施
         qqchScheDTO.setCorrList(corrService.getList(CompileDTO.dealListDto(dto.getVersion(), new QqchScheCorr())));
+        qqchScheDTO.setVersion(new BigDecimal("1.0"));
+        qqchScheDTO.setStageIdentity("1");
+
         return qqchScheDTO;
 
     }
@@ -58,7 +68,23 @@ public class QqchScheServiceImpl implements IQqchScheService {
         // 保存进度分析要素
         analyseService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getAnalyseList()));
         // 保存进度影响要素
-        factorsService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getFactorsList()));
+        List<List<QqchScheFactors>> factorsVOList = dto.getFactorsVOList();
+
+        List<QqchScheFactors> iFactorList = new ArrayList<>();
+
+        // 每行数据加上行号 不然前端不好回显数据
+        if (!CollectionUtils.isEmpty(factorsVOList)) {
+            int rowNum = 1;
+            for (List<QqchScheFactors> qqchScheFactors : factorsVOList) {
+                for (QqchScheFactors qqchScheFactor : qqchScheFactors) {
+                    qqchScheFactor.setRowNum(BigDecimal.valueOf(rowNum));
+                    iFactorList.add(qqchScheFactor);
+                }
+                rowNum++;
+            }
+
+            factorsService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), iFactorList));
+        }
         // 保存纠偏措施
         corrService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getCorrList()));
     }

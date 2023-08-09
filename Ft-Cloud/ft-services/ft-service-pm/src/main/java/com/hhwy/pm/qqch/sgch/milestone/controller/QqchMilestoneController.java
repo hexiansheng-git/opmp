@@ -42,7 +42,7 @@ public class QqchMilestoneController extends BaseController {
     @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
-        List<QqchMilestone> qqchMilestoneList = qqchMilestoneService.list(qqchMilestoneParam);
+        CompileDTO qqchMilestoneList = qqchMilestoneService.list(qqchMilestoneParam);
         return AjaxResult.success(qqchMilestoneList);
     }
 

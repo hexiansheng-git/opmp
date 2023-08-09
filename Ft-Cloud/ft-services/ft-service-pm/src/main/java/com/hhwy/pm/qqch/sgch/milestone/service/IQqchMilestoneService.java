@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.milestone.service;
 
+import com.hhwy.pm.qqch.common.domain.CompileDTO;
 import com.hhwy.pm.qqch.sgch.milestone.domain.QqchMilestone;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public interface IQqchMilestoneService {
 
     int deleteQqchMilestoneByPks(List<Long> qqchMilestonePkList);
 
-    List<QqchMilestone> list(QqchMilestone qqchMilestoneParam);
+    CompileDTO list(QqchMilestone qqchMilestoneParam);
 
     void save(List<QqchMilestone> list);
 }

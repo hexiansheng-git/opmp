@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.sche.dto;
 
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.sche.domain.*;
 import com.hhwy.pm.qqch.sgch.sche.vo.ScheFactorsVO;
 import com.hhwy.utils.JsonUtils;
@@ -9,10 +10,11 @@ import lombok.ToString;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @ToString
-public class QqchScheDTO implements Serializable {
+public class QqchScheDTO extends CompileEntity<QqchScheDTO> implements Serializable {
 
     private BigDecimal version;
     /**
@@ -34,7 +36,7 @@ public class QqchScheDTO implements Serializable {
     /**
      * 影响因素入参
      */
-    private List<QqchScheFactors> factorsList;
+    private List<List<QqchScheFactors>> factorsVOList;
     /**
      * 影响因素出参
      */
@@ -50,7 +52,7 @@ public class QqchScheDTO implements Serializable {
         JsonUtils.soutJsonStr(QqchScheDiff.class);
         JsonUtils.soutJsonStr(QqchScheAnalyse.class);
         JsonUtils.soutJsonStr(QqchScheFactors.class);
-        JsonUtils.soutJsonStr(QqchScheCorr.class);
+        JsonUtils.soutFtJsonStr(QqchScheCorr.class);
     }
 
 }

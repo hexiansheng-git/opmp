@@ -41,7 +41,7 @@ public class QqchScheController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchScheDTO dto) {
         qqchScheService.save(dto);
-        return AjaxResult.success("success");
+        return AjaxResult.success("操作成功");
     }
 
 

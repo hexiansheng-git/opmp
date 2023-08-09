@@ -28,7 +28,6 @@ public class CompileEntity<T> extends TreeNode<T> {
     private String valid;
 
 
-    @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
     private String submitFlag;
 
     /**

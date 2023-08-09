@@ -4,6 +4,7 @@ package com.hhwy.pm.qqch.common.aspect;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +25,12 @@ import java.util.List;
 public class CompileAspectImpl {
 
     private static CommonMapper commonMapper;
+    private static IQqchModuleConfirmCaseService moduleConfirmCaseService;
+    
 
     static {
         commonMapper = SpringUtils.getBean(CommonMapper.class);
+        moduleConfirmCaseService = SpringUtils.getBean(IQqchModuleConfirmCaseService.class);
     }
 
     /**
@@ -54,6 +58,7 @@ public class CompileAspectImpl {
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
                     commonMapper.deleteByVersion(tableName, ((CompileEntity) arg).getVersion());
+//                    moduleConfirmCaseService.addConfirmRecord();
                 }
             }
 

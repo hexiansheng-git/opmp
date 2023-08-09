@@ -22,5 +22,5 @@ public @interface CompileAspect {
      *
      * @return
      */
-    String tableName();
+    String tableName() default "";
 }
