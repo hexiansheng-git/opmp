@@ -42,7 +42,7 @@ public class QqchDiscloseFirstSecondController extends BaseController {
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDiscloseFirstSecondVo qqchDiscloseFirstSecondVo) {
         qqchDiscloseFirstSecondService.batchSave(qqchDiscloseFirstSecondVo);
-        return AjaxResult.success(qqchDiscloseFirstSecondVo);
+        return AjaxResult.success();
     }
 
     /**
