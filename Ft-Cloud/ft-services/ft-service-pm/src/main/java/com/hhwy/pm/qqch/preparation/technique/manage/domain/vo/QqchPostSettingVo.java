@@ -23,5 +23,5 @@ public class QqchPostSettingVo extends PreparationEntity {
     /**
      * 工区技术岗位设置集合
      */
-    private List<QqchPostSetting> WorkAreaTreeList;
+    private List<QqchPostSetting> workAreaTreeList;
 }

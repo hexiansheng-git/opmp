@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.system.mapper.MaterialInfoMapper">
+    <resultMap type="com.hhwy.domain.base.system.material.MaterialInfo" id="MaterialInfoResult">
+        <result property="id"    column="id"    />
+        <result property="categoryCode"    column="category_code"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="unit"    column="unit"    />
+        <result property="unitCode"    column="unit_code"    />
+        <result property="alias"    column="alias"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialEnName"    column="material_en_name"    />
+        <result property="materialSpec"    column="material_spec"    />
+        <result property="sort"    column="sort"    />
+        <result property="status"    column="status"    />
+        <result property="type"    column="type"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="ownSite" column="own_site"/>
+        <result property="ownType" column="own_type"/>
+        <result property="partNo" column="part_no"/>
+    </resultMap>
+
+    <sql id="selectMaterialInfoVo">
+        select `id`, `category_code`, `unit`, `unit_code`, `alias`, `material_code`, `material_name`, `material_en_name`, `material_spec`,
+               `status`, `type`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`,`category_id`,
+               `del_flag`, `remark`, `pt_var1`,`pt_var2`,`pt_var3` ,`sort`,`own_type`,`own_site`,`part_no` from `t_material_info`
+    </sql>
+
+    <sql id="selectMaterialCategoryInfo">
+        select ti.`id`, ti.`category_code`, ti.`unit`, ti.`unit_code`, ti.`alias`, ti.`material_code`, ti.`material_name`, ti.`material_en_name`, ti.`material_spec`,
+               ti.`status`, ti.`type`, ti.`create_user`, ti.`create_time`, ti.`update_user`, ti.`update_time`, ti.`del_user`, ti.`del_time`,ti.`category_id`,
+               ti.`del_flag`, ti.`remark`, ti.`pt_var1`,ti.`pt_var2`,ti.`pt_var3` ,ti.`sort` ,tc.category_name,ti.`own_type`,ti.`own_site`,ti.`part_no` as categoryName  from `t_material_info` ti
+               left join t_material_category tc on ti.category_code=tc.category_code
+    </sql>
+
+    <select id="getMaterialInfoPage"  parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultMap="MaterialInfoResult">
+        <include refid="selectMaterialInfoVo"/>
+        <where>
+            del_flag='0'
+            <if test="categoryCode != null  and categoryCode != ''"> and `category_code` like concat (#{categoryCode}, '%')</if>
+            <if test="materialCode != null  and materialCode != ''"> and `material_code` like concat(#{materialCode},'%') </if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` like concat(#{materialName}, '%')</if>
+            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` like concat(#{materialSpec}, '%')</if>
+            <if test="status != null  and status != ''"> and `status` = #{status}</if>
+            <if test="type != null "> and `type` = #{type}</if>
+            <if test="updateTime != null "> and `update_time` &gt;= #{updateTime}</if>
+            <if test="params.codeList != null">
+                and material_code IN
+                <foreach item="code" collection="params.codeList" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+        limit ${pageNum}, ${pageSize}
+    </select>
+
+    <select id="getMaterialInfoPageCount" parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultType="int">
+        select count(1) from `t_material_info`
+        <where>
+            del_flag='0'
+            <if test="categoryCode != null  and categoryCode != ''"> and `category_code` like concat (#{categoryCode}, '%')</if>
+            <if test="materialCode != null  and materialCode != ''"> and `material_code` like concat('%',#{materialCode},'%') </if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` like concat('%',#{materialName}, '%')</if>
+            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` like concat(#{materialSpec}, '%')</if>
+            <if test="status != null  and status != ''"> and `status` = #{status}</if>
+            <if test="updateTime != null "> and `update_time` &gt;= #{updateTime}</if>
+            <if test="type != null "> and `type` = #{type}</if>
+            <if test="params.codeList != null">
+                and material_code IN
+                <foreach item="code" collection="params.codeList" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectMaterialInfoList" parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultMap="MaterialInfoResult">
+        <include refid="selectMaterialInfoVo"/>
+        <where>
+            del_flag='0'
+            <if test="categoryCode != null  and categoryCode != ''"> and `category_code` like concat (#{categoryCode}, '%')</if>
+            <if test="materialCode != null  and materialCode != ''"> and `material_code` like concat('%',#{materialCode},'%') </if>
+            <if test="materialName != null  and materialName != ''"> and `material_name` like concat('%',#{materialName}, '%')</if>
+            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` like concat(#{materialSpec}, '%')</if>
+            <if test="status != null  and status != ''"> and `status` = #{status}</if>
+            <if test="type != null "> and `type` = #{type}</if>
+            <if test="partNo!=null and partNo !=''"> and `part_no` like concat ('%',#{partNo}, '%')</if>
+            <if test="params.codeList != null">
+                and material_code IN
+                <foreach item="code" collection="params.codeList" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+
+            <if test="params != null and params.nameList != null">
+                and material_name IN
+                <foreach item="item" collection="params.nameList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <if test="params != null and params.specList != null">
+                and material_spec IN
+                <foreach item="item" collection="params.specList" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <if test="params.types != null and params.types.length > 0">
+                and type IN
+                <foreach item="code" collection="params.types" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+        order by create_time desc
+        <if test="isFalg != null and isFalg!=''">
+            limit ${pageNum}, ${pageSize}
+        </if>
+        </select>
+
+    <select id="selectMaterialInfoById" parameterType="String" resultMap="MaterialInfoResult">
+        <include refid="selectMaterialInfoVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertMaterialInfo" parameterType="com.hhwy.domain.base.system.material.MaterialInfo">
+        insert into `t_material_info`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="categoryCode != null">`category_code`,</if>
+            <if test="categoryId != null">`category_id`,</if>
+            <if test="unit != null">`unit`,</if>
+            <if test="unitCode != null">`unit_code`,</if>
+            <if test="materialEnName != null">`material_en_name`,</if>
+            <if test="sort != null">`sort`,</if>
+            <if test="alias != null">`alias`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="materialName != null">`material_name`,</if>
+            <if test="materialSpec !=null">`material_spec`,</if>
+            <if test="status != null">`status`,</if>
+            <if test="type != null">`type`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_ar2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ownType != null">`own_type`,</if>
+            <if test="ownSite != null">`own_site`,</if>
+            <if test="partNo != null">`part_no`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="categoryCode != null">#{categoryCode},</if>
+            <if test="categoryId != null">#{categoryId},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="unitCode != null">#{unitCode},</if>
+            <if test="materialEnName != null">#{materialEnName},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="alias != null">#{alias},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialSpec !=null">#{materialSpec},</if>
+            <if test="status != null">#{status},</if>
+            <if test="type != null">#{type},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ownType != null">#{ownType},</if>
+            <if test="ownSite != null">#{ownSite},</if>
+            <if test="partNo != null">#{partNo},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `t_material_info` (
+                        `id`,
+                        `category_code`,`category_id`,
+                        `unit`,
+                        `unit_code`,`material_en_name`, `sort`,
+                        `alias`,
+                        `material_code`,
+                        `material_name`,
+                        `material_spec`,
+                        `status`,
+                        `type`,
+                        `create_user`,
+                        `create_time`,
+                        `update_user`,
+                        `update_time`,
+                        `del_user`,
+                        `del_time`,
+                        `del_flag`,
+                        `remark`,
+                        `pt_var1`,
+                        `pt_var2`,
+                        `pt_var3`,
+                        `own_type`,
+                        `own_site`,
+                        `part_no`
+                )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+                    (#{item.id},
+                    #{item.categoryCode}, #{item.categoryId},
+                    #{item.unit},
+                    #{item.unitCode}, #{item.materialEnName}, #{item.sort},
+                    #{item.alias},
+                    #{item.materialCode},
+                    #{item.materialName},
+                    #{item.materialSpec},
+                    #{item.status},
+                    #{item.type},
+                    #{item.createUser},
+                    #{item.createTime},
+                    #{item.updateUser},
+                    #{item.updateTime},
+                    #{item.delUser},
+                    #{item.delTime},
+                    #{item.delFlag},
+                    #{item.remark},
+                    #{item.ptVar1},
+                    #{item.ptVar2},
+                    #{item.ptVar3},
+                    #{item.ownType},
+                    #{item.ownSite},
+                    #{item.partNo}
+                    )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `t_material_info`
+        <trim prefix="set" suffixOverrides=",">
+                    <trim prefix="category_code =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.categoryCode != null ">
+                                when `id` = #{item.id} then #{item.categoryCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="unit =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.unit != null ">
+                                when `id` = #{item.id} then #{item.unit}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="alias =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.alias != null ">
+                                when `id` = #{item.id} then #{item.alias}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="material_code =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialCode != null ">
+                                when `id` = #{item.id} then #{item.materialCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="material_name =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialName != null ">
+                                when `id` = #{item.id} then #{item.materialName}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="material_spec =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialSpec != null ">
+                                when `id` = #{item.id} then #{item.materialSpec}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="status =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.status != null ">
+                                when `id` = #{item.id} then #{item.status}
+                            </if>
+                        </foreach>
+                    </trim>
+
+                    <trim prefix="type =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.type != null ">
+                                when `id` = #{item.id} then #{item.type}
+                            </if>
+                        </foreach>
+                    </trim>
+
+
+                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="own_type =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ownType != null ">
+                        when `id` = #{item.id} then #{item.ownType}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="own_site =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ownSite != null ">
+                        when `id` = #{item.id} then #{item.ownSite}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="part_no =case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.partNo != null ">
+                        when `id` = #{item.id} then #{item.partNo}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="list" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+    <update id="updateMaterialInfo" parameterType="com.hhwy.domain.base.system.material.MaterialInfo">
+        update `t_material_info`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="categoryCode != null">`category_code` = #{categoryCode},</if>
+            <if test="unit != null">`unit` = #{unit},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="materialName != null">`material_name` = #{materialName},</if>
+            <if test="materialSpec != null">`material_spec` = #{materialSpec},</if>
+            <if test="status != null">`status` = #{status},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="ownType != null">`own_type` = #{ownType},</if>
+            <if test="ownSite != null">`own_site` = #{ownSite},</if>
+            <if test="partNo != null">`part_no` = #{partNo},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <delete id="deleteMaterialInfoById" parameterType="String">
+        delete from `t_material_info` where `id` = #{id}
+    </delete>
+
+    <delete id="deleteMaterialInfoByIds" parameterType="String">
+        update t_material_info set del_flag="1"
+        where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="validRepetion" parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultMap="MaterialInfoResult">
+        select * from t_material_info where del_flag='0' and material_name=#{materialName} and material_spec=#{materialSpec}
+    </select>
+
+    <select id="newValidRepetion" parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultMap="MaterialInfoResult">
+        select * from t_material_info
+        <where>
+            del_flag='0'
+            <if test="materialSpec !=null and materialSpec !=''"> and material_spec =#{materialSpec}</if>
+            <if test="materialName != null  and materialName != ''"> and `material_name`=#{materialName}</if>
+            <if test="categoryCode != null  and categoryCode != ''">and `category_code` like concat ('%',#{categoryCode},'%')</if>
+            <if test="type!=null and type!=''"> and type=#{type}</if>
+            <if test="type==null and type==''"> and type!=2</if>
+        </where>
+        order by material_code desc
+    </select>
+
+    <select id="newSelectMaterialInfoList" parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultMap="MaterialInfoResult">
+        <include refid="selectMaterialCategoryInfo"/>
+        <if test="type != null "> and tc.type= #{type} </if>
+        <where>
+            ti.del_flag='0'
+            <if test="categoryCode != null  and categoryCode != ''"> and ti.`category_code` like concat ('%',#{categoryCode},'%')</if>
+            <if test="materialCode != null  and materialCode != ''"> and ti.`material_code` like concat ('%',#{materialCode},'%')</if>
+            <if test="materialName != null  and materialName != ''"> and ti.`material_name` like concat ('%',#{materialName},'%')</if>
+            <if test="status != null  and status != ''"> and ti.`status` = #{status}</if>
+            <if test="type != null "> and ti.`type` = #{type}</if>
+        </where>
+        order by ti.sort
+    </select>
+
+    <select id="selectCount" resultType="int">
+        select count(*) from t_material_info where del_flag='0';
+    </select>
+
+    <select id="selectMaterialInfoListByCodes" resultMap="MaterialInfoResult">
+        <include refid="selectMaterialInfoVo"/>
+        <where>
+            del_flag='0'
+           <if test="materialCodes != null">
+               and material_code in
+               <foreach collection="materialCodes" separator="," open="(" close=")" item="materialCode">
+                   #{materialCode}
+               </foreach>
+           </if>
+        </where>
+    </select>
+
+    <select id="selectMaxMaterialCode" parameterType="com.hhwy.domain.base.system.material.MaterialInfo" resultType="com.hhwy.domain.base.system.material.MaterialInfo">
+        select max(material_code) as materialCode ,max(sort) sort FROM t_material_info WHERE
+        del_flag='0'
+        <if test="null!=type and type!=''">and type=#{type}</if>
+        <if test="null==type or type==''">and type!=2</if>
+    </select>
+</mapper>

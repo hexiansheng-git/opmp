@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.system.equipment.mapper.EquipmentInfoMapper">
+    <resultMap type="com.hhwy.domain.base.system.equipment.EquipmentInfo" id="EquipmentInfoResult">
+        <result property="id"    column="id"    />
+        <result property="equipId"    column="equip_id"    />
+        <result property="equipCode"    column="equip_code"    />
+        <result property="equipName"    column="equip_name"    />
+        <result property="equipSpec"    column="equip_spec"    />
+        <result property="equipCalssify"    column="equip_calssify"    />
+        <result property="equipUnit"    column="equip_unit"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="tenantKey"    column="tenant_key"    />
+        <result property="ptVar1"    column="pt_var_1"    />
+        <result property="ptVar2"    column="pt_var_2"    />
+        <result property="ptVar3"    column="pt_var_3"    />
+        <result property="ptVar4"    column="pt_var_4"    />
+        <result property="ptVar5"    column="pt_var_5"    />
+        <result property="parentId" column="parent_id"/>
+        <result property="isUse" column="is_use"/>
+        <result property="parentName" column="parent_name"></result>
+    </resultMap>
+
+    <sql id="selectEquipmentInfoVo">
+           select
+            info.`id`,
+            info.`equip_id`,
+            info.`equip_code`,
+            info.`equip_name`,
+            info.`equip_spec`,
+            type.equip_name `equip_calssify`,
+            info.`equip_unit`,
+            info.`del_flag`,
+            info.`create_user`,
+            info.`create_time`,
+            info.`update_user`,
+            info.`update_time`,
+            info.`tenant_key`,
+            info.`pt_var_1`,
+            info.`pt_var_2`,
+            info.`pt_var_3`,
+            info.`pt_var_4`,
+            info.`pt_var_5`,
+            info.`parent_id`,
+						p.equip_name parent_name,
+            info.is_use,
+            type. code equipCalssifyCode
+            from `t_equipment_info` info
+            left join t_equipment_type type on SUBSTRING(info.equip_code,1,2)=type.code
+						left join t_equipment_type p on p.id = info.parent_id
+    </sql>
+
+    <select id="selectEquipmentInfoList" parameterType="com.hhwy.domain.base.system.equipment.EquipmentInfo" resultMap="EquipmentInfoResult">
+        <include refid="selectEquipmentInfoVo"/>
+        <where>
+            info.`del_flag` = 0
+            <if test="equipId != null "> and info.`equip_id` = #{equipId}</if>
+            <if test="equipCode != null  and equipCode != ''"> and info.`equip_code` like concat('%', #{equipCode}, '%')</if>
+            <if test="equipName != null  and equipName != ''"> and info.`equip_name` like concat('%', #{equipName}, '%')</if>
+            <if test="equipSpec != null  and equipSpec != ''"> and info.`equip_spec` like concat('%', #{equipSpec}, '%')</if>
+            <if test="equipCalssify != null  and equipCalssify != ''"> and info.`equip_calssify` = #{equipCalssify}</if>
+            <if test="equipUnit != null  and equipUnit != ''"> and info.`equip_unit` = #{equipUnit}</if>
+            <if test="createUser != null  and createUser != ''"> and info.`create_user` = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and info.`update_user` = #{updateUser}</if>
+            <if test="isUse != null  and isUse != ''"> and info.`is_use` = #{isUse}</if>
+            <if test="tenantKey != null  and tenantKey != ''"> and info.`tenant_key` = #{tenantKey}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and info.`pt_var_1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and info.`pt_var_2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and info.`pt_var_3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and info.`pt_var_4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and info.`pt_var_5` = #{ptVar5}</if>
+            <if test="parentId != null  and parentId != ''"> and info.`parent_id` = #{parentId}</if>
+            <!--<if test="null!=ids and ids!=''"> and info.id find_in_set(id,#{ids})</if>-->
+            <if test="ids!=null and ids.size()>0">
+                and info.id in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="null!=newEquipCode and newEquipCode!=''"> and info.`equip_code` = #{newEquipCode}</if>
+            <if test="params.equipNameList != null  and params.equipNameList.size() > 0">
+                and info.equip_name IN
+                <foreach item="code" collection="params.equipNameList" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </if>
+        </where>
+        order by info.`equip_code` asc
+    </select>
+    
+    <select id="selectEquipmentInfoById" parameterType="Long" resultMap="EquipmentInfoResult">
+        <include refid="selectEquipmentInfoVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertEquipmentInfo" parameterType="com.hhwy.domain.base.system.equipment.EquipmentInfo">
+        insert into `t_equipment_info`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="equipId != null">`equip_id`,</if>
+            <if test="equipCode != null">`equip_code`,</if>
+            <if test="equipName != null">`equip_name`,</if>
+            <if test="equipSpec != null">`equip_spec`,</if>
+            <if test="equipCalssify != null">`equip_calssify`,</if>
+            <if test="equipUnit != null">`equip_unit`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="tenantKey != null and tenantKey != ''">`tenant_key`,</if>
+            <if test="ptVar1 != null">`pt_var_1`,</if>
+            <if test="ptVar2 != null">`pt_var_2`,</if>
+            <if test="ptVar3 != null">`pt_var_3`,</if>
+            <if test="ptVar4 != null">`pt_var_4`,</if>
+            <if test="ptVar5 != null">`pt_var_5`,</if>
+            <if test="parentId != null">`parent_id`,</if>
+            <if test="isUse != null">`is_use`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="equipId != null">#{equipId},</if>
+            <if test="equipCode != null">#{equipCode},</if>
+            <if test="equipName != null">#{equipName},</if>
+            <if test="equipSpec != null">#{equipSpec},</if>
+            <if test="equipCalssify != null">#{equipCalssify},</if>
+            <if test="equipUnit != null">#{equipUnit},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="tenantKey != null and tenantKey != ''">#{tenantKey},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="isUse != null">#{isUse},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertBath" parameterType="list">
+        insert `t_equipment_info` (
+                                                `id`,
+                                                                `equip_id`,
+                                                                `equip_code`,
+                                                                `equip_name`,
+                                                                `equip_spec`,
+                                                                `equip_calssify`,
+                                                                `equip_unit`,
+                                                                `create_user`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `pt_var_1`,
+                                                                `pt_var_2`,
+                                                                `pt_var_3`,
+                                                                `pt_var_4`,
+                                                                `pt_var_5`,
+                                                                `parent_id`,
+                                                                `is_use`
+                                    )values
+        <foreach collection="dataList" separator="," item="item" index="index" >(
+            #{item.id},
+            #{item.equipId},
+            #{item.equipCode},
+            #{item.equipName},
+            #{item.equipSpec},
+            #{item.equipCalssify},
+            #{item.equipUnit},
+            #{item.createUser},
+            #{item.createTime},
+            #{item.updateUser},
+            #{item.updateTime},
+            #{item.ptVar1},
+            #{item.ptVar2},
+            #{item.ptVar3},
+            #{item.ptVar4},
+            #{item.ptVar5},
+            #{item.parentId},
+            #{item.isUse}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `t_equipment_info`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="equip_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.equipId != null ">
+                                when `id` = #{item.id} then #{item.equipId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="equip_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.equipCode != null ">
+                                when `id` = #{item.id} then #{item.equipCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="equip_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.equipName != null ">
+                                when `id` = #{item.id} then #{item.equipName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="equip_spec =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.equipSpec != null ">
+                                when `id` = #{item.id} then #{item.equipSpec}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="equip_calssify =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.equipCalssify != null ">
+                                when `id` = #{item.id} then #{item.equipCalssify}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="equip_unit =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.equipUnit != null ">
+                                when `id` = #{item.id} then #{item.equipUnit}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="tenant_key =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.tenantKey != null  and tenantKey != ''">
+                                when `id` = #{item.id} then #{item.tenantKey}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var_1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var_2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var_3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var_4 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar4 != null ">
+                                when `id` = #{item.id} then #{item.ptVar4}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var_5 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar5 != null ">
+                                when `id` = #{item.id} then #{item.ptVar5}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateEquipmentInfo" parameterType="com.hhwy.domain.base.system.equipment.EquipmentInfo">
+        update `t_equipment_info`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="equipId != null">`equip_id` = #{equipId},</if>
+            <if test="equipCode != null">`equip_code` = #{equipCode},</if>
+            <if test="equipName != null">`equip_name` = #{equipName},</if>
+            <if test="equipSpec != null">`equip_spec` = #{equipSpec},</if>
+            <if test="equipCalssify != null">`equip_calssify` = #{equipCalssify},</if>
+            <if test="equipUnit != null">`equip_unit` = #{equipUnit},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="tenantKey != null and tenantKey != ''">`tenant_key` = #{tenantKey},</if>
+            <if test="ptVar1 != null">`pt_var_1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var_2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var_3` = #{ptVar3},</if>
+            <if test="ptVar4 != null">`pt_var_4` = #{ptVar4},</if>
+            <if test="ptVar5 != null">`pt_var_5` = #{ptVar5},</if>
+            <if test="parentId != null">`parent_id` = #{parentId},</if>
+            <if test="isUse != null">`is_use` = #{isUse},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteEquipmentInfoById" parameterType="Long">
+        update `t_equipment_info` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteEquipmentInfoByIds" parameterType="String">
+        update `t_equipment_info` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectInfoByEquipmenInfo" parameterType="list" resultMap="EquipmentInfoResult">
+        select * from  t_equipment_info where del_flag='0' and equip_code in
+        <foreach collection="equipCodeList" separator="," item="equipCode" open="(" close=")">
+            #{equipCode}
+        </foreach>
+    </select>
+
+    <select id="selectByTypeIds" parameterType="list" resultMap="EquipmentInfoResult">
+        select ti.id,tt.parent_id,ti.equip_name as equipName,ti.equip_code as equipCode from t_equipment_info ti left join t_equipment_type tt on ti.parent_id = tt.id
+        where ti.del_flag='0' and ti.parent_id in
+        <foreach collection="equipTypeIds" separator="," item="typeId" open="(" close=")">
+            #{typeId}
+        </foreach>
+    </select>
+
+    <select id="selectInfoByIds" parameterType="list" resultMap="EquipmentInfoResult">
+        select * from t_equipment_info where del_flag='0' and id in
+        <foreach collection="equipInfoIds" separator="," item="id" open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+</mapper>

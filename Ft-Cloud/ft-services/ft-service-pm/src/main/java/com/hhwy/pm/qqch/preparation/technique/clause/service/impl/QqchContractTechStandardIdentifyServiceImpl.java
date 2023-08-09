@@ -67,26 +67,24 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         deleteParam.setDelFlag("1");
         qqchContractTechStandardIdentifyMapper.updateQqchContractTechStandardIdentify(deleteParam);
 
-        if (CollectionUtils.isEmpty(voParam.getTreeList())) {
-            return;
-        }
+        if (!CollectionUtils.isEmpty(voParam.getTreeList())) {
+            // 树转list
+            List<QqchContractTechStandardIdentify> insertList = TreeUtil.treeToList(voParam.getTreeList());
 
-        // 树转list
-        List<QqchContractTechStandardIdentify> insertList = TreeUtil.treeToList(voParam.getTreeList());
-
-        if (!CollectionUtils.isEmpty(insertList)) {
-            for (QqchContractTechStandardIdentify insert : insertList) {
-                insert.setVersion(voParam.getVersion());
-                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    insert.setValid(Valid.YES);
+            if (!CollectionUtils.isEmpty(insertList)) {
+                for (QqchContractTechStandardIdentify insert : insertList) {
+                    insert.setVersion(voParam.getVersion());
+                    if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                        insert.setValid(Valid.YES);
+                    }
+                    insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    insert.setCreateUserName(SecurityUtils.getUserName());
+                    insert.setCreateTime(DateUtils.getNowDate());
                 }
-                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                insert.setCreateUserName(SecurityUtils.getUserName());
-                insert.setCreateTime(DateUtils.getNowDate());
             }
+            // 全量入库
+            qqchContractTechStandardIdentifyMapper.insertQqchContractTechStandardIdentifyList(insertList);
         }
-        // 全量入库
-        qqchContractTechStandardIdentifyMapper.insertQqchContractTechStandardIdentifyList(insertList);
 
         String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

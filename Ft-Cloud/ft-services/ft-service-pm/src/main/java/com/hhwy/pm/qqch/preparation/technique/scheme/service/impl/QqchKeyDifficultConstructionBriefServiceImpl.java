@@ -59,19 +59,17 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
         deleteParam.setDelFlag("1");
         qqchKeyDifficultConstructionBriefMapper.updateQqchKeyDifficultConstructionBrief(deleteParam);
 
-        if (CollectionUtils.isEmpty(qqchKeyDifficultConstructionBriefVo.getList())) {
-            return;
-        }
+        if (!CollectionUtils.isEmpty(qqchKeyDifficultConstructionBriefVo.getList())) {
+            for (QqchKeyDifficultConstructionBrief brief : qqchKeyDifficultConstructionBriefVo.getList()) {
+                brief.setId(IdWorker.createId());
+                brief.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                brief.setCreateUserName(SecurityUtils.getUserName());
+                brief.setCreateTime(DateUtils.getNowDate());
 
-        for (QqchKeyDifficultConstructionBrief brief : qqchKeyDifficultConstructionBriefVo.getList()) {
-            brief.setId(IdWorker.createId());
-            brief.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            brief.setCreateUserName(SecurityUtils.getUserName());
-            brief.setCreateTime(DateUtils.getNowDate());
-
-            brief.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());
-            if (qqchKeyDifficultConstructionBriefVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                brief.setValid(Valid.YES);
+                brief.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());
+                if (qqchKeyDifficultConstructionBriefVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    brief.setValid(Valid.YES);
+                }
             }
         }
 
