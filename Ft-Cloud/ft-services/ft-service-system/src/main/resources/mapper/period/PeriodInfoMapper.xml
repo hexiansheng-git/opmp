@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.system.period.mapper.PeriodInfoMapper">
+    <resultMap type="com.hhwy.domain.base.system.period.PeriodInfo" id="PeriodInfoResult">
+        <result property="id"    column="id"    />
+        <result property="beginDate"    column="begin_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="periodCode"    column="period_code"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+    </resultMap>
+
+
+    <resultMap type="com.hhwy.domain.base.system.period.vo.PeriodCurrencyInfoVo" id="PeriodInfoResult2">
+        <result property="rate"    column="rate"    />
+        <result property="currencyCode"    column="currencyCode"    />
+        <result property="currencyName"    column="currencyName"    />
+        <result property="periodCode"    column="periodCode"    />
+    </resultMap>
+    <sql id="selectPeriodInfoVo">
+        select `id`, `begin_date`, `end_date`, `period_code`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3` from `t_period_info`
+    </sql>
+
+    <select id="selectPeriodInfoList" parameterType="com.hhwy.domain.base.system.period.PeriodInfo" resultMap="PeriodInfoResult">
+        <include refid="selectPeriodInfoVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="beginDate != null "> and `begin_date` = #{beginDate}</if>
+            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="periodCode != null  and periodCode != ''"> and `period_code` = #{periodCode}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ids!=null">
+                and id in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+            <if test="queryDate!=null and queryDate!=''"> and #{queryDate} &gt;= begin_date</if>
+            <if test="queryDate!=null and queryDate!=''"> and #{queryDate} &lt;= end_date</if>
+        </where>
+        order by `create_time` desc
+    </select>
+    
+    <select id="selectPeriodInfoById" parameterType="Long" resultMap="PeriodInfoResult">
+        <include refid="selectPeriodInfoVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertPeriodInfo" parameterType="com.hhwy.domain.base.system.period.PeriodInfo">
+        insert into `t_period_info`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="beginDate != null">`begin_date`,</if>
+            <if test="endDate != null">`end_date`,</if>
+            <if test="periodCode != null">`period_code`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="beginDate != null">#{beginDate},</if>
+            <if test="endDate != null">#{endDate},</if>
+            <if test="periodCode != null">#{periodCode},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `t_period_info` (
+                                                `id`,
+                                                                `begin_date`,
+                                                                `end_date`,
+                                                                `period_code`,
+                                                                `create_time`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                `remark`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`
+                                    )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+                                                (#{item.id},
+                                                                #{item.beginDate},
+                                                                #{item.endDate},
+                                                                #{item.periodCode},
+                                                                #{item.createTime},
+                                                                #{item.updateTime},
+                                                                #{item.delUser},
+                                                                #{item.delTime},
+                                                                #{item.remark},
+                                                                #{item.ptVar1},
+                                                                #{item.ptVar2},
+                                                                #{item.ptVar3})
+                                    </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `t_period_info`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="begin_date =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.beginDate != null ">
+                                when `id` = #{item.id} then #{item.beginDate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="end_date =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.endDate != null ">
+                                when `id` = #{item.id} then #{item.endDate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="period_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.periodCode != null ">
+                                when `id` = #{item.id} then #{item.periodCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updatePeriodInfo" parameterType="com.hhwy.domain.base.system.period.PeriodInfo">
+        update `t_period_info`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="beginDate != null">`begin_date` = #{beginDate},</if>
+            <if test="endDate != null">`end_date` = #{endDate},</if>
+            <if test="periodCode != null">`period_code` = #{periodCode},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deletePeriodInfoById" parameterType="Long">
+        update `t_period_info` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deletePeriodInfoByIds" parameterType="String">
+        update `t_period_info` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectPeriodByDate" parameterType="com.hhwy.domain.base.system.period.PeriodInfo" resultMap="PeriodInfoResult2">
+        SELECT
+            tci.id,tci.currency_name currencyName,
+            tci.currency_code currencyCode,
+            a.period_code periodCode,
+            a.rate
+        FROM
+            t_currency_info tci
+        INNER JOIN   (
+            SELECT
+                tc.currency_id,
+                tp.period_code,
+                tc.rate
+            FROM
+                t_period_info tp
+            LEFT JOIN
+                t_period_currency tc
+            ON
+                tp.period_code = tc.period_code
+            WHERE
+                 tp.del_flag='0'
+            AND
+                tc.del_flag='0'
+            AND
+                DATE_FORMAT(#{periodDate},'%Y-%m-%d') &gt;= tp.begin_date
+            AND
+                DATE_FORMAT(#{periodDate},'%Y-%m-%d') &lt;= tp.end_date
+
+        ) a on a.currency_id= tci.id  WHERE tci.del_flag='0'
+    </select>
+
+
+    <select id="selectPeriodByMonth" parameterType="com.hhwy.domain.base.system.period.PeriodInfo" resultMap="PeriodInfoResult2">
+        SELECT
+            tci.id,tci.currency_name currencyName,
+            tci.currency_code currencyCode,
+            a.period_code periodCode,
+            a.rate
+        FROM
+            t_currency_info tci
+        INNER JOIN   (
+            SELECT
+                tc.currency_id,
+                tp.period_code,
+                tc.rate
+            FROM
+                t_period_info tp
+            LEFT JOIN
+                t_period_currency tc
+            ON
+                tp.period_code = tc.period_code
+            <where>
+                tp.del_flag='0' and tc.del_flag='0'
+                <if test="null!=periodDate and ''!=periodDate">and #{periodDate}= DATE_FORMAT(tp.begin_date,'%Y-%m')</if>
+            </where>
+
+        ) a on a.currency_id= tci.id WHERE tci.del_flag='0'
+    </select>
+
+
+
+    <select id="validRepeat" parameterType="com.hhwy.domain.base.system.period.PeriodInfo" resultMap="PeriodInfoResult">
+        select * from t_period_info
+        <where>
+            del_flag='0'
+            and period_code=#{periodCode}
+            <if test="id!=null">and id <![CDATA[!= ]]> #{id}</if>
+        </where>
+    </select>
+
+    <select id="selectLastMonth" resultType="com.hhwy.domain.base.system.period.PeriodInfo">
+        SELECT max(end_date) as endDate from t_period_info WHERE del_flag='0';
+    </select>
+    <select id="selectPeriodInfoByDate" parameterType="com.hhwy.domain.base.system.period.PeriodInfo" resultMap="PeriodInfoResult">
+
+        select `id`,
+               `begin_date`,
+               `end_date`,
+               `period_code`,
+               `create_user`,
+               `create_time`,
+               `update_user`,
+               `update_time`,
+               `del_user`,
+               `del_time`,
+               `del_flag`,
+               `remark`,
+               `pt_var1`,
+               `pt_var2`,
+               `pt_var3`
+        FROM
+        t_period_info  as p
+        WHERE
+        p.del_flag = '0'
+        <if test="periodDate!=null">
+            AND p.begin_date  &lt;= DATE_FORMAT(#{periodDate},'%Y-%m-%d')
+            AND p.end_date >= DATE_FORMAT(#{periodDate},'%Y-%m-%d')
+        </if>
+        <if test="periodCode != null and periodCode != ''">
+            AND p.period_code = #{periodCode}
+        </if>
+        limit 1
+    </select>
+
+    <select id="selectPeriodByYear" parameterType="com.hhwy.domain.base.system.period.PeriodInfo" resultMap="com.hhwy.system.periodCurrency.mapper.PeriodCurrencyMapper.PeriodCurrencyResult">
+        SELECT
+            tci.id,
+            tpc.rate,
+            tci.currency_code,
+            tci.currency_name,
+            tpc.period_id,
+            tpc.period_code
+        FROM
+            t_currency_info tci
+        RIGHT JOIN t_period_currency tpc ON tpc.currency_id = tci.id
+        WHERE
+            tci.currency_code = #{currencyCode} and tpc.del_flag='0'
+          and tci.del_flag='0'
+        AND tpc.period_id in(
+            SELECT id FROM t_period_info WHERE period_code like concat (#{queryDate},'%') and del_flag='0'
+        )
+    </select>
+
+    <select id="selectBathByDate" parameterType="list" resultMap="PeriodInfoResult">
+        select * from t_period_info WHERE del_flag='0'  and (
+         <foreach collection="list" item="item" open="(" close=")" separator="or">#{item} &gt;=begin_date and #{item }
+             &lt;=end_date
+         </foreach>
+         )
+        order by create_time desc
+    </select>
+</mapper>
