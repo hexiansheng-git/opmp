@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.important.service;
 
+import com.hhwy.pm.qqch.common.domain.CompileDTO;
 import com.hhwy.pm.qqch.sgch.important.domain.QqchImportant;
 
 import java.util.List;
@@ -36,6 +37,6 @@ public interface IQqchImportantService {
      * @param qqchImportantParam
      * @return
      */
-    List<QqchImportant> list(QqchImportant qqchImportantParam);
+    CompileDTO list(QqchImportant qqchImportantParam);
 
 }
