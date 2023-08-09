@@ -9,6 +9,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.equipment.EquipmentInfo;
 import com.hhwy.system.equipment.mapper.EquipmentInfoMapper;
 import com.hhwy.system.equipment.service.IEquipmentInfoService;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,7 +160,7 @@ public class EquipmentInfoServiceImpl implements IEquipmentInfoService {
             }
         }
         if(StringUtils.isNotBlank(msg)){
-            return new AjaxResult(301,msg);
+            return new AjaxResult(Constant.WARN_CODE,msg);
         }
         //数据处理并批量插入
         List<String> equipCodeList = list.stream().map(e -> e.getEquipCode()).collect(Collectors.toList());

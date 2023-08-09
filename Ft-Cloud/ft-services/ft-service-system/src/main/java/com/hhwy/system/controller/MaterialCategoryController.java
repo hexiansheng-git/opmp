@@ -181,8 +181,8 @@ public class MaterialCategoryController extends BaseController {
         return AjaxResult.success(list);
     }
 
-    @PostMapping("/selectMaterialCodeList")
-    public AjaxResult selectMaterialCodeList(@RequestBody MaterialCategory materialCategory){
+    @GetMapping("/selectMaterialCodeList")
+    public AjaxResult selectMaterialCodeList(MaterialCategory materialCategory){
         startPage();
         List<MaterialCategory> list = materialCategoryService.selectMaterialCategoryList(materialCategory);
         TableDataInfo dataTable = getDataTable(list);

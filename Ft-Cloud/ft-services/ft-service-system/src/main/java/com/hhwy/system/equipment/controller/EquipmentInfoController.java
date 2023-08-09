@@ -11,10 +11,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -39,9 +36,9 @@ public class EquipmentInfoController extends BaseController {
      * 查询基础模块设备分类子表列表
      */
     @PreAuthorize(hasPermi ="equipment:info:list")
-    @PostMapping("/list")
+    @GetMapping("/list")
 //    @CustomLogger(title = "基础模块设备分类子表-查询", businessType = CustomBusinessType.SELECT)
-    public AjaxResult list(@RequestBody EquipmentInfo equipmentInfo) {
+    public AjaxResult list(EquipmentInfo equipmentInfo) {
         startPage();
         List<EquipmentInfo> list = equipmentInfoService.selectEquipmentInfoList(equipmentInfo);
         return AjaxResult.success(getDataTable(list));
