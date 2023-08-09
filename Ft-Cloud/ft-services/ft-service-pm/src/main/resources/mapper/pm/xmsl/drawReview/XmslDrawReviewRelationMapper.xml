@@ -8,15 +8,18 @@
                id="XmslDrawReviewRelationResultMap">
         <result property="mainId" column="main_id"/>
         <result property="wbsId" column="wbs_id"/>
+        <result property="wbsCode" column="wbs_code"/>
         <result property="listCode" column="list_code"/>
         <result property="listId" column="list_id"/>
+        <result property="version" column="version"/>
     </resultMap>
     <sql id="selectXmslDrawReviewRelationVo">
         select
                 `main_id`
              ,`wbs_id`
+             ,`wbs_code`
              ,`list_code`
-             ,`list_id`
+             ,`list_id`,version
         from xmsl_draw_review_relation
     </sql>
     <select id="getXmslDrawReviewRelation" resultMap="XmslDrawReviewRelationResultMap">
@@ -25,8 +28,10 @@
             del_flag = "0"
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
             <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="version != null ">and `version` = #{version}</if>
         </where>
         order by create_time desc
     </select>
@@ -34,13 +39,18 @@
     <select id="getXmslDrawReviewRelationList" resultMap="XmslDrawReviewRelationResultMap">
         <include refid="selectXmslDrawReviewRelationVo"/>
         <where>
-            del_flag = "0"
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
             <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="codeSet != null  and codeSet.size > 0 ">and `list_code` in
+                <foreach collection="codeSet" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
-        order by create_time desc
     </select>
 
     <insert id="insertXmslDrawReviewRelation" useGeneratedKeys="true" keyProperty="wbs_id">
@@ -48,14 +58,18 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="mainId != null ">`main_id`,</if>
             <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="wbsCode != null ">`wbs_code`,</if>
             <if test="listCode != null  and listCode != ''">`list_code`,</if>
             <if test="listId != null ">`list_id`,</if>
+            <if test="version != null ">`version`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="mainId != null ">#{mainId},</if>
             <if test="wbsId != null ">#{wbsId},</if>
+            <if test="wbsCode != null ">#{wbsCode},</if>
             <if test="listCode != null  and listCode != ''">#{listCode},</if>
             <if test="listId != null ">#{listId},</if>
+            <if test="version != null ">#{version},</if>
         </trim>
     </insert>
 
@@ -65,16 +79,20 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `main_id`,
             `wbs_id`,
+            `wbs_code`,
             `list_code`,
             `list_id`,
+            `version`
         </trim>
         values
         <foreach collection="xmslDrawReviewRelationList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.mainId},
                 #{item.wbsId},
+                #{item.wbsCode},
                 #{item.listCode},
                 #{item.listId},
+                #{item.version}
             </trim>
         </foreach>
     </insert>
@@ -84,8 +102,10 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="mainId != null ">`main_id` = #{mainId},</if>
             <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="wbsCode != null ">`wbs_code` = #{wbsCode},</if>
             <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
             <if test="listId != null ">`list_id` = #{listId},</if>
+            <if test="version != null ">`version` = #{version},</if>
         </trim>
         <where>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
@@ -106,6 +126,11 @@
                     when `wbs_id`=#{item.wbsId} then #{item.wbsId}
                 </foreach>
             </trim>
+            <trim prefix="wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.wbsCode}
+                </foreach>
+            </trim>
             <trim prefix="list_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `wbs_id`=#{item.wbsId} then #{item.listCode}
@@ -114,6 +139,11 @@
             <trim prefix="list_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `wbs_id`=#{item.wbsId} then #{item.listId}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.version}
                 </foreach>
             </trim>
         </trim>

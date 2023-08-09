@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ldd
@@ -19,6 +20,7 @@ public interface XmslContractListMapper {
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 
     List<XmslContractList> getByIds(@Param("ids") Long[] ids);
+    List<XmslContractList> getByCodes(@Param("codes") Set<String> codes);
     
     int insertXmslContractList(XmslContractList xmslContractList);
 

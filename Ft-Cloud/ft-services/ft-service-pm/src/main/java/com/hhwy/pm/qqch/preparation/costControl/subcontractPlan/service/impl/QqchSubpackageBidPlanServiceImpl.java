@@ -2,14 +2,10 @@ package com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
-import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.QqchFacilityPlan;
-import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.QqchStaffPlan;
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.QqchSubpackageBidPlan;
-import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.QqchSubpackageInventory;
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.domain.vo.QqchSubpackageBidPlanVo;
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.mapper.QqchFacilityPlanMapper;
 import com.hhwy.pm.qqch.preparation.costControl.subcontractPlan.mapper.QqchStaffPlanMapper;
@@ -30,10 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 
 /**
  * @author han
@@ -142,7 +135,7 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         List<QqchSubpackageBidPlan> qqchSubpackageBidPlanList = qqchSubpackageBidPlanMapper.getQqchSubpackageBidPlanList(qqchSubpackageBidPlan);
 
         //设置子表数据
-        this.setSublist(qqchSubpackageBidPlanList,version);
+//        this.setSublist(qqchSubpackageBidPlanList,version);
 
         //转树列表
         List<QqchSubpackageBidPlan> treeList = ListTreeUtil.formatTree(
@@ -163,58 +156,58 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
      * @param qqchSubpackageBidPlanList
      * @param version
      */
-    public void setSublist(List<QqchSubpackageBidPlan> qqchSubpackageBidPlanList,BigDecimal version){
-        //分包清单
-        QqchSubpackageInventory qqchSubpackageInventory = new QqchSubpackageInventory();
-        qqchSubpackageInventory.setVersion(version);
-        List<QqchSubpackageInventory> qqchSubpackageInventoryList = qqchSubpackageInventoryService.getQqchSubpackageInventoryList(qqchSubpackageInventory);
-
-        //转树列表
-        List<QqchSubpackageInventory> inventoryTreeList = ListTreeUtil.formatTree(
-                qqchSubpackageInventoryList,
-                o -> o.getPid() == null,
-                (r, n) -> r.getId().equals(n.getPid()),
-                QqchSubpackageInventory::getChildren,
-                QqchSubpackageInventory::setChildren);
-
-        //人员策划
-        QqchStaffPlan qqchStaffPlan = new QqchStaffPlan();
-        qqchStaffPlan.setVersion(version);
-        List<QqchStaffPlan> qqchStaffPlanList = qqchStaffPlanService.getQqchStaffPlanList(qqchStaffPlan);
-
-        //设备策划
-        QqchFacilityPlan qqchFacilityPlan = new QqchFacilityPlan();
-        qqchFacilityPlan.setVersion(version);
-        List<QqchFacilityPlan> qqchFacilityPlanList = qqchFacilityPlanService.getQqchFacilityPlanList(qqchFacilityPlan);
-
-        for (QqchSubpackageBidPlan qqchSubpackageBidPlan : qqchSubpackageBidPlanList) {
-            Long id = qqchSubpackageBidPlan.getId();
-
-            List<QqchSubpackageInventory> inventoryList = new ArrayList<>();
-            List<QqchStaffPlan> staffPlanList = new ArrayList<>();
-            List<QqchFacilityPlan> facilityPlanList = new ArrayList<>();
-
-            for (QqchSubpackageInventory subpackageInventory : inventoryTreeList) {
-                if(id.equals(subpackageInventory.getMasterId())){
-                    inventoryList.add(subpackageInventory);
-                }
-            }
-            for (QqchStaffPlan staffPlan : qqchStaffPlanList) {
-                if(id.equals(staffPlan.getMasterId())){
-                    staffPlanList.add(staffPlan);
-                }
-            }
-            for (QqchFacilityPlan facilityPlan : qqchFacilityPlanList) {
-                if(id.equals(facilityPlan.getMasterId())){
-                    facilityPlanList.add(facilityPlan);
-                }
-            }
-
-            qqchSubpackageBidPlan.setQqchSubpackageInventoryList(inventoryList);
-            qqchSubpackageBidPlan.setQqchStaffPlanList(staffPlanList);
-            qqchSubpackageBidPlan.setQqchFacilityPlanList(facilityPlanList);
-        }
-    }
+//    public void setSublist(List<QqchSubpackageBidPlan> qqchSubpackageBidPlanList,BigDecimal version){
+//        //分包清单
+//        QqchSubpackageInventory qqchSubpackageInventory = new QqchSubpackageInventory();
+//        qqchSubpackageInventory.setVersion(version);
+//        List<QqchSubpackageInventory> qqchSubpackageInventoryList = qqchSubpackageInventoryService.getQqchSubpackageInventoryList(qqchSubpackageInventory);
+//
+//        //转树列表
+//        List<QqchSubpackageInventory> inventoryTreeList = ListTreeUtil.formatTree(
+//                qqchSubpackageInventoryList,
+//                o -> o.getPid() == null,
+//                (r, n) -> r.getId().equals(n.getPid()),
+//                QqchSubpackageInventory::getChildren,
+//                QqchSubpackageInventory::setChildren);
+//
+//        //人员策划
+//        QqchStaffPlan qqchStaffPlan = new QqchStaffPlan();
+//        qqchStaffPlan.setVersion(version);
+//        List<QqchStaffPlan> qqchStaffPlanList = qqchStaffPlanService.getQqchStaffPlanList(qqchStaffPlan);
+//
+//        //设备策划
+//        QqchFacilityPlan qqchFacilityPlan = new QqchFacilityPlan();
+//        qqchFacilityPlan.setVersion(version);
+//        List<QqchFacilityPlan> qqchFacilityPlanList = qqchFacilityPlanService.getQqchFacilityPlanList(qqchFacilityPlan);
+//
+//        for (QqchSubpackageBidPlan qqchSubpackageBidPlan : qqchSubpackageBidPlanList) {
+//            Long id = qqchSubpackageBidPlan.getId();
+//
+//            List<QqchSubpackageInventory> inventoryList = new ArrayList<>();
+//            List<QqchStaffPlan> staffPlanList = new ArrayList<>();
+//            List<QqchFacilityPlan> facilityPlanList = new ArrayList<>();
+//
+//            for (QqchSubpackageInventory subpackageInventory : inventoryTreeList) {
+//                if(id.equals(subpackageInventory.getMasterId())){
+//                    inventoryList.add(subpackageInventory);
+//                }
+//            }
+//            for (QqchStaffPlan staffPlan : qqchStaffPlanList) {
+//                if(id.equals(staffPlan.getMasterId())){
+//                    staffPlanList.add(staffPlan);
+//                }
+//            }
+//            for (QqchFacilityPlan facilityPlan : qqchFacilityPlanList) {
+//                if(id.equals(facilityPlan.getMasterId())){
+//                    facilityPlanList.add(facilityPlan);
+//                }
+//            }
+//
+//            qqchSubpackageBidPlan.setQqchSubpackageInventoryList(inventoryList);
+//            qqchSubpackageBidPlan.setQqchStaffPlanList(staffPlanList);
+//            qqchSubpackageBidPlan.setQqchFacilityPlanList(facilityPlanList);
+//        }
+//    }
 
     /**
      * 保存/确认/提交
@@ -265,9 +258,9 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
             return;
         }
 
-        List<QqchSubpackageInventory> inventoryList = new ArrayList<>();
-        List<QqchStaffPlan> staffPlanList = new ArrayList<>();
-        List<QqchFacilityPlan> facilityPlanList = new ArrayList<>();
+//        List<QqchSubpackageInventory> inventoryList = new ArrayList<>();
+//        List<QqchStaffPlan> staffPlanList = new ArrayList<>();
+//        List<QqchFacilityPlan> facilityPlanList = new ArrayList<>();
 
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
@@ -275,17 +268,17 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         }
         for (QqchSubpackageBidPlan qqchSubpackageBidPlan : tileList) {
             //分包清单
-            this.disposeQqchSubpackageInventory(version,qqchSubpackageBidPlan,inventoryList);
+//            this.disposeQqchSubpackageInventory(version,qqchSubpackageBidPlan,inventoryList);
 
             //人员策划
-            this.disposeQqchStaffPlan(version,qqchSubpackageBidPlan,staffPlanList);
+//            this.disposeQqchStaffPlan(version,qqchSubpackageBidPlan,staffPlanList);
 
             //设备策划
-            this.disposeQqchFacilityPlan(version,qqchSubpackageBidPlan,facilityPlanList);
+//            this.disposeQqchFacilityPlan(version,qqchSubpackageBidPlan,facilityPlanList);
 
-            qqchSubpackageBidPlan.setQqchSubpackageInventoryList(null);
-            qqchSubpackageBidPlan.setQqchStaffPlanList(null);
-            qqchSubpackageBidPlan.setQqchFacilityPlanList(null);
+//            qqchSubpackageBidPlan.setQqchSubpackageInventoryList(null);
+//            qqchSubpackageBidPlan.setQqchStaffPlanList(null);
+//            qqchSubpackageBidPlan.setQqchFacilityPlanList(null);
             qqchSubpackageBidPlan.setValid(valid);
             qqchSubpackageBidPlan.setVersion(version);
             qqchSubpackageBidPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
@@ -297,19 +290,19 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         qqchSubpackageBidPlanMapper.insertQqchSubpackageBidPlanList(tileList);
 
         //插入分包清单
-        if(CollectionUtils.isNotEmpty(inventoryList)){
-            qqchSubpackageInventoryMapper.insertQqchSubpackageInventoryList(inventoryList);
-        }
+//        if(CollectionUtils.isNotEmpty(inventoryList)){
+//            qqchSubpackageInventoryMapper.insertQqchSubpackageInventoryList(inventoryList);
+//        }
 
         //插入人员策划
-        if(CollectionUtils.isNotEmpty(staffPlanList)){
-            qqchStaffPlanMapper.insertQqchStaffPlanList(staffPlanList);
-        }
+//        if(CollectionUtils.isNotEmpty(staffPlanList)){
+//            qqchStaffPlanMapper.insertQqchStaffPlanList(staffPlanList);
+//        }
 
         //插入设备策划
-        if(CollectionUtils.isNotEmpty(facilityPlanList)){
-            qqchFacilityPlanMapper.insertQqchFacilityPlanList(facilityPlanList);
-        }
+//        if(CollectionUtils.isNotEmpty(facilityPlanList)){
+//            qqchFacilityPlanMapper.insertQqchFacilityPlanList(facilityPlanList);
+//        }
     }
 
     /**
@@ -324,19 +317,19 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         qqchSubpackageBidPlanMapper.deleteQqchSubpackageBidPlan(qqchSubpackageBidPlan);
 
         //删除分包清单
-        QqchSubpackageInventory qqchSubpackageInventory = new QqchSubpackageInventory();
-        qqchSubpackageInventory.setVersion(version);
-        qqchSubpackageInventoryService.deleteQqchSubpackageInventory(qqchSubpackageInventory);
+//        QqchSubpackageInventory qqchSubpackageInventory = new QqchSubpackageInventory();
+//        qqchSubpackageInventory.setVersion(version);
+//        qqchSubpackageInventoryService.deleteQqchSubpackageInventory(qqchSubpackageInventory);
 
         //删除人员策划
-        QqchStaffPlan qqchStaffPlan = new QqchStaffPlan();
-        qqchStaffPlan.setVersion(version);
-        qqchStaffPlanService.deleteQqchStaffPlan(qqchStaffPlan);
+//        QqchStaffPlan qqchStaffPlan = new QqchStaffPlan();
+//        qqchStaffPlan.setVersion(version);
+//        qqchStaffPlanService.deleteQqchStaffPlan(qqchStaffPlan);
 
         //删除设备策划
-        QqchFacilityPlan qqchFacilityPlan = new QqchFacilityPlan();
-        qqchFacilityPlan.setVersion(version);
-        qqchFacilityPlanService.deleteQqchFacilityPlan(qqchFacilityPlan);
+//        QqchFacilityPlan qqchFacilityPlan = new QqchFacilityPlan();
+//        qqchFacilityPlan.setVersion(version);
+//        qqchFacilityPlanService.deleteQqchFacilityPlan(qqchFacilityPlan);
     }
 
     /**
@@ -345,36 +338,36 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
      * @param qqchSubpackageBidPlan
      * @param inventoryList
      */
-    public void disposeQqchSubpackageInventory(BigDecimal version,QqchSubpackageBidPlan qqchSubpackageBidPlan,List<QqchSubpackageInventory> inventoryList){
-        Long masterId = qqchSubpackageBidPlan.getId();
-        //分包清单
-        List<QqchSubpackageInventory> qqchSubpackageInventoryList = qqchSubpackageBidPlan.getQqchSubpackageInventoryList();
-        //分包清单平铺
-        List<QqchSubpackageInventory> inventoryTileList = this.formatList(
-                qqchSubpackageInventoryList,
-                QqchSubpackageInventory::setId,
-                QqchSubpackageInventory::setPid,
-                QqchSubpackageInventory::setSort,
-                QqchSubpackageInventory::setLeaf,
-                QqchSubpackageInventory::getLevel,
-                QqchSubpackageInventory::setLevel,
-                QqchSubpackageInventory::getMasterContractInventoryCode,
-                QqchSubpackageInventory::setUpMasterContractInventoryCode,
-                QqchSubpackageInventory::getChildren,
-                QqchSubpackageInventory::setChildren);
-
-        for (QqchSubpackageInventory inventory : inventoryTileList) {
-            inventory.setMasterId(masterId);
-            inventory.setVersion(version);
-            inventory.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            inventory.setCreateUserName(SecurityUtils.getUserName());
-            inventory.setCreateTime(DateUtils.getNowDate());
-        }
-        inventoryList.addAll(inventoryTileList);
-    }
+//    public void disposeQqchSubpackageInventory(BigDecimal version,QqchSubpackageBidPlan qqchSubpackageBidPlan,List<QqchSubpackageInventory> inventoryList){
+//        Long masterId = qqchSubpackageBidPlan.getId();
+//        //分包清单
+//        List<QqchSubpackageInventory> qqchSubpackageInventoryList = qqchSubpackageBidPlan.getQqchSubpackageInventoryList();
+//        //分包清单平铺
+//        List<QqchSubpackageInventory> inventoryTileList = this.formatList(
+//                qqchSubpackageInventoryList,
+//                QqchSubpackageInventory::setId,
+//                QqchSubpackageInventory::setPid,
+//                QqchSubpackageInventory::setSort,
+//                QqchSubpackageInventory::setLeaf,
+//                QqchSubpackageInventory::getLevel,
+//                QqchSubpackageInventory::setLevel,
+//                QqchSubpackageInventory::getMasterContractInventoryCode,
+//                QqchSubpackageInventory::setUpMasterContractInventoryCode,
+//                QqchSubpackageInventory::getChildren,
+//                QqchSubpackageInventory::setChildren);
+//
+//        for (QqchSubpackageInventory inventory : inventoryTileList) {
+//            inventory.setMasterId(masterId);
+//            inventory.setVersion(version);
+//            inventory.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+//            inventory.setCreateUserName(SecurityUtils.getUserName());
+//            inventory.setCreateTime(DateUtils.getNowDate());
+//        }
+//        inventoryList.addAll(inventoryTileList);
+//    }
 
     /**
-     * 树形列表转线性列表，加排序号，加叶子节点
+     * 树形列表转线性列表，加排序号，加叶子节点，加层级
      * @param source 数据源
      * @param setId 如何设置id
      * @param setPid 如何设置pid
@@ -388,64 +381,64 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
      * @param <T> 节点类型
      * @return
      */
-    private <T> List<T> formatList(
-            List<T> source,
-            BiConsumer<T,Long> setId,
-            BiConsumer<T,Long> setPid,
-            BiConsumer<T,Integer> setSort,
-            BiConsumer<T,String> setLeaf,
-            Function<T, Integer> getLevel,
-            BiConsumer<T,Integer> setLevel,
-            Function<T, String> getMasterContractInventoryCode,
-            BiConsumer<T,String> setUpMasterContractInventoryCode,
-            Function<T, List<T>> getChildren,
-            BiConsumer<T, List<T>> setChildren) {
-        List<T> resultList = new ArrayList<>();
-        int sort = 1;
-        for (T node : source) {
-            setSort.accept(node,sort++);
-            setLevel.accept(node,1);
-            recur(node, resultList, setId, setPid, setSort, setLeaf,getLevel, setLevel,getMasterContractInventoryCode, setUpMasterContractInventoryCode, getChildren, setChildren);
-        }
-        return resultList;
-    }
+//    private <T> List<T> formatList(
+//            List<T> source,
+//            BiConsumer<T,Long> setId,
+//            BiConsumer<T,Long> setPid,
+//            BiConsumer<T,Integer> setSort,
+//            BiConsumer<T,String> setLeaf,
+//            Function<T, Integer> getLevel,
+//            BiConsumer<T,Integer> setLevel,
+//            Function<T, String> getMasterContractInventoryCode,
+//            BiConsumer<T,String> setUpMasterContractInventoryCode,
+//            Function<T, List<T>> getChildren,
+//            BiConsumer<T, List<T>> setChildren) {
+//        List<T> resultList = new ArrayList<>();
+//        int sort = 1;
+//        for (T node : source) {
+//            setSort.accept(node,sort++);
+//            setLevel.accept(node,1);
+//            recur(node, resultList, setId, setPid, setSort, setLeaf,getLevel, setLevel,getMasterContractInventoryCode, setUpMasterContractInventoryCode, getChildren, setChildren);
+//        }
+//        return resultList;
+//    }
 
-    private <T> void recur(
-            T node,
-            List<T> resultList,
-            BiConsumer<T,Long> setId,
-            BiConsumer<T,Long> setPid,
-            BiConsumer<T,Integer> setSort,
-            BiConsumer<T,String> setLeaf,
-            Function<T, Integer> getLevel,
-            BiConsumer<T,Integer> setLevel,
-            Function<T, String> getMasterContractInventoryCode,
-            BiConsumer<T,String> setUpMasterContractInventoryCode,
-            Function<T, List<T>> getChildren,
-            BiConsumer<T, List<T>> setChildren) {
-        Long id = IdWorker.createId();
-        int sort = 1;
-        setId.accept(node,id);
-        resultList.add(node);
-
-        Integer parentLevel = getLevel.apply(node);
-        Integer myLevel = parentLevel + 1;
-        String masterContractInventoryCode = getMasterContractInventoryCode.apply(node);
-        List<T> children = getChildren.apply(node);
-        setChildren.accept(node, null);
-
-        if(!CollectionUtils.isEmpty(children)){
-            for (T child : children) {
-                setPid.accept(child,id);
-                setUpMasterContractInventoryCode.accept(child,masterContractInventoryCode);
-                setSort.accept(child,sort++);
-                setLevel.accept(child,myLevel);
-                recur(child, resultList, setId, setPid, setSort, setLeaf,getLevel, setLevel, getMasterContractInventoryCode, setUpMasterContractInventoryCode, getChildren, setChildren);
-            }
-        }else {
-            setLeaf.accept(node, CommonYesNo.YES);
-        }
-    }
+//    private <T> void recur(
+//            T node,
+//            List<T> resultList,
+//            BiConsumer<T,Long> setId,
+//            BiConsumer<T,Long> setPid,
+//            BiConsumer<T,Integer> setSort,
+//            BiConsumer<T,String> setLeaf,
+//            Function<T, Integer> getLevel,
+//            BiConsumer<T,Integer> setLevel,
+//            Function<T, String> getMasterContractInventoryCode,
+//            BiConsumer<T,String> setUpMasterContractInventoryCode,
+//            Function<T, List<T>> getChildren,
+//            BiConsumer<T, List<T>> setChildren) {
+//        Long id = IdWorker.createId();
+//        int sort = 1;
+//        setId.accept(node,id);
+//        resultList.add(node);
+//
+//        Integer parentLevel = getLevel.apply(node);
+//        Integer myLevel = parentLevel + 1;
+//        String masterContractInventoryCode = getMasterContractInventoryCode.apply(node);
+//        List<T> children = getChildren.apply(node);
+//        setChildren.accept(node, null);
+//
+//        if(!CollectionUtils.isEmpty(children)){
+//            for (T child : children) {
+//                setPid.accept(child,id);
+//                setUpMasterContractInventoryCode.accept(child,masterContractInventoryCode);
+//                setSort.accept(child,sort++);
+//                setLevel.accept(child,myLevel);
+//                recur(child, resultList, setId, setPid, setSort, setLeaf,getLevel, setLevel, getMasterContractInventoryCode, setUpMasterContractInventoryCode, getChildren, setChildren);
+//            }
+//        }else {
+//            setLeaf.accept(node, CommonYesNo.YES);
+//        }
+//    }
 
 
     /**
@@ -454,20 +447,20 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
      * @param qqchSubpackageBidPlan
      * @param staffPlanList
      */
-    public void disposeQqchStaffPlan(BigDecimal version,QqchSubpackageBidPlan qqchSubpackageBidPlan,List<QqchStaffPlan> staffPlanList){
-        Long masterId = qqchSubpackageBidPlan.getId();
-        //人员策划
-        List<QqchStaffPlan> qqchStaffPlanList = qqchSubpackageBidPlan.getQqchStaffPlanList();
-        for (QqchStaffPlan qqchStaffPlan : qqchStaffPlanList) {
-            qqchStaffPlan.setId(IdWorker.createId());
-            qqchStaffPlan.setMasterId(masterId);
-            qqchStaffPlan.setVersion(version);
-            qqchStaffPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchStaffPlan.setCreateUserName(SecurityUtils.getUserName());
-            qqchStaffPlan.setCreateTime(DateUtils.getNowDate());
-        }
-        staffPlanList.addAll(qqchStaffPlanList);
-    }
+//    public void disposeQqchStaffPlan(BigDecimal version,QqchSubpackageBidPlan qqchSubpackageBidPlan,List<QqchStaffPlan> staffPlanList){
+//        Long masterId = qqchSubpackageBidPlan.getId();
+//        //人员策划
+//        List<QqchStaffPlan> qqchStaffPlanList = qqchSubpackageBidPlan.getQqchStaffPlanList();
+//        for (QqchStaffPlan qqchStaffPlan : qqchStaffPlanList) {
+//            qqchStaffPlan.setId(IdWorker.createId());
+//            qqchStaffPlan.setMasterId(masterId);
+//            qqchStaffPlan.setVersion(version);
+//            qqchStaffPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+//            qqchStaffPlan.setCreateUserName(SecurityUtils.getUserName());
+//            qqchStaffPlan.setCreateTime(DateUtils.getNowDate());
+//        }
+//        staffPlanList.addAll(qqchStaffPlanList);
+//    }
 
     /**
      * 处理设备策划
@@ -475,18 +468,18 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
      * @param qqchSubpackageBidPlan
      * @param facilityPlanList
      */
-    public void disposeQqchFacilityPlan(BigDecimal version,QqchSubpackageBidPlan qqchSubpackageBidPlan,List<QqchFacilityPlan> facilityPlanList){
-        Long masterId = qqchSubpackageBidPlan.getId();
-        //设备策划
-        List<QqchFacilityPlan> qqchFacilityPlanList = qqchSubpackageBidPlan.getQqchFacilityPlanList();
-        for (QqchFacilityPlan qqchFacilityPlan : qqchFacilityPlanList) {
-            qqchFacilityPlan.setId(IdWorker.createId());
-            qqchFacilityPlan.setMasterId(masterId);
-            qqchFacilityPlan.setVersion(version);
-            qqchFacilityPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchFacilityPlan.setCreateUserName(SecurityUtils.getUserName());
-            qqchFacilityPlan.setCreateTime(DateUtils.getNowDate());
-        }
-        facilityPlanList.addAll(qqchFacilityPlanList);
-    }
+//    public void disposeQqchFacilityPlan(BigDecimal version,QqchSubpackageBidPlan qqchSubpackageBidPlan,List<QqchFacilityPlan> facilityPlanList){
+//        Long masterId = qqchSubpackageBidPlan.getId();
+//        //设备策划
+//        List<QqchFacilityPlan> qqchFacilityPlanList = qqchSubpackageBidPlan.getQqchFacilityPlanList();
+//        for (QqchFacilityPlan qqchFacilityPlan : qqchFacilityPlanList) {
+//            qqchFacilityPlan.setId(IdWorker.createId());
+//            qqchFacilityPlan.setMasterId(masterId);
+//            qqchFacilityPlan.setVersion(version);
+//            qqchFacilityPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+//            qqchFacilityPlan.setCreateUserName(SecurityUtils.getUserName());
+//            qqchFacilityPlan.setCreateTime(DateUtils.getNowDate());
+//        }
+//        facilityPlanList.addAll(qqchFacilityPlanList);
+//    }
 }

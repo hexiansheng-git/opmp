@@ -22,5 +22,5 @@ public class QqchPatentDeclarePlanVo extends PreparationEntity {
     /**
      * 字段描述：专利申报计划集合
      */
-    private List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList;
+    private List<QqchPatentDeclarePlan> list;
 }

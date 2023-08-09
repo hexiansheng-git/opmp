@@ -227,7 +227,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             wbsService.handlerAncestors(iteratFunc);
             wbsListRelationService.insertXmslWbsListRelationList(relationList);
         });
-        //4、wbs塞入redis
+        //TODO 必须执行完3后才能执行  4、wbs塞入redis
         wbsService.initWbs2Redis();
     }
 

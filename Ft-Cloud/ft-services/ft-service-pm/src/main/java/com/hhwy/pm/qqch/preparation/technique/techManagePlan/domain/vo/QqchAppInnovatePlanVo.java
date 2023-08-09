@@ -23,5 +23,5 @@ public class QqchAppInnovatePlanVo extends PreparationEntity {
     /**
      * 字段描述：四新应用及创新计划集合
      */
-    private List<QqchAppInnovatePlan> qqchAppInnovatePlanList;
+    private List<QqchAppInnovatePlan> list;
 }

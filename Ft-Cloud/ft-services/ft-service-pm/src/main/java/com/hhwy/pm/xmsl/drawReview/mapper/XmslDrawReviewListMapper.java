@@ -3,6 +3,7 @@ package com.hhwy.pm.xmsl.drawReview.mapper;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ public interface XmslDrawReviewListMapper {
     XmslDrawReviewList getXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 
     List<XmslDrawReviewList> getXmslDrawReviewListList(XmslDrawReviewList xmslDrawReviewList);
+
+    List<XmslDrawReviewList> getByIds(@Param("ids") Collection collection);
 
     int insertXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 

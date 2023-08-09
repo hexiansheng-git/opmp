@@ -19,6 +19,8 @@ public interface IXmslWbsService {
 
     List<XmslWbs> getByMainId(Long mainId);
 
+    XmslWbs getByCode(String code);
+
     /**
      * 查询生效版本wbs
      * @param xmslWbs

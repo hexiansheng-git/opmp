@@ -118,6 +118,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
      * @param qqchAdvancedVindicatePlanList
      * @param version
      */
+    @Transactional
     public void disposeBudgetData(List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList, BigDecimal version){
         //删除旧数据
         QqchAdvancedVindicatePlanBudget qqchAdvancedVindicatePlanBudget = new QqchAdvancedVindicatePlanBudget();
@@ -128,6 +129,9 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         for (QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan : qqchAdvancedVindicatePlanList) {
             Long id = qqchAdvancedVindicatePlan.getId();
             Map<String, BigDecimal> vintageBudgetMap = qqchAdvancedVindicatePlan.getVintageBudgetMap();
+            if(vintageBudgetMap == null){
+                continue;
+            }
             for (Map.Entry<String, BigDecimal> next : vintageBudgetMap.entrySet()) {
                 String key = next.getKey();
                 BigDecimal value = next.getValue();
@@ -204,7 +208,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         qqchAdvancedVindicatePlanVo.setVersion(version);
         qqchAdvancedVindicatePlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchAdvancedVindicatePlanVo.setVintageList(vintageList);
-        qqchAdvancedVindicatePlanVo.setQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanList);
+        qqchAdvancedVindicatePlanVo.setList(qqchAdvancedVindicatePlanList);
         return qqchAdvancedVindicatePlanVo;
     }
 
@@ -277,7 +281,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchAdvancedVindicatePlanVo.getVersion();
-        List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanVo.getQqchAdvancedVindicatePlanList();
+        List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanVo.getList();
 
         this.insertQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanList,version);
 

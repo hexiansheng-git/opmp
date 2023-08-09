@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewMaterialMapper">
+
+    <resultMap type="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewMaterial" id="XmslDrawReviewMaterialResultMap">
+        <result property="id" column="id"/>
+        <result property="mainId" column="main_id"/>
+        <result property="wbsId" column="wbs_id"/>
+        <result property="wbsCode" column="wbs_code"/>
+        <result property="listCode" column="list_code"/>
+        <result property="listId" column="list_id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="spec" column="spec"/>
+        <result property="type" column="type"/>
+        <result property="unit" column="unit"/>
+        <result property="quanlity" column="quanlity"/>
+        <result property="ratio" column="ratio"/>
+        <result property="theoreticalDosage" column="theoretical_dosage"/>
+        <result property="mixFlag" column="mix_flag"/>
+        <result property="mixingRatio" column="mixing_ratio"/>
+        <result property="theoreticalDosage1" column="theoretical_dosage_1"/>
+        <result property="sourceFlag" column="source_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <sql id="selectXmslDrawReviewMaterialVo">
+        select
+                                `id`
+                             ,`main_id`
+                             ,`wbs_id`
+                             ,`wbs_code`
+                             ,`list_code`
+                             ,`list_id`
+                             ,`code`
+                             ,`name`
+                             ,`spec`
+                             ,`type`
+                             ,`unit`
+                             ,`quanlity`
+                             ,`ratio`
+                             ,`theoretical_dosage`
+                             ,`mix_flag`
+                             ,`mixing_ratio`
+                             ,`theoretical_dosage_1`
+                             ,`source_flag`
+                             ,`remark`
+                             ,`create_user`
+                             ,`create_user_name`
+                             ,`create_time`
+                             ,`update_user`
+                             ,`update_time`
+        from xmsl_draw_review_material
+    </sql>
+    <select id="getXmslDrawReviewMaterial" resultMap="XmslDrawReviewMaterialResultMap">
+        <include refid="selectXmslDrawReviewMaterialVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="code != null  and code != ''">and `code` = #{code}</if>
+            <if test="name != null  and name != ''">and `name` = #{name}</if>
+            <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="ratio != null ">and `ratio` = #{ratio}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="mixFlag != null ">and `mix_flag` = #{mixFlag}</if>
+            <if test="mixingRatio != null ">and `mixing_ratio` = #{mixingRatio}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="sourceFlag != null  and sourceFlag != ''">and `source_flag` = #{sourceFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getXmslDrawReviewMaterialList" resultMap="XmslDrawReviewMaterialResultMap">
+        <include refid="selectXmslDrawReviewMaterialVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="listIds != null ">and `list_id` in
+                <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="wbsIds != null ">and `wbs_id` in
+                <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="code != null  and code != ''">and `code` = #{code}</if>
+            <if test="name != null  and name != ''">and `name` = #{name}</if>
+            <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="ratio != null ">and `ratio` = #{ratio}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="mixFlag != null ">and `mix_flag` = #{mixFlag}</if>
+            <if test="mixingRatio != null ">and `mixing_ratio` = #{mixingRatio}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="sourceFlag != null  and sourceFlag != ''">and `source_flag` = #{sourceFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertXmslDrawReviewMaterial" useGeneratedKeys="true" keyProperty="wbs_id">
+        insert into xmsl_draw_review_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="mainId != null ">`main_id`,</if>
+            <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
+            <if test="listCode != null  and listCode != ''">`list_code`,</if>
+            <if test="listId != null ">`list_id`,</if>
+            <if test="code != null  and code != ''">`code`,</if>
+            <if test="name != null  and name != ''">`name`,</if>
+            <if test="spec != null  and spec != ''">`spec`,</if>
+            <if test="type != null  and type != ''">`type`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="quanlity != null ">`quanlity`,</if>
+            <if test="ratio != null ">`ratio`,</if>
+            <if test="theoreticalDosage != null ">`theoretical_dosage`,</if>
+            <if test="mixFlag != null ">`mix_flag`,</if>
+            <if test="mixingRatio != null ">`mixing_ratio`,</if>
+            <if test="theoreticalDosage1 != null ">`theoretical_dosage_1`,</if>
+            <if test="sourceFlag != null  and sourceFlag != ''">`source_flag`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="mainId != null ">#{mainId},</if>
+            <if test="wbsId != null ">#{wbsId},</if>
+            <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
+            <if test="listCode != null  and listCode != ''">#{listCode},</if>
+            <if test="listId != null ">#{listId},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="spec != null  and spec != ''">#{spec},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="quanlity != null ">#{quanlity},</if>
+            <if test="ratio != null ">#{ratio},</if>
+            <if test="theoreticalDosage != null ">#{theoreticalDosage},</if>
+            <if test="mixFlag != null ">#{mixFlag},</if>
+            <if test="mixingRatio != null ">#{mixingRatio},</if>
+            <if test="theoreticalDosage1 != null ">#{theoreticalDosage1},</if>
+            <if test="sourceFlag != null  and sourceFlag != ''">#{sourceFlag},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertXmslDrawReviewMaterial -->
+    <insert id="insertXmslDrawReviewMaterialList">
+        insert into xmsl_draw_review_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `main_id`,
+            `wbs_id`,
+            `wbs_code`,
+            `list_code`,
+            `list_id`,
+            `code`,
+            `name`,
+            `spec`,
+            `type`,
+            `unit`,
+            `quanlity`,
+            `ratio`,
+            `theoretical_dosage`,
+            `mix_flag`,
+            `mixing_ratio`,
+            `theoretical_dosage_1`,
+            `source_flag`,
+            `remark`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+        </trim>
+        values
+        <foreach collection="xmslDrawReviewMaterialList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.mainId},
+                #{item.wbsId},
+                #{item.wbsCode},
+                #{item.listCode},
+                #{item.listId},
+                #{item.code},
+                #{item.name},
+                #{item.spec},
+                #{item.type},
+                #{item.unit},
+                #{item.quanlity},
+                #{item.ratio},
+                #{item.theoreticalDosage},
+                #{item.mixFlag},
+                #{item.mixingRatio},
+                #{item.theoreticalDosage1},
+                #{item.sourceFlag},
+                #{item.remark},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateXmslDrawReviewMaterial">
+        update xmsl_draw_review_material
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="mainId != null ">`main_id` = #{mainId},</if>
+            <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
+            <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
+            <if test="listId != null ">`list_id` = #{listId},</if>
+            <if test="code != null  and  code != ''">`code` = #{code},</if>
+            <if test="name != null  and  name != ''">`name` = #{name},</if>
+            <if test="spec != null  and  spec != ''">`spec` = #{spec},</if>
+            <if test="type != null  and  type != ''">`type` = #{type},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="quanlity != null ">`quanlity` = #{quanlity},</if>
+            <if test="ratio != null ">`ratio` = #{ratio},</if>
+            <if test="theoreticalDosage != null ">`theoretical_dosage` = #{theoreticalDosage},</if>
+            <if test="mixFlag != null ">`mix_flag` = #{mixFlag},</if>
+            <if test="mixingRatio != null ">`mixing_ratio` = #{mixingRatio},</if>
+            <if test="theoreticalDosage1 != null ">`theoretical_dosage_1` = #{theoreticalDosage1},</if>
+            <if test="sourceFlag != null  and  sourceFlag != ''">`source_flag` = #{sourceFlag},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+        </trim>
+        <where>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+        </where>
+    </update>
+
+    <update id="updateXmslDrawReviewMaterialList">
+        update xmsl_draw_review_material
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="main_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.mainId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.wbsId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.wbsCode}
+                </foreach>
+            </trim>
+            <trim prefix="list_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.listCode}
+                </foreach>
+            </trim>
+            <trim prefix="list_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.listId}
+                </foreach>
+            </trim>
+            <trim prefix="code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.code}
+                </foreach>
+            </trim>
+            <trim prefix="name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.name}
+                </foreach>
+            </trim>
+            <trim prefix="spec  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.spec}
+                </foreach>
+            </trim>
+            <trim prefix="type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.type}
+                </foreach>
+            </trim>
+            <trim prefix="unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.unit}
+                </foreach>
+            </trim>
+            <trim prefix="quanlity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.quanlity}
+                </foreach>
+            </trim>
+            <trim prefix="ratio  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.ratio}
+                </foreach>
+            </trim>
+            <trim prefix="theoretical_dosage  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.theoreticalDosage}
+                </foreach>
+            </trim>
+            <trim prefix="mix_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.mixFlag}
+                </foreach>
+            </trim>
+            <trim prefix="mixing_ratio  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.mixingRatio}
+                </foreach>
+            </trim>
+            <trim prefix="theoretical_dosage_1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.theoreticalDosage1}
+                </foreach>
+            </trim>
+            <trim prefix="source_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.sourceFlag}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `wbs_id`=#{item.wbsId} then #{item.updateTime}
+                </foreach>
+            </trim>
+        </trim>
+        where `wbs_id` in
+        <foreach collection="wbsIdList" index="index" item="item" separator="," open="(" close=")">
+            #{item.wbsId}
+        </foreach>
+    </update>
+
+    <delete id="deleteXmslDrawReviewMaterial">
+        delete from `xmsl_draw_review_material`
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
+            <if test="listId != null ">and `list_id` = #{listId}</if>
+            <if test="code != null  and code != ''">and `code` = #{code}</if>
+            <if test="name != null  and name != ''">and `name` = #{name}</if>
+            <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="ratio != null ">and `ratio` = #{ratio}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="mixFlag != null ">and `mix_flag` = #{mixFlag}</if>
+            <if test="mixingRatio != null ">and `mixing_ratio` = #{mixingRatio}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="sourceFlag != null  and sourceFlag != ''">and `source_flag` = #{sourceFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+        </where>
+    </delete>
+
+    <delete id="deleteXmslDrawReviewMaterialByPks">
+        delete from `xmsl_draw_review_material`
+        <where>
+            `wbs_id` in
+            <foreach item="wbsId" collection="xmslDrawReviewMaterialPkList" open="(" separator="," close=")">
+                #{wbsId}
+            </foreach>
+        </where>
+    </delete>
+</mapper>

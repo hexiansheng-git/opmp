@@ -4,6 +4,7 @@ import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wk
@@ -15,6 +16,8 @@ public interface XmslDrawReviewWbsMapper {
     XmslDrawReviewWbs getXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 
     List<XmslDrawReviewWbs> getXmslDrawReviewWbsList(XmslDrawReviewWbs xmslDrawReviewWbs);
+
+    List<XmslDrawReviewWbs> getByIds(Set<Long> idSet);
 
     int insertXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 

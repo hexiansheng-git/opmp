@@ -3,6 +3,7 @@ package com.hhwy.pm.xmsl.drawReview.service;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewRelation;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wk
@@ -15,6 +16,12 @@ public interface IXmslDrawReviewRelationService {
 
     List<XmslDrawReviewRelation> getXmslDrawReviewRelationList(XmslDrawReviewRelation xmslDrawReviewRelation);
 
+    List<XmslDrawReviewRelation> relationList(Long mainId,Long wbsId);
+
+    List<XmslDrawReviewRelation> relationList(Integer version,String wbsCode);
+
+    List<XmslDrawReviewRelation> relationList(Integer version, String wbsCode, Set<String> codeSet);
+
     int insertXmslDrawReviewRelation(XmslDrawReviewRelation xmslDrawReviewRelation);
 
     int insertXmslDrawReviewRelationList(List<XmslDrawReviewRelation> xmslDrawReviewRelationList);
@@ -26,4 +33,6 @@ public interface IXmslDrawReviewRelationService {
     int deleteXmslDrawReviewRelation(XmslDrawReviewRelation xmslDrawReviewRelation);
 
     int deleteXmslDrawReviewRelationByPks(List<Long> xmslDrawReviewRelationPkList);
+
+
 }

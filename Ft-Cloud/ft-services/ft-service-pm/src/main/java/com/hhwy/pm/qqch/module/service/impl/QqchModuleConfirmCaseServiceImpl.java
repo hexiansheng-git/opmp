@@ -55,6 +55,7 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
      * @param menuId 页面菜单id
      * @param stageIdentity 阶段标识
      */
+    @Transactional
     public void addConfirmRecord(String menuId,String stageIdentity){
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         CommonAssert.notBlank(stageIdentity,"阶段不能为空！");

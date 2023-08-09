@@ -476,6 +476,18 @@ public class ObjectUtils {
         list.add(val);
     }
 
+    /**
+     * 累加值到list
+     * @param list
+     * @param o
+     */
+    public static <T> List<T> add2List(List<T> list,T o){
+        if(list==null)
+            list = new ArrayList<>(10);
+        list.add(o);
+        return list;
+    }
+
 
     public static <T,T1> void addStr2MapList(Map<T,String> map, T key, String val){
         String str = map.get(key);

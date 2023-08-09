@@ -46,7 +46,7 @@ public class QqchImportantController extends BaseController {
     @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchImportant qqchImportantParam) {
-        List<QqchImportant> qqchImportantList = qqchImportantService.list(qqchImportantParam);
+        CompileDTO qqchImportantList = qqchImportantService.list(qqchImportantParam);
         return AjaxResult.success(qqchImportantList);
     }
 

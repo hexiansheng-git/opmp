@@ -22,5 +22,5 @@ public class QqchTopicResearchPlanVo extends PreparationEntity {
     /**
      * 字段描述：优课题研究计划集合
      */
-    private List<QqchTopicResearchPlan> qqchTopicResearchPlanList;
+    private List<QqchTopicResearchPlan> list;
 }
