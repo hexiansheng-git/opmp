@@ -67,29 +67,26 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         deleteParam.setDelFlag("1");
         qqchConstructionListMapper.updateQqchConstructionList(deleteParam);
 
-        if (CollectionUtils.isEmpty(qqchConstructionListVo.getList())) {
-            return;
-        }
+        if (!CollectionUtils.isEmpty(qqchConstructionListVo.getList())) {
+            for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
+                if (StringUtils.isBlank(qqchConstructionList.getSchemeCode())) {
+                    // 方案编号 = 项目编码 + 三位流水号
+                    String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
+                    String newCode = code.replace(CodeEnum.QQCH_CONSTRUCTION_LIST.prefix(), "");
+                    qqchConstructionList.setSchemeCode(qqchConstructionListVo.getProjectCode() + newCode);
+                }
+                qqchConstructionList.setId(IdWorker.createId());
+                qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchConstructionList.setCreateUserName(SecurityUtils.getUserName());
+                qqchConstructionList.setCreateTime(DateUtils.getNowDate());
 
-        for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
-            if (StringUtils.isBlank(qqchConstructionList.getSchemeCode())) {
-                // 方案编号 = 项目编码 + 三位流水号
-                String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
-                String newCode = code.replace(CodeEnum.QQCH_CONSTRUCTION_LIST.prefix(), "");
-                qqchConstructionList.setSchemeCode(qqchConstructionListVo.getProjectCode() + newCode);
+                qqchConstructionList.setVersion(qqchConstructionListVo.getVersion());
+                if (qqchConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchConstructionList.setValid(Valid.YES);
+                }
             }
-            qqchConstructionList.setId(IdWorker.createId());
-            qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchConstructionList.setCreateUserName(SecurityUtils.getUserName());
-            qqchConstructionList.setCreateTime(DateUtils.getNowDate());
-
-            qqchConstructionList.setVersion(qqchConstructionListVo.getVersion());
-            if (qqchConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                qqchConstructionList.setValid(Valid.YES);
-            }
+            qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
         }
-
-        qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
 
         String buttonMark = qqchConstructionListVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

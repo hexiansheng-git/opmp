@@ -91,46 +91,44 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         deleteParam.setVersion(qqchDiscloseThirdVo.getVersion());
         qqchDiscloseThirdMapper.deleteQqchDiscloseThird(deleteParam);
 
-        if (CollectionUtils.isEmpty(treeList)) {
-            return;
-        }
-
-        // 新主表集合
-        List<QqchDiscloseThird> newMainList = TreeUtil.treeToList(treeList);
-        for (QqchDiscloseThird newMain : newMainList) {
-            newMain.setVersion(qqchDiscloseThirdVo.getVersion());
-            if (qqchDiscloseThirdVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                newMain.setValid(Valid.YES);
+        if (!CollectionUtils.isEmpty(treeList)) {
+            // 新主表集合
+            List<QqchDiscloseThird> newMainList = TreeUtil.treeToList(treeList);
+            for (QqchDiscloseThird newMain : newMainList) {
+                newMain.setVersion(qqchDiscloseThirdVo.getVersion());
+                if (qqchDiscloseThirdVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    newMain.setValid(Valid.YES);
+                }
+                newMain.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                newMain.setCreateUserName(SecurityUtils.getUserName());
+                newMain.setCreateTime(DateUtils.getNowDate());
             }
-            newMain.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            newMain.setCreateUserName(SecurityUtils.getUserName());
-            newMain.setCreateTime(DateUtils.getNowDate());
-        }
 
-        // 新子列表集合
-        List<QqchDiscloseThirdDetail> newDetailList = new ArrayList<>();
-        for (QqchDiscloseThird qqchDiscloseThird : newMainList) {
-            List<QqchDiscloseThirdDetail> detailList = TreeUtil.treeToList(qqchDiscloseThird.getDetailTreeList());
-            if (!CollectionUtils.isEmpty(detailList)) {
-                for (QqchDiscloseThirdDetail detail : detailList) {
-                    detail.setMasterId(qqchDiscloseThird.getId());
-                    detail.setVersion(qqchDiscloseThirdVo.getVersion());
-                    if (qqchDiscloseThirdVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                        detail.setValid(Valid.YES);
+            // 新子列表集合
+            List<QqchDiscloseThirdDetail> newDetailList = new ArrayList<>();
+            for (QqchDiscloseThird qqchDiscloseThird : newMainList) {
+                List<QqchDiscloseThirdDetail> detailList = TreeUtil.treeToList(qqchDiscloseThird.getDetailTreeList());
+                if (!CollectionUtils.isEmpty(detailList)) {
+                    for (QqchDiscloseThirdDetail detail : detailList) {
+                        detail.setMasterId(qqchDiscloseThird.getId());
+                        detail.setVersion(qqchDiscloseThirdVo.getVersion());
+                        if (qqchDiscloseThirdVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                            detail.setValid(Valid.YES);
+                        }
+                        detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                        detail.setCreateUserName(SecurityUtils.getUserName());
+                        detail.setCreateTime(DateUtils.getNowDate());
+                        newDetailList.add(detail);
                     }
-                    detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    detail.setCreateUserName(SecurityUtils.getUserName());
-                    detail.setCreateTime(DateUtils.getNowDate());
-                    newDetailList.add(detail);
                 }
             }
+
+            // 主表全量入库
+            qqchDiscloseThirdMapper.insertQqchDiscloseThirdList(newMainList);
+
+            // 子全量入库
+            qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(newDetailList);
         }
-
-        // 主表全量入库
-        qqchDiscloseThirdMapper.insertQqchDiscloseThirdList(newMainList);
-
-        // 子全量入库
-        qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(newDetailList);
 
         String buttonMark = qqchDiscloseThirdVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

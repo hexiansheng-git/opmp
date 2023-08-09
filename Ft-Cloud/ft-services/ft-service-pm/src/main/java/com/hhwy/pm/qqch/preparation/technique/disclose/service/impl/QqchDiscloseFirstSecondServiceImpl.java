@@ -73,27 +73,25 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         deleteParam.setVersion(qqchDiscloseFirstSecondVo.getVersion());
         qqchDiscloseFirstSecondMapper.deleteQqchDiscloseFirstSecond(deleteParam);
 
-        if (CollectionUtils.isEmpty(qqchDiscloseFirstSecondVo.getTreeList())) {
-            return;
-        }
+        if (!CollectionUtils.isEmpty(qqchDiscloseFirstSecondVo.getTreeList())) {
+            // 树转list
+            List<QqchDiscloseFirstSecond> insertList = TreeUtil.treeToList(qqchDiscloseFirstSecondVo.getTreeList());
 
-        // 树转list
-        List<QqchDiscloseFirstSecond> insertList = TreeUtil.treeToList(qqchDiscloseFirstSecondVo.getTreeList());
-
-        if (!CollectionUtils.isEmpty(insertList)) {
-            for (QqchDiscloseFirstSecond insert : insertList) {
-                insert.setVersion(qqchDiscloseFirstSecondVo.getVersion());
-                if (qqchDiscloseFirstSecondVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    insert.setValid(Valid.YES);
+            if (!CollectionUtils.isEmpty(insertList)) {
+                for (QqchDiscloseFirstSecond insert : insertList) {
+                    insert.setVersion(qqchDiscloseFirstSecondVo.getVersion());
+                    if (qqchDiscloseFirstSecondVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                        insert.setValid(Valid.YES);
+                    }
+                    insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    insert.setCreateUserName(SecurityUtils.getUserName());
+                    insert.setCreateTime(DateUtils.getNowDate());
                 }
-                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                insert.setCreateUserName(SecurityUtils.getUserName());
-                insert.setCreateTime(DateUtils.getNowDate());
             }
-        }
 
-        // 全量入库
-        qqchDiscloseFirstSecondMapper.insertQqchDiscloseFirstSecondList(insertList);
+            // 全量入库
+            qqchDiscloseFirstSecondMapper.insertQqchDiscloseFirstSecondList(insertList);
+        }
 
         String buttonMark = qqchDiscloseFirstSecondVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

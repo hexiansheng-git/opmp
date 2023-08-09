@@ -62,25 +62,23 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
         deleteParam.setDelFlag("1");
         qqchContractTechAchievementIdentifyMapper.updateQqchContractTechAchievementIdentify(deleteParam);
 
-        if (CollectionUtils.isEmpty(voParam.getTreeList())) {
-            return;
-        }
-
-        // 树转list
-        List<QqchContractTechAchievementIdentify> insertList = TreeUtil.treeToList(voParam.getTreeList());
-        if (!CollectionUtils.isEmpty(insertList)) {
-            for (QqchContractTechAchievementIdentify insert : insertList) {
-                insert.setVersion(voParam.getVersion());
-                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    insert.setValid(Valid.YES);
+        if (!CollectionUtils.isEmpty(voParam.getTreeList())) {
+            // 树转list
+            List<QqchContractTechAchievementIdentify> insertList = TreeUtil.treeToList(voParam.getTreeList());
+            if (!CollectionUtils.isEmpty(insertList)) {
+                for (QqchContractTechAchievementIdentify insert : insertList) {
+                    insert.setVersion(voParam.getVersion());
+                    if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                        insert.setValid(Valid.YES);
+                    }
+                    insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    insert.setCreateUserName(SecurityUtils.getUserName());
+                    insert.setCreateTime(DateUtils.getNowDate());
                 }
-                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                insert.setCreateUserName(SecurityUtils.getUserName());
-                insert.setCreateTime(DateUtils.getNowDate());
             }
+            // 全量入库
+            qqchContractTechAchievementIdentifyMapper.insertQqchContractTechAchievementIdentifyList(insertList);
         }
-        // 全量入库
-        qqchContractTechAchievementIdentifyMapper.insertQqchContractTechAchievementIdentifyList(insertList);
 
         String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

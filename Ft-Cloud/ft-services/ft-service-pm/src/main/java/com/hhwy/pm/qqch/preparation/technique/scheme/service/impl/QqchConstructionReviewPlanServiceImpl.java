@@ -89,7 +89,8 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> dbList = this.getQqchConstructionReviewPlanList(null).getList();
 
         // 获取方案清单数据
-        QqchConstructionListVo listVo = qqchConstructionListService.getQqchConstructionListList(null);
+        QqchConstructionListVo listVo = qqchConstructionListService
+            .getQqchConstructionListList(new QqchConstructionListVo());
 
         // 构造新的list
         List<QqchConstructionReviewPlan> insertList = new ArrayList<>();
@@ -104,11 +105,13 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
             insert.setValid(Valid.YES);
 
             for (QqchConstructionReviewPlan db : dbList) {
-                if (insert.getSchemeCode().equals(db.getSchemeCode())) {
-                    insert.setSchemeLevelDescription(db.getSchemeLevelDescription());
-                    insert.setPreparationMainBody(db.getPreparationMainBody());
-                    insert.setContactInfo(db.getContactInfo());
-                    insert.setReviewMainBody(db.getReviewMainBody());
+                for (QqchConstructionReviewPlan dbPlan : db.getChildren()) {
+                    if (insert.getSchemeCode().equals(dbPlan.getSchemeCode())) {
+                        insert.setSchemeLevelDescription(dbPlan.getSchemeLevelDescription());
+                        insert.setPreparationMainBody(dbPlan.getPreparationMainBody());
+                        insert.setContactInfo(dbPlan.getContactInfo());
+                        insert.setReviewMainBody(dbPlan.getReviewMainBody());
+                    }
                 }
             }
             insertList.add(insert);
@@ -138,8 +141,11 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
             }
         }
 
-        // 数据更新
-        qqchConstructionReviewPlanMapper.updateQqchConstructionReviewPlanList(updateList);
+        if (!CollectionUtils.isEmpty(updateList)) {
+            // 数据更新
+            qqchConstructionReviewPlanMapper.updateQqchConstructionReviewPlanList(updateList);
+
+        }
 
         String buttonMark = qqchConstructionReviewPlanVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

@@ -56,28 +56,26 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         deleteParam.setDelFlag("1");
         qqchMajorConstructionComparisonMapper.updateQqchMajorConstructionComparison(deleteParam);
 
-        if (CollectionUtils.isEmpty(qqchMajorConstructionComparisonVo.getTreeList())) {
-            return;
-        }
+        if (!CollectionUtils.isEmpty(qqchMajorConstructionComparisonVo.getTreeList())) {
+            // 树转list
+            List<QqchMajorConstructionComparison> insertList = TreeUtil
+                .treeToList(qqchMajorConstructionComparisonVo.getTreeList());
 
-        // 树转list
-        List<QqchMajorConstructionComparison> insertList = TreeUtil
-            .treeToList(qqchMajorConstructionComparisonVo.getTreeList());
-
-        if (!CollectionUtils.isEmpty(insertList)) {
-            for (QqchMajorConstructionComparison insert : insertList) {
-                insert.setVersion(qqchMajorConstructionComparisonVo.getVersion());
-                if (qqchMajorConstructionComparisonVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    insert.setValid(Valid.YES);
+            if (!CollectionUtils.isEmpty(insertList)) {
+                for (QqchMajorConstructionComparison insert : insertList) {
+                    insert.setVersion(qqchMajorConstructionComparisonVo.getVersion());
+                    if (qqchMajorConstructionComparisonVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                        insert.setValid(Valid.YES);
+                    }
+                    insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                    insert.setCreateUserName(SecurityUtils.getUserName());
+                    insert.setCreateTime(DateUtils.getNowDate());
                 }
-                insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                insert.setCreateUserName(SecurityUtils.getUserName());
-                insert.setCreateTime(DateUtils.getNowDate());
             }
-        }
 
-        // 全量入库
-        qqchMajorConstructionComparisonMapper.insertQqchMajorConstructionComparisonList(insertList);
+            // 全量入库
+            qqchMajorConstructionComparisonMapper.insertQqchMajorConstructionComparisonList(insertList);
+        }
 
         String buttonMark = qqchMajorConstructionComparisonVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
