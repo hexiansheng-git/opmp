@@ -45,6 +45,8 @@ public class QqchSafeThreeTypePerson extends BaseEntity {
     @JsonProperty
     @Excel(name = "人员姓名")
     private String personName;
+
+    private String personId;
     /**
      * 字段描述：证照名称
      */

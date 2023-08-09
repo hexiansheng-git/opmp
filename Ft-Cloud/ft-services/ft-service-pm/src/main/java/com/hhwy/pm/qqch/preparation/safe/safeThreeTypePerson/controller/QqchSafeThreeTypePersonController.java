@@ -42,14 +42,20 @@ public class QqchSafeThreeTypePersonController extends BaseController {
     @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:list")
     @GetMapping("/list")
     public AjaxResult getQqchSafeThreeTypePersonList(@Validated(ValidationGroups.Select.class) QqchSafeThreeTypePerson qqchSafeThreeTypePersonParam) {
-        List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList = qqchSafeThreeTypePersonService.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonParam);
-        return getDataTableAjaxResult(qqchSafeThreeTypePersonList);
+        QqchSafeThreeTypePersonVo personList = qqchSafeThreeTypePersonService.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonParam);
+        return AjaxResult.success(personList);
     }
 
     @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSafeThreeTypePersonList(@RequestBody QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
         qqchSafeThreeTypePersonService.insertQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonVo);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/batchRefresh")
+    public AjaxResult batchRefresh(@RequestBody QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
+        qqchSafeThreeTypePersonService.batchRefresh(qqchSafeThreeTypePersonVo);
         return AjaxResult.success();
     }
 }
