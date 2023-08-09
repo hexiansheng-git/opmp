@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  */
 public interface IQqchPostSettingService {
 
-    QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version);
+    QqchPostSettingVo getTreeList(BigDecimal version);
 
-    void batchSave(QqchPostSettingVo qqchPostSettingVo, String postType);
+    void batchSave(QqchPostSettingVo qqchPostSettingVo);
 }

@@ -1,44 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.mapper.QqchSafeThreeTypePersonMapper">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    <resultMap type="com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.domain.QqchSafeThreeTypePerson" id="QqchSafeThreeTypePersonResultMap">
-                    <result property="id" column="id" />
-                    <result property="duties" column="duties" />
-                    <result property="personName" column="person_name" />
-                    <result property="cardName" column="card_name" />
-                    <result property="cardNumber" column="card_number" />
-                    <result property="signDate" column="sign_date" />
-                    <result property="validPeriod" column="valid_period" />
-                    <result property="noticeMsg" column="notice_msg" />
-                    <result property="cardUrl" column="card_url" />
-                    <result property="controMeasures" column="contro_measures" />
-                    <result property="attenPoint" column="atten_point" />
-                    <result property="mainResDeptId" column="main_res_dept_id" />
-                    <result property="mainResDeptName" column="main_res_dept_name" />
-                    <result property="otherDeptId" column="other_dept_id" />
-                    <result property="otherDeptName" column="other_dept_name" />
-                    <result property="remark" column="remark" />
-                    <result property="version" column="version" />
-                    <result property="valid" column="valid" />
-                    <result property="createUser" column="create_user" />
-                    <result property="createUserName" column="create_user_name" />
-                    <result property="createTime" column="create_time" />
-                    <result property="updateUser" column="update_user" />
-                    <result property="updateTime" column="update_time" />
-                    <result property="delUser" column="del_user" />
-                    <result property="delTime" column="del_time" />
-                    <result property="delFlag" column="del_flag" />
-                    <result property="ptVar1" column="pt_var1" />
-                    <result property="ptVar2" column="pt_var2" />
-            </resultMap>
+
+    <resultMap type="com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.domain.QqchSafeThreeTypePerson"
+               id="QqchSafeThreeTypePersonResultMap">
+        <result property="id" column="id"/>
+        <result property="duties" column="duties"/>
+        <result property="personName" column="person_name"/>
+        <result property="personId" column="person_id"/>
+        <result property="cardName" column="card_name"/>
+        <result property="cardNumber" column="card_number"/>
+        <result property="signDate" column="sign_date"/>
+        <result property="validPeriod" column="valid_period"/>
+        <result property="noticeMsg" column="notice_msg"/>
+        <result property="cardUrl" column="card_url"/>
+        <result property="controMeasures" column="contro_measures"/>
+        <result property="attenPoint" column="atten_point"/>
+        <result property="mainResDeptId" column="main_res_dept_id"/>
+        <result property="mainResDeptName" column="main_res_dept_name"/>
+        <result property="otherDeptId" column="other_dept_id"/>
+        <result property="otherDeptName" column="other_dept_name"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="pId" column="pId"/>
+    </resultMap>
     <sql id="selectQqchSafeThreeTypePersonVo">
         select
                                                             `id`
                                                          ,`duties`
+                                                         ,`duties` pId
                                                          ,`person_name`
+                                                         ,`person_id`
                                                          ,`card_name`
                                                          ,`card_number`
                                                          ,`sign_date`
@@ -67,435 +72,525 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     from qqch_safe_three_type_person
     </sql>
     <select id="getQqchSafeThreeTypePerson" resultMap="QqchSafeThreeTypePersonResultMap">
-        <include refid="selectQqchSafeThreeTypePersonVo" />
+        <include refid="selectQqchSafeThreeTypePersonVo"/>
         <where>
             del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="duties != null  and duties != ''"> and `duties` = #{duties}</if>
-                            <if test="personName != null  and personName != ''"> and `person_name` = #{personName}</if>
-                            <if test="cardName != null  and cardName != ''"> and `card_name` = #{cardName}</if>
-                            <if test="cardNumber != null  and cardNumber != ''"> and `card_number` = #{cardNumber}</if>
-                            <if test="signDate != null "> and `sign_date` = #{signDate}</if>
-                            <if test="validPeriod != null "> and `valid_period` = #{validPeriod}</if>
-                            <if test="noticeMsg != null  and noticeMsg != ''"> and `notice_msg` = #{noticeMsg}</if>
-                            <if test="cardUrl != null  and cardUrl != ''"> and `card_url` = #{cardUrl}</if>
-                            <if test="controMeasures != null  and controMeasures != ''"> and `contro_measures` = #{controMeasures}</if>
-                            <if test="attenPoint != null  and attenPoint != ''"> and `atten_point` = #{attenPoint}</if>
-                            <if test="mainResDeptId != null "> and `main_res_dept_id` = #{mainResDeptId}</if>
-                            <if test="mainResDeptName != null  and mainResDeptName != ''"> and `main_res_dept_name` = #{mainResDeptName}</if>
-                            <if test="otherDeptId != null "> and `other_dept_id` = #{otherDeptId}</if>
-                            <if test="otherDeptName != null  and otherDeptName != ''"> and `other_dept_name` = #{otherDeptName}</if>
-                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                            <if test="version != null "> and `version` = #{version}</if>
-                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                    </where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="duties != null  and duties != ''">and `duties` = #{duties}</if>
+            <if test="personName != null  and personName != ''">and `person_name` = #{personName}</if>
+            <if test="personId != null  and personId != ''">and `person_id` = #{personId}</if>
+            <if test="cardName != null  and cardName != ''">and `card_name` = #{cardName}</if>
+            <if test="cardNumber != null  and cardNumber != ''">and `card_number` = #{cardNumber}</if>
+            <if test="signDate != null ">and `sign_date` = #{signDate}</if>
+            <if test="validPeriod != null ">and `valid_period` = #{validPeriod}</if>
+            <if test="noticeMsg != null  and noticeMsg != ''">and `notice_msg` = #{noticeMsg}</if>
+            <if test="cardUrl != null  and cardUrl != ''">and `card_url` = #{cardUrl}</if>
+            <if test="controMeasures != null  and controMeasures != ''">and `contro_measures` = #{controMeasures}</if>
+            <if test="attenPoint != null  and attenPoint != ''">and `atten_point` = #{attenPoint}</if>
+            <if test="mainResDeptId != null ">and `main_res_dept_id` = #{mainResDeptId}</if>
+            <if test="mainResDeptName != null  and mainResDeptName != ''">and `main_res_dept_name` =
+                #{mainResDeptName}
+            </if>
+            <if test="otherDeptId != null ">and `other_dept_id` = #{otherDeptId}</if>
+            <if test="otherDeptName != null  and otherDeptName != ''">and `other_dept_name` = #{otherDeptName}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+        </where>
         order by create_time desc
     </select>
 
     <select id="getQqchSafeThreeTypePersonList" resultMap="QqchSafeThreeTypePersonResultMap">
-        <include refid="selectQqchSafeThreeTypePersonVo" />
+        <include refid="selectQqchSafeThreeTypePersonVo"/>
         <where>
             del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="duties != null  and duties != ''"> and `duties` = #{duties}</if>
-                            <if test="personName != null  and personName != ''"> and `person_name` = #{personName}</if>
-                            <if test="cardName != null  and cardName != ''"> and `card_name` = #{cardName}</if>
-                            <if test="cardNumber != null  and cardNumber != ''"> and `card_number` = #{cardNumber}</if>
-                            <if test="signDate != null "> and `sign_date` = #{signDate}</if>
-                            <if test="validPeriod != null "> and `valid_period` = #{validPeriod}</if>
-                            <if test="noticeMsg != null  and noticeMsg != ''"> and `notice_msg` = #{noticeMsg}</if>
-                            <if test="cardUrl != null  and cardUrl != ''"> and `card_url` = #{cardUrl}</if>
-                            <if test="controMeasures != null  and controMeasures != ''"> and `contro_measures` = #{controMeasures}</if>
-                            <if test="attenPoint != null  and attenPoint != ''"> and `atten_point` = #{attenPoint}</if>
-                            <if test="mainResDeptId != null "> and `main_res_dept_id` = #{mainResDeptId}</if>
-                            <if test="mainResDeptName != null  and mainResDeptName != ''"> and `main_res_dept_name` = #{mainResDeptName}</if>
-                            <if test="otherDeptId != null "> and `other_dept_id` = #{otherDeptId}</if>
-                            <if test="otherDeptName != null  and otherDeptName != ''"> and `other_dept_name` = #{otherDeptName}</if>
-                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                            <if test="version != null "> and `version` = #{version}</if>
-                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                    </where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="duties != null  and duties != ''">and `duties` = #{duties}</if>
+            <if test="personName != null  and personName != ''">and `person_name` = #{personName}</if>
+            <if test="personId != null  and personId != ''">and `person_id` = #{personId}</if>
+            <if test="cardName != null  and cardName != ''">and `card_name` = #{cardName}</if>
+            <if test="cardNumber != null  and cardNumber != ''">and `card_number` = #{cardNumber}</if>
+            <if test="signDate != null ">and `sign_date` = #{signDate}</if>
+            <if test="validPeriod != null ">and `valid_period` = #{validPeriod}</if>
+            <if test="noticeMsg != null  and noticeMsg != ''">and `notice_msg` = #{noticeMsg}</if>
+            <if test="cardUrl != null  and cardUrl != ''">and `card_url` = #{cardUrl}</if>
+            <if test="controMeasures != null  and controMeasures != ''">and `contro_measures` = #{controMeasures}</if>
+            <if test="attenPoint != null  and attenPoint != ''">and `atten_point` = #{attenPoint}</if>
+            <if test="mainResDeptId != null ">and `main_res_dept_id` = #{mainResDeptId}</if>
+            <if test="mainResDeptName != null  and mainResDeptName != ''">and `main_res_dept_name` =
+                #{mainResDeptName}
+            </if>
+            <if test="otherDeptId != null ">and `other_dept_id` = #{otherDeptId}</if>
+            <if test="otherDeptName != null  and otherDeptName != ''">and `other_dept_name` = #{otherDeptName}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+        </where>
         order by create_time desc
     </select>
 
-    <insert id="insertQqchSafeThreeTypePerson"  useGeneratedKeys="true" keyProperty="id"  >
+    <insert id="insertQqchSafeThreeTypePerson" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_safe_three_type_person
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                            <if test="id != null ">`id`,</if>
-                            <if test="duties != null  and duties != ''">`duties`,</if>
-                            <if test="personName != null  and personName != ''">`person_name`,</if>
-                            <if test="cardName != null  and cardName != ''">`card_name`,</if>
-                            <if test="cardNumber != null  and cardNumber != ''">`card_number`,</if>
-                            <if test="signDate != null ">`sign_date`,</if>
-                            <if test="validPeriod != null ">`valid_period`,</if>
-                            <if test="noticeMsg != null  and noticeMsg != ''">`notice_msg`,</if>
-                            <if test="cardUrl != null  and cardUrl != ''">`card_url`,</if>
-                            <if test="controMeasures != null  and controMeasures != ''">`contro_measures`,</if>
-                            <if test="attenPoint != null  and attenPoint != ''">`atten_point`,</if>
-                            <if test="mainResDeptId != null ">`main_res_dept_id`,</if>
-                            <if test="mainResDeptName != null  and mainResDeptName != ''">`main_res_dept_name`,</if>
-                            <if test="otherDeptId != null ">`other_dept_id`,</if>
-                            <if test="otherDeptName != null  and otherDeptName != ''">`other_dept_name`,</if>
-                            <if test="remark != null  and remark != ''">`remark`,</if>
-                            <if test="version != null ">`version`,</if>
-                            <if test="valid != null  and valid != ''">`valid`,</if>
-                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
-                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
-                            <if test="createTime != null ">`create_time`,</if>
-                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
-                            <if test="updateTime != null ">`update_time`,</if>
-                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
-                            <if test="delTime != null ">`del_time`,</if>
-                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
-                    </trim>
+            <if test="id != null ">`id`,</if>
+            <if test="duties != null  and duties != ''">`duties`,</if>
+            <if test="personName != null  and personName != ''">`person_name`,</if>
+            <if test="personId != null  and personId != ''">`person_id`,</if>
+            <if test="cardName != null  and cardName != ''">`card_name`,</if>
+            <if test="cardNumber != null  and cardNumber != ''">`card_number`,</if>
+            <if test="signDate != null ">`sign_date`,</if>
+            <if test="validPeriod != null ">`valid_period`,</if>
+            <if test="noticeMsg != null  and noticeMsg != ''">`notice_msg`,</if>
+            <if test="cardUrl != null  and cardUrl != ''">`card_url`,</if>
+            <if test="controMeasures != null  and controMeasures != ''">`contro_measures`,</if>
+            <if test="attenPoint != null  and attenPoint != ''">`atten_point`,</if>
+            <if test="mainResDeptId != null ">`main_res_dept_id`,</if>
+            <if test="mainResDeptName != null  and mainResDeptName != ''">`main_res_dept_name`,</if>
+            <if test="otherDeptId != null ">`other_dept_id`,</if>
+            <if test="otherDeptName != null  and otherDeptName != ''">`other_dept_name`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                            <if test="id != null ">#{id},</if>
-                            <if test="duties != null  and duties != ''">#{duties},</if>
-                            <if test="personName != null  and personName != ''">#{personName},</if>
-                            <if test="cardName != null  and cardName != ''">#{cardName},</if>
-                            <if test="cardNumber != null  and cardNumber != ''">#{cardNumber},</if>
-                            <if test="signDate != null ">#{signDate},</if>
-                            <if test="validPeriod != null ">#{validPeriod},</if>
-                            <if test="noticeMsg != null  and noticeMsg != ''">#{noticeMsg},</if>
-                            <if test="cardUrl != null  and cardUrl != ''">#{cardUrl},</if>
-                            <if test="controMeasures != null  and controMeasures != ''">#{controMeasures},</if>
-                            <if test="attenPoint != null  and attenPoint != ''">#{attenPoint},</if>
-                            <if test="mainResDeptId != null ">#{mainResDeptId},</if>
-                            <if test="mainResDeptName != null  and mainResDeptName != ''">#{mainResDeptName},</if>
-                            <if test="otherDeptId != null ">#{otherDeptId},</if>
-                            <if test="otherDeptName != null  and otherDeptName != ''">#{otherDeptName},</if>
-                            <if test="remark != null  and remark != ''">#{remark},</if>
-                            <if test="version != null ">#{version},</if>
-                            <if test="valid != null  and valid != ''">#{valid},</if>
-                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
-                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
-                            <if test="createTime != null ">#{createTime},</if>
-                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
-                            <if test="updateTime != null ">#{updateTime},</if>
-                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
-                            <if test="delTime != null ">#{delTime},</if>
-                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
-                    </trim>
+            <if test="id != null ">#{id},</if>
+            <if test="duties != null  and duties != ''">#{duties},</if>
+            <if test="personName != null  and personName != ''">#{personName},</if>
+            <if test="personId != null  and personId != ''">#{personId},</if>
+            <if test="cardName != null  and cardName != ''">#{cardName},</if>
+            <if test="cardNumber != null  and cardNumber != ''">#{cardNumber},</if>
+            <if test="signDate != null ">#{signDate},</if>
+            <if test="validPeriod != null ">#{validPeriod},</if>
+            <if test="noticeMsg != null  and noticeMsg != ''">#{noticeMsg},</if>
+            <if test="cardUrl != null  and cardUrl != ''">#{cardUrl},</if>
+            <if test="controMeasures != null  and controMeasures != ''">#{controMeasures},</if>
+            <if test="attenPoint != null  and attenPoint != ''">#{attenPoint},</if>
+            <if test="mainResDeptId != null ">#{mainResDeptId},</if>
+            <if test="mainResDeptName != null  and mainResDeptName != ''">#{mainResDeptName},</if>
+            <if test="otherDeptId != null ">#{otherDeptId},</if>
+            <if test="otherDeptName != null  and otherDeptName != ''">#{otherDeptName},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+        </trim>
     </insert>
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchSafeThreeTypePerson -->
     <insert id="insertQqchSafeThreeTypePersonList">
         insert into qqch_safe_three_type_person
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                `id`,
-                                                                `duties`,
-                                                                `person_name`,
-                                                                `card_name`,
-                                                                `card_number`,
-                                                                `sign_date`,
-                                                                `valid_period`,
-                                                                `notice_msg`,
-                                                                `card_url`,
-                                                                `contro_measures`,
-                                                                `atten_point`,
-                                                                `main_res_dept_id`,
-                                                                `main_res_dept_name`,
-                                                                `other_dept_id`,
-                                                                `other_dept_name`,
-                                                                `remark`,
-                                                                `version`,
-                                                                `valid`,
-                                                                `create_user`,
-                                                                `create_user_name`,
-                                                                `create_time`,
-                                                                `update_user`,
-                                                                `update_time`,
-                                                                `del_user`,
-                                                                `del_time`,
-                                                                                            `pt_var1`,
-                                                                `pt_var2`,
-                                    </trim>
+            `id`,
+            `duties`,
+            `person_name`,
+            `person_id`,
+            `card_name`,
+            `card_number`,
+            `sign_date`,
+            `valid_period`,
+            `notice_msg`,
+            `card_url`,
+            `contro_measures`,
+            `atten_point`,
+            `main_res_dept_id`,
+            `main_res_dept_name`,
+            `other_dept_id`,
+            `other_dept_name`,
+            `remark`,
+            `version`,
+            `valid`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+        </trim>
         values
         <foreach collection="qqchSafeThreeTypePersonList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                            #{item.id},
-                                                                                #{item.duties},
-                                                                                #{item.personName},
-                                                                                #{item.cardName},
-                                                                                #{item.cardNumber},
-                                                                                #{item.signDate},
-                                                                                #{item.validPeriod},
-                                                                                #{item.noticeMsg},
-                                                                                #{item.cardUrl},
-                                                                                #{item.controMeasures},
-                                                                                #{item.attenPoint},
-                                                                                #{item.mainResDeptId},
-                                                                                #{item.mainResDeptName},
-                                                                                #{item.otherDeptId},
-                                                                                #{item.otherDeptName},
-                                                                                #{item.remark},
-                                                                                #{item.version},
-                                                                                #{item.valid},
-                                                                                #{item.createUser},
-                                                                                #{item.createUserName},
-                                                                                #{item.createTime},
-                                                                                #{item.updateUser},
-                                                                                #{item.updateTime},
-                                                                                #{item.delUser},
-                                                                                #{item.delTime},
-                                                                                                                    #{item.ptVar1},
-                                                                                #{item.ptVar2},
-                                                </trim>
+                #{item.id},
+                #{item.duties},
+                #{item.personName},
+                #{item.personId},
+                #{item.cardName},
+                #{item.cardNumber},
+                #{item.signDate},
+                #{item.validPeriod},
+                #{item.noticeMsg},
+                #{item.cardUrl},
+                #{item.controMeasures},
+                #{item.attenPoint},
+                #{item.mainResDeptId},
+                #{item.mainResDeptName},
+                #{item.otherDeptId},
+                #{item.otherDeptName},
+                #{item.remark},
+                #{item.version},
+                #{item.valid},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+            </trim>
         </foreach>
     </insert>
 
     <update id="updateQqchSafeThreeTypePerson">
         update qqch_safe_three_type_person
         <trim prefix="SET" suffixOverrides=",">
-                            <if test="id != null ">`id` = #{id},</if>
-                            <if test="duties != null  and  duties != ''">`duties` = #{duties},</if>
-                            <if test="personName != null  and  personName != ''">`person_name` = #{personName},</if>
-                            <if test="cardName != null  and  cardName != ''">`card_name` = #{cardName},</if>
-                            <if test="cardNumber != null  and  cardNumber != ''">`card_number` = #{cardNumber},</if>
-                            <if test="signDate != null ">`sign_date` = #{signDate},</if>
-                            <if test="validPeriod != null ">`valid_period` = #{validPeriod},</if>
-                            <if test="noticeMsg != null  and  noticeMsg != ''">`notice_msg` = #{noticeMsg},</if>
-                            <if test="cardUrl != null  and  cardUrl != ''">`card_url` = #{cardUrl},</if>
-                            <if test="controMeasures != null  and  controMeasures != ''">`contro_measures` = #{controMeasures},</if>
-                            <if test="attenPoint != null  and  attenPoint != ''">`atten_point` = #{attenPoint},</if>
-                            <if test="mainResDeptId != null ">`main_res_dept_id` = #{mainResDeptId},</if>
-                            <if test="mainResDeptName != null  and  mainResDeptName != ''">`main_res_dept_name` = #{mainResDeptName},</if>
-                            <if test="otherDeptId != null ">`other_dept_id` = #{otherDeptId},</if>
-                            <if test="otherDeptName != null  and  otherDeptName != ''">`other_dept_name` = #{otherDeptName},</if>
-                            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-                            <if test="version != null ">`version` = #{version},</if>
-                            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
-                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
-                            <if test="createTime != null ">`create_time` = #{createTime},</if>
-                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
-                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-                            <if test="delTime != null ">`del_time` = #{delTime},</if>
-                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
-                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
-                    </trim>
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="duties != null  and  duties != ''">`duties` = #{duties},</if>
+            <if test="personName != null  and  personName != ''">`person_name` = #{personName},</if>
+            <if test="personId != null  and  personId != ''">`person_id` = #{personId},</if>
+            <if test="cardName != null  and  cardName != ''">`card_name` = #{cardName},</if>
+            <if test="cardNumber != null  and  cardNumber != ''">`card_number` = #{cardNumber},</if>
+            <if test="signDate != null ">`sign_date` = #{signDate},</if>
+            <if test="validPeriod != null ">`valid_period` = #{validPeriod},</if>
+            <if test="noticeMsg != null  and  noticeMsg != ''">`notice_msg` = #{noticeMsg},</if>
+            <if test="cardUrl != null  and  cardUrl != ''">`card_url` = #{cardUrl},</if>
+            <if test="controMeasures != null  and  controMeasures != ''">`contro_measures` = #{controMeasures},</if>
+            <if test="attenPoint != null  and  attenPoint != ''">`atten_point` = #{attenPoint},</if>
+            <if test="mainResDeptId != null ">`main_res_dept_id` = #{mainResDeptId},</if>
+            <if test="mainResDeptName != null  and  mainResDeptName != ''">`main_res_dept_name` = #{mainResDeptName},
+            </if>
+            <if test="otherDeptId != null ">`other_dept_id` = #{otherDeptId},</if>
+            <if test="otherDeptName != null  and  otherDeptName != ''">`other_dept_name` = #{otherDeptName},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+        </trim>
         <where>
-                                                                        <if test="id != null "> and `id` = #{id}</if>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
     </update>
 
-            <update id="updateQqchSafeThreeTypePersonList">
-            update qqch_safe_three_type_person
-            <trim prefix="set" suffixOverrides=",">
-                                    <trim prefix="id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.id}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="duties  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.duties}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="person_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.personName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="card_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.cardName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="card_number  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.cardNumber}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="sign_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.signDate}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="valid_period  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.validPeriod}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="notice_msg  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.noticeMsg}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="card_url  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.cardUrl}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="contro_measures  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.controMeasures}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="atten_point  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.attenPoint}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="main_res_dept_id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.mainResDeptId}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="main_res_dept_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.mainResDeptName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="other_dept_id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.otherDeptId}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="other_dept_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.otherDeptName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="remark  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.remark}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="version  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.version}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="valid  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.valid}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.createUser}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_user_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.createUserName}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.createTime}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="update_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.updateUser}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="update_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.updateTime}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.delUser}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.delTime}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_flag  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.delFlag}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var1  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar1}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var2  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.ptVar2}
-                        </foreach>
-                    </trim>
-                            </trim>
-            where `id` in
-            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
-                #{item.id}
-            </foreach>
-        </update>
-    
-            <update id="deleteQqchSafeThreeTypePerson">
-            update `qqch_safe_three_type_person` set del_flag = 1
-            <where>
-                                    <if test="id != null "> and `id` = #{id}</if>
-                                    <if test="duties != null  and duties != ''"> and `duties` = #{duties}</if>
-                                    <if test="personName != null  and personName != ''"> and `person_name` = #{personName}</if>
-                                    <if test="cardName != null  and cardName != ''"> and `card_name` = #{cardName}</if>
-                                    <if test="cardNumber != null  and cardNumber != ''"> and `card_number` = #{cardNumber}</if>
-                                    <if test="signDate != null "> and `sign_date` = #{signDate}</if>
-                                    <if test="validPeriod != null "> and `valid_period` = #{validPeriod}</if>
-                                    <if test="noticeMsg != null  and noticeMsg != ''"> and `notice_msg` = #{noticeMsg}</if>
-                                    <if test="cardUrl != null  and cardUrl != ''"> and `card_url` = #{cardUrl}</if>
-                                    <if test="controMeasures != null  and controMeasures != ''"> and `contro_measures` = #{controMeasures}</if>
-                                    <if test="attenPoint != null  and attenPoint != ''"> and `atten_point` = #{attenPoint}</if>
-                                    <if test="mainResDeptId != null "> and `main_res_dept_id` = #{mainResDeptId}</if>
-                                    <if test="mainResDeptName != null  and mainResDeptName != ''"> and `main_res_dept_name` = #{mainResDeptName}</if>
-                                    <if test="otherDeptId != null "> and `other_dept_id` = #{otherDeptId}</if>
-                                    <if test="otherDeptName != null  and otherDeptName != ''"> and `other_dept_name` = #{otherDeptName}</if>
-                                    <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                                    <if test="version != null "> and `version` = #{version}</if>
-                                    <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                            </where>
-        </update>
+    <update id="updateQqchSafeThreeTypePersonList">
+        update qqch_safe_three_type_person
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="duties  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.duties}
+                </foreach>
+            </trim>
+            <trim prefix="person_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.personName}
+                </foreach>
+            </trim>
+            <trim prefix="person_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.personId}
+                </foreach>
+            </trim>
+            <trim prefix="card_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cardName}
+                </foreach>
+            </trim>
+            <trim prefix="card_number  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cardNumber}
+                </foreach>
+            </trim>
+            <trim prefix="sign_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.signDate}
+                </foreach>
+            </trim>
+            <trim prefix="valid_period  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.validPeriod}
+                </foreach>
+            </trim>
+            <trim prefix="notice_msg  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.noticeMsg}
+                </foreach>
+            </trim>
+            <trim prefix="card_url  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cardUrl}
+                </foreach>
+            </trim>
+            <trim prefix="contro_measures  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.controMeasures}
+                </foreach>
+            </trim>
+            <trim prefix="atten_point  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.attenPoint}
+                </foreach>
+            </trim>
+            <trim prefix="main_res_dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mainResDeptId}
+                </foreach>
+            </trim>
+            <trim prefix="main_res_dept_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mainResDeptName}
+                </foreach>
+            </trim>
+            <trim prefix="other_dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.otherDeptId}
+                </foreach>
+            </trim>
+            <trim prefix="other_dept_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.otherDeptName}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
 
-                    <update id="deleteQqchSafeThreeTypePersonByPks">
-                update `qqch_safe_three_type_person` set del_flag = 1
-                <where>
-                    `id` in
-                    <foreach item="id" collection="qqchSafeThreeTypePersonPkList" open="(" separator="," close=")">
-                        #{id}
-                    </foreach>
-                </where>
-            </update>
-            </mapper>
+    <update id="deleteQqchSafeThreeTypePerson">
+        update `qqch_safe_three_type_person` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="duties != null  and duties != ''">and `duties` = #{duties}</if>
+            <if test="personName != null  and personName != ''">and `person_name` = #{personName}</if>
+            <if test="personId != null  and personId != ''">and `person_id` = #{personId}</if>
+            <if test="cardName != null  and cardName != ''">and `card_name` = #{cardName}</if>
+            <if test="cardNumber != null  and cardNumber != ''">and `card_number` = #{cardNumber}</if>
+            <if test="signDate != null ">and `sign_date` = #{signDate}</if>
+            <if test="validPeriod != null ">and `valid_period` = #{validPeriod}</if>
+            <if test="noticeMsg != null  and noticeMsg != ''">and `notice_msg` = #{noticeMsg}</if>
+            <if test="cardUrl != null  and cardUrl != ''">and `card_url` = #{cardUrl}</if>
+            <if test="controMeasures != null  and controMeasures != ''">and `contro_measures` = #{controMeasures}</if>
+            <if test="attenPoint != null  and attenPoint != ''">and `atten_point` = #{attenPoint}</if>
+            <if test="mainResDeptId != null ">and `main_res_dept_id` = #{mainResDeptId}</if>
+            <if test="mainResDeptName != null  and mainResDeptName != ''">and `main_res_dept_name` =
+                #{mainResDeptName}
+            </if>
+            <if test="otherDeptId != null ">and `other_dept_id` = #{otherDeptId}</if>
+            <if test="otherDeptName != null  and otherDeptName != ''">and `other_dept_name` = #{otherDeptName}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+        </where>
+    </update>
+
+    <update id="deleteQqchSafeThreeTypePersonByPks">
+        update `qqch_safe_three_type_person` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="qqchSafeThreeTypePersonPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <update id="batchRefresh">
+        update qqch_safe_three_type_person
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="card_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cardName}
+                </foreach>
+            </trim>
+            <trim prefix="card_number  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cardNumber}
+                </foreach>
+            </trim>
+            <trim prefix="sign_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.signDate}
+                </foreach>
+            </trim>
+            <trim prefix="valid_period  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.validPeriod}
+                </foreach>
+            </trim>
+            <trim prefix="notice_msg  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.noticeMsg}
+                </foreach>
+            </trim>
+            <trim prefix="card_url  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.cardUrl}
+                </foreach>
+            </trim>
+            <trim prefix="contro_measures  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.controMeasures}
+                </foreach>
+            </trim>
+            <trim prefix="atten_point  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.attenPoint}
+                </foreach>
+            </trim>
+            <trim prefix="main_res_dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mainResDeptId}
+                </foreach>
+            </trim>
+            <trim prefix="main_res_dept_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.mainResDeptName}
+                </foreach>
+            </trim>
+            <trim prefix="other_dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.otherDeptId}
+                </foreach>
+            </trim>
+            <trim prefix="other_dept_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.otherDeptName}
+                </foreach>
+            </trim>
+        </trim>
+        where verson  = #{version} and `person_id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.personId}
+        </foreach>
+    </update>
+</mapper>

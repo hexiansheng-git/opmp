@@ -1,10 +1,7 @@
 package com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.service.impl;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -49,15 +46,15 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
         return qqchSafeThreeTypePersonMapper.getQqchSafeThreeTypePerson(qqchSafeThreeTypePerson);
     }
 
-    public List<QqchSafeThreeTypePerson> getQqchSafeThreeTypePersonList(QqchSafeThreeTypePerson qqchSafeThreeTypePerson) {
+    public QqchSafeThreeTypePersonVo getQqchSafeThreeTypePersonList(QqchSafeThreeTypePerson qqchSafeThreeTypePerson) {
         ArrayList<QqchSafeThreeTypePerson> returnList = new ArrayList<>();
-        QqchSafeThreeTypePerson person = new QqchSafeThreeTypePerson();
+        QqchSafeThreeTypePersonVo person = new QqchSafeThreeTypePersonVo();
         BigDecimal version = qqchSafeThreeTypePerson.getVersion();
         version = VersionUtil.getVersion("qqch_safe_three_type_person",version);
         qqchSafeThreeTypePerson.setVersion(version);
         List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList = qqchSafeThreeTypePersonMapper.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePerson);
         //转树列表
-        if(ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
+        if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
             Map<String, List<QqchSafeThreeTypePerson>> dataListMap = qqchSafeThreeTypePersonList.stream().collect(Collectors.groupingBy(t -> t.getDuties()));
             LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictDataName("duties_type");
 
@@ -68,9 +65,11 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
                 parent.setChildrenList(dataListMap.get(key));
                 returnList.add(parent);
             }
-
+            person.setList(returnList);
         }
-        return returnList;
+        person.setVersion(version);
+        person.setStageIdentity(qqchReviewService.getStage());
+        return person;
     }
 
     @Transactional
@@ -139,5 +138,19 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
     @Transactional
     public int deleteQqchSafeThreeTypePersonByPks(List<Long> qqchSafeThreeTypePersonPkList) {
         return qqchSafeThreeTypePersonMapper.deleteQqchSafeThreeTypePersonByPks(qqchSafeThreeTypePersonPkList);
+    }
+
+    @Override
+    public void batchRefresh(QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
+        //仅仅修改最大版本切有效的人员证件信息
+        BigDecimal version = VersionUtil.getVersion("qqch_safe_three_type_person", null);
+        if (!CollectionUtils.isEmpty(qqchSafeThreeTypePersonVo.getList())) {
+            List<QqchSafeThreeTypePerson> list = qqchSafeThreeTypePersonVo.getList();
+            for (QqchSafeThreeTypePerson person : list) {
+                person.setVersion(version);
+                person.setUpdateTime(new Date());
+            }
+            qqchSafeThreeTypePersonMapper.batchRefresh(list,version);
+        }
     }
 }

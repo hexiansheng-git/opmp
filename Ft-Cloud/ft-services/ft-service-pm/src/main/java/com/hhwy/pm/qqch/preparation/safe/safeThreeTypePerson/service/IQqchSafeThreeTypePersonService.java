@@ -8,13 +8,13 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-08-08 17:22:03
- * @remark 
+ * @remark
  */
 public interface IQqchSafeThreeTypePersonService {
-                                                                                                                                                                                                                                                                                                                                                                
+
     QqchSafeThreeTypePerson getQqchSafeThreeTypePerson(QqchSafeThreeTypePerson qqchSafeThreeTypePerson);
 
-    List<QqchSafeThreeTypePerson> getQqchSafeThreeTypePersonList(QqchSafeThreeTypePerson qqchSafeThreeTypePerson);
+    QqchSafeThreeTypePersonVo getQqchSafeThreeTypePersonList(QqchSafeThreeTypePerson qqchSafeThreeTypePerson);
 
     int insertQqchSafeThreeTypePerson(QqchSafeThreeTypePerson qqchSafeThreeTypePerson);
 
@@ -22,9 +22,11 @@ public interface IQqchSafeThreeTypePersonService {
 
     int updateQqchSafeThreeTypePerson(QqchSafeThreeTypePerson qqchSafeThreeTypePerson);
 
-            int updateQqchSafeThreeTypePersonList(List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList);
-    
+    int updateQqchSafeThreeTypePersonList(List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList);
+
     int deleteQqchSafeThreeTypePerson(QqchSafeThreeTypePerson qqchSafeThreeTypePerson);
 
-            int deleteQqchSafeThreeTypePersonByPks(List<Long> qqchSafeThreeTypePersonPkList);
-    }
+    int deleteQqchSafeThreeTypePersonByPks(List<Long> qqchSafeThreeTypePersonPkList);
+
+    void batchRefresh(QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo);
+}
