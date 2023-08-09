@@ -29,34 +29,17 @@ public class QqchPostSettingController extends BaseController {
     private IQqchPostSettingService qqchPostSettingService;
 
     @PreAuthorize(hasPermi = "qqchPostSetting:list")
-    @GetMapping("/getTechDeptList")
-    public AjaxResult getTechDeptList(BigDecimal version) {
-        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getQqchPostSettingList("1", version);
-        return AjaxResult.success(qqchPostSettingVo);
-    }
-
-    @PreAuthorize(hasPermi = "qqchPostSetting:list")
-    @GetMapping("/getWorkAreaList")
-    public AjaxResult getWorkAreaList(BigDecimal version) {
-        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getQqchPostSettingList("2", version);
+    @GetMapping("/getTreeList")
+    public AjaxResult getTreeList(BigDecimal version) {
+        QqchPostSettingVo qqchPostSettingVo = qqchPostSettingService.getTreeList(version);
         return AjaxResult.success(qqchPostSettingVo);
     }
 
     @PreAuthorize(hasPermi = "qqchPostSetting:add")
-    @PostMapping("/batchSaveTechDept")
+    @PostMapping("/batchSave")
     public AjaxResult batchSaveTechDept(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchPostSettingVo qqchPostSettingVo) {
-        String postType = "1";
-        qqchPostSettingService.batchSave(qqchPostSettingVo, postType);
-        return AjaxResult.success();
-    }
-
-    @PreAuthorize(hasPermi = "qqchPostSetting:add")
-    @PostMapping("/batchSaveWorkArea")
-    public AjaxResult batchSaveWorkArea(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchPostSettingVo qqchPostSettingVo) {
-        String postType = "2";
-        qqchPostSettingService.batchSave(qqchPostSettingVo, postType);
+        qqchPostSettingService.batchSave(qqchPostSettingVo);
         return AjaxResult.success();
     }
 }

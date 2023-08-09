@@ -16,7 +16,12 @@ public class QqchPostSettingVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 岗位设置集合
+     * 项目技术管理部门及岗位设置集合
      */
-    private List<QqchPostSetting> treeList;
+    private List<QqchPostSetting> techDeptTreeList;
+
+    /**
+     * 工区技术岗位设置集合
+     */
+    private List<QqchPostSetting> WorkAreaTreeList;
 }

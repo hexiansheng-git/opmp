@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,43 +35,79 @@ public class QqchPostSettingServiceImpl implements IQqchPostSettingService {
     @Autowired
     private IQqchReviewService qqchReviewService;
 
-    public QqchPostSettingVo getQqchPostSettingList(String PostType, BigDecimal version) {
+    public QqchPostSettingVo getTreeList(BigDecimal version) {
         QqchPostSettingVo vo = new QqchPostSettingVo();
         version = VersionUtil.getVersion("qqch_post_setting", version);
         vo.setVersion(version);
 
-        QqchPostSetting qqchPostSetting = new QqchPostSetting();
-        qqchPostSetting.setPostType(PostType);
-        qqchPostSetting.setVersion(version);
-        List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSetting);
+        QqchPostSetting qqchPostSettingParam = new QqchPostSetting();
+        qqchPostSettingParam.setVersion(version);
+
+        List<QqchPostSetting> list = qqchPostSettingMapper.getQqchPostSettingList(qqchPostSettingParam);
+        // 项目技术管理部门及岗位设置集合
+        List<QqchPostSetting> techDeptList = new ArrayList<>();
+        // 工区技术岗位设置集合
+        List<QqchPostSetting> workAreaList = new ArrayList<>();
+
+        for (QqchPostSetting qqchPostSetting : list) {
+            if ("1".equals(qqchPostSetting.getPostType())) {
+                techDeptList.add(qqchPostSetting);
+            }
+            if ("2".equals(qqchPostSetting.getPostType())) {
+                workAreaList.add(qqchPostSetting);
+            }
+        }
+
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setTreeList(TreeUtil.build(list, null));
+        vo.setTechDeptTreeList(TreeUtil.build(techDeptList, null));
+        vo.setWorkAreaTreeList(TreeUtil.build(workAreaList, null));
         return vo;
     }
 
     @Transactional
-    public void batchSave(QqchPostSettingVo voParam, String postType) {
+    public void batchSave(QqchPostSettingVo voParam) {
         // 先批量删除当前版本所有数据
         QqchPostSetting deleteParam = new QqchPostSetting();
-        deleteParam.setPostType(postType);
         deleteParam.setVersion(voParam.getVersion());
         qqchPostSettingMapper.deleteQqchPostSetting(deleteParam);
 
-        if (CollectionUtils.isEmpty(voParam.getTreeList())) {
+        if (CollectionUtils.isEmpty(voParam.getTechDeptTreeList()) && CollectionUtils
+            .isEmpty(voParam.getWorkAreaTreeList())) {
             return;
         }
 
-        // 树转list
-        List<QqchPostSetting> insertList = TreeUtil.treeToList(voParam.getTreeList());
-        for (QqchPostSetting insert : insertList) {
-            insert.setPostType(postType);
-            insert.setVersion(voParam.getVersion());
-            if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                insert.setValid(Valid.YES);
+        List<QqchPostSetting> insertList = new ArrayList<>();
+
+        if (!CollectionUtils.isEmpty(voParam.getTechDeptTreeList())) {
+            // 项目技术管理部门及岗位设置树转list
+            List<QqchPostSetting> techDeptTreeList = TreeUtil.treeToList(voParam.getTechDeptTreeList());
+            for (QqchPostSetting insertTechDept : techDeptTreeList) {
+                insertTechDept.setPostType("1");
+                insertTechDept.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    insertTechDept.setValid(Valid.YES);
+                }
+                insertTechDept.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                insertTechDept.setCreateUserName(SecurityUtils.getUserName());
+                insertTechDept.setCreateTime(DateUtils.getNowDate());
+                insertList.add(insertTechDept);
             }
-            insert.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            insert.setCreateUserName(SecurityUtils.getUserName());
-            insert.setCreateTime(DateUtils.getNowDate());
+        }
+
+        if (!CollectionUtils.isEmpty(voParam.getWorkAreaTreeList())) {
+            // 工区技术岗位设置树转list
+            List<QqchPostSetting> workAreaTreeList = TreeUtil.treeToList(voParam.getWorkAreaTreeList());
+            for (QqchPostSetting insertWorkArea : workAreaTreeList) {
+                insertWorkArea.setPostType("2");
+                insertWorkArea.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    insertWorkArea.setValid(Valid.YES);
+                }
+                insertWorkArea.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                insertWorkArea.setCreateUserName(SecurityUtils.getUserName());
+                insertWorkArea.setCreateTime(DateUtils.getNowDate());
+                insertList.add(insertWorkArea);
+            }
         }
 
         if (insertList.size() > 0) {
