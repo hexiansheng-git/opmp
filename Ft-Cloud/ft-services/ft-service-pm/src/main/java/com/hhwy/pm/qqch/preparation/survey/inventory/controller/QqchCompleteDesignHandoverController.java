@@ -1,15 +1,14 @@
 package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
-import com.hhwy.pm.qqch.preparation.survey.inventory.domain.QqchCompleteDesignHandover;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
-import org.springframework.web.bind.annotation.*;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -45,7 +44,7 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:update")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         qqchCompleteDesignHandoverService.save(qqchCompleteDesignHandoverVo);
         return AjaxResult.success(qqchCompleteDesignHandoverVo);
     }

@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -105,10 +103,11 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
 
         LinkedHashMap<String, String> factorsTypeMap = DictUtil.getDictDataName("factors_type");
         List<ScheFactorsVO.ScheFactorsHeader> headers = new ArrayList<>();
-        factorsTypeMap.forEach((k,v)->{
+        factorsTypeMap.forEach((k, v) -> {
             ScheFactorsVO.ScheFactorsHeader scheFactorsHeader = new ScheFactorsVO.ScheFactorsHeader();
             scheFactorsHeader.setHeaderValue(k);
-            scheFactorsHeader.setHeaderName(v);
+            scheFactorsHeader.setHeaderName(v.split("-")[0]);
+            scheFactorsHeader.setTranslate(v.split("-")[1]);
             headers.add(scheFactorsHeader);
         });
 
@@ -116,7 +115,13 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
         // 表头
         res.setHeaderList(headers);
         // 数据
-        res.setFactorsList(qqchScheFactorsList);
+
+        List<List<QqchScheFactors>> resList = new ArrayList<>();
+        Map<BigDecimal, List<QqchScheFactors>> resMap = qqchScheFactorsList.stream().collect(Collectors.groupingBy(QqchScheFactors::getRowNum));
+        resMap.keySet().stream().sorted(Comparator.comparing(BigDecimal::intValue)).forEach(k -> {
+            resList.add(resMap.get(k));
+        });
+        res.setFactorsVOList(resList);
 
         return res;
     }

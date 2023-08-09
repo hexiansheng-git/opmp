@@ -43,7 +43,7 @@ public class QqchConstController extends BaseController {
     @GetMapping("/list")
     public AjaxResult getQqchConstList(@Validated(ValidationGroups.Select.class) CompileDTO<QqchConst> dto) {
         QqchConst qqchConst = CompileDTO.dealListDto(dto.getVersion(), new QqchConst());
-        List<QqchConst> qqchConstList = qqchConstService.list(qqchConst);
+        CompileDTO qqchConstList = qqchConstService.list(qqchConst);
         return AjaxResult.success(qqchConstList);
     }
 

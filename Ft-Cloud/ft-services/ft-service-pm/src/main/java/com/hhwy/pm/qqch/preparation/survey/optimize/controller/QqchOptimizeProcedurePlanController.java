@@ -46,7 +46,7 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.save(qqchOptimizeProcedurePlanVo);
-        return AjaxResult.success(qqchOptimizeProcedurePlanVo);
+        return AjaxResult.success("保存成功！");
     }
 
     /**
@@ -58,6 +58,6 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.confirm(qqchOptimizeProcedurePlanVo);
-        return AjaxResult.success(qqchOptimizeProcedurePlanVo);
+        return AjaxResult.success("确认成功！");
     }
 }

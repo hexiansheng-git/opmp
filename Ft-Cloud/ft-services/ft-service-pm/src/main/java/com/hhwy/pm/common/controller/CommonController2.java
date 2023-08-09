@@ -12,8 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/common")
-public class CommonController {
+@RequestMapping("/common2")
+public class CommonController2 {
 
     @Resource
     private CommonService commonService;

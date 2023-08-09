@@ -44,9 +44,9 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:update")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.save(qqchDesignTechnologyOptimizeVo);
-        return AjaxResult.success(qqchDesignTechnologyOptimizeVo);
+        return AjaxResult.success();
     }
 
     /**
@@ -58,6 +58,6 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.confirm(qqchDesignTechnologyOptimizeVo);
-        return AjaxResult.success(qqchDesignTechnologyOptimizeVo);
+        return AjaxResult.success("确认成功！");
     }
 }

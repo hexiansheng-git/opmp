@@ -103,12 +103,15 @@ public class QqchDesignTechnologyOptimizeServiceImpl implements IQqchDesignTechn
         if(CollectionUtils.isEmpty(qqchDesignTechnologyOptimizeList)){
             return;
         }
+
+        String valid = Valid.NO;
+        if(BigDecimal.ONE.compareTo(version) == 0){
+            valid = Valid.YES;
+        }
         for (QqchDesignTechnologyOptimize qqchDesignTechnologyOptimize : qqchDesignTechnologyOptimizeList) {
             qqchDesignTechnologyOptimize.setId(IdWorker.createId());
             qqchDesignTechnologyOptimize.setVersion(version);
-            if(version.compareTo(BigDecimal.ONE) == 0){
-                qqchDesignTechnologyOptimize.setValid(Valid.YES);
-            }
+            qqchDesignTechnologyOptimize.setValid(valid);
             qqchDesignTechnologyOptimize.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchDesignTechnologyOptimize.setCreateUserName(SecurityUtils.getUserName());
             qqchDesignTechnologyOptimize.setCreateTime(DateUtils.getNowDate());

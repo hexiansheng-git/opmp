@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.common.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -37,4 +39,8 @@ public class PreparationEntity {
      */
     @NotBlank(message = "按钮标识不能为空！",groups = ValidationGroups.Save.class)
     private String buttonMark;
+
+    @JsonProperty
+    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
+    private String moduleIdentity;
 }

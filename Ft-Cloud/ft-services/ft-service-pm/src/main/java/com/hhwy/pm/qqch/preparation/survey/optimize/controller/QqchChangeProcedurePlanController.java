@@ -47,7 +47,7 @@ public class QqchChangeProcedurePlanController extends BaseController {
     @PostMapping("/save")
     public AjaxResult editQqchChangeProcedurePlanList(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.save(qqchChangeProcedurePlanVo);
-        return AjaxResult.success(qqchChangeProcedurePlanVo);
+        return AjaxResult.success();
     }
 
     /**
@@ -59,6 +59,6 @@ public class QqchChangeProcedurePlanController extends BaseController {
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.confirm(qqchChangeProcedurePlanVo);
-        return AjaxResult.success(qqchChangeProcedurePlanVo);
+        return AjaxResult.success("确认成功！");
     }
 }
