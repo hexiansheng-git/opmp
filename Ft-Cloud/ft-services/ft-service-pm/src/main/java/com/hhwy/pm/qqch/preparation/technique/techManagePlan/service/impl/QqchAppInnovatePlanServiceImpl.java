@@ -130,7 +130,7 @@ public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanServi
 
         qqchAppInnovatePlanVo.setVersion(version);
         qqchAppInnovatePlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchAppInnovatePlanVo.setQqchAppInnovatePlanList(qqchAppInnovatePlanList);
+        qqchAppInnovatePlanVo.setList(qqchAppInnovatePlanList);
         return qqchAppInnovatePlanVo;
     }
 
@@ -146,7 +146,7 @@ public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanServi
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchAppInnovatePlanVo.getVersion();
-        List<QqchAppInnovatePlan> qqchAppInnovatePlanList = qqchAppInnovatePlanVo.getQqchAppInnovatePlanList();
+        List<QqchAppInnovatePlan> qqchAppInnovatePlanList = qqchAppInnovatePlanVo.getList();
 
         this.insertQqchAppInnovatePlanList(qqchAppInnovatePlanList,version);
 

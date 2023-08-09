@@ -130,7 +130,7 @@ public class QqchCraftDeclarePlanServiceImpl implements IQqchCraftDeclarePlanSer
 
         qqchCraftDeclarePlanVo.setVersion(version);
         qqchCraftDeclarePlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchCraftDeclarePlanVo.setQqchCraftDeclarePlanList(qqchCraftDeclarePlanList);
+        qqchCraftDeclarePlanVo.setList(qqchCraftDeclarePlanList);
         return qqchCraftDeclarePlanVo;
     }
 
@@ -146,7 +146,7 @@ public class QqchCraftDeclarePlanServiceImpl implements IQqchCraftDeclarePlanSer
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchCraftDeclarePlanVo.getVersion();
-        List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList = qqchCraftDeclarePlanVo.getQqchCraftDeclarePlanList();
+        List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList = qqchCraftDeclarePlanVo.getList();
 
         this.insertQqchCraftDeclarePlanList(qqchCraftDeclarePlanList,version);
 

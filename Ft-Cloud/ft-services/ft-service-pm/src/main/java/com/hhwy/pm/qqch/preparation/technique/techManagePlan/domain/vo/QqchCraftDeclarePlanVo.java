@@ -22,5 +22,5 @@ public class QqchCraftDeclarePlanVo extends PreparationEntity {
     /**
      * 字段描述：工艺工法申报计划集合
      */
-    private List<QqchCraftDeclarePlan> qqchCraftDeclarePlanList;
+    private List<QqchCraftDeclarePlan> list;
 }
