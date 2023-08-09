@@ -42,6 +42,8 @@ public class XmslWbsListRelation extends BaseEntity {
     @JsonProperty
     @Excel(name = "wbsId,xmsl_wbs")
     private Long wbsId;
+
+    private Long wbsCode;
     /**
      * 字段描述：工程量清单编码,xmsl_contract_list.code
      */

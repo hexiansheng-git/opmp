@@ -6,6 +6,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
+
+import java.util.Set;
 
 /**
  * 图纸复核-清单挂接wbs
@@ -13,6 +16,7 @@ import com.hhwy.common.core.web.domain.BaseEntity;
  * @date 2023-08-07 11:35:16
  * @remark xmsl_draw_review_relation
  */
+@Data
 public class XmslDrawReviewRelation extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -31,6 +35,13 @@ public class XmslDrawReviewRelation extends BaseEntity {
     @Excel(name = "wbsId,xmsl_draw_review_wbs.wbs_id")
     private Long wbsId;
     /**
+     * 字段描述：wbsId,xmsl_draw_review_wbs.wbs_Code
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "wbsCode,xmsl_draw_review_wbs.wbs_id")
+    private String wbsCode;
+    /**
      * 字段描述：工程量清单编码,xmsl_contract_list.code
      */
     @JsonProperty
@@ -43,6 +54,11 @@ public class XmslDrawReviewRelation extends BaseEntity {
     @JsonProperty
     @Excel(name = "工程量清单ID,xmsl_contract_list")
     private Long listId;
+
+    private Integer version;
+
+    private Set<String> codeSet;
+    private Set<String> wbsCodeSet;
 
     @JsonIgnore
     public Long getMainId() {

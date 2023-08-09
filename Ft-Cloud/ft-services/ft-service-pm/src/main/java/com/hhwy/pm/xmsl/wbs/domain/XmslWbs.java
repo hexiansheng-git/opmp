@@ -288,6 +288,7 @@ public class XmslWbs extends BaseEntity {
 
     @JsonProperty
     private String listIds;   //清单ID
+    private String wbsId;
 
 
     @JsonIgnore

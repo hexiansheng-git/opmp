@@ -72,6 +72,7 @@ public class XmslWbsController extends BaseController {
     }
 
 
+
     @PostMapping("/latestList")
     public AjaxResult latestList(@RequestBody XmslWbs wbs) {
         List<XmslWbs> list = xmslWbsService.latestData(wbs);
@@ -109,13 +110,6 @@ public class XmslWbsController extends BaseController {
             return AjaxResult.error("ERROR");
         xmslWbsService.initWbs2Redis();
         return AjaxResult.success();
-    }
-
-    @PreAuthorize(hasPermi = "xmslWbs:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteXmslWbsByPks(@PathVariable Long[] ids) {
-        List<Long> xmslWbsPkList = Arrays.asList(ids);
-        return toAjax(xmslWbsService.deleteXmslWbsByPks(xmslWbsPkList));
     }
 
 //    @GetMapping("/export")

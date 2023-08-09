@@ -8,6 +8,7 @@
                id="XmslWbsListRelationResultMap">
         <result property="mainId" column="main_id"/>
         <result property="wbsId" column="wbs_id"/>
+        <result property="wbsCode" column="wbs_code"/>
         <result property="listCode" column="list_code"/>
         <result property="listId" column="list_id"/>
     </resultMap>
@@ -15,6 +16,7 @@
         select
             `main_id`
              ,`wbs_id`
+             ,`wbs_code`
              ,`list_code`
              ,`list_id`
         from xmsl_wbs_list_relation

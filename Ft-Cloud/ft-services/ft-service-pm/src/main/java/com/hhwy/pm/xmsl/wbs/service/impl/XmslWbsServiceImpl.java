@@ -61,7 +61,14 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Resource
     private IXmslWbsHistoryService wbsHistoryService;
 
-
+    @Override
+    public XmslWbs getByCode(String code) {
+        if(StringUtils.isBlank(code))
+            return null;
+        XmslWbs xmslWbs = new XmslWbs();
+        xmslWbs.setCode(code);
+        return xmslWbsMapper.getXmslWbs(xmslWbs);
+    }
 
     public XmslWbs getXmslWbs(XmslWbs xmslWbs) {
         return xmslWbsMapper.getXmslWbs(xmslWbs);
@@ -258,20 +265,34 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         ThreadPoolUtil.execute(()->{
             String key = WbsRedisUtils.getKey(tenantKey);
             String childKey = WbsRedisUtils.getChildKey(tenantKey);
+            String direChildKey = WbsRedisUtils.getDireChildKey(tenantKey);
+            String wbsListKey = WbsRedisUtils.getWbsListKey(tenantKey);
+            String listWbsKey = WbsRedisUtils.getListWbsKey(tenantKey);
             try{
                 if(RedissonLockUtil.lock(key)){
                     Long count = xmslWbsMapper.countByWbs(new XmslWbs());
                     int limitSize = 3;
                     Long pages = count/limitSize+(count%limitSize>0?1:0);
                     Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
-                    Map<String,String> childRedisMap = new ConcurrentHashMap<>(limitSize);
+                    Map<String,String> childRedisMap = new ConcurrentHashMap<>(limitSize); //wbs对应的全部子级（孙级）
+                    Map<String,String> direChildRedisMap = new ConcurrentHashMap<>(limitSize);//wbs对应的直属子级
+                    Map<String,String> wbsListMap = new ConcurrentHashMap<>(); //wbs编号对应清单编号
+                    Map<String,String> listWbsMap = new ConcurrentHashMap<>(); //清单编号对应wbs编号
                     redisUtils.delete(key);
                     for (int i = 0; i < pages.intValue(); i++) {
                         PageHelper.startPage(i+1,limitSize,false);
                         List<XmslWbs> allList = this.latestWbsListSortLevel();
                         //遍历塞入map
                         allList.parallelStream().forEach(r->{
+                            String[] listCodes = Convert.toStrArray(r.getListCode());
+                            ObjectUtils.addStr2MapList(wbsListMap,r.getCode(),r.getListCode());
+                            for (int j = 0; j < listCodes.length; j++) {
+                                ObjectUtils.addStr2MapList(listWbsMap,listCodes[j],r.getCode());
+                            }
                             redisMap.put(r.getId(), JSONObject.toJSONString(r));
+                            //直属子级
+                            if(StringUtils.isNotBlank(r.getParentId()))
+                                ObjectUtils.addStr2MapList(direChildRedisMap,r.getParentId(),r.getId());
                             String ancestor = r.getAncestors();
                             if(com.hhwy.common.core.utils.StringUtils.isBlank(ancestor))
                                 return;
@@ -287,7 +308,16 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                     }
                     redisUtils.delete(childKey);
                     redisUtils.hPutAll(childKey,childRedisMap);
+                    redisUtils.delete(direChildKey);
+                    redisUtils.hPutAll(direChildKey,direChildRedisMap);
+                    redisUtils.delete(wbsListKey);
+                    redisUtils.hPutAll(wbsListKey,wbsListMap);
+                    redisUtils.delete(listWbsKey);
+                    redisUtils.hPutAll(listWbsKey,listWbsMap);
                 }
+            }catch(Exception e){
+                e.printStackTrace();
+                logger.info("塞wbs到缓存失败,msg:{}",e.getMessage());
             }finally {
                 RedissonLockUtil.unlock(key);
             }

@@ -7,9 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 图纸复核-清单
@@ -17,8 +19,11 @@ import java.util.Date;
  * @date 2023-08-07 11:35:12
  * @remark xmsl_draw_review_list
  */
+@Data
 public class XmslDrawReviewList extends BaseEntity {
     private static final long serialVersionUID = 1L;
+
+    private Long id;
 
     /**
      * 字段描述：清单编码,xmsl_contract_list.code
@@ -54,6 +59,10 @@ public class XmslDrawReviewList extends BaseEntity {
     @JsonProperty
     @Excel(name = "父id")
     private Long pid;
+    //版本号
+    private Integer version;
+    //是否为最新版本
+    private Integer versionFlag;
     /**
      * 字段描述：祖籍id集合
      */
@@ -196,283 +205,6 @@ public class XmslDrawReviewList extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    @JsonIgnore
-    public String getListCode() {
-        return listCode;
-    }
+    List<XmslDrawReviewMaterial> materialList;
 
-    @JsonIgnore
-    public void setListCode(String listCode) {
-        this.listCode = listCode;
-    }
-
-    @JsonIgnore
-    public Long getMainId() {
-        return mainId;
-    }
-
-    @JsonIgnore
-    public void setMainId(Long mainId) {
-        this.mainId = mainId;
-    }
-
-    @JsonIgnore
-    public Long getListId() {
-        return listId;
-    }
-
-    @JsonIgnore
-    public void setListId(Long listId) {
-        this.listId = listId;
-    }
-
-    @JsonIgnore
-    public Long getContractListId() {
-        return contractListId;
-    }
-
-    @JsonIgnore
-    public void setContractListId(Long contractListId) {
-        this.contractListId = contractListId;
-    }
-
-    @JsonIgnore
-    public Long getPid() {
-        return pid;
-    }
-
-    @JsonIgnore
-    public void setPid(Long pid) {
-        this.pid = pid;
-    }
-
-    @JsonIgnore
-    public String getAncestors() {
-        return ancestors;
-    }
-
-    @JsonIgnore
-    public void setAncestors(String ancestors) {
-        this.ancestors = ancestors;
-    }
-
-    @JsonIgnore
-    public String getChineseName() {
-        return chineseName;
-    }
-
-    @JsonIgnore
-    public void setChineseName(String chineseName) {
-        this.chineseName = chineseName;
-    }
-
-    @JsonIgnore
-    public String getForeignName() {
-        return foreignName;
-    }
-
-    @JsonIgnore
-    public void setForeignName(String foreignName) {
-        this.foreignName = foreignName;
-    }
-
-    @JsonIgnore
-    public String getListType() {
-        return listType;
-    }
-
-    @JsonIgnore
-    public void setListType(String listType) {
-        this.listType = listType;
-    }
-
-    @JsonIgnore
-    public String getUnitCode() {
-        return unitCode;
-    }
-
-    @JsonIgnore
-    public void setUnitCode(String unitCode) {
-        this.unitCode = unitCode;
-    }
-
-    @JsonIgnore
-    public String getUnit() {
-        return unit;
-    }
-
-    @JsonIgnore
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    @JsonIgnore
-    public BigDecimal getWinNum() {
-        return winNum;
-    }
-
-    @JsonIgnore
-    public void setWinNum(BigDecimal winNum) {
-        this.winNum = winNum;
-    }
-
-    @JsonIgnore
-    public BigDecimal getCheckNum() {
-        return checkNum;
-    }
-
-    @JsonIgnore
-    public void setCheckNum(BigDecimal checkNum) {
-        this.checkNum = checkNum;
-    }
-
-    @JsonIgnore
-    public String getImageProgress() {
-        return imageProgress;
-    }
-
-    @JsonIgnore
-    public void setImageProgress(String imageProgress) {
-        this.imageProgress = imageProgress;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
 }
