@@ -37,7 +37,7 @@ public class QqchPostSettingController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchPostSetting:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSaveTechDept(
+    public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchPostSettingVo qqchPostSettingVo) {
         qqchPostSettingService.batchSave(qqchPostSettingVo);
         return AjaxResult.success();
