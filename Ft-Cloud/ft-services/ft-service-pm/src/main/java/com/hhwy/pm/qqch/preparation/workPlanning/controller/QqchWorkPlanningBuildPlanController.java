@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.controller;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -120,12 +121,14 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
     @PreAuthorize(hasPermi = "qqchWorkPlanningBuildPlan:importData")
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file){
+    public AjaxResult importData(@RequestPart("file") MultipartFile file){
+        ExcelUtils<QqchWorkPlanningBuildPlan> util = new ExcelUtils<>(QqchWorkPlanningBuildPlan.class);
         try{
-            ExcelUtils<QqchWorkPlanningBuildPlan> util = new ExcelUtils<>(QqchWorkPlanningBuildPlan.class);
-            List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlans = util.importExcel(file.getInputStream());
-            return AjaxResult.success(qqchWorkPlanningBuildPlans);
+            InputStream inputStream = file.getInputStream();
+            List<QqchWorkPlanningBuildPlan> list = util.importExcel(inputStream);
+            return AjaxResult.success(list);
         }catch (Exception e){
+            e.printStackTrace();
             throw new RuntimeException("导入失败！");
         }
     }
