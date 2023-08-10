@@ -100,7 +100,7 @@ public class QqchMeasureExpEquController extends BaseController {
      * @param version
      * @throws IOException
      */
-    @GetMapping("/exportMeasure")
+    @PostMapping("/exportMeasure")
     public void exportMeasure(HttpServletResponse response, BigDecimal version) {
         QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "1");
         FtExcelUtil<QqchMeasureExpEqu> util = new FtExcelUtil<>(QqchMeasureExpEqu.class);
@@ -114,7 +114,7 @@ public class QqchMeasureExpEquController extends BaseController {
      * @param version
      * @throws IOException
      */
-    @GetMapping("/exportExperiment")
+    @PostMapping("/exportExperiment")
     public void exportExperiment(HttpServletResponse response, BigDecimal version) {
         QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "2");
 

@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -13,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -64,21 +64,24 @@ public class QqchExpBetonController extends BaseController {
     }
 
     /**
-     * 树列表导出 TODO
+     * 树列表导出
      *
      * @param response
-     * @param version
      * @throws IOException
      */
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, BigDecimal version) throws IOException {
-        List<QqchExpBeton> qqchExpBetonList = qqchExpBetonService.getTreeList(version).getTreeList();
-        FtExcelUtil<QqchExpBeton> util = new FtExcelUtil<>(QqchExpBeton.class);
-        util.exportExcel(response, qqchExpBetonList, DateUtils.getDate());
+    @PostMapping("/export")
+    public void export(HttpServletRequest request, HttpServletResponse response)
+        throws IOException {
+        FtExcelUtil<QqchExpBeton> excelUtil = new FtExcelUtil<>(QqchExpBeton.class);
+        try {
+            excelUtil.downloadTemplate(request, response, "importExpBeton.xlsx");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
-     * 树列表导出导入 TODO
+     * 树列表导出导入
      *
      * @param file
      * @return
@@ -88,7 +91,7 @@ public class QqchExpBetonController extends BaseController {
         FtExcelUtil<QqchExpBetonVo> util = new FtExcelUtil<>(QqchExpBetonVo.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<QqchExpBetonVo> list = util.importExcel(inputStream);
+            List<QqchExpBetonVo> list = util.importTreeExcel(inputStream);
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

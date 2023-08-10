@@ -48,12 +48,12 @@ public class QqchMeasureExpTechServiceImpl implements IQqchMeasureExpTechService
         qqchMeasureExpTech.setVersion(version);
         // 测量技术方案计划
         if ("1".equals(type)) {
-            qqchMeasureExpTech.setType("1");
+            vo.setType("1");
             vo.setMeasureList(qqchMeasureExpTechMapper.getQqchMeasureExpTechList(qqchMeasureExpTech));
         }
         // 试验方案计划
         if ("2".equals(type)) {
-            qqchMeasureExpTech.setType("2");
+            vo.setType("2");
             vo.setExperimentList(qqchMeasureExpTechMapper.getQqchMeasureExpTechList(qqchMeasureExpTech));
         }
 
