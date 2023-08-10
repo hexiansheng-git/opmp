@@ -1,9 +1,11 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.controller;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonImportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -12,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -70,14 +71,11 @@ public class QqchExpBetonController extends BaseController {
      * @throws IOException
      */
     @PostMapping("/export")
-    public void export(HttpServletRequest request, HttpServletResponse response)
+    public void export(HttpServletResponse response, BigDecimal version)
         throws IOException {
-        FtExcelUtil<QqchExpBeton> excelUtil = new FtExcelUtil<>(QqchExpBeton.class);
-        try {
-            excelUtil.downloadTemplate(request, response, "importExpBeton.xlsx");
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        List<QqchExpBeton> list = qqchExpBetonService.getList(version);
+        FtExcelUtil<QqchExpBeton> util = new FtExcelUtil<>(QqchExpBeton.class);
+        util.exportExcel(response, list, DateUtils.getDate());
     }
 
     /**
@@ -88,10 +86,10 @@ public class QqchExpBetonController extends BaseController {
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        FtExcelUtil<QqchExpBetonVo> util = new FtExcelUtil<>(QqchExpBetonVo.class);
+        FtExcelUtil<QqchExpBetonImportVo> util = new FtExcelUtil<>(QqchExpBetonImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<QqchExpBetonVo> list = util.importTreeExcel(inputStream);
+            List<QqchExpBetonImportVo> list = util.importTreeExcel(inputStream);
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

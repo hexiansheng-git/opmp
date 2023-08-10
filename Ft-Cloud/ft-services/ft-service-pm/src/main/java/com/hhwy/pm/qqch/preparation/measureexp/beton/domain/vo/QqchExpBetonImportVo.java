@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.preparation.measureexp.beton.domain;
+package com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -13,12 +13,18 @@ import lombok.Data;
 /**
  * @author zhenglili
  * @date 2023-08-04 16:12:49
- * @remark qqch_exp_beton
+ * @remark 混凝土配合比导入实体
  */
 @Data
-public class QqchExpBeton extends TreeNode<QqchExpBeton> {
+public class QqchExpBetonImportVo extends TreeNode<QqchExpBetonImportVo> {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 序号  导入用
+     */
+    @FtExcel(name = "序号", serialNumFlag = true)
+    private String serialNum;
 
     /**
      * 字段描述：主键id
@@ -59,7 +65,6 @@ public class QqchExpBeton extends TreeNode<QqchExpBeton> {
      * 字段描述：所属WBS名称
      */
     @JsonProperty
-    @FtExcel(name = "所属WBS名称")
     private String wbsName;
     /**
      * 字段描述：不同工艺环境下配合比要求
