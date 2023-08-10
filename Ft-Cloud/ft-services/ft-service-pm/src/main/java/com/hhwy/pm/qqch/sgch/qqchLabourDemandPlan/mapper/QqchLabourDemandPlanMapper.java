@@ -30,4 +30,8 @@ public interface QqchLabourDemandPlanMapper {
      int deleteQqchLabourDemandPlanByPks(@Param("qqchLabourDemandPlanPkList") List<Long> qqchLabourDemandPlanPkList);
 
     List<QqchLabourDemandPlanDto> selectCount(QqchLabourDemandPlan qqchLabourDemandPlan);
+
+    QqchLabourDemandPlan getQqchLabourDemandPlan1(QqchLabourDemandPlan qqchLabourDemandPlan);
+
+    QqchLabourDemandPlan getQqchLabourDemandPlan2(QqchLabourDemandPlan qqchLabourDemandPlan);
 }

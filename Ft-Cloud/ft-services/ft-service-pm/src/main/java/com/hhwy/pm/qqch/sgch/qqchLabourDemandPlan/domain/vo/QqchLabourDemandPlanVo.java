@@ -31,4 +31,8 @@ public class QqchLabourDemandPlanVo {
      * 字段描述：劳动力需求计划
      */
     private List<QqchLabourDemandPlan> qqchLabourDemandPlanList;
+
+    private String startTime;
+
+    private String endTime;
 }
