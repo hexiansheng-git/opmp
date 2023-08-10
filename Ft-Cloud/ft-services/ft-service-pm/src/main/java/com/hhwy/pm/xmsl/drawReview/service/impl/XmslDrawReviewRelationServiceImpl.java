@@ -71,10 +71,8 @@ public class XmslDrawReviewRelationServiceImpl implements IXmslDrawReviewRelatio
 
     @Transactional
     public int insertXmslDrawReviewRelationList(List<XmslDrawReviewRelation> xmslDrawReviewRelationList) {
-        for (XmslDrawReviewRelation xmslDrawReviewRelation : xmslDrawReviewRelationList) {
-            xmslDrawReviewRelation.setCreateUser(SecurityUtils.getUserName());
-            xmslDrawReviewRelation.setCreateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewRelationList))
+            return 0;
         return xmslDrawReviewRelationMapper.insertXmslDrawReviewRelationList(xmslDrawReviewRelationList);
     }
 

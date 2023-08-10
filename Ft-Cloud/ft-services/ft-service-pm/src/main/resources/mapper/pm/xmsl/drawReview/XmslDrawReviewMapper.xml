@@ -267,4 +267,70 @@
         </where>
     </update>
 
+    <update id="deleteRelation" parameterType="Map">
+        delete from xmsl_draw_review_relation where main_id = #{mainId}
+        <if test="wbsIds != null and wbsIds.size > 0">
+            and wbs_id in
+            <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="listIds != null and listIds.size > 0">
+            and list_id in
+            <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
+    <update id="deleteWbs" parameterType="Map">
+        delete from xmsl_draw_review_list where main_id = #{mainId}
+    </update>
+
+    <update id="deleteList" parameterType="Map">
+        delete from xmsl_draw_review_list where main_id = #{mainId}
+        <if test="wbsIds != null and wbsIds.size > 0">
+            and wbs_id in
+            <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="listIds != null and listIds.size > 0">
+            and list_id in
+            <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+    <update id="deleteMaterial" parameterType="Map">
+        delete from xmsl_draw_review_material where main_id = #{mainId}
+        <if test="wbsIds != null and wbsIds.size > 0">
+            and wbs_id in
+            <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="listIds != null and listIds.size > 0">
+            and list_id in
+            <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+    <update id="deleteSourceMaterial" parameterType="Map">
+        delete from xmsl_draw_review_source_material where main_id = #{mainId}
+        <if test="wbsIds != null and wbsIds.size > 0">
+            and wbs_id in
+            <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="listIds != null and listIds.size > 0">
+            and list_id in
+            <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
 </mapper>

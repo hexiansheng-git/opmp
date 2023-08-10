@@ -62,10 +62,8 @@ public class XmslDrawReviewWbsServiceImpl implements IXmslDrawReviewWbsService {
 
     @Transactional
     public int insertXmslDrawReviewWbsList(List<XmslDrawReviewWbs> xmslDrawReviewWbsList) {
-        for (XmslDrawReviewWbs xmslDrawReviewWbs : xmslDrawReviewWbsList) {
-            xmslDrawReviewWbs.setCreateUser(SecurityUtils.getUserName());
-            xmslDrawReviewWbs.setCreateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewWbsList))
+            return 0;
         return xmslDrawReviewWbsMapper.insertXmslDrawReviewWbsList(xmslDrawReviewWbsList);
     }
 

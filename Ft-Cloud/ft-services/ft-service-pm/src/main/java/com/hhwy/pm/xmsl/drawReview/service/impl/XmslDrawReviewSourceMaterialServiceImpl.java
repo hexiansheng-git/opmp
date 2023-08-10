@@ -55,11 +55,8 @@ public class XmslDrawReviewSourceMaterialServiceImpl implements IXmslDrawReviewS
 
     @Transactional
     public int insertXmslDrawReviewSourceMaterialList(List<XmslDrawReviewSourceMaterial> xmslDrawReviewSourceMaterialList) {
-        for (XmslDrawReviewSourceMaterial xmslDrawReviewSourceMaterial : xmslDrawReviewSourceMaterialList) {
-            xmslDrawReviewSourceMaterial.setId(IdWorker.createId());
-            xmslDrawReviewSourceMaterial.setCreateUser(SecurityUtils.getUserName());
-            xmslDrawReviewSourceMaterial.setCreateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewSourceMaterialList))
+            return 0;
         return xmslDrawReviewSourceMaterialMapper.insertXmslDrawReviewSourceMaterialList(xmslDrawReviewSourceMaterialList);
     }
 

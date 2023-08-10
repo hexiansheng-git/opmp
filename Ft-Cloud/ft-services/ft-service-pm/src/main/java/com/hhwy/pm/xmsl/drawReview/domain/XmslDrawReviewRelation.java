@@ -20,6 +20,18 @@ import java.util.Set;
 public class XmslDrawReviewRelation extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
+    public XmslDrawReviewRelation() {
+    }
+
+    public XmslDrawReviewRelation(Long mainId, Long wbsId, String wbsCode, String listCode, Long listId, Integer version) {
+        this.mainId = mainId;
+        this.wbsId = wbsId;
+        this.wbsCode = wbsCode;
+        this.listCode = listCode;
+        this.listId = listId;
+        this.version = version;
+    }
+
     /**
      * 字段描述：mainId,xmsl_draw_review.id
      */

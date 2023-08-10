@@ -84,7 +84,6 @@
     <select id="getXmslDrawReviewSourceMaterialList" resultMap="XmslDrawReviewSourceMaterialResultMap">
         <include refid="selectXmslDrawReviewSourceMaterialVo"/>
         <where>
-            del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>

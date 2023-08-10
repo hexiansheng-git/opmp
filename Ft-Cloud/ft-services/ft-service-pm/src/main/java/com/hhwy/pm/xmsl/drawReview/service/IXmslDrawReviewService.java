@@ -1,6 +1,8 @@
 package com.hhwy.pm.xmsl.drawReview.service;
 
 import java.util.List;
+import java.util.Map;
+
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
@@ -22,6 +24,22 @@ public interface IXmslDrawReviewService {
     XmslDrawReview getLast();
 
     Integer hasChange();
+
+    /**
+     * wbs列表
+     * 未生效时，获取全量最新的数据，否则根据版本查询
+     * @param map{version,valid,parentId}
+     * @return
+     */
+    List wbsList(Map map);
+
+    /**
+     * 工程量清单列表
+     * 未生效时，获取全量最新的数据，否则根据版本查询
+     * @param map{version,valid,parentId}
+     * @return
+     */
+    List engineeringList(Map map);
 
     /**
      * 根据wbs信息获取其下明细
@@ -56,6 +74,12 @@ public interface IXmslDrawReviewService {
     int updateXmslDrawReview(XmslDrawReview xmslDrawReview);
 
     
-    int deleteXmslDrawReview(XmslDrawReview xmslDrawReview);
+    void deleteXmslDrawReview(XmslDrawReview xmslDrawReview);
+
+    /**
+     * 流程结束
+     * @param id
+     */
+    void finishFlow(Long id);
 
 }

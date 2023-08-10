@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
@@ -17,6 +18,7 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import io.jsonwebtoken.lang.Assert;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -59,6 +61,79 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 
     public List<XmslDrawReview> getXmslDrawReviewList(XmslDrawReview xmslDrawReview) {
         return xmslDrawReviewMapper.getXmslDrawReviewList(xmslDrawReview);
+    }
+
+    @Override
+    public List wbsList(Map map) {
+        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
+            XmslDrawReviewWbs query = new XmslDrawReviewWbs();
+            query.setParentId(ObjectUtils.nvlLong(map.get("parentId")));
+            query.setVersion(ObjectUtils.nvl(map.get("version")));
+            query.setVersionFlag(Constant.YES_INT);
+            List<XmslDrawReviewWbs> list = drawReviewWbsService.getXmslDrawReviewWbsList(query);
+            return list;
+        }
+        XmslWbs query = new XmslWbs();
+        query.setParentId(ObjectUtils.nvlString(map.get("parentId")));
+        List<XmslWbs> list = wbsService.latestData(query);
+        if(CollectionUtils.isEmpty(list))
+            return list;
+        Map<String,XmslWbs> wbsMap = new HashMap<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            XmslWbs temp = list.get(i);
+            temp.setWbsId(temp.getId());
+            temp.setId(null);
+            wbsMap.put(temp.getCode(),temp);
+        }
+        if(ObjectUtils.isEmpty(map.get("version")))
+            return list;
+        //查询对应的图纸复核wbs
+        XmslDrawReviewWbs queryWbs = new XmslDrawReviewWbs();
+        queryWbs.setVersion(ObjectUtils.nvl(map.get("version")));
+        queryWbs.setVersionFlag(Constant.YES_INT);
+        queryWbs.setParams(ObjectUtils.toMap("wbsCodes",wbsMap.keySet()));
+        List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getXmslDrawReviewWbsList(queryWbs);
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslWbs tempWbs = wbsMap.get(wbsList.get(i).getCode());
+            tempWbs.setId(wbsList.get(i).getId()+"");
+        }
+        return list;
+    }
+
+    @Override
+    public List engineeringList(Map map) {
+        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
+            XmslDrawReviewList queryList = new XmslDrawReviewList();
+            queryList.setVersion(ObjectUtils.nvl(map.get("version")));
+            queryList.setVersionFlag(Constant.YES_INT);
+            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
+            List<XmslDrawReviewList> resuList = drawReviewListService.getXmslDrawReviewListList(queryList);
+            return resuList;
+        }
+        XmslContractList queryList = new XmslContractList();
+        queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
+        List<XmslContractList> list = contractListService.getEffectList(queryList);
+        Map<String,XmslContractList> listMap = new HashMap<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            XmslContractList temp = list.get(i);
+            temp.setPtVar2(temp.getCode());
+            temp.setPtVar1(temp.getId());
+            temp.setId(null);
+            listMap.put(temp.getCode(),temp);
+        }
+        if(ObjectUtils.isEmpty(map.get("version")))
+            return list;
+        //查询对应的图纸复核清单 (图纸复核清单id 填充到list)
+        XmslDrawReviewList queryDrawList = new XmslDrawReviewList();
+        queryDrawList.setVersion(ObjectUtils.nvl(map.get("version")));
+        queryDrawList.setVersionFlag(Constant.YES_INT);
+        queryDrawList.setParams(ObjectUtils.toMap("listCodes",listMap.keySet()));
+        List<XmslDrawReviewList> drawList = drawReviewListService.getXmslDrawReviewListList(queryDrawList);
+        for (int i = 0; i < drawList.size(); i++) {
+            XmslContractList tempList = listMap.get(drawList.get(i).getListCode());
+            tempList.setId(drawList.get(i).getId()+"");
+        }
+        return list;
     }
 
     @Override
@@ -116,7 +191,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         for (int i = 0; i < sourceMaterList.size(); i++) {
             XmslDrawReviewSourceMaterial temp = sourceMaterList.get(i);
             XmslDrawReviewMaterial material = materMap.get(temp.getMaterialId());
-            material.setMaterialList(ObjectUtils.add2List(material.getMaterialList(),temp));
+            material.setSourceMaterialList(ObjectUtils.add2List(material.getSourceMaterialList(),temp));
         }
         return list;
     }
@@ -164,7 +239,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslDrawReviewMaterial temp = materialList.get(i);
             materMap.put(temp.getId(),temp);
             //填充到清单
-            XmslDrawReviewWbs tempWbs = listMap.get(temp.getListId());
+            XmslDrawReviewWbs tempWbs = listMap.get(temp.getWbsId());
             tempWbs.setMaterialList(ObjectUtils.add2List(tempWbs.getMaterialList(),temp));
         }
         List<XmslDrawReviewSourceMaterial> sourceMaterList = sourceMaterialService.getByMaterId(materMap.keySet());
@@ -172,7 +247,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         for (int i = 0; i < sourceMaterList.size(); i++) {
             XmslDrawReviewSourceMaterial temp = sourceMaterList.get(i);
             XmslDrawReviewMaterial material = materMap.get(temp.getMaterialId());
-            material.setMaterialList(ObjectUtils.add2List(material.getMaterialList(),temp));
+            material.setSourceMaterialList(ObjectUtils.add2List(material.getSourceMaterialList(),temp));
         }
         return list;
     }
@@ -196,10 +271,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return resuList;
     }
 
-//    List<XmslDrawReviewRelation> relationList = relationService.relationList(version,wbsCode);
-//    Set<Long> listIdSet = relationList.stream().map(r->r.getListId()).collect(Collectors.toSet());
-//    list = drawReviewListService.getByIds(listIdSet);
-
     @Override
     public Integer hasChange() {
         Integer count =  this.xmslDrawReviewMapper.getXmslDrawReviewCount(new XmslDrawReview());
@@ -209,9 +280,11 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     @Override
     @Transactional
     public void save(XmslDrawReviewDto dto) {
-        if(dto.getId()==null){
+        Integer version = dto.getVersion()==null?1:dto.getVersion();
+        boolean isNew = dto.getId()==null;
+        if(isNew){
             new AddBaseInfoUtil<>(dto);
-            dto.setVersion(dto.getVersion()==null?1:dto.getVersion());
+            dto.setVersion(version);
             dto.setValid(Constant.NO_INT);
             xmslDrawReviewMapper.insertXmslDrawReview(dto);
         }else{
@@ -220,10 +293,162 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             xmslDrawReviewMapper.updateXmslDrawReview(dto);
         }
         //清单或wbs保存
-
-//        this.xmslDrawReviewMapper.getXmslDrawReview();
+        if(CollectionUtils.isNotEmpty(dto.getWbsList()))
+            handlerWbsList(dto,version,isNew);
+        else if(CollectionUtils.isNotEmpty(dto.getList()))
+            handlerList(dto,version,isNew);
     }
 
+    private void handlerWbsList(XmslDrawReviewDto dto,Integer version,boolean isNew){
+        List<XmslDrawReviewWbs> wbsList = dto.getWbsList();
+        //处理wbs
+        List<XmslDrawReviewWbs> addWbsList = new ArrayList<>();
+//        List<XmslDrawReviewWbs> updateWbsList = new ArrayList<>();
+        List<XmslDrawReviewRelation> addRelationList = new ArrayList<>();
+        List<XmslDrawReviewList> addList = new ArrayList<>();
+        List<XmslDrawReviewMaterial> addMaterList = new ArrayList<>();
+        List<XmslDrawReviewSourceMaterial> addSourceMaterList = new ArrayList<>();
+        Set<Long> wbsIdSet = new HashSet<>();
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslDrawReviewWbs temp = wbsList.get(i);
+            if(temp.getId() != null)
+                wbsIdSet.add(temp.getId());
+            temp.setVersion(version);
+            temp.setVersionFlag(Constant.YES_INT);
+            temp.setMainId(dto.getId());
+            if(temp.getId() ==null){
+                temp.initAdd();
+                addWbsList.add(temp);
+            }else{
+//                new AddBaseInfoUtil().updateBaseEntity(temp);
+//                updateWbsList.add(temp);
+            }
+            if(CollectionUtils.isEmpty(temp.getList()))
+                continue;
+            //清单&挂接清单
+            List<XmslDrawReviewList> list = temp.getList();
+            for (int j = 0; j < list.size(); j++) {
+                XmslDrawReviewList tempList = list.get(j);
+                tempList.setVersion(version);
+                tempList.setVersionFlag(Constant.YES_INT);
+                tempList.setMainId(dto.getId());
+                tempList.setWbsId(temp.getId());
+                tempList.setListCode(ObjectUtils.nvlString(tempList.getListCode(),tempList.getPtVar2()));
+                tempList.setListId(ObjectUtils.nvlLong(tempList.getListId(),Long.valueOf(tempList.getPtVar1())));
+                tempList.initAdd();
+                addList.add(tempList);
+                addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
+                        tempList.getListCode(),tempList.getId(),version));
+                if(CollectionUtils.isEmpty(tempList.getMaterialList()))
+                    continue;
+                //图纸材料细目
+                List<XmslDrawReviewMaterial> materialList = tempList.getMaterialList();
+                for (int k = 0; k < materialList.size(); k++) {
+                    XmslDrawReviewMaterial tempMater = materialList.get(k);
+                    tempMater.initAdd();
+                    tempMater.setMainId(dto.getId());
+                    tempMater.setWbsId(temp.getId());
+                    tempMater.setWbsCode(temp.getCode());
+                    tempMater.setListCode(tempList.getListCode());
+                    tempMater.setListId(tempList.getId());
+                    addMaterList.add(tempMater);
+                    if(CollectionUtils.isEmpty(tempMater.getSourceMaterialList()))
+                        continue;
+                    //原材料
+                    List<XmslDrawReviewSourceMaterial> sourceMaterialList = tempMater.getSourceMaterialList();
+                    for (int l = 0; l < sourceMaterialList.size(); l++) {
+                        XmslDrawReviewSourceMaterial tempSource = sourceMaterialList.get(l);
+                        tempSource.initAdd();
+                        tempSource.setMainId(dto.getId());
+                        tempSource.setWbsId(temp.getId());
+                        tempSource.setListId(tempList.getId());
+                        tempSource.setListCode(tempList.getListCode());
+                        tempSource.setMaterialId(tempMater.getId());
+                        addSourceMaterList.add(tempSource);
+                    }
+                }
+            }
+        }
+        if(!isNew && CollectionUtils.isNotEmpty(wbsIdSet)){
+            //删除wbs、挂接、清单、细目、配合比
+            Map delMap = ObjectUtils.toMap("mainId",dto.getId(),"wbsIds",wbsIdSet);
+            xmslDrawReviewMapper.deleteRelation(delMap);
+            xmslDrawReviewMapper.deleteList(delMap);
+            xmslDrawReviewMapper.deleteMaterial(delMap);
+            xmslDrawReviewMapper.deleteSourceMaterial(delMap);
+        }
+        drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
+        relationService.insertXmslDrawReviewRelationList(addRelationList);
+        drawReviewListService.insertXmslDrawReviewListList(addList);
+        materialService.insertXmslDrawReviewMaterialList(addMaterList);
+        sourceMaterialService.insertXmslDrawReviewSourceMaterialList(addSourceMaterList);
+    }
+
+    private void handlerList(XmslDrawReviewDto dto,Integer version,boolean isNew){
+        List<XmslDrawReviewList> list = dto.getList();
+        List<XmslDrawReviewRelation> addRelationList = new ArrayList<>();
+        List<XmslDrawReviewList> addList = new ArrayList<>();
+        List<XmslDrawReviewMaterial> addMaterList = new ArrayList<>();
+        List<XmslDrawReviewSourceMaterial> addSourceMaterList = new ArrayList<>();
+        //处理清单
+        Set<Long> listIdSet = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            XmslDrawReviewList tempList = list.get(i);
+            if(tempList.getId() != null)
+                listIdSet.add(tempList.getId());
+            tempList.setVersion(version);
+            tempList.setVersionFlag(Constant.YES_INT);
+            tempList.setMainId(dto.getId());
+            //清单&挂接清单
+            List<XmslDrawReviewWbs> wbsList = tempList.getWbsList();
+            for (int j = 0; j < wbsList.size(); j++) {
+                XmslDrawReviewWbs temp = wbsList.get(j);
+                XmslDrawReviewList newList = new XmslDrawReviewList();
+                tempList.setWbsId(temp.getId());
+                BeanUtils.copyProperties(tempList,newList);
+                newList.initAdd();
+                addList.add(newList);
+                addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
+                        tempList.getListCode(),tempList.getId(),version));
+                //图纸材料细目
+                List<XmslDrawReviewMaterial> materialList = temp.getMaterialList();
+                for (int k = 0; k < materialList.size(); k++) {
+                    XmslDrawReviewMaterial tempMater = materialList.get(k);
+                    tempMater.initAdd();
+                    tempMater.setMainId(dto.getId());
+                    tempMater.setWbsId(temp.getId());
+                    tempMater.setWbsCode(temp.getCode());
+                    tempMater.setListCode(tempList.getListCode());
+                    tempMater.setListId(tempList.getId());
+                    addMaterList.add(tempMater);
+                    //原材料
+                    List<XmslDrawReviewSourceMaterial> sourceMaterialList = tempMater.getSourceMaterialList();
+                    for (int l = 0; l < sourceMaterialList.size(); l++) {
+                        XmslDrawReviewSourceMaterial tempSource = sourceMaterialList.get(l);
+                        tempSource.initAdd();
+                        tempSource.setMainId(dto.getId());
+                        tempSource.setWbsId(temp.getId());
+                        tempSource.setListId(tempList.getId());
+                        tempSource.setListCode(tempList.getListCode());
+                        tempSource.setMaterialId(tempMater.getId());
+                        addSourceMaterList.add(tempSource);
+                    }
+                }
+            }
+        }
+        if(!isNew && CollectionUtils.isNotEmpty(listIdSet)){
+            //删除挂接、清单、细目、配合比
+            Map delMap = ObjectUtils.toMap("mainId",dto.getId(),"listIds",listIdSet);
+            xmslDrawReviewMapper.deleteRelation(delMap);
+            xmslDrawReviewMapper.deleteList(delMap);
+            xmslDrawReviewMapper.deleteMaterial(delMap);
+            xmslDrawReviewMapper.deleteSourceMaterial(delMap);
+        }
+        relationService.insertXmslDrawReviewRelationList(addRelationList);
+        drawReviewListService.insertXmslDrawReviewListList(addList);
+        materialService.insertXmslDrawReviewMaterialList(addMaterList);
+        sourceMaterialService.insertXmslDrawReviewSourceMaterialList(addSourceMaterList);
+    }
 
     @Transactional
     public int insertXmslDrawReview(XmslDrawReview xmslDrawReview) {
@@ -252,9 +477,28 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 
     
     @Transactional
-    public int deleteXmslDrawReview(XmslDrawReview xmslDrawReview) {
+    public void deleteXmslDrawReview(XmslDrawReview xmslDrawReview) {
+        XmslDrawReview dbDrawReview = this.getById(xmslDrawReview.getId());
+        Assert.notNull(dbDrawReview,"未找到要删除的数据，可能该数据已被删除");
+        Assert.isTrue(dbDrawReview.getValid()!=Constant.YES_INT,"已生效数据无法删除");
         xmslDrawReview.setUpdateUser(SecurityUtils.getUserName());
         xmslDrawReview.setUpdateTime(DateUtils.getNowDate());
-        return xmslDrawReviewMapper.deleteXmslDrawReview(xmslDrawReview);
+        xmslDrawReviewMapper.deleteXmslDrawReview(xmslDrawReview);
+        //删除子表
+        Map map= ObjectUtils.toMap("mainId",xmslDrawReview.getId());
+        this.xmslDrawReviewMapper.deleteRelation(map);
+        this.xmslDrawReviewMapper.deleteWbs(map);
+        this.xmslDrawReviewMapper.deleteList(map);
+        this.xmslDrawReviewMapper.deleteMaterial(map);
+        this.xmslDrawReviewMapper.deleteSourceMaterial(map);
+    }
+
+    @Override
+    public void finishFlow(Long id) {
+        //1、修改valid > 1
+        XmslDrawReview drawReview = this.getById(id);
+        Assert.notNull(drawReview,"获取图纸复核失败");
+        drawReview.setValid(Constant.YES_INT);
+        this.xmslDrawReviewMapper.updateXmslDrawReview(drawReview);
     }
 }
