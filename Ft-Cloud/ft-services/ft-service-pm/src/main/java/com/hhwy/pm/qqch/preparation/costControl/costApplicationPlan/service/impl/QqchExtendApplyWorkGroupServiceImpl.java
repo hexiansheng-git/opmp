@@ -109,7 +109,7 @@ public class QqchExtendApplyWorkGroupServiceImpl implements IQqchExtendApplyWork
 
         qqchExtendApplyWorkGroupVo.setVersion(version);
         qqchExtendApplyWorkGroupVo.setStageIdentity(qqchReviewService.getStage());
-        qqchExtendApplyWorkGroupVo.setQqchExtendApplyWorkGroupList(treeList);
+        qqchExtendApplyWorkGroupVo.setList(treeList);
         return qqchExtendApplyWorkGroupVo;
     }
 
@@ -125,7 +125,7 @@ public class QqchExtendApplyWorkGroupServiceImpl implements IQqchExtendApplyWork
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchExtendApplyWorkGroupVo.getVersion();
-        List<QqchExtendApplyWorkGroup> qqchExtendApplyWorkGroupList = qqchExtendApplyWorkGroupVo.getQqchExtendApplyWorkGroupList();
+        List<QqchExtendApplyWorkGroup> qqchExtendApplyWorkGroupList = qqchExtendApplyWorkGroupVo.getList();
 
         List<QqchExtendApplyWorkGroup> tileList = ListTreeUtil.formatList(
                 qqchExtendApplyWorkGroupList,

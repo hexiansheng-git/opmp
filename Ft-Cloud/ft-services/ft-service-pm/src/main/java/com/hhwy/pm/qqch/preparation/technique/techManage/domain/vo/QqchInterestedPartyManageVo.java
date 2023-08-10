@@ -22,5 +22,5 @@ public class QqchInterestedPartyManageVo extends PreparationEntity {
     /**
      * 字段描述：技术管理相关方管理集合
      */
-    private List<QqchInterestedPartyManage> qqchInterestedPartyManageList;
+    private List<QqchInterestedPartyManage> list;
 }

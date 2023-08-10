@@ -27,5 +27,5 @@ public class QqchBimTechPlanVo extends PreparationEntity {
     /**
      * 字段描述：BIM技术策划集合
      */
-    private List<QqchBimTechPlan> qqchBimTechPlanList;
+    private List<QqchBimTechPlan> list;
 }

@@ -109,7 +109,7 @@ public class QqchProjectOperationObjectiveServiceImpl implements IQqchProjectOpe
 
         qqchProjectOperationObjectiveVo.setVersion(version);
         qqchProjectOperationObjectiveVo.setStageIdentity(qqchReviewService.getStage());
-        qqchProjectOperationObjectiveVo.setQqchProjectOperationObjectiveList(treeList);
+        qqchProjectOperationObjectiveVo.setList(treeList);
         return qqchProjectOperationObjectiveVo;
     }
 
@@ -125,7 +125,7 @@ public class QqchProjectOperationObjectiveServiceImpl implements IQqchProjectOpe
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchProjectOperationObjectiveVo.getVersion();
-        List<QqchProjectOperationObjective> qqchProjectOperationObjectiveList = qqchProjectOperationObjectiveVo.getQqchProjectOperationObjectiveList();
+        List<QqchProjectOperationObjective> qqchProjectOperationObjectiveList = qqchProjectOperationObjectiveVo.getList();
 
         List<QqchProjectOperationObjective> tileList = ListTreeUtil.formatList(
                 qqchProjectOperationObjectiveList,

@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchProjectOperationObjectiveVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchProjectOperationObjective> qqchProjectOperationObjectiveList;
+    private List<QqchProjectOperationObjective> list;
 }

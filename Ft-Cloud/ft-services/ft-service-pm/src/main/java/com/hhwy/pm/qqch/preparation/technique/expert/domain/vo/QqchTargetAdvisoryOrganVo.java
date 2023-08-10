@@ -22,5 +22,5 @@ public class QqchTargetAdvisoryOrganVo extends PreparationEntity {
     /**
      * 字段描述：外部目标咨询机构选择集合
      */
-    private List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList;
+    private List<QqchTargetAdvisoryOrgan> list;
 }

@@ -137,7 +137,7 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
 
         qqchGeneralConditionVo.setVersion(version);
         qqchGeneralConditionVo.setStageIdentity(qqchReviewService.getStage());
-        qqchGeneralConditionVo.setQqchGeneralConditionList(treeList);
+        qqchGeneralConditionVo.setList(treeList);
         return qqchGeneralConditionVo;
     }
 
@@ -153,7 +153,7 @@ public class QqchGeneralConditionServiceImpl implements IQqchGeneralConditionSer
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchGeneralConditionVo.getVersion();
-        List<QqchGeneralCondition> qqchGeneralConditionList = qqchGeneralConditionVo.getQqchGeneralConditionList();
+        List<QqchGeneralCondition> qqchGeneralConditionList = qqchGeneralConditionVo.getList();
 
         List<QqchGeneralCondition> tileList = ListTreeUtil.formatList(
                 qqchGeneralConditionList,

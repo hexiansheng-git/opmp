@@ -127,7 +127,7 @@ public class QqchTechTrainPlanServiceImpl implements IQqchTechTrainPlanService {
 
         qqchTechTrainPlanVo.setVersion(version);
         qqchTechTrainPlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchTechTrainPlanVo.setQqchTechTrainPlanList(qqchTechTrainPlanList);
+        qqchTechTrainPlanVo.setList(qqchTechTrainPlanList);
         return qqchTechTrainPlanVo;
     }
 
@@ -143,7 +143,7 @@ public class QqchTechTrainPlanServiceImpl implements IQqchTechTrainPlanService {
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchTechTrainPlanVo.getVersion();
-        List<QqchTechTrainPlan> qqchTechTrainPlanList = qqchTechTrainPlanVo.getQqchTechTrainPlanList();
+        List<QqchTechTrainPlan> qqchTechTrainPlanList = qqchTechTrainPlanVo.getList();
 
         this.insertQqchTechTrainPlanList(qqchTechTrainPlanList,version);
 

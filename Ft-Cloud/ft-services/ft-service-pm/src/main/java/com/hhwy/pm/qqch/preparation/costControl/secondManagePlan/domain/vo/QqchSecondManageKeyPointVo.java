@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchSecondManageKeyPointVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList;
+    private List<QqchSecondManageKeyPoint> list;
 }

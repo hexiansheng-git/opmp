@@ -137,7 +137,7 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
 
         qqchSpecialConditionVo.setVersion(version);
         qqchSpecialConditionVo.setStageIdentity(qqchReviewService.getStage());
-        qqchSpecialConditionVo.setQqchSpecialConditionList(treeList);
+        qqchSpecialConditionVo.setList(treeList);
         return qqchSpecialConditionVo;
     }
 
@@ -153,7 +153,7 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchSpecialConditionVo.getVersion();
-        List<QqchSpecialCondition> qqchSpecialConditionList = qqchSpecialConditionVo.getQqchSpecialConditionList();
+        List<QqchSpecialCondition> qqchSpecialConditionList = qqchSpecialConditionVo.getList();
 
         List<QqchSpecialCondition> tileList = ListTreeUtil.formatList(
                 qqchSpecialConditionList,

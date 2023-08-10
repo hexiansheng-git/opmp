@@ -144,7 +144,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
         List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanMapper.getQqchBimTechPlanList(qqchBimTechPlan);
 
         qqchBimTechPlanVo.setBimMark(bimMark);
-        qqchBimTechPlanVo.setQqchBimTechPlanList(qqchBimTechPlanList);
+        qqchBimTechPlanVo.setList(qqchBimTechPlanList);
         return qqchBimTechPlanVo;
     }
 
@@ -166,7 +166,7 @@ public class QqchBimTechPlanServiceImpl implements IQqchBimTechPlanService {
         qqchBimTechPlanExtendService.disposeBimMark(bimMark,version);
 
         //处理数据
-        List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanVo.getQqchBimTechPlanList();
+        List<QqchBimTechPlan> qqchBimTechPlanList = qqchBimTechPlanVo.getList();
         this.insertQqchBimTechPlanList(qqchBimTechPlanList,version,bimMark);
 
         //处理确认状态是确认

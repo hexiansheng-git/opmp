@@ -22,5 +22,5 @@ public class QqchGeneralConditionVo extends PreparationEntity {
     /**
      * 字段描述：
      */
-    private List<QqchGeneralCondition> qqchGeneralConditionList;
+    private List<QqchGeneralCondition> list;
 }

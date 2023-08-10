@@ -109,7 +109,7 @@ public class QqchMeasureSettlePlanServiceImpl implements IQqchMeasureSettlePlanS
 
         qqchMeasureSettlePlanVo.setVersion(version);
         qqchMeasureSettlePlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchMeasureSettlePlanVo.setQqchMeasureSettlePlanList(treeList);
+        qqchMeasureSettlePlanVo.setList(treeList);
         return qqchMeasureSettlePlanVo;
     }
 
@@ -125,7 +125,7 @@ public class QqchMeasureSettlePlanServiceImpl implements IQqchMeasureSettlePlanS
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchMeasureSettlePlanVo.getVersion();
-        List<QqchMeasureSettlePlan> qqchMeasureSettlePlanList = qqchMeasureSettlePlanVo.getQqchMeasureSettlePlanList();
+        List<QqchMeasureSettlePlan> qqchMeasureSettlePlanList = qqchMeasureSettlePlanVo.getList();
 
         List<QqchMeasureSettlePlan> tileList = ListTreeUtil.formatList(
                 qqchMeasureSettlePlanList,

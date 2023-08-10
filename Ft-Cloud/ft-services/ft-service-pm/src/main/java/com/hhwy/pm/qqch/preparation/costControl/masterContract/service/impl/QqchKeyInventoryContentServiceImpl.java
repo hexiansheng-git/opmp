@@ -135,7 +135,7 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
 
         qqchKeyInventoryContentVo.setVersion(version);
         qqchKeyInventoryContentVo.setStageIdentity(qqchReviewService.getStage());
-        qqchKeyInventoryContentVo.setQqchKeyInventoryContentList(treeList);
+        qqchKeyInventoryContentVo.setList(treeList);
         return qqchKeyInventoryContentVo;
     }
 
@@ -151,7 +151,7 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchKeyInventoryContentVo.getVersion();
-        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = qqchKeyInventoryContentVo.getQqchKeyInventoryContentList();
+        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = qqchKeyInventoryContentVo.getList();
 
         List<QqchKeyInventoryContent> tileList = ListTreeUtil.formatList(
                 qqchKeyInventoryContentList,
