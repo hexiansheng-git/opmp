@@ -81,14 +81,14 @@ public class QqchManagementPersonConfig extends TreeNode<QqchManagementPersonCon
     /**
      * 字段描述：拟进场时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "拟进场时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date draftEntryTime;
     /**
      * 字段描述：拟退场时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "拟退场时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date draftExitTime;

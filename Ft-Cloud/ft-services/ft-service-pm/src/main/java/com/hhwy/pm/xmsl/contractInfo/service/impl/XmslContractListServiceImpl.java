@@ -3,6 +3,7 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,6 +37,8 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     private XmslContractListMapper xmslContractListMapper;
     @Autowired
     private XmslContractInfoMapper xmslContractInfoMapper;
+    @Autowired
+    private CommonMapper commonMapper;
 
 
     public List<XmslContractList> getXmslContractList(XmslContractList xmslContractList) {
@@ -61,9 +65,11 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
      */
     @Override
     public List<XmslContractList> getEffectList(XmslContractList xmslContractListParam) {
-        //查询生效的数据 masterId
+        //查询 最大  生效的数据  masterId
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         XmslContractInfo xmslContractInfo = new XmslContractInfo();
         xmslContractInfo.setValid("1");
+        xmslContractInfo.setVersion(maxVersion);
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
         if(xmslContractInfo1!=null){
             XmslContractList xmslContractList = new XmslContractList();
