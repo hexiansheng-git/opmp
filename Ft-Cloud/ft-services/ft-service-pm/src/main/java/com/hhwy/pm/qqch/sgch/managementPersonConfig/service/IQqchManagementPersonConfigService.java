@@ -30,5 +30,5 @@ public interface IQqchManagementPersonConfigService {
     void save(QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
 
 
-    QqchManagementPersonConfigVo synchData();
+    QqchManagementPersonConfigVo synchData( QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
 }

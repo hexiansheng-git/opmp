@@ -92,7 +92,8 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
      * 数据同步
      */
     @Override
-    public QqchManagementPersonConfigVo synchData() {
+    public QqchManagementPersonConfigVo synchData(QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
+        this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(),qqchManagementPersonConfigVo.getVersion());
         QqchManagementPersonConfigVo vo = new QqchManagementPersonConfigVo();
         //获取1.1项目组织
         QqchOrganizationListVo qqchOrganizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(null);
@@ -241,6 +242,9 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             managementPersonConfig.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             managementPersonConfig.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             managementPersonConfig.setCreateTime(DateUtils.getNowDate());
+            if(managementPersonConfig.getPid()==null){
+                managementPersonConfig.setPid(0l);
+            }
         }
         qqchManagementPersonConfigMapper.insertQqchManagementPersonConfigList(configs);
     }

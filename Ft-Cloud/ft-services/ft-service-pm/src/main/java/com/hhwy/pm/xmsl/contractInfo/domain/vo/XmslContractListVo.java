@@ -271,6 +271,13 @@ public class XmslContractListVo extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+    /**
+     * 字段描述：是否包含子级，0:否,1:是
+     */
+    @JsonProperty
+    @Excel(name = "是否包含子级，0:否,1:是")
+    private Integer haveChildren;
+
     private List<XmslContractListVo> children;
 
 }

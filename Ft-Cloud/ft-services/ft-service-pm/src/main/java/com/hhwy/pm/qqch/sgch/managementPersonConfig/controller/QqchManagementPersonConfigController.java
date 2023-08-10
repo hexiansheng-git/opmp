@@ -31,8 +31,8 @@ public class QqchManagementPersonConfigController extends BaseController{
      *  同步项目组织数据
      */
     @GetMapping("/synchData")
-    public AjaxResult getInitData(){
-        QqchManagementPersonConfigVo qqchManagementPersonConfigVo=qqchManagementPersonConfigService.synchData();
+    public AjaxResult getInitData(@RequestBody QqchManagementPersonConfigVo vo){
+        QqchManagementPersonConfigVo qqchManagementPersonConfigVo=qqchManagementPersonConfigService.synchData(vo);
         return AjaxResult.success(qqchManagementPersonConfigVo);
     }
 

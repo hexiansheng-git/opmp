@@ -147,4 +147,18 @@ public class QqchLabourDemandPlanController extends BaseController{
     }
 
 
+    /**
+     *  获取施工部署数据
+     *
+     * @param
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:sychData")
+    @PostMapping("/sychData")
+    public AjaxResult sychData(@RequestBody QqchLabourDemandPlanVo vo1){
+        QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.sychData(vo1);
+        return AjaxResult.success(vo);
+    }
+
+
 }

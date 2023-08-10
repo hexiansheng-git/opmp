@@ -195,4 +195,9 @@ public class QqchConstServiceImpl implements IQqchConstService {
         
         return compileDTO;
     }
+
+    @Override
+    public List<QqchConst> selectQqchConst(BigDecimal version) {
+        return qqchConstMapper.selectQqchConst(version);
+    }
 }

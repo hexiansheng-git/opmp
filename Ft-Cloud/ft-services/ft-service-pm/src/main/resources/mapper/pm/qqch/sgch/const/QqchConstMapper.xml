@@ -617,4 +617,16 @@
             </foreach>
         </where>
     </update>
+
+    <select id="selectQqchConst"  resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst">
+        SELECT
+            p.id,
+            p.occupation_code  occupationCode,
+            p.occupation_name  occupationName,
+            c.const_desc  constDesc
+        FROM
+            qqch_const as c
+                LEFT JOIN qqch_const_staff_plan as p on c.id  = p.master_id
+        WHERE c.valid  =1 and c.version = #{version}   and const_type = '4'
+    </select>
 </mapper>

@@ -227,6 +227,7 @@ public class QqchConstStaffPlan extends CompileEntity<QqchConstStaffPlan> {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+
     @JsonIgnore
     public Long getId() {
         return id;

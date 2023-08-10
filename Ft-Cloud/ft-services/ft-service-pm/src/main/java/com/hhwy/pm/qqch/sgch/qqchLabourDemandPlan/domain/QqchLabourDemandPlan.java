@@ -34,6 +34,8 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     private Long id;
 
     private Long pid;
+
+    private Long outId;
     /**
      * 字段描述：工种名称
      */

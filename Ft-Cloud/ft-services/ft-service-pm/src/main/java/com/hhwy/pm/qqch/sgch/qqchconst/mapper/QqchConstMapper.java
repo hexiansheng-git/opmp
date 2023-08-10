@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.sgch.qqchconst.mapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface QqchConstMapper {
     int deleteQqchConst(QqchConst qqchConst);
 
     int deleteQqchConstByPks(@Param("qqchConstPkList") List<Long> qqchConstPkList);
+
+    List<QqchConst> selectQqchConst(BigDecimal version);
 }

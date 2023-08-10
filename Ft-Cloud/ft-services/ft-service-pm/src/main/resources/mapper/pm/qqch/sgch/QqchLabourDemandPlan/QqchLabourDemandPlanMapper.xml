@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan" id="QqchLabourDemandPlanResultMap">
                     <result property="id" column="id" />
                     <result property="pid" column="pid" />
+                     <result property="outId" column="out_id" />
                     <result property="jobName" column="job_name" />
                     <result property="workTeam" column="work_team" />
                     <result property="chinaNum" column="china_num" />
@@ -42,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectQqchLabourDemandPlanVo">
         select
                                                             `id`
+                                                            ,`out_id`
                                                          ,`job_name`
                                                          ,`pid`
                                                          ,`work_team`
@@ -82,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
                             <if test="pid != null "> and `pid` = #{pid}</if>
+                        <if test="outId != null  and outId != ''"> and `out_id` = #{outId}</if>
                             <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
                             <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
                             <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
@@ -123,6 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
                             <if test="pid != null "> and `pid` = #{pid}</if>
+                            <if test="outId != null  and outId != ''"> and `out_id` = #{outId}</if>
                             <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
                             <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
                             <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
@@ -169,6 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
                             <if test="id != null ">`id`,</if>
                             <if test="pid != null ">`pid`,</if>
+                            <if test="outId != null  and outId != ''">`out_id`,</if>
                             <if test="jobName != null  and jobName != ''">`job_name`,</if>
                             <if test="workTeam != null  and workTeam != ''">`work_team`,</if>
                             <if test="chinaNum != null ">`china_num`,</if>
@@ -204,6 +209,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                             <if test="id != null ">#{id},</if>
                             <if test="pid != null ">#{pid},</if>
+                          <if test="outId != null  and outId != ''">#{outId},</if>
                             <if test="jobName != null  and jobName != ''">#{jobName},</if>
                             <if test="workTeam != null  and workTeam != ''">#{workTeam},</if>
                             <if test="chinaNum != null ">#{chinaNum},</if>
@@ -244,6 +250,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
                                                 `id`,
                                                 `pid`,
+                                                `out_id`,
                                                                 `job_name`,
                                                                 `work_team`,
                                                                 `china_num`,
@@ -280,6 +287,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <trim prefix="(" suffix=")" suffixOverrides=",">
                                                             #{item.id},
                                                             #{item.pid},
+                                                          #{item.outId},
                                                                                 #{item.jobName},
                                                                                 #{item.workTeam},
                                                                                 #{item.chinaNum},
@@ -319,6 +327,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
                             <if test="id != null ">`id` = #{id},</if>
                             <if test="pid != null ">`pid` = #{pid},</if>
+                            <if test="outId != null  and  outId != ''">`out_id` = #{outId},</if>
                             <if test="jobName != null  and  jobName != ''">`job_name` = #{jobName},</if>
                             <if test="workTeam != null  and  workTeam != ''">`work_team` = #{workTeam},</if>
                             <if test="chinaNum != null ">`china_num` = #{chinaNum},</if>
@@ -368,6 +377,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 <trim prefix="pid  = case" suffix="end,">
                     <foreach collection="list" item="item" index="index">
                         when `id`=#{item.id} then #{item.pid}
+                    </foreach>
+                </trim>
+                <trim prefix="out_id  = case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when `id`=#{item.id} then #{item.outId}
                     </foreach>
                 </trim>
                                     <trim prefix="job_name  = case" suffix="end,">
@@ -537,6 +551,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <where>
                                     <if test="id != null "> and `id` = #{id}</if>
                                     <if test="pid != null "> and `pid` = #{pid}</if>
+                                     <if test="outId != null  and outId != ''"> and `out_id` = #{outId}</if>
                                     <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
                                     <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
                                     <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
@@ -584,6 +599,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCount" resultType="com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto">
         SELECT
         `id`,
+        `out_id`,
         `job_name`,
         `pid`,
         `work_team`,
@@ -631,6 +647,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
             <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="outId != null  and outId != ''"> and `out_id` = #{outId}</if>
             <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
             <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
             <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
@@ -672,6 +689,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             del_flag = "0"
             <if test="id != null "> and `id` = #{id}</if>
             <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="outId != null  and outId != ''"> and `out_id` = #{outId}</if>
             <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
             <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
             <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
@@ -706,4 +724,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         order by exit_date desc limit 1
     </select>
+
             </mapper>

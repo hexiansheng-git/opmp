@@ -37,4 +37,5 @@ public interface IQqchLabourDemandPlanService {
     List<String> getAllWorkType(QqchLabourDemandPlanVo qqchLabourDemandPlanVo);
 
 
+    QqchLabourDemandPlanVo sychData(QqchLabourDemandPlanVo vo);
 }
