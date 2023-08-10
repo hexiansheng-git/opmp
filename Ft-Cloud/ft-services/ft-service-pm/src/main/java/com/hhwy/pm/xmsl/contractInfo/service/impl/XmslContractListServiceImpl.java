@@ -20,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -82,6 +79,13 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         if(ArrayUtils.isEmpty(ids))
             return new ArrayList<>(2);
         return xmslContractListMapper.getByIds(ids);
+    }
+
+    @Override
+    public List<XmslContractList> getByCodes(Set<String> codeSet) {
+        if(CollectionUtils.isEmpty(codeSet))
+            return new ArrayList<>(2);
+        return xmslContractListMapper.getByCodes(codeSet);
     }
 
     @Transactional

@@ -10,7 +10,9 @@ import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
  * @remark 
  */
 public interface XmslDrawReviewMapper {
-                                                                                                                                                                                                        
+
+    Integer selectMaxEffectVersion();
+
     XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview);
 
     List<XmslDrawReview> getXmslDrawReviewList(XmslDrawReview xmslDrawReview);

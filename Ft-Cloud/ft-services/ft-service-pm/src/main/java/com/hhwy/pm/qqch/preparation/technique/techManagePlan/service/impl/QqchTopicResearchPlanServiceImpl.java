@@ -131,7 +131,7 @@ public class QqchTopicResearchPlanServiceImpl implements IQqchTopicResearchPlanS
 
         qqchTopicResearchPlanVo.setVersion(version);
         qqchTopicResearchPlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchTopicResearchPlanVo.setQqchTopicResearchPlanList(qqchTopicResearchPlanList);
+        qqchTopicResearchPlanVo.setList(qqchTopicResearchPlanList);
         return qqchTopicResearchPlanVo;
     }
 
@@ -147,7 +147,7 @@ public class QqchTopicResearchPlanServiceImpl implements IQqchTopicResearchPlanS
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchTopicResearchPlanVo.getVersion();
-        List<QqchTopicResearchPlan> qqchTopicResearchPlanList = qqchTopicResearchPlanVo.getQqchTopicResearchPlanList();
+        List<QqchTopicResearchPlan> qqchTopicResearchPlanList = qqchTopicResearchPlanVo.getList();
 
         //保存数据
         this.insertQqchTopicResearchPlanList(qqchTopicResearchPlanList,version);

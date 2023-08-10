@@ -82,10 +82,10 @@ public class QqchEnhanceEffectOtherMeasure extends BaseEntity {
     @Excel(name = "责任人id")
     private String director;
     /**
-     * 字段描述：责任部门id
+     * 字段描述：责任人id
      */
     @JsonProperty
-    @Excel(name = "责任部门id")
+    @Excel(name = "责任人id")
     private String directorId;
     /**
      * 字段描述：备注/描述

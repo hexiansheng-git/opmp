@@ -199,6 +199,14 @@
             #{item}
         </foreach>
     </select>
+
+    <select id="getByCodes" parameterType="String" resultMap="XmslContractListResultMap">
+        <include refid="selectXmslContractListVo"/>
+        where code in
+        <foreach collection="codes" index="index" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
     
     <insert id="insertXmslContractList" useGeneratedKeys="true" keyProperty="id">
         insert into xmsl_contract_list

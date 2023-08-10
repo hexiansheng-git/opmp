@@ -1,8 +1,10 @@
 package com.hhwy.pm.xmsl.drawReview.service;
 
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author wk
@@ -14,6 +16,8 @@ public interface IXmslDrawReviewWbsService {
     XmslDrawReviewWbs getXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 
     List<XmslDrawReviewWbs> getXmslDrawReviewWbsList(XmslDrawReviewWbs xmslDrawReviewWbs);
+
+    List<XmslDrawReviewWbs> getByIds(Set<Long> idSet);
 
     int insertXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 

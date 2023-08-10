@@ -2,6 +2,9 @@ package com.hhwy.pm.xmsl.drawReview.service;
 
 import java.util.List;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
+import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
 
 /**
  * @author wk
@@ -19,6 +22,32 @@ public interface IXmslDrawReviewService {
     XmslDrawReview getLast();
 
     Integer hasChange();
+
+    /**
+     * 根据wbs信息获取其下明细
+     * @param version
+     * @param mainId
+     * @param wbsCode
+     * @param wbsId
+     * @return
+     */
+    List<XmslDrawReviewList> relationWbsList(Integer version, Long mainId,String wbsCode,Long wbsId);
+
+    /**
+     * 获取清单信息获取明细
+     * @param version
+     * @param mainId
+     * @param listCode
+     * @param listId
+     * @return
+     */
+    List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId);
+
+    /**
+     * 保存
+     * @param dto
+     */
+    void save(XmslDrawReviewDto dto);
 
     int insertXmslDrawReview(XmslDrawReview xmslDrawReview);
 

@@ -5,6 +5,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ldd
@@ -20,6 +21,8 @@ public interface IXmslContractListService {
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 
     List<XmslContractList> getByIds(Long[] ids);
+
+    public List<XmslContractList> getByCodes(Set<String> codeSet);
 
     int insertXmslContractList(XmslContractList xmslContractList);
 

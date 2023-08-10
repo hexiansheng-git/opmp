@@ -130,7 +130,7 @@ public class QqchPatentDeclarePlanServiceImpl implements IQqchPatentDeclarePlanS
 
         qqchPatentDeclarePlanVo.setVersion(version);
         qqchPatentDeclarePlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchPatentDeclarePlanVo.setQqchPatentDeclarePlanList(qqchPatentDeclarePlanList);
+        qqchPatentDeclarePlanVo.setList(qqchPatentDeclarePlanList);
         return qqchPatentDeclarePlanVo;
     }
 
@@ -146,7 +146,7 @@ public class QqchPatentDeclarePlanServiceImpl implements IQqchPatentDeclarePlanS
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchPatentDeclarePlanVo.getVersion();
-        List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList = qqchPatentDeclarePlanVo.getQqchPatentDeclarePlanList();
+        List<QqchPatentDeclarePlan> qqchPatentDeclarePlanList = qqchPatentDeclarePlanVo.getList();
 
         //处理数据
         this.insertQqchPatentDeclarePlanList(qqchPatentDeclarePlanList,version);

@@ -26,5 +26,5 @@ public class QqchAdvancedVindicatePlanVo extends PreparationEntity {
     /**
      * 字段描述：高新维护计划集合
      */
-    private List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList;
+    private List<QqchAdvancedVindicatePlan> list;
 }

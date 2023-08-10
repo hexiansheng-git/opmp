@@ -77,14 +77,14 @@ public class QqchImportant extends CompileEntity<QqchImportant> {
     /**
      * 字段描述：开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @FtExcel(name = "开始时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date beginDate;
     /**
      * 字段描述：结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @FtExcel(name = "结束时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date endDate;

@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileDTO;
 import com.hhwy.pm.qqch.sgch.important.domain.QqchImportant;
 import com.hhwy.pm.qqch.sgch.important.mapper.QqchImportantMapper;
 import com.hhwy.pm.qqch.sgch.important.service.IQqchImportantService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -94,8 +96,15 @@ public class QqchImportantServiceImpl implements IQqchImportantService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public List<QqchImportant> list(QqchImportant qqchImportantParam) {
+    public CompileDTO list(QqchImportant qqchImportantParam) {
+
+
+        CompileDTO compileDTO = new CompileDTO();
         List<QqchImportant> qqchImportantList = this.qqchImportantMapper.getQqchImportantList(qqchImportantParam);
-        return qqchImportantList;
+        compileDTO.setVersion(BigDecimal.ONE);
+        compileDTO.setStageIdentity("1");
+        compileDTO.setDto(qqchImportantList);
+        
+        return compileDTO;
     }
 }

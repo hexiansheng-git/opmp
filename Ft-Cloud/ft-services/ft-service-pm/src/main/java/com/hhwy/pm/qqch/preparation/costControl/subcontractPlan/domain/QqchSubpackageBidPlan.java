@@ -264,14 +264,14 @@ public class QqchSubpackageBidPlan extends BaseEntity {
     /**
      * 字段描述：分包清单集合
      */
-    private List<QqchSubpackageInventory> qqchSubpackageInventoryList;
+//    private List<QqchSubpackageInventory> qqchSubpackageInventoryList;
 
     /**
      * 字段描述：人员策划集合
      */
-    private List<QqchStaffPlan> qqchStaffPlanList;
+//    private List<QqchStaffPlan> qqchStaffPlanList;
     /**
      * 字段描述：设备策划集合
      */
-    private List<QqchFacilityPlan> qqchFacilityPlanList;
+//    private List<QqchFacilityPlan> qqchFacilityPlanList;
 }
