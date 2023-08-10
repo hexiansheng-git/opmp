@@ -23,6 +23,7 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
     public int insertQqchWorkPlanningBuildPlanList(QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo) {
         List<QqchWorkPlanningBuildPlan> qqchWorkPlanningBuildPlanList = new ArrayList<>();
         //判断是确认还是保存
-        if("0".equals(qqchWorkPlanningBuildPlanVo.getSubmitFlag())){
+        if("0".equals(qqchWorkPlanningBuildPlanVo.getButtonMark())){
             //先删除旧的 再添加新的
             QqchWorkPlanningBuildPlan temp = new QqchWorkPlanningBuildPlan();
             temp.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
@@ -92,7 +93,7 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
             }else{
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
             }
-        }else if("1".equals(qqchWorkPlanningBuildPlanVo.getSubmitFlag())){//确认
+        }else if("1".equals(qqchWorkPlanningBuildPlanVo.getButtonMark())){//确认
             //确认
             //新增一条确认记录
             String valid = "1";
@@ -108,11 +109,11 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
                     qqchWorkPlanningBuildPlan.setValid(valid);
                 }
                 qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlanningBuildPlanVo.getMenuId(),qqchWorkPlanningBuildPlanVo.getStageIdentity());
-                qqchReviewService.updateFinishNum(qqchWorkPlanningBuildPlanVo.getStageIdentity(),qqchWorkPlanningBuildPlanVo.getModuleIdentity());
+                qqchReviewService.updateFinishNum(qqchWorkPlanningBuildPlanVo.getStageIdentity(),qqchWorkPlanningBuildPlanVo.getMenuId());
             }else{
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
             }
-        }else if("2".equals(qqchWorkPlanningBuildPlanVo.getSubmitFlag())){////提交
+        }else if("2".equals(qqchWorkPlanningBuildPlanVo.getButtonMark())){////提交
             String valid = "0";
             if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getDataList())){
                 qqchWorkPlanningBuildPlanList = qqchWorkPlanningBuildPlanVo.getDataList();
@@ -192,7 +193,7 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
         QqchWorkPlanningBuildPlanVo qqchWorkPlanningBuildPlanVo = new QqchWorkPlanningBuildPlanVo();
         qqchWorkPlanningBuildPlanVo.setDataList(qqchWorkPlanningBuildPlanList);
         if(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanList)){
-            qqchWorkPlanningBuildPlanVo.setVersion(new BigDecimal(0));
+            qqchWorkPlanningBuildPlanVo.setVersion(new BigDecimal(InitVersionConstant.INIT_VERSION));
         }else{
             qqchWorkPlanningBuildPlanVo.setVersion(qqchWorkPlanningBuildPlanList.get(0).getVersion());
         }

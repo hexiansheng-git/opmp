@@ -141,7 +141,7 @@ public class QqchRecordPigeonholeManageServiceImpl implements IQqchRecordPigeonh
 
         qqchRecordPigeonholeManageVo.setVersion(version);
         qqchRecordPigeonholeManageVo.setStageIdentity(qqchReviewService.getStage());
-        qqchRecordPigeonholeManageVo.setQqchRecordPigeonholeManageList(treeList);
+        qqchRecordPigeonholeManageVo.setList(treeList);
         return qqchRecordPigeonholeManageVo;
     }
 
@@ -157,7 +157,7 @@ public class QqchRecordPigeonholeManageServiceImpl implements IQqchRecordPigeonh
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchRecordPigeonholeManageVo.getVersion();
-        List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageList = qqchRecordPigeonholeManageVo.getQqchRecordPigeonholeManageList();
+        List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageList = qqchRecordPigeonholeManageVo.getList();
 
         //处理数据
         this.insertQqchRecordPigeonholeManageList(qqchRecordPigeonholeManageList,version);

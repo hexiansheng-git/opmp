@@ -147,7 +147,7 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
 
         qqchSubpackageBidPlanVo.setVersion(version);
         qqchSubpackageBidPlanVo.setStageIdentity(qqchReviewService.getStage());
-        qqchSubpackageBidPlanVo.setQqchSubpackageBidPlanList(treeList);
+        qqchSubpackageBidPlanVo.setList(treeList);
         return qqchSubpackageBidPlanVo;
     }
 
@@ -221,7 +221,7 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchSubpackageBidPlanVo.getVersion();
-        List<QqchSubpackageBidPlan> qqchSubpackageBidPlanList = qqchSubpackageBidPlanVo.getQqchSubpackageBidPlanList();
+        List<QqchSubpackageBidPlan> qqchSubpackageBidPlanList = qqchSubpackageBidPlanVo.getList();
 
         List<QqchSubpackageBidPlan> tileList = ListTreeUtil.formatList(
                 qqchSubpackageBidPlanList,

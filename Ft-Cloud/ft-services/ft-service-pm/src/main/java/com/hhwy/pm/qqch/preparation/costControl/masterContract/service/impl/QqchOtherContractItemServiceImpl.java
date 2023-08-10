@@ -136,7 +136,7 @@ public class QqchOtherContractItemServiceImpl implements IQqchOtherContractItemS
 
         qqchOtherContractItemVo.setVersion(version);
         qqchOtherContractItemVo.setStageIdentity(qqchReviewService.getStage());
-        qqchOtherContractItemVo.setQqchOtherContractItemList(treeList);
+        qqchOtherContractItemVo.setList(treeList);
         return qqchOtherContractItemVo;
     }
 
@@ -152,7 +152,7 @@ public class QqchOtherContractItemServiceImpl implements IQqchOtherContractItemS
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchOtherContractItemVo.getVersion();
-        List<QqchOtherContractItem> qqchOtherContractItemList = qqchOtherContractItemVo.getQqchOtherContractItemList();
+        List<QqchOtherContractItem> qqchOtherContractItemList = qqchOtherContractItemVo.getList();
 
         List<QqchOtherContractItem> tileList = ListTreeUtil.formatList(
                 qqchOtherContractItemList,

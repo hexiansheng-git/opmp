@@ -125,7 +125,7 @@ public class QqchPigeonholeDutyDivisionServiceImpl implements IQqchPigeonholeDut
 
         qqchPigeonholeDutyDivisionVo.setVersion(version);
         qqchPigeonholeDutyDivisionVo.setStageIdentity(qqchReviewService.getStage());
-        qqchPigeonholeDutyDivisionVo.setQqchPigeonholeDutyDivisionList(qqchPigeonholeDutyDivisionList);
+        qqchPigeonholeDutyDivisionVo.setList(qqchPigeonholeDutyDivisionList);
         return qqchPigeonholeDutyDivisionVo;
     }
 
@@ -141,7 +141,7 @@ public class QqchPigeonholeDutyDivisionServiceImpl implements IQqchPigeonholeDut
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchPigeonholeDutyDivisionVo.getVersion();
-        List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList = qqchPigeonholeDutyDivisionVo.getQqchPigeonholeDutyDivisionList();
+        List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList = qqchPigeonholeDutyDivisionVo.getList();
 
         //处理数据
         this.insertQqchPigeonholeDutyDivisionList(qqchPigeonholeDutyDivisionList,version);

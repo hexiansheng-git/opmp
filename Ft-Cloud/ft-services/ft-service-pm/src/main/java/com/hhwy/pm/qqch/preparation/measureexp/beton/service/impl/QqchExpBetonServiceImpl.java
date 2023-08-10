@@ -93,4 +93,21 @@ public class QqchExpBetonServiceImpl implements IQqchExpBetonService {
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
+
+    /**
+     * 列表
+     *
+     * @param version
+     * @return
+     */
+    public List<QqchExpBeton> getList(BigDecimal version) {
+        QqchExpBetonVo vo = new QqchExpBetonVo();
+        version = VersionUtil.getVersion("qqch_exp_beton", version);
+        vo.setVersion(version);
+
+        QqchExpBeton qryParam = new QqchExpBeton();
+        qryParam.setVersion(version);
+        List<QqchExpBeton> list = qqchExpBetonMapper.getQqchExpBetonList(qryParam);
+        return list;
+    }
 }

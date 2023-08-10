@@ -61,7 +61,7 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
     public int insertQqchWorkPlaningArrangeList(QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo) {
         List<QqchWorkPlaningArrange> qqchWorkPlaningArrangeList = new ArrayList<>();
         //判断是确认还是保存
-        if("0".equals(qqchWorkPlaningArrangeVo.getSubmitFlag())){
+        if("0".equals(qqchWorkPlaningArrangeVo.getButtonMark())){
 
             String valid = "1";
             if(new BigDecimal(InitVersionConstant.INIT_VERSION).compareTo(qqchWorkPlaningArrangeVo.getVersion()) != 0){
@@ -79,7 +79,7 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
             }else{
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
             }
-        }else if("1".equals(qqchWorkPlaningArrangeVo.getSubmitFlag())){//确认
+        }else if("1".equals(qqchWorkPlaningArrangeVo.getButtonMark())){//确认
             //确认
             //新增一条确认记录
             qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeVo.getDataList();
@@ -91,10 +91,12 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
                     qqchWorkPlaningArrange.setValid("1");
                     qqchWorkPlaningArrange.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlaningArrangeVo.getVersion());
                 }
+                qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(),qqchWorkPlaningArrangeVo.getStageIdentity());
+                qqchReviewService.updateFinishNum(qqchWorkPlaningArrangeVo.getStageIdentity(),qqchWorkPlaningArrangeVo.getMenuId());
             }else{
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
             }
-        }else if("2".equals(qqchWorkPlaningArrangeVo.getSubmitFlag())){//提交
+        }else if("2".equals(qqchWorkPlaningArrangeVo.getButtonMark())){//提交
             qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeVo.getDataList();
             if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
                 for (QqchWorkPlaningArrange qqchWorkPlaningArrange : qqchWorkPlaningArrangeList) {
@@ -107,9 +109,6 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
             }else{
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
             }
-            qqchReviewService.updateFinishNum(qqchWorkPlaningArrangeVo.getStageIdentity(),qqchWorkPlaningArrangeVo.getModuleIdentity());
-            qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(),qqchWorkPlaningArrangeVo.getStageIdentity());
-
         }else{
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
         }
@@ -174,7 +173,7 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
         QqchWorkPlaningArrangeVo qqchWorkPlaningArrangeVo = new QqchWorkPlaningArrangeVo();
         qqchWorkPlaningArrangeVo.setDataList(qqchWorkPlaningArrangeList);
         if(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
-            qqchWorkPlaningArrangeVo.setVersion(new BigDecimal(0));
+            qqchWorkPlaningArrangeVo.setVersion(new BigDecimal(InitVersionConstant.INIT_VERSION));
         }else{
             qqchWorkPlaningArrangeVo.setVersion(qqchWorkPlaningArrangeList.get(0).getVersion());
         }

@@ -9,7 +9,9 @@ import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationHelper;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -97,12 +99,13 @@ public class DownTemplate {
 
         Workbook workBook;
         String filenameExtension = StringUtils.getFilenameExtension(templateName);
+
         if("xls".equals(filenameExtension)){
             workBook = new HSSFWorkbook(inputStream);
-            exportName = exportName + ".xls";
+//            exportName = exportName + ".xls";
         } else if ("xlsx".equals(filenameExtension)) {
             workBook = new XSSFWorkbook(inputStream);
-            exportName = exportName + ".xlsx";
+//            exportName = exportName + ".xlsx";
         }else {
             throw new RemoteException("文件格式不符合规范！");
         }
@@ -147,7 +150,7 @@ public class DownTemplate {
         try{
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, exportName));
+            response.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, templateName));
             outputStream = response.getOutputStream();
             workBook.write(outputStream);
         }catch(IOException ioe){

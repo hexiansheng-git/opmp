@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchExtendApplyWorkGroupVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchExtendApplyWorkGroup> qqchExtendApplyWorkGroupList;
+    private List<QqchExtendApplyWorkGroup> list;
 }

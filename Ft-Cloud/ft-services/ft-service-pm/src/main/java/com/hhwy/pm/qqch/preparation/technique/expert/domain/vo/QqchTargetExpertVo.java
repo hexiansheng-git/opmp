@@ -22,5 +22,5 @@ public class QqchTargetExpertVo extends PreparationEntity {
     /**
      * 字段描述：内外部目标专家选择集合
      */
-    private List<QqchTargetExpert> qqchTargetExpertList;
+    private List<QqchTargetExpert> list;
 }

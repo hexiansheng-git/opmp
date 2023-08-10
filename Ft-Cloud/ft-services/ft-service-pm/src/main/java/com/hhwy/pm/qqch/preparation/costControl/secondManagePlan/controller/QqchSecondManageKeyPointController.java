@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -89,13 +90,26 @@ public class QqchSecondManageKeyPointController extends BaseController {
 
     /**
      * 获取普通要点策划/变更策划/索赔策划
-     * @param qqchSecondManageKeyPoint
+     * @param version 版本
+     * @param keyPointType 要点类型
      * @return
      */
     @GetMapping("getSecondManageKeyPointPlanVo")
-    public AjaxResult getSecondManageKeyPointPlanVo(QqchSecondManageKeyPoint qqchSecondManageKeyPoint){
-        List<SecondManageKeyPointPlanVo> secondManageKeyPointPlanVoList = qqchSecondManageKeyPointService.getSecondManageKeyPointPlanVo(qqchSecondManageKeyPoint);
-        return AjaxResult.success(secondManageKeyPointPlanVoList);
+    public AjaxResult getSecondManageKeyPointPlanVo(BigDecimal version, String keyPointType){
+        SecondManageKeyPointPlanVo secondManageKeyPointPlanVo = qqchSecondManageKeyPointService.getSecondManageKeyPointPlanVo(version,keyPointType);
+        return AjaxResult.success(secondManageKeyPointPlanVo);
+    }
+
+    /**
+     * 保存/确认/提交  普通要点策划/变更策划/索赔策划  （操作附件）
+     * @param secondManageKeyPointPlanVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:add")
+    @PostMapping("/saveSecondManageKeyPointPlanVo")
+    public AjaxResult saveSecondManageKeyPointPlanVo(@RequestBody SecondManageKeyPointPlanVo secondManageKeyPointPlanVo) {
+        qqchSecondManageKeyPointService.saveSecondManageKeyPointPlanVo(secondManageKeyPointPlanVo);
+        return AjaxResult.success();
     }
 
     /**

@@ -109,7 +109,7 @@ public class QqchAdjustAnalyseServiceImpl implements IQqchAdjustAnalyseService {
 
         qqchAdjustAnalyseVo.setVersion(version);
         qqchAdjustAnalyseVo.setStageIdentity(qqchReviewService.getStage());
-        qqchAdjustAnalyseVo.setQqchAdjustAnalyseList(treeList);
+        qqchAdjustAnalyseVo.setList(treeList);
         return qqchAdjustAnalyseVo;
     }
 
@@ -125,7 +125,7 @@ public class QqchAdjustAnalyseServiceImpl implements IQqchAdjustAnalyseService {
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchAdjustAnalyseVo.getVersion();
-        List<QqchAdjustAnalyse> qqchAdjustAnalyseList = qqchAdjustAnalyseVo.getQqchAdjustAnalyseList();
+        List<QqchAdjustAnalyse> qqchAdjustAnalyseList = qqchAdjustAnalyseVo.getList();
 
         List<QqchAdjustAnalyse> tileList = ListTreeUtil.formatList(
                 qqchAdjustAnalyseList,

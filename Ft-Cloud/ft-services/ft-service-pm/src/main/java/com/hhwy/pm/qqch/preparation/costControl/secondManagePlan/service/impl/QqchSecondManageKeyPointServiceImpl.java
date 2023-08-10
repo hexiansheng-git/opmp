@@ -6,10 +6,13 @@ import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.QqchKeyPointContractClause;
+import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.QqchSecondManageExtend;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.QqchSecondManageKeyPoint;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.vo.QqchSecondManageKeyPointVo;
+import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.vo.SecondManageKeyPointPlan;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.vo.SecondManageKeyPointPlanVo;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.mapper.QqchKeyPointContractClauseMapper;
+import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.mapper.QqchSecondManageExtendMapper;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.mapper.QqchSecondManageKeyPointMapper;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.service.IQqchKeyPointContractClauseService;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.service.IQqchSecondManageKeyPointService;
@@ -22,6 +25,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
+import io.seata.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +50,12 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
 
     @Autowired
     private QqchKeyPointContractClauseMapper qqchKeyPointContractClauseMapper;
+
+    @Autowired
+    private QqchSecondManageExtendServiceImpl qqchSecondManageExtendService;
+
+    @Autowired
+    private QqchSecondManageExtendMapper qqchSecondManageExtendMapper;
 
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
@@ -109,39 +119,105 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
     }
 
     /**
-     * 获取普通要点策划/变更策划/索赔策划
-     * @param qqchSecondManageKeyPoint
+     * 获取普通要点策划/变更策划/索赔策划Vo
+     *
+     * @param version 版本
+     * @param keyPointType 要点类型
      * @return
      */
     @Override
-    public List<SecondManageKeyPointPlanVo> getSecondManageKeyPointPlanVo(QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
-        //获取要点类型
-        String keyPointType = qqchSecondManageKeyPoint.getKeyPointType();
+    public SecondManageKeyPointPlanVo getSecondManageKeyPointPlanVo(BigDecimal version, String keyPointType) {
         CommonAssert.notBlank(keyPointType,"要点类型不能为空！");
 
-        BigDecimal version = qqchSecondManageKeyPoint.getVersion();
-        version = VersionUtil.getVersion("qqch_second_manage_key_point",version);
+        version = qqchSecondManageExtendService.getVersion(version,keyPointType);
 
-        List<SecondManageKeyPointPlanVo> resultList = new ArrayList<>();
+        SecondManageKeyPointPlanVo secondManageKeyPointPlanVo = new SecondManageKeyPointPlanVo();
 
-        qqchSecondManageKeyPoint.setKeyPointType(keyPointType);
-        qqchSecondManageKeyPoint.setVersion(version);
+        //获取附件数据
+        QqchSecondManageExtend qqchSecondManageExtend = new QqchSecondManageExtend();
+        qqchSecondManageExtend.setType(keyPointType);
+        qqchSecondManageExtend.setVersion(version);
+        String fileGroupId = qqchSecondManageExtendService.getQqchSecondManageExtend(qqchSecondManageExtend).getFileGroupId();
+
         //获取二次经营要点识别数据
-        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+        List<SecondManageKeyPointPlan> secondManageKeyPointPlanList = this.getTableData(version, keyPointType);
 
-        if(CollectionUtils.isEmpty(qqchSecondManageKeyPointList)){
-            return resultList;
+        secondManageKeyPointPlanVo.setVersion(version);
+        secondManageKeyPointPlanVo.setFileGroupId(fileGroupId);
+        secondManageKeyPointPlanVo.setKeyPointType(keyPointType);
+        secondManageKeyPointPlanVo.setStageIdentity(qqchReviewService.getStage());
+        secondManageKeyPointPlanVo.setList(secondManageKeyPointPlanList);
+        return secondManageKeyPointPlanVo;
+    }
+
+    /**
+     * 保存/确认/提交  普通要点策划/变更策划/索赔策划  （操作附件）
+     * @param secondManageKeyPointPlanVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void saveSecondManageKeyPointPlanVo(SecondManageKeyPointPlanVo secondManageKeyPointPlanVo) {
+        String buttonMark = secondManageKeyPointPlanVo.getButtonMark();
+        ButtonMarkUtil.checkButtonMark(buttonMark);
+
+        BigDecimal version = secondManageKeyPointPlanVo.getVersion();
+        String keyPointType = secondManageKeyPointPlanVo.getKeyPointType();
+
+        //删除附件数据
+        QqchSecondManageExtend qqchSecondManageExtend = new QqchSecondManageExtend();
+        qqchSecondManageExtend.setVersion(version);
+        qqchSecondManageExtend.setType(keyPointType);
+        qqchSecondManageExtendService.deleteQqchSecondManageExtend(qqchSecondManageExtend);
+
+        //插入附件数据
+        String fileGroupId = secondManageKeyPointPlanVo.getFileGroupId();
+        if(StringUtils.isNotBlank(fileGroupId)){
+            qqchSecondManageExtend.setFileGroupId(fileGroupId);
+            if(version.compareTo(BigDecimal.ONE) == 0){
+                qqchSecondManageExtend.setValid(Valid.YES);
+            }
+            qqchSecondManageExtend.setVersion(version);
+            qqchSecondManageExtend.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchSecondManageExtend.setCreateUserName(SecurityUtils.getUserName());
+            qqchSecondManageExtend.setCreateTime(DateUtils.getNowDate());
+            qqchSecondManageExtendMapper.insertQqchSecondManageExtend(qqchSecondManageExtend);
         }
 
+        //处理确认状态是确认
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //插入确认记录
+            String menuId = secondManageKeyPointPlanVo.getMenuId();
+            String stageIdentity = secondManageKeyPointPlanVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
+    }
+
+    /**
+     * 获取普通要点策划/变更策划/索赔策划表格数据
+     * @param version
+     * @param keyPointType
+     * @return
+     */
+    public List<SecondManageKeyPointPlan> getTableData(BigDecimal version, String keyPointType){
+        //获取二次经营要点识别数据
+        QqchSecondManageKeyPoint qqchSecondManageKeyPoint = new QqchSecondManageKeyPoint();
+        qqchSecondManageKeyPoint.setVersion(version);
+        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+
+        List<SecondManageKeyPointPlan> secondManageKeyPointPlanList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(qqchSecondManageKeyPointList)){
+            return secondManageKeyPointPlanList;
+        }
         for (QqchSecondManageKeyPoint secondManageKeyPoint : qqchSecondManageKeyPointList) {
-            SecondManageKeyPointPlanVo secondManageKeyPointPlanVo = new SecondManageKeyPointPlanVo();
-            secondManageKeyPointPlanVo.setId(secondManageKeyPointPlanVo.getId());
-            secondManageKeyPointPlanVo.setPid(secondManageKeyPoint.getPid());
-            secondManageKeyPointPlanVo.setOptimizedDirection(secondManageKeyPoint.getOptimizedDirection());
-            secondManageKeyPointPlanVo.setContentDescription(secondManageKeyPoint.getContentDescription());
-            secondManageKeyPointPlanVo.setContractBasis(secondManageKeyPointPlanVo.getContractBasis());
-            secondManageKeyPointPlanVo.setRemark(secondManageKeyPoint.getRemark());
-            resultList.add(secondManageKeyPointPlanVo);
+            SecondManageKeyPointPlan secondManageKeyPointPlan = new SecondManageKeyPointPlan();
+            secondManageKeyPointPlan.setId(secondManageKeyPointPlan.getId());
+            secondManageKeyPointPlan.setPid(secondManageKeyPoint.getPid());
+            secondManageKeyPointPlan.setOptimizedDirection(secondManageKeyPoint.getOptimizedDirection());
+            secondManageKeyPointPlan.setContentDescription(secondManageKeyPoint.getContentDescription());
+            secondManageKeyPointPlan.setContractBasis(secondManageKeyPointPlan.getContractBasis());
+            secondManageKeyPointPlan.setRemark(secondManageKeyPoint.getRemark());
+            secondManageKeyPointPlanList.add(secondManageKeyPointPlan);
         }
 
         //获取二次经营要点识别关联合同条款（子表数据）
@@ -150,8 +226,8 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         qqchKeyPointContractClause.setKeyPointType(keyPointType);
         List<QqchKeyPointContractClause> qqchKeyPointContractClauseList = qqchKeyPointContractClauseMapper.getQqchKeyPointContractClauseList(qqchKeyPointContractClause);
 
-        for (SecondManageKeyPointPlanVo secondManageKeyPointPlanVo : resultList) {
-            Long masterId = secondManageKeyPointPlanVo.getId();
+        for (SecondManageKeyPointPlan secondManageKeyPointPlan : secondManageKeyPointPlanList) {
+            Long masterId = secondManageKeyPointPlan.getId();
             StringBuilder contractRight = new StringBuilder();
             StringBuilder triggerCondition = new StringBuilder();
 
@@ -161,19 +237,18 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
                     triggerCondition.append(keyPointContractClause.getTriggerCondition());
                 }
             }
-            secondManageKeyPointPlanVo.setContractRight(contractRight.toString());
-            secondManageKeyPointPlanVo.setTriggerCondition(triggerCondition.toString());
+            secondManageKeyPointPlan.setContractRight(contractRight.toString());
+            secondManageKeyPointPlan.setTriggerCondition(triggerCondition.toString());
         }
 
         //转树列表
-        resultList = ListTreeUtil.formatTree(
-                resultList,
+        secondManageKeyPointPlanList = ListTreeUtil.formatTree(
+                secondManageKeyPointPlanList,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
-                SecondManageKeyPointPlanVo::getChildren,
-                SecondManageKeyPointPlanVo::setChildren);
-
-        return resultList;
+                SecondManageKeyPointPlan::getChildren,
+                SecondManageKeyPointPlan::setChildren);
+        return secondManageKeyPointPlanList;
     }
 
     /**
@@ -204,7 +279,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
 
         qqchSecondManageKeyPointVo.setVersion(version);
         qqchSecondManageKeyPointVo.setStageIdentity(qqchReviewService.getStage());
-        qqchSecondManageKeyPointVo.setQqchSecondManageKeyPointList(treeList);
+        qqchSecondManageKeyPointVo.setList(treeList);
 
         return qqchSecondManageKeyPointVo;
     }
@@ -246,7 +321,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchSecondManageKeyPointVo.getVersion();
-        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointVo.getQqchSecondManageKeyPointList();
+        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointVo.getList();
 
         List<QqchSecondManageKeyPoint> tileList = ListTreeUtil.formatList(
                 qqchSecondManageKeyPointList,

@@ -21,7 +21,7 @@ import java.util.List;
  * @remark qqch_work_planing_arrange
  */
 @Data
-public class QqchWorkPlaningArrangeVo extends BaseEntity {
+public class QqchWorkPlaningArrangeVo  {
 
     /**
      * 字段描述：版本
@@ -31,7 +31,7 @@ public class QqchWorkPlaningArrangeVo extends BaseEntity {
     private BigDecimal version;
 
     @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
-    private String submitFlag;
+    private String buttonMark;
 
     /**
      * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
@@ -41,9 +41,7 @@ public class QqchWorkPlaningArrangeVo extends BaseEntity {
 
     @JsonProperty
     @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
-    private String moduleIdentity;
+    private String menuId;
 
     private List<QqchWorkPlaningArrange> dataList;
-
-    private String menuId;
 }

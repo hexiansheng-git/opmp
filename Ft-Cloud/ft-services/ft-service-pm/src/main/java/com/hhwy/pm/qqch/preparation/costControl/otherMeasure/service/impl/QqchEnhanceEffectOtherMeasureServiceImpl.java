@@ -108,7 +108,7 @@ public class QqchEnhanceEffectOtherMeasureServiceImpl implements IQqchEnhanceEff
 
         qqchEnhanceEffectOtherMeasureVo.setVersion(version);
         qqchEnhanceEffectOtherMeasureVo.setStageIdentity(qqchReviewService.getStage());
-        qqchEnhanceEffectOtherMeasureVo.setQqchEnhanceEffectOtherMeasureList(treeList);
+        qqchEnhanceEffectOtherMeasureVo.setList(treeList);
         return qqchEnhanceEffectOtherMeasureVo;
     }
 
@@ -124,7 +124,7 @@ public class QqchEnhanceEffectOtherMeasureServiceImpl implements IQqchEnhanceEff
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchEnhanceEffectOtherMeasureVo.getVersion();
-        List<QqchEnhanceEffectOtherMeasure> qqchEnhanceEffectOtherMeasureList = qqchEnhanceEffectOtherMeasureVo.getQqchEnhanceEffectOtherMeasureList();
+        List<QqchEnhanceEffectOtherMeasure> qqchEnhanceEffectOtherMeasureList = qqchEnhanceEffectOtherMeasureVo.getList();
 
         List<QqchEnhanceEffectOtherMeasure> tileList = ListTreeUtil.formatList(
                 qqchEnhanceEffectOtherMeasureList,

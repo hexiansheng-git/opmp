@@ -22,5 +22,5 @@ public class QqchTechRiskSolutionsVo extends PreparationEntity {
     /**
      * 字段描述：技术风险及应对措施集合
      */
-    private List<QqchTechRiskSolutions> qqchTechRiskSolutionsList;
+    private List<QqchTechRiskSolutions> list;
 }

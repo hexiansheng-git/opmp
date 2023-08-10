@@ -14,12 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
  * @author zq
  * @date 2023-07-19 11:49:17
  * @remark qqch_work_planing_arrange
  */
+@Data
 public class QqchWorkPlaningArrange extends BaseEntity {
     private static final long serialVersionUID = 1L;
 

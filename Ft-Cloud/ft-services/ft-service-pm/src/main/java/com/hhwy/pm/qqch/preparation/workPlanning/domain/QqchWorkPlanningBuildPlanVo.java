@@ -19,7 +19,7 @@ public class QqchWorkPlanningBuildPlanVo {
     private BigDecimal version;
 
     @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
-    private String submitFlag;
+    private String buttonMark;
 
     /**
      * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
@@ -29,9 +29,7 @@ public class QqchWorkPlanningBuildPlanVo {
 
     @JsonProperty
     @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
-    private String moduleIdentity;
+    private String menuId;
 
     private List<QqchWorkPlanningBuildPlan> dataList;
-    //菜单id
-    private String menuId;
 }

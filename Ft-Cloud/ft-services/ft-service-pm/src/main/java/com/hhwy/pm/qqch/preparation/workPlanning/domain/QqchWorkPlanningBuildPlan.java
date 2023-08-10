@@ -98,82 +98,82 @@ public class QqchWorkPlanningBuildPlan extends BaseEntity {
      * 字段描述：版本
      */
     @JsonProperty
-    @Excel(name = "版本")
+//    @Excel(name = "版本")
     private BigDecimal version;
     /**
      * 字段描述：是否有效 0无效 1有效
      */
     @JsonProperty
-    @Excel(name = "是否有效 0无效 1有效")
+//    @Excel(name = "是否有效 0无效 1有效")
     private String valid;
     /**
      * 字段描述：数据创建者id
      */
     @JsonProperty
-    @Excel(name = "数据创建者id")
+//    @Excel(name = "数据创建者id")
     private String createUser;
     /**
      * 字段描述：数据创建者名称
      */
     @JsonProperty
-    @Excel(name = "数据创建者名称")
+//    @Excel(name = "数据创建者名称")
     private String createUserName;
     /**
      * 字段描述：数据创建系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
      */
     @JsonProperty
-    @Excel(name = "数据修改者id")
+//    @Excel(name = "数据修改者id")
     private String updateUser;
     /**
      * 字段描述：数据修改系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
      */
     @JsonProperty
-    @Excel(name = "数据删除者")
+//    @Excel(name = "数据删除者")
     private String delUser;
     /**
      * 字段描述：数据删除系统时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+//    @Excel(name = "数据删除系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date delTime;
     /**
      * 字段描述：删除标识：0未删除；1已删除
      */
     @JsonProperty
-    @Excel(name = "删除标识：0未删除；1已删除")
+//    @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+//    @Excel(name = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+//    @Excel(name = "预留字段2")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
      */
     @JsonProperty
-    @Excel(name = "预留字段3")
+//    @Excel(name = "预留字段3")
     private String ptVar3;
 
 }

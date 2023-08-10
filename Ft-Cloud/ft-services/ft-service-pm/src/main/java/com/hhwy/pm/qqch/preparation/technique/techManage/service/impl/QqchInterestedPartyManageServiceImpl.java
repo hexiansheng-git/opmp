@@ -127,7 +127,7 @@ public class QqchInterestedPartyManageServiceImpl implements IQqchInterestedPart
 
         qqchInterestedPartyManageVo.setVersion(version);
         qqchInterestedPartyManageVo.setStageIdentity(qqchReviewService.getStage());
-        qqchInterestedPartyManageVo.setQqchInterestedPartyManageList(qqchInterestedPartyManageList);
+        qqchInterestedPartyManageVo.setList(qqchInterestedPartyManageList);
         return qqchInterestedPartyManageVo;
     }
 
@@ -143,7 +143,7 @@ public class QqchInterestedPartyManageServiceImpl implements IQqchInterestedPart
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchInterestedPartyManageVo.getVersion();
-        List<QqchInterestedPartyManage> qqchInterestedPartyManageList = qqchInterestedPartyManageVo.getQqchInterestedPartyManageList();
+        List<QqchInterestedPartyManage> qqchInterestedPartyManageList = qqchInterestedPartyManageVo.getList();
 
         //处理数据
         this.insertQqchInterestedPartyManageList(qqchInterestedPartyManageList,version);

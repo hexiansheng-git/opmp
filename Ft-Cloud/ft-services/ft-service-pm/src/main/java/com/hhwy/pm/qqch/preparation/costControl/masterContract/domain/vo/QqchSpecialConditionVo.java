@@ -22,5 +22,5 @@ public class QqchSpecialConditionVo extends PreparationEntity {
     /**
      * 字段描述：
      */
-    private List<QqchSpecialCondition> qqchSpecialConditionList;
+    private List<QqchSpecialCondition> list;
 }

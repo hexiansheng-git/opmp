@@ -5,6 +5,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonImportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
 import com.hhwy.utils.excel.FtExcelUtil;
@@ -64,31 +65,31 @@ public class QqchExpBetonController extends BaseController {
     }
 
     /**
-     * 树列表导出 TODO
+     * 树列表导出
      *
      * @param response
-     * @param version
      * @throws IOException
      */
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, BigDecimal version) throws IOException {
-        List<QqchExpBeton> qqchExpBetonList = qqchExpBetonService.getTreeList(version).getTreeList();
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, BigDecimal version)
+        throws IOException {
+        List<QqchExpBeton> list = qqchExpBetonService.getList(version);
         FtExcelUtil<QqchExpBeton> util = new FtExcelUtil<>(QqchExpBeton.class);
-        util.exportExcel(response, qqchExpBetonList, DateUtils.getDate());
+        util.exportExcel(response, list, DateUtils.getDate());
     }
 
     /**
-     * 树列表导出导入 TODO
+     * 树列表导出导入
      *
      * @param file
      * @return
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        FtExcelUtil<QqchExpBetonVo> util = new FtExcelUtil<>(QqchExpBetonVo.class);
+        FtExcelUtil<QqchExpBetonImportVo> util = new FtExcelUtil<>(QqchExpBetonImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<QqchExpBetonVo> list = util.importExcel(inputStream);
+            List<QqchExpBetonImportVo> list = util.importTreeExcel(inputStream);
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

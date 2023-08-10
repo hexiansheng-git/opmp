@@ -22,5 +22,5 @@ public class QqchRecordPigeonholeManageVo extends PreparationEntity {
     /**
      * 字段描述：技术档案归档管理集合
      */
-    private List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageList;
+    private List<QqchRecordPigeonholeManage> list;
 }

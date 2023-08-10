@@ -125,7 +125,7 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
 
         qqchTargetAdvisoryOrganVo.setVersion(version);
         qqchTargetAdvisoryOrganVo.setStageIdentity(qqchReviewService.getStage());
-        qqchTargetAdvisoryOrganVo.setQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganList);
+        qqchTargetAdvisoryOrganVo.setList(qqchTargetAdvisoryOrganList);
         return qqchTargetAdvisoryOrganVo;
     }
 
@@ -141,7 +141,7 @@ public class QqchTargetAdvisoryOrganServiceImpl implements IQqchTargetAdvisoryOr
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchTargetAdvisoryOrganVo.getVersion();
-        List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList = qqchTargetAdvisoryOrganVo.getQqchTargetAdvisoryOrganList();
+        List<QqchTargetAdvisoryOrgan> qqchTargetAdvisoryOrganList = qqchTargetAdvisoryOrganVo.getList();
 
         //处理数据
         this.insertQqchTargetAdvisoryOrganList(qqchTargetAdvisoryOrganList,version);

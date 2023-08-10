@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.measureexp.beton.service;
 
+import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -22,4 +24,11 @@ public interface IQqchExpBetonService {
      * @param qqchExpBetonVo
      */
     void batchSave(QqchExpBetonVo qqchExpBetonVo);
+
+    /**
+     * 列表
+     * @param version
+     * @return
+     */
+    List<QqchExpBeton> getList(BigDecimal version);
 }

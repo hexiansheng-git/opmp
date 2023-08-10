@@ -1,12 +1,13 @@
 package com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.vo;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.pm.qqch.common.domain.PreparationEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 /**
@@ -17,56 +18,19 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SecondManageKeyPointPlanVo {
+public class SecondManageKeyPointPlanVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：附件组id
      */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    private Long id;
+    @Excel(name = "附件组id")
+    private String fileGroupId;
     /**
-     * 字段描述：父id
+     * 字段描述：要点类型（字典项：key_point_type）
      */
-    @JsonSerialize(using = ToStringSerializer.class)
-    @JsonProperty
-    private Long pid;
-    /**
-     * 字段描述：优化方向
-     */
-    @JsonProperty
-    private String optimizedDirection;
-    /**
-     * 字段描述：内容描述
-     */
-    @JsonProperty
-    private String contentDescription;
-    /**
-     * 字段描述：合同权利（取二次经营要点识别关联合同条款中的条款内容）
-     */
-    @JsonProperty
-    private String contractRight;
-    /**
-     * 字段描述：触发条件（取二次经营要点识别关联合同条款中的触发条件）
-     */
-    @JsonProperty
-    private String triggerCondition;
-    /**
-     * 字段描述：合同依据（取二次经营要点中的关联合同条款）
-     */
-    @JsonProperty
-    private String contractBasis;
-    /**
-     * 字段描述：应对措施（取二次经营要点中的拟采取措施）
-     */
-    @JsonProperty
-    private String proposedMeasures;
-    /**
-     * 字段描述：备注/描述
-     */
-    @JsonProperty
-    private String remark;
+    @NotBlank(message = "要点类型不能为空！",groups = ValidationGroups.Save.class)
+    private String keyPointType;
 
-    private List<SecondManageKeyPointPlanVo> children;
+    private List<SecondManageKeyPointPlan> list;
 }

@@ -1,11 +1,14 @@
 package com.hhwy.pm.common.download;
 
 import com.alibaba.cloud.commons.io.IOUtils;
+import com.hhwy.utils.excelUtil.DownTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,6 +22,9 @@ import java.io.OutputStream;
 @RestController
 @RequestMapping("/download")
 public class DownloadTemplateController {
+
+    @Autowired
+    private DownTemplate downTemplate;
 
     /**
      * 下载模板
@@ -46,6 +52,22 @@ public class DownloadTemplateController {
         outputStream.flush();
         inStream.close();
         outputStream.close();
+    }
+
+    /**
+     * 下载模板，.xls或.xlsx
+     * @param fileName 模板名称，带后缀
+     * @param exportName 导出名称，不带后缀
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping( "/downloadTemplateWithSuffix")
+    public void downloadTemplateTest(@RequestParam String fileName,
+                                     @RequestParam(required = false) String exportName,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) throws Exception {
+        downTemplate.downloadTemplateWithSuffix(request,response,fileName,exportName);
     }
 
 }

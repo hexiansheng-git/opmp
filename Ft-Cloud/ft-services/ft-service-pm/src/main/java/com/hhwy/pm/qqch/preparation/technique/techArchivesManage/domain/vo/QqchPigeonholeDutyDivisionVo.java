@@ -22,5 +22,5 @@ public class QqchPigeonholeDutyDivisionVo extends PreparationEntity {
     /**
      * 字段描述：优技术档案归档责任分工集合
      */
-    private List<QqchPigeonholeDutyDivision> qqchPigeonholeDutyDivisionList;
+    private List<QqchPigeonholeDutyDivision> list;
 }

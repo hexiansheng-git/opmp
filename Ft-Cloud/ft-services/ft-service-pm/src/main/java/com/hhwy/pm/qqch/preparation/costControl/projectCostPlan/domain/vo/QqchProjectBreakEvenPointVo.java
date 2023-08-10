@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchProjectBreakEvenPointVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchProjectBreakEvenPoint> qqchProjectBreakEvenPointList;
+    private List<QqchProjectBreakEvenPoint> list;
 }

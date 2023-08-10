@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchEnhanceEffectOtherMeasureVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchEnhanceEffectOtherMeasure> qqchEnhanceEffectOtherMeasureList;
+    private List<QqchEnhanceEffectOtherMeasure> list;
 }

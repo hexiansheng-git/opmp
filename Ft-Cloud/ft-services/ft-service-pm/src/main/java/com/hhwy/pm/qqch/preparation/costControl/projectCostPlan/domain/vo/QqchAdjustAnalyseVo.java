@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchAdjustAnalyseVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchAdjustAnalyse> qqchAdjustAnalyseList;
+    private List<QqchAdjustAnalyse> list;
 }
