@@ -1,29 +1,31 @@
-package com.hhwy.pm.qqch.sgch.managementPersonConfig.domain;
+package com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author ldd
- * @date 2023-07-31 15:15:56
- * @remark qqch_management_person_config
+ * @date 2023-08-09 15:01:10
+ * @remark qqch_pulic_health_risk
  *
- *  15.1 管理人员配置
+ *  8.7.2 公共卫生风险策划
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class QqchManagementPersonConfig extends TreeNode<QqchManagementPersonConfig> {
+public class QqchPulicHealthRisk extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,70 +36,40 @@ public class QqchManagementPersonConfig extends TreeNode<QqchManagementPersonCon
     @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：项目组织数据id（备用字段，有可能为空）
+     * 字段描述：危险因素
      */
-    @JsonSerialize(using = ToStringSerializer.class)
+    @NotBlank(message = "危险因素不能为空",groups = {ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "项目组织数据id（备用字段，有可能为空）")
-    private Long outId;
+    @Excel(name = "危险因素")
+    private String riskFactor;
     /**
-     * 字段描述：父id
+     * 字段描述：风险等级
      */
-    @JsonSerialize(using = ToStringSerializer.class)
+    @NotBlank(message = "风险等级不能为空",groups = {ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "风险等级")
+    private String riskLevel;
     /**
-     * 字段描述：岗位
+     * 字段描述：可能导致的伤害
      */
+    @NotBlank(message = "可能导致的伤害不能为空",groups = {ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "岗位")
-    private String post;
+    @Excel(name = "可能导致的伤害")
+    private String possibleHarm;
     /**
-     * 字段描述：岗位职责
+     * 字段描述：检查计划
      */
+    @NotBlank(message = "检查计划不能为空",groups = {ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "岗位职责")
-    private String duty;
-
+    @Excel(name = "检查计划")
+    private String checkPlan;
     /**
-     *  人员id
+     * 字段描述：管控措施
      */
+    @NotBlank(message = "管控措施不能为空",groups = {ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "人员id")
-    private Long personId;
-    /**
-     * 字段描述：姓名
-     */
-    @JsonProperty
-    @Excel(name = "姓名")
-    private String name;
-    /**
-     * 字段描述：人员类别
-     */
-    @JsonProperty
-    @Excel(name = "人员类别")
-    private String personType;
-    /**
-     * 字段描述：拟进场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "拟进场时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date draftEntryTime;
-    /**
-     * 字段描述：拟退场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "拟退场时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date draftExitTime;
-    /**
-     * 字段描述：在场天数
-     */
-    @JsonProperty
-    @Excel(name = "在场天数")
-    private BigDecimal draftInDays;
+    @Excel(name = "管控措施")
+    private String controlMeasure;
     /**
      * 字段描述：附件组id
      */
@@ -242,6 +214,5 @@ public class QqchManagementPersonConfig extends TreeNode<QqchManagementPersonCon
     @JsonProperty
     @Excel(name = "是否有效 1-有效 0-失效")
     private String valid;
-
 
 }

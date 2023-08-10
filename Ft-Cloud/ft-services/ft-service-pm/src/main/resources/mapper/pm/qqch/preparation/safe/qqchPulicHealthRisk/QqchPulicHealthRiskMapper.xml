@@ -2,19 +2,15 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.mapper.QqchLabourDemandPlanMapper">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-    <resultMap type="com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan" id="QqchLabourDemandPlanResultMap">
+<mapper namespace="com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.mapper.QqchPulicHealthRiskMapper">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+    <resultMap type="com.hhwy.pm.qqch.preparation.safe.qqchPulicHealthRisk.domain.QqchPulicHealthRisk" id="QqchPulicHealthRiskResultMap">
                     <result property="id" column="id" />
-                    <result property="pid" column="pid" />
-                    <result property="jobName" column="job_name" />
-                    <result property="workTeam" column="work_team" />
-                    <result property="chinaNum" column="china_num" />
-                    <result property="outNum" column="out_num" />
-                    <result property="total" column="total" />
-                    <result property="outProportion" column="out_proportion" />
-                    <result property="entryDate" column="entry_date" />
-                    <result property="exitDate" column="exit_date" />
+                    <result property="riskFactor" column="risk_factor" />
+                    <result property="riskLevel" column="risk_level" />
+                    <result property="possibleHarm" column="possible_harm" />
+                    <result property="checkPlan" column="check_plan" />
+                    <result property="controlMeasure" column="control_measure" />
                     <result property="fileGroupId" column="file_group_id" />
                     <result property="remark" column="remark" />
                     <result property="regionId" column="region_id" />
@@ -39,18 +35,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     <result property="version" column="version" />
                     <result property="valid" column="valid" />
             </resultMap>
-    <sql id="selectQqchLabourDemandPlanVo">
+    <sql id="selectQqchPulicHealthRiskVo">
         select
                                                             `id`
-                                                         ,`job_name`
-                                                         ,`pid`
-                                                         ,`work_team`
-                                                         ,`china_num`
-                                                         ,`out_num`
-                                                         ,`total`
-                                                         ,`out_proportion`
-                                                         ,`entry_date`
-                                                         ,`exit_date`
+                                                         ,`risk_factor`
+                                                         ,`risk_level`
+                                                         ,`possible_harm`
+                                                         ,`check_plan`
+                                                         ,`control_measure`
                                                          ,`file_group_id`
                                                          ,`remark`
                                                          ,`region_id`
@@ -74,22 +66,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                          ,`task_status`
                                                          ,`version`
                                                          ,`valid`
-                                    from qqch_labour_demand_plan
+                                    from qqch_pulic_health_risk
     </sql>
-    <select id="getQqchLabourDemandPlan" resultMap="QqchLabourDemandPlanResultMap">
-        <include refid="selectQqchLabourDemandPlanVo" />
+    <select id="getQqchPulicHealthRisk" resultMap="QqchPulicHealthRiskResultMap">
+        <include refid="selectQqchPulicHealthRiskVo" />
         <where>
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
-                            <if test="pid != null "> and `pid` = #{pid}</if>
-                            <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
-                            <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
-                            <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
-                            <if test="outNum != null "> and `out_num` = #{outNum}</if>
-                            <if test="total != null "> and `total` = #{total}</if>
-                            <if test="outProportion != null "> and `out_proportion` = #{outProportion}</if>
-                            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
-                            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
+                            <if test="riskFactor != null  and riskFactor != ''"> and `risk_factor` = #{riskFactor}</if>
+                            <if test="riskLevel != null  and riskLevel != ''"> and `risk_level` = #{riskLevel}</if>
+                            <if test="possibleHarm != null  and possibleHarm != ''"> and `possible_harm` = #{possibleHarm}</if>
+                            <if test="checkPlan != null  and checkPlan != ''"> and `check_plan` = #{checkPlan}</if>
+                            <if test="controlMeasure != null  and controlMeasure != ''"> and `control_measure` = #{controlMeasure}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -117,20 +105,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by create_time desc
     </select>
 
-    <select id="getQqchLabourDemandPlanList" resultMap="QqchLabourDemandPlanResultMap">
-        <include refid="selectQqchLabourDemandPlanVo" />
+    <select id="getQqchPulicHealthRiskList" resultMap="QqchPulicHealthRiskResultMap">
+        <include refid="selectQqchPulicHealthRiskVo" />
         <where>
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
-                            <if test="pid != null "> and `pid` = #{pid}</if>
-                            <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
-                            <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
-                            <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
-                            <if test="outNum != null "> and `out_num` = #{outNum}</if>
-                            <if test="total != null "> and `total` = #{total}</if>
-                            <if test="outProportion != null "> and `out_proportion` = #{outProportion}</if>
-                            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
-                            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
+                            <if test="riskFactor != null  and riskFactor != ''"> and `risk_factor` = #{riskFactor}</if>
+                            <if test="riskLevel != null  and riskLevel != ''"> and `risk_level` = #{riskLevel}</if>
+                            <if test="possibleHarm != null  and possibleHarm != ''"> and `possible_harm` = #{possibleHarm}</if>
+                            <if test="checkPlan != null  and checkPlan != ''"> and `check_plan` = #{checkPlan}</if>
+                            <if test="controlMeasure != null  and controlMeasure != ''"> and `control_measure` = #{controlMeasure}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -154,29 +138,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
                             <if test="version != null "> and `version` = #{version}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-            <if test="jobNames!=null and jobNames.size>0">
-                and  job_name in
-                <foreach item="jobName" collection="jobNames" open="(" separator="," close=")">
-                    #{jobName}
-                </foreach>
-            </if>
                     </where>
         order by create_time desc
     </select>
 
-    <insert id="insertQqchLabourDemandPlan"  useGeneratedKeys="true" keyProperty="id"  >
-        insert into qqch_labour_demand_plan
+    <insert id="insertQqchPulicHealthRisk"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_pulic_health_risk
         <trim prefix="(" suffix=")" suffixOverrides=",">
                             <if test="id != null ">`id`,</if>
-                            <if test="pid != null ">`pid`,</if>
-                            <if test="jobName != null  and jobName != ''">`job_name`,</if>
-                            <if test="workTeam != null  and workTeam != ''">`work_team`,</if>
-                            <if test="chinaNum != null ">`china_num`,</if>
-                            <if test="outNum != null ">`out_num`,</if>
-                            <if test="total != null ">`total`,</if>
-                            <if test="outProportion != null ">`out_proportion`,</if>
-                            <if test="entryDate != null ">`entry_date`,</if>
-                            <if test="exitDate != null ">`exit_date`,</if>
+                            <if test="riskFactor != null  and riskFactor != ''">`risk_factor`,</if>
+                            <if test="riskLevel != null  and riskLevel != ''">`risk_level`,</if>
+                            <if test="possibleHarm != null  and possibleHarm != ''">`possible_harm`,</if>
+                            <if test="checkPlan != null  and checkPlan != ''">`check_plan`,</if>
+                            <if test="controlMeasure != null  and controlMeasure != ''">`control_measure`,</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
                             <if test="remark != null  and remark != ''">`remark`,</if>
                             <if test="regionId != null ">`region_id`,</if>
@@ -203,15 +177,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
                             <if test="id != null ">#{id},</if>
-                            <if test="pid != null ">#{pid},</if>
-                            <if test="jobName != null  and jobName != ''">#{jobName},</if>
-                            <if test="workTeam != null  and workTeam != ''">#{workTeam},</if>
-                            <if test="chinaNum != null ">#{chinaNum},</if>
-                            <if test="outNum != null ">#{outNum},</if>
-                            <if test="total != null ">#{total},</if>
-                            <if test="outProportion != null ">#{outProportion},</if>
-                            <if test="entryDate != null ">#{entryDate},</if>
-                            <if test="exitDate != null ">#{exitDate},</if>
+                            <if test="riskFactor != null  and riskFactor != ''">#{riskFactor},</if>
+                            <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
+                            <if test="possibleHarm != null  and possibleHarm != ''">#{possibleHarm},</if>
+                            <if test="checkPlan != null  and checkPlan != ''">#{checkPlan},</if>
+                            <if test="controlMeasure != null  and controlMeasure != ''">#{controlMeasure},</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
                             <if test="remark != null  and remark != ''">#{remark},</if>
                             <if test="regionId != null ">#{regionId},</if>
@@ -238,20 +208,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchLabourDemandPlan -->
-    <insert id="insertQqchLabourDemandPlanList">
-        insert into qqch_labour_demand_plan
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchPulicHealthRisk -->
+    <insert id="insertQqchPulicHealthRiskList">
+        insert into qqch_pulic_health_risk
         <trim prefix="(" suffix=")" suffixOverrides=",">
                                                 `id`,
-                                                `pid`,
-                                                                `job_name`,
-                                                                `work_team`,
-                                                                `china_num`,
-                                                                `out_num`,
-                                                                `total`,
-                                                                `out_proportion`,
-                                                                `entry_date`,
-                                                                `exit_date`,
+                                                                `risk_factor`,
+                                                                `risk_level`,
+                                                                `possible_harm`,
+                                                                `check_plan`,
+                                                                `control_measure`,
                                                                 `file_group_id`,
                                                                 `remark`,
                                                                 `region_id`,
@@ -276,18 +242,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `valid`,
                                     </trim>
         values
-        <foreach collection="qqchLabourDemandPlanList" item="item" separator=",">
+        <foreach collection="qqchPulicHealthRiskList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                                                             #{item.id},
-                                                            #{item.pid},
-                                                                                #{item.jobName},
-                                                                                #{item.workTeam},
-                                                                                #{item.chinaNum},
-                                                                                #{item.outNum},
-                                                                                #{item.total},
-                                                                                #{item.outProportion},
-                                                                                #{item.entryDate},
-                                                                                #{item.exitDate},
+                                                                                #{item.riskFactor},
+                                                                                #{item.riskLevel},
+                                                                                #{item.possibleHarm},
+                                                                                #{item.checkPlan},
+                                                                                #{item.controlMeasure},
                                                                                 #{item.fileGroupId},
                                                                                 #{item.remark},
                                                                                 #{item.regionId},
@@ -314,19 +276,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
-    <update id="updateQqchLabourDemandPlan">
-        update qqch_labour_demand_plan
+    <update id="updateQqchPulicHealthRisk">
+        update qqch_pulic_health_risk
         <trim prefix="SET" suffixOverrides=",">
                             <if test="id != null ">`id` = #{id},</if>
-                            <if test="pid != null ">`pid` = #{pid},</if>
-                            <if test="jobName != null  and  jobName != ''">`job_name` = #{jobName},</if>
-                            <if test="workTeam != null  and  workTeam != ''">`work_team` = #{workTeam},</if>
-                            <if test="chinaNum != null ">`china_num` = #{chinaNum},</if>
-                            <if test="outNum != null ">`out_num` = #{outNum},</if>
-                            <if test="total != null ">`total` = #{total},</if>
-                            <if test="outProportion != null ">`out_proportion` = #{outProportion},</if>
-                            <if test="entryDate != null ">`entry_date` = #{entryDate},</if>
-                            <if test="exitDate != null ">`exit_date` = #{exitDate},</if>
+                            <if test="riskFactor != null  and  riskFactor != ''">`risk_factor` = #{riskFactor},</if>
+                            <if test="riskLevel != null  and  riskLevel != ''">`risk_level` = #{riskLevel},</if>
+                            <if test="possibleHarm != null  and  possibleHarm != ''">`possible_harm` = #{possibleHarm},</if>
+                            <if test="checkPlan != null  and  checkPlan != ''">`check_plan` = #{checkPlan},</if>
+                            <if test="controlMeasure != null  and  controlMeasure != ''">`control_measure` = #{controlMeasure},</if>
                             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
                             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
                             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -353,61 +311,40 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     </trim>
         <where>
                                                                         <if test="id != null "> and `id` = #{id}</if>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
     </update>
 
-            <update id="updateQqchLabourDemandPlanList">
-            update qqch_labour_demand_plan
+            <update id="updateQqchPulicHealthRiskList">
+            update qqch_pulic_health_risk
             <trim prefix="set" suffixOverrides=",">
                                     <trim prefix="id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
                             when `id`=#{item.id} then #{item.id}
                         </foreach>
                     </trim>
-
-                <trim prefix="pid  = case" suffix="end,">
-                    <foreach collection="list" item="item" index="index">
-                        when `id`=#{item.id} then #{item.pid}
-                    </foreach>
-                </trim>
-                                    <trim prefix="job_name  = case" suffix="end,">
+                                    <trim prefix="risk_factor  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.jobName}
+                            when `id`=#{item.id} then #{item.riskFactor}
                         </foreach>
                     </trim>
-                                    <trim prefix="work_team  = case" suffix="end,">
+                                    <trim prefix="risk_level  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.workTeam}
+                            when `id`=#{item.id} then #{item.riskLevel}
                         </foreach>
                     </trim>
-                                    <trim prefix="china_num  = case" suffix="end,">
+                                    <trim prefix="possible_harm  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.chinaNum}
+                            when `id`=#{item.id} then #{item.possibleHarm}
                         </foreach>
                     </trim>
-                                    <trim prefix="out_num  = case" suffix="end,">
+                                    <trim prefix="check_plan  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.outNum}
+                            when `id`=#{item.id} then #{item.checkPlan}
                         </foreach>
                     </trim>
-                                    <trim prefix="total  = case" suffix="end,">
+                                    <trim prefix="control_measure  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.total}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="out_proportion  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.outProportion}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="entry_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.entryDate}
-                        </foreach>
-                    </trim>
-                                    <trim prefix="exit_date  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            when `id`=#{item.id} then #{item.exitDate}
+                            when `id`=#{item.id} then #{item.controlMeasure}
                         </foreach>
                     </trim>
                                     <trim prefix="file_group_id  = case" suffix="end,">
@@ -532,19 +469,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </foreach>
         </update>
     
-            <update id="deleteQqchLabourDemandPlan">
-            update `qqch_labour_demand_plan` set del_flag = 1
+            <update id="deleteQqchPulicHealthRisk">
+            update `qqch_pulic_health_risk` set del_flag = 1
             <where>
                                     <if test="id != null "> and `id` = #{id}</if>
-                                    <if test="pid != null "> and `pid` = #{pid}</if>
-                                    <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
-                                    <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
-                                    <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
-                                    <if test="outNum != null "> and `out_num` = #{outNum}</if>
-                                    <if test="total != null "> and `total` = #{total}</if>
-                                    <if test="outProportion != null "> and `out_proportion` = #{outProportion}</if>
-                                    <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
-                                    <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
+                                    <if test="riskFactor != null  and riskFactor != ''"> and `risk_factor` = #{riskFactor}</if>
+                                    <if test="riskLevel != null  and riskLevel != ''"> and `risk_level` = #{riskLevel}</if>
+                                    <if test="possibleHarm != null  and possibleHarm != ''"> and `possible_harm` = #{possibleHarm}</if>
+                                    <if test="checkPlan != null  and checkPlan != ''"> and `check_plan` = #{checkPlan}</if>
+                                    <if test="controlMeasure != null  and controlMeasure != ''"> and `control_measure` = #{controlMeasure}</if>
                                     <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                                     <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                                     <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -571,139 +504,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </where>
         </update>
 
-                    <update id="deleteQqchLabourDemandPlanByPks">
-                update `qqch_labour_demand_plan` set del_flag = 1
+                    <update id="deleteQqchPulicHealthRiskByPks">
+                update `qqch_pulic_health_risk` set del_flag = 1
                 <where>
                     `id` in
-                    <foreach item="id" collection="qqchLabourDemandPlanPkList" open="(" separator="," close=")">
+                    <foreach item="id" collection="qqchPulicHealthRiskPkList" open="(" separator="," close=")">
                         #{id}
                     </foreach>
                 </where>
             </update>
-
-    <select id="selectCount" resultType="com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto">
-        SELECT
-        `id`,
-        `job_name`,
-        `pid`,
-        `work_team`,
-        `china_num`,
-        `out_num`,
-        `total` as num,
-        `out_proportion`,
-        `entry_date` as startTime,
-        `exit_date` as endTime,
-        `file_group_id`,
-        `remark`,
-        `region_id`,
-        `region_name`,
-        `project_id`,
-        `project_name`,
-        `dept_id`,
-        `create_user`,
-        `create_user_name`,
-        `create_time`,
-        `update_user`,
-        `update_time`,
-        `del_user`,
-        `del_time`,
-        `del_flag`,
-        `pt_var1`,
-        `pt_var2`,
-        `pt_var3`,
-        `pt_var4`,
-        `pt_var5`,
-        `task_status`,
-        `version`,
-        `valid`
-        FROM
-        qqch_labour_demand_plan
-        where
-        del_flag = "0"
-        and pid=#{pid}
-        order by create_time desc
-    </select>
-
-
-    <select id="getQqchLabourDemandPlan1" resultMap="QqchLabourDemandPlanResultMap">
-        <include refid="selectQqchLabourDemandPlanVo" />
-        <where>
-            del_flag = "0"
-            <if test="id != null "> and `id` = #{id}</if>
-            <if test="pid != null "> and `pid` = #{pid}</if>
-            <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
-            <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
-            <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
-            <if test="outNum != null "> and `out_num` = #{outNum}</if>
-            <if test="total != null "> and `total` = #{total}</if>
-            <if test="outProportion != null "> and `out_proportion` = #{outProportion}</if>
-            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
-            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="regionId != null "> and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
-            <if test="projectId != null "> and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
-            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
-            <if test="version != null "> and `version` = #{version}</if>
-            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-        </where>
-        order by entry_date  limit 1
-    </select>
-
-    <select id="getQqchLabourDemandPlan2" resultMap="QqchLabourDemandPlanResultMap">
-        <include refid="selectQqchLabourDemandPlanVo" />
-        <where>
-            del_flag = "0"
-            <if test="id != null "> and `id` = #{id}</if>
-            <if test="pid != null "> and `pid` = #{pid}</if>
-            <if test="jobName != null  and jobName != ''"> and `job_name` = #{jobName}</if>
-            <if test="workTeam != null  and workTeam != ''"> and `work_team` = #{workTeam}</if>
-            <if test="chinaNum != null "> and `china_num` = #{chinaNum}</if>
-            <if test="outNum != null "> and `out_num` = #{outNum}</if>
-            <if test="total != null "> and `total` = #{total}</if>
-            <if test="outProportion != null "> and `out_proportion` = #{outProportion}</if>
-            <if test="entryDate != null "> and `entry_date` = #{entryDate}</if>
-            <if test="exitDate != null "> and `exit_date` = #{exitDate}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-            <if test="regionId != null "> and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
-            <if test="projectId != null "> and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
-            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
-            <if test="version != null "> and `version` = #{version}</if>
-            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-        </where>
-        order by exit_date desc limit 1
-    </select>
             </mapper>

@@ -100,6 +100,16 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         version = VersionUtil.getVersion("qqch_labour_demand_plan", version);
         qqchLabourDemandPlan.setVersion(version);
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
+        //查询开始时间
+        QqchLabourDemandPlan qqchLabourDemandPlan1 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan1(qqchLabourDemandPlan);
+        if(qqchLabourDemandPlan1!=null){
+            labourDemandPlanVo.setStartTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan1.getEntryDate()));
+        }
+        QqchLabourDemandPlan qqchLabourDemandPlan2 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan2(qqchLabourDemandPlan);
+        if(qqchLabourDemandPlan2!=null){
+            labourDemandPlanVo.setEndTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan2.getExitDate()));
+        }
+        //查询结束时间
         List<QqchLabourDemandPlan> treeList = TreeUtil.build(qqchLabourDemandPlanList, 0l);
         labourDemandPlanVo.setVersion(version);
         labourDemandPlanVo.setStageIdentity(qqchReviewService.getStage());

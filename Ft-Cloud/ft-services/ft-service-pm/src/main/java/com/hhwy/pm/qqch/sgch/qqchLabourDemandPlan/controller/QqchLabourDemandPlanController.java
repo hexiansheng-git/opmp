@@ -12,8 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -117,7 +123,7 @@ public class QqchLabourDemandPlanController extends BaseController{
      */
     @PreAuthorize(hasPermi = "qqchLabourDemandPlan:selectCount")
     @PostMapping("/selectCount")
-    public AjaxResult select(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlan){
+    public AjaxResult select(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlan) throws ParseException {
         if(qqchLabourDemandPlan.getStartTime()==null||qqchLabourDemandPlan.getEndTime()==null){
             return  AjaxResult.error("开始时间或者结束时间不能为空");
         }
@@ -125,7 +131,19 @@ public class QqchLabourDemandPlanController extends BaseController{
             return  AjaxResult.error("至少传一种工种");
         }
         List<QqchLabourDemandPlanDto> list= qqchLabourDemandPlanService.selectCount(qqchLabourDemandPlan);
-        return AjaxResult.success(list);
+        List<Date> dates = list.stream().map(QqchLabourDemandPlanDto::getTime).collect(Collectors.toList());
+        List<String> stringDate = new ArrayList<>();
+        for (Date date : dates) {
+            stringDate.add(new SimpleDateFormat("yyyy-MM").format(date));
+        }
+        String[] dates1 =  stringDate.toArray( new String[stringDate.size()]);
+        List<BigDecimal> num = list.stream().map(QqchLabourDemandPlanDto::getNum).collect(Collectors.toList());
+        BigDecimal[] num1 = num.toArray(new BigDecimal[num.size()]);
+
+        List<Object[]> list1 = new ArrayList<>();
+        list1.add(dates1);
+        list1.add(num1);
+        return AjaxResult.success(list1);
     }
 
 
