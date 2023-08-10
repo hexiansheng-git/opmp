@@ -125,7 +125,7 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
 
         qqchTargetExpertVo.setVersion(version);
         qqchTargetExpertVo.setStageIdentity(qqchReviewService.getStage());
-        qqchTargetExpertVo.setQqchTargetExpertList(qqchTargetExpertList);
+        qqchTargetExpertVo.setList(qqchTargetExpertList);
         return qqchTargetExpertVo;
     }
 
@@ -141,7 +141,7 @@ public class QqchTargetExpertServiceImpl implements IQqchTargetExpertService {
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchTargetExpertVo.getVersion();
-        List<QqchTargetExpert> qqchTargetExpertList = qqchTargetExpertVo.getQqchTargetExpertList();
+        List<QqchTargetExpert> qqchTargetExpertList = qqchTargetExpertVo.getList();
 
         this.insertQqchTargetExpertList(qqchTargetExpertList,version);
 

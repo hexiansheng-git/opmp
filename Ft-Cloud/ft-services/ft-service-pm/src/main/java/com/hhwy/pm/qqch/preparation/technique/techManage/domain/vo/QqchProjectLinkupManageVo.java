@@ -22,5 +22,5 @@ public class QqchProjectLinkupManageVo extends PreparationEntity {
     /**
      * 字段描述：技术管理项目沟通管理集合
      */
-    private List<QqchProjectLinkupManage> qqchProjectLinkupManageList;
+    private List<QqchProjectLinkupManage> list;
 }

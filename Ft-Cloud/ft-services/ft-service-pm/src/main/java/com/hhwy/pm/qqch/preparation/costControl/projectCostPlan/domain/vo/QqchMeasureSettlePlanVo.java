@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchMeasureSettlePlanVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchMeasureSettlePlan> qqchMeasureSettlePlanList;
+    private List<QqchMeasureSettlePlan> list;
 }

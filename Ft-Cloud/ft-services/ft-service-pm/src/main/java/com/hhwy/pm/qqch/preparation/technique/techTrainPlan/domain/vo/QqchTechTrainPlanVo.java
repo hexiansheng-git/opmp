@@ -22,5 +22,5 @@ public class QqchTechTrainPlanVo extends PreparationEntity {
     /**
      * 字段描述：技术培训策划集合
      */
-    private List<QqchTechTrainPlan> qqchTechTrainPlanList;
+    private List<QqchTechTrainPlan> list;
 }

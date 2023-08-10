@@ -127,7 +127,7 @@ public class QqchProjectLinkupManageServiceImpl implements IQqchProjectLinkupMan
 
         qqchProjectLinkupManageVo.setVersion(version);
         qqchProjectLinkupManageVo.setStageIdentity(qqchReviewService.getStage());
-        qqchProjectLinkupManageVo.setQqchProjectLinkupManageList(qqchProjectLinkupManageList);
+        qqchProjectLinkupManageVo.setList(qqchProjectLinkupManageList);
         return qqchProjectLinkupManageVo;
     }
 
@@ -143,7 +143,7 @@ public class QqchProjectLinkupManageServiceImpl implements IQqchProjectLinkupMan
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchProjectLinkupManageVo.getVersion();
-        List<QqchProjectLinkupManage> qqchProjectLinkupManageList = qqchProjectLinkupManageVo.getQqchProjectLinkupManageList();
+        List<QqchProjectLinkupManage> qqchProjectLinkupManageList = qqchProjectLinkupManageVo.getList();
 
         //处理数据
         this.insertQqchProjectLinkupManageList(qqchProjectLinkupManageList,version);

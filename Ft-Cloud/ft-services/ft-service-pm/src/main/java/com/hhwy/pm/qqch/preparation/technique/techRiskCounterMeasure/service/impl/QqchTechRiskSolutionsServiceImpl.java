@@ -141,7 +141,7 @@ public class QqchTechRiskSolutionsServiceImpl implements IQqchTechRiskSolutionsS
 
         qqchTechRiskSolutionsVo.setVersion(version);
         qqchTechRiskSolutionsVo.setStageIdentity(qqchReviewService.getStage());
-        qqchTechRiskSolutionsVo.setQqchTechRiskSolutionsList(treeList);
+        qqchTechRiskSolutionsVo.setList(treeList);
         return qqchTechRiskSolutionsVo;
     }
 
@@ -157,7 +157,7 @@ public class QqchTechRiskSolutionsServiceImpl implements IQqchTechRiskSolutionsS
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchTechRiskSolutionsVo.getVersion();
-        List<QqchTechRiskSolutions> qqchTechRiskSolutionsList = qqchTechRiskSolutionsVo.getQqchTechRiskSolutionsList();
+        List<QqchTechRiskSolutions> qqchTechRiskSolutionsList = qqchTechRiskSolutionsVo.getList();
 
         //处理数据
         this.insertQqchTechRiskSolutionsList(qqchTechRiskSolutionsList,version);

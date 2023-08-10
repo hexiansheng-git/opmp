@@ -109,7 +109,7 @@ public class QqchProjectBreakEvenPointServiceImpl implements IQqchProjectBreakEv
 
         qqchProjectBreakEvenPointVo.setVersion(version);
         qqchProjectBreakEvenPointVo.setStageIdentity(qqchReviewService.getStage());
-        qqchProjectBreakEvenPointVo.setQqchProjectBreakEvenPointList(treeList);
+        qqchProjectBreakEvenPointVo.setList(treeList);
         return qqchProjectBreakEvenPointVo;
     }
 
@@ -125,7 +125,7 @@ public class QqchProjectBreakEvenPointServiceImpl implements IQqchProjectBreakEv
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = qqchProjectBreakEvenPointVo.getVersion();
-        List<QqchProjectBreakEvenPoint> qqchProjectBreakEvenPointList = qqchProjectBreakEvenPointVo.getQqchProjectBreakEvenPointList();
+        List<QqchProjectBreakEvenPoint> qqchProjectBreakEvenPointList = qqchProjectBreakEvenPointVo.getList();
 
         List<QqchProjectBreakEvenPoint> tileList = ListTreeUtil.formatList(
                 qqchProjectBreakEvenPointList,

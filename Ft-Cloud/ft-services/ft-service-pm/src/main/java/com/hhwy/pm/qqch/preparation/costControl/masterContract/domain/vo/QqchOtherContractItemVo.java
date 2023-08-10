@@ -22,5 +22,5 @@ public class QqchOtherContractItemVo extends PreparationEntity {
     /**
      * 字段描述：
      */
-    private List<QqchOtherContractItem> qqchOtherContractItemList;
+    private List<QqchOtherContractItem> list;
 }

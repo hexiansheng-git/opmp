@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.QqchSeco
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.vo.QqchSecondManageKeyPointVo;
 import com.hhwy.pm.qqch.preparation.costControl.secondManagePlan.domain.vo.SecondManageKeyPointPlanVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -45,9 +46,17 @@ public interface IQqchSecondManageKeyPointService {
 
     /**
      * 获取普通要点策划/变更策划/索赔策划
-     * @param qqchSecondManageKeyPoint
+     *
+     * @param version
+     * @param keyPointType
      * @return
      */
-    List<SecondManageKeyPointPlanVo> getSecondManageKeyPointPlanVo(QqchSecondManageKeyPoint qqchSecondManageKeyPoint);
+    SecondManageKeyPointPlanVo getSecondManageKeyPointPlanVo(BigDecimal version, String keyPointType);
 
+    /**
+     * 保存/确认/提交  普通要点策划/变更策划/索赔策划  （操作附件）
+     * @param secondManageKeyPointPlanVo
+     * @return
+     */
+    void saveSecondManageKeyPointPlanVo(SecondManageKeyPointPlanVo secondManageKeyPointPlanVo);
 }

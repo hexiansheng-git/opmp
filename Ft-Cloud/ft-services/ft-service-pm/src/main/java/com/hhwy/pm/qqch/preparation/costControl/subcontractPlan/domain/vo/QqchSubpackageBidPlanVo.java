@@ -19,5 +19,5 @@ import java.util.List;
 public class QqchSubpackageBidPlanVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    private List<QqchSubpackageBidPlan> qqchSubpackageBidPlanList;
+    private List<QqchSubpackageBidPlan> list;
 }
