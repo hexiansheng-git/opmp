@@ -51,9 +51,6 @@ public class PmsConstant {
     /**币种信息redis key**/
     public static final String CURRENCYINFOKEY = "baishanyunCurrencyInfo";
 
-    /**合同装箱通知-最新内容字典项  **/
-    public static final String CONTRACT_NOTIFY_CONTENT_DICT_KEY = "cght_contract_notify_last";
-    
     /**合同变更类型-未发生变更  **/
     public static final Integer CONTRACT_CHANGE_TYPE_UN = 1;
     /**合同变更类型-已发生变更  **/
@@ -147,25 +144,6 @@ public class PmsConstant {
     public static final String PROCESS_TASKSTATUS="4";
     //流程业务状态：5
     public  static final String PROCESS_FINISH="5";
-
-
-    /** 箱子对应的二维码内容*/
-//    public  static final String BOX_QR_PATH= "/wlgl/boxcollect/selectMtlList?markOrEquId=%s&templateType=%s";;
-    public  static final String BOX_QR_PATH= "唛头编号：%s\n发运号：%s\n箱单号：%s\n合同号：%s";
-//    public  static final String BOX_QR_PATH= "/shippingManagement/packingListSummary/xdrecordlistdetail?boxCode=%s&markOrEquId=%s&packingCode=%s";
-    public  static final String BOX_QR_CONTENT= "唛头编号：%s\n发运号：%s\n箱单号：%s\n合同号：%s\n供应商：%s\n货物名称：%s";
-
-    /*设备 二维码内容*/
-    public  static final String MAT_QR_PATH= "合同号：%s\n物资编码：%s\n物资名称：%s\n供应商：%s";
-    public  static final String MAT_QR_CONTENT= "合同号：%s\n物资编码：%s\n物资名称：%s\n供应商：%s";
-
-    /** 箱子对应的二维码内容 BAK*/
-//    public  static final String BOX_QR_PATH= "/shippingManagement/packingListSummary/xdrecordlistdetail?boxCode=%s&markOrEquId=%s&packingCode=%s";
-//    public  static final String BOX_QR_CONTENT= "唛头编号：%s\n发运编号：%s\n供应商：%s\n货物名称：%s\n合同编号：%s\n箱单号：%s";
-
-    /*设备 二维码内容 BAK*/
-//    public  static final String MAT_QR_PATH= "供应商名称：%s\n合同号：%s\n物资编码：%s\n物资名称：%s\n单位：%s\n箱单号：%s\n规格型号：%s";
-//    public  static final String MAT_QR_CONTENT= "供应商名称：%s\n合同号：%s\n物资编码：%s\n物资名称：%s\n单位：%s\n箱单号：%s";
 
     //箱单汇总-装箱发货通知，点击邮件跳转路径
     public  static final String BOX_COLLECT_EMAIL_GO= "/shippingManagement/packingListSummary/xdrecordlist";
