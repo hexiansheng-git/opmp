@@ -10,7 +10,7 @@
         <result property="listCode" column="list_code"/>
         <result property="mainId" column="main_id"/>
         <result property="listId" column="list_id"/>
-        <result property="contractListId" column="contract_list_id"/>
+        <result property="wbsId" column="wbs_id"/>
         <result property="pid" column="pid"/>
         <result property="ancestors" column="ancestors"/>
         <result property="chineseName" column="chinese_name"/>
@@ -44,7 +44,7 @@
                 `list_code`
              ,`main_id`
              ,`list_id`
-             ,`contract_list_id`
+             ,`wbs_id`
              ,`pid`
              ,`ancestors`
              ,`chinese_name`
@@ -78,7 +78,7 @@
             <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
             <if test="listId != null ">and `list_id` = #{listId}</if>
-            <if test="contractListId != null ">and `contract_list_id` = #{contractListId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
             <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
@@ -114,7 +114,7 @@
             <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
             <if test="listId != null ">and `list_id` = #{listId}</if>
-            <if test="contractListId != null ">and `contract_list_id` = #{contractListId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
             <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
@@ -141,6 +141,12 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="versionFlag != null ">and `version_flag` = #{versionFlag}</if>
             <if test="version != null ">and `version` &lt;= #{version}</if>
+            <if test="params != null and params.listCodes != null">
+                and list_code in
+                <foreach collection="params.listCodes" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
         order by create_time desc
     </select>
@@ -160,7 +166,7 @@
             <if test="listCode != null  and listCode != ''">`list_code`,</if>
             <if test="mainId != null ">`main_id`,</if>
             <if test="listId != null ">`list_id`,</if>
-            <if test="contractListId != null ">`contract_list_id`,</if>
+            <if test="wbsId != null ">`wbs_id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
             <if test="chineseName != null  and chineseName != ''">`chinese_name`,</if>
@@ -193,7 +199,7 @@
             <if test="listCode != null  and listCode != ''">#{listCode},</if>
             <if test="mainId != null ">#{mainId},</if>
             <if test="listId != null ">#{listId},</if>
-            <if test="contractListId != null ">#{contractListId},</if>
+            <if test="wbsId != null ">#{wbsId},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
             <if test="chineseName != null  and chineseName != ''">#{chineseName},</if>
@@ -231,7 +237,7 @@
             `list_code`,
             `main_id`,
             `list_id`,
-            `contract_list_id`,
+            `wbs_id`,
             `pid`,
             `ancestors`,
             `chinese_name`,
@@ -265,7 +271,7 @@
                 #{item.listCode},
                 #{item.mainId},
                 #{item.listId},
-                #{item.contractListId},
+                #{item.wbsId},
                 #{item.pid},
                 #{item.ancestors},
                 #{item.chineseName},
@@ -301,7 +307,7 @@
             <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
             <if test="mainId != null ">`main_id` = #{mainId},</if>
             <if test="listId != null ">`list_id` = #{listId},</if>
-            <if test="contractListId != null ">`contract_list_id` = #{contractListId},</if>
+            <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
             <if test="chineseName != null  and  chineseName != ''">`chinese_name` = #{chineseName},</if>
@@ -353,9 +359,9 @@
                     when `main_id`=#{item.mainId} then #{item.listId}
                 </foreach>
             </trim>
-            <trim prefix="contract_list_id  = case" suffix="end,">
+            <trim prefix="wbs_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.contractListId}
+                    when `main_id`=#{item.mainId} then #{item.wbsId}
                 </foreach>
             </trim>
             <trim prefix="pid  = case" suffix="end,">
@@ -501,7 +507,7 @@
             <if test="listCode != null  and listCode != ''">and `list_code` = #{listCode}</if>
             <if test="mainId != null ">and `main_id` = #{mainId}</if>
             <if test="listId != null ">and `list_id` = #{listId}</if>
-            <if test="contractListId != null ">and `contract_list_id` = #{contractListId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
             <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>

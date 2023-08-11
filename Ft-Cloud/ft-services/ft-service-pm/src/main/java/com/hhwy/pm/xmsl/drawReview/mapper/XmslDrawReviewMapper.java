@@ -1,6 +1,8 @@
 package com.hhwy.pm.xmsl.drawReview.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 
@@ -29,5 +31,16 @@ public interface XmslDrawReviewMapper {
 
     
     int deleteXmslDrawReview(XmslDrawReview xmslDrawReview);
+
+    /**
+     * 删除wbs到清单的挂接关系
+     * @param map {mainId,wbsIds,listIds}
+     * @return
+     */
+    int deleteRelation(Map map);
+    int deleteWbs(Map map);
+    int deleteList(Map map);
+    int deleteMaterial(Map map);
+    int deleteSourceMaterial(Map map);
 
 }

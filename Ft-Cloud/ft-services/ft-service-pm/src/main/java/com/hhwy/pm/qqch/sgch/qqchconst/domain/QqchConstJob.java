@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.utils.JsonUtils;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -603,5 +604,10 @@ public class QqchConstJob extends CompileEntity<QqchConstJob> {
     @JsonIgnore
     public void setPtVar5(String ptVar5) {
         this.ptVar5 = ptVar5;
+    }
+
+
+    public static void main(String[] args) {
+        JsonUtils.soutJsonStr(QqchConstJob.class);
     }
 }

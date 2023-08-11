@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,11 +27,13 @@ public class CompileAspectImpl {
 
     private static CommonMapper commonMapper;
     private static IQqchModuleConfirmCaseService moduleConfirmCaseService;
+    private static IQqchReviewService reviewService;
     
 
     static {
         commonMapper = SpringUtils.getBean(CommonMapper.class);
         moduleConfirmCaseService = SpringUtils.getBean(IQqchModuleConfirmCaseService.class);
+        reviewService = SpringUtils.getBean(IQqchReviewService.class);
     }
 
     /**
@@ -52,13 +55,14 @@ public class CompileAspectImpl {
             if (arg == null) continue;
             // 如果参数类型属于前期策划编制模块
             if (arg instanceof CompileEntity) {
-
+                CompileEntity arg1 = (CompileEntity) arg;
                 if (CompileOptEnum.LIST.equals(compileAspect.type())) {
-                    beforeList((CompileEntity) arg, tableName);
+                    beforeList(arg1, tableName);
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
-                    commonMapper.deleteByVersion(tableName, ((CompileEntity) arg).getVersion());
-//                    moduleConfirmCaseService.addConfirmRecord();
+                    commonMapper.deleteByVersion(tableName, (arg1).getVersion());
+                    
+                    // moduleConfirmCaseService.addConfirmRecord(arg1.getModuleIdentity(),reviewService.getStage());
                 }
             }
 
@@ -120,6 +124,14 @@ public class CompileAspectImpl {
                     return TreeUtil.build(compileEntityList, null);
                 }
             }
+        }
+        
+        
+        if (result instanceof CompileEntity) {
+            CompileEntity res = (CompileEntity) result;
+            // 设置当前阶段
+            res.setStageIdentity(reviewService.getStage());
+            return res;
         }
         //如果这里不返回result，则目标对象实际返回值会被置为null
         return result;

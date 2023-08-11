@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
@@ -42,15 +42,15 @@ public class QqchScheServiceImpl implements IQqchScheService {
     public QqchScheDTO list(QqchScheDTO dto) {
         QqchScheDTO qqchScheDTO = new QqchScheDTO();
         // 说明
-        qqchScheDTO.setDiffDesc(diffDescService.getDesc(CompileDTO.dealListDto(dto.getVersion(), dto.getDiffDesc())));
+        qqchScheDTO.setDiffDesc(diffDescService.getDesc(CompileEntity.dealListDto(dto.getVersion(), dto.getDiffDesc())));
         // 差异化计算方法
-        qqchScheDTO.setDiffList(diffService.getList(CompileDTO.dealListDto(dto.getVersion(), new QqchScheDiff())));
+        qqchScheDTO.setDiffList(diffService.getList(CompileEntity.dealListDto(dto.getVersion(), new QqchScheDiff())));
         // 进度分析要素
-        qqchScheDTO.setAnalyseList(analyseService.getList(CompileDTO.dealListDto(dto.getVersion(), new QqchScheAnalyse())));
+        qqchScheDTO.setAnalyseList(analyseService.getList(CompileEntity.dealListDto(dto.getVersion(), new QqchScheAnalyse())));
         // 进度影响要素
-        qqchScheDTO.setScheFactorsVO(factorsService.getList(CompileDTO.dealListDto(dto.getVersion(), new QqchScheFactors())));
+        qqchScheDTO.setScheFactorsVO(factorsService.getList(CompileEntity.dealListDto(dto.getVersion(), new QqchScheFactors())));
         // 纠偏措施
-        qqchScheDTO.setCorrList(corrService.getList(CompileDTO.dealListDto(dto.getVersion(), new QqchScheCorr())));
+        qqchScheDTO.setCorrList(corrService.getList(CompileEntity.dealListDto(dto.getVersion(), new QqchScheCorr())));
         qqchScheDTO.setVersion(new BigDecimal("1.0"));
         qqchScheDTO.setStageIdentity("1");
 
@@ -62,13 +62,13 @@ public class QqchScheServiceImpl implements IQqchScheService {
     @Override
     public void save(QqchScheDTO dto) {
         // 保存说明
-        diffDescService.save(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffDesc()));
+        diffDescService.save(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffDesc()));
         // 保差异化计算方法
-        diffService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffList()));
+        diffService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffList()));
         // 保存进度分析要素
-        analyseService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getAnalyseList()));
+        analyseService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getAnalyseList()));
         // 保存进度影响要素
-        List<List<QqchScheFactors>> factorsVOList = dto.getFactorsVOList();
+        List<List<QqchScheFactors>> factorsVOList = dto.getScheFactorsVO() != null ? dto.getScheFactorsVO().getFactorsVOList() : new ArrayList<>();
 
         List<QqchScheFactors> iFactorList = new ArrayList<>();
 
@@ -83,9 +83,9 @@ public class QqchScheServiceImpl implements IQqchScheService {
                 rowNum++;
             }
 
-            factorsService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), iFactorList));
+            factorsService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), iFactorList));
         }
         // 保存纠偏措施
-        corrService.saveList(CompileDTO.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getCorrList()));
+        corrService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getCorrList()));
     }
 }

@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.milestone.domain.QqchMilestone;
 import com.hhwy.pm.qqch.sgch.milestone.mapper.QqchMilestoneMapper;
 import com.hhwy.pm.qqch.sgch.milestone.service.IQqchMilestoneService;
@@ -86,14 +86,14 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public CompileDTO list(QqchMilestone qqchMilestoneParam) {
+    public CompileEntity list(QqchMilestone qqchMilestoneParam) {
 
-        CompileDTO compileDTO = new CompileDTO();
+        CompileEntity compileEntity = new CompileEntity();
         List<QqchMilestone> qqchMilestoneList = this.qqchMilestoneMapper.getQqchMilestoneList(qqchMilestoneParam);
-        compileDTO.setDto(qqchMilestoneList);
-        compileDTO.setVersion(BigDecimal.ONE);
-        compileDTO.setStageIdentity("1");
-        return compileDTO;
+        compileEntity.setDto(qqchMilestoneList);
+        compileEntity.setVersion(BigDecimal.ONE);
+        compileEntity.setStageIdentity("1");
+        return compileEntity;
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.important.domain.QqchImportant;
 import com.hhwy.pm.qqch.sgch.important.mapper.QqchImportantMapper;
 import com.hhwy.pm.qqch.sgch.important.service.IQqchImportantService;
@@ -96,15 +96,15 @@ public class QqchImportantServiceImpl implements IQqchImportantService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public CompileDTO list(QqchImportant qqchImportantParam) {
+    public CompileEntity list(QqchImportant qqchImportantParam) {
 
 
-        CompileDTO compileDTO = new CompileDTO();
+        CompileEntity compileEntity = new CompileEntity();
         List<QqchImportant> qqchImportantList = this.qqchImportantMapper.getQqchImportantList(qqchImportantParam);
-        compileDTO.setVersion(BigDecimal.ONE);
-        compileDTO.setStageIdentity("1");
-        compileDTO.setDto(qqchImportantList);
+        compileEntity.setVersion(BigDecimal.ONE);
+//        compileEntity.setStageIdentity("1");
+        compileEntity.setDto(qqchImportantList);
         
-        return compileDTO;
+        return compileEntity;
     }
 }

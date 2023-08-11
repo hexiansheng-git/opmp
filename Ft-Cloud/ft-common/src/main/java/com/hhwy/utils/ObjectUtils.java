@@ -570,5 +570,18 @@ public class ObjectUtils {
         System.out.println(num);
         return num; 
     }
-    
+    /**
+     * 累加值到map的value
+     * @param map
+     * @param key
+     * @param val
+     */
+    public static void add2StrMap(Map<String,String> map, String key,String val){
+        String sval = map.get(key);
+        if(sval == null){
+            map.put(key, val);
+        }else{
+            map.put(key, sval+","+val);
+        }
+    }
 }

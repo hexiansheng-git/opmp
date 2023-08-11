@@ -1,12 +1,10 @@
 package com.hhwy.pm.qqch.preparation.measureexp.plan.controller;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
-import java.util.Map;
 
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
 import org.springframework.web.bind.annotation.*;
@@ -53,7 +51,7 @@ public class QqchMeasureExpPlanController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileDTO<List<QqchMeasureExpPlan>> map) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMeasureExpPlan>> map) {
 
         List<QqchMeasureExpPlan> dto = map.dealSaveDto();
         qqchMeasureExpPlanService.saveTree(dto);

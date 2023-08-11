@@ -545,4 +545,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selDictDate" resultType="map">
         select  dict_label  dictLabel, dict_value  dictValue from sys_dict_data where  dict_type=#{type}
     </select>
+    
+    
+    <select id="getPayInfo" resultMap="XmslContractPayinfoResultMap">
+        SELECT
+            DISTINCT
+            p.currency_code,
+            p.currency_name,
+            p.obversion_rate
+        FROM
+            xmsl_contract_info as c
+                LEFT JOIN xmsl_contract_payinfo  as p on p.master_id = c.id
+        WHERE
+            c.valid = '1'
+          AND c.del_flag = '0'
+          AND c.task_status = '5'
+    </select>
+    
 </mapper>

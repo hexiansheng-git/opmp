@@ -30,4 +30,12 @@ public interface XmslContractPayinfoMapper {
     int deleteXmslContractPayinfoByPks(@Param("xmslContractPayinfoPkList") List<Long> xmslContractPayinfoPkList);
 
     List<Map> selDictDate(String type);
+
+    /**
+     * 获取主合同的币种 汇率等信息
+     * 
+     * @return 
+     */
+    List<XmslContractPayinfo> getPayInfo();
+    
 }

@@ -3,6 +3,7 @@ package com.hhwy.pm.xmsl.drawReview.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
@@ -52,8 +53,8 @@ public class XmslDrawReviewController extends BaseController{
     private IXmslContractListService listService;
 
 
-    @PreAuthorize(hasPermi = "xmslDrawReview:list")
-    @GetMapping("/list")
+    @PreAuthorize(hasPermi = "xmslDrawReview:historyList")
+    @GetMapping("/historyList")
     public AjaxResult getXmslDrawReviewList(@Validated(ValidationGroups.Select.class) XmslDrawReview xmslDrawReviewParam){
         startPage();
         List<XmslDrawReview> xmslDrawReviewList = xmslDrawReviewService.getXmslDrawReviewList(xmslDrawReviewParam);
@@ -77,48 +78,24 @@ public class XmslDrawReviewController extends BaseController{
 
     /**
      * wbs列表
-     * @param wbs {version}
+     * @param map {version,valid,parentId}
      * @return
      */
     @PostMapping("/wbsList")
-    public AjaxResult wbsList(@RequestBody XmslDrawReviewWbs wbs){
-        if(wbs.getMainId() == null){
-            XmslWbs query = new XmslWbs();
-            query.setParentId(ObjectUtils.nvlString(wbs.getParentId()));
-            List<XmslWbs> list = wbsService.latestData(query);
-            for (int i = 0; i < list.size(); i++) {
-                XmslWbs temp = list.get(i);
-                temp.setWbsId(temp.getId());
-                temp.setId(null);
-            }
-            return AjaxResult.success(list);
-        }
-        wbs.setVersionFlag(Constant.YES_INT);
-        List<XmslDrawReviewWbs> list = drawReviewWbsService.getXmslDrawReviewWbsList(wbs);
+    public AjaxResult wbsList(@RequestBody Map map){
+        List list = xmslDrawReviewService.wbsList(map);
         return AjaxResult.success(list);
     }
 
     /**
      * 工程量清单列表
-     * @param list
+     * @param map {version,valid,parentId}
      * @return
      */
     @PostMapping("/engineeringList")
-    public AjaxResult engineeringList(@RequestBody XmslDrawReviewList list){
-        if(list.getMainId() == null){
-            XmslContractList queryList = new XmslContractList();
-            queryList.setPid(list.getPid()==null?0L:list.getPid());
-            List<XmslContractList> conList = listService.getEffectList(queryList);
-            for (int i = 0; i < conList.size(); i++) {
-                XmslContractList temp = conList.get(i);
-                temp.setPtVar1(temp.getId());
-                temp.setId(null);
-            }
-            return AjaxResult.success(list);
-        }
-        list.setVersionFlag(Constant.YES_INT);
-        List<XmslDrawReviewList> resuList = drawReviewListService.getXmslDrawReviewListList(list);
-        return AjaxResult.success(resuList);
+    public AjaxResult engineeringList(@RequestBody Map map){
+        List list = xmslDrawReviewService.engineeringList(map);
+        return AjaxResult.success(list);
     }
 
     /**
@@ -139,6 +116,7 @@ public class XmslDrawReviewController extends BaseController{
         }
         return AjaxResult.success(new ArrayList<>(2));
     }
+
 
     /**
      * 获取清单下wbs、细目、配合比数据
@@ -163,8 +141,20 @@ public class XmslDrawReviewController extends BaseController{
     @PreAuthorize(hasAnyPermi = {"xmslDrawReview:save"})
     @PostMapping("/save")
     public AjaxResult save(@RequestBody XmslDrawReviewDto dto){
+        try{
+            xmslDrawReviewService.save(dto);
+            return AjaxResult.success("",ObjectUtils.toMap("id",dto.getId(),"version",dto.getVersion()));
+        }catch(Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
 
-        return null;
+    @PreAuthorize(hasAnyPermi = {"xmslDrawReview:delete"})
+    @PostMapping("/delete")
+    public AjaxResult delete(@Validated(ValidationGroups.Delete.class) @RequestBody XmslDrawReview drawReview){
+        xmslDrawReviewService.deleteXmslDrawReview(drawReview);
+        return AjaxResult.success();
     }
 
 //    @GetMapping("/export")

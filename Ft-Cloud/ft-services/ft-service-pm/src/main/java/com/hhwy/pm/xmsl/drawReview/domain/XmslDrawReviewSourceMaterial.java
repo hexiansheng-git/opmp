@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.core.WarpBaseEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ import java.util.Set;
  * @remark xmsl_draw_review_source_material
  */
 @Data
-public class XmslDrawReviewSourceMaterial extends BaseEntity {
+public class XmslDrawReviewSourceMaterial extends WarpBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

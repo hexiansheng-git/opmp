@@ -9,6 +9,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Set;
@@ -63,11 +64,8 @@ public class XmslDrawReviewMaterialServiceImpl implements IXmslDrawReviewMateria
 
     @Transactional
     public int insertXmslDrawReviewMaterialList(List<XmslDrawReviewMaterial> xmslDrawReviewMaterialList) {
-        for (XmslDrawReviewMaterial xmslDrawReviewMaterial : xmslDrawReviewMaterialList) {
-            xmslDrawReviewMaterial.setId(IdWorker.createId());
-            xmslDrawReviewMaterial.setCreateUser(SecurityUtils.getUserName());
-            xmslDrawReviewMaterial.setCreateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewMaterialList))
+            return 0;
         return xmslDrawReviewMaterialMapper.insertXmslDrawReviewMaterialList(xmslDrawReviewMaterialList);
     }
 

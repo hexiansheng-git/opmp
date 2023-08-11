@@ -8,8 +8,11 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -28,6 +31,7 @@ public class XmslDrawReview extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "id")
+    @NotNull(message = "id不能为空",groups = {ValidationGroups.Delete.class})
     private Long id;
     /**
      * 字段描述：版本号
@@ -56,9 +60,9 @@ public class XmslDrawReview extends CommonBaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
     /**
      * 字段描述：数据修改者id

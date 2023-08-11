@@ -9,12 +9,15 @@ import java.util.List;
 
 @Data
 public class XmslDrawReviewDto extends XmslDrawReview {
+
     private Integer version;
     private Long mainId;
     private String listCode;
     private Long listId;
     private String wbsCode;
     private Long wbsId;
+    //提交标志，1：提交
+    private String submitFlag;
 
     private List<XmslDrawReviewWbs> wbsList;
     private List<XmslDrawReviewList> list;

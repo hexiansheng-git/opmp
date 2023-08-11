@@ -43,7 +43,7 @@
     </resultMap>
     <sql id="selectXmslDrawReviewWbsVo">
         select
-                                                            `wbs_id`
+                                                           id, `wbs_id`
                                                          ,`main_id`
                                                          ,`code`
                                                          ,`parent_id`
@@ -159,6 +159,12 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="versionFlag != null ">and `version_flag` = #{versionFlag}</if>
             <if test="version != null ">and `version` &lt;= #{version}</if>
+            <if test="params != null and params.wbsCodes != null">
+                and code in
+                <foreach collection="params.wbsCodes" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
         </where>
         order by sort
     </select>
@@ -256,6 +262,7 @@
     <insert id="insertXmslDrawReviewWbsList">
         insert into xmsl_draw_review_wbs
         <trim prefix="(" suffix=")" suffixOverrides=",">
+        id,
             `wbs_id`,
             `main_id`,
             `code`,
@@ -294,6 +301,7 @@
         values
         <foreach collection="xmslDrawReviewWbsList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
                 #{item.wbsId},
                 #{item.mainId},
                 #{item.code},

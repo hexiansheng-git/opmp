@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.core.WarpBaseEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -20,7 +21,7 @@ import java.util.List;
  * @remark xmsl_draw_review_list
  */
 @Data
-public class XmslDrawReviewList extends BaseEntity {
+public class XmslDrawReviewList extends WarpBaseEntity {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -50,8 +51,7 @@ public class XmslDrawReviewList extends BaseEntity {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "引用主合同清单ID,xmsl_contract_list.id")
-    private Long contractListId;
+    private Long wbsId;
     /**
      * 字段描述：父id
      */
@@ -138,9 +138,9 @@ public class XmslDrawReviewList extends BaseEntity {
     /**
      * 字段描述：数据创建系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据创建系统时间", dateFormat = "yyyy-MM-dd")
     private Date createTime;
     /**
      * 字段描述：数据修改者id
@@ -151,9 +151,9 @@ public class XmslDrawReviewList extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
@@ -206,5 +206,6 @@ public class XmslDrawReviewList extends BaseEntity {
     private String ptVar5;
 
     List<XmslDrawReviewMaterial> materialList;
+    List<XmslDrawReviewWbs> wbsList;
 
 }

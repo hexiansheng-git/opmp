@@ -50,10 +50,8 @@ public class XmslDrawReviewListServiceImpl implements IXmslDrawReviewListService
 
     @Transactional
     public int insertXmslDrawReviewListList(List<XmslDrawReviewList> xmslDrawReviewListList) {
-        for (XmslDrawReviewList xmslDrawReviewList : xmslDrawReviewListList) {
-            xmslDrawReviewList.setCreateUser(SecurityUtils.getUserName());
-            xmslDrawReviewList.setCreateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewListList))
+            return 0;
         return xmslDrawReviewListMapper.insertXmslDrawReviewListList(xmslDrawReviewListList);
     }
 
