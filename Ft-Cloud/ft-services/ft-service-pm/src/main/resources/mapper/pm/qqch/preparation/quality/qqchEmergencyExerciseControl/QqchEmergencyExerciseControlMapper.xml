@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.quality.qqchEmergencyExerciseControl.mapper.QqchEmergencyExerciseControlMapper">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+    <resultMap type="com.hhwy.pm.qqch.preparation.quality.qqchEmergencyExerciseControl.domain.QqchEmergencyExerciseControl" id="QqchEmergencyExerciseControlResultMap">
+                    <result property="id" column="id" />
+                    <result property="planId" column="plan_id" />
+                    <result property="planName" column="plan_name" />
+                    <result property="name" column="name" />
+                    <result property="exerciseType" column="exercise_type" />
+                    <result property="content" column="content" />
+                    <result property="dangerousEngineerId" column="dangerous_engineer_id" />
+                    <result property="dangerousEngineerName" column="dangerous_engineer_name" />
+                    <result property="ydate" column="ydate" />
+                    <result property="address" column="address" />
+                    <result property="teamId" column="team_id" />
+                    <result property="teamName" column="team_name" />
+                    <result property="responseLevel" column="response_level" />
+                    <result property="parkDept" column="park_dept" />
+                    <result property="thisCountryDuplicated" column="this_country_duplicated" />
+                    <result property="fileGroupId" column="file_group_id" />
+                    <result property="remark" column="remark" />
+                    <result property="regionId" column="region_id" />
+                    <result property="regionName" column="region_name" />
+                    <result property="projectId" column="project_id" />
+                    <result property="projectName" column="project_name" />
+                    <result property="deptId" column="dept_id" />
+                    <result property="createUser" column="create_user" />
+                    <result property="createUserName" column="create_user_name" />
+                    <result property="createTime" column="create_time" />
+                    <result property="updateUser" column="update_user" />
+                    <result property="updateTime" column="update_time" />
+                    <result property="delUser" column="del_user" />
+                    <result property="delTime" column="del_time" />
+                    <result property="delFlag" column="del_flag" />
+                    <result property="ptVar1" column="pt_var1" />
+                    <result property="ptVar2" column="pt_var2" />
+                    <result property="ptVar3" column="pt_var3" />
+                    <result property="ptVar4" column="pt_var4" />
+                    <result property="ptVar5" column="pt_var5" />
+                    <result property="taskStatus" column="task_status" />
+                    <result property="version" column="version" />
+                    <result property="valid" column="valid" />
+            </resultMap>
+    <sql id="selectQqchEmergencyExerciseControlVo">
+        select
+                                                            `id`
+                                                         ,`plan_id`
+                                                         ,`plan_name`
+                                                         ,`name`
+                                                         ,`exercise_type`
+                                                         ,`content`
+                                                         ,`dangerous_engineer_id`
+                                                         ,`dangerous_engineer_name`
+                                                         ,`ydate`
+                                                         ,`address`
+                                                         ,`team_id`
+                                                         ,`team_name`
+                                                         ,`response_level`
+                                                         ,`park_dept`
+                                                         ,`this_country_duplicated`
+                                                         ,`file_group_id`
+                                                         ,`remark`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                                         ,`task_status`
+                                                         ,`version`
+                                                         ,`valid`
+                                    from qqch_emergency_exercise_control
+    </sql>
+    <select id="getQqchEmergencyExerciseControl" resultMap="QqchEmergencyExerciseControlResultMap">
+        <include refid="selectQqchEmergencyExerciseControlVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="planId != null "> and `plan_id` = #{planId}</if>
+                            <if test="planName != null  and planName != ''"> and `plan_name` = #{planName}</if>
+                            <if test="name != null  and name != ''"> and `name` = #{name}</if>
+                            <if test="exerciseType != null  and exerciseType != ''"> and `exercise_type` = #{exerciseType}</if>
+                            <if test="content != null  and content != ''"> and `content` = #{content}</if>
+                            <if test="dangerousEngineerId != null "> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
+                            <if test="dangerousEngineerName != null  and dangerousEngineerName != ''"> and `dangerous_engineer_name` = #{dangerousEngineerName}</if>
+                            <if test="ydate != null "> and `ydate` = #{ydate}</if>
+                            <if test="address != null  and address != ''"> and `address` = #{address}</if>
+                            <if test="teamId != null "> and `team_id` = #{teamId}</if>
+                            <if test="teamName != null  and teamName != ''"> and `team_name` = #{teamName}</if>
+                            <if test="responseLevel != null  and responseLevel != ''"> and `response_level` = #{responseLevel}</if>
+                            <if test="parkDept != null  and parkDept != ''"> and `park_dept` = #{parkDept}</if>
+                            <if test="thisCountryDuplicated != null  and thisCountryDuplicated != ''"> and `this_country_duplicated` = #{thisCountryDuplicated}</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchEmergencyExerciseControlList" resultMap="QqchEmergencyExerciseControlResultMap">
+        <include refid="selectQqchEmergencyExerciseControlVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="planId != null "> and `plan_id` = #{planId}</if>
+                            <if test="planName != null  and planName != ''"> and `plan_name` = #{planName}</if>
+                            <if test="name != null  and name != ''"> and `name` = #{name}</if>
+                            <if test="exerciseType != null  and exerciseType != ''"> and `exercise_type` = #{exerciseType}</if>
+                            <if test="content != null  and content != ''"> and `content` = #{content}</if>
+                            <if test="dangerousEngineerId != null "> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
+                            <if test="dangerousEngineerName != null  and dangerousEngineerName != ''"> and `dangerous_engineer_name` = #{dangerousEngineerName}</if>
+                            <if test="ydate != null "> and `ydate` = #{ydate}</if>
+                            <if test="address != null  and address != ''"> and `address` = #{address}</if>
+                            <if test="teamId != null "> and `team_id` = #{teamId}</if>
+                            <if test="teamName != null  and teamName != ''"> and `team_name` = #{teamName}</if>
+                            <if test="responseLevel != null  and responseLevel != ''"> and `response_level` = #{responseLevel}</if>
+                            <if test="parkDept != null  and parkDept != ''"> and `park_dept` = #{parkDept}</if>
+                            <if test="thisCountryDuplicated != null  and thisCountryDuplicated != ''"> and `this_country_duplicated` = #{thisCountryDuplicated}</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchEmergencyExerciseControl"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_emergency_exercise_control
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">`id`,</if>
+                            <if test="planId != null ">`plan_id`,</if>
+                            <if test="planName != null  and planName != ''">`plan_name`,</if>
+                            <if test="name != null  and name != ''">`name`,</if>
+                            <if test="exerciseType != null  and exerciseType != ''">`exercise_type`,</if>
+                            <if test="content != null  and content != ''">`content`,</if>
+                            <if test="dangerousEngineerId != null ">`dangerous_engineer_id`,</if>
+                            <if test="dangerousEngineerName != null  and dangerousEngineerName != ''">`dangerous_engineer_name`,</if>
+                            <if test="ydate != null ">`ydate`,</if>
+                            <if test="address != null  and address != ''">`address`,</if>
+                            <if test="teamId != null ">`team_id`,</if>
+                            <if test="teamName != null  and teamName != ''">`team_name`,</if>
+                            <if test="responseLevel != null  and responseLevel != ''">`response_level`,</if>
+                            <if test="parkDept != null  and parkDept != ''">`park_dept`,</if>
+                            <if test="thisCountryDuplicated != null  and thisCountryDuplicated != ''">`this_country_duplicated`,</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+                            <if test="remark != null  and remark != ''">`remark`,</if>
+                            <if test="regionId != null ">`region_id`,</if>
+                            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+                            <if test="projectId != null ">`project_id`,</if>
+                            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+                            <if test="deptId != null ">`dept_id`,</if>
+                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+                            <if test="createTime != null ">`create_time`,</if>
+                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+                            <if test="updateTime != null ">`update_time`,</if>
+                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+                            <if test="delTime != null ">`del_time`,</if>
+                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+                            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+                            <if test="version != null ">`version`,</if>
+                            <if test="valid != null  and valid != ''">`valid`,</if>
+                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">#{id},</if>
+                            <if test="planId != null ">#{planId},</if>
+                            <if test="planName != null  and planName != ''">#{planName},</if>
+                            <if test="name != null  and name != ''">#{name},</if>
+                            <if test="exerciseType != null  and exerciseType != ''">#{exerciseType},</if>
+                            <if test="content != null  and content != ''">#{content},</if>
+                            <if test="dangerousEngineerId != null ">#{dangerousEngineerId},</if>
+                            <if test="dangerousEngineerName != null  and dangerousEngineerName != ''">#{dangerousEngineerName},</if>
+                            <if test="ydate != null ">#{ydate},</if>
+                            <if test="address != null  and address != ''">#{address},</if>
+                            <if test="teamId != null ">#{teamId},</if>
+                            <if test="teamName != null  and teamName != ''">#{teamName},</if>
+                            <if test="responseLevel != null  and responseLevel != ''">#{responseLevel},</if>
+                            <if test="parkDept != null  and parkDept != ''">#{parkDept},</if>
+                            <if test="thisCountryDuplicated != null  and thisCountryDuplicated != ''">#{thisCountryDuplicated},</if>
+                            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+                            <if test="remark != null  and remark != ''">#{remark},</if>
+                            <if test="regionId != null ">#{regionId},</if>
+                            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+                            <if test="projectId != null ">#{projectId},</if>
+                            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+                            <if test="deptId != null ">#{deptId},</if>
+                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+                            <if test="createTime != null ">#{createTime},</if>
+                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+                            <if test="updateTime != null ">#{updateTime},</if>
+                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+                            <if test="delTime != null ">#{delTime},</if>
+                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+                            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+                            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+                            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+                            <if test="version != null ">#{version},</if>
+                            <if test="valid != null  and valid != ''">#{valid},</if>
+                    </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchEmergencyExerciseControl -->
+    <insert id="insertQqchEmergencyExerciseControlList">
+        insert into qqch_emergency_exercise_control
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                `id`,
+                                                                `plan_id`,
+                                                                `plan_name`,
+                                                                `name`,
+                                                                `exercise_type`,
+                                                                `content`,
+                                                                `dangerous_engineer_id`,
+                                                                `dangerous_engineer_name`,
+                                                                `ydate`,
+                                                                `address`,
+                                                                `team_id`,
+                                                                `team_name`,
+                                                                `response_level`,
+                                                                `park_dept`,
+                                                                `this_country_duplicated`,
+                                                                `file_group_id`,
+                                                                `remark`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `dept_id`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                                            `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `pt_var4`,
+                                                                `pt_var5`,
+                                                                `task_status`,
+                                                                `version`,
+                                                                `valid`,
+                                    </trim>
+        values
+        <foreach collection="qqchEmergencyExerciseControlList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                            #{item.id},
+                                                                                #{item.planId},
+                                                                                #{item.planName},
+                                                                                #{item.name},
+                                                                                #{item.exerciseType},
+                                                                                #{item.content},
+                                                                                #{item.dangerousEngineerId},
+                                                                                #{item.dangerousEngineerName},
+                                                                                #{item.ydate},
+                                                                                #{item.address},
+                                                                                #{item.teamId},
+                                                                                #{item.teamName},
+                                                                                #{item.responseLevel},
+                                                                                #{item.parkDept},
+                                                                                #{item.thisCountryDuplicated},
+                                                                                #{item.fileGroupId},
+                                                                                #{item.remark},
+                                                                                #{item.regionId},
+                                                                                #{item.regionName},
+                                                                                #{item.projectId},
+                                                                                #{item.projectName},
+                                                                                #{item.deptId},
+                                                                                #{item.createUser},
+                                                                                #{item.createUserName},
+                                                                                #{item.createTime},
+                                                                                #{item.updateUser},
+                                                                                #{item.updateTime},
+                                                                                #{item.delUser},
+                                                                                #{item.delTime},
+                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar2},
+                                                                                #{item.ptVar3},
+                                                                                #{item.ptVar4},
+                                                                                #{item.ptVar5},
+                                                                                #{item.taskStatus},
+                                                                                #{item.version},
+                                                                                #{item.valid},
+                                                </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchEmergencyExerciseControl">
+        update qqch_emergency_exercise_control
+        <trim prefix="SET" suffixOverrides=",">
+                            <if test="id != null ">`id` = #{id},</if>
+                            <if test="planId != null ">`plan_id` = #{planId},</if>
+                            <if test="planName != null  and  planName != ''">`plan_name` = #{planName},</if>
+                            <if test="name != null  and  name != ''">`name` = #{name},</if>
+                            <if test="exerciseType != null  and  exerciseType != ''">`exercise_type` = #{exerciseType},</if>
+                            <if test="content != null  and  content != ''">`content` = #{content},</if>
+                            <if test="dangerousEngineerId != null ">`dangerous_engineer_id` = #{dangerousEngineerId},</if>
+                            <if test="dangerousEngineerName != null  and  dangerousEngineerName != ''">`dangerous_engineer_name` = #{dangerousEngineerName},</if>
+                            <if test="ydate != null ">`ydate` = #{ydate},</if>
+                            <if test="address != null  and  address != ''">`address` = #{address},</if>
+                            <if test="teamId != null ">`team_id` = #{teamId},</if>
+                            <if test="teamName != null  and  teamName != ''">`team_name` = #{teamName},</if>
+                            <if test="responseLevel != null  and  responseLevel != ''">`response_level` = #{responseLevel},</if>
+                            <if test="parkDept != null  and  parkDept != ''">`park_dept` = #{parkDept},</if>
+                            <if test="thisCountryDuplicated != null  and  thisCountryDuplicated != ''">`this_country_duplicated` = #{thisCountryDuplicated},</if>
+                            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+                            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+                            <if test="regionId != null ">`region_id` = #{regionId},</if>
+                            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+                            <if test="projectId != null ">`project_id` = #{projectId},</if>
+                            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+                            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+                            <if test="createTime != null ">`create_time` = #{createTime},</if>
+                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+                            <if test="delTime != null ">`del_time` = #{delTime},</if>
+                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+                            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+                            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+                            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+                            <if test="version != null ">`version` = #{version},</if>
+                            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+                    </trim>
+        <where>
+                                                                        <if test="id != null "> and `id` = #{id}</if>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+    </update>
+
+            <update id="updateQqchEmergencyExerciseControlList">
+            update qqch_emergency_exercise_control
+            <trim prefix="set" suffixOverrides=",">
+                                    <trim prefix="id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="plan_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.planId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="plan_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.planName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.name}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="exercise_type  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.exerciseType}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="content  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.content}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dangerous_engineer_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.dangerousEngineerId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dangerous_engineer_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.dangerousEngineerName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="ydate  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ydate}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="address  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.address}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="team_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.teamId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="team_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.teamName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="response_level  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.responseLevel}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="park_dept  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.parkDept}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="this_country_duplicated  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.thisCountryDuplicated}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="file_group_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.fileGroupId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="remark  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.remark}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="region_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.regionId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="region_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.regionName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="project_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.projectName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dept_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.deptId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUserName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_flag  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delFlag}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var1  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar1}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var2  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar2}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var3  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar3}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var4  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar4}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var5  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar5}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="task_status  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.taskStatus}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="version  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.version}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="valid  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.valid}
+                        </foreach>
+                    </trim>
+                            </trim>
+            where `id` in
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </update>
+    
+            <update id="deleteQqchEmergencyExerciseControl">
+            update `qqch_emergency_exercise_control` set del_flag = 1
+            <where>
+                                    <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="planId != null "> and `plan_id` = #{planId}</if>
+                                    <if test="planName != null  and planName != ''"> and `plan_name` = #{planName}</if>
+                                    <if test="name != null  and name != ''"> and `name` = #{name}</if>
+                                    <if test="exerciseType != null  and exerciseType != ''"> and `exercise_type` = #{exerciseType}</if>
+                                    <if test="content != null  and content != ''"> and `content` = #{content}</if>
+                                    <if test="dangerousEngineerId != null "> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
+                                    <if test="dangerousEngineerName != null  and dangerousEngineerName != ''"> and `dangerous_engineer_name` = #{dangerousEngineerName}</if>
+                                    <if test="ydate != null "> and `ydate` = #{ydate}</if>
+                                    <if test="address != null  and address != ''"> and `address` = #{address}</if>
+                                    <if test="teamId != null "> and `team_id` = #{teamId}</if>
+                                    <if test="teamName != null  and teamName != ''"> and `team_name` = #{teamName}</if>
+                                    <if test="responseLevel != null  and responseLevel != ''"> and `response_level` = #{responseLevel}</if>
+                                    <if test="parkDept != null  and parkDept != ''"> and `park_dept` = #{parkDept}</if>
+                                    <if test="thisCountryDuplicated != null  and thisCountryDuplicated != ''"> and `this_country_duplicated` = #{thisCountryDuplicated}</if>
+                                    <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+                                    <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+                                    <if test="regionId != null "> and `region_id` = #{regionId}</if>
+                                    <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+                                    <if test="projectId != null "> and `project_id` = #{projectId}</if>
+                                    <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+                                    <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                                    <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+                                    <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+                                    <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+                                    <if test="version != null "> and `version` = #{version}</if>
+                                    <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            </where>
+        </update>
+
+                    <update id="deleteQqchEmergencyExerciseControlByPks">
+                update `qqch_emergency_exercise_control` set del_flag = 1
+                <where>
+                    `id` in
+                    <foreach item="id" collection="qqchEmergencyExerciseControlPkList" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </where>
+            </update>
+            </mapper>
