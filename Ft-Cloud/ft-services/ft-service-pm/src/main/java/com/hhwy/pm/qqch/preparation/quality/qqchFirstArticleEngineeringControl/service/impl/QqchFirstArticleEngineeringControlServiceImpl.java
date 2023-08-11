@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -111,6 +113,14 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
 
         BigDecimal version = vo.getVersion();
         List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList = vo.getQqchFirstArticleEngineeringControlList();
+        if(CollectionUtils.isEmpty(qqchFirstArticleEngineeringControlList)){
+            return;
+        }else {
+            //校验数据必填
+            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
+                JyDetailsUtil.jyDetails(qqchFirstArticleEngineeringControlList, ValidationGroups.Save.class);
+            }
+        }
 
         this.insertQqchFirstArticleEngineeringControlList(qqchFirstArticleEngineeringControlList, version);
 
@@ -129,9 +139,6 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
         qqchFirstArticleEngineeringControl.setVersion(version);
         qqchFirstArticleEngineeringControlMapper.deleteQqchFirstArticleEngineeringControl(qqchFirstArticleEngineeringControl);
 
-        if (CollectionUtils.isEmpty(qqchFirstArticleEngineeringControlList)) {
-            return;
-        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

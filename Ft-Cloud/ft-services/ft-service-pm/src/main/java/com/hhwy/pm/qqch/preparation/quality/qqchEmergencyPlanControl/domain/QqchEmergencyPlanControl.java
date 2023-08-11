@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -36,12 +38,14 @@ public class QqchEmergencyPlanControl extends CommonBaseEntity {
     /**
      * 字段描述：应急预案名称
      */
+    @NotBlank(message = "应急预案名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "应急预案名称")
     private String name;
     /**
      * 字段描述：应对风险类型
      */
+    @NotBlank(message = "应对风险类型不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "应对风险类型")
     private String respondRiskType;
