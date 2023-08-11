@@ -1,15 +1,16 @@
 package com.hhwy.pm.qqch.tax.qqchTaxCostDetail.service;
 
-import java.util.List;
 import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain.QqchTaxCostDetail;
+
+import java.util.List;
 
 /**
  * @author mls
  * @date 2023-08-09 18:17:26
- * @remark 
+ * @remark
  */
 public interface IQqchTaxCostDetailService {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
     QqchTaxCostDetail getQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail);
 
     List<QqchTaxCostDetail> getQqchTaxCostDetailList(QqchTaxCostDetail qqchTaxCostDetail);
@@ -20,9 +21,9 @@ public interface IQqchTaxCostDetailService {
 
     int updateQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail);
 
-            int updateQqchTaxCostDetailList(List<QqchTaxCostDetail> qqchTaxCostDetailList);
-    
+    int updateQqchTaxCostDetailList(List<QqchTaxCostDetail> qqchTaxCostDetailList);
+
     int deleteQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail);
 
-            int deleteQqchTaxCostDetailByPks(List<Long> qqchTaxCostDetailPkList);
-    }
+    int deleteQqchTaxCostDetailByPks(List<Long> qqchTaxCostDetailPkList);
+}

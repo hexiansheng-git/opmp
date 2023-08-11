@@ -1,30 +1,29 @@
 package com.hhwy.pm.qqch.tax.qqchTaxCostDetail.service.impl;
 
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.mapper.QqchTaxCostDetailMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.service.IQqchTaxCostDetailService;
-import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain.QqchTaxCostDetail;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author mls
  * @date 2023-08-09 18:17:26
- * @remark 
+ * @remark
  */
 @Service
-public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService{
+public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
 
     @Autowired
     private QqchTaxCostDetailMapper qqchTaxCostDetailMapper;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
     public QqchTaxCostDetail getQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail) {
         return qqchTaxCostDetailMapper.getQqchTaxCostDetail(qqchTaxCostDetail);
     }
@@ -58,15 +57,15 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService{
         return qqchTaxCostDetailMapper.updateQqchTaxCostDetail(qqchTaxCostDetail);
     }
 
-            @Transactional
-        public int updateQqchTaxCostDetailList(List<QqchTaxCostDetail> qqchTaxCostDetailList) {
-            for (QqchTaxCostDetail qqchTaxCostDetail : qqchTaxCostDetailList) {
-                qqchTaxCostDetail.setUpdateUser(SecurityUtils.getUserName());
-                qqchTaxCostDetail.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchTaxCostDetailMapper.updateQqchTaxCostDetailList(qqchTaxCostDetailList);
+    @Transactional
+    public int updateQqchTaxCostDetailList(List<QqchTaxCostDetail> qqchTaxCostDetailList) {
+        for (QqchTaxCostDetail qqchTaxCostDetail : qqchTaxCostDetailList) {
+            qqchTaxCostDetail.setUpdateUser(SecurityUtils.getUserName());
+            qqchTaxCostDetail.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchTaxCostDetailMapper.updateQqchTaxCostDetailList(qqchTaxCostDetailList);
+    }
+
     @Transactional
     public int deleteQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail) {
         qqchTaxCostDetail.setUpdateUser(SecurityUtils.getUserName());
@@ -74,8 +73,8 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService{
         return qqchTaxCostDetailMapper.deleteQqchTaxCostDetail(qqchTaxCostDetail);
     }
 
-            @Transactional
-        public int deleteQqchTaxCostDetailByPks(List<Long> qqchTaxCostDetailPkList) {
-            return qqchTaxCostDetailMapper.deleteQqchTaxCostDetailByPks(qqchTaxCostDetailPkList);
-        }
+    @Transactional
+    public int deleteQqchTaxCostDetailByPks(List<Long> qqchTaxCostDetailPkList) {
+        return qqchTaxCostDetailMapper.deleteQqchTaxCostDetailByPks(qqchTaxCostDetailPkList);
     }
+}

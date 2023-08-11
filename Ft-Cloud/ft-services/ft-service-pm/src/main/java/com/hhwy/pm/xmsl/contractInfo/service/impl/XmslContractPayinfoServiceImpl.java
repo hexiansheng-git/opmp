@@ -90,4 +90,10 @@ public class XmslContractPayinfoServiceImpl implements IXmslContractPayinfoServi
     public List<Map> selDictDate(String type) {
         return xmslContractPayinfoMapper.selDictDate(type);
     }
+
+    @Override
+    public List<XmslContractPayinfo> getPayInfo(){
+        // 这里如果需要项目编码的话 就获取一下当前项目编码
+        return xmslContractPayinfoMapper.getPayInfo();
+    }
 }

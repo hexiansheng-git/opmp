@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
+import lombok.Data;
 import org.springframework.data.annotation.Transient;
 
 import javax.validation.constraints.NotBlank;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author lcf
  * @date 2022-10-21
  */
+@Data
 public class MaterialCategory extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -86,6 +88,9 @@ public class MaterialCategory extends CommonBaseEntity {
     private List<String> categoryCodes;
     
     private String path;
+
+    private Integer pageSize;
+    private Integer pageNum;
 
     public List<String> getCategoryCodes() {
         return categoryCodes;

@@ -39,7 +39,7 @@ public class QqchScheController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchScheDiff:save")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchScheDTO dto) {
+    public AjaxResult save(@RequestBody QqchScheDTO dto) {
         qqchScheService.save(dto);
         return AjaxResult.success("操作成功");
     }
