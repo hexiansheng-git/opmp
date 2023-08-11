@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -110,7 +112,14 @@ public class QqchEmergencyExerciseControlServiceImpl implements IQqchEmergencyEx
 
         BigDecimal version = vo.getVersion();
         List<QqchEmergencyExerciseControl> qqchEmergencyExerciseControlList = vo.getQqchEmergencyExerciseControlList();
-
+        if(CollectionUtils.isEmpty(qqchEmergencyExerciseControlList)){
+            return;
+        }else {
+            //校验数据必填
+            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
+                JyDetailsUtil.jyDetails(qqchEmergencyExerciseControlList, ValidationGroups.Save.class);
+            }
+        }
         this.insertQqchEmergencyExerciseControlList(qqchEmergencyExerciseControlList, version);
 
         //处理确认状态是确认
@@ -129,9 +138,7 @@ public class QqchEmergencyExerciseControlServiceImpl implements IQqchEmergencyEx
         qqchEmergencyExerciseControl1.setVersion(version);
         qqchEmergencyExerciseControlMapper.deleteQqchEmergencyExerciseControl(qqchEmergencyExerciseControl1);
 
-        if (CollectionUtils.isEmpty(qqchEmergencyExerciseControlList)) {
-            return;
-        }
+
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

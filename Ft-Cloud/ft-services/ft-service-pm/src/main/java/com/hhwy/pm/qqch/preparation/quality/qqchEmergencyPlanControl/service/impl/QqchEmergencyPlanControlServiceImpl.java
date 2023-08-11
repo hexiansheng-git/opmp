@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -111,6 +113,14 @@ public class QqchEmergencyPlanControlServiceImpl implements IQqchEmergencyPlanCo
 
         BigDecimal version = vo.getVersion();
         List<QqchEmergencyPlanControl> qqchEmergencyPlanControlList = vo.getQqchEmergencyPlanControlList();
+        if(CollectionUtils.isEmpty(qqchEmergencyPlanControlList)){
+            return;
+        }else {
+            //校验数据必填
+            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
+                JyDetailsUtil.jyDetails(qqchEmergencyPlanControlList, ValidationGroups.Save.class);
+            }
+        }
 
         this.insertQqchEmergencyPlanControlList(qqchEmergencyPlanControlList, version);
 
@@ -130,9 +140,6 @@ public class QqchEmergencyPlanControlServiceImpl implements IQqchEmergencyPlanCo
         qqchEmergencyPlanControl1.setVersion(version);
         qqchEmergencyPlanControlMapper.deleteQqchEmergencyPlanControl(qqchEmergencyPlanControl1);
 
-        if (CollectionUtils.isEmpty(qqchEmergencyPlanControlList)) {
-            return;
-        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

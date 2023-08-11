@@ -36,7 +36,7 @@ public class QqchEmergencyExerciseControlController extends BaseController{
     }
 
     @PreAuthorize(hasPermi = "qqchEmergencyExerciseControl:add")
-    @PostMapping("/batchAdd")
+    @PostMapping("/save")
     public AjaxResult insertQqchEmergencyExerciseControlList(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyExerciseControlVo vo){
         qqchEmergencyExerciseControlService.save(vo);
         return AjaxResult.success();

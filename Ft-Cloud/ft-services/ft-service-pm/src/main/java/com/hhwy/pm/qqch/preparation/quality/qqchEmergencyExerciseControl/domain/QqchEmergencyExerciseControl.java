@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -36,6 +39,7 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     /**
      * 字段描述：应急预案管控id
      */
+    @NotNull(message = "应急预案管控id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "应急预案管控id")
@@ -43,24 +47,28 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     /**
      * 字段描述：应急预案管控名称
      */
+    @NotBlank(message = "应急预案管控名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "应急预案管控名称")
     private String planName;
     /**
      * 字段描述：应急演练名称
      */
+    @NotBlank(message = "应急演练名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "应急演练名称")
     private String name;
     /**
      * 字段描述：演练形式
      */
+    @NotBlank(message = "演练形式不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "演练形式")
     private String exerciseType;
     /**
      * 字段描述：演练内容
      */
+    @NotBlank(message = "演练内容不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "演练内容")
     private String content;

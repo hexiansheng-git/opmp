@@ -6,10 +6,13 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -36,36 +39,42 @@ public class QqchSafetyTrain extends CommonBaseEntity {
     /**
      * 字段描述：培训类型
      */
+    @NotBlank(message = "培训类型不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "培训类型")
     private String trainType;
     /**
      * 字段描述：培训内容
      */
+    @NotBlank(message = "培训内容不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "培训内容")
     private String content;
     /**
      * 字段描述：培训对象
      */
+    @NotBlank(message = "培训对象不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "培训对象")
     private String target;
     /**
      * 字段描述：学时
      */
+    @NotNull(message = "学时不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "学时")
     private BigDecimal classHour;
     /**
      * 字段描述：参加人数
      */
+    @NotNull(message = "参加人数不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "参加人数")
     private BigDecimal participantsNum;
     /**
      * 字段描述：时间
      */
+    @NotBlank(message = "时间不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "时间", dateFormat = "yyyy-MM-dd")
