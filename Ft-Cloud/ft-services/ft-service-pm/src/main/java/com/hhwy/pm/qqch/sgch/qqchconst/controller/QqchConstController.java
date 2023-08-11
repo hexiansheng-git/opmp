@@ -5,7 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -41,15 +41,15 @@ public class QqchConstController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping("/list")
-    public AjaxResult getQqchConstList(@Validated(ValidationGroups.Select.class) CompileDTO<QqchConst> dto) {
-        QqchConst qqchConst = CompileDTO.dealListDto(dto.getVersion(), new QqchConst());
-        CompileDTO qqchConstList = qqchConstService.list(qqchConst);
+    public AjaxResult getQqchConstList(@Validated(ValidationGroups.Select.class) CompileEntity<QqchConst> dto) {
+        QqchConst qqchConst = CompileEntity.dealListDto(dto.getVersion(), new QqchConst());
+        CompileEntity qqchConstList = qqchConstService.list(qqchConst);
         return AjaxResult.success(qqchConstList);
     }
 
     @PreAuthorize(hasPermi = "qqchConst:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileDTO<List<QqchConst>> dtoList) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchConst>> dtoList) {
         List<QqchConst> qqchConsts = dtoList.dealSaveDto();
         qqchConstService.save(qqchConsts);
         return AjaxResult.success(qqchConsts);

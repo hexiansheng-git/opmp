@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.tax.qqchTaxGoal.domain;
+package com.hhwy.pm.qqch.tax.qqchTaxIn.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -6,22 +6,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.utils.JsonUtils;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author mls
- * @date 2023-08-09 18:17:29
- * @remark qqch_tax_goal
+ * @date 2023-08-09 18:17:35
+ * @remark qqch_tax_in_detail
  */
 @Data
 @ToString
-public class QqchTaxGoal extends CompileEntity {
+public class QqchTaxInDetail extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -32,29 +34,48 @@ public class QqchTaxGoal extends CompileEntity {
     @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：总目标
+     * 字段描述：父级ID
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "总目标")
-    private String allGoal;
+    @Excel(name = "父级ID")
+    private Long masterId;
     /**
-     * 字段描述：分目标
+     * 字段描述：1-主营业务收入, 2-其他业务收入
      */
     @JsonProperty
-    @Excel(name = "分目标")
-    private String partGoal;
+    @Excel(name = "1-主营业务收入, 2-其他业务收入")
+    private String dataType;
     /**
-     * 字段描述：关键影响因素
+     * 字段描述：币种
      */
     @JsonProperty
-    @Excel(name = "关键影响因素")
-    private String factor;
+    @Excel(name = "币种")
+    private String year;
     /**
-     * 字段描述：应对措施
+     * 字段描述：币种
      */
     @JsonProperty
-    @Excel(name = "应对措施")
-    private String measure;
+    @Excel(name = "币种")
+    private String currency;
+    /**
+     * 字段描述：收入金额
+     */
+    @JsonProperty
+    @Excel(name = "收入金额")
+    private BigDecimal amt;
+    /**
+     * 字段描述：收入金额(美元)
+     */
+    @JsonProperty
+    @Excel(name = "收入金额(美元)")
+    private BigDecimal usdAmt;
+    /**
+     * 字段描述：汇率
+     */
+    @JsonProperty
+    @Excel(name = "汇率")
+    private BigDecimal rate;
     /**
      * 字段描述：备注/描述
      */
@@ -199,10 +220,8 @@ public class QqchTaxGoal extends CompileEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
-
-    public static void main(String[] args) {
-        JsonUtils.soutJsonStr(QqchTaxGoal.class);
-    }
+    
+    
+    private List<Long> masterIdList;
 
 }

@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
@@ -128,14 +128,14 @@ public class QqchConstServiceImpl implements IQqchConstService {
             if (!CollectionUtils.isEmpty(jobList)) {
                 List<QqchConstJob> qqchConstJobList = TreeUtil.treeToList(jobList);
                 for (QqchConstJob qqchConstJob : qqchConstJobList) {
-                    qqchConstJob = CompileDTO.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstJob);
+                    qqchConstJob = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstJob);
                     qqchConstJob.setMasterId(id);
                 }
                 iJobList.addAll(qqchConstJobList);
             }
             if (!CollectionUtils.isEmpty(staffList)) {
                 for (QqchConstStaffPlan qqchConstStaffPlan : staffList) {
-                    qqchConstStaffPlan = CompileDTO.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstStaffPlan);
+                    qqchConstStaffPlan = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstStaffPlan);
                     qqchConstStaffPlan.setMasterId(id);
                     qqchConstStaffPlan.setId(IdWorker.createId());
                 }
@@ -143,7 +143,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
             }
             if (!CollectionUtils.isEmpty(facilityPlanList)) {
                 for (QqchConstFacilityPlan qqchConstFacilityPlan : facilityPlanList) {
-                    qqchConstFacilityPlan = CompileDTO.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstFacilityPlan);
+                    qqchConstFacilityPlan = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstFacilityPlan);
                     qqchConstFacilityPlan.setMasterId(id);
                     qqchConstFacilityPlan.setId(IdWorker.createId());
                 }
@@ -163,15 +163,15 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public CompileDTO<List<QqchConst>> list(QqchConst dto) {
+    public CompileEntity<List<QqchConst>> list(QqchConst dto) {
         List<QqchConst> qqchConstList = this.qqchConstMapper.getQqchConstList(dto);
-        List<QqchConstJob> jobList = this.jobService.list(CompileDTO.dealListDto(dto.getVersion(), new QqchConstJob()));
+        List<QqchConstJob> jobList = this.jobService.list(CompileEntity.dealListDto(dto.getVersion(), new QqchConstJob()));
         Map<Long, List<QqchConstJob>> jobListMap = jobList.stream().collect(Collectors.groupingBy(QqchConstJob::getMasterId));
 
-        List<QqchConstStaffPlan> staffPlanList = this.staffPlanService.list(CompileDTO.dealListDto(dto.getVersion(), new QqchConstStaffPlan()));
+        List<QqchConstStaffPlan> staffPlanList = this.staffPlanService.list(CompileEntity.dealListDto(dto.getVersion(), new QqchConstStaffPlan()));
         Map<Long, List<QqchConstStaffPlan>> staffPlanListMap = staffPlanList.stream().collect(Collectors.groupingBy(QqchConstStaffPlan::getMasterId));
 
-        List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileDTO.dealListDto(dto.getVersion(), new QqchConstFacilityPlan()));
+        List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(dto.getVersion(), new QqchConstFacilityPlan()));
         Map<Long, List<QqchConstFacilityPlan>> facilityPlanListMap = facilityPlanList.stream().collect(Collectors.groupingBy(QqchConstFacilityPlan::getMasterId));
 
         for (QqchConst qqchConst : qqchConstList) {
@@ -185,15 +185,14 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
         }
 
-        CompileDTO<List<QqchConst>> compileDTO = new CompileDTO<List<QqchConst>>();
+        CompileEntity<List<QqchConst>> compileEntity = new CompileEntity<List<QqchConst>>();
 
         List<QqchConst> build = TreeUtil.build(qqchConstList, null);
-        compileDTO.setVersion(new BigDecimal("1.0"));
-        compileDTO.setDto(build);
-        compileDTO.setStageIdentity("1");
-        compileDTO.setModuleIdentity("133");
+        compileEntity.setVersion(new BigDecimal("1.0"));
+        compileEntity.setDto(build);
+        compileEntity.setModuleIdentity("133");
         
-        return compileDTO;
+        return compileEntity;
     }
 
     @Override

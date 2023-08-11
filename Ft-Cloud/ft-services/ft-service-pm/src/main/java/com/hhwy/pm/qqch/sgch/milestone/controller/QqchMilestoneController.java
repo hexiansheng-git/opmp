@@ -5,7 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.milestone.domain.QqchMilestone;
 import com.hhwy.pm.qqch.sgch.milestone.service.IQqchMilestoneService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -34,7 +34,7 @@ public class QqchMilestoneController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping
-    public AjaxResult getQqchMilestone(@Validated(ValidationGroups.Get.class) CompileDTO<QqchMilestone> qqchMilestoneParam) {
+    public AjaxResult getQqchMilestone(@Validated(ValidationGroups.Get.class) CompileEntity<QqchMilestone> qqchMilestoneParam) {
         QqchMilestone qqchMilestone = qqchMilestoneService.getQqchMilestone(qqchMilestoneParam.dealListDto());
         return AjaxResult.success(qqchMilestone);
     }
@@ -42,13 +42,13 @@ public class QqchMilestoneController extends BaseController {
     @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
-        CompileDTO qqchMilestoneList = qqchMilestoneService.list(qqchMilestoneParam);
+        CompileEntity qqchMilestoneList = qqchMilestoneService.list(qqchMilestoneParam);
         return AjaxResult.success(qqchMilestoneList);
     }
 
     @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileDTO<List<QqchMilestone>> dtoList) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMilestone>> dtoList) {
         List<QqchMilestone> dto = dtoList.dealSaveDto();
         qqchMilestoneService.save(dto);
         return AjaxResult.success(dto);

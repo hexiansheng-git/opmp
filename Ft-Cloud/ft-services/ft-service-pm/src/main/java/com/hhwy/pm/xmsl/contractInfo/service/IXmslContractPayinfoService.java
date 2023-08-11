@@ -30,4 +30,7 @@ public interface IXmslContractPayinfoService {
     int deleteXmslContractPayinfoByPks(List<Long> xmslContractPayinfoPkList);
 
     List<Map> selDictDate(String type);
+
+
+    public List<XmslContractPayinfo> getPayInfo();
 }

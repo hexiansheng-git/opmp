@@ -5,7 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.pm.qqch.common.domain.CompileDTO;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.important.domain.QqchImportant;
 import com.hhwy.pm.qqch.sgch.important.service.IQqchImportantService;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr;
@@ -38,7 +38,7 @@ public class QqchImportantController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping
-    public AjaxResult getQqchImportant(@Validated(ValidationGroups.Get.class) CompileDTO<QqchImportant> qqchImportantParam) {
+    public AjaxResult getQqchImportant(@Validated(ValidationGroups.Get.class) CompileEntity<QqchImportant> qqchImportantParam) {
         QqchImportant qqchImportant = qqchImportantService.getQqchImportant(qqchImportantParam.dealListDto());
         return AjaxResult.success(qqchImportant);
     }
@@ -46,13 +46,13 @@ public class QqchImportantController extends BaseController {
     @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchImportant qqchImportantParam) {
-        CompileDTO qqchImportantList = qqchImportantService.list(qqchImportantParam);
+        CompileEntity qqchImportantList = qqchImportantService.list(qqchImportantParam);
         return AjaxResult.success(qqchImportantList);
     }
 
     @PreAuthorize(hasPermi = "qqchImportant:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileDTO<List<QqchImportant>> dto) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchImportant>> dto) {
         List<QqchImportant> qqchImportants = dto.dealSaveDto();
         qqchImportantService.save(qqchImportants);
         return AjaxResult.success(qqchImportants);
