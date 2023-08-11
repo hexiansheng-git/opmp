@@ -176,6 +176,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         //插入附件数据
         String fileGroupId = secondManageKeyPointPlanVo.getFileGroupId();
         if(StringUtils.isNotBlank(fileGroupId)){
+            qqchSecondManageExtend.setId(IdWorker.createId());
             qqchSecondManageExtend.setFileGroupId(fileGroupId);
             if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchSecondManageExtend.setValid(Valid.YES);
@@ -203,16 +204,22 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
      * @return
      */
     public List<SecondManageKeyPointPlan> getTableData(BigDecimal version, String keyPointType){
-        //获取二次经营要点识别数据
+        //获取二次经营要点识别数据（版本全量数据）
         QqchSecondManageKeyPoint qqchSecondManageKeyPoint = new QqchSecondManageKeyPoint();
         qqchSecondManageKeyPoint.setVersion(version);
-        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+        List<QqchSecondManageKeyPoint> secondManageKeyPointAllList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
 
-        List<SecondManageKeyPointPlan> secondManageKeyPointPlanList = new ArrayList<>();
-        if(CollectionUtils.isEmpty(qqchSecondManageKeyPointList)){
-            return secondManageKeyPointPlanList;
+        //获取二次经营要点识别数据（要点类型数据）
+        qqchSecondManageKeyPoint.setKeyPointType(keyPointType);
+        List<QqchSecondManageKeyPoint> secondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+
+
+        List<SecondManageKeyPointPlan> resultList = new ArrayList<>();
+        if(CollectionUtils.isEmpty(secondManageKeyPointList)){
+            return resultList;
         }
-        for (QqchSecondManageKeyPoint secondManageKeyPoint : qqchSecondManageKeyPointList) {
+        List<QqchSecondManageKeyPoint> keyPointTypeListAboutParent = this.getKeyPointTypeListAboutParent(secondManageKeyPointList, secondManageKeyPointAllList);
+        for (QqchSecondManageKeyPoint secondManageKeyPoint : keyPointTypeListAboutParent) {
             SecondManageKeyPointPlan secondManageKeyPointPlan = new SecondManageKeyPointPlan();
             secondManageKeyPointPlan.setId(secondManageKeyPoint.getId());
             secondManageKeyPointPlan.setPid(secondManageKeyPoint.getPid());
@@ -220,7 +227,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
             secondManageKeyPointPlan.setContentDescription(secondManageKeyPoint.getContentDescription());
             secondManageKeyPointPlan.setContractBasis(secondManageKeyPointPlan.getContractBasis());
             secondManageKeyPointPlan.setRemark(secondManageKeyPoint.getRemark());
-            secondManageKeyPointPlanList.add(secondManageKeyPointPlan);
+            resultList.add(secondManageKeyPointPlan);
         }
 
         //获取二次经营要点识别关联合同条款（子表数据）
@@ -229,7 +236,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         qqchKeyPointContractClause.setKeyPointType(keyPointType);
         List<QqchKeyPointContractClause> qqchKeyPointContractClauseList = qqchKeyPointContractClauseMapper.getQqchKeyPointContractClauseList(qqchKeyPointContractClause);
 
-        for (SecondManageKeyPointPlan secondManageKeyPointPlan : secondManageKeyPointPlanList) {
+        for (SecondManageKeyPointPlan secondManageKeyPointPlan : resultList) {
             Long masterId = secondManageKeyPointPlan.getId();
             StringBuilder contractRight = new StringBuilder();
             StringBuilder triggerCondition = new StringBuilder();
@@ -245,13 +252,47 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         }
 
         //转树列表
-        secondManageKeyPointPlanList = ListTreeUtil.formatTree(
-                secondManageKeyPointPlanList,
+        resultList = ListTreeUtil.formatTree(
+                resultList,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
                 SecondManageKeyPointPlan::getChildren,
                 SecondManageKeyPointPlan::setChildren);
-        return secondManageKeyPointPlanList;
+        return resultList;
+    }
+
+    /**
+     * 通过子集查询父级数据
+     * @param keyPointTypeList
+     * @param allList
+     * @return
+     */
+    public List<QqchSecondManageKeyPoint> getKeyPointTypeListAboutParent(List<QqchSecondManageKeyPoint> keyPointTypeList,List<QqchSecondManageKeyPoint> allList){
+        List<QqchSecondManageKeyPoint> resultList = new ArrayList<>();
+        for (QqchSecondManageKeyPoint keyPoint : keyPointTypeList) {
+            this.recursion(keyPoint,allList,resultList);
+            allList.add(keyPoint);
+        }
+        return resultList;
+    }
+
+    /**
+     * 递归查询父级数据
+     * @param keyPoint
+     * @param allList
+     * @param resultList
+     */
+    public void recursion(QqchSecondManageKeyPoint keyPoint,List<QqchSecondManageKeyPoint> allList,List<QqchSecondManageKeyPoint> resultList){
+        Long pid = keyPoint.getPid();
+        if(pid != null){
+            for (QqchSecondManageKeyPoint qqchSecondManageKeyPoint : allList) {
+                Long id = qqchSecondManageKeyPoint.getId();
+                if(pid.equals(id)){
+                    this.recursion(qqchSecondManageKeyPoint,allList,resultList);
+                    allList.add(qqchSecondManageKeyPoint);
+                }
+            }
+        }
     }
 
     /**
@@ -424,6 +465,9 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         Long masterId = secondManageKeyPoint.getId();
         //二次经营要点识别关联合同条款数据
         List<QqchKeyPointContractClause> qqchKeyPointContractClauseList = secondManageKeyPoint.getQqchKeyPointContractClauseList();
+        if(CollectionUtils.isEmpty(qqchKeyPointContractClauseList)){
+            return;
+        }
 
         for (QqchKeyPointContractClause qqchKeyPointContractClause : qqchKeyPointContractClauseList) {
             qqchKeyPointContractClause.setId(IdWorker.createId());
