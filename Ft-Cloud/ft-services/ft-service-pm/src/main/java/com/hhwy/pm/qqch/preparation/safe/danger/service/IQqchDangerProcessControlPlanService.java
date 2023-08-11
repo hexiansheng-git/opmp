@@ -24,7 +24,7 @@ public interface IQqchDangerProcessControlPlanService {
      * @param qqchDangerProcessControlPlanVo
      * @return
      */
-    void updateQqchDangerProcessControlPlanList(QqchDangerProcessControlPlanVo qqchDangerProcessControlPlanVo);
+    void batchSave(QqchDangerProcessControlPlanVo qqchDangerProcessControlPlanVo);
 
     /**
      * 同步数据
