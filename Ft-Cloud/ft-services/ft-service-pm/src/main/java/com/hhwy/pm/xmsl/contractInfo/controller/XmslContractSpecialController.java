@@ -120,4 +120,15 @@ public class XmslContractSpecialController extends BaseController {
             throw new RuntimeException("导入失败！");
         }
     }
+
+    /**
+     *  给编制模块（合同策划）提供接口
+     * @param xmslContractSpecialParam
+     * @return
+     */
+    @PostMapping("/provideList")
+    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractSpecial xmslContractSpecialParam) {
+        List<XmslContractSpecial> treeVOS = xmslContractSpecialService.provideList(xmslContractSpecialParam);
+        return AjaxResult.success(treeVOS);
+    }
 }

@@ -26,4 +26,6 @@ public interface IXmslContractSpecialService {
     int deleteXmslContractSpecial(XmslContractSpecial xmslContractSpecial);
 
     int deleteXmslContractSpecialByPks(List<Long> xmslContractSpecialPkList);
+
+    List<XmslContractSpecial> provideList(XmslContractSpecial xmslContractSpecialParam);
 }

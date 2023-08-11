@@ -122,4 +122,16 @@ public class XmslContractGeneralController extends BaseController {
             throw new RuntimeException("导入失败！");
         }
     }
+
+
+    /**
+     *  给编制模块（合同策划）提供接口
+     * @param xmslContractGeneralParam
+     * @return
+     */
+    @PostMapping("/provideList")
+    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractGeneral xmslContractGeneralParam) {
+        List<XmslContractGeneral> treeVOS = xmslContractGeneralService.provideList(xmslContractGeneralParam);
+        return AjaxResult.success(treeVOS);
+    }
 }
