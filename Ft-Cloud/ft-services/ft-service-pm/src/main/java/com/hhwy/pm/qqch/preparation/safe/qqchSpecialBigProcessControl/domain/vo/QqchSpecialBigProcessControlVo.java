@@ -10,5 +10,5 @@ import java.util.List;
 @Data
 public class QqchSpecialBigProcessControlVo extends PreparationEntity {
 
-    private List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList;
+    private List<QqchSpecialBigProcessControl> list;
 }

@@ -94,7 +94,7 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
         List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = qqchSpecialBigProcessControlMapper.getQqchSpecialBigProcessControlList(qqchSpecialBigProcessControl);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlList);
+        vo.setList(qqchSpecialBigProcessControlList);
         return vo;
     }
 
@@ -108,7 +108,7 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = vo.getVersion();
-        List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = vo.getQqchSpecialBigProcessControlList();
+        List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = vo.getList();
         if(CollectionUtils.isEmpty(qqchSpecialBigProcessControlList)){
             return;
         }else {

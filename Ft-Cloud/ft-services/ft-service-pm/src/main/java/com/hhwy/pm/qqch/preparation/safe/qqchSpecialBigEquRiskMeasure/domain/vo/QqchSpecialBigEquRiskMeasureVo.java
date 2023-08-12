@@ -9,5 +9,5 @@ import java.util.List;
 @Data
 public class QqchSpecialBigEquRiskMeasureVo extends PreparationEntity {
 
-    private List<QqchSpecialBigEquRiskMeasure> qqchSpecialBigEquRiskMeasureList;
+    private List<QqchSpecialBigEquRiskMeasure> list;
 }

@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
@@ -152,6 +153,18 @@ public class XmslContractListController extends BaseController {
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
+    }
+
+    /**
+     * 处理祖级名称、id
+     * @return
+     */
+    @PostMapping("/handlerAncestor")
+    public AjaxResult handlerAncestor() {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        xmslContractListService.handlerAncestors();
+        return AjaxResult.success();
     }
 
 }

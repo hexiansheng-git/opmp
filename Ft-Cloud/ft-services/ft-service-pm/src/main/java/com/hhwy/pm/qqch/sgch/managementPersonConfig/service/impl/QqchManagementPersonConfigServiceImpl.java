@@ -152,6 +152,8 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         this.recursion(build);
 
         vo.setQqchManagementPersonConfigList(build);
+        List<QqchManagementPersonConfig> configs = TreeUtil.treeToList(build);
+        this.insertQqchManagementPersonConfigList(configs,qqchManagementPersonConfigVo.getVersion());
         return vo;
     }
 
