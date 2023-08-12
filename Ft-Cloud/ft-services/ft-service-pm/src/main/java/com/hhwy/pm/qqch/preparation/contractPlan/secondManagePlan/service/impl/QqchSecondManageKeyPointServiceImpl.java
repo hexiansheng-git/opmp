@@ -271,7 +271,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         List<QqchSecondManageKeyPoint> resultList = new ArrayList<>();
         for (QqchSecondManageKeyPoint keyPoint : keyPointTypeList) {
             this.recursion(keyPoint,allList,resultList);
-            allList.add(keyPoint);
+            resultList.add(keyPoint);
         }
         return resultList;
     }
@@ -289,7 +289,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
                 Long id = qqchSecondManageKeyPoint.getId();
                 if(pid.equals(id)){
                     this.recursion(qqchSecondManageKeyPoint,allList,resultList);
-                    allList.add(qqchSecondManageKeyPoint);
+                    resultList.add(qqchSecondManageKeyPoint);
                 }
             }
         }

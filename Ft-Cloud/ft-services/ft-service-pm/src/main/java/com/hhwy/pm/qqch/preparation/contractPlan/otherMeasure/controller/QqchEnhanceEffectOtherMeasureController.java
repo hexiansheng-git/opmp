@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-08-08 17:08:56
- * @remark
+ * @remark 提高经营效果的其他措施
  */
 @Validated
 @RestController

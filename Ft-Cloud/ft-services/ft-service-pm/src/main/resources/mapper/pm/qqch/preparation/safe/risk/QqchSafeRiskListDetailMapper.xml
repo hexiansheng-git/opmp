@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListDetailMapper">
+
+    <resultMap type="com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail"
+               id="QqchSafeRiskListDetailResultMap">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="infoId" column="info_id"/>
+        <result property="workType" column="work_type"/>
+        <result property="workUnit" column="work_unit"/>
+        <result property="dangerThing" column="danger_thing"/>
+        <result property="possibleResult" column="possible_result"/>
+        <result property="possibleLevel" column="possible_level"/>
+        <result property="severityLevel" column="severity_level"/>
+        <result property="riskLevel" column="risk_level"/>
+        <result property="riskControWay" column="risk_contro_way"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+    </resultMap>
+    <sql id="selectQqchSafeRiskListDetailVo">
+        select
+                                                            `id`
+                                                         ,`pid`
+                                                         ,`info_id`
+                                                         ,`work_type`
+                                                         ,`work_unit`
+                                                         ,`danger_thing`
+                                                         ,`possible_result`
+                                                         ,`possible_level`
+                                                         ,`severity_level`
+                                                         ,`risk_level`
+                                                         ,`risk_contro_way`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                    from qqch_safe_risk_list_detail
+    </sql>
+    <select id="getQqchSafeRiskListDetail" resultMap="QqchSafeRiskListDetailResultMap">
+        <include refid="selectQqchSafeRiskListDetailVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="infoId != null ">and `info_id` = #{infoId}</if>
+            <if test="workType != null  and workType != ''">and `work_type` = #{workType}</if>
+            <if test="workUnit != null  and workUnit != ''">and `work_unit` = #{workUnit}</if>
+            <if test="dangerThing != null  and dangerThing != ''">and `danger_thing` = #{dangerThing}</if>
+            <if test="possibleResult != null  and possibleResult != ''">and `possible_result` = #{possibleResult}</if>
+            <if test="possibleLevel != null  and possibleLevel != ''">and `possible_level` = #{possibleLevel}</if>
+            <if test="severityLevel != null  and severityLevel != ''">and `severity_level` = #{severityLevel}</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="riskControWay != null  and riskControWay != ''">and `risk_contro_way` = #{riskControWay}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchSafeRiskListDetailList" resultMap="QqchSafeRiskListDetailResultMap">
+        <include refid="selectQqchSafeRiskListDetailVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="infoId != null ">and `info_id` = #{infoId}</if>
+            <if test="workType != null  and workType != ''">and `work_type` = #{workType}</if>
+            <if test="workUnit != null  and workUnit != ''">and `work_unit` = #{workUnit}</if>
+            <if test="dangerThing != null  and dangerThing != ''">and `danger_thing` = #{dangerThing}</if>
+            <if test="possibleResult != null  and possibleResult != ''">and `possible_result` = #{possibleResult}</if>
+            <if test="possibleLevel != null  and possibleLevel != ''">and `possible_level` = #{possibleLevel}</if>
+            <if test="severityLevel != null  and severityLevel != ''">and `severity_level` = #{severityLevel}</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="riskControWay != null  and riskControWay != ''">and `risk_contro_way` = #{riskControWay}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchSafeRiskListDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_safe_risk_list_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="infoId != null ">`info_id`,</if>
+            <if test="workType != null  and workType != ''">`work_type`,</if>
+            <if test="workUnit != null  and workUnit != ''">`work_unit`,</if>
+            <if test="dangerThing != null  and dangerThing != ''">`danger_thing`,</if>
+            <if test="possibleResult != null  and possibleResult != ''">`possible_result`,</if>
+            <if test="possibleLevel != null  and possibleLevel != ''">`possible_level`,</if>
+            <if test="severityLevel != null  and severityLevel != ''">`severity_level`,</if>
+            <if test="riskLevel != null  and riskLevel != ''">`risk_level`,</if>
+            <if test="riskControWay != null  and riskControWay != ''">`risk_contro_way`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="infoId != null ">#{infoId},</if>
+            <if test="workType != null  and workType != ''">#{workType},</if>
+            <if test="workUnit != null  and workUnit != ''">#{workUnit},</if>
+            <if test="dangerThing != null  and dangerThing != ''">#{dangerThing},</if>
+            <if test="possibleResult != null  and possibleResult != ''">#{possibleResult},</if>
+            <if test="possibleLevel != null  and possibleLevel != ''">#{possibleLevel},</if>
+            <if test="severityLevel != null  and severityLevel != ''">#{severityLevel},</if>
+            <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
+            <if test="riskControWay != null  and riskControWay != ''">#{riskControWay},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchSafeRiskListDetail -->
+    <insert id="insertQqchSafeRiskListDetailList">
+        insert into qqch_safe_risk_list_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `pid`,
+            `info_id`,
+            `work_type`,
+            `work_unit`,
+            `danger_thing`,
+            `possible_result`,
+            `possible_level`,
+            `severity_level`,
+            `risk_level`,
+            `risk_contro_way`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+        </trim>
+        values
+        <foreach collection="qqchSafeRiskListDetailList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.pid},
+                #{item.infoId},
+                #{item.workType},
+                #{item.workUnit},
+                #{item.dangerThing},
+                #{item.possibleResult},
+                #{item.possibleLevel},
+                #{item.severityLevel},
+                #{item.riskLevel},
+                #{item.riskControWay},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchSafeRiskListDetail">
+        update qqch_safe_risk_list_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="infoId != null ">`info_id` = #{infoId},</if>
+            <if test="workType != null  and  workType != ''">`work_type` = #{workType},</if>
+            <if test="workUnit != null  and  workUnit != ''">`work_unit` = #{workUnit},</if>
+            <if test="dangerThing != null  and  dangerThing != ''">`danger_thing` = #{dangerThing},</if>
+            <if test="possibleResult != null  and  possibleResult != ''">`possible_result` = #{possibleResult},</if>
+            <if test="possibleLevel != null  and  possibleLevel != ''">`possible_level` = #{possibleLevel},</if>
+            <if test="severityLevel != null  and  severityLevel != ''">`severity_level` = #{severityLevel},</if>
+            <if test="riskLevel != null  and  riskLevel != ''">`risk_level` = #{riskLevel},</if>
+            <if test="riskControWay != null  and  riskControWay != ''">`risk_contro_way` = #{riskControWay},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateQqchSafeRiskListDetailList">
+        update qqch_safe_risk_list_detail
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="info_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.infoId}
+                </foreach>
+            </trim>
+            <trim prefix="work_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workType}
+                </foreach>
+            </trim>
+            <trim prefix="work_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workUnit}
+                </foreach>
+            </trim>
+            <trim prefix="danger_thing  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dangerThing}
+                </foreach>
+            </trim>
+            <trim prefix="possible_result  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.possibleResult}
+                </foreach>
+            </trim>
+            <trim prefix="possible_level  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.possibleLevel}
+                </foreach>
+            </trim>
+            <trim prefix="severity_level  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.severityLevel}
+                </foreach>
+            </trim>
+            <trim prefix="risk_level  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.riskLevel}
+                </foreach>
+            </trim>
+            <trim prefix="risk_contro_way  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.riskControWay}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteQqchSafeRiskListDetail">
+        update `qqch_safe_risk_list_detail` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="infoId != null ">and `info_id` = #{infoId}</if>
+            <if test="workType != null  and workType != ''">and `work_type` = #{workType}</if>
+            <if test="workUnit != null  and workUnit != ''">and `work_unit` = #{workUnit}</if>
+            <if test="dangerThing != null  and dangerThing != ''">and `danger_thing` = #{dangerThing}</if>
+            <if test="possibleResult != null  and possibleResult != ''">and `possible_result` = #{possibleResult}</if>
+            <if test="possibleLevel != null  and possibleLevel != ''">and `possible_level` = #{possibleLevel}</if>
+            <if test="severityLevel != null  and severityLevel != ''">and `severity_level` = #{severityLevel}</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="riskControWay != null  and riskControWay != ''">and `risk_contro_way` = #{riskControWay}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+        </where>
+    </update>
+
+    <update id="deleteQqchSafeRiskListDetailByPks">
+        update `qqch_safe_risk_list_detail` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="qqchSafeRiskListDetailPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>
