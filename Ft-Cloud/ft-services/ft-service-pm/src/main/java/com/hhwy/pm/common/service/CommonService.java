@@ -2,7 +2,8 @@ package com.hhwy.pm.common.service;
 
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
-import com.hhwy.pm.qqch.constant.ConfirmStatus;
+import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
@@ -14,6 +15,7 @@ import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -83,7 +85,7 @@ public class CommonService {
 
         //获取当前阶段
         String currentStage = qqchReviewService.getStage();
-        if ("end".equals(currentStage)) {
+        if (PmConstant.END_STAGE.equals(currentStage)) {
             throw new RuntimeException("前期策划评审已结束");
         }
         //获取当前登录人信息
@@ -94,9 +96,9 @@ public class CommonService {
         qqchWorkPlan.setTaskStatus("5");
         qqchWorkPlan.setDelFlag("0");
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlan);
-        if (qqchWorkPlanList.size() != 1) {
-            throw new RuntimeException("前期策划工作计划数据异常");
-        }
+        // 查询到的数量不是0个的话 工作计划
+        if (qqchWorkPlanList.size() != 1) throw new CustomBusinessException("前期策划工作计划数据异常");
+        
         // 有效的工作计划
         QqchWorkPlan workPlan = qqchWorkPlanList.get(0);
         Long id = workPlan.getId();
@@ -104,13 +106,33 @@ public class CommonService {
         planDetail.setDelFlag("0");
         planDetail.setItemId(menuId);
         planDetail.setMainId(id);
+
+
+        switch (currentStage) {
+            case PmConstant.ONE:
+                planDetail.setIsFirst(PmConstant.ONE);
+                planDetail.setEditorFirst(userId + "");
+                break;
+            case PmConstant.TWO:
+                planDetail.setIsSecond(PmConstant.ONE);
+                planDetail.setEditorSecond(userId + "");
+                break;
+            case PmConstant.THREE:
+                planDetail.setIsThird(PmConstant.ONE);
+                planDetail.setEditorThird(userId + "");
+                break;
+            default:
+        }
+        // 根据阶段 编制人 页面唯一标识查询有没有编辑权限
         List<QqchWorkPlanDetail> qqchWorkPlanDetailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(planDetail);
+        // 如果没有查询到数据
+        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)) throw new CustomBusinessException("当前用户在当前阶段没有当前页面的编辑权限");
 
-
-        // 获取当前菜单 当前阶段 确认状态
-        String confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, "" + userId);
-
-
-        return false;
+        // 获取当前菜单 当前阶段 当前登录人有没有确认过
+        List<QqchModuleConfirmCase> confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, "" + userId);
+        // 确认记录不为空的话 则证明当前阶段已经被确认过 无需再进行确认
+        if (!CollectionUtils.isEmpty(confirmStatus)) throw new CustomBusinessException("当前用户在当前页面的当前阶段已经确认过 无需重复确认");
+        
+        return true;
     }
 }
