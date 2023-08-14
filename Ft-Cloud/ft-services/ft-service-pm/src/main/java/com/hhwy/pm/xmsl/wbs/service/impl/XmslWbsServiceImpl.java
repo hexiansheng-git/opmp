@@ -373,6 +373,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             if (StringUtils.isNotBlank(tempPid))
                 temp.setParentId(tempPid);
             new AddBaseInfoUtil<>().addBaseEntity(temp);
+            temp.setPtVar1("0");
             addList.add(temp);
         }
         if(CollectionUtils.isNotEmpty(addList))
