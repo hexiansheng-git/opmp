@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
@@ -27,4 +28,6 @@ public interface QqchSafeRiskListDetailMapper {
     int deleteQqchSafeRiskListDetail(QqchSafeRiskListDetail qqchSafeRiskListDetail);
 
     int deleteQqchSafeRiskListDetailByPks(@Param("qqchSafeRiskListDetailPkList") List<Long> qqchSafeRiskListDetailPkList);
+
+    void deleteByInfoIds(@Param("infoIdList") List<Long> infoIdList, @Param("delUser") String userName, @Param("delTime") Date nowDate);
 }

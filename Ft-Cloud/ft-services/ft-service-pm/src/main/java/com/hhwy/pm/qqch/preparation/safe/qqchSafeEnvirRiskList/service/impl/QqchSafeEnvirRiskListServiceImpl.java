@@ -102,7 +102,9 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
                 }
             }
             qqchSafeEnvirRiskListMapper.insertQqchSafeEnvirRiskListList(list);
-            detailService.insertQqchSafeEnvirRiskListDetailList(addDetailList);
+            if(!ObjectNullUtil.isEmpty(addDetailList)) {
+                detailService.insertQqchSafeEnvirRiskListDetailList(addDetailList);
+            }
         }
         String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

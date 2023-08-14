@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.risk.service;
 
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,4 +27,6 @@ public interface IQqchSafeRiskListDetailService {
     int deleteQqchSafeRiskListDetail(QqchSafeRiskListDetail qqchSafeRiskListDetail);
 
     int deleteQqchSafeRiskListDetailByPks(List<Long> qqchSafeRiskListDetailPkList);
+
+    void deleteByInfoIds(List<Long> infoIdList, String valueOf, String userName, Date nowDate);
 }

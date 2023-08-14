@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
@@ -79,4 +80,10 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
         public int deleteQqchSafeRiskListDetailByPks(List<Long> qqchSafeRiskListDetailPkList) {
             return qqchSafeRiskListDetailMapper.deleteQqchSafeRiskListDetailByPks(qqchSafeRiskListDetailPkList);
         }
+
+    @Override
+    @Transactional
+    public void deleteByInfoIds(List<Long> infoIdList, String userId, String userName, Date nowDate) {
+        qqchSafeRiskListDetailMapper.deleteByInfoIds(infoIdList,userName,nowDate);
     }
+}
