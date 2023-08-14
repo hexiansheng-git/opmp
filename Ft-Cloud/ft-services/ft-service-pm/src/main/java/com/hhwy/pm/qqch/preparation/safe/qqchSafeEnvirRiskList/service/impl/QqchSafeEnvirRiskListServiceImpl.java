@@ -159,12 +159,12 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
                     if(!ObjectNullUtil.isEmpty(detailListMap.get(safeEnvirRiskList.getId()))){
                         List<QqchSafeEnvirRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeEnvirRiskList.getId());
                         List<QqchSafeEnvirRiskListDetail> parentList = detailList.stream().filter(t->{
-                                            if(t.getPId()==0){
+                                            if(t.getPid()==0){
                                                 return true;
                                             }
                                             return false;
                          }).collect(Collectors.toList());
-                        Map<Long, List<QqchSafeEnvirRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(t -> t.getPId()));
+                        Map<Long, List<QqchSafeEnvirRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(t -> t.getPid()));
                         for (QqchSafeEnvirRiskListDetail detail : parentList) {
                             if(!ObjectNullUtil.isEmpty(groupByPidMap.get(detail.getId()))){
                                 List<QqchSafeEnvirRiskListDetail> childrenList = groupByPidMap.get(detail.getId());
