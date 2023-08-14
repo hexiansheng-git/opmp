@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.mapper.QqchSafeEnvriRiskManageMapper">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+    <resultMap type="com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.domain.QqchSafeEnvriRiskManage" id="QqchSafeEnvriRiskManageResultMap">
+                    <result property="id" column="id" />
+                    <result property="measureOption" column="measure_option" />
+                    <result property="executorPersonId" column="executor_person_id" />
+                    <result property="executorPersonName" column="executor_person_name" />
+                    <result property="departmentIds" column="department_ids" />
+                    <result property="departmentNames" column="department_names" />
+                    <result property="attenOption" column="atten_option" />
+                    <result property="excelTempleteId" column="excel_templete_id" />
+                    <result property="excelTempleteName" column="excel_templete_name" />
+                    <result property="version" column="version" />
+                    <result property="valid" column="valid" />
+                    <result property="createUser" column="create_user" />
+                    <result property="createUserName" column="create_user_name" />
+                    <result property="createTime" column="create_time" />
+                    <result property="updateUser" column="update_user" />
+                    <result property="updateTime" column="update_time" />
+                    <result property="delUser" column="del_user" />
+                    <result property="delTime" column="del_time" />
+                    <result property="delFlag" column="del_flag" />
+                    <result property="ptVar1" column="pt_var1" />
+                    <result property="ptVar2" column="pt_var2" />
+                    <result property="ptVar3" column="pt_var3" />
+                    <result property="deptId" column="dept_id" />
+            </resultMap>
+    <sql id="selectQqchSafeEnvriRiskManageVo">
+        select
+                                                            `id`
+                                                         ,`measure_option`
+                                                         ,`executor_person_id`
+                                                         ,`executor_person_name`
+                                                         ,`department_ids`
+                                                         ,`department_names`
+                                                         ,`atten_option`
+                                                         ,`excel_templete_id`
+                                                         ,`excel_templete_name`
+                                                         ,`version`
+                                                         ,`valid`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`dept_id`
+                                    from qqch_safe_envri_risk_manage
+    </sql>
+    <select id="getQqchSafeEnvriRiskManage" resultMap="QqchSafeEnvriRiskManageResultMap">
+        <include refid="selectQqchSafeEnvriRiskManageVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="measureOption != null  and measureOption != ''"> and `measure_option` = #{measureOption}</if>
+                            <if test="executorPersonId != null "> and `executor_person_id` = #{executorPersonId}</if>
+                            <if test="executorPersonName != null  and executorPersonName != ''"> and `executor_person_name` = #{executorPersonName}</if>
+                            <if test="departmentIds != null  and departmentIds != ''"> and `department_ids` = #{departmentIds}</if>
+                            <if test="departmentNames != null  and departmentNames != ''"> and `department_names` = #{departmentNames}</if>
+                            <if test="attenOption != null  and attenOption != ''"> and `atten_option` = #{attenOption}</if>
+                            <if test="excelTempleteId != null  and excelTempleteId != ''"> and `excel_templete_id` = #{excelTempleteId}</if>
+                            <if test="excelTempleteName != null  and excelTempleteName != ''"> and `excel_templete_name` = #{excelTempleteName}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchSafeEnvriRiskManageList" resultMap="QqchSafeEnvriRiskManageResultMap">
+        <include refid="selectQqchSafeEnvriRiskManageVo" />
+        <where>
+            del_flag = "0"
+                            <if test="id != null "> and `id` = #{id}</if>
+                            <if test="measureOption != null  and measureOption != ''"> and `measure_option` = #{measureOption}</if>
+                            <if test="executorPersonId != null "> and `executor_person_id` = #{executorPersonId}</if>
+                            <if test="executorPersonName != null  and executorPersonName != ''"> and `executor_person_name` = #{executorPersonName}</if>
+                            <if test="departmentIds != null  and departmentIds != ''"> and `department_ids` = #{departmentIds}</if>
+                            <if test="departmentNames != null  and departmentNames != ''"> and `department_names` = #{departmentNames}</if>
+                            <if test="attenOption != null  and attenOption != ''"> and `atten_option` = #{attenOption}</if>
+                            <if test="excelTempleteId != null  and excelTempleteId != ''"> and `excel_templete_id` = #{excelTempleteId}</if>
+                            <if test="excelTempleteName != null  and excelTempleteName != ''"> and `excel_templete_name` = #{excelTempleteName}</if>
+                            <if test="version != null "> and `version` = #{version}</if>
+                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                    </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertQqchSafeEnvriRiskManage"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_safe_envri_risk_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">`id`,</if>
+                            <if test="measureOption != null  and measureOption != ''">`measure_option`,</if>
+                            <if test="executorPersonId != null ">`executor_person_id`,</if>
+                            <if test="executorPersonName != null  and executorPersonName != ''">`executor_person_name`,</if>
+                            <if test="departmentIds != null  and departmentIds != ''">`department_ids`,</if>
+                            <if test="departmentNames != null  and departmentNames != ''">`department_names`,</if>
+                            <if test="attenOption != null  and attenOption != ''">`atten_option`,</if>
+                            <if test="excelTempleteId != null  and excelTempleteId != ''">`excel_templete_id`,</if>
+                            <if test="excelTempleteName != null  and excelTempleteName != ''">`excel_templete_name`,</if>
+                            <if test="version != null ">`version`,</if>
+                            <if test="valid != null  and valid != ''">`valid`,</if>
+                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+                            <if test="createTime != null ">`create_time`,</if>
+                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+                            <if test="updateTime != null ">`update_time`,</if>
+                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+                            <if test="delTime != null ">`del_time`,</if>
+                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+                            <if test="deptId != null ">`dept_id`,</if>
+                    </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                            <if test="id != null ">#{id},</if>
+                            <if test="measureOption != null  and measureOption != ''">#{measureOption},</if>
+                            <if test="executorPersonId != null ">#{executorPersonId},</if>
+                            <if test="executorPersonName != null  and executorPersonName != ''">#{executorPersonName},</if>
+                            <if test="departmentIds != null  and departmentIds != ''">#{departmentIds},</if>
+                            <if test="departmentNames != null  and departmentNames != ''">#{departmentNames},</if>
+                            <if test="attenOption != null  and attenOption != ''">#{attenOption},</if>
+                            <if test="excelTempleteId != null  and excelTempleteId != ''">#{excelTempleteId},</if>
+                            <if test="excelTempleteName != null  and excelTempleteName != ''">#{excelTempleteName},</if>
+                            <if test="version != null ">#{version},</if>
+                            <if test="valid != null  and valid != ''">#{valid},</if>
+                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+                            <if test="createTime != null ">#{createTime},</if>
+                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+                            <if test="updateTime != null ">#{updateTime},</if>
+                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+                            <if test="delTime != null ">#{delTime},</if>
+                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+                            <if test="deptId != null ">#{deptId},</if>
+                    </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchSafeEnvriRiskManage -->
+    <insert id="insertQqchSafeEnvriRiskManageList">
+        insert into qqch_safe_envri_risk_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                `id`,
+                                                                `measure_option`,
+                                                                `executor_person_id`,
+                                                                `executor_person_name`,
+                                                                `department_ids`,
+                                                                `department_names`,
+                                                                `atten_option`,
+                                                                `excel_templete_id`,
+                                                                `excel_templete_name`,
+                                                                `version`,
+                                                                `valid`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                                            `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `dept_id`,
+                                    </trim>
+        values
+        <foreach collection="qqchSafeEnvriRiskManageList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                                                            #{item.id},
+                                                                                #{item.measureOption},
+                                                                                #{item.executorPersonId},
+                                                                                #{item.executorPersonName},
+                                                                                #{item.departmentIds},
+                                                                                #{item.departmentNames},
+                                                                                #{item.attenOption},
+                                                                                #{item.excelTempleteId},
+                                                                                #{item.excelTempleteName},
+                                                                                #{item.version},
+                                                                                #{item.valid},
+                                                                                #{item.createUser},
+                                                                                #{item.createUserName},
+                                                                                #{item.createTime},
+                                                                                #{item.updateUser},
+                                                                                #{item.updateTime},
+                                                                                #{item.delUser},
+                                                                                #{item.delTime},
+                                                                                                                    #{item.ptVar1},
+                                                                                #{item.ptVar2},
+                                                                                #{item.ptVar3},
+                                                                                #{item.deptId},
+                                                </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchSafeEnvriRiskManage">
+        update qqch_safe_envri_risk_manage
+        <trim prefix="SET" suffixOverrides=",">
+                            <if test="id != null ">`id` = #{id},</if>
+                            <if test="measureOption != null  and  measureOption != ''">`measure_option` = #{measureOption},</if>
+                            <if test="executorPersonId != null ">`executor_person_id` = #{executorPersonId},</if>
+                            <if test="executorPersonName != null  and  executorPersonName != ''">`executor_person_name` = #{executorPersonName},</if>
+                            <if test="departmentIds != null  and  departmentIds != ''">`department_ids` = #{departmentIds},</if>
+                            <if test="departmentNames != null  and  departmentNames != ''">`department_names` = #{departmentNames},</if>
+                            <if test="attenOption != null  and  attenOption != ''">`atten_option` = #{attenOption},</if>
+                            <if test="excelTempleteId != null  and  excelTempleteId != ''">`excel_templete_id` = #{excelTempleteId},</if>
+                            <if test="excelTempleteName != null  and  excelTempleteName != ''">`excel_templete_name` = #{excelTempleteName},</if>
+                            <if test="version != null ">`version` = #{version},</if>
+                            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+                            <if test="createTime != null ">`create_time` = #{createTime},</if>
+                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+                            <if test="delTime != null ">`del_time` = #{delTime},</if>
+                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+                            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+                    </trim>
+        <where>
+                                                                        <if test="id != null "> and `id` = #{id}</if>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+    </update>
+
+            <update id="updateQqchSafeEnvriRiskManageList">
+            update qqch_safe_envri_risk_manage
+            <trim prefix="set" suffixOverrides=",">
+                                    <trim prefix="id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.id}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="measure_option  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.measureOption}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="executor_person_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.executorPersonId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="executor_person_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.executorPersonName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="department_ids  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.departmentIds}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="department_names  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.departmentNames}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="atten_option  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.attenOption}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="excel_templete_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.excelTempleteId}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="excel_templete_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.excelTempleteName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="version  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.version}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="valid  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.valid}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_user_name  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createUserName}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="create_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.createTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="update_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.updateTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_user  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delUser}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_time  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delTime}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="del_flag  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.delFlag}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var1  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar1}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var2  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar2}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="pt_var3  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.ptVar3}
+                        </foreach>
+                    </trim>
+                                    <trim prefix="dept_id  = case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            when `id`=#{item.id} then #{item.deptId}
+                        </foreach>
+                    </trim>
+                            </trim>
+            where `id` in
+            <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+                #{item.id}
+            </foreach>
+        </update>
+    
+            <update id="deleteQqchSafeEnvriRiskManage">
+            update `qqch_safe_envri_risk_manage` set del_flag = 1
+            <where>
+                                    <if test="id != null "> and `id` = #{id}</if>
+                                    <if test="measureOption != null  and measureOption != ''"> and `measure_option` = #{measureOption}</if>
+                                    <if test="executorPersonId != null "> and `executor_person_id` = #{executorPersonId}</if>
+                                    <if test="executorPersonName != null  and executorPersonName != ''"> and `executor_person_name` = #{executorPersonName}</if>
+                                    <if test="departmentIds != null  and departmentIds != ''"> and `department_ids` = #{departmentIds}</if>
+                                    <if test="departmentNames != null  and departmentNames != ''"> and `department_names` = #{departmentNames}</if>
+                                    <if test="attenOption != null  and attenOption != ''"> and `atten_option` = #{attenOption}</if>
+                                    <if test="excelTempleteId != null  and excelTempleteId != ''"> and `excel_templete_id` = #{excelTempleteId}</if>
+                                    <if test="excelTempleteName != null  and excelTempleteName != ''"> and `excel_templete_name` = #{excelTempleteName}</if>
+                                    <if test="version != null "> and `version` = #{version}</if>
+                                    <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
+                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
+                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+                                    <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+                            </where>
+        </update>
+
+                    <update id="deleteQqchSafeEnvriRiskManageByPks">
+                update `qqch_safe_envri_risk_manage` set del_flag = 1
+                <where>
+                    `id` in
+                    <foreach item="id" collection="qqchSafeEnvriRiskManagePkList" open="(" separator="," close=")">
+                        #{id}
+                    </foreach>
+                </where>
+            </update>
+            </mapper>
