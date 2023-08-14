@@ -151,6 +151,12 @@
         order by create_time desc
     </select>
 
+    <select id="getFullList" resultMap="XmslDrawReviewListResultMap">
+        <include refid="selectXmslDrawReviewListVo"/>
+        where `version_flag` = 1 and `version` &lt;= #{version} and del_flag = '0'
+        order by id
+    </select>
+
     <select id="getByIds" resultMap="XmslDrawReviewListResultMap" parameterType="Long">
         <include refid="selectXmslDrawReviewListVo"/>
         where id in

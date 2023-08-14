@@ -12,6 +12,7 @@ import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
@@ -42,6 +43,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private IXmslWbsService wbsService;
     @Resource
     private IXmslWbsListRelationService wbsListRelationService;
+    @Resource
+    private IXmslEngineeringReportService engineeringReportService;
 
 
     public XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain) {
@@ -222,6 +225,10 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             }finally {
                 log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
             }
+        });
+        //4、工程量报表生成
+        ThreadPoolUtil.getThreadPool().execute(()->{
+            engineeringReportService.sync();
         });
     }
 
