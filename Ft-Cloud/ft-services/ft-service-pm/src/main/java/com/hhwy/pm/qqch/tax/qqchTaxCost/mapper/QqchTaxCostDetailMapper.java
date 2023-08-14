@@ -1,13 +1,13 @@
-package com.hhwy.pm.qqch.tax.qqchTaxCostDetail.mapper;
+package com.hhwy.pm.qqch.tax.qqchTaxCost.mapper;
 
-import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain.QqchTaxCostDetail;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
  * @author mls
- * @date 2023-08-09 18:17:26
+ * @date 2023-08-11 13:56:55
  * @remark
  */
 public interface QqchTaxCostDetailMapper {

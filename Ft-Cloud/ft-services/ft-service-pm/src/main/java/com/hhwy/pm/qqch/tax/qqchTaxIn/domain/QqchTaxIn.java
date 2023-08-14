@@ -1,17 +1,12 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.math.BigDecimal;
@@ -191,8 +186,8 @@ public class QqchTaxIn extends CompileEntity<QqchTaxIn> {
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
-    private String ptVar1;
+    @Excel(name = "记录id")
+    private Long recordId;
     /**
      * 字段描述：预留字段2
      */
@@ -217,8 +212,8 @@ public class QqchTaxIn extends CompileEntity<QqchTaxIn> {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-    
+
     private List<QqchTaxInDetail> detailList;
 
-    
+
 }

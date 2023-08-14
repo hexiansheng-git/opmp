@@ -1,7 +1,8 @@
-package com.hhwy.pm.qqch.tax.qqchTaxCostDetail.service;
+package com.hhwy.pm.qqch.tax.qqchTaxCost.service;
 
-import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain.QqchTaxCostDetail;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,4 +27,6 @@ public interface IQqchTaxCostDetailService {
     int deleteQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail);
 
     int deleteQqchTaxCostDetailByPks(List<Long> qqchTaxCostDetailPkList);
+
+    void save(List<QqchTaxCostDetail> dealSaveDto);
 }

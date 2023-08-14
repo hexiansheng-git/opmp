@@ -23,9 +23,9 @@ import java.util.List;
 @Service
 public class QqchTaxGoalServiceImpl implements IQqchTaxGoalService {
 
-    
+
     private static final String TN = "qqch_tax_goal";
-    
+
     @Autowired
     private QqchTaxGoalMapper qqchTaxGoalMapper;
 
@@ -85,7 +85,7 @@ public class QqchTaxGoalServiceImpl implements IQqchTaxGoalService {
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.SAVE_LIST,tableName = TN)
+    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchTaxGoal> list) {
         this.qqchTaxGoalMapper.insertQqchTaxGoalList(list);
     }

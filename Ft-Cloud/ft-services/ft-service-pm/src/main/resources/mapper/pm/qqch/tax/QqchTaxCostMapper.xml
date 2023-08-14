@@ -11,9 +11,13 @@
         <result property="feeName" column="fee_name"/>
         <result property="currency" column="currency"/>
         <result property="currencyName" column="currency_name"/>
+        <result property="rate" column="rate"/>
         <result property="innerAmt" column="inner_amt"/>
         <result property="reqAmt" column="req_amt"/>
         <result property="localAmt" column="local_amt"/>
+        <result property="usdInnerAmt" column="usd_inner_amt"/>
+        <result property="usdReqAmt" column="usd_req_amt"/>
+        <result property="usdLocalAmt" column="usd_local_amt"/>
         <result property="remark" column="remark"/>
         <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
@@ -32,7 +36,7 @@
         <result property="delUser" column="del_user"/>
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
+        <result property="recordId" column="record_id"/>
         <result property="ptVar2" column="pt_var2"/>
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
@@ -45,9 +49,13 @@
              , `fee_name`
              , `currency`
              , `currency_name`
+             , `rate`
              , `inner_amt`
              , `req_amt`
              , `local_amt`
+             , `usd_inner_amt`
+             , `usd_req_amt`
+             , `usd_local_amt`
              , `remark`
              , `leaf`
              , `sort`
@@ -66,7 +74,7 @@
              , `del_user`
              , `del_time`
              , `del_flag`
-             , `pt_var1`
+             , `record_id`
              , `pt_var2`
              , `pt_var3`
              , `pt_var4`
@@ -83,9 +91,13 @@
             <if test="feeName != null  and feeName != ''">and `fee_name` = #{feeName}</if>
             <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
             <if test="currencyName != null  and currencyName != ''">and `currency_name` = #{currencyName}</if>
+            <if test="rate != null ">and `rate` = #{rate}</if>
             <if test="innerAmt != null ">and `inner_amt` = #{innerAmt}</if>
             <if test="reqAmt != null ">and `req_amt` = #{reqAmt}</if>
             <if test="localAmt != null ">and `local_amt` = #{localAmt}</if>
+            <if test="usdInnerAmt != null ">and `usd_inner_amt` = #{usdInnerAmt}</if>
+            <if test="usdReqAmt != null ">and `usd_req_amt` = #{usdReqAmt}</if>
+            <if test="usdLocalAmt != null ">and `usd_local_amt` = #{usdLocalAmt}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -104,7 +116,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="recordId != null  and recordId != ''">and `record_id` = #{recordId}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -123,9 +135,13 @@
             <if test="feeName != null  and feeName != ''">and `fee_name` = #{feeName}</if>
             <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
             <if test="currencyName != null  and currencyName != ''">and `currency_name` = #{currencyName}</if>
+            <if test="rate != null ">and `rate` = #{rate}</if>
             <if test="innerAmt != null ">and `inner_amt` = #{innerAmt}</if>
             <if test="reqAmt != null ">and `req_amt` = #{reqAmt}</if>
             <if test="localAmt != null ">and `local_amt` = #{localAmt}</if>
+            <if test="usdInnerAmt != null ">and `usd_inner_amt` = #{usdInnerAmt}</if>
+            <if test="usdReqAmt != null ">and `usd_req_amt` = #{usdReqAmt}</if>
+            <if test="usdLocalAmt != null ">and `usd_local_amt` = #{usdLocalAmt}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -144,7 +160,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="recordId != null  and recordId != ''">and `record_id` = #{recordId}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -162,9 +178,13 @@
             <if test="feeName != null  and feeName != ''">`fee_name`,</if>
             <if test="currency != null  and currency != ''">`currency`,</if>
             <if test="currencyName != null  and currencyName != ''">`currency_name`,</if>
+            <if test="rate != null ">`rate`,</if>
             <if test="innerAmt != null ">`inner_amt`,</if>
             <if test="reqAmt != null ">`req_amt`,</if>
             <if test="localAmt != null ">`local_amt`,</if>
+            <if test="usdInnerAmt != null ">`usd_inner_amt`,</if>
+            <if test="usdReqAmt != null ">`usd_req_amt`,</if>
+            <if test="usdLocalAmt != null ">`usd_local_amt`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
@@ -183,7 +203,7 @@
             <if test="delUser != null  and delUser != ''">`del_user`,</if>
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="recordId != null  and recordId != ''">`record_id`,</if>
             <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
             <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
@@ -196,9 +216,13 @@
             <if test="feeName != null  and feeName != ''">#{feeName},</if>
             <if test="currency != null  and currency != ''">#{currency},</if>
             <if test="currencyName != null  and currencyName != ''">#{currencyName},</if>
+            <if test="rate != null ">#{rate},</if>
             <if test="innerAmt != null ">#{innerAmt},</if>
             <if test="reqAmt != null ">#{reqAmt},</if>
             <if test="localAmt != null ">#{localAmt},</if>
+            <if test="usdInnerAmt != null ">#{usdInnerAmt},</if>
+            <if test="usdReqAmt != null ">#{usdReqAmt},</if>
+            <if test="usdLocalAmt != null ">#{usdLocalAmt},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
@@ -217,7 +241,7 @@
             <if test="delUser != null  and delUser != ''">#{delUser},</if>
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="recordId != null  and recordId != ''">#{recordId},</if>
             <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
             <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
@@ -235,9 +259,13 @@
             `fee_name`,
             `currency`,
             `currency_name`,
+            `rate`,
             `inner_amt`,
             `req_amt`,
             `local_amt`,
+            `usd_inner_amt`,
+            `usd_req_amt`,
+            `usd_local_amt`,
             `remark`,
             `leaf`,
             `sort`,
@@ -255,7 +283,7 @@
             `update_time`,
             `del_user`,
             `del_time`,
-            `pt_var1`,
+            `record_id`,
             `pt_var2`,
             `pt_var3`,
             `pt_var4`,
@@ -270,9 +298,13 @@
                 #{item.feeName},
                 #{item.currency},
                 #{item.currencyName},
+                #{item.rate},
                 #{item.innerAmt},
                 #{item.reqAmt},
                 #{item.localAmt},
+                #{item.usdInnerAmt},
+                #{item.usdReqAmt},
+                #{item.usdLocalAmt},
                 #{item.remark},
                 #{item.leaf},
                 #{item.sort},
@@ -290,7 +322,7 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
-                #{item.ptVar1},
+                #{item.recordId},
                 #{item.ptVar2},
                 #{item.ptVar3},
                 #{item.ptVar4},
@@ -308,9 +340,13 @@
             <if test="feeName != null  and  feeName != ''">`fee_name` = #{feeName},</if>
             <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
             <if test="currencyName != null  and  currencyName != ''">`currency_name` = #{currencyName},</if>
+            <if test="rate != null ">`rate` = #{rate},</if>
             <if test="innerAmt != null ">`inner_amt` = #{innerAmt},</if>
             <if test="reqAmt != null ">`req_amt` = #{reqAmt},</if>
             <if test="localAmt != null ">`local_amt` = #{localAmt},</if>
+            <if test="usdInnerAmt != null ">`usd_inner_amt` = #{usdInnerAmt},</if>
+            <if test="usdReqAmt != null ">`usd_req_amt` = #{usdReqAmt},</if>
+            <if test="usdLocalAmt != null ">`usd_local_amt` = #{usdLocalAmt},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
@@ -329,7 +365,7 @@
             <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="recordId != null  and  recordId != ''">`record_id` = #{recordId},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
@@ -373,6 +409,11 @@
                     when `id`=#{item.id} then #{item.currencyName}
                 </foreach>
             </trim>
+            <trim prefix="rate  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.rate}
+                </foreach>
+            </trim>
             <trim prefix="inner_amt  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.innerAmt}
@@ -386,6 +427,21 @@
             <trim prefix="local_amt  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.localAmt}
+                </foreach>
+            </trim>
+            <trim prefix="usd_inner_amt  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.usdInnerAmt}
+                </foreach>
+            </trim>
+            <trim prefix="usd_req_amt  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.usdReqAmt}
+                </foreach>
+            </trim>
+            <trim prefix="usd_local_amt  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.usdLocalAmt}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -478,9 +534,9 @@
                     when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
-            <trim prefix="pt_var1  = case" suffix="end,">
+            <trim prefix="record_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar1}
+                    when `id`=#{item.id} then #{item.recordId}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
@@ -519,9 +575,13 @@
             <if test="feeName != null  and feeName != ''">and `fee_name` = #{feeName}</if>
             <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
             <if test="currencyName != null  and currencyName != ''">and `currency_name` = #{currencyName}</if>
+            <if test="rate != null ">and `rate` = #{rate}</if>
             <if test="innerAmt != null ">and `inner_amt` = #{innerAmt}</if>
             <if test="reqAmt != null ">and `req_amt` = #{reqAmt}</if>
             <if test="localAmt != null ">and `local_amt` = #{localAmt}</if>
+            <if test="usdInnerAmt != null ">and `usd_inner_amt` = #{usdInnerAmt}</if>
+            <if test="usdReqAmt != null ">and `usd_req_amt` = #{usdReqAmt}</if>
+            <if test="usdLocalAmt != null ">and `usd_local_amt` = #{usdLocalAmt}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -540,7 +600,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="recordId != null  and recordId != ''">and `record_id` = #{recordId}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>

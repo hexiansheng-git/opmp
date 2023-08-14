@@ -18,6 +18,7 @@ import java.util.List;
 public class QqchMeasureExpDTO {
     private BigDecimal version;
     private String submitFlag;
+    private String stageIdentity;
     private QqchMeasureOrg org;
     private List<QqchMeasureExpRange> expRangeList;
     private List<QqchMeasureExpPerson> personList;

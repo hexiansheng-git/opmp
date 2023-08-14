@@ -2,7 +2,6 @@ package com.hhwy.pm.qqch.tax.qqchTaxIn.service;
 
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,5 +28,5 @@ public interface IQqchTaxInDetailService {
     int deleteQqchTaxInDetailByPks(List<Long> qqchTaxInDetailPkList);
 
     void save(List<QqchTaxInDetail> allDetails);
-    
+
 }

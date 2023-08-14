@@ -1,32 +1,31 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.controller;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.io.IOException;
-import java.util.Map;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
+import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg;
 import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
-import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
-import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
+import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -41,6 +40,8 @@ public class QqchMeasureExpRangeController extends BaseController {
     @Resource
     private IQqchMeasureExpRangeService qqchMeasureExpRangeService;
 
+    @Resource
+    private IQqchReviewService reviewService;
 
     @Resource
     private IQqchMeasureOrgService orgService;
@@ -57,15 +58,26 @@ public class QqchMeasureExpRangeController extends BaseController {
     }
 
     @GetMapping("/list")
-    public AjaxResult getQqchMeasureExpRangeList(@Validated(ValidationGroups.Select.class) QqchMeasureExpRange qqchMeasureExpRangeParam) {
+    public AjaxResult getQqchMeasureExpRangeList(@Validated(ValidationGroups.Select.class) QqchMeasureExpRange dto) {
         Map<String, Object> res = new HashMap<>();
+        CompileEntity compileEntity = new CompileEntity();
+        compileEntity.setVersion(dto.getVersion());
+        compileEntity.setStageIdentity(reviewService.getStage());
+
+        // 组织模式
         List<QqchMeasureOrg> measureOrgListByVersion = orgService.getQqchMeasureOrgListByVersion(new QqchMeasureOrg());
-        List<QqchMeasureExpRange> measureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeListByVersion(qqchMeasureExpRangeParam);
-        List<QqchMeasureExpPerson> measureExpPersonList = personService.getQqchMeasureExpPersonListByVersionCode(new QqchMeasureExpPerson());
-        res.put("measureOrg", CollectionUtils.isEmpty(measureOrgListByVersion) ? new QqchMeasureExpRange() : measureOrgListByVersion.get(0));
-        res.put("measureExpRange", measureExpRangeList);
-        res.put("measureExpPersonList", measureExpPersonList);
-        return AjaxResult.success(res);
+        // 工作范围
+        List<QqchMeasureExpRange> measureExpRangeList = qqchMeasureExpRangeService.getQqchMeasureExpRangeListByVersion(dto);
+        // 人员配置
+        QqchMeasureExpPerson wherePer = new QqchMeasureExpPerson();
+        wherePer.setDataType(dto.getDataType());
+        List<QqchMeasureExpPerson> measureExpPersonList = personService.getQqchMeasureExpPersonListByVersionCode(CompileEntity.dealListDto(dto.getVersion(), wherePer));
+        
+        res.put("org", CollectionUtils.isEmpty(measureOrgListByVersion) ? new QqchMeasureExpRange() : measureOrgListByVersion.get(0));
+        res.put("expRangeList", measureExpRangeList);
+        res.put("personList", measureExpPersonList);
+        compileEntity.setDto(res);
+        return AjaxResult.success(compileEntity);
     }
 
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")

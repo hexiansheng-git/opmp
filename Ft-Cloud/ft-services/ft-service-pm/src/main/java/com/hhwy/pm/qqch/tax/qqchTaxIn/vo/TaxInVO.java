@@ -1,8 +1,6 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.vo;
 
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
-import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
-import com.hhwy.utils.JsonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,7 @@ import java.util.List;
 @Data
 @ToString
 public class TaxInVO {
-    
+
     // 年份信息
     private List<String> yearList;
     // 币种信息
@@ -23,6 +21,8 @@ public class TaxInVO {
     private List<QqchTaxIn> inList;
     // 其他收入
     private List<QqchTaxIn> otherList;
+    
+    
 
 
     @Data
@@ -36,9 +36,4 @@ public class TaxInVO {
     }
 
 
-    public static void main(String[] args) {
-        JsonUtils.soutJsonStr(QqchTaxIn.class);
-        JsonUtils.soutJsonStr(QqchTaxInDetail.class);
-    }
-    
 }

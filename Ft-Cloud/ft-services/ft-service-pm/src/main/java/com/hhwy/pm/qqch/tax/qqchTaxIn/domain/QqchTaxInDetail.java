@@ -1,16 +1,13 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -220,8 +217,8 @@ public class QqchTaxInDetail extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-    
-    
+
+
     private List<Long> masterIdList;
 
 }

@@ -7,6 +7,7 @@ import java.io.IOException;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.domain.QqchMeasureExpPlan;
 import com.hhwy.pm.qqch.preparation.measureexp.plan.service.IQqchMeasureExpPlanService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,10 @@ public class QqchMeasureExpPlanController extends BaseController {
     @Autowired
     private IQqchMeasureExpPlanService qqchMeasureExpPlanService;
 
+    @Autowired
+    private IQqchReviewService reviewService;
+
+
 
     @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
     @GetMapping
@@ -45,8 +50,12 @@ public class QqchMeasureExpPlanController extends BaseController {
     @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchMeasureExpPlanList(@Validated(ValidationGroups.Select.class) QqchMeasureExpPlan qqchMeasureExpPlanParam) {
+        CompileEntity res = new CompileEntity<>();
         List<QqchMeasureExpPlan> qqchMeasureExpPlanList = qqchMeasureExpPlanService.getQqchMeasureExpPlanListByVersion(qqchMeasureExpPlanParam);
-        return AjaxResult.success(qqchMeasureExpPlanList);
+        res.setDto(qqchMeasureExpPlanList);
+        res.setVersion(qqchMeasureExpPlanParam.getVersion());
+        res.setStageIdentity(reviewService.getStage());
+        return AjaxResult.success(res);
     }
 
     @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")

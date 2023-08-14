@@ -2,16 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInMapper">
+<mapper namespace="com.hhwy.pm.qqch.tax.qqchTaxInstallment.mapper.QqchTaxInstallmentMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn" id="QqchTaxInResultMap">
+    <resultMap type="com.hhwy.pm.qqch.tax.qqchTaxInstallment.domain.QqchTaxInstallment"
+               id="QqchTaxInstallmentResultMap">
         <result property="id" column="id"/>
-        <result property="pid" column="pid"/>
-        <result property="dataType" column="data_type"/>
-        <result property="otherBusName" column="other_bus_name"/>
-        <result property="currency" column="currency"/>
-        <result property="currencyName" column="currency_name"/>
-        <result property="totalIn" column="total_in"/>
+        <result property="inRecordId" column="in_record_id"/>
+        <result property="costRecordId" column="cost_record_id"/>
         <result property="remark" column="remark"/>
         <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
@@ -30,20 +27,16 @@
         <result property="delUser" column="del_user"/>
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
-        <result property="recordId" column="record_id"/>
+        <result property="ptVar1" column="pt_var1"/>
         <result property="ptVar2" column="pt_var2"/>
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectQqchTaxInVo">
+    <sql id="selectQqchTaxInstallmentVo">
         select `id`
-             , `pid`
-             , `data_type`
-             , `other_bus_name`
-             , `currency`
-             , `currency_name`
-             , `total_in`
+             , `in_record_id`
+             , `cost_record_id`
              , `remark`
              , `leaf`
              , `sort`
@@ -62,24 +55,20 @@
              , `del_user`
              , `del_time`
              , `del_flag`
-             , `record_id`
+             , `pt_var1`
              , `pt_var2`
              , `pt_var3`
              , `pt_var4`
              , `pt_var5`
-        from qqch_tax_in
+        from qqch_tax_installment
     </sql>
-    <select id="getQqchTaxIn" resultMap="QqchTaxInResultMap">
-        <include refid="selectQqchTaxInVo"/>
+    <select id="getQqchTaxInstallment" resultMap="QqchTaxInstallmentResultMap">
+        <include refid="selectQqchTaxInstallmentVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="dataType != null  and dataType != ''">and `data_type` = #{dataType}</if>
-            <if test="otherBusName != null  and otherBusName != ''">and `other_bus_name` = #{otherBusName}</if>
-            <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
-            <if test="currencyName != null  and currencyName != ''">and `currency_name` = #{currencyName}</if>
-            <if test="totalIn != null ">and `total_in` = #{totalIn}</if>
+            <if test="inRecordId != null ">and `in_record_id` = #{inRecordId}</if>
+            <if test="costRecordId != null ">and `cost_record_id` = #{costRecordId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -98,7 +87,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="recordId != null  and recordId != ''">and `record_id` = #{recordId}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -107,17 +96,13 @@
         order by create_time desc
     </select>
 
-    <select id="getQqchTaxInList" resultMap="QqchTaxInResultMap">
-        <include refid="selectQqchTaxInVo"/>
+    <select id="getQqchTaxInstallmentList" resultMap="QqchTaxInstallmentResultMap">
+        <include refid="selectQqchTaxInstallmentVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="dataType != null  and dataType != ''">and `data_type` = #{dataType}</if>
-            <if test="otherBusName != null  and otherBusName != ''">and `other_bus_name` = #{otherBusName}</if>
-            <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
-            <if test="currencyName != null  and currencyName != ''">and `currency_name` = #{currencyName}</if>
-            <if test="totalIn != null ">and `total_in` = #{totalIn}</if>
+            <if test="inRecordId != null ">and `in_record_id` = #{inRecordId}</if>
+            <if test="costRecordId != null ">and `cost_record_id` = #{costRecordId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -136,7 +121,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="recordId != null  and recordId != ''">and `record_id` = #{recordId}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -145,16 +130,12 @@
         order by create_time desc
     </select>
 
-    <insert id="insertQqchTaxIn" useGeneratedKeys="true" keyProperty="id">
-        insert into qqch_tax_in
+    <insert id="insertQqchTaxInstallment" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_tax_installment
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="pid != null ">`pid`,</if>
-            <if test="dataType != null  and dataType != ''">`data_type`,</if>
-            <if test="otherBusName != null  and otherBusName != ''">`other_bus_name`,</if>
-            <if test="currency != null  and currency != ''">`currency`,</if>
-            <if test="currencyName != null  and currencyName != ''">`currency_name`,</if>
-            <if test="totalIn != null ">`total_in`,</if>
+            <if test="inRecordId != null ">`in_record_id`,</if>
+            <if test="costRecordId != null ">`cost_record_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
@@ -173,7 +154,7 @@
             <if test="delUser != null  and delUser != ''">`del_user`,</if>
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-            <if test="recordId != null  and recordId != ''">`record_id`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
             <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
             <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
@@ -181,12 +162,8 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="pid != null ">#{pid},</if>
-            <if test="dataType != null  and dataType != ''">#{dataType},</if>
-            <if test="otherBusName != null  and otherBusName != ''">#{otherBusName},</if>
-            <if test="currency != null  and currency != ''">#{currency},</if>
-            <if test="currencyName != null  and currencyName != ''">#{currencyName},</if>
-            <if test="totalIn != null ">#{totalIn},</if>
+            <if test="inRecordId != null ">#{inRecordId},</if>
+            <if test="costRecordId != null ">#{costRecordId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
@@ -205,7 +182,7 @@
             <if test="delUser != null  and delUser != ''">#{delUser},</if>
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="recordId != null  and recordId != ''">#{recordId},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
             <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
             <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
@@ -213,17 +190,13 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchTaxIn -->
-    <insert id="insertQqchTaxInList">
-        insert into qqch_tax_in
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchTaxInstallment -->
+    <insert id="insertQqchTaxInstallmentList">
+        insert into qqch_tax_installment
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `pid`,
-            `data_type`,
-            `other_bus_name`,
-            `currency`,
-            `currency_name`,
-            `total_in`,
+            `in_record_id`,
+            `cost_record_id`,
             `remark`,
             `leaf`,
             `sort`,
@@ -241,22 +214,18 @@
             `update_time`,
             `del_user`,
             `del_time`,
-            `record_id`,
+            `pt_var1`,
             `pt_var2`,
             `pt_var3`,
             `pt_var4`,
             `pt_var5`,
         </trim>
         values
-        <foreach collection="qqchTaxInList" item="item" separator=",">
+        <foreach collection="qqchTaxInstallmentList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.pid},
-                #{item.dataType},
-                #{item.otherBusName},
-                #{item.currency},
-                #{item.currencyName},
-                #{item.totalIn},
+                #{item.inRecordId},
+                #{item.costRecordId},
                 #{item.remark},
                 #{item.leaf},
                 #{item.sort},
@@ -274,7 +243,7 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
-                #{item.recordId},
+                #{item.ptVar1},
                 #{item.ptVar2},
                 #{item.ptVar3},
                 #{item.ptVar4},
@@ -283,16 +252,12 @@
         </foreach>
     </insert>
 
-    <update id="updateQqchTaxIn">
-        update qqch_tax_in
+    <update id="updateQqchTaxInstallment">
+        update qqch_tax_installment
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="pid != null ">`pid` = #{pid},</if>
-            <if test="dataType != null  and  dataType != ''">`data_type` = #{dataType},</if>
-            <if test="otherBusName != null  and  otherBusName != ''">`other_bus_name` = #{otherBusName},</if>
-            <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
-            <if test="currencyName != null  and  currencyName != ''">`currency_name` = #{currencyName},</if>
-            <if test="totalIn != null ">`total_in` = #{totalIn},</if>
+            <if test="inRecordId != null ">`in_record_id` = #{inRecordId},</if>
+            <if test="costRecordId != null ">`cost_record_id` = #{costRecordId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
@@ -311,7 +276,7 @@
             <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-            <if test="recordId != null  and  recordId != ''">`record_id` = #{recordId},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
@@ -322,42 +287,22 @@
         </where>
     </update>
 
-    <update id="updateQqchTaxInList">
-        update qqch_tax_in
+    <update id="updateQqchTaxInstallmentList">
+        update qqch_tax_installment
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="pid  = case" suffix="end,">
+            <trim prefix="in_record_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.pid}
+                    when `id`=#{item.id} then #{item.inRecordId}
                 </foreach>
             </trim>
-            <trim prefix="data_type  = case" suffix="end,">
+            <trim prefix="cost_record_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dataType}
-                </foreach>
-            </trim>
-            <trim prefix="other_bus_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.otherBusName}
-                </foreach>
-            </trim>
-            <trim prefix="currency  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.currency}
-                </foreach>
-            </trim>
-            <trim prefix="currency_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.currencyName}
-                </foreach>
-            </trim>
-            <trim prefix="total_in  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.totalIn}
+                    when `id`=#{item.id} then #{item.costRecordId}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -450,9 +395,9 @@
                     when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
-            <trim prefix="record_id  = case" suffix="end,">
+            <trim prefix="pt_var1  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.recordId}
+                    when `id`=#{item.id} then #{item.ptVar1}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
@@ -482,16 +427,12 @@
         </foreach>
     </update>
 
-    <update id="deleteQqchTaxIn">
-        update `qqch_tax_in` set del_flag = 1
+    <update id="deleteQqchTaxInstallment">
+        update `qqch_tax_installment` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="dataType != null  and dataType != ''">and `data_type` = #{dataType}</if>
-            <if test="otherBusName != null  and otherBusName != ''">and `other_bus_name` = #{otherBusName}</if>
-            <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
-            <if test="currencyName != null  and currencyName != ''">and `currency_name` = #{currencyName}</if>
-            <if test="totalIn != null ">and `total_in` = #{totalIn}</if>
+            <if test="inRecordId != null ">and `in_record_id` = #{inRecordId}</if>
+            <if test="costRecordId != null ">and `cost_record_id` = #{costRecordId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -510,7 +451,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="recordId != null  and recordId != ''">and `record_id` = #{recordId}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -518,11 +459,11 @@
         </where>
     </update>
 
-    <update id="deleteQqchTaxInByPks">
-        update `qqch_tax_in` set del_flag = 1
+    <update id="deleteQqchTaxInstallmentByPks">
+        update `qqch_tax_installment` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchTaxInPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="qqchTaxInstallmentPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

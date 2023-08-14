@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -12,6 +13,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
+import com.hhwy.pm.qqch.tax.qqchTaxStage.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
 import com.hhwy.utils.EntityUtils;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +50,9 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     @Autowired
     private IQqchTaxInDetailService detailService;
 
-
+    @Resource
+    private IQqchTaxStageService qqchTaxStageService;
+    
     public QqchTaxIn getQqchTaxIn(QqchTaxIn qqchTaxIn) {
         return qqchTaxInMapper.getQqchTaxIn(qqchTaxIn);
     }
@@ -132,25 +137,31 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
         IQqchTaxInService bean = SpringUtils.getBean(IQqchTaxInService.class);
 
+        List<QqchTaxIn> allTaxInList = new ArrayList<>();
+
+        // 分期会用到
+        Long recordId = IdWorker.createId();
+        this.qqchTaxStageService.saveStage(recordId,"1");
+
         // 保存主要
         List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), qqchTaxInParam.getDto().getInList());
         for (QqchTaxIn qqchTaxIn : qqchTaxIns) {
             qqchTaxIn.setDataType("1");
+            qqchTaxIn.setRecordId(recordId);
+            allTaxInList.add(qqchTaxIn);
         }
-        List<QqchTaxInDetail> masterDetailList = bean.saveInList(qqchTaxIns);
+        
 
         // 保存其他
         List<QqchTaxIn> otherInList = CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), qqchTaxInParam.getDto().getOtherList());
         for (QqchTaxIn qqchTaxIn : otherInList) {
             qqchTaxIn.setDataType("2");
+            qqchTaxIn.setRecordId(recordId);
+            allTaxInList.add(qqchTaxIn);
         }
-        List<QqchTaxInDetail> otherDetailList = bean.saveInList(otherInList);
-
-
-        // 保存年份数据
-        ArrayList<QqchTaxInDetail> allDetails = new ArrayList<>();
-        allDetails.addAll(masterDetailList);
-        allDetails.addAll(otherDetailList);
+        
+        // 所有的详情
+        List<QqchTaxInDetail> allDetails = bean.saveInList(allTaxInList);
         // 新增年份数据
         this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), allDetails));
 
@@ -166,12 +177,15 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             List<QqchTaxInDetail> detailList = item.getDetailList();
             // 不为空才循环
             if (!CollectionUtils.isEmpty(detailList)) {
-                for (QqchTaxInDetail qqchTaxInDetail : detailList) {
-                    qqchTaxInDetail.setId(IdWorker.createId());
-                    qqchTaxInDetail.setMasterId(item.getId());
-                    qqchTaxInDetail.setDataType(item.getDataType());
-                    qqchTaxInDetail.setVersion(item.getVersion());
-                    qqchTaxInDetail.setValid(item.getValid());
+                for (QqchTaxInDetail detail : detailList) {
+                    detail.setId(IdWorker.createId());
+                    detail.setMasterId(item.getId());
+                    detail.setDataType(item.getDataType());
+                    detail.setVersion(item.getVersion());
+                    detail.setValid(item.getValid());
+                    // 价格转换
+                    detail.setUsdAmt(CommonServiceUtil.getUsdAmt(detail.getAmt(), detail.getRate()));
+
                 }
                 allDetails.addAll(detailList);
             }
@@ -192,7 +206,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      *
      * @return
      */
-    private List<TaxInVO.CurrencyVO> getCurrencyInfo() {
+    public List<TaxInVO.CurrencyVO> getCurrencyInfo() {
 
         List<XmslContractPayinfo> payInfo = contractPayinfoService.getPayInfo();
         List<TaxInVO.CurrencyVO> res = payInfo.stream().map(item -> {
@@ -216,7 +230,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      *
      * @return
      */
-    private List<String> getYearList() {
+    public List<String> getYearList() {
         ArrayList<String> res = new ArrayList<>();
         res.add("2023");
         res.add("2024");

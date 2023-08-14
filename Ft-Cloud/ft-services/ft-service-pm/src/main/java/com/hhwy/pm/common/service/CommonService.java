@@ -4,6 +4,10 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
+import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
+import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import io.jsonwebtoken.lang.Assert;
@@ -12,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 物资策划通用业务类
@@ -29,6 +34,13 @@ public class CommonService {
 
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    
+    @Autowired
+    private IQqchWorkPlanService qqchWorkPlanService;
+
+
+    @Autowired
+    private IQqchWorkPlanDetailService qqchWorkPlanDetailService;
 
     /**
      * 校验单据能否被调整 (单条数据只能调整一次)
@@ -67,30 +79,38 @@ public class CommonService {
      * @param menuId 菜单id
      * @return
      */
-    public boolean  checkIsEditable(String menuId) {
-        boolean isEditable = true;
+    public boolean checkIsEditable(String menuId) {
+
         //获取当前阶段
         String currentStage = qqchReviewService.getStage();
-        if("end".equals(currentStage)){
-            return false;
+        if ("end".equals(currentStage)) {
+            throw new RuntimeException("前期策划评审已结束");
         }
-
         //获取当前登录人信息
         Long userId = SecurityUtils.getUserId();
-
-        //TODO 获取该菜单当前阶段的编制人信息
-        Long compilePersonId = 111L;
-
-        if(!userId.equals(compilePersonId)){
-            return false;
+        // 根据当前阶段和登录人查询有没有编辑权限
+        QqchWorkPlan qqchWorkPlan = new QqchWorkPlan();
+        qqchWorkPlan.setValid("1");
+        qqchWorkPlan.setTaskStatus("5");
+        qqchWorkPlan.setDelFlag("0");
+        List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlan);
+        if (qqchWorkPlanList.size() != 1) {
+            throw new RuntimeException("前期策划工作计划数据异常");
         }
+        // 有效的工作计划
+        QqchWorkPlan workPlan = qqchWorkPlanList.get(0);
+        Long id = workPlan.getId();
+        QqchWorkPlanDetail planDetail = new QqchWorkPlanDetail();
+        planDetail.setDelFlag("0");
+        planDetail.setItemId(menuId);
+        planDetail.setMainId(id);
+        List<QqchWorkPlanDetail> qqchWorkPlanDetailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(planDetail);
 
-        //获取该菜单当前阶段的确认状态
-        String confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, compilePersonId.toString());
-        if(ConfirmStatus.CONFIRMED.equals(confirmStatus)){
-            return false;
-        }
 
-        return isEditable;
+        // 获取当前菜单 当前阶段 确认状态
+        String confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, "" + userId);
+
+
+        return false;
     }
 }

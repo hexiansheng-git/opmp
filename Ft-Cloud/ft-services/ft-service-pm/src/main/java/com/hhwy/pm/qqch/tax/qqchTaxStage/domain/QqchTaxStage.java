@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain;
+package com.hhwy.pm.qqch.tax.qqchTaxStage.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,16 +7,18 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.utils.common.CommonBaseEntity;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * @author mls
- * @date 2023-08-09 18:17:26
- * @remark qqch_tax_cost_detail
+ * @date 2023-08-13 23:06:25
+ * @remark qqch_tax_stage
  */
-public class QqchTaxCostDetail extends BaseEntity {
+public class QqchTaxStage extends CompileEntity<QqchTaxStage> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -27,72 +29,24 @@ public class QqchTaxCostDetail extends BaseEntity {
     @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：qqch_tax_cost.id
+     * 字段描述：1-收入, 2-成本
+     */
+    @JsonProperty
+    @Excel(name = "1-收入, 2-成本")
+    private String dataType;
+    /**
+     * 字段描述：对应qqch_tax_stage的record_id或qqch_tax_cost的record_id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "qqch_tax_cost.id")
-    private Long masterId;
+    @Excel(name = "对应qqch_tax_stage的record_id或qqch_tax_cost的record_id")
+    private Long recordId;
     /**
-     * 字段描述：1-属地账成本明细_成本明细, 2-属地账成本明细_间接费用, 3-所得税明细
+     * 字段描述：刷新标识: 1-已刷新, 0-未刷新(只返回前端已刷新的数据)
      */
     @JsonProperty
-    @Excel(name = "1-属地账成本明细_成本明细, 2-属地账成本明细_间接费用, 3-所得税明细")
-    private String dataType;
-    /**
-     * 字段描述：年份
-     */
-    @JsonProperty
-    @Excel(name = "年份")
-    private String year;
-    /**
-     * 字段描述：币种
-     */
-    @JsonProperty
-    @Excel(name = "币种")
-    private String currency;
-    /**
-     * 字段描述：汇率
-     */
-    @JsonProperty
-    @Excel(name = "汇率")
-    private BigDecimal rate;
-    /**
-     * 字段描述：内账成本/内账
-     */
-    @JsonProperty
-    @Excel(name = "内账成本/内账")
-    private BigDecimal innerAmt;
-    /**
-     * 字段描述：符合属地账要求成本
-     */
-    @JsonProperty
-    @Excel(name = "符合属地账要求成本")
-    private BigDecimal reqAmt;
-    /**
-     * 字段描述：属地账策划成本
-     */
-    @JsonProperty
-    @Excel(name = "属地账策划成本")
-    private BigDecimal localAmt;
-    /**
-     * 字段描述：(美元)内账成本/内账
-     */
-    @JsonProperty
-    @Excel(name = "(美元)内账成本/内账")
-    private BigDecimal usdInnerAmt;
-    /**
-     * 字段描述：(美元)符合属地账要求成本
-     */
-    @JsonProperty
-    @Excel(name = "(美元)符合属地账要求成本")
-    private BigDecimal usdReqAmt;
-    /**
-     * 字段描述：(美元)属地账策划成本
-     */
-    @JsonProperty
-    @Excel(name = "(美元)属地账策划成本")
-    private BigDecimal usdLocalAmt;
+    @Excel(name = "刷新标识: 1-已刷新, 0-未刷新(只返回前端已刷新的数据)")
+    private String refreshFlag;
     /**
      * 字段描述：备注/描述
      */
@@ -249,16 +203,6 @@ public class QqchTaxCostDetail extends BaseEntity {
     }
 
     @JsonIgnore
-    public Long getMasterId() {
-        return masterId;
-    }
-
-    @JsonIgnore
-    public void setMasterId(Long masterId) {
-        this.masterId = masterId;
-    }
-
-    @JsonIgnore
     public String getDataType() {
         return dataType;
     }
@@ -269,93 +213,23 @@ public class QqchTaxCostDetail extends BaseEntity {
     }
 
     @JsonIgnore
-    public String getYear() {
-        return year;
+    public Long getRecordId() {
+        return recordId;
     }
 
     @JsonIgnore
-    public void setYear(String year) {
-        this.year = year;
+    public void setRecordId(Long recordId) {
+        this.recordId = recordId;
     }
 
     @JsonIgnore
-    public String getCurrency() {
-        return currency;
+    public String getRefreshFlag() {
+        return refreshFlag;
     }
 
     @JsonIgnore
-    public void setCurrency(String currency) {
-        this.currency = currency;
-    }
-
-    @JsonIgnore
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    @JsonIgnore
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
-    @JsonIgnore
-    public BigDecimal getInnerAmt() {
-        return innerAmt;
-    }
-
-    @JsonIgnore
-    public void setInnerAmt(BigDecimal innerAmt) {
-        this.innerAmt = innerAmt;
-    }
-
-    @JsonIgnore
-    public BigDecimal getReqAmt() {
-        return reqAmt;
-    }
-
-    @JsonIgnore
-    public void setReqAmt(BigDecimal reqAmt) {
-        this.reqAmt = reqAmt;
-    }
-
-    @JsonIgnore
-    public BigDecimal getLocalAmt() {
-        return localAmt;
-    }
-
-    @JsonIgnore
-    public void setLocalAmt(BigDecimal localAmt) {
-        this.localAmt = localAmt;
-    }
-
-    @JsonIgnore
-    public BigDecimal getUsdInnerAmt() {
-        return usdInnerAmt;
-    }
-
-    @JsonIgnore
-    public void setUsdInnerAmt(BigDecimal usdInnerAmt) {
-        this.usdInnerAmt = usdInnerAmt;
-    }
-
-    @JsonIgnore
-    public BigDecimal getUsdReqAmt() {
-        return usdReqAmt;
-    }
-
-    @JsonIgnore
-    public void setUsdReqAmt(BigDecimal usdReqAmt) {
-        this.usdReqAmt = usdReqAmt;
-    }
-
-    @JsonIgnore
-    public BigDecimal getUsdLocalAmt() {
-        return usdLocalAmt;
-    }
-
-    @JsonIgnore
-    public void setUsdLocalAmt(BigDecimal usdLocalAmt) {
-        this.usdLocalAmt = usdLocalAmt;
+    public void setRefreshFlag(String refreshFlag) {
+        this.refreshFlag = refreshFlag;
     }
 
     @JsonIgnore

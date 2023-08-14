@@ -1,10 +1,12 @@
-package com.hhwy.pm.qqch.tax.qqchTaxCostDetail.service.impl;
+package com.hhwy.pm.qqch.tax.qqchTaxCost.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.domain.QqchTaxCostDetail;
-import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.mapper.QqchTaxCostDetailMapper;
-import com.hhwy.pm.qqch.tax.qqchTaxCostDetail.service.IQqchTaxCostDetailService;
+import com.hhwy.pm.qqch.common.aspect.CompileAspect;
+import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.mapper.QqchTaxCostDetailMapper;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostDetailService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +21,7 @@ import java.util.List;
  */
 @Service
 public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
-
+    private final static String TN = "qqch_tax_cost_detail";
     @Autowired
     private QqchTaxCostDetailMapper qqchTaxCostDetailMapper;
 
@@ -32,7 +34,7 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
         return qqchTaxCostDetailMapper.getQqchTaxCostDetailList(qqchTaxCostDetail);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail) {
         qqchTaxCostDetail.setId(IdWorker.createId());
         qqchTaxCostDetail.setCreateUser(SecurityUtils.getUserName());
@@ -40,7 +42,7 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
         return qqchTaxCostDetailMapper.insertQqchTaxCostDetail(qqchTaxCostDetail);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchTaxCostDetailList(List<QqchTaxCostDetail> qqchTaxCostDetailList) {
         for (QqchTaxCostDetail qqchTaxCostDetail : qqchTaxCostDetailList) {
             qqchTaxCostDetail.setId(IdWorker.createId());
@@ -50,14 +52,14 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
         return qqchTaxCostDetailMapper.insertQqchTaxCostDetailList(qqchTaxCostDetailList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail) {
         qqchTaxCostDetail.setUpdateUser(SecurityUtils.getUserName());
         qqchTaxCostDetail.setUpdateTime(DateUtils.getNowDate());
         return qqchTaxCostDetailMapper.updateQqchTaxCostDetail(qqchTaxCostDetail);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int updateQqchTaxCostDetailList(List<QqchTaxCostDetail> qqchTaxCostDetailList) {
         for (QqchTaxCostDetail qqchTaxCostDetail : qqchTaxCostDetailList) {
             qqchTaxCostDetail.setUpdateUser(SecurityUtils.getUserName());
@@ -66,15 +68,22 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
         return qqchTaxCostDetailMapper.updateQqchTaxCostDetailList(qqchTaxCostDetailList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail) {
         qqchTaxCostDetail.setUpdateUser(SecurityUtils.getUserName());
         qqchTaxCostDetail.setUpdateTime(DateUtils.getNowDate());
         return qqchTaxCostDetailMapper.deleteQqchTaxCostDetail(qqchTaxCostDetail);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int deleteQqchTaxCostDetailByPks(List<Long> qqchTaxCostDetailPkList) {
         return qqchTaxCostDetailMapper.deleteQqchTaxCostDetailByPks(qqchTaxCostDetailPkList);
+    }
+
+    
+    @Override
+    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
+    public void save(List<QqchTaxCostDetail> list) {
+        this.qqchTaxCostDetailMapper.insertQqchTaxCostDetailList(list);
     }
 }

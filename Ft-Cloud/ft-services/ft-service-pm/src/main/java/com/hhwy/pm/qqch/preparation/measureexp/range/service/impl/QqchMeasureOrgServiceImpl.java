@@ -91,6 +91,7 @@ public class QqchMeasureOrgServiceImpl implements IQqchMeasureOrgService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE, tableName = TN)
     public void save(QqchMeasureOrg org) {
+        if (org == null) return;
         org.setId(IdWorker.createId());
         this.qqchMeasureOrgMapper.insertQqchMeasureOrg(org);
     }
