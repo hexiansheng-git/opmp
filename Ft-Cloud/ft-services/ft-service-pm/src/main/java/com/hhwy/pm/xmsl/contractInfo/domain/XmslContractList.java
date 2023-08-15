@@ -54,6 +54,8 @@ public class XmslContractList extends BaseEntity {
      */
     @JsonProperty
     private String ancestors;
+    @JsonProperty
+    private String ancestorsName;
 
     /**
      * 字段描述：是否包含子级，0:否,1:是
@@ -287,4 +289,5 @@ public class XmslContractList extends BaseEntity {
     private Long[] ids;
 
     private List<XmslContractList> children;
+
 }

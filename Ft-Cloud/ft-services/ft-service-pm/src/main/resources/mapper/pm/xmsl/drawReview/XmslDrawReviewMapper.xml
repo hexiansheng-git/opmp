@@ -122,6 +122,14 @@
         select version from xmsl_draw_review where valid = 1 order by version desc limit 1
     </select>
 
+    <select id="selectWbsAncestor" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs" parameterType="Integer">
+        select ancestors,id,parent_id parentId from xmsl_draw_review_wbs where version &lt;= #{version}
+    </select>
+
+    <select id="selectListAncestor" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList" parameterType="Integer">
+        select ancestors,id,pid pid from xmsl_draw_review_list where version &lt;= #{version}
+    </select>
+
     <insert id="insertXmslDrawReview">
         insert into xmsl_draw_review
         <trim prefix="(" suffix=")" suffixOverrides=",">

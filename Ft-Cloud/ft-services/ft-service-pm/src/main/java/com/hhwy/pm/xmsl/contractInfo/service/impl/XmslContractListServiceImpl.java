@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
+import cn.hutool.core.collection.ListUtil;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -15,8 +16,11 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 /**
  * @author ldd
@@ -32,6 +37,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Service
 public class XmslContractListServiceImpl implements IXmslContractListService {
+
+    private Logger logger= LoggerFactory.getLogger(XmslContractListServiceImpl.class);
 
     @Autowired
     private XmslContractListMapper xmslContractListMapper;
@@ -79,6 +86,8 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         }
         return null;
     }
+
+
 
     @Override
     public List<XmslContractList> getByIds(Long[] ids) {
@@ -215,6 +224,70 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     @Transactional
     public int deleteXmslContractListByPks(List<Long> xmslContractListPkList) {
         return xmslContractListMapper.deleteXmslContractListByPks(xmslContractListPkList);
+    }
+
+    @Override
+    public void handlerAncestors() {
+        handlerAncestors(null);
+    }
+    /**'
+     * 填充祖籍id name
+     * @param func
+     */
+    public void handlerAncestors(Function<XmslContractList,XmslContractList> func) {
+        long begin = System.currentTimeMillis();
+        try{
+            List<XmslContractList> list = this.xmslContractListMapper.getXmslContractList(new XmslContractList());
+            //祖级id、名称map
+            Map<String,List<String>> parentIdMap = new HashMap<>(list.size());
+            Map<String,List<String>> parentNameMap = new HashMap<>(list.size());
+            Map<String,String> idNameMap = new HashMap<>(list.size());
+            //是否为父级
+            Function<String,Boolean> isParentFunc = (s)->{return StringUtils.isBlank(s) || StringUtils.equalsAny(s,"-1","0");};
+            //遍历，获取祖级id、名称
+            for (int i = 0; i < list.size(); i++) {
+                XmslContractList temp = list.get(i);
+                if(func != null){
+                    func.apply(temp);
+                }
+                idNameMap.put(temp.getId(),temp.getChineseName().trim());
+                //若有父级，则放入parentIdMap、parentNameMap
+                if(isParentFunc.apply(temp.getPid()+"")){
+                    parentIdMap.put(temp.getId(), ListUtil.toList(temp.getId()));
+                    parentNameMap.put(temp.getId(),ListUtil.toList(temp.getChineseName()));
+                    continue;
+                }
+                String pid = temp.getPid()+"";
+                String pname = idNameMap.get(pid);
+                if(StringUtils.isBlank(pname))
+                    logger.warn("合同清单同步祖级名称ID时，未找到父级名称,子级ID:{},父级ID:{}",temp.getId(),pid);
+                List<String> pidList = ListUtils.defaultIfNull(parentIdMap.get(pid),new ArrayList<>());
+                List<String> pnameList = ListUtils.defaultIfNull(parentNameMap.get(pid),new ArrayList<>());
+                parentIdMap.put(temp.getId(),copyAndAdd(pidList,temp.getId()));
+                parentNameMap.put(temp.getId(),copyAndAdd(pnameList,temp.getChineseName()));
+            }
+            //填充祖级id、名称
+            for (int i = 0; i < list.size(); i++) {
+                XmslContractList temp = list.get(i);
+                if(isParentFunc.apply(temp.getPid()+"")){
+                    temp.setAncestors(temp.getId());
+                    temp.setAncestorsName(temp.getChineseName());
+                    continue;
+                }
+                temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()),","));
+                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()),","));
+            }
+            xmslContractListMapper.updateXmslContractListList1(list);
+        }finally{
+            long usemills = System.currentTimeMillis()-begin;
+            logger.debug("合同清单同步祖级名称ID，耗时:{}毫秒",usemills);
+        }
+    }
+
+    private List<String> copyAndAdd(List<String> list,String str){
+        List<String> result = new ArrayList<>(list);
+        result.add(str);
+        return result;
     }
 
 

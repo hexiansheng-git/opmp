@@ -24,7 +24,7 @@ public interface IQqchDangerListService {
      * @param qqchDangerListVo
      * @return
      */
-    void updateQqchDangerListList(QqchDangerListVo qqchDangerListVo);
+    void batchSave(QqchDangerListVo qqchDangerListVo);
 
     /**
      * 同步数据

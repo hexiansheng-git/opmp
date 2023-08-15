@@ -33,6 +33,13 @@ public interface IXmslDrawReviewWbsService {
 
     int updateXmslDrawReviewWbsList(List<XmslDrawReviewWbs> xmslDrawReviewWbsList);
 
+    /**
+     * 更新父级、祖级Id
+     * @param xmslDrawReviewWbsList 
+     * @return
+     */
+    int updateParentId(List<XmslDrawReviewWbs> xmslDrawReviewWbsList);
+
     int deleteXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 
     int deleteXmslDrawReviewWbsByPks(List<Long> xmslDrawReviewWbsPkList);
