@@ -121,7 +121,11 @@
 
 
     <select id="getModuleConfirmInfo" resultMap="QqchModuleConfirmCaseResultMap">
-        <include refid="selectQqchModuleConfirmCaseVo"/>
+        select
+        `confirm_user`
+        ,`module_identity`
+        ,`stage_identity`
+        from qqch_module_confirm_case
         <where>
             del_flag = '0'
             <if test="id != null ">and `id` = #{id}</if>
@@ -159,7 +163,6 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             group by confirm_user ,module_identity,stage_identity
         </where>
-        order by create_time desc
     </select>
 
 
