@@ -308,7 +308,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 // 根据阶段 模块Id 模块负责人去记录表中查询记录数量
                 List<QqchModuleConfirmCase> qqchModuleConfirmCaseList = moduleConfirmCaseService.getModuleConfirmInfo(moduleWhere);
                 // 查询到之后根据阶段分组 其中数组数量就是确认数量
-                Map<String, List<QqchModuleConfirmCase>> stageMap = qqchModuleConfirmCaseList.stream().collect(Collectors.groupingBy(QqchModuleConfirmCase::getStageIdentity));
+                Map<String, List<QqchModuleConfirmCase>> stageMap = qqchModuleConfirmCaseList.stream().filter(item->StringUtils.isNotEmpty(item.getStageIdentity())).collect(Collectors.groupingBy(QqchModuleConfirmCase::getStageIdentity));
                 
                 List<Review> qqchReviewList = this.reviewMapper.getQqchReviewList(new Review());
                 Map<String, List<Review>> reviewStageMap = qqchReviewList.stream().collect(Collectors.groupingBy(Review::getPlanStage));

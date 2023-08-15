@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPers
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -96,7 +97,7 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
+    @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchMeasureExpRange> getQqchMeasureExpRangeListByVersion(QqchMeasureExpRange qqchMeasureExpRangeParam) {
         return qqchMeasureExpRangeMapper.getQqchMeasureExpRangeList(qqchMeasureExpRangeParam);
     }
@@ -107,7 +108,7 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
     public void saveTreeList(List<QqchMeasureExpRange> expRangeList) {
         if (CollectionUtils.isEmpty(expRangeList)) return;
         for (QqchMeasureExpRange qqchMeasureExpRange : expRangeList) {
-            qqchMeasureExpRange.setId(IdWorker.createId());
+            qqchMeasureExpRange.setDataType(expRangeList.get(0).getDataType());
         }
         this.qqchMeasureExpRangeMapper.insertQqchMeasureExpRangeList(expRangeList);
     }
@@ -115,8 +116,9 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveAll(QqchMeasureExpDTO expVO) {
-        IQqchMeasureExpRangeService thisBean = SpringUtils.getBean(IQqchMeasureExpRangeService.class);
-        thisBean.saveTreeList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getExpRangeList()));
+        IQqchMeasureExpRangeService bean = (IQqchMeasureExpRangeService) AopContext.currentProxy();
+        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getExpRangeList());
+        bean.saveTreeList(qqchMeasureExpRanges);
         personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getPersonList()));
         QqchMeasureOrg org = expVO.getOrg();
         orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),org));
