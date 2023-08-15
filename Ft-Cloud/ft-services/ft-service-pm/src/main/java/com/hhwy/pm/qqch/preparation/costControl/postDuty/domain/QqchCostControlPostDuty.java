@@ -17,12 +17,12 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-08-08 17:48:45
- * @remark qqch_extend_apply_work_group
+ * @remark 成本管控岗位责任
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QqchExtendApplyWorkGroup extends BaseEntity {
+public class QqchCostControlPostDuty extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -40,11 +40,11 @@ public class QqchExtendApplyWorkGroup extends BaseEntity {
     @Excel(name = "父id")
     private Long pid;
     /**
-     * 字段描述：推广应用工作小组
+     * 字段描述：工作小组
      */
     @JsonProperty
-    @Excel(name = "推广应用工作小组")
-    private String extendApplyWorkGroup;
+    @Excel(name = "工作小组")
+    private String workGroup;
     /**
      * 字段描述：岗位
      */
@@ -226,5 +226,5 @@ public class QqchExtendApplyWorkGroup extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    private List<QqchExtendApplyWorkGroup> children;
+    private List<QqchCostControlPostDuty> children;
 }
