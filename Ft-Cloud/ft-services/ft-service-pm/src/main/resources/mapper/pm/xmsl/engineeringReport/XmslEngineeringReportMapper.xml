@@ -193,10 +193,38 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="params != null  and params.ids != null ">
+                and `id` in
+                <foreach item="id" collection="params.ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
         </where>
         order by sort
     </select>
 
+    <select id="getId" resultMap="XmslEngineeringReportResultMap">
+        select id,ancestors from xmsl_engineering_report
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="reportType != null ">and `report_type` = #{reportType}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="wbsId != null  and wbsId != ''">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` like concat('%',#{wbsCode},'%')</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` like concat('%',#{wbsName},'%')</if>
+            <if test="nodeType != null  and nodeType != ''">and `node_type` = #{nodeType}</if>
+            <if test="haveChildren != null ">and `have_children` = #{haveChildren}</if>
+            <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
+            <if test="ancestorsName != null  and ancestorsName != ''">and `ancestors_name` = #{ancestorsName}</if>
+            <if test="partCode != null  and partCode != ''">and `part_code` = #{partCode}</if>
+            <if test="wbsUnit != null  and wbsUnit != ''">and `wbs_unit` = #{wbsUnit}</if>
+            <if test="level != null ">and `level` = #{level}</if>
+            <if test="listCode != null  and listCode != ''">and `list_code` like concat('%',#{listCode},'%')</if>
+            <if test="listName != null  and listName != ''">and `list_name` like concat('%',#{listName},'%')</if>
+        </where>
+    </select>
+    
     <insert id="insertXmslEngineeringReport" useGeneratedKeys="true" keyProperty="id">
         insert into xmsl_engineering_report
         <trim prefix="(" suffix=")" suffixOverrides=",">
