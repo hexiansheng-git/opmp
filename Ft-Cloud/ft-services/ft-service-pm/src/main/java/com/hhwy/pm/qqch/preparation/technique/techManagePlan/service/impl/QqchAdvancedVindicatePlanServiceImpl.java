@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.mapper.QqchAdvanced
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchAdvancedVindicatePlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
+import com.hhwy.pm.qqch.utils.DataCheckUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.excelUtil.ExcelHeadStyle;
 import com.hhwy.utils.excelUtil.HeadVo;
@@ -282,6 +283,11 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
 
         BigDecimal version = qqchAdvancedVindicatePlanVo.getVersion();
         List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanVo.getList();
+
+        //校验唯一
+        if(!ButtonMark.SAVE.equals(buttonMark)){
+            DataCheckUtil.checkSingle(qqchAdvancedVindicatePlanList,QqchAdvancedVindicatePlan::getTopicCode);
+        }
 
         this.insertQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanList,version);
 
