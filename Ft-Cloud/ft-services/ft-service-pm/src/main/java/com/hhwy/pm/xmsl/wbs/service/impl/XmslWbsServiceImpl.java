@@ -6,6 +6,7 @@ import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
@@ -27,6 +28,7 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -164,6 +166,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         return xmslWbsMapper.getXmslWbsList(xmslWbs);
     }
 
+    
     @Override
     public List<XmslWbs> getXmslWbsList(XmslWbs xmslWbs) {
         xmslWbs.setParams(ObjectUtils.toMap("tableName","xmsl_wbs"));
@@ -195,6 +198,38 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(containSelf)
             childIdSet.addAll(Arrays.asList(ids));
         List<XmslWbs> wbsList = xmslWbsMapper.getByIds(childIdSet.toArray(new Long[]{}));
+        return wbsList;
+    }
+
+    @Override
+    public List<XmslWbs> copyChildList(String[] ids) {
+        if(ArrayUtils.isEmpty(ids))
+            return new ArrayList<>(2);
+        List<XmslWbs> list = WbsRedisUtils.getWbs(SetUtils.hashSet(ids));
+        if(CollectionUtils.isEmpty(list))
+            return new ArrayList<>(2);
+        Set<String> childIdSet = new HashSet<>();
+        for (int i = 0; i < ids.length; i++) {
+            Long[] tempIds = WbsRedisUtils.getChildWbsId(ids[i]+"");
+            childIdSet.addAll(Arrays.asList(ArrayUtils.toStringArray(tempIds)));
+        }
+        //获取所有子级数据
+        List<XmslWbs> wbsList = WbsRedisUtils.getWbs(childIdSet);
+        //替换id 为 uuid
+        Map<String,String> idWbsMap = new HashMap<>(wbsList.size());
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslWbs tempWbs = wbsList.get(i);
+            String newId = UUIDUtils.getShortUuid();
+            idWbsMap.put(tempWbs.getId(), newId);
+            tempWbs.setId(newId);
+        }
+        //处理父级Id
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslWbs tempWbs = wbsList.get(i);
+            if(StringUtils.isNotBlank(tempWbs.getParentId()))
+                continue;
+            tempWbs.setParentId(ObjectUtils.nvlString(idWbsMap.get(tempWbs.getParentId()),tempWbs.getParentId()));
+        }
         return wbsList;
     }
 
