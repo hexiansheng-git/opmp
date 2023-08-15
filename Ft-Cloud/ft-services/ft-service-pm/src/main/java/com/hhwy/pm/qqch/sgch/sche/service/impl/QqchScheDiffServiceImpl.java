@@ -7,9 +7,11 @@ import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheDiffMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheDiffService;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -86,6 +88,7 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchScheDiff> dealSaveDto) {
+        if (CollectionUtils.isEmpty(dealSaveDto)) throw new CustomBusinessException("进度差异化评定计算方法不能为空");
         this.checkData(dealSaveDto);
         for (QqchScheDiff qqchScheDiff : dealSaveDto) {
             qqchScheDiff.setId(IdWorker.createId());

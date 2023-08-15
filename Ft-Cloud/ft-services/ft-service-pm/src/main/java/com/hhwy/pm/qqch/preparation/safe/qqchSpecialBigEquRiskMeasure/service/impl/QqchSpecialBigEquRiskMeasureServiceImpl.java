@@ -92,7 +92,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
         List<QqchSpecialBigEquRiskMeasure> qqchSpecialBigEquRiskMeasureList = qqchSpecialBigEquRiskMeasureMapper.getQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasure);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setQqchSpecialBigEquRiskMeasureList(qqchSpecialBigEquRiskMeasureList);
+        vo.setList(qqchSpecialBigEquRiskMeasureList);
         return vo;
     }
 
@@ -106,7 +106,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
         ButtonMarkUtil.checkButtonMark(buttonMark);
 
         BigDecimal version = vo.getVersion();
-        List<QqchSpecialBigEquRiskMeasure> riskMeasureList = vo.getQqchSpecialBigEquRiskMeasureList();
+        List<QqchSpecialBigEquRiskMeasure> riskMeasureList = vo.getList();
         if(CollectionUtils.isEmpty(riskMeasureList)){
             return;
         }else {

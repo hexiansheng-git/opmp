@@ -157,6 +157,21 @@ public class XmslDrawReviewController extends BaseController{
         return AjaxResult.success();
     }
 
+    /**
+     * 审批监听器
+     * @param map
+     * @return
+     */
+    @PostMapping("/finishFlow")
+    public AjaxResult finishFlow(@RequestBody Map map){
+        Long businessId = ObjectUtils.nvlLong(((Map)((Map)map.get("execution")).get("variables")).get("businessId")) ;
+//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
+//        Map varMap = delegateTask.getVariables();
+//        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
+        xmslDrawReviewService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
+
 //    @GetMapping("/export")
 //    public void export(HttpServletResponse response, XmslDrawReview xmslDrawReviewParam) throws IOException {
 //        List<XmslDrawReview> xmslDrawReviewList = xmslDrawReviewService.getXmslDrawReviewList(xmslDrawReviewParam);

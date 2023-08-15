@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.common.domain;
 
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
@@ -23,7 +24,7 @@ import java.util.List;
 @Data
 @ToString
 public class CompileEntity<T> extends TreeNode<T> {
-    
+
     /**
      * 版本号
      */
@@ -104,6 +105,16 @@ public class CompileEntity<T> extends TreeNode<T> {
                 if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(o);
             }
             return (T) compileEntities;
+        }
+
+
+        // 如果当前保存的集合是空集合 就返回一个带有Version的数据 方便删除数据
+        if ((dto != null && dto instanceof List && (list = (List) dto).size() == 0)) {
+            CompileEntity entity = new CompileEntity<>();
+            entity.setVersion(this.version);
+            entity.setSubmitFlag(PmConstant.MINUS_ONE);
+            list.add(entity);
+            return (T) list;
         }
         return dto;
     }

@@ -84,7 +84,7 @@ public class QqchMeasureExpRangeController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpDTO expVO) {
         qqchMeasureExpRangeService.saveAll(expVO);
-        return AjaxResult.success("success");
+        return AjaxResult.success("操作成功");
     }
 
 

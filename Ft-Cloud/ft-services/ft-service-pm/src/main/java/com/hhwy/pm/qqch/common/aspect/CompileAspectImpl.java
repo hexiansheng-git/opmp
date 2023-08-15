@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.common.aspect;
 
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
@@ -16,8 +17,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -110,6 +112,21 @@ public class CompileAspectImpl {
                 Thread.currentThread().getId());
         //获取方法参数值数组
         Object[] args = joinPoint.getArgs();
+
+        // 空数据特殊处理
+        for (int i = 0; i < args.length; i++) {
+            Object arg = args[i];
+            if (arg instanceof List) {
+                List list = (List) arg;
+                if (list.get(0) instanceof CompileEntity) {
+                    List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
+                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntityList.get(0).getSubmitFlag())) {
+                        args[i] = Collections.emptyList();
+                    }
+                }
+            }
+        }
+        
         Object result = joinPoint.proceed(args);
         log.info("方法响应结果为{}", result);
         if (CompileOptEnum.TREE.equals(compileAspect.type())) {

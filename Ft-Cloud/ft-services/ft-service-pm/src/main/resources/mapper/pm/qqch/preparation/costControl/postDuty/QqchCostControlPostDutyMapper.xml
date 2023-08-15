@@ -2,13 +2,13 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.costControl.postDuty.mapper.QqchExtendApplyWorkGroupMapper">
+<mapper namespace="com.hhwy.pm.qqch.preparation.costControl.postDuty.mapper.QqchCostControlPostDutyMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.QqchExtendApplyWorkGroup"
-               id="QqchExtendApplyWorkGroupResultMap">
+    <resultMap type="com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.QqchCostControlPostDuty"
+               id="QqchWorkGroupResultMap">
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
-        <result property="extendApplyWorkGroup" column="extend_apply_work_group"/>
+        <result property="workGroup" column="work_group"/>
         <result property="post" column="post"/>
         <result property="name" column="name"/>
         <result property="specificChargeContent" column="specific_charge_content"/>
@@ -39,10 +39,10 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectQqchExtendApplyWorkGroupVo">
+    <sql id="selectQqchWorkGroupVo">
         select `id`
              , `pid`
-             , `extend_apply_work_group`
+             , `work_group`
              , `post`
              , `name`
              , `specific_charge_content`
@@ -72,16 +72,16 @@
              , `pt_var3`
              , `pt_var4`
              , `pt_var5`
-        from qqch_extend_apply_work_group
+        from qqch_cost_control_post_duty
     </sql>
-    <select id="getQqchExtendApplyWorkGroup" resultMap="QqchExtendApplyWorkGroupResultMap">
-        <include refid="selectQqchExtendApplyWorkGroupVo"/>
+    <select id="getQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
+        <include refid="selectQqchWorkGroupVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="extendApplyWorkGroup != null  and extendApplyWorkGroup != ''">and `extend_apply_work_group` =
-                #{extendApplyWorkGroup}
+            <if test="workGroup != null  and workGroup != ''">and `work_group` =
+                #{workGroup}
             </if>
             <if test="post != null  and post != ''">and `post` = #{post}</if>
             <if test="name != null  and name != ''">and `name` = #{name}</if>
@@ -119,14 +119,14 @@
         limit 1
     </select>
 
-    <select id="getQqchExtendApplyWorkGroupList" resultMap="QqchExtendApplyWorkGroupResultMap">
-        <include refid="selectQqchExtendApplyWorkGroupVo"/>
+    <select id="getQqchWorkGroupList" resultMap="QqchWorkGroupResultMap">
+        <include refid="selectQqchWorkGroupVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="extendApplyWorkGroup != null  and extendApplyWorkGroup != ''">and `extend_apply_work_group` =
-                #{extendApplyWorkGroup}
+            <if test="workGroup != null  and workGroup != ''">and `work_group` =
+                #{workGroup}
             </if>
             <if test="post != null  and post != ''">and `post` = #{post}</if>
             <if test="name != null  and name != ''">and `name` = #{name}</if>
@@ -163,12 +163,12 @@
         order by sort
     </select>
 
-    <insert id="insertQqchExtendApplyWorkGroup" useGeneratedKeys="true" keyProperty="id">
-        insert into qqch_extend_apply_work_group
+    <insert id="insertQqchWorkGroup" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_cost_control_post_duty
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="pid != null ">`pid`,</if>
-            <if test="extendApplyWorkGroup != null  and extendApplyWorkGroup != ''">`extend_apply_work_group`,</if>
+            <if test="workGroup != null  and workGroup != ''">`work_group`,</if>
             <if test="post != null  and post != ''">`post`,</if>
             <if test="name != null  and name != ''">`name`,</if>
             <if test="specificChargeContent != null  and specificChargeContent != ''">`specific_charge_content`,</if>
@@ -202,7 +202,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="pid != null ">#{pid},</if>
-            <if test="extendApplyWorkGroup != null  and extendApplyWorkGroup != ''">#{extendApplyWorkGroup},</if>
+            <if test="workGroup != null  and workGroup != ''">#{workGroup},</if>
             <if test="post != null  and post != ''">#{post},</if>
             <if test="name != null  and name != ''">#{name},</if>
             <if test="specificChargeContent != null  and specificChargeContent != ''">#{specificChargeContent},</if>
@@ -235,13 +235,13 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchExtendApplyWorkGroup -->
-    <insert id="insertQqchExtendApplyWorkGroupList">
-        insert into qqch_extend_apply_work_group
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchWorkGroup -->
+    <insert id="insertQqchWorkGroupList">
+        insert into qqch_cost_control_post_duty
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `pid`,
-            `extend_apply_work_group`,
+            `work_group`,
             `post`,
             `name`,
             `specific_charge_content`,
@@ -272,11 +272,11 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="qqchExtendApplyWorkGroupList" item="item" separator=",">
+        <foreach collection="qqchCostControlPostDutyList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.pid},
-                #{item.extendApplyWorkGroup},
+                #{item.workGroup},
                 #{item.post},
                 #{item.name},
                 #{item.specificChargeContent},
@@ -309,12 +309,12 @@
         </foreach>
     </insert>
 
-    <update id="updateQqchExtendApplyWorkGroup">
-        update qqch_extend_apply_work_group
+    <update id="updateQqchWorkGroup">
+        update qqch_cost_control_post_duty
         <trim prefix="SET" suffixOverrides=",">
             <if test="pid != null ">`pid` = #{pid},</if>
-            <if test="extendApplyWorkGroup != null  and  extendApplyWorkGroup != ''">`extend_apply_work_group` =
-                #{extendApplyWorkGroup},
+            <if test="workGroup != null  and  workGroup != ''">`work_group` =
+                #{workGroup},
             </if>
             <if test="post != null  and  post != ''">`post` = #{post},</if>
             <if test="name != null  and  name != ''">`name` = #{name},</if>
@@ -347,17 +347,17 @@
         </where>
     </update>
 
-    <update id="updateQqchExtendApplyWorkGroupList">
-        update qqch_extend_apply_work_group
+    <update id="updateQqchWorkGroupList">
+        update qqch_cost_control_post_duty
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="pid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.pid}
                 </foreach>
             </trim>
-            <trim prefix="extend_apply_work_group  = case" suffix="end,">
+            <trim prefix="work_group  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.extendApplyWorkGroup}
+                    when `id`=#{item.id} then #{item.workGroup}
                 </foreach>
             </trim>
             <trim prefix="post  = case" suffix="end,">
@@ -482,13 +482,13 @@
         </foreach>
     </update>
 
-    <update id="deleteQqchExtendApplyWorkGroup">
-        update `qqch_extend_apply_work_group` set del_flag = 1
+    <update id="deleteQqchWorkGroup">
+        update `qqch_cost_control_post_duty` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="extendApplyWorkGroup != null  and extendApplyWorkGroup != ''">and `extend_apply_work_group` =
-                #{extendApplyWorkGroup}
+            <if test="workGroup != null  and workGroup != ''">and `work_group` =
+                #{workGroup}
             </if>
             <if test="post != null  and post != ''">and `post` = #{post}</if>
             <if test="name != null  and name != ''">and `name` = #{name}</if>
@@ -522,11 +522,11 @@
         </where>
     </update>
 
-    <update id="deleteQqchExtendApplyWorkGroupByPks">
-        update `qqch_extend_apply_work_group` set del_flag = 1
+    <update id="deleteQqchWorkGroupByPks">
+        update `qqch_cost_control_post_duty` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchExtendApplyWorkGroupPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="qqchWorkGroupPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

@@ -35,4 +35,6 @@ public interface XmslContractListMapper {
     int deleteXmslContractListByPks(@Param("xmslContractListPkList") List<Long> xmslContractListPkList);
 
     void deleteByIds(@Param("list") Collection<Long> list);
+
+    void updateXmslContractListList1(List<XmslContractList> list);
 }

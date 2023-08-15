@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheFactors;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
 import com.hhwy.pm.qqch.sgch.sche.service.*;
+import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -84,6 +85,8 @@ public class QqchScheServiceImpl implements IQqchScheService {
             }
 
             factorsService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), iFactorList));
+        } else {
+            throw new CustomBusinessException("进度影响因素不能为空");
         }
         // 保存纠偏措施
         corrService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getCorrList()));

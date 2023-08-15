@@ -1,116 +1,95 @@
-package com.hhwy.pm.qqch.preparation.costControl.postDuty.domain;
+package com.hhwy.pm.qqch.preparation.quality.emp.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import lombok.AllArgsConstructor;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
- * @author han
- * @date 2023-08-08 17:48:45
- * @remark qqch_extend_apply_work_group
+ * @author mls
+ * @date 2023-08-15 10:03:46
+ * @remark qqch_emp_item
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class QqchExtendApplyWorkGroup extends BaseEntity {
+@ToString
+public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
+    @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：父id
+     * 字段描述：xmsl_wbs的id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "xmsl_wbs的id")
+    private Long wbsId;
     /**
-     * 字段描述：推广应用工作小组
+     * 字段描述：xmsl_wbs的编码
      */
     @JsonProperty
-    @Excel(name = "推广应用工作小组")
-    private String extendApplyWorkGroup;
+    @Excel(name = "xmsl_wbs的编码")
+    private String wbsCode;
     /**
-     * 字段描述：岗位
+     * 字段描述：检查表编号
      */
     @JsonProperty
-    @Excel(name = "岗位")
-    private String post;
+    @Excel(name = "检查表编号")
+    private String checkCode;
     /**
-     * 字段描述：姓名
+     * 字段描述：检查表名称
      */
     @JsonProperty
-    @Excel(name = "姓名")
-    private String name;
+    @Excel(name = "检查表名称")
+    private String checkName;
     /**
-     * 字段描述：具体负责内容
+     * 字段描述：检查项目
      */
     @JsonProperty
-    @Excel(name = "具体负责内容")
-    private String specificChargeContent;
+    @Excel(name = "检查项目")
+    private String checkItem;
     /**
-     * 字段描述：联系电话
+     * 字段描述：规定值或允许偏差
      */
     @JsonProperty
-    @Excel(name = "联系电话")
-    private String contactNumber;
+    @Excel(name = "规定值或允许偏差")
+    private String stipulate;
     /**
-     * 字段描述：备注/描述
+     * 字段描述：检查方法及频率
      */
     @JsonProperty
-    @Excel(name = "备注/描述")
+    @Excel(name = "检查方法及频率")
+    private String checkMethod;
+    /**
+     * 字段描述：附件
+     */
+    @JsonProperty
+    @Excel(name = "附件")
+    private String fileGroupId;
+    /**
+     * 字段描述：是否入库
+     */
+    @JsonProperty
+    @Excel(name = "是否入库")
+    private String storeFlag;
+    /**
+     * 字段描述：备注
+     */
+    @JsonProperty
+    @Excel(name = "备注")
     private String remark;
-    /**
-     * 字段描述：数据来源（1：选择，2：手动新增）
-     */
-    @JsonProperty
-    @Excel(name = "数据来源（1：选择，2：手动新增）")
-    private String source;
-    /**
-     * 字段描述：层级
-     */
-    @JsonProperty
-    @Excel(name = "层级")
-    private Integer level;
-    /**
-     * 字段描述：叶子节点（1：是，0：否）
-     */
-    @JsonProperty
-    @Excel(name = "叶子节点（1：是，0：否）")
-    private String leaf;
-    /**
-     * 字段描述：排序
-     */
-    @JsonProperty
-    @Excel(name = "排序")
-    private Integer sort;
-    /**
-     * 字段描述：版本
-     */
-    @JsonProperty
-    @Excel(name = "版本")
-    private BigDecimal version;
-    /**
-     * 字段描述：是否有效 1-有效 0-失效
-     */
-    @JsonProperty
-    @Excel(name = "是否有效 1-有效 0-失效")
-    private String valid;
     /**
      * 字段描述：所属区域id
      */
@@ -137,6 +116,13 @@ public class QqchExtendApplyWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
+    /**
+     * 字段描述：用户id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "用户id")
+    private Long userId;
     /**
      * 字段描述：部门id
      */
@@ -196,11 +182,11 @@ public class QqchExtendApplyWorkGroup extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：预留字段1，生效状态，0：未生效,1：已生效
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
-    private String ptVar1;
+    @Excel(name = "版本号")
+    private BigDecimal version;
     /**
      * 字段描述：预留字段2
      */
@@ -225,6 +211,16 @@ public class QqchExtendApplyWorkGroup extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    /**
+     * 字段描述：序号
+     */
+    @JsonProperty
+    @Excel(name = "序号")
+    private Integer sort;
 
-    private List<QqchExtendApplyWorkGroup> children;
+
+    public static void main(String[] args) {
+        long l = System.currentTimeMillis();
+        System.out.println(l);
+    }
 }

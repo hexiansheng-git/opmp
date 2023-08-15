@@ -27,7 +27,9 @@ public interface XmslDrawReviewListMapper {
 
     int updateXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 
-    int updateXmslDrawReviewListList(@Param("xmslDrawReviewListList") List<XmslDrawReviewList> xmslDrawReviewListList);
+    int updateXmslDrawReviewListList(@Param("list") List<XmslDrawReviewList> xmslDrawReviewListList);
+    
+    int updateParentId(@Param("list") List<XmslDrawReviewList> xmslDrawReviewListList);
 
     int deleteXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 
