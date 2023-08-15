@@ -109,14 +109,14 @@ public class QqchMeasureExpEquServiceImpl implements IQqchMeasureExpEquService {
                 }
                 qqchMeasureExpEquMapper.insertQqchMeasureExpEquList(voParam.getExperimentList());
             }
+        }
 
-            String buttonMark = voParam.getButtonMark();
-            if (ButtonMark.CONFIRM.equals(buttonMark)) {
-                // 插入确认状态
-                String menuId = voParam.getMenuId();
-                String stageIdentity = voParam.getStageIdentity();
-                qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
-            }
+        String buttonMark = voParam.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = voParam.getMenuId();
+            String stageIdentity = voParam.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
 }
