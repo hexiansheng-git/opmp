@@ -1,12 +1,16 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service.impl;
 
-import java.util.List;
+import java.util.*;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.dict.DictUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpPersonMapper;
@@ -89,7 +93,34 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
     public List<QqchMeasureExpPerson> getQqchMeasureExpPersonListByVersionCode(QqchMeasureExpPerson qqchMeasureExpPerson) {
-        return this.getQqchMeasureExpPersonList(qqchMeasureExpPerson);
+        String dataType = qqchMeasureExpPerson.getDataType();
+        List<QqchMeasureExpPerson> qqchMeasureExpPersonList = this.getQqchMeasureExpPersonList(qqchMeasureExpPerson);
+        if (CollectionUtils.isEmpty(qqchMeasureExpPersonList)) {
+            String dictType = PmConstant.ONE.equals(dataType) ? "teamCode" : "exp_teamCode";
+
+            LinkedHashMap<String, String> eamCode = DictUtil.getDictDataName(dictType);
+            ArrayList<QqchMeasureExpPerson> objects = new ArrayList<>();
+            Set<String> teamNameSet = eamCode.keySet();
+            Map<String, QqchLabourDemandPlan> teamMap = this.getTeamInfo(teamNameSet);
+            eamCode.forEach((teamCode, teamName) -> {
+                QqchMeasureExpPerson person = new QqchMeasureExpPerson();
+                person.setDataType(qqchMeasureExpPerson.getDataType());
+                person.setPositionCode(teamCode);
+                person.setPositionName(teamName);
+
+                QqchLabourDemandPlan qqchLabourDemandPlan = teamMap.get(teamCode) == null ? new QqchLabourDemandPlan() : teamMap.get(teamCode);
+                person.setCnNum(qqchLabourDemandPlan.getChinaNum());
+                person.setLocalNum(qqchLabourDemandPlan.getOutNum());
+                person.setPlanInDate(qqchLabourDemandPlan.getEntryDate());
+                objects.add(person);
+            });
+            return objects;
+        }
+        return qqchMeasureExpPersonList;
+    }
+
+    private Map<String, QqchLabourDemandPlan> getTeamInfo(Set<String> teamNameSet) {
+        return new HashMap<>();
     }
 
     @Override
