@@ -27,7 +27,9 @@ public interface XmslDrawReviewWbsMapper {
 
     int updateXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 
-    int updateXmslDrawReviewWbsList(@Param("xmslDrawReviewWbsList") List<XmslDrawReviewWbs> xmslDrawReviewWbsList);
+    int updateXmslDrawReviewWbsList(@Param("list") List<XmslDrawReviewWbs> xmslDrawReviewWbsList);
+
+    int updateParentId(List<XmslDrawReviewWbs> list);
 
     int deleteXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 

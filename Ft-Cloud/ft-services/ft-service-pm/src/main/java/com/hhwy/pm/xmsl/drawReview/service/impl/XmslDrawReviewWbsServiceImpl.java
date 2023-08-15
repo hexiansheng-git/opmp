@@ -111,6 +111,14 @@ public class XmslDrawReviewWbsServiceImpl implements IXmslDrawReviewWbsService {
         return xmslDrawReviewWbsMapper.insertXmslDrawReviewWbsList(xmslDrawReviewWbsList);
     }
 
+    @Override
+    @Transactional
+    public int updateParentId(List<XmslDrawReviewWbs> xmslDrawReviewWbsList) {
+        if(CollectionUtils.isEmpty(xmslDrawReviewWbsList))
+            return 0;
+        return xmslDrawReviewWbsMapper.updateParentId(xmslDrawReviewWbsList);
+    }
+
     @Transactional
     public int updateXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs) {
         xmslDrawReviewWbs.setUpdateUser(SecurityUtils.getUserName());
@@ -120,10 +128,8 @@ public class XmslDrawReviewWbsServiceImpl implements IXmslDrawReviewWbsService {
 
     @Transactional
     public int updateXmslDrawReviewWbsList(List<XmslDrawReviewWbs> xmslDrawReviewWbsList) {
-        for (XmslDrawReviewWbs xmslDrawReviewWbs : xmslDrawReviewWbsList) {
-            xmslDrawReviewWbs.setUpdateUser(SecurityUtils.getUserName());
-            xmslDrawReviewWbs.setUpdateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewWbsList))
+            return 0;
         return xmslDrawReviewWbsMapper.updateXmslDrawReviewWbsList(xmslDrawReviewWbsList);
     }
 

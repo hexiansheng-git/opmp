@@ -61,12 +61,26 @@ public class QqchDangerListServiceImpl implements IQqchDangerListService {
      * @return
      */
     @Transactional
-    public void updateQqchDangerListList(QqchDangerListVo voParam) {
-        for (QqchDangerList qqchDangerList : voParam.getList()) {
-            qqchDangerList.setUpdateUser(SecurityUtils.getUserName());
-            qqchDangerList.setUpdateTime(DateUtils.getNowDate());
+    public void batchSave(QqchDangerListVo voParam) {
+
+        // 清空数据库表中数据
+        QqchDangerList deleteParam = new QqchDangerList();
+        deleteParam.setVersion(voParam.getVersion());
+        qqchDangerListMapper.deleteQqchDangerList(deleteParam);
+
+        if (!CollectionUtils.isEmpty(voParam.getList())) {
+            for (QqchDangerList qqchDangerList : voParam.getList()) {
+                qqchDangerList.setId(IdWorker.createId());
+                qqchDangerList.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchDangerList.setValid(Valid.YES);
+                }
+                qqchDangerList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchDangerList.setCreateUserName(SecurityUtils.getUserName());
+                qqchDangerList.setCreateTime(DateUtils.getNowDate());
+            }
+            qqchDangerListMapper.insertQqchDangerListList(voParam.getList());
         }
-        qqchDangerListMapper.updateQqchDangerListList(voParam.getList());
 
         String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {

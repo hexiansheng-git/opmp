@@ -51,7 +51,7 @@ public class QqchDangerListController extends BaseController {
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerListVo qqchDangerListVo) {
-        qqchDangerListService.updateQqchDangerListList(qqchDangerListVo);
+        qqchDangerListService.batchSave(qqchDangerListVo);
         return AjaxResult.success();
     }
 }

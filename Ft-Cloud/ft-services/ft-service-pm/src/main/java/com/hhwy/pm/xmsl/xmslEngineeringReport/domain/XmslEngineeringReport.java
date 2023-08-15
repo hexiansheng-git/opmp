@@ -7,8 +7,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -34,6 +36,7 @@ public class XmslEngineeringReport extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "报表类型,1:wbs,2:清单")
+    @NotNull(message = "报表类型不能为空",groups = {ValidationGroups.Select.class})
     private Integer reportType;
     /**
      * 字段描述：主表id,xmsl_wbs_main.id

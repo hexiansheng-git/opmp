@@ -106,11 +106,16 @@ public class XmslDrawReviewListServiceImpl implements IXmslDrawReviewListService
 
     @Transactional
     public int updateXmslDrawReviewListList(List<XmslDrawReviewList> xmslDrawReviewListList) {
-        for (XmslDrawReviewList xmslDrawReviewList : xmslDrawReviewListList) {
-            xmslDrawReviewList.setUpdateUser(SecurityUtils.getUserName());
-            xmslDrawReviewList.setUpdateTime(DateUtils.getNowDate());
-        }
+        if(CollectionUtils.isEmpty(xmslDrawReviewListList))
+            return 0;
         return xmslDrawReviewListMapper.updateXmslDrawReviewListList(xmslDrawReviewListList);
+    }
+
+    @Transactional
+    public int updateParentId(List<XmslDrawReviewList> xmslDrawReviewListList) {
+        if(CollectionUtils.isEmpty(xmslDrawReviewListList))
+            return 0;
+        return xmslDrawReviewListMapper.updateParentId(xmslDrawReviewListList);
     }
 
     @Transactional

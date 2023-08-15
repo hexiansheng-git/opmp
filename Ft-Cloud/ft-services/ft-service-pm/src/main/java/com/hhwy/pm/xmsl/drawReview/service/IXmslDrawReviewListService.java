@@ -32,6 +32,7 @@ public interface IXmslDrawReviewListService {
     int updateXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 
     int updateXmslDrawReviewListList(List<XmslDrawReviewList> xmslDrawReviewListList);
+    int updateParentId(List<XmslDrawReviewList> xmslDrawReviewListList);
 
     int deleteXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 
