@@ -68,6 +68,13 @@ public interface IXmslWbsService {
     List<XmslWbs> childListByIds(Long[] ids,boolean containSelf);
 
     /**
+     * 获取wbs的所有子级，替换掉其id,父id
+     * @param ids
+     * @return
+     */
+    List<XmslWbs> copyChildList(String[] ids);
+
+    /**
      * 获取wbs简要信息
      * @return
      */

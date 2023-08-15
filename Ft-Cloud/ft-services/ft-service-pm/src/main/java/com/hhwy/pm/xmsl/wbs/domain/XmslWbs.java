@@ -286,6 +286,7 @@ public class XmslWbs extends BaseEntity {
     //序号
     private Integer sort;
 
+    //不存在于数据库
     @JsonProperty
     private String listIds;   //清单ID
     private String wbsId;
