@@ -36,6 +36,14 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     private Long pid;
 
     private Long outId;
+
+    /**
+     * 字段描述：工种编号
+     */
+    @JsonProperty
+    @Excel(name = "工种编号")
+    private String occupationCode;
+
     /**
      * 字段描述：工种名称
      */

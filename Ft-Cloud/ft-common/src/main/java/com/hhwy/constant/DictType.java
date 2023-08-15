@@ -15,4 +15,6 @@ public class DictType {
     public static final String DAILY_CONTROL_PLAN_INITIALIZE = "daily_control_plan_initialize";
     /*移交文件初始化数据*/
     public static final String HANDOVER_FILE_INIT_DATA = "handover_file_init_data";
+    /*管理模式初始化数据*/
+    public static final String MANAGE_MODE_INIT_DATA = "manage_mode_init_data";
 }

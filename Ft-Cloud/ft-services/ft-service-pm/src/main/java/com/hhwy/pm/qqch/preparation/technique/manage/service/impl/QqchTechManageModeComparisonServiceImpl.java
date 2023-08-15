@@ -1,7 +1,10 @@
 package com.hhwy.pm.qqch.preparation.technique.manage.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.DictType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -13,7 +16,9 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +38,8 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
     public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
@@ -43,6 +50,13 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         qryParam.setVersion(version);
         List<QqchTechManageModeComparison> list = qqchTechManageModeComparisonMapper
             .getQqchTechManageModeComparisonList(qryParam);
+
+        // 若表中无数据，则获取初始化数据
+        if (CollectionUtils.isEmpty(list)) {
+            list = this.getInitializeData();
+            vo.setList(list);
+        }
+
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
         return vo;
@@ -56,24 +70,21 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         deleteParam.setDelFlag("1");
         qqchTechManageModeComparisonMapper.updateQqchTechManageModeComparison(deleteParam);
 
-        if (CollectionUtils.isEmpty(voParam.getList())) {
-            return;
-        }
-
         int sort = 1;
-        for (QqchTechManageModeComparison qqchTechManageModeComparison : voParam.getList()) {
-            qqchTechManageModeComparison.setId(IdWorker.createId());
-            qqchTechManageModeComparison.setVersion(voParam.getVersion());
-            if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                qqchTechManageModeComparison.setValid(Valid.YES);
+        if (!CollectionUtils.isEmpty(voParam.getList())) {
+            for (QqchTechManageModeComparison qqchTechManageModeComparison : voParam.getList()) {
+                qqchTechManageModeComparison.setId(IdWorker.createId());
+                qqchTechManageModeComparison.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchTechManageModeComparison.setValid(Valid.YES);
+                }
+                qqchTechManageModeComparison.setSort(sort++);
+                qqchTechManageModeComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchTechManageModeComparison.setCreateUserName(SecurityUtils.getUserName());
+                qqchTechManageModeComparison.setCreateTime(DateUtils.getNowDate());
             }
-            qqchTechManageModeComparison.setSort(sort++);
-            qqchTechManageModeComparison.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            qqchTechManageModeComparison.setCreateUserName(SecurityUtils.getUserName());
-            qqchTechManageModeComparison.setCreateTime(DateUtils.getNowDate());
+            qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(voParam.getList());
         }
-
-        qqchTechManageModeComparisonMapper.insertQqchTechManageModeComparisonList(voParam.getList());
 
         String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
@@ -82,5 +93,27 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    /**
+     * 获取初始化数据
+     *
+     * @return
+     */
+    public List<QqchTechManageModeComparison> getInitializeData() {
+        List<QqchTechManageModeComparison> fileList = new ArrayList<>();
+
+        // 初始化数据
+        AjaxResult result = systemServiceApi.dictType(DictType.MANAGE_MODE_INIT_DATA);
+        List<Map<String, Object>> dictDataList = (List<Map<String, Object>>) result.get("data");
+
+        for (Map<String, Object> map : dictDataList) {
+            String dictLabel = (String) map.get("dictLabel");
+            QqchTechManageModeComparison qqchTechManageModeComparison = new QqchTechManageModeComparison();
+            qqchTechManageModeComparison.setManageMode(dictLabel);
+            fileList.add(qqchTechManageModeComparison);
+        }
+
+        return fileList;
     }
 }

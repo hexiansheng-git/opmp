@@ -598,4 +598,8 @@ public class ObjectUtils {
             map.put(key, sval+","+val);
         }
     }
+    
+//    public static void join(String limit,String... strs){
+////        StringUtils.join()    
+//    }
 }

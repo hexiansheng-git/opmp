@@ -16,6 +16,8 @@ public interface XmslEngineeringReportMapper {
 
     List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport xmslEngineeringReport);
 
+    List<XmslEngineeringReport> getId(XmslEngineeringReport xmslEngineeringReport);
+
     int insertXmslEngineeringReport(XmslEngineeringReport xmslEngineeringReport);
 
     int insertXmslEngineeringReportList(@Param("xmslEngineeringReportList") List<XmslEngineeringReport> xmslEngineeringReportList);

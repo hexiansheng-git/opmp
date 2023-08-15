@@ -15,10 +15,9 @@ import com.hhwy.pm.xmsl.drawReview.service.*;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
-import com.hhwy.utils.AddBaseInfoUtil;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.ObjectUtils;
-import com.hhwy.utils.PageFuncUtils;
+import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
+import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
+import com.hhwy.utils.*;
 import com.sun.org.apache.xml.internal.security.Init;
 import io.lettuce.core.Limit;
 import net.sf.jsqlparser.expression.LongValue;
@@ -59,6 +58,10 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     private IXmslDrawReviewSourceMaterialService sourceMaterialService;
     @Autowired
     private IXmslDrawReviewRelationService relationService;
+    @Autowired
+    private IXmslEngineeringReportService engineeringReportService;
+    @Autowired
+    private IXmslMaterialReportService materialReportService;
                                                                                                                                                                                                         
     public XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview) {
         return xmslDrawReviewMapper.getXmslDrawReview(xmslDrawReview);
@@ -507,6 +510,13 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         this.xmslDrawReviewMapper.updateXmslDrawReview(drawReview);
         //2、存储wbs以及清单的父级
         loadParentWbsList(id);
+        //3、生成工程量报表 & 主材报表
+        ThreadPoolUtil.execute(()->{
+            engineeringReportService.sync();
+        });
+        ThreadPoolUtil.execute(()->{
+            materialReportService.sync(id);
+        });
     }
     
     //加载图纸复核、

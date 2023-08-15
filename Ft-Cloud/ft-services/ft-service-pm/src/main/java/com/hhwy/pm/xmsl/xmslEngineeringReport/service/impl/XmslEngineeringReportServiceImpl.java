@@ -1,6 +1,8 @@
 package com.hhwy.pm.xmsl.xmslEngineeringReport.service.impl;
 
+import cn.hutool.core.collection.ConcurrentHashSet;
 import com.github.pagehelper.PageHelper;
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
@@ -20,12 +22,14 @@ import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import io.lettuce.core.protocol.RedisProtocolException;
+import io.netty.handler.codec.http.QueryStringDecoder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 工程量报表
@@ -139,33 +143,35 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         boolean hasCondition = StringUtils.isNotBlank(report.getWbsCode()) || StringUtils.isNotBlank(report.getWbsName())
                 || StringUtils.isNotBlank(report.getListCode()) || StringUtils.isNotBlank(report.getListName()) ;
         if(hasCondition && ( (StringUtils.trim(report.getWbsCode())+StringUtils.trim(report.getWbsName())).length() < 3
-                            || (StringUtils.trim(report.getListCode())+StringUtils.trim(report.getListName())).length() < 3) )
+                            && (StringUtils.trim(report.getListCode())+StringUtils.trim(report.getListName())).length() < 3) )
             throw new RuntimeException("搜索参数过小");
         if(!hasCondition){
             return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
         }
         //如果是懒加载,找出满足条件的id，扔redis
-        String key = "engineeringReport::lazySearch_"+SecurityUtils.getTenantKey();
+        String key = "engineeringReport::lazySearch_"+SecurityUtils.getTenantKey()+StringUtils.join(new String[]{
+                report.getWbsCode(),report.getWbsName(),report.getListCode(),report.getListName()  
+        }, ",");
         //获取ids
-//        Set<String> idSet = null;
-//        if(!redisUtils.hasKey(key) ){
-//            List<XmslWbs> list = xmslWbsMapper.latestWbsId(wbs);
-//            final Set<String> resuIdSet = new ConcurrentHashSet<>();
-//            list.parallelStream().forEach(r->{
-//                resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
-//            });
-//            if(resuIdSet.size() < 1)
-//                resuIdSet.add("-1");
-//            redisUtils.sAdd(key,resuIdSet.toArray(new String[]{}));
-//            redisUtils.expire(key,10, TimeUnit.MINUTES);
-//            idSet = resuIdSet;
-//        }else{
-//            idSet = redisUtils.sMembers(key);
-//        }
-//        wbs.setParams(wbs.getParams()==null?new HashMap<>():wbs.getParams());
-//        wbs.getParams().put("ids",idSet);
-//        List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
-        return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
+        Set<String> idSet = null;
+        if(!redisUtils.hasKey(key) ){
+            List<XmslEngineeringReport> list = xmslEngineeringReportMapper.getId(report);
+            final Set<String> resuIdSet = new ConcurrentHashSet<>();
+            list.parallelStream().forEach(r->{
+                resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
+            });
+            if(resuIdSet.size() < 1)
+                resuIdSet.add("-1");
+            redisUtils.sAdd(key,resuIdSet.toArray(new String[]{}));
+            redisUtils.expire(key,10, TimeUnit.MINUTES);
+            idSet = resuIdSet;
+        }else{
+            idSet = redisUtils.sMembers(key);
+        }
+        XmslEngineeringReport query = new XmslEngineeringReport();
+        query.setParentId(report.getParentId());
+        query.setParams(ObjectUtils.toMap("ids", idSet));
+        return xmslEngineeringReportMapper.getXmslEngineeringReportList(query);
     }
 
     @Transactional
