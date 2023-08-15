@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.organization.service.impl;
 
+import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -68,8 +69,12 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
         QqchSurveyOrganization qqchSurveyManageModel = new QqchSurveyOrganization();
         qqchSurveyManageModel.setVersion(qqchSurveyOrganizationVo.getVersion());
         qqchSurveyOrganizationMapper.deleteQqchSurveyOrganization(qqchSurveyManageModel);
+        List<QqchSurveyOrganization> list = qqchSurveyOrganizationVo.getQqchSurveyOrganizationList();
         //插入新数据
-        return  this.insertQqchSurveyOrganizationList(qqchSurveyOrganizationVo.getQqchSurveyOrganizationList(), qqchSurveyOrganizationVo.getVersion());
+        if (CollectionUtils.isEmpty(list)){
+            return 0;
+        }
+        return  this.insertQqchSurveyOrganizationList( list, qqchSurveyOrganizationVo.getVersion());
     }
 
     /**

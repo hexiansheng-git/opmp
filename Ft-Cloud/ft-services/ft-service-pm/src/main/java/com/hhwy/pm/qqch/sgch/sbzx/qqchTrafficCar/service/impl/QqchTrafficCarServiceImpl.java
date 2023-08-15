@@ -87,14 +87,16 @@ public class QqchTrafficCarServiceImpl implements IQqchTrafficCarService{
 
     @Transactional
     public void insertQqchTrafficCarList(List<QqchTrafficCar> qqchTrafficCarList,BigDecimal version) {
+
+        if (CollectionUtils.isEmpty(qqchTrafficCarList)) {
+            return;
+        }
+
         //删除旧数据
         QqchTrafficCar qqchTrafficCar = new QqchTrafficCar();
         qqchTrafficCar.setVersion(version);
         qqchTrafficCarMapper.deleteQqchTrafficCar(qqchTrafficCar);
 
-        if (CollectionUtils.isEmpty(qqchTrafficCarList)) {
-            return;
-        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
