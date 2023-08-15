@@ -7,10 +7,12 @@ import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheCorrMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheCorrService;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -87,6 +89,7 @@ public class QqchScheCorrServiceImpl implements IQqchScheCorrService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     @Override
     public void saveList(List<QqchScheCorr> dealSaveDto) {
+        if (CollectionUtils.isEmpty(dealSaveDto)) throw new CustomBusinessException("纠偏措施不能为空");
         this.checkData(dealSaveDto);
         this.qqchScheCorrMapper.insertQqchScheCorrList(dealSaveDto);
 
