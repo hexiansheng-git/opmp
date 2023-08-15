@@ -8,6 +8,8 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ public class QqchEmpItemController extends BaseController {
     @Autowired
     private IQqchEmpItemService qqchEmpItemService;
 
+    
 
     
 
@@ -48,6 +51,24 @@ public class QqchEmpItemController extends BaseController {
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<List<QqchEmpItem>>> dto) {
         qqchEmpItemService.save(dto);
         return AjaxResult.success(dto);
+    }
+
+
+
+    @PreAuthorize(hasPermi = "qqchEmpItem:wbsList")
+    @PostMapping("/wbsList")
+    public AjaxResult wbsList(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity dto) {
+        List<XmslWbs> xmslWbs = qqchEmpItemService.wbsList(dto);
+        return AjaxResult.success(xmslWbs);
+    }
+
+
+
+    @PreAuthorize(hasPermi = "qqchEmpItem:wbsList")
+    @PostMapping("/itemList")
+    public AjaxResult itemList(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchEmpItem> dto) {
+        CompileEntity<List<XmslWbs>> xmslWbs = qqchEmpItemService.itemList(dto.dealListDto());
+        return AjaxResult.success(xmslWbs);
     }
 
     @PreAuthorize(hasPermi = "qqchEmpItem:add")

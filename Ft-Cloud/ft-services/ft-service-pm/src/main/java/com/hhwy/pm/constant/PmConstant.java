@@ -7,6 +7,7 @@ package com.hhwy.pm.constant;
  */
 public interface PmConstant {
     String END_STAGE = "end";
+    String ZERO = "0";
     String ONE = "1";
     String TWO = "2";
     String THREE = "end";

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.quality.emp.service;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 
 import java.util.List;
 
@@ -29,5 +30,8 @@ public interface IQqchEmpItemService {
     int deleteQqchEmpItemByPks(List<Long> qqchEmpItemPkList);
 
     void save(CompileEntity<List<List<QqchEmpItem>>> dto);
-    
+
+    List<XmslWbs> wbsList(CompileEntity dto);
+
+    CompileEntity<List<XmslWbs>> itemList(QqchEmpItem dto);
 }
