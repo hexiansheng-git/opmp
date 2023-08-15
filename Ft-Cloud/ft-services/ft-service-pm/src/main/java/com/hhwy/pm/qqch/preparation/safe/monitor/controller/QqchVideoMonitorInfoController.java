@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.monitor.domain.vo.QqchVideoMonitorInfoVo;
 import com.hhwy.pm.qqch.preparation.safe.monitor.service.IQqchVideoMonitorInfoService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchVideoMonitorInfoController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchVideoMonitorInfo:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchVideoMonitorInfoVo qqchVideoMonitorInfoVo) {
+    public AjaxResult batchSave(@RequestBody QqchVideoMonitorInfoVo qqchVideoMonitorInfoVo) {
         qqchVideoMonitorInfoService.batchSave(qqchVideoMonitorInfoVo);
         return AjaxResult.success();
     }

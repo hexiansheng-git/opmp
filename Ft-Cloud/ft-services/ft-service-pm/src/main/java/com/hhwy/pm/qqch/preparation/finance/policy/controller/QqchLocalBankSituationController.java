@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.vo.QqchLocalBankSituationVo;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalBankSituationService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchLocalBankSituationController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchLocalBankSituation:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchLocalBankSituationVo qqchLocalBankSituationVo) {
+    public AjaxResult batchSave(@RequestBody QqchLocalBankSituationVo qqchLocalBankSituationVo) {
         qqchLocalBankSituationService.batchSave(qqchLocalBankSituationVo);
         return AjaxResult.success();
     }

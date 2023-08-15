@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.duty.domain.vo.QqchQualityPostDutyVo;
 import com.hhwy.pm.qqch.preparation.quality.duty.service.IQqchQualityPostDutyService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchQualityPostDutyController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchQualityPostDuty:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchQualityPostDutyVo qqchQualityPostDutyVo) {
+    public AjaxResult batchSave(@RequestBody QqchQualityPostDutyVo qqchQualityPostDutyVo) {
         qqchQualityPostDutyService.batchSave(qqchQualityPostDutyVo);
         return AjaxResult.success();
     }

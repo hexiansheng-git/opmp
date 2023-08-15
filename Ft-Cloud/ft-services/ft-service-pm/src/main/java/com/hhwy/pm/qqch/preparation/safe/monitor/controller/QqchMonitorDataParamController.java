@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.monitor.domain.vo.QqchMonitorDataParamVo;
 import com.hhwy.pm.qqch.preparation.safe.monitor.service.IQqchMonitorDataParamService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchMonitorDataParamController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchMonitorDataParam:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchMonitorDataParamVo qqchMonitorDataParamVo) {
+    public AjaxResult batchSave(@RequestBody QqchMonitorDataParamVo qqchMonitorDataParamVo) {
         qqchMonitorDataParamService.batchSave(qqchMonitorDataParamVo);
         return AjaxResult.success();
     }

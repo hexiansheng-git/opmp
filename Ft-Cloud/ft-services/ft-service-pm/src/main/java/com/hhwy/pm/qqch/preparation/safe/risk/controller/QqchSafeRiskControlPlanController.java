@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskControlPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskControlPlanService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchSafeRiskControlPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchSafeRiskControlPlan:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchSafeRiskControlPlanVo qqchSafeRiskControlPlanVo) {
+    public AjaxResult batchSave(@RequestBody QqchSafeRiskControlPlanVo qqchSafeRiskControlPlanVo) {
         qqchSafeRiskControlPlanService.batchSave(qqchSafeRiskControlPlanVo);
         return AjaxResult.success();
     }

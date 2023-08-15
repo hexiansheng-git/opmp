@@ -24,7 +24,7 @@ public interface IQqchQcImplementPlanService {
      * @param qqchQcImplementPlanVo
      * @return
      */
-    void updateQqchQcImplementPlan(QqchQcImplementPlanVo qqchQcImplementPlanVo);
+    void batchSave(QqchQcImplementPlanVo qqchQcImplementPlanVo);
 
     /**
      * 课题清单清单数据保存时，将数据同步实施计划
@@ -32,5 +32,4 @@ public interface IQqchQcImplementPlanService {
      * @param qqchQcImplementPlanVo
      */
     void syncData(QqchQcImplementPlanVo qqchQcImplementPlanVo);
-
 }

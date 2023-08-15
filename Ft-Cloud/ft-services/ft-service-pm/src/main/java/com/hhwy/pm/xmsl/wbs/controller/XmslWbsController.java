@@ -71,6 +71,19 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success(wbsList);
     }
 
+    /**
+     * 获取指定wbs的子级，并覆盖掉其id以及父级id。为前端赋值黏贴使用
+     * @param map {ids}
+     * @return
+     */
+    @PostMapping("/copyData")
+    public AjaxResult copyData(@RequestBody Map map) {
+        String ids = ObjectUtils.nvlString(map.get("ids"));
+        if(StringUtils.isBlank(ids))
+            return AjaxResult.error("参数缺失");
+        List<XmslWbs> wbsList = xmslWbsService.copyChildList(Convert.toStrArray(ids));
+        return AjaxResult.success(wbsList);
+    }
 
 
     @PostMapping("/latestList")

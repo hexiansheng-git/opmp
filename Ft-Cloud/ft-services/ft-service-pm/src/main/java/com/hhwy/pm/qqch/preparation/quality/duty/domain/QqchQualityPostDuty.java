@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,6 +34,7 @@ public class QqchQualityPostDuty extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "岗位名称")
+    @NotBlank(message = "岗位名称不能为空", groups = {ValidationGroups.Save.class})
     private String postName;
     /**
      * 字段描述：岗位职务id

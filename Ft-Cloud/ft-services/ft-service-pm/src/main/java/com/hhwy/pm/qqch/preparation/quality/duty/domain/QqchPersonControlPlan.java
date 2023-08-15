@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,12 +34,14 @@ public class QqchPersonControlPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "人员id")
+    @NotBlank(message = "人员id不能为空", groups = {ValidationGroups.Save.class})
     private String personId;
     /**
      * 字段描述：人员姓名
      */
     @JsonProperty
     @Excel(name = "人员姓名")
+    @NotBlank(message = "人员姓名不能为空", groups = {ValidationGroups.Save.class})
     private String personName;
     /**
      * 字段描述：职务id

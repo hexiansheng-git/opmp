@@ -1,6 +1,7 @@
 package com.hhwy.utils;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 
@@ -549,6 +550,19 @@ public class ObjectUtils {
             resuList.add(ObjectUtils.nvlString(map.get(strs[i]+""),strs[i]));
         }
         return StringUtils.join(resuList, ",");    
+    }
+
+    public static String replaceWithLongMap(String anceStr, Map map){
+        if(StringUtils.isBlank(anceStr))
+            return "";
+        String[] strs = anceStr.split(",");
+        List<String> resuList = new ArrayList<>(strs.length);
+        for (int i = 0; i < strs.length; i++) {
+            if(StringUtils.isBlank(strs[i]) || "null".equals(strs[i]))
+                continue;
+            resuList.add(ObjectUtils.nvlString(map.get(Long.valueOf(strs[i])),strs[i]));
+        }
+        return StringUtils.join(resuList, ",");
     }
 
     /**

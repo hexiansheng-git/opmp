@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.cost.domain.vo.QqchSafeMeasureCostPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.cost.service.IQqchSafeMeasureCostPlanService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchSafeMeasureCostPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchSafeMeasureCostPlan:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchSafeMeasureCostPlanVo qqchSafeMeasureCostPlanVo) {
+    public AjaxResult batchSave(@RequestBody QqchSafeMeasureCostPlanVo qqchSafeMeasureCostPlanVo) {
         qqchSafeMeasureCostPlanService.batchSave(qqchSafeMeasureCostPlanVo);
         return AjaxResult.success();
     }

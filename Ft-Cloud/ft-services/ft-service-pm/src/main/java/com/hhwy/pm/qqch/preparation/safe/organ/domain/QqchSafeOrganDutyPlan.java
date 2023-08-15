@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,6 +34,7 @@ public class QqchSafeOrganDutyPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "岗位名称(字典类型post_type)")
+    @NotBlank(message = "岗位名称不能为空", groups = {ValidationGroups.Save.class})
     private String postName;
     /**
      * 字段描述：人员id
@@ -56,12 +59,14 @@ public class QqchSafeOrganDutyPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目职务")
+    @NotBlank(message = "项目职务不能为空", groups = {ValidationGroups.Save.class})
     private String projectDuty;
     /**
      * 字段描述：岗位职责
      */
     @JsonProperty
     @Excel(name = "岗位职责")
+    @NotBlank(message = "岗位职责不能为空", groups = {ValidationGroups.Save.class})
     private String duty;
     /**
      * 字段描述：版本

@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcTopicListVo;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcTopicListService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -49,8 +48,7 @@ public class QqchQcTopicListController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchQcTopicList:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchQcTopicListVo qqchQcTopicListVo) {
+    public AjaxResult batchSave(@RequestBody QqchQcTopicListVo qqchQcTopicListVo) {
         qqchQcTopicListService.batchSave(qqchQcTopicListVo);
         return AjaxResult.success();
     }

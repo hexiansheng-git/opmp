@@ -27,7 +27,7 @@ public class WbsRedisUtils {
     //子级ID hashMap  WBS::child_id::租户标志   wbsId  子级Id(多个以逗号拼接)
     public static final String CHILD_KEY = "WBS::child_id::";
     //直属子级ID hashMap  WBS::dire_child_id::租户标志   wbsId  直属子级Id(多个以逗号拼接)
-    public static final String DIRE_CHILD_KEY = "WBS::child_id::";
+    public static final String DIRE_CHILD_KEY = "WBS::dire_child_id::";
     //清单编号对应wbs编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
     public static final String LIST_WBS_KEY = "WBS::list_wbs::";
     //wbs编号对应清单编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId

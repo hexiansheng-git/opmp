@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,13 @@ public class QqchMonitorDataParamServiceImpl implements IQqchMonitorDataParamSer
         deleteParam.setVersion(voParam.getVersion());
         qqchMonitorDataParamMapper.deleteQqchMonitorDataParam(deleteParam);
 
+        String buttonMark = voParam.getButtonMark();
         if (!CollectionUtils.isEmpty(voParam.getTreeList())) {
+            // 校验非空
+            if (!ButtonMark.SAVE.equals(buttonMark)) {
+                JyDetailsUtil.jyDetails(voParam.getTreeList(), ValidationGroups.Save.class);
+            }
+
             // 树转list
             List<QqchMonitorDataParam> list = TreeUtil.treeToList(voParam.getTreeList());
 
@@ -85,7 +93,6 @@ public class QqchMonitorDataParamServiceImpl implements IQqchMonitorDataParamSer
             qqchMonitorDataParamMapper.insertQqchMonitorDataParamList(list);
         }
 
-        String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
             String menuId = voParam.getMenuId();

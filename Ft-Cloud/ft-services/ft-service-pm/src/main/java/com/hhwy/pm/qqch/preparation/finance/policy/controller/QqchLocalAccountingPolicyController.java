@@ -8,7 +8,6 @@ import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPol
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.vo.QqchLocalAccountingPolicyVo;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
 import com.hhwy.utils.excel.FtExcelUtil;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -60,8 +59,7 @@ public class QqchLocalAccountingPolicyController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchLocalAccountingPolicy:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchLocalAccountingPolicyVo qqchLocalAccountingPolicyVo) {
+    public AjaxResult batchSave(@RequestBody QqchLocalAccountingPolicyVo qqchLocalAccountingPolicyVo) {
         qqchLocalAccountingPolicyService.batchSave(qqchLocalAccountingPolicyVo);
         return AjaxResult.success();
     }

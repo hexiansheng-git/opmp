@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -38,6 +40,7 @@ public class QqchLocalBankSituation extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "银行名称")
+    @NotBlank(message = "银行名称不能为空", groups = {ValidationGroups.Save.class})
     private String bankName;
     /**
      * 字段描述：性质（字典类型bank_nature）

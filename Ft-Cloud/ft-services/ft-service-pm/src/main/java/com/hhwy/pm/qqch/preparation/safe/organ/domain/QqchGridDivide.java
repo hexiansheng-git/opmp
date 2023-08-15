@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,12 +34,14 @@ public class QqchGridDivide extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "格子名称")
+    @NotBlank(message = "格子名称不能为空", groups = {ValidationGroups.Save.class})
     private String gridName;
     /**
      * 字段描述：格子类型
      */
     @JsonProperty
     @Excel(name = "格子类型")
+    @NotBlank(message = "格子类型不能为空", groups = {ValidationGroups.Save.class})
     private String gridType;
     /**
      * 字段描述：作业部位编码
@@ -68,6 +72,7 @@ public class QqchGridDivide extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "格子长")
+    @NotBlank(message = "格子长不能为空", groups = {ValidationGroups.Save.class})
     private String gridLeader;
     /**
      * 字段描述：版本

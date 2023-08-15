@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -31,12 +33,14 @@ public class QqchLocalAccountingPolicy extends BaseEntity {
      */
     @JsonProperty
     @FtExcel(name = "会计政策")
+    @NotBlank(message = "会计政策不能为空", groups = {ValidationGroups.Save.class})
     private String accountingPolicy;
     /**
      * 字段描述：内容描述
      */
     @JsonProperty
     @FtExcel(name = "内容描述")
+    @NotBlank(message = "内容描述不能为空", groups = {ValidationGroups.Save.class})
     private String content;
     /**
      * 字段描述：是否选择来的数据 1-是 0-否

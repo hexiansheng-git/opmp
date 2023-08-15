@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -39,24 +41,28 @@ public class QqchMonitorDataParam extends TreeNode<QqchMonitorDataParam> {
      */
     @JsonProperty
     @Excel(name = "预警事项")
+    @NotBlank(message = "预警事项不能为空", groups = {ValidationGroups.Save.class})
     private String warnMatter;
     /**
      * 字段描述：预警参数
      */
     @JsonProperty
     @Excel(name = "预警参数")
+    @NotBlank(message = "预警参数不能为空", groups = {ValidationGroups.Save.class})
     private String warnParam;
     /**
      * 字段描述：预警等级
      */
     @JsonProperty
     @Excel(name = "预警等级")
+    @NotBlank(message = "预警等级不能为空", groups = {ValidationGroups.Save.class})
     private String warnLevel;
     /**
      * 字段描述：施工状态
      */
     @JsonProperty
     @Excel(name = "施工状态")
+    @NotBlank(message = "施工状态不能为空", groups = {ValidationGroups.Save.class})
     private String constructionStatus;
     /**
      * 字段描述：排序
