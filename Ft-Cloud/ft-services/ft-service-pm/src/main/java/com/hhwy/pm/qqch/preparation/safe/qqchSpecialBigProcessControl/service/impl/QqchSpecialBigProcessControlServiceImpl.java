@@ -89,7 +89,7 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
      */
     public QqchSpecialBigProcessControlVo getQqchSpecialBigProcessControlList(QqchSpecialBigProcessControl qqchSpecialBigProcessControl) {
         QqchSpecialBigProcessControlVo vo = new QqchSpecialBigProcessControlVo();
-        BigDecimal version = VersionUtil.getVersion("qqch_special_big_equ_risk_measure", qqchSpecialBigProcessControl.getVersion());
+        BigDecimal version = VersionUtil.getVersion("qqch_special_big_process_control", qqchSpecialBigProcessControl.getVersion());
         qqchSpecialBigProcessControl.setVersion(version);
         List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = qqchSpecialBigProcessControlMapper.getQqchSpecialBigProcessControlList(qqchSpecialBigProcessControl);
         vo.setVersion(version);

@@ -103,6 +103,9 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
         }
         List<QqchConstructionEquipment> qqchConstructionEquipments = TreeUtil.treeToList(qqchConstructionEquipmentList);
         for (QqchConstructionEquipment equipment : qqchConstructionEquipments) {
+            if(equipment.getPid()==null){
+                equipment.setPid(0l);
+            }
             equipment.setValid(valid);
             equipment.setVersion(version);
             equipment.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
