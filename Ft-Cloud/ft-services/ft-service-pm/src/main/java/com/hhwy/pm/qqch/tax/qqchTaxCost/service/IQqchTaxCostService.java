@@ -1,6 +1,9 @@
 package com.hhwy.pm.qqch.tax.qqchTaxCost.service;
 
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 
 import java.util.List;
 
@@ -26,4 +29,13 @@ public interface IQqchTaxCostService {
     int deleteQqchTaxCost(QqchTaxCost qqchTaxCost);
 
     int deleteQqchTaxCostByPks(List<Long> qqchTaxCostPkList);
+
+    CompileEntity<TaxCostVO> getList(QqchTaxCost taxCost);
+
+    void save(CompileEntity<TaxCostVO> dto);
+
+
+    public List<QqchTaxCost> getCostList(QqchTaxCost dto);
+
+    List<QqchTaxCostDetail> saveCostList(List<QqchTaxCost> qqchTaxCosts);
 }

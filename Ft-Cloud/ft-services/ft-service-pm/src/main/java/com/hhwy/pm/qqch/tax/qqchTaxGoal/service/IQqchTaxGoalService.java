@@ -30,17 +30,17 @@ public interface IQqchTaxGoalService {
 
     /**
      * 保存
-     * 
-     * @param list 
+     *
+     * @param list
      */
     void save(List<QqchTaxGoal> list);
 
     /**
      * 列表
-     * 
-     * @param qqchTaxGoalParam 
+     *
+     * @param qqchTaxGoalParam
      * @return
      */
     CompileEntity<List<QqchTaxGoal>> list(QqchTaxGoal qqchTaxGoalParam);
-    
+
 }

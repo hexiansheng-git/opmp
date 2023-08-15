@@ -1,24 +1,25 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service.impl;
 
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureOrg;
 import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
 import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpRangeMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
+import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpRange;
-import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @author mls
@@ -40,6 +41,7 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
 
 
     public QqchMeasureExpRange getQqchMeasureExpRange(QqchMeasureExpRange qqchMeasureExpRange) {
+     
         return qqchMeasureExpRangeMapper.getQqchMeasureExpRange(qqchMeasureExpRange);
     }
 
@@ -101,8 +103,9 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
 
 
     @Override
-    @CompileAspect(type = CompileOptEnum.SAVE, tableName = TN)
+    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveTreeList(List<QqchMeasureExpRange> expRangeList) {
+        if (CollectionUtils.isEmpty(expRangeList)) return;
         for (QqchMeasureExpRange qqchMeasureExpRange : expRangeList) {
             qqchMeasureExpRange.setId(IdWorker.createId());
         }
@@ -113,20 +116,9 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
     @Transactional(rollbackFor = Exception.class)
     public void saveAll(QqchMeasureExpDTO expVO) {
         IQqchMeasureExpRangeService thisBean = SpringUtils.getBean(IQqchMeasureExpRangeService.class);
-        expVO.getExpRangeList().forEach(item -> {
-            item.setVersion(expVO.getVersion());
-            item.setSubmitFlag(expVO.getSubmitFlag());
-        });
-        expVO.getPersonList().forEach(item -> {
-            item.setVersion(expVO.getVersion());
-            item.setSubmitFlag(expVO.getSubmitFlag());
-        });
-        thisBean.saveTreeList(expVO.getExpRangeList());
-        
-        personService.saveList(expVO.getPersonList());
+        thisBean.saveTreeList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getExpRangeList()));
+        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getPersonList()));
         QqchMeasureOrg org = expVO.getOrg();
-        org.setVersion(expVO.getVersion());
-        org.setSubmitFlag(expVO.getSubmitFlag());
-        orgService.save(org);
+        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),org));
     }
 }

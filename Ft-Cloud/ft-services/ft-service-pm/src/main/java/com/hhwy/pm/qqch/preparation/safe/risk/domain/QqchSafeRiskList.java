@@ -38,6 +38,11 @@ public class QqchSafeRiskList extends BaseEntity {
     @JsonProperty
     @Excel(name = "wbs_id")
     private Long wbsId;
+
+    /**
+     * 字段描述：wbs_版本
+     */
+    private BigDecimal wbsVersionId;
     /**
      * 字段描述：
      */

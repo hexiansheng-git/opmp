@@ -15,6 +15,12 @@ public interface IXmslDrawReviewWbsService {
 
     XmslDrawReviewWbs getXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 
+    /**
+     * 获取全部有效的wbs
+     * @return
+     */
+    List<XmslDrawReviewWbs> getFullEffectList();
+
     List<XmslDrawReviewWbs> getXmslDrawReviewWbsList(XmslDrawReviewWbs xmslDrawReviewWbs);
 
     List<XmslDrawReviewWbs> getByIds(Set<Long> idSet);

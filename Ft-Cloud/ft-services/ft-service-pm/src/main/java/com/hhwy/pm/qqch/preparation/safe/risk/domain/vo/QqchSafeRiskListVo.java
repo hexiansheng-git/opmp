@@ -16,5 +16,5 @@ import java.util.List;
 public class QqchSafeRiskListVo  extends PreparationEntity {
     @NotBlank(message = "标识不能为空！",groups = {ValidationGroups.Save.class,ValidationGroups.Select.class})
     private String type;//0
-    private QqchSafeRiskList riskTemp;
+    private List<QqchSafeRiskList> list;
 }

@@ -1,21 +1,10 @@
 package com.hhwy.pm.xmsl.wbs.service.impl;
 
 import cn.hutool.core.lang.Assert;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.util.PageObjectUtil;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
-import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.feign.factory.SystemServiceFallbackFactory;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
-import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
-import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -23,12 +12,12 @@ import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMainMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -36,10 +25,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -56,6 +43,8 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     private IXmslWbsService wbsService;
     @Resource
     private IXmslWbsListRelationService wbsListRelationService;
+    @Resource
+    private IXmslEngineeringReportService engineeringReportService;
 
 
     public XmslWbsMain getXmslWbsMain(XmslWbsMain xmslWbsMain) {
@@ -212,23 +201,35 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.updateValid(id);
         //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据
         ThreadPoolUtil.getThreadPool().execute(()->{
-            List<XmslWbsListRelation> relationList = new ArrayList<>();
-            Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
-                if(StringUtils.isBlank(r.getListCode()))
+            long beginMills = System.currentTimeMillis();
+            try{
+                List<XmslWbsListRelation> relationList = new ArrayList<>();
+                Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
+                    if(StringUtils.isBlank(r.getListCode()))
+                        return r;
+                    Long[] listIds = Convert.toLongArray(r.getListIds());
+                    String[] listCodes = Convert.toStrArray(r.getListCode());
+                    for (int i = 0; i < listCodes.length; i++) {
+                        XmslWbsListRelation temp = new XmslWbsListRelation(id,Long.valueOf(r.getId()),listCodes[i],ArrayUtils.get(listIds,i));
+                        relationList.add(temp);
+                    }
                     return r;
-                Long[] listIds = Convert.toLongArray(r.getListIds());
-                String[] listCodes = Convert.toStrArray(r.getListCode());
-                for (int i = 0; i < listCodes.length; i++) {
-                    XmslWbsListRelation temp = new XmslWbsListRelation(id,Long.valueOf(r.getId()),listCodes[i],ArrayUtils.get(listIds,i));
-                    relationList.add(temp);
-                }
-                return r;
-            };
-            wbsService.handlerAncestors(iteratFunc);
-            wbsListRelationService.insertXmslWbsListRelationList(relationList);
+                };
+                wbsService.handlerAncestors(iteratFunc);
+                wbsListRelationService.insertXmslWbsListRelationList(relationList);
+                //4、wbs塞入redis
+                wbsService.initWbs2Redis();
+            }catch(Exception e){
+                e.printStackTrace();
+                log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
+            }finally {
+                log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
+            }
         });
-        //TODO 必须执行完3后才能执行  4、wbs塞入redis
-        wbsService.initWbs2Redis();
+        //4、工程量报表生成
+        ThreadPoolUtil.getThreadPool().execute(()->{
+            engineeringReportService.sync();
+        });
     }
 
 }

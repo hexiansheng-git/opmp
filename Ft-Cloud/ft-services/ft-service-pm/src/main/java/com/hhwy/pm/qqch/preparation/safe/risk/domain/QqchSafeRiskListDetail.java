@@ -158,4 +158,6 @@ public class QqchSafeRiskListDetail extends BaseEntity {
     private String ptVar2;
 
     private List<QqchSafeRiskListDetail> childrenList;
+
+    private  List<Long> infoIdList;
 }

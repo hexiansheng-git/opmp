@@ -41,13 +41,13 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
      * @param confirmUser 确认人id
      * @return
      */
-    public String getConfirmStatus(String menuId,String stage,String confirmUser){
+    public List<QqchModuleConfirmCase>  getConfirmStatus(String menuId,String stage,String confirmUser){
         QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();
         qqchModuleConfirmCase.setModuleIdentity(menuId);
         qqchModuleConfirmCase.setStageIdentity(stage);
         qqchModuleConfirmCase.setConfirmUser(confirmUser);
-        QqchModuleConfirmCase moduleConfirmInfo = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCase(qqchModuleConfirmCase);
-        return moduleConfirmInfo.getConfirmStatus();
+        List<QqchModuleConfirmCase> moduleConfirmInfo = qqchModuleConfirmCaseMapper.getQqchModuleConfirmCaseList(qqchModuleConfirmCase);
+        return moduleConfirmInfo;
     }
 
     /**

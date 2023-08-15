@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.tax.qqchTaxStage.mapper.QqchTaxStageMapper">
+
+    <resultMap type="com.hhwy.pm.qqch.tax.qqchTaxStage.domain.QqchTaxStage" id="QqchTaxStageResultMap">
+        <result property="id" column="id"/>
+        <result property="dataType" column="data_type"/>
+        <result property="recordId" column="record_id"/>
+        <result property="refreshFlag" column="refresh_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="leaf" column="leaf"/>
+        <result property="sort" column="sort"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+    <sql id="selectQqchTaxStageVo">
+        select `id`
+             , `data_type`
+             , `record_id`
+             , `refresh_flag`
+             , `remark`
+             , `leaf`
+             , `sort`
+             , `version`
+             , `valid`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+        from qqch_tax_stage
+    </sql>
+    <select id="getQqchTaxStage" resultMap="QqchTaxStageResultMap">
+        <include refid="selectQqchTaxStageVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="dataType != null  and dataType != ''">and `data_type` = #{dataType}</if>
+            <if test="recordId != null ">and `record_id` = #{recordId}</if>
+            <if test="refreshFlag != null  and refreshFlag != ''">and `refresh_flag` = #{refreshFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getQqchTaxStageList" resultMap="QqchTaxStageResultMap">
+        <include refid="selectQqchTaxStageVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="dataType != null  and dataType != ''">and `data_type` = #{dataType}</if>
+            <if test="recordId != null ">and `record_id` = #{recordId}</if>
+            <if test="refreshFlag != null  and refreshFlag != ''">and `refresh_flag` = #{refreshFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <select id="selectNewestRecordId" resultType="java.lang.Long">
+        (select record_id
+         from qqch_tax_stage
+         where data_type = '1'
+           and del_flag = '0'
+         order by id desc
+         limit 1)
+        union all
+        (select record_id
+         from qqch_tax_stage
+         where data_type = '2'
+           and del_flag = '0'
+         order by id desc
+         limit 1)
+
+
+    </select>
+
+    <insert id="insertQqchTaxStage" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_tax_stage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="dataType != null  and dataType != ''">`data_type`,</if>
+            <if test="recordId != null ">`record_id`,</if>
+            <if test="refreshFlag != null  and refreshFlag != ''">`refresh_flag`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
+            <if test="sort != null ">`sort`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="dataType != null  and dataType != ''">#{dataType},</if>
+            <if test="recordId != null ">#{recordId},</if>
+            <if test="refreshFlag != null  and refreshFlag != ''">#{refreshFlag},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchTaxStage -->
+    <insert id="insertQqchTaxStageList">
+        insert into qqch_tax_stage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `data_type`,
+            `record_id`,
+            `refresh_flag`,
+            `remark`,
+            `leaf`,
+            `sort`,
+            `version`,
+            `valid`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+        </trim>
+        values
+        <foreach collection="qqchTaxStageList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.dataType},
+                #{item.recordId},
+                #{item.refreshFlag},
+                #{item.remark},
+                #{item.leaf},
+                #{item.sort},
+                #{item.version},
+                #{item.valid},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchTaxStage">
+        update qqch_tax_stage
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="dataType != null  and  dataType != ''">`data_type` = #{dataType},</if>
+            <if test="recordId != null ">`record_id` = #{recordId},</if>
+            <if test="refreshFlag != null  and  refreshFlag != ''">`refresh_flag` = #{refreshFlag},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateQqchTaxStageList">
+        update qqch_tax_stage
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="data_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.dataType}
+                </foreach>
+            </trim>
+            <trim prefix="record_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.recordId}
+                </foreach>
+            </trim>
+            <trim prefix="refresh_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.refreshFlag}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="leaf  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaf}
+                </foreach>
+            </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteQqchTaxStage">
+        update `qqch_tax_stage` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="dataType != null  and dataType != ''">and `data_type` = #{dataType}</if>
+            <if test="recordId != null ">and `record_id` = #{recordId}</if>
+            <if test="refreshFlag != null  and refreshFlag != ''">and `refresh_flag` = #{refreshFlag}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+        </where>
+    </update>
+
+    <update id="deleteQqchTaxStageByPks">
+        update `qqch_tax_stage` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="qqchTaxStagePkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

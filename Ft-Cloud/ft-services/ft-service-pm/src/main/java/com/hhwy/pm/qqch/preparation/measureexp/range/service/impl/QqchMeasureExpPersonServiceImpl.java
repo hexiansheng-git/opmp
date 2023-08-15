@@ -6,12 +6,14 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.utils.EntityUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpPersonMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 
@@ -47,6 +49,7 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
 
     @Transactional(rollbackFor = Exception.class)
     public int insertQqchMeasureExpPersonList(List<QqchMeasureExpPerson> qqchMeasureExpPersonList) {
+        if (CollectionUtils.isEmpty(qqchMeasureExpPersonList)) return 0;
         for (QqchMeasureExpPerson qqchMeasureExpPerson : qqchMeasureExpPersonList) {
             qqchMeasureExpPerson.setId(IdWorker.createId());
             qqchMeasureExpPerson.setCreateUser(SecurityUtils.getUserName());
@@ -92,9 +95,11 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchMeasureExpPerson> personList) {
+        if (CollectionUtils.isEmpty(personList)) return;
         for (QqchMeasureExpPerson qqchMeasureExpPerson : personList) {
             qqchMeasureExpPerson.setId(IdWorker.createId());
         }
-        this.insertQqchMeasureExpPersonList(personList);
+        EntityUtils.setCreateUpdateInfo(personList);
+        this.qqchMeasureExpPersonMapper.insertQqchMeasureExpPersonList(personList);
     }
 }

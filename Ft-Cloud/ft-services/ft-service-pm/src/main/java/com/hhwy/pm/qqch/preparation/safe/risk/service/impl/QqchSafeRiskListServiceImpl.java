@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
@@ -65,29 +67,42 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         qqchSafeRiskList1.setVersion(qqchSafeRiskListVo.getVersion());
         qqchSafeRiskList1.setType(qqchSafeRiskListVo.getType());
         qqchSafeRiskListMapper.deleteQqchSafeRiskList(qqchSafeRiskList1);
-        QqchSafeRiskList riskTemp = qqchSafeRiskListVo.getRiskTemp();
-        riskTemp.setType(qqchSafeRiskListVo.getType());
-        riskTemp.setVersion(qqchSafeRiskListVo.getVersion());
-        riskTemp.setId(IdWorker.createId());
-        if (qqchSafeRiskListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-            riskTemp.setValid(Valid.YES);
-        }else{
-            riskTemp.setValid(Valid.NO);
+        //删除子表
+        List<QqchSafeRiskList> infoList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList1);
+        if(!ObjectNullUtil.isEmpty(infoList)){
+            List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
+            qqchSafeRiskListDetailService.deleteByInfoIds(infoIdList,String.valueOf(SecurityUtils.getUserId()),SecurityUtils.getUserName(), DateUtils.getNowDate());
         }
-        riskTemp.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-        riskTemp.setCreateUserName(SecurityUtils.getUserName());
-        riskTemp.setCreateTime(DateUtils.getNowDate());
-        qqchSafeRiskListMapper.insertQqchSafeRiskList(riskTemp);
-        if (!CollectionUtils.isEmpty(riskTemp.getDetailList())) {
-            List<QqchSafeRiskListDetail> detailList = riskTemp.getDetailList();
-            for (QqchSafeRiskListDetail qqchSafeRiskListDetail : detailList) {
-                qqchSafeRiskListDetail.setId(IdWorker.createId());
-                qqchSafeRiskListDetail.setInfoId(riskTemp.getId());
-                qqchSafeRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                qqchSafeRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
-                qqchSafeRiskListDetail.setCreateTime(DateUtils.getNowDate());
+
+        List<QqchSafeRiskList> list = qqchSafeRiskListVo.getList();
+        if(!ObjectNullUtil.isEmpty(list)){
+            ArrayList<QqchSafeRiskListDetail> addDetailList = new ArrayList<>();
+            for (QqchSafeRiskList qqchSafeRiskList : list) {
+                qqchSafeRiskList.setId(IdWorker.createId());
+                qqchSafeRiskList.setVersion(qqchSafeRiskListVo.getVersion());
+                if (qqchSafeRiskListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchSafeRiskList.setValid(Valid.YES);
+                }
+                qqchSafeRiskList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchSafeRiskList.setCreateUserName(SecurityUtils.getUserName());
+                qqchSafeRiskList.setCreateTime(DateUtils.getNowDate());
+                qqchSafeRiskList.setType(qqchSafeRiskListVo.getType());
+                List<QqchSafeRiskListDetail> detailList = qqchSafeRiskList.getDetailList();
+                if(!ObjectNullUtil.isEmpty(detailList)){
+                    for (QqchSafeRiskListDetail qqchSafeRiskListDetail : detailList) {
+                        qqchSafeRiskListDetail.setId(IdWorker.createId());
+                        qqchSafeRiskListDetail.setInfoId(qqchSafeRiskList.getId());
+                        qqchSafeRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                        qqchSafeRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
+                        qqchSafeRiskListDetail.setCreateTime(DateUtils.getNowDate());
+                        addDetailList.add(qqchSafeRiskListDetail);
+                    }
+                }
             }
-            qqchSafeRiskListDetailService.insertQqchSafeRiskListDetailList(detailList);
+            qqchSafeRiskListMapper.insertQqchSafeRiskListList(list);
+            if(!ObjectNullUtil.isEmpty(addDetailList)){
+                qqchSafeRiskListDetailService.insertQqchSafeRiskListDetailList(addDetailList);
+            }
         }
         return 1;
     }
@@ -131,28 +146,35 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
         qqchSafeRiskList.setVersion(version);
         qqchSafeRiskList.setType(qqchSafeRiskListVo.getType());
-        QqchSafeRiskList temp = qqchSafeRiskListMapper.getQqchSafeRiskList(qqchSafeRiskList);
-        if(!ObjectNullUtil.isEmpty(temp)){
+        List<QqchSafeRiskList> infoList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList);
+        if(!ObjectNullUtil.isEmpty(infoList)){
+            List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
             QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
-            qqchSafeRiskListDetail.setInfoId(temp.getId());
+            qqchSafeRiskListDetail.setInfoIdList(infoIdList);
             List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListDetailService.getQqchSafeRiskListDetailList(qqchSafeRiskListDetail);
-            if(!ObjectNullUtil.isEmpty(detailList)){
-                List<QqchSafeRiskListDetail> parentList = detailList.stream().filter(t->{
-                    if(t.getPid()==0){
-                        return true;
+            Map<Long, List<QqchSafeRiskListDetail>> detailListMap = detailList.stream().collect(Collectors.groupingBy(t -> t.getInfoId()));
+            for (QqchSafeRiskList safeRiskList : infoList) {
+                if(!ObjectNullUtil.isEmpty(detailListMap.get(safeRiskList.getId()))){
+                    List<QqchSafeRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeRiskList.getId());
+                    List<QqchSafeRiskListDetail> parentList = detailList.stream().filter(t -> {
+                        if (t.getPid() == 0) {
+                            return true;
+                        }
+                        return false;
+                    }).collect(Collectors.toList());
+                    Map<Long, List<QqchSafeRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(t -> t.getPid()));
+                    for (QqchSafeRiskListDetail detail : parentList) {
+                        if(!ObjectNullUtil.isEmpty(groupByPidMap.get(detail.getId()))){
+                            List<QqchSafeRiskListDetail> childrenList = groupByPidMap.get(detail.getId());
+                            detail.setChildrenList(childrenList);
+                        }
                     }
-                    return false;
-                }).collect(Collectors.toList());
-                Map<Long, List<QqchSafeRiskListDetail>> collect = detailList.stream().collect(Collectors.groupingBy(t -> t.getPid()));
-                for (QqchSafeRiskListDetail safeRiskListDetail : parentList) {
-                    if(!ObjectNullUtil.isEmpty(collect.get(safeRiskListDetail.getId()))){
-                        safeRiskListDetail.setChildrenList(collect.get(safeRiskListDetail.getId()));
-                    }
+                    safeRiskList.setDetailList(parentList);
                 }
-                temp.setDetailList(parentList);
+
             }
         }
-        qqchSafeRiskListVo.setRiskTemp(temp);
+        qqchSafeRiskListVo.setList(infoList);
         qqchSafeRiskListVo.setVersion(version);
         qqchSafeRiskListVo.setStageIdentity(qqchReviewService.getStage());
         return qqchSafeRiskListVo;

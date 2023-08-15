@@ -5,8 +5,10 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -90,5 +92,19 @@ public class QqchTaxCostController extends BaseController {
         List<QqchTaxCost> qqchTaxCostList = qqchTaxCostService.getQqchTaxCostList(qqchTaxCostParam);
         ExcelUtils<QqchTaxCost> util = new ExcelUtils<>(QqchTaxCost.class);
         util.exportExcel(response, qqchTaxCostList, DateUtils.getDate());
+    }
+
+    @PreAuthorize(hasPermi = "qqchTaxCost:list")
+    @GetMapping("/getList")
+    public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchTaxCost taxCost) {
+        CompileEntity<TaxCostVO> qqchTaxInList = qqchTaxCostService.getList(taxCost);
+        return AjaxResult.success(qqchTaxInList);
+    }
+
+    @PreAuthorize(hasPermi = "qqchTaxCost:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<TaxCostVO> dto) {
+        qqchTaxCostService.save(dto);
+        return AjaxResult.success(dto);
     }
 }

@@ -256,7 +256,7 @@ public class XmslWbs extends BaseEntity {
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "预留字段1 生效状态，0：未生效,1：已生效")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

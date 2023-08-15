@@ -102,7 +102,8 @@ public class QqchMeasureExpPlanServiceImpl implements IQqchMeasureExpPlanService
     @Override
     @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchMeasureExpPlan> getQqchMeasureExpPlanListByVersion(QqchMeasureExpPlan qqchMeasureExpPlanParam) {
-        return this.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
+        List<QqchMeasureExpPlan> qqchMeasureExpPlanList = this.getQqchMeasureExpPlanList(qqchMeasureExpPlanParam);
+        return qqchMeasureExpPlanList;
     }
 
    

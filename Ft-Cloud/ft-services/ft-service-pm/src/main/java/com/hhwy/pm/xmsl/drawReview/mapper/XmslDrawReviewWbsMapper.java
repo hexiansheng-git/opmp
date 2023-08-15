@@ -15,6 +15,8 @@ public interface XmslDrawReviewWbsMapper {
 
     XmslDrawReviewWbs getXmslDrawReviewWbs(XmslDrawReviewWbs xmslDrawReviewWbs);
 
+    List<XmslDrawReviewWbs> getFullList(Integer version);
+    
     List<XmslDrawReviewWbs> getXmslDrawReviewWbsList(XmslDrawReviewWbs xmslDrawReviewWbs);
 
     List<XmslDrawReviewWbs> getByIds(@Param("ids") Set<Long> idSet);

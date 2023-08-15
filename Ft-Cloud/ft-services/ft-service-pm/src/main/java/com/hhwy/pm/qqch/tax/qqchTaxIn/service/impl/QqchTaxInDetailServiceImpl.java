@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Service
 public class QqchTaxInDetailServiceImpl implements IQqchTaxInDetailService {
-    
+
     private final static String TN = "qqch_tax_in_detail";
 
     @Autowired

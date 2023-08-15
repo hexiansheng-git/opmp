@@ -169,6 +169,12 @@
         order by sort
     </select>
 
+    <select id="getFullList" resultMap="XmslDrawReviewWbsResultMap">
+        <include refid="selectXmslDrawReviewWbsVo"/>
+        where `version_flag` = 1 and `version` &lt;= #{version} and del_flag = '0'
+        order by level
+    </select>
+
     <select id="getByIds" resultMap="XmslDrawReviewWbsResultMap">
         <include refid="selectXmslDrawReviewWbsVo"/>
         <where>

@@ -31,15 +31,20 @@ public interface IQqchTaxInService {
     int deleteQqchTaxInByPks(List<Long> qqchTaxInPkList);
 
     /**
-     * @param qqchTaxInParam 
+     * @param qqchTaxInParam
      * @return
      */
     CompileEntity<TaxInVO> list(QqchTaxIn qqchTaxInParam);
 
-    void save( CompileEntity<TaxInVO> qqchTaxInParam);
+    void save(CompileEntity<TaxInVO> qqchTaxInParam);
+
     List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list);
 
 
     public List<QqchTaxIn> getInList(QqchTaxIn taxIn);
-    
+
+    public List<TaxInVO.CurrencyVO> getCurrencyInfo();
+
+    public List<String> getYearList();
+
 }

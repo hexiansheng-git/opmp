@@ -40,7 +40,6 @@ public class QqchTaxInController extends BaseController {
         return AjaxResult.success(qqchTaxIn);
     }
 
-    
 
     @PreAuthorize(hasPermi = "qqchTaxIn:add")
     @PostMapping("/batchAdd")
@@ -80,8 +79,6 @@ public class QqchTaxInController extends BaseController {
         ExcelUtils<QqchTaxIn> util = new ExcelUtils<>(QqchTaxIn.class);
         util.exportExcel(response, qqchTaxInList, DateUtils.getDate());
     }
-
-
 
 
     @PreAuthorize(hasPermi = "qqchTaxIn:list")

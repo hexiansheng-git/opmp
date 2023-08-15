@@ -7,6 +7,7 @@
     <resultMap type="com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList" id="QqchSafeRiskListResultMap">
         <result property="id" column="id"/>
         <result property="wbsId" column="wbs_id"/>
+        <result property="wbsVersionId" column="wbs_version_id"/>
         <result property="type" column="type"/>
         <result property="planStartDate" column="plan_start_date"/>
         <result property="planEndDate" column="plan_end_date"/>
@@ -37,6 +38,7 @@
         select
                                                             `id`
                                                          ,`wbs_id`
+                                                         ,wbs_version_id
                                                          ,`type`
                                                          ,`plan_start_date`
                                                          ,`plan_end_date`
@@ -69,7 +71,8 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}
+            <if test="wbsVersionId != null ">and `wbs_version_id` = #{wbsVersionId}</if></if>
             <if test="type != null  and type != ''">and `type` = #{type}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
@@ -109,7 +112,8 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}
+            <if test="wbsVersionId != null ">and `wbs_version_id` = #{wbsVersionId}</if></if>
             <if test="type != null  and type != ''">and `type` = #{type}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
@@ -148,7 +152,8 @@
         insert into qqch_safe_risk_list
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="wbsId != null ">`wbs_id`,
+            <if test="wbsVersionId != null ">`wbs_version_id`,</if></if>
             <if test="type != null  and type != ''">`type`,</if>
             <if test="planStartDate != null ">`plan_start_date`,</if>
             <if test="planEndDate != null ">`plan_end_date`,</if>
@@ -177,7 +182,8 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="wbsId != null ">#{wbsId},</if>
+            <if test="wbsId != null ">#{wbsId},
+            <if test="wbsVersionId != null ">#{wbsVersionId},</if></if>
             <if test="type != null  and type != ''">#{type},</if>
             <if test="planStartDate != null ">#{planStartDate},</if>
             <if test="planEndDate != null ">#{planEndDate},</if>
@@ -212,6 +218,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `wbs_id`,
+            `wbs_version_id`,
             `type`,
             `plan_start_date`,
             `plan_end_date`,
@@ -242,6 +249,7 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.wbsId},
+                #{item.wbsVersionId},
                 #{item.type},
                 #{item.planStartDate},
                 #{item.planEndDate},
@@ -275,6 +283,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="wbsVersionId != null ">`wbs_version_id` = #{wbsVersionId},</if>
             <if test="type != null  and  type != ''">`type` = #{type},</if>
             <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
             <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
@@ -322,6 +331,11 @@
             <trim prefix="wbs_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.wbsId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_version_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsVersionId}
                 </foreach>
             </trim>
             <trim prefix="type  = case" suffix="end,">
@@ -461,6 +475,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsVersionId != null ">and `wbs_version_id` = #{wbsVersionId}</if>
             <if test="type != null  and type != ''">and `type` = #{type}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>

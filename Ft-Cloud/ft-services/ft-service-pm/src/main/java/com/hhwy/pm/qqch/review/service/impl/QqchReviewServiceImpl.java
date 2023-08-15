@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
@@ -348,6 +349,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     @Override
     public String getStage() {
         Review where = new Review();
+        where.setDelFlag("0");
         List<Review> qqchReviewList = this.getQqchReviewList(where).stream().sorted(Comparator.comparing(Review::getPlanStage)).collect(toList());
         for (Review review : qqchReviewList) {
             String taskStatus = review.getTaskStatus();
@@ -356,7 +358,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             }
         }
         // 已经结束 不用查询阶段
-        return "end";
+        return PmConstant.END_STAGE;
     }
 
 
