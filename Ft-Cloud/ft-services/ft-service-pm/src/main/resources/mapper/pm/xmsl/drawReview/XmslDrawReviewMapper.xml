@@ -123,11 +123,11 @@
     </select>
 
     <select id="selectWbsAncestor" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs" parameterType="Integer">
-        select ancestors,id,parent_id parentId from xmsl_draw_review_wbs where version &lt;= #{version}
+        select ancestors,id,parent_id parentId,wbs_id wbsId from xmsl_draw_review_wbs where version &lt;= #{version}
     </select>
 
     <select id="selectListAncestor" resultType="com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList" parameterType="Integer">
-        select ancestors,id,pid pid from xmsl_draw_review_list where version &lt;= #{version}
+        select ancestors,id,pid pid,list_id listId from xmsl_draw_review_list where version &lt;= #{version}
     </select>
 
     <insert id="insertXmslDrawReview">

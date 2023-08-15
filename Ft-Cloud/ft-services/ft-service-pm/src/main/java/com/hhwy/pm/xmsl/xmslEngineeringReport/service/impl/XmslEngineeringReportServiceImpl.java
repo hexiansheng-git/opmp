@@ -9,6 +9,7 @@ import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewWbsService;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
@@ -17,7 +18,9 @@ import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportServ
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import io.lettuce.core.protocol.RedisProtocolException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +43,8 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     private IXmslDrawReviewListService drawReviewListService;
     @Autowired
     private IXmslDrawReviewService drawReviewService;
+    @Autowired
+    private RedisUtils redisUtils;
 
 
     @Override
@@ -131,6 +136,35 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
 
     public List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport report) {
         report.setParentId(ObjectUtils.nvlLong(report.getParentId(),-1L));
+        boolean hasCondition = StringUtils.isNotBlank(report.getWbsCode()) || StringUtils.isNotBlank(report.getWbsName())
+                || StringUtils.isNotBlank(report.getListCode()) || StringUtils.isNotBlank(report.getListName()) ;
+        if(hasCondition && ( (StringUtils.trim(report.getWbsCode())+StringUtils.trim(report.getWbsName())).length() < 3
+                            || (StringUtils.trim(report.getListCode())+StringUtils.trim(report.getListName())).length() < 3) )
+            throw new RuntimeException("搜索参数过小");
+        if(!hasCondition){
+            return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
+        }
+        //如果是懒加载,找出满足条件的id，扔redis
+        String key = "engineeringReport::lazySearch_"+SecurityUtils.getTenantKey();
+        //获取ids
+//        Set<String> idSet = null;
+//        if(!redisUtils.hasKey(key) ){
+//            List<XmslWbs> list = xmslWbsMapper.latestWbsId(wbs);
+//            final Set<String> resuIdSet = new ConcurrentHashSet<>();
+//            list.parallelStream().forEach(r->{
+//                resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
+//            });
+//            if(resuIdSet.size() < 1)
+//                resuIdSet.add("-1");
+//            redisUtils.sAdd(key,resuIdSet.toArray(new String[]{}));
+//            redisUtils.expire(key,10, TimeUnit.MINUTES);
+//            idSet = resuIdSet;
+//        }else{
+//            idSet = redisUtils.sMembers(key);
+//        }
+//        wbs.setParams(wbs.getParams()==null?new HashMap<>():wbs.getParams());
+//        wbs.getParams().put("ids",idSet);
+//        List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
         return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
     }
 

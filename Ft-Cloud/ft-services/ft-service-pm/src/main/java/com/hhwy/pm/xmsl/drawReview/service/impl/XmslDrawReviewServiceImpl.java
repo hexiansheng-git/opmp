@@ -513,6 +513,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     private void loadParentWbsList(Long id){
         List<XmslDrawReviewWbs> addWbsList = new ArrayList<>();
         List<XmslDrawReviewList> addList = new ArrayList<>();
+        Map<Long,Long> wbsIdMap = new HashMap<>();
+        Map<Long,Long> listIdMap = new HashMap<>();
         //1、获取当前赋值复核下所有的wbs的祖级id以及父级id
         XmslDrawReview drawReview = this.getById(id);
         Assert.notNull(drawReview, "图纸复核信息获取失败");
@@ -523,10 +525,12 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         for (int i = 0; i < wbsList.size(); i++) {
             XmslDrawReviewWbs tempWbs = wbsList.get(i);
             wbsAncesList.add(tempWbs.getAncestors());
+            wbsIdMap.put(tempWbs.getWbsId(), tempWbs.getId());
         }
         for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewList tempList = list.get(i);
             listAncesList.add(tempList.getAncestors());
+            listIdMap.put(tempList.getListId(), tempList.getId());
         }
         Set<Long> wbsIdSet = new HashSet<>();
         Set<Long> listIdSet = new HashSet<>();
@@ -534,8 +538,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         ancestorToList(wbsAncesList, wbsIdSet,false);
         ancestorToList(listAncesList, listIdSet,true);
         //2、获取wbs并转换为图纸复核wbs
-        Map<Long,Long> wbsIdMap = new HashMap<>();
-        Map<Long,Long> listIdMap = new HashMap<>();
         List<XmslWbs> pwbsList = WbsRedisUtils.getWbs(wbsIdSet);
         for (int i = 0; i < pwbsList.size(); i++) {
             XmslWbs temp = pwbsList.get(i);
@@ -562,29 +564,31 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             return true;
         });
         //保存wbs以及清单
-        //保存前修改父级id
-        for (int i = 0; i < addWbsList.size(); i++) {
-            XmslDrawReviewWbs temp = addWbsList.get(i);
-            temp.setParentId(ObjectUtils.nvlLong(wbsIdMap.get(temp.getParentId()),-1L));
-        }
-        for (int i = 0; i < addList.size(); i++) {
-            XmslDrawReviewList temp = addList.get(i);
-            temp.setPid(ObjectUtils.nvlLong(listIdMap.get(temp.getPid()),-1L));
-        }
+        BiFunction<List<XmslDrawReviewWbs>,Map<Long,Long>,Integer> setWbsPidFunc = (l,map)->{
+            for (int i = 0; i < l.size(); i++) {
+                XmslDrawReviewWbs temp = l.get(i);
+                temp.setParentId(ObjectUtils.nvlLong(map.get(temp.getParentId()),-1L));
+                temp.setAncestors(ObjectUtils.replaceWithLongMap(temp.getAncestors(),map));
+            }    
+            return 0;
+        };
+        BiFunction<List<XmslDrawReviewList>,Map<Long,Long>,Integer> setListPidFunc = (l,map)->{
+            for (int i = 0; i < l.size(); i++) {
+                XmslDrawReviewList temp = l.get(i);
+                temp.setPid(ObjectUtils.nvlLong(map.get(temp.getPid()),-1L));
+                temp.setAncestors(ObjectUtils.replaceWithLongMap(temp.getAncestors(),map));
+            }
+            return 0;
+        };
+        setWbsPidFunc.apply(addWbsList, wbsIdMap);
+        setListPidFunc.apply(addList, listIdMap);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         drawReviewListService.insertXmslDrawReviewListList(addList);
         //4、修改图纸复核wbs、清单对应的父级id
-        for (int i = 0; i < wbsList.size(); i++) {
-            XmslDrawReviewWbs temp = wbsList.get(i);
-            temp.setParentId(ObjectUtils.nvlLong(wbsIdMap.get(temp.getParentId()),temp.getParentId()));
-        }
-        for (int i = 0; i < list.size(); i++) {
-            XmslDrawReviewList temp = list.get(i);
-            temp.setPid(ObjectUtils.nvlLong(listIdMap.get(temp.getPid()),temp.getPid()));
-        }
+        setWbsPidFunc.apply(wbsList, wbsIdMap);
+        setListPidFunc.apply(list, listIdMap);
         drawReviewWbsService.updateParentId(wbsList);
         drawReviewListService.updateParentId(list);
-        
     }
     private void ancestorToList(List<String> list,Set idSet,boolean isLong){
         for (int i = 0; i < list.size(); i++) {
