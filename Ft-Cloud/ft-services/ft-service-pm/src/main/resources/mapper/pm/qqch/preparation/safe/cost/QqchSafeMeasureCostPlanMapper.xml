@@ -85,7 +85,7 @@
       <if test="costItem != null  and costItem != ''">and `cost_item` = #{costItem}</if>
       <if test="expectInvestCost != null ">and `expect_invest_cost` = #{expectInvestCost}</if>
       <if test="mainDeptId != null  and mainDeptId != ''">and `main_dept_id` = #{mainDeptId}</if>
-      <if test="mainDept != null ">and `main_dept` = #{mainDept}</if>
+      <if test="mainDept != null and mainDept != ''">and `main_dept` = #{mainDept}</if>
       <if test="superviseDeptId != null  and superviseDeptId != ''">and `supervise_dept_id` = #{superviseDeptId}</if>
       <if test="superviseDept != null  and superviseDept != ''">and `supervise_dept` = #{superviseDept}</if>
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">and `statistics_dept_id` = #{statisticsDeptId}
@@ -127,7 +127,7 @@
       <if test="costItem != null  and costItem != ''">and `cost_item` = #{costItem}</if>
       <if test="expectInvestCost != null ">and `expect_invest_cost` = #{expectInvestCost}</if>
       <if test="mainDeptId != null  and mainDeptId != ''">and `main_dept_id` = #{mainDeptId}</if>
-      <if test="mainDept != null ">and `main_dept` = #{mainDept}</if>
+      <if test="mainDept != null and mainDept != ''">and `main_dept` = #{mainDept}</if>
       <if test="superviseDeptId != null  and superviseDeptId != ''">and `supervise_dept_id` = #{superviseDeptId}</if>
       <if test="superviseDept != null  and superviseDept != ''">and `supervise_dept` = #{superviseDept}</if>
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">and `statistics_dept_id` = #{statisticsDeptId}
@@ -168,7 +168,7 @@
       <if test="costItem != null  and costItem != ''">`cost_item`,</if>
       <if test="expectInvestCost != null ">`expect_invest_cost`,</if>
       <if test="mainDeptId != null  and mainDeptId != ''">`main_dept_id`,</if>
-      <if test="mainDept != null ">`main_dept`,</if>
+      <if test="mainDept != null and mainDept != ''">`main_dept`,</if>
       <if test="superviseDeptId != null  and superviseDeptId != ''">`supervise_dept_id`,</if>
       <if test="superviseDept != null  and superviseDept != ''">`supervise_dept`,</if>
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">`statistics_dept_id`,</if>
@@ -203,7 +203,7 @@
       <if test="costItem != null  and costItem != ''">#{costItem},</if>
       <if test="expectInvestCost != null ">#{expectInvestCost},</if>
       <if test="mainDeptId != null  and mainDeptId != ''">#{mainDeptId},</if>
-      <if test="mainDept != null ">#{mainDept},</if>
+      <if test="mainDept != null and mainDept != ''">#{mainDept},</if>
       <if test="superviseDeptId != null  and superviseDeptId != ''">#{superviseDeptId},</if>
       <if test="superviseDept != null  and superviseDept != ''">#{superviseDept},</if>
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">#{statisticsDeptId},</if>
@@ -318,7 +318,7 @@
       <if test="costItem != null  and  costItem != ''">`cost_item` = #{costItem},</if>
       <if test="expectInvestCost != null ">`expect_invest_cost` = #{expectInvestCost},</if>
       <if test="mainDeptId != null  and  mainDeptId != ''">`main_dept_id` = #{mainDeptId},</if>
-      <if test="mainDept != null ">`main_dept` = #{mainDept},</if>
+      <if test="mainDept != null and mainDept != ''">`main_dept` = #{mainDept},</if>
       <if test="superviseDeptId != null  and  superviseDeptId != ''">`supervise_dept_id` = #{superviseDeptId},</if>
       <if test="superviseDept != null  and  superviseDept != ''">`supervise_dept` = #{superviseDept},</if>
       <if test="statisticsDeptId != null  and  statisticsDeptId != ''">`statistics_dept_id` = #{statisticsDeptId},</if>
@@ -535,7 +535,7 @@
       <if test="costItem != null  and costItem != ''">and `cost_item` = #{costItem}</if>
       <if test="expectInvestCost != null ">and `expect_invest_cost` = #{expectInvestCost}</if>
       <if test="mainDeptId != null  and mainDeptId != ''">and `main_dept_id` = #{mainDeptId}</if>
-      <if test="mainDept != null ">and `main_dept` = #{mainDept}</if>
+      <if test="mainDept != null and mainDept != ''">and `main_dept` = #{mainDept}</if>
       <if test="superviseDeptId != null  and superviseDeptId != ''">and `supervise_dept_id` = #{superviseDeptId}</if>
       <if test="superviseDept != null  and superviseDept != ''">and `supervise_dept` = #{superviseDept}</if>
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">and `statistics_dept_id` = #{statisticsDeptId}

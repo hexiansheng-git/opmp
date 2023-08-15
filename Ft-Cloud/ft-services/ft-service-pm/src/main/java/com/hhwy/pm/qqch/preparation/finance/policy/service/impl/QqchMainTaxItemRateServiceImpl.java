@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchMainTaxItemRateS
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +57,13 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
         deleteParam.setVersion(voParam.getVersion());
         qqchMainTaxItemRateMapper.deleteQqchMainTaxItemRate(deleteParam);
 
+        String buttonMark = voParam.getButtonMark();
         if (!CollectionUtils.isEmpty(voParam.getList())) {
+            // 校验非空
+            if (!ButtonMark.SAVE.equals(buttonMark)) {
+                JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
+            }
+
             for (QqchMainTaxItemRate qqchMainTaxItemRate : voParam.getList()) {
                 qqchMainTaxItemRate.setId(IdWorker.createId());
                 qqchMainTaxItemRate.setVersion(voParam.getVersion());
@@ -69,7 +77,6 @@ public class QqchMainTaxItemRateServiceImpl implements IQqchMainTaxItemRateServi
             qqchMainTaxItemRateMapper.insertQqchMainTaxItemRateList(voParam.getList());
         }
 
-        String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
             String menuId = voParam.getMenuId();

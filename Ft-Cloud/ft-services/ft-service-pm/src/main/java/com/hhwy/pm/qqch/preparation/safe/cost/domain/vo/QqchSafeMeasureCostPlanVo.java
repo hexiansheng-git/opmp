@@ -22,6 +22,11 @@ public class QqchSafeMeasureCostPlanVo extends PreparationEntity {
     private BigDecimal expectInvestCostTotal;
 
     /**
+     * 字段描述：占工程造价百分比(%)
+     */
+    private BigDecimal projectCostPercentage;
+
+    /**
      * 字段描述：安全文明措施费策划集合
      */
     private List<QqchSafeMeasureCostPlan> list;

@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -38,6 +40,7 @@ public class QqchMainTaxItemRate extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "税种")
+    @NotBlank(message = "税种不能为空", groups = {ValidationGroups.Save.class})
     private String taxType;
     /**
      * 字段描述：税率%

@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,12 +34,14 @@ public class QqchTaxLaw extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "税法英文名称")
+    @NotBlank(message = "税法英文名称不能为空", groups = {ValidationGroups.Save.class})
     private String taxLawEnglish;
     /**
      * 字段描述：税法中文名称
      */
     @JsonProperty
     @Excel(name = "税法中文名称")
+    @NotBlank(message = "税法英文名称不能为空", groups = {ValidationGroups.Save.class})
     private String taxLawChinese;
     /**
      * 字段描述：发布年度

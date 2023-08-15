@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcImplementPlanVo;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -49,9 +48,8 @@ public class QqchQcImplementPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchQcImplementPlan:update")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Update.class) @RequestBody QqchQcImplementPlanVo qqchQcImplementPlanVo) {
-        qqchQcImplementPlanService.updateQqchQcImplementPlan(qqchQcImplementPlanVo);
+    public AjaxResult batchSave(@RequestBody QqchQcImplementPlanVo qqchQcImplementPlanVo) {
+        qqchQcImplementPlanService.batchSave(qqchQcImplementPlanVo);
         return AjaxResult.success();
     }
 }

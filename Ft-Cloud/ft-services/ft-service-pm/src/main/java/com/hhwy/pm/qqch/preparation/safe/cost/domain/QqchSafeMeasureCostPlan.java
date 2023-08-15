@@ -6,8 +6,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -32,12 +35,14 @@ public class QqchSafeMeasureCostPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "费用项")
+    @NotBlank(message = "费用项不能为空", groups = {ValidationGroups.Save.class})
     private String costItem;
     /**
      * 字段描述：预计投入费用（美元）
      */
     @JsonProperty
     @Excel(name = "预计投入费用（美元）")
+    @NotNull(message = "预计投入费用（美元）不能为空", groups = {ValidationGroups.Save.class})
     private BigDecimal expectInvestCost;
     /**
      * 字段描述：主要使用部门id
@@ -51,7 +56,8 @@ public class QqchSafeMeasureCostPlan extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
     @Excel(name = "主要使用部门", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date mainDept;
+    @NotBlank(message = "主要使用部门不能为空", groups = {ValidationGroups.Save.class})
+    private String mainDept;
     /**
      * 字段描述：监督部门id
      */
@@ -75,12 +81,14 @@ public class QqchSafeMeasureCostPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "统计部门")
+    @NotBlank(message = "统计部门不能为空", groups = {ValidationGroups.Save.class})
     private String statisticsDept;
     /**
      * 字段描述：费用使用注意事项
      */
     @JsonProperty
     @Excel(name = "费用使用注意事项")
+    @NotBlank(message = "费用使用注意事项不能为空", groups = {ValidationGroups.Save.class})
     private String costUseNote;
     /**
      * 字段描述：责任id

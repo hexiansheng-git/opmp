@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,6 +34,7 @@ public class QqchSafeRiskControlPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "措施项")
+    @NotBlank(message = "措施项不能为空", groups = {ValidationGroups.Save.class})
     private String measures;
     /**
      * 字段描述：执行人
@@ -50,6 +53,7 @@ public class QqchSafeRiskControlPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "注意事项")
+    @NotBlank(message = "注意事项不能为空", groups = {ValidationGroups.Save.class})
     private String mainMatter;
     /**
      * 字段描述：版本

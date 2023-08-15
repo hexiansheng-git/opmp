@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.preparation.safe.cost.service.IQqchSafeMeasureCostPlanSe
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +68,13 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         deleteParam.setVersion(voParam.getVersion());
         qqchSafeMeasureCostPlanMapper.deleteQqchSafeMeasureCostPlan(deleteParam);
 
+        String buttonMark = voParam.getButtonMark();
         if (!CollectionUtils.isEmpty(voParam.getList())) {
+            // 校验非空
+            if (!ButtonMark.SAVE.equals(buttonMark)) {
+                JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
+            }
+
             for (QqchSafeMeasureCostPlan qqchSafeMeasureCostPlan : voParam.getList()) {
                 qqchSafeMeasureCostPlan.setId(IdWorker.createId());
                 qqchSafeMeasureCostPlan.setVersion(voParam.getVersion());
@@ -80,7 +88,6 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
             qqchSafeMeasureCostPlanMapper.insertQqchSafeMeasureCostPlanList(voParam.getList());
         }
 
-        String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
             String menuId = voParam.getMenuId();

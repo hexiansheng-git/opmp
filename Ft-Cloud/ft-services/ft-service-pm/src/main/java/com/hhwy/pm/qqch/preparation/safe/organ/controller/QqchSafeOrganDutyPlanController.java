@@ -5,7 +5,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchSafeOrganDutyPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchSafeOrganDutyPlanService;
-import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -50,8 +49,7 @@ public class QqchSafeOrganDutyPlanController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(
-        @Validated(ValidationGroups.Save.class) @RequestBody QqchSafeOrganDutyPlanVo qqchSafeOrganDutyPlanVo) {
+    public AjaxResult batchSave(@RequestBody QqchSafeOrganDutyPlanVo qqchSafeOrganDutyPlanVo) {
         qqchSafeOrganDutyPlanService.batchSave(qqchSafeOrganDutyPlanVo);
         return AjaxResult.success();
     }

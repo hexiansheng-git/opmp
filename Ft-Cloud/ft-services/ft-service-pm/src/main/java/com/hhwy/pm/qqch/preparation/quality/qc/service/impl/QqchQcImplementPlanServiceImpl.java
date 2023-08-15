@@ -6,14 +6,20 @@ import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcImplementPlan;
+import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcTopicList;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcImplementPlanVo;
 import com.hhwy.pm.qqch.preparation.quality.qc.mapper.QqchQcImplementPlanMapper;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcImplementPlanService;
+import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcTopicListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +39,8 @@ public class QqchQcImplementPlanServiceImpl implements IQqchQcImplementPlanServi
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchQcTopicListService qqchQcTopicListService;
 
     /**
      * 列表
@@ -46,12 +54,30 @@ public class QqchQcImplementPlanServiceImpl implements IQqchQcImplementPlanServi
 
         QqchQcImplementPlan qryParam = new QqchQcImplementPlan();
         qryParam.setVersion(version);
-        List<QqchQcImplementPlan> list = qqchQcImplementPlanMapper.getQqchQcImplementPlanList(qryParam);
+        List<QqchQcImplementPlan> planList = qqchQcImplementPlanMapper.getQqchQcImplementPlanList(qryParam);
+
+        // 组装列表
+        List<QqchQcImplementPlan> newList = new ArrayList<>();
+
+        // QC课题清单
+        List<QqchQcTopicList> topicList = qqchQcTopicListService.getQqchQcTopicListList(version).getList();
+        for (QqchQcTopicList qqchQcTopicList : topicList) {
+            QqchQcImplementPlan qqchQcImplementPlan = new QqchQcImplementPlan();
+            for (QqchQcImplementPlan plan : planList) {
+                if (plan.getTopicCode().equals(qqchQcTopicList.getTopicCode())) {
+                    BeanUtils.copyProperties(plan, qqchQcImplementPlan);
+                }
+            }
+            qqchQcImplementPlan.setTopicCode(qqchQcTopicList.getTopicCode());
+            qqchQcImplementPlan.setTopicName(qqchQcTopicList.getTopicName());
+            qqchQcImplementPlan.setTopicType(qqchQcTopicList.getTopicType());
+            qqchQcImplementPlan.setResearchDirection(qqchQcTopicList.getResearchDirection());
+            newList.add(qqchQcImplementPlan);
+        }
 
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setList(list);
-
+        vo.setList(newList);
         return vo;
     }
 
@@ -62,14 +88,34 @@ public class QqchQcImplementPlanServiceImpl implements IQqchQcImplementPlanServi
      * @return
      */
     @Transactional
-    public void updateQqchQcImplementPlan(QqchQcImplementPlanVo voParam) {
-        for (QqchQcImplementPlan qqchQcImplementPlan : voParam.getList()) {
-            qqchQcImplementPlan.setUpdateUser(SecurityUtils.getUserName());
-            qqchQcImplementPlan.setUpdateTime(DateUtils.getNowDate());
-        }
-        qqchQcImplementPlanMapper.updateQqchQcImplementPlanList(voParam.getList());
+    public void batchSave(QqchQcImplementPlanVo voParam) {
+        // 清空数据库表中QC课题清单数据
+        QqchQcImplementPlan deleteParam = new QqchQcImplementPlan();
+        deleteParam.setVersion(voParam.getVersion());
+        qqchQcImplementPlanMapper.deleteQqchQcImplementPlan(deleteParam);
 
         String buttonMark = voParam.getButtonMark();
+        if (!CollectionUtils.isEmpty(voParam.getList())) {
+            // 校验非空
+            if (!ButtonMark.SAVE.equals(buttonMark)) {
+                JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
+            }
+
+            for (QqchQcImplementPlan qqchQcImplementPlan : voParam.getList()) {
+                qqchQcImplementPlan.setId(IdWorker.createId());
+                qqchQcImplementPlan.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchQcImplementPlan.setValid(Valid.YES);
+                }
+                qqchQcImplementPlan.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchQcImplementPlan.setCreateUserName(SecurityUtils.getUserName());
+                qqchQcImplementPlan.setCreateTime(DateUtils.getNowDate());
+
+            }
+            // 课题清单入库
+            qqchQcImplementPlanMapper.insertQqchQcImplementPlanList(voParam.getList());
+        }
+
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
             String menuId = voParam.getMenuId();
@@ -79,7 +125,7 @@ public class QqchQcImplementPlanServiceImpl implements IQqchQcImplementPlanServi
     }
 
     /**
-     * 课题清单清单数据保存时，将数据同步实施计划
+     * 课题清单清单数据保存时，将数据同步实施计划   (废弃)
      *
      * @param voParam
      */

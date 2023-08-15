@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -32,12 +34,14 @@ public class QqchVideoMonitorInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "监控部位")
+    @NotBlank(message = "监控部位不能为空", groups = {ValidationGroups.Save.class})
     private String monitorPosition;
     /**
      * 字段描述：监控器材
      */
     @JsonProperty
     @Excel(name = "监控器材")
+    @NotBlank(message = "监控器材不能为空", groups = {ValidationGroups.Save.class})
     private String monitorEquipment;
     /**
      * 字段描述：具体位置

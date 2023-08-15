@@ -12,6 +12,8 @@ import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchSafeOrganDutyPlanSer
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +65,18 @@ public class QqchSafeOrganDutyPlanServiceImpl implements IQqchSafeOrganDutyPlanS
     public void batchSave(QqchSafeOrganDutyPlanVo voParam) {
         // 清空数据库表中数据
         QqchSafeOrganDutyPlan deleteParam = new QqchSafeOrganDutyPlan();
+
         deleteParam.setVersion(voParam.getVersion());
         qqchSafeOrganDutyPlanMapper.deleteQqchSafeOrganDutyPlan(deleteParam);
 
+        String buttonMark = voParam.getButtonMark();
+
         if (!CollectionUtils.isEmpty(voParam.getList())) {
+            // 校验非空
+            if (!ButtonMark.SAVE.equals(buttonMark)) {
+                JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
+            }
+
             for (QqchSafeOrganDutyPlan qqchSafeOrganDutyPlan : voParam.getList()) {
                 qqchSafeOrganDutyPlan.setId(IdWorker.createId());
                 qqchSafeOrganDutyPlan.setVersion(voParam.getVersion());
@@ -80,7 +90,6 @@ public class QqchSafeOrganDutyPlanServiceImpl implements IQqchSafeOrganDutyPlanS
             qqchSafeOrganDutyPlanMapper.insertQqchSafeOrganDutyPlanList(voParam.getList());
         }
 
-        String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
             String menuId = voParam.getMenuId();
