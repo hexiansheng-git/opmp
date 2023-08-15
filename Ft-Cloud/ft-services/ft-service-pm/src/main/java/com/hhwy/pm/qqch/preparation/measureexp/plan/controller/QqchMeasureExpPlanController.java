@@ -64,7 +64,7 @@ public class QqchMeasureExpPlanController extends BaseController {
 
         List<QqchMeasureExpPlan> dto = map.dealSaveDto();
         qqchMeasureExpPlanService.saveTree(dto);
-        return AjaxResult.success("success");
+        return AjaxResult.success("操作成功");
     }
 
 
