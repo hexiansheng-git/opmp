@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.xmsl.xmslMaterialReport.mapper.XmslMaterialReportMapper">
+
+    <resultMap type="com.hhwy.pm.xmsl.xmslMaterialReport.domain.XmslMaterialReport" id="XmslMaterialReportResultMap">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="spec" column="spec"/>
+        <result property="type" column="type"/>
+        <result property="unit" column="unit"/>
+        <result property="quanlity" column="quanlity"/>
+        <result property="theoreticalDosage" column="theoretical_dosage"/>
+        <result property="theoreticalDosage1" column="theoretical_dosage_1"/>
+        <result property="remark" column="remark"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="userId" column="user_id"/>
+        <result property="deptId" column="dept_id"/>
+    </resultMap>
+    <sql id="selectXmslMaterialReportVo">
+        select
+                `id`
+             ,`code`
+             ,`name`
+             ,`spec`
+             ,`type`
+             ,`unit`
+             ,`quanlity`
+             ,`theoretical_dosage`
+             ,`theoretical_dosage_1`
+             ,`remark`
+             ,`create_user`
+             ,`create_user_name`
+             ,`create_time`
+             ,`update_user`
+             ,`update_time`
+             ,`user_id`
+             ,`dept_id`
+        from xmsl_material_report
+    </sql>
+    <select id="getXmslMaterialReport" resultMap="XmslMaterialReportResultMap">
+        <include refid="selectXmslMaterialReportVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="code != null  and code != ''">and `code` = #{code}</if>
+            <if test="name != null  and name != ''">and `name` = #{name}</if>
+            <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getXmslMaterialReportList" resultMap="XmslMaterialReportResultMap">
+        <include refid="selectXmslMaterialReportVo"/>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="code != null  and code != ''">and `code` like concat('%',#{code},'%')</if>
+            <if test="name != null  and name != ''">and `name` like concat('%',#{name},'%')</if>
+            <if test="spec != null  and spec != ''">and `spec` like concat('%',#{spec},'%')</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insertXmslMaterialReport">
+        insert into xmsl_material_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="code != null  and code != ''">`code`,</if>
+            <if test="name != null  and name != ''">`name`,</if>
+            <if test="spec != null  and spec != ''">`spec`,</if>
+            <if test="type != null  and type != ''">`type`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="quanlity != null ">`quanlity`,</if>
+            <if test="theoreticalDosage != null ">`theoretical_dosage`,</if>
+            <if test="theoreticalDosage1 != null ">`theoretical_dosage_1`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="userId != null ">`user_id`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="code != null  and code != ''">#{code},</if>
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="spec != null  and spec != ''">#{spec},</if>
+            <if test="type != null  and type != ''">#{type},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="quanlity != null ">#{quanlity},</if>
+            <if test="theoreticalDosage != null ">#{theoreticalDosage},</if>
+            <if test="theoreticalDosage1 != null ">#{theoreticalDosage1},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="deptId != null ">#{deptId},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertXmslMaterialReport -->
+    <insert id="insertXmslMaterialReportList">
+        insert into xmsl_material_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `code`,
+            `name`,
+            `spec`,
+            `type`,
+            `unit`,
+            `quanlity`,
+            `theoretical_dosage`,
+            `theoretical_dosage_1`,
+            `remark`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `user_id`,
+            `dept_id`,
+        </trim>
+        values
+        <foreach collection="xmslMaterialReportList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.code},
+                #{item.name},
+                #{item.spec},
+                #{item.type},
+                #{item.unit},
+                #{item.quanlity},
+                #{item.theoreticalDosage},
+                #{item.theoreticalDosage1},
+                #{item.remark},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.userId},
+                #{item.deptId},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateXmslMaterialReport">
+        update xmsl_material_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="code != null  and  code != ''">`code` = #{code},</if>
+            <if test="name != null  and  name != ''">`name` = #{name},</if>
+            <if test="spec != null  and  spec != ''">`spec` = #{spec},</if>
+            <if test="type != null  and  type != ''">`type` = #{type},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="quanlity != null ">`quanlity` = #{quanlity},</if>
+            <if test="theoreticalDosage != null ">`theoretical_dosage` = #{theoreticalDosage},</if>
+            <if test="theoreticalDosage1 != null ">`theoretical_dosage_1` = #{theoreticalDosage1},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="userId != null ">`user_id` = #{userId},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="code != null  and code != ''">and `code` = #{code}</if>
+            <if test="name != null  and name != ''">and `name` = #{name}</if>
+            <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+        </where>
+    </update>
+
+
+    <delete id="deleteXmslMaterialReport">
+        delete from `xmsl_material_report`
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="code != null  and code != ''">and `code` = #{code}</if>
+            <if test="name != null  and name != ''">and `name` = #{name}</if>
+            <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
+            <if test="type != null  and type != ''">and `type` = #{type}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="quanlity != null ">and `quanlity` = #{quanlity}</if>
+            <if test="theoreticalDosage != null ">and `theoretical_dosage` = #{theoreticalDosage}</if>
+            <if test="theoreticalDosage1 != null ">and `theoretical_dosage_1` = #{theoreticalDosage1}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+        </where>
+    </delete>
+
+    <delete id="deleteAll">
+        delete from `xmsl_material_report` 
+    </delete>
+</mapper>
