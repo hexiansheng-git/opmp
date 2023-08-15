@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.preparation.measureexp.range.dto.QqchMeasureExpDTO;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
+import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.util.CollectionUtils;
@@ -39,6 +40,8 @@ public class QqchMeasureExpRangeController extends BaseController {
 
     @Resource
     private IQqchMeasureExpRangeService qqchMeasureExpRangeService;
+    @Resource
+    private IQqchMeasureService measureService;
 
     @Resource
     private IQqchReviewService reviewService;
@@ -83,7 +86,7 @@ public class QqchMeasureExpRangeController extends BaseController {
     @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpDTO expVO) {
-        qqchMeasureExpRangeService.saveAll(expVO);
+        measureService.saveAll(expVO);
         return AjaxResult.success("操作成功");
     }
 
