@@ -291,8 +291,10 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                         allList.parallelStream().forEach(r->{
                             String[] listCodes = Convert.toStrArray(r.getListCode());
                             ObjectUtils.addStr2MapList(wbsListMap,r.getCode(),r.getListCode());
-                            for (int j = 0; j < listCodes.length; j++) {
-                                ObjectUtils.addStr2MapList(listWbsMap,listCodes[j],r.getCode());
+                            if(ArrayUtils.isNotEmpty(listCodes)){
+                                for (int j = 0; j < listCodes.length; j++) {
+                                    ObjectUtils.addStr2MapList(listWbsMap,listCodes[j],r.getCode());
+                                }    
                             }
                             redisMap.put(r.getId(), JSONObject.toJSONString(r));
                             //直属子级

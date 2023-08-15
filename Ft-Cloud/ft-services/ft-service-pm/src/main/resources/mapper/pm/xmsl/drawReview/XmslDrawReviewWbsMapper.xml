@@ -570,9 +570,29 @@
                 </foreach>
             </trim>
         </trim>
-        where `main_id` in
-        <foreach collection="mainIdList" index="index" item="item" separator="," open="(" close=")">
-            #{item.mainId}
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="updateParentId">
+        update xmsl_draw_review_wbs
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="parent_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.parentId}
+                </foreach>
+            </trim>
+            <trim prefix="ancestors  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ancestors}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
         </foreach>
     </update>
 

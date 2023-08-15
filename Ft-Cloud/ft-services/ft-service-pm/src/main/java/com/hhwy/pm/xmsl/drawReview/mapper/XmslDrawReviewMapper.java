@@ -3,6 +3,8 @@ package com.hhwy.pm.xmsl.drawReview.mapper;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 
@@ -18,6 +20,20 @@ public interface XmslDrawReviewMapper {
     XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview);
 
     List<XmslDrawReview> getXmslDrawReviewList(XmslDrawReview xmslDrawReview);
+
+    /**
+     * 查询所有版本的父级
+     * @param version  版本号
+     * @return
+     */
+    List<XmslDrawReviewWbs> selectWbsAncestor(Integer version);
+
+    /**
+     * 查询所有版本的父级
+     * @param version  版本号
+     * @return
+     */
+    List<XmslDrawReviewList> selectListAncestor(Integer version);
 
     Integer getXmslDrawReviewCount(XmslDrawReview xmslDrawReview);
 

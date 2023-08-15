@@ -15,6 +15,7 @@ import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.mapper.XmslEngineeringReportMapper;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import io.lettuce.core.protocol.RedisProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +92,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     }
     private XmslEngineeringReport instanceWbs(XmslDrawReviewWbs wbs){
         XmslEngineeringReport report = new XmslEngineeringReport();
-        report.setParentId(wbs.getParentId());
+        report.setParentId(ObjectUtils.nvlLong(wbs.getParentId(),-1L));
         report.setWbsId(Long.valueOf(wbs.getId()));
         report.setWbsCode(wbs.getCode());
         report.setWbsName(wbs.getName());
@@ -110,7 +111,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     }
     private XmslEngineeringReport instanceList(XmslDrawReviewList list){
         XmslEngineeringReport report = new XmslEngineeringReport();
-        report.setParentId(list.getPid());
+        report.setParentId(ObjectUtils.nvlLong(list.getPid()));
         report.setListCode(list.getListCode());
         report.setListName(list.getChineseName());
         report.setListId(list.getId());
@@ -128,8 +129,9 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         return xmslEngineeringReportMapper.getXmslEngineeringReport(xmslEngineeringReport);
     }
 
-    public List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport xmslEngineeringReport) {
-        return xmslEngineeringReportMapper.getXmslEngineeringReportList(xmslEngineeringReport);
+    public List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport report) {
+        report.setParentId(ObjectUtils.nvlLong(report.getParentId(),-1L));
+        return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
     }
 
     @Transactional

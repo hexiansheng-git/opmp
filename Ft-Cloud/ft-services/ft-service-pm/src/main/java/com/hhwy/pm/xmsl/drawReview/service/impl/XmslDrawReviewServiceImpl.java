@@ -1,10 +1,11 @@
 package com.hhwy.pm.xmsl.drawReview.service.impl;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
@@ -13,22 +14,26 @@ import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
 import com.hhwy.pm.xmsl.drawReview.service.*;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
-import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
-import io.jsonwebtoken.lang.Assert;
+import com.hhwy.utils.PageFuncUtils;
+import com.sun.org.apache.xml.internal.security.Init;
+import io.lettuce.core.Limit;
+import net.sf.jsqlparser.expression.LongValue;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.ssl.PrivateKeyStrategy;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewMapper;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.util.Assert;
 
 /**
  * 图纸复核service
@@ -500,5 +505,151 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         Assert.notNull(drawReview,"获取图纸复核失败");
         drawReview.setValid(Constant.YES_INT);
         this.xmslDrawReviewMapper.updateXmslDrawReview(drawReview);
+        //2、存储wbs以及清单的父级
+        loadParentWbsList(id);
+    }
+    
+    //加载图纸复核、
+    private void loadParentWbsList(Long id){
+        List<XmslDrawReviewWbs> addWbsList = new ArrayList<>();
+        List<XmslDrawReviewList> addList = new ArrayList<>();
+        //1、获取当前赋值复核下所有的wbs的祖级id以及父级id
+        XmslDrawReview drawReview = this.getById(id);
+        Assert.notNull(drawReview, "图纸复核信息获取失败");
+        List<XmslDrawReviewWbs> wbsList = this.xmslDrawReviewMapper.selectWbsAncestor(drawReview.getVersion());
+        List<XmslDrawReviewList> list = this.xmslDrawReviewMapper.selectListAncestor(drawReview.getVersion());
+        List<String> wbsAncesList = new ArrayList<>(wbsList.size());
+        List<String> listAncesList = new ArrayList<>(list.size());
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslDrawReviewWbs tempWbs = wbsList.get(i);
+            wbsAncesList.add(tempWbs.getAncestors());
+        }
+        for (int i = 0; i < list.size(); i++) {
+            XmslDrawReviewList tempList = list.get(i);
+            listAncesList.add(tempList.getAncestors());
+        }
+        Set<Long> wbsIdSet = new HashSet<>();
+        Set<Long> listIdSet = new HashSet<>();
+        //去重祖级id
+        ancestorToList(wbsAncesList, wbsIdSet,false);
+        ancestorToList(listAncesList, listIdSet,true);
+        //2、获取wbs并转换为图纸复核wbs
+        Map<Long,Long> wbsIdMap = new HashMap<>();
+        Map<Long,Long> listIdMap = new HashMap<>();
+        List<XmslWbs> pwbsList = WbsRedisUtils.getWbs(wbsIdSet);
+        for (int i = 0; i < pwbsList.size(); i++) {
+            XmslWbs temp = pwbsList.get(i);
+            XmslDrawReviewWbs drawWbs = copyToWbs(temp);
+            drawWbs.setMainId(drawReview.getId());
+            drawWbs.setVersionFlag(Constant.YES_INT);
+            drawWbs.setVersion(drawReview.getVersion());
+            wbsIdMap.put(drawWbs.getWbsId(), drawWbs.getId());
+            addWbsList.add(drawWbs);
+        }
+        //分页取清单
+        List<Long> listIdList = new ArrayList<>(listIdSet);        
+        PageFuncUtils.exec(listIdList.size(),1000,(start,end)->{
+            List<Long> tempList = listIdList.subList(start, end);
+            List<XmslContractList> contractLists = contractListService.getByIds(tempList.toArray(new Long[]{}));
+            for (int i = 0; i < contractLists.size(); i++) {
+                XmslDrawReviewList temp = copyToList(contractLists.get(i));
+                temp.setMainId(drawReview.getId());
+                temp.setVersionFlag(Constant.YES_INT);
+                temp.setVersion(drawReview.getVersion());
+                addList.add(temp);
+                listIdMap.put(temp.getListId(), temp.getId());
+            }
+            return true;
+        });
+        //保存wbs以及清单
+        //保存前修改父级id
+        for (int i = 0; i < addWbsList.size(); i++) {
+            XmslDrawReviewWbs temp = addWbsList.get(i);
+            temp.setParentId(ObjectUtils.nvlLong(wbsIdMap.get(temp.getParentId()),-1L));
+        }
+        for (int i = 0; i < addList.size(); i++) {
+            XmslDrawReviewList temp = addList.get(i);
+            temp.setPid(ObjectUtils.nvlLong(listIdMap.get(temp.getPid()),-1L));
+        }
+        drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
+        drawReviewListService.insertXmslDrawReviewListList(addList);
+        //4、修改图纸复核wbs、清单对应的父级id
+        for (int i = 0; i < wbsList.size(); i++) {
+            XmslDrawReviewWbs temp = wbsList.get(i);
+            temp.setParentId(ObjectUtils.nvlLong(wbsIdMap.get(temp.getParentId()),temp.getParentId()));
+        }
+        for (int i = 0; i < list.size(); i++) {
+            XmslDrawReviewList temp = list.get(i);
+            temp.setPid(ObjectUtils.nvlLong(listIdMap.get(temp.getPid()),temp.getPid()));
+        }
+        drawReviewWbsService.updateParentId(wbsList);
+        drawReviewListService.updateParentId(list);
+        
+    }
+    private void ancestorToList(List<String> list,Set idSet,boolean isLong){
+        for (int i = 0; i < list.size(); i++) {
+            String temp = list.get(i);
+            if(StringUtils.isBlank(temp))
+                continue;
+            String[] ances = temp.split(",");
+            for (int j = 0; j < ances.length-1; j++) {
+                idSet.add(isLong?Long.valueOf(ances[j]):ances[j]);
+            }
+        }
+    }
+    
+    
+    public XmslDrawReviewWbs copyToWbs(XmslWbs temp){
+        XmslDrawReviewWbs drawWbs = new XmslDrawReviewWbs();
+        drawWbs.setId(IdWorker.createId());
+        drawWbs.setWbsId(Long.valueOf(temp.getId()));
+        drawWbs.setMainId(temp.getMainId());
+        drawWbs.setCode(temp.getCode());
+        drawWbs.setParentId(Long.valueOf(temp.getParentId()));
+        drawWbs.setHaveChildren(temp.getHaveChildren());
+        drawWbs.setAncestors(temp.getAncestors());
+        drawWbs.setAncestorsName(temp.getAncestorsName());
+        drawWbs.setPartCode(temp.getPartCode());
+        drawWbs.setName(temp.getName());
+//        drawWbs.setListCode(temp.getListCode());
+//        drawWbs.setStandardId(temp.getStandardId());
+//        drawWbs.setStandardCode(temp.getStandardCode());
+//        drawWbs.setStandardName(temp.getStandardName());
+        drawWbs.setNodeType(temp.getNodeType());
+        drawWbs.setUnit(temp.getUnit());
+        drawWbs.setLevel(temp.getLevel());
+        drawWbs.setStatus(temp.getStatus());
+        drawWbs.setDesignQuanlity(temp.getDesignQuanlity());
+        drawWbs.setCheckQuanlity(temp.getCheckQuanlity());
+        drawWbs.setCreateUser(temp.getCreateUser());
+        drawWbs.setCreateUserName(temp.getCreateUserName());
+        drawWbs.setCreateTime(temp.getCreateTime());
+        drawWbs.setUpdateUser(temp.getUpdateUser());
+        drawWbs.setUpdateTime(temp.getUpdateTime());
+        drawWbs.setDelFlag("0");
+        return drawWbs;
+    }
+    
+    public XmslDrawReviewList copyToList(XmslContractList temp){
+        XmslDrawReviewList drawList = new XmslDrawReviewList();
+        drawList.setId(IdWorker.createId());
+        drawList.setListId(Long.valueOf(temp.getId()));
+        drawList.setListCode(temp.getCode());
+        drawList.setPid(temp.getPid());
+        drawList.setAncestors(temp.getAncestors());
+        drawList.setChineseName(temp.getChineseName());
+        drawList.setForeignName(temp.getForeignName());
+        drawList.setListType(temp.getListType());
+        drawList.setUnitCode(temp.getUnitCode());
+        drawList.setUnit(temp.getUnit());
+        drawList.setWinNum(temp.getWinNum());
+        drawList.setRemark(temp.getRemark());
+//        drawList.setCreateUser(temp.getCreateUser());
+//        drawList.setCreateUserName(temp.getCreateUserName());
+//        drawList.setCreateTime(temp.getCreateTime());
+//        drawList.setUpdateUser(temp.getUpdateUser());
+//        drawList.setUpdateTime(temp.getUpdateTime());
+        drawList.setDelFlag("0");
+        return drawList;
     }
 }

@@ -33,50 +33,10 @@ public class XmslEngineeringReportController extends BaseController {
 
 
     @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
-    @GetMapping("/list")
-    public AjaxResult getXmslEngineeringReportList(@Validated(ValidationGroups.Select.class) XmslEngineeringReport xmslEngineeringReportParam) {
-        startPage();
+    @PostMapping("/list")
+    public AjaxResult getXmslEngineeringReportList(@RequestBody @Validated(ValidationGroups.Select.class) XmslEngineeringReport xmslEngineeringReportParam) {
         List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportService.getXmslEngineeringReportList(xmslEngineeringReportParam);
-        return getDataTableAjaxResult(xmslEngineeringReportList);
-    }
-
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:add")
-    @PostMapping("/add")
-    public AjaxResult insertXmslEngineeringReport(@Validated(ValidationGroups.Save.class) @RequestBody XmslEngineeringReport xmslEngineeringReportParam) {
-        xmslEngineeringReportService.insertXmslEngineeringReport(xmslEngineeringReportParam);
-        return AjaxResult.success(xmslEngineeringReportParam);
-    }
-
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:add")
-    @PostMapping("/batchAdd")
-    public AjaxResult insertXmslEngineeringReportList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslEngineeringReport> xmslEngineeringReportListParam) {
-        xmslEngineeringReportService.insertXmslEngineeringReportList(xmslEngineeringReportListParam);
-        return AjaxResult.success(xmslEngineeringReportListParam);
-    }
-
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:update")
-    @PostMapping("/update")
-    public AjaxResult updateXmslEngineeringReport(@Validated(ValidationGroups.Update.class) @RequestBody XmslEngineeringReport xmslEngineeringReportParam) {
-        return toAjax(xmslEngineeringReportService.updateXmslEngineeringReport(xmslEngineeringReportParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:update")
-    @PostMapping("/batchUpdate")
-    public AjaxResult updateXmslEngineeringReportList(@Validated(ValidationGroups.Update.class) @RequestBody List<XmslEngineeringReport> xmslEngineeringReportListParam) {
-        return toAjax(xmslEngineeringReportService.updateXmslEngineeringReportList(xmslEngineeringReportListParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:remove")
-    @PostMapping("/delete")
-    public AjaxResult deleteXmslEngineeringReport(@Validated(ValidationGroups.Delete.class) @RequestBody XmslEngineeringReport xmslEngineeringReportParam) {
-        return toAjax(xmslEngineeringReportService.deleteXmslEngineeringReport(xmslEngineeringReportParam));
-    }
-
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:remove")
-    @PostMapping("/{ids}")
-    public AjaxResult deleteXmslEngineeringReportByPks(@PathVariable Long[] ids) {
-        List<Long> xmslEngineeringReportPkList = Arrays.asList(ids);
-        return toAjax(xmslEngineeringReportService.deleteXmslEngineeringReportByPks(xmslEngineeringReportPkList));
+        return AjaxResult.success(xmslEngineeringReportList);
     }
 
     @GetMapping("/export")
