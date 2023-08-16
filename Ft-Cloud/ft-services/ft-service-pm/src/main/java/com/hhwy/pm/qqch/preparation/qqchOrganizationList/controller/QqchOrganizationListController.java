@@ -8,6 +8,8 @@ import java.io.IOException;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
+import com.hhwy.pm.qqch.sgch.important.domain.QqchImportant;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -22,6 +24,7 @@ import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganization
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author hwj
@@ -67,10 +70,14 @@ public class QqchOrganizationListController extends BaseController{
     }
 
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchOrganizationList qqchOrganizationListParam) throws IOException {
-        List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListService.getQqchOrganizationListList(qqchOrganizationListParam);
-        ExcelUtils<QqchOrganizationList> util = new ExcelUtils<>(QqchOrganizationList.class);
-        util.exportExcel(response, qqchOrganizationListList, DateUtils.getDate());
+    @PostMapping("/importData")
+    public AjaxResult importData(@RequestParam("file") MultipartFile file) {
+        FtExcelUtil<QqchOrganizationList> excelUtil = new FtExcelUtil<>(QqchOrganizationList.class);
+        try {
+            List<QqchOrganizationList> qqchImportants = excelUtil.importTreeExcel(file.getInputStream());
+            return AjaxResult.success(qqchImportants);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
