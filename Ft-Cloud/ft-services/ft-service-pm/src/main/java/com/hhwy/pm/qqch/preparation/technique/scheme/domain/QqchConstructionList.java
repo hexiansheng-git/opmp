@@ -79,21 +79,21 @@ public class QqchConstructionList extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @FtExcel(name = "计划编制时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @FtExcel(name = "计划编制时间", dateFormat = "yyyy-MM-dd")
     private Date planPreparationTime;
     /**
      * 字段描述：计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划实施时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @FtExcel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planImplementTime;
     /**
      * 字段描述：清单通过时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "清单通过时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @FtExcel(name = "清单通过时间", dateFormat = "yyyy-MM-dd")
     private Date listPassTime;
     /**
      * 字段描述：项目联系人
