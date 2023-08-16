@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.wbs.service;
 
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 
 import java.util.List;
@@ -72,13 +73,20 @@ public interface IXmslWbsService {
      * @param ids
      * @return
      */
-    List<XmslWbs> copyChildList(String[] ids);
+    Map<String,List<XmslWbs>> copyChildList(String[] ids);
 
     /**
      * 获取wbs简要信息
      * @return
      */
     List<XmslWbs> latestWbsSimpleAllList();
+
+    /**
+     * 导出数据
+     * @param main 
+     * @return
+     */
+    List<XmslWbs> exportData(XmslWbsMain main);
 
     /**
      * 处理wbs祖级信息(祖级id,祖级名称)
@@ -99,7 +107,7 @@ public interface IXmslWbsService {
      * @return { hasEffect 是否有生效,hasChange :是否有调整  }
      */
     Map hasEffectWbs();
-
+    
     void save(XmslWbsDto dto);
 
     int insertXmslWbs(XmslWbs xmslWbs);
@@ -113,4 +121,5 @@ public interface IXmslWbsService {
     int deleteXmslWbs(XmslWbs xmslWbs);
 
     int deleteXmslWbsByPks(List<Long> xmslWbsPkList);
+    
 }
