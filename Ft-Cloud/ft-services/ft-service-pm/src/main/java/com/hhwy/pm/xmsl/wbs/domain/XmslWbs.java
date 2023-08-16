@@ -11,6 +11,7 @@ import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.core.web.domain.TreeEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ import java.util.Date;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class XmslWbs extends BaseEntity {
+public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     private static final long serialVersionUID = 1L;
 
     public XmslWbs() {

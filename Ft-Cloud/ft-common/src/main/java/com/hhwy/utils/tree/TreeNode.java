@@ -5,6 +5,7 @@
 
 package com.hhwy.utils.tree;
 
+import com.hhwy.common.core.domain.R;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
@@ -12,9 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class TreeNode<T> extends CommonBaseEntity {
+public class TreeNode<T> extends TreeNodeBase<T,Long> {
     private Long id;
     private Long pid;
-    private Integer sort;
-    private List<T> children =new ArrayList<>();
 }

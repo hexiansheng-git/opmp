@@ -2,9 +2,12 @@ package com.hhwy.utils.tree;
 
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class TreeUtil {
@@ -63,4 +66,18 @@ public class TreeUtil {
             }
         }
     }
+    
+    public static <T extends TreeNode> List<T> exportListFormat(List<T> list){
+        //id : 子级数据
+        Map<Long,List<T>> childMap = new HashMap<>(list.size());
+        //第一级节点
+        List<T> firstList = new ArrayList<>();
+        
+        return null;
+    }
+    
+//    private static <T extends TreeNode> void chooseChild(List<T> list,){
+//        
+//    }
+    
 }

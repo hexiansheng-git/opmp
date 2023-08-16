@@ -150,5 +150,13 @@ public class EntityUtils {
 
     }
 
+    public static  void   setCreateUpdateInfo(Object l) {
 
+        try {
+
+        } catch (Exception e) {
+            log.error("设置创建信息更新信息异常", e);
+        }
+
+    }
 }

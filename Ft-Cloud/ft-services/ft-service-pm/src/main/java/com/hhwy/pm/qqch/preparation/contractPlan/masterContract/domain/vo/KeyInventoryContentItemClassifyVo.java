@@ -1,7 +1,5 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo;
 
-import com.hhwy.pm.qqch.common.domain.PreparationEntity;
-import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchKeyInventoryContent;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,13 +14,13 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QqchKeyInventoryContentVo extends PreparationEntity {
+public class KeyInventoryContentItemClassifyVo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：币种
+     * 字段描述：总价差值合计
      */
-    private String currency;
+    private String totalPriceDifferenceTotal;
 
-    private List<QqchKeyInventoryContent> list;
+    private List<KeyInventoryContentItemClassify> list;
 }

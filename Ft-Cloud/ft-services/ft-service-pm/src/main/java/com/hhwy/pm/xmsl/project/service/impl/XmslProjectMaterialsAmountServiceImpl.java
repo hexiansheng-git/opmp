@@ -1,7 +1,5 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
@@ -9,10 +7,12 @@ import com.hhwy.pm.xmsl.project.domain.XmslProjectMaterialsAmount;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectMaterialsAmountMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectMaterialsAmountService;
 import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @author han
@@ -62,8 +62,8 @@ public class XmslProjectMaterialsAmountServiceImpl implements IXmslProjectMateri
             xmslProjectMaterialsAmount.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectMaterialsAmount.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectMaterialsAmount.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectMaterialsAmount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectMaterialsAmount.setCreateUserName(SecurityUtils.getUserName());
+            xmslProjectMaterialsAmount.setCreateUser(xmslProjectBasicInfo.getCreateUser());
+            xmslProjectMaterialsAmount.setCreateUserName(xmslProjectBasicInfo.getCreateUserName());
             xmslProjectMaterialsAmount.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectMaterialsAmountMapper.insertProjectMaterialsAmountList(xmslProjectMaterialsAmountList);

@@ -30,5 +30,5 @@ public interface QqchManagementPersonConfigMapper {
 
     int deleteQqchManagementPersonConfigByPks(@Param("qqchManagementPersonConfigPkList") List<Long> qqchManagementPersonConfigPkList);
 
-    Map<String, Integer> personNumCalc(QqchManagementPersonConfigVo vo);
+    Map<String, Integer> personNumCalc(QqchManagementPersonConfig vo);
 }

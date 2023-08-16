@@ -236,9 +236,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         //处理父级Id
         for (int i = 0; i < wbsList.size(); i++) {
             XmslWbs tempWbs = wbsList.get(i);
-            if(StringUtils.isNotBlank(tempWbs.getParentId()))
+            if(StringUtils.isBlank(tempWbs.getParentId()))
                 continue;
-            tempWbs.setParentId(ObjectUtils.nvlString(idWbsMap.get(tempWbs.getParentId()),tempWbs.getParentId()));
+            tempWbs.setParentId(ObjectUtils.nvlString(idWbsMap.get(tempWbs.getParentId()+""),tempWbs.getParentId()));
         }
         return wbsList;
     }
