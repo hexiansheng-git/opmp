@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -88,13 +89,76 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     }
 
 
-    /**
-     * 数据同步
+    /***
+     * 功能描述: 获取项目组织数据
+     * 作者: fushudong
+     * 时间: 2023/8/16
      */
     @Override
     public QqchManagementPersonConfigVo synchData(QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
+        //保存表格现有数据
         this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(),qqchManagementPersonConfigVo.getVersion());
-        QqchManagementPersonConfigVo vo = new QqchManagementPersonConfigVo();
+
+        //需求：1.1的项目组织的子集为本功能的父集
+        //获取1.1项目组织
+        QqchOrganizationListVo qqchOrganizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(null);
+        //根据版本获取组织数据,附件条件： pid!=''
+        QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
+        BigDecimal version = qqchOrganizationListVo.getVersion();
+        qqchOrganizationList.setVersion(version);
+        List<QqchOrganizationList> organizationLists = qqchOrganizationListService.getQqchOrganizationListList2(qqchOrganizationList);
+
+        //获取当前已有的组织数据
+        List<QqchManagementPersonConfig> pageList = qqchManagementPersonConfigVo.getQqchManagementPersonConfigList();
+        //用户判断当前组织是否存在
+        List<String> collect = pageList.stream().map(QqchManagementPersonConfig::getPost).collect(Collectors.toList());
+
+        String valid = Valid.NO;
+        if (version.compareTo(BigDecimal.ONE) == 0) {
+            valid = Valid.YES;
+        }
+        //组装入库数据
+        List<QqchManagementPersonConfig> list = new ArrayList<QqchManagementPersonConfig>();
+        for (QqchOrganizationList organizationList : organizationLists) {
+            String organization = organizationList.getOrganization();
+            //判断当前岗位已存在，则不新增
+            if (collect.contains(organization)) {
+                continue;
+            }
+            QqchManagementPersonConfig entity = new QqchManagementPersonConfig();
+            entity.setId(organizationList.getId());
+            entity.setDuty(organizationList.getDutyDept());
+            entity.setPost(organizationList.getOrganization());
+            entity.setValid(valid);
+            entity.setVersion(version);
+            entity.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            entity.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            entity.setCreateTime(DateUtils.getNowDate());
+            if(entity.getPid()==null){
+                entity.setPid(0l);
+            }
+            entity.setDelFlag("0");
+            list.add(entity);
+        }
+        if (list.size() > 0) {
+            qqchManagementPersonConfigMapper.insertQqchManagementPersonConfigList(list);
+        }
+        return this.getQqchManagementPersonConfigList(new QqchManagementPersonConfig());
+    }
+
+    @Override
+    public Map<String, Integer> personNumCalc(QqchManagementPersonConfigVo vo) {
+        BigDecimal version = vo.getVersion();
+        version = VersionUtil.getVersion("qqch_management_person_config", version);
+        vo.setVersion(version);
+        return qqchManagementPersonConfigMapper.personNumCalc(vo);
+    }
+
+    /**
+     * 数据同步
+     */
+    public QqchManagementPersonConfigVo synchData1(QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
+        this.insertQqchManagementPersonConfigList(qqchManagementPersonConfigVo.getQqchManagementPersonConfigList(),qqchManagementPersonConfigVo.getVersion());
         //获取1.1项目组织
         QqchOrganizationListVo qqchOrganizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(null);
         //需求：1.1的项目组织的子集为本功能的父集
@@ -146,6 +210,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
                 iterator4.remove();
             }
         }
+        QqchManagementPersonConfigVo vo = new QqchManagementPersonConfigVo();
         vo.setVersion(qqchOrganizationListVo.getVersion());
         vo.setStageIdentity(qqchReviewService.getStage());
         // build  查询出子集
@@ -225,14 +290,14 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
      */
     @Transactional
     public void insertQqchManagementPersonConfigList(List<QqchManagementPersonConfig> qqchManagementPersonConfigList, BigDecimal version) {
-        //删除旧数据
-        QqchManagementPersonConfig qqchManagementPersonConfig = new QqchManagementPersonConfig();
-        qqchManagementPersonConfig.setVersion(version);
-        qqchManagementPersonConfigMapper.deleteQqchManagementPersonConfig(qqchManagementPersonConfig);
 
         if (CollectionUtils.isEmpty(qqchManagementPersonConfigList)) {
             return;
         }
+        //删除旧数据
+        QqchManagementPersonConfig qqchManagementPersonConfig = new QqchManagementPersonConfig();
+        qqchManagementPersonConfig.setVersion(version);
+        qqchManagementPersonConfigMapper.deleteQqchManagementPersonConfig(qqchManagementPersonConfig);
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

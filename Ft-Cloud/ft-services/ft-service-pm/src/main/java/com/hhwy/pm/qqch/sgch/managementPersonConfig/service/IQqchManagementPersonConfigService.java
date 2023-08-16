@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonC
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.vo.QqchManagementPersonConfigVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -31,4 +32,6 @@ public interface IQqchManagementPersonConfigService {
 
 
     QqchManagementPersonConfigVo synchData( QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
+
+    Map<String, Integer> personNumCalc(QqchManagementPersonConfigVo vo);
 }

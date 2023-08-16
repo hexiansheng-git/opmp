@@ -69,14 +69,11 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
      * @return
      */
     public QqchOrganizationListVo getQqchOrganizationListVo(BigDecimal version) {
-        QqchOrganizationListVo organizationListVo = new QqchOrganizationListVo();
-        List<QqchOrganizationList> dateList = new ArrayList<>();
-
         version = VersionUtil.getVersion("qqch_organization_list", version);
-        organizationListVo.setVersion(version);
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
+        List<QqchOrganizationList> dateList = new ArrayList<>();
         dateList = TreeUtil.build(qqchOrganizationListList, null);
         //初始化数据 F1 F2。。。。
         if (dateList.size() == 0) {
@@ -93,7 +90,9 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
             });
             dateList = dateList.stream().sorted(Comparator.comparing(QqchOrganizationList::getSort)).collect(Collectors.toList());
         }
+        QqchOrganizationListVo organizationListVo = new QqchOrganizationListVo();
         organizationListVo.setDataList(dateList);
+        organizationListVo.setVersion(version);
         //查询阶段
         organizationListVo.setStageIdentity(qqchReviewService.getStage());
         return organizationListVo;
