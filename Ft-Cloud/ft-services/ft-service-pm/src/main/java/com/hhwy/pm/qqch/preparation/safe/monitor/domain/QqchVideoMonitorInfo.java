@@ -59,7 +59,7 @@ public class QqchVideoMonitorInfo extends BaseEntity {
      * 字段描述：责任人
      */
     @JsonProperty
-    @Excel(name = "责任人")
+    @Excel(name = "责任人id")
     private String director;
     /**
      * 字段描述：版本

@@ -16,8 +16,6 @@
     <result property="statisticsDeptId" column="statistics_dept_id"/>
     <result property="statisticsDept" column="statistics_dept"/>
     <result property="costUseNote" column="cost_use_note"/>
-    <result property="directorId" column="director_id"/>
-    <result property="director" column="director"/>
     <result property="version" column="version"/>
     <result property="valid" column="valid"/>
     <result property="remark" column="remark"/>
@@ -52,8 +50,6 @@
       ,`statistics_dept_id`
       ,`statistics_dept`
       ,`cost_use_note`
-      ,`director_id`
-      ,`director`
       ,`version`
       ,`valid`
       ,`remark`
@@ -92,8 +88,6 @@
       </if>
       <if test="statisticsDept != null  and statisticsDept != ''">and `statistics_dept` = #{statisticsDept}</if>
       <if test="costUseNote != null  and costUseNote != ''">and `cost_use_note` = #{costUseNote}</if>
-      <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
-      <if test="director != null  and director != ''">and `director` = #{director}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -134,8 +128,6 @@
       </if>
       <if test="statisticsDept != null  and statisticsDept != ''">and `statistics_dept` = #{statisticsDept}</if>
       <if test="costUseNote != null  and costUseNote != ''">and `cost_use_note` = #{costUseNote}</if>
-      <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
-      <if test="director != null  and director != ''">and `director` = #{director}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -174,8 +166,6 @@
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">`statistics_dept_id`,</if>
       <if test="statisticsDept != null  and statisticsDept != ''">`statistics_dept`,</if>
       <if test="costUseNote != null  and costUseNote != ''">`cost_use_note`,</if>
-      <if test="directorId != null  and directorId != ''">`director_id`,</if>
-      <if test="director != null  and director != ''">`director`,</if>
       <if test="version != null ">`version`,</if>
       <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
@@ -209,8 +199,6 @@
       <if test="statisticsDeptId != null  and statisticsDeptId != ''">#{statisticsDeptId},</if>
       <if test="statisticsDept != null  and statisticsDept != ''">#{statisticsDept},</if>
       <if test="costUseNote != null  and costUseNote != ''">#{costUseNote},</if>
-      <if test="directorId != null  and directorId != ''">#{directorId},</if>
-      <if test="director != null  and director != ''">#{director},</if>
       <if test="version != null ">#{version},</if>
       <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
@@ -249,8 +237,6 @@
       `statistics_dept_id`,
       `statistics_dept`,
       `cost_use_note`,
-      `director_id`,
-      `director`,
       `version`,
       `valid`,
       `remark`,
@@ -285,8 +271,6 @@
         #{item.statisticsDeptId},
         #{item.statisticsDept},
         #{item.costUseNote},
-        #{item.directorId},
-        #{item.director},
         #{item.version},
         #{item.valid},
         #{item.remark},
@@ -324,8 +308,6 @@
       <if test="statisticsDeptId != null  and  statisticsDeptId != ''">`statistics_dept_id` = #{statisticsDeptId},</if>
       <if test="statisticsDept != null  and  statisticsDept != ''">`statistics_dept` = #{statisticsDept},</if>
       <if test="costUseNote != null  and  costUseNote != ''">`cost_use_note` = #{costUseNote},</if>
-      <if test="directorId != null  and  directorId != ''">`director_id` = #{directorId},</if>
-      <if test="director != null  and  director != ''">`director` = #{director},</if>
       <if test="version != null ">`version` = #{version},</if>
       <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
@@ -404,16 +386,6 @@
       <trim prefix="cost_use_note  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.costUseNote}
-        </foreach>
-      </trim>
-      <trim prefix="director_id  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.directorId}
-        </foreach>
-      </trim>
-      <trim prefix="director  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.director}
         </foreach>
       </trim>
       <trim prefix="version  = case" suffix="end,">
@@ -542,8 +514,6 @@
       </if>
       <if test="statisticsDept != null  and statisticsDept != ''">and `statistics_dept` = #{statisticsDept}</if>
       <if test="costUseNote != null  and costUseNote != ''">and `cost_use_note` = #{costUseNote}</if>
-      <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
-      <if test="director != null  and director != ''">and `director` = #{director}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>

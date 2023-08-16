@@ -24,7 +24,7 @@ public interface IQqchQualityProblemControlService {
      * @param qqchQualityProblemControlVo
      * @return
      */
-    void updateQqchQualityProblemControlList(QqchQualityProblemControlVo qqchQualityProblemControlVo);
+    void batchSave(QqchQualityProblemControlVo qqchQualityProblemControlVo);
 
     /**
      * 质量通病清单数据保存时，将数据同步过来

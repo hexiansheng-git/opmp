@@ -1,19 +1,17 @@
 package com.hhwy.pm;
 
-import com.hhwy.common.datasource.core.EnableFtDynamicDataSource;
+import com.hhwy.common.security.annotation.EnableCustomConfig;
 import com.hhwy.common.security.annotation.EnableFtFeignClients;
-import com.hhwy.common.tenant.annotation.EnableFtTenantClient;
+import com.hhwy.common.swagger.annotation.EnableCustomSwagger2;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import com.hhwy.common.security.annotation.EnableCustomConfig;
-import com.hhwy.common.swagger.annotation.EnableCustomSwagger2;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.Environment;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 /**
  * Demo模块
@@ -25,7 +23,7 @@ import java.net.UnknownHostException;
 @EnableFtFeignClients
 @SpringBootApplication(scanBasePackages = {"com.hhwy.*"})
 //@EnableFtDynamicDataSource
-@EnableFtTenantClient
+//@EnableFtTenantClient
 //@EnableFtSocketServer
 //@EnableFtSocketClient
 public class FtPmApplication {

@@ -91,18 +91,6 @@ public class QqchSafeMeasureCostPlan extends BaseEntity {
     @NotBlank(message = "费用使用注意事项不能为空", groups = {ValidationGroups.Save.class})
     private String costUseNote;
     /**
-     * 字段描述：责任id
-     */
-    @JsonProperty
-    @Excel(name = "责任id")
-    private String directorId;
-    /**
-     * 字段描述：责任人
-     */
-    @JsonProperty
-    @Excel(name = "责任人")
-    private String director;
-    /**
      * 字段描述：版本
      */
     @JsonProperty

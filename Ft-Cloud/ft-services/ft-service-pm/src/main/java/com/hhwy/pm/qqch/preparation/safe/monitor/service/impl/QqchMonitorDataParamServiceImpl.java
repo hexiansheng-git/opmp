@@ -11,7 +11,6 @@ import com.hhwy.pm.qqch.preparation.safe.monitor.mapper.QqchMonitorDataParamMapp
 import com.hhwy.pm.qqch.preparation.safe.monitor.service.IQqchMonitorDataParamService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -81,7 +80,6 @@ public class QqchMonitorDataParamServiceImpl implements IQqchMonitorDataParamSer
             List<QqchMonitorDataParam> list = TreeUtil.treeToList(voParam.getTreeList());
 
             for (QqchMonitorDataParam qqchMonitorDataParam : list) {
-                qqchMonitorDataParam.setId(IdWorker.createId());
                 qqchMonitorDataParam.setVersion(voParam.getVersion());
                 if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     qqchMonitorDataParam.setValid(Valid.YES);

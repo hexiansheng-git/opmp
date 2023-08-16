@@ -59,7 +59,7 @@ public class QqchGridDivide extends BaseEntity {
      * 字段描述：格子内人员总数数
      */
     @JsonProperty
-    @Excel(name = "格子内人员总数数")
+    @Excel(name = "格子内人员总数")
     private String totalNum;
     /**
      * 字段描述：格子长id

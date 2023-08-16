@@ -49,7 +49,15 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         QqchSafeMeasureCostPlan qryParam = new QqchSafeMeasureCostPlan();
         qryParam.setVersion(version);
         List<QqchSafeMeasureCostPlan> list = qqchSafeMeasureCostPlanMapper.getQqchSafeMeasureCostPlanList(qryParam);
-
+        BigDecimal expectInvestCostTotal = BigDecimal.ZERO;
+        // todo 需求未定数据来源
+        BigDecimal projectCostPercentage = BigDecimal.ZERO;
+        for (QqchSafeMeasureCostPlan qqchSafeMeasureCostPlan : list) {
+            expectInvestCostTotal = expectInvestCostTotal.add(qqchSafeMeasureCostPlan.getExpectInvestCost() == null ?
+                BigDecimal.ZERO : qqchSafeMeasureCostPlan.getExpectInvestCost());
+        }
+        vo.setExpectInvestCostTotal(expectInvestCostTotal);
+        vo.setProjectCostPercentage(projectCostPercentage);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);

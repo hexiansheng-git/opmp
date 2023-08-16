@@ -52,7 +52,7 @@ public class QqchQualityProblemControlController extends BaseController {
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Update.class) @RequestBody QqchQualityProblemControlVo qqchQualityProblemControlVo) {
-        qqchQualityProblemControlService.updateQqchQualityProblemControlList(qqchQualityProblemControlVo);
+        qqchQualityProblemControlService.batchSave(qqchQualityProblemControlVo);
         return AjaxResult.success();
     }
 }

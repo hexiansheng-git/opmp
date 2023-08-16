@@ -54,9 +54,9 @@ public class QqchQualityProblemTrain extends BaseEntity {
     /**
      * 字段描述：培训时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "培训时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "培训时间", dateFormat = "yyyy-MM-dd")
     private Date trainTime;
     /**
      * 字段描述：培训时长（小时）

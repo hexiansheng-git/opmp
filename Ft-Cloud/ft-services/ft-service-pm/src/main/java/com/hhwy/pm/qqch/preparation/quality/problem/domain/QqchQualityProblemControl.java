@@ -66,30 +66,30 @@ public class QqchQualityProblemControl extends BaseEntity {
     /**
      * 字段描述：方案定稿时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "方案定稿时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "方案定稿时间", dateFormat = "yyyy-MM-dd")
     private Date schemeFinalizeTime;
     /**
      * 字段描述：三级交底完成时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "三级交底完成时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "三级交底完成时间", dateFormat = "yyyy-MM-dd")
     private Date thirdDiscloseFinishTime;
     /**
      * 字段描述：技术培训时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "技术培训时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "技术培训时间", dateFormat = "yyyy-MM-dd")
     private Date technicalTrainTime;
     /**
      * 字段描述：计划实施时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planImplementTime;
     /**
      * 字段描述：责任id

@@ -6,14 +6,18 @@ import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.quality.problem.domain.QqchQualityProblemControl;
+import com.hhwy.pm.qqch.preparation.quality.problem.domain.QqchQualityProblemList;
 import com.hhwy.pm.qqch.preparation.quality.problem.domain.vo.QqchQualityProblemControlVo;
 import com.hhwy.pm.qqch.preparation.quality.problem.mapper.QqchQualityProblemControlMapper;
 import com.hhwy.pm.qqch.preparation.quality.problem.service.IQqchQualityProblemControlService;
+import com.hhwy.pm.qqch.preparation.quality.problem.service.IQqchQualityProblemListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +37,8 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IQqchQualityProblemListService qqchQualityProblemListService;
 
     /**
      * 列表
@@ -46,12 +52,33 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
 
         QqchQualityProblemControl qryParam = new QqchQualityProblemControl();
         qryParam.setVersion(version);
-        List<QqchQualityProblemControl> list =
-            qqchQualityProblemControlMapper.getQqchQualityProblemControlList(qryParam);
+        List<QqchQualityProblemControl> controlList = qqchQualityProblemControlMapper
+            .getQqchQualityProblemControlList(qryParam);
+
+        // 组装列表
+        List<QqchQualityProblemControl> newList = new ArrayList<>();
+
+        // 质量通病清单
+        List<QqchQualityProblemList> problemList = qqchQualityProblemListService.getQqchQualityProblemListList(version)
+            .getList();
+
+        for (QqchQualityProblemList qqchQualityProblemList : problemList) {
+            QqchQualityProblemControl qqchQualityProblemControl = new QqchQualityProblemControl();
+            for (QqchQualityProblemControl control : controlList) {
+                if (control.getProblemCode().equals(qqchQualityProblemList.getProblemCode())) {
+                    BeanUtils.copyProperties(control, qqchQualityProblemControl);
+                }
+            }
+            qqchQualityProblemControl.setProblemCode(qqchQualityProblemList.getProblemCode());
+            qqchQualityProblemControl.setProblemName(qqchQualityProblemList.getProblemName());
+            qqchQualityProblemControl.setWbsCode(qqchQualityProblemList.getWbsCode());
+            qqchQualityProblemControl.setWbsName(qqchQualityProblemList.getWbsName());
+            newList.add(qqchQualityProblemControl);
+        }
 
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setList(list);
+        vo.setList(newList);
         return vo;
     }
 
@@ -62,12 +89,26 @@ public class QqchQualityProblemControlServiceImpl implements IQqchQualityProblem
      * @return
      */
     @Transactional
-    public void updateQqchQualityProblemControlList(QqchQualityProblemControlVo voParam) {
-        for (QqchQualityProblemControl qqchQualityProblemControl : voParam.getList()) {
-            qqchQualityProblemControl.setUpdateUser(SecurityUtils.getUserName());
-            qqchQualityProblemControl.setUpdateTime(DateUtils.getNowDate());
+    public void batchSave(QqchQualityProblemControlVo voParam) {
+
+        // 清空数据库表中数据
+        QqchQualityProblemControl deleteParam = new QqchQualityProblemControl();
+        deleteParam.setVersion(voParam.getVersion());
+        qqchQualityProblemControlMapper.deleteQqchQualityProblemControl(deleteParam);
+
+        if (!CollectionUtils.isEmpty(voParam.getList())) {
+            for (QqchQualityProblemControl qqchQualityProblemControl : voParam.getList()) {
+                qqchQualityProblemControl.setId(IdWorker.createId());
+                qqchQualityProblemControl.setVersion(voParam.getVersion());
+                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                    qqchQualityProblemControl.setValid(Valid.YES);
+                }
+                qqchQualityProblemControl.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchQualityProblemControl.setCreateUserName(SecurityUtils.getUserName());
+                qqchQualityProblemControl.setCreateTime(DateUtils.getNowDate());
+            }
+            qqchQualityProblemControlMapper.insertQqchQualityProblemControlList(voParam.getList());
         }
-        qqchQualityProblemControlMapper.updateQqchQualityProblemControlList(voParam.getList());
 
         String buttonMark = voParam.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
