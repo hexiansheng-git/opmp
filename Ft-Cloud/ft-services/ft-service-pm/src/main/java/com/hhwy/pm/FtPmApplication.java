@@ -3,6 +3,7 @@ package com.hhwy.pm;
 import com.hhwy.common.security.annotation.EnableCustomConfig;
 import com.hhwy.common.security.annotation.EnableFtFeignClients;
 import com.hhwy.common.swagger.annotation.EnableCustomSwagger2;
+import com.hhwy.common.tenant.annotation.EnableFtTenantClient;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.apache.commons.lang3.StringUtils;
@@ -23,7 +24,7 @@ import org.springframework.core.env.Environment;
 @EnableFtFeignClients
 @SpringBootApplication(scanBasePackages = {"com.hhwy.*"})
 //@EnableFtDynamicDataSource
-//@EnableFtTenantClient
+@EnableFtTenantClient
 //@EnableFtSocketServer
 //@EnableFtSocketClient
 public class FtPmApplication {
