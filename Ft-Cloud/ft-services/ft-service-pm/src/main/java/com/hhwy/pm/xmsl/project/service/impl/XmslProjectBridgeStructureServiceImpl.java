@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
@@ -9,9 +8,11 @@ import com.hhwy.pm.xmsl.project.mapper.XmslProjectBridgeStructureMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBridgeStructureService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author han
@@ -63,8 +64,8 @@ public class XmslProjectBridgeStructureServiceImpl implements IXmslProjectBridge
             xmslProjectBridgeStructure.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectBridgeStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectBridgeStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectBridgeStructure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectBridgeStructure.setCreateUserName(SecurityUtils.getUserName());
+            xmslProjectBridgeStructure.setCreateUser(xmslProjectBasicInfo.getCreateUser());
+            xmslProjectBridgeStructure.setCreateUserName(xmslProjectBasicInfo.getCreateUserName());
             xmslProjectBridgeStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectBridgeStructureMapper.insertProjectBridgeStructureList(xmslProjectBridgeStructureList);

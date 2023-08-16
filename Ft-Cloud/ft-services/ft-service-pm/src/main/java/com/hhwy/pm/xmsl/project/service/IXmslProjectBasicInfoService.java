@@ -51,4 +51,6 @@ public interface IXmslProjectBasicInfoService {
      * @return
      */
     XmslProjectBasicInfo getProjectBasicInfoWithoutSublist(XmslProjectBasicInfo projectBasicInfo);
+
+    void insertProjectInvokeProject(XmslProjectBasicInfo projectBasicInfo);
 }

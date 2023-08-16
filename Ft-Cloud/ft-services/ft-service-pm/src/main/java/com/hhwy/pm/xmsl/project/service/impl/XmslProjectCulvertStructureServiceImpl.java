@@ -1,6 +1,5 @@
 package com.hhwy.pm.xmsl.project.service.impl;
 
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
@@ -8,10 +7,12 @@ import com.hhwy.pm.xmsl.project.domain.XmslProjectCulvertStructure;
 import com.hhwy.pm.xmsl.project.mapper.XmslProjectCulvertStructureMapper;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectCulvertStructureService;
 import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.util.List;
 
 /**
  * @author han
@@ -63,8 +64,8 @@ public class XmslProjectCulvertStructureServiceImpl implements IXmslProjectCulve
             xmslProjectCulvertStructure.setRegionId(xmslProjectBasicInfo.getRegionId());
             xmslProjectCulvertStructure.setRegionName(xmslProjectBasicInfo.getRegionName());
             xmslProjectCulvertStructure.setDeptId(xmslProjectBasicInfo.getDeptId());
-            xmslProjectCulvertStructure.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslProjectCulvertStructure.setCreateUserName(SecurityUtils.getUserName());
+            xmslProjectCulvertStructure.setCreateUser(xmslProjectBasicInfo.getCreateUser());
+            xmslProjectCulvertStructure.setCreateUserName(xmslProjectBasicInfo.getCreateUserName());
             xmslProjectCulvertStructure.setCreateTime(DateUtils.getNowDate());
         }
         return xmslProjectCulvertStructureMapper.insertProjectCulvertStructureList(xmslProjectCulvertStructureList);

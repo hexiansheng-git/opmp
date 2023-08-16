@@ -115,6 +115,16 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         return xmslProjectBasicInfoMapper.getProjectBasicInfoList(xmslProjectBasicInfo);
     }
 
+    @Override
+    public void insertProjectInvokeProject(XmslProjectBasicInfo projectBasicInfo) {
+        Long id = IdWorker.createId();
+        projectBasicInfo.setId(id);
+
+        this.setSublist(projectBasicInfo);
+
+        xmslProjectBasicInfoMapper.insertProjectBasicInfo(projectBasicInfo);
+    }
+
     /**
      * 新增项目基本信息
      * @param xmslProjectBasicInfo
@@ -125,6 +135,19 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         Long id = IdWorker.createId();
         xmslProjectBasicInfo.setId(id);
 
+        this.setSublist(xmslProjectBasicInfo);
+
+        xmslProjectBasicInfo.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        xmslProjectBasicInfo.setCreateUserName(SecurityUtils.getUserName());
+        xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
+        return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
+    }
+
+    /**
+     * 处理子表
+     * @param xmslProjectBasicInfo
+     */
+    public void setSublist(XmslProjectBasicInfo xmslProjectBasicInfo){
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
         if(!CollectionUtils.isEmpty(xmslProjectBridgeStructureList)){
@@ -148,11 +171,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         if(!CollectionUtils.isEmpty(xmslProjectMaterialsAmountList)){
             projectMaterialsAmountService.insertProjectMaterialsAmountList(xmslProjectBasicInfo.getXmslProjectMaterialsAmountList(), xmslProjectBasicInfo);
         }
-
-        xmslProjectBasicInfo.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-        xmslProjectBasicInfo.setCreateUserName(SecurityUtils.getUserName());
-        xmslProjectBasicInfo.setCreateTime(DateUtils.getNowDate());
-        return xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
     }
 
     /**
@@ -211,4 +229,5 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public XmslProjectBasicInfo getProjectBasicInfoWithoutSublist(XmslProjectBasicInfo projectBasicInfo) {
         return xmslProjectBasicInfoMapper.getProjectBasicInfo(projectBasicInfo);
     }
+
 }
