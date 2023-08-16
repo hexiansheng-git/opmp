@@ -12,6 +12,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -88,6 +89,7 @@ public class QqchImportantServiceImpl implements IQqchImportantService {
     @Transactional(rollbackFor = Exception.class)
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchImportant> dtos) {
+        if (CollectionUtils.isEmpty(dtos)) return;
         for (QqchImportant dto : dtos) {
             dto.setId(IdWorker.createId());
         }

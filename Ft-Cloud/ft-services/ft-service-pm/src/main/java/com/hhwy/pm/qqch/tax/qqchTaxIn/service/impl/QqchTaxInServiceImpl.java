@@ -144,7 +144,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         this.qqchTaxStageService.saveStage(recordId,"1");
 
         // 保存主要
-        List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), qqchTaxInParam.getDto().getInList());
+        List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), qqchTaxInParam.getModuleIdentity(),qqchTaxInParam.getDto().getInList());
         for (QqchTaxIn qqchTaxIn : qqchTaxIns) {
             qqchTaxIn.setDataType("1");
             qqchTaxIn.setRecordId(recordId);
@@ -153,7 +153,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         
 
         // 保存其他
-        List<QqchTaxIn> otherInList = CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), qqchTaxInParam.getDto().getOtherList());
+        List<QqchTaxIn> otherInList = CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(),qqchTaxInParam.getModuleIdentity(), qqchTaxInParam.getDto().getOtherList());
         for (QqchTaxIn qqchTaxIn : otherInList) {
             qqchTaxIn.setDataType("2");
             qqchTaxIn.setRecordId(recordId);
@@ -163,7 +163,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         // 所有的详情
         List<QqchTaxInDetail> allDetails = bean.saveInList(allTaxInList);
         // 新增年份数据
-        this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(), allDetails));
+        this.detailService.save(CompileEntity.dealSaveDto(qqchTaxInParam.getVersion(), qqchTaxInParam.getSubmitFlag(),qqchTaxInParam.getModuleIdentity(), allDetails));
 
     }
 

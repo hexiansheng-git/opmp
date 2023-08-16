@@ -116,11 +116,12 @@ public class QqchMeasureExpRangeServiceImpl implements IQqchMeasureExpRangeServi
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void saveAll(QqchMeasureExpDTO expVO) {
-        IQqchMeasureExpRangeService bean = (IQqchMeasureExpRangeService) AopContext.currentProxy();
-        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getExpRangeList());
-        bean.saveTreeList(qqchMeasureExpRanges);
-        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getPersonList()));
-        QqchMeasureOrg org = expVO.getOrg();
-        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),org));
+//        IQqchMeasureExpRangeService bean = (IQqchMeasureExpRangeService) AopContext.currentProxy();
+//        // TODO 找黄真要
+//        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),"asasasasa", expVO.getExpRangeList());
+//        bean.saveTreeList(qqchMeasureExpRanges);
+//        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "asasasasa",expVO.getPersonList()));
+//        QqchMeasureOrg org = expVO.getOrg();
+//        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), "asasasasa",expVO.getSubmitFlag(),org));
     }
 }

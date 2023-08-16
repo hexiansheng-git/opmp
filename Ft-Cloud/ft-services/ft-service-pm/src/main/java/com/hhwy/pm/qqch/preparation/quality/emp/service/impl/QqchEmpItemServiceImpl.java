@@ -13,11 +13,14 @@ import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.Qqc
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import springfox.documentation.spring.web.json.Json;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,11 +36,14 @@ import java.util.stream.Collectors;
 @Service
 public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
 
+    
 
     @Autowired
     private IQqchWeightEngineeringListService weightEngineeringListService;
     @Autowired
     private QqchEmpItemMapper qqchEmpItemMapper;
+    
+    
 
 
     public QqchEmpItem getQqchEmpItem(QqchEmpItem qqchEmpItem) {
@@ -102,18 +108,24 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         // 用于存放更改的wbs
         HashSet<String> wbsCodeList = new HashSet<>();
 
+        ArrayList<QqchEmpItem> iDatas = new ArrayList<>();
+        
         // 获取要保存的数据
         List<List<QqchEmpItem>> empItemListList = dto.getDto();
         // 处理要保存的数据
         for (List<QqchEmpItem> qqchEmpItemList : empItemListList) {
             for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
+                qqchEmpItem.setId(IdWorker.createId());
                 wbsCodeList.add(qqchEmpItem.getWbsCode());
+                CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(),dto.getModuleIdentity(), qqchEmpItem);
+                EntityUtils.setCreateUpdateInfo(qqchEmpItem);
+                iDatas.add(qqchEmpItem);
             }
-            CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), qqchEmpItemList);
         }
 
         // 将当前版本的做出变更的wbs进行删除
         this.qqchEmpItemMapper.deleteByWbsCodeAndVersion(wbsCodeList, version);
+        this.qqchEmpItemMapper.insertQqchEmpItemList(iDatas);
 
     }
 
@@ -135,12 +147,13 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.LIST, tableName = "qqch_emp_item")
+    @CompileAspect(type = CompileOptEnum.TREE, tableName = "qqch_emp_item")
     public CompileEntity<List<XmslWbs>> itemList(QqchEmpItem dto) {
-        CompileEntity objectCompileEntity = new CompileEntity();
-
+        CompileEntity entity = new CompileEntity();
         List<QqchEmpItem> qqchEmpItemList = this.qqchEmpItemMapper.getQqchEmpItemList(dto);
-        return objectCompileEntity ;
+        entity.setVersion(dto.getVersion());
+        entity.setDto(qqchEmpItemList);
+        return entity ;
     }
 
     private List<XmslWbs> getWbsList(List<String> wbsIdList) {
@@ -148,7 +161,12 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         XmslWbs xmslWbs = new XmslWbs();
         xmslWbs.setId("1111111");
         xmslWbs.setCode("sssssss");
+        xmslWbs.setName("adadssdadadadasd");
         res.add(xmslWbs);
         return res;
+    }
+
+    public static void main(String[] args) {
+        JsonUtils.soutJsonStr(XmslWbs.class);
     }
 }

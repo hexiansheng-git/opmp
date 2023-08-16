@@ -142,7 +142,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         ArrayList<QqchTaxCost> allList = new ArrayList<>();
 
         // 处理主要
-        List<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDto().getCostList());
+        List<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(),dto.getModuleIdentity(), dto.getDto().getCostList());
         
         // 生成记录id // 分期会用到
         Long recordId = IdWorker.createId();
@@ -168,7 +168,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         
         
         // 处理其他
-        List<QqchTaxCost> otherList = CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDto().getOtherList());
+        List<QqchTaxCost> otherList = CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getModuleIdentity(),dto.getDto().getOtherList());
         for (QqchTaxCost cost : otherList) {
             cost.setDataType("2");
 
@@ -185,7 +185,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         // 费用数据入库
         List<QqchTaxCostDetail> allDetails = bean.saveCostList(allList);
         // 新增年份数据
-        this.detailService.save(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), allDetails));
+        this.detailService.save(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getModuleIdentity(),allDetails));
 
 
     }

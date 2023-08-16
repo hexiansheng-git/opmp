@@ -55,19 +55,17 @@ public class QqchEmpItemController extends BaseController {
 
 
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:wbsList")
     @PostMapping("/wbsList")
-    public AjaxResult wbsList(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity dto) {
+    public AjaxResult wbsList(@Validated(ValidationGroups.Select.class) @RequestBody QqchEmpItem dto) {
         List<XmslWbs> xmslWbs = qqchEmpItemService.wbsList(dto);
         return AjaxResult.success(xmslWbs);
     }
 
 
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:wbsList")
-    @PostMapping("/itemList")
-    public AjaxResult itemList(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchEmpItem> dto) {
-        CompileEntity<List<XmslWbs>> xmslWbs = qqchEmpItemService.itemList(dto.dealListDto());
+    @GetMapping("/itemList")
+    public AjaxResult itemList(@Validated(ValidationGroups.Select.class) QqchEmpItem dto) {
+        CompileEntity<List<XmslWbs>> xmslWbs = qqchEmpItemService.itemList(dto);
         return AjaxResult.success(xmslWbs);
     }
 

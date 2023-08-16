@@ -8,18 +8,21 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -30,7 +33,8 @@ public class CompileAspectImpl {
     private static CommonMapper commonMapper;
     private static IQqchModuleConfirmCaseService moduleConfirmCaseService;
     private static IQqchReviewService reviewService;
-    
+    private static RedisUtils redisUtils;
+
 
     static {
         commonMapper = SpringUtils.getBean(CommonMapper.class);
@@ -46,8 +50,7 @@ public class CompileAspectImpl {
     public void doAspect() {
     }
 
-    @Before("doAspect() && @annotation(compileAspect)")
-    public void doBefore(JoinPoint joinPoint, CompileAspect compileAspect) {
+    public void beforeProceed(JoinPoint joinPoint, CompileAspect compileAspect) {
         String methodName = joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         StringBuffer sb = new StringBuffer();
@@ -63,23 +66,21 @@ public class CompileAspectImpl {
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
                     commonMapper.deleteByVersion(tableName, (arg1).getVersion());
-                    
-                    // moduleConfirmCaseService.addConfirmRecord(arg1.getModuleIdentity(),reviewService.getStage());
                 }
             }
 
-//            if (arg instanceof List) {
-//                List list = (List) arg;
-//                // 为空 返回
-//                if (CollectionUtils.isEmpty(list)) return;
-//                Object o = list.get(0);
-//                if (o instanceof CompileEntity) {
-//                    List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
-//                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
-//                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
-//                    }
-//                }
-//            }
+            if (arg instanceof List) {
+                List list = (List) arg;
+                if (list.get(0) instanceof CompileEntity) {
+                    List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
+                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
+                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
+                    }
+                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntityList.get(0).getSubmitFlag())) {
+                        args[i] = Collections.emptyList();
+                    }
+                }
+            }
 
 
             sb.append(i == args.length - 1 ? arg.toString() : arg.toString() + ", ");
@@ -112,26 +113,15 @@ public class CompileAspectImpl {
                 Thread.currentThread().getId());
         //获取方法参数值数组
         Object[] args = joinPoint.getArgs();
-        String tableName = compileAspect.tableName();
-        // 空数据特殊处理
-        for (int i = 0; i < args.length; i++) {
-            Object arg = args[i];
-            if (arg instanceof List) {
-                List list = (List) arg;
-                if (list.get(0) instanceof CompileEntity) {
-                    List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
-                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
-                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
-                    }
-                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntityList.get(0).getSubmitFlag())) {
-                        args[i] = Collections.emptyList();
-                    }
-                }
-            }
-        }
-        
+        this.beforeProceed(joinPoint, compileAspect);
         Object result = joinPoint.proceed(args);
         log.info("方法响应结果为{}", result);
+        Object o = this.afterProcessd(joinPoint, compileAspect, result);
+        return o;
+
+    }
+
+    private Object afterProcessd(ProceedingJoinPoint joinPoint, CompileAspect compileAspect, Object result) {
         if (CompileOptEnum.TREE.equals(compileAspect.type())) {
             if (result instanceof List) {
                 List list = (List) result;
@@ -145,8 +135,8 @@ public class CompileAspectImpl {
                 }
             }
         }
-        
-        
+
+
         if (result instanceof CompileEntity) {
             CompileEntity res = (CompileEntity) result;
             // 设置当前阶段

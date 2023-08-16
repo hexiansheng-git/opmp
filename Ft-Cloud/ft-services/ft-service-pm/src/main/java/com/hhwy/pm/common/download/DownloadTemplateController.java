@@ -70,4 +70,21 @@ public class DownloadTemplateController {
         downTemplate.downloadTemplateWithSuffix(request,response,fileName,exportName);
     }
 
+
+    /**
+     * 下载模板，.xls或.xlsx
+     * @param fileName 模板名称，带后缀
+     * @param exportName 导出名称，不带后缀
+     * @param request
+     * @param response
+     * @throws Exception
+     */
+    @GetMapping( "/ftDownLoad")
+    public void ftDownLoad(@RequestParam String fileName,
+                                     @RequestParam(required = false) String exportName,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) {
+        downTemplate.ftDownLoad(request, response, fileName, exportName);
+    }
+
 }

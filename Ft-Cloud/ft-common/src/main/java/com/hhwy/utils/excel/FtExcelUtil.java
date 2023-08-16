@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.reflect.ReflectUtils;
 import com.hhwy.utils.dict.DictUtil;
+import com.hhwy.utils.excelUtil.HeadVo;
 import com.hhwy.utils.field.FieldUtils;
 import com.hhwy.utils.tree.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
@@ -40,13 +41,21 @@ public class FtExcelUtil<T> {
     private Map<String, CellStyle> styles;
     private List<T> list;
     private List<Object[]> fields;
-    public Class<T> clazz;
+    public Class<?> clazz;
     public Map<String, Map<String, String>> dictsMap = new HashedMap<>();
     public Map<String, List> dicTypeAndLabelMap = new HashedMap<>();
 
     public FtExcelUtil(Class<T> clazz) {
         this.clazz = clazz;
     }
+
+    public FtExcelUtil(String  className) throws Exception {
+        Class<?> aClass = Class.forName(className);
+        this.clazz = aClass;;
+    }
+    
+    
+    
 
     public void init(List<T> list, String sheetName, FtExcel.Type type) {
 
@@ -141,7 +150,7 @@ public class FtExcelUtil<T> {
 
             for (Entry<Integer, Field> integerFieldEntry : fieldsMap.entrySet()) {
                 Object val = this.getCellValue(row, integerFieldEntry.getKey());
-                entity = entity == null ? this.clazz.newInstance() : entity;
+                entity = entity == null ? (T)this.clazz.newInstance() : entity;
                 Field field = fieldsMap.get(integerFieldEntry.getKey());
                 Class<?> fieldType = field.getType();
                 // 对不同类型的属性进行处理
@@ -778,7 +787,7 @@ public class FtExcelUtil<T> {
             T entity = null;
             for (int filedIndex = 0; filedIndex < pmsFields.size(); filedIndex++) {
                 Object val = this.getCellValue(row, filedIndex);
-                entity = entity == null ? this.clazz.newInstance() : entity;
+                entity = entity == null ? (T)this.clazz.newInstance() : entity;
                 Field field = pmsFields.get(filedIndex);
                 Class<?> fieldType = field.getType();
                 if (String.class == fieldType) {

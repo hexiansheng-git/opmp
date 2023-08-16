@@ -29,11 +29,11 @@ public class QqchMeasureServiceImpl implements IQqchMeasureService {
     private IQqchMeasureExpPersonService personService;
     @Override
     public void saveAll(QqchMeasureExpDTO expVO) {
-        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getExpRangeList());
+        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),"preliminaryPlanning/SurveyDesign/list1111111", expVO.getExpRangeList());
         measureExpRangeService.saveTreeList(qqchMeasureExpRanges);
-        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), expVO.getPersonList()));
+        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "preliminaryPlanning/SurveyDesign/list1111111",expVO.getPersonList()));
         QqchMeasureOrg org = expVO.getOrg();
-        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),org));
+        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), "preliminaryPlanning/SurveyDesign/list1111111",expVO.getSubmitFlag(),org));
         
     }
 }

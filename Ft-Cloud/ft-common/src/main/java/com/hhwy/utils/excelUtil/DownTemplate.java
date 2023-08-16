@@ -5,6 +5,7 @@ package com.hhwy.utils.excelUtil;/**
  */
 
 import com.hhwy.common.core.utils.file.FileUtils;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
@@ -33,12 +34,12 @@ import java.util.Map;
 @Component
 public class DownTemplate {
 
-    public void downloadExcel(HttpServletRequest request, HttpServletResponse res,String templateName,String excelName) throws Exception {
+    public void downloadExcel(HttpServletRequest request, HttpServletResponse res, String templateName, String excelName) throws Exception {
         //封装下拉字典项
         Map<String, List> map = getPullLists(templateName);
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("template/" + templateName);
-        if(inputStream == null)
-            return ;
+        if (inputStream == null)
+            return;
         HSSFWorkbook workBook = new HSSFWorkbook(inputStream);
         //获取创建的工作簿第一页
         HSSFSheet sheet = workBook.getSheetAt(0);
@@ -62,51 +63,52 @@ public class DownTemplate {
             cell.setCellType(CellType.STRING);
             String keyName = cell.getStringCellValue();
             cellsnameList.add(keyName);
-            if(!ObjectNullUtil.isEmpty(keyName)){
+            if (!ObjectNullUtil.isEmpty(keyName)) {
                 List vals = map.get(keyName);
-                if(null==vals || vals.size()==0){
+                if (null == vals || vals.size() == 0) {
                     continue;
                 }
                 setxiala(hiddenIndex, workBook, sheet, vals, i2);
-                hiddenIndex ++;
+                hiddenIndex++;
             }
         }
 
         sheet.removeRow(row);
         OutputStream outputStream = null;
-        try{
+        try {
             res.setCharacterEncoding("utf-8");
             res.setContentType("multipart/form-data");
             res.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, excelName));
             outputStream = res.getOutputStream();
             workBook.write(outputStream);
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
-        }finally {
-            try{
+        } finally {
+            try {
                 inputStream.close();
-                if(outputStream != null)
+                if (outputStream != null)
                     outputStream.close();
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
         }
     }
 
-    public void downloadTemplateWithSuffix(HttpServletRequest request, HttpServletResponse response, String templateName,String exportName) throws IOException {
+    public void downloadTemplateWithSuffix(HttpServletRequest request, HttpServletResponse response, String templateName, String exportName) throws IOException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("template/" + templateName);
-        if(inputStream == null){
+        if (inputStream == null) {
             throw new RuntimeException("找不到对应文件！");
         }
 
         Workbook workBook;
         String filenameExtension = StringUtils.getFilenameExtension(templateName);
 
-        if("xls".equals(filenameExtension)){
+        if ("xls".equals(filenameExtension)) {
             workBook = new HSSFWorkbook(inputStream);
 //            exportName = exportName + ".xls";
         } else if ("xlsx".equals(filenameExtension)) {
             workBook = new XSSFWorkbook(inputStream);
 //            exportName = exportName + ".xlsx";
-        }else {
+        } else {
             throw new RemoteException("文件格式不符合规范！");
         }
 
@@ -135,42 +137,43 @@ public class DownTemplate {
             cell.setCellType(CellType.STRING);
             String keyName = cell.getStringCellValue();
 //            cellsnameList.add(keyName);
-            if(!ObjectNullUtil.isEmpty(keyName)){
+            if (!ObjectNullUtil.isEmpty(keyName)) {
                 List<String> valueList = map.get(keyName);
-                if(null==valueList || valueList.size()==0){
+                if (null == valueList || valueList.size() == 0) {
                     continue;
                 }
                 setComboBox(hiddenIndex, workBook, sheet, valueList, i);
-                hiddenIndex ++;
+                hiddenIndex++;
             }
         }
 
         sheet.removeRow(row);
         OutputStream outputStream = null;
-        try{
+        try {
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
             response.setHeader("Content-Disposition", "attachment;fileName=" + FileUtils.setFileDownloadHeader(request, templateName));
             outputStream = response.getOutputStream();
             workBook.write(outputStream);
-        }catch(IOException ioe){
+        } catch (IOException ioe) {
             ioe.printStackTrace();
-        }finally {
-            try{
+        } finally {
+            try {
                 inputStream.close();
-                if(outputStream != null)
+                if (outputStream != null)
                     outputStream.close();
-            }catch (Exception ignored){}
+            } catch (Exception ignored) {
+            }
         }
     }
 
-    public void setComboBox(int sheetTotal, Workbook workbook, Sheet sheet, List<String> dataList, int columnIndex){
+    public void setComboBox(int sheetTotal, Workbook workbook, Sheet sheet, List<String> dataList, int columnIndex) {
         //新建一个sheet页
         String hiddenSheetName = "hiddenSheet" + sheetTotal;
         Sheet hiddenSheet = workbook.createSheet(hiddenSheetName);
         Cell cell;
         String[] explicitListValues = new String[dataList.size()];
-        for(int i = 0; i < dataList.size() ; i ++){
+        for (int i = 0; i < dataList.size(); i++) {
             String name = dataList.get(i);
             //根据i创建相应的行对象（说明我们将会把每个元素单独放一行）
             Row row = hiddenSheet.createRow(i);
@@ -197,14 +200,14 @@ public class DownTemplate {
 
         DataValidation dataValidation;
         DataValidationHelper dataValidationHelper;
-        if(workbook instanceof HSSFWorkbook){
+        if (workbook instanceof HSSFWorkbook) {
             dataValidationHelper = new HSSFDataValidationHelper((HSSFSheet) sheet);
-        }else {
-            dataValidationHelper = new XSSFDataValidationHelper((XSSFSheet)sheet);
+        } else {
+            dataValidationHelper = new XSSFDataValidationHelper((XSSFSheet) sheet);
         }
 
         DataValidationConstraint dataValidationConstraint = dataValidationHelper.createExplicitListConstraint(explicitListValues);
-        dataValidation = dataValidationHelper.createValidation(dataValidationConstraint,regions);
+        dataValidation = dataValidationHelper.createValidation(dataValidationConstraint, regions);
 
         //将第二个sheet设置为隐藏
         workbook.setSheetHidden(sheetTotal, true);
@@ -215,9 +218,9 @@ public class DownTemplate {
     //封装下拉选项
     public Map<String, List> getPullLists(String type) {
         Map<String, List> map = new HashMap<>();
-        for(MyDownTemplateEnum myDownTemplateType : MyDownTemplateEnum.values()){
+        for (MyDownTemplateEnum myDownTemplateType : MyDownTemplateEnum.values()) {
             String name = myDownTemplateType.getName();
-            if(type.equals(name)){
+            if (type.equals(name)) {
                 map = myDownTemplateType.pullLists();
                 break;
             }
@@ -225,12 +228,12 @@ public class DownTemplate {
         return map;
     }
 
-    public void setxiala(int sheetTotal, HSSFWorkbook workbook, HSSFSheet sheet, List<String> dataList, int columnIndex){
+    public void setxiala(int sheetTotal, HSSFWorkbook workbook, HSSFSheet sheet, List<String> dataList, int columnIndex) {
         //新建一个sheet页
         String hiddenSheetName = "hiddenSheet" + sheetTotal;
         HSSFSheet hiddenSheet = workbook.createSheet(hiddenSheetName);
         Cell cell = null;
-        for(int i = 0; i < dataList.size() ; i ++){
+        for (int i = 0; i < dataList.size(); i++) {
             String name = dataList.get(i);
             //根据i创建相应的行对象（说明我们将会把每个元素单独放一行）
             Row row = hiddenSheet.createRow(i);
@@ -332,4 +335,23 @@ public class DownTemplate {
         }
     }
 
+    public void ftDownLoad(HttpServletRequest request, HttpServletResponse response, String fileName, String exportName) {
+        try {
+            for (FtExcelEnum value : FtExcelEnum.values()) {
+                if (!value.getTemplateName().equals(fileName)) continue;
+                String clazzName = value.getClazzName();
+                Class<?> aClass = Class.forName(clazzName);
+                FtExcelUtil<?> ftExcelUtil = new FtExcelUtil<>(aClass);
+                exportName = (null != exportName && exportName != "") ? exportName : value.getExportName();
+                if (value.getFunction() == null) {
+                    ftExcelUtil.downloadTemplate(request, response, fileName, exportName);
+                } else {
+                    ftExcelUtil.downloadTemplate(request, response, fileName, value.getFunction(), exportName);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+    }
 }

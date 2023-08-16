@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.utils.JsonUtils;
 import lombok.Data;
 import lombok.ToString;
 
@@ -220,7 +221,6 @@ public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
 
 
     public static void main(String[] args) {
-        long l = System.currentTimeMillis();
-        System.out.println(l);
+        JsonUtils.soutJsonStr(QqchEmpItem.class);
     }
 }

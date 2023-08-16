@@ -102,7 +102,7 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
         QqchDocTechMae qqchOrganizationList = new QqchDocTechMae();
         qqchOrganizationList.setVersion(version);
         List<QqchDocTechMae> qqchOrganizationListList = qqchDocTechMaeMapper.getQqchDocTechMaeList(qqchOrganizationList);
-        TreeUtil.build(qqchOrganizationListList, null);
+        qqchOrganizationListList = TreeUtil.build(qqchOrganizationListList, null);
         QqchDocTechMaeV0 organizationListVo = new QqchDocTechMaeV0();
         organizationListVo.setVersion(version);
         organizationListVo.setDataList(qqchOrganizationListList);

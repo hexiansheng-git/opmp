@@ -63,11 +63,11 @@ public class QqchScheServiceImpl implements IQqchScheService {
     @Override
     public void save(QqchScheDTO dto) {
         // 保存说明
-        diffDescService.save(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffDesc()));
+        diffDescService.save(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getModuleIdentity(), dto.getDiffDesc()));
         // 保差异化计算方法
-        diffService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getDiffList()));
+        diffService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getModuleIdentity(), dto.getDiffList()));
         // 保存进度分析要素
-        analyseService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getAnalyseList()));
+        analyseService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getModuleIdentity(), dto.getAnalyseList()));
         // 保存进度影响要素
         List<List<QqchScheFactors>> factorsVOList = dto.getScheFactorsVO() != null ? dto.getScheFactorsVO().getFactorsVOList() : new ArrayList<>();
 
@@ -84,11 +84,11 @@ public class QqchScheServiceImpl implements IQqchScheService {
                 rowNum++;
             }
 
-            factorsService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), iFactorList));
+            factorsService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(),  dto.getModuleIdentity(),iFactorList));
         } else {
             throw new CustomBusinessException("进度影响因素不能为空");
         }
         // 保存纠偏措施
-        corrService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getCorrList()));
+        corrService.saveList(CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(), dto.getModuleIdentity(),dto.getCorrList()));
     }
 }

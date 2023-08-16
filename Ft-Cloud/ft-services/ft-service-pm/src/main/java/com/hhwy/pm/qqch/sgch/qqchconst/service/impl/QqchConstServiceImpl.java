@@ -128,14 +128,14 @@ public class QqchConstServiceImpl implements IQqchConstService {
             if (!CollectionUtils.isEmpty(jobList)) {
                 List<QqchConstJob> qqchConstJobList = TreeUtil.treeToList(jobList);
                 for (QqchConstJob qqchConstJob : qqchConstJobList) {
-                    qqchConstJob = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstJob);
+                    qqchConstJob = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(),cons.getModuleIdentity(), qqchConstJob);
                     qqchConstJob.setMasterId(id);
                 }
                 iJobList.addAll(qqchConstJobList);
             }
             if (!CollectionUtils.isEmpty(staffList)) {
                 for (QqchConstStaffPlan qqchConstStaffPlan : staffList) {
-                    qqchConstStaffPlan = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstStaffPlan);
+                    qqchConstStaffPlan = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), cons.getModuleIdentity(),qqchConstStaffPlan);
                     qqchConstStaffPlan.setMasterId(id);
                     qqchConstStaffPlan.setId(IdWorker.createId());
                 }
@@ -143,7 +143,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
             }
             if (!CollectionUtils.isEmpty(facilityPlanList)) {
                 for (QqchConstFacilityPlan qqchConstFacilityPlan : facilityPlanList) {
-                    qqchConstFacilityPlan = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(), qqchConstFacilityPlan);
+                    qqchConstFacilityPlan = CompileEntity.dealSaveDto(cons.getVersion(), cons.getSubmitFlag(),cons.getModuleIdentity(), qqchConstFacilityPlan);
                     qqchConstFacilityPlan.setMasterId(id);
                     qqchConstFacilityPlan.setId(IdWorker.createId());
                 }
