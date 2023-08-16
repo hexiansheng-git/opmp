@@ -32,9 +32,9 @@ public class QqchManagementPersonConfigController extends BaseController{
      *  列表右上角统计信息
      *  管理人员总数： 154中方管理： 35  外方管理 67  外方比例： 10%
      */
-    @PostMapping("/personTypeStatistics")
-    public AjaxResult personTypeStatistics(@RequestBody QqchManagementPersonConfigVo vo){
-        Map<String, Integer> result =  qqchManagementPersonConfigService.personNumCalc(vo);
+    @GetMapping("/personTypeStatistics")
+    public AjaxResult personTypeStatistics(@Validated(ValidationGroups.Select.class) QqchManagementPersonConfig qqchManagementPersonConfigParam){
+        Map<String, Integer> result =  qqchManagementPersonConfigService.personNumCalc(qqchManagementPersonConfigParam);
         return AjaxResult.success(result);
     }
 

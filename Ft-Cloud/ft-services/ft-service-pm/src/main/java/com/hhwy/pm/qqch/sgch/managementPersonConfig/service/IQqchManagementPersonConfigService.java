@@ -33,5 +33,5 @@ public interface IQqchManagementPersonConfigService {
 
     QqchManagementPersonConfigVo synchData( QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
 
-    Map<String, Integer> personNumCalc(QqchManagementPersonConfigVo vo);
+    Map<String, Integer> personNumCalc(QqchManagementPersonConfig vo);
 }
