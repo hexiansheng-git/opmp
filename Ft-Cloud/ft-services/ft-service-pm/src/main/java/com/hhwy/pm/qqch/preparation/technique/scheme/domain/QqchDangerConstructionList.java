@@ -53,19 +53,19 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：方案类型（字典类型scheme_type）
      */
     @JsonProperty
-    @Excel(name = "方案类型（字典类型scheme_type）", dictType = "scheme_type")
+    @Excel(name = "方案类型", dictType = "scheme_type")
     private String schemeType;
     /**
      * 字段描述：方案分级（字典类型scheme_level）
      */
     @JsonProperty
-    @Excel(name = "方案分级（字典类型scheme_level）", dictType = "scheme_level")
+    @Excel(name = "方案分级", dictType = "scheme_level")
     private String schemeLevel;
     /**
      * 字段描述：危大等级（字典类型danger_level）
      */
     @JsonProperty
-    @Excel(name = "危大等级（字典类型danger_level）", dictType = "danger_level")
+    @Excel(name = "危大等级", dictType = "danger_level")
     private String dangerLevel;
     /**
      * 字段描述：关键和特殊过程
