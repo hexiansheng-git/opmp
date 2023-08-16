@@ -64,16 +64,16 @@ public class QqchDesignCheckPlan extends CommonBaseEntity {
     /**
      * 字段描述：计划开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd")
     private Date planStartTime;
     /**
      * 字段描述：计划结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划结束时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划结束时间", dateFormat = "yyyy-MM-dd")
     private Date planEndTime;
     /**
      * 字段描述：评审主体
@@ -84,16 +84,16 @@ public class QqchDesignCheckPlan extends CommonBaseEntity {
     /**
      * 字段描述：计划评审时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划评审时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划评审时间", dateFormat = "yyyy-MM-dd")
     private Date planReviewTime;
     /**
      * 字段描述：计划验收时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划验收时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划验收时间", dateFormat = "yyyy-MM-dd")
     private Date planCheckTime;
     /**
      * 字段描述：版本

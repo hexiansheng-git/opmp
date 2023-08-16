@@ -24,6 +24,7 @@ import com.hhwy.utils.tree.TreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -31,6 +32,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import static org.springframework.transaction.annotation.Propagation.REQUIRED;
 
 /**
  * @author ldd
@@ -215,10 +218,12 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         //查询最新有效版本的数据
         BigDecimal version = commonMapper.selectMaxVersion("qqch_const");
         List<QqchConst> qqchConstList = qqchConstMapper.selectQqchConst(version);
+        //按工种名称分组
         Map<String, List<QqchConst>> listMap = qqchConstList.stream().collect(Collectors.groupingBy(QqchConst::getOccupationName));
        //遍历封装好
        List<QqchLabourDemandPlan> arrayList = new ArrayList<>();
         Set<Map.Entry<String, List<QqchConst>>> entrySet = listMap.entrySet();
+        //按工种名称遍历
         for (Map.Entry<String, List<QqchConst>> entry : entrySet) {
             QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
             qqchLabourDemandPlan.setJobName(entry.getKey());
@@ -279,15 +284,16 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
     }
 
 
+    @Transactional(propagation = REQUIRED)
     public void insertQqchLabourDemandPlanList(List<QqchLabourDemandPlan> qqchLabourDemandPlanList,BigDecimal version) {
+        if(CollectionUtils.isEmpty(qqchLabourDemandPlanList)){
+            return;
+        }
         //删除旧数据
         QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
         qqchLabourDemandPlan.setVersion(version);
         qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlan(qqchLabourDemandPlan);
 
-        if(CollectionUtils.isEmpty(qqchLabourDemandPlanList)){
-            return;
-        }
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
@@ -303,7 +309,6 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 labourDemandPlan.setPid(0l);
             }
         }
-
         qqchLabourDemandPlanMapper.insertQqchLabourDemandPlanList(configs);
     }
 }

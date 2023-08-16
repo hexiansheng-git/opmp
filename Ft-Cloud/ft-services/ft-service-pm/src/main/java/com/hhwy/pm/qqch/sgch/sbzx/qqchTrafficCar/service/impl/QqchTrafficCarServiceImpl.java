@@ -108,6 +108,9 @@ public class QqchTrafficCarServiceImpl implements IQqchTrafficCarService{
             car.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             car.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             car.setCreateTime(DateUtils.getNowDate());
+            if(car.getPid()==null){
+                car.setPid(0l);
+            }
         }
         qqchTrafficCarMapper.insertQqchTrafficCarList(qqchTrafficCars);
     }

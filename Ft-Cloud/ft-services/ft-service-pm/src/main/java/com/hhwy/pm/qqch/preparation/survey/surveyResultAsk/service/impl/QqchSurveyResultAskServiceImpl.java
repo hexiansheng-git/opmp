@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
@@ -65,12 +67,16 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
      */
     @Override
     public void save(QqchSurveyResultAskVo qqchSurveyResultAskVo) {
+        List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskVo.getQqchSurveyResultAskList();
+        if (CollectionUtil.isEmpty(qqchSurveyResultAskList)){
+            return;
+        }
         //删除旧数据
         QqchSurveyResultAsk qqchSurveyResultAsk = new QqchSurveyResultAsk();
         qqchSurveyResultAsk.setVersion(qqchSurveyResultAskVo.getVersion());
         qqchSurveyResultAskMapper.deleteQqchSurveyResultAsk(qqchSurveyResultAsk);
         //插入新数据
-        this.insertQqchSurveyResultAskList(qqchSurveyResultAskVo.getQqchSurveyResultAskList(), qqchSurveyResultAskVo.getVersion());
+        this.insertQqchSurveyResultAskList(qqchSurveyResultAskList, qqchSurveyResultAskVo.getVersion());
     }
 
 
