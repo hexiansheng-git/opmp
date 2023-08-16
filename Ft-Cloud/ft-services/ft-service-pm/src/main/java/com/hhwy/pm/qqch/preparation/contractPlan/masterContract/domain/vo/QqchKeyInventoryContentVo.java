@@ -19,5 +19,10 @@ import java.util.List;
 public class QqchKeyInventoryContentVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 字段描述：币种
+     */
+    private String currency;
+
     private List<QqchKeyInventoryContent> list;
 }
