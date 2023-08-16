@@ -49,11 +49,13 @@ public class QqchMeasureExpEquServiceImpl implements IQqchMeasureExpEquService {
         // 测量仪器设备配置计划
         if ("1".equals(type)) {
             qqchMeasureExpEqu.setType("1");
+            vo.setType("1");
             vo.setMeasureList(qqchMeasureExpEquMapper.getQqchMeasureExpEquList(qqchMeasureExpEqu));
         }
         // 试验仪器设备配置计划
         if ("2".equals(type)) {
             qqchMeasureExpEqu.setType("2");
+            vo.setType("2");
             vo.setExperimentList(qqchMeasureExpEquMapper.getQqchMeasureExpEquList(qqchMeasureExpEqu));
         }
 
