@@ -296,4 +296,5 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     private String listIds;   //清单ID
     private String wbsId;
 
+    
 }

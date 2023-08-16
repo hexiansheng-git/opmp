@@ -1,13 +1,19 @@
 package com.hhwy.utils.tree;
 
+import cn.hutool.core.builder.CompareToBuilder;
+import cn.hutool.core.comparator.CompareUtil;
+import com.hhwy.common.core.domain.R;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.poi.ss.formula.functions.T;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class TreeUtil {
@@ -66,18 +72,56 @@ public class TreeUtil {
             }
         }
     }
-    
-    public static <T extends TreeNode> List<T> exportListFormat(List<T> list){
+
+    /**
+     * 导出树形集合，按照树形结构重新排序
+     * 继承treeNode实体类用该方法
+     * @param list 
+     * @return
+     */
+    public static <T extends TreeNodeBase<T,R>> List<T> exportListFormat(List<T> list){
+        return TreeUtil.exportListFormat(list,(Class)Long.class);
+    }
+
+    /**
+     * 导出树形集合，按照树形结构重新排序
+     * 继承treeNodeBase实体类用该方法
+     * @param list
+     * @return
+     */
+    public static <T extends TreeNodeBase<T,R>> List<T> exportListFormat(List<T> list,Class<R> t1){
         //id : 子级数据
-        Map<Long,List<T>> childMap = new HashMap<>(list.size());
+        Map<R,List<T>> childMap = new HashMap<>(list.size());
         //第一级节点
         List<T> firstList = new ArrayList<>();
-        
-        return null;
+        for (int i = 0; i < list.size(); i++) {
+            T t = list.get(i);
+            Object poid = t.getPid();
+            //是否为第一级
+            if(t.getPid() == null || (t1.equals(Long.class) && ((Long)poid) < 1)
+                    || ("-1".equals(poid) || "0".equals(poid))){
+                firstList.add(t);
+            }else{
+                ObjectUtils.add2MapList(childMap, t.getPid(), t);
+            }
+        }
+        //递归
+        List<T> resuList = new ArrayList<>(list.size());
+        chooseChild(firstList,t1,childMap,resuList);
+        return resuList;
     }
     
-//    private static <T extends TreeNode> void chooseChild(List<T> list,){
-//        
-//    }
+    
+    private static <T extends TreeNodeBase> void chooseChild(List<T> list,Class<R> t1,Map<R,List<T>> childMap,List<T> resuList){
+        if(CollectionUtils.isEmpty(list))
+            return;
+        //排序
+        list.sort((v1, v2) -> {return CompareUtil.compare(v1.getSort(), v2.getSort()); });
+        for (int i = 0; i < list.size(); i++) {
+            T t = list.get(i);
+            resuList.add(t);
+            chooseChild(childMap.get(t.getId()),t1,childMap,resuList);
+        }
+    }
     
 }

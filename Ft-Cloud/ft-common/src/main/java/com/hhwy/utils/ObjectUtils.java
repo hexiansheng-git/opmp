@@ -196,6 +196,8 @@ public class ObjectUtils {
     public static Long nvlLong(Object obj,Long defaultVal){
         if(obj == null || "".equals(obj))
             return defaultVal;
+        if(obj instanceof Long)
+            return (Long)obj;
         return Long.valueOf(obj.toString());
     }
     
