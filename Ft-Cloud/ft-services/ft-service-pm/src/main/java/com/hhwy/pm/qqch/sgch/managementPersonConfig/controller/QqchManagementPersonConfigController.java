@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -26,6 +27,16 @@ public class QqchManagementPersonConfigController extends BaseController{
 
     @Autowired
     private IQqchManagementPersonConfigService qqchManagementPersonConfigService;
+
+    /**
+     *  列表右上角统计信息
+     *  管理人员总数： 154中方管理： 35  外方管理 67  外方比例： 10%
+     */
+    @PostMapping("/personTypeStatistics")
+    public AjaxResult personTypeStatistics(@RequestBody QqchManagementPersonConfigVo vo){
+        Map<String, Integer> result =  qqchManagementPersonConfigService.personNumCalc(vo);
+        return AjaxResult.success(result);
+    }
 
     /**
      *  同步项目组织数据

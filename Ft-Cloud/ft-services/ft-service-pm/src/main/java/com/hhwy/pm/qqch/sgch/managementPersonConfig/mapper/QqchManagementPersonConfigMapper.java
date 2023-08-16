@@ -1,9 +1,11 @@
 package com.hhwy.pm.qqch.sgch.managementPersonConfig.mapper;
 
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
+import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.vo.QqchManagementPersonConfigVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -27,4 +29,6 @@ public interface QqchManagementPersonConfigMapper {
     int deleteQqchManagementPersonConfig(QqchManagementPersonConfig qqchManagementPersonConfig);
 
     int deleteQqchManagementPersonConfigByPks(@Param("qqchManagementPersonConfigPkList") List<Long> qqchManagementPersonConfigPkList);
-    }
+
+    Map<String, Integer> personNumCalc(QqchManagementPersonConfigVo vo);
+}
