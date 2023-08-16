@@ -39,16 +39,16 @@ public class QqchMilestone extends CompileEntity<QqchMilestone> {
     /**
      * 字段描述：开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "开始时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @FtExcel(name = "开始时间", dateFormat = "yyyy-MM-dd")
     private Date beginDate;
     /**
      * 字段描述：结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "结束时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @FtExcel(name = "结束时间", dateFormat = "yyyy-MM-dd")
     private Date endDate;
     /**
      * 字段描述：版本

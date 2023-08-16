@@ -128,7 +128,7 @@
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
         </where>
-        order by create_time desc
+        order by id desc
     </select>
 
     <insert id="insertXmslDrawReviewMaterial" useGeneratedKeys="true" keyProperty="wbs_id">

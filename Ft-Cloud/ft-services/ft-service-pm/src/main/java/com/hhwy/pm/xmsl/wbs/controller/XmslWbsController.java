@@ -1,14 +1,18 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import com.hhwy.utils.validation.ValidationUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -16,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -81,8 +87,8 @@ public class XmslWbsController extends BaseController {
         String ids = ObjectUtils.nvlString(map.get("ids"));
         if(StringUtils.isBlank(ids))
             return AjaxResult.error("参数缺失");
-        List<XmslWbs> wbsList = xmslWbsService.copyChildList(Convert.toStrArray(ids));
-        return AjaxResult.success(wbsList);
+        Map<String,List<XmslWbs>> resuMap = xmslWbsService.copyChildList(Convert.toStrArray(ids));
+        return AjaxResult.success(resuMap);
     }
 
 
@@ -125,9 +131,15 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success();
     }
 
+    @GetMapping("/downloadTemplate")
+    public void downloadTemplate(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        FtExcelUtil ftExcelUtil = new FtExcelUtil(XmslWbs.class);
+        ftExcelUtil.downloadTemplate(request, response, "项目WBS");
+    }
+    
 //    @GetMapping("/export")
-//    public void export(HttpServletResponse response, XmslWbs xmslWbsParam) throws IOException {
-//        List<XmslWbs> xmslWbsList = xmslWbsService.getXmslWbsListByTname(xmslWbsParam);
+//    public void export(HttpServletResponse response, XmslWbsMain wbsMain) throws IOException {
+//        List<XmslWbs> xmslWbsList = xmslWbsService.getExportData(wbsMain);
 //        ExcelUtils<XmslWbs> util = new ExcelUtils<>(XmslWbs.class);
 //        util.exportExcel(response, xmslWbsList, DateUtils.getDate());
 //    }

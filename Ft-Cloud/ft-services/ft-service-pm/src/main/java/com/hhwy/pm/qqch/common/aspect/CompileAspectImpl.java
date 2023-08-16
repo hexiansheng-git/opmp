@@ -68,18 +68,18 @@ public class CompileAspectImpl {
                 }
             }
 
-            if (arg instanceof List) {
-                List list = (List) arg;
-                // 为空 返回
-                if (CollectionUtils.isEmpty(list)) return;
-                Object o = list.get(0);
-                if (o instanceof CompileEntity) {
-                    List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
-                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
-                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
-                    }
-                }
-            }
+//            if (arg instanceof List) {
+//                List list = (List) arg;
+//                // 为空 返回
+//                if (CollectionUtils.isEmpty(list)) return;
+//                Object o = list.get(0);
+//                if (o instanceof CompileEntity) {
+//                    List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
+//                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
+//                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
+//                    }
+//                }
+//            }
 
 
             sb.append(i == args.length - 1 ? arg.toString() : arg.toString() + ", ");
@@ -112,7 +112,7 @@ public class CompileAspectImpl {
                 Thread.currentThread().getId());
         //获取方法参数值数组
         Object[] args = joinPoint.getArgs();
-
+        String tableName = compileAspect.tableName();
         // 空数据特殊处理
         for (int i = 0; i < args.length; i++) {
             Object arg = args[i];
@@ -120,6 +120,9 @@ public class CompileAspectImpl {
                 List list = (List) arg;
                 if (list.get(0) instanceof CompileEntity) {
                     List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
+                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
+                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
+                    }
                     if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntityList.get(0).getSubmitFlag())) {
                         args[i] = Collections.emptyList();
                     }

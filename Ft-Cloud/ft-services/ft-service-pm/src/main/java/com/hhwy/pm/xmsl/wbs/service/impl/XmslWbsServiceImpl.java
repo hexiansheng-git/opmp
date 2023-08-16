@@ -202,17 +202,27 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     }
 
     @Override
-    public List<XmslWbs> copyChildList(String[] ids) {
+    public Map<String,List<XmslWbs>> copyChildList(String[] ids) {
         if(ArrayUtils.isEmpty(ids))
-            return new ArrayList<>(2);
+            return new HashMap<>(2);
         List<XmslWbs> list = WbsRedisUtils.getWbs(SetUtils.hashSet(ids));
-        if(CollectionUtils.isEmpty(list))
-            return new ArrayList<>(2);
-        Set<String> childIdSet = new HashSet<>();
-        for (int i = 0; i < ids.length; i++) {
-            Long[] tempIds = WbsRedisUtils.getChildWbsId(ids[i]+"");
-            childIdSet.addAll(Arrays.asList(ArrayUtils.toStringArray(tempIds)));
+        Map resuMap = new HashMap<>();
+        if(CollectionUtils.isEmpty(list)){
+            for (int i = 0; i < ids.length; i++) 
+                resuMap.put(ids[i],new ArrayList<>(2));    
+            return resuMap;
         }
+        for (int i = 0; i < ids.length; i++) {
+            if(ids[i].length() > 20)
+                continue;    
+            resuMap.put(ids[i],copyData(ids[i]));
+        }
+        return resuMap;
+    }
+    private List<XmslWbs> copyData(String id){
+        Set<String> childIdSet = new HashSet<>();
+        Long[] tempIds = WbsRedisUtils.getChildWbsId(id+"");
+        childIdSet.addAll(Arrays.asList(ArrayUtils.toStringArray(tempIds)));
         //获取所有子级数据
         List<XmslWbs> wbsList = WbsRedisUtils.getWbs(childIdSet);
         //替换id 为 uuid
@@ -241,6 +251,12 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Override
     public List<XmslWbs> latestWbsSimpleAllList() {
         return xmslWbsMapper.latestWbsSimpleAllList();
+    }
+
+    @Override
+    public List<XmslWbs> exportData(XmslWbsMain main) {
+        
+        return null;
     }
 
     @Override
