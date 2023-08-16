@@ -51,6 +51,8 @@ public class CompileEntity<T> extends TreeNode<T> {
     private String moduleIdentity;
 
     private T dto;
+    
+    private String dataType;
 
     
     
@@ -82,6 +84,16 @@ public class CompileEntity<T> extends TreeNode<T> {
         return tCompileDTO.dealSaveDto();
     }
 
+    public static <T> T dealSaveDto(BigDecimal version, String submitFlag, String menuId, String dataType,T dto) {
+        CompileEntity<T> tCompileDTO = new CompileEntity<>();
+        tCompileDTO.setVersion(version);
+        tCompileDTO.setSubmitFlag(submitFlag);
+        tCompileDTO.setDto(dto);
+        tCompileDTO.setModuleIdentity(menuId);
+        tCompileDTO.setDataType(dataType);
+        return tCompileDTO.dealSaveDto();
+    }
+
     public T dealSaveDto() {
         if (dto instanceof CompileEntity) {
             CompileEntity compileEntity = (CompileEntity) dto;
@@ -89,6 +101,7 @@ public class CompileEntity<T> extends TreeNode<T> {
             compileEntity.setSubmitFlag(submitFlag);
             compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
             compileEntity.setModuleIdentity(this.moduleIdentity);
+            compileEntity.setDataType(dataType);
             if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(compileEntity);
             return (T) compileEntity;
         }
@@ -105,6 +118,7 @@ public class CompileEntity<T> extends TreeNode<T> {
                 o.setVersion(version);
                 o.setModuleIdentity(moduleIdentity);
                 o.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
+                o.setDataType(dataType);
                 if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(o);
             }
             return (T) compileEntities;

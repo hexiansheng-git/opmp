@@ -8,11 +8,9 @@ import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPers
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpRangeService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureOrgService;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureService;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.util.List;
 
 @Service
@@ -27,13 +25,14 @@ public class QqchMeasureServiceImpl implements IQqchMeasureService {
 
     @Resource
     private IQqchMeasureExpPersonService personService;
+
     @Override
     public void saveAll(QqchMeasureExpDTO expVO) {
-        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(),"preliminaryPlanning/SurveyDesign/list1111111", expVO.getExpRangeList());
+        List<QqchMeasureExpRange> qqchMeasureExpRanges = CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "preliminaryPlanning/SurveyDesign/list1111111", expVO.getDataType(), expVO.getExpRangeList());
         measureExpRangeService.saveTreeList(qqchMeasureExpRanges);
-        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "preliminaryPlanning/SurveyDesign/list1111111",expVO.getPersonList()));
+        personService.saveList(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "preliminaryPlanning/SurveyDesign/list1111111", expVO.getDataType(), expVO.getPersonList()));
         QqchMeasureOrg org = expVO.getOrg();
-        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), "preliminaryPlanning/SurveyDesign/list1111111",expVO.getSubmitFlag(),org));
-        
+        orgService.save(CompileEntity.dealSaveDto(expVO.getVersion(), expVO.getSubmitFlag(), "preliminaryPlanning/SurveyDesign/list1111111", expVO.getDataType(), org));
+
     }
 }

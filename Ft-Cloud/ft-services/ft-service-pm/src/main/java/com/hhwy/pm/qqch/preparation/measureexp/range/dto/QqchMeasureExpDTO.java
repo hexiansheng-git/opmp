@@ -20,6 +20,7 @@ public class QqchMeasureExpDTO {
     private String submitFlag;
     private String stageIdentity;
     private QqchMeasureOrg org;
+    private String dataType;
     private List<QqchMeasureExpRange> expRangeList;
     private List<QqchMeasureExpPerson> personList;
 
