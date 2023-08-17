@@ -24,12 +24,5 @@ public interface IQqchDangerSafeMeasuresService {
      * @param qqchDangerSafeMeasuresVo
      * @return
      */
-    void updateQqchDangerSafeMeasuresList(QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo);
-
-    /**
-     * 同步数据
-     *
-     * @return
-     */
-    void syncData(QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo);
+    void batchSave(QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo);
 }

@@ -8,16 +8,15 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-08-07 14:23:10
- * @remark qqch_danger_safe_measures
+ * @date 2023-08-17 13:32:20
+ * @remark qqch_danger_safe_measures_detail
  */
 @Data
-public class QqchDangerSafeMeasures extends BaseEntity {
+public class QqchDangerSafeMeasuresDetail extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,35 +28,30 @@ public class QqchDangerSafeMeasures extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：危大工程编号
+     * 字段描述：主表id
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "危大工程编号")
-    private String schemeCode;
+    @Excel(name = "主表id")
+    private Long masterId;
     /**
-     * 字段描述：危大工程名称
+     * 字段描述：应对措施
      */
     @JsonProperty
-    @Excel(name = "危大工程名称")
-    private String schemeName;
+    @Excel(name = "应对措施")
+    private String measures;
     /**
-     * 字段描述：危大/超危大（字典类型danger_level）
+     * 字段描述：是否入库 0-否 1-是（字典类型common_yes）
      */
     @JsonProperty
-    @Excel(name = "危大/超危大（字典类型danger_level）")
-    private String dangerLevel;
+    @Excel(name = "是否入库 0-否 1-是（字典类型common_yes）")
+    private String isWarehouse;
     /**
-     * 字段描述：项目WBS编码
+     * 字段描述：是否选择来的数据 1-是 0-否
      */
     @JsonProperty
-    @Excel(name = "项目WBS编码")
-    private String wbsCode;
-    /**
-     * 字段描述：项目WBS
-     */
-    @JsonProperty
-    @Excel(name = "项目WBS")
-    private String wbsName;
+    @Excel(name = "是否选择来的数据 1-是 0-否")
+    private String isSelect;
     /**
      * 字段描述：版本
      */
@@ -184,9 +178,4 @@ public class QqchDangerSafeMeasures extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
-    /**
-     * 字段描述：措施明细集合
-     */
-    private List<QqchDangerSafeMeasuresDetail> detailList;
 }

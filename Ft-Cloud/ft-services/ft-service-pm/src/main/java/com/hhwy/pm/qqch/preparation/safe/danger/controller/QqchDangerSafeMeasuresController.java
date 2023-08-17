@@ -52,7 +52,7 @@ public class QqchDangerSafeMeasuresController extends BaseController {
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerSafeMeasuresVo qqchDangerSafeMeasuresVo) {
-        qqchDangerSafeMeasuresService.updateQqchDangerSafeMeasuresList(qqchDangerSafeMeasuresVo);
+        qqchDangerSafeMeasuresService.batchSave(qqchDangerSafeMeasuresVo);
         return AjaxResult.success();
     }
 }

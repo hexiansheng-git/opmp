@@ -81,8 +81,6 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         if (!CollectionUtils.isEmpty(treeList)) {
             List<Long> ids = treeList.stream().map(QqchDiscloseThird::getId).collect(Collectors.toList());
             // 批量删除子表数据
-            QqchDiscloseThirdDetail deleteParamDetail = new QqchDiscloseThirdDetail();
-            deleteParamDetail.setVersion(qqchDiscloseThirdVo.getVersion());
             qqchDiscloseThirdDetailMapper.deleteQqchDiscloseThirdDetailByPks(ids);
         }
 
