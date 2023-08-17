@@ -46,10 +46,7 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
         QqchQualityPostDutyVo vo = new QqchQualityPostDutyVo();
         version = VersionUtil.getVersion("qqch_quality_post_duty", version);
 
-        QqchQualityPostDuty qryParam = new QqchQualityPostDuty();
-        qryParam.setVersion(version);
-        List<QqchQualityPostDuty> list = qqchQualityPostDutyMapper.getQqchQualityPostDutyList(qryParam);
-
+        List<QqchQualityPostDuty> list = this.getNewVersionList(version);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
@@ -95,5 +92,18 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    /**
+     * 获取最新版本列表
+     *
+     * @param version
+     * @return
+     */
+    public List<QqchQualityPostDuty> getNewVersionList(BigDecimal version) {
+        QqchQualityPostDuty qryParam = new QqchQualityPostDuty();
+        qryParam.setVersion(version);
+        List<QqchQualityPostDuty> list = qqchQualityPostDutyMapper.getQqchQualityPostDutyList(qryParam);
+        return list;
     }
 }

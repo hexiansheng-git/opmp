@@ -3,9 +3,12 @@ package com.hhwy.pm.qqch.preparation.quality.duty.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.quality.duty.domain.QqchQualityPostDuty;
 import com.hhwy.pm.qqch.preparation.quality.duty.domain.vo.QqchQualityPostDutyVo;
 import com.hhwy.pm.qqch.preparation.quality.duty.service.IQqchQualityPostDutyService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import java.math.BigDecimal;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,5 +55,21 @@ public class QqchQualityPostDutyController extends BaseController {
     public AjaxResult batchSave(@RequestBody QqchQualityPostDutyVo qqchQualityPostDutyVo) {
         qqchQualityPostDutyService.batchSave(qqchQualityPostDutyVo);
         return AjaxResult.success();
+    }
+
+    /**
+     * 分页列表
+     *
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchQualityPostDuty:list")
+    @GetMapping("/getPageList")
+    public AjaxResult getPageList() {
+        // 获取最新版本
+        BigDecimal version = VersionUtil.getVersion("qqch_quality_post_duty", null);
+
+        startPage();
+        List<QqchQualityPostDuty> list = qqchQualityPostDutyService.getNewVersionList(version);
+        return getDataTableAjaxResult(list);
     }
 }

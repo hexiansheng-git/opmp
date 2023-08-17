@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.quality.duty.service;
 
+import com.hhwy.pm.qqch.preparation.quality.duty.domain.QqchQualityPostDuty;
 import com.hhwy.pm.qqch.preparation.quality.duty.domain.vo.QqchQualityPostDutyVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -13,4 +15,6 @@ public interface IQqchQualityPostDutyService {
     QqchQualityPostDutyVo getQqchQualityPostDutyList(BigDecimal version);
 
     void batchSave(QqchQualityPostDutyVo qqchQualityPostDutyVo);
+
+    List<QqchQualityPostDuty> getNewVersionList(BigDecimal version);
 }
