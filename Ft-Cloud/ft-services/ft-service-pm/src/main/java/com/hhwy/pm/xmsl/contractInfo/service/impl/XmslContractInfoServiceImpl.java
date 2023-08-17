@@ -42,6 +42,15 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
 
     /**
+     * 获取最新有效版本的合同信息
+     * @return
+     */
+    @Override
+    public XmslContractInfo getValidMaxVersionContractInfo() {
+        return xmslContractInfoMapper.getValidMaxVersionContractInfo();
+    }
+
+    /**
      *  回显接口
      *
      * @param xmslContractInfo

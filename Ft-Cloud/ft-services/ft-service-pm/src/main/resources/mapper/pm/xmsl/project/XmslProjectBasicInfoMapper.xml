@@ -25,6 +25,7 @@
         <result property="defectsLiabilityPeriod" column="defects_liability_period"/>
         <result property="executiveSpecificationStandard" column="executive_specification_standard"/>
         <result property="contractLang" column="contract_lang"/>
+        <result property="weightedGrade" column="weighted_grade"/>
         <result property="paymentCurrency" column="payment_currency"/>
         <result property="priceAdjustmentMode" column="price_adjustment_mode"/>
         <result property="prepaymentRatio" column="prepayment_ratio"/>
@@ -93,6 +94,7 @@
         ,`defects_liability_period`
         ,`executive_specification_standard`
         ,`contract_lang`
+        ,`weighted_grade`
         ,`payment_currency`
         ,`price_adjustment_mode`
         ,`prepayment_ratio`
@@ -271,6 +273,7 @@
         ,`defects_liability_period`
         ,`executive_specification_standard`
         ,`contract_lang`
+        ,`weighted_grade`
         ,`payment_currency`
         ,`price_adjustment_mode`
         ,`prepayment_ratio`
@@ -452,6 +455,7 @@
                 `executive_specification_standard`,
             </if>
             <if test="contractLang != null  and contractLang != ''">`contract_lang`,</if>
+            <if test="weightedGrade != null  and weightedGrade != ''">`weighted_grade`,</if>
             <if test="paymentCurrency != null  and paymentCurrency != ''">`payment_currency`,</if>
             <if test="priceAdjustmentMode != null  and priceAdjustmentMode != ''">`price_adjustment_mode`,</if>
             <if test="prepaymentRatio != null ">`prepayment_ratio`,</if>
@@ -528,6 +532,7 @@
                 #{executiveSpecificationStandard},
             </if>
             <if test="contractLang != null  and contractLang != ''">#{contractLang},</if>
+            <if test="weightedGrade != null  and weightedGrade != ''">#{weightedGrade},</if>
             <if test="paymentCurrency != null  and paymentCurrency != ''">#{paymentCurrency},</if>
             <if test="priceAdjustmentMode != null  and priceAdjustmentMode != ''">#{priceAdjustmentMode},</if>
             <if test="prepaymentRatio != null ">#{prepaymentRatio},</if>
@@ -607,6 +612,7 @@
             `defects_liability_period`,
             `executive_specification_standard`,
             `contract_lang`,
+            `weighted_grade`,
             `payment_currency`,
             `price_adjustment_mode`,
             `prepayment_ratio`,
@@ -674,6 +680,7 @@
                 #{item.defectsLiabilityPeriod},
                 #{item.executiveSpecificationStandard},
                 #{item.contractLang},
+                #{item.weightedGrade},
                 #{item.paymentCurrency},
                 #{item.priceAdjustmentMode},
                 #{item.prepaymentRatio},
@@ -751,6 +758,7 @@
                 `executive_specification_standard` = #{executiveSpecificationStandard},
             </if>
             <if test="contractLang != null  and  contractLang != ''">`contract_lang` = #{contractLang},</if>
+            <if test="weightedGrade != null  and  weightedGrade != ''">`weighted_grade` = #{weightedGrade},</if>
             <if test="paymentCurrency != null  and  paymentCurrency != ''">`payment_currency` = #{paymentCurrency},</if>
             <if test="priceAdjustmentMode != null  and  priceAdjustmentMode != ''">`price_adjustment_mode` =
                 #{priceAdjustmentMode},
@@ -918,6 +926,11 @@
             <trim prefix="contract_lang  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.contractLang}
+                </foreach>
+            </trim>
+            <trim prefix="weighted_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.weightedGrade}
                 </foreach>
             </trim>
             <trim prefix="payment_currency  = case" suffix="end,">

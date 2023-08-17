@@ -3,10 +3,7 @@ package com.hhwy.pm.common.download;
 import com.alibaba.cloud.commons.io.IOUtils;
 import com.hhwy.utils.excelUtil.DownTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -79,7 +76,7 @@ public class DownloadTemplateController {
      * @param response
      * @throws Exception
      */
-    @GetMapping( "/ftDownLoad")
+    @PostMapping( "/ftDownLoad")
     public void ftDownLoad(@RequestParam String fileName,
                                      @RequestParam(required = false) String exportName,
                                      HttpServletRequest request,

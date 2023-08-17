@@ -1,14 +1,11 @@
 package com.hhwy.pm.xmsl.project.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
-import java.util.List;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +13,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -79,13 +79,13 @@ public class XmslProjectBasicInfo extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "合同价格")
-    private BigDecimal contractPrice;
+    private String contractPrice;
     /**
      * 字段描述：合同汇率
      */
     @JsonProperty
     @Excel(name = "合同汇率")
-    private BigDecimal contractExchangeRate;
+    private String contractExchangeRate;
     /**
      * 字段描述：业主单位
      */
@@ -154,6 +154,12 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "合同语言")
     private String contractLang;
+    /**
+     * 字段描述：项目重要性等级
+     */
+    @JsonProperty
+    @Excel(name = "项目重要性等级")
+    private String weightedGrade;
     /**
      * 字段描述：支付货币
      */

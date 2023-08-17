@@ -11,7 +11,7 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
-import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +39,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     private QqchWorkGroupMemberMapper qqchWorkGroupMemberMapper;
 
     @Autowired
-    private XmslContractInfoMapper xmslContractInfoMapper;
+    private IXmslContractInfoService xmslContractInfoService;
 
 
     /**
@@ -220,30 +220,31 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      */
     public void setPlanUnit(QqchWorkGroup qqchWorkGroup){
         //获取合同关联项目信息-项目分类
-        XmslContractInfo validMaxVersionContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        XmslContractInfo validMaxVersionContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
 
-//        if(validMaxVersionContractInfo == null){
-//            return;
-//        }
+        if(validMaxVersionContractInfo == null){
+            qqchWorkGroup.setPlanDominantUnit("海外事业部");
+            qqchWorkGroup.setPlanApprovalUnit("项目名称");
+            return;
+        }
         //项目分类
-//        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
+        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
 
         //策划主导单位：I、II类项目，显示组织机构海外事业部层级名称 ；III、IV类型项目，显示项目所属单位名称
-//        if("1".equals(projectCategory) || "2".equals(projectCategory)){
-//            qqchWorkGroup.setPlanDominantUnit("海外事业部");
-//        }else {
-//            qqchWorkGroup.setPlanDominantUnit("项目名称");
-//        }
+        if("1".equals(projectCategory) || "2".equals(projectCategory)){
+            qqchWorkGroup.setPlanDominantUnit("海外事业部");
+        }else {
+            qqchWorkGroup.setPlanDominantUnit("项目名称");
+        }
 
         //策划审批单位：I、II、III类项目，显示组织机构海外事业部层级名称 ；IV类型项目，显示项目所属单位名称
-//        if("4".equals(projectCategory)){
-//            qqchWorkGroup.setPlanApprovalUnit("项目名称");
-//        }else {
-//            qqchWorkGroup.setPlanApprovalUnit("海外事业部");
-//        }
+        if("4".equals(projectCategory)){
+            qqchWorkGroup.setPlanApprovalUnit("项目名称");
+        }else {
+            qqchWorkGroup.setPlanApprovalUnit("海外事业部");
+        }
 
-        qqchWorkGroup.setPlanDominantUnit("海外事业部");
-        qqchWorkGroup.setPlanApprovalUnit("项目名称");
+
     }
 
     /**
