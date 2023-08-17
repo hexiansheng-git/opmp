@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.wbs.service;
 
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 
@@ -73,7 +74,7 @@ public interface IXmslWbsService {
      * @param ids
      * @return
      */
-    Map<String,List<XmslWbs>> copyChildList(String[] ids);
+    Map<String,List<XmslWbsHistory>> copyChildList(Long[] ids,Long mainId);
 
     /**
      * 获取wbs简要信息

@@ -4,6 +4,7 @@ package com.hhwy.pm.xmsl.wbs.service;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -16,6 +17,8 @@ public interface IXmslWbsHistoryService {
     XmslWbsHistory getXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 
     List<XmslWbsHistory> getXmslWbsHistoryList(XmslWbsHistory xmslWbsHistory);
+
+    List<XmslWbsHistory> getListByParentIds(Collection<Long> collection,Long mainId);
 
     int insertXmslWbsHistory(XmslWbsHistory xmslWbsHistory);
 

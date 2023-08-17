@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.wbs.service.impl;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -14,6 +15,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
+import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsHistoryMapper;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
@@ -201,48 +203,80 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         return wbsList;
     }
 
+//    @Override
+//    public Map<String,List<XmslWbs>> copyChildList(String[] ids) {
+//        if(ArrayUtils.isEmpty(ids))
+//            return new HashMap<>(2);
+//        List<XmslWbs> list = WbsRedisUtils.getWbs(SetUtils.hashSet(ids));
+//        Map resuMap = new HashMap<>();
+//        if(CollectionUtils.isEmpty(list)){
+//            for (int i = 0; i < ids.length; i++) 
+//                resuMap.put(ids[i],new ArrayList<>(2));    
+//            return resuMap;
+//        }
+//        for (int i = 0; i < ids.length; i++) {
+//            if(ids[i].length() > 20)
+//                continue;    
+//            resuMap.put(ids[i],copyData(ids[i]));
+//        }
+//        return resuMap;
+//    }
+//    private List<XmslWbs> copyData(String id){
+//        Set<String> childIdSet = new HashSet<>();
+//        Long[] tempIds = WbsRedisUtils.getChildWbsId(id+"");
+//        childIdSet.addAll(Arrays.asList(ArrayUtils.toStringArray(tempIds)));
+//        //获取所有子级数据
+//        List<XmslWbs> wbsList = WbsRedisUtils.getWbs(childIdSet);
+//        wbsList.sort((r,r1)->CompareUtil.compare(r.getLevel(),r1.getLevel()));
+//        //替换id 为 uuid
+//        Map<String,String> idWbsMap = new HashMap<>(wbsList.size());
+//        for (int i = 0; i < wbsList.size(); i++) {
+//            XmslWbs tempWbs = wbsList.get(i);
+//            String newId = UUIDUtils.getShortUuid();
+//            idWbsMap.put(tempWbs.getId(), newId);
+//            tempWbs.setId(newId);
+//        }
+//        //处理父级Id
+//        for (int i = 0; i < wbsList.size(); i++) {
+//            XmslWbs tempWbs = wbsList.get(i);
+//            if(StringUtils.isBlank(tempWbs.getParentId()))
+//                continue;
+//            tempWbs.setParentId(ObjectUtils.nvlString(idWbsMap.get(tempWbs.getParentId()+""),tempWbs.getParentId()));
+//        }
+//        return wbsList;
+//    }
     @Override
-    public Map<String,List<XmslWbs>> copyChildList(String[] ids) {
-        if(ArrayUtils.isEmpty(ids))
-            return new HashMap<>(2);
-        List<XmslWbs> list = WbsRedisUtils.getWbs(SetUtils.hashSet(ids));
-        Map resuMap = new HashMap<>();
-        if(CollectionUtils.isEmpty(list)){
-            for (int i = 0; i < ids.length; i++) 
-                resuMap.put(ids[i],new ArrayList<>(2));    
-            return resuMap;
-        }
-        for (int i = 0; i < ids.length; i++) {
-            if(ids[i].length() > 20)
-                continue;    
-            resuMap.put(ids[i],copyData(ids[i]));
+    public Map<String,List<XmslWbsHistory>> copyChildList(Long[] ids,Long mainId){
+        List<XmslWbsHistory> historyList = wbsHistoryService.getListByParentIds(Arrays.asList(ids),mainId);
+        //子级id : 最上级id
+        Map<String,String> realIdMap = new HashMap<>();
+        Map<String,List<XmslWbsHistory>> resuMap = new HashMap<>();
+        List<Long> idList = new ArrayList<>();
+        idList.addAll(Arrays.asList(ids));
+        //旧Id : 新的UUID
+        Map<String,String> newIdMap = new HashMap<>();
+        //遍历5级查找
+        for (int i = 0; i < 5; i++) {
+            List<XmslWbsHistory> tempList = wbsHistoryService.getListByParentIds(idList,mainId);
+            if(CollectionUtils.isEmpty(tempList))
+                break;
+            idList.clear();
+            for (int j = 0; j < tempList.size(); j++) {
+                XmslWbsHistory temp = tempList.get(j);
+                String topId = i==0?temp.getParentId():realIdMap.get(temp.getParentId());
+                idList.add(Long.valueOf(temp.getId()));
+                realIdMap.put(temp.getId(), topId);
+                //替换掉Id和父级Id，否则前端id会重
+                ObjectUtils.add2MapList(resuMap,topId,temp);
+                String newId = UUIDUtils.getShortUuid();
+                newIdMap.put(temp.getId(), newId);
+                temp.setId(newId);
+                temp.setParentId(i==0?temp.getParentId():ObjectUtils.nvlString(newIdMap.get(temp.getParentId())));
+            }
         }
         return resuMap;
     }
-    private List<XmslWbs> copyData(String id){
-        Set<String> childIdSet = new HashSet<>();
-        Long[] tempIds = WbsRedisUtils.getChildWbsId(id+"");
-        childIdSet.addAll(Arrays.asList(ArrayUtils.toStringArray(tempIds)));
-        //获取所有子级数据
-        List<XmslWbs> wbsList = WbsRedisUtils.getWbs(childIdSet);
-        //替换id 为 uuid
-        Map<String,String> idWbsMap = new HashMap<>(wbsList.size());
-        for (int i = 0; i < wbsList.size(); i++) {
-            XmslWbs tempWbs = wbsList.get(i);
-            String newId = UUIDUtils.getShortUuid();
-            idWbsMap.put(tempWbs.getId(), newId);
-            tempWbs.setId(newId);
-        }
-        //处理父级Id
-        for (int i = 0; i < wbsList.size(); i++) {
-            XmslWbs tempWbs = wbsList.get(i);
-            if(StringUtils.isBlank(tempWbs.getParentId()))
-                continue;
-            tempWbs.setParentId(ObjectUtils.nvlString(idWbsMap.get(tempWbs.getParentId()+""),tempWbs.getParentId()));
-        }
-        return wbsList;
-    }
-
+    
     @Override
     public Long countByWbs(XmslWbs wbs) {
         return this.xmslWbsMapper.countByWbs(wbs);
@@ -443,7 +477,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             wbsHistoryService.deleteXmslWbsHistoryByPks(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
         }
     }
-
+    
     private void saveMain(XmslWbsDto dto){
         //mainID不为空直接更新
         if(dto.getMainId() != null){

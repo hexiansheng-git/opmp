@@ -32,6 +32,9 @@ public class WbsRedisUtils {
     public static final String LIST_WBS_KEY = "WBS::list_wbs::";
     //wbs编号对应清单编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
     public static final String WBS_LIST_KEY = "WBS::wbs_list::";
+    
+    //wbs编号对应清单编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
+//    public static final String WBS_LIST_KEY = "WBS_HIS::wbs_list::";
 
 
     /**
@@ -160,12 +163,9 @@ public class WbsRedisUtils {
     public static String getDireChildKey(String tenantKey){
         return WbsRedisUtils.DIRE_CHILD_KEY + tenantKey;
     }
-
-    //
     public static String getListWbsKey(String tenantKey){
         return WbsRedisUtils.LIST_WBS_KEY+ tenantKey;
     }
-
     public static String getWbsListKey(String tenantKey){
         return WbsRedisUtils.WBS_LIST_KEY+ tenantKey;
     }

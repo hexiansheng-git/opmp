@@ -5,12 +5,15 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsHistoryMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -31,6 +34,16 @@ public class XmslWbsHistoryServiceImpl implements IXmslWbsHistoryService {
 
     public List<XmslWbsHistory> getXmslWbsHistoryList(XmslWbsHistory xmslWbsHistory) {
         return xmslWbsHistoryMapper.getXmslWbsHistoryList(xmslWbsHistory);
+    }
+
+    @Override
+    public List<XmslWbsHistory> getListByParentIds(Collection<Long> collection, Long mainId) {
+        if(mainId == null || CollectionUtils.isEmpty(collection))
+            return new ArrayList<>(2);
+        XmslWbsHistory wbsHistory = new XmslWbsHistory();
+        wbsHistory.setParams(ObjectUtils.toMap("parentIds", collection));
+        wbsHistory.setMainId(mainId);
+        return  xmslWbsHistoryMapper.getXmslWbsHistoryList(wbsHistory);
     }
 
     @Transactional

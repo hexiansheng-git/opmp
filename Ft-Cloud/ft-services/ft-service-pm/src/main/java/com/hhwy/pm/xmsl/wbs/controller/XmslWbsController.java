@@ -8,6 +8,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
@@ -87,7 +88,8 @@ public class XmslWbsController extends BaseController {
         String ids = ObjectUtils.nvlString(map.get("ids"));
         if(StringUtils.isBlank(ids))
             return AjaxResult.error("参数缺失");
-        Map<String,List<XmslWbs>> resuMap = xmslWbsService.copyChildList(Convert.toStrArray(ids));
+        Map<String,List<XmslWbsHistory>> resuMap = xmslWbsService.copyChildList(Convert.toLongArray(ids)
+                ,ObjectUtils.nvlLong(map.get("mainId")));
         return AjaxResult.success(resuMap);
     }
 

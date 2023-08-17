@@ -176,10 +176,17 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="params != null  and params.parentIds != null ">
+                and `parent_id` in
+                <foreach item="id" collection="params.parentIds" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
+    
     <insert id="insertXmslWbsHistory" useGeneratedKeys="true" keyProperty="id">
         insert into xmsl_wbs_history
         <trim prefix="(" suffix=")" suffixOverrides=",">
