@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * wbs标准
+ * wbs标准(总部)
  * @author wk
  * @date 2023-08-01 11:26:43
  * @remark 

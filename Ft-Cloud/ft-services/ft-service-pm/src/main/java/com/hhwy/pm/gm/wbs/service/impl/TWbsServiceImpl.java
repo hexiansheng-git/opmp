@@ -2,8 +2,10 @@ package com.hhwy.pm.gm.wbs.service.impl;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.convert.Convert;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
+import com.hhwy.common.datasource.utils.DataSourceUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.mapper.TWbsMapper;
@@ -125,20 +127,40 @@ public class TWbsServiceImpl implements ITWbsService {
         return resuMap;
     }
 
+    public void selectDbColumnList(String dataSource) {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(dataSource);
+        try {
+            
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+    
     @Override
     public List<TWbs> wbsListByType(String engineeringType, String name, String nodeType, Long parentId) {
         if(StringUtils.isBlank(engineeringType))
             return new ArrayList<>(2);
-        Long mainId = tWbsMapper.getEffectMainIdByType(engineeringType);
-        if(mainId == null)
-            return new ArrayList<>(2);
-        TWbs query = new TWbs();
-        query.setMainId(mainId);
-        query.setParentId((parentId==null||parentId<0)?"-1":parentId+"");
-        query.setName(name);
-        query.setNodeType(nodeType);
-        List<TWbs> list = this.lazySearchList(query);
-        return list;
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        try {
+            Long mainId = tWbsMapper.getEffectMainIdByType(engineeringType);
+            if(mainId == null)
+                return new ArrayList<>(2);
+            TWbs query = new TWbs();
+            query.setMainId(mainId);
+            query.setParentId((parentId==null||parentId<0)?"-1":parentId+"");
+            query.setName(name);
+            query.setNodeType(nodeType);
+            List<TWbs> list = this.lazySearchList(query);
+            return list;
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
     @Transactional
