@@ -1,14 +1,16 @@
 package com.hhwy.pm.common.download;
 
-import com.alibaba.cloud.commons.io.IOUtils;
 import com.hhwy.utils.excelUtil.DownTemplate;
+import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -29,26 +31,29 @@ public class DownloadTemplateController {
      * @param response
      * @throws Exception
      */
-    @GetMapping("/downloadTemplate")
+    @PostMapping("/downloadTemplate")
     public void downloadTemplate(@RequestParam(value = "fileName") String fileName, HttpServletResponse response)
         throws Exception {
 
         // 读取文件流（可从jar包取）
         InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("template/" + fileName);
-        if(inStream == null){
-            throw new RuntimeException("找不到指定文件!");
-        }
-        OutputStream outputStream = response.getOutputStream();
+        Map<String, Object> map = new HashMap<>();
+        ExcelUtilByTemplate.exportExcel(response, new ArrayList<>(), map, "", inStream);
 
-        // 设置输出的格式
-        response.reset();
-        response.setContentType("bin");
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-
-        IOUtils.copy(inStream, outputStream, 100);
-        outputStream.flush();
-        inStream.close();
-        outputStream.close();
+        //        if(inStream == null){
+//            throw new RuntimeException("找不到指定文件!");
+//        }
+//        OutputStream outputStream = response.getOutputStream();
+//
+//        // 设置输出的格式
+//        response.reset();
+//        response.setContentType("bin");
+//        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+//
+//        IOUtils.copy(inStream, outputStream, 100);
+//        outputStream.flush();
+//        inStream.close();
+//        outputStream.close();
     }
 
     /**
