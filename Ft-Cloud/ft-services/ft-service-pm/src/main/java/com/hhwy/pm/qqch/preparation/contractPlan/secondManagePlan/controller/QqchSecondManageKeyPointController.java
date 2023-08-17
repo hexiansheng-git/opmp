@@ -1,7 +1,5 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -14,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
@@ -41,12 +37,16 @@ public class QqchSecondManageKeyPointController extends BaseController {
         return AjaxResult.success(qqchSecondManageKeyPoint);
     }
 
+    /**
+     * 获取二次经营要点识别集合
+     * @param qqchSecondManageKeyPoint
+     * @return
+     */
     @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:list")
     @GetMapping("/list")
-    public AjaxResult getQqchSecondManageKeyPointList(@Validated(ValidationGroups.Select.class) QqchSecondManageKeyPoint qqchSecondManageKeyPointParam) {
-        startPage();
-        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointService.getQqchSecondManageKeyPointList(qqchSecondManageKeyPointParam);
-        return getDataTableAjaxResult(qqchSecondManageKeyPointList);
+    public AjaxResult getQqchSecondManageKeyPointList(@Validated(ValidationGroups.Select.class) QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
+        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointService.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+        return AjaxResult.success(qqchSecondManageKeyPointList);
     }
 
     @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:add")
@@ -79,13 +79,6 @@ public class QqchSecondManageKeyPointController extends BaseController {
     public AjaxResult deleteQqchSecondManageKeyPointByPks(@PathVariable Long[] ids) {
         List<Long> qqchSecondManageKeyPointPkList = Arrays.asList(ids);
         return toAjax(qqchSecondManageKeyPointService.deleteQqchSecondManageKeyPointByPks(qqchSecondManageKeyPointPkList));
-    }
-
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchSecondManageKeyPoint qqchSecondManageKeyPointParam) throws IOException {
-        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointService.getQqchSecondManageKeyPointList(qqchSecondManageKeyPointParam);
-        ExcelUtils<QqchSecondManageKeyPoint> util = new ExcelUtils<>(QqchSecondManageKeyPoint.class);
-        util.exportExcel(response, qqchSecondManageKeyPointList, DateUtils.getDate());
     }
 
     /**

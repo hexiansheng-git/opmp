@@ -28,4 +28,6 @@ public interface IQqchMeasuringInstrumentService {
             int deleteQqchMeasuringInstrumentByPks(List<Long> qqchMeasuringInstrumentPkList);
 
     void save(QqchMeasuringInstrumentVo vo);
+
+    QqchMeasuringInstrumentVo syncData(QqchMeasuringInstrumentVo qqchMeasuringInstrumentParam);
 }

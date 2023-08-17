@@ -28,4 +28,6 @@ public interface IQqchSmallMachineryService {
     int deleteQqchSmallMachineryByPks(List<Long> qqchSmallMachineryPkList);
 
     void save(QqchSmallMachineryVo qqchSmallMachineryVo);
+
+    void syncData(QqchSmallMachineryVo qqchSmallMachineryVo);
 }

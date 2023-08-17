@@ -2,10 +2,13 @@ package com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
+import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstFacilityPlanService;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.domain.QqchSmallMachinery;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.domain.vo.QqchSmallMachineryVo;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.mapper.QqchSmallMachineryMapper;
@@ -18,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,10 +40,52 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Resource
+    private IQqchConstFacilityPlanService facilityPlanService;
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                     
     public QqchSmallMachinery getQqchSmallMachinery(QqchSmallMachinery qqchSmallMachinery) {
         return qqchSmallMachineryMapper.getQqchSmallMachinery(qqchSmallMachinery);
+    }
+
+    /***
+     * 功能描述: 拉取施工部署数据
+     * 作者: fushudong
+     * 时间: 2023/8/17
+     */
+    @Override
+    public void syncData(QqchSmallMachineryVo param) {
+        //保存界面已有数据
+        BigDecimal version = param.getVersion();
+        List<QqchSmallMachinery> paramList = param.getQqchSmallMachineryList();
+        this.insertQqchMeasuringInstrumentList(paramList, version);
+
+        //获取设备策划数据
+        List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(version, new QqchConstFacilityPlan()));
+
+        String valid = Valid.NO;
+        if (version.compareTo(BigDecimal.ONE) == 0) {
+            valid = Valid.YES;
+        }
+        //入库数据拼装
+        List<QqchSmallMachinery> saveList = new ArrayList<>();
+        for (QqchConstFacilityPlan constFacilityPlan : facilityPlanList) {
+            //小型机具 实体
+            QqchSmallMachinery smallMachinery = new QqchSmallMachinery();
+            smallMachinery.setEquCode(constFacilityPlan.getFacilityCode());
+            smallMachinery.setEquName(constFacilityPlan.getFacilityName());
+            smallMachinery.setUnit(constFacilityPlan.getUnits());
+            smallMachinery.setNum(BigDecimal.valueOf(constFacilityPlan.getCount()));
+            smallMachinery.setSpec(constFacilityPlan.getSpecificationModel());
+            smallMachinery.setId(IdWorker.createId());
+            smallMachinery.setValid(valid);
+            smallMachinery.setVersion(version);
+            smallMachinery.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            smallMachinery.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            smallMachinery.setCreateTime(DateUtils.getNowDate());
+            saveList.add(smallMachinery);
+        }
+        qqchSmallMachineryMapper.insertQqchSmallMachineryList(saveList);
     }
 
     /**
@@ -57,7 +104,6 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
         vo.setQqchSmallMachineryList(qqchSmallMachineryList);
         return vo;
     }
-
 
     /**
      *  保存/确认

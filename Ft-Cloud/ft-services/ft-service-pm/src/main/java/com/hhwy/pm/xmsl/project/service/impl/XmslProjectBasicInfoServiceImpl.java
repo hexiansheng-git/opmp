@@ -2,11 +2,17 @@ package com.hhwy.pm.xmsl.project.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
+import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.*;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.mapper.*;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +55,12 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     @Autowired
     private XmslProjectMaterialsAmountMapper xmslProjectMaterialsAmountMapper;
+
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private IQqchWorkGroupService qqchWorkGroupService;
 
     /**
      * 根据id获取项目基本信息
@@ -228,6 +240,41 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     @Override
     public XmslProjectBasicInfo getProjectBasicInfoWithoutSublist(XmslProjectBasicInfo projectBasicInfo) {
         return xmslProjectBasicInfoMapper.getProjectBasicInfo(projectBasicInfo);
+    }
+
+    /**
+     * 获取项目基本信息（附带其他信息）
+     * @return
+     */
+    @Override
+    public ProjectInfoWithOther getProjectInfoWithOther() {
+        ProjectInfoWithOther projectInfoWithOther = new ProjectInfoWithOther();
+
+        //获取项目基本信息
+        XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        if (xmslProjectBasicInfo != null){
+            BeanUtils.copyProperties(xmslProjectBasicInfo,projectInfoWithOther);
+        }
+
+        //获取合同信息
+        XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        if(contractInfo != null){
+            projectInfoWithOther.setProjectCategory(contractInfo.getProjectCategory());
+            projectInfoWithOther.setContractAmount(contractInfo.getEffectiveAmout());
+            projectInfoWithOther.setContractTypeInContract(contractInfo.getContractType());
+            projectInfoWithOther.setContractSignDate(contractInfo.getSignDate());
+        }
+
+        //获取前期策划小组
+        QqchWorkGroup workGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+        if(workGroup != null){
+            projectInfoWithOther.setPlanDominantUnit(workGroup.getPlanDominantUnit());
+            projectInfoWithOther.setPlanEstablishDirector(workGroup.getPlanEstablishDirector());
+            projectInfoWithOther.setContactWay(workGroup.getContactWay());
+            projectInfoWithOther.setProjectOverview(workGroup.getProjectOverview());
+        }
+
+        return projectInfoWithOther;
     }
 
 }

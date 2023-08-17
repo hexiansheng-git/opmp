@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.project.service;
 
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 
 import java.util.List;
 
@@ -53,4 +54,10 @@ public interface IXmslProjectBasicInfoService {
     XmslProjectBasicInfo getProjectBasicInfoWithoutSublist(XmslProjectBasicInfo projectBasicInfo);
 
     void insertProjectInvokeProject(XmslProjectBasicInfo projectBasicInfo);
+
+    /**
+     * 获取项目基本信息（附带其他信息）
+     * @return
+     */
+    ProjectInfoWithOther getProjectInfoWithOther();
 }

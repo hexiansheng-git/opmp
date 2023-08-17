@@ -90,13 +90,15 @@ public class QqchConstructionEquipmentServiceImpl implements IQqchConstructionEq
     @Override
     public void insertQqchConstructionEquipmentList(List<QqchConstructionEquipment> qqchConstructionEquipmentList, BigDecimal version) {
 
-        if (CollectionUtils.isEmpty(qqchConstructionEquipmentList)) {
-            return;
-        }
         //删除旧数据
         QqchConstructionEquipment qqchConstructionEquipment = new QqchConstructionEquipment();
         qqchConstructionEquipment.setVersion(version);
         qqchConstructionEquipmentMapper.deleteQqchConstructionEquipment(qqchConstructionEquipment);
+
+        if (CollectionUtils.isEmpty(qqchConstructionEquipmentList)) {
+            return;
+        }
+
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

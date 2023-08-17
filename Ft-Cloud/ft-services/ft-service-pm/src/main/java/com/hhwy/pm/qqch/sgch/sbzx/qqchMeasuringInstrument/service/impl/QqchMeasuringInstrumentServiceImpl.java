@@ -2,10 +2,13 @@ package com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
+import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstFacilityPlanService;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.domain.QqchMeasuringInstrument;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.domain.vo.QqchMeasuringInstrumentVo;
 import com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.mapper.QqchMeasuringInstrumentMapper;
@@ -18,7 +21,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +40,54 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Resource
+    private IQqchConstFacilityPlanService facilityPlanService;
 
 
     public QqchMeasuringInstrument getQqchMeasuringInstrument(QqchMeasuringInstrument qqchMeasuringInstrument) {
         return qqchMeasuringInstrumentMapper.getQqchMeasuringInstrument(qqchMeasuringInstrument);
     }
 
+    /***
+     * 功能描述: 拉取施工部署数据
+     * 作者: fushudong
+     * 时间: 2023/8/17
+     */
+    @Override
+    public QqchMeasuringInstrumentVo syncData(QqchMeasuringInstrumentVo param) {
+        //保存界面已有数据
+        BigDecimal version = param.getVersion();
+        List<QqchMeasuringInstrument> paramList = param.getQqchMeasuringInstrumentList();
+        this.insertQqchMeasuringInstrumentList(paramList, version);
+
+        //获取设备策划数据
+        List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(version, new QqchConstFacilityPlan()));
+
+        String valid = Valid.NO;
+        if (version.compareTo(BigDecimal.ONE) == 0) {
+            valid = Valid.YES;
+        }
+        //入库数据拼装
+        List<QqchMeasuringInstrument> saveList = new ArrayList<>();
+        for (QqchConstFacilityPlan constFacilityPlan : facilityPlanList) {
+            //试验测量仪器 实体
+            QqchMeasuringInstrument measuringInstrument = new QqchMeasuringInstrument();
+            measuringInstrument.setEquCode(constFacilityPlan.getFacilityCode());
+            measuringInstrument.setEquName(constFacilityPlan.getFacilityName());
+            measuringInstrument.setUnit(constFacilityPlan.getUnits());
+            measuringInstrument.setNum(BigDecimal.valueOf(constFacilityPlan.getCount()));
+            measuringInstrument.setSpec(constFacilityPlan.getSpecificationModel());
+            measuringInstrument.setId(IdWorker.createId());
+            measuringInstrument.setValid(valid);
+            measuringInstrument.setVersion(version);
+            measuringInstrument.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            measuringInstrument.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            measuringInstrument.setCreateTime(DateUtils.getNowDate());
+            saveList.add(measuringInstrument);
+        }
+        qqchMeasuringInstrumentMapper.insertQqchMeasuringInstrumentList(saveList);
+        return null;
+    }
 
     /**
      *  列表接口
