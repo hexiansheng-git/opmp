@@ -93,10 +93,10 @@ public class QqchDangerProcessControlPlan extends BaseEntity {
     @Excel(name = "领导带班检查表附件组id")
     private String leaderFileGroupId;
     /**
-     * 字段描述：专项检查频率（字典类型special_examine_frequency）
+     * 字段描述：专项检查频率（字典类型examine_frequency）
      */
     @JsonProperty
-    @Excel(name = "专项检查频率（字典类型special_examine_frequency）")
+    @Excel(name = "专项检查频率（字典类型examine_frequency）")
     private String specialExamineFrequency;
 
     /**
