@@ -64,7 +64,7 @@ public class QqchImportantController extends BaseController {
     public AjaxResult importData(@RequestParam("file") MultipartFile file) {
         FtExcelUtil<QqchImportant> excelUtil = new FtExcelUtil<>(QqchImportant.class);
         try {
-            List<QqchImportant> qqchImportants = excelUtil.importTreeExcel(file.getInputStream());
+            List<QqchImportant> qqchImportants = excelUtil.importExcel(file.getInputStream());
             return AjaxResult.success(qqchImportants);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -76,7 +76,7 @@ public class QqchImportantController extends BaseController {
     public void exportTemp(HttpServletRequest request, HttpServletResponse response) {
         FtExcelUtil<QqchScheCorr> excelUtil = new FtExcelUtil<>(QqchScheCorr.class);
         try {
-            excelUtil.downloadTemplate(request, response, "importCorr.xlsx");
+            excelUtil.downloadTemplate(request, response, "importImportance.xlsx");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -14,7 +14,8 @@ public enum FtExcelEnum {
      * 前期策划 纠偏措施 导入模板 默认初始化字典下来 可以实现函数进行自定义下拉
      */
     QQCH_SCHE_CORR("importCorr.xlsx", "纠偏措施模板.xlsx", "com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr"),
-    QQCH_ORG("importOrg.xlsx", "项目组织机构模板.xlsx", "com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList");
+    QQCH_ORG("importOrg.xlsx", "项目组织机构模板.xlsx", "com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList"),
+    QQCH_IMPORTANCE("importImportance.xlsx", "开工前重要策划.xlsx", "com.hhwy.pm.qqch.sgch.important.domain.QqchImportant");
 
 
     private final String templateName;
