@@ -1,16 +1,12 @@
 package com.hhwy.pm.xmsl.drawReview.service.impl;
 
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.*;
 import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
+import com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewMapper;
 import com.hhwy.pm.xmsl.drawReview.service.*;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
@@ -18,27 +14,26 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
 import com.hhwy.utils.*;
-import com.sun.org.apache.xml.internal.security.Init;
-import io.lettuce.core.Limit;
-import net.sf.jsqlparser.expression.LongValue;
+import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.ssl.PrivateKeyStrategy;
 import org.springframework.beans.BeanUtils;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewMapper;
-import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.Assert;
+
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 /**
  * 图纸复核service
  * @author wk
  * @date 2023-08-07 11:23:32
- * @remark 
+ * @remark
  */
 @Service
 public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
@@ -62,7 +57,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     private IXmslEngineeringReportService engineeringReportService;
     @Autowired
     private IXmslMaterialReportService materialReportService;
-                                                                                                                                                                                                        
+
     public XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview) {
         return xmslDrawReviewMapper.getXmslDrawReview(xmslDrawReview);
     }
@@ -483,7 +478,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return xmslDrawReviewMapper.updateXmslDrawReview(xmslDrawReview);
     }
 
-    
+
     @Transactional
     public void deleteXmslDrawReview(XmslDrawReview xmslDrawReview) {
         XmslDrawReview dbDrawReview = this.getById(xmslDrawReview.getId());
@@ -518,7 +513,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             materialReportService.sync(id);
         });
     }
-    
+
     //加载图纸复核、
     private void loadParentWbsList(Long id){
         List<XmslDrawReviewWbs> addWbsList = new ArrayList<>();
@@ -559,7 +554,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             addWbsList.add(drawWbs);
         }
         //分页取清单
-        List<Long> listIdList = new ArrayList<>(listIdSet);        
+        List<Long> listIdList = new ArrayList<>(listIdSet);
         PageFuncUtils.exec(listIdList.size(),1000,(start,end)->{
             List<Long> tempList = listIdList.subList(start, end);
             List<XmslContractList> contractLists = contractListService.getByIds(tempList.toArray(new Long[]{}));
@@ -579,7 +574,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 XmslDrawReviewWbs temp = l.get(i);
                 temp.setParentId(ObjectUtils.nvlLong(map.get(temp.getParentId()),-1L));
                 temp.setAncestors(ObjectUtils.replaceWithLongMap(temp.getAncestors(),map));
-            }    
+            }
             return 0;
         };
         BiFunction<List<XmslDrawReviewList>,Map<Long,Long>,Integer> setListPidFunc = (l,map)->{
@@ -611,8 +606,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             }
         }
     }
-    
-    
+
+
     public XmslDrawReviewWbs copyToWbs(XmslWbs temp){
         XmslDrawReviewWbs drawWbs = new XmslDrawReviewWbs();
         drawWbs.setId(IdWorker.createId());
@@ -643,7 +638,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         drawWbs.setDelFlag("0");
         return drawWbs;
     }
-    
+
     public XmslDrawReviewList copyToList(XmslContractList temp){
         XmslDrawReviewList drawList = new XmslDrawReviewList();
         drawList.setId(IdWorker.createId());
