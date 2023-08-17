@@ -62,7 +62,7 @@ public class QqchOrganizationListController extends BaseController{
             return AjaxResult.success(qqchOrganizationListService.insertQqchOrganizationListVo(qqchOrganizationListVo));
         }catch (CustomBusinessException e){
             e.printStackTrace();
-            return AjaxResult.error(e.getMessage());
+            return AjaxResult.error(e.getMsg());
         }catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());

@@ -35,7 +35,7 @@ public class QqchOrganizationListVo {
     /**
      * 字段描述：版本
      */
-    @NotNull(message = "按钮标识不能为空",groups = {ValidationGroups.Update.class})
+    @NotNull(message = "版本id不能为空",groups = {ValidationGroups.Update.class})
     private BigDecimal version;
     /**
      * 字段描述：菜单id

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
@@ -13,6 +14,7 @@ import com.hhwy.pm.qqch.preparation.qqchOrganizationList.mapper.QqchOrganization
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.service.IQqchOrganizationListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
@@ -23,12 +25,10 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -70,6 +70,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
      */
     public QqchOrganizationListVo getQqchOrganizationListVo(BigDecimal version) {
         version = VersionUtil.getVersion("qqch_organization_list", version);
+        version = version == null? new BigDecimal("1.0"):version;
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
@@ -147,6 +148,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
     @Transactional
     public int insertQqchOrganizationListVo(QqchOrganizationListVo qqchOrganizationListVo) {
         List<QqchOrganizationList> dataList = qqchOrganizationListVo.getDataList();
+        this.checkData(dataList);
         List<QqchOrganizationList> organizationLists = TreeUtil.treeToList(dataList);
         if (ObjectNullUtil.isEmpty(dataList)) {
             return 1;
@@ -192,5 +194,22 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
 
         qqchOrganizationListMapper.insertQqchOrganizationListList(organizationLists);
         return 1;
+    }
+
+    private void checkData(List<QqchOrganizationList> dataList) {
+        LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
+        Set<String> strings = organizationCat.keySet();
+        if (dataList.size() != strings.size()) throw new RuntimeException("不能新增或者删除组织机构顶级数据");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String label : strings) {
+            List<QqchOrganizationList> collect = dataList.stream().filter(ite -> label.equals(ite.getOrganization())).collect(Collectors.toList());
+            if (CollectionUtils.isEmpty(collect)) {
+                stringBuilder.append(label + "不能删除或者修改").append(";");
+            }
+        }
+        if (!StringUtils.isEmpty(stringBuilder.toString())) {
+            throw new RuntimeException(stringBuilder.toString());
+        }
+
     }
 }
