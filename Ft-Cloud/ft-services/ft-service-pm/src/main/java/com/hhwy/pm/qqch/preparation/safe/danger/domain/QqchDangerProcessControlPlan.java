@@ -106,12 +106,11 @@ public class QqchDangerProcessControlPlan extends BaseEntity {
     @Excel(name = "专项检查表附件组id")
     private String specialFileGroupId;
     /**
-     * 字段描述：首件实施前安全条件确认
+     * 字段描述：是否首件
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "首件实施前安全条件确认", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date firstConfirmTime;
+    @Excel(name = "首件实施前安全条件确认")
+    private String whetherFirst;
     /**
      * 字段描述：版本
      */

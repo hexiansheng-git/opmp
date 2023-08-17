@@ -93,16 +93,16 @@ public class QqchQcImplementPlan extends BaseEntity {
     /**
      * 字段描述：计划开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd")
     private Date planStartTime;
     /**
      * 字段描述：计划结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划结束时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划结束时间", dateFormat = "yyyy-MM-dd")
     private Date planEndTime;
     /**
      * 字段描述：版本

@@ -19,7 +19,7 @@
     <result property="leaderFileGroupId" column="leader_file_group_id"/>
     <result property="specialExamineFrequency" column="special_examine_frequency"/>
     <result property="specialFileGroupId" column="special_file_group_id"/>
-    <result property="firstConfirmTime" column="first_confirm_time"/>
+    <result property="whetherFirst" column="whether_first"/>
     <result property="version" column="version"/>
     <result property="valid" column="valid"/>
     <result property="regionId" column="region_id"/>
@@ -56,7 +56,7 @@
       ,`leader_file_group_id`
       ,`special_examine_frequency`
       ,`special_file_group_id`
-      ,`first_confirm_time`
+      ,`whether_first`
       ,`version`
       ,`valid`
       ,`region_id`
@@ -104,7 +104,7 @@
       <if test="specialFileGroupId != null  and specialFileGroupId != ''">and `special_file_group_id` =
         #{specialFileGroupId}
       </if>
-      <if test="firstConfirmTime != null ">and `first_confirm_time` = #{firstConfirmTime}</if>
+      <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -154,7 +154,7 @@
       <if test="specialFileGroupId != null  and specialFileGroupId != ''">and `special_file_group_id` =
         #{specialFileGroupId}
       </if>
-      <if test="firstConfirmTime != null ">and `first_confirm_time` = #{firstConfirmTime}</if>
+      <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -195,7 +195,7 @@
       <if test="leaderFileGroupId != null  and leaderFileGroupId != ''">`leader_file_group_id`,</if>
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">`special_examine_frequency`,</if>
       <if test="specialFileGroupId != null  and specialFileGroupId != ''">`special_file_group_id`,</if>
-      <if test="firstConfirmTime != null ">`first_confirm_time`,</if>
+      <if test="whetherFirst != null and whetherFirst != ''">`whether_first`,</if>
       <if test="version != null ">`version`,</if>
       <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="regionId != null ">`region_id`,</if>
@@ -231,7 +231,7 @@
       <if test="leaderFileGroupId != null  and leaderFileGroupId != ''">#{leaderFileGroupId},</if>
       <if test="specialExamineFrequency != null  and specialExamineFrequency != ''">#{specialExamineFrequency},</if>
       <if test="specialFileGroupId != null  and specialFileGroupId != ''">#{specialFileGroupId},</if>
-      <if test="firstConfirmTime != null ">#{firstConfirmTime},</if>
+      <if test="whetherFirst != null and whetherFirst != ''">#{whetherFirst},</if>
       <if test="version != null ">#{version},</if>
       <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="regionId != null ">#{regionId},</if>
@@ -272,7 +272,7 @@
       `leader_file_group_id`,
       `special_examine_frequency`,
       `special_file_group_id`,
-      `first_confirm_time`,
+      `whether_first`,
       `version`,
       `valid`,
       `region_id`,
@@ -309,7 +309,7 @@
         #{item.leaderFileGroupId},
         #{item.specialExamineFrequency},
         #{item.specialFileGroupId},
-        #{item.firstConfirmTime},
+        #{item.whetherFirst},
         #{item.version},
         #{item.valid},
         #{item.regionId},
@@ -357,7 +357,7 @@
       <if test="specialFileGroupId != null  and  specialFileGroupId != ''">`special_file_group_id` =
         #{specialFileGroupId},
       </if>
-      <if test="firstConfirmTime != null ">`first_confirm_time` = #{firstConfirmTime},</if>
+      <if test="whetherFirst != null and whetherFirst != ''">`whether_first` = #{whetherFirst},</if>
       <if test="version != null ">`version` = #{version},</if>
       <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -452,9 +452,9 @@
           when `id`=#{item.id} then #{item.specialFileGroupId}
         </foreach>
       </trim>
-      <trim prefix="first_confirm_time  = case" suffix="end,">
+      <trim prefix="whether_first  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.firstConfirmTime}
+          when `id`=#{item.id} then #{item.whetherFirst}
         </foreach>
       </trim>
       <trim prefix="version  = case" suffix="end,">
@@ -588,7 +588,7 @@
       <if test="specialFileGroupId != null  and specialFileGroupId != ''">and `special_file_group_id` =
         #{specialFileGroupId}
       </if>
-      <if test="firstConfirmTime != null ">and `first_confirm_time` = #{firstConfirmTime}</if>
+      <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="regionId != null ">and `region_id` = #{regionId}</if>
