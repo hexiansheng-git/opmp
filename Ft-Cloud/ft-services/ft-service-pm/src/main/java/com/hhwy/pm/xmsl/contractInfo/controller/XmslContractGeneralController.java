@@ -110,7 +110,7 @@ public class XmslContractGeneralController extends BaseController {
      * @param file
      * @return
      */
-    @GetMapping("/import")
+    @PostMapping("/import")
     public AjaxResult importDate(@RequestPart("file") MultipartFile file){
         ExcelUtils<ImportXmslContractGeneral> util = new ExcelUtils<>(ImportXmslContractGeneral.class);
         try {

@@ -603,6 +603,7 @@
             CONCAT(truncate( ( count( IF ( person_type = '2', 1, NULL ) ) / count( * ) ) , 0) , '%')  AS rateNum
         FROM qqch_management_person_config
         <include refid="dynamicWhere"/>
+        AND pid != 0
     </select>
 
 

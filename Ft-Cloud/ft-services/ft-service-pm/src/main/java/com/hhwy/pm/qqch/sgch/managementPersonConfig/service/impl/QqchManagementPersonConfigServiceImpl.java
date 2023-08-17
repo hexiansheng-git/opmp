@@ -110,7 +110,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
 
         //获取当前已有的组织数据
         List<QqchManagementPersonConfig> pageList = qqchManagementPersonConfigVo.getQqchManagementPersonConfigList();
-        //用户判断当前组织是否存在
+        //collect用于判断拉取来的组织是否存在
         List<String> collect = pageList.stream().map(QqchManagementPersonConfig::getPost).collect(Collectors.toList());
 
         String valid = Valid.NO;
@@ -126,7 +126,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
                 continue;
             }
             QqchManagementPersonConfig entity = new QqchManagementPersonConfig();
-            entity.setId(organizationList.getId());
+//            entity.setId(organizationList.getId());
             entity.setDuty(organizationList.getDutyDept());
             entity.setPost(organizationList.getOrganization());
             entity.setValid(valid);
