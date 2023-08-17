@@ -2,7 +2,10 @@ package com.hhwy.pm.qqch.sgch.prodplan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.aspect.CompileAspect;
+import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import com.hhwy.pm.qqch.sgch.prodplan.mapper.QqchProdPlanMapper;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
@@ -12,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -24,6 +29,11 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
 
     @Autowired
     private QqchProdPlanMapper qqchProdPlanMapper;
+
+
+
+
+    private final static String TN = "qqch_prod_plan";
 
 
     public QqchProdPlan getQqchProdPlan(QqchProdPlan qqchProdPlan) {
@@ -82,10 +92,32 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
 
     @Override
     public CompileEntity<List<QqchProdPlan>> getList(QqchProdPlan dto) {
-
+        Date[] time = this.getTime();
+        HashMap<Date, List<String>> wbsList = getWbsList(time[0], time[1]);
 
         return null;
     }
+
+    @Override
+    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
+    public void save(List<QqchProdPlan> dto) {
+        this.qqchProdPlanMapper.insertQqchProdPlanList(dto);
+    }
+
+    @Override
+    @CompileAspect(type = CompileOptEnum.LIST,tableName = TN)
+    public  CompileEntity<HashMap<String, Object>>  selectList(QqchProdPlan qqchProdPlanParam) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
+        CompileEntity<HashMap<String, Object>> objectCompileEntity = new CompileEntity<>();
+        HashMap<String, Object> res = new HashMap<>();
+        List<QqchProdPlan> qqchProdPlanList = this.qqchProdPlanMapper.getQqchProdPlanList(qqchProdPlanParam);
+        res.put("list",qqchProdPlanList);
+        res.put("xData",qqchProdPlanList.stream().map(QqchProdPlan::getPlanDate).map(sdf::format).collect(Collectors.toList()));
+        res.put("yData",qqchProdPlanList.stream().map(QqchProdPlan::getFinishRatio).collect(Collectors.toList()));
+        objectCompileEntity.setDto(res);
+        return objectCompileEntity;
+    }
+
 
     // TODO 获取p6计划的开始时间和结束时间
     private Date[] getTime() {
@@ -116,9 +148,9 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
             ids.add("4");
             ids.add("5");
             ids.add("6");
-            res.put(date,ids);
+            res.put(date, ids);
         }
-        
+
         return res;
     }
 

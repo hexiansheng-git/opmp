@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.sgch.prodplan.service;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -29,4 +30,8 @@ public interface IQqchProdPlanService {
     int deleteQqchProdPlanByPks(List<Long> qqchProdPlanPkList);
 
     CompileEntity<List<QqchProdPlan>> getList(QqchProdPlan dto);
+
+    public void save(List<QqchProdPlan> dto);
+
+    CompileEntity<HashMap<String, Object>>  selectList(QqchProdPlan qqchProdPlanParam);
 }

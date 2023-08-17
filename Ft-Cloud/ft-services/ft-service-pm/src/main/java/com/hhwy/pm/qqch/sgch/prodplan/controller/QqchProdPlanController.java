@@ -5,10 +5,14 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -30,7 +35,10 @@ public class QqchProdPlanController extends BaseController {
 
     @Autowired
     private IQqchProdPlanService qqchProdPlanService;
-
+    @Autowired
+    private IQqchModuleConfirmCaseService confirmCaseService;
+    @Autowired
+    private IQqchReviewService reviewService;
 
     @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping
@@ -42,16 +50,19 @@ public class QqchProdPlanController extends BaseController {
     @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchProdPlanList(@Validated(ValidationGroups.Select.class) QqchProdPlan qqchProdPlanParam) {
-        startPage();
-        List<QqchProdPlan> qqchProdPlanList = qqchProdPlanService.getQqchProdPlanList(qqchProdPlanParam);
-        return getDataTableAjaxResult(qqchProdPlanList);
+        CompileEntity<HashMap<String, Object>> qqchProdPlanList = qqchProdPlanService.selectList(qqchProdPlanParam);
+        return AjaxResult.success(qqchProdPlanList);
     }
 
     @PreAuthorize(hasPermi = "qqchProdPlan:add")
-    @PostMapping("/add")
-    public AjaxResult insertQqchProdPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchProdPlan qqchProdPlanParam) {
-        qqchProdPlanService.insertQqchProdPlan(qqchProdPlanParam);
-        return AjaxResult.success(qqchProdPlanParam);
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchProdPlan>> dto) {
+        qqchProdPlanService.save(dto.dealSaveDto());
+        if (PmConstant.ONE.equals( dto.getSubmitFlag())){
+            confirmCaseService.addConfirmRecord(dto.getModuleIdentity(),reviewService.getStage());
+        }
+        
+        return AjaxResult.success(dto);
     }
 
     @PreAuthorize(hasPermi = "qqchProdPlan:add")

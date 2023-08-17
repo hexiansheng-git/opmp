@@ -7,7 +7,11 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import lombok.Data;
+import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -15,7 +19,9 @@ import java.util.Date;
  * @date 2023-08-17 16:20:08
  * @remark qqch_prod_plan
  */
-public class QqchProdPlan extends BaseEntity {
+@Data
+@ToString
+public class QqchProdPlan extends CompileEntity<QqchProdPlan> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -40,7 +46,7 @@ public class QqchProdPlan extends BaseEntity {
     /**
      * 字段描述：月份
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy年MM月")
     @JsonProperty
     @Excel(name = "月份", dateFormat = "yyyy-MM-dd")
     private Date planDate;
@@ -50,21 +56,21 @@ public class QqchProdPlan extends BaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "计划月度产值", dateFormat = "yyyy-MM-dd")
-    private Date monthProdValue;
+    private BigDecimal monthProdValue;
     /**
      * 字段描述：累计计划产值
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "累计计划产值", dateFormat = "yyyy-MM-dd")
-    private Date sumProdValue;
+    private BigDecimal sumProdValue;
     /**
      * 字段描述：计划完成比例
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "计划完成比例", dateFormat = "yyyy-MM-dd")
-    private Date finishRatio;
+    private BigDecimal finishRatio;
     /**
      * 字段描述：备注/描述
      */
@@ -163,17 +169,16 @@ public class QqchProdPlan extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1，生效状态，0：未生效,1：已生效
+     * 版本号
      */
     @JsonProperty
-    @Excel(name = "预留字段1，生效状态，0：未生效,1：已生效")
-    private String ptVar1;
+    private BigDecimal version;
     /**
      * 字段描述：预留字段2
      */
     @JsonProperty
     @Excel(name = "预留字段2")
-    private String ptVar2;
+    private String valid;
     /**
      * 字段描述：预留字段3
      */
@@ -199,283 +204,10 @@ public class QqchProdPlan extends BaseEntity {
     @Excel(name = "序号")
     private Integer sort;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
+    public static void main(String[] args) {
+        for (int i = 0; i < 10; i++) {
 
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public Integer getYear() {
-        return year;
-    }
-
-    @JsonIgnore
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    @JsonIgnore
-    public Integer getMonth() {
-        return month;
-    }
-
-    @JsonIgnore
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    @JsonIgnore
-    public Date getPlanDate() {
-        return planDate;
-    }
-
-    @JsonIgnore
-    public void setPlanDate(Date planDate) {
-        this.planDate = planDate;
-    }
-
-    @JsonIgnore
-    public Date getMonthProdValue() {
-        return monthProdValue;
-    }
-
-    @JsonIgnore
-    public void setMonthProdValue(Date monthProdValue) {
-        this.monthProdValue = monthProdValue;
-    }
-
-    @JsonIgnore
-    public Date getSumProdValue() {
-        return sumProdValue;
-    }
-
-    @JsonIgnore
-    public void setSumProdValue(Date sumProdValue) {
-        this.sumProdValue = sumProdValue;
-    }
-
-    @JsonIgnore
-    public Date getFinishRatio() {
-        return finishRatio;
-    }
-
-    @JsonIgnore
-    public void setFinishRatio(Date finishRatio) {
-        this.finishRatio = finishRatio;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @JsonIgnore
-    public Long getRegionId() {
-        return regionId;
-    }
-
-    @JsonIgnore
-    public void setRegionId(Long regionId) {
-        this.regionId = regionId;
-    }
-
-    @JsonIgnore
-    public String getRegionName() {
-        return regionName;
-    }
-
-    @JsonIgnore
-    public void setRegionName(String regionName) {
-        this.regionName = regionName;
-    }
-
-    @JsonIgnore
-    public Long getProjectId() {
-        return projectId;
-    }
-
-    @JsonIgnore
-    public void setProjectId(Long projectId) {
-        this.projectId = projectId;
-    }
-
-    @JsonIgnore
-    public String getProjectName() {
-        return projectName;
-    }
-
-    @JsonIgnore
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    @JsonIgnore
-    public Long getUserId() {
-        return userId;
-    }
-
-    @JsonIgnore
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    @JsonIgnore
-    public Long getDeptId() {
-        return deptId;
-    }
-
-    @JsonIgnore
-    public void setDeptId(Long deptId) {
-        this.deptId = deptId;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
-
-    @JsonIgnore
-    public Integer getSort() {
-        return sort;
-    }
-
-    @JsonIgnore
-    public void setSort(Integer sort) {
-        this.sort = sort;
+            System.out.println(i);
+        }
     }
 }

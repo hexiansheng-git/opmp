@@ -21,6 +21,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
@@ -122,6 +123,17 @@ public class CompileAspectImpl {
     }
 
     private Object afterProcessd(ProceedingJoinPoint joinPoint, CompileAspect compileAspect, Object result) {
+        BigDecimal version = null;
+        Object[] args = joinPoint.getArgs();
+        for (Object arg : args) {
+            if (arg instanceof CompileEntity) {
+                CompileEntity a = (CompileEntity) arg;
+                version = a.getVersion();
+            }
+        }
+
+
+        String tableName = compileAspect.tableName();
         if (CompileOptEnum.TREE.equals(compileAspect.type())) {
             if (result instanceof List) {
                 List list = (List) result;
@@ -141,9 +153,9 @@ public class CompileAspectImpl {
             CompileEntity res = (CompileEntity) result;
             // 设置当前阶段
             res.setStageIdentity(reviewService.getStage());
+            res.setVersion(VersionUtil.getVersion(tableName, version));
             return res;
         }
-        //如果这里不返回result，则目标对象实际返回值会被置为null
         return result;
     }
 
