@@ -10,6 +10,8 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.gm.wbs.domain.TWbs;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
@@ -24,6 +26,7 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -39,6 +42,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -64,6 +68,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     private TokenService tokenService;
     @Resource
     private IXmslWbsHistoryService wbsHistoryService;
+    @Resource
+    private IXmslContractInfoService xmslContractInfoService;
 
     @Override
     public XmslWbs getByCode(String code) {
@@ -285,6 +291,33 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Override
     public List<XmslWbs> latestWbsSimpleAllList() {
         return xmslWbsMapper.latestWbsSimpleAllList();
+    }
+
+    @Override
+    public List<XmslWbs> importData(MultipartFile file) throws Exception {
+        //读取excel中的数据，替换id
+        FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
+        List<XmslWbs> list = excelUtil.importExcel(file.getInputStream());
+        Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            XmslWbs temp = list.get(i);
+            String code = temp.getCode().trim();
+            if(code.indexOf("-") < 0){
+                temp.setLevel(1);
+                temp.setParentId("-1");
+            }else{
+                String parentCode = code.substring(0,code.length()-4);
+                //查找父级
+                XmslWbs parent = codeMap.get(parentCode);
+                Assert.notNull(parent, "未找到父级,请确保父级编码写在子级的前面，行号:"+(i+2));
+                temp.setParentId(parent.getId());
+                temp.setLevel(parent.getLevel()+1);
+                parent.setHaveChildren(Constant.YES_INT);
+            }
+            temp.setId(UUIDUtils.getShortUuid());
+            codeMap.put(temp.getCode(), temp);
+        }
+        return list;
     }
 
     @Override

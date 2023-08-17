@@ -1,9 +1,11 @@
 package com.hhwy.pm.xmsl.wbs.service;
 
+import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -82,6 +84,12 @@ public interface IXmslWbsService {
      */
     List<XmslWbs> latestWbsSimpleAllList();
 
+    /**
+     * 导入数据
+     * @param file
+     */
+    List<XmslWbs> importData(MultipartFile file) throws Exception;
+    
     /**
      * 导出数据
      * @param main 

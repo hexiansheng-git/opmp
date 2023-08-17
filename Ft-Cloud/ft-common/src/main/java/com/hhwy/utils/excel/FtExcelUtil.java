@@ -209,6 +209,10 @@ public class FtExcelUtil<T> {
         return list;
     }
 
+    public void exportExcel(HttpServletResponse response,  String sheetName) {
+        this.exportExcel(response, new ArrayList<>(2),sheetName);
+    }
+    
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
         this.init(list, sheetName, FtExcel.Type.EXPORT);
         this.exportExcel(response);
@@ -343,7 +347,11 @@ public class FtExcelUtil<T> {
         if (attr.combo().length > 0) {
             this.setXSSFValidation(this.sheet, attr.combo(), 1, 100, column, column);
         }
-
+        if (StringUtils.isNotEmpty(attr.dictType())) {
+            if(!this.dictsMap.containsKey(attr.dictType()))
+                this.dictsMap.put(attr.dictType(), DictUtil.getDictDataName(attr.dictType()));
+            this.setXSSFValidation(this.sheet, this.dictsMap.get(attr.dictType()).values().toArray(new String[]{}), 1, 100, column, column);
+        }
     }
 
     public Cell addCell(FtExcel attr, Row row, T vo, Field field, int column) {
@@ -598,9 +606,15 @@ public class FtExcelUtil<T> {
         this.initDicMap();
         // 获取其他除了字典项之外的下拉数据
         Map<String, List> otherSelectDatas = excelFunction.initSelectList();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("template/" + templateName);
-        if (inputStream == null) return;
-        Workbook sheets = WorkbookFactory.create(inputStream);
+        Workbook sheets = null;
+        InputStream inputStream = null;
+        if (templateName==null || "".equals(templateName)){
+            sheets = WorkbookFactory.create(true);
+            sheets.createSheet();
+        }else{
+            inputStream = getClass().getClassLoader().getResourceAsStream("template/" + templateName);
+            sheets = WorkbookFactory.create(inputStream);
+        }
         //获取创建的工作簿第一页
         Sheet shee = sheets.getSheetAt(0);
         //获取当前sheet最后一行数据对应的行索引
@@ -640,7 +654,8 @@ public class FtExcelUtil<T> {
             ioe.printStackTrace();
         } finally {
             try {
-                inputStream.close();
+                if(inputStream != null)
+                    inputStream.close();
                 if (outputStream != null)
                     outputStream.close();
             } catch (Exception e) {
