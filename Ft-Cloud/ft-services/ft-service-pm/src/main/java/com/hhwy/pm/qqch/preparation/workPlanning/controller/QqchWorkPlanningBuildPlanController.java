@@ -15,6 +15,7 @@ import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPla
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,6 +76,9 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
         try{
             qqchWorkPlanningBuildPlanService.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanVo);
             return AjaxResult.success(qqchWorkPlanningBuildPlanVo);
+        }catch (CustomBusinessException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMsg());
         }catch (Exception e){
          e.printStackTrace();
          return AjaxResult.error(e.getMessage());

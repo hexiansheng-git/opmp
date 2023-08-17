@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrange;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlaningArrangeVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningBuildPlan;
 import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlaningArrangeService;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -67,6 +68,9 @@ public class QqchWorkPlaningArrangeController extends BaseController{
         try{
             qqchWorkPlaningArrangeService.insertQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeListParam);
             return AjaxResult.success(qqchWorkPlaningArrangeListParam);
+        }catch (CustomBusinessException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMsg());
         }catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());

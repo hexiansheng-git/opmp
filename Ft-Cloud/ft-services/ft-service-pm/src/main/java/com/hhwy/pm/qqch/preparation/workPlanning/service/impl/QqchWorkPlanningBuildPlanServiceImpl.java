@@ -87,7 +87,6 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
                     qqchWorkPlanningBuildPlan.setCreateTime(DateUtils.getNowDate());
                     qqchWorkPlanningBuildPlan.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
                     qqchWorkPlanningBuildPlan.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningBuildPlanVo.getVersion());
-
                     qqchWorkPlanningBuildPlan.setValid(valid);
                 }
             }else{
