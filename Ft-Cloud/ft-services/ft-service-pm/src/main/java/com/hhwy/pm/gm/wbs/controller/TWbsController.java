@@ -1,0 +1,41 @@
+package com.hhwy.pm.gm.wbs.controller;
+
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.gm.wbs.domain.TWbs;
+import com.hhwy.pm.gm.wbs.service.ITWbsService;
+import com.hhwy.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * wbs标准
+ * @author wk
+ * @date 2023-08-01 11:26:43
+ * @remark 
+ */
+@Validated
+@RestController
+@RequestMapping("/tWbs")
+public class TWbsController extends BaseController{
+    @Autowired
+    private ITWbsService tWbsService;
+
+
+    /**
+     * 根据工程类型获取wbs(懒加载)
+     * @param map  {engineeringType,parentId,name,nodeType}
+     * @return
+     */
+    @PostMapping("/effectLazyList")
+    public AjaxResult effectLazyList(@RequestBody Map map) {
+        String engineeringType = ObjectUtils.nvlString(map.get("engineeringType"));
+        Long parentId = ObjectUtils.nvlLong(map.get("parentId"),-1L);
+        List<TWbs> list = tWbsService.wbsListByType(engineeringType,ObjectUtils.nvlString(map.get("name")),ObjectUtils.nvlString(map.get("nodeType")),parentId);
+        return AjaxResult.success(list);
+    }
+}
