@@ -81,10 +81,10 @@ public class QqchDangerProcessControlPlan extends BaseEntity {
     @Excel(name = "班前讲话", dateFormat = "yyyy-MM-dd")
     private Date preClassSpeechDate;
     /**
-     * 字段描述：领导带班检查频率（字典类型leader_examine_frequency）
+     * 字段描述：领导带班检查频率（字典类型examine_frequency）
      */
     @JsonProperty
-    @Excel(name = "领导带班检查频率（字典类型leader_examine_frequency）")
+    @Excel(name = "领导带班检查频率（字典类型examine_frequency）")
     private String leaderExamineFrequency;
     /**
      * 字段描述：领导带班检查表附件组id
