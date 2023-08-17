@@ -68,8 +68,29 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         return qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPoint(qqchSecondManageKeyPoint);
     }
 
+    /**
+     * 获取二次经营要点识别集合
+     * @param qqchSecondManageKeyPoint
+     * @return
+     */
     public List<QqchSecondManageKeyPoint> getQqchSecondManageKeyPointList(QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
-        return qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+        //获取最大生效版本
+        BigDecimal version = VersionUtil.getVersion("qqch_second_manage_key_point",null);
+        qqchSecondManageKeyPoint.setVersion(version);
+        List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointMapper.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
+
+        //设置子表数据
+        this.setSublist(qqchSecondManageKeyPointList,version);
+
+        //转树列表
+        List<QqchSecondManageKeyPoint> treeList = ListTreeUtil.formatTree(
+                qqchSecondManageKeyPointList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchSecondManageKeyPoint::getChildren,
+                QqchSecondManageKeyPoint::setChildren);
+
+        return treeList;
     }
 
     @Transactional

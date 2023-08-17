@@ -16,6 +16,11 @@ public interface IQqchSecondManageKeyPointService {
 
     QqchSecondManageKeyPoint getQqchSecondManageKeyPoint(QqchSecondManageKeyPoint qqchSecondManageKeyPoint);
 
+    /**
+     * 获取二次经营要点识别集合
+     * @param qqchSecondManageKeyPoint
+     * @return
+     */
     List<QqchSecondManageKeyPoint> getQqchSecondManageKeyPointList(QqchSecondManageKeyPoint qqchSecondManageKeyPoint);
 
     int insertQqchSecondManageKeyPoint(QqchSecondManageKeyPoint qqchSecondManageKeyPoint);
