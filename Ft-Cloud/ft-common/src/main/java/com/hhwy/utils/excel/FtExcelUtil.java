@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.reflect.ReflectUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excelUtil.HeadVo;
 import com.hhwy.utils.field.FieldUtils;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.map.HashedMap;
@@ -27,6 +28,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -631,7 +633,7 @@ public class FtExcelUtil<T> {
         try {
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=" + fileName);
+            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode(fileName, "UTF-8"));
             outputStream = response.getOutputStream();
             sheets.write(outputStream);
         } catch (IOException ioe) {
@@ -859,6 +861,7 @@ public class FtExcelUtil<T> {
         for (T t : ts) {
             // 如果是属于TreeNode才继续进行
             if (!(t instanceof TreeNode)) throw new RuntimeException("请继承TreeNode");
+            ((TreeNode<?>) t).setId(IdWorker.createId());
             // 序号
             String serNum = init.getFieldVal(serFieldName, t) + "";
             String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
@@ -886,8 +889,9 @@ public class FtExcelUtil<T> {
                         TreeNode treeNode = (TreeNode) i;
                         List children = treeNode.getChildren();
                         children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
-                        children.add(t);
+                        init.setFieldVal("pid",((TreeNode<?>) i).getId(),t);
                         init.setFieldVal(finalChildrenFieldName, children, i);
+                        children.add(t);
                     });
                 }
             }
