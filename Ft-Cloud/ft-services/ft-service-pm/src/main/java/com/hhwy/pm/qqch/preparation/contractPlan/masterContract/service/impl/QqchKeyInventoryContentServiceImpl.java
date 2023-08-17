@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.DataCheckUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
@@ -39,6 +41,9 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
 
 
     public QqchKeyInventoryContent getQqchKeyInventoryContent(QqchKeyInventoryContent qqchKeyInventoryContent) {
@@ -132,6 +137,14 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
                 (r, n) -> r.getId().equals(n.getPid()),
                 QqchKeyInventoryContent::getChildren,
                 QqchKeyInventoryContent::setChildren);
+
+        //获取合同信息-币种
+        XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        if(contractInfo != null){
+            qqchKeyInventoryContentVo.setCurrency(contractInfo.getListCurrencyName());
+        }else {
+            qqchKeyInventoryContentVo.setCurrency("美元");
+        }
 
         qqchKeyInventoryContentVo.setVersion(version);
         qqchKeyInventoryContentVo.setStageIdentity(qqchReviewService.getStage());
