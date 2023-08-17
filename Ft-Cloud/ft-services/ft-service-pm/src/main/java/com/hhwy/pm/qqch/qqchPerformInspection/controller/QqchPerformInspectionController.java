@@ -1,0 +1,174 @@
+package com.hhwy.pm.qqch.qqchPerformInspection.controller;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.io.IOException;
+import java.util.Map;
+
+import com.hhwy.common.core.domain.R;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
+import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.exception.CustomBusinessException;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.core.web.controller.BaseController;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
+
+import org.springframework.validation.annotation.Validated;
+import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.security.annotation.PreAuthorize;
+
+/**
+ * @author zqq
+ * @date 2023-08-17 10:58:09
+ * @remark
+ */
+@Validated
+@RestController
+@RequestMapping("/qqchPerformInspection")
+public class QqchPerformInspectionController extends BaseController {
+
+    @Autowired
+    private IQqchPerformInspectionService qqchPerformInspectionService;
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
+
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:list")
+    @GetMapping
+    public AjaxResult getQqchPerformInspection(@Validated(ValidationGroups.Get.class) QqchPerformInspection qqchPerformInspectionParam) {
+        QqchPerformInspection qqchPerformInspection = qqchPerformInspectionService.getQqchPerformInspection(qqchPerformInspectionParam);
+        return AjaxResult.success(qqchPerformInspection);
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:list")
+    @GetMapping("/list")
+    public AjaxResult getQqchPerformInspectionList(@Validated(ValidationGroups.Select.class) QqchPerformInspection qqchPerformInspectionParam) {
+        startPage();
+        List<QqchPerformInspection> qqchPerformInspectionList = qqchPerformInspectionService.getQqchPerformInspectionList(qqchPerformInspectionParam);
+        return getDataTableAjaxResult(qqchPerformInspectionList);
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:add")
+    @PostMapping("/add")
+    public AjaxResult insertQqchPerformInspection(@Validated(ValidationGroups.Save.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
+        try{
+            qqchPerformInspectionService.insertQqchPerformInspection(qqchPerformInspectionParam);
+            return AjaxResult.success();
+        }catch (CustomBusinessException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMsg());
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:add")
+    @PostMapping("/batchAdd")
+    public AjaxResult insertQqchPerformInspectionList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchPerformInspection> qqchPerformInspectionListParam) {
+        qqchPerformInspectionService.insertQqchPerformInspectionList(qqchPerformInspectionListParam);
+        return AjaxResult.success(qqchPerformInspectionListParam);
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:update")
+    @PostMapping("/update")
+    public AjaxResult updateQqchPerformInspection(@Validated(ValidationGroups.Update.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
+        try{
+            qqchPerformInspectionService.updateQqchPerformInspection(qqchPerformInspectionParam);
+            return AjaxResult.success();
+        }catch (CustomBusinessException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMsg());
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchPerformInspectionList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchPerformInspection> qqchPerformInspectionListParam) {
+        return toAjax(qqchPerformInspectionService.updateQqchPerformInspectionList(qqchPerformInspectionListParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteQqchPerformInspection(@Validated(ValidationGroups.Delete.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
+        return toAjax(qqchPerformInspectionService.deleteQqchPerformInspection(qqchPerformInspectionParam));
+    }
+
+    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteQqchPerformInspectionByPks(@PathVariable Long[] ids) {
+        List<Long> qqchPerformInspectionPkList = Arrays.asList(ids);
+        return toAjax(qqchPerformInspectionService.deleteQqchPerformInspectionByPks(qqchPerformInspectionPkList));
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, QqchPerformInspection qqchPerformInspectionParam) throws IOException {
+        List<QqchPerformInspection> qqchPerformInspectionList = qqchPerformInspectionService.getQqchPerformInspectionList(qqchPerformInspectionParam);
+        ExcelUtils<QqchPerformInspection> util = new ExcelUtils<>(QqchPerformInspection.class);
+        util.exportExcel(response, qqchPerformInspectionList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取策划项信息
+     * @return
+     */
+    @GetMapping("/getChEditMenuList")
+    public AjaxResult getChEditMenuList(){
+        try{
+            List<QqchPerformInspectionDetail> list  = qqchPerformInspectionService.getChEditMenuList();
+            return AjaxResult.success(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取检查好主导单位
+     * @return
+     */
+    @GetMapping("/getCheckUnitList")
+    public AjaxResult getCheckUnitList(){
+        ArrayList<String> checkList = new ArrayList<>();
+        checkList.add("海外事业部");
+        XmslProjectBasicInfo projectBasicInfo = projectBasicInfoService.getProjectBasicInfoWithoutSublist(new XmslProjectBasicInfo());
+        String projectName = projectBasicInfo.getProjectName();
+        String regionName = projectBasicInfo.getRegionName();
+        checkList.add(regionName);
+        checkList.add(projectName);
+        return AjaxResult.success(checkList);
+    }
+
+    /**
+     * 详情
+     * @param param
+     * @return
+     */
+    @GetMapping("/detail")
+    public AjaxResult detail(@Validated(ValidationGroups.Other.class) QqchPerformInspection param){
+        try{
+            QqchPerformInspection qqchPerformInspection = qqchPerformInspectionService.detail(param.getId());
+            return AjaxResult.success(qqchPerformInspection);
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+}
