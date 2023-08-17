@@ -37,6 +37,17 @@ public class QqchSmallMachineryController extends BaseController{
     }
 
     /**
+     *  拉取 施工部署数据(设备策划)
+     * @param qqchSmallMachineryVo
+     * @return
+     */
+    @PostMapping("/syncData")
+    public AjaxResult syncData(@Validated(ValidationGroups.Save.class) @RequestBody QqchSmallMachineryVo qqchSmallMachineryVo){
+        qqchSmallMachineryService.syncData(qqchSmallMachineryVo);
+        return AjaxResult.success();
+    }
+
+    /**
      *  列表接口
      * @param qqchSmallMachineryParam
      * @return

@@ -37,6 +37,17 @@ public class QqchMeasuringInstrumentController extends BaseController{
 
 
     /**
+     * 拉取 施工部署数据(设备策划)
+     *
+     */
+    @PostMapping("/syncData")
+    public AjaxResult syncData(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasuringInstrumentVo param){
+        QqchMeasuringInstrumentVo vo = qqchMeasuringInstrumentService.syncData(param);
+        return AjaxResult.success(vo);
+    }
+
+
+    /**
      * 列表接口
      *
      * @param qqchMeasuringInstrumentParam
