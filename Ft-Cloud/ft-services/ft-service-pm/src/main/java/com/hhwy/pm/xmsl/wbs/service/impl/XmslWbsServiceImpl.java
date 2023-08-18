@@ -299,14 +299,18 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
         List<XmslWbs> list = excelUtil.importExcel(file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
+        List<XmslWbs> resuList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             XmslWbs temp = list.get(i);
+            if(StringUtils.isBlank(temp.getCode()))
+                break;
+            resuList.add(temp);
             String code = temp.getCode().trim();
             if(code.indexOf("-") < 0){
                 temp.setLevel(1);
                 temp.setParentId("-1");
             }else{
-                String parentCode = code.substring(0,code.length()-4);
+                String parentCode = StringUtils.substringBeforeLast(code,"-");
                 //查找父级
                 XmslWbs parent = codeMap.get(parentCode);
                 Assert.notNull(parent, "未找到父级,请确保父级编码写在子级的前面，行号:"+(i+2));
@@ -317,7 +321,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             temp.setId(UUIDUtils.getShortUuid());
             codeMap.put(temp.getCode(), temp);
         }
-        return list;
+        return resuList;
     }
 
     @Override

@@ -158,6 +158,7 @@ public class XmslWbsController extends BaseController {
         try {
             return AjaxResult.success(xmslWbsService.importData(file));
         } catch (Exception e) {
+            e.printStackTrace();
             return AjaxResult.error("导入失败:"+e.getMessage());
         }
     }
