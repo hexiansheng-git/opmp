@@ -5,118 +5,148 @@
 <mapper namespace="com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper">
 
     <resultMap type="com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo" id="XmslContractInfoResultMap">
-        <result property="id" column="id"/>
-        <result property="code" column="code"/>
-        <result property="name" column="name"/>
-        <result property="projectCode" column="project_code"/>
-        <result property="projectNameYw" column="project_name_yw"/>
-        <result property="winDate" column="win_date"/>
-        <result property="signDate" column="sign_date"/>
-        <result property="brandName" column="brand_name"/>
-        <result property="projectCategory" column="project_category"/>
-        <result property="contractType" column="contract_type"/>
-        <result property="contractAttribute" column="contract_attribute"/>
-        <result property="timeZone" column="time_zone"/>
-        <result property="operateUserId" column="operate_user_id"/>
-        <result property="operateUserName" column="operate_user_name"/>
-        <result property="operateTime" column="operate_time"/>
-        <result property="meteringTime" column="metering_time"/>
-        <result property="projectScale" column="project_scale"/>
-        <result property="duration" column="duration"/>
-        <result property="startTime" column="start_time"/>
-        <result property="handoverTime" column="handover_time"/>
-        <result property="completedTime" column="completed_time"/>
-        <result property="defectLiability" column="defect_liability"/>
-        <result property="excludingAmout" column="excluding_amout"/>
-        <result property="taxRate" column="tax_rate"/>
-        <result property="taxes" column="taxes"/>
-        <result property="includingAmout" column="including_amout"/>
-        <result property="effectiveAmout" column="effective_amout"/>
-        <result property="listCurrencyCode" column="list_currency_code"/>
-        <result property="listCurrencyName" column="list_currency_name"/>
-        <result property="minPayAmount" column="min_pay_amount"/>
-        <result property="billProcessDuration" column="bill_process_duration"/>
-        <result property="fileGroupId" column="file_group_id"/>
-        <result property="remark" column="remark"/>
-        <result property="regionId" column="region_id"/>
-        <result property="regionName" column="region_name"/>
-        <result property="projectId" column="project_id"/>
-        <result property="projectName" column="project_name"/>
-        <result property="deptId" column="dept_id"/>
-        <result property="createUser" column="create_user"/>
-        <result property="createUserName" column="create_user_name"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateUser" column="update_user"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="delUser" column="del_user"/>
-        <result property="delTime" column="del_time"/>
-        <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
-        <result property="ptVar2" column="pt_var2"/>
-        <result property="ptVar3" column="pt_var3"/>
-        <result property="ptVar4" column="pt_var4"/>
-        <result property="ptVar5" column="pt_var5"/>
-        <result property="taskStatus" column="task_status"/>
-        <result property="valid" column="valid"/>
-        <result property="version" column="version"/>
+        <result property="id" column="id" />
+        <result property="code" column="code" />
+        <result property="name" column="name" />
+        <result property="projectCode" column="project_code" />
+        <result property="projectNameYw" column="project_name_yw" />
+        <result property="winDate" column="win_date" />
+        <result property="signDate" column="sign_date" />
+        <result property="brandName" column="brand_name" />
+        <result property="projectCategory" column="project_category" />
+        <result property="contractType" column="contract_type" />
+        <result property="contractAttribute" column="contract_attribute" />
+        <result property="timeZone" column="time_zone" />
+        <result property="operateUserId" column="operate_user_id" />
+        <result property="operateUserName" column="operate_user_name" />
+        <result property="operateTime" column="operate_time" />
+        <result property="meteringTime" column="metering_time" />
+        <result property="projectScale" column="project_scale" />
+        <result property="duration" column="duration" />
+        <result property="startTime" column="start_time" />
+        <result property="handoverTime" column="handover_time" />
+        <result property="completedTime" column="completed_time" />
+        <result property="defectLiability" column="defect_liability" />
+        <result property="excludingAmout" column="excluding_amout" />
+        <result property="taxRate" column="tax_rate" />
+        <result property="taxes" column="taxes" />
+        <result property="includingAmout" column="including_amout" />
+        <result property="effectiveAmout" column="effective_amout" />
+        <result property="listCurrencyCode" column="list_currency_code" />
+        <result property="listCurrencyName" column="list_currency_name" />
+        <result property="minPayAmount" column="min_pay_amount" />
+        <result property="billProcessDuration" column="bill_process_duration" />
+        <result property="fileGroupId" column="file_group_id" />
+        <result property="remark" column="remark" />
+        <result property="regionId" column="region_id" />
+        <result property="regionName" column="region_name" />
+        <result property="projectId" column="project_id" />
+        <result property="projectName" column="project_name" />
+        <result property="deptId" column="dept_id" />
+        <result property="createUser" column="create_user" />
+        <result property="createUserName" column="create_user_name" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="delUser" column="del_user" />
+        <result property="delTime" column="del_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="ptVar1" column="pt_var1" />
+        <result property="ptVar2" column="pt_var2" />
+        <result property="ptVar3" column="pt_var3" />
+        <result property="ptVar4" column="pt_var4" />
+        <result property="ptVar5" column="pt_var5" />
+        <result property="taskStatus" column="task_status" />
+        <result property="valid" column="valid" />
+        <result property="version" column="version" />
+        <result property="businessAreasAndProducts" column="business_areas_and_products" />
+        <result property="capitalSource" column="capital_source" />
+        <result property="projectLocation" column="project_location" />
+        <result property="subsidiaryOrgan" column="subsidiary_organ" />
+        <result property="projectManager" column="project_manager" />
+        <result property="internalContactWay" column="internal_contact_way" />
+        <result property="foreignContactWay" column="foreign_contact_way" />
+        <result property="winTheBiddingUnit" column="win_the_bidding_unit" />
+        <result property="designUnit" column="design_unit" />
+        <result property="proprietorUnit" column="proprietor_unit" />
+        <result property="supervisorUnit" column="supervisor_unit" />
+        <result property="managementCompany" column="management_company" />
+        <result property="detailedAddress" column="detailed_address" />
+        <result property="contractPrice" column="contract_price" />
+        <result property="contractingMethod" column="contracting_method" />
     </resultMap>
     <sql id="selectXmslContractInfoVo">
         select
-                                                            `id`
-                                                         ,`code`
-                                                         ,`name`
-                                                         ,`project_code`
-                                                         ,`project_name_yw`
-                                                         ,`win_date`
-                                                         ,`sign_date`
-                                                         ,`brand_name`
-                                                         ,`project_category`
-                                                         ,`contract_type`
-                                                         ,`contract_attribute`
-                                                         ,`time_zone`
-                                                         ,`operate_user_id`
-                                                         ,`operate_user_name`
-                                                         ,`operate_time`
-                                                         ,`metering_time`
-                                                         ,`project_scale`
-                                                         ,`duration`
-                                                         ,`start_time`
-                                                         ,`handover_time`
-                                                         ,`completed_time`
-                                                         ,`defect_liability`
-                                                         ,`excluding_amout`
-                                                         ,`tax_rate`
-                                                         ,`taxes`
-                                                         ,`including_amout`
-                                                         ,`effective_amout`
-                                                         ,`list_currency_code`
-                                                         ,`list_currency_name`
-                                                         ,`min_pay_amount`
-                                                         ,`bill_process_duration`
-                                                         ,`file_group_id`
-                                                         ,`remark`
-                                                         ,`region_id`
-                                                         ,`region_name`
-                                                         ,`project_id`
-                                                         ,`project_name`
-                                                         ,`dept_id`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                                         ,`pt_var3`
-                                                         ,`pt_var4`
-                                                         ,`pt_var5`
-                                                         ,`task_status`
-                                                         ,`valid`
-                                                         ,`version`
-                                    from xmsl_contract_info
+            `id`
+                ,`code`
+                ,`name`
+                ,`project_code`
+                ,`project_name_yw`
+                ,`win_date`
+                ,`sign_date`
+                ,`brand_name`
+                ,`project_category`
+                ,`contract_type`
+                ,`contract_attribute`
+                ,`time_zone`
+                ,`operate_user_id`
+                ,`operate_user_name`
+                ,`operate_time`
+                ,`metering_time`
+                ,`project_scale`
+                ,`duration`
+                ,`start_time`
+                ,`handover_time`
+                ,`completed_time`
+                ,`defect_liability`
+                ,`excluding_amout`
+                ,`tax_rate`
+                ,`taxes`
+                ,`including_amout`
+                ,`effective_amout`
+                ,`list_currency_code`
+                ,`list_currency_name`
+                ,`min_pay_amount`
+                ,`bill_process_duration`
+                ,`file_group_id`
+                ,`remark`
+                ,`region_id`
+                ,`region_name`
+                ,`project_id`
+                ,`project_name`
+                ,`dept_id`
+                ,`create_user`
+                ,`create_user_name`
+                ,`create_time`
+                ,`update_user`
+                ,`update_time`
+                ,`del_user`
+                ,`del_time`
+                ,`del_flag`
+                ,`pt_var1`
+                ,`pt_var2`
+                ,`pt_var3`
+                ,`pt_var4`
+                ,`pt_var5`
+                ,`task_status`
+                ,`valid`
+                ,`version`
+                ,`business_areas_and_products`
+                ,`capital_source`
+                ,`project_location`
+                ,`subsidiary_organ`
+                ,`project_manager`
+                ,`internal_contact_way`
+                ,`foreign_contact_way`
+                ,`win_the_bidding_unit`
+                ,`design_unit`
+                ,`proprietor_unit`
+                ,`supervisor_unit`
+                ,`management_company`
+                ,`detailed_address`
+                ,`contract_price`
+                ,`contracting_method`
+        from xmsl_contract_info
     </sql>
 
     <select id="getValidMaxVersionContractInfo" resultMap="XmslContractInfoResultMap">
@@ -125,154 +155,162 @@
         order by version desc
         limit 1
     </select>
+
     <select id="getXmslContractInfo" resultMap="XmslContractInfoResultMap">
-        <include refid="selectXmslContractInfoVo"/>
+        <include refid="selectXmslContractInfoVo" />
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="name != null  and name != ''">and `name` = #{name}</if>
-            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
-            <if test="projectNameYw != null  and projectNameYw != ''">and `project_name_yw` = #{projectNameYw}</if>
-            <if test="winDate != null ">and `win_date` = #{winDate}</if>
-            <if test="signDate != null ">and `sign_date` = #{signDate}</if>
-            <if test="brandName != null  and brandName != ''">and `brand_name` = #{brandName}</if>
-            <if test="projectCategory != null  and projectCategory != ''">and `project_category` = #{projectCategory}
-            </if>
-            <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractAttribute != null  and contractAttribute != ''">and `contract_attribute` =
-                #{contractAttribute}
-            </if>
-            <if test="timeZone != null  and timeZone != ''">and `time_zone` = #{timeZone}</if>
-            <if test="operateUserId != null  and operateUserId != ''">and `operate_user_id` = #{operateUserId}</if>
-            <if test="operateUserName != null  and operateUserName != ''">and `operate_user_name` = #{operateUserName}
-            </if>
-            <if test="operateTime != null ">and `operate_time` = #{operateTime}</if>
-            <if test="meteringTime != null  and meteringTime != ''">and `metering_time` = #{meteringTime}</if>
-            <if test="projectScale != null  and projectScale != ''">and `project_scale` = #{projectScale}</if>
-            <if test="duration != null  and duration != ''">and `duration` = #{duration}</if>
-            <if test="startTime != null ">and `start_time` = #{startTime}</if>
-            <if test="handoverTime != null ">and `handover_time` = #{handoverTime}</if>
-            <if test="completedTime != null ">and `completed_time` = #{completedTime}</if>
-            <if test="defectLiability != null  and defectLiability != ''">and `defect_liability` = #{defectLiability}
-            </if>
-            <if test="excludingAmout != null ">and `excluding_amout` = #{excludingAmout}</if>
-            <if test="taxRate != null ">and `tax_rate` = #{taxRate}</if>
-            <if test="taxes != null ">and `taxes` = #{taxes}</if>
-            <if test="includingAmout != null ">and `including_amout` = #{includingAmout}</if>
-            <if test="effectiveAmout != null ">and `effective_amout` = #{effectiveAmout}</if>
-            <if test="listCurrencyCode != null  and listCurrencyCode != ''">and `list_currency_code` =
-                #{listCurrencyCode}
-            </if>
-            <if test="listCurrencyName != null  and listCurrencyName != ''">and `list_currency_name` =
-                #{listCurrencyName}
-            </if>
-            <if test="minPayAmount != null ">and `min_pay_amount` = #{minPayAmount}</if>
-            <if test="billProcessDuration != null  and billProcessDuration != ''">and `bill_process_duration` =
-                #{billProcessDuration}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="code != null  and code != ''"> and `code` = #{code}</if>
+            <if test="name != null  and name != ''"> and `name` = #{name}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="projectNameYw != null  and projectNameYw != ''"> and `project_name_yw` = #{projectNameYw}</if>
+            <if test="winDate != null "> and `win_date` = #{winDate}</if>
+            <if test="signDate != null "> and `sign_date` = #{signDate}</if>
+            <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
+            <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
+            <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
+            <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
+            <if test="timeZone != null  and timeZone != ''"> and `time_zone` = #{timeZone}</if>
+            <if test="operateUserId != null  and operateUserId != ''"> and `operate_user_id` = #{operateUserId}</if>
+            <if test="operateUserName != null  and operateUserName != ''"> and `operate_user_name` = #{operateUserName}</if>
+            <if test="operateTime != null "> and `operate_time` = #{operateTime}</if>
+            <if test="meteringTime != null  and meteringTime != ''"> and `metering_time` = #{meteringTime}</if>
+            <if test="projectScale != null  and projectScale != ''"> and `project_scale` = #{projectScale}</if>
+            <if test="duration != null  and duration != ''"> and `duration` = #{duration}</if>
+            <if test="startTime != null "> and `start_time` = #{startTime}</if>
+            <if test="handoverTime != null "> and `handover_time` = #{handoverTime}</if>
+            <if test="completedTime != null "> and `completed_time` = #{completedTime}</if>
+            <if test="defectLiability != null  and defectLiability != ''"> and `defect_liability` = #{defectLiability}</if>
+            <if test="excludingAmout != null "> and `excluding_amout` = #{excludingAmout}</if>
+            <if test="taxRate != null "> and `tax_rate` = #{taxRate}</if>
+            <if test="taxes != null "> and `taxes` = #{taxes}</if>
+            <if test="includingAmout != null "> and `including_amout` = #{includingAmout}</if>
+            <if test="effectiveAmout != null "> and `effective_amout` = #{effectiveAmout}</if>
+            <if test="listCurrencyCode != null  and listCurrencyCode != ''"> and `list_currency_code` = #{listCurrencyCode}</if>
+            <if test="listCurrencyName != null  and listCurrencyName != ''"> and `list_currency_name` = #{listCurrencyName}</if>
+            <if test="minPayAmount != null "> and `min_pay_amount` = #{minPayAmount}</if>
+            <if test="billProcessDuration != null  and billProcessDuration != ''"> and `bill_process_duration` = #{billProcessDuration}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''"> and `business_areas_and_products` = #{businessAreasAndProducts}</if>
+            <if test="capitalSource != null  and capitalSource != ''"> and `capital_source` = #{capitalSource}</if>
+            <if test="projectLocation != null  and projectLocation != ''"> and `project_location` = #{projectLocation}</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''"> and `subsidiary_organ` = #{subsidiaryOrgan}</if>
+            <if test="projectManager != null  and projectManager != ''"> and `project_manager` = #{projectManager}</if>
+            <if test="internalContactWay != null  and internalContactWay != ''"> and `internal_contact_way` = #{internalContactWay}</if>
+            <if test="foreignContactWay != null  and foreignContactWay != ''"> and `foreign_contact_way` = #{foreignContactWay}</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''"> and `win_the_bidding_unit` = #{winTheBiddingUnit}</if>
+            <if test="designUnit != null  and designUnit != ''"> and `design_unit` = #{designUnit}</if>
+            <if test="proprietorUnit != null  and proprietorUnit != ''"> and `proprietor_unit` = #{proprietorUnit}</if>
+            <if test="supervisorUnit != null  and supervisorUnit != ''"> and `supervisor_unit` = #{supervisorUnit}</if>
+            <if test="managementCompany != null  and managementCompany != ''"> and `management_company` = #{managementCompany}</if>
+            <if test="detailedAddress != null  and detailedAddress != ''"> and `detailed_address` = #{detailedAddress}</if>
+            <if test="contractPrice != null "> and `contract_price` = #{contractPrice}</if>
+            <if test="contractingMethod != null  and contractingMethod != ''"> and `contracting_method` = #{contractingMethod}</if>
         </where>
         order by version desc
     </select>
 
     <select id="getXmslContractInfoList" resultMap="XmslContractInfoResultMap">
-        <include refid="selectXmslContractInfoVo"/>
+        <include refid="selectXmslContractInfoVo" />
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="name != null  and name != ''">and `name` = #{name}</if>
-            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
-            <if test="projectNameYw != null  and projectNameYw != ''">and `project_name_yw` = #{projectNameYw}</if>
-            <if test="winDate != null ">and `win_date` = #{winDate}</if>
-            <if test="signDate != null ">and `sign_date` = #{signDate}</if>
-            <if test="brandName != null  and brandName != ''">and `brand_name` = #{brandName}</if>
-            <if test="projectCategory != null  and projectCategory != ''">and `project_category` = #{projectCategory}
-            </if>
-            <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractAttribute != null  and contractAttribute != ''">and `contract_attribute` =
-                #{contractAttribute}
-            </if>
-            <if test="timeZone != null  and timeZone != ''">and `time_zone` = #{timeZone}</if>
-            <if test="operateUserId != null  and operateUserId != ''">and `operate_user_id` = #{operateUserId}</if>
-            <if test="operateUserName != null  and operateUserName != ''">and `operate_user_name` = #{operateUserName}
-            </if>
-            <if test="operateTime != null ">and `operate_time` = #{operateTime}</if>
-            <if test="meteringTime != null  and meteringTime != ''">and `metering_time` = #{meteringTime}</if>
-            <if test="projectScale != null  and projectScale != ''">and `project_scale` = #{projectScale}</if>
-            <if test="duration != null  and duration != ''">and `duration` = #{duration}</if>
-            <if test="startTime != null ">and `start_time` = #{startTime}</if>
-            <if test="handoverTime != null ">and `handover_time` = #{handoverTime}</if>
-            <if test="completedTime != null ">and `completed_time` = #{completedTime}</if>
-            <if test="defectLiability != null  and defectLiability != ''">and `defect_liability` = #{defectLiability}
-            </if>
-            <if test="excludingAmout != null ">and `excluding_amout` = #{excludingAmout}</if>
-            <if test="taxRate != null ">and `tax_rate` = #{taxRate}</if>
-            <if test="taxes != null ">and `taxes` = #{taxes}</if>
-            <if test="includingAmout != null ">and `including_amout` = #{includingAmout}</if>
-            <if test="effectiveAmout != null ">and `effective_amout` = #{effectiveAmout}</if>
-            <if test="listCurrencyCode != null  and listCurrencyCode != ''">and `list_currency_code` =
-                #{listCurrencyCode}
-            </if>
-            <if test="listCurrencyName != null  and listCurrencyName != ''">and `list_currency_name` =
-                #{listCurrencyName}
-            </if>
-            <if test="minPayAmount != null ">and `min_pay_amount` = #{minPayAmount}</if>
-            <if test="billProcessDuration != null  and billProcessDuration != ''">and `bill_process_duration` =
-                #{billProcessDuration}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="code != null  and code != ''"> and `code` = #{code}</if>
+            <if test="name != null  and name != ''"> and `name` = #{name}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="projectNameYw != null  and projectNameYw != ''"> and `project_name_yw` = #{projectNameYw}</if>
+            <if test="winDate != null "> and `win_date` = #{winDate}</if>
+            <if test="signDate != null "> and `sign_date` = #{signDate}</if>
+            <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
+            <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
+            <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
+            <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
+            <if test="timeZone != null  and timeZone != ''"> and `time_zone` = #{timeZone}</if>
+            <if test="operateUserId != null  and operateUserId != ''"> and `operate_user_id` = #{operateUserId}</if>
+            <if test="operateUserName != null  and operateUserName != ''"> and `operate_user_name` = #{operateUserName}</if>
+            <if test="operateTime != null "> and `operate_time` = #{operateTime}</if>
+            <if test="meteringTime != null  and meteringTime != ''"> and `metering_time` = #{meteringTime}</if>
+            <if test="projectScale != null  and projectScale != ''"> and `project_scale` = #{projectScale}</if>
+            <if test="duration != null  and duration != ''"> and `duration` = #{duration}</if>
+            <if test="startTime != null "> and `start_time` = #{startTime}</if>
+            <if test="handoverTime != null "> and `handover_time` = #{handoverTime}</if>
+            <if test="completedTime != null "> and `completed_time` = #{completedTime}</if>
+            <if test="defectLiability != null  and defectLiability != ''"> and `defect_liability` = #{defectLiability}</if>
+            <if test="excludingAmout != null "> and `excluding_amout` = #{excludingAmout}</if>
+            <if test="taxRate != null "> and `tax_rate` = #{taxRate}</if>
+            <if test="taxes != null "> and `taxes` = #{taxes}</if>
+            <if test="includingAmout != null "> and `including_amout` = #{includingAmout}</if>
+            <if test="effectiveAmout != null "> and `effective_amout` = #{effectiveAmout}</if>
+            <if test="listCurrencyCode != null  and listCurrencyCode != ''"> and `list_currency_code` = #{listCurrencyCode}</if>
+            <if test="listCurrencyName != null  and listCurrencyName != ''"> and `list_currency_name` = #{listCurrencyName}</if>
+            <if test="minPayAmount != null "> and `min_pay_amount` = #{minPayAmount}</if>
+            <if test="billProcessDuration != null  and billProcessDuration != ''"> and `bill_process_duration` = #{billProcessDuration}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''"> and `business_areas_and_products` = #{businessAreasAndProducts}</if>
+            <if test="capitalSource != null  and capitalSource != ''"> and `capital_source` = #{capitalSource}</if>
+            <if test="projectLocation != null  and projectLocation != ''"> and `project_location` = #{projectLocation}</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''"> and `subsidiary_organ` = #{subsidiaryOrgan}</if>
+            <if test="projectManager != null  and projectManager != ''"> and `project_manager` = #{projectManager}</if>
+            <if test="internalContactWay != null  and internalContactWay != ''"> and `internal_contact_way` = #{internalContactWay}</if>
+            <if test="foreignContactWay != null  and foreignContactWay != ''"> and `foreign_contact_way` = #{foreignContactWay}</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''"> and `win_the_bidding_unit` = #{winTheBiddingUnit}</if>
+            <if test="designUnit != null  and designUnit != ''"> and `design_unit` = #{designUnit}</if>
+            <if test="proprietorUnit != null  and proprietorUnit != ''"> and `proprietor_unit` = #{proprietorUnit}</if>
+            <if test="supervisorUnit != null  and supervisorUnit != ''"> and `supervisor_unit` = #{supervisorUnit}</if>
+            <if test="managementCompany != null  and managementCompany != ''"> and `management_company` = #{managementCompany}</if>
+            <if test="detailedAddress != null  and detailedAddress != ''"> and `detailed_address` = #{detailedAddress}</if>
+            <if test="contractPrice != null "> and `contract_price` = #{contractPrice}</if>
+            <if test="contractingMethod != null  and contractingMethod != ''"> and `contracting_method` = #{contractingMethod}</if>
         </where>
         order by version desc
     </select>
 
-
-    <insert id="insertXmslContractInfo" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertXmslContractInfo"  useGeneratedKeys="true" keyProperty="id"  >
         insert into xmsl_contract_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
@@ -328,7 +366,22 @@
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
-            <if test="version != null  and version != ''">`version`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''">`business_areas_and_products`,</if>
+            <if test="capitalSource != null  and capitalSource != ''">`capital_source`,</if>
+            <if test="projectLocation != null  and projectLocation != ''">`project_location`,</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">`subsidiary_organ`,</if>
+            <if test="projectManager != null  and projectManager != ''">`project_manager`,</if>
+            <if test="internalContactWay != null  and internalContactWay != ''">`internal_contact_way`,</if>
+            <if test="foreignContactWay != null  and foreignContactWay != ''">`foreign_contact_way`,</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''">`win_the_bidding_unit`,</if>
+            <if test="designUnit != null  and designUnit != ''">`design_unit`,</if>
+            <if test="proprietorUnit != null  and proprietorUnit != ''">`proprietor_unit`,</if>
+            <if test="supervisorUnit != null  and supervisorUnit != ''">`supervisor_unit`,</if>
+            <if test="managementCompany != null  and managementCompany != ''">`management_company`,</if>
+            <if test="detailedAddress != null  and detailedAddress != ''">`detailed_address`,</if>
+            <if test="contractPrice != null ">`contract_price`,</if>
+            <if test="contractingMethod != null  and contractingMethod != ''">`contracting_method`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -384,7 +437,22 @@
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
-            <if test="version != null  and version != ''">#{version},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''">#{businessAreasAndProducts},</if>
+            <if test="capitalSource != null  and capitalSource != ''">#{capitalSource},</if>
+            <if test="projectLocation != null  and projectLocation != ''">#{projectLocation},</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">#{subsidiaryOrgan},</if>
+            <if test="projectManager != null  and projectManager != ''">#{projectManager},</if>
+            <if test="internalContactWay != null  and internalContactWay != ''">#{internalContactWay},</if>
+            <if test="foreignContactWay != null  and foreignContactWay != ''">#{foreignContactWay},</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''">#{winTheBiddingUnit},</if>
+            <if test="designUnit != null  and designUnit != ''">#{designUnit},</if>
+            <if test="proprietorUnit != null  and proprietorUnit != ''">#{proprietorUnit},</if>
+            <if test="supervisorUnit != null  and supervisorUnit != ''">#{supervisorUnit},</if>
+            <if test="managementCompany != null  and managementCompany != ''">#{managementCompany},</if>
+            <if test="detailedAddress != null  and detailedAddress != ''">#{detailedAddress},</if>
+            <if test="contractPrice != null ">#{contractPrice},</if>
+            <if test="contractingMethod != null  and contractingMethod != ''">#{contractingMethod},</if>
         </trim>
     </insert>
 
@@ -445,6 +513,21 @@
             `task_status`,
             `valid`,
             `version`,
+            `business_areas_and_products`,
+            `capital_source`,
+            `project_location`,
+            `subsidiary_organ`,
+            `project_manager`,
+            `internal_contact_way`,
+            `foreign_contact_way`,
+            `win_the_bidding_unit`,
+            `design_unit`,
+            `proprietor_unit`,
+            `supervisor_unit`,
+            `management_company`,
+            `detailed_address`,
+            `contract_price`,
+            `contracting_method`,
         </trim>
         values
         <foreach collection="xmslContractInfoList" item="item" separator=",">
@@ -502,6 +585,21 @@
                 #{item.taskStatus},
                 #{item.valid},
                 #{item.version},
+                #{item.businessAreasAndProducts},
+                #{item.capitalSource},
+                #{item.projectLocation},
+                #{item.subsidiaryOrgan},
+                #{item.projectManager},
+                #{item.internalContactWay},
+                #{item.foreignContactWay},
+                #{item.winTheBiddingUnit},
+                #{item.designUnit},
+                #{item.proprietorUnit},
+                #{item.supervisorUnit},
+                #{item.managementCompany},
+                #{item.detailedAddress},
+                #{item.contractPrice},
+                #{item.contractingMethod},
             </trim>
         </foreach>
     </insert>
@@ -519,13 +617,10 @@
             <if test="brandName != null  and  brandName != ''">`brand_name` = #{brandName},</if>
             <if test="projectCategory != null  and  projectCategory != ''">`project_category` = #{projectCategory},</if>
             <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
-            <if test="contractAttribute != null  and  contractAttribute != ''">`contract_attribute` =
-                #{contractAttribute},
-            </if>
+            <if test="contractAttribute != null  and  contractAttribute != ''">`contract_attribute` = #{contractAttribute},</if>
             <if test="timeZone != null  and  timeZone != ''">`time_zone` = #{timeZone},</if>
             <if test="operateUserId != null  and  operateUserId != ''">`operate_user_id` = #{operateUserId},</if>
-            <if test="operateUserName != null  and  operateUserName != ''">`operate_user_name` = #{operateUserName},
-            </if>
+            <if test="operateUserName != null  and  operateUserName != ''">`operate_user_name` = #{operateUserName},</if>
             <if test="operateTime != null ">`operate_time` = #{operateTime},</if>
             <if test="meteringTime != null  and  meteringTime != ''">`metering_time` = #{meteringTime},</if>
             <if test="projectScale != null  and  projectScale != ''">`project_scale` = #{projectScale},</if>
@@ -539,16 +634,10 @@
             <if test="taxes != null ">`taxes` = #{taxes},</if>
             <if test="includingAmout != null ">`including_amout` = #{includingAmout},</if>
             <if test="effectiveAmout != null ">`effective_amout` = #{effectiveAmout},</if>
-            <if test="listCurrencyCode != null  and  listCurrencyCode != ''">`list_currency_code` =
-                #{listCurrencyCode},
-            </if>
-            <if test="listCurrencyName != null  and  listCurrencyName != ''">`list_currency_name` =
-                #{listCurrencyName},
-            </if>
+            <if test="listCurrencyCode != null  and  listCurrencyCode != ''">`list_currency_code` = #{listCurrencyCode},</if>
+            <if test="listCurrencyName != null  and  listCurrencyName != ''">`list_currency_name` = #{listCurrencyName},</if>
             <if test="minPayAmount != null ">`min_pay_amount` = #{minPayAmount},</if>
-            <if test="billProcessDuration != null  and  billProcessDuration != ''">`bill_process_duration` =
-                #{billProcessDuration},
-            </if>
+            <if test="billProcessDuration != null  and  billProcessDuration != ''">`bill_process_duration` = #{billProcessDuration},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -571,10 +660,25 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
-            <if test="version != null  and  version != ''">`version` = #{version},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="businessAreasAndProducts != null  and  businessAreasAndProducts != ''">`business_areas_and_products` = #{businessAreasAndProducts},</if>
+            <if test="capitalSource != null  and  capitalSource != ''">`capital_source` = #{capitalSource},</if>
+            <if test="projectLocation != null  and  projectLocation != ''">`project_location` = #{projectLocation},</if>
+            <if test="subsidiaryOrgan != null  and  subsidiaryOrgan != ''">`subsidiary_organ` = #{subsidiaryOrgan},</if>
+            <if test="projectManager != null  and  projectManager != ''">`project_manager` = #{projectManager},</if>
+            <if test="internalContactWay != null  and  internalContactWay != ''">`internal_contact_way` = #{internalContactWay},</if>
+            <if test="foreignContactWay != null  and  foreignContactWay != ''">`foreign_contact_way` = #{foreignContactWay},</if>
+            <if test="winTheBiddingUnit != null  and  winTheBiddingUnit != ''">`win_the_bidding_unit` = #{winTheBiddingUnit},</if>
+            <if test="designUnit != null  and  designUnit != ''">`design_unit` = #{designUnit},</if>
+            <if test="proprietorUnit != null  and  proprietorUnit != ''">`proprietor_unit` = #{proprietorUnit},</if>
+            <if test="supervisorUnit != null  and  supervisorUnit != ''">`supervisor_unit` = #{supervisorUnit},</if>
+            <if test="managementCompany != null  and  managementCompany != ''">`management_company` = #{managementCompany},</if>
+            <if test="detailedAddress != null  and  detailedAddress != ''">`detailed_address` = #{detailedAddress},</if>
+            <if test="contractPrice != null ">`contract_price` = #{contractPrice},</if>
+            <if test="contractingMethod != null  and  contractingMethod != ''">`contracting_method` = #{contractingMethod},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="id != null "> and `id` = #{id}</if>
         </where>
     </update>
 
@@ -851,6 +955,81 @@
                     when `id`=#{item.id} then #{item.version}
                 </foreach>
             </trim>
+            <trim prefix="business_areas_and_products  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.businessAreasAndProducts}
+                </foreach>
+            </trim>
+            <trim prefix="capital_source  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.capitalSource}
+                </foreach>
+            </trim>
+            <trim prefix="project_location  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectLocation}
+                </foreach>
+            </trim>
+            <trim prefix="subsidiary_organ  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.subsidiaryOrgan}
+                </foreach>
+            </trim>
+            <trim prefix="project_manager  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectManager}
+                </foreach>
+            </trim>
+            <trim prefix="internal_contact_way  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.internalContactWay}
+                </foreach>
+            </trim>
+            <trim prefix="foreign_contact_way  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.foreignContactWay}
+                </foreach>
+            </trim>
+            <trim prefix="win_the_bidding_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.winTheBiddingUnit}
+                </foreach>
+            </trim>
+            <trim prefix="design_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.designUnit}
+                </foreach>
+            </trim>
+            <trim prefix="proprietor_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.proprietorUnit}
+                </foreach>
+            </trim>
+            <trim prefix="supervisor_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.supervisorUnit}
+                </foreach>
+            </trim>
+            <trim prefix="management_company  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.managementCompany}
+                </foreach>
+            </trim>
+            <trim prefix="detailed_address  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.detailedAddress}
+                </foreach>
+            </trim>
+            <trim prefix="contract_price  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractPrice}
+                </foreach>
+            </trim>
+            <trim prefix="contracting_method  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractingMethod}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
@@ -861,71 +1040,75 @@
     <update id="deleteXmslContractInfo">
         update `xmsl_contract_info` set del_flag = 1
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="name != null  and name != ''">and `name` = #{name}</if>
-            <if test="projectCode != null  and projectCode != ''">and `project_code` = #{projectCode}</if>
-            <if test="projectNameYw != null  and projectNameYw != ''">and `project_name_yw` = #{projectNameYw}</if>
-            <if test="winDate != null ">and `win_date` = #{winDate}</if>
-            <if test="signDate != null ">and `sign_date` = #{signDate}</if>
-            <if test="brandName != null  and brandName != ''">and `brand_name` = #{brandName}</if>
-            <if test="projectCategory != null  and projectCategory != ''">and `project_category` = #{projectCategory}
-            </if>
-            <if test="contractType != null  and contractType != ''">and `contract_type` = #{contractType}</if>
-            <if test="contractAttribute != null  and contractAttribute != ''">and `contract_attribute` =
-                #{contractAttribute}
-            </if>
-            <if test="timeZone != null  and timeZone != ''">and `time_zone` = #{timeZone}</if>
-            <if test="operateUserId != null  and operateUserId != ''">and `operate_user_id` = #{operateUserId}</if>
-            <if test="operateUserName != null  and operateUserName != ''">and `operate_user_name` = #{operateUserName}
-            </if>
-            <if test="operateTime != null ">and `operate_time` = #{operateTime}</if>
-            <if test="meteringTime != null  and meteringTime != ''">and `metering_time` = #{meteringTime}</if>
-            <if test="projectScale != null  and projectScale != ''">and `project_scale` = #{projectScale}</if>
-            <if test="duration != null  and duration != ''">and `duration` = #{duration}</if>
-            <if test="startTime != null ">and `start_time` = #{startTime}</if>
-            <if test="handoverTime != null ">and `handover_time` = #{handoverTime}</if>
-            <if test="completedTime != null ">and `completed_time` = #{completedTime}</if>
-            <if test="defectLiability != null  and defectLiability != ''">and `defect_liability` = #{defectLiability}
-            </if>
-            <if test="excludingAmout != null ">and `excluding_amout` = #{excludingAmout}</if>
-            <if test="taxRate != null ">and `tax_rate` = #{taxRate}</if>
-            <if test="taxes != null ">and `taxes` = #{taxes}</if>
-            <if test="includingAmout != null ">and `including_amout` = #{includingAmout}</if>
-            <if test="effectiveAmout != null ">and `effective_amout` = #{effectiveAmout}</if>
-            <if test="listCurrencyCode != null  and listCurrencyCode != ''">and `list_currency_code` =
-                #{listCurrencyCode}
-            </if>
-            <if test="listCurrencyName != null  and listCurrencyName != ''">and `list_currency_name` =
-                #{listCurrencyName}
-            </if>
-            <if test="minPayAmount != null ">and `min_pay_amount` = #{minPayAmount}</if>
-            <if test="billProcessDuration != null  and billProcessDuration != ''">and `bill_process_duration` =
-                #{billProcessDuration}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="code != null  and code != ''"> and `code` = #{code}</if>
+            <if test="name != null  and name != ''"> and `name` = #{name}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="projectNameYw != null  and projectNameYw != ''"> and `project_name_yw` = #{projectNameYw}</if>
+            <if test="winDate != null "> and `win_date` = #{winDate}</if>
+            <if test="signDate != null "> and `sign_date` = #{signDate}</if>
+            <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
+            <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
+            <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
+            <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
+            <if test="timeZone != null  and timeZone != ''"> and `time_zone` = #{timeZone}</if>
+            <if test="operateUserId != null  and operateUserId != ''"> and `operate_user_id` = #{operateUserId}</if>
+            <if test="operateUserName != null  and operateUserName != ''"> and `operate_user_name` = #{operateUserName}</if>
+            <if test="operateTime != null "> and `operate_time` = #{operateTime}</if>
+            <if test="meteringTime != null  and meteringTime != ''"> and `metering_time` = #{meteringTime}</if>
+            <if test="projectScale != null  and projectScale != ''"> and `project_scale` = #{projectScale}</if>
+            <if test="duration != null  and duration != ''"> and `duration` = #{duration}</if>
+            <if test="startTime != null "> and `start_time` = #{startTime}</if>
+            <if test="handoverTime != null "> and `handover_time` = #{handoverTime}</if>
+            <if test="completedTime != null "> and `completed_time` = #{completedTime}</if>
+            <if test="defectLiability != null  and defectLiability != ''"> and `defect_liability` = #{defectLiability}</if>
+            <if test="excludingAmout != null "> and `excluding_amout` = #{excludingAmout}</if>
+            <if test="taxRate != null "> and `tax_rate` = #{taxRate}</if>
+            <if test="taxes != null "> and `taxes` = #{taxes}</if>
+            <if test="includingAmout != null "> and `including_amout` = #{includingAmout}</if>
+            <if test="effectiveAmout != null "> and `effective_amout` = #{effectiveAmout}</if>
+            <if test="listCurrencyCode != null  and listCurrencyCode != ''"> and `list_currency_code` = #{listCurrencyCode}</if>
+            <if test="listCurrencyName != null  and listCurrencyName != ''"> and `list_currency_name` = #{listCurrencyName}</if>
+            <if test="minPayAmount != null "> and `min_pay_amount` = #{minPayAmount}</if>
+            <if test="billProcessDuration != null  and billProcessDuration != ''"> and `bill_process_duration` = #{billProcessDuration}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''"> and `business_areas_and_products` = #{businessAreasAndProducts}</if>
+            <if test="capitalSource != null  and capitalSource != ''"> and `capital_source` = #{capitalSource}</if>
+            <if test="projectLocation != null  and projectLocation != ''"> and `project_location` = #{projectLocation}</if>
+            <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''"> and `subsidiary_organ` = #{subsidiaryOrgan}</if>
+            <if test="projectManager != null  and projectManager != ''"> and `project_manager` = #{projectManager}</if>
+            <if test="internalContactWay != null  and internalContactWay != ''"> and `internal_contact_way` = #{internalContactWay}</if>
+            <if test="foreignContactWay != null  and foreignContactWay != ''"> and `foreign_contact_way` = #{foreignContactWay}</if>
+            <if test="winTheBiddingUnit != null  and winTheBiddingUnit != ''"> and `win_the_bidding_unit` = #{winTheBiddingUnit}</if>
+            <if test="designUnit != null  and designUnit != ''"> and `design_unit` = #{designUnit}</if>
+            <if test="proprietorUnit != null  and proprietorUnit != ''"> and `proprietor_unit` = #{proprietorUnit}</if>
+            <if test="supervisorUnit != null  and supervisorUnit != ''"> and `supervisor_unit` = #{supervisorUnit}</if>
+            <if test="managementCompany != null  and managementCompany != ''"> and `management_company` = #{managementCompany}</if>
+            <if test="detailedAddress != null  and detailedAddress != ''"> and `detailed_address` = #{detailedAddress}</if>
+            <if test="contractPrice != null "> and `contract_price` = #{contractPrice}</if>
+            <if test="contractingMethod != null  and contractingMethod != ''"> and `contracting_method` = #{contractingMethod}</if>
         </where>
     </update>
 

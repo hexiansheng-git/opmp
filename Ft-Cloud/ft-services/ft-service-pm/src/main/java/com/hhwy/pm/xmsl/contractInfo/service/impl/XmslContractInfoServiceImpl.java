@@ -6,6 +6,8 @@ import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.*;
+import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,55 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     private  IXmslContractGeneralService xmslContractGeneralService;
     @Autowired
     private IXmslContractSpecialService xmslContractSpecialService;
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
+
+
+    /***
+     * 功能描述: 拉取项目信息，入库合同表
+     * 作者: fushudong
+     * 时间: 2023/8/18
+     */
+    private void getProjectInfo() {
+
+        XmslProjectBasicInfo projectInfo = projectBasicInfoService.getProjectBasicInfoWithoutSublist(new XmslProjectBasicInfo());
+        XmslContractInfo contractInfo = new XmslContractInfo();
+        contractInfo.setProjectCode(projectInfo.getProjectCode());
+        contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
+        contractInfo.setProjectName(projectInfo.getProjectName());
+        contractInfo.setWinDate(projectInfo.getWinTheBiddingDate());
+        contractInfo.setProjectCategory(projectInfo.getProjectType());
+        //承包方式字段
+        contractInfo.setContractingMethod(projectInfo.getContractingMethod());
+        //业务领域及产品
+        contractInfo.setBusinessAreasAndProducts(projectInfo.getBusinessAreasAndProducts());
+        //资金来源
+        contractInfo.setCapitalSource(projectInfo.getCapitalSource());
+        //项目所在地
+        contractInfo.setProjectLocation(projectInfo.getProjectLocation());
+        contractInfo.setSubsidiaryOrgan(projectInfo.getSubsidiaryOrgan());
+        contractInfo.setProjectManager(projectInfo.getProjectManager());
+        contractInfo.setInternalContactWay(projectInfo.getInternalContactWay());
+        contractInfo.setForeignContactWay(projectInfo.getForeignContactWay());
+        contractInfo.setWinTheBiddingUnit(projectInfo.getWinTheBiddingUnit());
+        //业主单位
+        contractInfo.setProprietorUnit(projectInfo.getProprietorUnit());
+        //设计单位
+        contractInfo.setDesignUnit(projectInfo.getDesignUnit());
+        //监理单位
+        contractInfo.setSupervisorUnit(projectInfo.getSupervisorUnit());
+        //详细地址
+        contractInfo.setDetailedAddress(projectInfo.getDetailedAddress());
+        //项目规模
+        contractInfo.setProjectScale(projectInfo.getProjectScale());
+        contractInfo.setContractPrice(projectInfo.getContractPrice());
+
+        contractInfo.setId(IdWorker.createId());
+        contractInfo.setCreateUser(SecurityUtils.getUserName());
+        contractInfo.setCreateTime(DateUtils.getNowDate());
+        xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
+
+    }
 
 
     /**
@@ -57,6 +108,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo) {
+
         //查询最大有效版本号，如果查不到，版本号赋默认值1.0
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         xmslContractInfo.setVersion(maxVersion);
