@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @Service
 @RocketMQMessageListener(
-        consumerGroup = "pm-project-h",
+        consumerGroup = "pm-project-h2",
         topic = "gm",
         selectorExpression = "wbsMain",
         consumeMode = ConsumeMode.ORDERLY)
