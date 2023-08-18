@@ -25,6 +25,7 @@ import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import sun.plugin.com.Utils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -141,20 +142,12 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success();
     }
 
-    @GetMapping("/downloadTemplate")
-    public void downloadTemplate(HttpServletResponse response, HttpServletRequest request) throws IOException {
-        FtExcelUtil ftExcelUtil = new FtExcelUtil(XmslWbs.class);
-        ftExcelUtil.downloadTemplate(request, response, "项目WBS");
-    }
 
-    @GetMapping("/exportTemplate")
+    @PostMapping("/exportTemplate")
     public void exportTemplate(HttpServletRequest request, HttpServletResponse response) {
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
         try {
-            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode("项目WBS模板.xlsx", "UTF-8"));
-            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-            response.setCharacterEncoding("utf-8");
-            excelUtil.exportExcel(response, "数据");
+            excelUtil.exportExcel(response,"项目WBS模板.xlsx");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -170,7 +163,7 @@ public class XmslWbsController extends BaseController {
     }
 
     @PostMapping("/exportData")
-    public void export(@RequestBody XmslWbsMain wbsMain,HttpServletResponse response ) throws IOException {
+    public void export(@RequestBody XmslWbsMain wbsMain,HttpServletResponse response) throws IOException {
         if(wbsMain.getId()==null){
             wbsMain = this.xmslWbsMainService.getEffect();
             return ;
@@ -179,8 +172,8 @@ public class XmslWbsController extends BaseController {
         queryWbs.setMainId(wbsMain.getId());
         List list = xmslWbsService.getXmslWbsList(queryWbs);
         list = TreeUtil.exportListFormat(list, (Class)String.class);
-        FtExcelUtil<TWbs> util = new FtExcelUtil<>(TWbs.class);
-        util.exportExcel(response, list, DateUtils.getDate());
+        FtExcelUtil<XmslWbs> util = new FtExcelUtil<>(XmslWbs.class);
+        util.exportExcel(response, list, DateUtils.getDate(),"项目WBS.xlsx");
     }
 
 }

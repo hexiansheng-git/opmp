@@ -225,17 +225,25 @@ public class FtExcelUtil<T> {
     }
 
     public void exportExcel(HttpServletResponse response,  String sheetName) {
-        this.exportExcel(response, new ArrayList<>(2),sheetName);
+        this.exportExcel(response, new ArrayList<>(2),sheetName,sheetName);
+    }
+
+    public void exportExcel(HttpServletResponse response,  String sheetName,String fileName) {
+        this.exportExcel(response, new ArrayList<>(2),sheetName,fileName);
     }
     
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
+        this.exportExcel(response,list,sheetName,sheetName);
+    }
+    
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName,String fileName) {
+        this.templateName = fileName;
         this.init(list, sheetName, FtExcel.Type.EXPORT);
         this.exportExcel(response);
     }
     
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, List<String> customFieldList) throws IOException {
-        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setCharacterEncoding("utf-8");
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String fileName,List<String> customFieldList) throws IOException {
+        this.templateName = fileName;
         this.init(list, sheetName, FtExcel.Type.EXPORT, customFieldList);
         this.exportExcel(response);
     }
@@ -260,6 +268,9 @@ public class FtExcelUtil<T> {
                     this.fillExcelData(index, row);
                 }
             }
+            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode(this.templateName, "UTF-8"));
+            response.setContentType("multipart/form-data");
+            response.setCharacterEncoding("utf-8");
             this.wb.write(response.getOutputStream());
         } catch (Exception var20) {
             log.error("导出Excel异常{}", var20.getMessage());

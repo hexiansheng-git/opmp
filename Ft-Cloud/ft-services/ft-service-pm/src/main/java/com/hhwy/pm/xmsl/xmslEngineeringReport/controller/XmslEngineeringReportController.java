@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.xmslEngineeringReport.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -10,17 +11,16 @@ import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportServ
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import sun.plugin.com.Utils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 工程量报表
@@ -50,14 +50,14 @@ public class XmslEngineeringReportController extends BaseController {
             List xmslEngineeringReportList = xmslEngineeringReportService.getList(xmslEngineeringReportParam);
             FtExcelUtil<XmslEngineeringReport> util = new FtExcelUtil<>(XmslEngineeringReport.class);
             xmslEngineeringReportList = TreeUtil.exportListFormat(xmslEngineeringReportList);
-            util.exportExcel(response, xmslEngineeringReportList, "数据",Arrays.asList("清单编码","清单名称","清单单位","合同总数量"
+            util.exportExcel(response, xmslEngineeringReportList, "数据","工程量报表",Arrays.asList("清单编码","清单名称","清单单位","合同总数量"
                     ,"WBS编码","WBS名称","节点类型","本部位复核数量"));
             return ;
         }
         List xmslEngineeringReportList = xmslEngineeringReportService.getList(xmslEngineeringReportParam);
         FtExcelUtil<XmslEngineeringReport> util = new FtExcelUtil<>(XmslEngineeringReport.class);
         xmslEngineeringReportList = TreeUtil.exportListFormat(xmslEngineeringReportList);
-        util.exportExcel(response, xmslEngineeringReportList, DateUtils.getDate());
+        util.exportExcel(response, xmslEngineeringReportList, DateUtils.getDate(),"工程量报表");
     }
 
     /**
