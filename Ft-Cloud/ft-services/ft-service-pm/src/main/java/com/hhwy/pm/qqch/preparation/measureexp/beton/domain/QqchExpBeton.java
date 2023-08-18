@@ -83,9 +83,9 @@ public class QqchExpBeton extends TreeNode<QqchExpBeton> {
     /**
      * 字段描述：拟完成时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "拟完成时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @FtExcel(name = "拟完成时间", dateFormat = "yyyy-MM-dd")
     private Date planFinishTime;
     /**
      * 字段描述：排序

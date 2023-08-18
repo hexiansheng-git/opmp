@@ -137,6 +137,7 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
                 List<QqchDangerSafeMeasuresDetail> detailList = newMain.getDetailList();
                 if (!CollectionUtils.isEmpty(detailList)) {
                     for (QqchDangerSafeMeasuresDetail detail : detailList) {
+                        detail.setId(IdWorker.createId());
                         detail.setMasterId(newMain.getId());
                         detail.setVersion(newMain.getVersion());
                         if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {

@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonImpor
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,9 +74,9 @@ public class QqchExpBetonController extends BaseController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, BigDecimal version)
         throws IOException {
-        List<QqchExpBeton> list = qqchExpBetonService.getList(version);
+        List list = qqchExpBetonService.getList(version);
         FtExcelUtil<QqchExpBeton> util = new FtExcelUtil<>(QqchExpBeton.class);
-        util.exportExcel(response, list, DateUtils.getDate());
+        util.exportExcel(response, TreeUtil.exportListFormat(list), DateUtils.getDate());
     }
 
     /**
