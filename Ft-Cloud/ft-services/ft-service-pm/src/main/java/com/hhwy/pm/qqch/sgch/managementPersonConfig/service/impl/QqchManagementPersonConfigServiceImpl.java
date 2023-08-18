@@ -127,6 +127,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             }
             QqchManagementPersonConfig entity = new QqchManagementPersonConfig();
 //            entity.setId(organizationList.getId());
+            entity.setId(IdWorker.createId());
             entity.setDuty(organizationList.getDutyDept());
             entity.setPost(organizationList.getOrganization());
             entity.setValid(valid);
