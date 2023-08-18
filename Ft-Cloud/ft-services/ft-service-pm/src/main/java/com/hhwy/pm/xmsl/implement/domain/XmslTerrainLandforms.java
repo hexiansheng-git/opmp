@@ -1,10 +1,10 @@
 package com.hhwy.pm.xmsl.implement.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import lombok.Data;
@@ -29,61 +29,61 @@ public class XmslTerrainLandforms extends BaseEntity {
      * 字段描述：段落
      */
     @JsonProperty
-    @Excel(name = "段落")
+    @ExcelProperty(value = "段落", index = 0)
     private String section;
     /**
      * 字段描述：地形
      */
     @JsonProperty
-    @Excel(name = "地形")
+    @ExcelProperty(value = "地形", index = 1)
     private String terrain;
     /**
      * 字段描述：最高海拔
      */
     @JsonProperty
-    @Excel(name = "最高海拔")
+    @ExcelProperty(value = "最高海拔（m）", index = 2)
     private String maxAltitude;
     /**
      * 字段描述：最低海拔
      */
     @JsonProperty
-    @Excel(name = "最低海拔")
+    @ExcelProperty(value = "最低海拔（m）", index = 3)
     private String minAltitude;
     /**
      * 字段描述：高差
      */
     @JsonProperty
-    @Excel(name = "高差")
+    @ExcelProperty(value = "高差（m）", index = 4)
     private String heightDiff;
     /**
      * 字段描述：位置
      */
     @JsonProperty
-    @Excel(name = "位置")
+    @ExcelProperty(value = "位置", index = 5)
     private String positionOne;
     /**
      * 字段描述：坡率
      */
     @JsonProperty
-    @Excel(name = "坡率")
+    @ExcelProperty(value = "坡率", index = 6)
     private String slopeRate;
     /**
      * 字段描述：位置
      */
     @JsonProperty
-    @Excel(name = "位置")
+    @ExcelProperty(value = "位置", index = 7)
     private String positionTwo;
     /**
      * 字段描述：类型
      */
     @JsonProperty
-    @Excel(name = "类型")
+    @ExcelProperty(value = "类型", index = 8)
     private String type;
     /**
      * 字段描述：最大填高/挖深
      */
     @JsonProperty
-    @Excel(name = "最大填高/挖深")
+    @ExcelProperty(value = "最大填高/挖深（m）", index = 9)
     private String maxFillingHeight;
     /**
      * 字段描述：附件组id

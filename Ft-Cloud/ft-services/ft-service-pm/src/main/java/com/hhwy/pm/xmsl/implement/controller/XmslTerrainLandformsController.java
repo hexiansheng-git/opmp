@@ -1,14 +1,15 @@
 package com.hhwy.pm.xmsl.implement.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.listener.TerrainLandformsImportListener;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
 import com.hhwy.pm.xmsl.implement.service.IXmslTerrainLandformsService;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -33,12 +34,23 @@ public class XmslTerrainLandformsController extends BaseController {
     @Autowired
     private IXmslTerrainLandformsService xmslTerrainLandformsService;
 
+    /**
+     * 实施条件列表-所有列表一起返回
+     *
+     * @return
+     */
     @GetMapping("/getAllList")
     public AjaxResult getAllList() {
         ImplementVo implementVo = xmslTerrainLandformsService.getAllList();
         return AjaxResult.success(implementVo);
     }
 
+    /**
+     * 实施条件所有表格数据批量保存
+     *
+     * @param implementVo
+     * @return
+     */
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody ImplementVo implementVo) {
         xmslTerrainLandformsService.batchSave(implementVo);
@@ -65,17 +77,24 @@ public class XmslTerrainLandformsController extends BaseController {
     }
 
     /**
-     * 导入
+     * 地形地貌导入
      *
      * @param file
      * @return
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        ExcelUtils<XmslTerrainLandforms> util = new ExcelUtils<>(XmslTerrainLandforms.class);
         try {
-            InputStream inputStream = file.getInputStream();
-            List<XmslTerrainLandforms> list = util.importExcel(inputStream);
+            TerrainLandformsImportListener readListener = new TerrainLandformsImportListener();
+            List<XmslTerrainLandforms> list;
+            try {
+                // 两行表头
+                EasyExcel.read(file.getInputStream(), XmslTerrainLandforms.class, readListener).headRowNumber(2)
+                    .sheet(0).doRead();
+                list = readListener.getList();
+            } catch (IOException e) {
+                return AjaxResult.error();
+            }
             return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

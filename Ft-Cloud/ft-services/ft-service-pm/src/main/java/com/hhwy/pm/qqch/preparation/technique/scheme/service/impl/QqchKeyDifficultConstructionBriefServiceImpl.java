@@ -71,10 +71,9 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
                     brief.setValid(Valid.YES);
                 }
             }
+            qqchKeyDifficultConstructionBriefMapper
+                .insertQqchKeyDifficultConstructionBriefList(qqchKeyDifficultConstructionBriefVo.getList());
         }
-
-        qqchKeyDifficultConstructionBriefMapper
-            .insertQqchKeyDifficultConstructionBriefList(qqchKeyDifficultConstructionBriefVo.getList());
 
         String buttonMark = qqchKeyDifficultConstructionBriefVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
