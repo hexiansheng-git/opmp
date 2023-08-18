@@ -121,12 +121,11 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, qqchOptimizeProcedurePlanVo.getVersion());
         if(qqchPreparationSurveyExtend == null){
             qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
-            qqchOptimizeProcedurePlanVo.setFileGroupId(fileGroupId);
+            qqchPreparationSurveyExtend.setFileGroupId(fileGroupId);
+            qqchPreparationSurveyExtend.setModuleIdentity(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN);
             qqchPreparationSurveyExtend.setVersion(qqchOptimizeProcedurePlanVo.getVersion());
             qqchPreparationSurveyExtend.setValid(Valid.YES);
             qqchPreparationSurveyExtendService.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-        }else {
-            qqchPreparationSurveyExtendService.updateQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
         }
 
         //插入新数据

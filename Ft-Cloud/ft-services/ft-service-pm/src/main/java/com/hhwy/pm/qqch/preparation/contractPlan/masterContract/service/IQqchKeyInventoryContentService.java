@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service;
 
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchKeyInventoryContent;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchKeyInventoryContentVo;
 
 import java.util.List;
@@ -14,7 +15,13 @@ public interface IQqchKeyInventoryContentService {
 
     QqchKeyInventoryContent getQqchKeyInventoryContent(QqchKeyInventoryContent qqchKeyInventoryContent);
 
-    List<QqchKeyInventoryContent> getQqchKeyInventoryContentList(QqchKeyInventoryContent qqchKeyInventoryContent);
+    /**
+     * 获取分项清单Vo
+     *
+     * @param qqchKeyInventoryContent
+     * @return
+     */
+    KeyInventoryContentItemClassifyVo getSubentryInventoryByType(QqchKeyInventoryContent qqchKeyInventoryContent);
 
     int insertQqchKeyInventoryContent(QqchKeyInventoryContent qqchKeyInventoryContent);
 

@@ -1,11 +1,10 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.masterContract.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchKeyInventoryContent;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchKeyInventoryContentVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -13,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -71,23 +68,16 @@ public class QqchKeyInventoryContentController extends BaseController {
         return toAjax(qqchKeyInventoryContentService.deleteQqchKeyInventoryContentByPks(qqchKeyInventoryContentPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchKeyInventoryContent qqchKeyInventoryContentParam) throws IOException {
-        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = qqchKeyInventoryContentService.getQqchKeyInventoryContentList(qqchKeyInventoryContentParam);
-        ExcelUtils<QqchKeyInventoryContent> util = new ExcelUtils<>(QqchKeyInventoryContent.class);
-        util.exportExcel(response, qqchKeyInventoryContentList, DateUtils.getDate());
-    }
-
     /**
-     * 获取须重点关注的清单及内容集合
-     * @param qqchKeyInventoryContentParam
+     * 获取分项清单Vo
+     * @param qqchKeyInventoryContent
      * @return
      */
     @PreAuthorize(hasPermi = "qqchKeyInventoryContent:list")
     @GetMapping("/list")
-    public AjaxResult getQqchKeyInventoryContentList(@Validated(ValidationGroups.Select.class) QqchKeyInventoryContent qqchKeyInventoryContentParam) {
-        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = qqchKeyInventoryContentService.getQqchKeyInventoryContentList(qqchKeyInventoryContentParam);
-        return AjaxResult.success(qqchKeyInventoryContentList);
+    public AjaxResult getSubentryInventoryByType(@Validated(ValidationGroups.Select.class) QqchKeyInventoryContent qqchKeyInventoryContent) {
+        KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = qqchKeyInventoryContentService.getSubentryInventoryByType(qqchKeyInventoryContent);
+        return AjaxResult.success(keyInventoryContentItemClassifyVo);
     }
 
     /**
