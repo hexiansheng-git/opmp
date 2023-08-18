@@ -3,6 +3,7 @@ package com.hhwy.pm.gm.wbs.mapper;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import org.apache.ibatis.annotations.Param;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author wk
@@ -28,6 +29,8 @@ public interface TWbsMapper {
 
     int insertTWbs(TWbs tWbs);
 
+    int insertTWbsMain(Map map);
+
     int insertTWbsList(@Param("tWbsList") List<TWbs> tWbsList);
 
     int updateTWbs(TWbs tWbs);
@@ -35,6 +38,8 @@ public interface TWbsMapper {
     int updateTWbsList(@Param("list") List<TWbs> tWbsList);
 
     int deleteTWbs(TWbs tWbs);
+    
+    int deleteTWbsMain(Long id);
 
     int deleteTWbsByPks(@Param("tWbsPkList") List<Long> tWbsPkList);
 }

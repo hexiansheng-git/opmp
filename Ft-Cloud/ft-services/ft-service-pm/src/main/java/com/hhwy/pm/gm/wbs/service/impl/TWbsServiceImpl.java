@@ -173,11 +173,6 @@ public class TWbsServiceImpl implements ITWbsService {
 
     @Transactional
     public int insertTWbsList(List<TWbs> tWbsList) {
-        for (TWbs tWbs : tWbsList) {
-            tWbs.setId(IdWorker.createId()+"");
-            tWbs.setCreateUser(SecurityUtils.getUserName());
-            tWbs.setCreateTime(DateUtils.getNowDate());
-        }
         return tWbsMapper.insertTWbsList(tWbsList);
     }
 
@@ -204,8 +199,19 @@ public class TWbsServiceImpl implements ITWbsService {
         return tWbsMapper.deleteTWbs(tWbs);
     }
 
+    @Override
+    public int insertTWbsMain(Map map) {
+        return tWbsMapper.insertTWbsMain(map);
+    }
+
+    @Override
+    public int deleteTWbsMain(Long id) {
+        return tWbsMapper.deleteTWbsMain(id);
+    }
+
     @Transactional
     public int deleteTWbsByPks(List<Long> tWbsPkList) {
         return tWbsMapper.deleteTWbsByPks(tWbsPkList);
     }
+    
 }

@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,9 @@ public class XmslWbsController extends BaseController {
     public void exportTemplate(HttpServletRequest request, HttpServletResponse response) {
         FtExcelUtil<XmslWbs> excelUtil = new FtExcelUtil<>(XmslWbs.class);
         try {
+            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode("项目WBS模板.xlsx", "UTF-8"));
+            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            response.setCharacterEncoding("utf-8");
             excelUtil.exportExcel(response, "数据");
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -45,13 +45,17 @@ public interface ITWbsService {
 
     int insertTWbs(TWbs tWbs);
 
+    int insertTWbsMain(Map map);
+
     int insertTWbsList(List<TWbs> tWbsList);
 
     int updateTWbs(TWbs tWbs);
 
     int updateTWbsList(List<TWbs> tWbsList);
 
+    int deleteTWbsMain(Long id);
+    
     int deleteTWbs(TWbs tWbs);
-
+    
     int deleteTWbsByPks(List<Long> tWbsPkList);
 }
