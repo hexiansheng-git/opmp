@@ -124,8 +124,10 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
             // 主表全量入库
             qqchDiscloseThirdMapper.insertQqchDiscloseThirdList(newMainList);
 
-            // 子全量入库
-            qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(newDetailList);
+            if (!CollectionUtils.isEmpty(newDetailList)) {
+                // 子全量入库
+                qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(newDetailList);
+            }
         }
 
         String buttonMark = qqchDiscloseThirdVo.getButtonMark();

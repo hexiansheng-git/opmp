@@ -153,8 +153,10 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             // 主表全量入库
             qqchDangerSafeMeasuresMapper.insertQqchDangerSafeMeasuresList(newMainList);
 
-            // 子全量入库
-            qqchDangerSafeMeasuresDetailMapper.insertQqchDangerSafeMeasuresDetailList(newDetailList);
+            if (!CollectionUtils.isEmpty(newDetailList)) {
+                // 子全量入库
+                qqchDangerSafeMeasuresDetailMapper.insertQqchDangerSafeMeasuresDetailList(newDetailList);
+            }
         }
 
         String buttonMark = voParam.getButtonMark();
