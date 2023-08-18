@@ -150,7 +150,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
             }
         }
 
-        if(CollectionUtils.isEmpty(qqchAdvancedVindicatePlanList)){
+        if(CollectionUtils.isEmpty(qqchAdvancedVindicatePlanBudgetList)){
             return;
         }
         //插入新数据
