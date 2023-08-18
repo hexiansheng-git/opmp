@@ -9,6 +9,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.xmslMaterialReport.domain.XmslMaterialReport;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -43,10 +44,10 @@ public class XmslMaterialReportController extends BaseController {
     }
 
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, XmslMaterialReport xmslMaterialReportParam) throws IOException {
-        List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.getXmslMaterialReportList(xmslMaterialReportParam);
-        ExcelUtils<XmslMaterialReport> util = new ExcelUtils<>(XmslMaterialReport.class);
+    @GetMapping("/exportData")
+    public void export(HttpServletResponse response) throws IOException {
+        List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.getXmslMaterialReportList(new XmslMaterialReport());
+        FtExcelUtil<XmslMaterialReport> util = new FtExcelUtil<>(XmslMaterialReport.class);
         util.exportExcel(response, xmslMaterialReportList, DateUtils.getDate());
     }
 

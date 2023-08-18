@@ -489,7 +489,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             if(temp.getId().length() < 21){
                 new AddBaseInfoUtil<>().updateBaseEntity(temp);
                 updateList.add(temp);
-                return;
+                continue;
             }
             String id = getSnowId(temp.getId(),idRepalceMap);
             idRepalceMap.put(temp.getId(),id);

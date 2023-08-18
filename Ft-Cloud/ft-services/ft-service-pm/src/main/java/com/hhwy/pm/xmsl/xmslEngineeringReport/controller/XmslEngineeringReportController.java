@@ -50,13 +50,12 @@ public class XmslEngineeringReportController extends BaseController {
             List xmslEngineeringReportList = xmslEngineeringReportService.getList(xmslEngineeringReportParam);
             FtExcelUtil<XmslEngineeringReport> util = new FtExcelUtil<>(XmslEngineeringReport.class);
             xmslEngineeringReportList = TreeUtil.exportListFormat(xmslEngineeringReportList);
-//            util.exportWithTemplate(response,xmslEngineeringReportList,2,"exportXmslEngineeringReport.xlsx","数据");
             util.exportExcel(response, xmslEngineeringReportList, "数据",Arrays.asList("清单编码","清单名称","清单单位","合同总数量"
                     ,"WBS编码","WBS名称","节点类型","本部位复核数量"));
             return ;
         }
         List xmslEngineeringReportList = xmslEngineeringReportService.getList(xmslEngineeringReportParam);
-        ExcelUtils<XmslEngineeringReport> util = new ExcelUtils<>(XmslEngineeringReport.class);
+        FtExcelUtil<XmslEngineeringReport> util = new FtExcelUtil<>(XmslEngineeringReport.class);
         xmslEngineeringReportList = TreeUtil.exportListFormat(xmslEngineeringReportList);
         util.exportExcel(response, xmslEngineeringReportList, DateUtils.getDate());
     }
