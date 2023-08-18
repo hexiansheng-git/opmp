@@ -386,6 +386,64 @@
         </foreach>
     </insert>
 
+    <insert id="insertTWbsMain" useGeneratedKeys="true" keyProperty="id">
+        insert into t_wbs_main
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="engineeringType != null  and engineeringType != ''">`engineering_type`,</if>
+            <if test="productType != null  and productType != ''">`product_type`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null ">`valid`,</if>
+            <if test="effectTime != null ">`effect_time`,</if>
+            <if test="globalId != null ">`global_id`,</if>
+            <if test="adjustDescription != null  and adjustDescription != ''">`adjust_description`,</if>
+            <if test="adjustContent != null  and adjustContent != ''">`adjust_content`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="createDept != null  and createDept != ''">`create_dept`,</if>
+            <if test="createDeptName != null  and createDeptName != ''">`create_dept_name`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="engineeringType != null  and engineeringType != ''">#{engineeringType},</if>
+            <if test="productType != null  and productType != ''">#{productType},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null ">#{valid},</if>
+            <if test="effectTime != null ">#{effectTime},</if>
+            <if test="globalId != null ">#{globalId},</if>
+            <if test="adjustDescription != null  and adjustDescription != ''">#{adjustDescription},</if>
+            <if test="adjustContent != null  and adjustContent != ''">#{adjustContent},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="createDept != null  and createDept != ''">#{createDept},</if>
+            <if test="createDeptName != null  and createDeptName != ''">#{createDeptName},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+        </trim>
+    </insert>
+    
     <update id="updateTWbs">
         update t_wbs
         <trim prefix="SET" suffixOverrides=",">
@@ -615,6 +673,10 @@
         </foreach>
     </update>
 
+    <update id="deleteTWbsMain">
+        update t_wbs_main set del_flag = 1 where id = #{id}
+    </update>
+    
     <update id="deleteTWbs">
         update `t_wbs` set del_flag = 1
         <where>
