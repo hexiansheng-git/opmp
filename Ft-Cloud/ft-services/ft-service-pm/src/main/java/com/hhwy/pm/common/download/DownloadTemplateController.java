@@ -31,7 +31,7 @@ public class DownloadTemplateController {
      * @param response
      * @throws Exception
      */
-    @PostMapping("/downloadTemplate")
+    @GetMapping("/downloadTemplate")
     public void downloadTemplate(@RequestParam(value = "fileName") String fileName, HttpServletResponse response)
         throws Exception {
 
