@@ -106,7 +106,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      * 字段描述：状态,0:停用,1:启用
      */
     @JsonProperty
-    @FtExcel(name = "状态",combo = {"启用","停用"},readConverterExp = "0=停用,1:启用")
+    @FtExcel(name = "状态",combo = {"启用","停用"},readConverterExp = "0=停用,1=启用")
     private Integer status;
     
     /**
