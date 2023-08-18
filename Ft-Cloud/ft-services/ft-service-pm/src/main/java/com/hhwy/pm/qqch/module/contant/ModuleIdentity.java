@@ -11,9 +11,9 @@ public class ModuleIdentity {
     /*优化变更组织策划*/
     public static final String OPTIMIZE_CHANGE_ORGANIZATION = "1";
     /*优化程序策划*/
-    public static final String OPTIMIZE_PROCEDURE_PLAN = "2";
+    public static final String OPTIMIZE_PROCEDURE_PLAN = "qqch_optimize_procedure_plan";
     /*变更程序策划*/
-    public static final String CHANGE_PROCEDURE_PLAN = "3";
+    public static final String CHANGE_PROCEDURE_PLAN = "qqch_change_procedure_plan";
     /*设计技术优化要点*/
     public static final String DESIGN_TECHNOLOGY_OPTIMIZE = "4";
     /*重大设计方案比选*/

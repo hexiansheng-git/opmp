@@ -115,12 +115,11 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
         QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, qqchChangeProcedurePlanVo.getVersion());
         if(qqchPreparationSurveyExtend == null){
             qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
+            qqchPreparationSurveyExtend.setModuleIdentity(ModuleIdentity.CHANGE_PROCEDURE_PLAN);
             qqchPreparationSurveyExtend.setVersion(qqchChangeProcedurePlanVo.getVersion());
             qqchPreparationSurveyExtend.setValid(Valid.YES);
             qqchChangeProcedurePlanVo.setFileGroupId(fileGroupId);
             qqchPreparationSurveyExtendService.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-        }else {
-            qqchPreparationSurveyExtendService.updateQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
         }
 
         //插入新数据

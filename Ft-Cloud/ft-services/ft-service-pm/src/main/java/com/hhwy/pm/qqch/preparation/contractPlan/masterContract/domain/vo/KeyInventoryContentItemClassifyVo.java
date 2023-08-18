@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,7 +22,7 @@ public class KeyInventoryContentItemClassifyVo {
     /**
      * 字段描述：总价差值合计
      */
-    private String totalPriceDifferenceTotal;
+    private BigDecimal totalPriceDifferenceTotal;
 
-    private List<KeyInventoryContentItemClassify> list;
+    private List<KeyInventoryContentItemClassify> list = new ArrayList<>();
 }

@@ -88,6 +88,98 @@ public class XmslContractInfo extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "项目分类（字典项 project_category）")
     private String projectCategory;
+
+    /**
+     * 字段描述：业务领域及产品
+     */
+    @JsonProperty
+    @Excel(name = "业务领域及产品")
+    private String businessAreasAndProducts;
+    /**
+     * 字段描述：资金来源
+     */
+    @JsonProperty
+    @Excel(name = "资金来源")
+    private String capitalSource;
+    /**
+     * 字段描述：项目所在地（国）
+     */
+    @JsonProperty
+    @Excel(name = "项目所在地（国）")
+    private String projectLocation;
+    /**
+     * 字段描述：所属机构
+     */
+    @JsonProperty
+    @Excel(name = "所属机构")
+    private String subsidiaryOrgan;
+    /**
+     * 字段描述：项目经理
+     */
+    @JsonProperty
+    @Excel(name = "项目经理")
+    private String projectManager;
+    /**
+     * 字段描述：联系方式（国内）
+     */
+    @JsonProperty
+    @Excel(name = "联系方式（国内）")
+    private String internalContactWay;
+    /**
+     * 字段描述：联系方式（国外）
+     */
+    @JsonProperty
+    @Excel(name = "联系方式（国外）")
+    private String foreignContactWay;
+    /**
+     * 字段描述：中标单位
+     */
+    @JsonProperty
+    @Excel(name = "中标单位")
+    private String winTheBiddingUnit;
+    /**
+     * 字段描述：业主单位
+     */
+    @JsonProperty
+    @Excel(name = "业主单位")
+    private String proprietorUnit;
+    /**
+     * 字段描述：监理单位
+     */
+    @JsonProperty
+    @Excel(name = "监理单位")
+    private String supervisorUnit;
+    /**
+     * 字段描述：管理公司
+     */
+    @JsonProperty
+    @Excel(name = "管理公司")
+    private String managementCompany;
+    /**
+     * 字段描述：设计单位
+     */
+    @JsonProperty
+    @Excel(name = "设计单位")
+    private String designUnit;
+    /**
+     * 字段描述：详细地址
+     */
+    @JsonProperty
+    @Excel(name = "详细地址")
+    private String detailedAddress;
+    /**
+     * 字段描述：合同价格
+     */
+    @JsonProperty
+    @Excel(name = "合同价格")
+    private String contractPrice;
+    /**
+     * 字段描述：承包方式
+     */
+    @JsonProperty
+    @Excel(name = "承包方式")
+    private String contractingMethod;
+
     /**
      * 字段描述：合同类型(字典项 contract_type)
      */

@@ -5,7 +5,9 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
@@ -230,6 +232,49 @@ public class ListTreeUtil {
             }
         } else {
             setPtVar1.accept(node,"1");//是叶子节点
+        }
+    }
+
+    /**
+     * 根据子集递归查询父级数据
+     * @param sublist
+     * @param allList
+     * @param getId
+     * @param getPid
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> getUpListBySublist(List<T> sublist,List<T> allList,Function<T,Long> getId,Function<T,Long> getPid) {
+        List<T> resultList = new ArrayList<>();
+        Map<Long,T> resultMap = new HashMap<>();
+
+        for (T t : sublist) {
+            recursion(t,allList,resultMap,getId,getPid);
+            resultMap.putIfAbsent(getId.apply(t), t);
+        }
+
+        for (Map.Entry<Long, T> t : resultMap.entrySet()) {
+            resultList.add(t.getValue());
+        }
+        return resultList;
+    }
+
+    /**
+     * 递归查询父级数据
+     * @param down
+     * @param allList
+     * @param resultMap
+     */
+    public static <T> void recursion(T down,List<T> allList,Map<Long,T> resultMap,Function<T,Long> getId,Function<T,Long> getPid){
+        Long pid = getPid.apply(down);
+        if(pid != null){
+            for (T t : allList) {
+                Long id = getId.apply(t);
+                if(pid.equals(id)){
+                    recursion(t,allList,resultMap,getId,getPid);
+                    resultMap.putIfAbsent(id, t);
+                }
+            }
         }
     }
 }

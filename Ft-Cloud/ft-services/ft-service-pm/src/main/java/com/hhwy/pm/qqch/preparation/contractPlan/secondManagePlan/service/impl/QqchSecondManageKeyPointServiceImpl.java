@@ -239,7 +239,7 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
         if(CollectionUtils.isEmpty(secondManageKeyPointList)){
             return resultList;
         }
-        List<QqchSecondManageKeyPoint> keyPointTypeListAboutParent = this.getKeyPointTypeListAboutParent(secondManageKeyPointList, secondManageKeyPointAllList);
+        List<QqchSecondManageKeyPoint> keyPointTypeListAboutParent = ListTreeUtil.getUpListBySublist(secondManageKeyPointList,secondManageKeyPointAllList,QqchSecondManageKeyPoint::getId,QqchSecondManageKeyPoint::getPid);
         for (QqchSecondManageKeyPoint secondManageKeyPoint : keyPointTypeListAboutParent) {
             SecondManageKeyPointPlan secondManageKeyPointPlan = new SecondManageKeyPointPlan();
             secondManageKeyPointPlan.setId(secondManageKeyPoint.getId());
@@ -288,33 +288,37 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
      * @param allList
      * @return
      */
-    public List<QqchSecondManageKeyPoint> getKeyPointTypeListAboutParent(List<QqchSecondManageKeyPoint> keyPointTypeList,List<QqchSecondManageKeyPoint> allList){
-        List<QqchSecondManageKeyPoint> resultList = new ArrayList<>();
-        for (QqchSecondManageKeyPoint keyPoint : keyPointTypeList) {
-            this.recursion(keyPoint,allList,resultList);
-            resultList.add(keyPoint);
-        }
-        return resultList;
-    }
+//    public List<QqchSecondManageKeyPoint> getKeyPointTypeListAboutParent(List<QqchSecondManageKeyPoint> keyPointTypeList,List<QqchSecondManageKeyPoint> allList){
+//        List<QqchSecondManageKeyPoint> resultList = new ArrayList<>();
+//        Map<Long,QqchSecondManageKeyPoint> resultMap = new HashMap<>();
+//        for (QqchSecondManageKeyPoint keyPoint : keyPointTypeList) {
+//            this.recursion(keyPoint,allList,resultMap);
+//            resultMap.putIfAbsent(keyPoint.getId(), keyPoint);
+//        }
+//        for (Map.Entry<Long, QqchSecondManageKeyPoint> keyPointEntry : resultMap.entrySet()) {
+//            resultList.add(keyPointEntry.getValue());
+//        }
+//        return resultList;
+//    }
 
     /**
      * 递归查询父级数据
      * @param keyPoint
      * @param allList
-     * @param resultList
+     * @param resultMap
      */
-    public void recursion(QqchSecondManageKeyPoint keyPoint,List<QqchSecondManageKeyPoint> allList,List<QqchSecondManageKeyPoint> resultList){
-        Long pid = keyPoint.getPid();
-        if(pid != null){
-            for (QqchSecondManageKeyPoint qqchSecondManageKeyPoint : allList) {
-                Long id = qqchSecondManageKeyPoint.getId();
-                if(pid.equals(id)){
-                    this.recursion(qqchSecondManageKeyPoint,allList,resultList);
-                    resultList.add(qqchSecondManageKeyPoint);
-                }
-            }
-        }
-    }
+//    public void recursion(QqchSecondManageKeyPoint keyPoint,List<QqchSecondManageKeyPoint> allList,Map<Long,QqchSecondManageKeyPoint> resultMap){
+//        Long pid = keyPoint.getPid();
+//        if(pid != null){
+//            for (QqchSecondManageKeyPoint qqchSecondManageKeyPoint : allList) {
+//                Long id = qqchSecondManageKeyPoint.getId();
+//                if(pid.equals(id)){
+//                    this.recursion(qqchSecondManageKeyPoint,allList,resultMap);
+//                    resultMap.putIfAbsent(id, qqchSecondManageKeyPoint);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * 获取二次经营要点识别Vo

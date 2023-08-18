@@ -48,7 +48,7 @@ public class XmslMaterialReportController extends BaseController {
     public void export(HttpServletResponse response) throws IOException {
         List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.getXmslMaterialReportList(new XmslMaterialReport());
         FtExcelUtil<XmslMaterialReport> util = new FtExcelUtil<>(XmslMaterialReport.class);
-        util.exportExcel(response, xmslMaterialReportList, DateUtils.getDate());
+        util.exportExcel(response, xmslMaterialReportList, DateUtils.getDate(),"主材报表");
     }
 
     /**

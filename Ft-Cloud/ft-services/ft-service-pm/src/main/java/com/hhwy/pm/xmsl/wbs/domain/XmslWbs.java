@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.wbs.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -105,7 +106,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      * 字段描述：状态,0:停用,1:启用
      */
     @JsonProperty
-    @FtExcel(name = "状态",combo = {"启用","停用"})
+    @FtExcel(name = "状态",combo = {"启用","停用"},readConverterExp = "0=停用,1=启用")
     private Integer status;
     
     /**
