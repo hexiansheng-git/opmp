@@ -108,6 +108,9 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
 
     @Transactional
     public int deleteQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
+        //流程已完成的不可删除
+        //暂时未加流程
+
         qqchPerformInspection.setUpdateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setUpdateTime(DateUtils.getNowDate());
         return qqchPerformInspectionMapper.deleteQqchPerformInspection(qqchPerformInspection);
