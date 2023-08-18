@@ -21,6 +21,8 @@ public interface IXmslEngineeringReportService {
     XmslEngineeringReport getXmslEngineeringReport(XmslEngineeringReport xmslEngineeringReport);
 
     List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport xmslEngineeringReport);
+    
+    List<XmslEngineeringReport> getList(XmslEngineeringReport report);
 
     int insertXmslEngineeringReport(XmslEngineeringReport xmslEngineeringReport);
 

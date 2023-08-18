@@ -138,6 +138,11 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         return xmslEngineeringReportMapper.getXmslEngineeringReport(xmslEngineeringReport);
     }
 
+    @Override
+    public List<XmslEngineeringReport> getList(XmslEngineeringReport report) {
+        return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
+    }
+
     public List<XmslEngineeringReport> getXmslEngineeringReportList(XmslEngineeringReport report) {
         report.setParentId(ObjectUtils.nvlLong(report.getParentId(),-1L));
         boolean hasCondition = StringUtils.isNotBlank(report.getWbsCode()) || StringUtils.isNotBlank(report.getWbsName())

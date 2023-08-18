@@ -1,5 +1,6 @@
 package com.hhwy.utils.excel;
 
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -32,6 +33,7 @@ import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class FtExcelUtil<T> {
     private static final Logger log = LoggerFactory.getLogger(FtExcelUtil.class);
@@ -42,6 +44,7 @@ public class FtExcelUtil<T> {
     private Sheet sheet;
     private Map<String, CellStyle> styles;
     private List<T> list;
+    private List<String> customFieldList;
     private List<Object[]> fields;
     public Class<?> clazz;
     public Map<String, Map<String, String>> dictsMap = new HashedMap<>();
@@ -69,6 +72,18 @@ public class FtExcelUtil<T> {
         this.list = list;
         this.sheetName = sheetName;
         this.type = type;
+        this.createExcelFieldAndSetDict();
+        this.createWorkbook();
+    }
+
+    public void init(List<T> list, String sheetName, FtExcel.Type type, List<String> customFieldList) {
+        if (list == null) {
+            list = new ArrayList();
+        }
+        this.list = (List)list;
+        this.sheetName = sheetName;
+        this.type = type;
+        this.customFieldList = customFieldList;
         this.createExcelFieldAndSetDict();
         this.createWorkbook();
     }
@@ -215,6 +230,13 @@ public class FtExcelUtil<T> {
     
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
         this.init(list, sheetName, FtExcel.Type.EXPORT);
+        this.exportExcel(response);
+    }
+    
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, List<String> customFieldList) throws IOException {
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setCharacterEncoding("utf-8");
+        this.init(list, sheetName, FtExcel.Type.EXPORT, customFieldList);
         this.exportExcel(response);
     }
 
@@ -510,14 +532,24 @@ public class FtExcelUtil<T> {
         List<Field> tempFields = new ArrayList<>();
         tempFields.addAll(Arrays.asList(this.clazz.getSuperclass().getDeclaredFields()));
         tempFields.addAll(Arrays.asList(this.clazz.getDeclaredFields()));
-
+        //若存在自定义导出列，按照自定义列顺序导出
+        if(CollectionUtils.isNotEmpty(customFieldList)){
+            Map<String,Field> fieldMap = tempFields.stream().filter(r->r.isAnnotationPresent(FtExcel.class))
+                    .collect(Collectors.toMap(r->r.getAnnotation(FtExcel.class).name().trim(), r->r) );
+            tempFields.clear();
+            for (int i = 0; i < customFieldList.size(); i++) {
+                Field field = fieldMap.get(customFieldList.get(i).trim());
+                if(field == null)
+                    continue;
+                tempFields.add(field);
+            }
+        }
         for (Field tempField : tempFields) {
             if (tempField.isAnnotationPresent(FtExcel.class)) {
                 FtExcel annotation = tempField.getAnnotation(FtExcel.class);
                 this.putToField(tempField, annotation);
                 // 设置字典项
                 this.setDictsMap(annotation.dictType());
-
             }
         }
     }

@@ -8,11 +8,15 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
+import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import sun.plugin.com.Utils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
@@ -39,10 +43,21 @@ public class XmslEngineeringReportController extends BaseController {
         return AjaxResult.success(xmslEngineeringReportList);
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, XmslEngineeringReport xmslEngineeringReportParam) throws IOException {
-        List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportService.getXmslEngineeringReportList(xmslEngineeringReportParam);
+    @PreAuthorize(hasPermi = "xmslEngineeringReport:export")
+    @PostMapping("/exportData")
+    public void exportData(HttpServletRequest request,HttpServletResponse response, @RequestBody XmslEngineeringReport xmslEngineeringReportParam) throws IOException {
+        if(xmslEngineeringReportParam.getReportType() == 2){ //清单
+            List xmslEngineeringReportList = xmslEngineeringReportService.getList(xmslEngineeringReportParam);
+            FtExcelUtil<XmslEngineeringReport> util = new FtExcelUtil<>(XmslEngineeringReport.class);
+            xmslEngineeringReportList = TreeUtil.exportListFormat(xmslEngineeringReportList);
+//            util.exportWithTemplate(response,xmslEngineeringReportList,2,"exportXmslEngineeringReport.xlsx","数据");
+            util.exportExcel(response, xmslEngineeringReportList, "数据",Arrays.asList("清单编码","清单名称","清单单位","合同总数量"
+                    ,"WBS编码","WBS名称","节点类型","本部位复核数量"));
+            return ;
+        }
+        List xmslEngineeringReportList = xmslEngineeringReportService.getList(xmslEngineeringReportParam);
         ExcelUtils<XmslEngineeringReport> util = new ExcelUtils<>(XmslEngineeringReport.class);
+        xmslEngineeringReportList = TreeUtil.exportListFormat(xmslEngineeringReportList);
         util.exportExcel(response, xmslEngineeringReportList, DateUtils.getDate());
     }
 
