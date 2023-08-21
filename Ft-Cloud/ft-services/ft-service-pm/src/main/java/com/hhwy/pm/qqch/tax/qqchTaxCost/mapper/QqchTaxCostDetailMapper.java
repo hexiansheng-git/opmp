@@ -27,4 +27,8 @@ public interface QqchTaxCostDetailMapper {
     int deleteQqchTaxCostDetail(QqchTaxCostDetail qqchTaxCostDetail);
 
     int deleteQqchTaxCostDetailByPks(@Param("qqchTaxCostDetailPkList") List<Long> qqchTaxCostDetailPkList);
+
+    List<QqchTaxCostDetail> getCostName(QqchTaxCostDetail costWhere);
+
+    List<QqchTaxCostDetail> getAmtByGroup(QqchTaxCostDetail costWhere);
 }

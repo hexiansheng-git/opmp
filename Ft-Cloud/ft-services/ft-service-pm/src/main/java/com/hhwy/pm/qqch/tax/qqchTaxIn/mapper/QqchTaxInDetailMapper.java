@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.mapper;
 
+import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +28,6 @@ public interface QqchTaxInDetailMapper {
     int deleteQqchTaxInDetail(QqchTaxInDetail qqchTaxInDetail);
 
     int deleteQqchTaxInDetailByPks(@Param("qqchTaxInDetailPkList") List<Long> qqchTaxInDetailPkList);
+
+    List<QqchTaxInDetail> getAmtByGroup(QqchTaxInDetail inWhere);
 }

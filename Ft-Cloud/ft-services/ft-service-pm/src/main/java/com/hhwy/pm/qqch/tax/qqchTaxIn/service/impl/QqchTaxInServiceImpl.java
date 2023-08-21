@@ -13,7 +13,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
-import com.hhwy.pm.qqch.tax.qqchTaxStage.service.IQqchTaxStageService;
+import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
 import com.hhwy.utils.EntityUtils;

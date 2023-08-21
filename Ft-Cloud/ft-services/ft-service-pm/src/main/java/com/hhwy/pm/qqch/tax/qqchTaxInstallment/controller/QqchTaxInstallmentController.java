@@ -60,7 +60,6 @@ public class QqchTaxInstallmentController extends BaseController{
     @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
     @PostMapping("/refresh")
     public AjaxResult refresh(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchTaxInstallment >dto){
-        
         return AjaxResult.success(qqchTaxInstallmentService.refresh(dto));
     }
     

@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo;
 
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 import lombok.ToString;
 
@@ -12,7 +13,7 @@ import java.util.List;
 public class InstallmentVO implements Serializable {
     private Long inRecordId;
     private Long costRecordId;
-    private List list;
+    private List<ListVO> list;
 
 
 
@@ -21,7 +22,7 @@ public class InstallmentVO implements Serializable {
 
     @Data
     @ToString
-    private static class ListVO{
+    public static class ListVO extends TreeNode<ListVO> {
         private String digest;
         // 内账成本
         private BigDecimal innerAmt;
@@ -35,14 +36,15 @@ public class InstallmentVO implements Serializable {
         private BigDecimal locAmt;
         // 收入
         private BigDecimal amt;
+        private BigDecimal profit;
 
 
-        private BigDecimal usdInnerAmt;
-        private BigDecimal usdReqAmt;
-        private BigDecimal usdDiffAmt;
-        private BigDecimal usdLocalAmt;
-        private BigDecimal usdLocAmt;
-
+//        private BigDecimal usdInnerAmt;
+//        private BigDecimal usdReqAmt;
+//        private BigDecimal usdDiffAmt;
+//        private BigDecimal usdLocalAmt;
+//        private BigDecimal usdLocAmt;
+//
         private BigDecimal usdAmt;
         
         

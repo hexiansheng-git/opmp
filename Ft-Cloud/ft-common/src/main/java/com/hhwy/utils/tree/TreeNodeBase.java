@@ -12,5 +12,6 @@ public class TreeNodeBase<T,R> extends BaseEntity {
     private R id;
     private R pid;
     private Integer sort;
+    private Integer level;
     private List<T> children =new ArrayList<>();
 }

@@ -9,10 +9,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.poi.ss.formula.functions.T;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -71,6 +68,43 @@ public class TreeUtil {
                 split(child,resultList);
             }
         }
+    }
+
+    /**
+     * 树形list转list
+     * @param source
+     * @return
+     */
+    public static <T extends TreeNode<T>> List<T> treeToListWithLevel(List<T> source) {
+        List<T> result = new ArrayList<>();
+        if (CollectionUtils.isEmpty(source)) {
+            return result;
+        }
+
+        int sort = 1;
+        for (T node : source) {
+            node.setSort(sort++);
+            node.setLevel(splitWithLevel(node,result,0));
+        }
+        return result;
+    }
+
+    private static <T extends TreeNode<T>> int splitWithLevel(T node, List<T> resultList,int level){
+        level++;
+        Long id = IdWorker.createId();
+        int sort = 1;
+        List<T> children = node.getChildren();
+        node.setId(id);
+        node.setChildren(null);
+        resultList.add(node);
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                child.setPid(id);
+                child.setSort(sort++);
+                child.setLevel(splitWithLevel(child,resultList,level));
+            }
+        }
+        return level;
     }
 
     /**

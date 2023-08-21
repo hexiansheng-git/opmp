@@ -1,6 +1,6 @@
-package com.hhwy.pm.qqch.tax.qqchTaxStage.mapper;
+package com.hhwy.pm.qqch.tax.qqchTaxInstallment.mapper;
 
-import com.hhwy.pm.qqch.tax.qqchTaxStage.domain.QqchTaxStage;
+import com.hhwy.pm.qqch.tax.qqchTaxInstallment.domain.QqchTaxStage;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

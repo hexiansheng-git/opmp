@@ -7,6 +7,7 @@
     <resultMap type="com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail" id="QqchTaxCostDetailResultMap">
         <result property="id" column="id"/>
         <result property="masterId" column="master_id"/>
+        <result property="pid" column="pid"/>
         <result property="dataType" column="data_type"/>
         <result property="year" column="year"/>
         <result property="currency" column="currency"/>
@@ -35,7 +36,7 @@
         <result property="delUser" column="del_user"/>
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
+        <result property="level" column="level"/>
         <result property="ptVar2" column="pt_var2"/>
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
@@ -72,7 +73,7 @@
              , `del_user`
              , `del_time`
              , `del_flag`
-             , `pt_var1`
+             , `level`
              , `pt_var2`
              , `pt_var3`
              , `pt_var4`
@@ -113,7 +114,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="level != null  and level != ''">and `level` = #{level}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -156,13 +157,81 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="level != null  and level != ''">and `level` = #{level}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
         order by create_time desc
+    </select>
+    <select id="getCostName" resultMap="QqchTaxCostDetailResultMap">
+
+
+        SELECT c.id                           AS id,
+               c.pid                          AS pid,
+               ifnull(c.fee_name, c.currency) AS currency,
+               t.usd_req_amt                  as req_amt,
+               t.usd_local_amt                   local_amt,
+               t.usd_inner_amt                   inner_amt
+        FROM qqch_tax_cost AS c
+                 LEFT JOIN
+             (SELECT d.master_id,
+                     d.currency           AS currency,
+                     sum(d.local_amt)     AS local_amt,
+                     sum(d.req_amt)       AS req_amt,
+                     sum(d.inner_amt)     AS inner_amt,
+                     sum(d.usd_local_amt) AS usd_local_amt,
+                     sum(d.usd_req_amt)   AS usd_req_amt,
+                     sum(d.usd_inner_amt) AS usd_inner_amt
+              FROM qqch_tax_cost c
+                       LEFT JOIN qqch_tax_cost_detail d ON c.id = d.master_id
+              WHERE c.del_flag = '0'
+                AND d.del_flag = '0'
+                AND c.valid = '1'
+                AND d.`year` = #{year}
+                AND c.data_type = #{dataType}
+
+                AND c.record_id = #{recordId}
+              GROUP BY d.master_id,
+                       d.currency,
+                       d.data_type) t ON c.id = t.master_id
+        WHERE c.del_flag = '0'
+          AND c.valid = '1'
+          AND c.data_type = #{dataType}
+          AND c.record_id = #{recordId}
+
+
+    </select>
+
+
+    <select id="getAmtByGroup" resultMap="QqchTaxCostDetailResultMap">
+
+
+        SELECT
+            d.master_id,
+            d.currency AS currency 	,
+            sum(d.local_amt) as local_amt,
+            sum(d.req_amt) as req_amt,
+            sum(d.inner_amt) as inner_amt,
+            sum(d.usd_local_amt) as usd_local_amt,
+            sum(d.usd_req_amt) as usd_req_amt,
+            sum(d.usd_inner_amt) as usd_inner_amt
+
+        FROM
+            qqch_tax_cost  c
+                LEFT JOIN qqch_tax_cost_detail d ON c.id = d.master_id
+        WHERE
+            c.del_flag = '0'
+          and d.del_flag = '0'
+          AND c.valid = '1'
+          AND c.data_type = #{dataType}
+          AND d.`year` = #{year}
+          and c.record_id = #{recordId}
+        GROUP BY
+            d.master_id,
+            d.currency,
+            d.data_type;
     </select>
 
     <insert id="insertQqchTaxCostDetail" useGeneratedKeys="true" keyProperty="id">
@@ -198,7 +267,7 @@
             <if test="delUser != null  and delUser != ''">`del_user`,</if>
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="level != null  and level != ''">`level`,</if>
             <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
             <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
@@ -235,7 +304,7 @@
             <if test="delUser != null  and delUser != ''">#{delUser},</if>
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="level != null  and level != ''">#{level},</if>
             <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
             <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
@@ -276,7 +345,7 @@
             `update_time`,
             `del_user`,
             `del_time`,
-            `pt_var1`,
+            `level`,
             `pt_var2`,
             `pt_var3`,
             `pt_var4`,
@@ -314,7 +383,7 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
-                #{item.ptVar1},
+                #{item.level},
                 #{item.ptVar2},
                 #{item.ptVar3},
                 #{item.ptVar4},
@@ -356,7 +425,7 @@
             <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="level != null  and  level != ''">`level` = #{level},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
@@ -520,9 +589,9 @@
                     when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
-            <trim prefix="pt_var1  = case" suffix="end,">
+            <trim prefix="level  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar1}
+                    when `id`=#{item.id} then #{item.level}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
@@ -585,7 +654,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="level != null  and level != ''">and `level` = #{level}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>

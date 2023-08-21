@@ -1,7 +1,6 @@
-package com.hhwy.pm.qqch.tax.qqchTaxStage.service;
+package com.hhwy.pm.qqch.tax.qqchTaxInstallment.service;
 
-import com.hhwy.pm.qqch.tax.qqchTaxStage.domain.QqchTaxStage;
-import com.hhwy.pm.qqch.tax.qqchTaxStage.dto.StageDTO;
+import com.hhwy.pm.qqch.tax.qqchTaxInstallment.domain.QqchTaxStage;
 
 import java.util.List;
 

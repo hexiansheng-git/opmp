@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.tax.qqchTaxStage.mapper.QqchTaxStageMapper">
+<mapper namespace="com.hhwy.pm.qqch.tax.qqchTaxInstallment.mapper.QqchTaxStageMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.tax.qqchTaxStage.domain.QqchTaxStage" id="QqchTaxStageResultMap">
+    <resultMap type="com.hhwy.pm.qqch.tax.qqchTaxInstallment.domain.QqchTaxStage" id="QqchTaxStageResultMap">
         <result property="id" column="id"/>
         <result property="dataType" column="data_type"/>
         <result property="recordId" column="record_id"/>

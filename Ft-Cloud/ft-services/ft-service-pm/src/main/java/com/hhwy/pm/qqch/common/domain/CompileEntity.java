@@ -111,7 +111,7 @@ public class CompileEntity<T> extends TreeNode<T> {
         if (dto != null && dto instanceof List && (list = (List) dto).size() > 0 && list.get(0) instanceof CompileEntity) {
             List<CompileEntity> compileEntities = (List<CompileEntity>) dto;
             // 不用管是不是树形结构  就先转一下
-            compileEntities = TreeUtil.treeToList(compileEntities);
+            compileEntities = TreeUtil.treeToListWithLevel(compileEntities);
             EntityUtils.setCreateUpdateInfo(compileEntities);
             for (CompileEntity o : compileEntities) {
                 o.setSubmitFlag(submitFlag);

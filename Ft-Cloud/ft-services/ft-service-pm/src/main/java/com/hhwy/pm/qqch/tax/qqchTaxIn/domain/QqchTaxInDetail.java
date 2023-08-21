@@ -47,7 +47,7 @@ public class QqchTaxInDetail extends CommonBaseEntity {
      * 字段描述：币种
      */
     @JsonProperty
-    @Excel(name = "币种")
+    @Excel(name = "年份")
     private String year;
     /**
      * 字段描述：币种
@@ -217,6 +217,7 @@ public class QqchTaxInDetail extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    private Long recordId;
 
 
     private List<Long> masterIdList;
