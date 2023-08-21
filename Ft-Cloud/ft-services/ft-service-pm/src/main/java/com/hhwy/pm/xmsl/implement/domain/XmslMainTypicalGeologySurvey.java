@@ -1,10 +1,10 @@
 package com.hhwy.pm.xmsl.implement.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import lombok.Data;
@@ -29,37 +29,37 @@ public class XmslMainTypicalGeologySurvey extends BaseEntity {
      * 字段描述：主线位置
      */
     @JsonProperty
-    @Excel(name = "主线位置")
+    @ExcelProperty(value = "主线位置", index = 0)
     private String mainPosition;
     /**
      * 字段描述：业主提供-深度
      */
     @JsonProperty
-    @Excel(name = "业主提供-深度")
+    @ExcelProperty(value = "深度（m）", index = 1)
     private String ownerDepth;
     /**
      * 字段描述：业主提供-地质描述
      */
     @JsonProperty
-    @Excel(name = "业主提供-地质描述")
+    @ExcelProperty(value = "地质描述", index = 2)
     private String ownerDescription;
     /**
      * 字段描述：项目部提供-深度
      */
     @JsonProperty
-    @Excel(name = "项目部提供-深度")
+    @ExcelProperty(value = "深度（m）", index = 3)
     private String projectDepDepth;
     /**
      * 字段描述：项目部提供-地质描述
      */
     @JsonProperty
-    @Excel(name = "项目部提供-地质描述")
+    @ExcelProperty(value = "地质描述", index = 4)
     private String projectDepDescription;
     /**
      * 字段描述：项目部提供-勘察方式
      */
     @JsonProperty
-    @Excel(name = "项目部提供-勘察方式")
+    @ExcelProperty(value = "勘察方式", index = 5)
     private String projectDepSurveyMethod;
     /**
      * 字段描述：附件组id
@@ -70,7 +70,7 @@ public class XmslMainTypicalGeologySurvey extends BaseEntity {
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @ExcelProperty(value = "备注", index = 6)
     private String remark;
     /**
      * 字段描述：所属区域id

@@ -19,6 +19,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -145,11 +146,16 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         return qqchOrganizationListMapper.deleteQqchOrganizationListByPks(qqchOrganizationListPkList);
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public int insertQqchOrganizationListVo(QqchOrganizationListVo qqchOrganizationListVo) {
         List<QqchOrganizationList> dataList = qqchOrganizationListVo.getDataList();
         this.checkData(dataList);
-        List<QqchOrganizationList> organizationLists = TreeUtil.treeToList(dataList);
+        List<QqchOrganizationList> organizationLists = TreeUtil.treeToListWithLevel(dataList);
+        organizationLists.stream().map(TreeNodeBase::getLevel).max(Comparator.comparing(Integer::valueOf)).ifPresent(level->{
+            if (level>2) throw new RuntimeException("组织结构最多只能有两级");
+        });
+
+
         if (ObjectNullUtil.isEmpty(dataList)) {
             return 1;
         } else {
@@ -194,6 +200,35 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
 
         qqchOrganizationListMapper.insertQqchOrganizationListList(organizationLists);
         return 1;
+    }
+
+    @Override
+    public List<QqchOrganizationList> mergeData(List<QqchOrganizationList> importDataList, List<QqchOrganizationList> oldDataList) {
+        LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
+        Set<String> strings = organizationCat.keySet();
+        
+        for (String string : strings) {
+            // 从老数据中获取数据
+            oldDataList.stream().filter(item->string.equals(item.getOrganization())).findFirst().ifPresent(old->{
+                importDataList.stream().filter(imp->string.equals(imp.getOrganization())).findFirst().ifPresent(imp->{
+                    List<QqchOrganizationList> oldChildren = old.getChildren();
+                    List<QqchOrganizationList> impChildren = imp.getChildren();
+                    List<QqchOrganizationList> nChildren = new ArrayList<>();
+                    for (QqchOrganizationList oldChild : oldChildren) {
+                        nChildren = impChildren.stream().filter(i -> !i.getOrganization().equals(oldChild.getOrganization())).collect(Collectors.toList());
+                    }
+                    oldChildren.addAll(nChildren);
+                    TreeSet<QqchOrganizationList> distinctList = oldChildren.stream().collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(QqchOrganizationList::getOrganization))));
+                    old.setChildren(new ArrayList<>(distinctList));
+                });
+            });
+            
+        }
+        
+        
+
+
+        return oldDataList;
     }
 
     private void checkData(List<QqchOrganizationList> dataList) {

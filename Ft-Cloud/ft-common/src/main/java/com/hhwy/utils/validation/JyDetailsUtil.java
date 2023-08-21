@@ -16,12 +16,14 @@ import java.util.function.Function;
  */
 @Slf4j
 public class JyDetailsUtil {
+
     /**
      * 单层子表校验
+     *
      * @param detailList 子表对象list
-     * @param groups class对象
+     * @param groups     class对象
      */
-    public static <T> Boolean jyDetails(List<T> detailList,Class<?>... groups) {
+    public static <T> Boolean jyDetails(List<T> detailList, Class<?>... groups) {
         StringBuffer str = new StringBuffer("");
         for (T t : detailList) {
             BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
@@ -41,11 +43,12 @@ public class JyDetailsUtil {
 
     /**
      * 双层子表校验
+     *
      * @param detailList 子表对象list
-     * @param key 第二层子表集合get方法
-     * @param groups class对象
+     * @param key        第二层子表集合get方法
+     * @param groups     class对象
      */
-    public static <T,E> Boolean jyDetailsDetails(List<T> detailList,String key, Class<?>... groups){
+    public static <T, E> Boolean jyDetailsDetails(List<T> detailList, String key, Class<?>... groups) {
         StringBuffer str = new StringBuffer("");
         StringBuffer strDetails = new StringBuffer("");
         for (T t : detailList) {
@@ -79,7 +82,8 @@ public class JyDetailsUtil {
                 for (E e : detailsDetailsList) {
                     BeanValidationResult beanValidationResultDetails = ValidationUtil.warpValidate(e, groups);
                     if (!beanValidationResultDetails.isSuccess()) {
-                        List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResultDetails.getErrorMessages();
+                        List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResultDetails
+                            .getErrorMessages();
                         for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
                             strDetails = strDetails.append(errorMessage.getMessage() + ",");
                         }
@@ -101,17 +105,48 @@ public class JyDetailsUtil {
 
     /**
      * 树列表平铺后只校验叶子节点数据
+     *
      * @param detailList
-     * @param getLeaf 如何获取叶子节点
+     * @param getLeaf    如何获取叶子节点
      * @param groups
-     * @return
      * @param <T>
+     * @return
      */
-    public static <T> Boolean jyDetails(List<T> detailList, Function<T, String> getLeaf,Class<?>... groups) {
+    public static <T> Boolean jyDetails(List<T> detailList, Function<T, String> getLeaf, Class<?>... groups) {
         StringBuilder str = new StringBuilder();
         for (T t : detailList) {
             String leaf = getLeaf.apply(t);
-            if(CommonYesNo.YES.equals(leaf)){
+            if (CommonYesNo.YES.equals(leaf)) {
+                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
+                if (!beanValidationResult.isSuccess()) {
+                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
+                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
+                        str.append(errorMessage.getMessage()).append(",");
+                    }
+                }
+            }
+        }
+        if (!"".contentEquals(str)) {
+            log.error(str.toString());
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, str.toString());
+        }
+        return true;
+    }
+
+    /**
+     * 树列表平铺后只校验叶子节点数据
+     *
+     * @param detailList
+     * @param getPid     如何获取根节点
+     * @param groups
+     * @param <T>
+     * @return
+     */
+    public static <T> Boolean jyRootDetails(List<T> detailList, Function<T, Long> getPid, Class<?>... groups) {
+        StringBuilder str = new StringBuilder();
+        for (T t : detailList) {
+            Long pid = getPid.apply(t);
+            if (pid != null) {
                 BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
                 if (!beanValidationResult.isSuccess()) {
                     List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();

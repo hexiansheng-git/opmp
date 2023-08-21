@@ -1,16 +1,17 @@
 package com.hhwy.pm.common.download;
 
+import com.alibaba.cloud.commons.io.IOUtils;
 import com.hhwy.utils.excelUtil.DownTemplate;
-import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
+import java.io.InputStream;
+import java.io.OutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 
 /**
@@ -34,26 +35,20 @@ public class DownloadTemplateController {
     @GetMapping("/downloadTemplate")
     public void downloadTemplate(@RequestParam(value = "fileName") String fileName, HttpServletResponse response)
         throws Exception {
-
         // 读取文件流（可从jar包取）
-        InputStream inStream = this.getClass().getClassLoader().getResourceAsStream("template/" + fileName);
-        Map<String, Object> map = new HashMap<>();
-        ExcelUtilByTemplate.exportExcel(response, new ArrayList<>(), map, "", inStream);
+        InputStream inStream = this.getClass().getClassLoader()
+            .getResourceAsStream("template/" + fileName);
+        OutputStream outputStream = response.getOutputStream();
 
-        //        if(inStream == null){
-//            throw new RuntimeException("找不到指定文件!");
-//        }
-//        OutputStream outputStream = response.getOutputStream();
-//
-//        // 设置输出的格式
-//        response.reset();
-//        response.setContentType("bin");
-//        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
-//
-//        IOUtils.copy(inStream, outputStream, 100);
-//        outputStream.flush();
-//        inStream.close();
-//        outputStream.close();
+        // 设置输出的格式
+        response.reset();
+        response.setContentType("bin");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+        IOUtils.copy(inStream, outputStream, 100);
+        outputStream.flush();
+        inStream.close();
+        outputStream.close();
     }
 
     /**

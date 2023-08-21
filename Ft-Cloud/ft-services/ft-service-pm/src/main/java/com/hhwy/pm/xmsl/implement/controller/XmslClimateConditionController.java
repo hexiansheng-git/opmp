@@ -1,14 +1,15 @@
 package com.hhwy.pm.xmsl.implement.controller;
 
+import com.alibaba.excel.EasyExcel;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.listener.ClimateConditionListener;
 import com.hhwy.pm.xmsl.implement.domain.XmslClimateCondition;
 import com.hhwy.pm.xmsl.implement.service.IXmslClimateConditionService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -62,11 +63,17 @@ public class XmslClimateConditionController extends BaseController {
      */
     @PostMapping("/importExcel")
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        ExcelUtils<XmslClimateCondition> util = new ExcelUtils<>(XmslClimateCondition.class);
         try {
-            InputStream inputStream = file.getInputStream();
-            List<XmslClimateCondition> list = util.importExcel(inputStream);
-            return AjaxResult.success(list);
+            ClimateConditionListener readListener = new ClimateConditionListener();
+            try {
+                // 两行表头
+                EasyExcel.read(file.getInputStream(), XmslClimateCondition.class, readListener).headRowNumber(2)
+                    .sheet(0).doRead();
+                List<XmslClimateCondition> list = readListener.getList();
+                return AjaxResult.success(list);
+            } catch (IOException e) {
+                return AjaxResult.error();
+            }
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }

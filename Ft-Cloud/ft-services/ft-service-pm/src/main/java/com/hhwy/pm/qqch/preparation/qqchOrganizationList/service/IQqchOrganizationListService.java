@@ -36,5 +36,10 @@ public interface IQqchOrganizationListService {
     int insertQqchOrganizationListVo(QqchOrganizationListVo qqchOrganizationListVo);
 
 
-
+    /**
+     * @param qqchImportants 
+     * @param qqchOrganizationLists
+     * @return
+     */
+    List<QqchOrganizationList> mergeData(List<QqchOrganizationList> qqchImportants, List<QqchOrganizationList> qqchOrganizationLists);
 }

@@ -2,12 +2,12 @@ package com.hhwy.pm.qqch.preparation.doc.dwg.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.doc.dwg.domain.QqchDocDwgVo;
-import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTech;
-import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTechVo;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -143,6 +143,7 @@ public class QqchDocDwgServiceImpl implements IQqchDocDwgService{
         }
         String finalValid = valid;
 
+        AtomicInteger sort = new AtomicInteger(0);
         dataList.stream().forEach(item->{
             item.setId(IdWorker.createId());
             item.setVersion(qqchDocDwgVo.getVersion());
@@ -150,6 +151,7 @@ public class QqchDocDwgServiceImpl implements IQqchDocDwgService{
             item.setCreateUser(SecurityUtils.getSysUser().getUserId()+"");
             item.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             item.setCreateTime(DateUtils.getNowDate());
+            item.setSort(sort.getAndIncrement());
         });
         //先删除旧的 再添加新的
         QqchDocDwg temp = new QqchDocDwg();

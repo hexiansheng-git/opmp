@@ -76,9 +76,10 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
                     qqchWorkPlaningArrange.setValid(valid);
                     qqchWorkPlaningArrange.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlaningArrangeVo.getVersion());
                 }
-            }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
             }
+//            else{
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
+//            }
         }else if("1".equals(qqchWorkPlaningArrangeVo.getButtonMark())){//确认
             //确认
             //新增一条确认记录
@@ -93,9 +94,10 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
                 }
                 qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlaningArrangeVo.getMenuId(),qqchWorkPlaningArrangeVo.getStageIdentity());
                 qqchReviewService.updateFinishNum(qqchWorkPlaningArrangeVo.getStageIdentity(),qqchWorkPlaningArrangeVo.getMenuId());
-            }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
             }
+//            else{
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
+//            }
         }else if("2".equals(qqchWorkPlaningArrangeVo.getButtonMark())){//提交
             qqchWorkPlaningArrangeList = qqchWorkPlaningArrangeVo.getDataList();
             if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
@@ -106,9 +108,10 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
                     qqchWorkPlaningArrange.setValid("0");
                     qqchWorkPlaningArrange.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlaningArrangeVo.getVersion());
                 }
-            }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
             }
+//            else{
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"便道部署不可为空");
+//            }
         }else{
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
         }
@@ -116,7 +119,9 @@ public class QqchWorkPlaningArrangeServiceImpl implements IQqchWorkPlaningArrang
         QqchWorkPlaningArrange temp = new QqchWorkPlaningArrange();
         temp.setVersion(qqchWorkPlaningArrangeVo.getVersion());
         qqchWorkPlaningArrangeMapper.deleteQqchWorkPlaningArrange(temp);
-        qqchWorkPlaningArrangeMapper.insertQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeList);
+        if(!ObjectNullUtil.isEmpty(qqchWorkPlaningArrangeList)){
+            qqchWorkPlaningArrangeMapper.insertQqchWorkPlaningArrangeList(qqchWorkPlaningArrangeList);
+        }
         return 1;
     }
 

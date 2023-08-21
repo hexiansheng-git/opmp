@@ -86,16 +86,15 @@ public class XmslTerrainLandformsController extends BaseController {
     public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
         try {
             TerrainLandformsImportListener readListener = new TerrainLandformsImportListener();
-            List<XmslTerrainLandforms> list;
             try {
                 // 两行表头
                 EasyExcel.read(file.getInputStream(), XmslTerrainLandforms.class, readListener).headRowNumber(2)
                     .sheet(0).doRead();
-                list = readListener.getList();
+                List<XmslTerrainLandforms> list = readListener.getList();
+                return AjaxResult.success(list);
             } catch (IOException e) {
                 return AjaxResult.error();
             }
-            return AjaxResult.success(list);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }

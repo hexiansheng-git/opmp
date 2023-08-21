@@ -53,11 +53,15 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         // todo 需求未定数据来源
         BigDecimal projectCostPercentage = BigDecimal.ZERO;
         for (QqchSafeMeasureCostPlan qqchSafeMeasureCostPlan : list) {
-            expectInvestCostTotal = expectInvestCostTotal.add(qqchSafeMeasureCostPlan.getExpectInvestCost() == null ?
-                BigDecimal.ZERO : qqchSafeMeasureCostPlan.getExpectInvestCost());
+            if (qqchSafeMeasureCostPlan.getExpectInvestCost() == null) {
+                qqchSafeMeasureCostPlan.setExpectInvestCost(BigDecimal.ZERO);
+            }
+            expectInvestCostTotal = expectInvestCostTotal.add(qqchSafeMeasureCostPlan.getExpectInvestCost());
+            qqchSafeMeasureCostPlan.setExpectInvestCost(
+                new BigDecimal(String.format("%.2f", qqchSafeMeasureCostPlan.getExpectInvestCost())));
         }
-        vo.setExpectInvestCostTotal(expectInvestCostTotal);
-        vo.setProjectCostPercentage(projectCostPercentage);
+        vo.setExpectInvestCostTotal(new BigDecimal(String.format("%.2f", expectInvestCostTotal)));
+        vo.setProjectCostPercentage(new BigDecimal(String.format("%.2f", projectCostPercentage)));
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);

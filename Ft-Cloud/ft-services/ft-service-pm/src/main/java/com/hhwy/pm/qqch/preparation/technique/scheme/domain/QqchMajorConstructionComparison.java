@@ -107,6 +107,12 @@ public class QqchMajorConstructionComparison extends TreeNode<QqchMajorConstruct
     @Excel(name = "排序")
     private Integer sort;
     /**
+     * 字段描述：是否选择来的数据 1-是 0-否
+     */
+    @JsonProperty
+    @Excel(name = "是否选择来的数据 1-是 0-否")
+    private String isSelect;
+    /**
      * 字段描述：版本
      */
     @JsonProperty

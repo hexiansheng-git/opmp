@@ -69,15 +69,16 @@ public class QqchMonitorDataParamServiceImpl implements IQqchMonitorDataParamSer
         deleteParam.setVersion(voParam.getVersion());
         qqchMonitorDataParamMapper.deleteQqchMonitorDataParam(deleteParam);
 
-        String buttonMark = voParam.getButtonMark();
-        if (!CollectionUtils.isEmpty(voParam.getTreeList())) {
-            // 校验非空
-            if (!ButtonMark.SAVE.equals(buttonMark)) {
-                JyDetailsUtil.jyDetails(voParam.getTreeList(), ValidationGroups.Save.class);
-            }
+        // 树转list
+        List<QqchMonitorDataParam> list = TreeUtil.treeToList(voParam.getTreeList());
 
-            // 树转list
-            List<QqchMonitorDataParam> list = TreeUtil.treeToList(voParam.getTreeList());
+        String buttonMark = voParam.getButtonMark();
+        if (!CollectionUtils.isEmpty(list)) {
+            // 校验非空 根节点不校验
+            if (!ButtonMark.SAVE.equals(buttonMark)) {
+                JyDetailsUtil
+                    .jyRootDetails(list, QqchMonitorDataParam::getPid, ValidationGroups.Save.class);
+            }
 
             for (QqchMonitorDataParam qqchMonitorDataParam : list) {
                 qqchMonitorDataParam.setVersion(voParam.getVersion());

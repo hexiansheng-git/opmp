@@ -1,10 +1,10 @@
 package com.hhwy.pm.xmsl.implement.domain;
 
+import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;
 import lombok.Data;
@@ -29,37 +29,37 @@ public class XmslClimateCondition extends BaseEntity {
      * 字段描述：旱季-周期
      */
     @JsonProperty
-    @Excel(name = "旱季-周期")
+    @ExcelProperty(value = "周期", index = 0)
     private String dryCycle;
     /**
      * 字段描述：旱季气温
      */
     @JsonProperty
-    @Excel(name = "旱季气温")
+    @ExcelProperty(value = "气温", index = 1)
     private String dryTemperature;
     /**
      * 字段描述：旱季-月均降雨量（mm）
      */
     @JsonProperty
-    @Excel(name = "旱季-月均降雨量（mm）")
+    @ExcelProperty(value = "月均降雨量（mm）", index = 2)
     private String dryMonthAverageRainfall;
     /**
      * 字段描述：雨季-周期
      */
     @JsonProperty
-    @Excel(name = "雨季-周期")
+    @ExcelProperty(value = "周期", index = 3)
     private String rainyCycle;
     /**
      * 字段描述：雨季-气温
      */
     @JsonProperty
-    @Excel(name = "雨季-气温")
+    @ExcelProperty(value = "气温", index = 4)
     private String rainyTemperature;
     /**
      * 字段描述：雨季-月均降雨量（mm）
      */
     @JsonProperty
-    @Excel(name = "雨季-月均降雨量（mm）")
+    @ExcelProperty(value = "月均降雨量（mm）", index = 5)
     private String rainyMonthAverageRainfall;
     /**
      * 字段描述：附件组id

@@ -30,7 +30,6 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：方案编号
      */
     @JsonProperty
-    @Excel(name = "方案编号")
     private String schemeCode;
     /**
      * 字段描述：方案名称

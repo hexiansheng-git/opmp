@@ -20,6 +20,7 @@
     <result property="convenienceCompare" column="convenience_compare"/>
     <result property="selectScheme" column="select_scheme"/>
     <result property="sort" column="sort"/>
+    <result property="isSelect" column="is_select"/>
     <result property="version" column="version"/>
     <result property="valid" column="valid"/>
     <result property="remark" column="remark"/>
@@ -58,6 +59,7 @@
       ,`convenience_compare`
       ,`select_scheme`
       ,`sort`
+      ,`is_select`
       ,`version`
       ,`valid`
       ,`remark`
@@ -103,6 +105,7 @@
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
       <if test="sort != null">and `sort` = #{sort}</if>
+      <if test="isSelect != null  and isSelect != ''">and `is_select` = #{isSelect}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -150,6 +153,7 @@
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
       <if test="sort != null">and `sort` = #{sort}</if>
+      <if test="isSelect != null  and isSelect != ''">and `is_select` = #{isSelect}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
@@ -192,6 +196,7 @@
       <if test="convenienceCompare != null  and convenienceCompare != ''">`convenience_compare`,</if>
       <if test="selectScheme != null  and selectScheme != ''">`select_scheme`,</if>
       <if test="sort != null">`sort`,</if>
+      <if test="isSelect != null  and isSelect != ''">`is_select`,</if>
       <if test="version != null ">`version`,</if>
       <if test="valid != null  and valid != ''">`valid`,</if>
       <if test="remark != null  and remark != ''">`remark`,</if>
@@ -229,6 +234,7 @@
       <if test="convenienceCompare != null  and convenienceCompare != ''">#{convenienceCompare},</if>
       <if test="selectScheme != null  and selectScheme != ''">#{selectScheme},</if>
       <if test="sort != null">#{sort},</if>
+      <if test="isSelect != null  and isSelect != ''">#{isSelect},</if>
       <if test="version != null ">#{version},</if>
       <if test="valid != null  and valid != ''">#{valid},</if>
       <if test="remark != null  and remark != ''">#{remark},</if>
@@ -271,6 +277,7 @@
       `convenience_compare`,
       `select_scheme`,
       `sort`,
+      `is_select`,
       `version`,
       `valid`,
       `remark`,
@@ -309,6 +316,7 @@
         #{item.convenienceCompare},
         #{item.selectScheme},
         #{item.sort},
+        #{item.isSelect},
         #{item.version},
         #{item.valid},
         #{item.remark},
@@ -354,6 +362,7 @@
       </if>
       <if test="selectScheme != null  and  selectScheme != ''">`select_scheme` = #{selectScheme},</if>
       <if test="sort != null">`sort` = #{sort},</if>
+      <if test="isSelect != null  and  isSelect != ''">`is_select` = #{isSelect},</if>
       <if test="version != null ">`version` = #{version},</if>
       <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
       <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
@@ -452,6 +461,11 @@
       <trim prefix="sort  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.sort}
+        </foreach>
+      </trim>
+      <trim prefix="is_select  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.isSelect}
         </foreach>
       </trim>
       <trim prefix="version  = case" suffix="end,">
@@ -587,6 +601,7 @@
       </if>
       <if test="selectScheme != null  and selectScheme != ''">and `select_scheme` = #{selectScheme}</if>
       <if test="sort != null">and `sort` = #{sort}</if>
+      <if test="isSelect != null  and isSelect != ''">and `is_select` = #{isSelect}</if>
       <if test="version != null ">and `version` = #{version}</if>
       <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
       <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>

@@ -1,10 +1,13 @@
 package com.hhwy.pm.qqch.common.domain;
 
+import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.myEnum.InitVersionConstant;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -12,7 +15,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -24,11 +26,15 @@ import java.util.List;
 @Data
 @ToString
 public class CompileEntity<T> extends TreeNode<T> {
+    
+    private static RedisUtils redisUtils;
+    static {
+        redisUtils = SpringUtils.getBean(RedisUtils.class);
+    }
 
     /**
      * 版本号
      */
-    @NotNull(message = "版本不能为空！", groups = ValidationGroups.Save.class)
     private BigDecimal version;
     /**
      * 有效状态
@@ -50,11 +56,22 @@ public class CompileEntity<T> extends TreeNode<T> {
     @NotBlank(message = "模块唯一标识不能为空！", groups = ValidationGroups.Save.class)
     private String moduleIdentity;
 
-    private T dto;
+   
     
     private String dataType;
 
-    
+    /**
+     * 请求id 
+     */
+    private String reqId;
+
+    private T dto;
+
+
+    // 每次实例化的时候  就进行初始化请求id
+    {
+        reqId = reqId == null ? UUIDUtils.getUuid() : reqId;
+    }
     
     
     public static <T> T dealListDto(BigDecimal version, T dto) {
@@ -65,6 +82,23 @@ public class CompileEntity<T> extends TreeNode<T> {
     }
 
 
+
+
+    public static <T> T dealSaveDto(CompileEntity param, T dto) {
+        CompileEntity<T> tCompileDTO = new CompileEntity<>();
+        tCompileDTO.setVersion(param.getVersion());
+        tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setModuleIdentity(param.getModuleIdentity());
+        tCompileDTO.setReqId(param.getReqId());
+        tCompileDTO.setStageIdentity(param.getStageIdentity());
+        tCompileDTO.setDataType(param.getDataType());
+        tCompileDTO.setDto(dto);
+        return tCompileDTO.dealSaveDto();
+    }
+
+    
+    
+
     public T dealListDto() {
         if (dto instanceof CompileEntity) {
             CompileEntity compileEntity = (CompileEntity) dto;
@@ -74,35 +108,14 @@ public class CompileEntity<T> extends TreeNode<T> {
         return dto;
     }
 
-
-    public static <T> T dealSaveDto(BigDecimal version, String submitFlag, String menuId, T dto) {
-        CompileEntity<T> tCompileDTO = new CompileEntity<>();
-        tCompileDTO.setVersion(version);
-        tCompileDTO.setSubmitFlag(submitFlag);
-        tCompileDTO.setDto(dto);
-        tCompileDTO.setModuleIdentity(menuId);
-        return tCompileDTO.dealSaveDto();
-    }
-
-    public static <T> T dealSaveDto(BigDecimal version, String submitFlag, String menuId, String dataType,T dto) {
-        CompileEntity<T> tCompileDTO = new CompileEntity<>();
-        tCompileDTO.setVersion(version);
-        tCompileDTO.setSubmitFlag(submitFlag);
-        tCompileDTO.setDto(dto);
-        tCompileDTO.setModuleIdentity(menuId);
-        tCompileDTO.setDataType(dataType);
-        return tCompileDTO.dealSaveDto();
-    }
-
     public T dealSaveDto() {
+        if (StringUtils.isEmpty(reqId)){
+            reqId = UUIDUtils.getUuid();
+        }
         if (dto instanceof CompileEntity) {
             CompileEntity compileEntity = (CompileEntity) dto;
             EntityUtils.setCreateUpdateInfo(compileEntity);
-            compileEntity.setSubmitFlag(submitFlag);
-            compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
-            compileEntity.setModuleIdentity(this.moduleIdentity);
-            compileEntity.setDataType(dataType);
-            if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(compileEntity);
+            setBaseInfo(compileEntity);
             return (T) compileEntity;
         }
 
@@ -114,12 +127,7 @@ public class CompileEntity<T> extends TreeNode<T> {
             compileEntities = TreeUtil.treeToListWithLevel(compileEntities);
             EntityUtils.setCreateUpdateInfo(compileEntities);
             for (CompileEntity o : compileEntities) {
-                o.setSubmitFlag(submitFlag);
-                o.setVersion(version);
-                o.setModuleIdentity(moduleIdentity);
-                o.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
-                o.setDataType(dataType);
-                if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(o);
+               setBaseInfo(o);
             }
             return (T) compileEntities;
         }
@@ -134,6 +142,18 @@ public class CompileEntity<T> extends TreeNode<T> {
             return (T) list;
         }
         return dto;
+    }
+    
+    
+    private void setBaseInfo(CompileEntity compileEntity){
+        
+        compileEntity.setSubmitFlag(submitFlag);
+        compileEntity.setModuleIdentity(moduleIdentity);
+        compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
+        compileEntity.setDataType(dataType);
+        compileEntity.setReqId(reqId);
+        compileEntity.setStageIdentity(stageIdentity);
+        if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(compileEntity);
     }
 
 
