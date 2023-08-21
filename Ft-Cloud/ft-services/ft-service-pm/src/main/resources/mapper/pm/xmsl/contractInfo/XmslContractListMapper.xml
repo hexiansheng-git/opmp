@@ -1091,4 +1091,15 @@
             #{item.id}
         </foreach>
     </update>
+
+    <select id="getContractPriceByListtype" resultMap="XmslContractListResultMap">
+        <include refid="selectXmslContractListVo"/>
+            <where>
+                    del_flag = "0"
+                    and pid not in (select id from xmsl_contract_list)
+                    and win_num IS NOT NULL
+                    and win_unit_price is not null
+                    and list_type = #{listType}
+            </where>
+    </select>
 </mapper>
