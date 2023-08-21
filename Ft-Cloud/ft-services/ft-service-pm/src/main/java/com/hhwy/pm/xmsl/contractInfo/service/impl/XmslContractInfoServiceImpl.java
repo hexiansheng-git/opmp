@@ -83,6 +83,10 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //项目规模
         contractInfo.setProjectScale(projectInfo.getProjectScale());
         contractInfo.setContractPrice(projectInfo.getContractPrice());
+        //编制日期
+        contractInfo.setOperateTime(projectInfo.getEstablishDate());
+        //编制人
+        contractInfo.setOperateUserName(projectInfo.getEstablishPersonnel());
 
         contractInfo.setVersion(BigDecimal.valueOf(1.0));
         contractInfo.setId(IdWorker.createId());
@@ -148,6 +152,19 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
                 xmslContractInfo1.setIsShowRecord(0);
             }else {
                 xmslContractInfo1.setIsShowRecord(1);
+            }
+
+            //查询主合同清单 金额
+            XmslContractList xmslContractList = new XmslContractList();
+            xmslContractList.setListType("1");
+            XmslContractList resultPrice = xmslContractListService.getContractPriceByListtype(xmslContractList);
+            if (resultPrice != null) {
+                //合同不含税金额   “主合同清单”页签变更后清单_不含税金额，末级合计
+                // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
+                xmslContractInfo1.setExcludingAmout(resultPrice.getWinNum());
+                //有效合同金额  主合同清单，清单类型是普通清单的所有末级节点的含税金额的合计
+                // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
+                xmslContractInfo1.setEffectiveAmout(resultPrice.getWinUnitPrice());
             }
         }
         return xmslContractInfo1;
