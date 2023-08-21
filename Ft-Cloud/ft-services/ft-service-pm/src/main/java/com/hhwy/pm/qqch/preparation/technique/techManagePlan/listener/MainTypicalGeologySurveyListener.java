@@ -2,22 +2,22 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.listener;
 
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
+import com.hhwy.pm.xmsl.implement.domain.XmslMainTypicalGeologySurvey;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
 
 /**
  * @author : zhenglili
- * @date : 2023/8/18
+ * @date : 2023/8/21
  */
 @Data
-public class TerrainLandformsImportListener extends AnalysisEventListener<XmslTerrainLandforms> {
+public class MainTypicalGeologySurveyListener extends AnalysisEventListener<XmslMainTypicalGeologySurvey> {
 
-    private List<XmslTerrainLandforms> list = new ArrayList<>();
+    private List<XmslMainTypicalGeologySurvey> list = new ArrayList<>();
 
     @Override
-    public void invoke(XmslTerrainLandforms data, AnalysisContext context) {
+    public void invoke(XmslMainTypicalGeologySurvey data, AnalysisContext context) {
         list.add(data);
     }
 
