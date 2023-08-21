@@ -89,9 +89,10 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
                     qqchWorkPlanningBuildPlan.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningBuildPlanVo.getVersion());
                     qqchWorkPlanningBuildPlan.setValid(valid);
                 }
-            }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
             }
+//            else{
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
+//            }
         }else if("1".equals(qqchWorkPlanningBuildPlanVo.getButtonMark())){//确认
             //确认
             //新增一条确认记录
@@ -109,9 +110,10 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
                 }
                 qqchModuleConfirmCaseService.addConfirmRecord(qqchWorkPlanningBuildPlanVo.getMenuId(),qqchWorkPlanningBuildPlanVo.getStageIdentity());
                 qqchReviewService.updateFinishNum(qqchWorkPlanningBuildPlanVo.getStageIdentity(),qqchWorkPlanningBuildPlanVo.getMenuId());
-            }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
             }
+//            else{
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
+//            }
         }else if("2".equals(qqchWorkPlanningBuildPlanVo.getButtonMark())){////提交
             String valid = "0";
             if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getDataList())){
@@ -124,9 +126,10 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
                     qqchWorkPlanningBuildPlan.setVersion(ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanVo.getVersion()) ? new BigDecimal(InitVersionConstant.INIT_VERSION) : qqchWorkPlanningBuildPlanVo.getVersion());
                     qqchWorkPlanningBuildPlan.setValid(valid);
                 }
-            }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
             }
+//            else{
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"营地场站规划不可为空");
+//            }
         }else{
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
         }
@@ -134,8 +137,9 @@ public class QqchWorkPlanningBuildPlanServiceImpl implements IQqchWorkPlanningBu
         QqchWorkPlanningBuildPlan qqchWorkPlanningBuildPlan = new QqchWorkPlanningBuildPlan();
         qqchWorkPlanningBuildPlan.setVersion(qqchWorkPlanningBuildPlanVo.getVersion());
         qqchWorkPlanningBuildPlanMapper.deleteQqchWorkPlanningBuildPlan(qqchWorkPlanningBuildPlan);
-        qqchWorkPlanningBuildPlanMapper.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanList);
-
+        if(!ObjectNullUtil.isEmpty(qqchWorkPlanningBuildPlanList)){
+            qqchWorkPlanningBuildPlanMapper.insertQqchWorkPlanningBuildPlanList(qqchWorkPlanningBuildPlanList);
+        }
         return 1;
     }
 
