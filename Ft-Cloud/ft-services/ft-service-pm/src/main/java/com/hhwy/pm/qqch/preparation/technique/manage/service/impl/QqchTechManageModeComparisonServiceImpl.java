@@ -5,6 +5,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.common.defaultData.service.IQqchDefaultDataInitializeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -40,6 +41,8 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
     private IQqchReviewService qqchReviewService;
     @Autowired
     private SystemServiceApi systemServiceApi;
+    @Autowired
+    private IQqchDefaultDataInitializeService qqchDefaultDataInitializeService;
 
     public QqchTechManageModeComparisonVo getQqchTechManageModeComparisonList(BigDecimal version) {
         QqchTechManageModeComparisonVo vo = new QqchTechManageModeComparisonVo();
@@ -51,9 +54,13 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         List<QqchTechManageModeComparison> list = qqchTechManageModeComparisonMapper
             .getQqchTechManageModeComparisonList(qryParam);
 
-        // 若表中无数据，则获取初始化数据
         if (CollectionUtils.isEmpty(list)) {
-            list = this.getInitializeData();
+            // 判断是否已经初始化过
+            boolean initialize = qqchDefaultDataInitializeService
+                .interpretInitializeStatus("qqch_tech_manage_mode_comparison", version);
+            if (!initialize) {
+                list = this.getInitializeData();
+            }
             vo.setList(list);
         }
 
