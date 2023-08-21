@@ -107,9 +107,7 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
 
         BigDecimal version = vo.getVersion();
         List<QqchSpecialBigEquRiskMeasure> riskMeasureList = vo.getList();
-        if(CollectionUtils.isEmpty(riskMeasureList)){
-            return;
-        }else {
+        if(CollectionUtils.isNotEmpty(riskMeasureList)){
             //校验数据必填
             if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
                 JyDetailsUtil.jyDetails(riskMeasureList, ValidationGroups.Save.class);
@@ -132,6 +130,9 @@ public class QqchSpecialBigEquRiskMeasureServiceImpl implements IQqchSpecialBigE
         QqchSpecialBigEquRiskMeasure qqchSpecialBigEquRiskMeasure1 = new QqchSpecialBigEquRiskMeasure();
         qqchSpecialBigEquRiskMeasure1.setVersion(version);
         qqchSpecialBigEquRiskMeasureMapper.deleteQqchSpecialBigEquRiskMeasure(qqchSpecialBigEquRiskMeasure1);
+        if (CollectionUtils.isEmpty(qqchSpecialBigEquRiskMeasureList)) {
+            return 0;
+        }
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
