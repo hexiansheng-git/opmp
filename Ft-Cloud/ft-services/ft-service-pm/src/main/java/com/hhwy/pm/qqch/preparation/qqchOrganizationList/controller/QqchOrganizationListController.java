@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchChangeProcedurePlanVo;
 import com.hhwy.pm.qqch.preparation.workPlanning.domain.QqchWorkPlanningPrjImg;
@@ -71,11 +72,15 @@ public class QqchOrganizationListController extends BaseController{
 
 
     @PostMapping("/importData")
-    public AjaxResult importData(@RequestParam("file") MultipartFile file) {
+    public AjaxResult importData(@RequestParam("file") MultipartFile file,@RequestParam("list") String list) {
         FtExcelUtil<QqchOrganizationList> excelUtil = new FtExcelUtil<>(QqchOrganizationList.class);
         try {
             List<QqchOrganizationList> qqchImportants = excelUtil.importTreeExcel(file.getInputStream());
-            return AjaxResult.success(qqchImportants);
+            List<QqchOrganizationList> qqchOrganizationLists = JSONObject.parseArray(list, QqchOrganizationList.class);
+            List<QqchOrganizationList> res = qqchOrganizationListService.mergeData(qqchImportants, qqchOrganizationLists);
+
+
+            return AjaxResult.success(res);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

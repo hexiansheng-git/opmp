@@ -202,6 +202,35 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         return 1;
     }
 
+    @Override
+    public List<QqchOrganizationList> mergeData(List<QqchOrganizationList> importDataList, List<QqchOrganizationList> oldDataList) {
+        LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
+        Set<String> strings = organizationCat.keySet();
+        
+        for (String string : strings) {
+            // 从老数据中获取数据
+            oldDataList.stream().filter(item->string.equals(item.getOrganization())).findFirst().ifPresent(old->{
+                importDataList.stream().filter(imp->string.equals(imp.getOrganization())).findFirst().ifPresent(imp->{
+                    List<QqchOrganizationList> oldChildren = old.getChildren();
+                    List<QqchOrganizationList> impChildren = imp.getChildren();
+                    List<QqchOrganizationList> nChildren = new ArrayList<>();
+                    for (QqchOrganizationList oldChild : oldChildren) {
+                        nChildren = impChildren.stream().filter(i -> !i.getOrganization().equals(oldChild.getOrganization())).collect(Collectors.toList());
+                    }
+                    oldChildren.addAll(nChildren);
+                    TreeSet<QqchOrganizationList> distinctList = oldChildren.stream().collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(QqchOrganizationList::getOrganization))));
+                    old.setChildren(new ArrayList<>(distinctList));
+                });
+            });
+            
+        }
+        
+        
+
+
+        return oldDataList;
+    }
+
     private void checkData(List<QqchOrganizationList> dataList) {
         LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
         Set<String> strings = organizationCat.keySet();
