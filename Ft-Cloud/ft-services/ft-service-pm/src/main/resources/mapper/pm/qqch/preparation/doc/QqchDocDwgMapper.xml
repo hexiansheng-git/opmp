@@ -26,7 +26,7 @@
         <result property="delUser" column="del_user"/>
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
+        <result property="sort" column="sort"/>
         <result property="ptVar2" column="pt_var2"/>
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
@@ -54,7 +54,7 @@
              , `del_user`
              , `del_time`
              , `del_flag`
-             , `pt_var1`
+             , `sort`
              , `pt_var2`
              , `pt_var3`
              , `pt_var4`
@@ -86,7 +86,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
@@ -120,13 +120,13 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchDocDwg" useGeneratedKeys="true" keyProperty="id">
@@ -153,7 +153,7 @@
             <if test="delUser != null  and delUser != ''">`del_user`,</if>
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="sort != null  and sort != ''">`sort`,</if>
             <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
             <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
@@ -181,7 +181,7 @@
             <if test="delUser != null  and delUser != ''">#{delUser},</if>
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="sort != null  and sort != ''">#{sort},</if>
             <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
             <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
@@ -213,7 +213,7 @@
             `update_time`,
             `del_user`,
             `del_time`,
-            `pt_var1`,
+            `sort`,
             `pt_var2`,
             `pt_var3`,
             `pt_var4`,
@@ -242,7 +242,7 @@
                 #{item.updateTime},
                 #{item.delUser},
                 #{item.delTime},
-                #{item.ptVar1},
+                #{item.sort},
                 #{item.ptVar2},
                 #{item.ptVar3},
                 #{item.ptVar4},
@@ -275,7 +275,7 @@
             <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
@@ -394,9 +394,9 @@
                     when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
-            <trim prefix="pt_var1  = case" suffix="end,">
+            <trim prefix="sort  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar1}
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
@@ -450,7 +450,7 @@
             <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>

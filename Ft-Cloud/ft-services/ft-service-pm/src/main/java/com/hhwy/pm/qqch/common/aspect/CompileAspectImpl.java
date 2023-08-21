@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.common.aspect;
 
 
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -41,6 +42,7 @@ public class CompileAspectImpl {
         commonMapper = SpringUtils.getBean(CommonMapper.class);
         moduleConfirmCaseService = SpringUtils.getBean(IQqchModuleConfirmCaseService.class);
         reviewService = SpringUtils.getBean(IQqchReviewService.class);
+        redisUtils = SpringUtils.getBean(RedisUtils.class);
     }
 
     /**
@@ -66,6 +68,7 @@ public class CompileAspectImpl {
                     beforeList(arg1, tableName);
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
+                    this.addConfirm(arg1);
                     commonMapper.deleteByVersion(tableName, (arg1).getVersion());
                 }
             }
@@ -74,10 +77,12 @@ public class CompileAspectImpl {
                 List list = (List) arg;
                 if (list.get(0) instanceof CompileEntity) {
                     List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
+                    CompileEntity compileEntity = compileEntityList.get(0);
                     if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
-                        commonMapper.deleteByVersion(tableName, compileEntityList.get(0).getVersion());
+                        this.addConfirm(compileEntity);
+                        commonMapper.deleteByVersion(tableName, compileEntity.getVersion());
                     }
-                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntityList.get(0).getSubmitFlag())) {
+                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntity.getSubmitFlag())) {
                         args[i] = Collections.emptyList();
                     }
                 }
@@ -90,6 +95,19 @@ public class CompileAspectImpl {
                 joinPoint.getTarget().getClass().getName() + "." + methodName,
                 sb,
                 Thread.currentThread().getId());
+    }
+
+    /**
+     * 添加确认记录 只有点击确认的时候需要添加确认记录
+     * 
+     * @param compileEntity 
+     */
+    private void addConfirm(CompileEntity compileEntity) {
+        String reqId = compileEntity.getReqId();
+        if (!redisUtils.hasKey(reqId) && "1".equals(compileEntity.getSubmitFlag())) {
+            moduleConfirmCaseService.addConfirmRecord(compileEntity.getModuleIdentity(), compileEntity.getStageIdentity());
+            redisUtils.setEx(reqId, reqId, 60000);
+        }
     }
 
 

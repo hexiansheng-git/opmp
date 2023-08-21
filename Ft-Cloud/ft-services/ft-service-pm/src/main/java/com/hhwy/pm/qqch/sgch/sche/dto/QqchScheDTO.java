@@ -16,11 +16,7 @@ import java.util.Map;
 @ToString
 public class QqchScheDTO extends CompileEntity<QqchScheDTO> implements Serializable {
 
-    private BigDecimal version;
-    /**
-     * 提交状态
-     */
-    private String submitFlag;
+
     /**
      * 说明
      */
@@ -45,14 +41,5 @@ public class QqchScheDTO extends CompileEntity<QqchScheDTO> implements Serializa
      * 纠偏措施
      */
     private List<QqchScheCorr> corrList;
-
-
-    public static void main(String[] args) {
-        JsonUtils.soutJsonStr(QqchScheDiffDesc.class);
-        JsonUtils.soutJsonStr(QqchScheDiff.class);
-        JsonUtils.soutJsonStr(QqchScheAnalyse.class);
-        JsonUtils.soutJsonStr(QqchScheFactors.class);
-        JsonUtils.soutFtJsonStr(QqchScheCorr.class);
-    }
 
 }

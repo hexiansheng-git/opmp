@@ -117,7 +117,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
             for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
                 qqchEmpItem.setId(IdWorker.createId());
                 wbsCodeList.add(qqchEmpItem.getWbsCode());
-                CompileEntity.dealSaveDto(dto.getVersion(), dto.getSubmitFlag(),dto.getModuleIdentity(), qqchEmpItem);
+                CompileEntity.dealSaveDto(dto, qqchEmpItem);
                 EntityUtils.setCreateUpdateInfo(qqchEmpItem);
                 iDatas.add(qqchEmpItem);
             }

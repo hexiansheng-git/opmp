@@ -148,6 +148,7 @@ public class QqchImportant extends CompileEntity<QqchImportant> {
      * 字段描述：备注
      */
     @JsonProperty
+    @FtExcel(name = "备注")
     private String remark;
     /**
      * 字段描述：预留字段1
