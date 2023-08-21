@@ -39,4 +39,7 @@ public interface IXmslContractListService {
     List<XmslContractList> getEffectList(XmslContractList xmslContractListParam);
 
     void handlerAncestors();
+
+
+    XmslContractList getContractPriceByListtype(XmslContractList xmslContractList);
 }
