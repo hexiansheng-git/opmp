@@ -1,8 +1,8 @@
-package com.hhwy.pm.qqch.tax.qqchTaxGlobalFormula.mapper;
+package com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper;
 
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import com.hhwy.pm.qqch.tax.qqchTaxGlobalFormula.domain.QqchTaxGlobalFormula;
+import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 
 /**
  * @author mls

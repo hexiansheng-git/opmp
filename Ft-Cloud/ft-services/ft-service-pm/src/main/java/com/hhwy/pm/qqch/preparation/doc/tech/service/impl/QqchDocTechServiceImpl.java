@@ -81,6 +81,9 @@ public class QqchDocTechServiceImpl implements IQqchDocTechService {
     public int insertQqchDocTechListVo(QqchDocTechVo qqchDocTechVo) {
         List<QqchDocTech> dataList = qqchDocTechVo.getDataList();
         if (ObjectNullUtil.isEmpty(dataList)) {
+            QqchDocTech temp = new QqchDocTech();
+            temp.setVersion(qqchDocTechVo.getVersion());
+            qqchDocTechMapper.deleteQqchDocTech(temp);
             return 1;
         } else {
             //校验数据必填

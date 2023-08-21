@@ -1,7 +1,7 @@
-package com.hhwy.pm.qqch.tax.qqchTaxGlobalFormula.service;
+package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service;
 
 import java.util.List;
-import com.hhwy.pm.qqch.tax.qqchTaxGlobalFormula.domain.QqchTaxGlobalFormula;
+import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 
 /**
  * @author mls

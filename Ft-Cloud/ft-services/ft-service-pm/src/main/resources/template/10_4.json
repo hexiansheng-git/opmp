@@ -1,0 +1,71 @@
+[
+  {
+    "itemName": "现金流入",
+    "children": [
+      {
+        "itemName": "本期预计实收工程款"
+      },
+      {
+        "itemName": "工程质保金返回"
+      },
+      {
+        "itemName": "本期预计实收预付款"
+      },
+      {
+        "itemName": "出售材料款"
+      },
+      {
+        "itemName": "其他收入"
+      },
+      {
+        "itemName": "货币间兑换收入"
+      }
+    ]
+  },
+  {
+    "itemName": "现金流出",
+    "children": [
+      {
+        "itemName": "人员薪资支出"
+      },
+      {
+        "itemName": "材料采购"
+      },
+      {
+        "itemName": "设备采购"
+      },
+      {
+        "itemName": "机械使用支出"
+      },
+      {
+        "itemName": "支付协作队伍款",
+        "children": [
+          {
+            "itemName": "工程款"
+          },
+          {
+            "itemName": "预付款及代垫费"
+          }
+        ]
+      },
+      {
+        "itemName": "关税、清关费、运费"
+      },
+      {
+        "itemName": "税费支出"
+      },
+      {
+        "itemName": "间接费用等现金支出"
+      },
+      {
+        "itemName": "其他支出(押金、保证金、备用金)"
+      },
+      {
+        "itemName": "货币间兑换收入"
+      },
+      {
+        "itemName": "资金余缺"
+      }
+    ]
+  }
+]

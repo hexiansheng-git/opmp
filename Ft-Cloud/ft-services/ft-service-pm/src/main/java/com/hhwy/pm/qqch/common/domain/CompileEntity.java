@@ -102,7 +102,7 @@ public class CompileEntity<T> extends TreeNode<T> {
     public T dealListDto() {
         if (dto instanceof CompileEntity) {
             CompileEntity compileEntity = (CompileEntity) dto;
-            compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
+            compileEntity.setVersion(version);
             return (T) compileEntity;
         }
         return dto;

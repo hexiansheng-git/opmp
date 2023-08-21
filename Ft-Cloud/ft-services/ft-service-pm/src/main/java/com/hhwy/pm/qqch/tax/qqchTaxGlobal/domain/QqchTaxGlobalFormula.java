@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.tax.qqchTaxGlobalFormula.domain;
+package com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import java.util.Date;

@@ -115,6 +115,9 @@ public class QqchDocDwgServiceImpl implements IQqchDocDwgService{
     public int insertQqchDocDwgVo(QqchDocDwgVo qqchDocDwgVo) {
         List<QqchDocDwg> dataList = qqchDocDwgVo.getDataList();
         if (ObjectNullUtil.isEmpty(dataList)) {
+            QqchDocDwg temp = new QqchDocDwg();
+            temp.setVersion(qqchDocDwgVo.getVersion());
+            qqchDocDwgMapper.deleteQqchDocDwg(temp);
             return 1;
         } else {
             //校验数据必填
