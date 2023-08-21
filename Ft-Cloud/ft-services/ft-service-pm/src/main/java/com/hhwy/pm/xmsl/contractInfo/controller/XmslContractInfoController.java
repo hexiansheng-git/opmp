@@ -30,7 +30,7 @@ public class XmslContractInfoController extends BaseController {
     private IXmslContractInfoService xmslContractInfoService;
 
 
-    @PreAuthorize(hasPermi = "xmslContractInfo:list")
+//    @PreAuthorize(hasPermi = "xmslContractInfo:list")
     @GetMapping
     public AjaxResult getXmslContractInfo(@Validated(ValidationGroups.Get.class)  XmslContractInfo xmslContractInfoParam) {
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfoParam);
@@ -54,8 +54,7 @@ public class XmslContractInfoController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractInfo:add")
     @PostMapping("/add")
     public AjaxResult insertXmslContractInfo(@Validated(ValidationGroups.Save.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
-        xmslContractInfoService.insertXmslContractInfo(xmslContractInfoParam);
-        return AjaxResult.success(xmslContractInfoParam);
+        return AjaxResult.success(xmslContractInfoService.insertXmslContractInfo(xmslContractInfoParam));
     }
 
 
@@ -76,7 +75,8 @@ public class XmslContractInfoController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
     @PostMapping("/update")
     public AjaxResult updateXmslContractInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
-        return toAjax(xmslContractInfoService.updateXmslContractInfo(xmslContractInfoParam));
+        xmslContractInfoService.updateXmslContractInfo(xmslContractInfoParam);
+        return AjaxResult.success(xmslContractInfoParam.getId());
     }
 
 

@@ -27,7 +27,7 @@ public interface IXmslContractInfoService {
      * @param xmslContractInfo
      * @return
      */
-    int insertXmslContractInfo(XmslContractInfo xmslContractInfo);
+    Long insertXmslContractInfo(XmslContractInfo xmslContractInfo);
 
     int insertXmslContractInfoList(List<XmslContractInfo> xmslContractInfoList);
 

@@ -84,8 +84,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setProjectScale(projectInfo.getProjectScale());
         contractInfo.setContractPrice(projectInfo.getContractPrice());
 
+        contractInfo.setVersion(BigDecimal.valueOf(1.0));
         contractInfo.setId(IdWorker.createId());
-        contractInfo.setCreateUser(SecurityUtils.getUserName());
+//        contractInfo.setCreateUser(SecurityUtils.getUserName());
         contractInfo.setCreateTime(DateUtils.getNowDate());
         xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
 
@@ -113,6 +114,13 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         xmslContractInfo.setVersion(maxVersion);
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+
+        //如果为空,说明第一次进入，从项目信息中拉取项目数据
+        if (xmslContractInfo1 == null) {
+            getProjectInfo();
+            xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+        }
+        //查询字表数据
         if(xmslContractInfo1!=null){
             //1.1投保险种
             XmslContractInsure xmslContractInsure = new XmslContractInsure();
@@ -156,7 +164,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @return
      */
     @Transactional
-    public int insertXmslContractInfo(XmslContractInfo xmslContractInfo) {
+    public Long insertXmslContractInfo(XmslContractInfo xmslContractInfo) {
         //删除旧数据
         XmslContractInfo info = new XmslContractInfo();
         info.setVersion(xmslContractInfo.getVersion());
@@ -180,7 +188,8 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         this.addSonTable(xmslContractInfo);
         xmslContractInfo.setCreateUser(SecurityUtils.getUserName());
         xmslContractInfo.setCreateTime(DateUtils.getNowDate());
-        return xmslContractInfoMapper.insertXmslContractInfo(xmslContractInfo);
+        xmslContractInfoMapper.insertXmslContractInfo(xmslContractInfo);
+        return xmslContractInfo.getId();
     }
 
     @Transactional
