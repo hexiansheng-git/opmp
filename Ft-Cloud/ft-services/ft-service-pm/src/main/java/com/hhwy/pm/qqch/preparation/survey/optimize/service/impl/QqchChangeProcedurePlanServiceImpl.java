@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.common.defaultData.service.IQqchDefaultDataInitializeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -52,19 +53,27 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
     @Autowired
     private IQqchReviewService qqchReviewService;
 
+    @Autowired
+    private IQqchDefaultDataInitializeService qqchDefaultDataInitializeService;
+
 
     /**
      * 获取变更程序策划
      * @return
      * @param version
      */
+    @Transactional
     public QqchChangeProcedurePlanVo getQqchChangeProcedurePlanVo(BigDecimal version) {
         QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = new QqchChangeProcedurePlanVo();
 
         version = VersionUtil.getVersion("qqch_change_procedure_plan",version);
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanMapper.getQqchChangeProcedurePlanList(version);
         if(CollectionUtils.isEmpty(qqchChangeProcedurePlanList)){
-            qqchChangeProcedurePlanList = this.getInitializeData();
+            //判断是否已经初始化过
+            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
+            if(!initialize){
+                qqchChangeProcedurePlanList = this.getInitializeData();
+            }
         }
 
         //获取附件组id（页面标识和版本号控制）

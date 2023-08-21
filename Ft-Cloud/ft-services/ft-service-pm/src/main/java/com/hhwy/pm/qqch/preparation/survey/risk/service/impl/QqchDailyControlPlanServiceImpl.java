@@ -5,7 +5,9 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.common.defaultData.service.IQqchDefaultDataInitializeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchDailyControlPlan;
@@ -47,6 +49,9 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
     @Autowired
     private IQqchReviewService qqchReviewService;
 
+    @Autowired
+    private IQqchDefaultDataInitializeService qqchDefaultDataInitializeService;
+
 
     /**
      * 获取日常管控策划Vo
@@ -61,7 +66,11 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
         qqchDailyControlPlan.setVersion(version);
         List<QqchDailyControlPlan> qqchDailyControlPlanList = qqchDailyControlPlanMapper.getQqchDailyControlPlanList(qqchDailyControlPlan);
         if(CollectionUtils.isEmpty(qqchDailyControlPlanList)){
-            qqchDailyControlPlanList = this.getInitializeData();
+            //判断是否已经初始化过
+            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
+            if(!initialize){
+                qqchDailyControlPlanList = this.getInitializeData();
+            }
         }
 
         qqchDailyControlPlanVo.setVersion(version);

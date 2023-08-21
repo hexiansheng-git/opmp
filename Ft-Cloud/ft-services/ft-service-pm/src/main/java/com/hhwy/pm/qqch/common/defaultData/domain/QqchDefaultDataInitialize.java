@@ -1,4 +1,4 @@
-package com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.domain;
+package com.hhwy.pm.qqch.common.defaultData.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -11,77 +11,38 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author han
- * @date 2023-08-03 13:39:59
- * @remark qqch_project_break_even_point
+ * @date 2023-08-21 10:02:06
+ * @remark 默认数据初始化状态
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QqchProjectBreakEvenPoint extends BaseEntity {
+public class QqchDefaultDataInitialize extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
+    @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：父id
+     * 字段描述：模块标识
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "模块标识")
+    private String moduleIdentity;
     /**
-     * 字段描述：主要事项
+     * 字段描述：初始化状态（1：已初始化，0：未初始化）
      */
     @JsonProperty
-    @Excel(name = "主要事项")
-    private String majorItem;
-    /**
-     * 字段描述：内容说明
-     */
-    @JsonProperty
-    @Excel(name = "内容说明")
-    private String contentExplain;
-    /**
-     * 字段描述：影响因素
-     */
-    @JsonProperty
-    @Excel(name = "影响因素")
-    private String influenceFactor;
-    /**
-     * 字段描述：应对措施
-     */
-    @JsonProperty
-    @Excel(name = "应对措施")
-    private String solutions;
-    /**
-     * 字段描述：备注/描述
-     */
-    @JsonProperty
-    @Excel(name = "备注/描述")
-    private String remark;
-    /**
-     * 字段描述：叶子节点（1：是，0：否）
-     */
-    @JsonProperty
-    @Excel(name = "叶子节点（1：是，0：否）")
-    private String leaf;
-    /**
-     * 字段描述：排序
-     */
-    @JsonProperty
-    @Excel(name = "排序")
-    private Integer sort;
+    @Excel(name = "初始化状态（1：已初始化，0：未初始化）")
+    private String initializeStatus;
     /**
      * 字段描述：版本
      */
@@ -208,9 +169,4 @@ public class QqchProjectBreakEvenPoint extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
-    /**
-     * 字段描述：子集
-     */
-    private List<QqchProjectBreakEvenPoint> children = new ArrayList<>();
 }

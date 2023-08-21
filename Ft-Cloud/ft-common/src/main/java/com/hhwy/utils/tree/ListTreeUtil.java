@@ -14,6 +14,42 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class ListTreeUtil {
+
+    /**
+     * 导出维护序号
+     * @param source
+     * @param checkRoot
+     * @param checkParent
+     * @param getChildren
+     * @param setChildren
+     * @param getSerialNumber
+     * @param setSerialNumber
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> preserveSerialNumber(List<T> source, Predicate<T> checkRoot, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren, Function<T, String> getSerialNumber, BiConsumer<T,String> setSerialNumber) {
+        List<T> ts = formatTree(source, checkRoot, checkParent, getChildren, setChildren);
+        int serialNum = 1;
+        for (T t : ts) {
+            setSerialNumber.accept(t,String.valueOf(serialNum++));
+            setSerialNumber(t,getSerialNumber,setSerialNumber,getChildren);
+        }
+        return formatList(ts,getChildren,setChildren);
+    }
+
+    private static <T> void setSerialNumber(T t, Function<T, String> getSerialNumber, BiConsumer<T,String> setSerialNumber, Function<T, List<T>> getChildren){
+        int serialNum = 1;
+        String parentSerialNum = getSerialNumber.apply(t);
+        List<T> children = getChildren.apply(t);
+        if(!CollectionUtils.isEmpty(children)) {
+            for (T child : children) {
+                String serial = parentSerialNum + "." + serialNum;
+                serialNum++;
+                setSerialNumber.accept(child,serial);
+            }
+        }
+    }
+
     /**
      * 线性列表转树形列表
      *

@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.common.defaultData.service.IQqchDefaultDataInitializeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -52,6 +53,9 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
     @Autowired
     private IQqchReviewService qqchReviewService;
 
+    @Autowired
+    private IQqchDefaultDataInitializeService qqchDefaultDataInitializeService;
+
 
     /**
      * 获取优化程序策划集合
@@ -66,7 +70,11 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
         List<QqchOptimizeProcedurePlan> qqchOptimizeProcedurePlanList = qqchOptimizeProcedurePlanMapper.getQqchOptimizeProcedurePlanList(version);
         if(CollectionUtils.isEmpty(qqchOptimizeProcedurePlanList)){
             //数据库中没有数据，需要初始化
-            qqchOptimizeProcedurePlanList = this.getInitializeData();
+            //判断是否已经初始化过
+            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
+            if(!initialize){
+                qqchOptimizeProcedurePlanList = this.getInitializeData();
+            }
         }
 
         //获取附件组id（页面标识和版本号控制）
