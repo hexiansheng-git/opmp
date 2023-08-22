@@ -280,4 +280,11 @@ public class XmslContractListVo extends BaseEntity {
 
     private List<XmslContractListVo> children;
 
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private Integer sort;
+
 }

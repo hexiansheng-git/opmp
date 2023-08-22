@@ -188,4 +188,11 @@ public class XmslContractSpecial extends BaseEntity {
     private Long[]  ids;
 
     private List<XmslContractSpecial> children;
+
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    @Excel(name = "排序")
+    private Integer sort;
 }
