@@ -33,6 +33,8 @@ public class Constant {
 
     /** 是否含有历史记录按钮 **/
     public static final String HISTORY_NOTE_FIELD_NAME= "historyNote";
+    /** 部门表-项目标识 **/
+    public static final String DEPT_PRJ_FLAG = "prjInfo";
 
 
 
