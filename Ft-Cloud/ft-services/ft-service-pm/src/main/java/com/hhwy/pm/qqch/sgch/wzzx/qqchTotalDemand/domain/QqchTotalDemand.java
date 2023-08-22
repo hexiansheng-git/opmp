@@ -111,6 +111,9 @@ public class QqchTotalDemand extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "是否优先进场:0-否;1-是")
     private String firstEnterFlag;
+
+    private boolean firstEnterFlagBool;
+
     /**
      * 字段描述：附件组id
      */

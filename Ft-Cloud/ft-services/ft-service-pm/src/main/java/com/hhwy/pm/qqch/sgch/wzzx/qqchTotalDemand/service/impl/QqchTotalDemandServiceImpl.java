@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -64,6 +65,13 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountList = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCountList(qqchTotalDemandTimeCount);
         Map<Long, List<QqchTotalDemandTimeCount>> timeCountMap = qqchTotalDemandTimeCountList.stream().collect(Collectors.groupingBy(QqchTotalDemandTimeCount::getDemandId));
         for (QqchTotalDemand totalDemand : qqchTotalDemandList) {
+            //是否优先进场:0-否;1-是
+            String firstEnterFlag = totalDemand.getFirstEnterFlag();
+            if (StringUtils.isNotEmpty(firstEnterFlag) && firstEnterFlag.equals("0")){
+                totalDemand.setFirstEnterFlagBool(false);
+            }else {
+                totalDemand.setFirstEnterFlagBool(true);
+            }
             List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCounts = timeCountMap.get(totalDemand.getId());
             totalDemand.setQqchTotalDemandTimeCountList(qqchTotalDemandTimeCounts);
         }
