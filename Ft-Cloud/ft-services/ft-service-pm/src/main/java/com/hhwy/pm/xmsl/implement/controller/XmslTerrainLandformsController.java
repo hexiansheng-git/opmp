@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.listener.TerrainLandformsImportListener;
 import com.hhwy.pm.xmsl.implement.domain.XmslTerrainLandforms;
 import com.hhwy.pm.xmsl.implement.domain.vo.ImplementVo;
@@ -39,6 +40,7 @@ public class XmslTerrainLandformsController extends BaseController {
      *
      * @return
      */
+    @PreAuthorize(hasPermi = "xmslTerrainLandforms:list")
     @GetMapping("/getAllList")
     public AjaxResult getAllList() {
         ImplementVo implementVo = xmslTerrainLandformsService.getAllList();
@@ -51,6 +53,7 @@ public class XmslTerrainLandformsController extends BaseController {
      * @param implementVo
      * @return
      */
+    @PreAuthorize(hasPermi = "xmslTerrainLandforms:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody ImplementVo implementVo) {
         xmslTerrainLandformsService.batchSave(implementVo);
