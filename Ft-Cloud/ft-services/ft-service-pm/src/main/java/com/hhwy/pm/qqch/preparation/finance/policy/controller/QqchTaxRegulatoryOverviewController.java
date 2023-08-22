@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -48,7 +49,7 @@ public class QqchTaxRegulatoryOverviewController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchTaxRegulatoryOverview:add")
     @PostMapping("/batchSave")
-    public AjaxResult batchSave(QqchTaxRegulatoryOverviewVo qqchTaxRegulatoryOverviewVo) {
+    public AjaxResult batchSave(@RequestBody QqchTaxRegulatoryOverviewVo qqchTaxRegulatoryOverviewVo) {
         qqchTaxRegulatoryOverviewService.batchSave(qqchTaxRegulatoryOverviewVo);
         return AjaxResult.success();
     }
