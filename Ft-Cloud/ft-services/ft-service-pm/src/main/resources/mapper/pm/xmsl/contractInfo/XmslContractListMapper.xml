@@ -1115,7 +1115,7 @@
                     and pid not in (select id from xmsl_contract_list)
                     and win_num IS NOT NULL
                     and win_unit_price is not null
-                    and list_type = #{listType}
+                    and list_type = #{listType} limit 1
             </where>
     </select>
 </mapper>
