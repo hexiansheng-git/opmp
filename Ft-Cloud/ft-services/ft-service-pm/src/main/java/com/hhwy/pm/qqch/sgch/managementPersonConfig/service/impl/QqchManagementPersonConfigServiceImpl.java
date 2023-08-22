@@ -211,13 +211,14 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     @Transactional
     public void insertQqchManagementPersonConfigList(List<QqchManagementPersonConfig> qqchManagementPersonConfigList, BigDecimal version) {
 
-        if (CollectionUtils.isEmpty(qqchManagementPersonConfigList)) {
-            return;
-        }
         //删除旧数据
         QqchManagementPersonConfig qqchManagementPersonConfig = new QqchManagementPersonConfig();
         qqchManagementPersonConfig.setVersion(version);
         qqchManagementPersonConfigMapper.deleteQqchManagementPersonConfig(qqchManagementPersonConfig);
+
+        if (CollectionUtils.isEmpty(qqchManagementPersonConfigList)) {
+            return;
+        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
