@@ -7,6 +7,7 @@ import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.mapper.QqchTaxCostMapper;
@@ -15,6 +16,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
@@ -45,8 +47,8 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
     @Resource
     private IQqchTaxCostDetailService detailService;
-
-
+    @Resource
+    private IQqchReviewService reviewService;
 
     @Resource
     private IQqchTaxStageService qqchTaxStageService;
@@ -123,11 +125,12 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         taxCost.setDataType("2");
         taxInVO.setOtherList(bean.getCostList(taxCost));
 
-        entity.setModuleIdentity(taxCost.getModuleIdentity());
-        entity.setVersion(taxCost.getVersion());
+        entity.setStageIdentity(reviewService.getStage());
+        entity.setVersion(VersionUtil.getVersion(TN,taxCost.getVersion()));
         entity.setDto(taxInVO);
         return entity;
     }
+
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -139,55 +142,75 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
         ArrayList<QqchTaxCost> allList = new ArrayList<>();
 
-        // 处理主要
-        List<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDto(dto, dto.getDto().getCostList());
-        
+
         // 生成记录id // 分期会用到
         Long recordId = IdWorker.createId();
-        
+
         // 当税费不为空的时候才能进行插入数据
-        if (!CollectionUtils.isEmpty(dto.getDto().getTaxList())){
+        if (!CollectionUtils.isEmpty(dto.getDto().getTaxList())) {
             // 在分期中插入数据
-            qqchTaxStageService.saveStage(recordId,"2"); 
-        }
-   
-        
-        for (QqchTaxCost cost : qqchTaxCosts) {
-            cost.setDataType("1");
-
-            BigDecimal rate = cost.getRate();
-            // 计算美元价格
-            cost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(cost.getInnerAmt(), rate));
-            cost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(cost.getLocalAmt(), rate));
-            cost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(cost.getReqAmt(), rate));
-            cost.setRecordId(recordId);
-            allList.add(cost);
-        }
-        
-        
-        // 处理其他
-        List<QqchTaxCost> otherList = CompileEntity.dealSaveDto(dto,dto.getDto().getOtherList());
-        for (QqchTaxCost cost : otherList) {
-            cost.setDataType("2");
-
-            BigDecimal rate = cost.getRate();
-            // 计算美元价格
-            cost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(cost.getInnerAmt(), rate));
-            cost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(cost.getLocalAmt(), rate));
-            cost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(cost.getReqAmt(), rate));
-            cost.setRecordId(recordId);
-            allList.add(cost);
+            qqchTaxStageService.saveStage(recordId, "2");
         }
 
-        
+        if (!CollectionUtils.isEmpty(dto.getDto().getCostList())) {
+            // 处理主要
+            List<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDto(dto, dto.getDto().getCostList());
+            for (QqchTaxCost cost : qqchTaxCosts) {
+                cost.setDataType("1");
+
+                BigDecimal rate = cost.getRate();
+                // 计算美元价格
+                cost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(cost.getInnerAmt(), rate));
+                cost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(cost.getLocalAmt(), rate));
+                cost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(cost.getReqAmt(), rate));
+                cost.setRecordId(recordId);
+                allList.add(cost);
+            }
+        }
+
+
+        if (!CollectionUtils.isEmpty(dto.getDto().getOtherList())) {
+            // 处理其他
+            List<QqchTaxCost> otherList = CompileEntity.dealSaveDto(dto, dto.getDto().getOtherList());
+            for (QqchTaxCost cost : otherList) {
+                cost.setDataType("2");
+
+                BigDecimal rate = cost.getRate();
+                // 计算美元价格
+                cost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(cost.getInnerAmt(), rate));
+                cost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(cost.getLocalAmt(), rate));
+                cost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(cost.getReqAmt(), rate));
+                cost.setRecordId(recordId);
+                allList.add(cost);
+            }
+        }
+
+
+        // 处理税费
+        if (!CollectionUtils.isEmpty(dto.getDto().getTaxList())) {
+            List<QqchTaxCost> taxCostList = CompileEntity.dealSaveDto(dto, dto.getDto().getTaxList());
+            for (QqchTaxCost cost : taxCostList) {
+                cost.setDataType("3");
+
+                BigDecimal rate = cost.getRate();
+                // 计算美元价格
+                cost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(cost.getInnerAmt(), rate));
+                cost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(cost.getLocalAmt(), rate));
+                cost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(cost.getReqAmt(), rate));
+                cost.setRecordId(recordId);
+                allList.add(cost);
+            }
+        }
+
+
         // 费用数据入库
         List<QqchTaxCostDetail> allDetails = bean.saveCostList(allList);
         // 新增年份数据
-        this.detailService.save(CompileEntity.dealSaveDto(dto,allDetails));
+        this.detailService.save(CompileEntity.dealSaveDto(dto, allDetails));
 
 
     }
-    
+
 
     /**
      * 获取收入信息
@@ -232,7 +255,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                     detail.setVersion(item.getVersion());
                     detail.setValid(item.getValid());
                     BigDecimal rate = detail.getRate();
-                    
+
                     // 计算美元价格
                     detail.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(detail.getInnerAmt(), rate));
                     detail.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(detail.getLocalAmt(), rate));
@@ -248,6 +271,26 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         // 新增数据
         this.qqchTaxCostMapper.insertQqchTaxCostList(list);
         return allDetails;
+    }
+
+    @Override
+    public CompileEntity<TaxCostVO> taxList(QqchTaxCost taxCost) {
+        IQqchTaxCostService bean = SpringUtils.getBean(IQqchTaxCostService.class);
+
+        CompileEntity entity = new CompileEntity();
+
+        TaxCostVO taxInVO = new TaxCostVO();
+        taxInVO.setYearList(qqchTaxInService.getYearList());
+        taxInVO.setCurrencyVOList(qqchTaxInService.getCurrencyInfo());
+  
+        // 在查询其他收入
+        taxCost.setDataType("3");
+        taxInVO.setTaxList(bean.getCostList(taxCost));
+
+        entity.setStageIdentity(reviewService.getStage());
+        entity.setVersion(VersionUtil.getVersion(TN,taxCost.getVersion()));
+        entity.setDto(taxInVO);
+        return entity;
     }
 
 

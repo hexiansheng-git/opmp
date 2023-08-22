@@ -14,10 +14,8 @@ import com.hhwy.pm.qqch.tax.qqchTaxInstallment.mapper.QqchTaxInstallmentMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.mapper.QqchTaxStageMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxInstallmentService;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo.InstallmentVO;
-import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,12 +108,14 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
     @Transactional(rollbackFor = Exception.class)
     @CompileAspect(type = CompileOptEnum.SAVE, tableName = TN)
     public void save(CompileEntity<QqchTaxInstallment> dto) {
-        this.qqchTaxInstallmentMapper.insertQqchTaxInstallment(dto.dealSaveDto());
+        QqchTaxInstallment qqchTaxInstallment = dto.dealSaveDto();
+        qqchTaxInstallment.setId(IdWorker.createId());
+        this.qqchTaxInstallmentMapper.insertQqchTaxInstallment(qqchTaxInstallment);
     }
 
     @Override
-    public InstallmentVO refresh(CompileEntity<QqchTaxInstallment> dto) {
-        QqchTaxInstallment params = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto.getDto());
+    public InstallmentVO refresh(QqchTaxInstallment params) {
+        //  QqchTaxInstallment params = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto.getDto());
         InstallmentVO installmentVO = new InstallmentVO();
         List<Long> longs = qqchTaxStageMapper.selectNewestRecordId();
         if (CollectionUtils.isEmpty(longs)) return installmentVO;
@@ -145,8 +145,8 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         InstallmentVO.ListVO totalOut = this.getTotal("成本合计", outList, otherOutList);
 
         resList.add(totalOut);
-        resList.addAll(outList);
-        resList.addAll(otherOutList);
+        resList.addAll(CollectionUtils.isEmpty(outList) ? new ArrayList<>() : outList);
+        resList.addAll(CollectionUtils.isEmpty(otherOutList) ? new ArrayList<>() : otherOutList);
 
         // 利息
         InstallmentVO.ListVO profitList = this.getProfitList(totalIn, totalOut);
@@ -160,7 +160,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         listVO.setDigest("利润总额");
         BigDecimal amt = totalIn.getAmt();
         BigDecimal sum = BigDecimalUtils.sum(totalOut.getLocalAmt(), totalOut.getReqAmt(), totalOut.getInnerAmt());
-        listVO.setProfit(BigDecimalUtils.multiply(amt,sum));
+        listVO.setProfit(BigDecimalUtils.multiply(amt, sum));
         return listVO;
     }
 
@@ -171,24 +171,30 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         BigDecimal req = BigDecimal.ZERO;
         BigDecimal local = BigDecimal.ZERO;
 
+        if (!CollectionUtils.isEmpty(outList)) {
+            for (InstallmentVO.ListVO vo : outList) {
+                inner = BigDecimalUtils.sum(vo.getInnerAmt(), inner);
+                req = BigDecimalUtils.sum(vo.getReqAmt(), req);
+                local = BigDecimalUtils.sum(vo.getLocalAmt(), local);
+            }
+        }
 
-        for (InstallmentVO.ListVO vo : outList) {
-            inner = BigDecimalUtils.sum(vo.getInnerAmt(),inner);
-            req = BigDecimalUtils.sum(vo.getReqAmt(),req);
-            local = BigDecimalUtils.sum(vo.getLocalAmt(),local);
+
+        if (!CollectionUtils.isEmpty(otherOutList)) {
+            for (InstallmentVO.ListVO vo : otherOutList) {
+                inner = BigDecimalUtils.sum(vo.getInnerAmt(), inner);
+                req = BigDecimalUtils.sum(vo.getReqAmt(), req);
+                local = BigDecimalUtils.sum(vo.getLocalAmt(), local);
+            }
         }
-        for (InstallmentVO.ListVO vo : otherOutList) {
-            inner = BigDecimalUtils.sum(vo.getInnerAmt(),inner);
-            req = BigDecimalUtils.sum(vo.getReqAmt(),req);
-            local = BigDecimalUtils.sum(vo.getLocalAmt(),local);
-        }
-        
+
+
         listVO.setInnerAmt(inner);
         listVO.setReqAmt(req);
         listVO.setInnerAmt(local);
 
-        listVO.setLocAmt(BigDecimalUtils.multiply(inner,req));
-        listVO.setDiffAmt(BigDecimalUtils.sum(req,local));
+        listVO.setLocAmt(BigDecimalUtils.multiply(inner, req));
+        listVO.setDiffAmt(BigDecimalUtils.sum(req, local));
         return listVO;
     }
 
@@ -206,15 +212,15 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
      * @param year
      * @return
      */
-    private List<InstallmentVO.ListVO> getOutList(Long recordId, String year,String type) {
+    private List<InstallmentVO.ListVO> getOutList(Long recordId, String year, String type) {
 
         QqchTaxCostDetail costWhere = new QqchTaxCostDetail();
         costWhere.setRecordId(recordId);
         costWhere.setYear(year);
         costWhere.setDataType(type);
         List<QqchTaxCostDetail> costNameList = costDetailMapper.getCostName(costWhere);
-        List<QqchTaxCostDetail> amtList =   costDetailMapper.getAmtByGroup(costWhere);
-        if (!CollectionUtils.isEmpty(amtList) && !CollectionUtils.isEmpty(costNameList)){
+        List<QqchTaxCostDetail> amtList = costDetailMapper.getAmtByGroup(costWhere);
+        if (!CollectionUtils.isEmpty(amtList) && !CollectionUtils.isEmpty(costNameList)) {
             Map<Long, List<QqchTaxCostDetail>> masterIdMap = amtList.stream().collect(Collectors.groupingBy(QqchTaxCostDetail::getMasterId));
             // 将年份数据挂到费用上
             ArrayList<InstallmentVO.ListVO> listVOArrayList = new ArrayList<>();
@@ -226,9 +232,9 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
                 listVO.setInnerAmt(detail.getInnerAmt());
 
 
-                listVO.setLocAmt(BigDecimalUtils.multiply(listVO.getInnerAmt(),listVO.getReqAmt()));
-                listVO.setDiffAmt(BigDecimalUtils.sum(listVO.getReqAmt(),listVO.getLocalAmt()));
-                
+                listVO.setLocAmt(BigDecimalUtils.multiply(listVO.getInnerAmt(), listVO.getReqAmt()));
+                listVO.setDiffAmt(BigDecimalUtils.sum(listVO.getReqAmt(), listVO.getLocalAmt()));
+
                 // 子集也转结果集
                 if (!CollectionUtils.isEmpty(detailList)) {
                     List<InstallmentVO.ListVO> collect = detailList.stream().map(item -> {
@@ -238,13 +244,13 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
                         detailListVo.setInnerAmt(detail.getUsdInnerAmt());
 
 
-                        detailListVo.setLocAmt(BigDecimalUtils.multiply(detailListVo.getInnerAmt(),detailListVo.getReqAmt()));
-                        detailListVo.setDiffAmt(BigDecimalUtils.sum(detailListVo.getReqAmt(),detailListVo.getLocalAmt()));
+                        detailListVo.setLocAmt(BigDecimalUtils.multiply(detailListVo.getInnerAmt(), detailListVo.getReqAmt()));
+                        detailListVo.setDiffAmt(BigDecimalUtils.sum(detailListVo.getReqAmt(), detailListVo.getLocalAmt()));
                         return detailListVo;
                     }).collect(Collectors.toList());
                     listVO.setChildren(collect);
                 }
-                
+
                 listVOArrayList.add(listVO);
             }
             // 将数据转成树并计算
@@ -263,7 +269,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         return null;
     }
 
-    public static  List<InstallmentVO.ListVO> build(List<InstallmentVO.ListVO> tree, Long pid) {
+    public static List<InstallmentVO.ListVO> build(List<InstallmentVO.ListVO> tree, Long pid) {
         // 这里一定要先将等级排序
         List<InstallmentVO.ListVO> treeNodes = tree.stream().sorted(Comparator.comparing(InstallmentVO.ListVO::getLevel).reversed()).collect(Collectors.toList());
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(treeNodes)) {
@@ -272,14 +278,13 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         treeNodes.forEach(treeVO -> {
             List<InstallmentVO.ListVO> collect = treeNodes.stream().filter((item) -> treeVO.getId().equals(item.getPid())).collect(Collectors.toList());
             for (InstallmentVO.ListVO listVO : collect) {
-                treeVO.setLocalAmt(BigDecimalUtils.sum(listVO.getLocalAmt(),treeVO.getLocalAmt()));
-                treeVO.setReqAmt(BigDecimalUtils.sum(listVO.getReqAmt(),treeVO.getReqAmt()));
-                treeVO.setInnerAmt(BigDecimalUtils.sum(listVO.getInnerAmt(),treeVO.getInnerAmt()));
+                treeVO.setLocalAmt(BigDecimalUtils.sum(listVO.getLocalAmt(), treeVO.getLocalAmt()));
+                treeVO.setReqAmt(BigDecimalUtils.sum(listVO.getReqAmt(), treeVO.getReqAmt()));
+                treeVO.setInnerAmt(BigDecimalUtils.sum(listVO.getInnerAmt(), treeVO.getInnerAmt()));
 
 
-
-                treeVO.setLocAmt(BigDecimalUtils.multiply(treeVO.getInnerAmt(),treeVO.getReqAmt()));
-                treeVO.setDiffAmt(BigDecimalUtils.sum(treeVO.getReqAmt(),treeVO.getLocalAmt()));
+                treeVO.setLocAmt(BigDecimalUtils.multiply(treeVO.getInnerAmt(), treeVO.getReqAmt()));
+                treeVO.setDiffAmt(BigDecimalUtils.sum(treeVO.getReqAmt(), treeVO.getLocalAmt()));
             }
             treeVO.setChildren(collect);
         });
@@ -316,12 +321,9 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         System.out.println(objectTreeNode1);
 
 
-
-
-
     }
-    
-    
+
+
     private InstallmentVO.ListVO getInList(Long recordId, String year, String dataType) {
         // 获取主营业务收入
         QqchTaxInDetail inWhere = new QqchTaxInDetail();

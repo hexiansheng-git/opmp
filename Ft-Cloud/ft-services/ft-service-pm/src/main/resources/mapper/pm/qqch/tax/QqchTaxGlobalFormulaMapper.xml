@@ -36,8 +36,8 @@
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
         <result property="version" column="version"/>
-        <result property="ptVar2" column="pt_var2"/>
-        <result property="ptVar3" column="pt_var3"/>
+        <result property="currency" column="currency"/>
+        <result property="rate" column="rate"/>
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
@@ -73,8 +73,8 @@
              , `del_time`
              , `del_flag`
              , `version`
-             , `pt_var2`
-             , `pt_var3`
+             , `currency`
+             , `rate`
              , `pt_var4`
              , `pt_var5`
              , `sort`
@@ -114,8 +114,8 @@
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
+            <if test="rate != null  and rate != ''">and `rate` = #{rate}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -157,8 +157,8 @@
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
+            <if test="rate != null  and rate != ''">and `rate` = #{rate}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -199,8 +199,8 @@
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
             <if test="version != null ">`version`,</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="currency != null  and currency != ''">`currency`,</if>
+            <if test="rate != null  and rate != ''">`rate`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="sort != null ">`sort`,</if>
@@ -236,8 +236,8 @@
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="version != null ">#{version},</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="currency != null  and currency != ''">#{currency},</if>
+            <if test="rate != null  and rate != ''">#{rate},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="sort != null ">#{sort},</if>
@@ -277,8 +277,8 @@
             `del_user`,
             `del_time`,
             `version`,
-            `pt_var2`,
-            `pt_var3`,
+            `currency`,
+            `rate`,
             `pt_var4`,
             `pt_var5`,
             `sort`,
@@ -315,8 +315,8 @@
                 #{item.delUser},
                 #{item.delTime},
                 #{item.version},
-                #{item.ptVar2},
-                #{item.ptVar3},
+                #{item.currency},
+                #{item.rate},
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.sort},
@@ -357,8 +357,8 @@
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="version != null ">`version` = #{version},</if>
-            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
-            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
+            <if test="rate != null  and  rate != ''">`rate` = #{rate},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
@@ -521,14 +521,14 @@
                     when `id`=#{item.id} then #{item.version}
                 </foreach>
             </trim>
-            <trim prefix="pt_var2  = case" suffix="end,">
+            <trim prefix="currency  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar2}
+                    when `id`=#{item.id} then #{item.currency}
                 </foreach>
             </trim>
-            <trim prefix="pt_var3  = case" suffix="end,">
+            <trim prefix="rate  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar3}
+                    when `id`=#{item.id} then #{item.rate}
                 </foreach>
             </trim>
             <trim prefix="pt_var4  = case" suffix="end,">
@@ -586,8 +586,8 @@
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
+            <if test="rate != null  and rate != ''">and `rate` = #{rate}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>

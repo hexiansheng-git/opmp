@@ -2,7 +2,6 @@ package com.hhwy.pm.qqch.common.aspect;
 
 
 import com.hhwy.common.core.utils.SpringUtils;
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -64,7 +63,7 @@ public class CompileAspectImpl {
             // 如果参数类型属于前期策划编制模块
             if (arg instanceof CompileEntity) {
                 CompileEntity arg1 = (CompileEntity) arg;
-                if (CompileOptEnum.LIST.equals(compileAspect.type())) {
+                if (CompileOptEnum.LIST.equals(compileAspect.type()) || CompileOptEnum.TREE.equals(compileAspect.type())) {
                     beforeList(arg1, tableName);
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
@@ -99,8 +98,8 @@ public class CompileAspectImpl {
 
     /**
      * 添加确认记录 只有点击确认的时候需要添加确认记录
-     * 
-     * @param compileEntity 
+     *
+     * @param compileEntity
      */
     private void addConfirm(CompileEntity compileEntity) {
         String reqId = compileEntity.getReqId();

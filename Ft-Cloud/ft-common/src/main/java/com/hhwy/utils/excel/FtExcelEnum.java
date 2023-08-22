@@ -1,4 +1,4 @@
-package com.hhwy.utils.excelUtil;
+package com.hhwy.utils.excel;
 
 import com.hhwy.utils.excel.ExcelFunction;
 
@@ -15,7 +15,8 @@ public enum FtExcelEnum {
      */
     QQCH_SCHE_CORR("importCorr.xlsx", "纠偏措施模板.xlsx", "com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr"),
     QQCH_ORG("importOrg.xlsx", "项目组织机构模板.xlsx", "com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList"),
-    QQCH_IMPORTANCE("importImportance.xlsx", "开工前重要策划.xlsx", "com.hhwy.pm.qqch.sgch.important.domain.QqchImportant");
+    QQCH_IMPORTANCE("importImportance.xlsx", "开工前重要策划.xlsx", "com.hhwy.pm.qqch.sgch.important.domain.QqchImportant"),
+    QQCH_TAX_GLOBAL("importTaxGlobal.xlsx", "整体资金策划.xlsx", "com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal");
 
 
     private final String templateName;

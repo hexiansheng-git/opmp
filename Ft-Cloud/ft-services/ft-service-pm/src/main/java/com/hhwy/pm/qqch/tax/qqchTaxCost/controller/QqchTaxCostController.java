@@ -97,9 +97,20 @@ public class QqchTaxCostController extends BaseController {
     @PreAuthorize(hasPermi = "qqchTaxCost:list")
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchTaxCost taxCost) {
-        CompileEntity<TaxCostVO> qqchTaxInList = qqchTaxCostService.getList(taxCost);
+        QqchTaxCost qqchTaxCost = CompileEntity.dealListDto(taxCost.getVersion(), new QqchTaxCost());
+        CompileEntity<TaxCostVO> qqchTaxInList = qqchTaxCostService.getList(qqchTaxCost);
         return AjaxResult.success(qqchTaxInList);
     }
+
+
+    @PreAuthorize(hasPermi = "qqchTaxCost:taxList")
+    @GetMapping("/taxList")
+    public AjaxResult taxList(@Validated(ValidationGroups.Select.class) QqchTaxCost taxCost) {
+        QqchTaxCost qqchTaxCost = CompileEntity.dealListDto(taxCost.getVersion(), new QqchTaxCost());
+        CompileEntity<TaxCostVO> qqchTaxInList = qqchTaxCostService.taxList(qqchTaxCost);
+        return AjaxResult.success(qqchTaxInList);
+    }
+
 
     @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/save")

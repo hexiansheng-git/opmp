@@ -31,6 +31,6 @@ public interface IQqchTaxInstallmentService {
 
     void save(CompileEntity<QqchTaxInstallment> dto);
 
-    InstallmentVO refresh(CompileEntity<QqchTaxInstallment> dto);
+    InstallmentVO refresh(QqchTaxInstallment dto);
     
 }

@@ -13,6 +13,7 @@ import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.beans.BeansException;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -29,7 +30,10 @@ public class CompileEntity<T> extends TreeNode<T> {
     
     private static RedisUtils redisUtils;
     static {
-        redisUtils = SpringUtils.getBean(RedisUtils.class);
+        try {
+            redisUtils = SpringUtils.getBean(RedisUtils.class);
+        } catch (Exception e) {
+        }
     }
 
     /**

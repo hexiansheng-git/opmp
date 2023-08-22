@@ -38,4 +38,6 @@ public interface IQqchTaxCostService {
     public List<QqchTaxCost> getCostList(QqchTaxCost dto);
 
     List<QqchTaxCostDetail> saveCostList(List<QqchTaxCost> qqchTaxCosts);
+
+    CompileEntity<TaxCostVO> taxList(QqchTaxCost dealListDto);
 }

@@ -1,15 +1,16 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service;
 
-import java.util.List;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
+
+import java.util.List;
 
 /**
  * @author mls
  * @date 2023-08-17 16:19:10
- * @remark 
+ * @remark
  */
 public interface IQqchTaxGlobalFormulaService {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
     QqchTaxGlobalFormula getQqchTaxGlobalFormula(QqchTaxGlobalFormula qqchTaxGlobalFormula);
 
     List<QqchTaxGlobalFormula> getQqchTaxGlobalFormulaList(QqchTaxGlobalFormula qqchTaxGlobalFormula);
@@ -20,9 +21,14 @@ public interface IQqchTaxGlobalFormulaService {
 
     int updateQqchTaxGlobalFormula(QqchTaxGlobalFormula qqchTaxGlobalFormula);
 
-            int updateQqchTaxGlobalFormulaList(List<QqchTaxGlobalFormula> qqchTaxGlobalFormulaList);
-    
+    int updateQqchTaxGlobalFormulaList(List<QqchTaxGlobalFormula> qqchTaxGlobalFormulaList);
+
     int deleteQqchTaxGlobalFormula(QqchTaxGlobalFormula qqchTaxGlobalFormula);
 
-            int deleteQqchTaxGlobalFormulaByPks(List<Long> qqchTaxGlobalFormulaPkList);
-    }
+    int deleteQqchTaxGlobalFormulaByPks(List<Long> qqchTaxGlobalFormulaPkList);
+
+    QqchTaxGlobalFormula getFormula(QqchTaxGlobalFormula dealListDto);
+
+    int save(QqchTaxGlobalFormula dealSaveDto);
+    
+}

@@ -5,6 +5,7 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import com.hhwy.common.core.utils.DateUtils;
@@ -31,7 +32,7 @@ public class QqchTaxInstallmentController extends BaseController{
 
     @Autowired
     private IQqchTaxInstallmentService qqchTaxInstallmentService;
-
+    private static final String TN = "qqch_tax_installment";
                                                                                                                                                                                                                                                                                                                                         
 
     @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
@@ -43,12 +44,10 @@ public class QqchTaxInstallmentController extends BaseController{
 
     @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
     @GetMapping("/list")
-    public AjaxResult getQqchTaxInstallmentList(@Validated(ValidationGroups.Select.class) QqchTaxInstallment qqchTaxInstallmentParam){
-        startPage();
-        List<QqchTaxInstallment> qqchTaxInstallmentList = qqchTaxInstallmentService.getQqchTaxInstallmentList(qqchTaxInstallmentParam);
-        return getDataTableAjaxResult(qqchTaxInstallmentList);
+    public AjaxResult getQqchTaxInstallmentList(@Validated(ValidationGroups.Select.class) QqchTaxInstallment dto){
+        QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto);
+        return AjaxResult.success(qqchTaxInstallmentService.refresh(qqchTaxInstallment));
     }
-
     @PreAuthorize(hasPermi = "qqchTaxInstallment:save")
     @PostMapping("/save")
     public AjaxResult insertQqchTaxInstallment(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchTaxInstallment >dto){
@@ -58,9 +57,10 @@ public class QqchTaxInstallmentController extends BaseController{
 
 
     @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
-    @PostMapping("/refresh")
-    public AjaxResult refresh(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchTaxInstallment >dto){
-        return AjaxResult.success(qqchTaxInstallmentService.refresh(dto));
+    @GetMapping("/refresh")
+    public AjaxResult refresh(QqchTaxInstallment dto){
+        QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(dto.getVersion(), dto);
+        return AjaxResult.success(qqchTaxInstallmentService.refresh(qqchTaxInstallment));
     }
     
     

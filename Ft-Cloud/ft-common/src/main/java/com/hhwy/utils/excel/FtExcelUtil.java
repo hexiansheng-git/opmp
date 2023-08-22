@@ -1,12 +1,10 @@
 package com.hhwy.utils.excel;
 
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.reflect.ReflectUtils;
 import com.hhwy.utils.dict.DictUtil;
-import com.hhwy.utils.excelUtil.HeadVo;
 import com.hhwy.utils.field.FieldUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeNode;
@@ -54,13 +52,12 @@ public class FtExcelUtil<T> {
         this.clazz = clazz;
     }
 
-    public FtExcelUtil(String  className) throws Exception {
+    public FtExcelUtil(String className) throws Exception {
         Class<?> aClass = Class.forName(className);
-        this.clazz = aClass;;
+        this.clazz = aClass;
+        ;
     }
-    
-    
-    
+
 
     public void init(List<T> list, String sheetName, FtExcel.Type type) {
 
@@ -80,7 +77,7 @@ public class FtExcelUtil<T> {
         if (list == null) {
             list = new ArrayList();
         }
-        this.list = (List)list;
+        this.list = (List) list;
         this.sheetName = sheetName;
         this.type = type;
         this.customFieldList = customFieldList;
@@ -167,7 +164,7 @@ public class FtExcelUtil<T> {
 
             for (Entry<Integer, Field> integerFieldEntry : fieldsMap.entrySet()) {
                 Object val = this.getCellValue(row, integerFieldEntry.getKey());
-                entity = entity == null ? (T)this.clazz.newInstance() : entity;
+                entity = entity == null ? (T) this.clazz.newInstance() : entity;
                 Field field = fieldsMap.get(integerFieldEntry.getKey());
                 Class<?> fieldType = field.getType();
                 // 对不同类型的属性进行处理
@@ -224,25 +221,25 @@ public class FtExcelUtil<T> {
         return list;
     }
 
-    public void exportExcel(HttpServletResponse response,  String sheetName) {
-        this.exportExcel(response, new ArrayList<>(2),sheetName,sheetName);
+    public void exportExcel(HttpServletResponse response, String sheetName) {
+        this.exportExcel(response, new ArrayList<>(2), sheetName, sheetName);
     }
 
-    public void exportExcel(HttpServletResponse response,  String sheetName,String fileName) {
-        this.exportExcel(response, new ArrayList<>(2),sheetName,fileName);
+    public void exportExcel(HttpServletResponse response, String sheetName, String fileName) {
+        this.exportExcel(response, new ArrayList<>(2), sheetName, fileName);
     }
-    
+
     public void exportExcel(HttpServletResponse response, List<T> list, String sheetName) {
-        this.exportExcel(response,list,sheetName,sheetName);
+        this.exportExcel(response, list, sheetName, sheetName);
     }
-    
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName,String fileName) {
+
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String fileName) {
         this.templateName = fileName;
         this.init(list, sheetName, FtExcel.Type.EXPORT);
         this.exportExcel(response);
     }
-    
-    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String fileName,List<String> customFieldList) throws IOException {
+
+    public void exportExcel(HttpServletResponse response, List<T> list, String sheetName, String fileName, List<String> customFieldList) throws IOException {
         this.templateName = fileName;
         this.init(list, sheetName, FtExcel.Type.EXPORT, customFieldList);
         this.exportExcel(response);
@@ -268,7 +265,7 @@ public class FtExcelUtil<T> {
                     this.fillExcelData(index, row);
                 }
             }
-            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode(this.templateName, "UTF-8"));
+            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(this.templateName, "UTF-8"));
             response.setContentType("multipart/form-data");
             response.setCharacterEncoding("utf-8");
             this.wb.write(response.getOutputStream());
@@ -381,7 +378,7 @@ public class FtExcelUtil<T> {
             this.setXSSFValidation(this.sheet, attr.combo(), 1, 100, column, column);
         }
         if (StringUtils.isNotEmpty(attr.dictType())) {
-            if(!this.dictsMap.containsKey(attr.dictType()))
+            if (!this.dictsMap.containsKey(attr.dictType()))
                 this.dictsMap.put(attr.dictType(), DictUtil.getDictDataName(attr.dictType()));
             this.setXSSFValidation(this.sheet, this.dictsMap.get(attr.dictType()).values().toArray(new String[]{}), 1, 100, column, column);
         }
@@ -544,13 +541,13 @@ public class FtExcelUtil<T> {
         tempFields.addAll(Arrays.asList(this.clazz.getSuperclass().getDeclaredFields()));
         tempFields.addAll(Arrays.asList(this.clazz.getDeclaredFields()));
         //若存在自定义导出列，按照自定义列顺序导出
-        if(CollectionUtils.isNotEmpty(customFieldList)){
-            Map<String,Field> fieldMap = tempFields.stream().filter(r->r.isAnnotationPresent(FtExcel.class))
-                    .collect(Collectors.toMap(r->r.getAnnotation(FtExcel.class).name().trim(), r->r) );
+        if (CollectionUtils.isNotEmpty(customFieldList)) {
+            Map<String, Field> fieldMap = tempFields.stream().filter(r -> r.isAnnotationPresent(FtExcel.class))
+                    .collect(Collectors.toMap(r -> r.getAnnotation(FtExcel.class).name().trim(), r -> r));
             tempFields.clear();
             for (int i = 0; i < customFieldList.size(); i++) {
                 Field field = fieldMap.get(customFieldList.get(i).trim());
-                if(field == null)
+                if (field == null)
                     continue;
                 tempFields.add(field);
             }
@@ -651,10 +648,10 @@ public class FtExcelUtil<T> {
         Map<String, List> otherSelectDatas = excelFunction.initSelectList();
         Workbook sheets = null;
         InputStream inputStream = null;
-        if (templateName==null || "".equals(templateName)){
+        if (templateName == null || "".equals(templateName)) {
             sheets = WorkbookFactory.create(true);
             sheets.createSheet();
-        }else{
+        } else {
             inputStream = getClass().getClassLoader().getResourceAsStream("template/" + templateName);
             sheets = WorkbookFactory.create(inputStream);
         }
@@ -690,14 +687,14 @@ public class FtExcelUtil<T> {
         try {
             response.setCharacterEncoding("utf-8");
             response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=" +  URLEncoder.encode(fileName, "UTF-8"));
+            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(fileName, "UTF-8"));
             outputStream = response.getOutputStream();
             sheets.write(outputStream);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         } finally {
             try {
-                if(inputStream != null)
+                if (inputStream != null)
                     inputStream.close();
                 if (outputStream != null)
                     outputStream.close();
@@ -847,7 +844,7 @@ public class FtExcelUtil<T> {
             T entity = null;
             for (int filedIndex = 0; filedIndex < pmsFields.size(); filedIndex++) {
                 Object val = this.getCellValue(row, filedIndex);
-                entity = entity == null ? (T)this.clazz.newInstance() : entity;
+                entity = entity == null ? (T) this.clazz.newInstance() : entity;
                 Field field = pmsFields.get(filedIndex);
                 Class<?> fieldType = field.getType();
                 if (String.class == fieldType) {
@@ -879,9 +876,20 @@ public class FtExcelUtil<T> {
         return list;
     }
 
-
     public List<T> importTreeExcel(InputStream inputStream) throws Exception {
-        List<T> ts = importExcel(inputStream);
+        return importTreeExcel(inputStream,null);
+    }
+
+
+    public List<T> importTreeExcel(InputStream inputStream, Integer startRow) throws Exception {
+
+        List<T> ts;
+        if (startRow == null) {
+            ts = importExcel(inputStream);
+        } else {
+            ts = importExcel(inputStream, startRow);
+        }
+
         this.init(list, sheetName, FtExcel.Type.IMPORT);
         List<Object[]> fieldsAnno = this.fields;
         String serFieldName = null;
@@ -947,7 +955,7 @@ public class FtExcelUtil<T> {
                         TreeNode treeNode = (TreeNode) i;
                         List children = treeNode.getChildren();
                         children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
-                        init.setFieldVal("pid",((TreeNode<?>) i).getId(),t);
+                        init.setFieldVal("pid", ((TreeNode<?>) i).getId(), t);
                         init.setFieldVal(finalChildrenFieldName, children, i);
                         children.add(t);
                     });
