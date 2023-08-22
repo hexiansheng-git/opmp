@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -12,6 +14,8 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -310,5 +315,27 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Override
     public QqchWorkGroup getValidMaxVersionQqchWorkGroup() {
         return qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
+    }
+
+    @Override
+    public List<QqchWorkGroup> gmList(QqchWorkGroup qqchWorkGroup) {
+        if(StringUtils.isBlank(qqchWorkGroup.getPtVar5()))
+            return new ArrayList<>(2);
+        List<QqchWorkGroup> list = null;
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(qqchWorkGroup.getPtVar5());
+        try {
+            qqchWorkGroup.setPtVar5(null);
+            list = qqchWorkGroupMapper.getQqchWorkGroupList(qqchWorkGroup);
+            System.out.println(list.size());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+        return list;
     }
 }

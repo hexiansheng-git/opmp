@@ -101,4 +101,15 @@ public class QqchWorkGroupController extends BaseController {
     public AjaxResult deleteQqchWorkGroup(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWorkGroup qqchWorkGroupParam) {
         return toAjax(qqchWorkGroupService.deleteQqchWorkGroup(qqchWorkGroupParam));
     }
+
+    /**
+     * 查询指定租户下的工作小组
+     * @param qqchWorkGroupParam
+     * @return
+     */
+    @GetMapping("/gmList")
+    public AjaxResult gmList(@Validated(ValidationGroups.Select.class) QqchWorkGroup qqchWorkGroupParam) {
+        List<QqchWorkGroup> qqchWorkGroupList = qqchWorkGroupService.gmList(qqchWorkGroupParam);
+        return getDataTableAjaxResult(qqchWorkGroupList);
+    }
 }
