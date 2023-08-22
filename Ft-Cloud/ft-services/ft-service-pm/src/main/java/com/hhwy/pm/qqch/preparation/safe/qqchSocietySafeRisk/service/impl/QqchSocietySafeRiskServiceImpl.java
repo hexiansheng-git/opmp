@@ -107,13 +107,10 @@ public class QqchSocietySafeRiskServiceImpl implements IQqchSocietySafeRiskServi
     public void save(QqchSocietySafeRiskVo vo) {
         String buttonMark = vo.getButtonMark();
         ButtonMarkUtil.checkButtonMark(buttonMark);
-
         BigDecimal version = vo.getVersion();
         List<QqchSocietySafeRisk> qqchSocietySafeRiskList = vo.getQqchSocietySafeRiskList();
-        if(CollectionUtils.isEmpty(qqchSocietySafeRiskList)){
-            return;
-        }else {
-            //校验数据必填
+        //校验数据必填
+        if(CollectionUtils.isNotEmpty(qqchSocietySafeRiskList)){
             if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
                 JyDetailsUtil.jyDetails(qqchSocietySafeRiskList, ValidationGroups.Save.class);
             }
@@ -139,6 +136,8 @@ public class QqchSocietySafeRiskServiceImpl implements IQqchSocietySafeRiskServi
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
         }
+        if (CollectionUtils.isEmpty(qqchSocietySafeRiskList))
+            return 0;
         for (QqchSocietySafeRisk qqchSocietySafeRisk : qqchSocietySafeRiskList) {
             qqchSocietySafeRisk.setValid(valid);
             qqchSocietySafeRisk.setVersion(version);

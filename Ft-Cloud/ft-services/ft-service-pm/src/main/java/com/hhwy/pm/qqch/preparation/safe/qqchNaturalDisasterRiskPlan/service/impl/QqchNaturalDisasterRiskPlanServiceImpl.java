@@ -109,14 +109,13 @@ public class QqchNaturalDisasterRiskPlanServiceImpl implements IQqchNaturalDisas
 
         BigDecimal version = vo.getVersion();
         List<QqchNaturalDisasterRiskPlan> qqchNaturalDisasterRiskPlanList = vo.getQqchNaturalDisasterRiskPlanList();
-        if(CollectionUtils.isEmpty(qqchNaturalDisasterRiskPlanList)){
-            return;
-        }else {
-            //校验数据必填
+        //校验数据必填
+        if(CollectionUtils.isNotEmpty(qqchNaturalDisasterRiskPlanList)){
             if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
                 JyDetailsUtil.jyDetails(qqchNaturalDisasterRiskPlanList, ValidationGroups.Save.class);
             }
         }
+
         this.insertQqchNaturalDisasterRiskPlanList(qqchNaturalDisasterRiskPlanList,version);
 
         //判断是否是确认
@@ -138,6 +137,8 @@ public class QqchNaturalDisasterRiskPlanServiceImpl implements IQqchNaturalDisas
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;
         }
+        if (CollectionUtils.isEmpty(qqchNaturalDisasterRiskPlanList))
+            return 0;
         for (QqchNaturalDisasterRiskPlan qqchNaturalDisasterRiskPlan : qqchNaturalDisasterRiskPlanList) {
             qqchNaturalDisasterRiskPlan.setValid(valid);
             qqchNaturalDisasterRiskPlan.setVersion(version);
