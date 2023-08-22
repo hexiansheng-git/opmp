@@ -91,7 +91,6 @@ public class QqchTargetAdvisoryOrganController extends BaseController {
      * @param qqchTargetAdvisoryOrgan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:list")
     @GetMapping("getQqchTargetAdvisoryOrganVo")
     public AjaxResult getQqchTargetAdvisoryOrganVo(@Validated(ValidationGroups.Get.class) QqchTargetAdvisoryOrgan qqchTargetAdvisoryOrgan) {
         QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo = qqchTargetAdvisoryOrganService.getQqchTargetAdvisoryOrganVo(qqchTargetAdvisoryOrgan);
@@ -103,7 +102,7 @@ public class QqchTargetAdvisoryOrganController extends BaseController {
      * @param qqchTargetAdvisoryOrganVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:add")
+    @PreAuthorize(hasPermi = "qqchTargetAdvisoryOrgan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetAdvisoryOrganVo qqchTargetAdvisoryOrganVo) {
         qqchTargetAdvisoryOrganService.save(qqchTargetAdvisoryOrganVo);

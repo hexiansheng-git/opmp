@@ -91,7 +91,6 @@ public class QqchTechRiskSolutionsController extends BaseController {
      * @param qqchTechRiskSolutions
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:list")
     @GetMapping("getQqchTechRiskSolutionsVo")
     public AjaxResult getQqchTechRiskSolutionsVo(@Validated(ValidationGroups.Select.class) QqchTechRiskSolutions qqchTechRiskSolutions) {
         QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo = qqchTechRiskSolutionsService.getQqchTechRiskSolutionsVo(qqchTechRiskSolutions);
@@ -103,7 +102,7 @@ public class QqchTechRiskSolutionsController extends BaseController {
      * @param qqchTechRiskSolutionsVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:add")
+    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo) {
         qqchTechRiskSolutionsService.save(qqchTechRiskSolutionsVo);

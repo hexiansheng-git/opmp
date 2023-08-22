@@ -16,8 +16,14 @@ import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSta
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSubpackageBidPlanService;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSubpackageInventoryService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
@@ -26,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,6 +70,12 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private IXmslContractListService xmslContractListService;
 
 
     public QqchSubpackageBidPlan getQqchSubpackageBidPlan(QqchSubpackageBidPlan qqchSubpackageBidPlan) {
@@ -242,6 +256,80 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
             String stageIdentity = qqchSubpackageBidPlanVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
+    }
+
+    /**
+     * 处理选择的班组数据
+     * @param qqchConstList
+     * @return
+     */
+    @Override
+    public List<QqchSubpackageBidPlan> disposeSelectedData(List<QqchConst> qqchConstList) {
+        List<QqchSubpackageBidPlan> resultList = new ArrayList<>();
+
+        qqchConstList = ListTreeUtil.formatList(qqchConstList, QqchConst::getChildren, QqchConst::setChildren);
+
+        /*获取最新生效版本的合同信息*/
+        XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        BigDecimal contractAmount = BigDecimal.ZERO;
+//        if(contractInfo != null){
+//            contractAmount = contractInfo.
+//        }
+
+        /*获取最新生效版本的主合同清单*/
+        List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
+
+        for (QqchConst qqchConst : qqchConstList) {
+            QqchSubpackageBidPlan qqchSubpackageBidPlan= new QqchSubpackageBidPlan();
+            qqchSubpackageBidPlan.setId(qqchConst.getId());
+            qqchSubpackageBidPlan.setPid(qqchConst.getPid());
+            qqchSubpackageBidPlan.setName(qqchConst.getConstName());
+            qqchSubpackageBidPlan.setContent(qqchConst.getConstContent());
+            qqchSubpackageBidPlan.setPaymentCurrencyRatio(qqchConst.getPayInfo());
+
+            //分包收入
+            BigDecimal subpackageIncome = BigDecimal.ZERO;
+            //总产值占比
+            BigDecimal totalOutputValueProportion = BigDecimal.ZERO;
+
+            List<QqchConstJob> jobList = qqchConst.getJobList();
+            if(CollectionUtils.isNotEmpty(jobList)){
+                jobList = ListTreeUtil.formatList(jobList,QqchConstJob::getChildren,QqchConstJob::setChildren);
+                for (QqchConstJob qqchConstJob : jobList) {
+                    //清单编码
+                    String itemCode = qqchConstJob.getItemCode();
+                    for (XmslContractList inventory : inventoryList) {
+                        if(itemCode.equals(inventory.getCode())){
+                            //已复核数量
+                            BigDecimal checkedNum = qqchConstJob.getCheckedNum();
+                            //中标单价
+                            BigDecimal winAmount = inventory.getWinAmount();
+                            if(checkedNum != null && winAmount != null){
+                                subpackageIncome = subpackageIncome.add(checkedNum.multiply(winAmount));
+                            }
+                        }
+                    }
+                }
+            }
+
+            qqchSubpackageBidPlan.setSubpackageIncome(subpackageIncome);
+            if(contractAmount.compareTo(BigDecimal.ZERO) != 0){
+                totalOutputValueProportion = subpackageIncome.divide(contractAmount,2, RoundingMode.HALF_UP);
+                qqchSubpackageBidPlan.setTotalOutputValueProportion(totalOutputValueProportion);
+            }
+
+            resultList.add(qqchSubpackageBidPlan);
+        }
+
+        //转树列表
+        resultList = ListTreeUtil.formatTree(
+                resultList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchSubpackageBidPlan::getChildren,
+                QqchSubpackageBidPlan::setChildren);
+
+        return resultList;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service;
 
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.QqchSubpackageBidPlan;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.vo.QqchSubpackageBidPlanVo;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 
 import java.util.List;
 
@@ -41,4 +42,11 @@ public interface IQqchSubpackageBidPlanService {
      * @return
      */
     void save(QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo);
+
+    /**
+     * 处理选择的班组数据
+     * @param qqchConstList
+     * @return
+     */
+    List<QqchSubpackageBidPlan> disposeSelectedData(List<QqchConst> qqchConstList);
 }

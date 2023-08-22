@@ -91,7 +91,6 @@ public class QqchPigeonholeDutyDivisionController extends BaseController {
      * @param qqchPigeonholeDutyDivision
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:list")
     @GetMapping("getQqchPigeonholeDutyDivisionVo")
     public AjaxResult getQqchPigeonholeDutyDivisionVo(@Validated(ValidationGroups.Get.class) QqchPigeonholeDutyDivision qqchPigeonholeDutyDivision) {
         QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo = qqchPigeonholeDutyDivisionService.getQqchPigeonholeDutyDivisionVo(qqchPigeonholeDutyDivision);
@@ -103,7 +102,7 @@ public class QqchPigeonholeDutyDivisionController extends BaseController {
      * @param qqchPigeonholeDutyDivisionVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:add")
+    @PreAuthorize(hasPermi = "qqchPigeonholeDutyDivision:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchPigeonholeDutyDivisionVo qqchPigeonholeDutyDivisionVo) {
         qqchPigeonholeDutyDivisionService.save(qqchPigeonholeDutyDivisionVo);
