@@ -83,7 +83,7 @@ public class QqchExpBetonImportVo extends TreeNode<QqchExpBetonImportVo> {
      * 字段描述：所需数量
      */
     @JsonProperty
-    @FtExcel(name = "所需数量")
+    @FtExcel(name = "使用数量")
     private BigDecimal usedNum;
     /**
      * 字段描述：拟完成时间
