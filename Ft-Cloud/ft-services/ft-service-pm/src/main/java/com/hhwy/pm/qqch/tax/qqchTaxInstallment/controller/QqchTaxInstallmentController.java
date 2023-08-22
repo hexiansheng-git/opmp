@@ -5,6 +5,7 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +33,9 @@ public class QqchTaxInstallmentController extends BaseController{
 
     @Autowired
     private IQqchTaxInstallmentService qqchTaxInstallmentService;
+    
+    @Autowired
+    private IQqchTaxInService qqchTaxInService;
     private static final String TN = "qqch_tax_installment";
                                                                                                                                                                                                                                                                                                                                         
 
@@ -61,6 +65,15 @@ public class QqchTaxInstallmentController extends BaseController{
     public AjaxResult refresh(QqchTaxInstallment dto){
         QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(dto.getVersion(), dto);
         return AjaxResult.success(qqchTaxInstallmentService.refresh(qqchTaxInstallment));
+    }
+
+
+
+    @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
+    @GetMapping("/timeList")
+    public AjaxResult refresh(){
+        List<String> yearList = qqchTaxInService.getYearList();
+        return AjaxResult.success(yearList);
     }
     
     
