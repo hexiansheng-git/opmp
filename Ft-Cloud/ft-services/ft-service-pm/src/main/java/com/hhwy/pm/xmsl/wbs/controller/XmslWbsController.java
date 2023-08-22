@@ -168,9 +168,11 @@ public class XmslWbsController extends BaseController {
             wbsMain = this.xmslWbsMainService.getEffect();
             return ;
         }
-        XmslWbs queryWbs = new XmslWbs();
-        queryWbs.setMainId(wbsMain.getId());
-        List list = xmslWbsService.getXmslWbsList(queryWbs);
+        List list = xmslWbsService.getByMainId(wbsMain.getId());
+        for (int i = 0; i < list.size(); i++) {
+           XmslWbs temp = (XmslWbs)list.get(i);
+           temp.setPid(temp.getParentId());
+        }
         list = TreeUtil.exportListFormat(list, (Class)String.class);
         FtExcelUtil<XmslWbs> util = new FtExcelUtil<>(XmslWbs.class);
         util.exportExcel(response, list, DateUtils.getDate(),"项目WBS.xlsx");

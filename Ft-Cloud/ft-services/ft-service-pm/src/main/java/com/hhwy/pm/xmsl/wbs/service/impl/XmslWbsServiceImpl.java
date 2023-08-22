@@ -43,11 +43,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
+import sun.security.pkcs11.wrapper.Functions;
 
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -300,17 +302,27 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         List<XmslWbs> list = excelUtil.importExcel(file.getInputStream());
         Map<String,XmslWbs> codeMap = new HashMap<>(list.size());
         List<XmslWbs> resuList = new ArrayList<>();
+        //序号map
+        Map<String,Integer> sortMap = new HashMap<>(list.size());
+        Function<String,Integer> getSortFunc = (code)->{
+            Integer sort = sortMap.get(code);
+            sort = sort==null?1:sort+1;
+            sortMap.put(code,sort);
+            return sort;    
+        };
         for (int i = 0; i < list.size(); i++) {
             XmslWbs temp = list.get(i);
             if(StringUtils.isBlank(temp.getCode()))
                 break;
             resuList.add(temp);
             String code = temp.getCode().trim();
+            String parentCode = "";  //父级编码，用于记录子级的序号
             if(code.indexOf("-") < 0){
                 temp.setLevel(1);
                 temp.setParentId("-1");
+                parentCode = "-1";
             }else{
-                String parentCode = StringUtils.substringBeforeLast(code,"-");
+                parentCode = StringUtils.substringBeforeLast(code,"-");
                 //查找父级
                 XmslWbs parent = codeMap.get(parentCode);
                 Assert.notNull(parent, "未找到父级,请确保父级编码写在子级的前面，行号:"+(i+2));
@@ -318,6 +330,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 temp.setLevel(parent.getLevel()+1);
                 parent.setHaveChildren(Constant.YES_INT);
             }
+            //获取序号
+            Integer sort = sortMap.get(parentCode);
+            sort = sort==null?1:sort+1;
+            sortMap.put(parentCode,sort);
+            temp.setSort(sort);
             temp.setId(UUIDUtils.getShortUuid());
             codeMap.put(temp.getCode(), temp);
         }

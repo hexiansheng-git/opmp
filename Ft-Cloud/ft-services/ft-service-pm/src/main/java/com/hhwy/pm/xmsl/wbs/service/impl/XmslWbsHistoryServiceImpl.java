@@ -56,11 +56,6 @@ public class XmslWbsHistoryServiceImpl implements IXmslWbsHistoryService {
 
     @Transactional
     public int insertXmslWbsHistoryList(List<XmslWbsHistory> xmslWbsHistoryList) {
-        for (XmslWbsHistory xmslWbsHistory : xmslWbsHistoryList) {
-            xmslWbsHistory.setId(IdWorker.createId()+"");
-            xmslWbsHistory.setCreateUser(SecurityUtils.getUserName());
-            xmslWbsHistory.setCreateTime(DateUtils.getNowDate());
-        }
         return xmslWbsHistoryMapper.insertXmslWbsHistoryList(xmslWbsHistoryList);
     }
 

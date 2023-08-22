@@ -128,34 +128,41 @@ public class TreeUtil {
         Map<R,List<T>> childMap = new HashMap<>(list.size());
         //第一级节点
         List<T> firstList = new ArrayList<>();
+        Set<R> idSet = new HashSet<>(list.size()); 
         for (int i = 0; i < list.size(); i++) {
             T t = list.get(i);
-            Object poid = t.getPid();
             //是否为第一级
-            if(t.getPid() == null || (t1.equals(Long.class) && ((Long)poid) < 1)
-                    || ("-1".equals(poid) || "0".equals(poid))){
+            if(isFirstNode(t.getPid(),t1)){
                 firstList.add(t);
             }else{
                 ObjectUtils.add2MapList(childMap, t.getPid(), t);
             }
+            idSet.add(t.getId());
         }
         //递归
         List<T> resuList = new ArrayList<>(list.size());
-        chooseChild(firstList,t1,childMap,resuList);
+        chooseChild(firstList,t1,childMap,resuList,idSet);
         return resuList;
     }
     
     
-    private static <T extends TreeNodeBase> void chooseChild(List<T> list,Class<R> t1,Map<R,List<T>> childMap,List<T> resuList){
+    private static <T extends TreeNodeBase> void chooseChild(List<T> list,Class<R> t1,Map<R,List<T>> childMap,List<T> resuList,Set<R> idSet){
         if(CollectionUtils.isEmpty(list))
             return;
         //排序
         list.sort((v1, v2) -> {return CompareUtil.compare(v1.getSort(), v2.getSort()); });
         for (int i = 0; i < list.size(); i++) {
             T t = list.get(i);
+            if(!isFirstNode(t.getPid(),t1) && !idSet.contains(t.getPid())) //非第一节点 且 父级id不存在为脏数据
+                continue;    
             resuList.add(t);
-            chooseChild(childMap.get(t.getId()),t1,childMap,resuList);
+            chooseChild(childMap.get(t.getId()),t1,childMap,resuList,idSet);
         }
+    }
+    
+    private static boolean isFirstNode(Object pid,Class<R> t1){
+        return pid == null || (t1.equals(Long.class) && ((Long)pid) < 1)
+                || ("-1".equals(pid) || "0".equals(pid));
     }
     
 }
