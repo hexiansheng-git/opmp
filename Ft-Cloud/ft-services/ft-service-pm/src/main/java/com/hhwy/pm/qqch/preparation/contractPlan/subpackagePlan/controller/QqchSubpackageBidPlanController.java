@@ -92,7 +92,6 @@ public class QqchSubpackageBidPlanController extends BaseController {
      * @param qqchSubpackageBidPlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:list")
     @GetMapping("getQqchSubpackageBidPlanVo")
     public AjaxResult getQqchSubpackageBidPlanVo(@Validated(ValidationGroups.Get.class) QqchSubpackageBidPlan qqchSubpackageBidPlan) {
         QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo = qqchSubpackageBidPlanService.getQqchSubpackageBidPlanVo(qqchSubpackageBidPlan);
@@ -104,7 +103,7 @@ public class QqchSubpackageBidPlanController extends BaseController {
      * @param qqchSubpackageBidPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:add")
+    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo) {
         qqchSubpackageBidPlanService.save(qqchSubpackageBidPlanVo);
