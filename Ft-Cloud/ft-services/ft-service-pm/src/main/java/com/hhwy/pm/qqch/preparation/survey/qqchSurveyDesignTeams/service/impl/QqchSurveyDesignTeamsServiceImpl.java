@@ -49,9 +49,7 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
      * @return
      */
     public QqchSurveyDesignTeamsVo getQqchSurveyDesignTeamsList(QqchSurveyDesignTeams qqchSurveyDesignTeams) {
-        QqchSurveyDesignTeamsVo vo = new QqchSurveyDesignTeamsVo();
         BigDecimal version = VersionUtil.getVersion("qqch_survey_design_teams",qqchSurveyDesignTeams.getVersion());
-        vo.setVersion(version);
         qqchSurveyDesignTeams.setVersion(version);
         List<QqchSurveyDesignTeams> qqchSurveyDesignTeamsList = qqchSurveyDesignTeamsMapper.getQqchSurveyDesignTeamsList(qqchSurveyDesignTeams);
         for (QqchSurveyDesignTeams surveyDesignTeams : qqchSurveyDesignTeamsList) {
@@ -64,6 +62,8 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
             surveyDesignTeams.setQqchSurveyPersonPlanList(qqchSurveyPersonPlanList);
             surveyDesignTeams.setQqchSurveyEquPlanList(qqchSurveyEquPlanList);
         }
+        QqchSurveyDesignTeamsVo vo = new QqchSurveyDesignTeamsVo();
+        vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setQqchSurveyDesignTeamsList(qqchSurveyDesignTeamsList);
         return vo;
