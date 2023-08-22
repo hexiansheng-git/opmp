@@ -37,4 +37,11 @@ public interface IQqchWorkPlanService {
     int deleteQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
     int deleteQqchWorkPlanByPks(List<Long> qqchWorkPlanPkList);
+
+    /**
+     * 获取租户下的前期策划工作计划
+     * @param plan {}
+     * @return
+     */
+    List<QqchWorkPlan> planListByTenantKey(QqchWorkPlan plan);
 }

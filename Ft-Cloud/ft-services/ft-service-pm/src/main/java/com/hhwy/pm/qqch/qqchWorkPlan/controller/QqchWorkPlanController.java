@@ -152,4 +152,15 @@ public class QqchWorkPlanController extends BaseController {
         qqchWorkPlanService.insertQqchWorkPlanList(qqchWorkPlanListParam);
         return AjaxResult.success(qqchWorkPlanListParam);
     }
+
+    /**
+     * 根据租户标识获取其下工作计划
+     * @param qqchWorkPlanParam
+     * @return
+     */
+    @GetMapping("/gmList")
+    public AjaxResult gmList(@Validated(ValidationGroups.Select.class) QqchWorkPlan qqchWorkPlanParam) {
+        List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.planListByTenantKey(qqchWorkPlanParam);
+        return getDataTableAjaxResult(qqchWorkPlanList);
+    }
 }

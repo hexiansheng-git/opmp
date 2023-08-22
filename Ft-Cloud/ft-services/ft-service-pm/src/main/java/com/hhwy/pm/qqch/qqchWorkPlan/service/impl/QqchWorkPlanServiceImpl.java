@@ -2,13 +2,16 @@ package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
@@ -394,5 +397,26 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Transactional
     public int deleteQqchWorkPlanByPks(List<Long> qqchWorkPlanPkList) {
         return qqchWorkPlanMapper.deleteQqchWorkPlanByPks(qqchWorkPlanPkList);
+    }
+
+    @Override
+    public List<QqchWorkPlan> planListByTenantKey(QqchWorkPlan plan) {
+        if(StringUtils.isBlank(plan.getPtVar5()))
+            return new ArrayList<>(2);
+        List<QqchWorkPlan> list = null;
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(plan.getPtVar5());
+        try {
+            plan.setPtVar5(null);
+            list = qqchWorkPlanMapper.getQqchWorkPlanList(plan);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+        return list;
     }
 }

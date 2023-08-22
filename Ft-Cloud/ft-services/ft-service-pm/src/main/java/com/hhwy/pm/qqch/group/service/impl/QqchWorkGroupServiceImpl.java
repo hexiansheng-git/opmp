@@ -328,7 +328,6 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         try {
             qqchWorkGroup.setPtVar5(null);
             list = qqchWorkGroupMapper.getQqchWorkGroupList(qqchWorkGroup);
-            System.out.println(list.size());
         }catch (Exception e){
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());
