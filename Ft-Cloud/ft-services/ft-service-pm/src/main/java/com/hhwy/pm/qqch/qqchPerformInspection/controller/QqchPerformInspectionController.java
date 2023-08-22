@@ -1,34 +1,26 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import java.util.Map;
-
-import com.hhwy.common.core.domain.R;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
-import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
-import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
-import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zqq
@@ -148,7 +140,7 @@ public class QqchPerformInspectionController extends BaseController {
     public AjaxResult getCheckUnitList(){
         ArrayList<String> checkList = new ArrayList<>();
         checkList.add("海外事业部");
-        XmslProjectBasicInfo projectBasicInfo = projectBasicInfoService.getProjectBasicInfoWithoutSublist(new XmslProjectBasicInfo());
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
         String projectName = projectBasicInfo.getProjectName();
         String regionName = projectBasicInfo.getRegionName();
         checkList.add(regionName);

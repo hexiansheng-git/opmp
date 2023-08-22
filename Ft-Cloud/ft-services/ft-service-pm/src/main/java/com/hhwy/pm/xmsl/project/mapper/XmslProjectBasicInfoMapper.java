@@ -1,9 +1,11 @@
 package com.hhwy.pm.xmsl.project.mapper;
 
-import java.util.List;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author han
@@ -12,6 +14,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface XmslProjectBasicInfoMapper {
+
+
+    ProjectBasicInfo projectInfo();
 
     XmslProjectBasicInfo getProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 

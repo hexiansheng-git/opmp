@@ -72,6 +72,69 @@
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
 
+    <select id="projectInfo" resultType="com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo">
+        select
+            `id`
+            ,`project_id`
+            ,`project_code`
+            ,`project_name`
+            ,`project_short_name`
+            ,`project_name_foreign_lang`
+            ,`mileage`
+            ,`contract_price`
+            ,`contract_exchange_rate`
+            ,`proprietor_unit`
+            ,`supervisor_unit`
+            ,`management_company`
+            ,`capital_source`
+            ,`contract_type`
+            ,`contract_schedule`
+            ,`start_date`
+            ,`completion_date`
+            ,`defects_liability_period`
+            ,`executive_specification_standard`
+            ,`contract_lang`
+            ,`weighted_grade`
+            ,`payment_currency`
+            ,`price_adjustment_mode`
+            ,`prepayment_ratio`
+            ,`performance_security_ratio`
+            ,`retention_money_ratio`
+            ,`quality_guarantee_deposit_ratio`
+            ,`win_the_bidding_date`
+            ,`business_areas_and_products`
+            ,`contracting_method`
+            ,`project_type`
+            ,`project_location`
+            ,`subsidiary_organ`
+            ,`project_manager`
+            ,`internal_contact_way`
+            ,`foreign_contact_way`
+            ,`win_the_bidding_unit`
+            ,`design_unit`
+            ,`establish_personnel`
+            ,`establish_date`
+            ,`detailed_address`
+            ,`project_scale`
+            ,`project_context`
+            ,`remark`
+            ,`region_id`
+            ,`region_name`
+            ,`dept_id`
+            ,`create_user`
+            ,`create_user_name`
+            ,`create_time`
+            ,`pt_var1`
+            ,`pt_var2`
+            ,`pt_var3`
+            ,`pt_var4`
+            ,`pt_var5`
+        from xmsl_project_basic_info
+        where del_flag = '0'
+        order by create_time desc
+        limit 1
+    </select>
+
     <select id="getProjectBasicInfo" resultMap="ProjectBasicInfoResultMap">
         select
         `id`

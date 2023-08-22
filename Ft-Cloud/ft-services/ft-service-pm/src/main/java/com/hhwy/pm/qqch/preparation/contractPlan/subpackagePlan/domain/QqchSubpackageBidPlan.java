@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * @author han
- * @date 2023-08-03 13:35:44
+ * @date 2023-08-22 09:53:05
  * @remark qqch_subpackage_bid_plan
  */
 @Data
@@ -52,61 +52,29 @@ public class QqchSubpackageBidPlan extends BaseEntity {
     @Excel(name = "施工内容")
     private String content;
     /**
-     * 字段描述：拟分包模式
+     * 字段描述：拟分包模式（字典项：subpackage_model）
      */
     @JsonProperty
-    @Excel(name = "拟分包模式")
+    @Excel(name = "拟分包模式（字典项：subpackage_model）")
     private String subpackageModel;
     /**
-     * 字段描述：预计分包合同额
+     * 字段描述：分包收入
      */
     @JsonProperty
-    @Excel(name = "预计分包合同额")
-    private BigDecimal subpackageContractAmount;
+    @Excel(name = "分包收入")
+    private BigDecimal subpackageIncome;
+    /**
+     * 字段描述：总产值占比（%）
+     */
+    @JsonProperty
+    @Excel(name = "总产值占比（%）")
+    private BigDecimal totalOutputValueProportion;
     /**
      * 字段描述：拟支付货币和支付比例
      */
     @JsonProperty
     @Excel(name = "拟支付货币和支付比例")
-    private String currencyRatio;
-    /**
-     * 字段描述：拟招标/议标方案
-     */
-    @JsonProperty
-    @Excel(name = "拟招标/议标方案")
-    private String bidScheme;
-    /**
-     * 字段描述：拟分包方案依据
-     */
-    @JsonProperty
-    @Excel(name = "拟分包方案依据")
-    private String subpackageSchemeGist;
-    /**
-     * 字段描述：拟启动招标程序时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "拟启动招标程序时间", dateFormat = "yyyy-MM-dd")
-    private Date startupTime;
-    /**
-     * 字段描述：拟定协作单位进场时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @JsonProperty
-    @Excel(name = "拟定协作单位进场时间", dateFormat = "yyyy-MM-dd")
-    private Date approachTime;
-    /**
-     * 字段描述：拟邀请参与投标协作单位来源
-     */
-    @JsonProperty
-    @Excel(name = "拟邀请参与投标协作单位来源")
-    private String cooperativeUnitSource;
-    /**
-     * 字段描述：合同签订和执行情况
-     */
-    @JsonProperty
-    @Excel(name = "合同签订和执行情况")
-    private String contractSignExecution;
+    private String paymentCurrencyRatio;
     /**
      * 字段描述：备注/描述
      */
@@ -257,21 +225,6 @@ public class QqchSubpackageBidPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-    /**
-     * 字段描述：子集合
-     */
-    private List<QqchSubpackageBidPlan> children;
-    /**
-     * 字段描述：分包清单集合
-     */
-//    private List<QqchSubpackageInventory> qqchSubpackageInventoryList;
 
-    /**
-     * 字段描述：人员策划集合
-     */
-//    private List<QqchStaffPlan> qqchStaffPlanList;
-    /**
-     * 字段描述：设备策划集合
-     */
-//    private List<QqchFacilityPlan> qqchFacilityPlanList;
+    private List<QqchSubpackageBidPlan> children;
 }

@@ -12,14 +12,9 @@
         <result property="name" column="name"/>
         <result property="content" column="content"/>
         <result property="subpackageModel" column="subpackage_model"/>
-        <result property="subpackageContractAmount" column="subpackage_contract_amount"/>
-        <result property="currencyRatio" column="currency_ratio"/>
-        <result property="bidScheme" column="bid_scheme"/>
-        <result property="subpackageSchemeGist" column="subpackage_scheme_gist"/>
-        <result property="startupTime" column="startup_time"/>
-        <result property="approachTime" column="approach_time"/>
-        <result property="cooperativeUnitSource" column="cooperative_unit_source"/>
-        <result property="contractSignExecution" column="contract_sign_execution"/>
+        <result property="subpackageIncome" column="subpackage_income"/>
+        <result property="totalOutputValueProportion" column="total_output_value_proportion"/>
+        <result property="paymentCurrencyRatio" column="payment_currency_ratio"/>
         <result property="remark" column="remark"/>
         <result property="source" column="source"/>
         <result property="leaf" column="leaf"/>
@@ -51,14 +46,9 @@
              , `name`
              , `content`
              , `subpackage_model`
-             , `subpackage_contract_amount`
-             , `currency_ratio`
-             , `bid_scheme`
-             , `subpackage_scheme_gist`
-             , `startup_time`
-             , `approach_time`
-             , `cooperative_unit_source`
-             , `contract_sign_execution`
+             , `subpackage_income`
+             , `total_output_value_proportion`
+             , `payment_currency_ratio`
              , `remark`
              , `source`
              , `leaf`
@@ -95,21 +85,12 @@
             <if test="content != null  and content != ''">and `content` = #{content}</if>
             <if test="subpackageModel != null  and subpackageModel != ''">and `subpackage_model` = #{subpackageModel}
             </if>
-            <if test="subpackageContractAmount != null ">and `subpackage_contract_amount` =
-                #{subpackageContractAmount}
+            <if test="subpackageIncome != null ">and `subpackage_income` = #{subpackageIncome}</if>
+            <if test="totalOutputValueProportion != null ">and `total_output_value_proportion` =
+                #{totalOutputValueProportion}
             </if>
-            <if test="currencyRatio != null  and currencyRatio != ''">and `currency_ratio` = #{currencyRatio}</if>
-            <if test="bidScheme != null  and bidScheme != ''">and `bid_scheme` = #{bidScheme}</if>
-            <if test="subpackageSchemeGist != null  and subpackageSchemeGist != ''">and `subpackage_scheme_gist` =
-                #{subpackageSchemeGist}
-            </if>
-            <if test="startupTime != null ">and `startup_time` = #{startupTime}</if>
-            <if test="approachTime != null ">and `approach_time` = #{approachTime}</if>
-            <if test="cooperativeUnitSource != null  and cooperativeUnitSource != ''">and `cooperative_unit_source` =
-                #{cooperativeUnitSource}
-            </if>
-            <if test="contractSignExecution != null  and contractSignExecution != ''">and `contract_sign_execution` =
-                #{contractSignExecution}
+            <if test="paymentCurrencyRatio != null  and paymentCurrencyRatio != ''">and `payment_currency_ratio` =
+                #{paymentCurrencyRatio}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="source != null  and source != ''">and `source` = #{source}</if>
@@ -150,21 +131,12 @@
             <if test="content != null  and content != ''">and `content` = #{content}</if>
             <if test="subpackageModel != null  and subpackageModel != ''">and `subpackage_model` = #{subpackageModel}
             </if>
-            <if test="subpackageContractAmount != null ">and `subpackage_contract_amount` =
-                #{subpackageContractAmount}
+            <if test="subpackageIncome != null ">and `subpackage_income` = #{subpackageIncome}</if>
+            <if test="totalOutputValueProportion != null ">and `total_output_value_proportion` =
+                #{totalOutputValueProportion}
             </if>
-            <if test="currencyRatio != null  and currencyRatio != ''">and `currency_ratio` = #{currencyRatio}</if>
-            <if test="bidScheme != null  and bidScheme != ''">and `bid_scheme` = #{bidScheme}</if>
-            <if test="subpackageSchemeGist != null  and subpackageSchemeGist != ''">and `subpackage_scheme_gist` =
-                #{subpackageSchemeGist}
-            </if>
-            <if test="startupTime != null ">and `startup_time` = #{startupTime}</if>
-            <if test="approachTime != null ">and `approach_time` = #{approachTime}</if>
-            <if test="cooperativeUnitSource != null  and cooperativeUnitSource != ''">and `cooperative_unit_source` =
-                #{cooperativeUnitSource}
-            </if>
-            <if test="contractSignExecution != null  and contractSignExecution != ''">and `contract_sign_execution` =
-                #{contractSignExecution}
+            <if test="paymentCurrencyRatio != null  and paymentCurrencyRatio != ''">and `payment_currency_ratio` =
+                #{paymentCurrencyRatio}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="source != null  and source != ''">and `source` = #{source}</if>
@@ -202,14 +174,9 @@
             <if test="name != null  and name != ''">`name`,</if>
             <if test="content != null  and content != ''">`content`,</if>
             <if test="subpackageModel != null  and subpackageModel != ''">`subpackage_model`,</if>
-            <if test="subpackageContractAmount != null ">`subpackage_contract_amount`,</if>
-            <if test="currencyRatio != null  and currencyRatio != ''">`currency_ratio`,</if>
-            <if test="bidScheme != null  and bidScheme != ''">`bid_scheme`,</if>
-            <if test="subpackageSchemeGist != null  and subpackageSchemeGist != ''">`subpackage_scheme_gist`,</if>
-            <if test="startupTime != null ">`startup_time`,</if>
-            <if test="approachTime != null ">`approach_time`,</if>
-            <if test="cooperativeUnitSource != null  and cooperativeUnitSource != ''">`cooperative_unit_source`,</if>
-            <if test="contractSignExecution != null  and contractSignExecution != ''">`contract_sign_execution`,</if>
+            <if test="subpackageIncome != null ">`subpackage_income`,</if>
+            <if test="totalOutputValueProportion != null ">`total_output_value_proportion`,</if>
+            <if test="paymentCurrencyRatio != null  and paymentCurrencyRatio != ''">`payment_currency_ratio`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="source != null  and source != ''">`source`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
@@ -241,14 +208,9 @@
             <if test="name != null  and name != ''">#{name},</if>
             <if test="content != null  and content != ''">#{content},</if>
             <if test="subpackageModel != null  and subpackageModel != ''">#{subpackageModel},</if>
-            <if test="subpackageContractAmount != null ">#{subpackageContractAmount},</if>
-            <if test="currencyRatio != null  and currencyRatio != ''">#{currencyRatio},</if>
-            <if test="bidScheme != null  and bidScheme != ''">#{bidScheme},</if>
-            <if test="subpackageSchemeGist != null  and subpackageSchemeGist != ''">#{subpackageSchemeGist},</if>
-            <if test="startupTime != null ">#{startupTime},</if>
-            <if test="approachTime != null ">#{approachTime},</if>
-            <if test="cooperativeUnitSource != null  and cooperativeUnitSource != ''">#{cooperativeUnitSource},</if>
-            <if test="contractSignExecution != null  and contractSignExecution != ''">#{contractSignExecution},</if>
+            <if test="subpackageIncome != null ">#{subpackageIncome},</if>
+            <if test="totalOutputValueProportion != null ">#{totalOutputValueProportion},</if>
+            <if test="paymentCurrencyRatio != null  and paymentCurrencyRatio != ''">#{paymentCurrencyRatio},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="source != null  and source != ''">#{source},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
@@ -285,14 +247,9 @@
             `name`,
             `content`,
             `subpackage_model`,
-            `subpackage_contract_amount`,
-            `currency_ratio`,
-            `bid_scheme`,
-            `subpackage_scheme_gist`,
-            `startup_time`,
-            `approach_time`,
-            `cooperative_unit_source`,
-            `contract_sign_execution`,
+            `subpackage_income`,
+            `total_output_value_proportion`,
+            `payment_currency_ratio`,
             `remark`,
             `source`,
             `leaf`,
@@ -325,14 +282,9 @@
                 #{item.name},
                 #{item.content},
                 #{item.subpackageModel},
-                #{item.subpackageContractAmount},
-                #{item.currencyRatio},
-                #{item.bidScheme},
-                #{item.subpackageSchemeGist},
-                #{item.startupTime},
-                #{item.approachTime},
-                #{item.cooperativeUnitSource},
-                #{item.contractSignExecution},
+                #{item.subpackageIncome},
+                #{item.totalOutputValueProportion},
+                #{item.paymentCurrencyRatio},
                 #{item.remark},
                 #{item.source},
                 #{item.leaf},
@@ -367,20 +319,12 @@
             <if test="name != null  and  name != ''">`name` = #{name},</if>
             <if test="content != null  and  content != ''">`content` = #{content},</if>
             <if test="subpackageModel != null  and  subpackageModel != ''">`subpackage_model` = #{subpackageModel},</if>
-            <if test="subpackageContractAmount != null ">`subpackage_contract_amount` = #{subpackageContractAmount},
+            <if test="subpackageIncome != null ">`subpackage_income` = #{subpackageIncome},</if>
+            <if test="totalOutputValueProportion != null ">`total_output_value_proportion` =
+                #{totalOutputValueProportion},
             </if>
-            <if test="currencyRatio != null  and  currencyRatio != ''">`currency_ratio` = #{currencyRatio},</if>
-            <if test="bidScheme != null  and  bidScheme != ''">`bid_scheme` = #{bidScheme},</if>
-            <if test="subpackageSchemeGist != null  and  subpackageSchemeGist != ''">`subpackage_scheme_gist` =
-                #{subpackageSchemeGist},
-            </if>
-            <if test="startupTime != null ">`startup_time` = #{startupTime},</if>
-            <if test="approachTime != null ">`approach_time` = #{approachTime},</if>
-            <if test="cooperativeUnitSource != null  and  cooperativeUnitSource != ''">`cooperative_unit_source` =
-                #{cooperativeUnitSource},
-            </if>
-            <if test="contractSignExecution != null  and  contractSignExecution != ''">`contract_sign_execution` =
-                #{contractSignExecution},
+            <if test="paymentCurrencyRatio != null  and  paymentCurrencyRatio != ''">`payment_currency_ratio` =
+                #{paymentCurrencyRatio},
             </if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="source != null  and  source != ''">`source` = #{source},</if>
@@ -429,44 +373,19 @@
                     when `id`=#{item.id} then #{item.subpackageModel}
                 </foreach>
             </trim>
-            <trim prefix="subpackage_contract_amount  = case" suffix="end,">
+            <trim prefix="subpackage_income  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.subpackageContractAmount}
+                    when `id`=#{item.id} then #{item.subpackageIncome}
                 </foreach>
             </trim>
-            <trim prefix="currency_ratio  = case" suffix="end,">
+            <trim prefix="total_output_value_proportion  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.currencyRatio}
+                    when `id`=#{item.id} then #{item.totalOutputValueProportion}
                 </foreach>
             </trim>
-            <trim prefix="bid_scheme  = case" suffix="end,">
+            <trim prefix="payment_currency_ratio  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.bidScheme}
-                </foreach>
-            </trim>
-            <trim prefix="subpackage_scheme_gist  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.subpackageSchemeGist}
-                </foreach>
-            </trim>
-            <trim prefix="startup_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.startupTime}
-                </foreach>
-            </trim>
-            <trim prefix="approach_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.approachTime}
-                </foreach>
-            </trim>
-            <trim prefix="cooperative_unit_source  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.cooperativeUnitSource}
-                </foreach>
-            </trim>
-            <trim prefix="contract_sign_execution  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.contractSignExecution}
+                    when `id`=#{item.id} then #{item.paymentCurrencyRatio}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
@@ -575,21 +494,12 @@
             <if test="content != null  and content != ''">and `content` = #{content}</if>
             <if test="subpackageModel != null  and subpackageModel != ''">and `subpackage_model` = #{subpackageModel}
             </if>
-            <if test="subpackageContractAmount != null ">and `subpackage_contract_amount` =
-                #{subpackageContractAmount}
+            <if test="subpackageIncome != null ">and `subpackage_income` = #{subpackageIncome}</if>
+            <if test="totalOutputValueProportion != null ">and `total_output_value_proportion` =
+                #{totalOutputValueProportion}
             </if>
-            <if test="currencyRatio != null  and currencyRatio != ''">and `currency_ratio` = #{currencyRatio}</if>
-            <if test="bidScheme != null  and bidScheme != ''">and `bid_scheme` = #{bidScheme}</if>
-            <if test="subpackageSchemeGist != null  and subpackageSchemeGist != ''">and `subpackage_scheme_gist` =
-                #{subpackageSchemeGist}
-            </if>
-            <if test="startupTime != null ">and `startup_time` = #{startupTime}</if>
-            <if test="approachTime != null ">and `approach_time` = #{approachTime}</if>
-            <if test="cooperativeUnitSource != null  and cooperativeUnitSource != ''">and `cooperative_unit_source` =
-                #{cooperativeUnitSource}
-            </if>
-            <if test="contractSignExecution != null  and contractSignExecution != ''">and `contract_sign_execution` =
-                #{contractSignExecution}
+            <if test="paymentCurrencyRatio != null  and paymentCurrencyRatio != ''">and `payment_currency_ratio` =
+                #{paymentCurrencyRatio}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="source != null  and source != ''">and `source` = #{source}</if>

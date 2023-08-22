@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -55,13 +56,12 @@ public class XmslProjectBasicInfoController extends BaseController{
 
     /**
      * 获取项目信息详情（不带子表）
-     * @param projectBasicInfo
      * @return
      */
-    @GetMapping("getProjectBasicInfoWithoutSublist")
-    public AjaxResult getProjectBasicInfoWithoutSublist(@Validated(ValidationGroups.Select.class) XmslProjectBasicInfo projectBasicInfo){
-        XmslProjectBasicInfo xmslProjectBasicInfo = projectBasicInfoService.getProjectBasicInfoWithoutSublist(projectBasicInfo);
-        return AjaxResult.success(xmslProjectBasicInfo);
+    @GetMapping("projectInfo")
+    public AjaxResult projectInfo(){
+        ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
+        return AjaxResult.success(projectInfo);
     }
 
     /**

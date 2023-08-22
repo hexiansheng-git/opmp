@@ -7,6 +7,7 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.*;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.mapper.*;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
@@ -234,12 +235,12 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     /**
      * 获取项目信息详情（不带子表）
-     * @param projectBasicInfo
+     *
      * @return
      */
     @Override
-    public XmslProjectBasicInfo getProjectBasicInfoWithoutSublist(XmslProjectBasicInfo projectBasicInfo) {
-        return xmslProjectBasicInfoMapper.getProjectBasicInfo(projectBasicInfo);
+    public ProjectBasicInfo projectInfo() {
+        return xmslProjectBasicInfoMapper.projectInfo();
     }
 
     /**

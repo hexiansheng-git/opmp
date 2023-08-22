@@ -6,7 +6,7 @@ import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.*;
-import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -52,7 +52,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      */
     private void getProjectInfo() {
 
-        XmslProjectBasicInfo projectInfo = projectBasicInfoService.getProjectBasicInfoWithoutSublist(new XmslProjectBasicInfo());
+        ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
         XmslContractInfo contractInfo = new XmslContractInfo();
         contractInfo.setProjectCode(projectInfo.getProjectCode());
         contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
