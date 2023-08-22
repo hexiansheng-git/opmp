@@ -114,7 +114,6 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
      * @param qqchAdvancedVindicatePlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:list")
     @GetMapping("getQqchAdvancedVindicatePlanVo")
     public AjaxResult getQqchAdvancedVindicatePlanVo(@Validated(ValidationGroups.Get.class) QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) {
         QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo = qqchAdvancedVindicatePlanService.getQqchAdvancedVindicatePlanVo(qqchAdvancedVindicatePlan);
@@ -126,7 +125,7 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
      * @param qqchAdvancedVindicatePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:update")
+    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo) {
         qqchAdvancedVindicatePlanService.save(qqchAdvancedVindicatePlanVo);

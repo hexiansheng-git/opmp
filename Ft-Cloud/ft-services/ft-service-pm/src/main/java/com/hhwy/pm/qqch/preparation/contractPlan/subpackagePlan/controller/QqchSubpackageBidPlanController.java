@@ -8,6 +8,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.QqchSubpackageBidPlan;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.vo.QqchSubpackageBidPlanVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSubpackageBidPlanService;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * @author han
  * @date 2023-08-03 13:35:44
- * @remark 分包招标策划
+ * @remark 分包策划
  */
 @Validated
 @RestController
@@ -91,7 +92,6 @@ public class QqchSubpackageBidPlanController extends BaseController {
      * @param qqchSubpackageBidPlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:list")
     @GetMapping("getQqchSubpackageBidPlanVo")
     public AjaxResult getQqchSubpackageBidPlanVo(@Validated(ValidationGroups.Get.class) QqchSubpackageBidPlan qqchSubpackageBidPlan) {
         QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo = qqchSubpackageBidPlanService.getQqchSubpackageBidPlanVo(qqchSubpackageBidPlan);
@@ -103,11 +103,22 @@ public class QqchSubpackageBidPlanController extends BaseController {
      * @param qqchSubpackageBidPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:add")
+    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo) {
         qqchSubpackageBidPlanService.save(qqchSubpackageBidPlanVo);
         return AjaxResult.success();
+    }
+
+    /**
+     * 处理选择的班组数据
+     * @param qqchConstList
+     * @return
+     */
+    @GetMapping("disposeSelectedData")
+    public AjaxResult disposeSelectedData(List<QqchConst> qqchConstList){
+        List<QqchSubpackageBidPlan> list = qqchSubpackageBidPlanService.disposeSelectedData(qqchConstList);
+        return AjaxResult.success(list);
     }
 
 }

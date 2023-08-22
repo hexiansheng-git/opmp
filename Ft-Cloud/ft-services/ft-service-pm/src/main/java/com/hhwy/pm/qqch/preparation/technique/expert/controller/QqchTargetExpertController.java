@@ -91,7 +91,6 @@ public class QqchTargetExpertController extends BaseController {
      * @param qqchTargetExpert
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
     @GetMapping("getQqchTargetExpertVo")
     public AjaxResult getQqchTargetExpertVo(@Validated(ValidationGroups.Select.class) QqchTargetExpert qqchTargetExpert) {
         QqchTargetExpertVo qqchTargetExpertVo = qqchTargetExpertService.getQqchTargetExpertVo(qqchTargetExpert);
@@ -103,7 +102,7 @@ public class QqchTargetExpertController extends BaseController {
      * @param qqchTargetExpertVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
+    @PreAuthorize(hasPermi = "qqchTargetExpert:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetExpertVo qqchTargetExpertVo) {
         qqchTargetExpertService.save(qqchTargetExpertVo);

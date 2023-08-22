@@ -304,12 +304,6 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         List<XmslWbs> resuList = new ArrayList<>();
         //序号map
         Map<String,Integer> sortMap = new HashMap<>(list.size());
-        Function<String,Integer> getSortFunc = (code)->{
-            Integer sort = sortMap.get(code);
-            sort = sort==null?1:sort+1;
-            sortMap.put(code,sort);
-            return sort;    
-        };
         for (int i = 0; i < list.size(); i++) {
             XmslWbs temp = list.get(i);
             if(StringUtils.isBlank(temp.getCode()))

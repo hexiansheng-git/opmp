@@ -91,7 +91,6 @@ public class QqchInterestedPartyManageController extends BaseController {
      * @param qqchInterestedPartyManage
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:list")
     @GetMapping("getQqchInterestedPartyManageVo")
     public AjaxResult getQqchInterestedPartyManageVo(@Validated(ValidationGroups.Select.class) QqchInterestedPartyManage qqchInterestedPartyManage) {
         QqchInterestedPartyManageVo qqchInterestedPartyManageVo = qqchInterestedPartyManageService.getQqchInterestedPartyManageVo(qqchInterestedPartyManage);
@@ -103,7 +102,7 @@ public class QqchInterestedPartyManageController extends BaseController {
      * @param qqchInterestedPartyManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:add")
+    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchInterestedPartyManageVo qqchInterestedPartyManageVo) {
         qqchInterestedPartyManageService.save(qqchInterestedPartyManageVo);

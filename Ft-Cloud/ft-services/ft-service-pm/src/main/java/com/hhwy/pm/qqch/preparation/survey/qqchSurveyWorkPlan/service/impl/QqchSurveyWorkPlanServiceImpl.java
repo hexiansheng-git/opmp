@@ -43,7 +43,7 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         QqchSurveyWorkPlanVo vo = new QqchSurveyWorkPlanVo();
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setQqchSurveyWorkPlanList(qqchSurveyWorkPlanList);
+        vo.setQqchSurveyWorkPlanList(qqchSurveyWorkPlans);
         return  vo;
     }
 
