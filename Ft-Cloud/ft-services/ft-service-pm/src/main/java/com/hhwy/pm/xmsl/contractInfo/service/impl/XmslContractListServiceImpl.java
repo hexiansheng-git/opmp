@@ -48,6 +48,26 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     private CommonMapper commonMapper;
 
 
+    /**
+     * 获取最新生效版本的主合同清单
+     * @return
+     */
+    @Override
+    public List<XmslContractList> getValidMaxVersionContractInventoryList() {
+        List<XmslContractList> xmslContractListList = new ArrayList<>();
+
+        XmslContractInfo contractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        if(contractInfo == null){
+            return xmslContractListList;
+        }
+
+        Long masterId = contractInfo.getId();
+        XmslContractList xmslContractList = new XmslContractList();
+        xmslContractList.setMasterId(masterId);
+        xmslContractListList = xmslContractListMapper.getXmslContractList(xmslContractList);
+        return xmslContractListList;
+    }
+
     public List<XmslContractList> getXmslContractList(XmslContractList xmslContractList) {
         List<XmslContractList> xmslContractList1 = xmslContractListMapper.getXmslContractList(xmslContractList);
         List<XmslContractList> treeList = ListTreeUtil.formatTree(xmslContractList1, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractList::getChildren, XmslContractList::setChildren);

@@ -14,6 +14,12 @@ import java.util.Set;
  */
 public interface IXmslContractListService {
 
+    /**
+     * 获取最新生效版本的主合同清单
+     * @return
+     */
+    List<XmslContractList> getValidMaxVersionContractInventoryList();
+
     List<XmslContractList> getXmslContractList(XmslContractList xmslContractList);
 
     List<XmslContractList> getXmslContractList2(XmslContractList xmslContractListParam);

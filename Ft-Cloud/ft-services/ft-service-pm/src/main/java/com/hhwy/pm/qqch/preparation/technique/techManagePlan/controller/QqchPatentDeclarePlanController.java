@@ -118,7 +118,6 @@ public class QqchPatentDeclarePlanController extends BaseController {
      * @param qqchPatentDeclarePlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:list")
     @GetMapping("getQqchPatentDeclarePlanVo")
     public AjaxResult getQqchPatentDeclarePlanVo(@Validated(ValidationGroups.Get.class) QqchPatentDeclarePlan qqchPatentDeclarePlan) {
         QqchPatentDeclarePlanVo qqchPatentDeclarePlanVo = qqchPatentDeclarePlanService.getQqchPatentDeclarePlanVo(qqchPatentDeclarePlan);
@@ -130,7 +129,7 @@ public class QqchPatentDeclarePlanController extends BaseController {
      * @param qqchPatentDeclarePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:update")
+    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchPatentDeclarePlanVo qqchPatentDeclarePlanVo) {
         qqchPatentDeclarePlanService.save(qqchPatentDeclarePlanVo);

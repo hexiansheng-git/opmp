@@ -91,7 +91,6 @@ public class QqchTechTrainPlanController extends BaseController {
      * @param qqchTechTrainPlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
     @GetMapping("getQqchTechTrainPlanVo")
     public AjaxResult getQqchTechTrainPlanVo(@Validated(ValidationGroups.Select.class) QqchTechTrainPlan qqchTechTrainPlan) {
         QqchTechTrainPlanVo qqchTechTrainPlanVo = qqchTechTrainPlanService.getQqchTechTrainPlanVo(qqchTechTrainPlan);
@@ -103,7 +102,7 @@ public class QqchTechTrainPlanController extends BaseController {
      * @param qqchTechTrainPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
+    @PreAuthorize(hasPermi = "qqchTechTrainPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechTrainPlanVo qqchTechTrainPlanVo) {
         qqchTechTrainPlanService.save(qqchTechTrainPlanVo);

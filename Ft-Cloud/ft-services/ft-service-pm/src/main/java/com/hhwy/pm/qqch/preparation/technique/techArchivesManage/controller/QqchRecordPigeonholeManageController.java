@@ -91,7 +91,6 @@ public class QqchRecordPigeonholeManageController extends BaseController {
      * @param qqchRecordPigeonholeManage
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:list")
     @GetMapping("getQqchRecordPigeonholeManageVo")
     public AjaxResult getQqchRecordPigeonholeManageVo(@Validated(ValidationGroups.Select.class) QqchRecordPigeonholeManage qqchRecordPigeonholeManage) {
         QqchRecordPigeonholeManageVo qqchRecordPigeonholeManageVo = qqchRecordPigeonholeManageService.getQqchRecordPigeonholeManageVo(qqchRecordPigeonholeManage);
@@ -103,7 +102,7 @@ public class QqchRecordPigeonholeManageController extends BaseController {
      * @param qqchRecordPigeonholeManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:add")
+    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchRecordPigeonholeManageVo qqchRecordPigeonholeManageVo) {
         qqchRecordPigeonholeManageService.save(qqchRecordPigeonholeManageVo);

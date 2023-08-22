@@ -91,7 +91,6 @@ public class QqchBimTechPlanController extends BaseController {
      * @param qqchBimTechPlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:list")
     @GetMapping("/getQqchBimTechPlanVo")
     public AjaxResult getQqchBimTechPlanVo(@Validated(ValidationGroups.Select.class) QqchBimTechPlan qqchBimTechPlan) {
         QqchBimTechPlanVo qqchBimTechPlanVo = qqchBimTechPlanService.getQqchBimTechPlanVo(qqchBimTechPlan);
@@ -103,7 +102,7 @@ public class QqchBimTechPlanController extends BaseController {
      * @param qqchBimTechPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:add")
+    @PreAuthorize(hasPermi = "qqchBimTechPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchBimTechPlanVo qqchBimTechPlanVo) {
         qqchBimTechPlanService.save(qqchBimTechPlanVo);

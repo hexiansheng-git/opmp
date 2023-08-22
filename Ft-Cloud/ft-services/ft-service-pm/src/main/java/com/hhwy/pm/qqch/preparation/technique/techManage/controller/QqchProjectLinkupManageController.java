@@ -91,7 +91,6 @@ public class QqchProjectLinkupManageController extends BaseController {
      * @param qqchProjectLinkupManage
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:list")
     @GetMapping("getQqchProjectLinkupManageVo")
     public AjaxResult getQqchProjectLinkupManageVo(@Validated(ValidationGroups.Get.class) QqchProjectLinkupManage qqchProjectLinkupManage) {
         QqchProjectLinkupManageVo qqchProjectLinkupManageVo = qqchProjectLinkupManageService.getQqchProjectLinkupManageVo(qqchProjectLinkupManage);
@@ -103,7 +102,7 @@ public class QqchProjectLinkupManageController extends BaseController {
      * @param qqchProjectLinkupManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:add")
+    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchProjectLinkupManageVo qqchProjectLinkupManageVo) {
         qqchProjectLinkupManageService.save(qqchProjectLinkupManageVo);

@@ -99,6 +99,11 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         qqchCostControlPostDuty.setVersion(version);
         List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyMapper.getQqchExtendApplyWorkGroupList(qqchCostControlPostDuty);
 
+        if(CollectionUtils.isEmpty(qqchCostControlPostDutyList)){
+            //数据库中没有数据，初始化一级结构
+
+        }
+
         //转树列表
         List<QqchCostControlPostDuty> treeList = ListTreeUtil.formatTree(
                 qqchCostControlPostDutyList,
@@ -111,6 +116,10 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         qqchCostControlPostDutyVo.setStageIdentity(qqchReviewService.getStage());
         qqchCostControlPostDutyVo.setList(treeList);
         return qqchCostControlPostDutyVo;
+    }
+
+    public List<QqchCostControlPostDuty> initializeStairStructure(){
+        return null;
     }
 
     /**

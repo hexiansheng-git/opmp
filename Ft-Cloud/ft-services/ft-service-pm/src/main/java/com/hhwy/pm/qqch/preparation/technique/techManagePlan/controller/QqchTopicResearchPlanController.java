@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -130,7 +129,7 @@ public class QqchTopicResearchPlanController extends BaseController {
      * @param qqchTopicResearchPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
+    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTopicResearchPlanVo qqchTopicResearchPlanVo) {
         qqchTopicResearchPlanService.save(qqchTopicResearchPlanVo);

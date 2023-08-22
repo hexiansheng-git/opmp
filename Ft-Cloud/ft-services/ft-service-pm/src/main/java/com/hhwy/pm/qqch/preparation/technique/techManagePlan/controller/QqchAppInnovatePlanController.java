@@ -118,7 +118,6 @@ public class QqchAppInnovatePlanController extends BaseController {
      * @param qqchAppInnovatePlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:list")
     @GetMapping("getQqchAppInnovatePlanVo")
     public AjaxResult getQqchAppInnovatePlanVo(@Validated(ValidationGroups.Get.class) QqchAppInnovatePlan qqchAppInnovatePlan) {
         QqchAppInnovatePlanVo qqchAppInnovatePlanVo = qqchAppInnovatePlanService.getQqchAppInnovatePlanVo(qqchAppInnovatePlan);
@@ -130,7 +129,7 @@ public class QqchAppInnovatePlanController extends BaseController {
      * @param qqchAppInnovatePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:update")
+    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchAppInnovatePlanVo qqchAppInnovatePlanVo) {
         qqchAppInnovatePlanService.save(qqchAppInnovatePlanVo);

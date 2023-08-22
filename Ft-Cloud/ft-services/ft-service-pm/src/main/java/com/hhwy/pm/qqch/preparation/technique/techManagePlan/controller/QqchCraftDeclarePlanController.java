@@ -118,7 +118,6 @@ public class QqchCraftDeclarePlanController extends BaseController {
      * @param qqchCraftDeclarePlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:list")
     @GetMapping("getQqchCraftDeclarePlanVo")
     public AjaxResult getQqchCraftDeclarePlanVo(@Validated(ValidationGroups.Get.class) QqchCraftDeclarePlan qqchCraftDeclarePlan) {
         QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo = qqchCraftDeclarePlanService.getQqchCraftDeclarePlanVo(qqchCraftDeclarePlan);
@@ -130,7 +129,7 @@ public class QqchCraftDeclarePlanController extends BaseController {
      * @param qqchCraftDeclarePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:update")
+    @PreAuthorize(hasPermi = "qqchCraftDeclarePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCraftDeclarePlanVo qqchCraftDeclarePlanVo) {
         qqchCraftDeclarePlanService.save(qqchCraftDeclarePlanVo);
