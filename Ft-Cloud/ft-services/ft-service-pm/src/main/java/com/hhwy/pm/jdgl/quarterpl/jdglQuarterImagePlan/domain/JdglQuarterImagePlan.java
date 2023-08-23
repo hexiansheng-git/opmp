@@ -1,33 +1,23 @@
-package com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain;
+package com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
-import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
-import com.hhwy.utils.validation.ValidationGroups;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author chenjinhao
- * @date 2023-08-21 15:48:04
- * @remark jdgl_year_plan
+ * @date 2023-08-21 15:48:25
+ * @remark jdgl_quarter_image_plan
  */
 @Data
-public class JdglYearPlan extends BaseEntity {
+public class JdglQuarterImagePlan extends TreeNode<JdglQuarterImagePlan> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,6 +27,125 @@ public class JdglYearPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "主键id")
     private Long id;
+    /**
+     * 字段描述：进度计划id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "进度计划id")
+    private Long planId;
+    /**
+     * 字段描述：总年进度计划形象id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "总年进度计划形象id")
+    private Long totalPlanImageId;
+
+    /**
+     * 字段描述：总年进度计划形象父id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "总年进度计划形象id")
+    private Long totalPlanImagePid;
+
+    /**
+     * 字段描述：作业id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "作业id")
+    private Long workId;
+    /**
+     * 字段描述：作业代码
+     */
+    @JsonProperty
+    @Excel(name = "作业代码")
+    private String workCode;
+    /**
+     * 字段描述：作业名称
+     */
+    @JsonProperty
+    @Excel(name = "作业名称")
+    private String workName;
+    /**
+     * 字段描述：单位
+     */
+    @JsonProperty
+    @Excel(name = "单位")
+    private String unit;
+    /**
+     * 字段描述：设计工程量
+     */
+    @JsonProperty
+    @Excel(name = "设计工程量")
+    private BigDecimal designQuantity;
+    /**
+     * 字段描述：开累完成工程量
+     */
+    @JsonProperty
+    @Excel(name = "开累完成工程量")
+    private BigDecimal totalCompQuantity;
+    /**
+     * 字段描述：剩余工程量
+     */
+    @JsonProperty
+    @Excel(name = "剩余工程量")
+    private BigDecimal remainQuantity;
+    /**
+     * 字段描述：计划完成工程量
+     */
+    @JsonProperty
+    @Excel(name = "计划完成工程量")
+    private BigDecimal planCompQuantity;
+
+    /**
+     * 字段描述：单价
+     */
+    @JsonProperty
+    @Excel(name = "单价")
+    private BigDecimal price;
+
+    /**
+     * 字段描述：计划完成产值
+     */
+    @JsonProperty
+    @Excel(name = "计划完成产值")
+    private BigDecimal planCompValue;
+    /**
+     * 字段描述：计划开始日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "计划开始日期", dateFormat = "yyyy-MM-dd")
+    private Date planStartDate;
+    /**
+     * 字段描述：计划结束日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "计划结束日期", dateFormat = "yyyy-MM-dd")
+    private Date planEndDate;
+
+    @JsonProperty
+    @Excel(name = "责任人")
+    private String responsePerson;
+
+    /**
+     * 字段描述：wbsid
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "wbsId")
+    private Long wbsId;
+    /**
+     * 字段描述：wbs名称
+     */
+    @JsonProperty
+    @Excel(name = "wbs名称")
+    private String wbsName;
+
     /**
      * 字段描述：附件组id
      */
@@ -49,101 +158,6 @@ public class JdglYearPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注/描述")
     private String remark;
-    /**
-     * 字段描述：项目名称
-     */
-    @JsonProperty
-    @Excel(name = "项目名称")
-    private String projectName;
-    /**
-     * 字段描述：年份
-     */
-    @JsonProperty
-    @Excel(name = "年份")
-    @NotBlank(message = "期次不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
-    private String year;
-    /**
-     * 字段描述：版本
-     */
-    @JsonProperty
-    @Excel(name = "版本")
-    private String version;
-    /**
-     * 字段描述：是否生效版本
-     */
-    @JsonProperty
-    @Excel(name = "是否生效版本")
-    private String isUse;
-    /**
-     * 字段描述：有效合同金额（合同币种）
-     */
-    @JsonProperty
-    @Excel(name = "有效合同金额（合同币种）")
-    private BigDecimal contactAmtCu;
-    /**
-     * 字段描述：开累完成产值（合同币种）
-     */
-    @JsonProperty
-    @Excel(name = "开累完成产值（合同币种）")
-    private BigDecimal totalCompValueCu;
-    /**
-     * 字段描述：剩余有效合同金额（合同币种）
-     */
-    @JsonProperty
-    @Excel(name = "剩余有效合同金额（合同币种）")
-    private BigDecimal remainContactAmtCu;
-    /**
-     * 字段描述：本年计划产值（合同币种）
-     */
-    @JsonProperty
-    @Excel(name = "本年计划产值（合同币种）")
-    private BigDecimal yearPlanValueCu;
-    /**
-     * 字段描述：合同币种
-     */
-    @JsonProperty
-    @Excel(name = "合同币种")
-    private String custUnit;
-    /**
-     * 字段描述：汇率
-     */
-    @JsonProperty
-    @Excel(name = "汇率")
-    private BigDecimal exchangeRate;
-    /**
-     * 字段描述：本年计划产值（万美元）
-     */
-    @JsonProperty
-    @Excel(name = "本年计划产值（万美元）")
-    private BigDecimal yearPlanValueDl;
-    /**
-     * 字段描述：是否需调整计划
-     */
-    @JsonProperty
-    @Excel(name = "是否需调整计划")
-    private String isNeedAdjust;
-    /**
-     * 字段描述：批复年计划产值（美元）
-     */
-    @JsonProperty
-    @Excel(name = "批复年计划产值（美元）")
-    private BigDecimal approveYearPlanValueDl;
-    /**
-     * 字段描述：计划说明
-     */
-    @JsonProperty
-    @Excel(name = "计划说明")
-    private String planDescription;
-    /**
-     * 字段描述：年进度产值计划
-     */
-    @JsonProperty
-    private List<JdglYearValuePlan> jdglYearValuePlanList;
-    /**
-     * 字段描述：年进度产值计划
-     */
-    @JsonProperty
-    private List<JdglYearImagePlan> jdglYearImagePlanList;
     /**
      * 字段描述：部门id
      */
@@ -238,11 +252,5 @@ public class JdglYearPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
-    /**
-     * 字段描述：当前总计划版本
-     */
-    @JsonProperty
-    @Excel(name = "当前总计划版本")
-    private String thisTotalVersion;
 
 }

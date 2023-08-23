@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.mapper.JdglQuarterValuePlanMapper">
+
+    <resultMap type="com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan"
+               id="JdglQuarterValuePlanResultMap">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="planId" column="plan_id"/>
+        <result property="inventoryId" column="inventory_id"/>
+        <result property="inventoryCode" column="inventory_code"/>
+        <result property="inventoryName" column="inventory_name"/>
+        <result property="unit" column="unit"/>
+        <result property="designQuantity" column="design_quantity"/>
+        <result property="priceCu" column="price_cu"/>
+        <result property="totalCompDesignQuantity" column="total_comp_design_quantity"/>
+        <result property="remainDesignQuantity" column="remain_design_quantity"/>
+        <result property="quarterPlanCompDesignQuantity" column="quarter_plan_comp_design_quantity"/>
+        <result property="quarterPlanValueCu" column="quarter_plan_value_cu"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+    </resultMap>
+    <sql id="selectJdglQuarterValuePlanVo">
+        select `id`
+             , `pid`
+             , `plan_id`
+             , `inventory_id`
+             , `inventory_code`
+             , `inventory_name`
+             , `unit`
+             , `design_quantity`
+             , `price_cu`
+             , `total_comp_design_quantity`
+             , `remain_design_quantity`
+             , `quarter_plan_comp_design_quantity`
+             , `quarter_plan_value_cu`
+             , `file_group_id`
+             , `remark`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+             , `task_status`
+        from jdgl_quarter_value_plan
+    </sql>
+    <select id="getJdglQuarterValuePlan" resultMap="JdglQuarterValuePlanResultMap">
+        <include refid="selectJdglQuarterValuePlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="inventoryId != null ">and `inventory_id` = #{inventoryId}</if>
+            <if test="inventoryCode != null  and inventoryCode != ''">and `inventory_code` = #{inventoryCode}</if>
+            <if test="inventoryName != null  and inventoryName != ''">and `inventory_name` = #{inventoryName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="priceCu != null ">and `price_cu` = #{priceCu}</if>
+            <if test="totalCompDesignQuantity != null ">and `total_comp_design_quantity` = #{totalCompDesignQuantity}
+            </if>
+            <if test="remainDesignQuantity != null ">and `remain_design_quantity` = #{remainDesignQuantity}</if>
+            <if test="quarterPlanCompDesignQuantity != null ">and `quarter_plan_comp_design_quantity` =
+                #{quarterPlanCompDesignQuantity}
+            </if>
+            <if test="quarterPlanValueCu != null ">and `quarter_plan_value_cu` = #{quarterPlanValueCu}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getJdglQuarterValuePlanList" resultMap="JdglQuarterValuePlanResultMap">
+        <include refid="selectJdglQuarterValuePlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="inventoryId != null ">and `inventory_id` = #{inventoryId}</if>
+            <if test="inventoryCode != null  and inventoryCode != ''">and `inventory_code` = #{inventoryCode}</if>
+            <if test="inventoryName != null  and inventoryName != ''">and `inventory_name` = #{inventoryName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="priceCu != null ">and `price_cu` = #{priceCu}</if>
+            <if test="totalCompDesignQuantity != null ">and `total_comp_design_quantity` = #{totalCompDesignQuantity}
+            </if>
+            <if test="remainDesignQuantity != null ">and `remain_design_quantity` = #{remainDesignQuantity}</if>
+            <if test="quarterPlanCompDesignQuantity != null ">and `quarter_plan_comp_design_quantity` =
+                #{quarterPlanCompDesignQuantity}
+            </if>
+            <if test="quarterPlanValueCu != null ">and `quarter_plan_value_cu` = #{quarterPlanValueCu}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertJdglQuarterValuePlan" useGeneratedKeys="true" keyProperty="id">
+        insert into jdgl_quarter_value_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="planId != null ">`plan_id`,</if>
+            <if test="inventoryId != null ">`inventory_id`,</if>
+            <if test="inventoryCode != null  and inventoryCode != ''">`inventory_code`,</if>
+            <if test="inventoryName != null  and inventoryName != ''">`inventory_name`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="designQuantity != null ">`design_quantity`,</if>
+            <if test="priceCu != null ">`price_cu`,</if>
+            <if test="totalCompDesignQuantity != null ">`total_comp_design_quantity`,</if>
+            <if test="remainDesignQuantity != null ">`remain_design_quantity`,</if>
+            <if test="quarterPlanCompDesignQuantity != null ">`quarter_plan_comp_design_quantity`,</if>
+            <if test="quarterPlanValueCu != null ">`quarter_plan_value_cu`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="planId != null ">#{planId},</if>
+            <if test="inventoryId != null ">#{inventoryId},</if>
+            <if test="inventoryCode != null  and inventoryCode != ''">#{inventoryCode},</if>
+            <if test="inventoryName != null  and inventoryName != ''">#{inventoryName},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="designQuantity != null ">#{designQuantity},</if>
+            <if test="priceCu != null ">#{priceCu},</if>
+            <if test="totalCompDesignQuantity != null ">#{totalCompDesignQuantity},</if>
+            <if test="remainDesignQuantity != null ">#{remainDesignQuantity},</if>
+            <if test="quarterPlanCompDesignQuantity != null ">#{quarterPlanCompDesignQuantity},</if>
+            <if test="quarterPlanValueCu != null ">#{quarterPlanValueCu},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglQuarterValuePlan -->
+    <insert id="insertJdglQuarterValuePlanList">
+        insert into jdgl_quarter_value_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `pid`,
+            `plan_id`,
+            `inventory_id`,
+            `inventory_code`,
+            `inventory_name`,
+            `unit`,
+            `design_quantity`,
+            `price_cu`,
+            `total_comp_design_quantity`,
+            `remain_design_quantity`,
+            `quarter_plan_comp_design_quantity`,
+            `quarter_plan_value_cu`,
+            `file_group_id`,
+            `remark`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+        </trim>
+        values
+        <foreach collection="jdglQuarterValuePlanList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.pid},
+                #{item.planId},
+                #{item.inventoryId},
+                #{item.inventoryCode},
+                #{item.inventoryName},
+                #{item.unit},
+                #{item.designQuantity},
+                #{item.priceCu},
+                #{item.totalCompDesignQuantity},
+                #{item.remainDesignQuantity},
+                #{item.quarterPlanCompDesignQuantity},
+                #{item.quarterPlanValueCu},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateJdglQuarterValuePlan">
+        update jdgl_quarter_value_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="planId != null ">`plan_id` = #{planId},</if>
+            <if test="inventoryId != null ">`inventory_id` = #{inventoryId},</if>
+            <if test="inventoryCode != null  and  inventoryCode != ''">`inventory_code` = #{inventoryCode},</if>
+            <if test="inventoryName != null  and  inventoryName != ''">`inventory_name` = #{inventoryName},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="designQuantity != null ">`design_quantity` = #{designQuantity},</if>
+            <if test="priceCu != null ">`price_cu` = #{priceCu},</if>
+            <if test="totalCompDesignQuantity != null ">`total_comp_design_quantity` = #{totalCompDesignQuantity},</if>
+            <if test="remainDesignQuantity != null ">`remain_design_quantity` = #{remainDesignQuantity},</if>
+            <if test="quarterPlanCompDesignQuantity != null ">`quarter_plan_comp_design_quantity` =
+                #{quarterPlanCompDesignQuantity},
+            </if>
+            <if test="quarterPlanValueCu != null ">`quarter_plan_value_cu` = #{quarterPlanValueCu},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateJdglQuarterValuePlanList">
+        update jdgl_quarter_value_plan
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `pid`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="plan_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planId}
+                </foreach>
+            </trim>
+            <trim prefix="inventory_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.inventoryId}
+                </foreach>
+            </trim>
+            <trim prefix="inventory_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.inventoryCode}
+                </foreach>
+            </trim>
+            <trim prefix="inventory_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.inventoryName}
+                </foreach>
+            </trim>
+            <trim prefix="unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.unit}
+                </foreach>
+            </trim>
+            <trim prefix="design_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.designQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="price_cu  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.priceCu}
+                </foreach>
+            </trim>
+            <trim prefix="total_comp_design_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalCompDesignQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="remain_design_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainDesignQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="quarter_plan_comp_design_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.quarterPlanCompDesignQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="quarter_plan_value_cu  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.quarterPlanValueCu}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteJdglQuarterValuePlan">
+        update `jdgl_quarter_value_plan` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="inventoryId != null ">and `inventory_id` = #{inventoryId}</if>
+            <if test="inventoryCode != null  and inventoryCode != ''">and `inventory_code` = #{inventoryCode}</if>
+            <if test="inventoryName != null  and inventoryName != ''">and `inventory_name` = #{inventoryName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="priceCu != null ">and `price_cu` = #{priceCu}</if>
+            <if test="totalCompDesignQuantity != null ">and `total_comp_design_quantity` = #{totalCompDesignQuantity}
+            </if>
+            <if test="remainDesignQuantity != null ">and `remain_design_quantity` = #{remainDesignQuantity}</if>
+            <if test="quarterPlanCompDesignQuantity != null ">and `quarter_plan_comp_design_quantity` =
+                #{quarterPlanCompDesignQuantity}
+            </if>
+            <if test="quarterPlanValueCu != null ">and `quarter_plan_value_cu` = #{quarterPlanValueCu}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+    </update>
+
+    <update id="deleteJdglQuarterValuePlanByPks">
+        update `jdgl_quarter_value_plan` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="jdglQuarterValuePlanPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

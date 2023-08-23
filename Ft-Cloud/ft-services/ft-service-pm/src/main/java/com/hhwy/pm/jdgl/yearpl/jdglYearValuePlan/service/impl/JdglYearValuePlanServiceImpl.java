@@ -87,11 +87,14 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
 
     @Transactional
     public int updateJdglYearValuePlanList(List<JdglYearValuePlan> jdglYearValuePlanList) {
-        for (JdglYearValuePlan jdglYearValuePlan : jdglYearValuePlanList) {
-            jdglYearValuePlan.setUpdateUser(SecurityUtils.getUserName());
-            jdglYearValuePlan.setUpdateTime(DateUtils.getNowDate());
+        if (!CollectionUtils.isEmpty(jdglYearValuePlanList)) {
+            for (JdglYearValuePlan jdglYearValuePlan : jdglYearValuePlanList) {
+                jdglYearValuePlan.setUpdateUser(SecurityUtils.getUserName());
+                jdglYearValuePlan.setUpdateTime(DateUtils.getNowDate());
+            }
+            return jdglYearValuePlanMapper.updateJdglYearValuePlanList(jdglYearValuePlanList);
         }
-        return jdglYearValuePlanMapper.updateJdglYearValuePlanList(jdglYearValuePlanList);
+        return 0;
     }
 
     @Transactional

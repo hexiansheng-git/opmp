@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.mapper.JdglMonthImagePlanMapper">
+
+    <resultMap type="com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan"
+               id="JdglMonthImagePlanResultMap">
+        <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="planId" column="plan_id"/>
+        <result property="totalPlanImageId" column="total_plan_image_id"/>
+        <result property="totalPlanImagePid" column="total_plan_image_pid"/>
+        <result property="workId" column="work_id"/>
+        <result property="workCode" column="work_code"/>
+        <result property="workName" column="work_name"/>
+        <result property="unit" column="unit"/>
+        <result property="designQuantity" column="design_quantity"/>
+        <result property="totalCompQuantity" column="total_comp_quantity"/>
+        <result property="remainQuantity" column="remain_quantity"/>
+        <result property="planCompQuantity" column="plan_comp_quantity"/>
+        <result property="planCompValue" column="plan_comp_value"/>
+        <result property="planStartDate" column="plan_start_date"/>
+        <result property="planEndDate" column="plan_end_date"/>
+        <result property="wbsId" column="wbs_id"/>
+        <result property="wbsName" column="wbs_name"/>
+        <result property="responsePerson" column="response_person"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+    </resultMap>
+    <sql id="selectJdglMonthImagePlanVo">
+        select `id`
+             , `pid`
+             , `plan_id`
+             , `total_plan_image_id`
+             , `total_plan_image_pid`
+             , `work_id`
+             , `work_code`
+             , `work_name`
+             , `unit`
+             , `design_quantity`
+             , `total_comp_quantity`
+             , `remain_quantity`
+             , `plan_comp_quantity`
+             , `plan_comp_value`
+             , `plan_start_date`
+             , `plan_end_date`
+             , `wbs_id`
+             , `wbs_name`
+             , `response_person`
+             , `file_group_id`
+             , `remark`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+             , `task_status`
+        from jdgl_month_image_plan
+    </sql>
+    <select id="getJdglMonthImagePlan" resultMap="JdglMonthImagePlanResultMap">
+        <include refid="selectJdglMonthImagePlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="totalPlanImageId != null ">and `total_plan_image_id` = #{totalPlanImageId}</if>
+            <if test="totalPlanImagePid != null ">and `total_plan_image_pid` = #{totalPlanImagePid}</if>
+            <if test="workId != null ">and `work_id` = #{workId}</if>
+            <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
+            <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="totalCompQuantity != null ">and `total_comp_quantity` = #{totalCompQuantity}</if>
+            <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>
+            <if test="planCompQuantity != null ">and `plan_comp_quantity` = #{planCompQuantity}</if>
+            <if test="planCompValue != null ">and `plan_comp_value` = #{planCompValue}</if>
+            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
+            <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getJdglMonthImagePlanList" resultMap="JdglMonthImagePlanResultMap">
+        <include refid="selectJdglMonthImagePlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="totalPlanImageId != null ">and `total_plan_image_id` = #{totalPlanImageId}</if>
+            <if test="totalPlanImagePid != null ">and `total_plan_image_pid` = #{totalPlanImagePid}</if>
+            <if test="workId != null ">and `work_id` = #{workId}</if>
+            <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
+            <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="totalCompQuantity != null ">and `total_comp_quantity` = #{totalCompQuantity}</if>
+            <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>
+            <if test="planCompQuantity != null ">and `plan_comp_quantity` = #{planCompQuantity}</if>
+            <if test="planCompValue != null ">and `plan_comp_value` = #{planCompValue}</if>
+            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
+            <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertJdglMonthImagePlan" useGeneratedKeys="true" keyProperty="id">
+        insert into jdgl_month_image_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="planId != null ">`plan_id`,</if>
+            <if test="totalPlanImageId != null ">`total_plan_image_id`,</if>
+            <if test="totalPlanImagePid != null ">`total_plan_image_pid`,</if>
+            <if test="workId != null ">`work_id`,</if>
+            <if test="workCode != null  and workCode != ''">`work_code`,</if>
+            <if test="workName != null  and workName != ''">`work_name`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="designQuantity != null ">`design_quantity`,</if>
+            <if test="totalCompQuantity != null ">`total_comp_quantity`,</if>
+            <if test="remainQuantity != null ">`remain_quantity`,</if>
+            <if test="planCompQuantity != null ">`plan_comp_quantity`,</if>
+            <if test="planCompValue != null ">`plan_comp_value`,</if>
+            <if test="planStartDate != null ">`plan_start_date`,</if>
+            <if test="planEndDate != null ">`plan_end_date`,</if>
+            <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="wbsName != null ">`wbs_name`,</if>
+            <if test="responsePerson != null ">`response_person`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="planId != null ">#{planId},</if>
+            <if test="totalPlanImageId != null ">#{totalPlanImageId},</if>
+            <if test="totalPlanImagePid != null ">#{totalPlanImagePid},</if>
+            <if test="workId != null ">#{workId},</if>
+            <if test="workCode != null  and workCode != ''">#{workCode},</if>
+            <if test="workName != null  and workName != ''">#{workName},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="designQuantity != null ">#{designQuantity},</if>
+            <if test="totalCompQuantity != null ">#{totalCompQuantity},</if>
+            <if test="remainQuantity != null ">#{remainQuantity},</if>
+            <if test="planCompQuantity != null ">#{planCompQuantity},</if>
+            <if test="planCompValue != null ">#{planCompValue},</if>
+            <if test="planStartDate != null ">#{planStartDate},</if>
+            <if test="planEndDate != null ">#{planEndDate},</if>
+            <if test="wbsId != null ">#{wbsId},</if>
+            <if test="wbsName != null ">#{wbsName},</if>
+            <if test="responsePerson != null ">#{responsePerson},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglMonthImagePlan -->
+    <insert id="insertJdglMonthImagePlanList">
+        insert into jdgl_month_image_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `pid`,
+            `plan_id`,
+            `total_plan_image_id`,
+            `total_plan_image_pid`,
+            `work_id`,
+            `work_code`,
+            `work_name`,
+            `unit`,
+            `design_quantity`,
+            `total_comp_quantity`,
+            `remain_quantity`,
+            `plan_comp_quantity`,
+            `plan_comp_value`,
+            `plan_start_date`,
+            `plan_end_date`,
+            `wbs_id`,
+            `wbs_name`,
+            `response_person`,
+            `file_group_id`,
+            `remark`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+        </trim>
+        values
+        <foreach collection="jdglMonthImagePlanList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.pid},
+                #{item.planId},
+                #{item.totalPlanImageId},
+                #{item.totalPlanImagePid},
+                #{item.workId},
+                #{item.workCode},
+                #{item.workName},
+                #{item.unit},
+                #{item.designQuantity},
+                #{item.totalCompQuantity},
+                #{item.remainQuantity},
+                #{item.planCompQuantity},
+                #{item.planCompValue},
+                #{item.planStartDate},
+                #{item.planEndDate},
+                #{item.wbsId},
+                #{item.wbsName},
+                #{item.responsePerson},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateJdglMonthImagePlan">
+        update jdgl_month_image_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="planId != null ">`plan_id` = #{planId},</if>
+            <if test="totalPlanImageId != null ">`total_plan_image_id` = #{totalPlanImageId},</if>
+            <if test="totalPlanImagePid != null ">`total_plan_image_pid` = #{totalPlanImagePid},</if>
+            <if test="workId != null ">`work_id` = #{workId},</if>
+            <if test="workCode != null  and  workCode != ''">`work_code` = #{workCode},</if>
+            <if test="workName != null  and  workName != ''">`work_name` = #{workName},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="designQuantity != null ">`design_quantity` = #{designQuantity},</if>
+            <if test="totalCompQuantity != null ">`total_comp_quantity` = #{totalCompQuantity},</if>
+            <if test="remainQuantity != null ">`remain_quantity` = #{remainQuantity},</if>
+            <if test="planCompQuantity != null ">`plan_comp_quantity` = #{planCompQuantity},</if>
+            <if test="planCompValue != null ">`plan_comp_value` = #{planCompValue},</if>
+            <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
+            <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
+            <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="wbsName != null ">`wbs_name` = #{wbsName},</if>
+            <if test="responsePerson != null ">`response_person` = #{responsePerson},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateJdglMonthImagePlanList">
+        update jdgl_month_image_plan
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `pid`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="plan_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planId}
+                </foreach>
+            </trim>
+            <trim prefix="total_plan_image_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalPlanImageId}
+                </foreach>
+            </trim>
+            <trim prefix="total_plan_image_pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalPlanImagePid}
+                </foreach>
+            </trim>
+            <trim prefix="work_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workId}
+                </foreach>
+            </trim>
+            <trim prefix="work_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workCode}
+                </foreach>
+            </trim>
+            <trim prefix="work_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.workName}
+                </foreach>
+            </trim>
+            <trim prefix="unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.unit}
+                </foreach>
+            </trim>
+            <trim prefix="design_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.designQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="total_comp_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalCompQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="remain_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="plan_comp_quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planCompQuantity}
+                </foreach>
+            </trim>
+            <trim prefix="plan_comp_value  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planCompValue}
+                </foreach>
+            </trim>
+            <trim prefix="plan_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="plan_end_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planEndDate}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsName}
+                </foreach>
+            </trim>
+            <trim prefix="response_person  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.responsePerson}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteJdglMonthImagePlan">
+        update `jdgl_month_image_plan` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="totalPlanImageId != null ">and `total_plan_image_id` = #{totalPlanImageId}</if>
+            <if test="totalPlanImagePid != null ">and `total_plan_image_pid` = #{totalPlanImagePid}</if>
+            <if test="workId != null ">and `work_id` = #{workId}</if>
+            <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
+            <if test="workName != null  and workName != ''">and `work_name` = #{workName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="totalCompQuantity != null ">and `total_comp_quantity` = #{totalCompQuantity}</if>
+            <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>
+            <if test="planCompQuantity != null ">and `plan_comp_quantity` = #{planCompQuantity}</if>
+            <if test="planCompValue != null ">and `plan_comp_value` = #{planCompValue}</if>
+            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
+            <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+    </update>
+
+    <update id="deleteJdglMonthImagePlanByPks">
+        update `jdgl_month_image_plan` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="jdglMonthImagePlanPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.mapper.JdglMonthPlanMapper">
+
+    <resultMap type="com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan" id="JdglMonthPlanResultMap">
+        <result property="id" column="id"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="remark" column="remark"/>
+        <result property="year" column="year"/>
+        <result property="month" column="month"/>
+        <result property="startDate" column="start_date"/>
+        <result property="endDate" column="end_date"/>
+        <result property="version" column="version"/>
+        <result property="isUse" column="is_use"/>
+        <result property="contactAmtCu" column="contact_amt_cu"/>
+        <result property="quarterPlanValueDl" column="quarter_plan_value_dl"/>
+        <result property="quarterCompValueDl" column="quarter_comp_value_dl"/>
+        <result property="remainQuarterAmtDl" column="remain_quarter_amt_dl"/>
+        <result property="thisPlanValueCu" column="this_plan_value_cu"/>
+        <result property="custUnit" column="cust_unit"/>
+        <result property="exchangeRate" column="exchange_rate"/>
+        <result property="thisPlanValueDl" column="this_plan_value_dl"/>
+        <result property="isNeedAdjust" column="is_need_adjust"/>
+        <result property="approveThisPlanValueDl" column="approve_this_plan_value_dl"/>
+        <result property="planDescription" column="plan_description"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="thisTotalVersion" column="this_total_version"/>
+    </resultMap>
+    <sql id="selectJdglMonthPlanVo">
+        select `id`
+             , `file_group_id`
+             , `project_name`
+             , `remark`
+             , `year`
+             , `month`
+             , `start_date`
+             , `end_date`
+             , `version`
+             , `is_use`
+             , `contact_amt_cu`
+             , `quarter_plan_value_dl`
+             , `quarter_comp_value_dl`
+             , `remain_quarter_amt_dl`
+             , `this_plan_value_cu`
+             , `cust_unit`
+             , `exchange_rate`
+             , `this_plan_value_dl`
+             , `is_need_adjust`
+             , `approve_this_plan_value_dl`
+             , `plan_description`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+             , `task_status`
+             , `this_total_version`
+        from jdgl_month_plan
+    </sql>
+    <select id="getJdglMonthPlan" resultMap="JdglMonthPlanResultMap">
+        <include refid="selectJdglMonthPlanVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="year != null  and year != ''">and `year` = #{year}</if>
+            <if test="month != null  and month != ''">and `month` = #{month}</if>
+            <if test="startDate != null ">and `start_date` = #{startDate}</if>
+            <if test="endDate != null ">and `end_date` = #{endDate}</if>
+            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="isUse != null  and isUse != ''">and `is_use` = #{isUse}</if>
+            <if test="contactAmtCu != null ">and `contact_amt_cu` = #{contactAmtCu}</if>
+            <if test="quarterPlanValueDl != null ">and `quarter_plan_value_dl` = #{quarterPlanValueDl}</if>
+            <if test="quarterCompValueDl != null ">and `quarter_comp_value_dl` = #{quarterCompValueDl}</if>
+            <if test="remainQuarterAmtDl != null ">and `remain_quarter_amt_dl` = #{remainQuarterAmtDl}</if>
+            <if test="thisPlanValueCu != null ">and `this_plan_value_cu` = #{thisPlanValueCu}</if>
+            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
+            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
+            <if test="thisPlanValueDl != null ">and `this_plan_value_dl` = #{thisPlanValueDl}</if>
+            <if test="isNeedAdjust != null  and isNeedAdjust != ''">and `is_need_adjust` = #{isNeedAdjust}</if>
+            <if test="approveThisPlanValueDl != null ">and `approve_this_plan_value_dl` = #{approveThisPlanValueDl}</if>
+            <if test="planDescription != null  and planDescription != ''">and `plan_description` = #{planDescription}
+            </if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="thisTotalVersion != null  and thisTotalVersion != ''">and `this_total_version` =
+                #{thisTotalVersion}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getJdglMonthPlanList" resultMap="JdglMonthPlanResultMap">
+        <include refid="selectJdglMonthPlanVo"/>
+        <where>
+        del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="year != null  and year != ''">and `year` = #{year}</if>
+            <if test="month != null  and month != ''">and `month` = #{month}</if>
+            <if test="startDate != null ">and `start_date` = #{startDate}</if>
+            <if test="endDate != null ">and `end_date` = #{endDate}</if>
+            <if test="version != null  and version != ''">and `version` = #{version}</if>
+            <if test="isUse != null  and isUse != ''">and `is_use` = #{isUse}</if>
+            <if test="contactAmtCu != null ">and `contact_amt_cu` = #{contactAmtCu}</if>
+            <if test="quarterPlanValueDl != null ">and `quarter_plan_value_dl` = #{quarterPlanValueDl}</if>
+            <if test="quarterCompValueDl != null ">and `quarter_comp_value_dl` = #{quarterCompValueDl}</if>
+            <if test="remainQuarterAmtDl != null ">and `remain_quarter_amt_dl` = #{remainQuarterAmtDl}</if>
+            <if test="thisPlanValueCu != null ">and `this_plan_value_cu` = #{thisPlanValueCu}</if>
+            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
+            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
+            <if test="thisPlanValueDl != null ">and `this_plan_value_dl` = #{thisPlanValueDl}</if>
+            <if test="isNeedAdjust != null  and isNeedAdjust != ''">and `is_need_adjust` = #{isNeedAdjust}</if>
+            <if test="approveThisPlanValueDl != null ">and `approve_this_plan_value_dl` = #{approveThisPlanValueDl}</if>
+            <if test="planDescription != null  and planDescription != ''">and `plan_description` = #{planDescription}
+            </if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="thisTotalVersion != null  and thisTotalVersion != ''">and `this_total_version` =
+                #{thisTotalVersion}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <insert id="insertJdglMonthPlan" useGeneratedKeys="true" keyProperty="id">
+        insert into jdgl_month_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="year != null  and year != ''">`year`,</if>
+            <if test="month != null  and month != ''">`month`,</if>
+            <if test="startDate != null ">`start_date`,</if>
+            <if test="endDate != null ">`end_date`,</if>
+            <if test="version != null  and version != ''">`version`,</if>
+            <if test="isUse != null  and isUse != ''">`is_use`,</if>
+            <if test="contactAmtCu != null ">`contact_amt_cu`,</if>
+            <if test="quarterPlanValueDl != null ">`quarter_plan_value_dl`,</if>
+            <if test="quarterCompValueDl != null ">`quarter_comp_value_dl`,</if>
+            <if test="remainQuarterAmtDl != null ">`remain_quarter_amt_dl`,</if>
+            <if test="thisPlanValueCu != null ">`this_plan_value_cu`,</if>
+            <if test="custUnit != null  and custUnit != ''">`cust_unit`,</if>
+            <if test="exchangeRate != null ">`exchange_rate`,</if>
+            <if test="thisPlanValueDl != null ">`this_plan_value_dl`,</if>
+            <if test="isNeedAdjust != null  and isNeedAdjust != ''">`is_need_adjust`,</if>
+            <if test="approveThisPlanValueDl != null ">`approve_this_plan_value_dl`,</if>
+            <if test="planDescription != null  and planDescription != ''">`plan_description`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="thisTotalVersion != null  and thisTotalVersion != ''">`this_total_version`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="year != null  and year != ''">#{year},</if>
+            <if test="month != null  and month != ''">#{month},</if>
+            <if test="startDate != null ">#{startDate},</if>
+            <if test="endDate != null ">#{endDate},</if>
+            <if test="version != null  and version != ''">#{version},</if>
+            <if test="isUse != null  and isUse != ''">#{isUse},</if>
+            <if test="contactAmtCu != null ">#{contactAmtCu},</if>
+            <if test="quarterPlanValueDl != null ">#{quarterPlanValueDl},</if>
+            <if test="quarterCompValueDl != null ">#{quarterCompValueDl},</if>
+            <if test="remainQuarterAmtDl != null ">#{remainQuarterAmtDl},</if>
+            <if test="thisPlanValueCu != null ">#{thisPlanValueCu},</if>
+            <if test="custUnit != null  and custUnit != ''">#{custUnit},</if>
+            <if test="exchangeRate != null ">#{exchangeRate},</if>
+            <if test="thisPlanValueDl != null ">#{thisPlanValueDl},</if>
+            <if test="isNeedAdjust != null  and isNeedAdjust != ''">#{isNeedAdjust},</if>
+            <if test="approveThisPlanValueDl != null ">#{approveThisPlanValueDl},</if>
+            <if test="planDescription != null  and planDescription != ''">#{planDescription},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="thisTotalVersion != null  and thisTotalVersion != ''">#{thisTotalVersion},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglMonthPlan -->
+    <insert id="insertJdglMonthPlanList">
+        insert into jdgl_month_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `file_group_id`,
+            `project_name`,
+            `remark`,
+            `year`,
+            `month`,
+            `start_date`,
+            `end_date`,
+            `version`,
+            `is_use`,
+            `contact_amt_cu`,
+            `quarter_plan_value_dl`,
+            `quarter_comp_value_dl`,
+            `remain_quarter_amt_dl`,
+            `this_plan_value_cu`,
+            `cust_unit`,
+            `exchange_rate`,
+            `this_plan_value_dl`,
+            `is_need_adjust`,
+            `approve_this_plan_value_dl`,
+            `plan_description`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+            `this_total_version`,
+        </trim>
+        values
+        <foreach collection="jdglMonthPlanList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.fileGroupId},
+                #{item.projectName},
+                #{item.remark},
+                #{item.year},
+                #{item.month},
+                #{item.startDate},
+                #{item.endDate},
+                #{item.version},
+                #{item.isUse},
+                #{item.contactAmtCu},
+                #{item.quarterPlanValueDl},
+                #{item.quarterCompValueDl},
+                #{item.remainQuarterAmtDl},
+                #{item.thisPlanValueCu},
+                #{item.custUnit},
+                #{item.exchangeRate},
+                #{item.thisPlanValueDl},
+                #{item.isNeedAdjust},
+                #{item.approveThisPlanValueDl},
+                #{item.planDescription},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+                #{item.thisTotalVersion},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateJdglMonthPlan">
+        update jdgl_month_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="year != null  and  year != ''">`year` = #{year},</if>
+            <if test="month != null  and  month != ''">`month` = #{month},</if>
+            <if test="startDate != null ">`start_date` = #{startDate},</if>
+            <if test="endDate != null ">`end_date` = #{endDate},</if>
+            <if test="version != null  and  version != ''">`version` = #{version},</if>
+            <if test="isUse != null  and  isUse != ''">`is_use` = #{isUse},</if>
+            <if test="contactAmtCu != null ">`contact_amt_cu` = #{contactAmtCu},</if>
+            <if test="quarterPlanValueDl != null ">`quarter_plan_value_dl` = #{quarterPlanValueDl},</if>
+            <if test="quarterCompValueDl != null ">`quarter_comp_value_dl` = #{quarterCompValueDl},</if>
+            <if test="remainQuarterAmtDl != null ">`remain_quarter_amt_dl` = #{remainQuarterAmtDl},</if>
+            <if test="thisPlanValueCu != null ">`this_plan_value_cu` = #{thisPlanValueCu},</if>
+            <if test="custUnit != null  and  custUnit != ''">`cust_unit` = #{custUnit},</if>
+            <if test="exchangeRate != null ">`exchange_rate` = #{exchangeRate},</if>
+            <if test="thisPlanValueDl != null ">`this_plan_value_dl` = #{thisPlanValueDl},</if>
+            <if test="isNeedAdjust != null  and  isNeedAdjust != ''">`is_need_adjust` = #{isNeedAdjust},</if>
+            <if test="approveThisPlanValueDl != null ">`approve_this_plan_value_dl` = #{approveThisPlanValueDl},</if>
+            <if test="planDescription != null  and  planDescription != ''">`plan_description` = #{planDescription},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="thisTotalVersion != null  and  thisTotalVersion != ''">`this_total_version` =
+                #{thisTotalVersion},
+            </if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateJdglMonthPlanList">
+        update jdgl_month_plan
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="year  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.year}
+                </foreach>
+            </trim>
+            <trim prefix="month  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.month}
+                </foreach>
+            </trim>
+            <trim prefix="start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.startDate}
+                </foreach>
+            </trim>
+            <trim prefix="end_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.endDate}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="is_use  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isUse}
+                </foreach>
+            </trim>
+            <trim prefix="contact_amt_cu  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contactAmtCu}
+                </foreach>
+            </trim>
+            <trim prefix="quarter_plan_value_dl  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.quarterPlanValueDl}
+                </foreach>
+            </trim>
+            <trim prefix="quarter_comp_value_dl  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.quarterCompValueDl}
+                </foreach>
+            </trim>
+            <trim prefix="remain_quarter_amt_dl  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainQuarterAmtDl}
+                </foreach>
+            </trim>
+            <trim prefix="this_plan_value_cu  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.thisPlanValueCu}
+                </foreach>
+            </trim>
+            <trim prefix="cust_unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.custUnit}
+                </foreach>
+            </trim>
+            <trim prefix="exchange_rate  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.exchangeRate}
+                </foreach>
+            </trim>
+            <trim prefix="this_plan_value_dl  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.thisPlanValueDl}
+                </foreach>
+            </trim>
+            <trim prefix="is_need_adjust  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isNeedAdjust}
+                </foreach>
+            </trim>
+            <trim prefix="approve_this_plan_value_dl  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.approveThisPlanValueDl}
+                </foreach>
+            </trim>
+            <trim prefix="plan_description  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planDescription}
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.deptId}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+            <trim prefix="this_total_version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.thisTotalVersion}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteJdglMonthPlan">
+        update `jdgl_month_plan` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="deleteJdglMonthPlanByPks">
+        update `jdgl_month_plan` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="jdglMonthPlanPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

@@ -66,7 +66,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         JdglYearPlan returnVO = new JdglYearPlan();
 
         // 获取项目及合同信息
-        XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(null);
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
 
         if(xmslContractInfo != null) {
             returnVO.setProjectName(xmslContractInfo.getProjectName());

@@ -76,11 +76,14 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Transactional
     public int updateJdglYearImagePlanList(List<JdglYearImagePlan> jdglYearImagePlanList) {
-        for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
-            jdglYearImagePlan.setUpdateUser(SecurityUtils.getUserName());
-            jdglYearImagePlan.setUpdateTime(DateUtils.getNowDate());
+        if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+            for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
+                jdglYearImagePlan.setUpdateUser(SecurityUtils.getUserName());
+                jdglYearImagePlan.setUpdateTime(DateUtils.getNowDate());
+            }
+            return jdglYearImagePlanMapper.updateJdglYearImagePlanList(jdglYearImagePlanList);
         }
-        return jdglYearImagePlanMapper.updateJdglYearImagePlanList(jdglYearImagePlanList);
+        return 0;
     }
 
     @Transactional
