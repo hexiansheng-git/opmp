@@ -48,10 +48,10 @@ public class QqchDangerProcessControlPlanController extends BaseController {
      * @param qqchDangerProcessControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerProcessControlPlan:update")
+    @PreAuthorize(hasPermi = "qqchDangerProcessControlPlan:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerProcessControlPlanVo qqchDangerProcessControlPlanVo) {
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchDangerProcessControlPlanVo qqchDangerProcessControlPlanVo) {
         qqchDangerProcessControlPlanService.batchSave(qqchDangerProcessControlPlanVo);
         return AjaxResult.success();
     }

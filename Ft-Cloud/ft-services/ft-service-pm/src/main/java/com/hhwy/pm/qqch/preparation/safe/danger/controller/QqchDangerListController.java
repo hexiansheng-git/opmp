@@ -47,10 +47,10 @@ public class QqchDangerListController extends BaseController {
      * @param qqchDangerListVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerList:update")
+    @PreAuthorize(hasPermi = "qqchDangerList:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerListVo qqchDangerListVo) {
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchDangerListVo qqchDangerListVo) {
         qqchDangerListService.batchSave(qqchDangerListVo);
         return AjaxResult.success();
     }

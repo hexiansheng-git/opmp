@@ -46,7 +46,7 @@ public class QqchQcImplementPlanController extends BaseController {
      * @param qqchQcImplementPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQcImplementPlan:update")
+    @PreAuthorize(hasPermi = "qqchQcImplementPlan:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody QqchQcImplementPlanVo qqchQcImplementPlanVo) {
         qqchQcImplementPlanService.batchSave(qqchQcImplementPlanVo);

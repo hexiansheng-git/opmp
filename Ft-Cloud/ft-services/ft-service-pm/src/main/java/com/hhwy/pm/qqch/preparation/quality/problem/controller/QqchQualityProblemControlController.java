@@ -48,10 +48,10 @@ public class QqchQualityProblemControlController extends BaseController {
      * @param qqchQualityProblemControlVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityProblemControl:update")
+    @PreAuthorize(hasPermi = "qqchQualityProblemControl:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
-        @Validated(ValidationGroups.Update.class) @RequestBody QqchQualityProblemControlVo qqchQualityProblemControlVo) {
+        @Validated(ValidationGroups.Save.class) @RequestBody QqchQualityProblemControlVo qqchQualityProblemControlVo) {
         qqchQualityProblemControlService.batchSave(qqchQualityProblemControlVo);
         return AjaxResult.success();
     }
