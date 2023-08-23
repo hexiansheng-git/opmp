@@ -2,7 +2,6 @@ package com.hhwy.pm.xmsl.wbs.service.impl;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.comparator.CompareUtil;
 import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
@@ -10,14 +9,12 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsHistory;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
-import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsHistoryMapper;
 import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
@@ -33,7 +30,6 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -43,13 +39,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
-import sun.security.pkcs11.wrapper.Functions;
 
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -133,7 +127,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         xmslWbs.getParams().put("tableName",main.getValid()==Constant.NO_INT?"xmsl_wbs_history":"xmsl_wbs");
         List<XmslWbs> list = xmslWbsMapper.getXmslWbsList(xmslWbs);
         //清单信息获取
-        return ObjectUtils.toMap("list",list,"mainId",main.getId());
+        return ObjectUtils.toMap("list",list,"mainId",main.getId(),"version",main.getVersion());
     }
 
     @Override

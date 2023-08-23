@@ -30,7 +30,6 @@ public class QqchComparisonSchemeController extends BaseController {
      * 重大设计方案比选-方案台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchComparisonScheme:list")
     @GetMapping("/list")
     public AjaxResult getQqchComparisonSchemeVo(BigDecimal version) {
         QqchComparisonSchemeVo qqchComparisonSchemeVo = qqchComparisonSchemeService.getQqchComparisonSchemeVo(version);
@@ -42,7 +41,7 @@ public class QqchComparisonSchemeController extends BaseController {
      * @param qqchComparisonSchemeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchComparisonScheme:update")
+    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.save(qqchComparisonSchemeVo);
@@ -54,7 +53,7 @@ public class QqchComparisonSchemeController extends BaseController {
      * @param qqchComparisonSchemeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchComparisonScheme:update")
+    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.confirm(qqchComparisonSchemeVo);

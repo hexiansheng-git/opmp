@@ -91,7 +91,6 @@ public class QqchProjectBreakEvenPointController extends BaseController {
      * @param qqchProjectBreakEvenPoint
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:list")
     @GetMapping("getQqchProjectBreakEvenPointVo")
     public AjaxResult getQqchProjectBreakEvenPointVo(@Validated(ValidationGroups.Get.class) QqchProjectBreakEvenPoint qqchProjectBreakEvenPoint) {
         QqchProjectBreakEvenPointVo qqchProjectBreakEvenPointVo = qqchProjectBreakEvenPointService.getQqchProjectBreakEvenPointVo(qqchProjectBreakEvenPoint);
@@ -103,7 +102,7 @@ public class QqchProjectBreakEvenPointController extends BaseController {
      * @param qqchProjectBreakEvenPointVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:add")
+    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchProjectBreakEvenPointVo qqchProjectBreakEvenPointVo) {
         qqchProjectBreakEvenPointService.save(qqchProjectBreakEvenPointVo);

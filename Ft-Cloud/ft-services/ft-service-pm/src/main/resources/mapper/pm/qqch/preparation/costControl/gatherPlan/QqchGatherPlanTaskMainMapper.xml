@@ -2,13 +2,14 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.survey.extend.mapper.QqchPreparationSurveyExtendMapper">
+<mapper namespace="com.hhwy.pm.qqch.preparation.costControl.gatherPlan.mapper.QqchGatherPlanTaskMainMapper">
 
-    <resultMap type="com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend"
-               id="QqchPreparationSurveyExtendResultMap">
+    <resultMap type="com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.QqchGatherPlanTaskMain"
+               id="QqchGatherPlanTaskMainResultMap">
         <result property="id" column="id"/>
-        <result property="moduleIdentity" column="module_identity"/>
-        <result property="fileGroupId" column="file_group_id"/>
+        <result property="wbsMainId" column="wbs_main_id"/>
+        <result property="wbsVersion" column="wbs_version"/>
+        <result property="remark" column="remark"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
         <result property="regionId" column="region_id"/>
@@ -30,45 +31,42 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
-    <sql id="selectQqchPreparationSurveyExtendVo">
-        select
-              `id`
-             ,`module_identity`
-             ,`file_group_id`
-             ,`version`
-             ,`valid`
-             ,`region_id`
-             ,`region_name`
-             ,`project_id`
-             ,`project_name`
-             ,`dept_id`
-             ,`create_user`
-             ,`create_user_name`
-             ,`create_time`
-             ,`update_user`
-             ,`update_time`
-             ,`del_user`
-             ,`del_time`
-             ,`del_flag`
-             ,`pt_var1`
-             ,`pt_var2`
-             ,`pt_var3`
-             ,`pt_var4`
-             ,`pt_var5`
-        from qqch_preparation_survey_extend
+    <sql id="selectQqchGatherPlanTaskMainVo">
+        select `id`
+             , `wbs_main_id`
+             , `wbs_version`
+             , `remark`
+             , `version`
+             , `valid`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+             , `dept_id`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+        from qqch_gather_plan_task_main
     </sql>
-    <select id="getQqchPreparationSurveyExtend" resultMap="QqchPreparationSurveyExtendResultMap">
-        <include refid="selectQqchPreparationSurveyExtendVo"/>
+    <select id="getQqchGatherPlanTaskMain" resultMap="QqchGatherPlanTaskMainResultMap">
+        <include refid="selectQqchGatherPlanTaskMainVo"/>
         <where>
-            del_flag = '0'
+            del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="moduleIdentity != null  and moduleIdentity != ''">and
-                `module_identity` = #{moduleIdentity}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and
-                `file_group_id` = #{fileGroupId}
-            </if>
-            <if test="version != null">and `version` = #{version}</if>
+            <if test="wbsMainId != null ">and `wbs_main_id` = #{wbsMainId}</if>
+            <if test="wbsVersion != null ">and `wbs_version` = #{wbsVersion}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -93,18 +91,15 @@
         limit 1
     </select>
 
-    <select id="getQqchPreparationSurveyExtendList" resultMap="QqchPreparationSurveyExtendResultMap">
-        <include refid="selectQqchPreparationSurveyExtendVo"/>
+    <select id="getQqchGatherPlanTaskMainList" resultMap="QqchGatherPlanTaskMainResultMap">
+        <include refid="selectQqchGatherPlanTaskMainVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="moduleIdentity != null  and moduleIdentity != ''">and
-                `module_identity` = #{moduleIdentity}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and
-                `file_group_id` = #{fileGroupId}
-            </if>
-            <if test="version != null">and `version` = #{version}</if>
+            <if test="wbsMainId != null ">and `wbs_main_id` = #{wbsMainId}</if>
+            <if test="wbsVersion != null ">and `wbs_version` = #{wbsVersion}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -128,17 +123,14 @@
         order by create_time desc
     </select>
 
-    <insert id="insertQqchPreparationSurveyExtend" useGeneratedKeys="true" keyProperty="id">
-        insert into qqch_preparation_survey_extend
+    <insert id="insertQqchGatherPlanTaskMain" useGeneratedKeys="true" keyProperty="id">
+        insert into qqch_gather_plan_task_main
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="moduleIdentity != null  and moduleIdentity != ''">
-                `module_identity`,
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">
-                `file_group_id`,
-            </if>
-            <if test="version != null">`version`,</if>
+            <if test="wbsMainId != null ">`wbs_main_id`,</if>
+            <if test="wbsVersion != null ">`wbs_version`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -161,13 +153,10 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="moduleIdentity != null  and moduleIdentity != ''">
-                #{moduleIdentity},
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">
-                #{fileGroupId},
-            </if>
-            <if test="version != null">#{version},</if>
+            <if test="wbsMainId != null ">#{wbsMainId},</if>
+            <if test="wbsVersion != null ">#{wbsVersion},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -190,13 +179,14 @@
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchPreparationSurveyExtend -->
-    <insert id="insertQqchPreparationSurveyExtendList">
-        insert into qqch_preparation_survey_extend
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchGatherPlanTaskMain -->
+    <insert id="insertQqchGatherPlanTaskMainList">
+        insert into qqch_gather_plan_task_main
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `module_identity`,
-            `file_group_id`,
+            `wbs_main_id`,
+            `wbs_version`,
+            `remark`,
             `version`,
             `valid`,
             `region_id`,
@@ -218,11 +208,12 @@
             `pt_var5`,
         </trim>
         values
-        <foreach collection="qqchPreparationSurveyExtendList" item="item" separator=",">
+        <foreach collection="qqchGatherPlanTaskMainList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.moduleIdentity},
-                #{item.fileGroupId},
+                #{item.wbsMainId},
+                #{item.wbsVersion},
+                #{item.remark},
                 #{item.version},
                 #{item.valid},
                 #{item.regionId},
@@ -246,16 +237,13 @@
         </foreach>
     </insert>
 
-    <update id="updateQqchPreparationSurveyExtend">
-        update qqch_preparation_survey_extend
+    <update id="updateQqchGatherPlanTaskMain">
+        update qqch_gather_plan_task_main
         <trim prefix="SET" suffixOverrides=",">
-            <if test="moduleIdentity != null  and  moduleIdentity != ''">
-                `module_identity` = #{moduleIdentity},
-            </if>
-            <if test="fileGroupId != null  and  fileGroupId != ''">
-                `file_group_id` = #{fileGroupId},
-            </if>
-            <if test="version != null">`version` = #{version},</if>
+            <if test="wbsMainId != null ">`wbs_main_id` = #{wbsMainId},</if>
+            <if test="wbsVersion != null ">`wbs_version` = #{wbsVersion},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="version != null ">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
@@ -263,7 +251,7 @@
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
-            <if test="updateTime != null ">`update_time` = #{updateTime},</if>>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
             <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
             <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
@@ -275,17 +263,22 @@
         </where>
     </update>
 
-    <update id="updateQqchPreparationSurveyExtendList">
-        update qqch_preparation_survey_extend
+    <update id="updateQqchGatherPlanTaskMainList">
+        update qqch_gather_plan_task_main
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="module_identity  = case" suffix="end,">
+            <trim prefix="wbs_main_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.moduleIdentity}
+                    when `id`=#{item.id} then #{item.wbsMainId}
                 </foreach>
             </trim>
-            <trim prefix="file_group_id  = case" suffix="end,">
+            <trim prefix="wbs_version  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.fileGroupId}
+                    when `id`=#{item.id} then #{item.wbsVersion}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">
@@ -365,17 +358,14 @@
         </foreach>
     </update>
 
-    <update id="deleteQqchPreparationSurveyExtend">
-        update `qqch_preparation_survey_extend` set del_flag = '1'
+    <update id="deleteQqchGatherPlanTaskMain">
+        update `qqch_gather_plan_task_main` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="moduleIdentity != null  and moduleIdentity != ''">and
-                `module_identity` = #{moduleIdentity}
-            </if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and
-                `file_group_id` = #{fileGroupId}
-            </if>
-            <if test="version != null">and `version` = #{version}</if>
+            <if test="wbsMainId != null ">and `wbs_main_id` = #{wbsMainId}</if>
+            <if test="wbsVersion != null ">and `wbs_version` = #{wbsVersion}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -396,11 +386,11 @@
         </where>
     </update>
 
-    <update id="deleteQqchPreparationSurveyExtendByPks">
-        update `qqch_preparation_survey_extend` set del_flag = '1'
+    <update id="deleteQqchGatherPlanTaskMainByPks">
+        update `qqch_gather_plan_task_main` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchPreparationSurveyExtendPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="qqchGatherPlanTaskMainPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>

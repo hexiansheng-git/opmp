@@ -29,7 +29,6 @@ public class QqchBlueprintManageInventoryController extends BaseController {
      * 勘察设计图纸管理清单台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:list")
     @GetMapping("/list")
     public AjaxResult getQqchBlueprintManageInventoryList(BigDecimal version) {
         QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo = qqchBlueprintManageInventoryService.getQqchBlueprintManageInventoryVo(version);
@@ -41,7 +40,7 @@ public class QqchBlueprintManageInventoryController extends BaseController {
      * @param qqchBlueprintManageInventoryVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:add")
+    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
         qqchBlueprintManageInventoryService.save(qqchBlueprintManageInventoryVo);
@@ -53,7 +52,7 @@ public class QqchBlueprintManageInventoryController extends BaseController {
      * @param qqchBlueprintManageInventoryVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:add")
+    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
         qqchBlueprintManageInventoryService.confirm(qqchBlueprintManageInventoryVo);

@@ -91,7 +91,6 @@ public class QqchOtherContractItemController extends BaseController {
      * @param qqchOtherContractItem
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:list")
     @GetMapping("getQqchOtherContractItemVo")
     public AjaxResult getQqchOtherContractItemVo(@Validated(ValidationGroups.Get.class) QqchOtherContractItem qqchOtherContractItem) {
         QqchOtherContractItemVo qqchOtherContractItemVo = qqchOtherContractItemService.getQqchOtherContractItemVo(qqchOtherContractItem);
@@ -103,7 +102,7 @@ public class QqchOtherContractItemController extends BaseController {
      * @param qqchOtherContractItemVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:add")
+    @PreAuthorize(hasPermi = "qqchOtherContractItem:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOtherContractItemVo qqchOtherContractItemVo) {
         qqchOtherContractItemService.save(qqchOtherContractItemVo);

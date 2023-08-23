@@ -73,7 +73,6 @@ public class QqchKeyInventoryContentController extends BaseController {
      * @param qqchKeyInventoryContent
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:list")
     @GetMapping("/list")
     public AjaxResult getSubentryInventoryByType(@Validated(ValidationGroups.Select.class) QqchKeyInventoryContent qqchKeyInventoryContent) {
         KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = qqchKeyInventoryContentService.getSubentryInventoryByType(qqchKeyInventoryContent);
@@ -85,7 +84,6 @@ public class QqchKeyInventoryContentController extends BaseController {
      * @param qqchKeyInventoryContent
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:list")
     @GetMapping("getQqchKeyInventoryContentVo")
     public AjaxResult getQqchKeyInventoryContentVo(@Validated(ValidationGroups.Get.class) QqchKeyInventoryContent qqchKeyInventoryContent) {
         QqchKeyInventoryContentVo qqchKeyInventoryContentVo = qqchKeyInventoryContentService.getQqchKeyInventoryContentVo(qqchKeyInventoryContent);
@@ -97,7 +95,7 @@ public class QqchKeyInventoryContentController extends BaseController {
      * @param qqchKeyInventoryContentVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:add")
+    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchKeyInventoryContentVo qqchKeyInventoryContentVo) {
         qqchKeyInventoryContentService.save(qqchKeyInventoryContentVo);

@@ -39,7 +39,6 @@ public class QqchDelayProjectPayPlanController extends BaseController {
         return AjaxResult.success(qqchDelayProjectPayPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDelayProjectPayPlanList(@Validated(ValidationGroups.Select.class) QqchDelayProjectPayPlan qqchDelayProjectPayPlanParam) {
         startPage();
@@ -91,7 +90,6 @@ public class QqchDelayProjectPayPlanController extends BaseController {
      * @param qqchDelayProjectPayPlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:list")
     @GetMapping("getQqchDelayProjectPayPlanVo")
     public AjaxResult getQqchDelayProjectPayPlanVo(@Validated(ValidationGroups.Get.class) QqchDelayProjectPayPlan qqchDelayProjectPayPlan) {
         QqchDelayProjectPayPlanVo qqchDelayProjectPayPlanVo = qqchDelayProjectPayPlanService.getQqchDelayProjectPayPlanVo(qqchDelayProjectPayPlan);
@@ -103,7 +101,7 @@ public class QqchDelayProjectPayPlanController extends BaseController {
      * @param qqchDelayProjectPayPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:add")
+    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDelayProjectPayPlanVo qqchDelayProjectPayPlanVo) {
         qqchDelayProjectPayPlanService.save(qqchDelayProjectPayPlanVo);

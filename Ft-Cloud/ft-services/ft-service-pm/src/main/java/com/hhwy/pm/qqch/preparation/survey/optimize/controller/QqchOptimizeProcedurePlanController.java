@@ -30,7 +30,6 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      * 优化程序策划台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchOptimizeProcedurePlanVo(BigDecimal version) {
         QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = qqchOptimizeProcedurePlanService.getQqchOptimizeProcedurePlanVo(version);
@@ -42,7 +41,7 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      * @param qqchOptimizeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:update")
+    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.save(qqchOptimizeProcedurePlanVo);
@@ -54,7 +53,7 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      * @param qqchOptimizeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:update")
+    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.confirm(qqchOptimizeProcedurePlanVo);

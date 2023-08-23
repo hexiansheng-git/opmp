@@ -30,7 +30,6 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
      * 设计技术优化要点台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignTechnologyOptimizeVo(BigDecimal version) {
         QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo = qqchDesignTechnologyOptimizeService.getQqchDesignTechnologyOptimizeVo(version);
@@ -42,7 +41,7 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
      * @param qqchDesignTechnologyOptimizeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:update")
+    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.save(qqchDesignTechnologyOptimizeVo);
@@ -54,7 +53,7 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
      * @param qqchDesignTechnologyOptimizeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:update")
+    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.confirm(qqchDesignTechnologyOptimizeVo);

@@ -16,7 +16,22 @@ import java.util.function.Predicate;
 public class ListTreeUtil {
 
     /**
-     * 导出维护序号
+     * 导出维护序号（普通列表）
+     * @param source
+     * @param setSerialNumber
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> preserveSerialNumber(List<T> source, BiConsumer<T,String> setSerialNumber) {
+        int serialNum = 1;
+        for (T t : source) {
+            setSerialNumber.accept(t,String.valueOf(serialNum++));
+        }
+        return source;
+    }
+
+    /**
+     * 导出维护序号（树列表）
      * @param source
      * @param checkRoot
      * @param checkParent

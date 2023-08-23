@@ -31,7 +31,6 @@ public class QqchChangeProcedurePlanController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchChangeProcedurePlanVo(BigDecimal version) {
         QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo = qqchChangeProcedurePlanService.getQqchChangeProcedurePlanVo(version);
@@ -43,7 +42,7 @@ public class QqchChangeProcedurePlanController extends BaseController {
      * @param qqchChangeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:update")
+    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:save")
     @PostMapping("/save")
     public AjaxResult editQqchChangeProcedurePlanList(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.save(qqchChangeProcedurePlanVo);
@@ -55,7 +54,7 @@ public class QqchChangeProcedurePlanController extends BaseController {
      * @param qqchChangeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:update")
+    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.confirm(qqchChangeProcedurePlanVo);

@@ -63,6 +63,7 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
      * @param version
      */
     @Override
+    @Transactional
     public QqchOptimizeProcedurePlanVo getQqchOptimizeProcedurePlanVo(BigDecimal version) {
         QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo = new QqchOptimizeProcedurePlanVo();
 
@@ -74,6 +75,8 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
             boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
             if(!initialize){
                 qqchOptimizeProcedurePlanList = this.getInitializeData();
+                //入库
+                this.insertQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanList,version);
             }
         }
 

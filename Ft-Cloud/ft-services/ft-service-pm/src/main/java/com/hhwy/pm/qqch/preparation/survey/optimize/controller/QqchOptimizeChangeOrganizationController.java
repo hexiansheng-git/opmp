@@ -30,7 +30,6 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
      * 优化变更组织策划台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:list")
     @GetMapping("/treeList")
     public AjaxResult getQqchOptimizeChangeOrganizationVo(BigDecimal version) {
         QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo = qqchOptimizeChangeOrganizationService.getQqchOptimizeChangeOrganizationVo(version);
@@ -42,7 +41,7 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
      * @param qqchOptimizeChangeOrganizationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:update")
+    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo) {
         qqchOptimizeChangeOrganizationService.save(qqchOptimizeChangeOrganizationVo);
@@ -54,7 +53,7 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
      * @param qqchOptimizeChangeOrganizationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:update")
+    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo){
         qqchOptimizeChangeOrganizationService.confirm(qqchOptimizeChangeOrganizationVo);

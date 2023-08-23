@@ -91,7 +91,6 @@ public class QqchSpecialConditionController extends BaseController {
      * @param qqchSpecialCondition
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:list")
     @GetMapping("getQqchSpecialConditionVo")
     public AjaxResult getQqchSpecialConditionVo(@Validated(ValidationGroups.Get.class) QqchSpecialCondition qqchSpecialCondition) {
         QqchSpecialConditionVo qqchSpecialConditionVo = qqchSpecialConditionService.getQqchSpecialConditionVo(qqchSpecialCondition);
@@ -103,7 +102,7 @@ public class QqchSpecialConditionController extends BaseController {
      * @param qqchSpecialConditionVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
+    @PreAuthorize(hasPermi = "qqchSpecialCondition:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialConditionVo qqchSpecialConditionVo) {
         qqchSpecialConditionService.save(qqchSpecialConditionVo);

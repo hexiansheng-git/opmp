@@ -58,6 +58,8 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
      * @return
      * @param version
      */
+    @Override
+    @Transactional
     public QqchDailyControlPlanVo getQqchDailyControlPlanVo(BigDecimal version) {
         QqchDailyControlPlanVo qqchDailyControlPlanVo = new QqchDailyControlPlanVo();
 
@@ -70,6 +72,8 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
             boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
             if(!initialize){
                 qqchDailyControlPlanList = this.getInitializeData();
+                //入库
+                this.insertQqchDailyControlPlanList(qqchDailyControlPlanList,version);
             }
         }
 

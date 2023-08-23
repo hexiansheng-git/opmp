@@ -29,7 +29,6 @@ public class QqchDailyControlPlanController extends BaseController {
      * 台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDailyControlPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDailyControlPlanList(BigDecimal version) {
         QqchDailyControlPlanVo qqchDailyControlPlanVo = qqchDailyControlPlanService.getQqchDailyControlPlanVo(version);
@@ -41,7 +40,7 @@ public class QqchDailyControlPlanController extends BaseController {
      * @param qqchDailyControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDailyControlPlan:update")
+    @PreAuthorize(hasPermi = "qqchDailyControlPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         qqchDailyControlPlanService.save(qqchDailyControlPlanVo);
@@ -53,7 +52,7 @@ public class QqchDailyControlPlanController extends BaseController {
      * @param qqchDailyControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDailyControlPlan:update")
+    @PreAuthorize(hasPermi = "qqchDailyControlPlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         qqchDailyControlPlanService.confirm(qqchDailyControlPlanVo);

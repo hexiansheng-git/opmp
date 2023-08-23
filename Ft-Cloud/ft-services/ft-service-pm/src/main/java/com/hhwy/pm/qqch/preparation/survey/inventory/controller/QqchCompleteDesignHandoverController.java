@@ -30,7 +30,6 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      * 完整设计交接情况台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:list")
     @GetMapping("/list")
     public AjaxResult getQqchCompleteDesignHandoverList(BigDecimal version) {
         QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo = qqchCompleteDesignHandoverService.getQqchCompleteDesignHandoverVo(version);
@@ -42,7 +41,7 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      * @param qqchCompleteDesignHandoverVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:update")
+    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         qqchCompleteDesignHandoverService.save(qqchCompleteDesignHandoverVo);
@@ -54,7 +53,7 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      * @param qqchCompleteDesignHandoverVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:update")
+    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         qqchCompleteDesignHandoverService.confirm(qqchCompleteDesignHandoverVo);

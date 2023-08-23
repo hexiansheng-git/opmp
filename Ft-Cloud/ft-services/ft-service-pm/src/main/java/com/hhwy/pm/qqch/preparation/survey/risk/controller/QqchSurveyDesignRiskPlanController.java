@@ -30,7 +30,6 @@ public class QqchSurveyDesignRiskPlanController extends BaseController {
      * 勘察设计风险策划Vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyDesignRiskPlanVo(BigDecimal version) {
         QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = qqchSurveyDesignRiskPlanService.getQqchSurveyDesignRiskPlanVo(version);
@@ -42,7 +41,7 @@ public class QqchSurveyDesignRiskPlanController extends BaseController {
      * @param qqchSurveyDesignRiskPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:update")
+    @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
         qqchSurveyDesignRiskPlanService.save(qqchSurveyDesignRiskPlanVo);
@@ -54,7 +53,7 @@ public class QqchSurveyDesignRiskPlanController extends BaseController {
      * @param qqchSurveyDesignRiskPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:update")
+    @PreAuthorize(hasPermi = "qqchSurveyDesignRiskPlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo) {
         qqchSurveyDesignRiskPlanService.confirm(qqchSurveyDesignRiskPlanVo);

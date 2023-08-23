@@ -91,7 +91,6 @@ public class QqchProjectOperationObjectiveController extends BaseController {
      * @param qqchProjectOperationObjective
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:list")
     @GetMapping("getQqchProjectOperationObjectiveVo")
     public AjaxResult getQqchProjectOperationObjectiveVo(@Validated(ValidationGroups.Get.class) QqchProjectOperationObjective qqchProjectOperationObjective) {
         QqchProjectOperationObjectiveVo qqchProjectOperationObjectiveVo = qqchProjectOperationObjectiveService.getQqchProjectOperationObjectiveVo(qqchProjectOperationObjective);
@@ -103,7 +102,7 @@ public class QqchProjectOperationObjectiveController extends BaseController {
      * @param qqchProjectOperationObjectiveVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:add")
+    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchProjectOperationObjectiveVo qqchProjectOperationObjectiveVo) {
         qqchProjectOperationObjectiveService.save(qqchProjectOperationObjectiveVo);

@@ -73,6 +73,8 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
             boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
             if(!initialize){
                 qqchChangeProcedurePlanList = this.getInitializeData();
+                //入库
+                this.insertQqchChangeProcedurePlanList(qqchChangeProcedurePlanList, version);
             }
         }
 
@@ -121,7 +123,7 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
 
         //维护附件
         String fileGroupId = qqchChangeProcedurePlanVo.getFileGroupId();
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, qqchChangeProcedurePlanVo.getVersion());
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.CHANGE_PROCEDURE_PLAN, qqchChangeProcedurePlanVo.getVersion());
         if(qqchPreparationSurveyExtend == null){
             qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
             qqchPreparationSurveyExtend.setModuleIdentity(ModuleIdentity.CHANGE_PROCEDURE_PLAN);

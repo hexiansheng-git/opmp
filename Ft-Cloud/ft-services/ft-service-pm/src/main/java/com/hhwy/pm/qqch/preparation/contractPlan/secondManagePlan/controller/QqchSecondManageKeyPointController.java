@@ -42,7 +42,6 @@ public class QqchSecondManageKeyPointController extends BaseController {
      * @param qqchSecondManageKeyPoint
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:list")
     @GetMapping("/list")
     public AjaxResult getQqchSecondManageKeyPointList(@Validated(ValidationGroups.Select.class) QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
         List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointList = qqchSecondManageKeyPointService.getQqchSecondManageKeyPointList(qqchSecondManageKeyPoint);
@@ -98,7 +97,7 @@ public class QqchSecondManageKeyPointController extends BaseController {
      * @param secondManageKeyPointPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:add")
+    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:save")
     @PostMapping("/saveSecondManageKeyPointPlanVo")
     public AjaxResult saveSecondManageKeyPointPlanVo(@RequestBody SecondManageKeyPointPlanVo secondManageKeyPointPlanVo) {
         qqchSecondManageKeyPointService.saveSecondManageKeyPointPlanVo(secondManageKeyPointPlanVo);
@@ -110,7 +109,6 @@ public class QqchSecondManageKeyPointController extends BaseController {
      * @param qqchSecondManageKeyPoint
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:list")
     @GetMapping("getQqchSecondManageKeyPointVo")
     public AjaxResult getQqchSecondManageKeyPointVo(@Validated(ValidationGroups.Get.class) QqchSecondManageKeyPoint qqchSecondManageKeyPoint) {
         QqchSecondManageKeyPointVo qqchSecondManageKeyPointVo = qqchSecondManageKeyPointService.getQqchSecondManageKeyPointVo(qqchSecondManageKeyPoint);
@@ -122,7 +120,7 @@ public class QqchSecondManageKeyPointController extends BaseController {
      * @param qqchSecondManageKeyPointVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:add")
+    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchSecondManageKeyPointVo qqchSecondManageKeyPointVo) {
         qqchSecondManageKeyPointService.save(qqchSecondManageKeyPointVo);

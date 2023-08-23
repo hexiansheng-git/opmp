@@ -98,7 +98,6 @@ public class QqchSubpackageInventoryController extends BaseController {
      * @param qqchSubpackageInventory
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSubpackageInventory:list")
     @GetMapping("/collectList")
     public AjaxResult getSubpackageInventoryCollectVoList(@Validated(ValidationGroups.Select.class) QqchSubpackageInventory qqchSubpackageInventory) {
         List<SubpackageInventoryCollectVo> subpackageInventoryCollectVoList = qqchSubpackageInventoryService.getSubpackageInventoryCollectVoList(qqchSubpackageInventory);

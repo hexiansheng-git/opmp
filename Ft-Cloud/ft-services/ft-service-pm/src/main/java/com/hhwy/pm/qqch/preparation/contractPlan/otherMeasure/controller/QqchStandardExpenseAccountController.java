@@ -43,7 +43,6 @@ public class QqchStandardExpenseAccountController extends BaseController {
      * @param qqchStandardExpenseAccountParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:list")
     @GetMapping("/list")
     public AjaxResult getQqchStandardExpenseAccountList(@Validated(ValidationGroups.Select.class) QqchStandardExpenseAccount qqchStandardExpenseAccountParam) {
         List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList = qqchStandardExpenseAccountService.getQqchStandardExpenseAccountList(qqchStandardExpenseAccountParam);

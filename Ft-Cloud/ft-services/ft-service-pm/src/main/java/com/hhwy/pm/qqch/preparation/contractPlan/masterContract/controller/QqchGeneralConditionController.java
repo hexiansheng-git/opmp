@@ -91,7 +91,6 @@ public class QqchGeneralConditionController extends BaseController {
      * @param qqchGeneralCondition
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:list")
     @GetMapping("getQqchGeneralConditionVo")
     public AjaxResult getQqchGeneralConditionVo(@Validated(ValidationGroups.Get.class) QqchGeneralCondition qqchGeneralCondition) {
         QqchGeneralConditionVo qqchGeneralConditionVo = qqchGeneralConditionService.getQqchGeneralConditionVo(qqchGeneralCondition);

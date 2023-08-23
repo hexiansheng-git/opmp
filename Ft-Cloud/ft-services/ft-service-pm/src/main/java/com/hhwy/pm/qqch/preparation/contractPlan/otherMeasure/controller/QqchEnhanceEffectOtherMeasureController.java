@@ -91,7 +91,6 @@ public class QqchEnhanceEffectOtherMeasureController extends BaseController {
      * @param qqchEnhanceEffectOtherMeasure
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchEnhanceEffectOtherMeasure:list")
     @GetMapping("getQqchEnhanceEffectOtherMeasureVo")
     public AjaxResult getQqchEnhanceEffectOtherMeasureVo(@Validated(ValidationGroups.Get.class) QqchEnhanceEffectOtherMeasure qqchEnhanceEffectOtherMeasure) {
         QqchEnhanceEffectOtherMeasureVo qqchEnhanceEffectOtherMeasureVo = qqchEnhanceEffectOtherMeasureService.getQqchEnhanceEffectOtherMeasureVo(qqchEnhanceEffectOtherMeasure);
@@ -103,7 +102,7 @@ public class QqchEnhanceEffectOtherMeasureController extends BaseController {
      * @param qqchEnhanceEffectOtherMeasureVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchEnhanceEffectOtherMeasure:add")
+    @PreAuthorize(hasPermi = "qqchEnhanceEffectOtherMeasure:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchEnhanceEffectOtherMeasureVo qqchEnhanceEffectOtherMeasureVo) {
         qqchEnhanceEffectOtherMeasureService.save(qqchEnhanceEffectOtherMeasureVo);

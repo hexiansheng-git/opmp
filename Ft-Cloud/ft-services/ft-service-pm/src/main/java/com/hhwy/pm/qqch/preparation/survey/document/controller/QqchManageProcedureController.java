@@ -29,7 +29,6 @@ public class QqchManageProcedureController extends BaseController {
      * 台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManageProcedure:list")
     @GetMapping("/list")
     public AjaxResult getQqchManageProcedureList(BigDecimal version) {
         QqchManageProcedureVo qqchManageProcedureVo = qqchManageProcedureService.getQqchManageProcedureVo(version);
@@ -41,7 +40,7 @@ public class QqchManageProcedureController extends BaseController {
      * @param qqchManageProcedureVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManageProcedure:add")
+    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchManageProcedureVo qqchManageProcedureVo) {
         qqchManageProcedureService.save(qqchManageProcedureVo);
@@ -53,7 +52,7 @@ public class QqchManageProcedureController extends BaseController {
      * @param qqchManageProcedureVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManageProcedure:add")
+    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchManageProcedureVo qqchManageProcedureVo) {
         qqchManageProcedureService.confirm(qqchManageProcedureVo);

@@ -30,7 +30,6 @@ public class QqchDesignConstructionSituationController extends BaseController {
      * 边设计边施工情况台账
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignConstructionSituationList(BigDecimal version) {
         QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo = qqchDesignConstructionSituationService.getQqchDesignConstructionSituationVo(version);
@@ -42,7 +41,7 @@ public class QqchDesignConstructionSituationController extends BaseController {
      * @param qqchDesignConstructionSituationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:update")
+    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         qqchDesignConstructionSituationService.save(qqchDesignConstructionSituationVo);
@@ -54,7 +53,7 @@ public class QqchDesignConstructionSituationController extends BaseController {
      * @param qqchDesignConstructionSituationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:update")
+    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         qqchDesignConstructionSituationService.confirm(qqchDesignConstructionSituationVo);

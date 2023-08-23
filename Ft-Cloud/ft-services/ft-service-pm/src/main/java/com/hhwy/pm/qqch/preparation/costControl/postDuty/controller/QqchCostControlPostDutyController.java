@@ -91,7 +91,6 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDuty
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:list")
     @GetMapping("getQqchExtendApplyWorkGroupVo")
     public AjaxResult getQqchExtendApplyWorkGroupVo(@Validated(ValidationGroups.Get.class) QqchCostControlPostDuty qqchCostControlPostDuty) {
         QqchCostControlPostDutyVo qqchCostControlPostDutyVo = qqchExtendApplyWorkGroupService.getQqchExtendApplyWorkGroupVo(qqchCostControlPostDuty);
@@ -103,7 +102,7 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDutyVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:add")
+    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo) {
         qqchExtendApplyWorkGroupService.save(qqchCostControlPostDutyVo);
