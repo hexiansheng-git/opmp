@@ -159,6 +159,12 @@ public class JdglWeekImagePlan extends TreeNode<JdglWeekImagePlan> {
     @Excel(name = "备注/描述")
     private String remark;
     /**
+     * 字段描述：顺序号
+     */
+    @JsonProperty
+    @Excel(name = "顺序号")
+    private Integer sort;
+    /**
      * 字段描述：部门id
      */
     @JsonSerialize(using = ToStringSerializer.class)
