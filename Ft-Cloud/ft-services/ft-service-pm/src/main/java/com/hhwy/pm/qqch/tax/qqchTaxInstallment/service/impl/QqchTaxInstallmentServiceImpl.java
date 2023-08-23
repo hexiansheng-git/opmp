@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo.InstallmentVO;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -114,6 +115,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
     }
 
     @Override
+    @CompileAspect(type = CompileOptEnum.LIST,tableName = TN)
     public InstallmentVO refresh(QqchTaxInstallment params) {
         //  QqchTaxInstallment params = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto.getDto());
         InstallmentVO installmentVO = new InstallmentVO();

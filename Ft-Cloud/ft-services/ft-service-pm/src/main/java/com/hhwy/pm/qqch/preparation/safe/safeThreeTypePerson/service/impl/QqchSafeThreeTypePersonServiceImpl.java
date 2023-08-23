@@ -88,6 +88,7 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
         qqchSafeThreeTypePersonMapper.deleteQqchSafeThreeTypePerson(temp);
         if (!CollectionUtils.isEmpty(qqchSafeThreeTypePersonVo.getList())) {
             List<QqchSafeThreeTypePerson> list = qqchSafeThreeTypePersonVo.getList();
+            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
             for (QqchSafeThreeTypePerson person : list) {
                 person.setId(IdWorker.createId());
                 person.setVersion(qqchSafeThreeTypePersonVo.getVersion());
@@ -96,6 +97,7 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
                 }else{
                     person.setValid(Valid.NO);
                 }
+                person.setDuties(dutiesTypeMap.get(person.getDuties()));
                 person.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 person.setCreateUserName(SecurityUtils.getUserName());
                 person.setCreateTime(DateUtils.getNowDate());
