@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.domain.base.system.UserPostInfo;
+import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
 import com.hhwy.system.mapper.UserMapper;
@@ -125,5 +126,11 @@ public class UserServiceImpl implements IUserService {
         String userNames = map.get("userNames");//多个,分隔
         List<SysUser> list=userMapper.select4AByUserNames(map);
         return list;
+    }
+
+    @Override
+    public List<SysUser> selectAllUser(List<SysDept> deptList) {
+        return  userMapper.selectAllUser(deptList);
+
     }
 }

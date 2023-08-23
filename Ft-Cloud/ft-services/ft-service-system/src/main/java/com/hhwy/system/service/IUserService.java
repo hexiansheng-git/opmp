@@ -1,7 +1,9 @@
 package com.hhwy.system.service;
 
 import com.hhwy.domain.base.system.SelfUserInfo;
+import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysUser;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -37,4 +39,6 @@ public interface IUserService {
      * @return
      */
     List<SysUser> select4AByUserNames(Map<String, String> map);
+
+    List<SysUser> selectAllUser(List<SysDept> deptList);
 }

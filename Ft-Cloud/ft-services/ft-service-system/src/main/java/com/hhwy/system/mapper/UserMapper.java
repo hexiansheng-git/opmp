@@ -2,6 +2,7 @@ package com.hhwy.system.mapper;
 
 import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.domain.base.system.UserPostInfo;
+import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysUser;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -116,4 +117,6 @@ public interface UserMapper {
      * @return
      */
     List<SysUser> selectBy4AList(@Param(value = "fourAList") List<String> fourAList);
+
+    List<SysUser> selectAllUser(@Param("deptList") List<SysDept> deptList);
 }

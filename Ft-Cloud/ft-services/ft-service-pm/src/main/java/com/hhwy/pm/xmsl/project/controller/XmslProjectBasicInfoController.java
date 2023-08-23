@@ -1,6 +1,8 @@
 package com.hhwy.pm.xmsl.project.controller;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -125,4 +127,28 @@ public class XmslProjectBasicInfoController extends BaseController{
         ExcelUtils<XmslProjectBasicInfo> util = new ExcelUtils<>(XmslProjectBasicInfo.class);
         util.exportExcel(response, xmslProjectBasicInfoList, DateUtils.getDate());
     }
+
+    /**
+     * 新增租户项目信息
+     * @param xmslProjectBasicInfoParam
+     * @return
+     */
+    @PostMapping("/addTenant")
+    public AjaxResult insertProjectTenant(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
+        String dataSource = xmslProjectBasicInfoParam.getProjectCode();
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        if(StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)){
+            DynamicDataSourceContextHolder.push(dataSource);
+            try {
+                projectBasicInfoService.insertProjectInvokeProject(xmslProjectBasicInfoParam);
+                return AjaxResult.success(xmslProjectBasicInfoParam);
+            }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
+            }
+        }
+        return  AjaxResult.error("数据源为空");
+    }
+
+
 }

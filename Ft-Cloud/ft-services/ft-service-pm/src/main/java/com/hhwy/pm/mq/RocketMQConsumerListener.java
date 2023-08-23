@@ -21,23 +21,21 @@ import org.springframework.stereotype.Service;
  * 配置RocketMQ监听
  * @author qzz
  */
-@Service
-@RocketMQMessageListener(
-        consumerGroup = "pm-project-h",
-        topic = "gm",
-        selectorExpression = "prj",
-        // 消费模式: 顺序消费
-        consumeMode = ConsumeMode.ORDERLY)
+//@Service
+//@RocketMQMessageListener(
+//        consumerGroup = "pm-project-h",
+//        topic = "pm",
+//        selectorExpression = "prj",
+//        // 消费模式: 顺序消费
+//        consumeMode = ConsumeMode.ORDERLY)
 public class RocketMQConsumerListener implements RocketMQListener<String> , RocketMQPushConsumerLifecycleListener {
 
     @Autowired
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
-
     @Override
     public void onMessage(String s) {
         try {
             XmslProjectBasicInfo projectBasicInfo =  JSON.parseObject(s, XmslProjectBasicInfo.class);
-//            System.out.println("消费消息："+s);
             //接收参数转换为项目信息入库。
             xmslProjectBasicInfoService.insertProjectInvokeProject(projectBasicInfo);
         }catch (Exception e){

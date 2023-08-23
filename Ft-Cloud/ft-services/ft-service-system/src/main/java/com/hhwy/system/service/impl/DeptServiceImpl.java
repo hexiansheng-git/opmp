@@ -1,6 +1,7 @@
 package com.hhwy.system.service.impl;
 
 import com.hhwy.common.security.service.TokenService;
+import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.utils.TreeObject;
 import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.mapper.DeptMapper;
@@ -38,6 +39,16 @@ public class DeptServiceImpl implements IDeptService {
         List<SysTreeUtil> regionList = deptMapper.selectRegionInfo();
         List<SysTreeUtil> deptTree = TreeObject.getDeptTree(regionList);
         return deptTree;
+    }
+
+    @Override
+    public SysDept selectDeptIdByprojectId(Long projectId) {
+        return deptMapper.selectDeptIdByProjectId(projectId);
+    }
+
+    @Override
+    public List<SysDept> selectAllDept(Long deptId) {
+        return deptMapper.selectAllDept(deptId);
     }
 
 }
