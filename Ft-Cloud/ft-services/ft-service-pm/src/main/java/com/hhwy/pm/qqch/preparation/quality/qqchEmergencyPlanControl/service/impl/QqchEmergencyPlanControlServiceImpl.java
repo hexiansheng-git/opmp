@@ -113,19 +113,15 @@ public class QqchEmergencyPlanControlServiceImpl implements IQqchEmergencyPlanCo
 
         BigDecimal version = vo.getVersion();
         List<QqchEmergencyPlanControl> qqchEmergencyPlanControlList = vo.getQqchEmergencyPlanControlList();
-        if(CollectionUtils.isEmpty(qqchEmergencyPlanControlList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchEmergencyPlanControlList, ValidationGroups.Save.class);
-            }
-        }
-
         this.insertQqchEmergencyPlanControlList(qqchEmergencyPlanControlList, version);
 
+        if(CollectionUtils.isEmpty(qqchEmergencyPlanControlList)){
+            return;
+        }
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchEmergencyPlanControlList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -140,6 +136,9 @@ public class QqchEmergencyPlanControlServiceImpl implements IQqchEmergencyPlanCo
         qqchEmergencyPlanControl1.setVersion(version);
         qqchEmergencyPlanControlMapper.deleteQqchEmergencyPlanControl(qqchEmergencyPlanControl1);
 
+        if(CollectionUtils.isEmpty(qqchEmergencyPlanControlList)){
+            return;
+        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
