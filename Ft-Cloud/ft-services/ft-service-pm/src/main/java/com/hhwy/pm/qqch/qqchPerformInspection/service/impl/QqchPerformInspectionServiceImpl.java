@@ -7,15 +7,19 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
 import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import org.springframework.stereotype.Service;
@@ -41,7 +45,9 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     private IQqchPerformInspectionDetailService detailService;
     @Autowired
     private IQqchWorkPlanService workPlanService;
-
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    
 
     public QqchPerformInspection getQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         return qqchPerformInspectionMapper.getQqchPerformInspection(qqchPerformInspection);
@@ -207,5 +213,31 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
             batchAddList.add(detail);
         }
         return batchAddList;
+    }
+
+    @Override
+    public List<Map> tenantSummaryList() {
+        List<SysTenant> list = systemServiceApi.tenantList();
+        List<Map> resuList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            SysTenant tempTenant = list.get(i);
+            //切换到master
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tempTenant.getTenantKey()));
+            try {
+                List<Map> summaryList = qqchPerformInspectionMapper.getSummaryList();
+                for (int j = 0; j < summaryList.size(); j++) {
+                    summaryList.get(j).put("tenantKey", tempTenant.getTenantKey());
+                }
+                resuList.addAll(summaryList);
+            }catch (Exception e){
+                e.printStackTrace();
+                throw new CustomBusinessException(e.getMessage());
+            }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
+            }
+        }
+        return resuList;
     }
 }

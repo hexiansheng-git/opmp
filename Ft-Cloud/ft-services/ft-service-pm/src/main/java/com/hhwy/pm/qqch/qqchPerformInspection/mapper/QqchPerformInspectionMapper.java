@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 
@@ -14,6 +16,8 @@ public interface QqchPerformInspectionMapper {
     QqchPerformInspection getQqchPerformInspection(QqchPerformInspection qqchPerformInspection);
 
     List<QqchPerformInspection> getQqchPerformInspectionList(QqchPerformInspection qqchPerformInspection);
+
+    List<Map> getSummaryList();
 
     int insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection);
 

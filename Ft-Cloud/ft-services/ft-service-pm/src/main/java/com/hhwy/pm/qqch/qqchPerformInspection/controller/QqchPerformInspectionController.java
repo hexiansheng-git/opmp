@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zqq
@@ -162,5 +163,15 @@ public class QqchPerformInspectionController extends BaseController {
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
+    }
+
+    /**
+     * 所有租户下的统计信息
+     * @return
+     */
+    @PostMapping("/tenantSummaryList")
+    public AjaxResult tenantSummaryList() {
+        List<Map> list = qqchPerformInspectionService.tenantSummaryList();
+        return AjaxResult.success(list);
     }
 }

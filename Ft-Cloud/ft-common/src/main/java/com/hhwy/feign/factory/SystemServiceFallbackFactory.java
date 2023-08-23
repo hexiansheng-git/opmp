@@ -2,10 +2,14 @@ package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.system.api.domain.SysTenant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Demo服务降级处理
@@ -40,6 +44,10 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
                 return null;
             }
 
+            @Override
+            public List<SysTenant> tenantList() {
+                return new ArrayList<>();
+            }
         };
     }
 }

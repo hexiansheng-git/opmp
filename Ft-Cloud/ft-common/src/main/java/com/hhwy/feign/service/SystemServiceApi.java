@@ -2,9 +2,13 @@ package com.hhwy.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
+import com.hhwy.system.api.domain.SysTenant;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * 文件服务
@@ -34,4 +38,11 @@ public interface SystemServiceApi {
      */
     @GetMapping("/syspm/menu/qqch")
     AjaxResult getQqchMenu(@RequestParam("name") String name);
+
+    /**
+     * 获取所有租户
+     * @return
+     */
+    @PostMapping("/syspm/tenantList")
+    List<SysTenant> tenantList();
 }

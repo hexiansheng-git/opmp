@@ -9,17 +9,16 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.service.IMenuService;
 import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;
+import com.hhwy.system.core.service.ISysTenantService;
 import com.hhwy.system.service.ISysPmService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -42,6 +41,8 @@ public class SysPmController {
 
     @Autowired
     private IMenuService menuService;
+    @Autowired
+    private ISysTenantService tenantService;
     /**
      * 查询字典项，导出使用  , 根据value查询 label
      * @param dictType
@@ -119,5 +120,18 @@ public class SysPmController {
         }
         return resu;
     }
+
+    /**
+     * 获取全部租户信息
+     * @return
+     */
+    @PostMapping("/tenantList")
+    public List<SysTenant> tenantList() {
+        SysTenant tenant = new SysTenant();
+        tenant.setTenantStatus("0");
+        List<SysTenant> tenantList = tenantService.selectSysTenantList(tenant);
+        return tenantList;
+    }
+
 
 }
