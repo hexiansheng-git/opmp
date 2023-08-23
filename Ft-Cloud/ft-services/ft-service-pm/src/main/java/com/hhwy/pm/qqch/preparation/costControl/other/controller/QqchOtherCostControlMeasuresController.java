@@ -35,8 +35,8 @@ public class QqchOtherCostControlMeasuresController extends BaseController {
      * @return
      */
     @PreAuthorize(hasPermi = "qqchOtherCostControlMeasures:list")
-    @GetMapping("/list")
-    public AjaxResult getQqchOtherCostControlMeasuresList(BigDecimal version) {
+    @GetMapping("/getTreeList")
+    public AjaxResult getTreeList(BigDecimal version) {
         QqchOtherCostControlMeasuresVo qqchOtherCostControlMeasuresVo = qqchOtherCostControlMeasuresService
             .getQqchOtherCostControlMeasuresList(version);
         return AjaxResult.success(qqchOtherCostControlMeasuresVo);

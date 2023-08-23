@@ -49,9 +49,9 @@ public class QqchOtherCostControlMeasures extends TreeNode<QqchOtherCostControlM
     /**
      * 字段描述：计划开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd")
     private Date planStartTime;
     /**
      * 字段描述：责任id
