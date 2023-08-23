@@ -107,18 +107,15 @@ public class QqchPulicHealthRiskServiceImpl implements IQqchPulicHealthRiskServi
 
         BigDecimal version = vo.getVersion();
         List<QqchPulicHealthRisk> qqchPulicHealthRiskList = vo.getQqchPulicHealthRiskList();
-        if(CollectionUtils.isEmpty(qqchPulicHealthRiskList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchPulicHealthRiskList, ValidationGroups.Save.class);
-            }
-        }
         this.insertQqchPulicHealthRiskList(qqchPulicHealthRiskList,version);
 
+        if(CollectionUtils.isEmpty(qqchPulicHealthRiskList)){
+            return;
+        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchPulicHealthRiskList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -132,6 +129,9 @@ public class QqchPulicHealthRiskServiceImpl implements IQqchPulicHealthRiskServi
         QqchPulicHealthRisk qqchPulicHealthRisk1 = new QqchPulicHealthRisk();
         qqchPulicHealthRisk1.setVersion(version);
         qqchPulicHealthRiskMapper.deleteQqchPulicHealthRisk(qqchPulicHealthRisk1);
+        if(CollectionUtils.isEmpty(qqchPulicHealthRiskList)){
+            return 0;
+        }
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;

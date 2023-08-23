@@ -111,18 +111,15 @@ public class QqchCareerHealthRiskListServiceImpl implements IQqchCareerHealthRis
 
         BigDecimal version = vo.getVersion();
         List<QqchCareerHealthRiskList> qqchCareerHealthRiskListList = vo.getQqchCareerHealthRiskListList();
-        if(CollectionUtils.isEmpty(qqchCareerHealthRiskListList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchCareerHealthRiskListList, ValidationGroups.Save.class);
-            }
-        }
         this.insertQqchCareerHealthRiskListList(qqchCareerHealthRiskListList,version);
 
+        if(CollectionUtils.isEmpty(qqchCareerHealthRiskListList)){
+            return;
+        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchCareerHealthRiskListList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -136,6 +133,10 @@ public class QqchCareerHealthRiskListServiceImpl implements IQqchCareerHealthRis
         QqchCareerHealthRiskList qqchCareerHealthRiskList1 = new QqchCareerHealthRiskList();
         qqchCareerHealthRiskList1.setVersion(version);
         qqchCareerHealthRiskListMapper.deleteQqchCareerHealthRiskList(qqchCareerHealthRiskList1);
+
+        if(CollectionUtils.isEmpty(qqchCareerHealthRiskListList)){
+            return 0;
+        }
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;

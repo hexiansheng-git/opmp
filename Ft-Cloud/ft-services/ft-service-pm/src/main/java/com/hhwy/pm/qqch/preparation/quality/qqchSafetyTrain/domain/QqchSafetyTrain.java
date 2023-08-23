@@ -74,7 +74,7 @@ public class QqchSafetyTrain extends CommonBaseEntity {
     /**
      * 字段描述：时间
      */
-    @NotBlank(message = "时间不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotNull(message = "时间不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "时间", dateFormat = "yyyy-MM-dd")

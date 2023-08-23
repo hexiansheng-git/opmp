@@ -112,19 +112,16 @@ public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
 
         BigDecimal version = vo.getVersion();
         List<QqchSafetyTrain> qqchSafetyTrainList = vo.getQqchSafetyTrainList();
-        if(CollectionUtils.isEmpty(qqchSafetyTrainList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchSafetyTrainList, ValidationGroups.Save.class);
-            }
-        }
 
         this.insertQqchSafetyTrainList(qqchSafetyTrainList, version);
+        if(CollectionUtils.isEmpty(qqchSafetyTrainList)){
+            return;
+        }
 
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchSafetyTrainList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -138,6 +135,10 @@ public class QqchSafetyTrainServiceImpl implements IQqchSafetyTrainService {
         QqchSafetyTrain qqchSafetyTrain1 = new QqchSafetyTrain();
         qqchSafetyTrain1.setVersion(version);
         qqchSafetyTrainMapper.deleteQqchSafetyTrain(qqchSafetyTrain1);
+
+        if(CollectionUtils.isEmpty(qqchSafetyTrainList)){
+            return;
+        }
 
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
