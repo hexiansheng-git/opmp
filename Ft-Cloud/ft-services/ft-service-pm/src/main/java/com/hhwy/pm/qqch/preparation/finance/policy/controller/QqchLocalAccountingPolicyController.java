@@ -7,6 +7,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.QqchLocalAccountingPolicy;
 import com.hhwy.pm.qqch.preparation.finance.policy.domain.vo.QqchLocalAccountingPolicyVo;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchLocalAccountingPolicyService;
+import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,7 +77,10 @@ public class QqchLocalAccountingPolicyController extends BaseController {
         QqchLocalAccountingPolicyVo qqchLocalAccountingPolicyVo = qqchLocalAccountingPolicyService
             .getQqchLocalAccountingPolicyList(version);
         FtExcelUtil<QqchLocalAccountingPolicy> util = new FtExcelUtil<>(QqchLocalAccountingPolicy.class);
-        util.exportExcel(response, qqchLocalAccountingPolicyVo.getList(), DateUtils.getDate());
+        // 导出维护序号
+        List<QqchLocalAccountingPolicy> newList = ExportUtil
+            .preserveSerialNumber(qqchLocalAccountingPolicyVo.getList(), QqchLocalAccountingPolicy::setSerialNum);
+        util.exportExcel(response, newList, DateUtils.getDate());
     }
 
     /**

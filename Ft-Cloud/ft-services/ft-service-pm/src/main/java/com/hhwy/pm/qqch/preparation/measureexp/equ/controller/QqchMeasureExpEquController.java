@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquExperimentExportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.vo.QqchMeasureExpEquVo;
 import com.hhwy.pm.qqch.preparation.measureexp.equ.service.IQqchMeasureExpEquService;
+import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
@@ -104,7 +105,11 @@ public class QqchMeasureExpEquController extends BaseController {
     public void exportMeasure(HttpServletResponse response, BigDecimal version) {
         QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "1");
         FtExcelUtil<QqchMeasureExpEqu> util = new FtExcelUtil<>(QqchMeasureExpEqu.class);
-        util.exportExcel(response, qqchMeasureExpEquVo.getMeasureList(), DateUtils.getDate());
+
+        // 导出维护序号
+        List<QqchMeasureExpEqu> newList = ExportUtil
+            .preserveSerialNumber(qqchMeasureExpEquVo.getMeasureList(), QqchMeasureExpEqu::setSerialNum);
+        util.exportExcel(response, newList, DateUtils.getDate());
     }
 
     /**
@@ -119,9 +124,11 @@ public class QqchMeasureExpEquController extends BaseController {
         QqchMeasureExpEquVo qqchMeasureExpEquVo = qqchMeasureExpEquService.getQqchMeasureExpEquList(version, "2");
 
         List<QqchMeasureExpEquExperimentExportVo> exportList = new ArrayList<>();
+        int serialNum = 1;
         for (QqchMeasureExpEqu equVo : qqchMeasureExpEquVo.getExperimentList()) {
             QqchMeasureExpEquExperimentExportVo experimentExportVo = new QqchMeasureExpEquExperimentExportVo();
             BeanUtils.copyProperties(equVo, experimentExportVo);
+            experimentExportVo.setSerialNum(String.valueOf(serialNum++));
             exportList.add(experimentExportVo);
         }
         FtExcelUtil<QqchMeasureExpEquExperimentExportVo> util = new FtExcelUtil<>(

@@ -21,6 +21,12 @@ public class QqchDangerConstructionList extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 序号 导出用
+     */
+    @Excel(name = "序号")
+    private String serialNum;
+
+    /**
      * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)

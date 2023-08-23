@@ -8,8 +8,8 @@ import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.QqchExpBeton;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonImportVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonVo;
 import com.hhwy.pm.qqch.preparation.measureexp.beton.service.IQqchExpBetonService;
+import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
-import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
@@ -74,9 +74,15 @@ public class QqchExpBetonController extends BaseController {
     @PostMapping("/export")
     public void export(HttpServletResponse response, BigDecimal version)
         throws IOException {
-        List list = qqchExpBetonService.getList(version);
+
+        List<QqchExpBeton> treeList = qqchExpBetonService.getTreeList(version).getTreeList();
         FtExcelUtil<QqchExpBeton> util = new FtExcelUtil<>(QqchExpBeton.class);
-        util.exportExcel(response, TreeUtil.exportListFormat(list), DateUtils.getDate());
+
+        List<QqchExpBeton> newList = ExportUtil.preserveSerialNumberTree(treeList, QqchExpBeton::getChildren,
+            QqchExpBeton::setChildren,
+            QqchExpBeton::getSerialNum, QqchExpBeton::setSerialNum);
+
+        util.exportExcel(response, newList, DateUtils.getDate());
     }
 
     /**

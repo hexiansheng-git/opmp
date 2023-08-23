@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
@@ -61,7 +62,11 @@ public class QqchConstructionListController extends BaseController {
             .getQqchConstructionListList(qqchConstructionListParamVo);
         List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
         FtExcelUtil<QqchConstructionList> util = new FtExcelUtil<>(QqchConstructionList.class);
-        util.exportExcel(response, qqchConstructionListList, DateUtils.getDate());
+
+        // 导出维护序号
+        List<QqchConstructionList> newList = ExportUtil
+            .preserveSerialNumber(qqchConstructionListList, QqchConstructionList::setSerialNum);
+        util.exportExcel(response, newList, DateUtils.getDate());
     }
 
     /**

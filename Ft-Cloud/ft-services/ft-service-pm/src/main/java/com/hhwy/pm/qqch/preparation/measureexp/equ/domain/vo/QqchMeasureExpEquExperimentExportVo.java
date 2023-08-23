@@ -19,6 +19,11 @@ import lombok.Data;
 public class QqchMeasureExpEquExperimentExportVo extends PreparationEntity {
 
     private static final long serialVersionUID = 1L;
+    /**
+     * 序号 导出用
+     */
+    @FtExcel(name = "序号")
+    private String serialNum;
 
     /**
      * 字段描述：主键id

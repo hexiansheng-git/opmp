@@ -21,6 +21,12 @@ public class QqchExpBeton extends TreeNode<QqchExpBeton> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 序号 导出用
+     */
+    @FtExcel(name = "序号")
+    private String serialNum;
+
+    /**
      * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
@@ -59,7 +65,7 @@ public class QqchExpBeton extends TreeNode<QqchExpBeton> {
      * 字段描述：所属WBS名称
      */
     @JsonProperty
-    @FtExcel(name = "所属WBS名称")
+    @FtExcel(name = "所属WBS")
     private String wbsName;
     /**
      * 字段描述：不同工艺环境下配合比要求

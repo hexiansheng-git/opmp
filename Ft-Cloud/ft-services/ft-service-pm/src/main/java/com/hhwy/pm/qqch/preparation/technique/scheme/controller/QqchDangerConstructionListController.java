@@ -8,9 +8,11 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
+import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -68,6 +70,10 @@ public class QqchDangerConstructionListController extends BaseController {
         QqchDangerConstructionListVo qqchDangerConstructionListVo = qqchDangerConstructionListService
             .getQqchDangerConstructionListList(version);
         ExcelUtils<QqchDangerConstructionList> util = new ExcelUtils<>(QqchDangerConstructionList.class);
-        util.exportExcel(response, qqchDangerConstructionListVo.getList(), DateUtils.getDate());
+
+        // 导出维护序号
+        List<QqchDangerConstructionList> newList = ExportUtil
+            .preserveSerialNumber(qqchDangerConstructionListVo.getList(), QqchDangerConstructionList::setSerialNum);
+        util.exportExcel(response, newList, DateUtils.getDate());
     }
 }
