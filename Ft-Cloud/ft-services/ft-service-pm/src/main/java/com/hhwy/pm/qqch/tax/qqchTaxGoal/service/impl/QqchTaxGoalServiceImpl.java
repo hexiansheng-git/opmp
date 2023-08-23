@@ -91,6 +91,7 @@ public class QqchTaxGoalServiceImpl implements IQqchTaxGoalService {
     }
 
     @Override
+    @CompileAspect(type = CompileOptEnum.LIST,tableName = TN)
     public CompileEntity<List<QqchTaxGoal>> list(QqchTaxGoal qqchTaxGoalParam) {
         List<QqchTaxGoal> qqchTaxGoalList = this.qqchTaxGoalMapper.getQqchTaxGoalList(qqchTaxGoalParam);
         CompileEntity objectCompileEntity = new CompileEntity();

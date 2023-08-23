@@ -1,16 +1,16 @@
 package com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo;
 
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 import lombok.ToString;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
 @Data
 @ToString
-public class InstallmentVO implements Serializable {
+public class InstallmentVO extends CompileEntity<InstallmentVO> {
     private Long inRecordId;
     private Long costRecordId;
     private List<ListVO> list;
