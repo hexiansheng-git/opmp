@@ -106,18 +106,15 @@ public class QqchDangerJobIdentificationServiceImpl implements IQqchDangerJobIde
 
         BigDecimal version = vo.getVersion();
         List<QqchDangerJobIdentification> qqchDangerJobIdentificationList = vo.getQqchDangerJobIdentificationList();
-        if(CollectionUtils.isEmpty(qqchDangerJobIdentificationList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchDangerJobIdentificationList, ValidationGroups.Save.class);
-            }
-        }
         this.insertQqchDangerJobIdentificationList(qqchDangerJobIdentificationList,version);
 
+        if(CollectionUtils.isEmpty(qqchDangerJobIdentificationList)){
+            return;
+        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchDangerJobIdentificationList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -131,6 +128,11 @@ public class QqchDangerJobIdentificationServiceImpl implements IQqchDangerJobIde
         QqchDangerJobIdentification qqchDangerJobIdentification1 = new QqchDangerJobIdentification();
         qqchDangerJobIdentification1.setVersion(version);
         qqchDangerJobIdentificationMapper.deleteQqchDangerJobIdentification(qqchDangerJobIdentification1);
+
+        if(CollectionUtils.isEmpty(qqchDangerJobIdentificationList)){
+            return 0;
+        }
+
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;

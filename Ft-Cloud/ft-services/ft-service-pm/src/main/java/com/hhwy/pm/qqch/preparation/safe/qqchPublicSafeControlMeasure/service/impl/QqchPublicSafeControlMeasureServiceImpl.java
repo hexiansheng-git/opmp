@@ -100,18 +100,15 @@ public class QqchPublicSafeControlMeasureServiceImpl implements IQqchPublicSafeC
 
         BigDecimal version = vo.getVersion();
         List<QqchPublicSafeControlMeasure> qqchPublicSafeControlMeasureList = vo.getQqchPublicSafeControlMeasureList();
-        if(CollectionUtils.isEmpty(qqchPublicSafeControlMeasureList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchPublicSafeControlMeasureList, ValidationGroups.Save.class);
-            }
-        }
         this.insertQqchPublicSafeControlMeasureList(qqchPublicSafeControlMeasureList,version);
 
+        if(CollectionUtils.isEmpty(qqchPublicSafeControlMeasureList)){
+            return;
+        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchPublicSafeControlMeasureList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -124,6 +121,8 @@ public class QqchPublicSafeControlMeasureServiceImpl implements IQqchPublicSafeC
         QqchPublicSafeControlMeasure qqchPublicSafeControlMeasure1 = new QqchPublicSafeControlMeasure();
         qqchPublicSafeControlMeasure1.setVersion(version);
         qqchPublicSafeControlMeasureMapper.deleteQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasure1);
+        if (CollectionUtils.isEmpty(qqchPublicSafeControlMeasureList))
+            return 0;
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;

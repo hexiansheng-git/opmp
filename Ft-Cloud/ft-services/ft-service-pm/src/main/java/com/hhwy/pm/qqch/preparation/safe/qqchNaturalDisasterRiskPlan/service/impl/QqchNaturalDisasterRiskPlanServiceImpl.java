@@ -109,17 +109,15 @@ public class QqchNaturalDisasterRiskPlanServiceImpl implements IQqchNaturalDisas
 
         BigDecimal version = vo.getVersion();
         List<QqchNaturalDisasterRiskPlan> qqchNaturalDisasterRiskPlanList = vo.getQqchNaturalDisasterRiskPlanList();
-        //校验数据必填
-        if(CollectionUtils.isNotEmpty(qqchNaturalDisasterRiskPlanList)){
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchNaturalDisasterRiskPlanList, ValidationGroups.Save.class);
-            }
-        }
-
         this.insertQqchNaturalDisasterRiskPlanList(qqchNaturalDisasterRiskPlanList,version);
 
+        if(CollectionUtils.isEmpty(qqchNaturalDisasterRiskPlanList)){
+            return;
+        }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchNaturalDisasterRiskPlanList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
