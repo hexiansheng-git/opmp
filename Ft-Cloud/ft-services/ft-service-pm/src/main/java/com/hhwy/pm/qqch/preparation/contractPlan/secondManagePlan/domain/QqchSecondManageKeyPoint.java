@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -231,5 +232,5 @@ public class QqchSecondManageKeyPoint extends BaseEntity {
 
     private List<QqchKeyPointContractClause> qqchKeyPointContractClauseList;
 
-    private List<QqchSecondManageKeyPoint> children;
+    private List<QqchSecondManageKeyPoint> children = new ArrayList<>();
 }

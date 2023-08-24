@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -229,5 +230,5 @@ public class QqchSubpackageInventory extends BaseEntity {
     @JsonProperty
     private String ptVar5;
 
-    private List<QqchSubpackageInventory> children;
+    private List<QqchSubpackageInventory> children = new ArrayList<>();
 }

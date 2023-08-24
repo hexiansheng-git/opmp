@@ -108,4 +108,16 @@ public class QqchCostControlPostDutyController extends BaseController {
         qqchExtendApplyWorkGroupService.save(qqchCostControlPostDutyVo);
         return AjaxResult.success();
     }
+
+    /**
+     * 同步人员总需计划
+     * @param qqchCostControlPostDutyVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:save")
+    @PostMapping("/synchronization")
+    public AjaxResult synchronization(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo){
+        qqchExtendApplyWorkGroupService.synchronization(qqchCostControlPostDutyVo);
+        return AjaxResult.success();
+    }
 }

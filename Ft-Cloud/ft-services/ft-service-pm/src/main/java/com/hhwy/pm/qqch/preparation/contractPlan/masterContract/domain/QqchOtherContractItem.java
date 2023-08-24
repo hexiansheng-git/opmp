@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -217,5 +218,5 @@ public class QqchOtherContractItem extends BaseEntity {
     @JsonProperty
     private String ptVar5;
 
-    private List<QqchOtherContractItem> children;
+    private List<QqchOtherContractItem> children = new ArrayList<>();
 }

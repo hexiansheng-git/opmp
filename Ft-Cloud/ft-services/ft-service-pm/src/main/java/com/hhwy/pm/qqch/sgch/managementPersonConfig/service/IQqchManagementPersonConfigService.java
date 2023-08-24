@@ -9,10 +9,10 @@ import java.util.Map;
 /**
  * @author ldd
  * @date 2023-07-31 15:15:56
- * @remark 
+ * @remark
  */
 public interface IQqchManagementPersonConfigService {
-                                                                                                                                                                                                                                                                                                                                                                                                                            
+
     QqchManagementPersonConfig getQqchManagementPersonConfig(QqchManagementPersonConfig qqchManagementPersonConfig);
 
     QqchManagementPersonConfigVo getQqchManagementPersonConfigList(QqchManagementPersonConfig qqchManagementPersonConfig);
@@ -22,16 +22,23 @@ public interface IQqchManagementPersonConfigService {
 
     int updateQqchManagementPersonConfig(QqchManagementPersonConfig qqchManagementPersonConfig);
 
-            int updateQqchManagementPersonConfigList(List<QqchManagementPersonConfig> qqchManagementPersonConfigList);
-    
+    int updateQqchManagementPersonConfigList(List<QqchManagementPersonConfig> qqchManagementPersonConfigList);
+
     int deleteQqchManagementPersonConfig(QqchManagementPersonConfig qqchManagementPersonConfig);
 
-            int deleteQqchManagementPersonConfigByPks(List<Long> qqchManagementPersonConfigPkList);
+    int deleteQqchManagementPersonConfigByPks(List<Long> qqchManagementPersonConfigPkList);
 
     void save(QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
 
 
-    QqchManagementPersonConfigVo synchData( QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
+    QqchManagementPersonConfigVo synchData(QqchManagementPersonConfigVo qqchManagementPersonConfigVo);
 
     Map<String, Integer> personNumCalc(QqchManagementPersonConfig vo);
+
+    /**
+     * 获取 “项目领导层” 层级下的人员数据
+     *
+     * @return
+     */
+    List<QqchManagementPersonConfig> getProjectLeadershipPersonList();
 }

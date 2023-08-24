@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -81,6 +82,12 @@ public class QqchCostControlPostDuty extends BaseEntity {
     @JsonProperty
     @Excel(name = "数据来源（1：选择，2：手动新增）")
     private String source;
+    /**
+     * 字段描述：关联id  ： 关联人员总需计划
+     */
+    @JsonProperty
+    @Excel(name = "关联id")
+    private Long relevancyId;
     /**
      * 字段描述：层级
      */
@@ -226,5 +233,5 @@ public class QqchCostControlPostDuty extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    private List<QqchCostControlPostDuty> children;
+    private List<QqchCostControlPostDuty> children = new ArrayList<>();
 }

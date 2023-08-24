@@ -19,6 +19,7 @@
         <result property="draftInDays" column="draft_in_days"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
+        <result property="relevancyId" column="relevancy_id"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -55,6 +56,7 @@
                 , `draft_in_days`
                 , `file_group_id`
                 , `remark`
+                , `relevancy_id`
                 , `region_id`
                 , `region_name`
                 , `project_id`
@@ -124,6 +126,7 @@
         <include refid="selectQqchManagementPersonConfigVo"/>
         <include refid="dynamicWhere"/>
         order by create_time desc
+        limit 1
     </select>
 
     <select id="getQqchManagementPersonConfigList" resultMap="QqchManagementPersonConfigResultMap">
@@ -184,6 +187,7 @@
             <if test="draftInDays != null ">`draft_in_days`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="relevancyId != null ">`relevancy_id`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -220,6 +224,7 @@
             <if test="draftInDays != null ">#{draftInDays},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="relevancyId != null">#{relevancyId},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -261,6 +266,7 @@
             `draft_in_days`,
             `file_group_id`,
             `remark`,
+            `relevancy_id`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -298,6 +304,7 @@
                 #{item.draftInDays},
                 #{item.fileGroupId},
                 #{item.remark},
+                #{item.relevancyId},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},

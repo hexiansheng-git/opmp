@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -208,5 +209,5 @@ public class QqchStandardExpenseAccount extends BaseEntity {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
-    private List<QqchStandardExpenseAccount> children;
+    private List<QqchStandardExpenseAccount> children = new ArrayList<>();
 }

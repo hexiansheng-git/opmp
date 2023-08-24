@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGoal.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -12,6 +13,7 @@ import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author mls
@@ -198,7 +200,11 @@ public class QqchTaxGoal extends CompileEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-
+    
+    
+    @JsonIgnore
+    private List children;
+ 
 
     public static void main(String[] args) {
         JsonUtils.soutJsonStr(QqchTaxGoal.class);

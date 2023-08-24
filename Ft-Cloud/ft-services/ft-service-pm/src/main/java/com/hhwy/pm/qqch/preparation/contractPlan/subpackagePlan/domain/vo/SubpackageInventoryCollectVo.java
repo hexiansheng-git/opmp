@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -69,5 +70,5 @@ public class SubpackageInventoryCollectVo {
     @JsonProperty
     private BigDecimal subpackageGuidePrice;
 
-    private List<SubpackageInventoryCollectVo> children;
+    private List<SubpackageInventoryCollectVo> children = new ArrayList<>();
 }
