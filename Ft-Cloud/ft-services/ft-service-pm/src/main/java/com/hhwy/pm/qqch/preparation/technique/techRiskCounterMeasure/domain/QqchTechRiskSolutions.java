@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -223,5 +224,5 @@ public class QqchTechRiskSolutions extends BaseEntity {
     /**
      * 字段描述：子集
      */
-    private List<QqchTechRiskSolutions> children;
+    private List<QqchTechRiskSolutions> children = new ArrayList<>();
 }

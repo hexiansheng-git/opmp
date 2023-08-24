@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -155,7 +154,6 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         return qqchManagementPersonConfigMapper.personNumCalc(vo);
     }
 
-
     /**
      * 列表接口
      *
@@ -227,6 +225,9 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         for (QqchManagementPersonConfig managementPersonConfig : configs) {
             managementPersonConfig.setValid(valid);
             managementPersonConfig.setVersion(version);
+            if(managementPersonConfig.getRelevancyId() != null){
+                managementPersonConfig.setRelevancyId(IdWorker.createId());
+            }
             managementPersonConfig.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             managementPersonConfig.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             managementPersonConfig.setCreateTime(DateUtils.getNowDate());
@@ -236,4 +237,31 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         }
         qqchManagementPersonConfigMapper.insertQqchManagementPersonConfigList(configs);
     }
+
+    private static final String PROJECT_LEADERSHIP = "项目领导层";
+
+    /**
+     * 获取 “项目领导层” 层级下的人员数据
+     * @return
+     */
+    @Override
+    public List<QqchManagementPersonConfig> getProjectLeadershipPersonList() {
+        //获取当前最大生效版本
+        BigDecimal version = VersionUtil.getVersion("qqch_management_person_config", null);
+        //获取岗位为 “项目领导层” 的数据
+        QqchManagementPersonConfig qqchManagementPersonConfig = new QqchManagementPersonConfig();
+        qqchManagementPersonConfig.setPost(PROJECT_LEADERSHIP);
+        qqchManagementPersonConfig.setVersion(version);
+        QqchManagementPersonConfig projectLeadership = qqchManagementPersonConfigMapper.getQqchManagementPersonConfig(qqchManagementPersonConfig);
+
+        if(projectLeadership == null){
+            return new ArrayList<>();
+        }
+
+        //获取 “项目领导层” 的下级数据
+        qqchManagementPersonConfig = new QqchManagementPersonConfig();
+        qqchManagementPersonConfig.setPid(projectLeadership.getId());
+        return qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(qqchManagementPersonConfig);
+    }
+
 }

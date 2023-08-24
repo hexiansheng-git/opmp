@@ -15,6 +15,7 @@
         <result property="contactNumber" column="contact_number"/>
         <result property="remark" column="remark"/>
         <result property="source" column="source"/>
+        <result property="relevancyId" column="relevancy_id"/>
         <result property="level" column="level"/>
         <result property="leaf" column="leaf"/>
         <result property="sort" column="sort"/>
@@ -49,6 +50,7 @@
              , `contact_number`
              , `remark`
              , `source`
+             , `relevancy_id`
              , `level`
              , `leaf`
              , `sort`
@@ -175,6 +177,7 @@
             <if test="contactNumber != null  and contactNumber != ''">`contact_number`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="source != null  and source != ''">`source`,</if>
+            <if test="relevancyId != null">`relevancy_id`,</if>
             <if test="level != null ">`level`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="sort != null ">`sort`,</if>
@@ -209,6 +212,7 @@
             <if test="contactNumber != null  and contactNumber != ''">#{contactNumber},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="source != null  and source != ''">#{source},</if>
+            <if test="relevancyId != null">#{relevancyId},</if>
             <if test="level != null ">#{level},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="sort != null ">#{sort},</if>
@@ -248,6 +252,7 @@
             `contact_number`,
             `remark`,
             `source`,
+            `relevancy_id`,
             `level`,
             `leaf`,
             `sort`,
@@ -283,6 +288,7 @@
                 #{item.contactNumber},
                 #{item.remark},
                 #{item.source},
+                #{item.relevancyId},
                 #{item.level},
                 #{item.leaf},
                 #{item.sort},

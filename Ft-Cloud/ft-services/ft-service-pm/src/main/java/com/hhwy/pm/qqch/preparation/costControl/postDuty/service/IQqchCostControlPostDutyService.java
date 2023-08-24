@@ -39,4 +39,11 @@ public interface IQqchCostControlPostDutyService {
      * @return
      */
     void save(QqchCostControlPostDutyVo qqchCostControlPostDutyVo);
+
+    /**
+     * 同步人员总需计划
+     * @param qqchCostControlPostDutyVo
+     * @return
+     */
+    void synchronization(QqchCostControlPostDutyVo qqchCostControlPostDutyVo);
 }

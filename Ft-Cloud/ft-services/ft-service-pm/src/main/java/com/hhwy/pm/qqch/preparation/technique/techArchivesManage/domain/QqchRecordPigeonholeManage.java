@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -205,5 +206,5 @@ public class QqchRecordPigeonholeManage extends BaseEntity {
     /**
      * 字段描述：子集
      */
-    private List<QqchRecordPigeonholeManage> children;
+    private List<QqchRecordPigeonholeManage> children = new ArrayList<>();
 }

@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -196,5 +197,5 @@ public class QqchGeneralCondition extends BaseEntity {
     @JsonProperty
     private String ptVar5;
 
-    private List<QqchGeneralCondition> children;
+    private List<QqchGeneralCondition> children = new ArrayList<>();
 }

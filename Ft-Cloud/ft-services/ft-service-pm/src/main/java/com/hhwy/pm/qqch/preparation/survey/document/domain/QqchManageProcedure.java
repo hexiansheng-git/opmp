@@ -1,19 +1,19 @@
 package com.hhwy.pm.qqch.preparation.survey.document.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -206,5 +206,5 @@ public class QqchManageProcedure extends BaseEntity {
     /**
      * 字段描述：子集
      */
-    private List<QqchManageProcedure> children;
+    private List<QqchManageProcedure> children = new ArrayList<>();
 }

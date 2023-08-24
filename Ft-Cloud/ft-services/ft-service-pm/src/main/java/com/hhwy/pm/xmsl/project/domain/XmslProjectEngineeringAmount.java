@@ -1,19 +1,20 @@
 package com.hhwy.pm.xmsl.project.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import java.util.List;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -173,5 +174,5 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
     /**
      * 字段描述：子集合
      */
-    private List<XmslProjectEngineeringAmount> children;
+    private List<XmslProjectEngineeringAmount> children = new ArrayList<>();
 }

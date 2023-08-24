@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -223,5 +224,5 @@ public class QqchProjectOperationObjective extends BaseEntity {
     /**
      * 字段描述：子集
      */
-    private List<QqchProjectOperationObjective> children;
+    private List<QqchProjectOperationObjective> children = new ArrayList<>();
 }

@@ -3,6 +3,8 @@ package com.hhwy.pm.qqch.preparation.costControl.postDuty.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.constant.DataSource;
+import com.hhwy.pm.qqch.constant.WorkGroup;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.QqchCostControlPostDuty;
@@ -10,17 +12,20 @@ import com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.vo.QqchCostContr
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.mapper.QqchCostControlPostDutyMapper;
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.service.IQqchCostControlPostDutyService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
+import com.hhwy.pm.qqch.sgch.managementPersonConfig.service.IQqchManagementPersonConfigService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
+import io.seata.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author han
@@ -38,6 +43,9 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private IQqchManagementPersonConfigService qqchManagementPersonConfigService;
 
 
     public QqchCostControlPostDuty getQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty) {
@@ -98,11 +106,6 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
 
         qqchCostControlPostDuty.setVersion(version);
         List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyMapper.getQqchExtendApplyWorkGroupList(qqchCostControlPostDuty);
-
-        if(CollectionUtils.isEmpty(qqchCostControlPostDutyList)){
-            //数据库中没有数据，初始化一级结构
-
-        }
 
         //转树列表
         List<QqchCostControlPostDuty> treeList = ListTreeUtil.formatTree(
@@ -193,7 +196,110 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
             qqchCostControlPostDuty.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchCostControlPostDuty.setCreateUserName(SecurityUtils.getUserName());
             qqchCostControlPostDuty.setCreateTime(DateUtils.getNowDate());
+
+            String source = qqchCostControlPostDuty.getSource();
+            if(StringUtils.isBlank(source)){
+                qqchCostControlPostDuty.setSource(DataSource.MANUAL_ADDITION);
+            }
         }
         qqchCostControlPostDutyMapper.insertQqchExtendApplyWorkGroupList(qqchCostControlPostDutyList);
+    }
+
+    private static final String OVERALL_MANAGEMENT = "统筹管理";
+    private static final String PROJECT_LEADER = "项目经理";
+
+    /**
+     * 同步人员总需计划
+     * @param qqchCostControlPostDutyVo
+     * @return
+     */
+    @Override
+    @Transactional
+    public void synchronization(QqchCostControlPostDutyVo qqchCostControlPostDutyVo) {
+        List<QqchCostControlPostDuty> list = qqchCostControlPostDutyVo.getList();
+
+        QqchCostControlPostDuty overallManagement = null;
+        for (QqchCostControlPostDuty qqchCostControlPostDuty : list) {
+            if(OVERALL_MANAGEMENT.equals(qqchCostControlPostDuty.getWorkGroup())){
+                overallManagement = qqchCostControlPostDuty;
+                list.remove(qqchCostControlPostDuty);
+                break;
+            }
+        }
+
+        List<QqchCostControlPostDuty> originalList = new ArrayList<>();
+        if (overallManagement == null){
+            overallManagement = new QqchCostControlPostDuty();
+            overallManagement.setWorkGroup(OVERALL_MANAGEMENT);
+        }else {
+            originalList = overallManagement.getChildren();
+        }
+        List<QqchCostControlPostDuty> finalList = this.mergeData(originalList);
+        overallManagement.setChildren(finalList);
+        list.add(0,overallManagement);
+
+        //入库
+        this.insertQqchExtendApplyWorkGroupList(list,qqchCostControlPostDutyVo.getVersion());
+    }
+
+    /**
+     * 合并数据
+     * @param originalList 原始数据
+     */
+    public List<QqchCostControlPostDuty> mergeData(List<QqchCostControlPostDuty> originalList){
+
+        //手动新增的数据集
+        List<QqchCostControlPostDuty> manualAdditionList = new ArrayList<>();
+        //原始数据中之前同步过的数据，封装成map
+        Map<Long,QqchCostControlPostDuty> originalRelevancyIdMap = new HashMap<>();
+        for (QqchCostControlPostDuty qqchCostControlPostDuty : originalList) {
+            if(qqchCostControlPostDuty.getRelevancyId() != null){
+                originalRelevancyIdMap.put(qqchCostControlPostDuty.getRelevancyId(),qqchCostControlPostDuty);
+            }else {
+                manualAdditionList.add(qqchCostControlPostDuty);
+            }
+        }
+
+        //获取人员总需计划中层级为 ”项目领导层“ 的下级人员数据
+        List<QqchManagementPersonConfig> projectLeadershipPersonList = qqchManagementPersonConfigService.getProjectLeadershipPersonList();
+
+        //数据转换  overallManagementList：远程数据
+        List<QqchCostControlPostDuty> overallManagementList = new ArrayList<>();
+        for (QqchManagementPersonConfig qqchManagementPersonConfig : projectLeadershipPersonList) {
+            QqchCostControlPostDuty qqchCostControlPostDuty = new QqchCostControlPostDuty();
+            String post = qqchManagementPersonConfig.getPost();
+            qqchCostControlPostDuty.setPost(post);
+            qqchCostControlPostDuty.setName(qqchManagementPersonConfig.getName());
+            qqchCostControlPostDuty.setSource(DataSource.CHOICE);
+            qqchCostControlPostDuty.setRelevancyId(qqchManagementPersonConfig.getRelevancyId());
+            if(PROJECT_LEADER.equals(post)){
+                qqchCostControlPostDuty.setWorkGroup(WorkGroup.GROUP_LEADER);
+            }else {
+                qqchCostControlPostDuty.setWorkGroup(WorkGroup.ASSISTANT_GROUP_LEADER);
+            }
+            overallManagementList.add(qqchCostControlPostDuty);
+        }
+
+        List<QqchCostControlPostDuty> resultList = new ArrayList<>();
+        //数据合并
+        for (QqchCostControlPostDuty qqchCostControlPostDuty : overallManagementList) {
+            Long relevancyId = qqchCostControlPostDuty.getRelevancyId();
+
+            //在map中查询是否存在关联的原始数据
+            QqchCostControlPostDuty original = originalRelevancyIdMap.get(relevancyId);
+            if(original != null){
+                //存在关联数据
+                original.setWorkGroup(qqchCostControlPostDuty.getWorkGroup());
+                original.setPost(qqchCostControlPostDuty.getPost());
+                original.setName(qqchCostControlPostDuty.getName());
+                resultList.add(original);
+            }else {
+                //不存在关联数据
+                resultList.add(qqchCostControlPostDuty);
+            }
+        }
+
+        resultList.addAll(manualAdditionList);
+        return resultList;
     }
 }

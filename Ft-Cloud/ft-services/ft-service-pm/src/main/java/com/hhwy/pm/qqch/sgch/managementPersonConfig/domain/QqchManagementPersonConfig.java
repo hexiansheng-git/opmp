@@ -111,6 +111,12 @@ public class QqchManagementPersonConfig extends TreeNode<QqchManagementPersonCon
     @Excel(name = "备注/描述")
     private String remark;
     /**
+     * 字段描述：关联id  ： 关联成本管控岗位责任
+     */
+    @JsonProperty
+    @Excel(name = "关联id")
+    private Long relevancyId;
+    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
