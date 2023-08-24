@@ -50,7 +50,7 @@ public class SbchTotalDemandPlanController extends BaseController {
             return AjaxResult.success();
         }catch (CustomBusinessException e){
             e.printStackTrace();
-            return AjaxResult.error(e.getMessage());
+            return AjaxResult.error(e.getMsg());
         }catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
