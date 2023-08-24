@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 import lombok.ToString;
@@ -20,7 +21,7 @@ import java.util.List;
  */
 @Data
 @ToString
-public class QqchTaxInDetail extends CommonBaseEntity {
+public class QqchTaxInDetail extends CompileEntity<QqchTaxInDetail> {
     private static final long serialVersionUID = 1L;
 
     /**

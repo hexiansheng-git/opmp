@@ -183,6 +183,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
                     detail.setDataType(item.getDataType());
                     detail.setVersion(item.getVersion());
                     detail.setValid(item.getValid());
+                    detail.setVersion(item.getVersion());
                     // 价格转换
                     detail.setUsdAmt(CommonServiceUtil.getUsdAmt(detail.getAmt(), detail.getRate()));
 
