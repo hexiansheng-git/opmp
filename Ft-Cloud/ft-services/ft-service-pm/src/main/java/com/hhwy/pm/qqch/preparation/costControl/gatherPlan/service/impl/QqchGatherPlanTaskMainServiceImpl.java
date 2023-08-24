@@ -153,7 +153,7 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
 
             for (QqchGatherPlanTask gatherPlanTask : qqchGatherPlanTaskList) {
                 if(qqchGatherPlanTaskVo.getWbsCode().equals(gatherPlanTask.getWbsCode())){
-                    qqchGatherPlanTaskVo.setId(qqchGatherPlanTaskVo.getId());
+                    qqchGatherPlanTaskVo.setId(gatherPlanTask.getId());
                     qqchGatherPlanTaskVo.setGatherer(gatherPlanTask.getGatherer());
                     qqchGatherPlanTaskVo.setVerifier(gatherPlanTask.getVerifier());
                     qqchGatherPlanTaskVo.setRemark(gatherPlanTask.getRemark());
