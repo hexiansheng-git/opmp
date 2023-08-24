@@ -70,8 +70,8 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
 
     @Transactional
     public int deleteQqchQualityRiskControlMeasures(QqchQualityRiskControlMeasures qqchQualityRiskControlMeasures) {
-        qqchQualityRiskControlMeasures.setUpdateUser(SecurityUtils.getUserName());
-        qqchQualityRiskControlMeasures.setUpdateTime(DateUtils.getNowDate());
+//        qqchQualityRiskControlMeasures.setUpdateUser(SecurityUtils.getUserName());
+//        qqchQualityRiskControlMeasures.setUpdateTime(DateUtils.getNowDate());
         return qqchQualityRiskControlMeasuresMapper.deleteQqchQualityRiskControlMeasures(qqchQualityRiskControlMeasures);
     }
 
@@ -113,9 +113,11 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
 
         BigDecimal version = vo.getVersion();
         List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList = vo.getQqchQualityRiskControlMeasuresList();
-
         this.insertQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresList, version);
 
+        if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
+            return;
+        }
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             //插入确认记录
@@ -132,6 +134,25 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
         qqchQualityRiskControlMeasures.setVersion(version);
         qqchQualityRiskControlMeasuresMapper.deleteQqchQualityRiskControlMeasures(qqchQualityRiskControlMeasures);
 
+        if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
+            return;
+        }
+        String valid = Valid.NO;
+        if (version.compareTo(BigDecimal.ONE) == 0) {
+            valid = Valid.YES;
+        }
+        for (QqchQualityRiskControlMeasures riskControlMeasures : qqchQualityRiskControlMeasuresList) {
+            riskControlMeasures.setId(IdWorker.createId());
+            riskControlMeasures.setValid(valid);
+            riskControlMeasures.setVersion(version);
+            riskControlMeasures.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            riskControlMeasures.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            riskControlMeasures.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchQualityRiskControlMeasuresMapper.insertQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresList);
+    }
+
+    public void insetList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList,BigDecimal version) {
         if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
             return;
         }

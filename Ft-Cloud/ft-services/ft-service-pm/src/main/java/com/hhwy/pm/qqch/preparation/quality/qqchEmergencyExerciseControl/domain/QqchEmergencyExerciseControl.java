@@ -39,7 +39,7 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     /**
      * 字段描述：应急预案管控id
      */
-    @NotNull(message = "应急预案管控id不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotNull(message = "应急预案管控id不能为空", groups = {ValidationGroups.Update.class})
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "应急预案管控id")
@@ -47,7 +47,7 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     /**
      * 字段描述：应急预案管控名称
      */
-    @NotBlank(message = "应急预案管控名称不能为空", groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+    @NotBlank(message = "应急预案管控名称不能为空", groups = {ValidationGroups.Update.class})
     @JsonProperty
     @Excel(name = "应急预案管控名称")
     private String planName;

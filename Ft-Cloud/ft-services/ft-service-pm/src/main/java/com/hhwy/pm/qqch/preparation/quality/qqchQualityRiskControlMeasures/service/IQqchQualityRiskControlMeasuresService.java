@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.serv
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.vo.QqchQualityRiskControlMeasuresVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface IQqchQualityRiskControlMeasuresService {
     int deleteQqchQualityRiskControlMeasuresByPks(List<Long> qqchQualityRiskControlMeasuresPkList);
 
     void save(QqchQualityRiskControlMeasuresVo vo);
+
+    void insetList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList, BigDecimal version);
 }
