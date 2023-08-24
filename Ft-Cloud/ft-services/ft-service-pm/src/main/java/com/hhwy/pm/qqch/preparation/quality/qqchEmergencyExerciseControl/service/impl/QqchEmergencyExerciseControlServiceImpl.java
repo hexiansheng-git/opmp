@@ -112,18 +112,15 @@ public class QqchEmergencyExerciseControlServiceImpl implements IQqchEmergencyEx
 
         BigDecimal version = vo.getVersion();
         List<QqchEmergencyExerciseControl> qqchEmergencyExerciseControlList = vo.getQqchEmergencyExerciseControlList();
-        if(CollectionUtils.isEmpty(qqchEmergencyExerciseControlList)){
-            return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchEmergencyExerciseControlList, ValidationGroups.Save.class);
-            }
-        }
         this.insertQqchEmergencyExerciseControlList(qqchEmergencyExerciseControlList, version);
 
+        if(CollectionUtils.isEmpty(qqchEmergencyExerciseControlList)){
+            return;
+        }
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchEmergencyExerciseControlList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -138,7 +135,9 @@ public class QqchEmergencyExerciseControlServiceImpl implements IQqchEmergencyEx
         qqchEmergencyExerciseControl1.setVersion(version);
         qqchEmergencyExerciseControlMapper.deleteQqchEmergencyExerciseControl(qqchEmergencyExerciseControl1);
 
-
+        if(CollectionUtils.isEmpty(qqchEmergencyExerciseControlList)){
+            return;
+        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
