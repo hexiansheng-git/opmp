@@ -4,7 +4,6 @@ import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.api.domain.SysDept;
 
 import java.util.List;
-import java.util.Map;
 
 public interface IDeptService {
 
@@ -15,5 +14,5 @@ public interface IDeptService {
 
     SysDept selectDeptIdByprojectId(Long projectId);
 
-    List<SysDept> selectAllDept(Long deptId);
+    List<SysDept> selectAllDept(Long deptId, String ancestors);
 }
