@@ -146,6 +146,7 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
             QqchGatherPlanTaskVo qqchGatherPlanTaskVo = new QqchGatherPlanTaskVo();
             qqchGatherPlanTaskVo.setWbsId(Long.valueOf(wbs.getId()));
             qqchGatherPlanTaskVo.setWbsCode(wbs.getCode());
+            qqchGatherPlanTaskVo.setHaveChildren(wbs.getHaveChildren());
             qqchGatherPlanTaskVo.setPartCode(wbs.getPartCode());
             qqchGatherPlanTaskVo.setPartName(wbs.getName());
             qqchGatherPlanTaskVo.setType(wbs.getNodeType());
