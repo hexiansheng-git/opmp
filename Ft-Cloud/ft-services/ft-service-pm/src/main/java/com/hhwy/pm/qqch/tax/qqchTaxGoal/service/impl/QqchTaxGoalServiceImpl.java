@@ -12,6 +12,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -87,6 +88,7 @@ public class QqchTaxGoalServiceImpl implements IQqchTaxGoalService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchTaxGoal> list) {
+        if (CollectionUtils.isEmpty(list)) return;
         this.qqchTaxGoalMapper.insertQqchTaxGoalList(list);
     }
 

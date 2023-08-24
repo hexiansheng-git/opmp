@@ -1,0 +1,732 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.plan.mapper.SbchTotalDemandPlanDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
+               id="SbchTotalDemandPlanDetailResult">
+        <result property="id" column="id"/>
+        <result property="planId" column="plan_id"/>
+        <result property="materialType" column="material_type"/>
+        <result property="materialCode" column="material_code"/>
+        <result property="materialName" column="material_name"/>
+        <result property="materialSpec" column="material_spec"/>
+        <result property="materialPower" column="material_power"/>
+        <result property="brandIds" column="brand_ids"/>
+        <result property="brandNames" column="brand_names"/>
+        <result property="materialUnit" column="material_unit"/>
+        <result property="totalNum" column="total_num"/>
+        <result property="allocateNum" column="allocate_num"/>
+        <result property="countryBuyNum" column="country_buy_num"/>
+        <result property="localBuyNum" column="local_buy_num"/>
+        <result property="localLeaseNum" column="local_lease_num"/>
+        <result property="companySelfNum" column="company_self_num"/>
+        <result property="planEntryTime" column="plan_entry_time"/>
+        <result property="planExitTime" column="plan_exit_time"/>
+        <result property="isSpecial" column="is_special"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="remark" column="remark"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="deptId" column="dept_id"/>
+    </resultMap>
+
+    <sql id="selectSbchTotalDemandPlanDetailVo">
+        select `id`, `plan_id`, `material_type`, `material_code`, `material_name`, `material_spec`, `material_power`, `brand_ids`, `brand_names`, `material_unit`, `total_num`, `allocate_num`, `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`, `plan_exit_time`, `is_special`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`,`project_name`, `region_id`, `region_name`, `dept_id` from `sbch_total_demand_plan_detail`
+    </sql>
+
+    <select id="selectSbchTotalDemandPlanDetailList"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
+            resultMap="SbchTotalDemandPlanDetailResult">
+        select detail.`id`, `plan_id`, detail.`material_type`,category.category_name pt_var1, detail.`material_code`,
+        info.`material_name`, info.`material_spec`,
+        detail.`material_power`, `brand_ids`, `brand_names`, detail.`material_unit`, `total_num`, `allocate_num`,
+        `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`,
+        `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
+        detail.`update_user`, detail.`update_user_name`, detail.`update_time`,
+        detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var2`, detail.`pt_var3`,
+        detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
+        from `sbch_total_demand_plan_detail` detail
+        left join t_material_category category on category.category_code = detail.material_type
+        LEFT JOIN t_material_info info ON detail.material_code = info.material_code
+        <where>
+            detail.`del_flag` = 0
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="materialType != null  and materialType != ''">and detail.`material_type` like concat('%',
+                #{materialType}, '%')
+            </if>
+            <if test="materialCode != null  and materialCode != ''">and info.`material_code` like '${materialCode}%'
+            </if>
+            <if test="materialName != null  and materialName != ''">and info.`material_name` like '${materialName}%'
+            </if>
+            <if test="materialSpec != null  and materialSpec != ''">and info.`material_spec` like '${materialSpec}%'
+            </if>
+            <if test="materialPower != null ">and detail.`material_power` = #{materialPower}</if>
+            <if test="brandIds != null  and brandIds != ''">and `brand_ids` = #{brandIds}</if>
+            <if test="brandNames != null  and brandNames != ''">and `brand_names` like concat('%', #{brandNames}, '%')
+            </if>
+            <if test="materialUnit != null  and materialUnit != ''">and `material_unit` = #{materialUnit}</if>
+            <if test="totalNum != null ">and `total_num` = #{totalNum}</if>
+            <if test="allocateNum != null ">and `allocate_num` = #{allocateNum}</if>
+            <if test="countryBuyNum != null ">and `country_buy_num` = #{countryBuyNum}</if>
+            <if test="localBuyNum != null ">and `local_buy_num` = #{localBuyNum}</if>
+            <if test="localLeaseNum != null ">and `local_lease_num` = #{localLeaseNum}</if>
+            <if test="companySelfNum != null ">and `company_self_num` = #{companySelfNum}</if>
+            <if test="params.allocateNumFlag != null and  params.allocateNumFlag != '' and  params.allocateNumFlag == true">
+                and `allocate_num` > 0
+            </if>
+            <if test="params.countryBuyNumFlag != null and  params.countryBuyNumFlag != '' and  params.countryBuyNumFlag == true">
+                and `country_buy_num` > 0
+            </if>
+            <if test="params.localBuyNumFlag != null and  params.localBuyNumFlag != '' and  params.localBuyNumFlag == true">
+                and `local_buy_num` > 0
+            </if>
+            <if test="params.localLeaseNumFlag != null and  params.localLeaseNumFlag != '' and  params.localLeaseNumFlag == true">
+                and `local_lease_num` > 0
+            </if>
+            <if test="params.companySelfNumFlag != null and  params.companySelfNumFlag != '' and  params.companySelfNumFlag == true">
+                and `company_self_num` > 0
+            </if>
+            <if test="planEntryTime != null ">and `plan_entry_time` = #{planEntryTime}</if>
+            <if test="planExitTime != null ">and `plan_exit_time` = #{planExitTime}</if>
+            <if test="isSpecial != null  and isSpecial != ''">and detail.`is_special` = #{isSpecial}</if>
+            <if test="createUser != null ">and detail.`create_user` = #{createUser}</if>
+            <if test="createUserName != null ">and detail.`create_user_name` like concat('%', #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null ">and detail.`update_user` = #{updateUser}</if>
+            <if test="updateUserName != null ">and detail.`update_user_name` like concat('%', #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null ">and detail.`del_user` = #{delUser}</if>
+            <if test="delTime != null ">and detail.`del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and category.category_name like concat('%', #{ptVar1}, '%')</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and detail.`pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and detail.`pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null ">and detail.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and detail.`project_name` like concat('%',
+                #{projectName}, '%')
+            </if>
+            <if test="regionId != null ">and detail.`region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and detail.`region_name` like concat('%', #{regionName},
+                '%')
+            </if>
+            <if test="deptId != null ">and detail.`dept_id` = #{deptId}</if>
+            <if test="planIds != null">
+                and plan_id in
+                <foreach collection="planIds" item="planId" index="index" separator="," open="(" close=")">
+                    #{planId}
+                </foreach>
+            </if>
+            <if test="materialCodeList != null">
+                and material_code in
+                <foreach collection="materialCodeList" item="materialCode" index="index" separator="," open="("
+                         close=")">
+                    #{materialCode}
+                </foreach>
+            </if>
+        </where>
+        group by detail.id
+        order by detail.`id` desc
+    </select>
+
+    <select id="selectSbchTotalDemandPlanDetailById" parameterType="Long" resultMap="SbchTotalDemandPlanDetailResult">
+        <include refid="selectSbchTotalDemandPlanDetailVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSbchTotalDemandPlanDetail"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
+        insert into `sbch_total_demand_plan_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="planId != null">`plan_id`,</if>
+            <if test="materialType != null">`material_type`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="materialName != null">`material_name`,</if>
+            <if test="materialSpec != null">`material_spec`,</if>
+            <if test="materialPower != null">`material_power`,</if>
+            <if test="brandIds != null">`brand_ids`,</if>
+            <if test="brandNames != null">`brand_names`,</if>
+            <if test="materialUnit != null">`material_unit`,</if>
+            <if test="totalNum != null">`total_num`,</if>
+            <if test="allocateNum != null">`allocate_num`,</if>
+            <if test="countryBuyNum != null">`country_buy_num`,</if>
+            <if test="localBuyNum != null">`local_buy_num`,</if>
+            <if test="localLeaseNum != null">`local_lease_num`,</if>
+            <if test="companySelfNum != null">`company_self_num`,</if>
+            <if test="planEntryTime != null">`plan_entry_time`,</if>
+            <if test="planExitTime != null">`plan_exit_time`,</if>
+            <if test="isSpecial != null">`is_special`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="planId != null">#{planId},</if>
+            <if test="materialType != null">#{materialType},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialSpec != null">#{materialSpec},</if>
+            <if test="materialPower != null">#{materialPower},</if>
+            <if test="brandIds != null">#{brandIds},</if>
+            <if test="brandNames != null">#{brandNames},</if>
+            <if test="materialUnit != null">#{materialUnit},</if>
+            <if test="totalNum != null">#{totalNum},</if>
+            <if test="allocateNum != null">#{allocateNum},</if>
+            <if test="countryBuyNum != null">#{countryBuyNum},</if>
+            <if test="localBuyNum != null">#{localBuyNum},</if>
+            <if test="localLeaseNum != null">#{localLeaseNum},</if>
+            <if test="companySelfNum != null">#{companySelfNum},</if>
+            <if test="planEntryTime != null">#{planEntryTime},</if>
+            <if test="planExitTime != null">#{planExitTime},</if>
+            <if test="isSpecial != null">#{isSpecial},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="deptId != null">#{deptId},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `sbch_total_demand_plan_detail` (
+        `id`,
+        `plan_id`,
+        `material_type`,
+        `material_code`,
+        `material_name`,
+        `material_spec`,
+        `material_power`,
+        `brand_ids`,
+        `brand_names`,
+        `material_unit`,
+        `total_num`,
+        `allocate_num`,
+        `country_buy_num`,
+        `local_buy_num`,
+        `local_lease_num`,
+        `company_self_num`,
+        `plan_entry_time`,
+        `plan_exit_time`,
+        `is_special`,
+        `create_user`,
+        `create_user_name`,
+        `create_time`,
+        `remark`,
+        `pt_var1`,
+        `pt_var2`,
+        `pt_var3`,
+        `project_id`,
+        `project_name`,
+        `region_id`,
+        `region_name`,
+        `dept_id`
+        )values
+        <foreach collection="dataList" separator="," item="item" index="index">
+            (
+            #{item.id},
+            #{item.planId},
+            #{item.materialType},
+            #{item.materialCode},
+            #{item.materialName},
+            #{item.materialSpec},
+            #{item.materialPower},
+            #{item.brandIds},
+            #{item.brandNames},
+            #{item.materialUnit},
+            #{item.totalNum},
+            #{item.allocateNum},
+            #{item.countryBuyNum},
+            #{item.localBuyNum},
+            #{item.localLeaseNum},
+            #{item.companySelfNum},
+            #{item.planEntryTime},
+            #{item.planExitTime},
+            #{item.isSpecial},
+            #{item.createUser},
+            #{item.createUserName},
+            #{item.createTime},
+            #{item.remark},
+            #{item.ptVar1},
+            #{item.ptVar2},
+            #{item.ptVar3},
+            #{item.projectId},
+            #{item.projectName},
+            #{item.regionId},
+            #{item.regionName},
+            #{item.deptId} )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sbch_total_demand_plan_detail`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="plan_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planId != null ">
+                        when `id` = #{item.id} then #{item.planId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_type =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialType != null ">
+                        when `id` = #{item.id} then #{item.materialType}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialCode != null ">
+                        when `id` = #{item.id} then #{item.materialCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialName != null ">
+                        when `id` = #{item.id} then #{item.materialName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_spec =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialSpec != null ">
+                        when `id` = #{item.id} then #{item.materialSpec}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_power =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialPower != null ">
+                        when `id` = #{item.id} then #{item.materialPower}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="brand_ids =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.brandIds != null ">
+                        when `id` = #{item.id} then #{item.brandIds}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="brand_names =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.brandNames != null ">
+                        when `id` = #{item.id} then #{item.brandNames}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_unit =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialUnit != null ">
+                        when `id` = #{item.id} then #{item.materialUnit}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.totalNum != null ">
+                        when `id` = #{item.id} then #{item.totalNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="allocate_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.allocateNum != null ">
+                        when `id` = #{item.id} then #{item.allocateNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="country_buy_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.countryBuyNum != null ">
+                        when `id` = #{item.id} then #{item.countryBuyNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="local_buy_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.localBuyNum != null ">
+                        when `id` = #{item.id} then #{item.localBuyNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="local_lease_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.localLeaseNum != null ">
+                        when `id` = #{item.id} then #{item.localLeaseNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="company_self_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.companySelfNum != null ">
+                        when `id` = #{item.id} then #{item.companySelfNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_entry_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planEntryTime != null ">
+                        when `id` = #{item.id} then #{item.planEntryTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_exit_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planExitTime != null ">
+                        when `id` = #{item.id} then #{item.planExitTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="is_special =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.isSpecial != null ">
+                        when `id` = #{item.id} then #{item.isSpecial}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id` = #{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id` = #{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id` = #{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUserName != null ">
+                        when `id` = #{item.id} then #{item.updateUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id` = #{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id` = #{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id` = #{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id` = #{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id` = #{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectName != null ">
+                        when `id` = #{item.id} then #{item.projectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.regionId != null ">
+                        when `id` = #{item.id} then #{item.regionId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.regionName != null ">
+                        when `id` = #{item.id} then #{item.regionName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id` = #{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index">
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="updateSbchTotalDemandPlanDetail"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
+        update `sbch_total_demand_plan_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planId != null">`plan_id` = #{planId},</if>
+            <if test="materialType != null">`material_type` = #{materialType},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="materialName != null">`material_name` = #{materialName},</if>
+            <if test="materialSpec != null">`material_spec` = #{materialSpec},</if>
+            <if test="materialPower != null">`material_power` = #{materialPower},</if>
+            <if test="brandIds != null">`brand_ids` = #{brandIds},</if>
+            <if test="brandNames != null">`brand_names` = #{brandNames},</if>
+            <if test="materialUnit != null">`material_unit` = #{materialUnit},</if>
+            <if test="totalNum != null">`total_num` = #{totalNum},</if>
+            <if test="allocateNum != null">`allocate_num` = #{allocateNum},</if>
+            <if test="countryBuyNum != null">`country_buy_num` = #{countryBuyNum},</if>
+            <if test="localBuyNum != null">`local_buy_num` = #{localBuyNum},</if>
+            <if test="localLeaseNum != null">`local_lease_num` = #{localLeaseNum},</if>
+            <if test="companySelfNum != null">`company_self_num` = #{companySelfNum},</if>
+            <if test="planEntryTime != null">`plan_entry_time` = #{planEntryTime},</if>
+            <if test="planExitTime != null">`plan_exit_time` = #{planExitTime},</if>
+            <if test="isSpecial != null">`is_special` = #{isSpecial},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchTotalDemandPlanDetailById" parameterType="Long">
+        update `sbch_total_demand_plan_detail` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchTotalDemandPlanDetailByIds" parameterType="String">
+        update `sbch_total_demand_plan_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteSbchTotalDemandPlanDetailByPlanId">
+        update sbch_total_demand_plan_detail set del_flag = '1',del_user = #{delUser},del_time = #{delTime} where plan_id = #{planId}
+    </update>
+
+    <select id="selectSbchTotalDemandPlanDetailLeaderList"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
+            resultMap="SbchTotalDemandPlanDetailResult">
+        select detail.`id`, `plan_id`, detail.`material_type`,category.category_name pt_var1, detail.`material_code`,
+        info.`material_name`, info.`material_spec`,
+        detail.`material_power`, `brand_ids`, `brand_names`, detail.`material_unit`, `total_num`, `allocate_num`,
+        `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`,
+        `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
+        detail.`update_user`, detail.`update_user_name`, detail.`update_time`,
+        detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var2`, detail.`pt_var3`,
+        detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
+        from `sbch_total_demand_plan_detail` detail
+        left join t_material_category category on category.category_code = detail.material_type
+        LEFT JOIN t_material_info info ON detail.material_code = info.material_code
+        <where>
+            detail.`del_flag` = 0
+            and plan_id in
+            (
+            select id from sbch_total_demand_plan where is_valid = '1' and del_flag = '0'
+            )
+            <if test="planId != null ">and `plan_id` = #{planId}</if>
+            <if test="materialType != null  and materialType != ''">and detail.`material_type` like concat('%',
+                #{materialType}, '%')
+            </if>
+            <if test="materialCode != null  and materialCode != ''">and info.`material_code` like concat('%',
+                #{materialCode}, '%')
+            </if>
+            <if test="materialName != null  and materialName != ''">and info.`material_name` like concat('%',
+                #{materialName}, '%')
+            </if>
+            <if test="materialSpec != null  and materialSpec != ''">and info.`material_spec` like concat('%',
+                #{materialSpec}, '%')
+            </if>
+            <if test="materialPower != null ">and detail.`material_power` = #{materialPower}</if>
+            <if test="brandIds != null  and brandIds != ''">and `brand_ids` = #{brandIds}</if>
+            <if test="brandNames != null  and brandNames != ''">and `brand_names` like concat('%', #{brandNames}, '%')
+            </if>
+            <if test="materialUnit != null  and materialUnit != ''">and `material_unit` = #{materialUnit}</if>
+            <if test="totalNum != null ">and `total_num` = #{totalNum}</if>
+            <if test="allocateNum != null ">and `allocate_num` = #{allocateNum}</if>
+            <if test="countryBuyNum != null ">and `country_buy_num` = #{countryBuyNum}</if>
+            <if test="localBuyNum != null ">and `local_buy_num` = #{localBuyNum}</if>
+            <if test="localLeaseNum != null ">and `local_lease_num` = #{localLeaseNum}</if>
+            <if test="companySelfNum != null ">and `company_self_num` = #{companySelfNum}</if>
+            <if test="params.allocateNumFlag != null and  params.allocateNumFlag != '' and  params.allocateNumFlag == 'true'">
+                and `allocate_num` > 0
+            </if>
+            <if test="params.countryBuyNumFlag != null and  params.countryBuyNumFlag != '' and  params.countryBuyNumFlag == 'true'">
+                and `country_buy_num` > 0
+            </if>
+            <if test="params.localBuyNumFlag != null and  params.localBuyNumFlag != '' and  params.localBuyNumFlag == 'true'">
+                and `local_buy_num` > 0
+            </if>
+            <if test="params.localLeaseNumFlag != null and  params.localLeaseNumFlag != '' and  params.localLeaseNumFlag == 'true'">
+                and `local_lease_num` > 0
+            </if>
+            <if test="params.companySelfNumFlag != null and  params.companySelfNumFlag != '' and  params.companySelfNumFlag == 'true'">
+                and `company_self_num` > 0
+            </if>
+            <if test="params.countryAndLocalFlag != null and  params.countryAndLocalFlag != '' and  params.countryAndLocalFlag == 'true'">
+                and (`country_buy_num` > 0 or `local_buy_num` > 0 )
+            </if>
+            <if test="planEntryTime != null ">and `plan_entry_time` = #{planEntryTime}</if>
+            <if test="planExitTime != null ">and `plan_exit_time` = #{planExitTime}</if>
+            <if test="isSpecial != null  and isSpecial != ''">and detail.`is_special` = #{isSpecial}</if>
+            <if test="createUser != null ">and detail.`create_user` = #{createUser}</if>
+            <if test="createUserName != null ">and detail.`create_user_name` like concat('%', #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null ">and detail.`update_user` = #{updateUser}</if>
+            <if test="updateUserName != null ">and detail.`update_user_name` like concat('%', #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null ">and detail.`del_user` = #{delUser}</if>
+            <if test="delTime != null ">and detail.`del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and category.category_name like concat('%', #{ptVar1}, '%')</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and detail.`pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and detail.`pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null ">and detail.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and detail.`project_name` like concat('%',
+                #{projectName}, '%')
+            </if>
+            <if test="regionId != null ">and detail.`region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and detail.`region_name` like concat('%', #{regionName},
+                '%')
+            </if>
+            <if test="deptId != null ">and detail.`dept_id` = #{deptId}</if>
+            <if test="planIds != null">
+                and plan_id in
+                <foreach collection="planIds" item="planId" index="index" separator="," open="(" close=")">
+                    #{planId}
+                </foreach>
+            </if>
+            <if test="materialCodeList != null">
+                and detail.material_code in
+                <foreach collection="materialCodeList" item="materialCode" index="index" separator="," open="("
+                         close=")">
+                    #{materialCode}
+                </foreach>
+            </if>
+            <if test="projectIds != null">
+                and detail.project_id in
+                <foreach collection="projectIds" item="projectId" index="index" separator="," open="(" close=")">
+                    #{projectId}
+                </foreach>
+            </if>
+        </where>
+        ${params.dataScope}
+        order by detail.`id` desc
+    </select>
+
+</mapper>

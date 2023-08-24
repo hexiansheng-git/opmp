@@ -50,6 +50,14 @@ public interface XmslWbsMapper {
 
     int updateXmslWbsAncestorList(List<XmslWbs> list);
 
+    /**
+     * 修改版本修改状态
+     * 版本修改状态，1:原数据修改,2:新增数据，3：禁用（仅生效数据）
+     * @param list
+     * @return
+     */
+    int updatePtVar2List(List<XmslWbs> list);
+
     int deleteXmslWbs(XmslWbs xmslWbs);
 
     int deleteXmslWbsByPks(@Param("xmslWbsPkList") List<Long> xmslWbsPkList);

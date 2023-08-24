@@ -16,6 +16,7 @@ import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeNodeBase;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import javax.validation.constraints.NotBlank;
@@ -271,5 +272,8 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
     private String listIds;   //清单ID
     private String wbsId;
 
-    
+    @Override
+    public String toString() {
+        return partCode + StringUtils.trim(name) + nodeType + listCode;
+    }
 }

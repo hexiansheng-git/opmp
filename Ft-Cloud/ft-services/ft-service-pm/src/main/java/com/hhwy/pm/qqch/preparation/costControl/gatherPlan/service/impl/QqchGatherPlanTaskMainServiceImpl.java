@@ -146,13 +146,14 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
             QqchGatherPlanTaskVo qqchGatherPlanTaskVo = new QqchGatherPlanTaskVo();
             qqchGatherPlanTaskVo.setWbsId(Long.valueOf(wbs.getId()));
             qqchGatherPlanTaskVo.setWbsCode(wbs.getCode());
+            qqchGatherPlanTaskVo.setHaveChildren(wbs.getHaveChildren());
             qqchGatherPlanTaskVo.setPartCode(wbs.getPartCode());
             qqchGatherPlanTaskVo.setPartName(wbs.getName());
             qqchGatherPlanTaskVo.setType(wbs.getNodeType());
 
             for (QqchGatherPlanTask gatherPlanTask : qqchGatherPlanTaskList) {
                 if(qqchGatherPlanTaskVo.getWbsCode().equals(gatherPlanTask.getWbsCode())){
-                    qqchGatherPlanTaskVo.setId(qqchGatherPlanTaskVo.getId());
+                    qqchGatherPlanTaskVo.setId(gatherPlanTask.getId());
                     qqchGatherPlanTaskVo.setGatherer(gatherPlanTask.getGatherer());
                     qqchGatherPlanTaskVo.setVerifier(gatherPlanTask.getVerifier());
                     qqchGatherPlanTaskVo.setRemark(gatherPlanTask.getRemark());

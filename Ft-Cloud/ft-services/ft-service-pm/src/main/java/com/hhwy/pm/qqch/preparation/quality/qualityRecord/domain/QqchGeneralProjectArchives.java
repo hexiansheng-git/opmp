@@ -1,91 +1,122 @@
-package com.hhwy.pm.qqch.tax.qqchTaxIn.domain;
+package com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
 /**
- * @author mls
- * @date 2023-08-09 18:17:35
- * @remark qqch_tax_in_detail
+ * @author han
+ * @date 2023-08-24 15:32:35
+ * @remark qqch_general_project_archives
  */
 @Data
-@ToString
-public class QqchTaxInDetail extends CompileEntity<QqchTaxInDetail> {
+@NoArgsConstructor
+@AllArgsConstructor
+public class QqchGeneralProjectArchives extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
+    @Excel(name = "主键id")
     private Long id;
     /**
-     * 字段描述：父级ID
+     * 字段描述：所属wbs编号
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父级ID")
-    private Long masterId;
+    @Excel(name = "所属wbs编号")
+    private String wbsCode;
     /**
-     * 字段描述：1-主营业务收入, 2-其他业务收入
+     * 字段描述：所属wbs名称
      */
     @JsonProperty
-    @Excel(name = "1-主营业务收入, 2-其他业务收入")
-    private String dataType;
+    @Excel(name = "所属wbs名称")
+    private String wbsName;
     /**
-     * 字段描述：币种
+     * 字段描述：资料目录清单
      */
     @JsonProperty
-    @Excel(name = "年份")
-    private String year;
+    @Excel(name = "资料目录清单")
+    private String dataDirectoryInventory;
     /**
-     * 字段描述：币种
+     * 字段描述：资料数量（份）
      */
     @JsonProperty
-    @Excel(name = "币种")
-    private String currency;
+    @Excel(name = "资料数量（份）")
+    private Integer dataQuantity;
     /**
-     * 字段描述：收入金额
+     * 字段描述：登记号
      */
     @JsonProperty
-    @Excel(name = "收入金额")
-    private BigDecimal amt;
+    @Excel(name = "登记号")
+    private String registerNumber;
     /**
-     * 字段描述：收入金额(美元)
+     * 字段描述：完工时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "收入金额(美元)")
-    private BigDecimal usdAmt;
+    @Excel(name = "完工时间", dateFormat = "yyyy-MM-dd")
+    private Date completeTime;
     /**
-     * 字段描述：汇率
+     * 字段描述：资料完成时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "汇率")
-    private BigDecimal rate;
+    @Excel(name = "资料完成时间", dateFormat = "yyyy-MM-dd")
+    private Date dataCompleteTime;
     /**
-     * 字段描述：备注/描述
+     * 字段描述：资料上传人
      */
     @JsonProperty
-    @Excel(name = "备注/描述")
+    @Excel(name = "资料上传人")
+    private String dataUploadUser;
+    /**
+     * 字段描述：资料上传人id
+     */
+    @JsonProperty
+    @Excel(name = "资料上传人id")
+    private String dataUploadUserId;
+    /**
+     * 字段描述：资料上传负责部门
+     */
+    @JsonProperty
+    @Excel(name = "资料上传负责部门")
+    private String dataUploadDutyDept;
+    /**
+     * 字段描述：监督负责人
+     */
+    @JsonProperty
+    @Excel(name = "监督负责人")
+    private String supervisor;
+    /**
+     * 字段描述：监督负责人id
+     */
+    @JsonProperty
+    @Excel(name = "监督负责人id")
+    private String supervisorId;
+    /**
+     * 字段描述：附件组id
+     */
+    @JsonProperty
+    @Excel(name = "附件组id")
+    private String fileGroupId;
+    /**
+     * 字段描述：备注
+     */
+    @JsonProperty
+    @Excel(name = "备注")
     private String remark;
-    /**
-     * 字段描述：叶子节点（1：是，0：否）
-     */
-    @JsonProperty
-    @Excel(name = "叶子节点（1：是，0：否）")
-    private String leaf;
     /**
      * 字段描述：排序
      */
@@ -218,9 +249,4 @@ public class QqchTaxInDetail extends CompileEntity<QqchTaxInDetail> {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-    private Long recordId;
-
-
-    private List<Long> masterIdList;
-
 }
