@@ -602,6 +602,13 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         return xmslWbsMapper.updateXmslWbsList(xmslWbsList);
     }
 
+    @Override
+    public int updatePtVar2List(List<XmslWbs> list) {
+        if(CollectionUtils.isEmpty(list))
+            return 0;
+        return xmslWbsMapper.updatePtVar2List(list);
+    }
+
     @Transactional
     public int deleteXmslWbs(XmslWbs xmslWbs) {
         xmslWbs.setUpdateUser(SecurityUtils.getUserName());

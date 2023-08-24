@@ -2,11 +2,11 @@ package com.hhwy.system.mapper;
 
 import com.hhwy.domain.base.system.SysTreeUtil;
 import com.hhwy.system.api.domain.SysDept;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
-import java.util.Map;
 
 public interface DeptMapper {
 
@@ -20,7 +20,7 @@ public interface DeptMapper {
     List<SysTreeUtil> selectRegionInfo();
 
 
-    SysDept selectDeptIdByProjectId(@PathVariable("projectId") Long projectId);
+    SysDept selectDeptIdByProjectId(@Param("projectId") Long projectId);
 
-    List<SysDept> selectAllDept(@PathVariable("deptId") Long deptId);
+    List<SysDept> selectAllDept(@Param("deptId") Long deptId, @Param("ancestors") String ancestors);
 }

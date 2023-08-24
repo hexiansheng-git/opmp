@@ -53,7 +53,7 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
     private IDeptService deptService;
     @Override
     public void onMessage(String s) {
-            try {
+//            try {
                 Map projectBasicInfo = JSON.parseObject(s, Map.class);
                 String projectName = (String) projectBasicInfo.get("projectName");
                 String projectCode = (String) projectBasicInfo.get("projectCode");
@@ -77,18 +77,19 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
 
                 SysDept dept=deptService.selectDeptIdByprojectId(projectId);
                 Long deptId = dept.getDeptId();
-                List<SysDept> deptList = deptService.selectAllDept(deptId);
+                String ancestors = dept.getAncestors();
+                List<SysDept> deptList = deptService.selectAllDept(deptId,ancestors);
                 sysTenant.setDeptList(deptList);
 
                 List<SysUser> userList=userService.selectAllUser(deptList);
                 sysTenant.setUserList(userList);
                 this.tenantService.insertSysTenant(sysTenant);
-            }catch (MyBatisSystemException e){
-                e.printStackTrace();
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
+//            }catch (MyBatisSystemException e){
+//                e.printStackTrace();
+//            }
+//            catch (Exception e){
+//                e.printStackTrace();
+//            }
     }
 
     @Override

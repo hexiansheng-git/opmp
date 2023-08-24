@@ -6,6 +6,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
@@ -135,13 +136,14 @@ public class XmslProjectBasicInfoController extends BaseController{
      */
     @PostMapping("/addTenant")
     public AjaxResult insertProjectTenant(@RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
-        String dataSource = xmslProjectBasicInfoParam.getProjectCode();
-        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        String tenantKey = xmslProjectBasicInfoParam.getProjectCode();
+        String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+        String oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
         if(StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)){
             DynamicDataSourceContextHolder.push(dataSource);
             try {
                 projectBasicInfoService.insertProjectInvokeProject(xmslProjectBasicInfoParam);
-                return AjaxResult.success(xmslProjectBasicInfoParam);
+                return AjaxResult.success();
             }finally {
                 DynamicDataSourceContextHolder.poll();
                 DynamicDataSourceContextHolder.push(oldDataSource);

@@ -11,7 +11,6 @@ import com.hhwy.pm.qqch.preparation.costControl.other.mapper.QqchOtherCostContro
 import com.hhwy.pm.qqch.preparation.costControl.other.service.IQqchOtherCostControlMeasuresService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
@@ -73,7 +72,6 @@ public class QqchOtherCostControlMeasuresServiceImpl implements IQqchOtherCostCo
             List<QqchOtherCostControlMeasures> list = TreeUtil.treeToList(voParam.getTreeList());
 
             for (QqchOtherCostControlMeasures qqchOtherCostControlMeasures : list) {
-                qqchOtherCostControlMeasures.setId(IdWorker.createId());
                 qqchOtherCostControlMeasures.setVersion(voParam.getVersion());
                 if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     qqchOtherCostControlMeasures.setValid(Valid.YES);

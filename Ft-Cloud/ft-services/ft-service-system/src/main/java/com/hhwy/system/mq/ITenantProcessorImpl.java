@@ -1,13 +1,16 @@
 package com.hhwy.system.mq;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.core.processor.ITenantProcessor;
+import com.hhwy.utils.exception.CustomBusinessException;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Map;
-
+@Service
 public class ITenantProcessorImpl implements ITenantProcessor {
 
     @Autowired
@@ -18,9 +21,13 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 
     @Override
     public void doPostForInsert(SysTenant sysTenant) {
+        System.out.println("122222********************************************************************************");
         Map<String, Object> projectInfo = sysTenant.getParams();
         rocketMQTemplate.convertAndSend("pm:tenantSuccess",projectInfo);
-        pmServiceApi.insertProjectTenant(projectInfo);
+        AjaxResult res = pmServiceApi.insertProjectTenant(projectInfo);
+        if(!res.get("code").toString().equals("200")){
+            throw  new CustomBusinessException("同步项目信息到租户数据库失败！！");
+        };
     }
 
     @Override
