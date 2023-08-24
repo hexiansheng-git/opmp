@@ -127,6 +127,8 @@ public interface IXmslWbsService {
 
     int updateXmslWbsList(List<XmslWbs> xmslWbsList);
 
+    int updatePtVar2List(List<XmslWbs> list);
+
     int deleteXmslWbs(XmslWbs xmslWbs);
 
     int deleteXmslWbsByPks(List<Long> xmslWbsPkList);

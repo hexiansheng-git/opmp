@@ -19,6 +19,7 @@ import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ThreadPoolUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -184,6 +185,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     }
 
     @Override
+    @Transactional
     public void finishFlow(Long id) {
         XmslWbsMain main = getById(id);
         Assert.notNull(main,"获取数据失败");
@@ -199,12 +201,25 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
         //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
-        //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据
+        //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
         ThreadPoolUtil.getThreadPool().execute(()->{
             long beginMills = System.currentTimeMillis();
             try{
+                Map<String,XmslWbs> lastWbsMap = new HashMap<>(10000);
+                //加载上一版本的wbs
+                if(effect != null){
+                    List<XmslWbs> lastList = wbsService.getByMainId(effect.getId());
+                    for (int i = 0; i < lastList.size(); i++) {
+                        XmslWbs temp = lastList.get(i);
+                        lastWbsMap.put(temp.getCode(), temp); 
+                    }
+                }
                 List<XmslWbsListRelation> relationList = new ArrayList<>();
+                //需要修改版本标识(ptVar2)
+                List<XmslWbs> updateFlagList = new ArrayList<>();
                 Function<XmslWbs,XmslWbs> iteratFunc = (r)->{
+                    //对比状态,如果需要修改标识，放入updateFlagList
+                    compareVersionFlag(r,lastWbsMap,updateFlagList);
                     if(StringUtils.isBlank(r.getListCode()))
                         return r;
                     Long[] listIds = Convert.toLongArray(r.getListIds());
@@ -217,11 +232,14 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 };
                 wbsService.handlerAncestors(iteratFunc);
                 wbsListRelationService.insertXmslWbsListRelationList(relationList);
-                //4、wbs塞入redis
+                //4、修改版本变更标志
+                wbsService.updatePtVar2List(updateFlagList);
+                //5、wbs塞入redis
                 wbsService.initWbs2Redis();
             }catch(Exception e){
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
+                
             }finally {
                 log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
             }
@@ -232,4 +250,29 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         });
     }
 
+    /**
+     * 对比wbs和上一个版本，获取修改状态
+     * 版本修改状态，1:原数据修改,2:新增数据，3：禁用（仅生效数据）
+     * @param wbs
+     * @param lastWbsMap
+     * @param updateList
+     */
+    private void compareVersionFlag(XmslWbs wbs,Map<String,XmslWbs> lastWbsMap,List<XmslWbs> updateList){
+        if(MapUtils.isEmpty(lastWbsMap))
+            return ;
+        XmslWbs oldWbs = lastWbsMap.get(wbs.getCode());
+        //版本修改状态，1:原数据修改,2:新增数据，3：禁用（仅生效数据）
+        String flag = null;
+        if(oldWbs == null ){  //新增数据
+            flag = "2";
+        }else if(oldWbs.getStatus() == Constant.NO_INT && wbs.getStatus() == Constant.YES_INT){
+            flag = "3";
+        }else if(!StringUtils.equals(oldWbs.toString(), wbs.toString())){
+            flag = "1";
+        }
+        if(flag != null){
+            wbs.setPtVar2(flag);
+            updateList.add(wbs);
+        }
+    }
 }
