@@ -1,0 +1,29 @@
+package com.hhwy.pm.qqch.preparation.quality.qualityRecord.service;
+
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
+
+import java.util.List;
+
+/**
+ * @author han
+ * @date 2023-08-24 15:32:35
+ * @remark
+ */
+public interface IQqchGeneralProjectArchivesService {
+
+    QqchGeneralProjectArchives getQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
+    List<QqchGeneralProjectArchives> getQqchGeneralProjectArchivesList(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
+    int insertQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
+    int insertQqchGeneralProjectArchivesList(List<QqchGeneralProjectArchives> qqchGeneralProjectArchivesList);
+
+    int updateQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
+    int updateQqchGeneralProjectArchivesList(List<QqchGeneralProjectArchives> qqchGeneralProjectArchivesList);
+
+    int deleteQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
+    int deleteQqchGeneralProjectArchivesByPks(List<Long> qqchGeneralProjectArchivesPkList);
+}
