@@ -221,7 +221,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         List<Map> resuList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             SysTenant tempTenant = list.get(i);
-            //切换到master
+            //切换租户 真
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tempTenant.getTenantKey()));
             try {
