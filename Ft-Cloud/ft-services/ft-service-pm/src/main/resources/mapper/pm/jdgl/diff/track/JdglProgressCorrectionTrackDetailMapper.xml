@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackDetailMapper">
+
+  <resultMap type="com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrackDetail"
+    id="JdglProgressCorrectionTrackDetailResultMap">
+    <result property="id" column="id"/>
+    <result property="trackId" column="track_id"/>
+    <result property="workCode" column="work_code"/>
+    <result property="workName" column="work_name"/>
+    <result property="isKeyLine" column="is_key_line"/>
+    <result property="unit" column="unit"/>
+    <result property="quantity" column="quantity"/>
+    <result property="deviationQuantity" column="deviation_quantity"/>
+    <result property="totalFloat" column="total_float"/>
+    <result property="expectLagDay" column="expect_lag_day"/>
+    <result property="svValue" column="sv_value"/>
+    <result property="completeProgressPercentage" column="complete_progress_percentage"/>
+    <result property="completeDatePercentage" column="complete_date_percentage"/>
+    <result property="deviationCausesAnalysis" column="deviation_causes_analysis"/>
+    <result property="correctionTarget" column="correction_target"/>
+    <result property="concreteMeasure" column="concrete_measure"/>
+    <result property="correctionCompleteDate" column="correction_complete_date"/>
+    <result property="workTeam" column="work_team"/>
+    <result property="directorId" column="director_id"/>
+    <result property="director" column="director"/>
+    <result property="correctionExecuteSituation" column="correction_execute_situation"/>
+    <result property="regionId" column="region_id"/>
+    <result property="regionName" column="region_name"/>
+    <result property="projectId" column="project_id"/>
+    <result property="projectName" column="project_name"/>
+    <result property="deptId" column="dept_id"/>
+    <result property="createUser" column="create_user"/>
+    <result property="createUserName" column="create_user_name"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateUser" column="update_user"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="delUser" column="del_user"/>
+    <result property="delTime" column="del_time"/>
+    <result property="delFlag" column="del_flag"/>
+    <result property="ptVar1" column="pt_var1"/>
+    <result property="ptVar2" column="pt_var2"/>
+    <result property="ptVar3" column="pt_var3"/>
+    <result property="ptVar4" column="pt_var4"/>
+    <result property="ptVar5" column="pt_var5"/>
+  </resultMap>
+  <sql id="selectJdglProgressCorrectionTrackDetailVo">
+        select
+                                                            `id`
+                                                         ,`track_id`
+                                                         ,`work_code`
+                                                         ,`work_name`
+                                                         ,`is_key_line`
+                                                         ,`unit`
+                                                         ,`quantity`
+                                                         ,`deviation_quantity`
+                                                         ,`total_float`
+                                                         ,`expect_lag_day`
+                                                         ,`sv_value`
+                                                         ,`complete_progress_percentage`
+                                                         ,`complete_date_percentage`
+                                                         ,`deviation_causes_analysis`
+                                                         ,`correction_target`
+                                                         ,`concrete_measure`
+                                                         ,`correction_complete_date`
+                                                         ,`work_team`
+                                                         ,`director_id`
+                                                         ,`director`
+                                                         ,`correction_execute_situation`
+                                                         ,`region_id`
+                                                         ,`region_name`
+                                                         ,`project_id`
+                                                         ,`project_name`
+                                                         ,`dept_id`
+                                                         ,`create_user`
+                                                         ,`create_user_name`
+                                                         ,`create_time`
+                                                         ,`update_user`
+                                                         ,`update_time`
+                                                         ,`del_user`
+                                                         ,`del_time`
+                                                         ,`del_flag`
+                                                         ,`pt_var1`
+                                                         ,`pt_var2`
+                                                         ,`pt_var3`
+                                                         ,`pt_var4`
+                                                         ,`pt_var5`
+                                    from jdgl_progress_correction_track_detail
+    </sql>
+  <select id="getJdglProgressCorrectionTrackDetail" resultMap="JdglProgressCorrectionTrackDetailResultMap">
+    <include refid="selectJdglProgressCorrectionTrackDetailVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="trackId != null ">and `track_id` = #{trackId}</if>
+      <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
+      <if test="workName != null ">and `work_name` = #{workName}</if>
+      <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
+      <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+      <if test="quantity != null ">and `quantity` = #{quantity}</if>
+      <if test="deviationQuantity != null ">and `deviation_quantity` = #{deviationQuantity}</if>
+      <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
+      <if test="expectLagDay != null ">and `expect_lag_day` = #{expectLagDay}</if>
+      <if test="svValue != null ">and `sv_value` = #{svValue}</if>
+      <if test="completeProgressPercentage != null ">and `complete_progress_percentage` =
+        #{completeProgressPercentage}
+      </if>
+      <if test="completeDatePercentage != null ">and `complete_date_percentage` = #{completeDatePercentage}</if>
+      <if test="deviationCausesAnalysis != null ">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
+      <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
+      <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
+      <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
+      <if test="workTeam != null ">and `work_team` = #{workTeam}</if>
+      <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
+      <if test="director != null  and director != ''">and `director` = #{director}</if>
+      <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">and
+        `correction_execute_situation` = #{correctionExecuteSituation}
+      </if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <select id="getJdglProgressCorrectionTrackDetailList" resultMap="JdglProgressCorrectionTrackDetailResultMap">
+    <include refid="selectJdglProgressCorrectionTrackDetailVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="trackId != null ">and `track_id` = #{trackId}</if>
+      <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
+      <if test="workName != null ">and `work_name` = #{workName}</if>
+      <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
+      <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+      <if test="quantity != null ">and `quantity` = #{quantity}</if>
+      <if test="deviationQuantity != null ">and `deviation_quantity` = #{deviationQuantity}</if>
+      <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
+      <if test="expectLagDay != null ">and `expect_lag_day` = #{expectLagDay}</if>
+      <if test="svValue != null ">and `sv_value` = #{svValue}</if>
+      <if test="completeProgressPercentage != null ">and `complete_progress_percentage` =
+        #{completeProgressPercentage}
+      </if>
+      <if test="completeDatePercentage != null ">and `complete_date_percentage` = #{completeDatePercentage}</if>
+      <if test="deviationCausesAnalysis != null ">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
+      <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
+      <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
+      <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
+      <if test="workTeam != null ">and `work_team` = #{workTeam}</if>
+      <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
+      <if test="director != null  and director != ''">and `director` = #{director}</if>
+      <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">and
+        `correction_execute_situation` = #{correctionExecuteSituation}
+      </if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
+
+  <insert id="insertJdglProgressCorrectionTrackDetail" useGeneratedKeys="true" keyProperty="id">
+    insert into jdgl_progress_correction_track_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null ">`id`,</if>
+      <if test="trackId != null ">`track_id`,</if>
+      <if test="workCode != null  and workCode != ''">`work_code`,</if>
+      <if test="workName != null ">`work_name`,</if>
+      <if test="isKeyLine != null  and isKeyLine != ''">`is_key_line`,</if>
+      <if test="unit != null  and unit != ''">`unit`,</if>
+      <if test="quantity != null ">`quantity`,</if>
+      <if test="deviationQuantity != null ">`deviation_quantity`,</if>
+      <if test="totalFloat != null ">`total_float`,</if>
+      <if test="expectLagDay != null ">`expect_lag_day`,</if>
+      <if test="svValue != null ">`sv_value`,</if>
+      <if test="completeProgressPercentage != null ">`complete_progress_percentage`,</if>
+      <if test="completeDatePercentage != null ">`complete_date_percentage`,</if>
+      <if test="deviationCausesAnalysis != null ">`deviation_causes_analysis`,</if>
+      <if test="correctionTarget != null  and correctionTarget != ''">`correction_target`,</if>
+      <if test="concreteMeasure != null  and concreteMeasure != ''">`concrete_measure`,</if>
+      <if test="correctionCompleteDate != null ">`correction_complete_date`,</if>
+      <if test="workTeam != null ">`work_team`,</if>
+      <if test="directorId != null  and directorId != ''">`director_id`,</if>
+      <if test="director != null  and director != ''">`director`,</if>
+      <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">
+        `correction_execute_situation`,
+      </if>
+      <if test="regionId != null ">`region_id`,</if>
+      <if test="regionName != null  and regionName != ''">`region_name`,</if>
+      <if test="projectId != null ">`project_id`,</if>
+      <if test="projectName != null  and projectName != ''">`project_name`,</if>
+      <if test="deptId != null ">`dept_id`,</if>
+      <if test="createUser != null  and createUser != ''">`create_user`,</if>
+      <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+      <if test="createTime != null ">`create_time`,</if>
+      <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+      <if test="updateTime != null ">`update_time`,</if>
+      <if test="delUser != null  and delUser != ''">`del_user`,</if>
+      <if test="delTime != null ">`del_time`,</if>
+      <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null ">#{id},</if>
+      <if test="trackId != null ">#{trackId},</if>
+      <if test="workCode != null  and workCode != ''">#{workCode},</if>
+      <if test="workName != null ">#{workName},</if>
+      <if test="isKeyLine != null  and isKeyLine != ''">#{isKeyLine},</if>
+      <if test="unit != null  and unit != ''">#{unit},</if>
+      <if test="quantity != null ">#{quantity},</if>
+      <if test="deviationQuantity != null ">#{deviationQuantity},</if>
+      <if test="totalFloat != null ">#{totalFloat},</if>
+      <if test="expectLagDay != null ">#{expectLagDay},</if>
+      <if test="svValue != null ">#{svValue},</if>
+      <if test="completeProgressPercentage != null ">#{completeProgressPercentage},</if>
+      <if test="completeDatePercentage != null ">#{completeDatePercentage},</if>
+      <if test="deviationCausesAnalysis != null ">#{deviationCausesAnalysis},</if>
+      <if test="correctionTarget != null  and correctionTarget != ''">#{correctionTarget},</if>
+      <if test="concreteMeasure != null  and concreteMeasure != ''">#{concreteMeasure},</if>
+      <if test="correctionCompleteDate != null ">#{correctionCompleteDate},</if>
+      <if test="workTeam != null ">#{workTeam},</if>
+      <if test="directorId != null  and directorId != ''">#{directorId},</if>
+      <if test="director != null  and director != ''">#{director},</if>
+      <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">
+        #{correctionExecuteSituation},
+      </if>
+      <if test="regionId != null ">#{regionId},</if>
+      <if test="regionName != null  and regionName != ''">#{regionName},</if>
+      <if test="projectId != null ">#{projectId},</if>
+      <if test="projectName != null  and projectName != ''">#{projectName},</if>
+      <if test="deptId != null ">#{deptId},</if>
+      <if test="createUser != null  and createUser != ''">#{createUser},</if>
+      <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+      <if test="createTime != null ">#{createTime},</if>
+      <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+      <if test="updateTime != null ">#{updateTime},</if>
+      <if test="delUser != null  and delUser != ''">#{delUser},</if>
+      <if test="delTime != null ">#{delTime},</if>
+      <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+    </trim>
+  </insert>
+
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglProgressCorrectionTrackDetail -->
+  <insert id="insertJdglProgressCorrectionTrackDetailList">
+    insert into jdgl_progress_correction_track_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      `id`,
+      `track_id`,
+      `work_code`,
+      `work_name`,
+      `is_key_line`,
+      `unit`,
+      `quantity`,
+      `deviation_quantity`,
+      `total_float`,
+      `expect_lag_day`,
+      `sv_value`,
+      `complete_progress_percentage`,
+      `complete_date_percentage`,
+      `deviation_causes_analysis`,
+      `correction_target`,
+      `concrete_measure`,
+      `correction_complete_date`,
+      `work_team`,
+      `director_id`,
+      `director`,
+      `correction_execute_situation`,
+      `region_id`,
+      `region_name`,
+      `project_id`,
+      `project_name`,
+      `dept_id`,
+      `create_user`,
+      `create_user_name`,
+      `create_time`,
+      `update_user`,
+      `update_time`,
+      `del_user`,
+      `del_time`,
+      `pt_var1`,
+      `pt_var2`,
+      `pt_var3`,
+      `pt_var4`,
+      `pt_var5`,
+    </trim>
+    values
+    <foreach collection="jdglProgressCorrectionTrackDetailList" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{item.id},
+        #{item.trackId},
+        #{item.workCode},
+        #{item.workName},
+        #{item.isKeyLine},
+        #{item.unit},
+        #{item.quantity},
+        #{item.deviationQuantity},
+        #{item.totalFloat},
+        #{item.expectLagDay},
+        #{item.svValue},
+        #{item.completeProgressPercentage},
+        #{item.completeDatePercentage},
+        #{item.deviationCausesAnalysis},
+        #{item.correctionTarget},
+        #{item.concreteMeasure},
+        #{item.correctionCompleteDate},
+        #{item.workTeam},
+        #{item.directorId},
+        #{item.director},
+        #{item.correctionExecuteSituation},
+        #{item.regionId},
+        #{item.regionName},
+        #{item.projectId},
+        #{item.projectName},
+        #{item.deptId},
+        #{item.createUser},
+        #{item.createUserName},
+        #{item.createTime},
+        #{item.updateUser},
+        #{item.updateTime},
+        #{item.delUser},
+        #{item.delTime},
+        #{item.ptVar1},
+        #{item.ptVar2},
+        #{item.ptVar3},
+        #{item.ptVar4},
+        #{item.ptVar5},
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="updateJdglProgressCorrectionTrackDetail">
+    update jdgl_progress_correction_track_detail
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="id != null ">`id` = #{id},</if>
+      <if test="trackId != null ">`track_id` = #{trackId},</if>
+      <if test="workCode != null  and  workCode != ''">`work_code` = #{workCode},</if>
+      <if test="workName != null ">`work_name` = #{workName},</if>
+      <if test="isKeyLine != null  and  isKeyLine != ''">`is_key_line` = #{isKeyLine},</if>
+      <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+      <if test="quantity != null ">`quantity` = #{quantity},</if>
+      <if test="deviationQuantity != null ">`deviation_quantity` = #{deviationQuantity},</if>
+      <if test="totalFloat != null ">`total_float` = #{totalFloat},</if>
+      <if test="expectLagDay != null ">`expect_lag_day` = #{expectLagDay},</if>
+      <if test="svValue != null ">`sv_value` = #{svValue},</if>
+      <if test="completeProgressPercentage != null ">`complete_progress_percentage` = #{completeProgressPercentage},
+      </if>
+      <if test="completeDatePercentage != null ">`complete_date_percentage` = #{completeDatePercentage},</if>
+      <if test="deviationCausesAnalysis != null ">`deviation_causes_analysis` = #{deviationCausesAnalysis},</if>
+      <if test="correctionTarget != null  and  correctionTarget != ''">`correction_target` = #{correctionTarget},</if>
+      <if test="concreteMeasure != null  and  concreteMeasure != ''">`concrete_measure` = #{concreteMeasure},</if>
+      <if test="correctionCompleteDate != null ">`correction_complete_date` = #{correctionCompleteDate},</if>
+      <if test="workTeam != null ">`work_team` = #{workTeam},</if>
+      <if test="directorId != null  and  directorId != ''">`director_id` = #{directorId},</if>
+      <if test="director != null  and  director != ''">`director` = #{director},</if>
+      <if test="correctionExecuteSituation != null  and  correctionExecuteSituation != ''">
+        `correction_execute_situation` = #{correctionExecuteSituation},
+      </if>
+      <if test="regionId != null ">`region_id` = #{regionId},</if>
+      <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+      <if test="projectId != null ">`project_id` = #{projectId},</if>
+      <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+      <if test="deptId != null ">`dept_id` = #{deptId},</if>
+      <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+      <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+      <if test="createTime != null ">`create_time` = #{createTime},</if>
+      <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+      <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+      <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+      <if test="delTime != null ">`del_time` = #{delTime},</if>
+      <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+      <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+      <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+      <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+      <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+      <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+    </trim>
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+    </where>
+  </update>
+
+  <update id="updateJdglProgressCorrectionTrackDetailList">
+    update jdgl_progress_correction_track_detail
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
+        </foreach>
+      </trim>
+      <trim prefix="track_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.trackId}
+        </foreach>
+      </trim>
+      <trim prefix="work_code  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.workCode}
+        </foreach>
+      </trim>
+      <trim prefix="work_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.workName}
+        </foreach>
+      </trim>
+      <trim prefix="is_key_line  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.isKeyLine}
+        </foreach>
+      </trim>
+      <trim prefix="unit  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.unit}
+        </foreach>
+      </trim>
+      <trim prefix="quantity  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.quantity}
+        </foreach>
+      </trim>
+      <trim prefix="deviation_quantity  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.deviationQuantity}
+        </foreach>
+      </trim>
+      <trim prefix="total_float  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.totalFloat}
+        </foreach>
+      </trim>
+      <trim prefix="expect_lag_day  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.expectLagDay}
+        </foreach>
+      </trim>
+      <trim prefix="sv_value  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.svValue}
+        </foreach>
+      </trim>
+      <trim prefix="complete_progress_percentage  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.completeProgressPercentage}
+        </foreach>
+      </trim>
+      <trim prefix="complete_date_percentage  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.completeDatePercentage}
+        </foreach>
+      </trim>
+      <trim prefix="deviation_causes_analysis  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.deviationCausesAnalysis}
+        </foreach>
+      </trim>
+      <trim prefix="correction_target  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.correctionTarget}
+        </foreach>
+      </trim>
+      <trim prefix="concrete_measure  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.concreteMeasure}
+        </foreach>
+      </trim>
+      <trim prefix="correction_complete_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.correctionCompleteDate}
+        </foreach>
+      </trim>
+      <trim prefix="work_team  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.workTeam}
+        </foreach>
+      </trim>
+      <trim prefix="director_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.directorId}
+        </foreach>
+      </trim>
+      <trim prefix="director  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.director}
+        </foreach>
+      </trim>
+      <trim prefix="correction_execute_situation  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.correctionExecuteSituation}
+        </foreach>
+      </trim>
+      <trim prefix="region_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionId}
+        </foreach>
+      </trim>
+      <trim prefix="region_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionName}
+        </foreach>
+      </trim>
+      <trim prefix="project_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectId}
+        </foreach>
+      </trim>
+      <trim prefix="project_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectName}
+        </foreach>
+      </trim>
+      <trim prefix="dept_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.deptId}
+        </foreach>
+      </trim>
+      <trim prefix="create_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUser}
+        </foreach>
+      </trim>
+      <trim prefix="create_user_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUserName}
+        </foreach>
+      </trim>
+      <trim prefix="create_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delUser}
+        </foreach>
+      </trim>
+      <trim prefix="del_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var1  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar1}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var2  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar2}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var3  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar3}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var4  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar4}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var5  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar5}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
+  </update>
+
+  <update id="deleteJdglProgressCorrectionTrackDetail">
+    update `jdgl_progress_correction_track_detail` set del_flag = 1
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="trackId != null ">and `track_id` = #{trackId}</if>
+      <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
+      <if test="workName != null ">and `work_name` = #{workName}</if>
+      <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
+      <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+      <if test="quantity != null ">and `quantity` = #{quantity}</if>
+      <if test="deviationQuantity != null ">and `deviation_quantity` = #{deviationQuantity}</if>
+      <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
+      <if test="expectLagDay != null ">and `expect_lag_day` = #{expectLagDay}</if>
+      <if test="svValue != null ">and `sv_value` = #{svValue}</if>
+      <if test="completeProgressPercentage != null ">and `complete_progress_percentage` =
+        #{completeProgressPercentage}
+      </if>
+      <if test="completeDatePercentage != null ">and `complete_date_percentage` = #{completeDatePercentage}</if>
+      <if test="deviationCausesAnalysis != null ">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
+      <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
+      <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
+      <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
+      <if test="workTeam != null ">and `work_team` = #{workTeam}</if>
+      <if test="directorId != null  and directorId != ''">and `director_id` = #{directorId}</if>
+      <if test="director != null  and director != ''">and `director` = #{director}</if>
+      <if test="correctionExecuteSituation != null  and correctionExecuteSituation != ''">and
+        `correction_execute_situation` = #{correctionExecuteSituation}
+      </if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+  </update>
+
+  <update id="deleteJdglProgressCorrectionTrackDetailByPks">
+    update `jdgl_progress_correction_track_detail` set del_flag = 1
+    <where>
+      `id` in
+      <foreach item="id" collection="jdglProgressCorrectionTrackDetailPkList" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </where>
+  </update>
+</mapper>
