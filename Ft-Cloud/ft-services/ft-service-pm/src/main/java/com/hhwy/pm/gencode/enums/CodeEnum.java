@@ -22,9 +22,27 @@ public enum CodeEnum {
     /**
      * 示例 XX20221123001
      */
-    XX("XX", "yyyyMMdd", 3);
+    XX("XX", "yyyyMMdd", 3),
 
 
+    /*总需计划*/
+    EQU_TOTAL_PLAN("SBCHZXJH", "yyyy", 3),
+    /*设备申购*/
+    EQU_PERCHASE("SBSG", "yyyy", 3),
+    /*设备进口调查*/
+    EQU_IMPORT_INQUIRY("SBCHJKDC","yyyy",3),
+    /*设备进口方案*/
+    EQU_IMPORT_PLAN("SBCHJKFA","yyyy",3),
+    /*设备属地化采购*/
+    EQU_LOCALPERCHASE("SDHCG", "yyyy", 3),
+    /*清关档案*/
+    EQU_CUSTOMS_CLEAR("SBCHQGDA","yyyy",3),
+    /*大型设备运输方案*/
+    EQU_MATERIAL_TRAN("SBCHYSFA","yyyy",3),
+    /*设备爱现场管理策划*/
+    EQU_MATERIAL_MANAGER("SBCHXCGL","yyyy",3),
+    /*单机核算策划*/
+    EQU_SINGLE_CHECK("SBCHDJHS","yyyy",3);
     /**
      * 前缀
      */
