@@ -144,6 +144,7 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
 
         for (XmslWbs wbs : wbsList) {
             QqchGatherPlanTaskVo qqchGatherPlanTaskVo = new QqchGatherPlanTaskVo();
+            qqchGatherPlanTaskVo.setId(Long.valueOf(wbs.getId()));
             qqchGatherPlanTaskVo.setWbsId(Long.valueOf(wbs.getId()));
             qqchGatherPlanTaskVo.setWbsCode(wbs.getCode());
             qqchGatherPlanTaskVo.setHaveChildren(wbs.getHaveChildren());
@@ -153,7 +154,7 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
 
             for (QqchGatherPlanTask gatherPlanTask : qqchGatherPlanTaskList) {
                 if(qqchGatherPlanTaskVo.getWbsCode().equals(gatherPlanTask.getWbsCode())){
-                    qqchGatherPlanTaskVo.setId(gatherPlanTask.getId());
+                    qqchGatherPlanTaskVo.setGatherId(gatherPlanTask.getGatherId());
                     qqchGatherPlanTaskVo.setGatherer(gatherPlanTask.getGatherer());
                     qqchGatherPlanTaskVo.setVerifier(gatherPlanTask.getVerifier());
                     qqchGatherPlanTaskVo.setRemark(gatherPlanTask.getRemark());
@@ -266,15 +267,15 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
             qqchGatherPlanTask.setRemark(qqchGatherPlanTaskVo.getRemark());
             qqchGatherPlanTask.setVersion(version);
 
-            Long id = qqchGatherPlanTaskVo.getId();
-            if(id == null){
-                qqchGatherPlanTask.setId(IdWorker.createId());
+            Long gatherId = qqchGatherPlanTaskVo.getGatherId();
+            if(gatherId == null){
+                qqchGatherPlanTask.setGatherId(IdWorker.createId());
                 qqchGatherPlanTask.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 qqchGatherPlanTask.setCreateUserName(SecurityUtils.getUserName());
                 qqchGatherPlanTask.setCreateTime(DateUtils.getNowDate());
                 insertList.add(qqchGatherPlanTask);
             }else {
-                qqchGatherPlanTask.setId(id);
+                qqchGatherPlanTask.setGatherId(gatherId);
                 qqchGatherPlanTask.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
                 qqchGatherPlanTask.setUpdateTime(DateUtils.getNowDate());
                 updateList.add(qqchGatherPlanTask);

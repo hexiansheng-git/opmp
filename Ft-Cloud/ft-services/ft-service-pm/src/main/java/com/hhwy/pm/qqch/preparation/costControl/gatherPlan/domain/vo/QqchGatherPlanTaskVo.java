@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author han
  * @date 2023-08-23 11:10:35
@@ -19,11 +22,17 @@ public class QqchGatherPlanTaskVo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：wbs主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long id;
+    /**
+     * 字段描述：本地表主键id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long gatherId;
     /**
      * 字段描述：主表id
      */
@@ -96,4 +105,6 @@ public class QqchGatherPlanTaskVo {
      */
     @JsonProperty
     private String remark;
+
+    private List<QqchGatherPlanTaskVo> children = new ArrayList<>();
 }

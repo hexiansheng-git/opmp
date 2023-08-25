@@ -6,7 +6,7 @@
 
     <resultMap type="com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.QqchGatherPlanTask"
                id="QqchGatherPlanTaskResultMap">
-        <result property="id" column="id"/>
+        <result property="gatherId" column="gather_id"/>
         <result property="masterId" column="master_id"/>
         <result property="wbsId" column="wbs_id"/>
         <result property="wbsCode" column="wbs_code"/>
@@ -37,7 +37,7 @@
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
     <sql id="selectQqchGatherPlanTaskVo">
-        select `id`
+        select `gather_id`
              , `master_id`
              , `wbs_id`
              , `wbs_code`
@@ -72,7 +72,7 @@
         <include refid="selectQqchGatherPlanTaskVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="gatherId != null ">and `gather_id` = #{gatherId}</if>
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
@@ -110,7 +110,7 @@
         <include refid="selectQqchGatherPlanTaskVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="gatherId != null ">and `gather_id` = #{gatherId}</if>
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
@@ -146,7 +146,7 @@
     <insert id="insertQqchGatherPlanTask" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_gather_plan_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null ">`id`,</if>
+            <if test="gatherId != null ">`gather_id`,</if>
             <if test="masterId != null ">`master_id`,</if>
             <if test="wbsId != null ">`wbs_id`,</if>
             <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
@@ -177,7 +177,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null ">#{id},</if>
+            <if test="gatherId != null ">#{gatherId},</if>
             <if test="masterId != null ">#{masterId},</if>
             <if test="wbsId != null ">#{wbsId},</if>
             <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
@@ -213,7 +213,7 @@
     <insert id="insertQqchGatherPlanTaskList">
         insert into qqch_gather_plan_task
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            `id`,
+            `gather_id`,
             `master_id`,
             `wbs_id`,
             `wbs_code`,
@@ -245,7 +245,7 @@
         values
         <foreach collection="qqchGatherPlanTaskList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                #{item.id},
+                #{item.gatherId},
                 #{item.masterId},
                 #{item.wbsId},
                 #{item.wbsCode},
@@ -304,7 +304,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="gatherId != null ">and `gather_id` = #{gatherId}</if>
         </where>
     </update>
 
@@ -313,125 +313,125 @@
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="master_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.masterId}
+                    when `gather_id`=#{item.gatherId} then #{item.masterId}
                 </foreach>
             </trim>
             <trim prefix="wbs_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.wbsId}
+                    when `gather_id`=#{item.gatherId} then #{item.wbsId}
                 </foreach>
             </trim>
             <trim prefix="wbs_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.wbsCode}
+                    when `gather_id`=#{item.gatherId} then #{item.wbsCode}
                 </foreach>
             </trim>
             <trim prefix="gatherer  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.gatherer}
+                    when `gather_id`=#{item.gatherId} then #{item.gatherer}
                 </foreach>
             </trim>
             <trim prefix="gatherer_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.gathererId}
+                    when `gather_id`=#{item.gatherId} then #{item.gathererId}
                 </foreach>
             </trim>
             <trim prefix="verifier  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.verifier}
+                    when `gather_id`=#{item.gatherId} then #{item.verifier}
                 </foreach>
             </trim>
             <trim prefix="verifier_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.verifierId}
+                    when `gather_id`=#{item.gatherId} then #{item.verifierId}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remark}
+                    when `gather_id`=#{item.gatherId} then #{item.remark}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.version}
+                    when `gather_id`=#{item.gatherId} then #{item.version}
                 </foreach>
             </trim>
             <trim prefix="valid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.valid}
+                    when `gather_id`=#{item.gatherId} then #{item.valid}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.regionId}
+                    when `gather_id`=#{item.gatherId} then #{item.regionId}
                 </foreach>
             </trim>
             <trim prefix="region_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.regionName}
+                    when `gather_id`=#{item.gatherId} then #{item.regionName}
                 </foreach>
             </trim>
             <trim prefix="project_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectId}
+                    when `gather_id`=#{item.gatherId} then #{item.projectId}
                 </foreach>
             </trim>
             <trim prefix="project_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectName}
+                    when `gather_id`=#{item.gatherId} then #{item.projectName}
                 </foreach>
             </trim>
             <trim prefix="dept_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.deptId}
+                    when `gather_id`=#{item.gatherId} then #{item.deptId}
                 </foreach>
             </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.updateUser}
+                    when `gather_id`=#{item.gatherId} then #{item.updateUser}
                 </foreach>
             </trim>
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.updateTime}
+                    when `gather_id`=#{item.gatherId} then #{item.updateTime}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar1}
+                    when `gather_id`=#{item.gatherId} then #{item.ptVar1}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar2}
+                    when `gather_id`=#{item.gatherId} then #{item.ptVar2}
                 </foreach>
             </trim>
             <trim prefix="pt_var3  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar3}
+                    when `gather_id`=#{item.gatherId} then #{item.ptVar3}
                 </foreach>
             </trim>
             <trim prefix="pt_var4  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar4}
+                    when `gather_id`=#{item.gatherId} then #{item.ptVar4}
                 </foreach>
             </trim>
             <trim prefix="pt_var5  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar5}
+                    when `gather_id`=#{item.gatherId} then #{item.ptVar5}
                 </foreach>
             </trim>
         </trim>
-        where `id` in
+        where `gather_id` in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-            #{item.id}
+            #{item.gatherId}
         </foreach>
     </update>
 
     <update id="deleteQqchGatherPlanTask">
         update `qqch_gather_plan_task` set del_flag = 1
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="gatherId != null ">and `gather_id` = #{gatherId}</if>
             <if test="masterId != null ">and `master_id` = #{masterId}</if>
             <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
