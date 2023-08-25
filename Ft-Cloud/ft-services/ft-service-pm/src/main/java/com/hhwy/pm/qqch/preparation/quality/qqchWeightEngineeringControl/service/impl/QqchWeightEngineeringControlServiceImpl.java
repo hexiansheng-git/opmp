@@ -70,8 +70,8 @@ public class QqchWeightEngineeringControlServiceImpl implements IQqchWeightEngin
 
     @Transactional
     public int deleteQqchWeightEngineeringControl(QqchWeightEngineeringControl qqchWeightEngineeringControl) {
-//        qqchWeightEngineeringControl.setUpdateUser(SecurityUtils.getUserName());
-//        qqchWeightEngineeringControl.setUpdateTime(DateUtils.getNowDate());
+        qqchWeightEngineeringControl.setUpdateUser(SecurityUtils.getUserName());
+        qqchWeightEngineeringControl.setUpdateTime(DateUtils.getNowDate());
         return qqchWeightEngineeringControlMapper.deleteQqchWeightEngineeringControl(qqchWeightEngineeringControl);
     }
 
@@ -132,26 +132,6 @@ public class QqchWeightEngineeringControlServiceImpl implements IQqchWeightEngin
         QqchWeightEngineeringControl qqchWeightEngineeringControl = new QqchWeightEngineeringControl();
         qqchWeightEngineeringControl.setVersion(version);
         qqchWeightEngineeringControlMapper.deleteQqchWeightEngineeringControl(qqchWeightEngineeringControl);
-        if (CollectionUtils.isEmpty(qqchWeightEngineeringControlList)) {
-            return;
-        }
-        String valid = Valid.NO;
-        if (version.compareTo(BigDecimal.ONE) == 0) {
-            valid = Valid.YES;
-        }
-        for (QqchWeightEngineeringControl engineeringControl : qqchWeightEngineeringControlList) {
-            engineeringControl.setId(IdWorker.createId());
-            engineeringControl.setValid(valid);
-            engineeringControl.setVersion(version);
-            engineeringControl.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            engineeringControl.setCreateUserName(SecurityUtils.getUserName());
-            engineeringControl.setCreateTime(DateUtils.getNowDate());
-        }
-        qqchWeightEngineeringControlMapper.insertQqchWeightEngineeringControlList(qqchWeightEngineeringControlList);
-    }
-
-    public void insertList(List<QqchWeightEngineeringControl> qqchWeightEngineeringControlList,BigDecimal version) {
-
         if (CollectionUtils.isEmpty(qqchWeightEngineeringControlList)) {
             return;
         }

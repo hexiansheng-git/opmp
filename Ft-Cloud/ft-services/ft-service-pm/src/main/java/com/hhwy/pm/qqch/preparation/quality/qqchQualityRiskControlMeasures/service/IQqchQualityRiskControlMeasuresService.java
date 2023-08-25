@@ -29,5 +29,5 @@ public interface IQqchQualityRiskControlMeasuresService {
 
     void save(QqchQualityRiskControlMeasuresVo vo);
 
-    void insetrList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList, BigDecimal version);
+    void insetList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList, BigDecimal version);
 }

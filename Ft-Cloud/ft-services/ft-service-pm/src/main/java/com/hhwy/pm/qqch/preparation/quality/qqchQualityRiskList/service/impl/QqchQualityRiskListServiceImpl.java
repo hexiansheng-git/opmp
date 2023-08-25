@@ -170,7 +170,7 @@ public class QqchQualityRiskListServiceImpl implements IQqchQualityRiskListServi
                 qualityRisk.setRiskLevel(param.getRiskLevel());
                 objects.add(qualityRisk);
             });
-            qualityRiskService.insetrList(objects, version);
+            qualityRiskService.insetList(objects, version);
         } else {
             //界面传入数据和原风险管控数据都不为空
 
