@@ -37,7 +37,7 @@ public class QqchSafeRiskList extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "wbs_id")
-    private Long wbsId;
+    private String wbsId;
 
     /**
      * 字段描述：wbs_版本
