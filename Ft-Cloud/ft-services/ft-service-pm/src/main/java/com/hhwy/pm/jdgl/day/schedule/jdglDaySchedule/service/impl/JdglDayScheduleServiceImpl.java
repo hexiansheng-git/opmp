@@ -1,0 +1,171 @@
+package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.impl;
+
+import java.util.Date;
+import java.util.List;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
+import com.hhwy.utils.tree.TreeUtil;
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper.JdglDayScheduleMapper;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
+import com.hhwy.utils.idworker.IdWorker;
+
+/**
+ * @author cjh
+ * @date 2023-08-24 14:05:37
+ * @remark
+ */
+@Service
+public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
+
+    @Autowired
+    private JdglDayScheduleMapper jdglDayScheduleMapper;
+
+    @Autowired
+    private IJdglDayScheduleWbsService iJdglDayScheduleWbsService;
+
+    public JdglDaySchedule getJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
+        JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
+        if(jdglDaySchedule1 != null) {
+            JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
+            jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
+            // 懒加载
+            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
+            jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
+        }
+        return jdglDaySchedule1;
+    }
+
+    public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {
+        List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleMapper.getJdglDayScheduleList(jdglDaySchedule);
+        if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
+            for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
+                JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
+                jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
+                // 懒加载
+                List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
+                jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
+            }
+        }
+        return jdglDayScheduleList;
+    }
+
+    @Override
+    public JdglDaySchedule getInit(JdglDaySchedule jdglDayScheduleParam) {
+        if(jdglDayScheduleParam == null) {
+            return null;
+        }
+        Date date = jdglDayScheduleParam.getDate();
+        if(date == null){
+            return null;
+        }
+        // 获取初始wbs数据
+        List<JdglDayScheduleWbs> initWbs = iJdglDayScheduleWbsService.getInitWbs(date);
+        jdglDayScheduleParam.setJdglDayScheduleWbsList(initWbs);
+
+        // 获取开累产值
+        JdglDaySchedule jdglDaySchedule = jdglDayScheduleMapper.getHistoryValue(date);
+
+        if(jdglDaySchedule != null) {
+            jdglDayScheduleParam.setTotalValueCu(jdglDaySchedule.getTotalValueCu());
+            jdglDayScheduleParam.setTotalValueDl(jdglDaySchedule.getTotalValueDl());
+        }
+
+        return jdglDayScheduleParam;
+    }
+
+    @Transactional
+    public int insertJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
+        Long id = IdWorker.createId();
+        if(jdglDaySchedule != null) {
+            jdglDaySchedule.setId(id);
+            jdglDaySchedule.setCreateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setCreateTime(DateUtils.getNowDate());
+
+            int i = jdglDayScheduleMapper.insertJdglDaySchedule(jdglDaySchedule);
+
+            if(i > 0) {
+                List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDaySchedule.getJdglDayScheduleWbsList();
+                if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
+                    List<JdglDayScheduleWbs> jdglDayScheduleWbs = TreeUtil.treeToList(jdglDayScheduleWbsList);
+                    if(!CollectionUtils.isEmpty(jdglDayScheduleWbs)) {
+                        for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbs) {
+                            jdglDayScheduleWbs1.setDayScheduleId(id);
+                        }
+                    }
+                    iJdglDayScheduleWbsService.insertJdglDayScheduleWbsList(jdglDayScheduleWbs);
+                }
+            }
+
+            return i;
+        }
+        return 0;
+    }
+
+    @Transactional
+    public int insertJdglDayScheduleList(List<JdglDaySchedule> jdglDayScheduleList) {
+        for (JdglDaySchedule jdglDaySchedule : jdglDayScheduleList) {
+            jdglDaySchedule.setId(IdWorker.createId());
+            jdglDaySchedule.setCreateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setCreateTime(DateUtils.getNowDate());
+        }
+        return jdglDayScheduleMapper.insertJdglDayScheduleList(jdglDayScheduleList);
+    }
+
+    @Transactional
+    public int updateJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
+        if(jdglDaySchedule == null) {
+            return 0;
+        }
+
+        int i = jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
+        Long id = jdglDaySchedule.getId();
+        jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+        jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
+
+        List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDaySchedule.getJdglDayScheduleWbsList();
+        if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
+            for (JdglDayScheduleWbs jdglDayScheduleWbs: jdglDayScheduleWbsList) {
+                jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule.getId());
+            }
+        }
+
+        iJdglDayScheduleWbsService.updateJdglDayScheduleWbsList(jdglDayScheduleWbsList, id);
+
+        // wbs清单更新后，更新主表每日产值
+        jdglDayScheduleMapper.updateJdglDayScheduleValue(id);
+
+        return i;
+    }
+
+    @Transactional
+    public int updateJdglDayScheduleList(List<JdglDaySchedule> jdglDayScheduleList) {
+        for (JdglDaySchedule jdglDaySchedule : jdglDayScheduleList) {
+            jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
+        }
+        return jdglDayScheduleMapper.updateJdglDayScheduleList(jdglDayScheduleList);
+    }
+
+    @Transactional
+    public int deleteJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
+        jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+        jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
+        return jdglDayScheduleMapper.deleteJdglDaySchedule(jdglDaySchedule);
+    }
+
+    @Transactional
+    public int deleteJdglDayScheduleByPks(List<Long> jdglDaySchedulePkList) {
+        return jdglDayScheduleMapper.deleteJdglDayScheduleByPks(jdglDaySchedulePkList);
+    }
+
+
+}

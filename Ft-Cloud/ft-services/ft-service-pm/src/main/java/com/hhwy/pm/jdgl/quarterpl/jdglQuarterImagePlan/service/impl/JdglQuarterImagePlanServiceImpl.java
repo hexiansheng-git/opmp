@@ -76,11 +76,12 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
     @Transactional
     public int updateJdglQuarterImagePlanList(List<JdglQuarterImagePlan> jdglQuarterImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
-            for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlanList) {
+            List<JdglQuarterImagePlan> jdglQuarterImagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
+            for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlans) {
                 jdglQuarterImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglQuarterImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-            return jdglQuarterImagePlanMapper.updateJdglQuarterImagePlanList(jdglQuarterImagePlanList);
+            return jdglQuarterImagePlanMapper.updateJdglQuarterImagePlanList(jdglQuarterImagePlans);
         }
         return 0;
     }

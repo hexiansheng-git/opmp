@@ -76,11 +76,12 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     @Transactional
     public int updateJdglMonthImagePlanList(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-            for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
+            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
+            for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlans) {
                 jdglMonthImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglMonthImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-            return jdglMonthImagePlanMapper.updateJdglMonthImagePlanList(jdglMonthImagePlanList);
+            return jdglMonthImagePlanMapper.updateJdglMonthImagePlanList(jdglMonthImagePlans);
         }
 
         return 0;
