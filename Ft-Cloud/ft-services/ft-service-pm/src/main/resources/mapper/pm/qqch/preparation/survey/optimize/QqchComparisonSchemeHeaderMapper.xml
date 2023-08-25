@@ -99,7 +99,7 @@
             <if test="id != null ">`id`,</if>
             <if test="schemeId != null ">`scheme_id`,</if>
             <if test="header != null  and header != ''">`header`,</if>
-            <if test="sort != null  and sort != ''">`sort`,</if>
+            <if test="sort != null">`sort`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -125,7 +125,7 @@
             <if test="id != null ">#{id},</if>
             <if test="schemeId != null ">#{schemeId},</if>
             <if test="header != null  and header != ''">#{header},</if>
-            <if test="sort != null  and sort != ''">#{sort},</if>
+            <if test="sort != null">#{sort},</if>
             <if test="version != null">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -212,7 +212,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="schemeId != null ">`scheme_id` = #{schemeId},</if>
             <if test="header != null  and  header != ''">`header` = #{header},</if>
-            <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+            <if test="sort != null">`sort` = #{sort},</if>
             <if test="version != null">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
