@@ -15,18 +15,18 @@ import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQ
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import io.seata.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -89,7 +89,56 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         return qqchWeightEngineeringListMapper.deleteQqchWeightEngineeringListByPks(qqchWeightEngineeringListPkList);
     }
 
+    /**
+     * 获取最新生效版本重难点工程清单中选择的wbs以及其所有父级结构的集合
+     * @return
+     */
+    @Override
+    public List<XmslWbs> keyDifficultProjectInventoryWbsList() {
+        //获取最新生效版本的重难点工程清单
+        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(null);
 
+        //获取wbs集合
+        Set<String> wbsIds = new HashSet<>();
+        for (QqchWeightEngineeringList weightEngineeringList : qqchWeightEngineeringListList) {
+            String wbsAncestors = weightEngineeringList.getWbsAncestors();
+            if(StringUtils.isNotBlank(wbsAncestors)){
+                String[] wbsArrays = wbsAncestors.split(",");
+                wbsIds.addAll(Arrays.asList(wbsArrays));
+            }
+        }
+        return WbsRedisUtils.getWbs(wbsIds);
+    }
+
+    /**
+     * 获取最新生效版本重难点工程清单中选择的wbs编码集合
+     * @return
+     */
+    public Set<String> keyDifficultProjectInventoryWbsCodeSet() {
+        //获取最新生效版本的重难点工程清单
+        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(null);
+
+        Set<String> wbsCodeSet = new HashSet<>();
+        for (QqchWeightEngineeringList qqchWeightEngineeringList : qqchWeightEngineeringListList) {
+            String wbsCode = qqchWeightEngineeringList.getWbsCode();
+            if(StringUtils.isNotBlank(wbsCode)){
+                wbsCodeSet.add(wbsCode);
+            }
+        }
+        return wbsCodeSet;
+    }
+
+    /**
+     * 根据版本获取重难点工程清单
+     * @param version
+     * @return
+     */
+    public List<QqchWeightEngineeringList> getEngineeringListByVersion(BigDecimal version) {
+        version = VersionUtil.getVersion("qqch_weight_engineering_list", version);
+        QqchWeightEngineeringList qqchWeightEngineeringList = new QqchWeightEngineeringList();
+        qqchWeightEngineeringList.setVersion(version);
+        return qqchWeightEngineeringListMapper.getQqchWeightEngineeringListList(qqchWeightEngineeringList);
+    }
 
     /**
      * 列表接口
@@ -99,9 +148,7 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
 
         BigDecimal version = qqchWeightEngineeringList.getVersion();
         version = VersionUtil.getVersion("qqch_weight_engineering_list", version);
-
-        qqchWeightEngineeringList.setVersion(version);
-        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = qqchWeightEngineeringListMapper.getQqchWeightEngineeringListList(qqchWeightEngineeringList);
+        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(version);
 
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());

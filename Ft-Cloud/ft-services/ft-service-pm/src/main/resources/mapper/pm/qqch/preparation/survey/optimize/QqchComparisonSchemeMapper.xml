@@ -9,6 +9,7 @@
         <result property="id" column="id"/>
         <result property="comparisonScheme" column="comparison_scheme"/>
         <result property="comparisonResult" column="comparison_result"/>
+        <result property="rowCount" column="row_count"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
         <result property="regionId" column="region_id"/>
@@ -35,6 +36,7 @@
               `id`
              ,`comparison_scheme`
              ,`comparison_result`
+             ,`row_count`
              ,`version`
              ,`valid`
              ,`region_id`
@@ -68,6 +70,7 @@
             <if test="comparisonResult != null  and comparisonResult != ''">and `comparison_result` =
                 #{comparisonResult}
             </if>
+            <if test="rowCount != null">and `row_count` = #{rowCount}</if>
             <if test="version != null">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
@@ -103,6 +106,7 @@
             <if test="id != null ">`id`,</if>
             <if test="comparisonScheme != null  and comparisonScheme != ''">`comparison_scheme`,</if>
             <if test="comparisonResult != null  and comparisonResult != ''">`comparison_result`,</if>
+            <if test="rowCount != null">`row_count`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -128,6 +132,7 @@
             <if test="id != null ">#{id},</if>
             <if test="comparisonScheme != null  and comparisonScheme != ''">#{comparisonScheme},</if>
             <if test="comparisonResult != null  and comparisonResult != ''">#{comparisonResult},</if>
+            <if test="rowCount != null  and rowCount != ''">#{rowCount},</if>
             <if test="version != null">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -158,6 +163,7 @@
             `id`,
             `comparison_scheme`,
             `comparison_result`,
+            `row_count`,
             `version`,
             `valid`,
             `region_id`,
@@ -184,6 +190,7 @@
                 #{item.id},
                 #{item.comparisonScheme},
                 #{item.comparisonResult},
+                #{item.rowCount},
                 #{item.version},
                 #{item.valid},
                 #{item.regionId},
@@ -216,6 +223,7 @@
             <if test="comparisonResult != null  and  comparisonResult != ''">`comparison_result` =
                 #{comparisonResult},
             </if>
+            <if test="rowCount != null">`row_count` = #{rowCount},</if>
             <if test="version != null">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -247,6 +255,11 @@
             <trim prefix="comparison_result  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.comparisonResult}
+                </foreach>
+            </trim>
+            <trim prefix="row_count  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.rowCount}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">

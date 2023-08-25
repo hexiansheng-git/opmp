@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.qualityRecord.service;
 
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
 
 import java.util.List;
 
@@ -26,4 +27,12 @@ public interface IQqchGeneralProjectArchivesService {
     int deleteQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives);
 
     int deleteQqchGeneralProjectArchivesByPks(List<Long> qqchGeneralProjectArchivesPkList);
+
+    /**
+     * 获取台账Vo
+     * @param qqchGeneralProjectArchives
+     * @return
+     */
+    GeneralProjectArchivesWbsVo getGeneralProjectArchivesWbsVo(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
 }
