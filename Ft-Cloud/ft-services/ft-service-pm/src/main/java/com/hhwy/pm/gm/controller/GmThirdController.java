@@ -2,6 +2,7 @@ package com.hhwy.pm.gm.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.gm.qqch.service.IGmThirdService;
+import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.review.domain.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,5 +37,16 @@ public class GmThirdController {
     public AjaxResult reviewList(@RequestBody Map map) {
         Map<String,List<Review>> resuMap = gmThirdService.reviewList(map);
         return AjaxResult.success(resuMap);
+    }
+
+    /**
+     * 前期策划执行检查
+     * @param map {tenantKeys}
+     * @return
+     */
+    @PostMapping("/evaluationList")
+    public AjaxResult evaluationList(@RequestBody Map map) {
+        List<QqchSummaryEvaluation> list = gmThirdService.evauluationList(map);
+        return AjaxResult.success(list);
     }
 }

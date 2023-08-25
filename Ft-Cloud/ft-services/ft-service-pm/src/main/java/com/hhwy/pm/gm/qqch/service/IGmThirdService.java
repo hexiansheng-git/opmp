@@ -1,5 +1,6 @@
 package com.hhwy.pm.gm.qqch.service;
 
+import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.review.domain.Review;
 
 import java.util.List;
@@ -22,4 +23,11 @@ public interface IGmThirdService {
      * @return {租户标志:评审对象集合}
      */
     public Map<String, List<Review>> reviewList(Map map);
+
+    /**
+     * 前期策划总结评价
+     * @param map
+     * @return
+     */
+    public List<QqchSummaryEvaluation> evauluationList(Map map);
 }
