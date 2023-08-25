@@ -42,7 +42,7 @@ public class JdglDayScheduleController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "jdglDaySchedule:list")
-    @GetMapping("/cs")
+    @GetMapping("/getInit")
     public AjaxResult getInit(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getInit(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
