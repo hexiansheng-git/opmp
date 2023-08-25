@@ -1,4 +1,4 @@
-package com.hhwy.pm.jdgl.diff.track.domain;
+package com.hhwy.pm.jdgl.diff.make.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -12,11 +12,11 @@ import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-08-25 15:33:39
- * @remark jdgl_progress_correction_track_detail
+ * @date 2023-08-25 15:26:48
+ * @remark jdgl_correction_measures_make_detail
  */
 @Data
-public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorrectionTrackDetail> {
+public class JdglCorrectionMeasuresMakeDetail extends TreeNode<JdglCorrectionMeasuresMakeDetail> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,12 +35,12 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
     @Excel(name = "父id")
     private Long pid;
     /**
-     * 字段描述：跟踪id
+     * 字段描述：制定id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "跟踪id")
-    private Long trackId;
+    @Excel(name = "制定id")
+    private Long makeId;
     /**
      * 字段描述：作业代码
      */

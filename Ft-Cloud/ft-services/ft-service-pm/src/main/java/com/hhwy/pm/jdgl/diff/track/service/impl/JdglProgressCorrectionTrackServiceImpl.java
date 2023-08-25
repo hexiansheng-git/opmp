@@ -8,6 +8,7 @@ import com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackMapper;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackDetailService;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,22 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
     @Autowired
     private IJdglProgressCorrectionTrackDetailService jdglProgressCorrectionTrackDetailService;
 
+    /**
+     * 查询单条数据-详情
+     *
+     * @param jdglProgressCorrectionTrack
+     * @return
+     */
     public JdglProgressCorrectionTrack getJdglProgressCorrectionTrack(
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
-        return jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+        JdglProgressCorrectionTrack track = jdglProgressCorrectionTrackMapper
+            .getJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+        if (track != null) {
+            List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrackDetailService
+                .getDetailListByTackId(track.getId());
+            track.setDetailList(TreeUtil.build(detailList, null));
+        }
+        return track;
     }
 
     /**
@@ -41,17 +55,7 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
      */
     public List<JdglProgressCorrectionTrack> getJdglProgressCorrectionTrackList(
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
-
-        List<JdglProgressCorrectionTrack> list = jdglProgressCorrectionTrackMapper
-            .getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrack);
-        if (!CollectionUtils.isEmpty(list)) {
-            for (JdglProgressCorrectionTrack track : list) {
-                List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrackDetailService
-                    .getDetailListByTackId(track.getId());
-                track.setDetailList(detailList);
-            }
-        }
-        return list;
+        return jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrack);
     }
 
     @Transactional
@@ -73,13 +77,21 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         return jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrackList(jdglProgressCorrectionTrackList);
     }
 
+    /**
+     * 更新保存
+     *
+     * @param jdglProgressCorrectionTrack
+     * @return
+     */
     @Transactional
     public int updateJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
         List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrack.getDetailList();
         int num = 0;
         if (!CollectionUtils.isEmpty(detailList)) {
+            // 树转列表
+            List<JdglProgressCorrectionTrackDetail> treeList = TreeUtil.treeToList(detailList);
             // 执行更改下操作
-            num = jdglProgressCorrectionTrackDetailService.updateJdglProgressCorrectionTrackDetailList(detailList);
+            num = jdglProgressCorrectionTrackDetailService.updateJdglProgressCorrectionTrackDetailList(treeList);
         }
         return num;
     }

@@ -34,9 +34,15 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     @Autowired
     private IJdglProgressCorrectionTrackService jdglProgressCorrectionTrackService;
 
+    /**
+     * 查询单条数据-详情
+     *
+     * @param jdglProgressCorrectionTrackParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:list")
     @GetMapping
-    public AjaxResult getJdglProgressCorrectionTrack(
+    public AjaxResult getOne(
         @Validated(ValidationGroups.Get.class) JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack = jdglProgressCorrectionTrackService
             .getJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
@@ -77,6 +83,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
 
     /**
      * 更新保存
+     *
      * @param jdglProgressCorrectionTrackParam
      * @return
      */

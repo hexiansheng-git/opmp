@@ -1,22 +1,23 @@
-package com.hhwy.pm.jdgl.diff.track.domain;
+package com.hhwy.pm.jdgl.diff.make.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 
 /**
  * @author zhenglili
- * @date 2023-08-25 15:33:39
- * @remark jdgl_progress_correction_track_detail
+ * @date 2023-08-25 14:33:50
+ * @remark jdgl_correction_measures_make
  */
 @Data
-public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorrectionTrackDetail> {
+public class JdglCorrectionMeasuresMake extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,139 +29,61 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
     @Excel(name = "主键")
     private Long id;
     /**
-     * 字段描述：父id
+     * 字段描述：预警期次
      */
-    @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "父id")
-    private Long pid;
+    @Excel(name = "预警期次")
+    private String warnPeriod;
     /**
-     * 字段描述：跟踪id
+     * 字段描述：预警时间
      */
-    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "跟踪id")
-    private Long trackId;
+    @Excel(name = "预警时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date warnTime;
     /**
-     * 字段描述：作业代码
+     * 字段描述：风险等级（字典类别track_risk_level）
      */
     @JsonProperty
-    @Excel(name = "作业代码")
-    private String workCode;
+    @Excel(name = "风险等级（字典类别track_risk_level）")
+    private String riskLevel;
     /**
-     * 字段描述：作业名称
+     * 字段描述：本期总分
      */
     @JsonProperty
-    @Excel(name = "作业名称")
-    private BigDecimal workName;
+    @Excel(name = "本期总分")
+    private BigDecimal periodTotalScore;
     /**
-     * 字段描述：是否关键线路 1-有效 0-失效
+     * 字段描述：编制人id
      */
     @JsonProperty
-    @Excel(name = "是否关键线路 1-有效 0-失效")
-    private String isKeyLine;
+    @Excel(name = "编制人id")
+    private String compilerId;
     /**
-     * 字段描述：单位
+     * 字段描述：编制人
      */
     @JsonProperty
-    @Excel(name = "单位")
-    private String unit;
+    @Excel(name = "编制人")
+    private String compiler;
     /**
-     * 字段描述：工程量
+     * 字段描述：纠偏日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "工程量")
-    private BigDecimal quantity;
+    @Excel(name = "纠偏日期", dateFormat = "yyyy-MM-dd")
+    private Date correctionDate;
     /**
-     * 字段描述：偏差量
+     * 字段描述：项目存在的关键问题
      */
     @JsonProperty
-    @Excel(name = "偏差量")
-    private BigDecimal deviationQuantity;
+    @Excel(name = "项目存在的关键问题")
+    private String existKeyIssue;
     /**
-     * 字段描述：总时差
+     * 字段描述：流程状态（5已完成）
      */
     @JsonProperty
-    @Excel(name = "总时差")
-    private BigDecimal totalFloat;
-    /**
-     * 字段描述：预计滞后天数
-     */
-    @JsonProperty
-    @Excel(name = "预计滞后天数")
-    private BigDecimal expectLagDay;
-    /**
-     * 字段描述：SV值
-     */
-    @JsonProperty
-    @Excel(name = "SV值")
-    private BigDecimal svValue;
-    /**
-     * 字段描述：完成进度百分比
-     */
-    @JsonProperty
-    @Excel(name = "完成进度百分比")
-    private BigDecimal completeProgressPercentage;
-    /**
-     * 字段描述：完成工期百分比
-     */
-    @JsonProperty
-    @Excel(name = "完成工期百分比")
-    private BigDecimal completeDatePercentage;
-    /**
-     * 字段描述：偏差原因分析
-     */
-    @JsonProperty
-    @Excel(name = "偏差原因分析")
-    private BigDecimal deviationCausesAnalysis;
-    /**
-     * 字段描述：纠偏目标
-     */
-    @JsonProperty
-    @Excel(name = "纠偏目标")
-    private String correctionTarget;
-    /**
-     * 字段描述：具体措施
-     */
-    @JsonProperty
-    @Excel(name = "具体措施")
-    private String concreteMeasure;
-    /**
-     * 字段描述：纠偏完成日期
-     */
-    @JsonProperty
-    @Excel(name = "纠偏完成日期")
-    private BigDecimal correctionCompleteDate;
-    /**
-     * 字段描述：作业队伍
-     */
-    @JsonProperty
-    @Excel(name = "作业队伍")
-    private BigDecimal workTeam;
-    /**
-     * 字段描述：责任人id
-     */
-    @JsonProperty
-    @Excel(name = "责任人id")
-    private String directorId;
-    /**
-     * 字段描述：责任人
-     */
-    @JsonProperty
-    @Excel(name = "责任人")
-    private String director;
-    /**
-     * 字段描述：纠偏执行情况
-     */
-    @JsonProperty
-    @Excel(name = "纠偏执行情况")
-    private String correctionExecuteSituation;
-    /**
-     * 字段描述：排序
-     */
-    @JsonProperty
-    @Excel(name = "排序")
-    private Integer sort;
+    @Excel(name = "流程状态（5已完成）")
+    private String taskStatus;
     /**
      * 字段描述：所属区域id
      */
@@ -275,4 +198,6 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<JdglCorrectionMeasuresMakeDetail> detailList;
 }

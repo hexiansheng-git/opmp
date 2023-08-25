@@ -3,14 +3,13 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper
-  namespace="com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackDetailMapper">
+  namespace="com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeDetailMapper">
 
-  <resultMap
-    type="com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrackDetail"
-    id="JdglProgressCorrectionTrackDetailResultMap">
+  <resultMap type="com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail"
+    id="JdglCorrectionMeasuresMakeDetailResultMap">
     <result property="id" column="id"/>
     <result property="pid" column="pid"/>
-    <result property="trackId" column="track_id"/>
+    <result property="makeId" column="make_id"/>
     <result property="workCode" column="work_code"/>
     <result property="workName" column="work_name"/>
     <result property="isKeyLine" column="is_key_line"/>
@@ -50,11 +49,11 @@
     <result property="ptVar4" column="pt_var4"/>
     <result property="ptVar5" column="pt_var5"/>
   </resultMap>
-  <sql id="selectJdglProgressCorrectionTrackDetailVo">
+  <sql id="selectJdglCorrectionMeasuresMakeDetailVo">
     select
       `id`
       ,`pid`
-      ,`track_id`
+      ,`make_id`
       ,`work_code`
       ,`work_name`
       ,`is_key_line`
@@ -93,15 +92,15 @@
       ,`pt_var3`
       ,`pt_var4`
       ,`pt_var5`
-    from jdgl_progress_correction_track_detail
+    from jdgl_correction_measures_make_detail
   </sql>
-  <select id="getJdglProgressCorrectionTrackDetail" resultMap="JdglProgressCorrectionTrackDetailResultMap">
-    <include refid="selectJdglProgressCorrectionTrackDetailVo"/>
+  <select id="getJdglCorrectionMeasuresMakeDetail" resultMap="JdglCorrectionMeasuresMakeDetailResultMap">
+    <include refid="selectJdglCorrectionMeasuresMakeDetailVo"/>
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="trackId != null ">and `track_id` = #{trackId}</if>
+      <if test="makeId != null ">and `make_id` = #{makeId}</if>
       <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
       <if test="workName != null ">and `work_name` = #{workName}</if>
       <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
@@ -148,13 +147,13 @@
     order by create_time desc
   </select>
 
-  <select id="getJdglProgressCorrectionTrackDetailList" resultMap="JdglProgressCorrectionTrackDetailResultMap">
-    <include refid="selectJdglProgressCorrectionTrackDetailVo"/>
+  <select id="getJdglCorrectionMeasuresMakeDetailList" resultMap="JdglCorrectionMeasuresMakeDetailResultMap">
+    <include refid="selectJdglCorrectionMeasuresMakeDetailVo"/>
     <where>
       del_flag = "0"
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="trackId != null ">and `track_id` = #{trackId}</if>
+      <if test="makeId != null ">and `make_id` = #{makeId}</if>
       <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
       <if test="workName != null ">and `work_name` = #{workName}</if>
       <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
@@ -201,12 +200,12 @@
     order by create_time desc
   </select>
 
-  <insert id="insertJdglProgressCorrectionTrackDetail" useGeneratedKeys="true" keyProperty="id">
-    insert into jdgl_progress_correction_track_detail
+  <insert id="insertJdglCorrectionMeasuresMakeDetail" useGeneratedKeys="true" keyProperty="id">
+    insert into jdgl_correction_measures_make_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null ">`id`,</if>
       <if test="pid != null ">`pid`,</if>
-      <if test="trackId != null ">`track_id`,</if>
+      <if test="makeId != null ">`make_id`,</if>
       <if test="workCode != null  and workCode != ''">`work_code`,</if>
       <if test="workName != null ">`work_name`,</if>
       <if test="isKeyLine != null  and isKeyLine != ''">`is_key_line`,</if>
@@ -251,7 +250,7 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null ">#{id},</if>
       <if test="pid != null ">#{pid},</if>
-      <if test="trackId != null ">#{trackId},</if>
+      <if test="makeId != null ">#{makeId},</if>
       <if test="workCode != null  and workCode != ''">#{workCode},</if>
       <if test="workName != null ">#{workName},</if>
       <if test="isKeyLine != null  and isKeyLine != ''">#{isKeyLine},</if>
@@ -295,13 +294,13 @@
     </trim>
   </insert>
 
-  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglProgressCorrectionTrackDetail -->
-  <insert id="insertJdglProgressCorrectionTrackDetailList">
-    insert into jdgl_progress_correction_track_detail
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglCorrectionMeasuresMakeDetail -->
+  <insert id="insertJdglCorrectionMeasuresMakeDetailList">
+    insert into jdgl_correction_measures_make_detail
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
       `pid`,
-      `track_id`,
+      `make_id`,
       `work_code`,
       `work_name`,
       `is_key_line`,
@@ -341,11 +340,11 @@
       `pt_var5`,
     </trim>
     values
-    <foreach collection="jdglProgressCorrectionTrackDetailList" item="item" separator=",">
+    <foreach collection="jdglCorrectionMeasuresMakeDetailList" item="item" separator=",">
       <trim prefix="(" suffix=")" suffixOverrides=",">
         #{item.id},
         #{item.pid},
-        #{item.trackId},
+        #{item.makeId},
         #{item.workCode},
         #{item.workName},
         #{item.isKeyLine},
@@ -387,12 +386,12 @@
     </foreach>
   </insert>
 
-  <update id="updateJdglProgressCorrectionTrackDetail">
-    update jdgl_progress_correction_track_detail
+  <update id="updateJdglCorrectionMeasuresMakeDetail">
+    update jdgl_correction_measures_make_detail
     <trim prefix="SET" suffixOverrides=",">
       <if test="id != null ">`id` = #{id},</if>
       <if test="pid != null ">`pid` = #{pid},</if>
-      <if test="trackId != null ">`track_id` = #{trackId},</if>
+      <if test="makeId != null ">`make_id` = #{makeId},</if>
       <if test="workCode != null  and  workCode != ''">`work_code` = #{workCode},</if>
       <if test="workName != null ">`work_name` = #{workName},</if>
       <if test="isKeyLine != null  and  isKeyLine != ''">`is_key_line` = #{isKeyLine},</if>
@@ -440,8 +439,8 @@
     </where>
   </update>
 
-  <update id="updateJdglProgressCorrectionTrackDetailList">
-    update jdgl_progress_correction_track_detail
+  <update id="updateJdglCorrectionMeasuresMakeDetailList">
+    update jdgl_correction_measures_make_detail
     <trim prefix="set" suffixOverrides=",">
       <trim prefix="id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
@@ -453,9 +452,9 @@
           when `id`=#{item.id} then #{item.pid}
         </foreach>
       </trim>
-      <trim prefix="track_id  = case" suffix="end,">
+      <trim prefix="make_id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.trackId}
+          when `id`=#{item.id} then #{item.makeId}
         </foreach>
       </trim>
       <trim prefix="work_code  = case" suffix="end,">
@@ -655,12 +654,12 @@
     </foreach>
   </update>
 
-  <update id="deleteJdglProgressCorrectionTrackDetail">
-    update `jdgl_progress_correction_track_detail` set del_flag = 1
+  <update id="deleteJdglCorrectionMeasuresMakeDetail">
+    update `jdgl_correction_measures_make_detail` set del_flag = 1
     <where>
       <if test="id != null ">and `id` = #{id}</if>
       <if test="pid != null ">and `pid` = #{pid}</if>
-      <if test="trackId != null ">and `track_id` = #{trackId}</if>
+      <if test="makeId != null ">and `make_id` = #{makeId}</if>
       <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
       <if test="workName != null ">and `work_name` = #{workName}</if>
       <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
@@ -706,11 +705,11 @@
     </where>
   </update>
 
-  <update id="deleteJdglProgressCorrectionTrackDetailByPks">
-    update `jdgl_progress_correction_track_detail` set del_flag = 1
+  <update id="deleteJdglCorrectionMeasuresMakeDetailByPks">
+    update `jdgl_correction_measures_make_detail` set del_flag = 1
     <where>
       `id` in
-      <foreach item="id" collection="jdglProgressCorrectionTrackDetailPkList" open="(" separator="," close=")">
+      <foreach item="id" collection="jdglCorrectionMeasuresMakeDetailPkList" open="(" separator="," close=")">
         #{id}
       </foreach>
     </where>
