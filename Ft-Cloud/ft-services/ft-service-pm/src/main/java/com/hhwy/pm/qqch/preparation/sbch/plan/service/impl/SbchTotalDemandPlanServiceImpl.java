@@ -50,8 +50,8 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
     private GenCodeService genCodeService;
 
     @Override
-    public SbchTotalDemandPlanDetailVo getList(BigDecimal version) {
-        SbchTotalDemandPlanDetailVo sbchTotalDemandPlanDetailVo = new SbchTotalDemandPlanDetailVo();
+    public SbchTotalDemandPlan getList(BigDecimal version) {
+        SbchTotalDemandPlan sbchTotalDemandPlanDetailVo = new SbchTotalDemandPlan();
 
         version = VersionUtil.getVersion("sbch_total_demand_plan", version);
         SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
@@ -59,6 +59,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
         List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
         if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)){
             SbchTotalDemandPlan sbchTotalDemandPlan1 = sbchTotalDemandPlans.get(0);
+            sbchTotalDemandPlanDetailVo = sbchTotalDemandPlan1;
             SbchTotalDemandPlanDetail detailVo = new SbchTotalDemandPlanDetail();
             detailVo.setPlanId(sbchTotalDemandPlan1.getId());
             List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(detailVo);
@@ -87,7 +88,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                     returnList.add(detail);
                 }
             }
-            sbchTotalDemandPlanDetailVo.setList(returnList);
+            sbchTotalDemandPlanDetailVo.setPlanDetailList(returnList);
         }
         sbchTotalDemandPlanDetailVo.setVersion(version);
         sbchTotalDemandPlanDetailVo.setStageIdentity(qqchReviewService.getStage());
@@ -95,32 +96,22 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
     }
 
     @Override
-    public void batchSave(SbchTotalDemandPlanDetailVo vo) {
-        List<SbchTotalDemandPlanDetail> list = vo.getList();
+    public void batchSave(SbchTotalDemandPlan vo) {
+        List<SbchTotalDemandPlanDetail> list = vo.getPlanDetailList();
         SbchTotalDemandPlan temp = new SbchTotalDemandPlan();
         temp.setVersion(vo.getVersion());
         List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(temp);
-        Long planId = null;
-        SbchTotalDemandPlan plan = new SbchTotalDemandPlan();
-        plan.setVersion(vo.getVersion());
         if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)){
-            plan = sbchTotalDemandPlans.get(0);
-            planId = plan.getId();
-            MyUtilPrepareUtil.setUpdateInfoBase(plan);
-            sbchTotalDemandPlanMapper.updateSbchTotalDemandPlan(plan);
+            vo.setId(sbchTotalDemandPlans.get(0).getId());
+            MyUtilPrepareUtil.setUpdateInfoBase(vo);
+            sbchTotalDemandPlanMapper.updateSbchTotalDemandPlan(vo);
         }else{
-            planId = IdWorker.createId();
-            plan.setId(planId);
+            vo.setId(IdWorker.createId());
             String setCode = genCodeService.getSetCode(CodeEnum.EQU_TOTAL_PLAN);
-            plan.setUnicode(setCode);
-            plan.setTitleName("设备总需");
-            plan.setProjectId(vo.getProjectId());
-            plan.setProjectName(vo.getProjectName());
-            plan.setPrjCode(vo.getPrjCode());
-            plan.setRegionId(vo.getRegionId());
-            plan.setRegionName(vo.getRegionName());
-            MyUtilPrepareUtil.setCreateUpdateInfo(plan);
-            sbchTotalDemandPlanMapper.insertSbchTotalDemandPlan(plan);
+            vo.setUnicode(setCode);
+            vo.setTitleName("设备总需");
+            MyUtilPrepareUtil.setCreateUpdateInfo(vo);
+            sbchTotalDemandPlanMapper.insertSbchTotalDemandPlan(vo);
         }
 
         if(!ObjectNullUtil.isEmpty(list)){
@@ -130,14 +121,14 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
             }
             for (SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail : list) {
                 sbchTotalDemandPlanDetail.setId(IdWorker.createId());
-                sbchTotalDemandPlanDetail.setPlanId(planId);
+                sbchTotalDemandPlanDetail.setPlanId(vo.getId());
                 EntityUtils.setCreateInfo(sbchTotalDemandPlanDetail);
             }
         }
         // 清空数据库表中数据
         SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
         sbchTotalDemandPlan.setVersion(vo.getVersion());
-        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getSysUser().getUserId(),new Date());
+        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(vo.getId(), SecurityUtils.getSysUser().getUserId(),new Date());
         if(!ObjectNullUtil.isEmpty(list)){
             sbchTotalDemandPlanDetailMapper.batchInsert(list);
         }
