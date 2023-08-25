@@ -165,13 +165,5 @@ public class QqchPerformInspectionController extends BaseController {
         }
     }
 
-    /**
-     * 所有租户下的统计信息
-     * @return
-     */
-    @PostMapping("/tenantSummaryList")
-    public AjaxResult tenantSummaryList() {
-        List<Map> list = qqchPerformInspectionService.tenantSummaryList();
-        return AjaxResult.success(list);
-    }
+    
 }

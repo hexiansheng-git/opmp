@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.gm.mapper.GmThirdMapper">
+    
+
+    <select id="inspectionSummaryList" resultType="map">
+        select sum(1) num,sum(if(check_unit='海外事业部',1,0)) centerNum,max(check_date) checkDate from qqch_perform_inspection
+        where del_flag = 0 and valid = 1
+    </select>
+    
+    
+    
+
+</mapper>

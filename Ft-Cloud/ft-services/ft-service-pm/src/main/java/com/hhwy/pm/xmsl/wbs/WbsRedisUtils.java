@@ -106,8 +106,8 @@ public class WbsRedisUtils {
         Long[] wbsIds = WbsRedisUtils.getDireChildWbsId(wbsId);
         if(ArrayUtils.isEmpty(wbsIds))
             return new ArrayList<>(2);
-
-        return null;
+        List<XmslWbs> list = WbsRedisUtils.getWbs(Arrays.asList(wbsIds));
+        return list;
     }
 
     /**

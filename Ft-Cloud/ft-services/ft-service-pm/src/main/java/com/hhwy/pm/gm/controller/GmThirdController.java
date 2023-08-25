@@ -1,8 +1,9 @@
 package com.hhwy.pm.gm.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.pm.gm.qqch.service.IGmThirdService;
+import com.hhwy.pm.gm.service.IGmThirdService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.review.domain.Review;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +39,28 @@ public class GmThirdController {
         Map<String,List<Review>> resuMap = gmThirdService.reviewList(map);
         return AjaxResult.success(resuMap);
     }
+
+    /**
+     * 所有租户下的前期策划执行检查统计信息
+     * @return
+     */
+    @PostMapping("/inspectionSummaryList")
+    public AjaxResult tenantSummaryList() {
+        List<Map> list = gmThirdService.inspectionSummaryList();
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 前期策划执行检查信息
+     * @param map
+     * @return
+     */
+    @PostMapping("/inspectionList")
+    public AjaxResult inspectionList(@RequestBody Map map) {
+        List<QqchPerformInspection> list = gmThirdService.inspectionList(map);
+        return AjaxResult.success(list);
+    }
+    
 
     /**
      * 前期策划执行检查

@@ -34,11 +34,7 @@ public interface IQqchPerformInspectionService {
 
     QqchPerformInspection detail(Long id);
 
-    /**
-     * 查询所有租户下的统计信息
-     * @return {tenantKey,snum,centerNum,checkDate}
-     */
-    List<Map> tenantSummaryList();
+    
     
     
 }

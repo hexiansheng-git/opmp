@@ -215,29 +215,5 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         return batchAddList;
     }
 
-    @Override
-    public List<Map> tenantSummaryList() {
-        List<SysTenant> list = systemServiceApi.tenantList();
-        List<Map> resuList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            SysTenant tempTenant = list.get(i);
-            //切换租户 真
-            String oldDataSource = DynamicDataSourceContextHolder.peek();
-            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tempTenant.getTenantKey()));
-            try {
-                List<Map> summaryList = qqchPerformInspectionMapper.getSummaryList();
-                for (int j = 0; j < summaryList.size(); j++) {
-                    summaryList.get(j).put("tenantKey", tempTenant.getTenantKey());
-                }
-                resuList.addAll(summaryList);
-            }catch (Exception e){
-                e.printStackTrace();
-                throw new CustomBusinessException(e.getMessage());
-            }finally {
-                DynamicDataSourceContextHolder.poll();
-                DynamicDataSourceContextHolder.push(oldDataSource);
-            }
-        }
-        return resuList;
-    }
+    
 }

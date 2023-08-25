@@ -1,6 +1,7 @@
-package com.hhwy.pm.gm.qqch.service;
+package com.hhwy.pm.gm.service;
 
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.review.domain.Review;
 
 import java.util.List;
@@ -23,6 +24,19 @@ public interface IGmThirdService {
      * @return {租户标志:评审对象集合}
      */
     public Map<String, List<Review>> reviewList(Map map);
+
+    /**
+     * 查询所有租户下的前期策划执行检查统计信息
+     * @return {tenantKey,snum,centerNum,checkDate}
+     */
+    List<Map> inspectionSummaryList();
+
+    /**
+     * 查询 前期策划执行检查
+     * @param map {checkUnit,checkPersonName,checkUnitFlag(1:海外事业部,2:区域中心),tenantKeys}
+     * @return
+     */
+    List<QqchPerformInspection> inspectionList(Map map);
 
     /**
      * 前期策划总结评价

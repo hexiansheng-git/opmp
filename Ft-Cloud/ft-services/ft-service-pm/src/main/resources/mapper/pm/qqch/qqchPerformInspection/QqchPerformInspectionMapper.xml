@@ -85,10 +85,9 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="checkUnit != null  and checkUnit != ''">and `check_unit` = #{checkUnit}</if>
+            <if test="checkUnit != null  and checkUnit != ''">and `check_unit` like concat('%',#{checkUnit},'%') </if>
             <if test="checkPersonId != null ">and `check_person_id` = #{checkPersonId}</if>
-            <if test="checkPersonName != null  and checkPersonName != ''">and `check_person_name` = #{checkPersonName}
-            </if>
+            <if test="checkPersonName != null  and checkPersonName != ''">and `check_person_name` like concat('%',#{checkPersonName},'%')</if>
             <if test="checkDate != null ">and `check_date` = #{checkDate}</if>
             <if test="overallStatus != null  and overallStatus != ''">and `overall_status` = #{overallStatus}</if>
             <if test="version != null ">and `version` = #{version}</if>
@@ -105,6 +104,12 @@
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="params != null  and params.checkUnitFlag != null and params.checkUnitFlag != '' ">
+                <choose>
+                    <when test="params.checkUnitFlag == '1' "> and check_unit = '海外事业部'</when>
+                    <when test="params.checkUnitFlag == '2' "> and check_unit != '海外事业部'</when>
+                </choose>
+            </if>
         </where>
         order by create_time desc
     </select>
