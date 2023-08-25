@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.mapper.QqchSurveyRes
 import com.hhwy.pm.qqch.preparation.survey.surveyResultPlan.service.IQqchSurveyResultPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -91,6 +92,9 @@ public class QqchSurveyResultPlanServiceImpl implements IQqchSurveyResultPlanSer
 
 
     private void insertQqchSurveyResultPlanList(List<QqchSurveyResultPlan> qqchSurveyResultPlanList, BigDecimal version) {
+        if (CollectionUtils.isEmpty(qqchSurveyResultPlanList)){
+            return;
+        }
         for (QqchSurveyResultPlan qqchSurveyResultPlan : qqchSurveyResultPlanList) {
             qqchSurveyResultPlan.setId(IdWorker.createId());
             qqchSurveyResultPlan.setVersion(version);

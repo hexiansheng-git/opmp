@@ -124,10 +124,10 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         BigDecimal version = vo.getVersion();
         List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList = vo.getQqchFirstArticleEngineeringListList();
 
-        this.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList, version);
-
         //向9.5.1同步数据
         this.dataSync(qqchFirstArticleEngineeringListList, version);
+
+        this.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList, version);
 
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
@@ -241,14 +241,29 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
         }
+
+        List<QqchFirstArticleEngineeringList> addObjects = new ArrayList<>();
+        List<QqchFirstArticleEngineeringList> updateObjects = new ArrayList<>();
         for (QqchFirstArticleEngineeringList firstArticleEngineeringList : qqchFirstArticleEngineeringListList) {
-            firstArticleEngineeringList.setId(IdWorker.createId());
             firstArticleEngineeringList.setValid(valid);
             firstArticleEngineeringList.setVersion(version);
             firstArticleEngineeringList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             firstArticleEngineeringList.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             firstArticleEngineeringList.setCreateTime(DateUtils.getNowDate());
+
+            QqchFirstArticleEngineeringList bean = new QqchFirstArticleEngineeringList();
+            bean.setId(firstArticleEngineeringList.getId());
+            QqchFirstArticleEngineeringList result = qqchFirstArticleEngineeringListMapper.getQqchFirstArticleEngineeringList(bean);
+            if (result == null) {
+                firstArticleEngineeringList.setId(IdWorker.createId());
+                addObjects.add(firstArticleEngineeringList);
+            }else {
+                updateObjects.add(firstArticleEngineeringList);
+            }
         }
-        qqchFirstArticleEngineeringListMapper.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList);
+        if (CollectionUtils.isNotEmpty(addObjects))
+            qqchFirstArticleEngineeringListMapper.insertQqchFirstArticleEngineeringListList(addObjects);
+        if (CollectionUtils.isNotEmpty(updateObjects))
+            qqchFirstArticleEngineeringListMapper.updateQqchFirstArticleEngineeringListList(updateObjects);
     }
 }

@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.management.remote.rmi._RMIConnection_Stub;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,6 +94,9 @@ public class QqchDesignDisclosurePlanServiceImpl implements IQqchDesignDisclosur
     }
 
     private void insertQqchDesignDisclosurePlanList(List<QqchDesignDisclosurePlan> qqchDesignDisclosurePlanList, BigDecimal version) {
+        if (CollectionUtils.isEmpty(qqchDesignDisclosurePlanList)) {
+            return;
+        }
         for (QqchDesignDisclosurePlan qqchDesignDisclosurePlan : qqchDesignDisclosurePlanList) {
             qqchDesignDisclosurePlan.setId(IdWorker.createId());
             qqchDesignDisclosurePlan.setVersion(version);
