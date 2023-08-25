@@ -51,4 +51,10 @@ public class DeptServiceImpl implements IDeptService {
         return deptMapper.selectAllDept(deptId,ancestors);
     }
 
+    @Override
+    public List<SysDept> selectPrjInfo(Long deptId, String ancestors) {
+        return deptMapper.selectPrjInfo(deptId,ancestors);
+    }
+
+
 }

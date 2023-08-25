@@ -7,22 +7,23 @@ package com.hhwy.system.controller;/*
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
-import com.hhwy.system.api.domain.SysDictData;
-import com.hhwy.system.api.domain.SysMenu;
-import com.hhwy.system.api.domain.SysTenant;
-import com.hhwy.system.api.domain.SysUser;
+import com.hhwy.system.api.domain.*;
 import com.hhwy.system.core.service.IMenuService;
 import com.hhwy.system.core.service.ISysDictTypeService;
 import com.hhwy.system.core.service.ISysMenuV2Service;
 import com.hhwy.system.core.service.ISysTenantService;
+import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/syspm")
@@ -43,6 +44,9 @@ public class SysPmController {
     private IMenuService menuService;
     @Autowired
     private ISysTenantService tenantService;
+
+    @Autowired
+    private IDeptService deptService;
     /**
      * 查询字典项，导出使用  , 根据value查询 label
      * @param dictType
@@ -133,5 +137,27 @@ public class SysPmController {
         return tenantList;
     }
 
+    /**
+     * 查询档期啊用户项目+区域信息
+     * @return
+     */
+    @PostMapping("/prjInfo")
+    public Map prjInfo() {
+        Map<Object, Object> res = new HashMap<>();
+        SysUser user = tokenService.getSysUser();
+        SysDept dept = user.getDept();
+        List<SysDept> deptList = deptService.selectPrjInfo(dept.getDeptId(), dept.getAncestors());
+        for(SysDept item:deptList){
+            if(item.getDeptType().equals("prjInfo")){
+                res.put("prjName",item.getDeptName());
+                res.put("prjId",item.getPtVar5());
+            }
+            if(item.getDeptType().equals("region")){
+                res.put("regionName",item.getDeptName());
+                res.put("regionId",item.getDeptId());
+            }
+        }
+        return res;
+    }
 
 }
