@@ -164,7 +164,7 @@
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
         </where>
-        order by create_time desc
+--         order by create_time desc
     </select>
 
     <insert id="insertQqchFirstArticleEngineeringList" useGeneratedKeys="true" keyProperty="id">
