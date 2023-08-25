@@ -244,6 +244,30 @@ public class ProjectBasicInfo {
     @JsonProperty
     private String projectContext;
     /**
+     * 字段描述：当地币种
+     */
+    @JsonProperty
+    @Excel(name = "当地币种")
+    private String localCurrency;
+    /**
+     * 字段描述：币种编码
+     */
+    @JsonProperty
+    @Excel(name = "当地币种编码")
+    private String localCurrencyCode;
+    /**
+     * 字段描述：当地币种
+     */
+    @JsonProperty
+    @Excel(name = "合同币种")
+    private String contractCurrency;
+    /**
+     * 字段描述：币种编码
+     */
+    @JsonProperty
+    @Excel(name = "合同币种编码")
+    private String contractCurrencyCode;
+    /**
      * 字段描述：备注/描述
      */
     @JsonProperty
