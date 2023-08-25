@@ -16,6 +16,9 @@ import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.domain.R;
 import reactor.core.publisher.Mono;
 
+import static com.hhwy.common.core.constant.HttpStatus.ERROR;
+import static com.hhwy.common.core.constant.HttpStatus.NOT_FOUND_SERVICE;
+
 /**
  * 网关统一异常处理
  *
@@ -35,6 +38,7 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         }
 
         String msg;
+        int errorCode = ERROR;
 
         if (ex instanceof NotFoundException) {
             //Unable to find instance for ft-service-XXX
@@ -44,6 +48,7 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
             }else {
                 msg = "服务未找到";
             }
+            errorCode = NOT_FOUND_SERVICE;
         } else if (ex instanceof ResponseStatusException) {
             ResponseStatusException responseStatusException = (ResponseStatusException) ex;
             msg = responseStatusException.getMessage();
@@ -56,9 +61,10 @@ public class GatewayExceptionHandler implements ErrorWebExceptionHandler {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
         response.setStatusCode(HttpStatus.OK);
 
+        final int code = errorCode;
         return response.writeWith(Mono.fromSupplier(() -> {
             DataBufferFactory bufferFactory = response.bufferFactory();
-            return bufferFactory.wrap(JSON.toJSONBytes(R.fail(msg)));
+            return bufferFactory.wrap(JSON.toJSONBytes(R.fail(msg).code(code)));
         }));
     }
 }
