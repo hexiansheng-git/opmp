@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service;
 
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.SbchTotalDemandPlanDetailVo;
 
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ import java.math.BigDecimal;
  * @create 2023-08-23 16:39
  */
 public interface SbchTotalDemandPlanService {
-    SbchTotalDemandPlanDetailVo getList(BigDecimal version);
+    SbchTotalDemandPlan getList(BigDecimal version);
 
-    void batchSave(SbchTotalDemandPlanDetailVo vo);
+    void batchSave(SbchTotalDemandPlan vo);
 }
