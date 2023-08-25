@@ -127,18 +127,15 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
 
         BigDecimal version = vo.getVersion();
         List<QqchSpecialBigEquList> qqchSpecialBigEquListList = vo.getQqchSpecialBigEquListList();
-        if (CollectionUtils.isEmpty(qqchSpecialBigEquListList)) {
-            return;
-        } else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchSpecialBigEquListList, ValidationGroups.Save.class);
-            }
-        }
         this.insertQqchSpecialBigEquListList(qqchSpecialBigEquListList, version);
 
+        if (CollectionUtils.isEmpty(qqchSpecialBigEquListList)) {
+            return;
+        }
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchSpecialBigEquListList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -152,7 +149,9 @@ public class QqchSpecialBigEquListServiceImpl implements IQqchSpecialBigEquListS
         QqchSpecialBigEquList qqchSpecialBigEquList = new QqchSpecialBigEquList();
         qqchSpecialBigEquList.setVersion(version);
         qqchSpecialBigEquListMapper.deleteQqchSpecialBigEquList(qqchSpecialBigEquList);
-
+        if (CollectionUtils.isEmpty(qqchSpecialBigEquListList)) {
+            return;
+        }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
