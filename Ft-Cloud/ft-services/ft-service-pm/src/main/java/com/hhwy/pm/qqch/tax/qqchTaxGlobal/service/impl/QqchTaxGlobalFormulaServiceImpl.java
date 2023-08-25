@@ -1,9 +1,12 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper.QqchTaxGlobalFormulaMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalFormulaService;
@@ -18,6 +21,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,23 +99,31 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
-    public QqchTaxGlobalFormula getFormula(QqchTaxGlobalFormula dto) {
+    public CompileEntity<QqchTaxGlobalFormula> getFormula(QqchTaxGlobalFormula dto) {
+        CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormulaCompileEntity = new CompileEntity<>();
+
         List<QqchTaxGlobalFormula> qqchTaxGlobalFormulaList = this.qqchTaxGlobalFormulaMapper.getQqchTaxGlobalFormulaList(dto);
-        BigDecimal prePayRate = this.getPrePayRate();
-        BigDecimal excContAmt = this.getExcContAmt();
-        String currency = this.getCurrency();
+        XmslProjectBasicInfo prj = this.getPrj();
+        BigDecimal prePayRate = prj.getPrepaymentRatio();
+        XmslContractInfo cont = this.getCont();
+        BigDecimal excContAmt = cont.getExcludingAmout();
+        String currency = cont.getListCurrencyCode();
         BigDecimal rate = this.getRateByCurrency(currency);
+        BigDecimal cnyRate = this.getRateByCurrency("CNY");
+        BigDecimal localRate = this.getRateByCurrency(prj.getPaymentCurrency());
         QqchTaxGlobalFormula res = new QqchTaxGlobalFormula();
         if (!CollectionUtils.isEmpty(qqchTaxGlobalFormulaList)) {
             res = qqchTaxGlobalFormulaList.get(0);
         }
-        
+
         res.setCurrency(currency);
         res.setExcContAmt(excContAmt);
         res.setRate(rate);
+        res.setCnyRate(cnyRate);
+        res.setLocalRate(localRate);
         res.setPrePayRate(prePayRate);
-
-        return res;
+        qqchTaxGlobalFormulaCompileEntity.setDto(res);
+        return qqchTaxGlobalFormulaCompileEntity;
     }
 
     @Override
@@ -120,25 +132,71 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         return 1;
     }
 
+    @Override
+    public List<QqchTaxGlobal> getGlobalByFormula(QqchTaxGlobalFormula dealListDto) {
+        IQqchTaxGlobalFormulaService bean = SpringUtils.getBean(IQqchTaxGlobalFormulaService.class);
+        CompileEntity<QqchTaxGlobalFormula> formula1 = bean.getFormula(dealListDto);
+        QqchTaxGlobalFormula formula = formula1.getDto();
+        ArrayList<QqchTaxGlobal> qqchTaxGlobals = new ArrayList<>();
 
-    private BigDecimal getPrePayRate() {
-        XmslProjectBasicInfo where = new XmslProjectBasicInfo();
-        where.setDelFlag("0");
-        // TODO 需要获取到项目信息
-        where.setProjectCode("0001");
-        XmslProjectBasicInfo projectBasicInfo = projectBasicInfoService.getProjectBasicInfo(where);
-        return projectBasicInfo.getPrepaymentRatio();
+        QqchTaxGlobal rec = new QqchTaxGlobal();
+        rec.setItemName("本期预计实收工程款");
+        rec.setRegionLocalAmt(formula.getLocalRecAmt());
+        rec.setRegionLocalRate(formula.getLocalRate());
+        rec.setOverseasCnyAmt(formula.getCnyRecAmt());
+        rec.setOverseasUsdAmt(formula.getUsdRecAmt());
+        rec.setOverseasCnyRate(formula.getCnyRate());
+
+
+        QqchTaxGlobal back = new QqchTaxGlobal();
+        back.setItemName("工程质保金返回");
+        back.setRegionLocalAmt(formula.getLocalBackAmt());
+        back.setOverseasCnyAmt(formula.getCnyBackAmt());
+        back.setOverseasUsdAmt(formula.getUsdBackAmt());
+        back.setOverseasCnyRate(formula.getCnyRate());
+        back.setRegionLocalRate(formula.getLocalRate());
+
+
+        QqchTaxGlobal pay = new QqchTaxGlobal();
+        pay.setItemName("本期预计实收预付款");
+        pay.setRegionLocalAmt(formula.getLocalPayAmt());
+        pay.setOverseasCnyAmt(formula.getCnyPayAmt());
+        pay.setOverseasUsdAmt(formula.getUsdPayAmt());
+        pay.setOverseasCnyRate(formula.getCnyRate());
+        pay.setRegionLocalRate(formula.getLocalRate());
+
+
+        qqchTaxGlobals.add(rec);
+        qqchTaxGlobals.add(back);
+        qqchTaxGlobals.add(pay);
+        return qqchTaxGlobals;
     }
 
-    private BigDecimal getExcContAmt() {
-        XmslContractInfo validMaxVersionContractInfo = contractInfoService.getValidMaxVersionContractInfo();
-        return validMaxVersionContractInfo.getExcludingAmout();
+
+    private XmslProjectBasicInfo getPrj() {
+        XmslProjectBasicInfo projectBasicInfo = null;
+        try {
+            XmslProjectBasicInfo where = new XmslProjectBasicInfo();
+            where.setDelFlag("0");
+            // TODO 需要获取到项目信息
+            where.setProjectCode("0001");
+            projectBasicInfo = projectBasicInfoService.getProjectBasicInfo(where);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return projectBasicInfo == null ? new XmslProjectBasicInfo() : projectBasicInfo;
     }
 
-    private String getCurrency() {
-        XmslContractInfo validMaxVersionContractInfo = contractInfoService.getValidMaxVersionContractInfo();
-        return validMaxVersionContractInfo.getListCurrencyCode();
+    private XmslContractInfo getCont() {
+        XmslContractInfo validMaxVersionContractInfo = null;
+        try {
+            validMaxVersionContractInfo = contractInfoService.getValidMaxVersionContractInfo();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return validMaxVersionContractInfo == null ? new XmslContractInfo() : validMaxVersionContractInfo;
     }
+    
 
     private BigDecimal getRateByCurrency(String currency) {
 

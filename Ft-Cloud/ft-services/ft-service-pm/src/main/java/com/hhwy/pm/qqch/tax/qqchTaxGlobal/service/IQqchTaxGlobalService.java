@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service;
 
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 
@@ -29,7 +30,7 @@ public interface IQqchTaxGlobalService {
 
     int deleteQqchTaxGlobalByPks(List<Long> qqchTaxGlobalPkList);
 
-    List<QqchTaxGlobal> list(QqchTaxGlobal dto) throws IOException;
+    CompileEntity<List<QqchTaxGlobal>> list(QqchTaxGlobal dto) throws IOException;
 
 
     void save(List<QqchTaxGlobal> dto);

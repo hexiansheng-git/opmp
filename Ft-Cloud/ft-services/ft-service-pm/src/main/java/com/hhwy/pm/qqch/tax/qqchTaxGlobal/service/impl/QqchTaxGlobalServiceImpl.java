@@ -5,15 +5,13 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
-import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper.QqchTaxGlobalMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalService;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -34,7 +32,6 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
 
     @Resource
     private QqchTaxGlobalMapper qqchTaxGlobalMapper;
-
 
 
     private static final String TN = "qqch_tax_global";
@@ -96,15 +93,18 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
-    public List<QqchTaxGlobal> list(QqchTaxGlobal dto) throws IOException {
+    public CompileEntity<List<QqchTaxGlobal>> list(QqchTaxGlobal dto) throws IOException {
+        CompileEntity<List<QqchTaxGlobal>> res = new CompileEntity<>();
+
         List<QqchTaxGlobal> qqchTaxGlobalList = qqchTaxGlobalMapper.getQqchTaxGlobalList(dto);
         if (CollectionUtils.isEmpty(qqchTaxGlobalList)) {
             InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_4.json");
             String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
             qqchTaxGlobalList = JSONObject.parseArray(json, QqchTaxGlobal.class);
-            qqchTaxGlobalList = TreeUtil.build(qqchTaxGlobalList, null);
         }
-        return qqchTaxGlobalList;
+        qqchTaxGlobalList = TreeUtil.build(qqchTaxGlobalList, null);
+        res.setDto(qqchTaxGlobalList);
+        return res;
     }
 
 
@@ -114,7 +114,6 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
     public void save(List<QqchTaxGlobal> dto) {
         this.qqchTaxGlobalMapper.insertQqchTaxGlobalList(dto);
     }
-
 
 
 }

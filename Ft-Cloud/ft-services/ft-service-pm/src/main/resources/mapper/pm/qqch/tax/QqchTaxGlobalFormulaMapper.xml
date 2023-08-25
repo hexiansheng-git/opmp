@@ -38,9 +38,9 @@
         <result property="version" column="version"/>
         <result property="currency" column="currency"/>
         <result property="rate" column="rate"/>
-        <result property="ptVar4" column="pt_var4"/>
-        <result property="ptVar5" column="pt_var5"/>
-        <result property="sort" column="sort"/>
+        <result property="cnyRate" column="cny_rate"/>
+        <result property="localRate" column="local_rate"/>
+        <result property="valid" column="valid"/>
     </resultMap>
     <sql id="selectQqchTaxGlobalFormulaVo">
         select `id`
@@ -48,7 +48,7 @@
              , `quantities`
              , `adjust_in_amt`
              , `interest_in_amt`
-             , `pre_pay_rate`
+             , `pre_pay_rate`ßß
              , `pre_pay_amt`
              , `gua_deduct_rate`
              , `gua_amt`
@@ -75,9 +75,9 @@
              , `version`
              , `currency`
              , `rate`
-             , `pt_var4`
-             , `pt_var5`
-             , `sort`
+             , `cny_rate`
+             , `local_rate`
+             , `valid`
         from qqch_tax_global_formula
     </sql>
     <select id="getQqchTaxGlobalFormula" resultMap="QqchTaxGlobalFormulaResultMap">
@@ -116,9 +116,9 @@
             <if test="version != null ">and `version` = #{version}</if>
             <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
             <if test="rate != null  and rate != ''">and `rate` = #{rate}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="cnyRate != null  and cnyRate != ''">and `cny_rate` = #{cnyRate}</if>
+            <if test="localRate != null  and localRate != ''">and `local_rate` = #{localRate}</if>
+            <if test="valid != null ">and `valid` = #{valid}</if>
         </where>
         order by create_time desc
     </select>
@@ -159,9 +159,9 @@
             <if test="version != null ">and `version` = #{version}</if>
             <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
             <if test="rate != null  and rate != ''">and `rate` = #{rate}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="cnyRate != null  and cnyRate != ''">and `cny_rate` = #{cnyRate}</if>
+            <if test="localRate != null  and localRate != ''">and `local_rate` = #{localRate}</if>
+            <if test="valid != null ">and `valid` = #{valid}</if>
         </where>
         order by create_time desc
     </select>
@@ -201,9 +201,9 @@
             <if test="version != null ">`version`,</if>
             <if test="currency != null  and currency != ''">`currency`,</if>
             <if test="rate != null  and rate != ''">`rate`,</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
-            <if test="sort != null ">`sort`,</if>
+            <if test="cnyRate != null  and cnyRate != ''">`cny_rate`,</if>
+            <if test="localRate != null  and localRate != ''">`local_rate`,</if>
+            <if test="valid != null ">`valid`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -238,9 +238,9 @@
             <if test="version != null ">#{version},</if>
             <if test="currency != null  and currency != ''">#{currency},</if>
             <if test="rate != null  and rate != ''">#{rate},</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
-            <if test="sort != null ">#{sort},</if>
+            <if test="cnyRate != null  and cnyRate != ''">#{cnyRate},</if>
+            <if test="localRate != null  and localRate != ''">#{localRate},</if>
+            <if test="valid != null ">#{valid},</if>
         </trim>
     </insert>
 
@@ -279,9 +279,9 @@
             `version`,
             `currency`,
             `rate`,
-            `pt_var4`,
-            `pt_var5`,
-            `sort`,
+            `cny_rate`,
+            `local_rate`,
+            `valid`,
         </trim>
         values
         <foreach collection="qqchTaxGlobalFormulaList" item="item" separator=",">
@@ -317,9 +317,9 @@
                 #{item.version},
                 #{item.currency},
                 #{item.rate},
-                #{item.ptVar4},
-                #{item.ptVar5},
-                #{item.sort},
+                #{item.cnyRate},
+                #{item.localRate},
+                #{item.valid},
             </trim>
         </foreach>
     </insert>
@@ -359,9 +359,9 @@
             <if test="version != null ">`version` = #{version},</if>
             <if test="currency != null  and  currency != ''">`currency` = #{currency},</if>
             <if test="rate != null  and  rate != ''">`rate` = #{rate},</if>
-            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
-            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
-            <if test="sort != null ">`sort` = #{sort},</if>
+            <if test="cnyRate != null  and  cnyRate != ''">`cny_rate` = #{cnyRate},</if>
+            <if test="localRate != null  and  localRate != ''">`local_rate` = #{localRate},</if>
+            <if test="valid != null ">`valid` = #{valid},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -531,19 +531,19 @@
                     when `id`=#{item.id} then #{item.rate}
                 </foreach>
             </trim>
-            <trim prefix="pt_var4  = case" suffix="end,">
+            <trim prefix="cny_rate  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar4}
+                    when `id`=#{item.id} then #{item.cnyRate}
                 </foreach>
             </trim>
-            <trim prefix="pt_var5  = case" suffix="end,">
+            <trim prefix="local_rate  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar5}
+                    when `id`=#{item.id} then #{item.localRate}
                 </foreach>
             </trim>
-            <trim prefix="sort  = case" suffix="end,">
+            <trim prefix="valid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.sort}
+                    when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
         </trim>
@@ -588,9 +588,9 @@
             <if test="version != null ">and `version` = #{version}</if>
             <if test="currency != null  and currency != ''">and `currency` = #{currency}</if>
             <if test="rate != null  and rate != ''">and `rate` = #{rate}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="cnyRate != null  and cnyRate != ''">and `cny_rate` = #{cnyRate}</if>
+            <if test="localRate != null  and localRate != ''">and `local_rate` = #{localRate}</if>
+            <if test="valid != null ">and `valid` = #{valid}</if>
         </where>
     </update>
 

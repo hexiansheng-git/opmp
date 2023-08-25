@@ -50,7 +50,7 @@ public class QqchTaxGlobalController extends BaseController {
     @PreAuthorize(hasPermi = "qqchTaxGlobal:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchTaxGlobal dto) {
-        List<QqchTaxGlobal> qqchTaxGlobalList = null;
+        CompileEntity<List<QqchTaxGlobal>> qqchTaxGlobalList = null;
         try {
             qqchTaxGlobalList = qqchTaxGlobalService.list(dto.dealListDto() == null ? new QqchTaxGlobal() : dto.dealListDto());
         } catch (IOException e) {
@@ -130,7 +130,14 @@ public class QqchTaxGlobalController extends BaseController {
 
     @GetMapping("/getFormula")
     public AjaxResult getFormula(QqchTaxGlobalFormula param) {
-        QqchTaxGlobalFormula qqchTaxGlobalFormula = taxGlobalFormulaService.getFormula(param.dealListDto());
+        CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormula = taxGlobalFormulaService.getFormula(param.dealListDto());
         return AjaxResult.success(qqchTaxGlobalFormula);
     }
+    @GetMapping("/getGlobalByFormula")
+    public AjaxResult getGlobalByFormula(QqchTaxGlobalFormula param) {
+        List<QqchTaxGlobal> qqchTaxGlobalFormula = taxGlobalFormulaService.getGlobalByFormula(param.dealListDto());
+        return AjaxResult.success(qqchTaxGlobalFormula);
+    }
+    
+    
 }

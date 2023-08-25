@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service;
 
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 
 import java.util.List;
@@ -27,8 +29,13 @@ public interface IQqchTaxGlobalFormulaService {
 
     int deleteQqchTaxGlobalFormulaByPks(List<Long> qqchTaxGlobalFormulaPkList);
 
-    QqchTaxGlobalFormula getFormula(QqchTaxGlobalFormula dealListDto);
+    CompileEntity<QqchTaxGlobalFormula> getFormula(QqchTaxGlobalFormula dealListDto);
 
     int save(QqchTaxGlobalFormula dealSaveDto);
-    
+
+    /**
+     * @param dealListDto 
+     * @return
+     */
+    List<QqchTaxGlobal> getGlobalByFormula(QqchTaxGlobalFormula dealListDto);
 }

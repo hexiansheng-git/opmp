@@ -1,13 +1,14 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.utils.JsonUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import lombok.Data;
 import lombok.ToString;
 
@@ -225,22 +226,93 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
     @Excel(name = "汇率")
     private BigDecimal rate;
     /**
-     * 字段描述：预留字段4
+     * 字段描述：美元对人民币汇率
      */
     @JsonProperty
-    @Excel(name = "预留字段4")
-    private String ptVar4;
+    @Excel(name = "美元对人民币汇率")
+    private BigDecimal cnyRate;
     /**
-     * 字段描述：预留字段5
+     * 字段描述：项目当地币汇率
      */
     @JsonProperty
-    @Excel(name = "预留字段5")
-    private String ptVar5;
+    @Excel(name = "项目当地币汇率")
+    private BigDecimal localRate;
     /**
      * 字段描述：序号
      */
     @JsonProperty
-    @Excel(name = "序号")
-    private Integer sort;
+    @Excel(name = "是否有效")
+    private String valid;
 
+    private BigDecimal recAmt;
+    private BigDecimal usdRecAmt;
+    private BigDecimal cnyRecAmt;
+    private BigDecimal localRecAmt;
+
+    private BigDecimal backAmt;
+    private BigDecimal usdBackAmt;
+    private BigDecimal cnyBackAmt;
+    private BigDecimal localBackAmt;
+
+    private BigDecimal payAmt;
+    private BigDecimal usdPayAmt;
+    private BigDecimal cnyPayAmt;
+    private BigDecimal localPayAmt;
+
+
+    public BigDecimal getRecAmt() {
+        BigDecimal a = BigDecimalUtils.sum(quantities, adjustInAmt, interestInAmt);
+        BigDecimal b = BigDecimalUtils.subtract(BigDecimalUtils.subtract(a, prePayAmt), guaAmt);
+        return recAmt = BigDecimalUtils.sum(b, aloneInterestInAmt, claimInAmt);
+    }
+
+    public BigDecimal getUsdRecAmt() {
+        return usdRecAmt = CommonServiceUtil.getUsdAmt(this.getRecAmt(), this.rate);
+    }
+
+    public BigDecimal getCnyRecAmt() {
+        return cnyRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getCnyRate());
+    }
+
+
+    public BigDecimal getLocalRecAmt() {
+        return localRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getLocalRate());
+    }
+
+
+    public BigDecimal getBackAmt() {
+        return backAmt = BigDecimalUtils.multiply(guaAmt, nodeRecoveryRate);
+    }
+
+    public BigDecimal getUsdBackAmt() {
+        return usdBackAmt = CommonServiceUtil.getUsdAmt(this.getBackAmt(), this.rate);
+    }
+
+    public BigDecimal getCnyBackAmt() {
+        return cnyBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getCnyRate());
+    }
+
+    public BigDecimal getLocalBackAmt() {
+        return localBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getLocalRate());
+    }
+
+    public BigDecimal getPayAmt() {
+        return payAmt = BigDecimalUtils.multiply(this.excContAmt, this.prePayRate);
+    }
+
+    public BigDecimal getUsdPayAmt() {
+        return usdPayAmt = CommonServiceUtil.getUsdAmt(this.getPayAmt(), this.rate);
+    }
+
+    public BigDecimal getCnyPayAmt() {
+        return cnyPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getCnyRate());
+    }
+
+    public BigDecimal getLocalPayAmt() {
+        return localPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getLocalRate());
+    }
+
+    public static void main(String[] args) {
+        JsonUtils.soutJsonStr(QqchTaxGlobalFormula.class);
+    }
 }
