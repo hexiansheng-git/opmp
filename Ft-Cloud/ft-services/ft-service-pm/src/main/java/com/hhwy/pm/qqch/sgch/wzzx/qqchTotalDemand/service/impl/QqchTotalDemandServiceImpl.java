@@ -22,8 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -64,16 +63,58 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         qqchTotalDemandTimeCount.setVersion(version);
         List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountList = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCountList(qqchTotalDemandTimeCount);
         Map<Long, List<QqchTotalDemandTimeCount>> timeCountMap = qqchTotalDemandTimeCountList.stream().collect(Collectors.groupingBy(QqchTotalDemandTimeCount::getDemandId));
+
+        if (CollectionUtils.isEmpty(qqchTotalDemandList)) {
+            vo.setVersion(version);
+            vo.setStageIdentity(qqchReviewService.getStage());
+            vo.setQqchTotalDemandList(qqchTotalDemandList);
+            return vo;
+        }
+
+
+        int maxCountYearData = 0;
+        HashSet<String> set = new HashSet<>();
+        Iterator<Map.Entry<Long, List<QqchTotalDemandTimeCount>>> iterator = timeCountMap.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<Long, List<QqchTotalDemandTimeCount>> next = iterator.next();
+            Long key = next.getKey();
+            List<QqchTotalDemandTimeCount> value = next.getValue();
+            if (maxCountYearData < value.size()){
+                maxCountYearData = value.size();
+                for (QqchTotalDemandTimeCount totalDemandTimeCount : value) {
+                    set.add(totalDemandTimeCount.getYear());
+                }
+            }
+        }
+
+        while (iterator.hasNext()){
+            Map.Entry<Long, List<QqchTotalDemandTimeCount>> next = iterator.next();
+            List<QqchTotalDemandTimeCount> value = next.getValue();
+            Map<String, List<QqchTotalDemandTimeCount>> collect = value.stream().collect(Collectors.groupingBy(QqchTotalDemandTimeCount::getYear));
+
+            if (maxCountYearData > value.size()){
+                for (String year : set) {
+                    if (collect.containsKey(year)) {
+                        continue;
+                    }
+                    QqchTotalDemandTimeCount qqchTotalDemandTimeCount1 = new QqchTotalDemandTimeCount();
+                    value.add(qqchTotalDemandTimeCount1);
+                }
+            }
+        }
+
+
         for (QqchTotalDemand totalDemand : qqchTotalDemandList) {
             //是否优先进场:0-否;1-是
             String firstEnterFlag = totalDemand.getFirstEnterFlag();
-            if (StringUtils.isNotEmpty(firstEnterFlag) && firstEnterFlag.equals("0")){
+            if (StringUtils.isNotEmpty(firstEnterFlag) && firstEnterFlag.equals("0")) {
                 totalDemand.setFirstEnterFlagBool(false);
-            }else {
+            } else {
                 totalDemand.setFirstEnterFlagBool(true);
             }
             List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCounts = timeCountMap.get(totalDemand.getId());
             totalDemand.setQqchTotalDemandTimeCountList(qqchTotalDemandTimeCounts);
+
         }
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());

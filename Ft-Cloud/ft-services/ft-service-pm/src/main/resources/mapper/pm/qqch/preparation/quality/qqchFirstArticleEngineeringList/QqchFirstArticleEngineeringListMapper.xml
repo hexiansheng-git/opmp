@@ -541,7 +541,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -592,7 +592,7 @@
         update `qqch_first_article_engineering_list` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="qqchFirstArticleEngineeringListPkList" open="(" separator="," close=")">
+            <foreach item="id" collection="list" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
