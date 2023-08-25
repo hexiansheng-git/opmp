@@ -5,10 +5,10 @@ spring:
   cloud:
     nacos:
       #      一公局测试nacos
-      namespace: cfhec-opmp-web
-      server-addr: 10.11.239.194:8848
+      namespace: b98e659c-0e09-465a-87f4-e11be1ed18f4
+      server-addr: 127.0.0.1:8848
       username: nacos
-      password: hhwy@dgl
+      password: nacos
       discovery:
         # 服务注册地址
         server-addr: ${spring.cloud.nacos.server-addr}

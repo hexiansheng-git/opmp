@@ -152,7 +152,7 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
         qqchQualityRiskControlMeasuresMapper.insertQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresList);
     }
 
-    public void insetList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList,BigDecimal version) {
+    public void insetrList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList,BigDecimal version) {
         if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
             return;
         }

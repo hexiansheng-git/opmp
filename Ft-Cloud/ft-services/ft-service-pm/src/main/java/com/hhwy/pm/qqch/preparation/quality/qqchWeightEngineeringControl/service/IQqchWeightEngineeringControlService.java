@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.servic
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.QqchWeightEngineeringControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.vo.QqchWeightEngineeringControlVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -28,4 +29,6 @@ public interface IQqchWeightEngineeringControlService {
    int deleteQqchWeightEngineeringControlByPks(List<Long> qqchWeightEngineeringControlPkList);
 
     void save(QqchWeightEngineeringControlVo vo);
+
+    public void insertList(List<QqchWeightEngineeringControl> qqchWeightEngineeringControlList, BigDecimal version);
 }

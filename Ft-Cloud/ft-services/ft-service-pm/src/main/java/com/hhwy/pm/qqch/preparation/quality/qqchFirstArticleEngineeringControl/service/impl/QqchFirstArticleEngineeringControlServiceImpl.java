@@ -70,8 +70,8 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
 
     @Transactional
     public int deleteQqchFirstArticleEngineeringControl(QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl) {
-        qqchFirstArticleEngineeringControl.setUpdateUser(SecurityUtils.getUserName());
-        qqchFirstArticleEngineeringControl.setUpdateTime(DateUtils.getNowDate());
+//        qqchFirstArticleEngineeringControl.setUpdateUser(SecurityUtils.getUserName());
+//        qqchFirstArticleEngineeringControl.setUpdateTime(DateUtils.getNowDate());
         return qqchFirstArticleEngineeringControlMapper.deleteQqchFirstArticleEngineeringControl(qqchFirstArticleEngineeringControl);
     }
 
@@ -152,5 +152,21 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
             firstArticleEngineeringControl.setCreateTime(DateUtils.getNowDate());
         }
       qqchFirstArticleEngineeringControlMapper.insertQqchFirstArticleEngineeringControlList(qqchFirstArticleEngineeringControlList);
+    }
+
+    public void insertList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList,BigDecimal version) {
+        String valid = Valid.NO;
+        if (version.compareTo(BigDecimal.ONE) == 0) {
+            valid = Valid.YES;
+        }
+        for (QqchFirstArticleEngineeringControl firstArticleEngineeringControl : qqchFirstArticleEngineeringControlList) {
+            firstArticleEngineeringControl.setId(IdWorker.createId());
+            firstArticleEngineeringControl.setValid(valid);
+            firstArticleEngineeringControl.setVersion(version);
+            firstArticleEngineeringControl.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            firstArticleEngineeringControl.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            firstArticleEngineeringControl.setCreateTime(DateUtils.getNowDate());
+        }
+        qqchFirstArticleEngineeringControlMapper.insertQqchFirstArticleEngineeringControlList(qqchFirstArticleEngineeringControlList);
     }
 }
