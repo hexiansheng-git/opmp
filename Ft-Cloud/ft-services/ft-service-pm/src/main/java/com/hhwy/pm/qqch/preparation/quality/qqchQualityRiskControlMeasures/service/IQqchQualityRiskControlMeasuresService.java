@@ -9,10 +9,10 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-08-04 11:20:54
- * @remark 
+ * @remark
  */
 public interface IQqchQualityRiskControlMeasuresService {
-                                                                                                                                                                                                                                                                                                                                                                                                                
+
     QqchQualityRiskControlMeasures getQqchQualityRiskControlMeasures(QqchQualityRiskControlMeasures qqchQualityRiskControlMeasures);
 
     QqchQualityRiskControlMeasuresVo getQqchQualityRiskControlMeasuresList(QqchQualityRiskControlMeasures qqchQualityRiskControlMeasures);
@@ -22,12 +22,12 @@ public interface IQqchQualityRiskControlMeasuresService {
     int updateQqchQualityRiskControlMeasures(QqchQualityRiskControlMeasures qqchQualityRiskControlMeasures);
 
     int updateQqchQualityRiskControlMeasuresList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList);
-    
+
     int deleteQqchQualityRiskControlMeasures(QqchQualityRiskControlMeasures qqchQualityRiskControlMeasures);
 
     int deleteQqchQualityRiskControlMeasuresByPks(List<Long> qqchQualityRiskControlMeasuresPkList);
 
     void save(QqchQualityRiskControlMeasuresVo vo);
 
-    void insetList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList, BigDecimal version);
+    void insetrList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList, BigDecimal version);
 }
