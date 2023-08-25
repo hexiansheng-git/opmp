@@ -25,12 +25,11 @@ public class QqchGatherPlanTask extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 字段描述：主键
+     * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
-    @Excel(name = "主键")
-    private Long id;
+    private Long gatherId;
     /**
      * 字段描述：主表id
      */

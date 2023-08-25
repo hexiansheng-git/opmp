@@ -240,7 +240,10 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
      */
     @Override
     public ProjectBasicInfo projectInfo() {
-        return xmslProjectBasicInfoMapper.projectInfo();
+        XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        ProjectBasicInfo projectInfo = new ProjectBasicInfo();
+        BeanUtils.copyProperties(xmslProjectBasicInfo,projectInfo);
+        return projectInfo;
     }
 
     /**

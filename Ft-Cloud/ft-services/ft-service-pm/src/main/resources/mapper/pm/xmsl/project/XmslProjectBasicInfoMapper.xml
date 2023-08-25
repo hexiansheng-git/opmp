@@ -36,6 +36,7 @@
         <result property="businessAreasAndProducts" column="business_areas_and_products"/>
         <result property="contractingMethod" column="contracting_method"/>
         <result property="projectType" column="project_type"/>
+        <result property="projectCategory" column="project_category"/>
         <result property="projectLocation" column="project_location"/>
         <result property="subsidiaryOrgan" column="subsidiary_organ"/>
         <result property="projectManager" column="project_manager"/>
@@ -74,8 +75,7 @@
 
     <select id="projectInfo" resultType="com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo">
         select
-            `id`
-            ,`project_id`
+            `project_id`
             ,`project_code`
             ,`project_name`
             ,`project_short_name`
@@ -105,6 +105,7 @@
             ,`business_areas_and_products`
             ,`contracting_method`
             ,`project_type`
+            ,`project_category`
             ,`project_location`
             ,`subsidiary_organ`
             ,`project_manager`
@@ -123,14 +124,8 @@
             ,`dept_id`
             ,`create_user`
             ,`create_user_name`
-            ,`create_time`
-            ,`pt_var1`
-            ,`pt_var2`
-            ,`pt_var3`
-            ,`pt_var4`
-            ,`pt_var5`
         from xmsl_project_basic_info
-        where del_flag = '0'
+        where `del_flag` = '0'
         order by create_time desc
         limit 1
     </select>
@@ -168,6 +163,7 @@
         ,`business_areas_and_products`
         ,`contracting_method`
         ,`project_type`
+        ,`project_category`
         ,`project_location`
         ,`subsidiary_organ`
         ,`project_manager`
@@ -254,6 +250,7 @@
                 #{contractingMethod}
             </if>
             <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
+            <if test="projectCategory != null  and projectCategory != ''">and `project_category` = #{projectCategory}</if>
             <if test="projectLocation != null  and projectLocation != ''">and `project_location` = #{projectLocation}
             </if>
             <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">and `subsidiary_organ` = #{subsidiaryOrgan}
@@ -347,6 +344,7 @@
         ,`business_areas_and_products`
         ,`contracting_method`
         ,`project_type`
+        ,`project_category`
         ,`project_location`
         ,`subsidiary_organ`
         ,`project_manager`
@@ -433,6 +431,7 @@
                 #{contractingMethod}
             </if>
             <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
+            <if test="projectCategory != null  and projectCategory != ''">and `project_category` = #{projectCategory}</if>
             <if test="projectLocation != null  and projectLocation != ''">and `project_location` = #{projectLocation}
             </if>
             <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">and `subsidiary_organ` = #{subsidiaryOrgan}
@@ -531,6 +530,7 @@
             </if>
             <if test="contractingMethod != null  and contractingMethod != ''">`contracting_method`,</if>
             <if test="projectType != null  and projectType != ''">`project_type`,</if>
+            <if test="projectCategory != null  and projectCategory != ''">`project_category`,</if>
             <if test="projectLocation != null  and projectLocation != ''">`project_location`,</if>
             <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">`subsidiary_organ`,</if>
             <if test="projectManager != null  and projectManager != ''">`project_manager`,</if>
@@ -608,6 +608,7 @@
             </if>
             <if test="contractingMethod != null  and contractingMethod != ''">#{contractingMethod},</if>
             <if test="projectType != null  and projectType != ''">#{projectType},</if>
+            <if test="projectCategory != null  and projectCategory != ''">#{projectCategory},</if>
             <if test="projectLocation != null  and projectLocation != ''">#{projectLocation},</if>
             <if test="subsidiaryOrgan != null  and subsidiaryOrgan != ''">#{subsidiaryOrgan},</if>
             <if test="projectManager != null  and projectManager != ''">#{projectManager},</if>
@@ -686,6 +687,7 @@
             `business_areas_and_products`,
             `contracting_method`,
             `project_type`,
+            `project_category`,
             `project_location`,
             `subsidiary_organ`,
             `project_manager`,
@@ -754,6 +756,7 @@
                 #{item.businessAreasAndProducts},
                 #{item.contractingMethod},
                 #{item.projectType},
+                #{item.projectCategory},
                 #{item.projectLocation},
                 #{item.subsidiaryOrgan},
                 #{item.projectManager},
@@ -841,6 +844,7 @@
                 #{contractingMethod},
             </if>
             <if test="projectType != null  and  projectType != ''">`project_type` = #{projectType},</if>
+            <if test="projectCategory != null  and  projectCategory != ''">`project_category` = #{projectCategory},</if>
             <if test="projectLocation != null  and  projectLocation != ''">`project_location` = #{projectLocation},</if>
             <if test="subsidiaryOrgan != null  and  subsidiaryOrgan != ''">`subsidiary_organ` = #{subsidiaryOrgan},</if>
             <if test="projectManager != null  and  projectManager != ''">`project_manager` = #{projectManager},</if>
@@ -1044,6 +1048,11 @@
             <trim prefix="project_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectType}
+                </foreach>
+            </trim>
+            <trim prefix="project_category  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectCategory}
                 </foreach>
             </trim>
             <trim prefix="project_location  = case" suffix="end,">
