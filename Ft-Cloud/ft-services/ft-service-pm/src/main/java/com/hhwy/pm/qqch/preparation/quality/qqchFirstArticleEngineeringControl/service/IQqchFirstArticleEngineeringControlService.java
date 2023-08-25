@@ -3,15 +3,16 @@ package com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.domain.QqchFirstArticleEngineeringControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.domain.vo.QqchFirstArticleEngineeringControlVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
  * @author ldd
  * @date 2023-08-04 17:06:12
- * @remark 
+ * @remark
  */
 public interface IQqchFirstArticleEngineeringControlService {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+
     QqchFirstArticleEngineeringControl getQqchFirstArticleEngineeringControl(QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl);
 
     QqchFirstArticleEngineeringControlVo getQqchFirstArticleEngineeringControlList(QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl);
@@ -22,10 +23,12 @@ public interface IQqchFirstArticleEngineeringControlService {
     int updateQqchFirstArticleEngineeringControl(QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl);
 
     int updateQqchFirstArticleEngineeringControlList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList);
-    
+
     int deleteQqchFirstArticleEngineeringControl(QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl);
 
     int deleteQqchFirstArticleEngineeringControlByPks(List<Long> qqchFirstArticleEngineeringControlPkList);
 
     void save(QqchFirstArticleEngineeringControlVo vo);
+
+    void insertList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList, BigDecimal version);
 }

@@ -102,7 +102,7 @@ public class SbchTotalDemandPlan extends MyPrepareBaseEntity {
 
     /** 部门id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属部门不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    @NotNull(message = "所属部门不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Long deptId;
 
     private List<SbchTotalDemandPlanDetail> planDetailList;

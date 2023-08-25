@@ -15,4 +15,7 @@ public interface IDeptService {
     SysDept selectDeptIdByprojectId(Long projectId);
 
     List<SysDept> selectAllDept(Long deptId, String ancestors);
+
+    List<SysDept> selectPrjInfo(Long deptId, String ancestors);
+
 }

@@ -197,7 +197,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         Set<Long> childIdSet = new HashSet<>();
         for (int i = 0; i < ids.length; i++) {
             Long[] tempIds = WbsRedisUtils.getChildWbsId(ids[i]+"");
-            childIdSet.addAll(Arrays.asList(tempIds));
+            if(tempIds != null)
+                childIdSet.addAll(Arrays.asList(tempIds));
         }
         if(containSelf)
             childIdSet.addAll(Arrays.asList(ids));

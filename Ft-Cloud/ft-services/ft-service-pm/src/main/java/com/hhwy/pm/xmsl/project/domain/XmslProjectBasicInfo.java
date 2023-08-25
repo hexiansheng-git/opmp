@@ -222,6 +222,12 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @Excel(name = "项目类型")
     private String projectType;
     /**
+     * 字段描述：项目分类
+     */
+    @JsonProperty
+    @Excel(name = "项目分类")
+    private String projectCategory;
+    /**
      * 字段描述：项目所在地（国）
      */
     @JsonProperty

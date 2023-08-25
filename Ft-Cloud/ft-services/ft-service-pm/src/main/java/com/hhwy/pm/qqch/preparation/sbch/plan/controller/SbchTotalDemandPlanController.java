@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.sbch.plan.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.SbchTotalDemandPlanService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.SbchTotalDemandPlanDetailVo;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -37,14 +38,14 @@ public class SbchTotalDemandPlanController extends BaseController {
     @GetMapping("/getList")
     @ResponseBody
     public AjaxResult getList(BigDecimal version) {
-        SbchTotalDemandPlanDetailVo sbchTotalDemandPlanDetailVo = sbchTotalDemandPlanService.getList(version);
-        return AjaxResult.success(sbchTotalDemandPlanDetailVo);
+        SbchTotalDemandPlan sbchTotalDemandPlan = sbchTotalDemandPlanService.getList(version);
+        return AjaxResult.success(sbchTotalDemandPlan);
     }
 
     @PreAuthorize(hasPermi = "sbchTotalDemandPlan:add")
     @PostMapping("/batchAdd")
     @ResponseBody
-    public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody SbchTotalDemandPlanDetailVo vo){
+    public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody SbchTotalDemandPlan vo){
         try{
             sbchTotalDemandPlanService.batchSave(vo);
             return AjaxResult.success();

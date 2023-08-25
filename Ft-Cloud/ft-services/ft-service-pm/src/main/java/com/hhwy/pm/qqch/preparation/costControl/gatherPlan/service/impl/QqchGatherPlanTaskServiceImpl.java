@@ -5,7 +5,6 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.QqchGatherPlanTask;
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.mapper.QqchGatherPlanTaskMapper;
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.service.IQqchGatherPlanTaskService;
-import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +33,6 @@ public class QqchGatherPlanTaskServiceImpl implements IQqchGatherPlanTaskService
 
     @Transactional
     public int insertQqchGatherPlanTask(QqchGatherPlanTask qqchGatherPlanTask) {
-        qqchGatherPlanTask.setId(IdWorker.createId());
         qqchGatherPlanTask.setCreateUser(SecurityUtils.getUserName());
         qqchGatherPlanTask.setCreateTime(DateUtils.getNowDate());
         return qqchGatherPlanTaskMapper.insertQqchGatherPlanTask(qqchGatherPlanTask);
@@ -43,7 +41,6 @@ public class QqchGatherPlanTaskServiceImpl implements IQqchGatherPlanTaskService
     @Transactional
     public int insertQqchGatherPlanTaskList(List<QqchGatherPlanTask> qqchGatherPlanTaskList) {
         for (QqchGatherPlanTask qqchGatherPlanTask : qqchGatherPlanTaskList) {
-            qqchGatherPlanTask.setId(IdWorker.createId());
             qqchGatherPlanTask.setCreateUser(SecurityUtils.getUserName());
             qqchGatherPlanTask.setCreateTime(DateUtils.getNowDate());
         }

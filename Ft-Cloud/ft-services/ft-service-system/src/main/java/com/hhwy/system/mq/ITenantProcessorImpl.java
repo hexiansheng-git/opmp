@@ -25,9 +25,9 @@ public class ITenantProcessorImpl implements ITenantProcessor {
         Map<String, Object> projectInfo = sysTenant.getParams();
         rocketMQTemplate.convertAndSend("pm:tenantSuccess",projectInfo);
         AjaxResult res = pmServiceApi.insertProjectTenant(projectInfo);
-        if(!res.get("code").toString().equals("200")){
-            throw  new CustomBusinessException("同步项目信息到租户数据库失败！！");
-        };
+//        if(!res.get("code").toString().equals("200")){
+//            throw  new CustomBusinessException("同步项目信息到租户数据库失败！！");
+//        };
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.List;
  * @date 2023-08-08 11:39:00
  * @remark qqch_special_big_equ_list
  *
- *  特种设备及大型设备清单
+ *  8.4.1特种设备及大型设备清单
  */
 @Data
 @AllArgsConstructor
