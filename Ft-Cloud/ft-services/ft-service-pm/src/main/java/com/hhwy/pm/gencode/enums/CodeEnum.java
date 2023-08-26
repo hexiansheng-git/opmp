@@ -46,7 +46,11 @@ public enum CodeEnum {
     /*异国别设备调拨*/
     EQU_CROSSALLO("YGBTB", "yyyy", 3),
     /*单机核算策划*/
-    EQU_SINGLE_CHECK("SBCHDJHS","yyyy",3);
+    EQU_SINGLE_CHECK("SBCHDJHS","yyyy",3),
+    /*设备租赁供应商*/
+    EQU_SUPPLIER("ZLGYS", "yyyy", 3),
+    /*租赁设备*/
+    EQU_LEASE("ZLSB", "yyyy", 3);
     /**
      * 前缀
      */
