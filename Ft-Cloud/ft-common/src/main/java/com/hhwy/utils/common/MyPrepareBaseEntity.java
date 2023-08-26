@@ -24,6 +24,7 @@ public class MyPrepareBaseEntity extends BaseEntity {
     private BigDecimal versionNo;
     private String formNo;
     private String titleName;
+    @NotBlank(message = "项目名称不能为空！",groups = ValidationGroups.Save.class)
     private String projectName;
     private String createUserName;
     private Long deptId;
