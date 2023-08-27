@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.sbch.sblease.service.impl;
 
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.domain.SbchEquipmentAllot;
 import com.hhwy.pm.qqch.preparation.sbch.sblease.domain.*;
 import com.hhwy.pm.qqch.preparation.sbch.sblease.mapper.SbchEquipmentLeaseDetailsMapper;
@@ -48,6 +50,8 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
     private ISbchEquipmentSupplierDetailsService sbchEquipmentSupplierDetailsService;
     @Autowired
     private ISbchEquipmentLeaseDetailsService sbchEquipmentLeaseDetailsService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Override
     public LeaseVo getList(BigDecimal version) {
         LeaseVo leaseVo = new LeaseVo();
@@ -136,6 +140,13 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
         if(!ObjectNullUtil.isEmpty(leaseDetailsList)){
             JyDetailsUtil.jyDetails(leaseDetailsList, ValidationGroups.Save.class);
             sbchEquipmentLeaseDetailsService.insertOrEditBatchByMainId(leaseDetailsList, sbchEquipmentLease.getId(), false);
+        }
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(leaseVo.getButtonMark())){
+            //插入确认记录
+            String menuId = leaseVo.getMenuId();
+            String stageIdentity = leaseVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 }

@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.sbch.equAllot.service.impl;
 
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.EquAllotVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.service.EquAllotService;
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.domain.SbchEquipmentAllot;
@@ -71,6 +73,8 @@ public class EquAllotServiceImpl implements EquAllotService {
     private ISbchEquipmentAllotDetailsService sbchEquipmentAllotDetailsService;
     @Autowired
     private ISbchEquipmentAllotTransnationalDetailsService sbchEquipmentAllotTransnationalDetailsService;
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Override
     public EquAllotVo getList(BigDecimal version) {
         EquAllotVo returnVo = new EquAllotVo();
@@ -169,6 +173,13 @@ public class EquAllotServiceImpl implements EquAllotService {
             jyDetailsList(internationList);
             // 明细
             sbchEquipmentAllotTransnationalDetailsService.insertOrEditBatchByMainId(internationList, sbchEquipmentAllotTransnational.getId(), false);
+        }
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(equAllotVo.getButtonMark())){
+            //插入确认记录
+            String menuId = equAllotVo.getMenuId();
+            String stageIdentity = equAllotVo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 
