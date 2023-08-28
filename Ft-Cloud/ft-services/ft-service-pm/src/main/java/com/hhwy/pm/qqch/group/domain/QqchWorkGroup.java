@@ -36,7 +36,7 @@ public class QqchWorkGroup extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "主键id")
-    @NotNull(message = "id不能为空！",groups = ValidationGroups.Delete.class)
+    @NotNull(message = "id不能为空！",groups = {ValidationGroups.Delete.class,ValidationGroups.Update.class})
     private Long id;
     /**
      * 字段描述：版本

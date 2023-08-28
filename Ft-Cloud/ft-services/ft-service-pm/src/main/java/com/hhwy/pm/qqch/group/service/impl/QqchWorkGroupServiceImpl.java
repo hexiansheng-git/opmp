@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -14,7 +13,6 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
-import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author han
@@ -149,14 +146,16 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             //直接查询
             qqchWorkGroup.setId(id);
             qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(qqchWorkGroup);
-            qqchWorkGroup.setVersionStr("v" + qqchWorkGroup.getVersion());
 
             //获取最新生效数据
             QqchWorkGroup validMaxVersionWorkGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
-            if(id.equals(validMaxVersionWorkGroup.getId())){
+            if(validMaxVersionWorkGroup != null && id.equals(validMaxVersionWorkGroup.getId())){
                 qqchWorkGroup.setAdjustMark(CommonYesNo.YES);
             }
         }
+
+        //设置版本字符串
+        qqchWorkGroup.setVersionStr("v" + qqchWorkGroup.getVersion());
 
         //设置历史记录按钮
         this.setHistoryMark(qqchWorkGroup);
@@ -202,6 +201,13 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      */
     @Transactional
     public int insertQqchWorkGroup(QqchWorkGroup qqchWorkGroup) {
+        BigDecimal version = qqchWorkGroup.getVersion();
+        QqchWorkGroup query = new QqchWorkGroup();
+        query.setVersion(version);
+        QqchWorkGroup getByVersion = qqchWorkGroupMapper.getQqchWorkGroup(query);
+        if(getByVersion != null){
+            throw new RuntimeException("该版本已经存在，请勿重复保存！");
+        }
         Long id = IdWorker.createId();
         qqchWorkGroup.setId(id);
 
