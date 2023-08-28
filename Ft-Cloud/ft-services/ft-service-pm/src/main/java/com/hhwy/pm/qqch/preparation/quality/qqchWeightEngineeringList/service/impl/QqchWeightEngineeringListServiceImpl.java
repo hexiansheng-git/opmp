@@ -101,10 +101,19 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         //获取wbs集合
         Set<String> wbsIds = new HashSet<>();
         for (QqchWeightEngineeringList weightEngineeringList : qqchWeightEngineeringListList) {
+            Long wbsId = weightEngineeringList.getWbsId();
             String wbsAncestors = weightEngineeringList.getWbsAncestors();
             if(StringUtils.isNotBlank(wbsAncestors)){
                 String[] wbsArrays = wbsAncestors.split(",");
                 wbsIds.addAll(Arrays.asList(wbsArrays));
+            }
+            if(wbsId != null){
+                Long[] childWbsIds = WbsRedisUtils.getChildWbsId(String.valueOf(wbsId));
+                if(childWbsIds != null) {
+                    for (Long childWbsId : childWbsIds) {
+                        wbsIds.add(String.valueOf(childWbsId));
+                    }
+                }
             }
         }
         return WbsRedisUtils.getWbs(wbsIds);

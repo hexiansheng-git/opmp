@@ -104,7 +104,7 @@ public class QqchKeyDifficultProjectArchivesController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:save")
     @PostMapping("/save")
-    public AjaxResult save(KeyDifficultWbsVo keyDifficultWbsVo) {
+    public AjaxResult save(@RequestBody KeyDifficultWbsVo keyDifficultWbsVo) {
         qqchKeyDifficultProjectArchivesService.save(keyDifficultWbsVo);
         return AjaxResult.success();
     }

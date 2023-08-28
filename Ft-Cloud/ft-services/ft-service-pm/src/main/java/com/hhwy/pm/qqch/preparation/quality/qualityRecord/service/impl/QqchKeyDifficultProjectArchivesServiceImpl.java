@@ -105,7 +105,7 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
 
         //获取重难点工程档案清单
         BigDecimal version = qqchKeyDifficultProjectArchives.getVersion();
-        version = VersionUtil.getVersion("qqch_complete_design_handover",version);
+        version = VersionUtil.getVersion("qqch_key_difficult_project_archives",version);
         qqchKeyDifficultProjectArchives.setVersion(version);
         List<QqchKeyDifficultProjectArchives> qqchKeyDifficultProjectArchivesList = qqchKeyDifficultProjectArchivesMapper.getQqchKeyDifficultProjectArchivesList(qqchKeyDifficultProjectArchives);
 
@@ -120,7 +120,7 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
 
             List<QqchKeyDifficultProjectArchives> sublist = new ArrayList<>();
             for (QqchKeyDifficultProjectArchives keyDifficultProjectArchives : qqchKeyDifficultProjectArchivesList) {
-                if(xmslWbs.getCode().equals(qqchKeyDifficultProjectArchives.getWbsCode())){
+                if(xmslWbs.getCode().equals(keyDifficultProjectArchives.getWbsCode())){
                     sublist.add(keyDifficultProjectArchives);
                 }
             }
