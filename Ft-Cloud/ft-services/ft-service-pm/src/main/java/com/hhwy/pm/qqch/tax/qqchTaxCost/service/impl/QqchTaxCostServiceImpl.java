@@ -233,25 +233,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
 
         if (CollectionUtils.isEmpty(costList)) {
-            InputStream resourceAsStream = null;
-            if (PmConstant.ONE.equals(qqchTaxIn.getDataType())) {
-                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_1.json");
-
-            } else {
-                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_2.json");
-            }
-
-            String json = "";
-            try {
-                json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            costList = JSONObject.parseArray(json, QqchTaxCost.class);
-            costList.stream().filter(ite -> PmConstant.ONE.equals(ite.getLeaf())).forEach(i -> {
-                i.setChildren(currencyChildren);
-            });
-
+            costList = this.getInitData(qqchTaxIn, currencyChildren);
         }
         List<Long> collect = costList.stream().map(QqchTaxCost::getId).collect(Collectors.toList());
 
@@ -267,6 +249,37 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         for (QqchTaxCost taxIn : costList) {
             taxIn.setDetailList(idMap.get(taxIn.getId()));
         }
+        return costList;
+    }
+
+    /**
+     * 获取初始化数据
+     * 
+     * 
+     * @param qqchTaxIn 
+     * @param currencyChildren
+     * @return
+     */
+    private List<QqchTaxCost> getInitData(QqchTaxCost qqchTaxIn, List<QqchTaxCost> currencyChildren) {
+        List<QqchTaxCost> costList = new ArrayList<>();
+
+        InputStream resourceAsStream = null;
+        if (PmConstant.ONE.equals(qqchTaxIn.getDataType())) {
+            resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_1.json");
+        } else {
+            resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_2.json");
+        }
+
+        String json = "";
+        try {
+            json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        costList = JSONObject.parseArray(json, QqchTaxCost.class);
+        costList.stream().filter(ite -> PmConstant.ONE.equals(ite.getLeaf())).forEach(i -> {
+            i.setChildren(currencyChildren);
+        });
         return costList;
     }
 
