@@ -55,7 +55,7 @@
         <result property="locationImageGroupId" column="location_image_group_id"/>
         <result property="structureImageGroupId" column="structure_image_group_id"/>
         <result property="localCurrency" column="local_currency"/>
-        <result property="localCurrencyCode" column="currency_code"/>
+        <result property="localCurrencyCode" column="local_currency_code"/>
         <result property="contractCurrency" column="contract_currency"/>
         <result property="contractCurrencyCode" column="contract_currency_code"/>
         <result property="remark" column="remark"/>
