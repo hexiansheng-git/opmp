@@ -123,7 +123,7 @@ public class QqchTaxGlobalController extends BaseController {
 
 
     @PostMapping("/saveFormula")
-    public AjaxResult saveFormula(QqchTaxGlobalFormula param) {
+    public AjaxResult saveFormula(@RequestBody QqchTaxGlobalFormula param) {
         taxGlobalFormulaService.save(param.dealSaveDto());
         return AjaxResult.success(param);
     }
