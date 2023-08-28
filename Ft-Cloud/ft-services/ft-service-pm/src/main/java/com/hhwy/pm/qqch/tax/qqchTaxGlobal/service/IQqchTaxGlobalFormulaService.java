@@ -5,6 +5,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -38,4 +39,6 @@ public interface IQqchTaxGlobalFormulaService {
      * @return
      */
     List<QqchTaxGlobal> getGlobalByFormula(QqchTaxGlobalFormula dealListDto);
+
+    Map<String, Object> getPrjInfo(QqchTaxGlobalFormula param);
 }

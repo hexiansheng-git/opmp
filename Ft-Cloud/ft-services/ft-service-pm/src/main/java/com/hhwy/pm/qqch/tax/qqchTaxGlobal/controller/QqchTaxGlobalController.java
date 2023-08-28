@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -138,6 +139,17 @@ public class QqchTaxGlobalController extends BaseController {
         List<QqchTaxGlobal> qqchTaxGlobalFormula = taxGlobalFormulaService.getGlobalByFormula(param.dealListDto());
         return AjaxResult.success(qqchTaxGlobalFormula);
     }
+
+
+    @GetMapping("/getPrjInfo")
+    public AjaxResult getPrjInfo(QqchTaxGlobalFormula param) {
+        Map<String,Object> res = taxGlobalFormulaService.getPrjInfo(param);
+        return AjaxResult.success(res);
+    }
     
     
+    
+
+
+
 }

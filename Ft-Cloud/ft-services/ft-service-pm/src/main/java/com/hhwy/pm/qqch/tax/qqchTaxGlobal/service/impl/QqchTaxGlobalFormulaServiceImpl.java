@@ -10,9 +10,12 @@ import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper.QqchTaxGlobalFormulaMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalFormulaService;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
@@ -22,7 +25,9 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -41,6 +46,8 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
     @Resource
     private IXmslProjectBasicInfoService projectBasicInfoService;
+    @Resource
+    private IQqchTaxInService taxInService;
 
 
     public QqchTaxGlobalFormula getQqchTaxGlobalFormula(QqchTaxGlobalFormula qqchTaxGlobalFormula) {
@@ -103,7 +110,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormulaCompileEntity = new CompileEntity<>();
 
         List<QqchTaxGlobalFormula> qqchTaxGlobalFormulaList = this.qqchTaxGlobalFormulaMapper.getQqchTaxGlobalFormulaList(dto);
-        XmslProjectBasicInfo prj = this.getPrj();
+        ProjectBasicInfo prj = this.getPrj();
         BigDecimal prePayRate = prj.getPrepaymentRatio();
         XmslContractInfo cont = this.getCont();
         BigDecimal excContAmt = cont.getExcludingAmout();
@@ -173,19 +180,31 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         return qqchTaxGlobals;
     }
 
+    @Override
+    public Map<String, Object> getPrjInfo(QqchTaxGlobalFormula param) {
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("yearList", taxInService.getYearList());
 
-    private XmslProjectBasicInfo getPrj() {
-        XmslProjectBasicInfo projectBasicInfo = null;
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+
+        TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
+        currencyVO.setCurrency(projectBasicInfo.getLocalCurrencyCode());
+        currencyVO.setCurrencyName(projectBasicInfo.getLocalCurrency());
+        res.put("currencyInfo", currencyVO);
+
+
+        return res;
+    }
+
+
+    private ProjectBasicInfo getPrj() {
+        ProjectBasicInfo projectBasicInfo = null;
         try {
-            XmslProjectBasicInfo where = new XmslProjectBasicInfo();
-            where.setDelFlag("0");
-            // TODO 需要获取到项目信息
-            where.setProjectCode("0001");
-            projectBasicInfo = projectBasicInfoService.getProjectBasicInfo(where);
+            projectBasicInfo = projectBasicInfoService.projectInfo();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return projectBasicInfo == null ? new XmslProjectBasicInfo() : projectBasicInfo;
+        return projectBasicInfo == null ? new ProjectBasicInfo() : projectBasicInfo;
     }
 
     private XmslContractInfo getCont() {
@@ -197,7 +216,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         }
         return validMaxVersionContractInfo == null ? new XmslContractInfo() : validMaxVersionContractInfo;
     }
-    
+
 
     private BigDecimal getRateByCurrency(String currency) {
 
