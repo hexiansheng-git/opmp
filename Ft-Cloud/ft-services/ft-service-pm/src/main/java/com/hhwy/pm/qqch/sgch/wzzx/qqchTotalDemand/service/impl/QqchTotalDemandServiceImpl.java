@@ -72,36 +72,48 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         }
 
 
+        //以下两个循环主要用于处理格式：
+        // 前端要求每条数据的年和月数据必传，比如第一条记录里面有2023年和2024年的数据，第二条数据没有2023年和2024年的数据，返回前端时需要第二条数据也需要把字段带过去，值可以赋一个默认值
+
+        //遍历“物资总需详情时间数据” 得到所有记录中年份个数的最大值maxCountYearData，得到年份集合yearSet
         int maxCountYearData = 0;
-        HashSet<String> set = new HashSet<>();
-        Iterator<Map.Entry<Long, List<QqchTotalDemandTimeCount>>> iterator = timeCountMap.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry<Long, List<QqchTotalDemandTimeCount>> next = iterator.next();
+        List<String> yearList = new ArrayList<>();
+        for (Map.Entry<Long, List<QqchTotalDemandTimeCount>> next : timeCountMap.entrySet()) {
             Long key = next.getKey();
             List<QqchTotalDemandTimeCount> value = next.getValue();
-            if (maxCountYearData < value.size()){
+            if (maxCountYearData < value.size()) {
                 maxCountYearData = value.size();
                 for (QqchTotalDemandTimeCount totalDemandTimeCount : value) {
-                    set.add(totalDemandTimeCount.getYear());
+                    yearList.add(totalDemandTimeCount.getYear());
                 }
             }
         }
-
-        while (iterator.hasNext()){
-            Map.Entry<Long, List<QqchTotalDemandTimeCount>> next = iterator.next();
-            List<QqchTotalDemandTimeCount> value = next.getValue();
-            Map<String, List<QqchTotalDemandTimeCount>> collect = value.stream().collect(Collectors.groupingBy(QqchTotalDemandTimeCount::getYear));
-
-            if (maxCountYearData > value.size()){
-                for (String year : set) {
-                    if (collect.containsKey(year)) {
-                        continue;
+        if (maxCountYearData > 0){
+            for (QqchTotalDemand totalDemand : qqchTotalDemandList) {
+                List<QqchTotalDemandTimeCount> fixDateList = new ArrayList<>();
+                List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCounts = timeCountMap.get(totalDemand.getId());
+                if (CollectionUtils.isEmpty(qqchTotalDemandTimeCounts)){
+                    for (int i=0; i< yearList.size(); i++){
+                        QqchTotalDemandTimeCount demandTimeCount = new QqchTotalDemandTimeCount();
+                        demandTimeCount.setYear(yearList.get(i));
+                        fixDateList.add(demandTimeCount);
                     }
-                    QqchTotalDemandTimeCount qqchTotalDemandTimeCount1 = new QqchTotalDemandTimeCount();
-                    value.add(qqchTotalDemandTimeCount1);
+                }else if (qqchTotalDemandTimeCounts.size() < maxCountYearData){
+                    for (int i=0; i< yearList.size(); i++){
+                        String year = qqchTotalDemandTimeCounts.get(i).getYear();
+                        if (yearList.contains(year))
+                            continue;
+                        QqchTotalDemandTimeCount demandTimeCount = new QqchTotalDemandTimeCount();
+                        demandTimeCount.setYear(yearList.get(i));
+                        fixDateList.add(demandTimeCount);
+                    }
+                }else {
+                    continue;
                 }
+                timeCountMap.put(totalDemand.getId(), fixDateList);
             }
         }
+
 
 
         for (QqchTotalDemand totalDemand : qqchTotalDemandList) {
@@ -114,8 +126,10 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
             }
             List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCounts = timeCountMap.get(totalDemand.getId());
             totalDemand.setQqchTotalDemandTimeCountList(qqchTotalDemandTimeCounts);
-
         }
+
+
+
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setQqchTotalDemandList(qqchTotalDemandList);
