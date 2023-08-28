@@ -2,17 +2,15 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.sblease.mapper.SbchEquipmentSupplierDetailsMapper">
-    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails" id="SbchEquipmentSupplierDetailsResult">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.mapper.SbchEquipmentTeamDetailsMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetails" id="SbchEquipmentTeamDetailsResult">
         <result property="id"    column="id"    />
         <result property="mainId"    column="main_id"    />
-        <result property="supplier"    column="supplier"    />
-        <result property="mainEquipment"    column="main_equipment"    />
-        <result property="countryId"    column="country_id"    />
-        <result property="country"    column="country"    />
-        <result property="companyAddr"    column="company_addr"    />
-        <result property="linkman"    column="linkman"    />
-        <result property="mobile"    column="mobile"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="teamName"    column="team_name"    />
+        <result property="workContent"    column="work_content"    />
+        <result property="leader"    column="leader"    />
+        <result property="enterTime"    column="enter_time"    />
         <result property="remark"    column="remark"    />
         <result property="createUser"    column="create_user"    />
         <result property="createUserName"    column="create_user_name"    />
@@ -33,124 +31,56 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="region"    column="region"    />
     </resultMap>
 
-    <sql id="selectSbchEquipmentSupplierDetailsVo">
-        select
-            de.`id`,
-            de.`main_id`,
-            de.`supplier`,
-            de.`main_equipment`,
-            de.`country_id`,
---             de.`country`,
-            de.`company_addr`,
-            de.`linkman`,
-            de.`mobile`,
-            de.`remark`,
-            de.`create_user`,
-            de.`create_user_name`,
-            de.`create_time`,
-            de.`update_user`,
-            de.`update_user_name`,
-            de.`update_time`,
-            de.`del_user`,
-            de.`del_time`,
-            de.`del_flag`,
-            de.`pt_var1`,
-            de.`pt_var2`,
-            de.`pt_var3`,
-            de.`pt_var4`,
-            de.`dept_id`,
-            de.`project_id`,
-            de.`region_id`,
-            de.`region`
-            from `sbch_equipment_supplier_details` de
+    <sql id="selectSbchEquipmentTeamDetailsVo">
+        select `id`, `main_id`, `project_name`, `team_name`, `work_content`, `leader`, `enter_time`, `remark`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `dept_id`, `project_id`, `region_id`, `region` from `sbch_equipment_team_details`
     </sql>
 
-    <select id="selectSbchEquipmentSupplierDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails" resultMap="SbchEquipmentSupplierDetailsResult">
-        <include refid="selectSbchEquipmentSupplierDetailsVo"/>
+    <select id="selectSbchEquipmentTeamDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetails" resultMap="SbchEquipmentTeamDetailsResult">
+        <include refid="selectSbchEquipmentTeamDetailsVo"/>
         <where>
-            de.`del_flag` = 0
-            <if test="mainId != null "> and de.`main_id` = #{mainId}</if>
-            <if test="supplier != null  and supplier != ''"> and de.`supplier` = #{supplier}</if>
-            <if test="mainEquipment != null  and mainEquipment != ''"> and de.`main_equipment` = #{mainEquipment}</if>
-            <if test="countryId != null "> and de.`country_id` = #{countryId}</if>
-            <if test="country != null  and country != ''"> and de.`country` = #{country}</if>
-            <if test="companyAddr != null  and companyAddr != ''"> and de.`company_addr` = #{companyAddr}</if>
-            <if test="linkman != null  and linkman != ''"> and de.`linkman` = #{linkman}</if>
-            <if test="mobile != null  and mobile != ''"> and de.`mobile` = #{mobile}</if>
-            <if test="createUser != null  and createUser != ''"> and de.`create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''"> and de.`create_user_name` like concat('%', #{createUserName}, '%')</if>
-            <if test="updateUser != null  and updateUser != ''"> and de.`update_user` = #{updateUser}</if>
-            <if test="updateUserName != null  and updateUserName != ''"> and de.`update_user_name` like concat('%', #{updateUserName}, '%')</if>
-            <if test="delUser != null  and delUser != ''"> and de.`del_user` = #{delUser}</if>
-            <if test="delTime != null "> and de.`del_time` = #{delTime}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''"> and de.`pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''"> and de.`pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''"> and de.`pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''"> and de.`pt_var4` = #{ptVar4}</if>
-            <if test="deptId != null "> and de.`dept_id` = #{deptId}</if>
-            <if test="projectId != null "> and de.`project_id` = #{projectId}</if>
-            <if test="regionId != null "> and de.`region_id` = #{regionId}</if>
-            <if test="region != null  and region != ''"> and de.`region` = #{region}</if>
-            <if test="ids!=null and ids.size()>0">
-                and de.id in
-                <foreach item="id" collection="ids" open="(" separator="," close=")">
-                    #{id}
-                </foreach>
-            </if>
+            `del_flag` = 0
+            <if test="mainId != null "> and `main_id` = #{mainId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="teamName != null  and teamName != ''"> and `team_name` like concat('%', #{teamName}, '%')</if>
+            <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
+            <if test="leader != null  and leader != ''"> and `leader` = #{leader}</if>
+            <if test="enterTime != null "> and `enter_time` = #{enterTime}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="region != null  and region != ''"> and `region` = #{region}</if>
         </where>
-        order by de.`id` desc
-    </select>
-
-    <select id="selectSupplierList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails" resultMap="SbchEquipmentSupplierDetailsResult">
-        <include refid="selectSbchEquipmentSupplierDetailsVo"/>
-        <where>
-            de.`del_flag` = 0
-            and de.main_id in
-            (
-            select id from sbch_equipment_supplier where valid = '1' and del_flag = '0'
-            )
-            <if test="mainId != null "> and de.`main_id` = #{mainId}</if>
-            <if test="supplier != null  and supplier != ''"> and de.`supplier` = #{supplier}</if>
-            <if test="mainEquipment != null  and mainEquipment != ''"> and de.`main_equipment` = #{mainEquipment}</if>
-            <if test="countryId != null "> and de.`country_id` = #{countryId}</if>
-            <if test="country != null  and country != ''"> and de.`country` = #{country}</if>
-            <if test="companyAddr != null  and companyAddr != ''"> and de.`company_addr` = #{companyAddr}</if>
-            <if test="linkman != null  and linkman != ''"> and de.`linkman` = #{linkman}</if>
-            <if test="mobile != null  and mobile != ''"> and de.`mobile` = #{mobile}</if>
-            <if test="createUser != null  and createUser != ''"> and de.`create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''"> and de.`create_user_name` like concat('%', #{createUserName}, '%')</if>
-            <if test="updateUser != null  and updateUser != ''"> and de.`update_user` = #{updateUser}</if>
-            <if test="updateUserName != null  and updateUserName != ''"> and de.`update_user_name` like concat('%', #{updateUserName}, '%')</if>
-            <if test="delUser != null  and delUser != ''"> and de.`del_user` = #{delUser}</if>
-            <if test="delTime != null "> and de.`del_time` = #{delTime}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''"> and de.`pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''"> and de.`pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''"> and de.`pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''"> and de.`pt_var4` = #{ptVar4}</if>
-            <if test="deptId != null "> and de.`dept_id` = #{deptId}</if>
-            <if test="projectId != null "> and de.`project_id` = #{projectId}</if>
-            <if test="regionId != null "> and de.`region_id` = #{regionId}</if>
-            <if test="region != null  and region != ''"> and de.`region` = #{region}</if>
-        </where>
-        order by de.`id` desc
+        order by `id` desc
     </select>
     
-    <select id="selectSbchEquipmentSupplierDetailsById" parameterType="Long" resultMap="SbchEquipmentSupplierDetailsResult">
-        <include refid="selectSbchEquipmentSupplierDetailsVo"/>
-        where de.`id` = #{id}
+    <select id="selectSbchEquipmentTeamDetailsById" parameterType="Long" resultMap="SbchEquipmentTeamDetailsResult">
+        <include refid="selectSbchEquipmentTeamDetailsVo"/>
+        where `id` = #{id}
     </select>
-    <insert id="insertSbchEquipmentSupplierDetails" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails">
-        insert into `sbch_equipment_supplier_details`
+    <select id="selectSbchEquipmentTeamDetailsByMainId" parameterType="Long" resultMap="SbchEquipmentTeamDetailsResult">
+        <include refid="selectSbchEquipmentTeamDetailsVo"/>
+        where `main_id` = #{mainId}
+    </select>
+    <insert id="insertSbchEquipmentTeamDetails" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetails">
+        insert into `sbch_equipment_team_details`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="mainId != null">`main_id`,</if>
-            <if test="supplier != null">`supplier`,</if>
-            <if test="mainEquipment != null">`main_equipment`,</if>
-            <if test="countryId != null">`country_id`,</if>
-            <if test="country != null">`country`,</if>
-            <if test="companyAddr != null">`company_addr`,</if>
-            <if test="linkman != null">`linkman`,</if>
-            <if test="mobile != null">`mobile`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="teamName != null">`team_name`,</if>
+            <if test="workContent != null">`work_content`,</if>
+            <if test="leader != null">`leader`,</if>
+            <if test="enterTime != null">`enter_time`,</if>
             <if test="remark != null">`remark`,</if>
             <if test="createUser != null">`create_user`,</if>
             <if test="createUserName != null">`create_user_name`,</if>
@@ -173,13 +103,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="mainId != null">#{mainId},</if>
-            <if test="supplier != null">#{supplier},</if>
-            <if test="mainEquipment != null">#{mainEquipment},</if>
-            <if test="countryId != null">#{countryId},</if>
-            <if test="country != null">#{country},</if>
-            <if test="companyAddr != null">#{companyAddr},</if>
-            <if test="linkman != null">#{linkman},</if>
-            <if test="mobile != null">#{mobile},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="teamName != null">#{teamName},</if>
+            <if test="workContent != null">#{workContent},</if>
+            <if test="leader != null">#{leader},</if>
+            <if test="enterTime != null">#{enterTime},</if>
             <if test="remark != null">#{remark},</if>
             <if test="createUser != null">#{createUser},</if>
             <if test="createUserName != null">#{createUserName},</if>
@@ -202,16 +130,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <insert id="batchInsert" parameterType="list">
-        insert `sbch_equipment_supplier_details` (
+        insert `sbch_equipment_team_details` (
                                                 `id`,
                                                                 `main_id`,
-                                                                `supplier`,
-                                                                `main_equipment`,
-                                                                `country_id`,
-                                                                `country`,
-                                                                `company_addr`,
-                                                                `linkman`,
-                                                                `mobile`,
+                                                                `project_name`,
+                                                                `team_name`,
+                                                                `work_content`,
+                                                                `leader`,
+                                                                `enter_time`,
                                                                 `remark`,
                                                                 `create_user`,
                                                                 `create_user_name`,
@@ -234,13 +160,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach collection="list" separator="," item="item" index="index" >
                                                 (#{item.id},
                                                                 #{item.mainId},
-                                                                #{item.supplier},
-                                                                #{item.mainEquipment},
-                                                                #{item.countryId},
-                                                                #{item.country},
-                                                                #{item.companyAddr},
-                                                                #{item.linkman},
-                                                                #{item.mobile},
+                                                                #{item.projectName},
+                                                                #{item.teamName},
+                                                                #{item.workContent},
+                                                                #{item.leader},
+                                                                #{item.enterTime},
                                                                 #{item.remark},
                                                                 #{item.createUser},
                                                                 #{item.createUserName},
@@ -263,7 +187,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="batchUpdate" parameterType="list">
-        update `sbch_equipment_supplier_details`
+        update `sbch_equipment_team_details`
         <trim prefix="set" suffixOverrides=",">
                                                                 <trim prefix="main_id =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
@@ -272,52 +196,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="supplier =case" suffix="end,">
+                                                    <trim prefix="project_name =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.supplier != null ">
-                                when `id` = #{item.id} then #{item.supplier}
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="main_equipment =case" suffix="end,">
+                                                    <trim prefix="team_name =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.mainEquipment != null ">
-                                when `id` = #{item.id} then #{item.mainEquipment}
+                            <if test="item.teamName != null ">
+                                when `id` = #{item.id} then #{item.teamName}
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="country_id =case" suffix="end,">
+                                                    <trim prefix="work_content =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.countryId != null ">
-                                when `id` = #{item.id} then #{item.countryId}
+                            <if test="item.workContent != null ">
+                                when `id` = #{item.id} then #{item.workContent}
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="country =case" suffix="end,">
+                                                    <trim prefix="leader =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.country != null ">
-                                when `id` = #{item.id} then #{item.country}
+                            <if test="item.leader != null ">
+                                when `id` = #{item.id} then #{item.leader}
                             </if>
                         </foreach>
                     </trim>
-                                                    <trim prefix="company_addr =case" suffix="end,">
+                                                    <trim prefix="enter_time =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
-                            <if test="item.companyAddr != null ">
-                                when `id` = #{item.id} then #{item.companyAddr}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="linkman =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.linkman != null ">
-                                when `id` = #{item.id} then #{item.linkman}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="mobile =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.mobile != null ">
-                                when `id` = #{item.id} then #{item.mobile}
+                            <if test="item.enterTime != null ">
+                                when `id` = #{item.id} then #{item.enterTime}
                             </if>
                         </foreach>
                     </trim>
@@ -457,17 +367,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-    <update id="updateSbchEquipmentSupplierDetails" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails">
-        update `sbch_equipment_supplier_details`
+    <update id="updateSbchEquipmentTeamDetails" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetails">
+        update `sbch_equipment_team_details`
         <trim prefix="SET" suffixOverrides=",">
             <if test="mainId != null">`main_id` = #{mainId},</if>
-            <if test="supplier != null">`supplier` = #{supplier},</if>
-            <if test="mainEquipment != null">`main_equipment` = #{mainEquipment},</if>
-            <if test="countryId != null">`country_id` = #{countryId},</if>
-            <if test="country != null">`country` = #{country},</if>
-            <if test="companyAddr != null">`company_addr` = #{companyAddr},</if>
-            <if test="linkman != null">`linkman` = #{linkman},</if>
-            <if test="mobile != null">`mobile` = #{mobile},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="teamName != null">`team_name` = #{teamName},</if>
+            <if test="workContent != null">`work_content` = #{workContent},</if>
+            <if test="leader != null">`leader` = #{leader},</if>
+            <if test="enterTime != null">`enter_time` = #{enterTime},</if>
             <if test="remark != null">`remark` = #{remark},</if>
             <if test="createUser != null">`create_user` = #{createUser},</if>
             <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
@@ -490,18 +398,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where `id` = #{id}
     </update>
 
-    <update id="deleteSbchEquipmentSupplierDetailsById" parameterType="Long">
-        update `sbch_equipment_supplier_details` set del_flag = 1 where `id` = #{id}
+    <update id="deleteSbchEquipmentTeamDetailsById" parameterType="Long">
+        update `sbch_equipment_team_details` set del_flag = 1 where `id` = #{id}
     </update>
 
-    <update id="deleteSbchEquipmentSupplierDetailsByIds" parameterType="String">
-        update `sbch_equipment_supplier_details` set del_flag = 1 where `id` in
+    <update id="deleteSbchEquipmentTeamDetailsByIds" parameterType="String">
+        update `sbch_equipment_team_details` set del_flag = 1 where `id` in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </update>
-    <update id="deleteSbchEquipmentSupplierDetailsByMainId" parameterType="Long">
-        update `sbch_equipment_supplier_details` set del_flag = 1 where main_id=#{mainId}
+
+    <update id="deleteSbchEquipmentTeamDetailsByMainId" parameterType="Long">
+        update `sbch_equipment_team_details` set del_flag = 1 where main_id=#{mainId}
     </update>
 
 

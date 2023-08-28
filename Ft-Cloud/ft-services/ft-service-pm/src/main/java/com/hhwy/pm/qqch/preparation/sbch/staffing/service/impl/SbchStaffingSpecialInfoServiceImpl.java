@@ -7,6 +7,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingSpecialDetail;
 import com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingSpecialInfo;
@@ -106,6 +107,13 @@ public class SbchStaffingSpecialInfoServiceImpl implements ISbchStaffingSpecialI
                 sbchStaffingSpecialDetail.setDeptId(sbchStaffingSpecialInfo.getDeptId());
             }
             staffingSpecialDetailService.batchInsert(detailList);
+        }
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(sbchStaffingSpecialInfo.getButtonMark())){
+            //插入确认记录
+            String menuId = sbchStaffingSpecialInfo.getMenuId();
+            String stageIdentity = sbchStaffingSpecialInfo.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
         return sbchStaffingSpecialInfo.getId();
     }
@@ -210,6 +218,7 @@ public class SbchStaffingSpecialInfoServiceImpl implements ISbchStaffingSpecialI
         List<SbchStaffingSpecialInfo> sbchStaffingSpecialInfos = sbchStaffingSpecialInfoMapper.selectSbchStaffingSpecialInfoList(sbchStaffingSpecialInfo);
         if(!ObjectNullUtil.isEmpty(sbchStaffingSpecialInfos)){
             SbchStaffingSpecialInfo sbchStaffingSpecialInfo1 = sbchStaffingSpecialInfos.get(0);
+            BeanUtils.copyProperties(sbchStaffingSpecialInfo1,sbchStaffingSpecialInfo);
             SbchStaffingSpecialDetail sbchStaffingSpecialDetail = new SbchStaffingSpecialDetail();
             sbchStaffingSpecialDetail.setInfoId(sbchStaffingSpecialInfo.getId());
             List<SbchStaffingSpecialDetail> sbchStaffingSpecialDetails = staffingSpecialDetailService.selectSbchStaffingSpecialDetailList(sbchStaffingSpecialDetail);

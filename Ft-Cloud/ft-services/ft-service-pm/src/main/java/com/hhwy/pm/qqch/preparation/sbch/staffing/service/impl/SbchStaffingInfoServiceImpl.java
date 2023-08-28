@@ -236,6 +236,7 @@ public class SbchStaffingInfoServiceImpl implements ISbchStaffingInfoService {
         List<SbchStaffingInfo> sbchStaffingInfos = sbchStaffingInfoMapper.selectSbchStaffingInfoList(sbchStaffingInfo);
         if(!ObjectNullUtil.isEmpty(sbchStaffingInfos)){
             SbchStaffingInfo sbchStaffingInfo1 = sbchStaffingInfos.get(0);
+            BeanUtils.copyProperties(sbchStaffingInfo1,sbchStaffingInfo);
             SbchStaffingDetail sbchStaffingDetail = new SbchStaffingDetail();
             sbchStaffingDetail.setStaffingId(sbchStaffingInfo1.getId());
             List<SbchStaffingDetail> sbchStaffingDetails = sbchStaffingDetailService.selectSbchStaffingDetailList(sbchStaffingDetail);

@@ -85,6 +85,7 @@ public class EquAllotServiceImpl implements EquAllotService {
         List<SbchEquipmentAllot> sbchEquipmentAllots = sbchEquipmentAllotMapper.selectSbchEquipmentAllotList(allot);
         if(!ObjectNullUtil.isEmpty(sbchEquipmentAllots)){
             SbchEquipmentAllot allot1 = sbchEquipmentAllots.get(0);
+            BeanUtils.copyProperties(allot1,returnVo);
             //查询同国别调拨设备
             SbchEquipmentAllotDetails sbchEquipmentAllotDetails = new SbchEquipmentAllotDetails();
             sbchEquipmentAllotDetails.setMainId(allot1.getId());
