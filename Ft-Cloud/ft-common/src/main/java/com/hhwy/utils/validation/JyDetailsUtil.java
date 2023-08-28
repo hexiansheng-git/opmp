@@ -24,21 +24,34 @@ public class JyDetailsUtil {
      * @param groups     class对象
      */
     public static <T> Boolean jyDetails(List<T> detailList, Class<?>... groups) {
-        StringBuffer str = new StringBuffer("");
+        StringBuilder str = new StringBuilder();
         for (T t : detailList) {
-            BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
-            if (!beanValidationResult.isSuccess()) {
-                List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
-                for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                    str = str.append(errorMessage.getMessage() + ",");
-                }
-            }
+            jy(str, t, groups);
         }
-        if (!"".equals(str.toString())) {
+        if (!"".contentEquals(str)) {
             log.error(str.toString());
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, str.toString());
         }
         return true;
+    }
+
+    /**
+     * 校验数据
+     * @param str
+     * @param t
+     * @param groups
+     * @param <T>
+     */
+    private static <T> void jy(StringBuilder str, T t, Class<?>[] groups) {
+        BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
+        if (!beanValidationResult.isSuccess()) {
+            List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
+            for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
+                if(str.indexOf(errorMessage.getMessage()) == -1){
+                    str.append(errorMessage.getMessage()).append(",");
+                }
+            }
+        }
     }
 
     /**
@@ -49,14 +62,16 @@ public class JyDetailsUtil {
      * @param groups     class对象
      */
     public static <T, E> Boolean jyDetailsDetails(List<T> detailList, String key, Class<?>... groups) {
-        StringBuffer str = new StringBuffer("");
-        StringBuffer strDetails = new StringBuffer("");
+        StringBuilder str = new StringBuilder();
+        StringBuffer strDetails = new StringBuffer();
         for (T t : detailList) {
             BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
             if (!beanValidationResult.isSuccess()) {
                 List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
                 for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                    str = str.append(errorMessage.getMessage() + ",");
+                    if(str.indexOf(errorMessage.getMessage()) == -1){
+                        str.append(errorMessage.getMessage()).append(",");
+                    }
                 }
             }
 
@@ -117,13 +132,7 @@ public class JyDetailsUtil {
         for (T t : detailList) {
             String leaf = getLeaf.apply(t);
             if (CommonYesNo.YES.equals(leaf)) {
-                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
-                if (!beanValidationResult.isSuccess()) {
-                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
-                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                        str.append(errorMessage.getMessage()).append(",");
-                    }
-                }
+                jy(str, t, groups);
             }
         }
         if (!"".contentEquals(str)) {
@@ -140,26 +149,18 @@ public class JyDetailsUtil {
      * @param getPid     如何获取根节点
      * @param groups
      * @param <T>
-     * @return
      */
-    public static <T> Boolean jyRootDetails(List<T> detailList, Function<T, Long> getPid, Class<?>... groups) {
+    public static <T> void jyRootDetails(List<T> detailList, Function<T, Long> getPid, Class<?>... groups) {
         StringBuilder str = new StringBuilder();
         for (T t : detailList) {
             Long pid = getPid.apply(t);
             if (pid != null) {
-                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(t, groups);
-                if (!beanValidationResult.isSuccess()) {
-                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
-                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                        str.append(errorMessage.getMessage()).append(",");
-                    }
-                }
+                jy(str, t, groups);
             }
         }
         if (!"".contentEquals(str)) {
             log.error(str.toString());
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, str.toString());
         }
-        return true;
     }
 }
