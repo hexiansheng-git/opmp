@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
+import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringControl.domain.QqchFirstArticleEngineeringControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.vo.QqchQualityRiskControlMeasuresVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.mapper.QqchQualityRiskControlMeasuresMapper;
@@ -152,9 +153,15 @@ public class QqchQualityRiskControlMeasuresServiceImpl implements IQqchQualityRi
         qqchQualityRiskControlMeasuresMapper.insertQqchQualityRiskControlMeasuresList(qqchQualityRiskControlMeasuresList);
     }
 
-    public void insetrList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList,BigDecimal version) {
+    public void insertList(List<QqchQualityRiskControlMeasures> qqchQualityRiskControlMeasuresList,BigDecimal version, String flag) {
         if (CollectionUtils.isEmpty(qqchQualityRiskControlMeasuresList)) {
             return;
+        }
+        if (flag.equals("update")){
+            //删除旧数据
+            QqchQualityRiskControlMeasures qqchFirstArticleEngineeringControl = new QqchQualityRiskControlMeasures();
+            qqchFirstArticleEngineeringControl.setVersion(version);
+            qqchQualityRiskControlMeasuresMapper.deleteQqchQualityRiskControlMeasures(qqchFirstArticleEngineeringControl);
         }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {

@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchKeyDifficultProjectArchives;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.KeyDifficultWbs;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.KeyDifficultWbsVo;
@@ -35,6 +36,9 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
 
     @Autowired
     private QqchKeyDifficultProjectArchivesMapper qqchKeyDifficultProjectArchivesMapper;
+
+    @Autowired
+    private IQqchWeightEngineeringListService qqchWeightEngineeringListService;
 
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
@@ -96,8 +100,8 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
     public KeyDifficultWbsVo getKeyDifficultWbsVo(QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchives) {
         KeyDifficultWbsVo keyDifficultWbsVo = new KeyDifficultWbsVo();
 
-        //TODO 获取重难点工程清单wbs
-        List<XmslWbs> wbsList = new ArrayList<>();
+        //获取重难点工程清单wbs
+        List<XmslWbs> keyDifficultProjectInventoryWbsList = qqchWeightEngineeringListService.keyDifficultProjectInventoryWbsList();
 
         //获取重难点工程档案清单
         BigDecimal version = qqchKeyDifficultProjectArchives.getVersion();
@@ -106,11 +110,11 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
         List<QqchKeyDifficultProjectArchives> qqchKeyDifficultProjectArchivesList = qqchKeyDifficultProjectArchivesMapper.getQqchKeyDifficultProjectArchivesList(qqchKeyDifficultProjectArchives);
 
         List<KeyDifficultWbs> keyDifficultWbsList = new ArrayList<>();
-        for (XmslWbs xmslWbs : wbsList) {
+        for (XmslWbs xmslWbs : keyDifficultProjectInventoryWbsList) {
             KeyDifficultWbs keyDifficultWbs = new KeyDifficultWbs();
 
-            //TODO 可能：维护id和pid
-
+            keyDifficultWbs.setId(Long.valueOf(xmslWbs.getId()));
+            keyDifficultWbs.setPid(Long.valueOf(xmslWbs.getParentId()));
             keyDifficultWbs.setWbsCode(xmslWbs.getCode());
             keyDifficultWbs.setWbsName(xmslWbs.getName());
 
@@ -125,7 +129,13 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
             keyDifficultWbsList.add(keyDifficultWbs);
         }
 
-        //TODO 可能：构建树
+        //构建树
+        keyDifficultWbsList = ListTreeUtil.formatTree(
+                keyDifficultWbsList,
+                o -> o.getPid() == -1,
+                (r, n) -> r.getId().equals(n.getPid()),
+                KeyDifficultWbs::getChildren,
+                KeyDifficultWbs::setChildren);
 
         keyDifficultWbsVo.setVersion(version);
         keyDifficultWbsVo.setStageIdentity(qqchReviewService.getStage());

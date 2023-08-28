@@ -29,14 +29,15 @@ public class QqchComparisonSchemeContentServiceImpl implements IQqchComparisonSc
 
     /**
      * 批量插入单元格
+     *
      * @param qqchComparisonSchemeContentList
      * @param schemeId
-     * @param headerId
+     * @param rownum
      * @param version
      * @return
      */
     @Transactional
-    public void insertQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList, Long schemeId, Long headerId, BigDecimal version) {
+    public void insertQqchComparisonSchemeContentList(List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList, Long schemeId, Integer rownum, BigDecimal version) {
         if(CollectionUtils.isEmpty(qqchComparisonSchemeContentList)){
             return;
         }
@@ -44,9 +45,9 @@ public class QqchComparisonSchemeContentServiceImpl implements IQqchComparisonSc
         for (QqchComparisonSchemeContent qqchComparisonSchemeContent : qqchComparisonSchemeContentList) {
             qqchComparisonSchemeContent.setId(IdWorker.createId());
             qqchComparisonSchemeContent.setSchemeId(schemeId);
-            qqchComparisonSchemeContent.setHeaderId(headerId);
+            qqchComparisonSchemeContent.setRownum(rownum);
             qqchComparisonSchemeContent.setVersion(version);
-            qqchComparisonSchemeContent.setSort(String.valueOf(sort++));
+            qqchComparisonSchemeContent.setSort(sort++);
             qqchComparisonSchemeContent.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchComparisonSchemeContent.setCreateUserName(SecurityUtils.getUserName());
             qqchComparisonSchemeContent.setCreateTime(DateUtils.getNowDate());

@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
+import com.hhwy.pm.qqch.preparation.quality.qqchQualityRiskControlMeasures.domain.QqchQualityRiskControlMeasures;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.QqchWeightEngineeringControl;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.vo.QqchWeightEngineeringControlVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.mapper.QqchWeightEngineeringControlMapper;
@@ -150,10 +151,15 @@ public class QqchWeightEngineeringControlServiceImpl implements IQqchWeightEngin
         qqchWeightEngineeringControlMapper.insertQqchWeightEngineeringControlList(qqchWeightEngineeringControlList);
     }
 
-    public void insertList(List<QqchWeightEngineeringControl> qqchWeightEngineeringControlList,BigDecimal version) {
-
+    public void insertList(List<QqchWeightEngineeringControl> qqchWeightEngineeringControlList,BigDecimal version, String flag) {
         if (CollectionUtils.isEmpty(qqchWeightEngineeringControlList)) {
             return;
+        }
+        if (flag.equals("update")){
+            //删除旧数据
+            QqchWeightEngineeringControl weightEngineeringControl = new QqchWeightEngineeringControl();
+            weightEngineeringControl.setVersion(version);
+            qqchWeightEngineeringControlMapper.deleteQqchWeightEngineeringControl(weightEngineeringControl);
         }
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {

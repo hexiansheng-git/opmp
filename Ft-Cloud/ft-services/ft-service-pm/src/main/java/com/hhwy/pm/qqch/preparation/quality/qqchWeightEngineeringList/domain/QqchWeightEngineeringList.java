@@ -53,11 +53,24 @@ public class QqchWeightEngineeringList extends CommonBaseEntity {
     @Excel(name = "所属WBS的id")
     private Long wbsId;
     /**
+     * 字段描述：所属WBS的id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "所属WBS的id")
+    private String wbsCode;
+    /**
      * 字段描述：所属WBS名称
      */
     @JsonProperty
     @Excel(name = "所属WBS名称")
     private String wbsName;
+    /**
+     * 字段描述：所属WBS祖级id
+     */
+    @JsonProperty
+    @Excel(name = "所属WBS祖级id")
+    private String wbsAncestors;
     /**
      * 字段描述：作业班组
      */

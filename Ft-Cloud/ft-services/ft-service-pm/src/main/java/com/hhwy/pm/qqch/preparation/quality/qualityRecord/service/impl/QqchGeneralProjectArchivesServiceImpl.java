@@ -3,13 +3,20 @@ package com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbs;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.mapper.QqchGeneralProjectArchivesMapper;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchGeneralProjectArchivesService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +29,9 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
 
     @Autowired
     private QqchGeneralProjectArchivesMapper qqchGeneralProjectArchivesMapper;
+
+    @Autowired
+    private IXmslWbsService xmslWbsService;
 
 
     public QqchGeneralProjectArchives getQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives) {
@@ -76,5 +86,40 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
     @Transactional
     public int deleteQqchGeneralProjectArchivesByPks(List<Long> qqchGeneralProjectArchivesPkList) {
         return qqchGeneralProjectArchivesMapper.deleteQqchGeneralProjectArchivesByPks(qqchGeneralProjectArchivesPkList);
+    }
+
+    /**
+     * 获取台账Vo
+     * @param qqchGeneralProjectArchives
+     * @return
+     */
+    @Override
+    public GeneralProjectArchivesWbsVo getGeneralProjectArchivesWbsVo(QqchGeneralProjectArchives qqchGeneralProjectArchives) {
+        GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo = new GeneralProjectArchivesWbsVo();
+
+        //获取最顶级的wbs
+        List<XmslWbs> wbsList = xmslWbsService.latestData(new XmslWbs());
+
+        //获取一般工程档案清单
+        BigDecimal version = qqchGeneralProjectArchives.getVersion();
+        version = VersionUtil.getVersion("qqch_complete_design_handover",version);
+        qqchGeneralProjectArchives.setVersion(version);
+        List<QqchGeneralProjectArchives> generalProjectArchivesList = qqchGeneralProjectArchivesMapper.getQqchGeneralProjectArchivesList(qqchGeneralProjectArchives);
+
+        List<GeneralProjectArchivesWbs> list = new ArrayList<>();
+        for (XmslWbs wbs : wbsList) {
+            GeneralProjectArchivesWbs generalProjectArchivesWbs = new GeneralProjectArchivesWbs();
+
+            generalProjectArchivesWbs.setId(Long.valueOf(wbs.getId()));
+            generalProjectArchivesWbs.setPid(Long.valueOf(wbs.getParentId()));
+            generalProjectArchivesWbs.setWbsCode(wbs.getCode());
+            generalProjectArchivesWbs.setWbsName(wbs.getName());
+
+            List<QqchGeneralProjectArchives> sublist = new ArrayList<>();
+            for (QqchGeneralProjectArchives generalProjectArchives : generalProjectArchivesList) {
+//                if()
+            }
+        }
+        return generalProjectArchivesWbsVo;
     }
 }

@@ -30,5 +30,5 @@ public interface IQqchWeightEngineeringControlService {
 
     void save(QqchWeightEngineeringControlVo vo);
 
-    public void insertList(List<QqchWeightEngineeringControl> qqchWeightEngineeringControlList, BigDecimal version);
+    public void insertList(List<QqchWeightEngineeringControl> qqchWeightEngineeringControlList, BigDecimal version, String flag);
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -26,7 +25,7 @@ public class QqchLocalAccountingPolicy extends BaseEntity {
     /**
      * 序号 导出用
      */
-    @Excel(name = "序号")
+    @FtExcel(name = "序号")
     private String serialNum;
 
     /**

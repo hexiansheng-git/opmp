@@ -124,10 +124,10 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         BigDecimal version = vo.getVersion();
         List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList = vo.getQqchFirstArticleEngineeringListList();
 
-        this.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList, version);
-
         //向9.5.1同步数据
         this.dataSync(qqchFirstArticleEngineeringListList, version);
+
+        this.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList, version);
 
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
@@ -177,38 +177,38 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
                 bean.setFirstPersonName(param.getPersonName());
                 objects.add(bean);
             });
-            firstArticleEngineService.insertList(objects, version);
+            firstArticleEngineService.insertList(objects, version, "save");
         } else {
             //界面传入数据和9.5.2数据都不为空
 
             //遍历界面传入数据：与9.5.2数据匹配，匹配成功修改，否则新增
             Map<Long, Long> OriCollect = firstControl.stream().collect(Collectors.toMap(QqchFirstArticleEngineeringControl::getListId, QqchFirstArticleEngineeringControl::getId));
-            List<Long> ids = new ArrayList<>();
             List<QqchFirstArticleEngineeringControl> objects = new ArrayList<>();
+            List<QqchFirstArticleEngineeringControl> addObjects = new ArrayList<>();
             for (QqchFirstArticleEngineeringList param : firstArticleEngineeringList) {
                 Long id = param.getId();
+                QqchFirstArticleEngineeringControl bean = new QqchFirstArticleEngineeringControl();
+                bean.setListId(id);
+                bean.setName(param.getName());
+                bean.setWbsName(param.getWbsName());
+                bean.setPlanStartTime(param.getPlanStartTime());
+                bean.setFirstPersonId(param.getPersonId());
+                bean.setWorkGroup(param.getWorkGroup());
+                bean.setFirstPersonName(param.getPersonName());
                 if (OriCollect.containsKey(id)) {
                     //执行修改
-                    QqchFirstArticleEngineeringControl bean = new QqchFirstArticleEngineeringControl();
                     bean.setId(OriCollect.get(id));
-                    bean.setListId(id);
-                    bean.setName(param.getName());
-                    bean.setWbsName(param.getWbsName());
-                    bean.setPlanStartTime(param.getPlanStartTime());
-                    bean.setWorkGroup(param.getWorkGroup());
-                    bean.setFirstPersonId(param.getPersonId());
-                    bean.setFirstPersonName(param.getPersonName());
                     objects.add(bean);
                 } else {
-                    //执行删除
-                    ids.add(OriCollect.get(id));
+                    //执行新增
+                    addObjects.add(bean);
                 }
             }
             if (CollectionUtils.isNotEmpty(objects)) {
-                firstArticleEngineService.updateQqchFirstArticleEngineeringControlList(objects);
+                firstArticleEngineService.insertList(objects, version, "update");
             }
-            if (CollectionUtils.isNotEmpty(ids)) {
-                firstArticleEngineService.deleteQqchFirstArticleEngineeringControlByPks(ids);
+            if (CollectionUtils.isNotEmpty(addObjects)) {
+                firstArticleEngineService.insertList(addObjects, version, "save");
             }
 
             //遍历9.5.2数据：与传入数据匹配，匹配不成功删除
@@ -221,7 +221,7 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
                 }
                 oriIds.add(bean.getId());
                 if (CollectionUtils.isNotEmpty(oriIds)) {
-                    firstArticleEngineService.deleteQqchFirstArticleEngineeringControlByPks(ids);
+                    firstArticleEngineService.deleteQqchFirstArticleEngineeringControlByPks(oriIds);
                 }
             }
         }
@@ -230,9 +230,13 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
     @Transactional
     public void insertQqchFirstArticleEngineeringListList(List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList,BigDecimal version) {
         //删除旧数据
+//        QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList = new QqchFirstArticleEngineeringList();
+//        qqchFirstArticleEngineeringList.setVersion(version);
+//        qqchFirstArticleEngineeringListMapper.deleteQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringList);
+
         QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList = new QqchFirstArticleEngineeringList();
         qqchFirstArticleEngineeringList.setVersion(version);
-        qqchFirstArticleEngineeringListMapper.deleteQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringList);
+        List<QqchFirstArticleEngineeringList> oriList = qqchFirstArticleEngineeringListMapper.getQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringList);
 
         if (CollectionUtils.isEmpty(qqchFirstArticleEngineeringListList)) {
             return;
@@ -241,14 +245,40 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
         }
+
+        List<QqchFirstArticleEngineeringList> addObjects = new ArrayList<>();
+        List<QqchFirstArticleEngineeringList> updateObjects = new ArrayList<>();
         for (QqchFirstArticleEngineeringList firstArticleEngineeringList : qqchFirstArticleEngineeringListList) {
-            firstArticleEngineeringList.setId(IdWorker.createId());
             firstArticleEngineeringList.setValid(valid);
             firstArticleEngineeringList.setVersion(version);
             firstArticleEngineeringList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             firstArticleEngineeringList.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             firstArticleEngineeringList.setCreateTime(DateUtils.getNowDate());
+
+            QqchFirstArticleEngineeringList bean = new QqchFirstArticleEngineeringList();
+            bean.setId(firstArticleEngineeringList.getId());
+            QqchFirstArticleEngineeringList result = qqchFirstArticleEngineeringListMapper.getQqchFirstArticleEngineeringList(bean);
+            if (result == null) {
+                firstArticleEngineeringList.setId(IdWorker.createId());
+                addObjects.add(firstArticleEngineeringList);
+            }else {
+                updateObjects.add(firstArticleEngineeringList);
+            }
+
         }
-        qqchFirstArticleEngineeringListMapper.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList);
+        if (CollectionUtils.isNotEmpty(addObjects))
+            qqchFirstArticleEngineeringListMapper.insertQqchFirstArticleEngineeringListList(addObjects);
+        if (CollectionUtils.isNotEmpty(updateObjects))
+            qqchFirstArticleEngineeringListMapper.updateQqchFirstArticleEngineeringListList(updateObjects);
+
+        Map<Long, List<QqchFirstArticleEngineeringList>> collect = qqchFirstArticleEngineeringListList.stream().collect(Collectors.groupingBy(QqchFirstArticleEngineeringList::getId));
+        List<Long> delObjects = new ArrayList<>();
+        for (QqchFirstArticleEngineeringList firstArticleEngineeringList : oriList) {
+            if (!collect.containsKey(firstArticleEngineeringList.getId())) {
+                delObjects.add(firstArticleEngineeringList.getId());
+            }
+        }
+        if (CollectionUtils.isNotEmpty(delObjects))
+            qqchFirstArticleEngineeringListMapper.deleteQqchFirstArticleEngineeringListByPks(delObjects);
     }
 }

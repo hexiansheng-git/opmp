@@ -154,7 +154,14 @@ public class QqchFirstArticleEngineeringControlServiceImpl implements IQqchFirst
         qqchFirstArticleEngineeringControlMapper.insertQqchFirstArticleEngineeringControlList(qqchFirstArticleEngineeringControlList);
     }
 
-    public void insertList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList,BigDecimal version) {
+    public void insertList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList,BigDecimal version, String flag) {
+        if (flag.equals("update")){
+            //删除旧数据
+            QqchFirstArticleEngineeringControl qqchFirstArticleEngineeringControl = new QqchFirstArticleEngineeringControl();
+            qqchFirstArticleEngineeringControl.setVersion(version);
+            qqchFirstArticleEngineeringControlMapper.deleteQqchFirstArticleEngineeringControl(qqchFirstArticleEngineeringControl);
+        }
+
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

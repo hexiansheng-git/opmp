@@ -15,18 +15,18 @@ import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQ
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
+import io.seata.common.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -89,7 +89,56 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         return qqchWeightEngineeringListMapper.deleteQqchWeightEngineeringListByPks(qqchWeightEngineeringListPkList);
     }
 
+    /**
+     * 获取最新生效版本重难点工程清单中选择的wbs以及其所有父级结构的集合
+     * @return
+     */
+    @Override
+    public List<XmslWbs> keyDifficultProjectInventoryWbsList() {
+        //获取最新生效版本的重难点工程清单
+        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(null);
 
+        //获取wbs集合
+        Set<String> wbsIds = new HashSet<>();
+        for (QqchWeightEngineeringList weightEngineeringList : qqchWeightEngineeringListList) {
+            String wbsAncestors = weightEngineeringList.getWbsAncestors();
+            if(StringUtils.isNotBlank(wbsAncestors)){
+                String[] wbsArrays = wbsAncestors.split(",");
+                wbsIds.addAll(Arrays.asList(wbsArrays));
+            }
+        }
+        return WbsRedisUtils.getWbs(wbsIds);
+    }
+
+    /**
+     * 获取最新生效版本重难点工程清单中选择的wbs编码集合
+     * @return
+     */
+    public Set<String> keyDifficultProjectInventoryWbsCodeSet() {
+        //获取最新生效版本的重难点工程清单
+        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(null);
+
+        Set<String> wbsCodeSet = new HashSet<>();
+        for (QqchWeightEngineeringList qqchWeightEngineeringList : qqchWeightEngineeringListList) {
+            String wbsCode = qqchWeightEngineeringList.getWbsCode();
+            if(StringUtils.isNotBlank(wbsCode)){
+                wbsCodeSet.add(wbsCode);
+            }
+        }
+        return wbsCodeSet;
+    }
+
+    /**
+     * 根据版本获取重难点工程清单
+     * @param version
+     * @return
+     */
+    public List<QqchWeightEngineeringList> getEngineeringListByVersion(BigDecimal version) {
+        version = VersionUtil.getVersion("qqch_weight_engineering_list", version);
+        QqchWeightEngineeringList qqchWeightEngineeringList = new QqchWeightEngineeringList();
+        qqchWeightEngineeringList.setVersion(version);
+        return qqchWeightEngineeringListMapper.getQqchWeightEngineeringListList(qqchWeightEngineeringList);
+    }
 
     /**
      * 列表接口
@@ -99,9 +148,7 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
 
         BigDecimal version = qqchWeightEngineeringList.getVersion();
         version = VersionUtil.getVersion("qqch_weight_engineering_list", version);
-
-        qqchWeightEngineeringList.setVersion(version);
-        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = qqchWeightEngineeringListMapper.getQqchWeightEngineeringListList(qqchWeightEngineeringList);
+        List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(version);
 
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
@@ -172,21 +219,21 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void dataSync(List<QqchWeightEngineeringList> weightEngineeringList, BigDecimal version) {
-        //界面传入数据为空，删除所有9.4.2数据
+        //界面传入数据为空，删除所有9.5.2数据
         if (CollectionUtils.isEmpty(weightEngineeringList)) {
             QqchWeightEngineeringControl param = new QqchWeightEngineeringControl();
             param.setVersion(version);
             weightEngineControlService.deleteQqchWeightEngineeringControl(param);
             return;
         }
-        // 查询9.4.2数据
+        // 查询9.5.2数据
         QqchWeightEngineeringControl control = new QqchWeightEngineeringControl();
         control.setVersion(version);
-        QqchWeightEngineeringControlVo controlVo = weightEngineControlService.getQqchWeightEngineeringControlList(control);
-        List<QqchWeightEngineeringControl> controlList = controlVo.getQqchWeightEngineeringControlList();
+        QqchWeightEngineeringControlVo firstControlVo = weightEngineControlService.getQqchWeightEngineeringControlList(control);
+        List<QqchWeightEngineeringControl> firstControl = firstControlVo.getQqchWeightEngineeringControlList();
 
-        if (CollectionUtils.isEmpty(controlList)) {
-            //界面传入不为空，9.4.2数据为空，新增数据
+        if (CollectionUtils.isEmpty(firstControl)) {
+            //界面传入不为空，9.5.2数据为空，新增数据
             List<QqchWeightEngineeringControl> objects = new ArrayList<>();
             weightEngineeringList.forEach(param -> {
                 QqchWeightEngineeringControl bean = new QqchWeightEngineeringControl();
@@ -197,49 +244,49 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
                 bean.setWorkGroup(param.getWorkGroup());
                 objects.add(bean);
             });
-            weightEngineControlService.insertList(objects, version);
+            weightEngineControlService.insertList(objects, version, "save");
         } else {
-            //界面传入数据和9.4.2数据都不为空
+            //界面传入数据和9.5.2数据都不为空
 
-            //遍历界面传入数据：与9.4.2数据匹配，匹配成功修改，否则新增
-            Map<Long, Long> oriCollect = controlList.stream().collect(Collectors.toMap(QqchWeightEngineeringControl::getListId, QqchWeightEngineeringControl::getId));
-            List<Long> ids = new ArrayList<>();
+            //遍历界面传入数据：与9.5.2数据匹配，匹配成功修改，否则新增
+            Map<Long, Long> OriCollect = firstControl.stream().collect(Collectors.toMap(QqchWeightEngineeringControl::getListId, QqchWeightEngineeringControl::getId));
             List<QqchWeightEngineeringControl> objects = new ArrayList<>();
+            List<QqchWeightEngineeringControl> addObjects = new ArrayList<>();
             for (QqchWeightEngineeringList param : weightEngineeringList) {
                 Long id = param.getId();
-                if (oriCollect.containsKey(id)) {
+                QqchWeightEngineeringControl bean = new QqchWeightEngineeringControl();
+                bean.setListId(id);
+                bean.setName(param.getName());
+                bean.setWbsName(param.getWbsName());
+                bean.setPlannStartDate(param.getPlannStartDate());
+                bean.setWorkGroup(param.getWorkGroup());
+                if (OriCollect.containsKey(id)) {
                     //执行修改
-                    QqchWeightEngineeringControl bean = new QqchWeightEngineeringControl();
-                    bean.setId(oriCollect.get(id));
-                    bean.setListId(id);
-                    bean.setName(param.getName());
-                    bean.setWbsName(param.getWbsName());
-                    bean.setPlannStartDate(param.getPlannStartDate());
-                    bean.setWorkGroup(param.getWorkGroup());
+                    bean.setId(OriCollect.get(id));
                     objects.add(bean);
                 } else {
-                    //执行删除
-                    ids.add(oriCollect.get(id));
+                    //执行新增
+                    addObjects.add(bean);
                 }
             }
             if (CollectionUtils.isNotEmpty(objects)) {
-                weightEngineControlService.updateQqchWeightEngineeringControlList(objects);
+                weightEngineControlService.insertList(objects, version, "update");
             }
-            if (CollectionUtils.isNotEmpty(ids)) {
-                weightEngineControlService.deleteQqchWeightEngineeringControlByPks(ids);
+            if (CollectionUtils.isNotEmpty(addObjects)) {
+                weightEngineControlService.insertList(addObjects, version, "save");
             }
 
-            //遍历9.4.2数据：与传入数据匹配，匹配不成功删除
+            //遍历9.5.2数据：与传入数据匹配，匹配不成功删除
             Set<Long> newCollect = weightEngineeringList.stream().map(QqchWeightEngineeringList::getId).collect(Collectors.toSet());
             List<Long> oriIds = new ArrayList<>();
-            for (QqchWeightEngineeringControl quality : controlList) {
-                Long listId = quality.getListId();
+            for (QqchWeightEngineeringControl bean : firstControl) {
+                Long listId = bean.getListId();
                 if (newCollect.contains(listId)) {
                     continue;
                 }
-                oriIds.add(quality.getId());
+                oriIds.add(bean.getId());
                 if (CollectionUtils.isNotEmpty(oriIds)) {
-                    weightEngineControlService.deleteQqchWeightEngineeringControlByPks(ids);
+                    weightEngineControlService.deleteQqchWeightEngineeringControlByPks(oriIds);
                 }
             }
         }

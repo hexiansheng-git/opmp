@@ -65,6 +65,8 @@ public class WbsRedisUtils {
         List<XmslWbs> list = new ArrayList<>(wbsObjList.size());
         for (int i = 0; i < wbsObjList.size(); i++) {
             Object temp = wbsObjList.get(i);
+            if(temp == null)
+                continue;
             list.add(JSONObject.parseObject(temp.toString(),XmslWbs.class));
         }
         return list;

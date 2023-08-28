@@ -128,6 +128,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
     @Override
     public int save(QqchTaxGlobalFormula dealSaveDto) {
+        dealSaveDto.setId(IdWorker.createId());
         this.qqchTaxGlobalFormulaMapper.insertQqchTaxGlobalFormula(dealSaveDto);
         return 1;
     }

@@ -76,11 +76,12 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
     @Transactional
     public int updateJdglWeekImagePlanList(List<JdglWeekImagePlan> jdglWeekImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
-            for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
+            List<JdglWeekImagePlan> jdglWeekImagePlans = TreeUtil.treeToList(jdglWeekImagePlanList);
+            for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlans) {
                 jdglWeekImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglWeekImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-            return jdglWeekImagePlanMapper.updateJdglWeekImagePlanList(jdglWeekImagePlanList);
+            return jdglWeekImagePlanMapper.updateJdglWeekImagePlanList(jdglWeekImagePlans);
         }
         return 0;
     }

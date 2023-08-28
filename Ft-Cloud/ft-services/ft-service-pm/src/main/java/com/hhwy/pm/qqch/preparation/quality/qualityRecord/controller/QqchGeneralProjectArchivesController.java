@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchGeneralProjectArchivesService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,5 +91,16 @@ public class QqchGeneralProjectArchivesController extends BaseController {
         List<QqchGeneralProjectArchives> qqchGeneralProjectArchivesList = qqchGeneralProjectArchivesService.getQqchGeneralProjectArchivesList(qqchGeneralProjectArchivesParam);
         ExcelUtils<QqchGeneralProjectArchives> util = new ExcelUtils<>(QqchGeneralProjectArchives.class);
         util.exportExcel(response, qqchGeneralProjectArchivesList, DateUtils.getDate());
+    }
+
+    /**
+     * 获取台账Vo
+     * @param qqchGeneralProjectArchives
+     * @return
+     */
+    @GetMapping("getGeneralProjectArchivesWbsVo")
+    public AjaxResult getGeneralProjectArchivesWbsVo(@Validated(ValidationGroups.Get.class) QqchGeneralProjectArchives qqchGeneralProjectArchives) {
+        GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo = qqchGeneralProjectArchivesService.getGeneralProjectArchivesWbsVo(qqchGeneralProjectArchives);
+        return AjaxResult.success(generalProjectArchivesWbsVo);
     }
 }

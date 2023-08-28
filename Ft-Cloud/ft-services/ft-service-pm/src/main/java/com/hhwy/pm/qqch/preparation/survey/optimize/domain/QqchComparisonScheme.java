@@ -1,19 +1,18 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
-import com.hhwy.common.core.annotation.Excel;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author han
@@ -45,6 +44,12 @@ public class QqchComparisonScheme extends BaseEntity {
     @JsonProperty
     @Excel(name = "比选结果")
     private String comparisonResult;
+    /**
+     * 字段描述：数据行数
+     */
+    @JsonProperty
+    @Excel(name = "数据行数")
+    private Integer rowCount;
     /**
      * 字段描述：版本
      */
@@ -171,8 +176,14 @@ public class QqchComparisonScheme extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
     /**
      * 字段描述：表头
      */
-    private List<QqchComparisonSchemeHeader> qqchComparisonSchemeHeaderList;
+    private List<QqchComparisonSchemeHeader> headerList;
+
+    /**
+     * 字段描述：所有行数据
+     */
+    private List<List<QqchComparisonSchemeContent>> contentListList;
 }

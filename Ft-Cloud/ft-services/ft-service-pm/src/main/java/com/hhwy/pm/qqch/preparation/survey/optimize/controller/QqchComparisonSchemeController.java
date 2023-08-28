@@ -43,7 +43,7 @@ public class QqchComparisonSchemeController extends BaseController {
      */
     @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.save(qqchComparisonSchemeVo);
         return AjaxResult.success();
     }

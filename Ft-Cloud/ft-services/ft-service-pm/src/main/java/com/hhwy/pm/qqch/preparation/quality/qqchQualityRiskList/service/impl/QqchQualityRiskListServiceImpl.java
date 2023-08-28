@@ -23,9 +23,11 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author ldd
@@ -148,70 +150,73 @@ public class QqchQualityRiskListServiceImpl implements IQqchQualityRiskListServi
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void dataSync(List<QqchQualityRiskList> qqchQualityRiskListList,  BigDecimal version) {
-        //界面传入数据为空，删除所有风险管控措施
+        //界面传入数据为空，删除所有9.3.2数据
         if (CollectionUtils.isEmpty(qqchQualityRiskListList)) {
             QqchQualityRiskControlMeasures param = new QqchQualityRiskControlMeasures();
             param.setVersion(version);
             qualityRiskService.deleteQqchQualityRiskControlMeasures(param);
             return;
         }
-        // 查询风险管控措施数据
-        QqchQualityRiskControlMeasuresVo qualityListVo = qualityRiskService.getQqchQualityRiskControlMeasuresList(new QqchQualityRiskControlMeasures());
-        List<QqchQualityRiskControlMeasures> qualityList = qualityListVo.getQqchQualityRiskControlMeasuresList();
+        // 查询9.3.2数据
+        QqchQualityRiskControlMeasures control = new QqchQualityRiskControlMeasures();
+        control.setVersion(version);
+        QqchQualityRiskControlMeasuresVo firstControlVo = qualityRiskService.getQqchQualityRiskControlMeasuresList(control);
+        List<QqchQualityRiskControlMeasures> firstControl = firstControlVo.getQqchQualityRiskControlMeasuresList();
 
-        if (CollectionUtils.isEmpty(qualityList)) {
-            //界面传入不为空，原风险管控数据为空，新增数据
+        if (CollectionUtils.isEmpty(firstControl)) {
+            //界面传入不为空，9.3.2数据为空，新增数据
             List<QqchQualityRiskControlMeasures> objects = new ArrayList<>();
             qqchQualityRiskListList.forEach(param -> {
-                QqchQualityRiskControlMeasures qualityRisk = new QqchQualityRiskControlMeasures();
-                qualityRisk.setListId(param.getId());
-                qualityRisk.setContent(param.getContent());
-                qualityRisk.setReason(param.getReason());
-                qualityRisk.setRiskLevel(param.getRiskLevel());
-                objects.add(qualityRisk);
+                QqchQualityRiskControlMeasures bean = new QqchQualityRiskControlMeasures();
+                bean.setListId(param.getId());
+                bean.setContent(param.getContent());
+                bean.setReason(param.getReason());
+                bean.setRiskLevel(param.getRiskLevel());
+                objects.add(bean);
             });
-            qualityRiskService.insetrList(objects, version);
+            qualityRiskService.insertList(objects, version, "save");
         } else {
-            //界面传入数据和原风险管控数据都不为空
+            //界面传入数据和9.3.2数据都不为空
 
-            //遍历界面传入数据：与原有的风险管控措施数据匹配，匹配成功修改，否则新增
-            Map<Long, Long> OriCollect = qualityList.stream().collect(Collectors.toMap(QqchQualityRiskControlMeasures::getListId, QqchQualityRiskControlMeasures::getId));
-            List<Long> ids = new ArrayList<>();
+            //遍历界面传入数据：与9.3.2数据匹配，匹配成功修改，否则新增
+            Map<Long, Long> OriCollect = firstControl.stream().collect(Collectors.toMap(QqchQualityRiskControlMeasures::getListId, QqchQualityRiskControlMeasures::getId));
             List<QqchQualityRiskControlMeasures> objects = new ArrayList<>();
-            for (QqchQualityRiskList quality : qqchQualityRiskListList) {
-                Long id = quality.getId();
+            List<QqchQualityRiskControlMeasures> addObjects = new ArrayList<>();
+            for (QqchQualityRiskList param : qqchQualityRiskListList) {
+                Long id = param.getId();
+                QqchQualityRiskControlMeasures bean = new QqchQualityRiskControlMeasures();
+                bean.setListId(id);
+                bean.setListId(param.getId());
+                bean.setContent(param.getContent());
+                bean.setReason(param.getReason());
+                bean.setRiskLevel(param.getRiskLevel());
                 if (OriCollect.containsKey(id)) {
                     //执行修改
-                    QqchQualityRiskControlMeasures bean = new QqchQualityRiskControlMeasures();
                     bean.setId(OriCollect.get(id));
-                    bean.setListId(id);
-                    bean.setReason(quality.getReason());
-                    bean.setRiskLevel(quality.getRiskLevel());
-                    bean.setContent(quality.getContent());
                     objects.add(bean);
                 } else {
-                    //执行删除
-                    ids.add(OriCollect.get(id));
+                    //执行新增
+                    addObjects.add(bean);
                 }
             }
             if (CollectionUtils.isNotEmpty(objects)) {
-                qualityRiskService.updateQqchQualityRiskControlMeasuresList(objects);
+                qualityRiskService.insertList(objects, version, "update");
             }
-            if (CollectionUtils.isNotEmpty(ids)) {
-                qualityRiskService.deleteQqchQualityRiskControlMeasuresByPks(ids);
+            if (CollectionUtils.isNotEmpty(addObjects)) {
+                qualityRiskService.insertList(addObjects, version, "save");
             }
 
-            //遍历原风险管控数据：与传入数据匹配，匹配不成功删除
+            //遍历9.3.2数据：与传入数据匹配，匹配不成功删除
             Set<Long> newCollect = qqchQualityRiskListList.stream().map(QqchQualityRiskList::getId).collect(Collectors.toSet());
             List<Long> oriIds = new ArrayList<>();
-            for (QqchQualityRiskControlMeasures quality : qualityList) {
-                Long listId = quality.getListId();
+            for (QqchQualityRiskControlMeasures bean : firstControl) {
+                Long listId = bean.getListId();
                 if (newCollect.contains(listId)) {
                     continue;
                 }
-                oriIds.add(quality.getId());
+                oriIds.add(bean.getId());
                 if (CollectionUtils.isNotEmpty(oriIds)) {
-                    qualityRiskService.deleteQqchQualityRiskControlMeasuresByPks(ids);
+                    qualityRiskService.deleteQqchQualityRiskControlMeasuresByPks(oriIds);
                 }
             }
         }

@@ -1,19 +1,17 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author han
@@ -51,7 +49,7 @@ public class QqchComparisonSchemeHeader extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "排序")
-    private String sort;
+    private Integer sort;
     /**
      * 字段描述：版本
      */
@@ -178,8 +176,4 @@ public class QqchComparisonSchemeHeader extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
-    /**
-     * 字段描述：字段详情
-     */
-    private List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList;
 }
