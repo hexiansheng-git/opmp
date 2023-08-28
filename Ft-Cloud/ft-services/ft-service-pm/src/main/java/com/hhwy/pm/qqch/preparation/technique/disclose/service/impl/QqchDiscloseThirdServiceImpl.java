@@ -13,12 +13,20 @@ import com.hhwy.pm.qqch.preparation.technique.disclose.mapper.QqchDiscloseThirdM
 import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseThirdService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
+import java.security.cert.CollectionCertStoreParameters;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import com.sun.javafx.util.TempState;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -50,30 +58,41 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         List<QqchDiscloseThird> list = qqchDiscloseThirdMapper.getQqchDiscloseThirdList(qryParam);
 
         // 全部详情
-        QqchDiscloseThirdDetail qryParamDetail = new QqchDiscloseThirdDetail();
-        qryParamDetail.setVersion(version);
-        List<QqchDiscloseThirdDetail> deTailList =
-            qqchDiscloseThirdDetailMapper.getQqchDiscloseThirdDetailList(qryParamDetail);
-
-        if (!CollectionUtils.isEmpty(list) && !CollectionUtils.isEmpty(deTailList)) {
-            for (QqchDiscloseThird qqchDiscloseThird : list) {
-                List<QqchDiscloseThirdDetail> detailListChild = new ArrayList<>();
-                for (QqchDiscloseThirdDetail deTail : deTailList) {
-                    if (qqchDiscloseThird.getId().equals(deTail.getMasterId())) {
-                        detailListChild.add(deTail);
-                    }
-                }
-                qqchDiscloseThird.setDetailTreeList(TreeUtil.build(detailListChild, null));
-            }
-        }
+//        QqchDiscloseThirdDetail qryParamDetail = new QqchDiscloseThirdDetail();
+//        qryParamDetail.setVersion(version);
+//        List<QqchDiscloseThirdDetail> deTailList = qqchDiscloseThirdDetailMapper.getQqchDiscloseThirdDetailList(qryParamDetail);
+//
+//        if (!CollectionUtils.isEmpty(list) && !CollectionUtils.isEmpty(deTailList)) {
+//            for (QqchDiscloseThird qqchDiscloseThird : list) {
+//                List<QqchDiscloseThirdDetail> detailListChild = new ArrayList<>();
+//                for (QqchDiscloseThirdDetail deTail : deTailList) {
+//                    if (qqchDiscloseThird.getId().equals(deTail.getMasterId())) {
+//                        detailListChild.add(deTail);
+//                    }
+//                }
+//                qqchDiscloseThird.setDetailTreeList(TreeUtil.build(detailListChild, null));
+//            }
+//        }
 
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setTreeList(TreeUtil.build(list, null));
-        vo.setAllDetailTreeList(TreeUtil.build(deTailList, null));
+        vo.setTreeList(TreeUtil.build(list, -1L));
+//        vo.setAllDetailTreeList(TreeUtil.build(deTailList, null));
         return vo;
     }
 
+    @Override
+    public List<QqchDiscloseThirdDetail> getDetailList(Long masterId) {
+        if(masterId == null || masterId < 0L)
+            return new ArrayList<>(2);
+        QqchDiscloseThirdDetail query = new QqchDiscloseThirdDetail();
+        query.setMasterId(masterId);
+        List<QqchDiscloseThirdDetail> list = qqchDiscloseThirdDetailMapper.getQqchDiscloseThirdDetailList(query);
+        //转树形
+        return TreeUtil.build(list,-1L);
+    }
+
     @Transactional
+    @Deprecated
     public void batchSave(QqchDiscloseThirdVo qqchDiscloseThirdVo) {
         // 三级交底主表数据
         List<QqchDiscloseThird> treeList = qqchDiscloseThirdVo.getTreeList();
@@ -138,4 +157,89 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
+
+    @Override
+    @Transactional
+    public void save(QqchDiscloseThirdVo vo) {
+        if(CollectionUtils.isEmpty(vo.getTreeList()))
+            return ;
+        //新增交底明细
+        List<QqchDiscloseThirdDetail> detailAddList = new ArrayList<>();
+        //新增交底集合
+        List<QqchDiscloseThird> addList = new ArrayList<>();
+        //修改交底集合
+        List<QqchDiscloseThird> updateList = new ArrayList<>();
+        Set<Long> delIdSet = new HashSet<>();
+        saveThird(vo.getTreeList(),-1L,detailAddList,addList,updateList,delIdSet);
+        if(!CollectionUtils.isEmpty(addList))
+            this.qqchDiscloseThirdMapper.insertQqchDiscloseThirdList(addList);
+        if(!CollectionUtils.isEmpty(updateList))
+            this.qqchDiscloseThirdMapper.updateQqchDiscloseThirdList(updateList);
+        if(!CollectionUtils.isEmpty(delIdSet))
+            qqchDiscloseThirdMapper.deleteDetailByMasterIds(delIdSet);
+        if(!CollectionUtils.isEmpty(detailAddList))
+            qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(detailAddList);    
+    }
+
+    /**
+     * 保存交底人信息
+     * 第一级的人员，不处理其明细
+     * @param list          交底人信息
+     * @param pid            父级ID
+     * @param detailAddList   需要保存的交底明细数据
+     * @param addList         需要新增的交底
+     * @param updateList      需要修改的交底
+     * @param delIdSet      需要修改的交底                       
+     */
+    public void saveThird(List<QqchDiscloseThird> list,Long pid,List<QqchDiscloseThirdDetail> detailAddList,List<QqchDiscloseThird> addList,List<QqchDiscloseThird> updateList,Set<Long> delIdSet){
+        if(CollectionUtils.isEmpty(list))
+            return;
+        for (int i = 0; i < list.size(); i++) {
+            QqchDiscloseThird temp = list.get(i);
+            temp.setPid(pid);
+            if(temp.getId()== null){
+                new AddBaseInfoUtil<>().addBaseEntity(temp);
+                temp.setId(IdWorker.createId());
+                addList.add(temp);
+            }else{
+                new AddBaseInfoUtil<>().updateBaseEntity(temp);
+                updateList.add(temp);
+            }
+            //递归子级
+            saveThird(temp.getChildren(),temp.getId(),detailAddList,addList,updateList,delIdSet);
+            //最上级节点为用户，用户不绑定wbs，跳过
+            if(temp.getPid() == null || temp.getPid() < 0L)
+                continue;
+            //处理挂接的wbs
+            if(temp.getDetailTreeList() == null)
+                continue;
+            delIdSet.add(temp.getId());
+            //删除交底明细，并获取需要新增的交底明细
+            saveThirdDetail(temp.getDetailTreeList(),-1L,temp.getId(),detailAddList);
+        }
+    }
+
+    /**
+     * 保存交底明细信息  
+     * 
+     * @param list      交底明细集合
+     * @param pid       父级ID
+     * @param masterId  对应交底ID
+     * @param addList   需要保存的交底明细数据
+     */
+    public void saveThirdDetail(List<QqchDiscloseThirdDetail> list,Long pid,Long masterId,List<QqchDiscloseThirdDetail> addList){
+        if(CollectionUtils.isEmpty(list))
+            return;
+        for (int i = 0; i < list.size(); i++) {
+            QqchDiscloseThirdDetail temp = list.get(i);
+            temp.setId(IdWorker.createId());
+            temp.setPid(pid);
+            new AddBaseInfoUtil<>().addBaseEntity(temp);
+            temp.setMasterId(masterId);
+            addList.add(temp);
+            //递归子级
+            saveThirdDetail(temp.getChildren(),temp.getId(),masterId,addList);
+        }
+    }
 }
+

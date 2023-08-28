@@ -3,10 +3,13 @@ package com.hhwy.pm.qqch.preparation.technique.disclose.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.technique.disclose.domain.QqchDiscloseThirdDetail;
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo.QqchDiscloseThirdVo;
 import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseThirdService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,11 +38,23 @@ public class QqchDiscloseThirdController extends BaseController {
         return AjaxResult.success(qqchDiscloseThirdVo);
     }
 
+    /**
+     * 交底明细
+     * @param masterId
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchDiscloseThird:list")
+    @GetMapping("/getDetailList")
+    public AjaxResult getDetailList(Long masterId) {
+        List<QqchDiscloseThirdDetail> list = qqchDiscloseThirdService.getDetailList(masterId);
+        return AjaxResult.success(list);
+    }
+
     @PreAuthorize(hasPermi = "qqchDiscloseThird:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDiscloseThirdVo qqchDiscloseThirdVo) {
-        qqchDiscloseThirdService.batchSave(qqchDiscloseThirdVo);
+        qqchDiscloseThirdService.save(qqchDiscloseThirdVo);
         return AjaxResult.success();
     }
 }

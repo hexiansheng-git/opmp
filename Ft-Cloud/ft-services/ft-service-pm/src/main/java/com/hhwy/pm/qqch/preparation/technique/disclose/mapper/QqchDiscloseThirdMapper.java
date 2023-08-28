@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.technique.disclose.mapper;
 
 import com.hhwy.pm.qqch.preparation.technique.disclose.domain.QqchDiscloseThird;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -26,4 +28,6 @@ public interface QqchDiscloseThirdMapper {
     int deleteQqchDiscloseThird(QqchDiscloseThird qqchDiscloseThird);
 
     int deleteQqchDiscloseThirdByPks(@Param("qqchDiscloseThirdPkList") List<Long> qqchDiscloseThirdPkList);
+
+    int deleteDetailByMasterIds(@Param("ids") Set<Long> ids);
 }

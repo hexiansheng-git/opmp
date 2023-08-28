@@ -540,4 +540,11 @@
       </foreach>
     </where>
   </update>
+
+  <update id="deleteDetailByMasterIds">
+    delete from `qqch_disclose_third_detail` where master_id in
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </update>
 </mapper>
