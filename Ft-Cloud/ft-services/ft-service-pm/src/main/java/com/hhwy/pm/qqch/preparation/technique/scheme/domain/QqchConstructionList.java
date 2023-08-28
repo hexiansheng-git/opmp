@@ -12,6 +12,7 @@ import java.util.Date;
 import lombok.Data;
 
 /**
+ * 施工方案清单
  * @author zhenglili
  * @date 2023-07-13 14:40:32
  * @remark 3.4.2施工方案清单

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -13,6 +14,7 @@ import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,8 +44,9 @@ public class QqchConstructionListController extends BaseController {
     @GetMapping("/getList")
     public AjaxResult getList(
         @Validated(ValidationGroups.Select.class) QqchConstructionListVo qqchConstructionListParamVo) {
-        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
-            .getQqchConstructionListList(qqchConstructionListParamVo);
+        if(StringUtils.isBlank(qqchConstructionListParamVo.getWbsCode()))
+            return AjaxResult.success(new ArrayList<>(2));
+        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList(qqchConstructionListParamVo);
         return AjaxResult.success(qqchConstructionListVo);
     }
 

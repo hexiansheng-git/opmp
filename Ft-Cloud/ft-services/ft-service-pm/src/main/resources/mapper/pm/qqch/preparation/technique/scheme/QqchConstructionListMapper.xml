@@ -548,6 +548,16 @@
     </where>
   </update>
 
+  <update id="deleteByWbsCode">
+    update `qqch_construction_list` set del_flag = 1
+    <where>
+      `wbs_code` in
+      <foreach item="code" collection="wbsCodeSet" open="(" separator="," close=")">
+        #{code}
+      </foreach>
+    </where>
+  </update>
+
   <select id="getBigDangerLevelConstructionList" resultMap="QqchConstructionListResultMap">
     <include refid="selectQqchConstructionListVo"/>
     <where>

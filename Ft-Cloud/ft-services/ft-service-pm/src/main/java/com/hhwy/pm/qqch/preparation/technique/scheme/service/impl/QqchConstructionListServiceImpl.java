@@ -17,11 +17,14 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -62,11 +65,11 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
         // 先批量删除当前版本所有数据
-        QqchConstructionList deleteParam = new QqchConstructionList();
-        deleteParam.setVersion(qqchConstructionListVo.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchConstructionListMapper.updateQqchConstructionList(deleteParam);
-
+//        QqchConstructionList deleteParam = new QqchConstructionList();
+//        deleteParam.setVersion(qqchConstructionListVo.getVersion());
+//        deleteParam.setDelFlag("1");
+//        qqchConstructionListMapper.updateQqchConstructionList(deleteParam);
+        Set<String> delWbsCodeSet = new HashSet<>(); 
         if (!CollectionUtils.isEmpty(qqchConstructionListVo.getList())) {
             for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
                 if (StringUtils.isBlank(qqchConstructionList.getSchemeCode())) {
@@ -84,10 +87,13 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
                 if (qqchConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     qqchConstructionList.setValid(Valid.YES);
                 }
+                delWbsCodeSet.add(qqchConstructionList.getWbsCode());
             }
+            //删除原wbsCode对应的数据
+            qqchConstructionListMapper.deleteByWbsCode(delWbsCodeSet);
             qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
         }
-
+        
         String buttonMark = qqchConstructionListVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态

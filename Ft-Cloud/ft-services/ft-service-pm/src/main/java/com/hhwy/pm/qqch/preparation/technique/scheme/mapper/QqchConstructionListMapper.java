@@ -3,6 +3,8 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.mapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Set;
+
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -28,6 +30,8 @@ public interface QqchConstructionListMapper {
     int deleteQqchConstructionList(QqchConstructionList qqchConstructionList);
 
     int deleteQqchConstructionListByPks(@Param("qqchConstructionListPkList") List<Long> qqchConstructionListPkList);
+
+    int deleteByWbsCode(@Param("wbsCodeSet") Set<String> wbsCodeSet);
 
     List<QqchConstructionList> getBigDangerLevelConstructionList(QqchConstructionList qqchConstructionList);
 
