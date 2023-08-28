@@ -98,9 +98,20 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         //获取最新生效版本的重难点工程清单
         List<QqchWeightEngineeringList> qqchWeightEngineeringListList = this.getEngineeringListByVersion(null);
 
-        //获取wbs集合
+        //获取wbsId集合
+        Set<String> wbsIds = this.getWbsIds(qqchWeightEngineeringListList);
+        return WbsRedisUtils.getWbs(wbsIds);
+    }
+
+    /**
+     * 获取wbsId集合
+     * @param engineeringListList
+     * @return
+     */
+    public Set<String> getWbsIds(List<QqchWeightEngineeringList> engineeringListList){
+        //获取wbsId集合
         Set<String> wbsIds = new HashSet<>();
-        for (QqchWeightEngineeringList weightEngineeringList : qqchWeightEngineeringListList) {
+        for (QqchWeightEngineeringList weightEngineeringList : engineeringListList) {
             Long wbsId = weightEngineeringList.getWbsId();
             String wbsAncestors = weightEngineeringList.getWbsAncestors();
             if(StringUtils.isNotBlank(wbsAncestors)){
@@ -116,7 +127,7 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
                 }
             }
         }
-        return WbsRedisUtils.getWbs(wbsIds);
+        return wbsIds;
     }
 
     /**
