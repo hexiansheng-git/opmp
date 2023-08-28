@@ -3,7 +3,6 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeContent;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonSchemeHeader;
 import com.hhwy.pm.qqch.preparation.survey.optimize.mapper.QqchComparisonSchemeHeaderMapper;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeHeaderService;
@@ -45,13 +44,13 @@ public class QqchComparisonSchemeHeaderServiceImpl implements IQqchComparisonSch
             Long headerId = IdWorker.createId();
 
             //插入单元格
-            List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeHeader.getQqchComparisonSchemeContentList();
-            qqchComparisonSchemeContentService.insertQqchComparisonSchemeContentList(qqchComparisonSchemeContentList, schemeId , headerId, version);
+//            List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeHeader.getContentList();
+//            qqchComparisonSchemeContentService.insertQqchComparisonSchemeContentList(qqchComparisonSchemeContentList, schemeId , headerId, version);
 
             qqchComparisonSchemeHeader.setId(headerId);
             qqchComparisonSchemeHeader.setSchemeId(schemeId);
             qqchComparisonSchemeHeader.setVersion(version);
-            qqchComparisonSchemeHeader.setSort(String.valueOf(sort++));
+            qqchComparisonSchemeHeader.setSort(sort++);
             qqchComparisonSchemeHeader.setCreateUser(StringUtils.valueOf(SecurityUtils.getUserId()));
             qqchComparisonSchemeHeader.setCreateUserName(SecurityUtils.getUserName());
             qqchComparisonSchemeHeader.setCreateTime(DateUtils.getNowDate());

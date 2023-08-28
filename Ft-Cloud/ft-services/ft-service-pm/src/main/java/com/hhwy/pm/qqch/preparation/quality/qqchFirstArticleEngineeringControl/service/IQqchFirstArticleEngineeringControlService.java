@@ -30,5 +30,5 @@ public interface IQqchFirstArticleEngineeringControlService {
 
     void save(QqchFirstArticleEngineeringControlVo vo);
 
-    void insertList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList, BigDecimal version);
+    void insertList(List<QqchFirstArticleEngineeringControl> qqchFirstArticleEngineeringControlList, BigDecimal version, String flag);
 }

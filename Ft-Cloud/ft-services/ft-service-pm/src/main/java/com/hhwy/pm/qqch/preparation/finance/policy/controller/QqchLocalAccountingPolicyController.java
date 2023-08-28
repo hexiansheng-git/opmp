@@ -71,7 +71,7 @@ public class QqchLocalAccountingPolicyController extends BaseController {
      * @param version
      * @throws IOException
      */
-    @PostMapping("/export")
+    @GetMapping("/export")
     public void export(HttpServletResponse response, BigDecimal version)
         throws IOException {
         QqchLocalAccountingPolicyVo qqchLocalAccountingPolicyVo = qqchLocalAccountingPolicyService

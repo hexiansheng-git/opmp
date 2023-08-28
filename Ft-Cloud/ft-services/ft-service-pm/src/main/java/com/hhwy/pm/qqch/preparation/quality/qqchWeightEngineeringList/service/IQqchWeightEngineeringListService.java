@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service;
 
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 
 import java.util.List;
 
@@ -13,6 +14,12 @@ import java.util.List;
 public interface IQqchWeightEngineeringListService {
                                                                                                                                                                                                                                                                                                                                                                                                                 
     QqchWeightEngineeringList getQqchWeightEngineeringList(QqchWeightEngineeringList qqchWeightEngineeringList);
+
+    /**
+     * 获取最新生效版本重难点工程清单中选择的wbs以及其所有父级结构的集合
+     * @return
+     */
+    List<XmslWbs> keyDifficultProjectInventoryWbsList();
 
     QqchWeightEngineeringListVo getQqchWeightEngineeringListList(QqchWeightEngineeringList qqchWeightEngineeringList);
 

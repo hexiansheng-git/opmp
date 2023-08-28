@@ -54,6 +54,10 @@
         <result property="engineeringGeographicalLocationZ" column="engineering_geographical_location_z"/>
         <result property="locationImageGroupId" column="location_image_group_id"/>
         <result property="structureImageGroupId" column="structure_image_group_id"/>
+        <result property="localCurrency" column="local_currency"/>
+        <result property="localCurrencyCode" column="currency_code"/>
+        <result property="contractCurrency" column="contract_currency"/>
+        <result property="contractCurrencyCode" column="contract_currency_code"/>
         <result property="remark" column="remark"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
@@ -118,6 +122,10 @@
             ,`detailed_address`
             ,`project_scale`
             ,`project_context`
+            ,`local_currency`
+            ,`local_currency_code`
+            ,`contract_currency`
+            ,`contract_currency_code`
             ,`remark`
             ,`region_id`
             ,`region_name`
@@ -181,6 +189,10 @@
         ,`engineering_geographical_location_z`
         ,`location_image_group_id`
         ,`structure_image_group_id`
+        ,`local_currency`
+        ,`local_currency_code`
+        ,`contract_currency`
+        ,`contract_currency_code`
         ,`remark`
         ,`region_id`
         ,`region_name`
@@ -362,6 +374,10 @@
         ,`engineering_geographical_location_z`
         ,`location_image_group_id`
         ,`structure_image_group_id`
+        ,`local_currency`
+        ,`local_currency_code`
+        ,`contract_currency`
+        ,`contract_currency_code`
         ,`remark`
         ,`region_id`
         ,`region_name`
@@ -554,6 +570,10 @@
             </if>
             <if test="locationImageGroupId != null  and locationImageGroupId != ''">`location_image_group_id`,</if>
             <if test="structureImageGroupId != null  and structureImageGroupId != ''">`structure_image_group_id`,</if>
+            <if test="localCurrency != null  and localCurrency != ''">`local_currency`,</if>
+            <if test="localCurrencyCode != null  and localCurrencyCode != ''">`local_currency_code`,</if>
+            <if test="contractCurrency != null  and contractCurrency != ''">`contract_currency`,</if>
+            <if test="contractCurrencyCode != null  and contractCurrencyCode != ''">`contract_currency_code`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -632,6 +652,10 @@
             </if>
             <if test="locationImageGroupId != null  and locationImageGroupId != ''">#{locationImageGroupId},</if>
             <if test="structureImageGroupId != null  and structureImageGroupId != ''">#{structureImageGroupId},</if>
+            <if test="localCurrency != null  and localCurrency != ''">#{localCurrency},</if>
+            <if test="localCurrencyCode != null  and localCurrencyCode != ''">#{localCurrencyCode},</if>
+            <if test="contractCurrency != null  and contractCurrency != ''">#{contractCurrency},</if>
+            <if test="contractCurrencyCode != null  and contractCurrencyCode != ''">#{contractCurrencyCode},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -705,6 +729,10 @@
             `engineering_geographical_location_z`,
             `location_image_group_id`,
             `structure_image_group_id`,
+            `local_currency`,
+            `local_currency_code`,
+            `contract_currency`,
+            `contract_currency_code`,
             `remark`,
             `region_id`,
             `region_name`,
@@ -774,6 +802,10 @@
                 #{item.engineeringGeographicalLocationZ},
                 #{item.locationImageGroupId},
                 #{item.structureImageGroupId},
+                #{item.localCurrency},
+                #{item.localCurrencyCode},
+                #{item.contractCurrency},
+                #{item.contractCurrencyCode},
                 #{item.remark},
                 #{item.regionId},
                 #{item.regionName},
@@ -879,6 +911,18 @@
             </if>
             <if test="structureImageGroupId != null  and  structureImageGroupId != ''">`structure_image_group_id` =
                 #{structureImageGroupId},
+            </if>
+            <if test="localCurrency != null  and  localCurrency != ''">`local_currency` =
+                #{localCurrency},
+            </if>
+            <if test="localCurrencyCode != null  and  localCurrencyCode != ''">`local_currency_code` =
+                #{localCurrencyCode},
+            </if>
+            <if test="contractCurrency != null  and  contractCurrency != ''">`contract_currency` =
+                #{contractCurrency},
+            </if>
+            <if test="contractCurrencyCode != null  and  contractCurrencyCode != ''">`contract_currency_code` =
+                #{contractCurrencyCode},
             </if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -1138,6 +1182,26 @@
             <trim prefix="structure_image_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.structureImageGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="local_currency  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.localCurrency}
+                </foreach>
+            </trim>
+            <trim prefix="local_currency_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.localCurrencyCode}
+                </foreach>
+            </trim>
+            <trim prefix="contract_currency  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractCurrency}
+                </foreach>
+            </trim>
+            <trim prefix="contract_currency_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractCurrencyCode}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">

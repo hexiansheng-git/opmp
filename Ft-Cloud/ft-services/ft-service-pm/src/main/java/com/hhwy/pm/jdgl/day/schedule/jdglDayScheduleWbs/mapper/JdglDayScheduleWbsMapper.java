@@ -1,0 +1,32 @@
+package com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.mapper;
+
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+
+/**
+ * @author cjh
+ * @date 2023-08-24 14:05:56
+ * @remark
+ */
+public interface JdglDayScheduleWbsMapper {
+
+    JdglDayScheduleWbs getJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs);
+
+    List<JdglDayScheduleWbs> getJdglDayScheduleWbsList(JdglDayScheduleWbs jdglDayScheduleWbs);
+
+    int insertJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs);
+
+    int insertJdglDayScheduleWbsList(@Param("jdglDayScheduleWbsList") List<JdglDayScheduleWbs> jdglDayScheduleWbsList);
+
+    int updateJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs);
+
+    int updateJdglDayScheduleWbsList(@Param("jdglDayScheduleWbsList") List<JdglDayScheduleWbs> jdglDayScheduleWbsList);
+
+    int deleteJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs);
+
+    int deleteJdglDayScheduleWbsByPks(@Param("jdglDayScheduleWbsPkList") List<Long> jdglDayScheduleWbsPkList);
+
+    int deleteJdglDayScheduleWbsByDayScheduleId(Long dayScheduleId);
+}

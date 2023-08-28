@@ -22,9 +22,9 @@ public interface QqchFirstArticleEngineeringListMapper {
 
     int updateQqchFirstArticleEngineeringList(QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList);
 
-            int updateQqchFirstArticleEngineeringListList(@Param("qqchFirstArticleEngineeringListList") List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList);
+            int updateQqchFirstArticleEngineeringListList(@Param("list") List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList);
     
     int deleteQqchFirstArticleEngineeringList(QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList);
 
-            int deleteQqchFirstArticleEngineeringListByPks(@Param("qqchFirstArticleEngineeringListPkList") List<Long> qqchFirstArticleEngineeringListPkList);
+            int deleteQqchFirstArticleEngineeringListByPks(@Param("list") List<Long> qqchFirstArticleEngineeringListPkList);
     }

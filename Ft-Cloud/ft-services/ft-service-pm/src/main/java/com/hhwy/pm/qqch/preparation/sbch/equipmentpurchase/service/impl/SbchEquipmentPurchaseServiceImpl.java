@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchase;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchaseDetails;
@@ -140,6 +141,13 @@ public class SbchEquipmentPurchaseServiceImpl implements ISbchEquipmentPurchaseS
             detailsService.insertOrEditBatchByMainId(detailList, sbchEquipmentPurchase.getId(), false);
         }
 
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(sbchEquipmentPurchase.getButtonMark())){
+            //插入确认记录
+            String menuId = sbchEquipmentPurchase.getMenuId();
+            String stageIdentity = sbchEquipmentPurchase.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
         return sbchEquipmentPurchase.getId().toString();
     }
 

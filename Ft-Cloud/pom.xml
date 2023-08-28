@@ -280,6 +280,7 @@
             <id>public</id>
             <name>aliyun nexus</name>
             <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+<!--            <url>http://192.168.1.102:13002/nexus/content/groups/hhwy/</url>-->
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -288,7 +289,7 @@
         <repository>
             <id>dev-hhwy</id>
             <name>Local Development Repository hhwy</name>
-            <url>http://hwws.365grid.cn/nexus/content/groups/hhwy/</url>
+            <url>http://192.168.1.102:13002/nexus/content/groups/hhwy/</url>
             <releases>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
