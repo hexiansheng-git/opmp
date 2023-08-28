@@ -48,48 +48,48 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
     private IQqchManagementPersonConfigService qqchManagementPersonConfigService;
 
 
-    public QqchCostControlPostDuty getQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty) {
-        return qqchCostControlPostDutyMapper.getQqchExtendApplyWorkGroup(qqchCostControlPostDuty);
+    public QqchCostControlPostDuty getQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty) {
+        return qqchCostControlPostDutyMapper.getQqchCostControlPostDuty(qqchCostControlPostDuty);
     }
 
-    public List<QqchCostControlPostDuty> getQqchExtendApplyWorkGroupList(QqchCostControlPostDuty qqchCostControlPostDuty) {
-        return qqchCostControlPostDutyMapper.getQqchExtendApplyWorkGroupList(qqchCostControlPostDuty);
+    public List<QqchCostControlPostDuty> getQqchCostControlPostDutyList(QqchCostControlPostDuty qqchCostControlPostDuty) {
+        return qqchCostControlPostDutyMapper.getQqchCostControlPostDutyList(qqchCostControlPostDuty);
     }
 
     @Transactional
-    public int insertQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty) {
+    public int insertQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty) {
         qqchCostControlPostDuty.setId(IdWorker.createId());
         qqchCostControlPostDuty.setCreateUser(SecurityUtils.getUserName());
         qqchCostControlPostDuty.setCreateTime(DateUtils.getNowDate());
-        return qqchCostControlPostDutyMapper.insertQqchExtendApplyWorkGroup(qqchCostControlPostDuty);
+        return qqchCostControlPostDutyMapper.insertQqchCostControlPostDuty(qqchCostControlPostDuty);
     }
 
     @Transactional
-    public int updateQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty) {
+    public int updateQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty) {
         qqchCostControlPostDuty.setUpdateUser(SecurityUtils.getUserName());
         qqchCostControlPostDuty.setUpdateTime(DateUtils.getNowDate());
-        return qqchCostControlPostDutyMapper.updateQqchExtendApplyWorkGroup(qqchCostControlPostDuty);
+        return qqchCostControlPostDutyMapper.updateQqchCostControlPostDuty(qqchCostControlPostDuty);
     }
 
     @Transactional
-    public int updateQqchExtendApplyWorkGroupList(List<QqchCostControlPostDuty> qqchCostControlPostDutyList) {
+    public int updateQqchCostControlPostDutyList(List<QqchCostControlPostDuty> qqchCostControlPostDutyList) {
         for (QqchCostControlPostDuty qqchCostControlPostDuty : qqchCostControlPostDutyList) {
             qqchCostControlPostDuty.setUpdateUser(SecurityUtils.getUserName());
             qqchCostControlPostDuty.setUpdateTime(DateUtils.getNowDate());
         }
-        return qqchCostControlPostDutyMapper.updateQqchExtendApplyWorkGroupList(qqchCostControlPostDutyList);
+        return qqchCostControlPostDutyMapper.updateQqchCostControlPostDutyList(qqchCostControlPostDutyList);
     }
 
     @Transactional
-    public int deleteQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty) {
+    public int deleteQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty) {
         qqchCostControlPostDuty.setUpdateUser(SecurityUtils.getUserName());
         qqchCostControlPostDuty.setUpdateTime(DateUtils.getNowDate());
-        return qqchCostControlPostDutyMapper.deleteQqchExtendApplyWorkGroup(qqchCostControlPostDuty);
+        return qqchCostControlPostDutyMapper.deleteQqchCostControlPostDuty(qqchCostControlPostDuty);
     }
 
     @Transactional
-    public int deleteQqchExtendApplyWorkGroupByPks(List<Long> qqchExtendApplyWorkGroupPkList) {
-        return qqchCostControlPostDutyMapper.deleteQqchExtendApplyWorkGroupByPks(qqchExtendApplyWorkGroupPkList);
+    public int deleteQqchCostControlPostDutyByPks(List<Long> qqchCostControlPostDutyPkList) {
+        return qqchCostControlPostDutyMapper.deleteQqchCostControlPostDutyByPks(qqchCostControlPostDutyPkList);
     }
 
     /**
@@ -98,14 +98,14 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
      * @return
      */
     @Override
-    public QqchCostControlPostDutyVo getQqchExtendApplyWorkGroupVo(QqchCostControlPostDuty qqchCostControlPostDuty) {
+    public QqchCostControlPostDutyVo getQqchCostControlPostDutyVo(QqchCostControlPostDuty qqchCostControlPostDuty) {
         QqchCostControlPostDutyVo qqchCostControlPostDutyVo = new QqchCostControlPostDutyVo();
 
         BigDecimal version = qqchCostControlPostDuty.getVersion();
-        version = VersionUtil.getVersion("qqch_extend_apply_work_group",version);
+        version = VersionUtil.getVersion("qqch_cost_control_post_duty",version);
 
         qqchCostControlPostDuty.setVersion(version);
-        List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyMapper.getQqchExtendApplyWorkGroupList(qqchCostControlPostDuty);
+        List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyMapper.getQqchCostControlPostDutyList(qqchCostControlPostDuty);
 
         //转树列表
         List<QqchCostControlPostDuty> treeList = ListTreeUtil.formatTree(
@@ -119,10 +119,6 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         qqchCostControlPostDutyVo.setStageIdentity(qqchReviewService.getStage());
         qqchCostControlPostDutyVo.setList(treeList);
         return qqchCostControlPostDutyVo;
-    }
-
-    public List<QqchCostControlPostDuty> initializeStairStructure(){
-        return null;
     }
 
     /**
@@ -170,9 +166,9 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         //删除旧数据
         QqchCostControlPostDuty qqchCostControlPostDuty = new QqchCostControlPostDuty();
         qqchCostControlPostDuty.setVersion(version);
-        qqchCostControlPostDutyMapper.deleteQqchExtendApplyWorkGroup(qqchCostControlPostDuty);
+        qqchCostControlPostDutyMapper.deleteQqchCostControlPostDuty(qqchCostControlPostDuty);
 
-        this.insertQqchExtendApplyWorkGroupList(tileList,version);
+        this.insertQqchCostControlPostDutyList(tileList,version);
     }
 
     /**
@@ -181,7 +177,7 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
      * @param version
      */
     @Transactional
-    public void insertQqchExtendApplyWorkGroupList(List<QqchCostControlPostDuty> qqchCostControlPostDutyList, BigDecimal version) {
+    public void insertQqchCostControlPostDutyList(List<QqchCostControlPostDuty> qqchCostControlPostDutyList, BigDecimal version) {
         if(CollectionUtils.isEmpty(qqchCostControlPostDutyList)){
             return;
         }
@@ -202,7 +198,7 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
                 qqchCostControlPostDuty.setSource(DataSource.MANUAL_ADDITION);
             }
         }
-        qqchCostControlPostDutyMapper.insertQqchExtendApplyWorkGroupList(qqchCostControlPostDutyList);
+        qqchCostControlPostDutyMapper.insertQqchCostControlPostDutyList(qqchCostControlPostDutyList);
     }
 
     private static final String OVERALL_MANAGEMENT = "统筹管理";
@@ -238,8 +234,17 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         overallManagement.setChildren(finalList);
         list.add(0,overallManagement);
 
+        List<QqchCostControlPostDuty> tileList = ListTreeUtil.formatList(
+                list,
+                QqchCostControlPostDuty::setId,
+                QqchCostControlPostDuty::setPid,
+                QqchCostControlPostDuty::setSort,
+                QqchCostControlPostDuty::setLeaf,
+                QqchCostControlPostDuty::getChildren,
+                QqchCostControlPostDuty::setChildren);
+
         //入库
-        this.insertQqchExtendApplyWorkGroupList(list,qqchCostControlPostDutyVo.getVersion());
+        this.insertQqchCostControlPostDutyList(tileList,qqchCostControlPostDutyVo.getVersion());
     }
 
     /**

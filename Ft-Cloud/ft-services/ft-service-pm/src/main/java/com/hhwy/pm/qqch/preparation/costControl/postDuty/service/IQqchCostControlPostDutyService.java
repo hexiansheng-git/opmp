@@ -12,26 +12,26 @@ import java.util.List;
  */
 public interface IQqchCostControlPostDutyService {
 
-    QqchCostControlPostDuty getQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    QqchCostControlPostDuty getQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    List<QqchCostControlPostDuty> getQqchExtendApplyWorkGroupList(QqchCostControlPostDuty qqchCostControlPostDuty);
+    List<QqchCostControlPostDuty> getQqchCostControlPostDutyList(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int insertQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    int insertQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int updateQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    int updateQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int updateQqchExtendApplyWorkGroupList(List<QqchCostControlPostDuty> qqchCostControlPostDutyList);
+    int updateQqchCostControlPostDutyList(List<QqchCostControlPostDuty> qqchCostControlPostDutyList);
 
-    int deleteQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    int deleteQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int deleteQqchExtendApplyWorkGroupByPks(List<Long> qqchExtendApplyWorkGroupPkList);
+    int deleteQqchCostControlPostDutyByPks(List<Long> qqchCostControlPostDutyPkList);
 
     /**
      * 获取Vo
      * @param qqchCostControlPostDuty
      * @return
      */
-    QqchCostControlPostDutyVo getQqchExtendApplyWorkGroupVo(QqchCostControlPostDuty qqchCostControlPostDuty);
+    QqchCostControlPostDutyVo getQqchCostControlPostDutyVo(QqchCostControlPostDuty qqchCostControlPostDuty);
 
     /**
      * 保存/确认/提交

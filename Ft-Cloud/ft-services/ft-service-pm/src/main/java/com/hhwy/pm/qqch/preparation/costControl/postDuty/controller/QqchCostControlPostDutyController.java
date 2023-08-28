@@ -25,63 +25,63 @@ import java.util.List;
  */
 @Validated
 @RestController
-@RequestMapping("/qqchExtendApplyWorkGroup")
+@RequestMapping("/qqchCostControlPostDuty")
 public class QqchCostControlPostDutyController extends BaseController {
 
     @Autowired
-    private IQqchCostControlPostDutyService qqchExtendApplyWorkGroupService;
+    private IQqchCostControlPostDutyService qqchCostControlPostDutyService;
 
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:list")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:list")
     @GetMapping
-    public AjaxResult getQqchExtendApplyWorkGroup(@Validated(ValidationGroups.Get.class) QqchCostControlPostDuty qqchCostControlPostDutyParam) {
-        QqchCostControlPostDuty qqchCostControlPostDuty = qqchExtendApplyWorkGroupService.getQqchExtendApplyWorkGroup(qqchCostControlPostDutyParam);
+    public AjaxResult getQqchCostControlPostDuty(@Validated(ValidationGroups.Get.class) QqchCostControlPostDuty qqchCostControlPostDutyParam) {
+        QqchCostControlPostDuty qqchCostControlPostDuty = qqchCostControlPostDutyService.getQqchCostControlPostDuty(qqchCostControlPostDutyParam);
         return AjaxResult.success(qqchCostControlPostDuty);
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:list")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:list")
     @GetMapping("/list")
-    public AjaxResult getQqchExtendApplyWorkGroupList(@Validated(ValidationGroups.Select.class) QqchCostControlPostDuty qqchCostControlPostDutyParam) {
+    public AjaxResult getQqchCostControlPostDutyList(@Validated(ValidationGroups.Select.class) QqchCostControlPostDuty qqchCostControlPostDutyParam) {
         startPage();
-        List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchExtendApplyWorkGroupService.getQqchExtendApplyWorkGroupList(qqchCostControlPostDutyParam);
+        List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyService.getQqchCostControlPostDutyList(qqchCostControlPostDutyParam);
         return getDataTableAjaxResult(qqchCostControlPostDutyList);
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:add")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:add")
     @PostMapping("/add")
-    public AjaxResult insertQqchExtendApplyWorkGroup(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
-        qqchExtendApplyWorkGroupService.insertQqchExtendApplyWorkGroup(qqchCostControlPostDutyParam);
+    public AjaxResult insertQqchCostControlPostDuty(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
+        qqchCostControlPostDutyService.insertQqchCostControlPostDuty(qqchCostControlPostDutyParam);
         return AjaxResult.success(qqchCostControlPostDutyParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:update")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:update")
     @PostMapping("/update")
-    public AjaxResult updateQqchExtendApplyWorkGroup(@Validated(ValidationGroups.Update.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
-        return toAjax(qqchExtendApplyWorkGroupService.updateQqchExtendApplyWorkGroup(qqchCostControlPostDutyParam));
+    public AjaxResult updateQqchCostControlPostDuty(@Validated(ValidationGroups.Update.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
+        return toAjax(qqchCostControlPostDutyService.updateQqchCostControlPostDuty(qqchCostControlPostDutyParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:update")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:update")
     @PostMapping("/batchUpdate")
-    public AjaxResult updateQqchExtendApplyWorkGroupList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchCostControlPostDuty> qqchCostControlPostDutyListParam) {
-        return toAjax(qqchExtendApplyWorkGroupService.updateQqchExtendApplyWorkGroupList(qqchCostControlPostDutyListParam));
+    public AjaxResult updateQqchCostControlPostDutyList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchCostControlPostDuty> qqchCostControlPostDutyListParam) {
+        return toAjax(qqchCostControlPostDutyService.updateQqchCostControlPostDutyList(qqchCostControlPostDutyListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:remove")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteQqchExtendApplyWorkGroup(@Validated(ValidationGroups.Delete.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
-        return toAjax(qqchExtendApplyWorkGroupService.deleteQqchExtendApplyWorkGroup(qqchCostControlPostDutyParam));
+    public AjaxResult deleteQqchCostControlPostDuty(@Validated(ValidationGroups.Delete.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
+        return toAjax(qqchCostControlPostDutyService.deleteQqchCostControlPostDuty(qqchCostControlPostDutyParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:remove")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:remove")
     @PostMapping("/{ids}")
-    public AjaxResult deleteQqchExtendApplyWorkGroupByPks(@PathVariable Long[] ids) {
-        List<Long> qqchExtendApplyWorkGroupPkList = Arrays.asList(ids);
-        return toAjax(qqchExtendApplyWorkGroupService.deleteQqchExtendApplyWorkGroupByPks(qqchExtendApplyWorkGroupPkList));
+    public AjaxResult deleteQqchCostControlPostDutyByPks(@PathVariable Long[] ids) {
+        List<Long> qqchCostControlPostDutyPkList = Arrays.asList(ids);
+        return toAjax(qqchCostControlPostDutyService.deleteQqchCostControlPostDutyByPks(qqchCostControlPostDutyPkList));
     }
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchCostControlPostDuty qqchCostControlPostDutyParam) throws IOException {
-        List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchExtendApplyWorkGroupService.getQqchExtendApplyWorkGroupList(qqchCostControlPostDutyParam);
+        List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyService.getQqchCostControlPostDutyList(qqchCostControlPostDutyParam);
         ExcelUtils<QqchCostControlPostDuty> util = new ExcelUtils<>(QqchCostControlPostDuty.class);
         util.exportExcel(response, qqchCostControlPostDutyList, DateUtils.getDate());
     }
@@ -91,9 +91,9 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDuty
      * @return
      */
-    @GetMapping("getQqchExtendApplyWorkGroupVo")
-    public AjaxResult getQqchExtendApplyWorkGroupVo(@Validated(ValidationGroups.Get.class) QqchCostControlPostDuty qqchCostControlPostDuty) {
-        QqchCostControlPostDutyVo qqchCostControlPostDutyVo = qqchExtendApplyWorkGroupService.getQqchExtendApplyWorkGroupVo(qqchCostControlPostDuty);
+    @GetMapping("getQqchCostControlPostDutyVo")
+    public AjaxResult getQqchCostControlPostDutyVo(@Validated(ValidationGroups.Get.class) QqchCostControlPostDuty qqchCostControlPostDuty) {
+        QqchCostControlPostDutyVo qqchCostControlPostDutyVo = qqchCostControlPostDutyService.getQqchCostControlPostDutyVo(qqchCostControlPostDuty);
         return AjaxResult.success(qqchCostControlPostDutyVo);
     }
 
@@ -102,10 +102,10 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDutyVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:save")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo) {
-        qqchExtendApplyWorkGroupService.save(qqchCostControlPostDutyVo);
+        qqchCostControlPostDutyService.save(qqchCostControlPostDutyVo);
         return AjaxResult.success();
     }
 
@@ -114,10 +114,10 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDutyVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchExtendApplyWorkGroup:save")
+    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
     @PostMapping("/synchronization")
     public AjaxResult synchronization(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo){
-        qqchExtendApplyWorkGroupService.synchronization(qqchCostControlPostDutyVo);
+        qqchCostControlPostDutyService.synchronization(qqchCostControlPostDutyVo);
         return AjaxResult.success();
     }
 }

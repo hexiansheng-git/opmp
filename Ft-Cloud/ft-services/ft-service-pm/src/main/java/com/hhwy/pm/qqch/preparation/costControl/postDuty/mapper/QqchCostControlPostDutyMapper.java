@@ -14,19 +14,19 @@ import java.util.List;
 @Repository
 public interface QqchCostControlPostDutyMapper {
 
-    QqchCostControlPostDuty getQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    QqchCostControlPostDuty getQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    List<QqchCostControlPostDuty> getQqchExtendApplyWorkGroupList(QqchCostControlPostDuty qqchCostControlPostDuty);
+    List<QqchCostControlPostDuty> getQqchCostControlPostDutyList(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int insertQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    int insertQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int insertQqchExtendApplyWorkGroupList(@Param("qqchExtendApplyWorkGroupList") List<QqchCostControlPostDuty> qqchCostControlPostDutyList);
+    int insertQqchCostControlPostDutyList(@Param("qqchCostControlPostDutyList") List<QqchCostControlPostDuty> qqchCostControlPostDutyList);
 
-    int updateQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    int updateQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int updateQqchExtendApplyWorkGroupList(@Param("list") List<QqchCostControlPostDuty> qqchCostControlPostDutyList);
+    int updateQqchCostControlPostDutyList(@Param("list") List<QqchCostControlPostDuty> qqchCostControlPostDutyList);
 
-    int deleteQqchExtendApplyWorkGroup(QqchCostControlPostDuty qqchCostControlPostDuty);
+    int deleteQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty);
 
-    int deleteQqchExtendApplyWorkGroupByPks(@Param("qqchExtendApplyWorkGroupPkList") List<Long> qqchExtendApplyWorkGroupPkList);
+    int deleteQqchCostControlPostDutyByPks(@Param("qqchCostControlPostDutyPkList") List<Long> qqchCostControlPostDutyPkList);
 }
