@@ -82,14 +82,14 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
         QqchSurveyDesignTeams qqchSurveyDesignTeams = new QqchSurveyDesignTeams();
         qqchSurveyDesignTeams.setVersion(qqchSurveyDesignTeamsVo.getVersion());
         //1
-       QqchSurveyDesignTeams qqchSurveyDesignTeams1 = qqchSurveyDesignTeamsMapper.getQqchSurveyDesignTeams(qqchSurveyDesignTeams);
-        if(qqchSurveyDesignTeams1!=null){
+        List<QqchSurveyDesignTeams> designTeamsList = qqchSurveyDesignTeamsMapper.getQqchSurveyDesignTeamsList(qqchSurveyDesignTeams);
+        for (QqchSurveyDesignTeams surveyDesignTeams : designTeamsList) {
             QqchSurveyPersonPlan qqchSurveyPersonPlan = new QqchSurveyPersonPlan();
-            qqchSurveyPersonPlan.setMasterId(qqchSurveyDesignTeams1.getId());
+            qqchSurveyPersonPlan.setMasterId(surveyDesignTeams.getId());
             qqchSurveyPersonPlanMapper.deleteQqchSurveyPersonPlan(qqchSurveyPersonPlan);
 
             QqchSurveyEquPlan qqchSurveyEquPlan=new QqchSurveyEquPlan();
-            qqchSurveyEquPlan.setMasterId(qqchSurveyDesignTeams1.getId());
+            qqchSurveyEquPlan.setMasterId(surveyDesignTeams.getId());
             qqchSurveyEquPlanMapper.deleteQqchSurveyEquPlan(qqchSurveyEquPlan);
         }
         //2
