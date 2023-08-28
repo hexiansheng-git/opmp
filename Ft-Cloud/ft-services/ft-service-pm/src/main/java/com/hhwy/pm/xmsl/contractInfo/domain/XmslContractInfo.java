@@ -90,6 +90,12 @@ public class XmslContractInfo extends CommonBaseEntity {
     private String projectCategory;
 
     /**
+     * 字段描述：项目类型 （字典项 project_type）
+     */
+    @JsonProperty
+    private String projectType;
+
+    /**
      * 字段描述：业务领域及产品
      */
     @JsonProperty

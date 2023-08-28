@@ -58,6 +58,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
         contractInfo.setProjectName(projectInfo.getProjectName());
         contractInfo.setWinDate(projectInfo.getWinTheBiddingDate());
+        contractInfo.setProjectType(projectInfo.getProjectType());
         contractInfo.setProjectCategory(projectInfo.getProjectType());
         //承包方式字段
         contractInfo.setContractingMethod(projectInfo.getContractingMethod());
@@ -90,7 +91,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
         contractInfo.setVersion(BigDecimal.valueOf(1.0));
         contractInfo.setId(IdWorker.createId());
-//        contractInfo.setCreateUser(SecurityUtils.getUserName());
+        contractInfo.setCreateUser(SecurityUtils.getUserName());
         contractInfo.setCreateTime(DateUtils.getNowDate());
         xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
 

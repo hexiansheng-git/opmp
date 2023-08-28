@@ -16,8 +16,14 @@ public enum FtExcelEnum {
     QQCH_SCHE_CORR("importCorr.xlsx", "纠偏措施模板.xlsx", "com.hhwy.pm.qqch.sgch.sche.domain.QqchScheCorr"),
     QQCH_ORG("importOrg.xlsx", "项目组织机构模板.xlsx", "com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList"),
     QQCH_IMPORTANCE("importImportance.xlsx", "开工前重要策划.xlsx", "com.hhwy.pm.qqch.sgch.important.domain.QqchImportant"),
+
     QQCH_TAX_GLOBAL("importTaxGlobal.xlsx", "整体资金策划.xlsx", "com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal"),
-    QQCH_TAX_GOAL("importTaxGoal.xlsx", "财务目标.xlsx", "com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal");
+    QQCH_TAX_GOAL("importTaxGoal.xlsx", "财务目标.xlsx", "com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal"),
+
+
+    QQCH_CONTRACT_INSURE("importContractInsure.xlsx", "主合同信息-投保险种.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure"),
+    QQCH_CONTRACT_SIGN("importContractSign.xlsx", "主合同信息-签订信息.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSign"),
+    QQCH_CONTRACT_PAYINFO("importContractPayinfo.xlsx", "主合同信息-项目支付信息.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo");
 
 
     private final String templateName;

@@ -14,6 +14,7 @@
         <result property="signDate" column="sign_date" />
         <result property="brandName" column="brand_name" />
         <result property="projectCategory" column="project_category" />
+        <result property="projectType" column="project_type"/>
         <result property="contractType" column="contract_type" />
         <result property="contractAttribute" column="contract_attribute" />
         <result property="timeZone" column="time_zone" />
@@ -86,6 +87,7 @@
                 ,`sign_date`
                 ,`brand_name`
                 ,`project_category`
+                ,`project_type`
                 ,`contract_type`
                 ,`contract_attribute`
                 ,`time_zone`
@@ -168,6 +170,7 @@
             <if test="winDate != null "> and `win_date` = #{winDate}</if>
             <if test="signDate != null "> and `sign_date` = #{signDate}</if>
             <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
+            <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
             <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
             <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
             <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
@@ -245,6 +248,7 @@
             <if test="winDate != null "> and `win_date` = #{winDate}</if>
             <if test="signDate != null "> and `sign_date` = #{signDate}</if>
             <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
+            <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
             <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
             <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
             <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
@@ -321,6 +325,7 @@
             <if test="winDate != null ">`win_date`,</if>
             <if test="signDate != null ">`sign_date`,</if>
             <if test="brandName != null  and brandName != ''">`brand_name`,</if>
+            <if test="projectType != null  and projectType != ''">`project_type`,</if>
             <if test="projectCategory != null  and projectCategory != ''">`project_category`,</if>
             <if test="contractType != null  and contractType != ''">`contract_type`,</if>
             <if test="contractAttribute != null  and contractAttribute != ''">`contract_attribute`,</if>
@@ -469,6 +474,7 @@
             `sign_date`,
             `brand_name`,
             `project_category`,
+            `project_type`,
             `contract_type`,
             `contract_attribute`,
             `time_zone`,
@@ -615,6 +621,7 @@
             <if test="winDate != null ">`win_date` = #{winDate},</if>
             <if test="signDate != null ">`sign_date` = #{signDate},</if>
             <if test="brandName != null  and  brandName != ''">`brand_name` = #{brandName},</if>
+            <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
             <if test="projectCategory != null  and  projectCategory != ''">`project_category` = #{projectCategory},</if>
             <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
             <if test="contractAttribute != null  and  contractAttribute != ''">`contract_attribute` = #{contractAttribute},</if>
@@ -730,6 +737,12 @@
                     when `id`=#{item.id} then #{item.projectCategory}
                 </foreach>
             </trim>
+            <trim prefix="project_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectType}
+                </foreach>
+            </trim>
+
             <trim prefix="contract_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.contractType}
@@ -1048,6 +1061,7 @@
             <if test="winDate != null "> and `win_date` = #{winDate}</if>
             <if test="signDate != null "> and `sign_date` = #{signDate}</if>
             <if test="brandName != null  and brandName != ''"> and `brand_name` = #{brandName}</if>
+            <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
             <if test="projectCategory != null  and projectCategory != ''"> and `project_category` = #{projectCategory}</if>
             <if test="contractType != null  and contractType != ''"> and `contract_type` = #{contractType}</if>
             <if test="contractAttribute != null  and contractAttribute != ''"> and `contract_attribute` = #{contractAttribute}</if>
