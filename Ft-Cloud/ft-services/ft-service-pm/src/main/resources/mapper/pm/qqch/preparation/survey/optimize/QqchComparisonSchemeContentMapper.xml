@@ -13,6 +13,7 @@
         <result property="description" column="description"/>
         <result property="sort" column="sort"/>
         <result property="rownum" column="rownum"/>
+        <result property="checked" column="checked"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
         <result property="regionId" column="region_id"/>
@@ -42,6 +43,7 @@
              ,`description`
              ,`sort`
              ,`rownum`
+             ,`checked`
              ,`version`
              ,`valid`
              ,`region_id`
@@ -113,6 +115,7 @@
             <if test="description != null  and description != ''">`description`,</if>
             <if test="sort != null">`sort`,</if>
             <if test="rownum != null">`rownum`,</if>
+            <if test="checked != null">`checked`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="regionId != null ">`region_id`,</if>
@@ -141,6 +144,7 @@
             <if test="description != null  and description != ''">#{description},</if>
             <if test="sort != null">#{sort},</if>
             <if test="rownum != null">#{rownum},</if>
+            <if test="checked != null">#{checked},</if>
             <if test="version != null">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="regionId != null ">#{regionId},</if>
@@ -174,6 +178,7 @@
             `description`,
             `sort`,
             `rownum`,
+            `checked`,
             `version`,
             `valid`,
             `region_id`,
@@ -203,6 +208,7 @@
                 #{item.description},
                 #{item.sort},
                 #{item.rownum},
+                #{item.checked},
                 #{item.version},
                 #{item.valid},
                 #{item.regionId},
@@ -234,6 +240,7 @@
             <if test="description != null  and  description != ''">`description` = #{description},</if>
             <if test="sort != null">`sort` = #{sort},</if>
             <if test="rownum != null">`rownum` = #{rownum},</if>
+            <if test="checked != null">`checked` = #{checked},</if>
             <if test="version != null">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -280,6 +287,11 @@
             <trim prefix="rownum  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.rownum}
+                </foreach>
+            </trim>
+            <trim prefix="checked  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.checked}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">

@@ -64,6 +64,12 @@ public class QqchComparisonSchemeContent extends BaseEntity {
     @Excel(name = "行号")
     private Integer rownum;
     /**
+     * 字段描述：是否选中：0：未选中，1：选中
+     */
+    @JsonProperty
+    @Excel(name = "是否选中：0：未选中，1：选中")
+    private Integer checked;
+    /**
      * 字段描述：版本
      */
     @JsonProperty
