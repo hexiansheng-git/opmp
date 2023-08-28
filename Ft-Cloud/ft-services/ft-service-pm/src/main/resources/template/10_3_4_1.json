@@ -1,0 +1,125 @@
+[
+  {
+    "id": 1,
+    "otherBusName": "人工费总额"
+  },
+  {
+    "id": 2,
+    "pid": 1,
+    "otherBusName": "中方现场人工费",
+    "leaf": "1"
+  },
+  {
+    "id": 3,
+    "pid": 1,
+    "otherBusName": "当地现场人工费",
+    "leaf": "1"
+  },
+  {
+    "id": 4,
+    "otherBusName": "材料费总额"
+  },
+  {
+    "id": 5,
+    "otherBusName": "机械使用费"
+  },
+  {
+    "id": 6,
+    "pid": 5,
+    "otherBusName": "设备折旧费",
+    "leaf": "1"
+  },
+  {
+    "id": 7,
+    "pid": 5,
+    "otherBusName": "设备租赁费",
+    "leaf": "1"
+  },
+  {
+    "id": 10,
+    "pid": 5,
+    "otherBusName": "燃油料",
+    "leaf": "1"
+  },
+  {
+    "id": 11,
+    "pid": 5,
+    "otherBusName": "配件"
+  },
+  {
+    "id": 12,
+    "otherBusName": "预算中分包费用"
+  },
+  {
+    "id": 13,
+    "pid": 12,
+    "otherBusName": "1号包间",
+    "leaf": "1"
+  },
+  {
+    "id": 14,
+    "pid": 12,
+    "otherBusName": "2号包间",
+    "leaf": "1"
+  },
+  {
+    "id": 15,
+    "pid": 12,
+    "otherBusName": "3号包间",
+    "leaf": "1"
+  },
+  {
+    "id": 151,
+    "pid": 12,
+    "otherBusName": "4号包间",
+    "leaf": "1"
+  },
+  {
+    "id": 152,
+    "otherBusName": "外账策划分包费用"
+  },
+  {
+    "id": 16,
+    "otherBusName": "其他直接费总额"
+  },
+  {
+    "id": 17,
+    "pid": 16,
+    "otherBusName": "经理部办公/生活/...",
+    "leaf": "1"
+  },
+  {
+    "id": 18,
+    "pid": 16,
+    "otherBusName": "小型工具使用费",
+    "leaf": "1"
+  },
+  {
+    "id": 19,
+    "pid": 16,
+    "otherBusName": "工程用电费",
+    "leaf": "1"
+  },
+  {
+    "id": 20,
+    "otherBusName": "监理费用"
+  },
+  {
+    "id": 21,
+    "pid": 20,
+    "otherBusName": "监理办公/生活/...",
+    "leaf": "1"
+  },
+  {
+    "id": 21,
+    "pid": 20,
+    "otherBusName": "监理车辆购置费",
+    "leaf": "1"
+  },
+  {
+    "id": 21,
+    "pid": 20,
+    "otherBusName": "监理营地提供费",
+    "leaf": "1"
+  }
+]

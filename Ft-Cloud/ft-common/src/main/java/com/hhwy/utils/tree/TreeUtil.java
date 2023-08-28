@@ -21,9 +21,16 @@ public class TreeUtil {
         if (CollectionUtils.isEmpty(treeNodes)) {
             return new ArrayList<>();
         }
-        treeNodes.stream().forEach(treeVO -> {
-            treeVO.setChildren(
-                    treeNodes.stream().filter((item) -> treeVO.getId().equals(item.getPid())).collect(Collectors.toList()));
+        treeNodes.forEach(treeVO -> {
+
+            List<T> nChildren = treeNodes.stream().filter((item) -> treeVO.getId().equals(item.getPid())).collect(Collectors.toList());
+
+            List<T> oChildren = treeVO.getChildren();
+            if (CollectionUtils.isNotEmpty(oChildren)){
+                nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
+                nChildren.addAll(oChildren);
+            }
+            treeVO.setChildren(nChildren);
         });
         List<T> collect;
         if (pid == null) {

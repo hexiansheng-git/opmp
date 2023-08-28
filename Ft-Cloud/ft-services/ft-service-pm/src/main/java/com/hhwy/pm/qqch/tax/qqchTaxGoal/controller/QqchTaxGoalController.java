@@ -8,10 +8,13 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal;
 import com.hhwy.pm.qqch.tax.qqchTaxGoal.service.IQqchTaxGoalService;
+import com.hhwy.utils.excel.FtExcel;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -90,5 +93,13 @@ public class QqchTaxGoalController extends BaseController {
         List<QqchTaxGoal> qqchTaxGoalList = qqchTaxGoalService.getQqchTaxGoalList(qqchTaxGoalParam);
         ExcelUtils<QqchTaxGoal> util = new ExcelUtils<>(QqchTaxGoal.class);
         util.exportExcel(response, qqchTaxGoalList, DateUtils.getDate());
+    }
+
+
+    @PostMapping("/importData")
+    public AjaxResult importData(@RequestParam("file") MultipartFile file) throws Exception {
+        FtExcelUtil<QqchTaxGoal> excelUtil = new FtExcelUtil<>(QqchTaxGoal.class);
+        List<QqchTaxGoal> qqchTaxGoals = excelUtil.importExcel(file.getInputStream(), 3);
+        return AjaxResult.success(qqchTaxGoals);
     }
 }

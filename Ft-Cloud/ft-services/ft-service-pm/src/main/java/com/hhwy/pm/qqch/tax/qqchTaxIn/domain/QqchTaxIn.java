@@ -212,6 +212,7 @@ public class QqchTaxIn extends CompileEntity<QqchTaxIn> {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    private BigDecimal rate;
 
     private List<QqchTaxInDetail> detailList;
 

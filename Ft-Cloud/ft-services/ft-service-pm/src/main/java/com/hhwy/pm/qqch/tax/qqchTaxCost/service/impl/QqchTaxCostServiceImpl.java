@@ -1,9 +1,11 @@
 package com.hhwy.pm.qqch.tax.qqchTaxCost.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -15,16 +17,21 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
+import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -126,7 +133,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         taxInVO.setOtherList(bean.getCostList(taxCost));
 
         entity.setStageIdentity(reviewService.getStage());
-        entity.setVersion(VersionUtil.getVersion(TN,taxCost.getVersion()));
+        entity.setVersion(VersionUtil.getVersion(TN, taxCost.getVersion()));
         entity.setDto(taxInVO);
         return entity;
     }
@@ -222,7 +229,30 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchTaxCost> getCostList(QqchTaxCost qqchTaxIn) {
         List<QqchTaxCost> costList = this.qqchTaxCostMapper.getQqchTaxCostList(qqchTaxIn);
-        if (CollectionUtils.isEmpty(costList)) return new ArrayList<>();
+        List<QqchTaxCost> currencyChildren = this.getCurrencyChildren();
+
+
+        if (CollectionUtils.isEmpty(costList)) {
+            InputStream resourceAsStream = null;
+            if (PmConstant.ONE.equals(qqchTaxIn.getDataType())) {
+                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_1.json");
+
+            } else {
+                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_2.json");
+            }
+
+            String json = "";
+            try {
+                json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            costList = JSONObject.parseArray(json, QqchTaxCost.class);
+            costList.stream().filter(ite -> PmConstant.ONE.equals(ite.getLeaf())).forEach(i -> {
+                i.setChildren(currencyChildren);
+            });
+
+        }
         List<Long> collect = costList.stream().map(QqchTaxCost::getId).collect(Collectors.toList());
 
         // 查询详情
@@ -238,6 +268,22 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
             taxIn.setDetailList(idMap.get(taxIn.getId()));
         }
         return costList;
+    }
+
+
+    private List<QqchTaxCost> getCurrencyChildren() {
+        List<TaxInVO.CurrencyVO> currencyInfo = qqchTaxInService.getCurrencyInfo();
+        List<QqchTaxCost> collect = currencyInfo.stream().map(i -> {
+            QqchTaxCost qqchTaxIn = new QqchTaxCost();
+            qqchTaxIn.setId(IdWorker.createId());
+            qqchTaxIn.setCurrency(i.getCurrency());
+            qqchTaxIn.setFeeName(i.getCurrencyName());
+            qqchTaxIn.setRate(i.getRate());
+            return qqchTaxIn;
+
+        }).collect(Collectors.toList());
+
+        return collect;
     }
 
     @Override
@@ -282,13 +328,13 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         TaxCostVO taxInVO = new TaxCostVO();
         taxInVO.setYearList(qqchTaxInService.getYearList());
         taxInVO.setCurrencyVOList(qqchTaxInService.getCurrencyInfo());
-  
+
         // 在查询其他收入
         taxCost.setDataType("3");
         taxInVO.setTaxList(bean.getCostList(taxCost));
 
         entity.setStageIdentity(reviewService.getStage());
-        entity.setVersion(VersionUtil.getVersion(TN,taxCost.getVersion()));
+        entity.setVersion(VersionUtil.getVersion(TN, taxCost.getVersion()));
         entity.setDto(taxInVO);
         return entity;
     }

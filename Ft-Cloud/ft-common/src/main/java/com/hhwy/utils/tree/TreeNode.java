@@ -16,4 +16,8 @@ import java.util.List;
 public class TreeNode<T> extends TreeNodeBase<T,Long> {
     private Long id;
     private Long pid;
+    /**
+     * 是否是叶子节点 1-是 0-否
+     */
+    private String leaf;
 }
