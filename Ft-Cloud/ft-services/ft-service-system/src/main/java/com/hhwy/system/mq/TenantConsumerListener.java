@@ -58,7 +58,7 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
                 Map projectBasicInfo = JSON.parseObject(s, Map.class);
                 String projectName = (String) projectBasicInfo.get("projectName");
                 String projectCode = (String) projectBasicInfo.get("projectCode");
-                Long projectId = (Long) projectBasicInfo.get("projectId");
+                Long projectId = Long.parseLong((String) projectBasicInfo.get("projectId")) ;
                 SysTenant sysTenant = new SysTenant();
 
                 sysTenant.setParams(projectBasicInfo);
