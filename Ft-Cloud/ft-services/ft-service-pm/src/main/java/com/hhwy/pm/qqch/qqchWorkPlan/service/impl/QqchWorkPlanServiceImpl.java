@@ -12,6 +12,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
+import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
@@ -28,7 +29,6 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import io.swagger.models.auth.In;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +61,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private TokenService tokenService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchWorkGroupService qqchWorkGroupService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -166,6 +168,11 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         int listCount = qqchWorkPlanMapper.getQqchWorkPlanListCount(new QqchWorkPlan());
         if (listCount > 1) {
             busData.setIsShowRecord(1);
+        }
+        //查询最新生效版本前期策划工作小组
+        QqchWorkGroup workGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+        if(workGroup != null){
+            busData.setPlanApprovalUnit(workGroup.getPlanApprovalUnit());
         }
         return busData;
     }
