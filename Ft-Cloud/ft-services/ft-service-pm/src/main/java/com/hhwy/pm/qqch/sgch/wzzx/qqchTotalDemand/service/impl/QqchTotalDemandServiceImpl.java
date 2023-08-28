@@ -165,13 +165,13 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         //删除旧数据
         QqchTotalDemand qqchTotalDemand = new QqchTotalDemand();
         qqchTotalDemand.setVersion(version);
-        QqchTotalDemand demand = qqchTotalDemandMapper.getQqchTotalDemand(qqchTotalDemand);
-        if(demand!=null){
+        List<QqchTotalDemand> demandList = qqchTotalDemandMapper.getQqchTotalDemandList(qqchTotalDemand);
+        for (QqchTotalDemand demand : demandList) {
             QqchTotalDemandTimeCount qqchTotalDemandTimeCount = new QqchTotalDemandTimeCount();
             qqchTotalDemandTimeCount.setDemandId(demand.getId());
             qqchTotalDemandTimeCountService.deleteQqchTotalDemandTimeCount(qqchTotalDemandTimeCount);
-            qqchTotalDemandMapper.deleteQqchTotalDemand(qqchTotalDemand);
         }
+        qqchTotalDemandMapper.deleteQqchTotalDemand(qqchTotalDemand);
 
         if (CollectionUtils.isEmpty(qqchTotalDemandList)) {
             return;
