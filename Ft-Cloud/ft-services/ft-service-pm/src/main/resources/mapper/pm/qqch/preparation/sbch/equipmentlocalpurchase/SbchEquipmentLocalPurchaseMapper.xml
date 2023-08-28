@@ -32,6 +32,7 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="version" column="version"></result>
         <result property="valid" column="valid"></result>
+        <result property="prjCode" column="prj_code"></result>
     </resultMap>
 
     <sql id="selectSbchEquipmentPurchaseVo">
@@ -62,7 +63,8 @@
             c.`pt_var3`,
             c.`pt_var4`,
             c.`version`,
-            c.`valid`
+            c.`valid`,
+            c.`prj_code`
         from `sbch_equipment_local_purchase`c
     </sql>
 
@@ -100,6 +102,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and c.`pt_var4` = #{ptVar4}</if>
             <if test="version != null  and version != ''">and sbch.`version` = #{version}</if>
             <if test="valid != null  and valid != ''">and sbch.`valid` = #{valid}</if>
+            <if test="prjCode != null  and prjCode != ''"> and c.`prj_code` = #{prjCode}</if>
             <if test="ids != null and ids.length>0">
                 and c.id in
                 <foreach collection="ids" item="id" separator="," open="(" close=")">
@@ -146,6 +149,8 @@
             <if test="ptVar2 != null">`pt_var2`,</if>
             <if test="ptVar3 != null">`pt_var3`,</if>
             <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="prjCode != null">`prj_code`,</if>
+            <if test="version != null">`version`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -175,6 +180,8 @@
             <if test="ptVar2 != null">#{ptVar2},</if>
             <if test="ptVar3 != null">#{ptVar3},</if>
             <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="prjCode != null">#{prjCode},</if>
+            <if test="version != null">#{version},</if>
         </trim>
     </insert>
 
@@ -207,6 +214,8 @@
         `pt_var2`,
         `pt_var3`,
         `pt_var4`,
+        `prj_code`,
+        `version`
         )values
         <foreach collection="dataList" separator="," item="item" index="index">
             #{item.id}
@@ -236,6 +245,8 @@
             #{item.ptVar2}
             #{item.ptVar3}
             #{item.ptVar4}
+            #{item.prjCode}
+            #{item.version}
         </foreach>
     </insert>
 
@@ -424,6 +435,20 @@
                     </if>
                 </foreach>
             </trim>
+            <trim prefix="prj_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.prjCode != null ">
+                        when `id` = #{item.id} then #{item.prjCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="version =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.version != null ">
+                        when `id` = #{item.id} then #{item.version}
+                    </if>
+                </foreach>
+            </trim>
         </trim>
         where
         <foreach collection="dataList" separator="or" item="item" index="index">
@@ -460,6 +485,8 @@
             <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="prjCode != null">`prj_code` = #{prjCode},</if>
+            <if test="version != null">`version` = #{version},</if>
         </trim>
         where `id` = #{id}
     </update>
@@ -494,6 +521,8 @@
             <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
             <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
             <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="prjCode != null">`prj_code` = #{prjCode},</if>
+            <if test="version != null">`version` = #{version},</if>
         </trim>
         where `adjust_code` = #{adjustCode}
     </update>
