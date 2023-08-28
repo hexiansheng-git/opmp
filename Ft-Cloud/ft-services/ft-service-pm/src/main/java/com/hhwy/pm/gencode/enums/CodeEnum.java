@@ -50,7 +50,11 @@ public enum CodeEnum {
     /*设备租赁供应商*/
     EQU_SUPPLIER("ZLGYS", "yyyy", 3),
     /*租赁设备*/
-    EQU_LEASE("ZLSB", "yyyy", 3);
+    EQU_LEASE("ZLSB", "yyyy", 3),
+    /*设备策划--设备人员配置*/
+    EQU_STAFFING("SBCGRYPZ","yyyy",3),
+    /*设备策划--设备人员配置-特殊人员配置*/
+    EQU_STAFF_SPECIAL("SBCHTSRYPZ","yyyy",3);
     /**
      * 前缀
      */

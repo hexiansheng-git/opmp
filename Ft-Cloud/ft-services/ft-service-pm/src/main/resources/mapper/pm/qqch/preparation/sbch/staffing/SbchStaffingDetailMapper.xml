@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.staffing.mapper.SbchStaffingDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingDetail" id="SbchStaffingDetailResult">
+        <result property="id"    column="id"    />
+        <result property="staffingId"    column="staffing_id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="planDetailId"    column="plan_detail_id"    />
+        <result property="materialName"    column="material_name"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="postName"    column="post_name"    />
+        <result property="workType"    column="work_type"    />
+        <result property="staffName"    column="staff_name"    />
+        <result property="qualification"    column="qualification"    />
+        <result property="qualiGroupId"    column="quali_group_id"    />
+        <result property="workGroupId"    column="work_group_id"    />
+        <result property="isSatisfy"    column="is_satisfy"    />
+        <result property="planComingDate"    column="plan_coming_date"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="regionId"    column="region_id"    />
+        <result property="regionName"    column="region_name"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+
+    <sql id="selectSbchStaffingDetailVo">
+        select `id`, `staffing_id`, `plan_id`, `plan_detail_id`, `material_name`, `material_code`, `post_name`, `work_type`, `staff_name`, `qualification`, `quali_group_id`, `work_group_id`, `is_satisfy`, `plan_coming_date`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_staffing_detail`
+    </sql>
+
+    <select id="selectSbchStaffingDetailList" parameterType="com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingDetail" resultMap="SbchStaffingDetailResult">
+        select detail.`id`, detail.`staffing_id`, detail.`plan_id`, detail.`plan_detail_id`, info.`material_name`,
+        detail.`material_code`, detail.`post_name`, detail.`work_type`, detail.`staff_name`, detail.`qualification`,
+        detail.`quali_group_id`, detail.`work_group_id`, detail.`is_satisfy`, detail.`plan_coming_date`,
+        detail.`create_user`, detail.`create_time`, detail.`update_user`, detail.`update_time`, detail.`del_user`,
+        detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var1`, detail.`pt_var2`, detail.`pt_var3`,
+        detail.`project_id`, detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
+        from `sbch_staffing_detail` detail
+        LEFT JOIN t_material_info info ON detail.material_code = info.material_code
+        <where>
+            detail.`del_flag` = 0
+            <if test="staffingId != null "> and `staffing_id` = #{staffingId}</if>
+            <if test="planId != null "> and `plan_id` = #{planId}</if>
+            <if test="planDetailId != null "> and `plan_detail_id` = #{planDetailId}</if>
+            <if test="materialName != null  and materialName != ''"> and info.`material_name` like '${materialName}%'</if>
+            <if test="materialCode != null  and materialCode != ''"> and info.`material_code` like '${materialCode}%'</if>
+            <if test="postName != null  and postName != ''"> and `post_name` like concat('%', #{postName}, '%')</if>
+            <if test="workType != null  and workType != ''"> and `work_type` = #{workType}</if>
+            <if test="staffName != null  and staffName != ''"> and `staff_name` like concat('%', #{staffName}, '%')</if>
+            <if test="qualification != null  and qualification != ''"> and `qualification` = #{qualification}</if>
+            <if test="qualiGroupId != null  and qualiGroupId != ''"> and `quali_group_id` = #{qualiGroupId}</if>
+            <if test="workGroupId != null  and workGroupId != ''"> and `work_group_id` = #{workGroupId}</if>
+            <if test="isSatisfy != null  and isSatisfy != ''"> and `is_satisfy` = #{isSatisfy}</if>
+            <if test="planComingDate != null "> and `plan_coming_date` = #{planComingDate}</if>
+            <if test="createUser != null  and createUser != ''"> and detail.`create_user` = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and detail.`update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and detail.`del_user` = #{delUser}</if>
+            <if test="delTime != null "> and detail.`del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and detail.`pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and detail.`pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and detail.`pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null "> and detail.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and detail.`project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="regionId != null "> and detail.`region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and detail.`region_name` like concat('%', #{regionName}, '%')</if>
+            <if test="deptId != null "> and detail.`dept_id` = #{deptId}</if>
+        </where>
+        order by detail.`id` desc
+    </select>
+    
+    <select id="selectSbchStaffingDetailById" parameterType="Long" resultMap="SbchStaffingDetailResult">
+        <include refid="selectSbchStaffingDetailVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSbchStaffingDetail" parameterType="com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingDetail">
+        insert into `sbch_staffing_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="staffingId != null">`staffing_id`,</if>
+            <if test="planId != null">`plan_id`,</if>
+            <if test="planDetailId != null">`plan_detail_id`,</if>
+            <if test="materialName != null">`material_name`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="postName != null">`post_name`,</if>
+            <if test="workType != null">`work_type`,</if>
+            <if test="staffName != null">`staff_name`,</if>
+            <if test="qualification != null">`qualification`,</if>
+            <if test="qualiGroupId != null">`quali_group_id`,</if>
+            <if test="workGroupId != null">`work_group_id`,</if>
+            <if test="isSatisfy != null">`is_satisfy`,</if>
+            <if test="planComingDate != null">`plan_coming_date`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="staffingId != null">#{staffingId},</if>
+            <if test="planId != null">#{planId},</if>
+            <if test="planDetailId != null">#{planDetailId},</if>
+            <if test="materialName != null">#{materialName},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="postName != null">#{postName},</if>
+            <if test="workType != null">#{workType},</if>
+            <if test="staffName != null">#{staffName},</if>
+            <if test="qualification != null">#{qualification},</if>
+            <if test="qualiGroupId != null">#{qualiGroupId},</if>
+            <if test="workGroupId != null">#{workGroupId},</if>
+            <if test="isSatisfy != null">#{isSatisfy},</if>
+            <if test="planComingDate != null">#{planComingDate},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="deptId != null">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `sbch_staffing_detail` (
+                                                `id`,
+                                                                `staffing_id`,
+                                                                `plan_id`,
+                                                                `plan_detail_id`,
+                                                                `material_name`,
+                                                                `material_code`,
+                                                                `post_name`,
+                                                                `work_type`,
+                                                                `staff_name`,
+                                                                `qualification`,
+                                                                `quali_group_id`,
+                                                                `work_group_id`,
+                                                                `is_satisfy`,
+                                                                `plan_coming_date`,
+                                                                `create_user`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `remark`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `dept_id`
+                                    )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+                                                (#{item.id},
+                                                                #{item.staffingId},
+                                                                #{item.planId},
+                                                                #{item.planDetailId},
+                                                                #{item.materialName},
+                                                                #{item.materialCode},
+                                                                #{item.postName},
+                                                                #{item.workType},
+                                                                #{item.staffName},
+                                                                #{item.qualification},
+                                                                #{item.qualiGroupId},
+                                                                #{item.workGroupId},
+                                                                #{item.isSatisfy},
+                                                                #{item.planComingDate},
+                                                                #{item.createUser},
+                                                                #{item.createTime},
+                                                                #{item.updateUser},
+                                                                #{item.updateTime},
+                                                                #{item.remark},
+                                                                #{item.ptVar1},
+                                                                #{item.ptVar2},
+                                                                #{item.ptVar3},
+                                                                #{item.projectId},
+                                                                #{item.projectName},
+                                                                #{item.regionId},
+                                                                #{item.regionName},
+                                                                #{item.deptId})
+                                    </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sbch_staffing_detail`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="staffing_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.staffingId != null ">
+                                when `id` = #{item.id} then #{item.staffingId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="plan_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.planId != null ">
+                                when `id` = #{item.id} then #{item.planId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="plan_detail_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.planDetailId != null ">
+                                when `id` = #{item.id} then #{item.planDetailId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="material_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.materialName != null ">
+                                when `id` = #{item.id} then #{item.materialName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="material_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.materialCode != null ">
+                                when `id` = #{item.id} then #{item.materialCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="post_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.postName != null ">
+                                when `id` = #{item.id} then #{item.postName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="work_type =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.workType != null ">
+                                when `id` = #{item.id} then #{item.workType}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="staff_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.staffName != null ">
+                                when `id` = #{item.id} then #{item.staffName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="qualification =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.qualification != null ">
+                                when `id` = #{item.id} then #{item.qualification}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="quali_group_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.qualiGroupId != null ">
+                                when `id` = #{item.id} then #{item.qualiGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="work_group_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.workGroupId != null ">
+                                when `id` = #{item.id} then #{item.workGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="is_satisfy =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.isSatisfy != null ">
+                                when `id` = #{item.id} then #{item.isSatisfy}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="plan_coming_date =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.planComingDate != null ">
+                                when `id` = #{item.id} then #{item.planComingDate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectId != null ">
+                                when `id` = #{item.id} then #{item.projectId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionId != null ">
+                                when `id` = #{item.id} then #{item.regionId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionName != null ">
+                                when `id` = #{item.id} then #{item.regionName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dept_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.deptId != null ">
+                                when `id` = #{item.id} then #{item.deptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateSbchStaffingDetail" parameterType="com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingDetail">
+        update `sbch_staffing_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="staffingId != null">`staffing_id` = #{staffingId},</if>
+            <if test="planId != null">`plan_id` = #{planId},</if>
+            <if test="planDetailId != null">`plan_detail_id` = #{planDetailId},</if>
+            <if test="materialName != null">`material_name` = #{materialName},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="postName != null">`post_name` = #{postName},</if>
+            <if test="workType != null">`work_type` = #{workType},</if>
+            <if test="staffName != null">`staff_name` = #{staffName},</if>
+            <if test="qualification != null">`qualification` = #{qualification},</if>
+            <if test="qualiGroupId != null">`quali_group_id` = #{qualiGroupId},</if>
+            <if test="workGroupId != null">`work_group_id` = #{workGroupId},</if>
+            <if test="isSatisfy != null">`is_satisfy` = #{isSatisfy},</if>
+            <if test="planComingDate != null">`plan_coming_date` = #{planComingDate},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchStaffingDetailById" parameterType="Long">
+        update `sbch_staffing_detail` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchStaffingDetailByIds" parameterType="String">
+        update `sbch_staffing_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteSbchStaffingDetailByStaffingId">
+         update `sbch_staffing_detail` set del_flag = '1',del_user= #{delUser},del_time=#{delTime}
+         where staffing_id = #{staffingId}
+    </update>
+
+
+</mapper>
