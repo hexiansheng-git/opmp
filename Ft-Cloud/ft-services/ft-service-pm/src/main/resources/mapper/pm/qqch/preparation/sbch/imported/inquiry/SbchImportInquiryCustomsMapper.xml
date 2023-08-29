@@ -1,0 +1,444 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.mapper.SbchImportInquiryCustomsMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.domain.SbchImportInquiryCustoms" id="SbchImportInquiryCustomsResult">
+        <result property="id"    column="id"    />
+        <result property="inquiryId"    column="inquiry_id"    />
+        <result property="countryId"    column="country_id"    />
+        <result property="countryCode"    column="country_code"    />
+        <result property="portName"    column="port_name"    />
+        <result property="customsName"    column="customs_name"    />
+        <result property="customsStatus"    column="customs_status"    />
+        <result property="taxStatus"    column="tax_status"    />
+        <result property="customsPolicy"    column="customs_policy"    />
+        <result property="customsPoint"    column="customs_point"    />
+        <result property="customsCompany"    column="customs_company"    />
+        <result property="customsAttention"    column="customs_attention"    />
+        <result property="fileGroupId"    column="file_group_id"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="regionId"    column="region_id"    />
+        <result property="regionName"    column="region_name"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+
+    <sql id="selectSbchImportInquiryCustomsVo">
+        select `id`, `inquiry_id`, `country_id`,`country_code`, `port_name`, `customs_name`,`customs_status`, `tax_status`, `customs_policy`, `customs_point`, `customs_company`, `customs_attention`, `file_group_id`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_import_inquiry_customs`
+    </sql>
+
+    <select id="selectSbchImportInquiryCustomsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.domain.SbchImportInquiryCustoms" resultMap="SbchImportInquiryCustomsResult">
+        <include refid="selectSbchImportInquiryCustomsVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="inquiryId != null "> and `inquiry_id` = #{inquiryId}</if>
+            <if test="countryId != null "> and `country_id` = #{countryId}</if>
+            <if test="countryCode != null "> and `country_code` = #{countryCode}</if>
+            <if test="portName != null  and portName != ''"> and `port_name` like concat('%', #{portName}, '%')</if>
+            <if test="customsName != null  and customsName != ''"> and `customs_name` like concat('%', #{customsName}, '%')</if>
+            <if test="customsStatus != null  and customsStatus != ''"> and `customs_status` like concat('%', #{customsStatus}, '%')</if>
+            <if test="taxStatus != null  and taxStatus != ''"> and `tax_status` = #{taxStatus}</if>
+            <if test="customsPolicy != null  and customsPolicy != ''"> and `customs_policy` = #{customsPolicy}</if>
+            <if test="customsPoint != null  and customsPoint != ''"> and `customs_point` = #{customsPoint}</if>
+            <if test="customsCompany != null  and customsCompany != ''"> and `customs_company` = #{customsCompany}</if>
+            <if test="customsAttention != null  and customsAttention != ''"> and `customs_attention` = #{customsAttention}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%', #{regionName}, '%')</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectSbchImportInquiryCustomsById" parameterType="Long" resultMap="SbchImportInquiryCustomsResult">
+        <include refid="selectSbchImportInquiryCustomsVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSbchImportInquiryCustoms" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.domain.SbchImportInquiryCustoms">
+        insert into `sbch_import_inquiry_customs`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="inquiryId != null">`inquiry_id`,</if>
+            <if test="countryId != null">`country_id`,</if>
+            <if test="countryCode != null">`country_code`,</if>
+            <if test="portName != null">`port_name`,</if>
+            <if test="customsName != null">`customs_name`,</if>
+            <if test="customsStatus != null">`customs_status`,</if>
+            <if test="taxStatus != null">`tax_status`,</if>
+            <if test="customsPolicy != null">`customs_policy`,</if>
+            <if test="customsPoint != null">`customs_point`,</if>
+            <if test="customsCompany != null">`customs_company`,</if>
+            <if test="customsAttention != null">`customs_attention`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="inquiryId != null">#{inquiryId},</if>
+            <if test="countryId != null">#{countryId},</if>
+            <if test="countryCode != null">#{countryCode},</if>
+            <if test="portName != null">#{portName},</if>
+            <if test="customsName != null">#{customsName},</if>
+            <if test="customsStatus != null">#{customsStatus},</if>
+            <if test="taxStatus != null">#{taxStatus},</if>
+            <if test="customsPolicy != null">#{customsPolicy},</if>
+            <if test="customsPoint != null">#{customsPoint},</if>
+            <if test="customsCompany != null">#{customsCompany},</if>
+            <if test="customsAttention != null">#{customsAttention},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="deptId != null">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `sbch_import_inquiry_customs` (
+                                                `id`,
+                                                                `inquiry_id`,
+                                                                `country_id`,
+                                                                `country_code`,
+                                                                `port_name`,
+                                                                `customs_name`,
+                                                                `customs_status`,
+                                                                `tax_status`,
+                                                                `customs_policy`,
+                                                                `customs_point`,
+                                                                `customs_company`,
+                                                                `customs_attention`,
+                                                                `file_group_id`,
+                                                                `create_user`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `remark`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `dept_id`
+                                    )values
+        <foreach collection="customsList" separator="," item="item" index="index" >
+               (
+               #{item.id}, #{item.inquiryId},#{item.countryId},#{item.countryCode},#{item.portName}, #{item.customsName},
+               #{item.customsStatus},#{item.taxStatus},#{item.customsPolicy}, #{item.customsPoint}, #{item.customsCompany},
+               #{item.customsAttention},#{item.fileGroupId},#{item.createUser},#{item.createTime},#{item.updateUser},
+               #{item.updateTime},#{item.remark},#{item.ptVar1},#{item.ptVar2},#{item.ptVar3},#{item.projectId},
+               #{item.projectName},#{item.regionId}, #{item.regionName},#{item.deptId}
+               )
+                                    </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sbch_import_inquiry_customs`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="inquiry_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.inquiryId != null ">
+                                when `id` = #{item.id} then #{item.inquiryId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="country_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.countryId != null ">
+                                when `id` = #{item.id} then #{item.countryId}
+                            </if>
+                        </foreach>
+                    </trim>
+            <trim prefix="country_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.countryCode != null ">
+                        when `id` = #{item.id} then #{item.countryCode}
+                    </if>
+                </foreach>
+            </trim>
+                                                    <trim prefix="port_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.portName != null ">
+                                when `id` = #{item.id} then #{item.portName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsName != null ">
+                                when `id` = #{item.id} then #{item.customsName}
+                            </if>
+                        </foreach>
+                    </trim>
+            <trim prefix="customs_status =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.customsStatus != null ">
+                        when `id` = #{item.id} then #{item.customsStatus}
+                    </if>
+                </foreach>
+            </trim>
+                                                    <trim prefix="tax_status =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.taxStatus != null ">
+                                when `id` = #{item.id} then #{item.taxStatus}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_policy =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsPolicy != null ">
+                                when `id` = #{item.id} then #{item.customsPolicy}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_point =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsPoint != null ">
+                                when `id` = #{item.id} then #{item.customsPoint}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_company =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsCompany != null ">
+                                when `id` = #{item.id} then #{item.customsCompany}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_attention =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsAttention != null ">
+                                when `id` = #{item.id} then #{item.customsAttention}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="file_group_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.fileGroupId != null ">
+                                when `id` = #{item.id} then #{item.fileGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectId != null ">
+                                when `id` = #{item.id} then #{item.projectId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionId != null ">
+                                when `id` = #{item.id} then #{item.regionId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionName != null ">
+                                when `id` = #{item.id} then #{item.regionName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dept_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.deptId != null ">
+                                when `id` = #{item.id} then #{item.deptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateSbchImportInquiryCustoms" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.domain.SbchImportInquiryCustoms">
+        update `sbch_import_inquiry_customs`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inquiryId != null">`inquiry_id` = #{inquiryId},</if>
+            <if test="countryId != null">`country_id` = #{countryId},</if>
+            <if test="countryCode != null">`country_code` = #{countryCode},</if>
+            <if test="portName != null">`port_name` = #{portName},</if>
+            <if test="customsName != null">`customs_name` = #{customsName},</if>
+            <if test="customsStatus != null">`customs_status` = #{customsStatus},</if>
+            <if test="taxStatus != null">`tax_status` = #{taxStatus},</if>
+            <if test="customsPolicy != null">`customs_policy` = #{customsPolicy},</if>
+            <if test="customsPoint != null">`customs_point` = #{customsPoint},</if>
+            <if test="customsCompany != null">`customs_company` = #{customsCompany},</if>
+            <if test="customsAttention != null">`customs_attention` = #{customsAttention},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchImportInquiryCustomsById" parameterType="Long">
+        update `sbch_import_inquiry_customs` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchImportInquiryCustomsByIds" parameterType="String">
+        update `sbch_import_inquiry_customs` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteSbchImportInquiryCustomsByInquiryId">
+        update `sbch_import_inquiry_customs` set del_flag = 1,del_user = #{userId},del_time = #{date} where inquiry_id = #{inquiryId}
+    </update>
+
+
+</mapper>
