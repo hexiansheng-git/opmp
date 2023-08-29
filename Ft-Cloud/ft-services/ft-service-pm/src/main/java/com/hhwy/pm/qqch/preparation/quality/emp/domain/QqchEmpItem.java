@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.utils.JsonUtils;
 import lombok.Data;
@@ -85,6 +86,13 @@ public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
     @JsonProperty
     @Excel(name = "是否入库")
     private String storeFlag;
+    private Boolean bstoreFlag;
+
+
+    public Boolean getBstoreFlag() {
+        return bstoreFlag = PmConstant.ONE.equals(this.getStoreFlag());
+    }
+
     /**
      * 字段描述：备注
      */
