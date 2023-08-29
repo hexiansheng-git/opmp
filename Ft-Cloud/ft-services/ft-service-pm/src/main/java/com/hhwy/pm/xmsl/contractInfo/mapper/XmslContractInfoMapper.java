@@ -32,4 +32,6 @@ public interface XmslContractInfoMapper {
     int deleteXmslContractInfo(XmslContractInfo xmslContractInfo);
 
     int deleteXmslContractInfoByPks(@Param("xmslContractInfoPkList") List<Long> xmslContractInfoPkList);
+
+    XmslContractInfo getMaxVersionRecordByVersion(XmslContractInfo xmslContractInfo);
 }
