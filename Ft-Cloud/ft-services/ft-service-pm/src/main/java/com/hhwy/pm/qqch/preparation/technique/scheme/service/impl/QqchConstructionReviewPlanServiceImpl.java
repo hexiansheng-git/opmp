@@ -57,21 +57,26 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> newList = new ArrayList<>();
 
         QqchConstructionReviewPlan planOne = new QqchConstructionReviewPlan();
+
         planOne.setSchemeLevel("I级施工方案");
+        planOne.setId(1L);
         planOne.setChildren(onePlanList);
         newList.add(planOne);
 
         QqchConstructionReviewPlan planTwo = new QqchConstructionReviewPlan();
+        planTwo.setId(2L);
         planTwo.setSchemeLevel("II级施工方案");
         planTwo.setChildren(twoPlanList);
         newList.add(planTwo);
 
         QqchConstructionReviewPlan planTree = new QqchConstructionReviewPlan();
+        planTree.setId(3L);
         planTree.setSchemeLevel("III级施工方案");
         planTree.setChildren(threePlanList);
         newList.add(planTree);
 
         QqchConstructionReviewPlan planFour = new QqchConstructionReviewPlan();
+        planTree.setId(4L);
         planFour.setSchemeLevel("IV级施工方案");
         planFour.setChildren(fourPlanList);
         newList.add(planFour);
