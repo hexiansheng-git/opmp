@@ -4,8 +4,12 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -40,4 +44,8 @@ public interface IQqchTaxCostService {
     List<QqchTaxCostDetail> saveCostList(List<QqchTaxCost> qqchTaxCosts);
 
     CompileEntity<TaxCostVO> taxList(QqchTaxCost dealListDto);
+
+    void downTemp(HttpServletResponse response, QqchTaxCost params) throws IOException;
+
+    List<QqchTaxCost> importData(MultipartFile file, Map<String,Object> params) throws IOException;
 }

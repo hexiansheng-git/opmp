@@ -136,7 +136,11 @@ public class SbchEquipmentPurchaseServiceImpl implements ISbchEquipmentPurchaseS
         }
 
         if(!ObjectNullUtil.isEmpty(detailList)){
-            JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
+            //校验数据必填
+            if("1".equals(sbchEquipmentPurchase.getButtonMark())||"2".equals(sbchEquipmentPurchase.getButtonMark())){//确认
+                JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
+            }
+
             // 明细
             detailsService.insertOrEditBatchByMainId(detailList, sbchEquipmentPurchase.getId(), false);
         }

@@ -54,6 +54,7 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Override
     public LeaseVo getList(BigDecimal version) {
+        LeaseVo returnVo = new LeaseVo();
         LeaseVo leaseVo = new LeaseVo();
         version = VersionUtil.getVersion("sbch_equipment_supplier", version);//因为设备租赁供应商调查表和租赁设备信息调查现在是一个接口 所以两个主表的version一定是同步的
         SbchEquipmentLease sbchEquipmentLease = new SbchEquipmentLease();
@@ -61,10 +62,11 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
         List<SbchEquipmentLease> sbchEquipmentLeases = sbchEquipmentLeaseMapper.selectSbchEquipmentLeaseList(sbchEquipmentLease);
         if(!ObjectNullUtil.isEmpty(sbchEquipmentLeases)){
             SbchEquipmentLease sbchEquipmentLease1 = sbchEquipmentLeases.get(0);
+            BeanUtils.copyProperties(sbchEquipmentLease1,returnVo);
             SbchEquipmentLeaseDetails sbchEquipmentLeaseDetails = new SbchEquipmentLeaseDetails();
             sbchEquipmentLeaseDetails.setMainId(sbchEquipmentLease1.getId());
             List<SbchEquipmentLeaseDetails> sbchEquipmentLeaseDetails1 = sbchEquipmentLeaseDetailsMapper.selectSbchEquipmentLeaseDetailsList(sbchEquipmentLeaseDetails);
-            leaseVo.setLeaseDetailsList(sbchEquipmentLeaseDetails1);
+            returnVo.setLeaseDetailsList(sbchEquipmentLeaseDetails1);
         }
 
         SbchEquipmentSupplier sbchEquipmentSupplier = new SbchEquipmentSupplier();
@@ -76,11 +78,14 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
             SbchEquipmentSupplierDetails sbchEquipmentSupplierDetails = new SbchEquipmentSupplierDetails();
             sbchEquipmentSupplierDetails.setMainId(sbchEquipmentSupplier1.getId());
             List<SbchEquipmentSupplierDetails> sbchEquipmentSupplierDetails1 = sbchEquipmentSupplierDetailsMapper.selectSbchEquipmentSupplierDetailsList(sbchEquipmentSupplierDetails);
-            leaseVo.setSupplierList(sbchEquipmentSupplierDetails1);
+            if(!ObjectNullUtil.isEmpty(sbchEquipmentSupplierDetails1)){
+                //set country信息
+            }
+            returnVo.setSupplierList(sbchEquipmentSupplierDetails1);
         }
-        leaseVo.setVersion(version);
-        leaseVo.setStageIdentity(qqchReviewService.getStage());
-        return leaseVo;
+        returnVo.setVersion(version);
+        returnVo.setStageIdentity(qqchReviewService.getStage());
+        return returnVo;
     }
 
     @Override

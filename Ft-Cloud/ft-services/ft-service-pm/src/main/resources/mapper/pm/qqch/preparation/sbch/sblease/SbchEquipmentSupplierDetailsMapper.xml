@@ -61,10 +61,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             de.`dept_id`,
             de.`project_id`,
             de.`region_id`,
-            de.`region`,
-            info.country_name country
+            de.`region`
             from `sbch_equipment_supplier_details` de
-            left join t_country_info info on de.country_id=info.id
     </sql>
 
     <select id="selectSbchEquipmentSupplierDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails" resultMap="SbchEquipmentSupplierDetailsResult">

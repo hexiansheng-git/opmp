@@ -54,7 +54,9 @@ public enum CodeEnum {
     /*设备策划--设备人员配置*/
     EQU_STAFFING("SBCGRYPZ","yyyy",3),
     /*设备策划--设备人员配置-特殊人员配置*/
-    EQU_STAFF_SPECIAL("SBCHTSRYPZ","yyyy",3);
+    EQU_STAFF_SPECIAL("SBCHTSRYPZ","yyyy",3),
+    /*协作单位设备*/
+    EQU_XZDWSB("XZDWSB", "yyyy", 3);
     /**
      * 前缀
      */

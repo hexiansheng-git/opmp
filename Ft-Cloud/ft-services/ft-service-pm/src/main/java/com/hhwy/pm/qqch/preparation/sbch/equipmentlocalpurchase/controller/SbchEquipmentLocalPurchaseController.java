@@ -39,7 +39,7 @@ public class SbchEquipmentLocalPurchaseController extends BaseController {
      * 查询设备申购管理列表
      */
     @PreAuthorize(hasPermi ="equipmentlocalpurchase:purchase:list")
-    @PostMapping("/list")
+    @GetMapping("/list")
     //@CustomLogger(title = "设备属地化采购-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(BigDecimal version) {
         SbchEquipmentLocalPurchase list = sbchEquipmentPurchaseService.selectSbchEquipmentPurchaseList(version);

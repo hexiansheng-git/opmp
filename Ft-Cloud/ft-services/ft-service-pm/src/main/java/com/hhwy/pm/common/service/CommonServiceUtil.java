@@ -1,6 +1,7 @@
 package com.hhwy.pm.common.service;
 
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.feign.service.PmServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 @Slf4j
 public class CommonServiceUtil {
     private static CommonMapper commonMapper;
+    private static PmServiceApi pmServiceApi;
 
     static {
         commonMapper = SpringUtils.getBean(CommonMapper.class);
@@ -31,5 +33,7 @@ public class CommonServiceUtil {
         return BigDecimalUtils.divideMay0(amt, rate, 4);
     }
 
+    
+    
 
 }

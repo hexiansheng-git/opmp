@@ -102,6 +102,14 @@ public class QqchSpecialBigEquList extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "设备来源")
     private String equSourse;
+
+    /**
+     * 字段描述：是否首件
+     */
+    @JsonProperty
+    @Excel(name = "是否首件")
+    private String whetherFirst;
+
     /**
      * 字段描述：操作人员证书
      */

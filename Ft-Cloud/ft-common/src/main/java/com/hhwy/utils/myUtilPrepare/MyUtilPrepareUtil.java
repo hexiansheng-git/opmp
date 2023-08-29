@@ -52,8 +52,8 @@ public class MyUtilPrepareUtil {
     public static  <T extends MyPrepareBaseEntity> void setUpdateInfoBase(T t){
         try{
             t.setVersionNo(t.getVersion());
-            t.setFormNo(t.getUnicode()+"-"+t.getVersionNo());
-            t.setTitleName(t.getProjectName()+"-"+t.getTitleName());
+//            t.setFormNo(t.getUnicode()+"-"+t.getVersionNo());
+//            t.setTitleName(t.getProjectName()+"-"+t.getTitleName());
             String isValid = NO;
             if (t.getVersion().compareTo(BigDecimal.ONE) == 0) {
                 isValid = YES;

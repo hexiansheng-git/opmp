@@ -77,12 +77,15 @@ public class SbchEquipmentLocalPurchaseServiceImpl implements ISbchEquipmentLoca
     @Override
     //@CustomDatascope（alias = "c")
     public SbchEquipmentLocalPurchase selectSbchEquipmentPurchaseList(BigDecimal version) {
+        SbchEquipmentLocalPurchase returnVo = new SbchEquipmentLocalPurchase();
+
         SbchEquipmentLocalPurchase sbchEquipmentLocalPurchase = new SbchEquipmentLocalPurchase();
         version = VersionUtil.getVersion("sbch_equipment_local_purchase", version);
         sbchEquipmentLocalPurchase.setVersion(version);
         List<SbchEquipmentLocalPurchase> sbchEquipmentLocalPurchases = sbchEquipmentPurchaseMapper.selectSbchEquipmentPurchaseList(sbchEquipmentLocalPurchase);
         if(!ObjectNullUtil.isEmpty(sbchEquipmentLocalPurchases)){
             SbchEquipmentLocalPurchase sbchEquipmentLocalPurchase1 = sbchEquipmentLocalPurchases.get(0);
+            returnVo = sbchEquipmentLocalPurchase1;
             SbchEquipmentLocalPurchaseDetails sbchEquipmentLocalPurchaseDetails = new SbchEquipmentLocalPurchaseDetails();
             sbchEquipmentLocalPurchaseDetails.setMainId(sbchEquipmentLocalPurchase1.getId());
             List<SbchEquipmentLocalPurchaseDetails> sbchEquipmentLocalPurchaseDetails1 = detailsService.selectSbchEquipmentPurchaseDetailsList(sbchEquipmentLocalPurchaseDetails);
@@ -90,11 +93,11 @@ public class SbchEquipmentLocalPurchaseServiceImpl implements ISbchEquipmentLoca
             Map<String, String> busAndMaterialMap = new HashMap<>();
             busAndMaterialMap.put("materialName", "materialName");
             List<SbchEquipmentLocalPurchaseDetails> detailsListVersion1 = setMaterialNameUtils.setMaterialInfo(sbchEquipmentLocalPurchaseDetails1, "materialCode", busAndMaterialMap);
-            sbchEquipmentLocalPurchase.setDetailsList(detailsListVersion1);
+            returnVo.setDetailsList(detailsListVersion1);
         }
-        sbchEquipmentLocalPurchase.setVersion(version);
-        sbchEquipmentLocalPurchase.setStageIdentity(qqchReviewService.getStage());
-        return sbchEquipmentLocalPurchase;
+        returnVo.setVersion(version);
+        returnVo.setStageIdentity(qqchReviewService.getStage());
+        return returnVo;
     }
 
     /**
