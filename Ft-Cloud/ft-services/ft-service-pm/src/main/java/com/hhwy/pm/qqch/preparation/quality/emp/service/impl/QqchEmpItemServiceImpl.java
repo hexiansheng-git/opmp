@@ -145,7 +145,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.TREE, tableName = "qqch_emp_item")
-    public CompileEntity<List<XmslWbs>> itemList(QqchEmpItem dto) {
+    public CompileEntity<List<QqchEmpItem>> itemList(QqchEmpItem dto) {
         CompileEntity entity = new CompileEntity();
         List<QqchEmpItem> qqchEmpItemList = this.qqchEmpItemMapper.getQqchEmpItemList(dto);
         entity.setVersion(dto.getVersion());

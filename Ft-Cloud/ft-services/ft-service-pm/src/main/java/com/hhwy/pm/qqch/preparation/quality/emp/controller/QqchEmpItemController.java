@@ -65,7 +65,7 @@ public class QqchEmpItemController extends BaseController {
 
     @GetMapping("/itemList")
     public AjaxResult itemList(@Validated(ValidationGroups.Select.class) QqchEmpItem dto) {
-        CompileEntity<List<XmslWbs>> xmslWbs = qqchEmpItemService.itemList(dto);
+        CompileEntity<List<QqchEmpItem>> xmslWbs = qqchEmpItemService.itemList(dto);
         return AjaxResult.success(xmslWbs);
     }
 

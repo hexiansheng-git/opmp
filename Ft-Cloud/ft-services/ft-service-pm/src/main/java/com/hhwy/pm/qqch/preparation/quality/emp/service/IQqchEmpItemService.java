@@ -33,5 +33,5 @@ public interface IQqchEmpItemService {
 
     List<XmslWbs> wbsList(CompileEntity dto);
 
-    CompileEntity<List<XmslWbs>> itemList(QqchEmpItem dto);
+    CompileEntity<List<QqchEmpItem>> itemList(QqchEmpItem dto);
 }
