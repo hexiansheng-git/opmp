@@ -179,10 +179,10 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
                 List<QqchPerformInspectionDetail> detailList1 = pidMap.get(qqchPerformInspectionDetail.getId());
                 qqchPerformInspectionDetail.setChildrenList(detailList1);
             }
-            qqchPerformInspection.setDetailList(parentList);
+            temp.setDetailList(parentList);
         }
 
-        return qqchPerformInspection;
+        return temp;
     }
 
     //处理策划项数据
