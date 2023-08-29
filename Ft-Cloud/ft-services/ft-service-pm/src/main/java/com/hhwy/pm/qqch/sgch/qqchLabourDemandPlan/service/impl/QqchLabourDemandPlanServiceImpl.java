@@ -217,6 +217,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         this.insertQqchLabourDemandPlanList(vo.getQqchLabourDemandPlanList(),vo.getVersion());
         //查询最新有效版本的数据
         BigDecimal version = commonMapper.selectMaxVersion("qqch_const");
+        //查询施工部署数据，人员策划
         List<QqchConst> qqchConstList = qqchConstMapper.selectQqchConst(version);
         //按工种名称分组
         Map<String, List<QqchConst>> listMap = qqchConstList.stream().collect(Collectors.groupingBy(QqchConst::getOccupationName));

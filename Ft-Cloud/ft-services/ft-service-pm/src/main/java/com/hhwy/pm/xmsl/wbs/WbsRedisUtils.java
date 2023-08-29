@@ -13,6 +13,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * wbs缓存
@@ -72,6 +73,13 @@ public class WbsRedisUtils {
         return list;
     }
 
+    public static List<XmslWbs> getWbs(Long[] wbsIds){
+        if(ArrayUtils.isEmpty(wbsIds))
+            return new ArrayList<>();
+        Collection<String> set = Arrays.stream(wbsIds).map(r->r.toString()).collect(Collectors.toSet());
+        return getWbs(set);
+    }
+
     /**
      * 获取指定wbs的所有子级
      * @param tenantKey
@@ -88,6 +96,10 @@ public class WbsRedisUtils {
     public static Long[] getChildWbsId(String wbsId){
         String tenantKey = SecurityUtils.getTenantKey();
         return WbsRedisUtils.getChildWbsId(tenantKey,wbsId);
+    }
+
+    public static List<XmslWbs> getChildWbs(String wbsId) {
+        return getWbs(getChildWbsId(wbsId));
     }
 
     /**
@@ -108,8 +120,7 @@ public class WbsRedisUtils {
         Long[] wbsIds = WbsRedisUtils.getDireChildWbsId(wbsId);
         if(ArrayUtils.isEmpty(wbsIds))
             return new ArrayList<>(2);
-        List<XmslWbs> list = WbsRedisUtils.getWbs(Arrays.asList(wbsIds));
-        return list;
+        return WbsRedisUtils.getWbs(wbsIds);
     }
 
     /**

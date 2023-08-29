@@ -27,6 +27,12 @@ public interface IQqchKeyDifficultProjectArchivesService {
     int deleteQqchKeyDifficultProjectArchivesByPks(List<Long> qqchKeyDifficultProjectArchivesPkList);
 
     /**
+     * 获取最新版本的重难点工程清单数据
+     * @return
+     */
+    List<QqchKeyDifficultProjectArchives> getValidMaxVersionData();
+
+    /**
      * 获取台账页Vo
      * @param qqchKeyDifficultProjectArchives
      * @return

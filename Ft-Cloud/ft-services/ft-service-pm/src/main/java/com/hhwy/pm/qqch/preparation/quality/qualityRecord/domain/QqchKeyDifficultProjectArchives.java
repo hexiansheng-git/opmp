@@ -32,6 +32,13 @@ public class QqchKeyDifficultProjectArchives extends BaseEntity {
     @Excel(name = "主键id")
     private Long id;
     /**
+     * 字段描述：所属WBS的id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "所属WBS的id")
+    private Long wbsId;
+    /**
      * 字段描述：所属wbs编号
      */
     @JsonProperty
@@ -43,6 +50,12 @@ public class QqchKeyDifficultProjectArchives extends BaseEntity {
     @JsonProperty
     @Excel(name = "所属wbs名称")
     private String wbsName;
+    /**
+     * 字段描述：所属WBS祖级id
+     */
+    @JsonProperty
+    @Excel(name = "所属WBS祖级id")
+    private String wbsAncestors;
     /**
      * 字段描述：资料目录清单
      */

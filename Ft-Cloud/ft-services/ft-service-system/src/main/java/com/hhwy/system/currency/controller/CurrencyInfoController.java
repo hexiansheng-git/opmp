@@ -141,6 +141,14 @@ public class CurrencyInfoController extends BaseController {
         return AjaxResult.success(currencyInfoService.selectCurrencyInfoList(currencyInfo));
     }
 
+
+
+    @PostMapping("/selectList")
+//    @CustomLogger(title = "币种-列表查询",businessType = CustomBusinessType.SELECT)
+    public List<CurrencyInfo> selectList(@RequestBody CurrencyInfo currencyInfo) {
+        return currencyInfoService.selectCurrencyInfoList(currencyInfo);
+    }
+
     /**
      * 导入
      *

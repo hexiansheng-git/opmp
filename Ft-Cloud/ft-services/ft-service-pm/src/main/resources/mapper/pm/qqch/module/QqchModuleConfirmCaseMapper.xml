@@ -131,6 +131,7 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="moduleIdentity != null  and moduleIdentity != ''">and `module_identity` = #{moduleIdentity}</if>
             <if test="moduleIdentityList != null  and moduleIdentityList.size()!= 0">
+                and module_identity in
                 <foreach item="id" collection="moduleIdentityList" open="(" separator="," close=")">
                     #{id}
                 </foreach>
@@ -141,6 +142,7 @@
             <if test="confirmStatus != null  and confirmStatus != ''">and `confirm_status` = #{confirmStatus}</if>
             <if test="confirmUser != null  and confirmUser != ''">and `confirm_user` = #{confirmUser}</if>
             <if test="confirmUserList != null  and confirmUserList.size()!= 0">
+                and confirm_user in
                 <foreach item="id" collection="confirmUserList" open="(" separator="," close=")">
                     #{id}
                 </foreach>

@@ -8,8 +8,10 @@
             type="com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchKeyDifficultProjectArchives"
             id="QqchKeyDifficultProjectArchivesResultMap">
         <result property="id" column="id"/>
+        <result property="wbsId" column="wbs_id"/>
         <result property="wbsCode" column="wbs_code"/>
         <result property="wbsName" column="wbs_name"/>
+        <result property="wbsAncestors" column="wbs_ancestors"/>
         <result property="dataDirectoryInventory" column="data_directory_inventory"/>
         <result property="dataQuantity" column="data_quantity"/>
         <result property="registerNumber" column="register_number"/>
@@ -46,8 +48,10 @@
     </resultMap>
     <sql id="selectQqchKeyDifficultProjectArchivesVo">
         select `id`
+             , `wbs_id`
              , `wbs_code`
              , `wbs_name`
+             , `wbs_ancestors`
              , `data_directory_inventory`
              , `data_quantity`
              , `register_number`
@@ -188,8 +192,10 @@
         insert into qqch_key_difficult_project_archives
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
+            <if test="wbsId != null ">`wbs_id`,</if>
             <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="wbsAncestors != null  and wbsAncestors != ''">`wbs_ancestors`,</if>
             <if test="dataDirectoryInventory != null  and dataDirectoryInventory != ''">`data_directory_inventory`,</if>
             <if test="dataQuantity != null ">`data_quantity`,</if>
             <if test="registerNumber != null  and registerNumber != ''">`register_number`,</if>
@@ -226,8 +232,10 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
+            <if test="wbsId != null ">#{wbsId},</if>
             <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="wbsAncestors != null  and wbsAncestors != ''">#{wbsAncestors},</if>
             <if test="dataDirectoryInventory != null  and dataDirectoryInventory != ''">#{dataDirectoryInventory},</if>
             <if test="dataQuantity != null ">#{dataQuantity},</if>
             <if test="registerNumber != null  and registerNumber != ''">#{registerNumber},</if>
@@ -269,8 +277,10 @@
         insert into qqch_key_difficult_project_archives
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
+            `wbs_id`,
             `wbs_code`,
             `wbs_name`,
+            `wbs_ancestors`,
             `data_directory_inventory`,
             `data_quantity`,
             `register_number`,
@@ -308,8 +318,10 @@
         <foreach collection="qqchKeyDifficultProjectArchivesList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
+                #{item.wbsId},
                 #{item.wbsCode},
                 #{item.wbsName},
+                #{item.wbsAncestors},
                 #{item.dataDirectoryInventory},
                 #{item.dataQuantity},
                 #{item.registerNumber},
