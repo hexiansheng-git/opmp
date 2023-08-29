@@ -109,18 +109,15 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
 
         BigDecimal version = vo.getVersion();
         List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlList = vo.getList();
+
+        this.insertQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlList,version);
         if(CollectionUtils.isEmpty(qqchSpecialBigProcessControlList)){
             return;
-        }else {
-            //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                JyDetailsUtil.jyDetails(qqchSpecialBigProcessControlList, ValidationGroups.Save.class);
-            }
         }
-        this.insertQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlList,version);
-
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
+            //校验数据必填
+            JyDetailsUtil.jyDetails(qqchSpecialBigProcessControlList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
@@ -134,6 +131,9 @@ public class QqchSpecialBigProcessControlServiceImpl implements IQqchSpecialBigP
         QqchSpecialBigProcessControl qqchSpecialBigEquRiskMeasure1 = new QqchSpecialBigProcessControl();
         qqchSpecialBigEquRiskMeasure1.setVersion(version);
         qqchSpecialBigProcessControlMapper.deleteQqchSpecialBigProcessControl(qqchSpecialBigEquRiskMeasure1);
+        if(CollectionUtils.isEmpty(qqchSpecialBigProcessControlList)){
+            return 0;
+        }
         String valid = Valid.NO;
         if(version.compareTo(BigDecimal.ONE) == 0){
             valid = Valid.YES;

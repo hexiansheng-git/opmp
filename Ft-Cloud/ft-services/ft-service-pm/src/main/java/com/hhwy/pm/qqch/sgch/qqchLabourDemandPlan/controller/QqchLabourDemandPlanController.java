@@ -154,7 +154,7 @@ public class QqchLabourDemandPlanController extends BaseController{
      * @return
      */
     @PreAuthorize(hasPermi = "qqchLabourDemandPlan:sychData")
-    @GetMapping("/sychData")
+    @PostMapping("/sychData")
     public AjaxResult sychData(@RequestBody QqchLabourDemandPlanVo vo1){
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.sychData(vo1);
         return AjaxResult.success(vo);

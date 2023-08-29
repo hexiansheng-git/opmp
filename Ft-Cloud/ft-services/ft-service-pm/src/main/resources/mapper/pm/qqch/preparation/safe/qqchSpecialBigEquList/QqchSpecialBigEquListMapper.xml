@@ -16,6 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                     <result property="personId" column="person_id" />
                     <result property="personName" column="person_name" />
                     <result property="equSourse" column="equ_sourse" />
+        <result property="whetherFirst" column="whether_first"/>
                     <result property="fileGroupId" column="file_group_id" />
                     <result property="remark" column="remark" />
                     <result property="regionId" column="region_id" />
@@ -53,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                          ,`person_id`
                                                          ,`person_name`
                                                          ,`equ_sourse`
+                ,`whether_first`
                                                          ,`file_group_id`
                                                          ,`remark`
                                                          ,`region_id`
@@ -93,6 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="personId != null "> and `person_id` = #{personId}</if>
                             <if test="personName != null  and personName != ''"> and `person_name` = #{personName}</if>
                             <if test="equSourse != null  and equSourse != ''"> and `equ_sourse` = #{equSourse}</if>
+            <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -135,6 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="personId != null "> and `person_id` = #{personId}</if>
                             <if test="personName != null  and personName != ''"> and `person_name` = #{personName}</if>
                             <if test="equSourse != null  and equSourse != ''"> and `equ_sourse` = #{equSourse}</if>
+                            <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -159,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="version != null "> and `version` = #{version}</if>
                             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
                     </where>
-        order by create_time desc
+#         order by create_time desc
     </select>
 
     <insert id="insertQqchSpecialBigEquList"  useGeneratedKeys="true" keyProperty="id"  >
@@ -176,6 +180,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="personId != null ">`person_id`,</if>
                             <if test="personName != null  and personName != ''">`person_name`,</if>
                             <if test="equSourse != null  and equSourse != ''">`equ_sourse`,</if>
+                            <if test="whetherFirst != null and whetherFirst != ''">`whether_first`,</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
                             <if test="remark != null  and remark != ''">`remark`,</if>
                             <if test="regionId != null ">`region_id`,</if>
@@ -212,6 +217,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="personId != null ">#{personId},</if>
                             <if test="personName != null  and personName != ''">#{personName},</if>
                             <if test="equSourse != null  and equSourse != ''">#{equSourse},</if>
+                            <if test="whetherFirst != null and whetherFirst != ''">#{whetherFirst},</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
                             <if test="remark != null  and remark != ''">#{remark},</if>
                             <if test="regionId != null ">#{regionId},</if>
@@ -253,6 +259,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `person_id`,
                                                                 `person_name`,
                                                                 `equ_sourse`,
+                                                                `whether_first`,
                                                                 `file_group_id`,
                                                                 `remark`,
                                                                 `region_id`,
@@ -290,6 +297,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                                 #{item.personId},
                                                                                 #{item.personName},
                                                                                 #{item.equSourse},
+                                                                                #{item.whetherFirst},
                                                                                 #{item.fileGroupId},
                                                                                 #{item.remark},
                                                                                 #{item.regionId},
@@ -330,6 +338,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="personId != null ">`person_id` = #{personId},</if>
                             <if test="personName != null  and  personName != ''">`person_name` = #{personName},</if>
                             <if test="equSourse != null  and  equSourse != ''">`equ_sourse` = #{equSourse},</if>
+                            <if test="whetherFirst != null and whetherFirst != ''">`whether_first` = #{whetherFirst},</if>
                             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
                             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
                             <if test="regionId != null ">`region_id` = #{regionId},</if>
@@ -417,6 +426,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             when `id`=#{item.id} then #{item.equSourse}
                         </foreach>
                     </trim>
+
+                <trim prefix="whether_first  = case" suffix="end,">
+                    <foreach collection="list" item="item" index="index">
+                        when `id`=#{item.id} then #{item.whetherFirst}
+                    </foreach>
+                </trim>
                                     <trim prefix="file_group_id  = case" suffix="end,">
                         <foreach collection="list" item="item" index="index">
                             when `id`=#{item.id} then #{item.fileGroupId}
@@ -553,6 +568,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="personId != null "> and `person_id` = #{personId}</if>
                                     <if test="personName != null  and personName != ''"> and `person_name` = #{personName}</if>
                                     <if test="equSourse != null  and equSourse != ''"> and `equ_sourse` = #{equSourse}</if>
+                                    <if test="whetherFirst != null and whetherFirst != ''">and `whether_first` = #{whetherFirst}</if>
                                     <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                                     <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                                     <if test="regionId != null "> and `region_id` = #{regionId}</if>
