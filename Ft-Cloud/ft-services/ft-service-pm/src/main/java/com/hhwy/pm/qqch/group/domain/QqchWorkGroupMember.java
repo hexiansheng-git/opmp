@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author han
@@ -225,4 +226,6 @@ public class QqchWorkGroupMember extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<QqchWorkGroupMember> children;
 }

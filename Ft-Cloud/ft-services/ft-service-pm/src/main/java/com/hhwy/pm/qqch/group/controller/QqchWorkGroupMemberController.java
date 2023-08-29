@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
+import com.hhwy.pm.qqch.group.domain.vo.WorkGroupMemberQueryVo;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -34,14 +35,14 @@ public class QqchWorkGroupMemberController extends BaseController {
 
     /**
      * 获取工作小组成员历史
-     * @param qqchWorkGroupMember
+     * @param queryVo
      * @return
      */
     @GetMapping("history")
-    public AjaxResult getEstablishPreliminaryPlanHistory(@Validated(ValidationGroups.Select.class) QqchWorkGroupMember qqchWorkGroupMember){
-        startPage();
-        List<QqchWorkGroupMember> workGroupMemberList = qqchWorkGroupMemberService.getEstablishPreliminaryPlanHistory(qqchWorkGroupMember);
-        return getDataTableAjaxResult(workGroupMemberList);
+    public AjaxResult getEstablishPreliminaryPlanHistory(@Validated(ValidationGroups.Select.class) WorkGroupMemberQueryVo queryVo){
+//        startPage();
+        List<QqchWorkGroupMember> workGroupMemberList = qqchWorkGroupMemberService.getEstablishPreliminaryPlanHistory(queryVo);
+        return AjaxResult.success(workGroupMemberList);
     }
 
     /**

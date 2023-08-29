@@ -1,9 +1,11 @@
 package com.hhwy.pm.qqch.group.mapper;
 
-import java.util.List;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
+import com.hhwy.pm.qqch.group.domain.vo.WorkGroupMemberQueryVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author han
@@ -28,4 +30,6 @@ public interface QqchWorkGroupMemberMapper {
     int deleteQqchWorkGroupMember(QqchWorkGroupMember qqchWorkGroupMember);
 
     int deleteQqchWorkGroupMemberByPks(@Param("qqchWorkGroupMemberPkList") List<Long> qqchWorkGroupMemberPkList);
+
+    List<QqchWorkGroupMember> getWorkGroupMemberHistory(WorkGroupMemberQueryVo queryVo);
 }

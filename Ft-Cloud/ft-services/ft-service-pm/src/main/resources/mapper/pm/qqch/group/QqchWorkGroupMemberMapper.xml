@@ -192,6 +192,48 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getWorkGroupMemberHistory" resultMap="QqchWorkGroupMemberResultMap">
+        select
+            `id`
+             ,`work_group_id`
+             ,`temporary_group_duty`
+             ,`director`
+             ,`director_id`
+             ,`affiliated_unit`
+             ,`post_duty`
+             ,`plan_responsibility`
+             ,`expert_member`
+             ,`expert_business_direction`
+             ,`mobile`
+             ,`wechat_id`
+             ,`remark`
+             ,`region_id`
+             ,`region_name`
+             ,`project_id`
+             ,`project_name`
+             ,`dept_id`
+             ,`create_user`
+             ,`create_user_name`
+             ,`create_time`
+             ,`update_user`
+             ,`update_time`
+             ,`del_user`
+             ,`del_time`
+             ,`del_flag`
+             ,`pt_var1`
+             ,`pt_var2`
+             ,`pt_var3`
+             ,`pt_var4`
+             ,`pt_var5`
+        from qqch_work_group_member
+        <where>
+            del_flag = '0' and find_in_set(director_id,#{directorIds})
+            <if test="temporaryGroupDuty != null  and temporaryGroupDuty != ''">and `temporary_group_duty` =
+                #{temporaryGroupDuty}
+            </if>
+            <if test="director != null  and director != ''">and `director` like concat('%' , #{director} , '%')</if>
+        </where>
+    </select>
 
     <insert id="insertQqchWorkGroupMember" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_work_group_member
