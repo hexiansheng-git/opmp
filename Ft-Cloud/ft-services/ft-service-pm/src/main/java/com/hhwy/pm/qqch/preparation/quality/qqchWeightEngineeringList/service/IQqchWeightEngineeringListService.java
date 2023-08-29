@@ -5,6 +5,7 @@ import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ldd
@@ -14,6 +15,12 @@ import java.util.List;
 public interface IQqchWeightEngineeringListService {
                                                                                                                                                                                                                                                                                                                                                                                                                 
     QqchWeightEngineeringList getQqchWeightEngineeringList(QqchWeightEngineeringList qqchWeightEngineeringList);
+
+    /**
+     * 获取最新生效版本重难点工程清单中选择的wbs以及其所有父级结构的集合
+     * @return
+     */
+    Set<Long> getCurrentAndLowerLevelWbsIds();
 
     /**
      * 获取最新生效版本重难点工程清单中选择的wbs以及其所有父级结构的集合

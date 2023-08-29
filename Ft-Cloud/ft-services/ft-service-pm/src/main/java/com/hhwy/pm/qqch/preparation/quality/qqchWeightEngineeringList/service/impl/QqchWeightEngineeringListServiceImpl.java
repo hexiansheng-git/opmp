@@ -90,6 +90,27 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
     }
 
     /**
+     * 获取重难点工程清单涉及的wbs及其下级所有Id
+     * @return
+     */
+    public Set<Long> getCurrentAndLowerLevelWbsIds() {
+        //获取最新生效版本的重难点工程清单
+        List<QqchWeightEngineeringList> engineeringListList = this.getEngineeringListByVersion(null);
+        Set<Long> wbsIds = new HashSet<>();
+        for (QqchWeightEngineeringList weightEngineeringList : engineeringListList) {
+            Long wbsId = weightEngineeringList.getWbsId();
+            if(wbsId != null){
+                wbsIds.add(wbsId);
+                Long[] childWbsIds = WbsRedisUtils.getChildWbsId(String.valueOf(wbsId));
+                if(childWbsIds != null) {
+                    wbsIds.addAll(Arrays.asList(childWbsIds));
+                }
+            }
+        }
+        return wbsIds;
+    }
+
+    /**
      * 获取最新生效版本重难点工程清单中选择的wbs以及其所有父级结构的集合
      * @return
      */

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.qualityRecord.service;
 
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbs;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
 
 import java.util.List;
@@ -35,4 +36,17 @@ public interface IQqchGeneralProjectArchivesService {
      */
     GeneralProjectArchivesWbsVo getGeneralProjectArchivesWbsVo(QqchGeneralProjectArchives qqchGeneralProjectArchives);
 
+    /**
+     * 点击获取下级
+     * @param qqchGeneralProjectArchives
+     * @return
+     */
+    List<GeneralProjectArchivesWbs> getLowerLevel(QqchGeneralProjectArchives qqchGeneralProjectArchives);
+
+    /**
+     * 保存/确认/提交
+     * @param generalProjectArchivesWbsVo
+     * @return
+     */
+    void save(GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo);
 }
