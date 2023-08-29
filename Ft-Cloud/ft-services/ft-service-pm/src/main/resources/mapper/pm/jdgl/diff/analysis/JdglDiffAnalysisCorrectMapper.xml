@@ -2,23 +2,20 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper.JdglDayScheduleMapper">
+<mapper namespace="com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisCorrectMapper">
 
-    <resultMap type="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule"
-               id="JdglDayScheduleResultMap">
+    <resultMap type="com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect"
+               id="JdglDiffAnalysisCorrectResultMap">
         <result property="id" column="id"/>
-        <result property="projectName" column="project_name"/>
-        <result property="date" column="date"/>
-        <result property="custUnit" column="cust_unit"/>
-        <result property="dayValueCu" column="day_value_cu"/>
-        <result property="totalValueCu" column="total_value_cu"/>
-        <result property="exchangeRate" column="exchange_rate"/>
-        <result property="dayValueDl" column="day_value_dl"/>
-        <result property="totalValueDl" column="total_value_dl"/>
-        <result property="description" column="description"/>
+        <result property="diffAnalysisId" column="diff_analysis_id"/>
+        <result property="firstType" column="first_type"/>
+        <result property="firstTypeValue" column="first_type_value"/>
+        <result property="secondType" column="second_type"/>
+        <result property="grade" column="grade"/>
+        <result property="sort" column="sortsort"/>
+        <result property="isSelect" column="is_select"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
-        <result property="deptId" column="dept_id"/>
         <result property="createUser" column="create_user"/>
         <result property="createUserName" column="create_user_name"/>
         <result property="createTime" column="create_time"/>
@@ -33,21 +30,22 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="taskStatus" column="task_status"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
     </resultMap>
-    <sql id="selectJdglDayScheduleVo">
+    <sql id="selectJdglDiffAnalysisCorrectVo">
         select `id`
-             , `project_name`
-             , `date`
-             , `cust_unit`
-             , `day_value_cu`
-             , `total_value_cu`
-             , `exchange_rate`
-             , `day_value_dl`
-             , `total_value_dl`
-             , `description`
+             , `diff_analysis_id`
+             , `first_type`
+             , `first_type_value`
+             , `second_type`
+             , `grade`
+             , `sort`
+             , `is_select`
              , `file_group_id`
              , `remark`
-             , `dept_id`
              , `create_user`
              , `create_user_name`
              , `create_time`
@@ -62,25 +60,26 @@
              , `pt_var4`
              , `pt_var5`
              , `task_status`
-        from jdgl_day_schedule
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+        from jdgl_diff_analysis_correct
     </sql>
-    <select id="getJdglDaySchedule" resultMap="JdglDayScheduleResultMap">
-        <include refid="selectJdglDayScheduleVo"/>
+    <select id="getJdglDiffAnalysisCorrect" resultMap="JdglDiffAnalysisCorrectResultMap">
+        <include refid="selectJdglDiffAnalysisCorrectVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="date != null ">and `date` = #{date}</if>
-            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
-            <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
-            <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
-            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
-            <if test="dayValueDl != null ">and `day_value_dl` = #{dayValueDl}</if>
-            <if test="totalValueDl != null ">and `total_value_dl` = #{totalValueDl}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
+            <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
+            <if test="firstType != null  and firstType != ''">and `first_type` = #{firstType}</if>
+            <if test="firstTypeValue != null  and firstTypeValue != ''">and `first_type_value` = #{firstTypeValue}</if>
+            <if test="secondType != null  and secondType != ''">and `second_type` = #{secondType}</if>
+            <if test="grade != null ">and `grade` = #{grade}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="isSelect != null  and isSelect != ''">and `is_select` = #{isSelect}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
@@ -95,27 +94,28 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
         order by create_time desc
     </select>
 
-    <select id="getJdglDayScheduleList" resultMap="JdglDayScheduleResultMap">
-        <include refid="selectJdglDayScheduleVo"/>
+    <select id="getJdglDiffAnalysisCorrectList" resultMap="JdglDiffAnalysisCorrectResultMap">
+        <include refid="selectJdglDiffAnalysisCorrectVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="date != null ">and `date` = #{date}</if>
-            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
-            <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
-            <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
-            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
-            <if test="dayValueDl != null ">and `day_value_dl` = #{dayValueDl}</if>
-            <if test="totalValueDl != null ">and `total_value_dl` = #{totalValueDl}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
+            <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
+            <if test="firstType != null  and firstType != ''">and `first_type` = #{firstType}</if>
+            <if test="firstTypeValue != null  and firstTypeValue != ''">and `first_type_value` = #{firstTypeValue}</if>
+            <if test="secondType != null  and secondType != ''">and `second_type` = #{secondType}</if>
+            <if test="grade != null ">and `grade` = #{grade}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="isSelect != null  and isSelect != ''">and `is_select` = #{isSelect}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
@@ -130,38 +130,27 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
-        order by create_time desc
-    </select>
-    <select id="getHistoryValue"
-            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
-        select sum(day_value_cu) totalValueCu,sum(day_value_dl) totalValueDl
-        from jdgl_day_schedule where date &lt; #{date} and taskStatus = "5"
-    </select>
-    <select id="getCountValue" resultType="java.math.BigDecimal">
-        select sum(day_value_dl)
-        from jdgl_day_schedule
-        where taskStatus = "5"
-        <if test="startDate != null "> and date &gt;= #{startDate}</if>
-        <if test="endDate != null "> and date &lt;= #{endDate}</if>
+        order by firstType asc, sort asc
     </select>
 
-    <insert id="insertJdglDaySchedule" useGeneratedKeys="true" keyProperty="id">
-        insert into jdgl_day_schedule
+    <insert id="insertJdglDiffAnalysisCorrect" useGeneratedKeys="true" keyProperty="id">
+        insert into jdgl_diff_analysis_correct
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="projectName != null  and projectName != ''">`project_name`,</if>
-            <if test="date != null ">`date`,</if>
-            <if test="custUnit != null  and custUnit != ''">`cust_unit`,</if>
-            <if test="dayValueCu != null ">`day_value_cu`,</if>
-            <if test="totalValueCu != null ">`total_value_cu`,</if>
-            <if test="exchangeRate != null ">`exchange_rate`,</if>
-            <if test="dayValueDl != null ">`day_value_dl`,</if>
-            <if test="totalValueDl != null ">`total_value_dl`,</if>
-            <if test="description != null  and description != ''">`description`,</if>
+            <if test="diffAnalysisId != null ">`diff_analysis_id`,</if>
+            <if test="firstType != null  and firstType != ''">`first_type`,</if>
+            <if test="firstTypeValue != null  and firstTypeValue != ''">`first_type_value`,</if>
+            <if test="secondType != null  and secondType != ''">`second_type`,</if>
+            <if test="grade != null ">`grade`,</if>
+            <if test="sort != null ">`sort`,</if>
+            <if test="isSelect != null  and isSelect != ''">`is_select`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
-            <if test="deptId != null ">`dept_id`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
             <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
             <if test="createTime != null ">`create_time`,</if>
@@ -176,21 +165,22 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="projectName != null  and projectName != ''">#{projectName},</if>
-            <if test="date != null ">#{date},</if>
-            <if test="custUnit != null  and custUnit != ''">#{custUnit},</if>
-            <if test="dayValueCu != null ">#{dayValueCu},</if>
-            <if test="totalValueCu != null ">#{totalValueCu},</if>
-            <if test="exchangeRate != null ">#{exchangeRate},</if>
-            <if test="dayValueDl != null ">#{dayValueDl},</if>
-            <if test="totalValueDl != null ">#{totalValueDl},</if>
-            <if test="description != null  and description != ''">#{description},</if>
+            <if test="diffAnalysisId != null ">#{diffAnalysisId},</if>
+            <if test="firstType != null  and firstType != ''">#{firstType},</if>
+            <if test="firstTypeValue != null  and firstTypeValue != ''">#{firstTypeValue},</if>
+            <if test="secondType != null  and secondType != ''">#{secondType},</if>
+            <if test="grade != null ">#{grade},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="isSelect != null  and isSelect != ''">#{isSelect},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="deptId != null ">#{deptId},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
             <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
             <if test="createTime != null ">#{createTime},</if>
@@ -205,26 +195,27 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglDaySchedule -->
-    <insert id="insertJdglDayScheduleList">
-        insert into jdgl_day_schedule
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglDiffAnalysisCorrect -->
+    <insert id="insertJdglDiffAnalysisCorrectList">
+        insert into jdgl_diff_analysis_correct
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `project_name`,
-            `date`,
-            `cust_unit`,
-            `day_value_cu`,
-            `total_value_cu`,
-            `exchange_rate`,
-            `day_value_dl`,
-            `total_value_dl`,
-            `description`,
+            `diff_analysis_id`,
+            `first_type`,
+            `first_type_value`,
+            `second_type`,
+            `grade`,
+            `sort`,
+            `is_select`,
             `file_group_id`,
             `remark`,
-            `dept_id`,
             `create_user`,
             `create_user_name`,
             `create_time`,
@@ -238,23 +229,24 @@
             `pt_var4`,
             `pt_var5`,
             `task_status`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
         </trim>
         values
-        <foreach collection="jdglDayScheduleList" item="item" separator=",">
+        <foreach collection="jdglDiffAnalysisCorrectList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.projectName},
-                #{item.date},
-                #{item.custUnit},
-                #{item.dayValueCu},
-                #{item.totalValueCu},
-                #{item.exchangeRate},
-                #{item.dayValueDl},
-                #{item.totalValueDl},
-                #{item.description},
+                #{item.diffAnalysisId},
+                #{item.firstType},
+                #{item.firstTypeValue},
+                #{item.secondType},
+                #{item.grade},
+                #{item.sort},
+                #{item.isSelect},
                 #{item.fileGroupId},
                 #{item.remark},
-                #{item.deptId},
                 #{item.createUser},
                 #{item.createUserName},
                 #{item.createTime},
@@ -268,26 +260,27 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.taskStatus},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
             </trim>
         </foreach>
     </insert>
 
-    <update id="updateJdglDaySchedule">
-        update jdgl_day_schedule
+    <update id="updateJdglDiffAnalysisCorrect">
+        update jdgl_diff_analysis_correct
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-            <if test="date != null ">`date` = #{date},</if>
-            <if test="custUnit != null  and  custUnit != ''">`cust_unit` = #{custUnit},</if>
-            <if test="dayValueCu != null ">`day_value_cu` = #{dayValueCu},</if>
-            <if test="totalValueCu != null ">`total_value_cu` = #{totalValueCu},</if>
-            <if test="exchangeRate != null ">`exchange_rate` = #{exchangeRate},</if>
-            <if test="dayValueDl != null ">`day_value_dl` = #{dayValueDl},</if>
-            <if test="totalValueDl != null ">`total_value_dl` = #{totalValueDl},</if>
-            <if test="description != null  and  description != ''">`description` = #{description},</if>
+            <if test="diffAnalysisId != null ">`diff_analysis_id` = #{diffAnalysisId},</if>
+            <if test="firstType != null  and  firstType != ''">`first_type` = #{firstType},</if>
+            <if test="firstTypeValue != null  and  firstTypeValue != ''">`first_type_value` = #{firstTypeValue},</if>
+            <if test="secondType != null  and  secondType != ''">`second_type` = #{secondType},</if>
+            <if test="grade != null ">`grade` = #{grade},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
+            <if test="isSelect != null  and  isSelect != ''">`is_select` = #{isSelect},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="deptId != null ">`dept_id` = #{deptId},</if>
             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
             <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
             <if test="createTime != null ">`create_time` = #{createTime},</if>
@@ -302,63 +295,57 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
         </where>
     </update>
 
-    <update id="updateJdglDayScheduleList">
-        update jdgl_day_schedule
+    <update id="updateJdglDiffAnalysisCorrectList">
+        update jdgl_diff_analysis_correct
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="project_name  = case" suffix="end,">
+            <trim prefix="diff_analysis_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectName}
+                    when `id`=#{item.id} then #{item.diffAnalysisId}
                 </foreach>
             </trim>
-            <trim prefix="date  = case" suffix="end,">
+            <trim prefix="first_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.date}
+                    when `id`=#{item.id} then #{item.firstType}
                 </foreach>
             </trim>
-            <trim prefix="cust_unit  = case" suffix="end,">
+            <trim prefix="first_type_value  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.custUnit}
+                    when `id`=#{item.id} then #{item.firstTypeValue}
                 </foreach>
             </trim>
-            <trim prefix="day_value_cu  = case" suffix="end,">
+            <trim prefix="second_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dayValueCu}
+                    when `id`=#{item.id} then #{item.secondType}
                 </foreach>
             </trim>
-            <trim prefix="total_value_cu  = case" suffix="end,">
+            <trim prefix="grade  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.totalValueCu}
+                    when `id`=#{item.id} then #{item.grade}
                 </foreach>
             </trim>
-            <trim prefix="exchange_rate  = case" suffix="end,">
+            <trim prefix="sort  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.exchangeRate}
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
-            <trim prefix="day_value_dl  = case" suffix="end,">
+            <trim prefix="is_select  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dayValueDl}
-                </foreach>
-            </trim>
-            <trim prefix="total_value_dl  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.totalValueDl}
-                </foreach>
-            </trim>
-            <trim prefix="description  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.description}
+                    when `id`=#{item.id} then #{item.isSelect}
                 </foreach>
             </trim>
             <trim prefix="file_group_id  = case" suffix="end,">
@@ -369,11 +356,6 @@
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
-            <trim prefix="dept_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
             <trim prefix="create_user  = case" suffix="end,">
@@ -446,6 +428,26 @@
                     when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
@@ -453,22 +455,19 @@
         </foreach>
     </update>
 
-    <update id="deleteJdglDaySchedule">
-        update `jdgl_day_schedule` set del_flag = 1
+    <update id="deleteJdglDiffAnalysisCorrect">
+        update `jdgl_diff_analysis_correct` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="date != null ">and `date` = #{date}</if>
-            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
-            <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
-            <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
-            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
-            <if test="dayValueDl != null ">and `day_value_dl` = #{dayValueDl}</if>
-            <if test="totalValueDl != null ">and `total_value_dl` = #{totalValueDl}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
+            <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
+            <if test="firstType != null  and firstType != ''">and `first_type` = #{firstType}</if>
+            <if test="firstTypeValue != null  and firstTypeValue != ''">and `first_type_value` = #{firstTypeValue}</if>
+            <if test="secondType != null  and secondType != ''">and `second_type` = #{secondType}</if>
+            <if test="grade != null ">and `grade` = #{grade}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+            <if test="isSelect != null  and isSelect != ''">and `is_select` = #{isSelect}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
@@ -483,24 +482,20 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
     </update>
 
-    <update id="deleteJdglDayScheduleByPks">
-        update `jdgl_day_schedule` set del_flag = 1
+    <update id="deleteJdglDiffAnalysisCorrectByPks">
+        update `jdgl_diff_analysis_correct` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="jdglDaySchedulePkList" open="(" separator="," close=")">
+            <foreach item="id" collection="jdglDiffAnalysisCorrectPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
-    </update>
-    <update id="updateJdglDayScheduleValue">
-
-        update jdgl_day_schedule jds
-        set day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
-            day_value_dl= day_value_cu*exchange_rate/10000,
-        where id = #{id}
-
     </update>
 </mapper>

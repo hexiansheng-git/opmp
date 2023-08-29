@@ -2,23 +2,25 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper.JdglDayScheduleMapper">
+<mapper namespace="com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisPathMapper">
 
-    <resultMap type="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule"
-               id="JdglDayScheduleResultMap">
+    <resultMap type="com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisPath" id="JdglDiffAnalysisPathResultMap">
         <result property="id" column="id"/>
-        <result property="projectName" column="project_name"/>
-        <result property="date" column="date"/>
-        <result property="custUnit" column="cust_unit"/>
-        <result property="dayValueCu" column="day_value_cu"/>
-        <result property="totalValueCu" column="total_value_cu"/>
-        <result property="exchangeRate" column="exchange_rate"/>
-        <result property="dayValueDl" column="day_value_dl"/>
-        <result property="totalValueDl" column="total_value_dl"/>
-        <result property="description" column="description"/>
+        <result property="diffAnalysisId" column="diff_analysis_id"/>
+        <result property="planItemCode" column="plan_item_code"/>
+        <result property="planItemName" column="plan_item_name"/>
+        <result property="isCriticalPath" column="is_critical_path"/>
+        <result property="unit" column="unit"/>
+        <result property="designNum" column="design_num"/>
+        <result property="planStartDate" column="plan_start_date"/>
+        <result property="planEndDate" column="plan_end_date"/>
+        <result property="planDays" column="plan_days"/>
+        <result property="totalDayCompRate" column="total_day_comp_rate"/>
+        <result property="totalProgressCompRate" column="total_progress_comp_rate"/>
+        <result property="isDeviation" column="is_deviation"/>
+        <result property="thisDeviationNum" column="this_deviation_num"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
-        <result property="deptId" column="dept_id"/>
         <result property="createUser" column="create_user"/>
         <result property="createUserName" column="create_user_name"/>
         <result property="createTime" column="create_time"/>
@@ -33,21 +35,28 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="taskStatus" column="task_status"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
     </resultMap>
-    <sql id="selectJdglDayScheduleVo">
+    <sql id="selectJdglDiffAnalysisPathVo">
         select `id`
-             , `project_name`
-             , `date`
-             , `cust_unit`
-             , `day_value_cu`
-             , `total_value_cu`
-             , `exchange_rate`
-             , `day_value_dl`
-             , `total_value_dl`
-             , `description`
+             , `diff_analysis_id`
+             , `plan_item_code`
+             , `plan_item_name`
+             , `is_critical_path`
+             , `unit`
+             , `design_num`
+             , `plan_start_date`
+             , `plan_end_date`
+             , `plan_days`
+             , `total_day_comp_rate`
+             , `total_progress_comp_rate`
+             , `is_deviation`
+             , `this_deviation_num`
              , `file_group_id`
              , `remark`
-             , `dept_id`
              , `create_user`
              , `create_user_name`
              , `create_time`
@@ -62,25 +71,32 @@
              , `pt_var4`
              , `pt_var5`
              , `task_status`
-        from jdgl_day_schedule
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+        from jdgl_diff_analysis_path
     </sql>
-    <select id="getJdglDaySchedule" resultMap="JdglDayScheduleResultMap">
-        <include refid="selectJdglDayScheduleVo"/>
+    <select id="getJdglDiffAnalysisPath" resultMap="JdglDiffAnalysisPathResultMap">
+        <include refid="selectJdglDiffAnalysisPathVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="date != null ">and `date` = #{date}</if>
-            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
-            <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
-            <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
-            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
-            <if test="dayValueDl != null ">and `day_value_dl` = #{dayValueDl}</if>
-            <if test="totalValueDl != null ">and `total_value_dl` = #{totalValueDl}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
+            <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
+            <if test="planItemCode != null  and planItemCode != ''">and `plan_item_code` = #{planItemCode}</if>
+            <if test="planItemName != null  and planItemName != ''">and `plan_item_name` = #{planItemName}</if>
+            <if test="isCriticalPath != null  and isCriticalPath != ''">and `is_critical_path` = #{isCriticalPath}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designNum != null ">and `design_num` = #{designNum}</if>
+            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="planDays != null ">and `plan_days` = #{planDays}</if>
+            <if test="totalDayCompRate != null ">and `total_day_comp_rate` = #{totalDayCompRate}</if>
+            <if test="totalProgressCompRate != null ">and `total_progress_comp_rate` = #{totalProgressCompRate}</if>
+            <if test="isDeviation != null  and isDeviation != ''">and `is_deviation` = #{isDeviation}</if>
+            <if test="thisDeviationNum != null ">and `this_deviation_num` = #{thisDeviationNum}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
@@ -95,27 +111,34 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
         order by create_time desc
     </select>
 
-    <select id="getJdglDayScheduleList" resultMap="JdglDayScheduleResultMap">
-        <include refid="selectJdglDayScheduleVo"/>
+    <select id="getJdglDiffAnalysisPathList" resultMap="JdglDiffAnalysisPathResultMap">
+        <include refid="selectJdglDiffAnalysisPathVo"/>
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="date != null ">and `date` = #{date}</if>
-            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
-            <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
-            <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
-            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
-            <if test="dayValueDl != null ">and `day_value_dl` = #{dayValueDl}</if>
-            <if test="totalValueDl != null ">and `total_value_dl` = #{totalValueDl}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
+            <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
+            <if test="planItemCode != null  and planItemCode != ''">and `plan_item_code` = #{planItemCode}</if>
+            <if test="planItemName != null  and planItemName != ''">and `plan_item_name` = #{planItemName}</if>
+            <if test="isCriticalPath != null  and isCriticalPath != ''">and `is_critical_path` = #{isCriticalPath}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designNum != null ">and `design_num` = #{designNum}</if>
+            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="planDays != null ">and `plan_days` = #{planDays}</if>
+            <if test="totalDayCompRate != null ">and `total_day_comp_rate` = #{totalDayCompRate}</if>
+            <if test="totalProgressCompRate != null ">and `total_progress_comp_rate` = #{totalProgressCompRate}</if>
+            <if test="isDeviation != null  and isDeviation != ''">and `is_deviation` = #{isDeviation}</if>
+            <if test="thisDeviationNum != null ">and `this_deviation_num` = #{thisDeviationNum}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
@@ -130,38 +153,33 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
         order by create_time desc
     </select>
-    <select id="getHistoryValue"
-            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
-        select sum(day_value_cu) totalValueCu,sum(day_value_dl) totalValueDl
-        from jdgl_day_schedule where date &lt; #{date} and taskStatus = "5"
-    </select>
-    <select id="getCountValue" resultType="java.math.BigDecimal">
-        select sum(day_value_dl)
-        from jdgl_day_schedule
-        where taskStatus = "5"
-        <if test="startDate != null "> and date &gt;= #{startDate}</if>
-        <if test="endDate != null "> and date &lt;= #{endDate}</if>
-    </select>
 
-    <insert id="insertJdglDaySchedule" useGeneratedKeys="true" keyProperty="id">
-        insert into jdgl_day_schedule
+    <insert id="insertJdglDiffAnalysisPath" useGeneratedKeys="true" keyProperty="id">
+        insert into jdgl_diff_analysis_path
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
-            <if test="projectName != null  and projectName != ''">`project_name`,</if>
-            <if test="date != null ">`date`,</if>
-            <if test="custUnit != null  and custUnit != ''">`cust_unit`,</if>
-            <if test="dayValueCu != null ">`day_value_cu`,</if>
-            <if test="totalValueCu != null ">`total_value_cu`,</if>
-            <if test="exchangeRate != null ">`exchange_rate`,</if>
-            <if test="dayValueDl != null ">`day_value_dl`,</if>
-            <if test="totalValueDl != null ">`total_value_dl`,</if>
-            <if test="description != null  and description != ''">`description`,</if>
+            <if test="diffAnalysisId != null ">`diff_analysis_id`,</if>
+            <if test="planItemCode != null  and planItemCode != ''">`plan_item_code`,</if>
+            <if test="planItemName != null  and planItemName != ''">`plan_item_name`,</if>
+            <if test="isCriticalPath != null  and isCriticalPath != ''">`is_critical_path`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="designNum != null ">`design_num`,</if>
+            <if test="planStartDate != null ">`plan_start_date`,</if>
+            <if test="planEndDate != null ">`plan_end_date`,</if>
+            <if test="planDays != null ">`plan_days`,</if>
+            <if test="totalDayCompRate != null ">`total_day_comp_rate`,</if>
+            <if test="totalProgressCompRate != null ">`total_progress_comp_rate`,</if>
+            <if test="isDeviation != null  and isDeviation != ''">`is_deviation`,</if>
+            <if test="thisDeviationNum != null ">`this_deviation_num`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
-            <if test="deptId != null ">`dept_id`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
             <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
             <if test="createTime != null ">`create_time`,</if>
@@ -176,21 +194,28 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
-            <if test="projectName != null  and projectName != ''">#{projectName},</if>
-            <if test="date != null ">#{date},</if>
-            <if test="custUnit != null  and custUnit != ''">#{custUnit},</if>
-            <if test="dayValueCu != null ">#{dayValueCu},</if>
-            <if test="totalValueCu != null ">#{totalValueCu},</if>
-            <if test="exchangeRate != null ">#{exchangeRate},</if>
-            <if test="dayValueDl != null ">#{dayValueDl},</if>
-            <if test="totalValueDl != null ">#{totalValueDl},</if>
-            <if test="description != null  and description != ''">#{description},</if>
+            <if test="diffAnalysisId != null ">#{diffAnalysisId},</if>
+            <if test="planItemCode != null  and planItemCode != ''">#{planItemCode},</if>
+            <if test="planItemName != null  and planItemName != ''">#{planItemName},</if>
+            <if test="isCriticalPath != null  and isCriticalPath != ''">#{isCriticalPath},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="designNum != null ">#{designNum},</if>
+            <if test="planStartDate != null ">#{planStartDate},</if>
+            <if test="planEndDate != null ">#{planEndDate},</if>
+            <if test="planDays != null ">#{planDays},</if>
+            <if test="totalDayCompRate != null ">#{totalDayCompRate},</if>
+            <if test="totalProgressCompRate != null ">#{totalProgressCompRate},</if>
+            <if test="isDeviation != null  and isDeviation != ''">#{isDeviation},</if>
+            <if test="thisDeviationNum != null ">#{thisDeviationNum},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="deptId != null ">#{deptId},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
             <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
             <if test="createTime != null ">#{createTime},</if>
@@ -205,26 +230,33 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglDaySchedule -->
-    <insert id="insertJdglDayScheduleList">
-        insert into jdgl_day_schedule
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglDiffAnalysisPath -->
+    <insert id="insertJdglDiffAnalysisPathList">
+        insert into jdgl_diff_analysis_path
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
-            `project_name`,
-            `date`,
-            `cust_unit`,
-            `day_value_cu`,
-            `total_value_cu`,
-            `exchange_rate`,
-            `day_value_dl`,
-            `total_value_dl`,
-            `description`,
+            `diff_analysis_id`,
+            `plan_item_code`,
+            `plan_item_name`,
+            `is_critical_path`,
+            `unit`,
+            `design_num`,
+            `plan_start_date`,
+            `plan_end_date`,
+            `plan_days`,
+            `total_day_comp_rate`,
+            `total_progress_comp_rate`,
+            `is_deviation`,
+            `this_deviation_num`,
             `file_group_id`,
             `remark`,
-            `dept_id`,
             `create_user`,
             `create_user_name`,
             `create_time`,
@@ -238,23 +270,30 @@
             `pt_var4`,
             `pt_var5`,
             `task_status`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
         </trim>
         values
-        <foreach collection="jdglDayScheduleList" item="item" separator=",">
+        <foreach collection="jdglDiffAnalysisPathList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
-                #{item.projectName},
-                #{item.date},
-                #{item.custUnit},
-                #{item.dayValueCu},
-                #{item.totalValueCu},
-                #{item.exchangeRate},
-                #{item.dayValueDl},
-                #{item.totalValueDl},
-                #{item.description},
+                #{item.diffAnalysisId},
+                #{item.planItemCode},
+                #{item.planItemName},
+                #{item.isCriticalPath},
+                #{item.unit},
+                #{item.designNum},
+                #{item.planStartDate},
+                #{item.planEndDate},
+                #{item.planDays},
+                #{item.totalDayCompRate},
+                #{item.totalProgressCompRate},
+                #{item.isDeviation},
+                #{item.thisDeviationNum},
                 #{item.fileGroupId},
                 #{item.remark},
-                #{item.deptId},
                 #{item.createUser},
                 #{item.createUserName},
                 #{item.createTime},
@@ -268,26 +307,33 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.taskStatus},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
             </trim>
         </foreach>
     </insert>
 
-    <update id="updateJdglDaySchedule">
-        update jdgl_day_schedule
+    <update id="updateJdglDiffAnalysisPath">
+        update jdgl_diff_analysis_path
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
-            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-            <if test="date != null ">`date` = #{date},</if>
-            <if test="custUnit != null  and  custUnit != ''">`cust_unit` = #{custUnit},</if>
-            <if test="dayValueCu != null ">`day_value_cu` = #{dayValueCu},</if>
-            <if test="totalValueCu != null ">`total_value_cu` = #{totalValueCu},</if>
-            <if test="exchangeRate != null ">`exchange_rate` = #{exchangeRate},</if>
-            <if test="dayValueDl != null ">`day_value_dl` = #{dayValueDl},</if>
-            <if test="totalValueDl != null ">`total_value_dl` = #{totalValueDl},</if>
-            <if test="description != null  and  description != ''">`description` = #{description},</if>
+            <if test="diffAnalysisId != null ">`diff_analysis_id` = #{diffAnalysisId},</if>
+            <if test="planItemCode != null  and  planItemCode != ''">`plan_item_code` = #{planItemCode},</if>
+            <if test="planItemName != null  and  planItemName != ''">`plan_item_name` = #{planItemName},</if>
+            <if test="isCriticalPath != null  and  isCriticalPath != ''">`is_critical_path` = #{isCriticalPath},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="designNum != null ">`design_num` = #{designNum},</if>
+            <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
+            <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
+            <if test="planDays != null ">`plan_days` = #{planDays},</if>
+            <if test="totalDayCompRate != null ">`total_day_comp_rate` = #{totalDayCompRate},</if>
+            <if test="totalProgressCompRate != null ">`total_progress_comp_rate` = #{totalProgressCompRate},</if>
+            <if test="isDeviation != null  and  isDeviation != ''">`is_deviation` = #{isDeviation},</if>
+            <if test="thisDeviationNum != null ">`this_deviation_num` = #{thisDeviationNum},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="deptId != null ">`dept_id` = #{deptId},</if>
             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
             <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
             <if test="createTime != null ">`create_time` = #{createTime},</if>
@@ -302,63 +348,87 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
         </where>
     </update>
 
-    <update id="updateJdglDayScheduleList">
-        update jdgl_day_schedule
+    <update id="updateJdglDiffAnalysisPathList">
+        update jdgl_diff_analysis_path
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
                 </foreach>
             </trim>
-            <trim prefix="project_name  = case" suffix="end,">
+            <trim prefix="diff_analysis_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectName}
+                    when `id`=#{item.id} then #{item.diffAnalysisId}
                 </foreach>
             </trim>
-            <trim prefix="date  = case" suffix="end,">
+            <trim prefix="plan_item_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.date}
+                    when `id`=#{item.id} then #{item.planItemCode}
                 </foreach>
             </trim>
-            <trim prefix="cust_unit  = case" suffix="end,">
+            <trim prefix="plan_item_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.custUnit}
+                    when `id`=#{item.id} then #{item.planItemName}
                 </foreach>
             </trim>
-            <trim prefix="day_value_cu  = case" suffix="end,">
+            <trim prefix="is_critical_path  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dayValueCu}
+                    when `id`=#{item.id} then #{item.isCriticalPath}
                 </foreach>
             </trim>
-            <trim prefix="total_value_cu  = case" suffix="end,">
+            <trim prefix="unit  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.totalValueCu}
+                    when `id`=#{item.id} then #{item.unit}
                 </foreach>
             </trim>
-            <trim prefix="exchange_rate  = case" suffix="end,">
+            <trim prefix="design_num  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.exchangeRate}
+                    when `id`=#{item.id} then #{item.designNum}
                 </foreach>
             </trim>
-            <trim prefix="day_value_dl  = case" suffix="end,">
+            <trim prefix="plan_start_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.dayValueDl}
+                    when `id`=#{item.id} then #{item.planStartDate}
                 </foreach>
             </trim>
-            <trim prefix="total_value_dl  = case" suffix="end,">
+            <trim prefix="plan_end_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.totalValueDl}
+                    when `id`=#{item.id} then #{item.planEndDate}
                 </foreach>
             </trim>
-            <trim prefix="description  = case" suffix="end,">
+            <trim prefix="plan_days  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.description}
+                    when `id`=#{item.id} then #{item.planDays}
+                </foreach>
+            </trim>
+            <trim prefix="total_day_comp_rate  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalDayCompRate}
+                </foreach>
+            </trim>
+            <trim prefix="total_progress_comp_rate  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalProgressCompRate}
+                </foreach>
+            </trim>
+            <trim prefix="is_deviation  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isDeviation}
+                </foreach>
+            </trim>
+            <trim prefix="this_deviation_num  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.thisDeviationNum}
                 </foreach>
             </trim>
             <trim prefix="file_group_id  = case" suffix="end,">
@@ -369,11 +439,6 @@
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
-            <trim prefix="dept_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.deptId}
                 </foreach>
             </trim>
             <trim prefix="create_user  = case" suffix="end,">
@@ -446,6 +511,26 @@
                     when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
@@ -453,22 +538,25 @@
         </foreach>
     </update>
 
-    <update id="deleteJdglDaySchedule">
-        update `jdgl_day_schedule` set del_flag = 1
+    <update id="deleteJdglDiffAnalysisPath">
+        update `jdgl_diff_analysis_path` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="date != null ">and `date` = #{date}</if>
-            <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
-            <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
-            <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
-            <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
-            <if test="dayValueDl != null ">and `day_value_dl` = #{dayValueDl}</if>
-            <if test="totalValueDl != null ">and `total_value_dl` = #{totalValueDl}</if>
-            <if test="description != null  and description != ''">and `description` = #{description}</if>
+            <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
+            <if test="planItemCode != null  and planItemCode != ''">and `plan_item_code` = #{planItemCode}</if>
+            <if test="planItemName != null  and planItemName != ''">and `plan_item_name` = #{planItemName}</if>
+            <if test="isCriticalPath != null  and isCriticalPath != ''">and `is_critical_path` = #{isCriticalPath}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designNum != null ">and `design_num` = #{designNum}</if>
+            <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
+            <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
+            <if test="planDays != null ">and `plan_days` = #{planDays}</if>
+            <if test="totalDayCompRate != null ">and `total_day_comp_rate` = #{totalDayCompRate}</if>
+            <if test="totalProgressCompRate != null ">and `total_progress_comp_rate` = #{totalProgressCompRate}</if>
+            <if test="isDeviation != null  and isDeviation != ''">and `is_deviation` = #{isDeviation}</if>
+            <if test="thisDeviationNum != null ">and `this_deviation_num` = #{thisDeviationNum}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
@@ -483,24 +571,20 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
     </update>
 
-    <update id="deleteJdglDayScheduleByPks">
-        update `jdgl_day_schedule` set del_flag = 1
+    <update id="deleteJdglDiffAnalysisPathByPks">
+        update `jdgl_diff_analysis_path` set del_flag = 1
         <where>
             `id` in
-            <foreach item="id" collection="jdglDaySchedulePkList" open="(" separator="," close=")">
+            <foreach item="id" collection="jdglDiffAnalysisPathPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
         </where>
-    </update>
-    <update id="updateJdglDayScheduleValue">
-
-        update jdgl_day_schedule jds
-        set day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
-            day_value_dl= day_value_cu*exchange_rate/10000,
-        where id = #{id}
-
     </update>
 </mapper>

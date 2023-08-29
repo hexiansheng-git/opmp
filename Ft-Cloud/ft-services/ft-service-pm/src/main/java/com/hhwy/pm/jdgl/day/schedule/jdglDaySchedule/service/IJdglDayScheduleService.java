@@ -1,5 +1,7 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
@@ -28,4 +30,6 @@ public interface IJdglDayScheduleService {
     int deleteJdglDayScheduleByPks(List<Long> jdglDaySchedulePkList);
 
     JdglDaySchedule getInit(JdglDaySchedule jdglDayScheduleParam);
+
+    BigDecimal getCountValue(Date startDate, Date endDate);
 }
