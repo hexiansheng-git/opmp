@@ -11,8 +11,10 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * wbs缓存
@@ -70,6 +72,13 @@ public class WbsRedisUtils {
             list.add(JSONObject.parseObject(temp.toString(),XmslWbs.class));
         }
         return list;
+    }
+
+    public static List<XmslWbs> getWbs(Long[] wbsIds){
+        if(ArrayUtils.isEmpty(wbsIds))
+            return new ArrayList<>();
+        Collection<String> set = Arrays.stream(wbsIds).map(r->r.toString()).collect(Collectors.toSet());
+        return getWbs(set);
     }
 
     /**
