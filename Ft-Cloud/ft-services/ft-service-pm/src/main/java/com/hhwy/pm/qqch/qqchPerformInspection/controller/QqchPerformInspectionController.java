@@ -155,7 +155,7 @@ public class QqchPerformInspectionController extends BaseController {
      * @return
      */
     @GetMapping("/detail")
-    public AjaxResult detail(@Validated(ValidationGroups.Other.class) QqchPerformInspection param){
+    public AjaxResult detail(@Validated(ValidationGroups.Other.class) @RequestBody QqchPerformInspection param){
         try{
             QqchPerformInspection qqchPerformInspection = qqchPerformInspectionService.detail(param.getId());
             return AjaxResult.success(qqchPerformInspection);
