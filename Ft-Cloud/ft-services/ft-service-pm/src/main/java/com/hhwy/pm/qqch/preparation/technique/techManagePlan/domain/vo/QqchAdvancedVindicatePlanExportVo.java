@@ -23,6 +23,9 @@ import java.util.Map;
 @AllArgsConstructor
 public class QqchAdvancedVindicatePlanExportVo {
 
+    @ExcelProperty(value = "序号",index = 0)
+    private String SerialNumber;
+
     /**
      * 字段描述：单位名称
      */

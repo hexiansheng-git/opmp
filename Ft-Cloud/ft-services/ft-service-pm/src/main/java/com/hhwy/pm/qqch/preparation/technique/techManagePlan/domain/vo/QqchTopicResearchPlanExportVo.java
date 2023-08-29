@@ -21,6 +21,8 @@ import java.util.Date;
 public class QqchTopicResearchPlanExportVo {
     private static final long serialVersionUID = 1L;
 
+    @FtExcel(name = "序号")
+    private String SerialNumber;
     /**
      * 字段描述：所属区域名称
      */

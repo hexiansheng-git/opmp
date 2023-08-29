@@ -557,9 +557,11 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         qqchAdvancedVindicatePlan.setVersion(version);
         List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanMapper.getQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlan);
         this.setQqchAdvancedVindicatePlanBudget(qqchAdvancedVindicatePlanList,version);
+        int serialNumber = 1;
         for (QqchAdvancedVindicatePlan advancedVindicatePlan : qqchAdvancedVindicatePlanList) {
             QqchAdvancedVindicatePlanExportVo qqchAdvancedVindicatePlanExportVo = new QqchAdvancedVindicatePlanExportVo();
             BeanUtils.copyProperties(advancedVindicatePlan,qqchAdvancedVindicatePlanExportVo);
+            qqchAdvancedVindicatePlanExportVo.setSerialNumber(String.valueOf(serialNumber++));
             qqchAdvancedVindicatePlanExportVoList.add(qqchAdvancedVindicatePlanExportVo);
         }
         return this.getKeysAndValues(qqchAdvancedVindicatePlanExportVoList);
