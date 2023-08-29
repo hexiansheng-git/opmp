@@ -25,6 +25,12 @@ import java.util.List;
 public class QqchTaxCost extends CompileEntity<QqchTaxCost> {
     private static final long serialVersionUID = 1L;
 
+
+
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "序号")
+    private String serNum;
     /**
      * 字段描述：主键
      */

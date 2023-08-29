@@ -156,12 +156,22 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     private List<XmslWbs> getWbsList(List<String> wbsIdList) {
         List<XmslWbs> res = new ArrayList<>();
         XmslWbs xmslWbs = new XmslWbs();
-        xmslWbs.setId("1111111");
-        xmslWbs.setCode("sssssss");
-        xmslWbs.setName("adadssdadadadasd");
+        xmslWbs.setId("4");
+        xmslWbs.setCode("4444");
+        xmslWbs.setName("名称1");
+
+        List<XmslWbs> child = new ArrayList<>();
+        XmslWbs xmslWbs1 = new XmslWbs();
+        xmslWbs1.setId("5");
+        xmslWbs1.setCode("5555");
+        xmslWbs1.setName("名称2");
+        xmslWbs.setChildren(child);
+        child.add(xmslWbs1);
         res.add(xmslWbs);
         return res;
     }
+
+
 
     public static void main(String[] args) {
         JsonUtils.soutJsonStr(XmslWbs.class);

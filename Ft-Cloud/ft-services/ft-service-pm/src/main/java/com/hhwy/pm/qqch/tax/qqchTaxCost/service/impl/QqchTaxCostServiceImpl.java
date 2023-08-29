@@ -1,5 +1,8 @@
 package com.hhwy.pm.qqch.tax.qqchTaxCost.service.impl;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
@@ -26,15 +29,15 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -229,11 +232,9 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchTaxCost> getCostList(QqchTaxCost qqchTaxIn) {
         List<QqchTaxCost> costList = this.qqchTaxCostMapper.getQqchTaxCostList(qqchTaxIn);
-        List<QqchTaxCost> currencyChildren = this.getCurrencyChildren();
-
 
         if (CollectionUtils.isEmpty(costList)) {
-            costList = this.getInitData(qqchTaxIn, currencyChildren);
+            costList = this.getInitData(qqchTaxIn);
         }
         List<Long> collect = costList.stream().map(QqchTaxCost::getId).collect(Collectors.toList());
 
@@ -254,13 +255,12 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
     /**
      * 获取初始化数据
-     * 
-     * 
-     * @param qqchTaxIn 
-     * @param currencyChildren
+     *
+     * @param qqchTaxIn
      * @return
      */
-    private List<QqchTaxCost> getInitData(QqchTaxCost qqchTaxIn, List<QqchTaxCost> currencyChildren) {
+    private List<QqchTaxCost> getInitData(QqchTaxCost qqchTaxIn) {
+        List<QqchTaxCost> currencyChildren = this.getCurrencyChildren();
         List<QqchTaxCost> costList = new ArrayList<>();
 
         InputStream resourceAsStream = null;
@@ -350,6 +350,186 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         entity.setVersion(VersionUtil.getVersion(TN, taxCost.getVersion()));
         entity.setDto(taxInVO);
         return entity;
+    }
+
+    @Override
+    public void downTemp(HttpServletResponse response, QqchTaxCost params) throws IOException {
+
+        EasyExcel.write(response.getOutputStream())
+                // 这里放入动态头
+                .head(this.getHeaders())
+                .sheet("模板")
+                // 当然这里数据也可以用 List<List<String>> 去传入
+                .doWrite(this.getData(params));
+    }
+
+    @Override
+    public List<QqchTaxCost> importData(MultipartFile file, Map<String, Object> params) throws IOException {
+
+        List<QqchTaxCost> dataList = new ArrayList<>();
+
+        final int[] i = {1};
+
+        List<String> yearList = qqchTaxInService.getYearList();
+
+
+        // 使用EasyExcel进行数据读取
+        EasyExcel.read(file.getInputStream(), new AnalysisEventListener<Map<Integer, String>>() {
+            @Override
+            public void invoke(Map<Integer, String> rowData, AnalysisContext context) {
+                // 处理每一行数据
+                if (i[0] != 1) {
+                    dataList.add(getCost(rowData, yearList));
+                }
+                i[0]++;
+            }
+
+            @Override
+            public void doAfterAllAnalysed(AnalysisContext context) {
+                System.out.println("Data reading completed.");
+            }
+        }).sheet(0).doRead();
+
+
+        return dealDetailList(dataList);
+    }
+
+    private List<QqchTaxCost> dealDetailList(List<QqchTaxCost> dataList) {
+        List<String> currencyNameList = dataList.stream().map(QqchTaxCost::getFeeName).distinct().collect(Collectors.toList());
+        
+        
+        
+        
+        
+        
+        
+
+
+        return null;
+    }
+
+    private QqchTaxCost getCost(Map<Integer, String> rowData, List<String> yearList) {
+        Set<Integer> integers = rowData.keySet();
+        HashMap<Integer, QqchTaxCostDetail> detailHashMap = new HashMap<>(3);
+
+
+        QqchTaxCost qqchTaxCost = new QqchTaxCost();
+
+
+        for (Integer col : integers) {
+            switch (col) {
+                case 1:
+                    // 费用名称
+                    qqchTaxCost.setFeeName(rowData.get(col));
+                    break;
+                case 2:
+                    // 内账   
+                    qqchTaxCost.setInnerAmt(new BigDecimal(rowData.get(col)));
+                    break;
+                case 3:
+                    // 符合账
+                    qqchTaxCost.setReqAmt(new BigDecimal(rowData.get(col)));
+                    break;
+                case 4:
+                    // 属地账
+                    qqchTaxCost.setLocalAmt(new BigDecimal(rowData.get(col)));
+                    break;
+                default:
+            }
+
+            // 大于四列后 每三个成一组
+            if (col > 4) {
+                int idx = (col - 5) / 3;
+                if (detailHashMap.get(idx) == null) {
+                    QqchTaxCostDetail detail = new QqchTaxCostDetail();
+                    String year = yearList.get(idx);
+                    detail.setYear(year);
+                    detail.setInnerAmt(new BigDecimal(rowData.get(col)));
+                    detail.setReqAmt(new BigDecimal(rowData.get(col + 1)));
+                    detail.setLocalAmt(new BigDecimal(rowData.get(col + 2)));
+                    detailHashMap.put(idx, detail);
+                }
+            }
+
+
+        }
+        List<QqchTaxCostDetail> values = new ArrayList<>(detailHashMap.values());
+
+        qqchTaxCost.setDetailList(values);
+
+        return qqchTaxCost;
+    }
+
+    private List getData(QqchTaxCost params) {
+        List<QqchTaxCost> initData = this.getInitData(params);
+
+        List<List<String>> res = new ArrayList<>();
+        for (QqchTaxCost initDatum : initData) {
+            List<String> strings = new ArrayList<>();
+            strings.add(initDatum.getSerNum());
+            strings.add(initDatum.getFeeName());
+            res.add(strings);
+        }
+
+        return res;
+    }
+
+    private List<List<String>> getHeaders() {
+        List<List<String>> list = new ArrayList<>();
+        List<String> xh = new ArrayList<>();
+        xh.add("序号");
+        list.add(xh);
+
+
+        List<String> hMaeCode = new ArrayList<>();
+        hMaeCode.add("费用名称");
+        list.add(hMaeCode);
+
+
+        List<String> hjd0 = new ArrayList<>();
+        hjd0.add("合计");
+        hjd0.add("内账成本");
+        list.add(hjd0);
+
+        List<String> hjd1 = new ArrayList<>();
+        hjd1.add("合计");
+        hjd1.add("符合属地账要求成本");
+        list.add(hjd1);
+
+
+        List<String> hjd2 = new ArrayList<>();
+        hjd2.add("合计");
+        hjd2.add("属地账策划成本");
+        list.add(hjd2);
+
+        List<String> yearList = qqchTaxInService.getYearList();
+
+        for (String year : yearList) {
+
+            List<String> nz = new ArrayList<>();
+            nz.add(year);
+            nz.add("内账成本");
+            list.add(nz);
+
+            List<String> fh = new ArrayList<>();
+            fh.add(year);
+            fh.add("符合属地账要求成本");
+            list.add(fh);
+
+            List<String> sd = new ArrayList<>();
+            sd.add(year);
+            sd.add("属地账策划成本");
+            list.add(sd);
+
+        }
+
+        return list;
+    }
+
+
+    public static void main(String[] args) {
+
+        System.out.println((7 - 4) / 3);
     }
 
 

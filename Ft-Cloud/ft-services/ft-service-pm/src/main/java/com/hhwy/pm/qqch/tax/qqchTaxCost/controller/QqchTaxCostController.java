@@ -13,11 +13,13 @@ import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mls
@@ -117,5 +119,25 @@ public class QqchTaxCostController extends BaseController {
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<TaxCostVO> dto) {
         qqchTaxCostService.save(dto);
         return AjaxResult.success(dto);
+    }
+
+
+    @PostMapping("/downTemp")
+    public void downTemp(HttpServletResponse response, @RequestBody QqchTaxCost params) {
+        try {
+            qqchTaxCostService.downTemp(response, params);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @PostMapping("/importData")
+    public AjaxResult importData(@RequestParam("file") MultipartFile file, @RequestParam Map<String, Object> params) {
+        try {
+            return AjaxResult.success(qqchTaxCostService.importData(file, params));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
