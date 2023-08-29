@@ -44,8 +44,8 @@ public class QqchConstructionListController extends BaseController {
     @GetMapping("/getList")
     public AjaxResult getList(
         @Validated(ValidationGroups.Select.class) QqchConstructionListVo qqchConstructionListParamVo) {
-        if(StringUtils.isBlank(qqchConstructionListParamVo.getWbsCode()))
-            return AjaxResult.success(new ArrayList<>(2));
+//        if(StringUtils.isBlank(qqchConstructionListParamVo.getWbsCode()))
+//            return AjaxResult.success(new ArrayList<>(2));
         QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList(qqchConstructionListParamVo);
         return AjaxResult.success(qqchConstructionListVo);
     }
