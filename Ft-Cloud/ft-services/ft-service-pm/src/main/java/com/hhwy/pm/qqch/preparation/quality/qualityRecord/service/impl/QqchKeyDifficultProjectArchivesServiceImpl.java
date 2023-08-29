@@ -92,6 +92,17 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
     }
 
     /**
+     * 获取最新版本的重难点工程清单数据
+     * @return
+     */
+    public List<QqchKeyDifficultProjectArchives> getValidMaxVersionData() {
+        BigDecimal version = VersionUtil.getVersion("qqch_key_difficult_project_archives",null);
+        QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchives = new QqchKeyDifficultProjectArchives();
+        qqchKeyDifficultProjectArchives.setVersion(version);
+        return qqchKeyDifficultProjectArchivesMapper.getQqchKeyDifficultProjectArchivesList(qqchKeyDifficultProjectArchives);
+    }
+
+    /**
      * 获取台账页Vo
      * @param qqchKeyDifficultProjectArchives
      * @return
@@ -209,6 +220,7 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
                     qqchKeyDifficultProjectArchives.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                     qqchKeyDifficultProjectArchives.setCreateUserName(SecurityUtils.getUserName());
                     qqchKeyDifficultProjectArchives.setCreateTime(DateUtils.getNowDate());
+                    qqchKeyDifficultProjectArchives.setWbsId(keyDifficultWbs.getId());
                     qqchKeyDifficultProjectArchives.setWbsCode(keyDifficultWbs.getWbsCode());
                     qqchKeyDifficultProjectArchives.setWbsName(keyDifficultWbs.getWbsName());
                     qqchKeyDifficultProjectArchives.setVersion(version);

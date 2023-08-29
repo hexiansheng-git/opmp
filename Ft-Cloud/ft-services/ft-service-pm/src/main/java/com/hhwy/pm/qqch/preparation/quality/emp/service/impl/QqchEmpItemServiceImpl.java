@@ -39,8 +39,6 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     private IQqchWeightEngineeringListService weightEngineeringListService;
     @Autowired
     private QqchEmpItemMapper qqchEmpItemMapper;
-    
-    
 
 
     public QqchEmpItem getQqchEmpItem(QqchEmpItem qqchEmpItem) {
@@ -106,13 +104,14 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         HashSet<String> wbsCodeList = new HashSet<>();
 
         ArrayList<QqchEmpItem> iDatas = new ArrayList<>();
-        
+
         // 获取要保存的数据
         List<List<QqchEmpItem>> empItemListList = dto.getDto();
         // 处理要保存的数据
         for (List<QqchEmpItem> qqchEmpItemList : empItemListList) {
             for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
                 qqchEmpItem.setId(IdWorker.createId());
+                qqchEmpItem.setStoreFlag(qqchEmpItem.getBstoreFlag() ? PmConstant.ONE : PmConstant.ZERO);
                 wbsCodeList.add(qqchEmpItem.getWbsCode());
                 CompileEntity.dealSaveDto(dto, qqchEmpItem);
                 EntityUtils.setCreateUpdateInfo(qqchEmpItem);
@@ -145,12 +144,15 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
 
     @Override
     @CompileAspect(type = CompileOptEnum.TREE, tableName = "qqch_emp_item")
-    public CompileEntity<List<XmslWbs>> itemList(QqchEmpItem dto) {
+    public CompileEntity<List<QqchEmpItem>> itemList(QqchEmpItem dto) {
         CompileEntity entity = new CompileEntity();
         List<QqchEmpItem> qqchEmpItemList = this.qqchEmpItemMapper.getQqchEmpItemList(dto);
+        for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
+            qqchEmpItem.setBstoreFlag(PmConstant.ONE.equals(qqchEmpItem.getStoreFlag()));
+        }
         entity.setVersion(dto.getVersion());
         entity.setDto(qqchEmpItemList);
-        return entity ;
+        return entity;
     }
 
     private List<XmslWbs> getWbsList(List<String> wbsIdList) {
@@ -170,7 +172,6 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         res.add(xmslWbs);
         return res;
     }
-
 
 
     public static void main(String[] args) {

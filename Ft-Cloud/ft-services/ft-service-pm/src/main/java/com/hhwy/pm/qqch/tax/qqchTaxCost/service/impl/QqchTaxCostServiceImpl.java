@@ -6,6 +6,7 @@ import com.alibaba.excel.event.AnalysisEventListener;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
@@ -396,16 +397,36 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
     private List<QqchTaxCost> dealDetailList(List<QqchTaxCost> dataList) {
         List<String> currencyNameList = dataList.stream().map(QqchTaxCost::getFeeName).distinct().collect(Collectors.toList());
-        
-        
-        
-        
-        
-        
-        
 
+        Map<String, String> currencyInfoByNames = CommonServiceUtil.getCurrencyCodesByNames(currencyNameList);
+        List<String> codes = new ArrayList<>(currencyInfoByNames.values());
 
-        return null;
+        Map<String, BigDecimal> rateMap = CommonServiceUtil.getRateByCodes(codes);
+
+        for (QqchTaxCost qqchTaxCost : dataList) {
+            String feeName = qqchTaxCost.getFeeName();
+            String code = currencyInfoByNames.get(feeName);
+            if (StringUtils.isNotEmpty(code)) {
+                BigDecimal rate = rateMap.get(code) == null ? BigDecimal.ONE : rateMap.get(code);
+                qqchTaxCost.setCurrency(code);
+                qqchTaxCost.setRate(rate);
+                qqchTaxCost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getInnerAmt(), rate));
+                qqchTaxCost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getLocalAmt(), rate));
+                qqchTaxCost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getReqAmt(), rate));
+                List<QqchTaxCostDetail> detailList = qqchTaxCost.getDetailList();
+                if (!CollectionUtils.isEmpty(detailList)) {
+                    for (QqchTaxCostDetail detail : detailList) {
+                        detail.setRate(rate);
+                        detail.setCurrency(code);
+                        detail.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(detail.getInnerAmt(), rate));
+                        detail.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(detail.getLocalAmt(), rate));
+                        detail.setUsdReqAmt(CommonServiceUtil.getUsdAmt(detail.getReqAmt(), rate));
+                    }
+                }
+            }
+        }
+        
+        return dataList;
     }
 
     private QqchTaxCost getCost(Map<Integer, String> rowData, List<String> yearList) {

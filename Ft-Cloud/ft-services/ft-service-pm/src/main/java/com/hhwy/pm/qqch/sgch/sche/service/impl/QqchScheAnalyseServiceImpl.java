@@ -87,7 +87,7 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     @Override
     public void saveList(List<QqchScheAnalyse> dealSaveDto) {
-        if (CollectionUtils.isEmpty(dealSaveDto)) throw new CustomBusinessException("进度分析要素不能为空");;
+        if (CollectionUtils.isEmpty(dealSaveDto)) return;
         this.checkData(dealSaveDto);
         this.qqchScheAnalyseMapper.insertQqchScheAnalyseList(dealSaveDto);
     }

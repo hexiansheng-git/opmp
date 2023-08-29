@@ -31,6 +31,9 @@ public class QqchTaxGoal extends CompileEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long id;
+
+    @FtExcel(name = "序号")
+    private String serNum;
     /**
      * 字段描述：总目标
      */

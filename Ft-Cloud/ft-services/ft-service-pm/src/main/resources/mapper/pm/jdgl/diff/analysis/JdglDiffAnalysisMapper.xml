@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisMapper">
+
+    <resultMap type="com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis" id="JdglDiffAnalysisResultMap">
+        <result property="id" column="id"/>
+        <result property="period" column="period"/>
+        <result property="riskLevel" column="risk_level"/>
+        <result property="totalGrade" column="total_grade"/>
+        <result property="sDiffGrade" column="s_diff_grade"/>
+        <result property="keyGrade" column="key_grade"/>
+        <result property="valueGrade" column="value_grade"/>
+        <result property="contractOverGrade" column="contract_over_grade"/>
+        <result property="importanceGrade" column="importance_grade"/>
+        <result property="scaleGrade" column="scale_grade"/>
+        <result property="correctGrade" column="correct_grade"/>
+        <result property="contractAmtDl" column="contract_amt_dl"/>
+        <result property="contractStartDate" column="contract_start_date"/>
+        <result property="contractEndDate" column="contract_end_date"/>
+        <result property="meterValue" column="meter_value"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+    </resultMap>
+    <sql id="selectJdglDiffAnalysisVo">
+        select `id`
+             , `period`
+             , `risk_level`
+             , `total_grade`
+             , `s_diff_grade`
+             , `key_grade`
+             , `value_grade`
+             , `contract_over_grade`
+             , `importance_grade`
+             , `scale_grade`
+             , `correct_grade`
+             , `contract_amt_dl`
+             , `contract_start_date`
+             , `contract_end_date`
+             , `meter_value`
+             , `file_group_id`
+             , `remark`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+             , `pt_var3`
+             , `pt_var4`
+             , `pt_var5`
+             , `task_status`
+             , `region_id`
+             , `region_name`
+             , `project_id`
+             , `project_name`
+        from jdgl_diff_analysis
+    </sql>
+    <select id="getJdglDiffAnalysis" resultMap="JdglDiffAnalysisResultMap">
+        <include refid="selectJdglDiffAnalysisVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="period != null ">and `period` = #{period}</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="totalGrade != null ">and `total_grade` = #{totalGrade}</if>
+            <if test="sDiffGrade != null ">and `s_diff_grade` = #{sDiffGrade}</if>
+            <if test="keyGrade != null ">and `key_grade` = #{keyGrade}</if>
+            <if test="valueGrade != null ">and `value_grade` = #{valueGrade}</if>
+            <if test="contractOverGrade != null ">and `contract_over_grade` = #{contractOverGrade}</if>
+            <if test="importanceGrade != null ">and `importance_grade` = #{importanceGrade}</if>
+            <if test="scaleGrade != null ">and `scale_grade` = #{scaleGrade}</if>
+            <if test="correctGrade != null ">and `correct_grade` = #{correctGrade}</if>
+            <if test="contractAmtDl != null ">and `contract_amt_dl` = #{contractAmtDl}</if>
+            <if test="contractStartDate != null ">and `contract_start_date` = #{contractStartDate}</if>
+            <if test="contractEndDate != null ">and `contract_end_date` = #{contractEndDate}</if>
+            <if test="meterValue != null ">and `meter_value` = #{meterValue}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <select id="getJdglDiffAnalysisList" resultMap="JdglDiffAnalysisResultMap">
+        <include refid="selectJdglDiffAnalysisVo"/>
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="period != null ">and `period` = #{period}</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="totalGrade != null ">and `total_grade` = #{totalGrade}</if>
+            <if test="sDiffGrade != null ">and `s_diff_grade` = #{sDiffGrade}</if>
+            <if test="keyGrade != null ">and `key_grade` = #{keyGrade}</if>
+            <if test="valueGrade != null ">and `value_grade` = #{valueGrade}</if>
+            <if test="contractOverGrade != null ">and `contract_over_grade` = #{contractOverGrade}</if>
+            <if test="importanceGrade != null ">and `importance_grade` = #{importanceGrade}</if>
+            <if test="scaleGrade != null ">and `scale_grade` = #{scaleGrade}</if>
+            <if test="correctGrade != null ">and `correct_grade` = #{correctGrade}</if>
+            <if test="contractAmtDl != null ">and `contract_amt_dl` = #{contractAmtDl}</if>
+            <if test="contractStartDate != null ">and `contract_start_date` = #{contractStartDate}</if>
+            <if test="contractEndDate != null ">and `contract_end_date` = #{contractEndDate}</if>
+            <if test="meterValue != null ">and `meter_value` = #{meterValue}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+        </where>
+        order by period desc
+    </select>
+
+    <insert id="insertJdglDiffAnalysis" useGeneratedKeys="true" keyProperty="id">
+        insert into jdgl_diff_analysis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="period != null ">`period`,</if>
+            <if test="riskLevel != null  and riskLevel != ''">`risk_level`,</if>
+            <if test="totalGrade != null ">`total_grade`,</if>
+            <if test="sDiffGrade != null ">`s_diff_grade`,</if>
+            <if test="keyGrade != null ">`key_grade`,</if>
+            <if test="valueGrade != null ">`value_grade`,</if>
+            <if test="contractOverGrade != null ">`contract_over_grade`,</if>
+            <if test="importanceGrade != null ">`importance_grade`,</if>
+            <if test="scaleGrade != null ">`scale_grade`,</if>
+            <if test="correctGrade != null ">`correct_grade`,</if>
+            <if test="contractAmtDl != null ">`contract_amt_dl`,</if>
+            <if test="contractStartDate != null ">`contract_start_date`,</if>
+            <if test="contractEndDate != null ">`contract_end_date`,</if>
+            <if test="meterValue != null ">`meter_value`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="period != null ">#{period},</if>
+            <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
+            <if test="totalGrade != null ">#{totalGrade},</if>
+            <if test="sDiffGrade != null ">#{sDiffGrade},</if>
+            <if test="keyGrade != null ">#{keyGrade},</if>
+            <if test="valueGrade != null ">#{valueGrade},</if>
+            <if test="contractOverGrade != null ">#{contractOverGrade},</if>
+            <if test="importanceGrade != null ">#{importanceGrade},</if>
+            <if test="scaleGrade != null ">#{scaleGrade},</if>
+            <if test="correctGrade != null ">#{correctGrade},</if>
+            <if test="contractAmtDl != null ">#{contractAmtDl},</if>
+            <if test="contractStartDate != null ">#{contractStartDate},</if>
+            <if test="contractEndDate != null ">#{contractEndDate},</if>
+            <if test="meterValue != null ">#{meterValue},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglDiffAnalysis -->
+    <insert id="insertJdglDiffAnalysisList">
+        insert into jdgl_diff_analysis
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `period`,
+            `risk_level`,
+            `total_grade`,
+            `s_diff_grade`,
+            `key_grade`,
+            `value_grade`,
+            `contract_over_grade`,
+            `importance_grade`,
+            `scale_grade`,
+            `correct_grade`,
+            `contract_amt_dl`,
+            `contract_start_date`,
+            `contract_end_date`,
+            `meter_value`,
+            `file_group_id`,
+            `remark`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+        </trim>
+        values
+        <foreach collection="jdglDiffAnalysisList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.period},
+                #{item.riskLevel},
+                #{item.totalGrade},
+                #{item.sDiffGrade},
+                #{item.keyGrade},
+                #{item.valueGrade},
+                #{item.contractOverGrade},
+                #{item.importanceGrade},
+                #{item.scaleGrade},
+                #{item.correctGrade},
+                #{item.contractAmtDl},
+                #{item.contractStartDate},
+                #{item.contractEndDate},
+                #{item.meterValue},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateJdglDiffAnalysis">
+        update jdgl_diff_analysis
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="period != null ">`period` = #{period},</if>
+            <if test="riskLevel != null  and  riskLevel != ''">`risk_level` = #{riskLevel},</if>
+            <if test="totalGrade != null ">`total_grade` = #{totalGrade},</if>
+            <if test="sDiffGrade != null ">`s_diff_grade` = #{sDiffGrade},</if>
+            <if test="keyGrade != null ">`key_grade` = #{keyGrade},</if>
+            <if test="valueGrade != null ">`value_grade` = #{valueGrade},</if>
+            <if test="contractOverGrade != null ">`contract_over_grade` = #{contractOverGrade},</if>
+            <if test="importanceGrade != null ">`importance_grade` = #{importanceGrade},</if>
+            <if test="scaleGrade != null ">`scale_grade` = #{scaleGrade},</if>
+            <if test="correctGrade != null ">`correct_grade` = #{correctGrade},</if>
+            <if test="contractAmtDl != null ">`contract_amt_dl` = #{contractAmtDl},</if>
+            <if test="contractStartDate != null ">`contract_start_date` = #{contractStartDate},</if>
+            <if test="contractEndDate != null ">`contract_end_date` = #{contractEndDate},</if>
+            <if test="meterValue != null ">`meter_value` = #{meterValue},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+        </trim>
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateJdglDiffAnalysisList">
+        update jdgl_diff_analysis
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="period  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.period}
+                </foreach>
+            </trim>
+            <trim prefix="risk_level  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.riskLevel}
+                </foreach>
+            </trim>
+            <trim prefix="total_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalGrade}
+                </foreach>
+            </trim>
+            <trim prefix="s_diff_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sDiffGrade}
+                </foreach>
+            </trim>
+            <trim prefix="key_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.keyGrade}
+                </foreach>
+            </trim>
+            <trim prefix="value_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valueGrade}
+                </foreach>
+            </trim>
+            <trim prefix="contract_over_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractOverGrade}
+                </foreach>
+            </trim>
+            <trim prefix="importance_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.importanceGrade}
+                </foreach>
+            </trim>
+            <trim prefix="scale_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.scaleGrade}
+                </foreach>
+            </trim>
+            <trim prefix="correct_grade  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.correctGrade}
+                </foreach>
+            </trim>
+            <trim prefix="contract_amt_dl  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractAmtDl}
+                </foreach>
+            </trim>
+            <trim prefix="contract_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="contract_end_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.contractEndDate}
+                </foreach>
+            </trim>
+            <trim prefix="meter_value  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.meterValue}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionId}
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.regionName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteJdglDiffAnalysis">
+        update `jdgl_diff_analysis` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="period != null ">and `period` = #{period}</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="totalGrade != null ">and `total_grade` = #{totalGrade}</if>
+            <if test="sDiffGrade != null ">and `s_diff_grade` = #{sDiffGrade}</if>
+            <if test="keyGrade != null ">and `key_grade` = #{keyGrade}</if>
+            <if test="valueGrade != null ">and `value_grade` = #{valueGrade}</if>
+            <if test="contractOverGrade != null ">and `contract_over_grade` = #{contractOverGrade}</if>
+            <if test="importanceGrade != null ">and `importance_grade` = #{importanceGrade}</if>
+            <if test="scaleGrade != null ">and `scale_grade` = #{scaleGrade}</if>
+            <if test="correctGrade != null ">and `correct_grade` = #{correctGrade}</if>
+            <if test="contractAmtDl != null ">and `contract_amt_dl` = #{contractAmtDl}</if>
+            <if test="contractStartDate != null ">and `contract_start_date` = #{contractStartDate}</if>
+            <if test="contractEndDate != null ">and `contract_end_date` = #{contractEndDate}</if>
+            <if test="meterValue != null ">and `meter_value` = #{meterValue}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+        </where>
+    </update>
+
+    <update id="deleteJdglDiffAnalysisByPks">
+        update `jdgl_diff_analysis` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="jdglDiffAnalysisPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+</mapper>

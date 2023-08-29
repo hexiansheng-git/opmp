@@ -1,6 +1,7 @@
 package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.system.api.domain.SysTenant;
 import org.slf4j.Logger;
@@ -46,6 +47,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
 
             @Override
             public List<SysTenant> tenantList() {
+                return new ArrayList<>();
+            }
+
+            @Override
+            public List<CurrencyInfo> selectCurrencyList(CurrencyInfo where) {
                 return new ArrayList<>();
             }
         };

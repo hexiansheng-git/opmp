@@ -86,6 +86,7 @@ public class QqchScheDiffDescServiceImpl implements IQqchScheDiffDescService {
     @CompileAspect(type = CompileOptEnum.SAVE, tableName = TN)
     @Override
     public void save(QqchScheDiffDesc qqchScheDiffDesc) {
+        if (qqchScheDiffDesc == null) return;
         qqchScheDiffDesc.setId(IdWorker.createId());
         this.qqchScheDiffDescMapper.insertQqchScheDiffDesc(qqchScheDiffDesc);
     }

@@ -116,6 +116,10 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
         List<QqchDocTechMae> dataList = qqchDocTechVo.getDataList();
         List<QqchDocTechMae> qqchDocTechMaes = TreeUtil.treeToList(dataList);
         if (ObjectNullUtil.isEmpty(dataList)) {
+            //先删除旧的 再添加新的
+            QqchDocTechMae temp = new QqchDocTechMae();
+            temp.setVersion(qqchDocTechVo.getVersion());
+            qqchDocTechMaeMapper.deleteQqchDocTechMae(temp);
             return 1;
         } else {
             //校验数据必填

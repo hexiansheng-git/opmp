@@ -20,6 +20,8 @@ import java.util.Date;
 public class QqchPatentDeclarePlanExportVo {
     private static final long serialVersionUID = 1L;
 
+    @Excel(name = "序号")
+    private String SerialNumber;
     /**
      * 字段描述：增加时间
      */

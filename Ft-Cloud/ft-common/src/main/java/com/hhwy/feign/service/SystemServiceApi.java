@@ -1,6 +1,7 @@
 package com.hhwy.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
 import com.hhwy.system.api.domain.SysTenant;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -45,4 +46,7 @@ public interface SystemServiceApi {
      */
     @PostMapping("/syspm/tenantList")
     List<SysTenant> tenantList();
+
+    @PostMapping("/currency/info/selectList")
+    List<CurrencyInfo> selectCurrencyList(CurrencyInfo where);
 }

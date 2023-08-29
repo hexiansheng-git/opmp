@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.utils.validation.ValidationGroups;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author zq 8.8.3
@@ -44,7 +45,7 @@ public class QqchSafeEnvriRiskManage extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "执行人id")
-    @NotBlank(message = "执行人id",groups = {ValidationGroups.Save.class})
+    @NotNull(message = "执行人id",groups = {ValidationGroups.Save.class})
     private Long executorPersonId;
     /**
      * 字段描述：执行人(姓名-部门)

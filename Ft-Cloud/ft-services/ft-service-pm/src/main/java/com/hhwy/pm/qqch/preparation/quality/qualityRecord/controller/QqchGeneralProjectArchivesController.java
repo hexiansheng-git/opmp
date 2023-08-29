@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbs;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchGeneralProjectArchivesService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -102,5 +103,28 @@ public class QqchGeneralProjectArchivesController extends BaseController {
     public AjaxResult getGeneralProjectArchivesWbsVo(@Validated(ValidationGroups.Get.class) QqchGeneralProjectArchives qqchGeneralProjectArchives) {
         GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo = qqchGeneralProjectArchivesService.getGeneralProjectArchivesWbsVo(qqchGeneralProjectArchives);
         return AjaxResult.success(generalProjectArchivesWbsVo);
+    }
+
+    /**
+     * 点击获取下级
+     * @param qqchGeneralProjectArchives
+     * @return
+     */
+    @GetMapping("getLowerLevel")
+    public AjaxResult getLowerLevel(QqchGeneralProjectArchives qqchGeneralProjectArchives) {
+        List<GeneralProjectArchivesWbs> list = qqchGeneralProjectArchivesService.getLowerLevel(qqchGeneralProjectArchives);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 保存/确认/提交
+     * @param generalProjectArchivesWbsVo
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
+    @PostMapping("/save")
+    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo) {
+        qqchGeneralProjectArchivesService.save(generalProjectArchivesWbsVo);
+        return AjaxResult.success();
     }
 }

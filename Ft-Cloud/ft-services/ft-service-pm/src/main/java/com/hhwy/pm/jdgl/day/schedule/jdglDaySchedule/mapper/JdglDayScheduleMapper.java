@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -32,4 +33,6 @@ public interface JdglDayScheduleMapper {
     int updateJdglDayScheduleValue(@Param("id") Long id);
 
     JdglDaySchedule getHistoryValue(@Param("date") Date date);
+
+    BigDecimal getCountValue(Date startDate, Date endDate);
 }

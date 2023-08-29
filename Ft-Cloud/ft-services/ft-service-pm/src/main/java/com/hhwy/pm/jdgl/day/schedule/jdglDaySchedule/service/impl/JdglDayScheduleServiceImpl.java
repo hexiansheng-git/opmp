@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.impl;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -80,6 +81,17 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         }
 
         return jdglDayScheduleParam;
+    }
+
+    /**
+     * 获取日期区间内的每日产值合计，如果不传值，则获取所有。
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public BigDecimal getCountValue(Date startDate, Date endDate) {
+        return jdglDayScheduleMapper.getCountValue(startDate, endDate);
     }
 
     @Transactional
