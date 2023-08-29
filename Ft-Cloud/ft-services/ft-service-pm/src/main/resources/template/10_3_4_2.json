@@ -1,45 +1,53 @@
 [
   {
+    "serNum": "1",
     "id": 1,
     "feeName": "预算中间接费"
   },
   {
+    "serNum": "1.1",
     "id": 2,
     "pid": 1,
     "feeName": "经理部管理部"
     
   },
   {
+    "serNum": "1.1.1",
     "id": 21,
     "pid": 2,
     "feeName": "中方管理人员费",
     "leaf": "1"
   },
   {
+    "serNum": "1.1.2",
     "id": 22,
     "pid": 2,
     "feeName": "办公费",
     "leaf": "1"
   },
   {
+    "serNum": "1.1.3",
     "id": 23,
     "pid": 2,
     "feeName": "业务招待费",
     "leaf": "1"
   },
   {
+    "serNum": "1.1.4",
     "id": 24,
     "pid": 2,
     "feeName": "差旅费",
     "leaf": "1"
   },
   {
+    "serNum": "1.1.5",
     "id": 25,
     "pid": 2,
     "feeName": "电话费",
     "leaf": "1"
   },
   {
+    "serNum": "1.1.6",
     "id": 26,
     "pid": 2,
     "feeName": "生活用水电费",
@@ -47,6 +55,7 @@
   },
 
   {
+    "serNum": "2",
     "id": 3,
     "feeName": "其他"
   },
@@ -55,16 +64,19 @@
   
   
   {
+    "serNum": "3",
     "id": 4,
     "feeName": "间接费"
   },
   {
+    "serNum": "3.1",
     "id": 5,
     "pid": 4,
     "feeName": "财务费用"
   },
 
   {
+    "serNum": "3.1.1",
     "id": 51,
     "pid": 5,
     "feeName": "资金占用费",
@@ -72,12 +84,14 @@
   },
 
   {
+    "serNum": "3.1.2",
     "id": 52,
     "pid": 5,
     "feeName": "汇兑损益",
     "leaf": "1"
   },
   {
+    "serNum": "3.1.3",
     "id": 53,
     "pid": 5,
     "feeName": "其他",

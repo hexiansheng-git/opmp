@@ -1,122 +1,145 @@
 [
   {
     "id": 1,
-    "feeName": "人工费总额"
+    "feeName": "人工费总额",
+    "serNum": "1"
   },
   {
     "id": 2,
     "pid": 1,
     "feeName": "中方现场人工费",
+    "serNum": "1.1",
     "leaf": "1"
   },
   {
     "id": 3,
     "pid": 1,
     "feeName": "当地现场人工费",
+    "serNum": "1.2",
     "leaf": "1"
   },
   {
     "id": 4,
-    "feeName": "材料费总额"
+    "feeName": "材料费总额",
+    "serNum": "2"
   },
   {
     "id": 5,
-    "feeName": "机械使用费"
+    "feeName": "机械使用费",
+    "serNum": "3"
   },
   {
     "id": 6,
     "pid": 5,
     "feeName": "设备折旧费",
+    "serNum": "3.1",
     "leaf": "1"
   },
   {
     "id": 7,
     "pid": 5,
     "feeName": "设备租赁费",
+    "serNum": "3.2",
     "leaf": "1"
   },
   {
     "id": 10,
     "pid": 5,
     "feeName": "燃油料",
+    "serNum": "3.3",
     "leaf": "1"
   },
   {
     "id": 11,
     "pid": 5,
+    "serNum": "3.4",
     "feeName": "配件"
   },
   {
     "id": 12,
+    "serNum": "4",
     "feeName": "预算中分包费用"
   },
   {
     "id": 13,
     "pid": 12,
     "feeName": "1号包间",
+    "serNum": "4.1",
     "leaf": "1"
   },
   {
+    "serNum": "4.2",
     "id": 14,
     "pid": 12,
     "feeName": "2号包间",
     "leaf": "1"
   },
   {
+    "serNum": "4.3",
     "id": 15,
     "pid": 12,
     "feeName": "3号包间",
     "leaf": "1"
   },
   {
+    "serNum": "4.4",
     "id": 151,
     "pid": 12,
     "feeName": "4号包间",
     "leaf": "1"
   },
   {
+    "serNum": "5",
     "id": 152,
     "feeName": "外账策划分包费用"
   },
   {
+    "serNum": "6",
     "id": 16,
     "feeName": "其他直接费总额"
   },
   {
+    "serNum": "6.1",
     "id": 17,
     "pid": 16,
     "feeName": "经理部办公/生活/...",
     "leaf": "1"
   },
   {
+    "serNum": "6.2",
     "id": 18,
     "pid": 16,
     "feeName": "小型工具使用费",
     "leaf": "1"
   },
   {
+    "serNum": "6.3",
     "id": 19,
     "pid": 16,
     "feeName": "工程用电费",
     "leaf": "1"
   },
   {
+    "serNum": "7",
     "id": 20,
     "feeName": "监理费用"
   },
   {
+    "serNum": "7.1",
     "id": 21,
     "pid": 20,
     "feeName": "监理办公/生活/...",
     "leaf": "1"
   },
   {
+    "serNum": "7.2",
     "id": 21,
     "pid": 20,
     "feeName": "监理车辆购置费",
     "leaf": "1"
   },
   {
+    "serNum": "7.3",
     "id": 21,
     "pid": 20,
     "feeName": "监理营地提供费",
