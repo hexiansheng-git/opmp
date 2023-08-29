@@ -5,8 +5,6 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.qqch.constant.ButtonMark;
-import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationList;
 import com.hhwy.pm.qqch.preparation.qqchOrganizationList.domain.QqchOrganizationListVo;
@@ -71,7 +69,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
      */
     public QqchOrganizationListVo getQqchOrganizationListVo(BigDecimal version) {
         version = VersionUtil.getVersion("qqch_organization_list", version);
-        version = version == null? new BigDecimal("1.0"):version;
+        version = version == null ? new BigDecimal("1.0") : version;
         QqchOrganizationList qqchOrganizationList = new QqchOrganizationList();
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
@@ -87,7 +85,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
                 QqchOrganizationList organizationList = new QqchOrganizationList();
                 organizationList.setOrganization(temp.get("dictLabel") + "");
                 organizationList.setId(IdWorker.createId());
-                organizationList.setSort(Integer.valueOf(temp.get("dictValue")+""));
+                organizationList.setSort(Integer.valueOf(temp.get("dictValue") + ""));
                 finalDateList.add(organizationList);
             });
             dateList = dateList.stream().sorted(Comparator.comparing(QqchOrganizationList::getSort)).collect(Collectors.toList());
@@ -151,8 +149,8 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         List<QqchOrganizationList> dataList = qqchOrganizationListVo.getDataList();
         this.checkData(dataList);
         List<QqchOrganizationList> organizationLists = TreeUtil.treeToListWithLevel(dataList);
-        organizationLists.stream().map(TreeNodeBase::getLevel).max(Comparator.comparing(Integer::valueOf)).ifPresent(level->{
-            if (level>2) throw new RuntimeException("组织结构最多只能有两级");
+        organizationLists.stream().map(TreeNodeBase::getLevel).max(Comparator.comparing(Integer::valueOf)).ifPresent(level -> {
+            if (level > 2) throw new RuntimeException("组织结构最多只能有两级");
         });
 
 
@@ -160,36 +158,36 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
             return 1;
         } else {
             //校验数据必填
-            if("1".equals(qqchOrganizationListVo.getButtonMark())||"2".equals(qqchOrganizationListVo.getButtonMark())){//确认
+            if ("1".equals(qqchOrganizationListVo.getButtonMark()) || "2".equals(qqchOrganizationListVo.getButtonMark())) {//确认
                 List<QqchOrganizationList> collect = organizationLists.stream().filter(item -> item.getPid() != null).collect(Collectors.toList());
                 JyDetailsUtil.jyDetails(collect, ValidationGroups.Save.class);
             }
         }
         String valid = "";//是否有效
         //判断是确认还是保存
-        if("0".equals(qqchOrganizationListVo.getButtonMark())){//保存（判断是业务保存还是变更保存）
-            if(qqchOrganizationListVo.getVersion().intValue()==new BigDecimal(InitVersionConstant.INIT_VERSION).intValue()){//业务保存
+        if ("0".equals(qqchOrganizationListVo.getButtonMark())) {//保存（判断是业务保存还是变更保存）
+            if (qqchOrganizationListVo.getVersion().intValue() == new BigDecimal(InitVersionConstant.INIT_VERSION).intValue()) {//业务保存
                 valid = "1";
-            }else{//变更保存
+            } else {//变更保存
                 valid = "0";
             }
-        }else if("1".equals(qqchOrganizationListVo.getButtonMark())){//确认
+        } else if ("1".equals(qqchOrganizationListVo.getButtonMark())) {//确认
             valid = "1";
             //插入确认状态
             String menuId = qqchOrganizationListVo.getMenuId();
             String stageIdentity = qqchOrganizationListVo.getStageIdentity();
-            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
-        }else if("2".equals(qqchOrganizationListVo.getButtonMark())){//提交
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        } else if ("2".equals(qqchOrganizationListVo.getButtonMark())) {//提交
             valid = "0";
-        }else{
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"标识不符合规范");
+        } else {
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "标识不符合规范");
         }
         String finalValid = valid;
 
-        organizationLists.stream().forEach(item->{
+        organizationLists.stream().forEach(item -> {
             item.setVersion(qqchOrganizationListVo.getVersion());
             item.setValid(finalValid);
-            item.setCreateUser(SecurityUtils.getSysUser().getUserId()+"");
+            item.setCreateUser(SecurityUtils.getSysUser().getUserId() + "");
             item.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             item.setCreateTime(DateUtils.getNowDate());
         });
@@ -206,26 +204,29 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
     public List<QqchOrganizationList> mergeData(List<QqchOrganizationList> importDataList, List<QqchOrganizationList> oldDataList) {
         LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
         Set<String> strings = organizationCat.keySet();
-        
+        this.checkData(importDataList);
         for (String string : strings) {
             // 从老数据中获取数据
-            oldDataList.stream().filter(item->string.equals(item.getOrganization())).findFirst().ifPresent(old->{
-                importDataList.stream().filter(imp->string.equals(imp.getOrganization())).findFirst().ifPresent(imp->{
+            oldDataList.stream().filter(item -> string.equals(item.getOrganization())).findFirst().ifPresent(old -> {
+                importDataList.stream().filter(imp -> string.equals(imp.getOrganization())).findFirst().ifPresent(imp -> {
                     List<QqchOrganizationList> oldChildren = old.getChildren();
                     List<QqchOrganizationList> impChildren = imp.getChildren();
                     List<QqchOrganizationList> nChildren = new ArrayList<>();
-                    for (QqchOrganizationList oldChild : oldChildren) {
-                        nChildren = impChildren.stream().filter(i -> !i.getOrganization().equals(oldChild.getOrganization())).collect(Collectors.toList());
+                    if (CollectionUtils.isEmpty(oldChildren)) {
+                        nChildren = impChildren;
+                    } else {
+                        for (QqchOrganizationList oldChild : oldChildren) {
+                            nChildren = impChildren.stream().filter(i -> !i.getOrganization().equals(oldChild.getOrganization())).collect(Collectors.toList());
+                        }
                     }
+
                     oldChildren.addAll(nChildren);
                     TreeSet<QqchOrganizationList> distinctList = oldChildren.stream().collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(QqchOrganizationList::getOrganization))));
                     old.setChildren(new ArrayList<>(distinctList));
                 });
             });
-            
+
         }
-        
-        
 
 
         return oldDataList;
