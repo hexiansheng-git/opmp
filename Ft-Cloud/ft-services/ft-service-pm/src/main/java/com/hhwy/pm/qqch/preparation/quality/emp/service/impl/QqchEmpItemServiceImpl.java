@@ -147,6 +147,9 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     public CompileEntity<List<QqchEmpItem>> itemList(QqchEmpItem dto) {
         CompileEntity entity = new CompileEntity();
         List<QqchEmpItem> qqchEmpItemList = this.qqchEmpItemMapper.getQqchEmpItemList(dto);
+        for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
+            qqchEmpItem.setBstoreFlag(PmConstant.ONE.equals(qqchEmpItem.getStoreFlag()));
+        }
         entity.setVersion(dto.getVersion());
         entity.setDto(qqchEmpItemList);
         return entity;

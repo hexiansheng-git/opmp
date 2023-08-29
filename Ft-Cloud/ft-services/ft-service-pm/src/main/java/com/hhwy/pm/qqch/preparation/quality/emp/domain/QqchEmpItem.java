@@ -87,12 +87,6 @@ public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
     @Excel(name = "是否入库")
     private String storeFlag;
     private Boolean bstoreFlag;
-
-
-    public Boolean getBstoreFlag() {
-        return bstoreFlag = PmConstant.ONE.equals(this.getStoreFlag());
-    }
-
     /**
      * 字段描述：备注
      */
