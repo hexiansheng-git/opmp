@@ -20,6 +20,8 @@ import java.util.Date;
 public class QqchAppInnovatePlanExportVo {
     private static final long serialVersionUID = 1L;
 
+    @FtExcel(name = "序号")
+    private String SerialNumber;
     /**
      * 字段描述：四新”技术名称
      */

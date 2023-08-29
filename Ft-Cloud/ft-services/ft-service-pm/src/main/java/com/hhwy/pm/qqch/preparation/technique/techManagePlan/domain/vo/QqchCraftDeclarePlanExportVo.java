@@ -20,6 +20,8 @@ import java.util.Date;
 public class QqchCraftDeclarePlanExportVo {
     private static final long serialVersionUID = 1L;
 
+    @FtExcel(name = "序号")
+    private String SerialNumber;
     /**
      * 字段描述：区域中心
      */
