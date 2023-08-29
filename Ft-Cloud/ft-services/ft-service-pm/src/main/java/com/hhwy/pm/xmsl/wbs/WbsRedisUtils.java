@@ -11,7 +11,6 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -99,6 +98,10 @@ public class WbsRedisUtils {
         return WbsRedisUtils.getChildWbsId(tenantKey,wbsId);
     }
 
+    public static List<XmslWbs> getChildWbs(String wbsId) {
+        return getWbs(getChildWbsId(wbsId));
+    }
+
     /**
      * 获取直属子级wbsId
      * @param wbsId
@@ -117,8 +120,7 @@ public class WbsRedisUtils {
         Long[] wbsIds = WbsRedisUtils.getDireChildWbsId(wbsId);
         if(ArrayUtils.isEmpty(wbsIds))
             return new ArrayList<>(2);
-        List<XmslWbs> list = WbsRedisUtils.getWbs(Arrays.asList(wbsIds));
-        return list;
+        return WbsRedisUtils.getWbs(wbsIds);
     }
 
     /**
