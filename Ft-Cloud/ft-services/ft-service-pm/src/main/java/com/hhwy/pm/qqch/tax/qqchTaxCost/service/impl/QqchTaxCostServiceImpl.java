@@ -27,6 +27,7 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -132,6 +133,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         // 先查询主收入
         taxCost.setDataType("1");
         taxInVO.setCostList(bean.getCostList(taxCost));
+        //  taxInVO.setCostList(TreeUtil.build(TreeUtil.treeToListWithLevel(taxInVO.getCostList()),null));
         // 在查询其他收入
         taxCost.setDataType("2");
         taxInVO.setOtherList(bean.getCostList(taxCost));
@@ -278,9 +280,21 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
             e.printStackTrace();
         }
         costList = JSONObject.parseArray(json, QqchTaxCost.class);
+
+        List<QqchTaxCost> allChildren = new ArrayList<>();
         costList.stream().filter(ite -> PmConstant.ONE.equals(ite.getLeaf())).forEach(i -> {
-            i.setChildren(currencyChildren);
+            for (QqchTaxCost currencyChild : currencyChildren) {
+                QqchTaxCost qqchTaxCost = new QqchTaxCost();
+                BeanUtils.copyProperties(currencyChild, qqchTaxCost);
+                qqchTaxCost.setPid(i.getId());
+                qqchTaxCost.setId(IdWorker.createId());
+                qqchTaxCost.setLeaf("1");
+                i.setLeaf("0");
+                allChildren.add(qqchTaxCost);
+            }
         });
+
+        costList.addAll(allChildren);
         return costList;
     }
 
@@ -425,7 +439,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                 }
             }
         }
-        
+
         return dataList;
     }
 
