@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.preparation.survey.qqchSurveyWorkPlan.service.IQqchSurve
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,8 +54,12 @@ public class QqchSurveyWorkPlanServiceImpl implements IQqchSurveyWorkPlanService
         QqchSurveyWorkPlan qqchSurveyWorkPlan = new QqchSurveyWorkPlan();
         qqchSurveyWorkPlan.setVersion(qqchSurveyWorkPlanVo.getVersion());
         qqchSurveyWorkPlanMapper.deleteQqchSurveyWorkPlan(qqchSurveyWorkPlan);
+        List<QqchSurveyWorkPlan> paramList = qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList();
+        if (CollectionUtils.isEmpty(paramList)){
+            return;
+        }
         //插入新数据
-        this.insertQqchSurveyWorkPlanList(qqchSurveyWorkPlanVo.getQqchSurveyWorkPlanList(), qqchSurveyWorkPlanVo.getVersion());
+        this.insertQqchSurveyWorkPlanList(paramList, qqchSurveyWorkPlanVo.getVersion());
     }
 
     @Override

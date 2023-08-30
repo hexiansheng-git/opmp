@@ -49,6 +49,12 @@ public class GeneralProjectArchivesWbs {
     private String wbsName;
 
     /**
+     * 字段描述：是否包含子级，0:否,1:是
+     */
+    @JsonProperty
+    private Integer haveChildren;
+
+    /**
      * 字段描述：重难点工程清单标识（1：是，0：不是）
      */
     private String keyDifficultPointFlag;

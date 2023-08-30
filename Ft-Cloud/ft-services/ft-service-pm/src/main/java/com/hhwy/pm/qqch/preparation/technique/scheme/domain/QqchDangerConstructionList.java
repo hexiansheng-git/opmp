@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class QqchDangerConstructionList extends BaseEntity {
     /**
      * 序号 导出用
      */
-    @Excel(name = "序号")
+    @FtExcel(name = "序号")
     private String serialNum;
 
     /**
@@ -41,7 +41,7 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：方案名称
      */
     @JsonProperty
-    @Excel(name = "方案名称")
+    @FtExcel(name = "方案名称")
     private String schemeName;
     /**
      * 字段描述：关联WBS编码
@@ -52,70 +52,70 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：关联WBS
      */
     @JsonProperty
-    @Excel(name = "关联WBS")
+    @FtExcel(name = "关联WBS")
     private String wbsName;
     /**
      * 字段描述：方案类型（字典类型scheme_type）
      */
     @JsonProperty
-    @Excel(name = "方案类型", dictType = "scheme_type")
+    @FtExcel(name = "方案类型", dictType = "scheme_type")
     private String schemeType;
     /**
      * 字段描述：方案分级（字典类型scheme_level）
      */
     @JsonProperty
-    @Excel(name = "方案分级", dictType = "scheme_level")
+    @FtExcel(name = "方案分级", dictType = "scheme_level")
     private String schemeLevel;
     /**
      * 字段描述：危大等级（字典类型danger_level）
      */
     @JsonProperty
-    @Excel(name = "危大等级", dictType = "danger_level")
+    @FtExcel(name = "危大等级", dictType = "danger_level")
     private String dangerLevel;
     /**
      * 字段描述：关键和特殊过程
      */
     @JsonProperty
-    @Excel(name = "关键和特殊过程")
+    @FtExcel(name = "关键和特殊过程")
     private String keySpecialProcesses;
     /**
      * 字段描述：简要说明
      */
     @JsonProperty
-    @Excel(name = "简要说明")
+    @FtExcel(name = "简要说明")
     private String briefDescription;
     /**
      * 字段描述：主要措施
      */
     @JsonProperty
-    @Excel(name = "主要措施")
+    @FtExcel(name = "主要措施")
     private String mainMeasure;
     /**
      * 字段描述：计划编制时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划编制时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划编制时间", dateFormat = "yyyy-MM-dd")
     private Date planPreparationTime;
     /**
      * 字段描述：计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planImplementTime;
     /**
      * 字段描述：清单通过时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "清单通过时间", dateFormat = "yyyy-MM-dd")
+    @FtExcel(name = "清单通过时间", dateFormat = "yyyy-MM-dd")
     private Date listPassTime;
     /**
      * 字段描述：项目联系人
      */
     @JsonProperty
-    @Excel(name = "项目联系人")
+    @FtExcel(name = "项目联系人")
     private String contactPerson;
     /**
      * 字段描述：版本
@@ -131,7 +131,7 @@ public class QqchDangerConstructionList extends BaseEntity {
      * 字段描述：备注
      */
     @JsonProperty
-    @Excel(name = "备注")
+    @FtExcel(name = "备注")
     private String remark;
     /**
      * 字段描述：所属区域id

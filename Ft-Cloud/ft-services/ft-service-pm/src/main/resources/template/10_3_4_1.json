@@ -21,7 +21,8 @@
   {
     "id": 4,
     "feeName": "材料费总额",
-    "serNum": "2"
+    "serNum": "2",
+    "leaf": "1"
   },
   {
     "id": 5,
@@ -91,7 +92,8 @@
   {
     "serNum": "5",
     "id": 152,
-    "feeName": "外账策划分包费用"
+    "feeName": "外账策划分包费用",
+    "leaf": "1"
   },
   {
     "serNum": "6",

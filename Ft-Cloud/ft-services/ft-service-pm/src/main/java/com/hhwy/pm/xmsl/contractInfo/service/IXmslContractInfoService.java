@@ -40,4 +40,6 @@ public interface IXmslContractInfoService {
     int deleteXmslContractInfoByPks(List<Long> xmslContractInfoPkList);
 
     int updateXmslContractInfo1(XmslContractInfo xmslContractInfo);
+
+    XmslContractInfo adjustXmslContractInfo(XmslContractInfo xmslContractInfoParam);
 }
