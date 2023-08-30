@@ -68,13 +68,14 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
     @Override
     public void save(QqchSurveyResultAskVo qqchSurveyResultAskVo) {
         List<QqchSurveyResultAsk> qqchSurveyResultAskList = qqchSurveyResultAskVo.getQqchSurveyResultAskList();
-        if (CollectionUtil.isEmpty(qqchSurveyResultAskList)){
-            return;
-        }
         //删除旧数据
         QqchSurveyResultAsk qqchSurveyResultAsk = new QqchSurveyResultAsk();
         qqchSurveyResultAsk.setVersion(qqchSurveyResultAskVo.getVersion());
         qqchSurveyResultAskMapper.deleteQqchSurveyResultAsk(qqchSurveyResultAsk);
+
+        if (CollectionUtil.isEmpty(qqchSurveyResultAskList)){
+            return;
+        }
         //插入新数据
         this.insertQqchSurveyResultAskList(qqchSurveyResultAskList, qqchSurveyResultAskVo.getVersion());
     }
