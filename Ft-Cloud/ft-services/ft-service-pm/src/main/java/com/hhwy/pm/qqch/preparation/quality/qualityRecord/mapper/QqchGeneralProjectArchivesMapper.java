@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProj
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,4 +30,6 @@ public interface QqchGeneralProjectArchivesMapper {
     int deleteQqchGeneralProjectArchives(QqchGeneralProjectArchives qqchGeneralProjectArchives);
 
     int deleteQqchGeneralProjectArchivesByPks(@Param("qqchGeneralProjectArchivesPkList") List<Long> qqchGeneralProjectArchivesPkList);
+
+    void deleteByWbsCodesAndVersion(@Param("wbsCodes") String wbsCodes,@Param("version") BigDecimal version);
 }

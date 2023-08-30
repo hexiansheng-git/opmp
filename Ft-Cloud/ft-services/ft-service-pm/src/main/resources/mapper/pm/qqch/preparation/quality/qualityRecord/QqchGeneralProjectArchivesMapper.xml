@@ -612,4 +612,9 @@
             </foreach>
         </where>
     </update>
+
+    <update id="deleteByWbsCodesAndVersion">
+        update `qqch_general_project_archives` set del_flag = '1'
+        where find_in_set(wbs_code,#{wbsCodes}) and version = #{version}
+    </update>
 </mapper>

@@ -202,6 +202,7 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
      * @return
      */
     @Override
+    @Transactional
     public void save(GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo) {
         String buttonMark = generalProjectArchivesWbsVo.getButtonMark();
         ButtonMarkUtil.checkButtonMark(buttonMark);
@@ -226,10 +227,12 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
      * @param list
      * @param version
      */
-    private void disposeData(List<GeneralProjectArchivesWbs> list, BigDecimal version) {
+    @Transactional
+    public void disposeData(List<GeneralProjectArchivesWbs> list, BigDecimal version) {
         //一般工程档案列表
         List<QqchGeneralProjectArchives> insertList = new ArrayList<>();
-        List<QqchGeneralProjectArchives> updateList = new ArrayList<>();
+
+        StringBuilder wbsCodes = new StringBuilder();
 
         for (GeneralProjectArchivesWbs generalProjectArchivesWbs : list) {
             Long wbsId = generalProjectArchivesWbs.getId();
@@ -241,31 +244,26 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
                 continue;
             }
 
+            wbsCodes.append(wbsCode).append(",");
+
             List<QqchGeneralProjectArchives> generalSublist = generalProjectArchivesWbs.getGeneralSublist();
             for (QqchGeneralProjectArchives generalProjectArchives : generalSublist) {
-                Long id = generalProjectArchives.getId();
-                if(id == null){
-                    generalProjectArchives.setId(IdWorker.createId());
-                    generalProjectArchives.setWbsId(wbsId);
-                    generalProjectArchives.setWbsCode(wbsCode);
-                    generalProjectArchives.setWbsName(wbsName);
-                    generalProjectArchives.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                    generalProjectArchives.setCreateUserName(SecurityUtils.getUserName());
-                    generalProjectArchives.setCreateTime(DateUtils.getNowDate());
-                    insertList.add(generalProjectArchives);
-                }else {
-                    generalProjectArchives.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-                    generalProjectArchives.setUpdateTime(DateUtils.getNowDate());
-                    updateList.add(generalProjectArchives);
-                }
+                generalProjectArchives.setId(IdWorker.createId());
+                generalProjectArchives.setWbsId(wbsId);
+                generalProjectArchives.setWbsCode(wbsCode);
+                generalProjectArchives.setWbsName(wbsName);
+                generalProjectArchives.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                generalProjectArchives.setCreateUserName(SecurityUtils.getUserName());
+                generalProjectArchives.setCreateTime(DateUtils.getNowDate());
+                insertList.add(generalProjectArchives);
             }
         }
 
+        //根据wbsCodes和版本删除数据
+        qqchGeneralProjectArchivesMapper.deleteByWbsCodesAndVersion(wbsCodes.toString(),version);
+
         if(insertList.size() > 0){
             qqchGeneralProjectArchivesMapper.insertQqchGeneralProjectArchivesList(insertList);
-        }
-        if(updateList.size() > 0){
-            qqchGeneralProjectArchivesMapper.updateQqchGeneralProjectArchivesList(updateList);
         }
     }
 }
