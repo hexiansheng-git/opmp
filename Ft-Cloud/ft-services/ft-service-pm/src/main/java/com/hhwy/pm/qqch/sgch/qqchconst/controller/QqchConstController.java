@@ -51,7 +51,7 @@ public class QqchConstController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchConst>> dtoList) {
         List<QqchConst> qqchConsts = dtoList.dealSaveDto();
-        qqchConstService.save(qqchConsts);
+        qqchConstService.save(qqchConsts,dtoList);
         return AjaxResult.success(qqchConsts);
     }
 

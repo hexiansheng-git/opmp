@@ -11,6 +11,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -84,6 +85,7 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchConstJob> iJobList) {
+        if (CollectionUtils.isEmpty(iJobList)) return;
         this.qqchConstJobMapper.insertQqchConstJobList(iJobList);
 
     }

@@ -25,7 +25,9 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeNode;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -267,11 +269,22 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         List<QqchTaxCost> costList = new ArrayList<>();
 
         InputStream resourceAsStream = null;
-        if (PmConstant.ONE.equals(qqchTaxIn.getDataType())) {
-            resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_1.json");
-        } else {
-            resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_2.json");
+        String dataType = qqchTaxIn.getDataType();
+
+
+        switch (dataType) {
+            case "1":
+                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_1.json");
+                break;
+            case "2":
+                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_4_2.json");
+                break;
+            case "3":
+                resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_3_5.json");
+                break;
+            default:
         }
+
 
         String json = "";
         try {
@@ -372,7 +385,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
         EasyExcel.write(response.getOutputStream())
                 // 这里放入动态头
-                .head(this.getHeaders())
+                .head(this.getHeaders(params))
                 .sheet("模板")
                 // 当然这里数据也可以用 List<List<String>> 去传入
                 .doWrite(this.getData(params));
@@ -424,9 +437,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                 BigDecimal rate = rateMap.get(code) == null ? BigDecimal.ONE : rateMap.get(code);
                 qqchTaxCost.setCurrency(code);
                 qqchTaxCost.setRate(rate);
-                qqchTaxCost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getInnerAmt(), rate));
-                qqchTaxCost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getLocalAmt(), rate));
-                qqchTaxCost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getReqAmt(), rate));
+
                 List<QqchTaxCostDetail> detailList = qqchTaxCost.getDetailList();
                 if (!CollectionUtils.isEmpty(detailList)) {
                     for (QqchTaxCostDetail detail : detailList) {
@@ -435,12 +446,96 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                         detail.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(detail.getInnerAmt(), rate));
                         detail.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(detail.getLocalAmt(), rate));
                         detail.setUsdReqAmt(CommonServiceUtil.getUsdAmt(detail.getReqAmt(), rate));
+
+                        // 给每一个币种计算多个年份之和
+                        qqchTaxCost.setInnerAmt(BigDecimalUtils.sum(qqchTaxCost.getInnerAmt(), detail.getInnerAmt()));
+                        qqchTaxCost.setLocalAmt(BigDecimalUtils.sum(qqchTaxCost.getLocalAmt(), detail.getLocalAmt()));
+                        qqchTaxCost.setReqAmt(BigDecimalUtils.sum(qqchTaxCost.getReqAmt(), detail.getReqAmt()));
                     }
                 }
+
+                qqchTaxCost.setUsdInnerAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getInnerAmt(), rate));
+                qqchTaxCost.setUsdLocalAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getLocalAmt(), rate));
+                qqchTaxCost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getReqAmt(), rate));
             }
         }
 
-        return dataList;
+        return this.toTree(dataList, ".");
+    }
+
+
+    private List<QqchTaxCost> toTree(List<QqchTaxCost> ts, String serStr) {
+        ArrayList<QqchTaxCost> res = new ArrayList<>();
+
+        HashMap<Integer, List<QqchTaxCost>> lengthMap = new HashMap<>();
+        for (QqchTaxCost t : ts) {
+            // 如果是属于TreeNode才继续进行
+            if (!(t instanceof TreeNode)) throw new RuntimeException("请继承TreeNode");
+            ((TreeNode<?>) t).setId(IdWorker.createId());
+            // 序号
+            String serNum = t.getSerNum();
+            String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
+            // 
+            List<QqchTaxCost> lenList = lengthMap.get(split.length);
+            // 如果当前数据为空 就new一个  然后
+            lenList = org.apache.commons.collections4.CollectionUtils.isEmpty(lenList) ? new ArrayList<>() : lenList;
+            lenList.add(t);
+            // 放入map 等会儿用
+            lengthMap.put(split.length, lenList);
+        }
+
+        // 由大到小
+        String finalSerStr = serStr;
+        lengthMap.keySet().stream().sorted(Comparator.comparing(Integer::intValue).reversed()).forEach(length -> {
+            List<QqchTaxCost> lengthList = lengthMap.get(length);
+            if (length == 1) {
+                res.addAll(lengthList);
+            } else {
+                for (QqchTaxCost t : lengthList) {
+                    String serNum = t.getSerNum();
+                    String parentSerNum = getStrBefore(serNum, finalSerStr);
+                    ts.stream().filter(item -> parentSerNum.equals(item.getSerNum())).findFirst().ifPresent(parent -> {
+                        List<QqchTaxCost> children = parent.getChildren();
+                        children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
+                        t.setPid(parent.getId());
+                        parent.setUsdReqAmt(BigDecimalUtils.sum(parent.getUsdReqAmt(), t.getUsdReqAmt()));
+                        parent.setUsdInnerAmt(BigDecimalUtils.sum(parent.getUsdInnerAmt(), t.getUsdInnerAmt()));
+                        parent.setUsdLocalAmt(BigDecimalUtils.sum(parent.getUsdLocalAmt(), t.getUsdLocalAmt()));
+
+                        parent.setReqAmt(parent.getUsdReqAmt());
+                        parent.setInnerAmt(parent.getUsdInnerAmt());
+                        parent.setLocalAmt(parent.getUsdLocalAmt());
+                        // 计算每一年的数据
+                        List<QqchTaxCostDetail> detailList = parent.getDetailList();
+                        for (QqchTaxCostDetail detail : detailList) {
+                            String year = detail.getYear();
+                            List<QqchTaxCostDetail> details = t.getDetailList();
+                            details.stream().filter(ite -> year.equals(ite.getYear())).forEach(item -> {
+                                detail.setUsdInnerAmt(BigDecimalUtils.sum(detail.getUsdInnerAmt(), item.getUsdInnerAmt()));
+                                detail.setUsdLocalAmt(BigDecimalUtils.sum(detail.getUsdLocalAmt(), item.getUsdLocalAmt()));
+                                detail.setUsdReqAmt(BigDecimalUtils.sum(detail.getUsdReqAmt(), item.getUsdReqAmt()));
+
+                                detail.setInnerAmt(detail.getUsdInnerAmt());
+                                detail.setLocalAmt(detail.getUsdLocalAmt());
+                                detail.setReqAmt(detail.getUsdReqAmt());
+                            });
+                        }
+                        children.add(t);
+                        parent.setChildren(children);
+                    });
+                }
+            }
+        });
+
+        return res;
+
+    }
+
+
+    private String getStrBefore(String strOrig, String str) {
+        int lastIndex = strOrig.lastIndexOf(str);
+        return strOrig.substring(0, lastIndex);
+
     }
 
     private QqchTaxCost getCost(Map<Integer, String> rowData, List<String> yearList) {
@@ -453,21 +548,25 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
         for (Integer col : integers) {
             switch (col) {
+
+                case 0:
+                    qqchTaxCost.setSerNum(rowData.get(col));
+                    break;
                 case 1:
                     // 费用名称
                     qqchTaxCost.setFeeName(rowData.get(col));
                     break;
                 case 2:
                     // 内账   
-                    qqchTaxCost.setInnerAmt(new BigDecimal(rowData.get(col)));
+                    qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
                     break;
                 case 3:
                     // 符合账
-                    qqchTaxCost.setReqAmt(new BigDecimal(rowData.get(col)));
+                    qqchTaxCost.setReqAmt(getDecimalVal(rowData.get(col)));
                     break;
                 case 4:
                     // 属地账
-                    qqchTaxCost.setLocalAmt(new BigDecimal(rowData.get(col)));
+                    qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
                     break;
                 default:
             }
@@ -479,9 +578,9 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                     QqchTaxCostDetail detail = new QqchTaxCostDetail();
                     String year = yearList.get(idx);
                     detail.setYear(year);
-                    detail.setInnerAmt(new BigDecimal(rowData.get(col)));
-                    detail.setReqAmt(new BigDecimal(rowData.get(col + 1)));
-                    detail.setLocalAmt(new BigDecimal(rowData.get(col + 2)));
+                    detail.setInnerAmt(getDecimalVal(rowData.get(col)));
+                    detail.setReqAmt(getDecimalVal(rowData.get(col + 1)));
+                    detail.setLocalAmt(getDecimalVal(rowData.get(col + 2)));
                     detailHashMap.put(idx, detail);
                 }
             }
@@ -495,8 +594,26 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         return qqchTaxCost;
     }
 
+
+    private BigDecimal getDecimalVal(String s) {
+
+        try {
+            return StringUtils.isEmpty(s) ? BigDecimal.ZERO : new BigDecimal(s);
+        } catch (Exception e) {
+            throw new RuntimeException("金额必须为数字");
+        }
+
+    }
+
     private List getData(QqchTaxCost params) {
         List<QqchTaxCost> initData = this.getInitData(params);
+        
+        // 生成序号
+        for (QqchTaxCost initDatum : initData) {
+           
+            
+        }
+        
 
         List<List<String>> res = new ArrayList<>();
         for (QqchTaxCost initDatum : initData) {
@@ -509,7 +626,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         return res;
     }
 
-    private List<List<String>> getHeaders() {
+    private List<List<String>> getHeaders(QqchTaxCost params) {
         List<List<String>> list = new ArrayList<>();
         List<String> xh = new ArrayList<>();
         xh.add("序号");
@@ -526,11 +643,13 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         hjd0.add("内账成本");
         list.add(hjd0);
 
-        List<String> hjd1 = new ArrayList<>();
-        hjd1.add("合计");
-        hjd1.add("符合属地账要求成本");
-        list.add(hjd1);
-
+        String dataType = params.getDataType();
+        if (!"3".equals(dataType)) {
+            List<String> hjd1 = new ArrayList<>();
+            hjd1.add("合计");
+            hjd1.add("符合属地账要求成本");
+            list.add(hjd1);
+        }
 
         List<String> hjd2 = new ArrayList<>();
         hjd2.add("合计");
@@ -545,11 +664,13 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
             nz.add(year);
             nz.add("内账成本");
             list.add(nz);
-
-            List<String> fh = new ArrayList<>();
-            fh.add(year);
-            fh.add("符合属地账要求成本");
-            list.add(fh);
+            
+            if (!"3".equals(dataType)) {
+                List<String> fh = new ArrayList<>();
+                fh.add(year);
+                fh.add("符合属地账要求成本");
+                list.add(fh);
+            }
 
             List<String> sd = new ArrayList<>();
             sd.add(year);

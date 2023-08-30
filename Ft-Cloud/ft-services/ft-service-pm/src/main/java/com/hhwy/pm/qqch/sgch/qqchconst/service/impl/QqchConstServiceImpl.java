@@ -108,7 +108,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
-    public void save(List<QqchConst> qqchConsts) {
+    public void save(List<QqchConst> qqchConsts, CompileEntity<List<QqchConst>> dtoList) {
 
         List<QqchConstJob> iJobList = new ArrayList<>();
         List<QqchConstStaffPlan> iStaffList = new ArrayList<>();
@@ -135,7 +135,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
             }
             if (!CollectionUtils.isEmpty(staffList)) {
                 for (QqchConstStaffPlan qqchConstStaffPlan : staffList) {
-                    qqchConstStaffPlan = CompileEntity.dealSaveDto(cons,qqchConstStaffPlan);
+                    qqchConstStaffPlan = CompileEntity.dealSaveDto(cons, qqchConstStaffPlan);
                     qqchConstStaffPlan.setMasterId(id);
                     qqchConstStaffPlan.setId(IdWorker.createId());
                 }
@@ -154,9 +154,9 @@ public class QqchConstServiceImpl implements IQqchConstService {
         this.qqchConstMapper.insertQqchConstList(qqchConsts);
 
         // 保存
-        jobService.saveList(iJobList);
-        staffPlanService.saveList(iStaffList);
-        facilityPlanService.saveList(iFacList);
+        jobService.saveList(CompileEntity.dealSaveDto(dtoList, iJobList));
+        staffPlanService.saveList(CompileEntity.dealSaveDto(dtoList, iStaffList));
+        facilityPlanService.saveList(CompileEntity.dealSaveDto(dtoList, iFacList));
 
 
     }
@@ -191,7 +191,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
         compileEntity.setVersion(new BigDecimal("1.0"));
         compileEntity.setDto(build);
         compileEntity.setModuleIdentity("133");
-        
+
         return compileEntity;
     }
 

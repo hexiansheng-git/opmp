@@ -29,7 +29,7 @@ public interface IQqchConstService {
 
     int deleteQqchConstByPks(List<Long> qqchConstPkList);
 
-    void save(List<QqchConst> qqchConsts);
+    void save(List<QqchConst> qqchConsts, CompileEntity<List<QqchConst>> dtoList);
 
     CompileEntity list(QqchConst qqchConst);
 
