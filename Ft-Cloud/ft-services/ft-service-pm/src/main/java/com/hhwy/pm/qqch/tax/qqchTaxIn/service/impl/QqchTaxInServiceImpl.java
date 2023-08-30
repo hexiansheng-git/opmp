@@ -258,8 +258,8 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         // 假数据
         if (CollectionUtils.isEmpty(res)) {
             res = new ArrayList<>();
-            res.add(new TaxInVO.CurrencyVO("RMB", "人民币", new BigDecimal("6.9")));
-            res.add(new TaxInVO.CurrencyVO("USD", "美元", new BigDecimal("1")));
+            res.add(new TaxInVO.CurrencyVO("RMB", "比尔", new BigDecimal("6.9")));
+            res.add(new TaxInVO.CurrencyVO("USD", "中非法郎", new BigDecimal("1.1")));
         }
         return res;
     }

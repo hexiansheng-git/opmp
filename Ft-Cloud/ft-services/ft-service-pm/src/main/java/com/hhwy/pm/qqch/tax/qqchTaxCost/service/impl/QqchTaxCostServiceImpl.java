@@ -26,6 +26,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeNode;
 import org.apache.commons.io.IOUtils;
@@ -393,6 +394,8 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
     @Override
     public List<QqchTaxCost> importData(MultipartFile file, Map<String, Object> params) throws IOException {
+        String dataType = String.valueOf(params.get("dataType"));
+        CommonAssert.notBlank(dataType,"dataType不能为空");
 
         List<QqchTaxCost> dataList = new ArrayList<>();
 
@@ -407,7 +410,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
             public void invoke(Map<Integer, String> rowData, AnalysisContext context) {
                 // 处理每一行数据
                 if (i[0] != 1) {
-                    dataList.add(getCost(rowData, yearList));
+                    dataList.add(getCost(rowData, yearList, dataType));
                 }
                 i[0]++;
             }
@@ -426,6 +429,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         List<String> currencyNameList = dataList.stream().map(QqchTaxCost::getFeeName).distinct().collect(Collectors.toList());
 
         Map<String, String> currencyInfoByNames = CommonServiceUtil.getCurrencyCodesByNames(currencyNameList);
+        if (currencyInfoByNames == null  || currencyInfoByNames.size() == 0) throw new RuntimeException("请检查币种是否书写错误");
         List<String> codes = new ArrayList<>(currencyInfoByNames.values());
 
         Map<String, BigDecimal> rateMap = CommonServiceUtil.getRateByCodes(codes);
@@ -538,7 +542,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
     }
 
-    private QqchTaxCost getCost(Map<Integer, String> rowData, List<String> yearList) {
+    private QqchTaxCost getCost(Map<Integer, String> rowData, List<String> yearList, String dataType) {
         Set<Integer> integers = rowData.keySet();
         HashMap<Integer, QqchTaxCostDetail> detailHashMap = new HashMap<>(3);
 
@@ -547,41 +551,79 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
 
         for (Integer col : integers) {
-            switch (col) {
 
-                case 0:
-                    qqchTaxCost.setSerNum(rowData.get(col));
-                    break;
-                case 1:
-                    // 费用名称
-                    qqchTaxCost.setFeeName(rowData.get(col));
-                    break;
-                case 2:
-                    // 内账   
-                    qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
-                    break;
-                case 3:
-                    // 符合账
-                    qqchTaxCost.setReqAmt(getDecimalVal(rowData.get(col)));
-                    break;
-                case 4:
-                    // 属地账
-                    qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
-                    break;
-                default:
-            }
+            if (!"3".equals(dataType)) {
+                switch (col) {
 
-            // 大于四列后 每三个成一组
-            if (col > 4) {
-                int idx = (col - 5) / 3;
-                if (detailHashMap.get(idx) == null) {
-                    QqchTaxCostDetail detail = new QqchTaxCostDetail();
-                    String year = yearList.get(idx);
-                    detail.setYear(year);
-                    detail.setInnerAmt(getDecimalVal(rowData.get(col)));
-                    detail.setReqAmt(getDecimalVal(rowData.get(col + 1)));
-                    detail.setLocalAmt(getDecimalVal(rowData.get(col + 2)));
-                    detailHashMap.put(idx, detail);
+                    case 0:
+                        qqchTaxCost.setSerNum(rowData.get(col));
+                        break;
+                    case 1:
+                        // 费用名称
+                        qqchTaxCost.setFeeName(rowData.get(col));
+                        break;
+                    case 2:
+                        // 内账   
+                        qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        break;
+                    case 3:
+                        // 符合账
+                        qqchTaxCost.setReqAmt(getDecimalVal(rowData.get(col)));
+                        break;
+                    case 4:
+                        // 属地账
+                        qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
+                        break;
+                    default:
+                }
+
+                // 大于四列后 每三个成一组
+                if (col > 4) {
+                    int idx = (col - 5) / 3;
+                    if (detailHashMap.get(idx) == null) {
+                        QqchTaxCostDetail detail = new QqchTaxCostDetail();
+                        String year = yearList.get(idx);
+                        detail.setYear(year);
+                        detail.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        detail.setReqAmt(getDecimalVal(rowData.get(col + 1)));
+                        detail.setLocalAmt(getDecimalVal(rowData.get(col + 2)));
+                        detailHashMap.put(idx, detail);
+                    }
+                }
+
+            } else {
+
+                switch (col) {
+
+                    case 0:
+                        qqchTaxCost.setSerNum(rowData.get(col));
+                        break;
+                    case 1:
+                        // 费用名称
+                        qqchTaxCost.setFeeName(rowData.get(col));
+                        break;
+                    case 2:
+                        // 内账   
+                        qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        break;
+                    case 3:
+                        // 属地账
+                        qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
+                        break;
+                    default:
+                }
+
+                // 大于三列后 每二个成一组
+                if (col > 3) {
+                    int idx = (col - 4) / 2;
+                    if (detailHashMap.get(idx) == null) {
+                        QqchTaxCostDetail detail = new QqchTaxCostDetail();
+                        String year = yearList.get(idx);
+                        detail.setYear(year);
+                        detail.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        detail.setLocalAmt(getDecimalVal(rowData.get(col + 1)));
+                        detailHashMap.put(idx, detail);
+                    }
                 }
             }
 
@@ -606,17 +648,30 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     }
 
     private List getData(QqchTaxCost params) {
-        List<QqchTaxCost> initData = this.getInitData(params);
-        
+        List<QqchTaxCost> initDatas = this.getInitData(params);
+
+        HashMap<String, Integer> stringIntegerHashMap = new HashMap<>();
+
+
         // 生成序号
-        for (QqchTaxCost initDatum : initData) {
-           
-            
+        for (QqchTaxCost initDatum : initDatas) {
+            if (!"1".equals(initDatum.getLeaf())) continue;
+            initDatas.stream().filter(ite -> ite.getId().equals(initDatum.getPid())).findFirst().ifPresent(i -> {
+                String serNum = i.getSerNum();
+                Integer integer = stringIntegerHashMap.get(serNum);
+                if (integer == null) {
+                    stringIntegerHashMap.put(serNum, integer = 1);
+
+                } else {
+                    stringIntegerHashMap.put(serNum, ++integer);
+                }
+                initDatum.setSerNum(serNum + "." + integer);
+            });
         }
-        
+        initDatas = initDatas.stream().sorted(Comparator.comparing(QqchTaxCost::getSerNum)).collect(Collectors.toList());
 
         List<List<String>> res = new ArrayList<>();
-        for (QqchTaxCost initDatum : initData) {
+        for (QqchTaxCost initDatum : initDatas) {
             List<String> strings = new ArrayList<>();
             strings.add(initDatum.getSerNum());
             strings.add(initDatum.getFeeName());
@@ -664,7 +719,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
             nz.add(year);
             nz.add("内账成本");
             list.add(nz);
-            
+
             if (!"3".equals(dataType)) {
                 List<String> fh = new ArrayList<>();
                 fh.add(year);
