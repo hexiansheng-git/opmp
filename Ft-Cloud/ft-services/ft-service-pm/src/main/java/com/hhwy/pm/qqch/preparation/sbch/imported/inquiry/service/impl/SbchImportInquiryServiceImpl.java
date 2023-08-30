@@ -256,7 +256,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
         temp.setVersion(vo.getVersion());
         List<SbchImportInquiry> sbchImportInquiries = sbchImportInquiryMapper.selectSbchImportInquiryList(temp);
         if(!ObjectNullUtil.isEmpty(sbchImportInquiries)){
-            vo.setId(vo.getId());
+            vo.setId(sbchImportInquiries.get(0).getId());
             MyUtilPrepareUtil.setUpdateInfoBase(vo);
             sbchImportInquiryMapper.updateSbchImportInquiry(vo);
         }else{
