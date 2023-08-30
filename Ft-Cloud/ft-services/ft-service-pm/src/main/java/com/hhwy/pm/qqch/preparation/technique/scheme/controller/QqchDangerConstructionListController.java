@@ -1,7 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -9,6 +8,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructi
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
 import com.hhwy.utils.excel.ExportUtil;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -69,7 +69,7 @@ public class QqchDangerConstructionListController extends BaseController {
         throws IOException {
         QqchDangerConstructionListVo qqchDangerConstructionListVo = qqchDangerConstructionListService
             .getQqchDangerConstructionListList(version);
-        ExcelUtils<QqchDangerConstructionList> util = new ExcelUtils<>(QqchDangerConstructionList.class);
+        FtExcelUtil<QqchDangerConstructionList> util = new FtExcelUtil<>(QqchDangerConstructionList.class);
 
         // 导出维护序号
         List<QqchDangerConstructionList> newList = ExportUtil
