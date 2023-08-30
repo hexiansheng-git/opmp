@@ -151,6 +151,7 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
 
             Long wbsId = Long.valueOf(wbs.getId());
             generalProjectArchivesWbs.setId(wbsId);
+            generalProjectArchivesWbs.setHaveChildren(wbs.getHaveChildren());
             generalProjectArchivesWbs.setPid(Long.valueOf(wbs.getParentId()));
             generalProjectArchivesWbs.setWbsCode(wbs.getCode());
             generalProjectArchivesWbs.setWbsName(wbs.getName());
