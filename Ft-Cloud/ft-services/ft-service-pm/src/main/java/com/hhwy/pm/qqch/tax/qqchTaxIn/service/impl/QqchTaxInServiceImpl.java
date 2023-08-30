@@ -1,11 +1,9 @@
 package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
-import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -20,17 +18,13 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -122,10 +116,29 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
         TaxInVO taxInVO = new TaxInVO();
         taxInVO.setYearList(this.getYearList());
-        taxInVO.setCurrencyVOList(this.getCurrencyInfo());
+        List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
+        taxInVO.setCurrencyVOList(currencyInfo);
         // 先查询主收入
         qqchTaxInParam.setDataType("1");
-        taxInVO.setInList(bean.getInList(qqchTaxInParam));
+        List<QqchTaxIn> inList = bean.getInList(qqchTaxInParam);
+        if (CollectionUtils.isEmpty(inList)) {
+            List<QqchTaxInDetail> detailList = this.getDetialList();
+
+
+            inList = new ArrayList<>();
+            for (TaxInVO.CurrencyVO currencyVO : currencyInfo) {
+                QqchTaxIn qqchTaxIn = new QqchTaxIn();
+                qqchTaxIn.setId(IdWorker.createId());
+                qqchTaxIn.setOtherBusName(currencyVO.getCurrencyName());
+                qqchTaxIn.setCurrency(currencyVO.getCurrency());
+                qqchTaxIn.setCurrencyName(currencyVO.getCurrencyName());
+                qqchTaxIn.setRate(currencyVO.getRate());
+                qqchTaxIn.setDetailList(detailList);
+                inList.add(qqchTaxIn);
+            }
+        }
+
+        taxInVO.setInList(inList);
         // 在查询其他收入
         qqchTaxInParam.setDataType("2");
         List<QqchTaxIn> other = bean.getInList(qqchTaxInParam);
@@ -135,6 +148,18 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         entity.setVersion(qqchTaxInParam.getVersion());
         entity.setDto(taxInVO);
         return entity;
+    }
+
+    private List<QqchTaxInDetail> getDetialList() {
+        List<String> yearList = this.getYearList();
+
+        return yearList.stream().map(item -> {
+            QqchTaxInDetail qqchTaxInDetail = new QqchTaxInDetail();
+            qqchTaxInDetail.setId(IdWorker.createId());
+            qqchTaxInDetail.setYear(item);
+            return qqchTaxInDetail;
+        }).collect(Collectors.toList());
+
     }
 
 
@@ -151,7 +176,8 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         this.qqchTaxStageService.saveStage(recordId, "1");
 
         // 保存主要
-        List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam, qqchTaxInParam.getDto().getInList());
+        List<QqchTaxIn> inList = qqchTaxInParam.getDto().getInList();
+        List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam, inList);
         for (QqchTaxIn qqchTaxIn : qqchTaxIns) {
             qqchTaxIn.setDataType("1");
             qqchTaxIn.setRecordId(recordId);
@@ -160,12 +186,16 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
 
         // 保存其他
-        List<QqchTaxIn> otherInList = CompileEntity.dealSaveDto(qqchTaxInParam, qqchTaxInParam.getDto().getOtherList());
-        for (QqchTaxIn qqchTaxIn : otherInList) {
-            qqchTaxIn.setDataType("2");
-            qqchTaxIn.setRecordId(recordId);
-            allTaxInList.add(qqchTaxIn);
+        List<QqchTaxIn> otherList = qqchTaxInParam.getDto().getOtherList();
+        if (!CollectionUtils.isEmpty(otherList)) {
+            List<QqchTaxIn> otherInList = CompileEntity.dealSaveDto(qqchTaxInParam, otherList);
+            for (QqchTaxIn qqchTaxIn : otherInList) {
+                qqchTaxIn.setDataType("2");
+                qqchTaxIn.setRecordId(recordId);
+                allTaxInList.add(qqchTaxIn);
+            }
         }
+
 
         // 所有的详情
         List<QqchTaxInDetail> allDetails = bean.saveInList(allTaxInList);

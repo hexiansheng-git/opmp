@@ -46,6 +46,16 @@ public class XmslContractInfoController extends BaseController {
     }
 
     /**
+     *  主合同信息调整
+     */
+    @PreAuthorize(hasPermi = "xmslContractInfo:adjust")
+    @GetMapping("/adjust")
+    public AjaxResult adjustXmslContractInfo(@Validated(ValidationGroups.Select.class) XmslContractInfo xmslContractInfoParam) {
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.adjustXmslContractInfo(xmslContractInfoParam);
+        return AjaxResult.success(xmslContractInfo);
+    }
+
+    /**
      *  主合同信息新增
      *
      * @param xmslContractInfoParam

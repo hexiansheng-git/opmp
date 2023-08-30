@@ -86,16 +86,16 @@ public class QqchSurveyDesignTeams extends CommonBaseEntity {
     /**
      * 字段描述：进场时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "进场时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "进场时间", dateFormat = "yyyy-MM-dd")
     private Date enterTime;
     /**
      * 字段描述：勘察设计大纲提交时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "勘察设计大纲提交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "勘察设计大纲提交时间", dateFormat = "yyyy-MM-dd")
     private Date submitTime;
     /**
      * 字段描述：退场时间

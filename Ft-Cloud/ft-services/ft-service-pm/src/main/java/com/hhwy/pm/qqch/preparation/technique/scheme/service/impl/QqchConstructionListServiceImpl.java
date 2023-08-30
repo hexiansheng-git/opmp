@@ -50,15 +50,16 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 
         BigDecimal version = VersionUtil.getVersion("qqch_construction_list", paramVo.getVersion());
         vo.setVersion(version);
-
-        QqchConstructionList qryParam = new QqchConstructionList();
-        qryParam.setVersion(version);
-        qryParam.setSchemeName(paramVo.getSchemeName());
-        qryParam.setSchemeLevel(paramVo.getSchemeType());
-        qryParam.setWbsCode(paramVo.getWbsCode());
-        List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
+        if(StringUtils.isNotBlank(paramVo.getWbsCode())){
+            QqchConstructionList qryParam = new QqchConstructionList();
+            qryParam.setVersion(version);
+            qryParam.setSchemeName(paramVo.getSchemeName());
+            qryParam.setSchemeLevel(paramVo.getSchemeType());
+            qryParam.setWbsCode(paramVo.getWbsCode());
+            List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
+            vo.setList(list);
+        }
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setList(list);
         return vo;
     }
 

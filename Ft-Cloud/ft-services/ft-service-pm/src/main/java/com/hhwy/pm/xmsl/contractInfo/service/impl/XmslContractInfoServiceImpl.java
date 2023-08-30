@@ -113,62 +113,62 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @param xmslContractInfo
      * @return
      */
-    public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfo) {
+    public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
 
         //查询最大有效版本号，如果查不到，版本号赋默认值1.0
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
-        xmslContractInfo.setVersion(maxVersion);
-        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+        xmslContractInfoParam.setVersion(maxVersion);
+        XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
 
         //如果为空,说明第一次进入，从项目信息中拉取项目数据
-        if (xmslContractInfo1 == null) {
+        if (xmslContractInfo == null) {
             getProjectInfo();
-            xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+            xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
         }
         //查询字表数据
-        if(xmslContractInfo1!=null){
-            //1.1投保险种
-            XmslContractInsure xmslContractInsure = new XmslContractInsure();
-            xmslContractInsure.setMasterId(xmslContractInfo.getId());
-            List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsure);
-            if(CollectionUtils.isNotEmpty(xmslContractInsureList)){
-                xmslContractInfo1.setXmslContractInsureList(xmslContractInsureList);
-            }
-            //1.2签订信息
-            XmslContractSign xmslContractSign = new XmslContractSign();
-            xmslContractSign.setMasterId(xmslContractInfo.getId());
-            List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSign);
-            if(CollectionUtils.isNotEmpty(xmslContractSignList)){
-                xmslContractInfo1.setXmslContractSignList(xmslContractSignList);
-            }
-            //1.3项目支付信息
-            XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
-            xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
-            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
-            if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
-                xmslContractInfo1.setXmslContractPayinfoList(xmslContractPayinfoList);
-            }
-            //最大有效版本号为1.0 说明不存在历史版本
-            if(maxVersion.compareTo(new BigDecimal(1.0))==0){
-                xmslContractInfo1.setIsShowRecord(0);
-            }else {
-                xmslContractInfo1.setIsShowRecord(1);
-            }
-
-            //查询主合同清单 金额
-            XmslContractList xmslContractList = new XmslContractList();
-            xmslContractList.setListType("1");
-            XmslContractList resultPrice = xmslContractListService.getContractPriceByListtype(xmslContractList);
-            if (resultPrice != null) {
-                //合同不含税金额   “主合同清单”页签变更后清单_不含税金额，末级合计
-                // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
-                xmslContractInfo1.setExcludingAmout(resultPrice.getWinNum());
-                //有效合同金额  主合同清单，清单类型是普通清单的所有末级节点的含税金额的合计
-                // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
-                xmslContractInfo1.setEffectiveAmout(resultPrice.getWinUnitPrice());
-            }
+        if(xmslContractInfo!=null){
+            getSonTable(xmslContractInfo, maxVersion);
         }
-        return xmslContractInfo1;
+        return xmslContractInfo;
+    }
+
+
+
+    /***
+     * 功能描述: 调整功能
+     * 逻辑：只有有效版本才可以调整；从历史记录界面选择有效版本点击调整，
+     * 后台判断：如果当前版本是数据库中最大版本则新增一条记录，内容与当前版本一致，只有版本号+1，返回前端；否则将大于当前版本的最小版本记录返回前端
+     * 作者: fushudong
+     * 时间: 2023/8/29
+     */
+    @Override
+    public XmslContractInfo adjustXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
+        //获取当前版本数据
+        XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
+        getSonTable(xmslContractInfo, xmslContractInfo.getVersion());
+        //查询当前版本是否是数据库中最大版本
+        XmslContractInfo bean = xmslContractInfoMapper.getMaxVersionRecordByVersion(xmslContractInfoParam);
+        if (bean == null){
+            //当前版本是数据库中最大版本，新增一条数据，内容与当前版本一致，只有版本号+1
+            BigDecimal version = xmslContractInfo.getVersion();
+            version = version.add(new BigDecimal("1.0"));
+            xmslContractInfo.setVersion(version);
+            xmslContractInfo.setValid("0");
+
+            insertXmslContractInfo(xmslContractInfo);
+            XmslContractInfo param = new XmslContractInfo();
+            param.setVersion(version);
+            XmslContractInfo result = xmslContractInfoMapper.getXmslContractInfo(param);
+            getSonTable(result, result.getVersion());
+            return result;
+        }else {
+            //当前版本不是最大版本，将大于当前版本的最小版本记录返回前端
+            XmslContractInfo param = new XmslContractInfo();
+            param.setVersion(bean.getVersion());
+            XmslContractInfo result = xmslContractInfoMapper.getXmslContractInfo(param);
+            getSonTable(result, bean.getVersion());
+            return result;
+        }
     }
 
     public List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo) {
@@ -240,6 +240,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //第三步 修改主表
         xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
         xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
+        xmslContractInfo.setValid("0");
         return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 
@@ -295,6 +296,48 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 
+    private void getSonTable(XmslContractInfo xmslContractInfo, BigDecimal maxVersion) {
+        //1.1投保险种
+        XmslContractInsure xmslContractInsure = new XmslContractInsure();
+        xmslContractInsure.setMasterId(xmslContractInfo.getId());
+        List<XmslContractInsure> xmslContractInsureList = xmslContractInsureService.getXmslContractInsureList(xmslContractInsure);
+        if(CollectionUtils.isNotEmpty(xmslContractInsureList)){
+            xmslContractInfo.setXmslContractInsureList(xmslContractInsureList);
+        }
+        //1.2签订信息
+        XmslContractSign xmslContractSign = new XmslContractSign();
+        xmslContractSign.setMasterId(xmslContractInfo.getId());
+        List<XmslContractSign> xmslContractSignList = xmslContractSignService.getXmslContractSignList(xmslContractSign);
+        if(CollectionUtils.isNotEmpty(xmslContractSignList)){
+            xmslContractInfo.setXmslContractSignList(xmslContractSignList);
+        }
+        //1.3项目支付信息
+        XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+        xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
+        List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
+        if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
+            xmslContractInfo.setXmslContractPayinfoList(xmslContractPayinfoList);
+        }
+        //最大有效版本号为1.0 说明不存在历史版本
+        if(maxVersion.compareTo(new BigDecimal(1.0))==0){
+            xmslContractInfo.setIsShowRecord(0);
+        }else {
+            xmslContractInfo.setIsShowRecord(1);
+        }
+
+        //查询主合同清单 金额
+        XmslContractList xmslContractList = new XmslContractList();
+        xmslContractList.setListType("1");
+        XmslContractList resultPrice = xmslContractListService.getContractPriceByListtype(xmslContractList);
+        if (resultPrice != null) {
+            //合同不含税金额   “主合同清单”页签变更后清单_不含税金额，末级合计
+            // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
+            xmslContractInfo.setExcludingAmout(resultPrice.getWinNum());
+            //有效合同金额  主合同清单，清单类型是普通清单的所有末级节点的含税金额的合计
+            // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
+            xmslContractInfo.setEffectiveAmout(resultPrice.getWinUnitPrice());
+        }
+    }
 
     private void addSonTable(XmslContractInfo xmslContractInfo){
         //投保险种

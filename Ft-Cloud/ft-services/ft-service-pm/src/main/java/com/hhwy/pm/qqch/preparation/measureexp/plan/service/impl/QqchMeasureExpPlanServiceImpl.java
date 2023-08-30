@@ -92,11 +92,12 @@ public class QqchMeasureExpPlanServiceImpl implements IQqchMeasureExpPlanService
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveTree(List<QqchMeasureExpPlan> dtos) {
         this.checkData(dtos);
+        if (CollectionUtils.isEmpty(dtos)) return;
         this.qqchMeasureExpPlanMapper.insertQqchMeasureExpPlanList(dtos);
     }
 
     private void checkData(List<QqchMeasureExpPlan> dtos) {
-        if (CollectionUtils.isEmpty(dtos)) throw new RuntimeException("数据不能为空");
+        
     }
 
     @Override

@@ -88,7 +88,7 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchScheDiff> dealSaveDto) {
-        if (CollectionUtils.isEmpty(dealSaveDto)) throw new CustomBusinessException("进度差异化评定计算方法不能为空");
+        if (CollectionUtils.isEmpty(dealSaveDto)) return;
         this.checkData(dealSaveDto);
         for (QqchScheDiff qqchScheDiff : dealSaveDto) {
             qqchScheDiff.setId(IdWorker.createId());

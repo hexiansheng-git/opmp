@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,6 +174,7 @@ public class QqchAppInnovatePlanServiceImpl implements IQqchAppInnovatePlanServi
             BeanUtils.copyProperties(appInnovatePlan,qqchAppInnovatePlanExportVo);
             qqchAppInnovatePlanExportVoList.add(qqchAppInnovatePlanExportVo);
         }
+        ListTreeUtil.preserveSerialNumber(qqchAppInnovatePlanExportVoList,QqchAppInnovatePlanExportVo::setSerialNumber);
         return qqchAppInnovatePlanExportVoList;
     }
 }
