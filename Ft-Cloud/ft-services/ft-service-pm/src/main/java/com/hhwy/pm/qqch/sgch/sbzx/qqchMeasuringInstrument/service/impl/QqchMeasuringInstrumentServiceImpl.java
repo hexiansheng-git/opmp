@@ -24,7 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -60,6 +63,12 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
         List<QqchMeasuringInstrument> paramList = param.getQqchMeasuringInstrumentList();
         this.insertQqchMeasuringInstrumentList(paramList, version);
 
+        //按设备编号分组，用于判断是否已存在
+        Map<String, List<QqchMeasuringInstrument>> collect = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(paramList)) {
+            collect = paramList.stream().collect(Collectors.groupingBy(QqchMeasuringInstrument::getEquCode));
+        }
+
         //获取设备策划数据
         List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(version, new QqchConstFacilityPlan()));
 
@@ -70,6 +79,10 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
         //入库数据拼装
         List<QqchMeasuringInstrument> saveList = new ArrayList<>();
         for (QqchConstFacilityPlan constFacilityPlan : facilityPlanList) {
+            if (collect.containsKey(constFacilityPlan.getFacilityCode())){
+                //只新增数据
+                continue;
+            }
             //试验测量仪器 实体
             QqchMeasuringInstrument measuringInstrument = new QqchMeasuringInstrument();
             measuringInstrument.setEquCode(constFacilityPlan.getFacilityCode());

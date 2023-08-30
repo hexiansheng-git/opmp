@@ -24,7 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -60,6 +63,12 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
         List<QqchSmallMachinery> paramList = param.getQqchSmallMachineryList();
         this.insertQqchMeasuringInstrumentList(paramList, version);
 
+        //按设备编号分组，用于判断是否已存在
+        Map<String, List<QqchSmallMachinery>> collect = new HashMap<>();
+        if (CollectionUtils.isNotEmpty(paramList)) {
+            collect = paramList.stream().collect(Collectors.groupingBy(QqchSmallMachinery::getEquCode));
+        }
+
         //获取设备策划数据
         List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(version, new QqchConstFacilityPlan()));
 
@@ -70,6 +79,10 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
         //入库数据拼装
         List<QqchSmallMachinery> saveList = new ArrayList<>();
         for (QqchConstFacilityPlan constFacilityPlan : facilityPlanList) {
+            if (collect.containsKey(constFacilityPlan.getFacilityCode())){
+                //只入库新增的数据
+                continue;
+            }
             //小型机具 实体
             QqchSmallMachinery smallMachinery = new QqchSmallMachinery();
             smallMachinery.setEquCode(constFacilityPlan.getFacilityCode());
