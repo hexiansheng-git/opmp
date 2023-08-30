@@ -76,7 +76,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/update")
-    public AjaxResult updateQqchWorkGroup(@Validated(ValidationGroups.Update.class) @RequestBody QqchWorkGroup qqchWorkGroup) {
+    public AjaxResult updateQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.updateQqchWorkGroup(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
     }
