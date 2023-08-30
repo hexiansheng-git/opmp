@@ -6,6 +6,8 @@
 
     <resultMap type="com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisPath" id="JdglDiffAnalysisPathResultMap">
         <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
+        <result property="sort" column="sort"/>
         <result property="diffAnalysisId" column="diff_analysis_id"/>
         <result property="planItemCode" column="plan_item_code"/>
         <result property="planItemName" column="plan_item_name"/>
@@ -42,6 +44,8 @@
     </resultMap>
     <sql id="selectJdglDiffAnalysisPathVo">
         select `id`
+             , `pid`
+             , `sort`
              , `diff_analysis_id`
              , `plan_item_code`
              , `plan_item_name`
@@ -82,6 +86,8 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
             <if test="planItemCode != null  and planItemCode != ''">and `plan_item_code` = #{planItemCode}</if>
             <if test="planItemName != null  and planItemName != ''">and `plan_item_name` = #{planItemName}</if>
@@ -124,6 +130,8 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
             <if test="planItemCode != null  and planItemCode != ''">and `plan_item_code` = #{planItemCode}</if>
             <if test="planItemName != null  and planItemName != ''">and `plan_item_name` = #{planItemName}</if>
@@ -165,6 +173,8 @@
         insert into jdgl_diff_analysis_path
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="sort != null ">`sort`,</if>
             <if test="diffAnalysisId != null ">`diff_analysis_id`,</if>
             <if test="planItemCode != null  and planItemCode != ''">`plan_item_code`,</if>
             <if test="planItemName != null  and planItemName != ''">`plan_item_name`,</if>
@@ -201,6 +211,8 @@
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="sort != null ">#{sort},</if>
             <if test="diffAnalysisId != null ">#{diffAnalysisId},</if>
             <if test="planItemCode != null  and planItemCode != ''">#{planItemCode},</if>
             <if test="planItemName != null  and planItemName != ''">#{planItemName},</if>
@@ -242,6 +254,8 @@
         insert into jdgl_diff_analysis_path
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
+            `pid`,
+            `sort`,
             `diff_analysis_id`,
             `plan_item_code`,
             `plan_item_name`,
@@ -279,6 +293,8 @@
         <foreach collection="jdglDiffAnalysisPathList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
+                #{item.pid},
+                #{item.sort},
                 #{item.diffAnalysisId},
                 #{item.planItemCode},
                 #{item.planItemName},
@@ -319,6 +335,8 @@
         update jdgl_diff_analysis_path
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
             <if test="diffAnalysisId != null ">`diff_analysis_id` = #{diffAnalysisId},</if>
             <if test="planItemCode != null  and  planItemCode != ''">`plan_item_code` = #{planItemCode},</if>
             <if test="planItemName != null  and  planItemName != ''">`plan_item_name` = #{planItemName},</if>
@@ -364,6 +382,16 @@
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="diff_analysis_id  = case" suffix="end,">
@@ -542,6 +570,8 @@
         update `jdgl_diff_analysis_path` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="diffAnalysisId != null ">and `diff_analysis_id` = #{diffAnalysisId}</if>
             <if test="planItemCode != null  and planItemCode != ''">and `plan_item_code` = #{planItemCode}</if>
             <if test="planItemName != null  and planItemName != ''">and `plan_item_name` = #{planItemName}</if>

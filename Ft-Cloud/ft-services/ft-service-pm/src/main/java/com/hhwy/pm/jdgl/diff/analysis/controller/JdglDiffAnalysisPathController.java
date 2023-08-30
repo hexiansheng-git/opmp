@@ -43,7 +43,6 @@ public class JdglDiffAnalysisPathController extends BaseController{
     @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisPathList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
-        startPage();
         List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getJdglDiffAnalysisPathList(jdglDiffAnalysisPathParam);
         return getDataTableAjaxResult(jdglDiffAnalysisPathList);
     }

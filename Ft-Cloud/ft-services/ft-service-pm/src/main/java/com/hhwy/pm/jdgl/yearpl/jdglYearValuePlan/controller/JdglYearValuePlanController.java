@@ -44,7 +44,6 @@ public class JdglYearValuePlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglYearValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglYearValuePlanList(@Validated(ValidationGroups.Select.class) JdglYearValuePlan jdglYearValuePlanParam) {
-        startPage();
         List<JdglYearValuePlan> jdglYearValuePlanList = jdglYearValuePlanService.getJdglYearValuePlanList(jdglYearValuePlanParam);
         return getDataTableAjaxResult(jdglYearValuePlanList);
     }

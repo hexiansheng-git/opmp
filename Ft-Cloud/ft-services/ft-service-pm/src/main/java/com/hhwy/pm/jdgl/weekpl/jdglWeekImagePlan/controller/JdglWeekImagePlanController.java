@@ -42,7 +42,6 @@ public class JdglWeekImagePlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglWeekImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglWeekImagePlanList(@Validated(ValidationGroups.Select.class) JdglWeekImagePlan jdglWeekImagePlanParam) {
-        startPage();
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekImagePlanService.getJdglWeekImagePlanList(jdglWeekImagePlanParam);
         return getDataTableAjaxResult(jdglWeekImagePlanList);
     }

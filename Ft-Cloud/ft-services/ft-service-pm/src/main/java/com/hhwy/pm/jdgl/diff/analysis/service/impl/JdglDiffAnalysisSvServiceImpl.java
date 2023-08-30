@@ -8,6 +8,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
 import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisSvMapper;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,12 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
     }
 
     public List<JdglDiffAnalysisSv> getJdglDiffAnalysisSvList(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
-        return jdglDiffAnalysisSvMapper.getJdglDiffAnalysisSvList(jdglDiffAnalysisSv);
+        List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList = jdglDiffAnalysisSvMapper.getJdglDiffAnalysisSvList(jdglDiffAnalysisSv);
+        if(CollectionUtils.isEmpty(jdglDiffAnalysisSvList)) {
+            return jdglDiffAnalysisSvList;
+        }
+        List<JdglDiffAnalysisSv> build = TreeUtil.build(jdglDiffAnalysisSvList, jdglDiffAnalysisSv.getPid());
+        return build;
     }
 
     @Transactional

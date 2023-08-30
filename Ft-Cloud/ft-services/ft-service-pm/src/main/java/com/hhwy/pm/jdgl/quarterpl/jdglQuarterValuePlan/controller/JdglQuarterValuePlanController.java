@@ -41,7 +41,6 @@ public class JdglQuarterValuePlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterValuePlanList(@Validated(ValidationGroups.Select.class) JdglQuarterValuePlan jdglQuarterValuePlanParam) {
-        startPage();
         List<JdglQuarterValuePlan> jdglQuarterValuePlanList = jdglQuarterValuePlanService.getJdglQuarterValuePlanList(jdglQuarterValuePlanParam);
         return getDataTableAjaxResult(jdglQuarterValuePlanList);
     }
