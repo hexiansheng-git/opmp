@@ -24,4 +24,12 @@ public class ModuleIdentity {
      */
     /*完整设计交接情况*/
     public static final String COMPLETE_DESIGN_HANDOVER = "6";
+
+    /*
+    勘察设计风险管控措施
+     */
+    /*勘察设计风险策划*/
+    public static final String QQCH_SURVEY_DESIGN_RISK_PLAN = "qqch_survey_design_risk_plan";
+    /*日常管控策划*/
+    public static final String QQCH_DAILY_CONTROL_PLAN = "qqch_survey_design_risk_plan";
 }

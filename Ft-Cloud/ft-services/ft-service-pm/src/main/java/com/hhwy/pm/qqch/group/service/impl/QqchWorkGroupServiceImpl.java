@@ -330,7 +330,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         List<QqchWorkGroup> list = null;
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
-        DynamicDataSourceContextHolder.push(qqchWorkGroup.getPtVar5());
+//        DynamicDataSourceContextHolder.push(qqchWorkGroup.getPtVar5());
+        DynamicDataSourceContextHolder.push("master");
         try {
             qqchWorkGroup.setPtVar5(null);
             list = qqchWorkGroupMapper.getQqchWorkGroupList(qqchWorkGroup);

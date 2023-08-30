@@ -44,7 +44,6 @@ public class JdglDiffAnalysisSvController extends BaseController {
     @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisSvList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
-        startPage();
         List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList = jdglDiffAnalysisSvService.getJdglDiffAnalysisSvList(jdglDiffAnalysisSvParam);
         return getDataTableAjaxResult(jdglDiffAnalysisSvList);
     }

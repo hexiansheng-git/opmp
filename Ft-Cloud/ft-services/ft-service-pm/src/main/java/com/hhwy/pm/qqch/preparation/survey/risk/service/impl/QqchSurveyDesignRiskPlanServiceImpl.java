@@ -5,7 +5,9 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.common.defaultData.service.IQqchDefaultDataInitializeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.survey.risk.domain.QqchSurveyDesignRiskPlan;
@@ -45,6 +47,9 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
     @Autowired
     private IQqchReviewService qqchReviewService;
 
+    @Autowired
+    private IQqchDefaultDataInitializeService qqchDefaultDataInitializeService;
+
 
     /**
      * 勘察设计风险策划Vo
@@ -62,7 +67,13 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
         qqchSurveyDesignRiskPlanVo.setVersion(version);
         qqchSurveyDesignRiskPlanVo.setStageIdentity(qqchReviewService.getStage());
         if(CollectionUtils.isEmpty(qqchSurveyDesignRiskPlanList)){
-            qqchSurveyDesignRiskPlanList = this.getInitializeData();
+            //判断是否已经初始化过
+            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.QQCH_SURVEY_DESIGN_RISK_PLAN, version);
+            if(!initialize){
+                qqchSurveyDesignRiskPlanList = this.getInitializeData();
+                //入库
+                qqchSurveyDesignRiskPlanMapper.insertQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
+            }
             qqchSurveyDesignRiskPlanVo.setQqchSurveyDesignRiskPlanList(qqchSurveyDesignRiskPlanList);
             return qqchSurveyDesignRiskPlanVo;
         }

@@ -42,7 +42,6 @@ public class JdglQuarterImagePlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterImagePlanList(@Validated(ValidationGroups.Select.class) JdglQuarterImagePlan jdglQuarterImagePlanParam) {
-        startPage();
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterImagePlanService.getJdglQuarterImagePlanList(jdglQuarterImagePlanParam);
         return getDataTableAjaxResult(jdglQuarterImagePlanList);
     }

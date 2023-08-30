@@ -69,7 +69,7 @@ public class QqchDailyControlPlanServiceImpl implements IQqchDailyControlPlanSer
         List<QqchDailyControlPlan> qqchDailyControlPlanList = qqchDailyControlPlanMapper.getQqchDailyControlPlanList(qqchDailyControlPlan);
         if(CollectionUtils.isEmpty(qqchDailyControlPlanList)){
             //判断是否已经初始化过
-            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, version);
+            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.QQCH_DAILY_CONTROL_PLAN, version);
             if(!initialize){
                 qqchDailyControlPlanList = this.getInitializeData();
                 //入库

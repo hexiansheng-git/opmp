@@ -14,13 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.utils.tree.TreeNode;
 
 /**
  * @author 陈锦豪
  * @date 2023-08-28 16:24:27
  * @remark jdgl_diff_analysis_sv
  */
-public class JdglDiffAnalysisSv extends BaseEntity {
+public class JdglDiffAnalysisSv extends TreeNode<JdglDiffAnalysisSv> {
     private static final long serialVersionUID = 1L;
 
     /**

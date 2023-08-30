@@ -94,6 +94,17 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         return jdglDayScheduleMapper.getCountValue(startDate, endDate);
     }
 
+    /**
+     * 获取日期区间内的日填报数据，如不传值，则获取所有。
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<JdglDaySchedule> getListByDateRange(Date startDate, Date endDate) {
+        return jdglDayScheduleMapper.getListByDateRange(startDate, endDate);
+    }
+
     @Transactional
     public int insertJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
         Long id = IdWorker.createId();

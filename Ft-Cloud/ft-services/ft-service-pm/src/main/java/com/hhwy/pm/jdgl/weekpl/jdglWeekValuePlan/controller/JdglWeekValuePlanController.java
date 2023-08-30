@@ -41,7 +41,6 @@ public class JdglWeekValuePlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglWeekValuePlanList(@Validated(ValidationGroups.Select.class) JdglWeekValuePlan jdglWeekValuePlanParam) {
-        startPage();
         List<JdglWeekValuePlan> jdglWeekValuePlanList = jdglWeekValuePlanService.getJdglWeekValuePlanList(jdglWeekValuePlanParam);
         return getDataTableAjaxResult(jdglWeekValuePlanList);
     }

@@ -42,7 +42,6 @@ public class JdglMonthImagePlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMonthImagePlanList(@Validated(ValidationGroups.Select.class) JdglMonthImagePlan jdglMonthImagePlanParam) {
-        startPage();
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthImagePlanService.getJdglMonthImagePlanList(jdglMonthImagePlanParam);
         return getDataTableAjaxResult(jdglMonthImagePlanList);
     }

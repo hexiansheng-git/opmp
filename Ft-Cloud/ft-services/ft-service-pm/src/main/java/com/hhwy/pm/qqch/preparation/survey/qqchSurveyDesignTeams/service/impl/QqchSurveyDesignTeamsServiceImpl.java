@@ -94,8 +94,13 @@ public class QqchSurveyDesignTeamsServiceImpl implements IQqchSurveyDesignTeamsS
         }
         //2
         qqchSurveyDesignTeamsMapper.deleteQqchSurveyDesignTeams(qqchSurveyDesignTeams);
+
+        List<QqchSurveyDesignTeams> paramList = qqchSurveyDesignTeamsVo.getQqchSurveyDesignTeamsList();
+        if (CollectionUtils.isEmpty(paramList)) {
+            return;
+        }
         //插入新数据
-        this.insertQqchSurveyDesignTeamsList(qqchSurveyDesignTeamsVo.getQqchSurveyDesignTeamsList(), qqchSurveyDesignTeamsVo.getVersion());
+        this.insertQqchSurveyDesignTeamsList(paramList, qqchSurveyDesignTeamsVo.getVersion());
     }
 
     @Override

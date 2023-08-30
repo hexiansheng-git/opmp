@@ -35,4 +35,6 @@ public interface JdglDayScheduleMapper {
     JdglDaySchedule getHistoryValue(@Param("date") Date date);
 
     BigDecimal getCountValue(Date startDate, Date endDate);
+
+    List<JdglDaySchedule> getListByDateRange(Date startDate, Date endDate);
 }
