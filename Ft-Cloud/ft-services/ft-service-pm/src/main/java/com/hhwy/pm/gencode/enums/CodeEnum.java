@@ -56,7 +56,13 @@ public enum CodeEnum {
     /*设备策划--设备人员配置-特殊人员配置*/
     EQU_STAFF_SPECIAL("SBCHTSRYPZ","yyyy",3),
     /*协作单位设备*/
-    EQU_XZDWSB("XZDWSB", "yyyy", 3);
+    EQU_XZDWSB("XZDWSB", "yyyy", 3),
+    /*特种设备管理*/
+    EQU_SPECIAL("TZSB", "yyyy", 3),
+    /*特种设备风险识别和措施策划对象管理*/
+    EQU_SPECIALPLAN("TZSBJH", "yyyy", 3),
+    /*特种设备管控策划管理*/
+    EQU_SPECIALCONTROLPLAN("TZSBGKJH", "yyyy", 3);
     /**
      * 前缀
      */
