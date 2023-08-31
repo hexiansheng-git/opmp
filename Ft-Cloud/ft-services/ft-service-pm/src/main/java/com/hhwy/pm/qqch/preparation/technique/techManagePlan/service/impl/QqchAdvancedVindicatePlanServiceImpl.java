@@ -312,10 +312,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
     /**
      * 返回导入的所有数据
      * [file]
-     * @return {@link List< Map< String, String>>}
-     * @throws
-     * @author 李庆伟
-     * @date 2022/5/30 11:16
+     * @throw
      */
     private List<QqchAdvancedVindicatePlanImportVo> makeData(MultipartFile file) throws FileNotFoundException, IllegalAccessException {
         InputStream inputStream = null;//转换成输入流
@@ -366,7 +363,8 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         }
         //获取头部,取最后一次解析的列头数据
         Map<Integer, String> headMap = headList.get(headList.size() -1);
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat df2 = new SimpleDateFormat("yyyy/MM/dd");
         //封装数据体
         List<QqchAdvancedVindicatePlanImportVo> importVoList = new ArrayList<>();
         for (Map<Integer, String> dataRow : dataList) {
@@ -398,8 +396,12 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
                         String typeName = field.getType().getSimpleName();
                         if("Date".equals(typeName)){
                             Date date = null;
-                            if(StringUtils.isNotBlank(value)){
-                                date = this.StringToDate(value,df);
+                            if(value.contains("-")){
+                                date = this.StringToDate(value,df1);
+                            }else if(value.contains("/")){
+                                date = this.StringToDate(value,df2);
+                            }else {
+                                throw new RuntimeException("日类类型错误！");
                             }
                             field.set(importVo, date);
                         }else if("BigDecimal".equals(typeName)) {

@@ -43,6 +43,7 @@ public class QqchAppInnovatePlanExportVo {
     /**
      * 字段描述：负责人（带联系方式）
      */
+    @FtExcel(name = "负责人及联系方式")
     private String director;
     /**
      * 字段描述：相关人员

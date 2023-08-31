@@ -13,7 +13,7 @@ import java.util.Date;
 /**
  * @author han
  * @date 2023-07-25 10:39:25
- * @remark 课题研究计划导出Vo
+ * @remark version.compareTo(BigDecimal.ONE) == 0导出Vo
  */
 @Data
 @NoArgsConstructor

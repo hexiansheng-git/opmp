@@ -349,7 +349,7 @@ public class FtExcelUtil<T> {
         //20230703 bigdecimal字段导出带出很多0问题
         if (value instanceof BigDecimal) {
             cell.setCellType(CellType.STRING);
-            cell.setCellValue(value == null ? "" : new DecimalFormat("0.0000").format((BigDecimal) value));
+            cell.setCellValue(value == null ? "" : new DecimalFormat("0.00").format((BigDecimal) value));
             return;
         }
         if (FtExcel.ColumnType.STRING == attr.cellType()) {
