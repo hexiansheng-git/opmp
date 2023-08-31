@@ -103,7 +103,7 @@ public class QqchSurveyDesignTeams extends CommonBaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "退场时间")
-    private String exitTime;
+    private Date exitTime;
     /**
      * 字段描述：附件组id
      */

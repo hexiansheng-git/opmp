@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
                             <if test="enterTime != null "> and `enter_time` = #{enterTime}</if>
                             <if test="submitTime != null "> and `submit_time` = #{submitTime}</if>
-                            <if test="exitTime != null  and exitTime != ''"> and `exit_time` = #{exitTime}</if>
+                            <if test="exitTime != null"> and `exit_time` = #{exitTime}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -138,7 +138,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
                             <if test="enterTime != null "> and `enter_time` = #{enterTime}</if>
                             <if test="submitTime != null "> and `submit_time` = #{submitTime}</if>
-                            <if test="exitTime != null  and exitTime != ''"> and `exit_time` = #{exitTime}</if>
+                            <if test="exitTime != null"> and `exit_time` = #{exitTime}</if>
                             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                             <if test="regionId != null "> and `region_id` = #{regionId}</if>
@@ -180,7 +180,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
                             <if test="enterTime != null ">`enter_time`,</if>
                             <if test="submitTime != null ">`submit_time`,</if>
-                            <if test="exitTime != null  and exitTime != ''">`exit_time`,</if>
+                            <if test="exitTime != null">`exit_time`,</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
                             <if test="remark != null  and remark != ''">`remark`,</if>
                             <if test="regionId != null ">`region_id`,</if>
@@ -217,7 +217,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
                             <if test="enterTime != null ">#{enterTime},</if>
                             <if test="submitTime != null ">#{submitTime},</if>
-                            <if test="exitTime != null  and exitTime != ''">#{exitTime},</if>
+                            <if test="exitTime != null">#{exitTime},</if>
                             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
                             <if test="remark != null  and remark != ''">#{remark},</if>
                             <if test="regionId != null ">#{regionId},</if>
@@ -567,7 +567,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
                                     <if test="enterTime != null "> and `enter_time` = #{enterTime}</if>
                                     <if test="submitTime != null "> and `submit_time` = #{submitTime}</if>
-                                    <if test="exitTime != null  and exitTime != ''"> and `exit_time` = #{exitTime}</if>
+                                    <if test="exitTime != null"> and `exit_time` = #{exitTime}</if>
                                     <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
                                     <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
                                     <if test="regionId != null "> and `region_id` = #{regionId}</if>

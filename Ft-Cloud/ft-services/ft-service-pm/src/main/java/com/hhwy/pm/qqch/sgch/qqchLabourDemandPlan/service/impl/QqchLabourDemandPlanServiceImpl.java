@@ -29,6 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
@@ -223,7 +224,9 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             QqchLabourDemandPlan param = new QqchLabourDemandPlan();
             param.setVersion(constVersion);
             this.deleteQqchLabourDemandPlan(param);
-            return new QqchLabourDemandPlanVo();
+            QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
+            qqchLabourDemandPlan.setVersion(vo.getVersion());
+            return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
         }
 
         //查询1.5.2原有数据
@@ -238,7 +241,9 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             //如果1.5.2数据为空，则直接入库新数据
             List<QqchLabourDemandPlan> arrayList = this.toTreeList(qqchConstList);
             this.insertQqchLabourDemandPlanList(arrayList, labourVersion);
-            return new QqchLabourDemandPlanVo();
+            QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
+            qqchLabourDemandPlan.setVersion(vo.getVersion());
+            return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
         }
 
         List<QqchLabourDemandPlan> saveList = new ArrayList<>();
@@ -256,10 +261,14 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 for (QqchConstStaffPlanResult result : qqchConstStaffPlanResults) {
                     QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
                     qqchLabourDemandPlan1.setOutId(result.getId());
+                    qqchLabourDemandPlan1.setOccupationCode(result.getOccupationCode());
+                    qqchLabourDemandPlan1.setJobName(result.getOccupationName());
                     qqchLabourDemandPlan1.setWorkTeam(result.getConstDesc());
                     qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(result.getChineseSideCount()));
                     qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(result.getLocalCount()));
                     qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(result.getTotalCount()));
+                    BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / result.getTotalCount());
+                    qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
                     saveList.add(qqchLabourDemandPlan1);
                 }
             }else {
@@ -280,10 +289,14 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             }
             QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
             qqchLabourDemandPlan1.setOutId(result.getId());
+            qqchLabourDemandPlan1.setOccupationCode(result.getOccupationCode());
+            qqchLabourDemandPlan1.setJobName(result.getOccupationName());
             qqchLabourDemandPlan1.setWorkTeam(result.getConstDesc());
             qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(result.getChineseSideCount()));
             qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(result.getLocalCount()));
             qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(result.getTotalCount()));
+            BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / result.getTotalCount());
+            qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
             saveList.add(qqchLabourDemandPlan1);
         }
         if (CollectionUtils.isNotEmpty(delList)) {
@@ -292,7 +305,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
 
         if (CollectionUtils.isNotEmpty(saveList)) {
             //1.3人员策划 按工种名称分组
-            Map<String, List<QqchLabourDemandPlan>> map13 = saveList.stream().collect(Collectors.groupingBy(QqchLabourDemandPlan::getWorkTeam));
+            Map<String, List<QqchLabourDemandPlan>> map13 = saveList.stream().collect(Collectors.groupingBy(QqchLabourDemandPlan::getJobName));
             Set<Map.Entry<String, List<QqchLabourDemandPlan>>> entrySet = map13.entrySet();
             //按工种名称遍历，封装1.5.2入库数据
             List<QqchLabourDemandPlan> arrayList = new ArrayList<>();
@@ -305,7 +318,9 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             }
             this.insertQqchLabourDemandPlanList(arrayList, labourVersion);
         }
-        return null;
+        QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
+        qqchLabourDemandPlan.setVersion(vo.getVersion());
+        return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
     }
 
 
@@ -349,10 +364,17 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             qqchLabourDemandPlan.setJobName(entry.getKey());
             List<QqchLabourDemandPlan> list = new ArrayList<>();
             List<QqchConstStaffPlanResult> entryValue = entry.getValue();
-            for (QqchConstStaffPlanResult qqchConst : entryValue) {
+            for (QqchConstStaffPlanResult result : entryValue) {
                 QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
-                qqchLabourDemandPlan1.setOutId(qqchConst.getId());
-                qqchLabourDemandPlan1.setWorkTeam(qqchConst.getConstDesc());
+                qqchLabourDemandPlan1.setOutId(result.getId());
+                qqchLabourDemandPlan1.setOccupationCode(result.getOccupationCode());
+                qqchLabourDemandPlan1.setJobName(result.getOccupationName());
+                qqchLabourDemandPlan1.setWorkTeam(result.getConstDesc());
+                qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(result.getChineseSideCount()));
+                qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(result.getLocalCount()));
+                qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(result.getTotalCount()));
+                BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / result.getTotalCount());
+                qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
                 list.add(qqchLabourDemandPlan1);
             }
             qqchLabourDemandPlan.setChildren(list);
