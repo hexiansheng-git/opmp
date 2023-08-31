@@ -163,6 +163,9 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             List<XmslEngineeringReport> list = xmslEngineeringReportMapper.getId(report);
             final Set<String> resuIdSet = new ConcurrentHashSet<>();
             list.parallelStream().forEach(r->{
+                resuIdSet.add(r.getId()+"");
+                if(StringUtils.isBlank(r.getAncestors()))
+                    return;
                 resuIdSet.addAll(Arrays.asList(Convert.toStrArray(r.getAncestors())));
             });
             if(resuIdSet.size() < 1)

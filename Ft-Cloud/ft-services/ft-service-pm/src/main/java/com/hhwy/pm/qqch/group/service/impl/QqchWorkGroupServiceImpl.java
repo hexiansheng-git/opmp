@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -13,6 +14,7 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -327,14 +331,18 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     public List<QqchWorkGroup> gmList(QqchWorkGroup qqchWorkGroup) {
         if(StringUtils.isBlank(qqchWorkGroup.getPtVar5()))
             return new ArrayList<>(2);
+        String[] tenantKeys = Convert.toStrArray(qqchWorkGroup.getPtVar5());
         List<QqchWorkGroup> list = null;
-        //切换到master
+        //TODO 直到租户能用前，都直接获取master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
-//        DynamicDataSourceContextHolder.push(qqchWorkGroup.getPtVar5());
         DynamicDataSourceContextHolder.push("master");
         try {
             qqchWorkGroup.setPtVar5(null);
             list = qqchWorkGroupMapper.getQqchWorkGroupList(qqchWorkGroup);
+            for (int i = 0; i < list.size(); i++) {
+                QqchWorkGroup temp =  list.get(i);
+                temp.setProjectName("master");
+            }
         }catch (Exception e){
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());
@@ -342,6 +350,27 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
+//        for (int i = 0; i < tenantKeys.length; i++) {
+//            String tenantKey = tenantKeys[i];
+//            //切换到master
+//            String oldDataSource = DynamicDataSourceContextHolder.peek();
+//            DynamicDataSourceContextHolder.push(tenantKey); 
+//            try {
+//                qqchWorkGroup.setPtVar5(null);
+//                list = qqchWorkGroupMapper.getQqchWorkGroupList(qqchWorkGroup);
+//        for (int i = 0; i < list.size(); i++) {
+//            QqchWorkGroup temp =  list.get(i);
+//            temp.setProjectName(tenantKey);
+//        }
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                throw new CustomBusinessException(e.getMessage());
+//            }finally {
+//                DynamicDataSourceContextHolder.poll();
+//                DynamicDataSourceContextHolder.push(oldDataSource);
+//            }    
+//        }
+        
         return list;
     }
 }

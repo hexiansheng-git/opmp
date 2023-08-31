@@ -107,9 +107,9 @@ public class QqchWorkGroupController extends BaseController {
      * @param qqchWorkGroupParam
      * @return
      */
-    @GetMapping("/gmList")
-    public AjaxResult gmList(@Validated(ValidationGroups.Select.class) QqchWorkGroup qqchWorkGroupParam) {
+    @PostMapping("/gmList")
+    public AjaxResult gmList(@RequestBody @Validated(ValidationGroups.Select.class) QqchWorkGroup qqchWorkGroupParam) {
         List<QqchWorkGroup> qqchWorkGroupList = qqchWorkGroupService.gmList(qqchWorkGroupParam);
-        return getDataTableAjaxResult(qqchWorkGroupList);
+        return AjaxResult.success(qqchWorkGroupList);
     }
 }
