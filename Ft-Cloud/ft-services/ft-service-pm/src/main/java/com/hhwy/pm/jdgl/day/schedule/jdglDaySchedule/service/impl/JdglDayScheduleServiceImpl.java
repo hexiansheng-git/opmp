@@ -164,7 +164,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         iJdglDayScheduleWbsService.updateJdglDayScheduleWbsList(jdglDayScheduleWbsList, id);
 
         // wbs清单更新后，更新主表每日产值
-        jdglDayScheduleMapper.updateJdglDayScheduleValue(id);
+        jdglDayScheduleMapper.updateJdglDayScheduleValue(id, jdglDaySchedule.getDate());
 
         return i;
     }

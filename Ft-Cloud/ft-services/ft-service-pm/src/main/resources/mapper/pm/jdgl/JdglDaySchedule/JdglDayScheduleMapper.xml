@@ -505,10 +505,13 @@
     </update>
     <update id="updateJdglDayScheduleValue">
 
-        update jdgl_day_schedule jds
-        set day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
-            day_value_dl= day_value_cu*exchange_rate/10000,
-        where id = #{id}
+        update jdgl_day_schedule jds,(select * from jdgl_day_schedule where date = DATE_SUB(#{date},INTERVAL 1 DAY) and task_status = '5') queryjds
+        set
+            jds.day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
+            jds.day_value_dl= jds.day_value_cu*jds.exchange_rate/10000,
+            jds.total_value_cu = ifnull(queryjds.total_value_cu, 0)+jds.day_value_cu,
+            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+jds.day_value_dl
+        where jds.id = #{id}
 
     </update>
 </mapper>
