@@ -34,4 +34,10 @@ public interface JdglDayScheduleBillMapper {
     List<JdglDayScheduleBill> getHistoryBill(@Param("date") Date date);
 
     int deleteJdglDayScheduleBillByDayScheduleId(@Param("dayScheduleId") Long dayScheduleId);
+
+    List<JdglDayScheduleBill> getBillValueListByRangeDate(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
+
+    List<JdglDayScheduleBill> getBillValueListByEndDate(@Param("endDate") Date endDate);
+
+
 }
