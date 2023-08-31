@@ -1,8 +1,8 @@
 package com.hhwy.pm.jdgl.diff.analysis.service;
 
-import java.util.List;
-
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+
+import java.util.List;
 
 /**
  * @author 陈锦豪
@@ -26,4 +26,9 @@ public interface IJdglDiffAnalysisService {
     int deleteJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis);
 
     int deleteJdglDiffAnalysisByPks(List<Long> jdglDiffAnalysisPkList);
+
+    /**
+     * 生成差异化数据
+     */
+    void initDiffAnalysis();
 }

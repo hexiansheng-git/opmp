@@ -1,20 +1,17 @@
 package com.hhwy.pm.jdgl.diff.analysis.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author 陈锦豪
@@ -22,6 +19,8 @@ import lombok.Data;
  * @remark jdgl_diff_analysis_correct
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class JdglDiffAnalysisCorrect extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -203,5 +202,4 @@ public class JdglDiffAnalysisCorrect extends BaseEntity {
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
-
 }
