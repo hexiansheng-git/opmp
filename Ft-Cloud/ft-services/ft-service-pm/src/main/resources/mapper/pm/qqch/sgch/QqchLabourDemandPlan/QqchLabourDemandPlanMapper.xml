@@ -80,8 +80,8 @@
                 , `occupation_code`
         FROM qqch_labour_demand_plan
     </sql>
-    <select id="getQqchLabourDemandPlan" resultMap="QqchLabourDemandPlanResultMap">
-        <include refid="selectQqchLabourDemandPlanVo"/>
+
+    <sql id="dynamicWhere">
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
@@ -120,6 +120,28 @@
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="occupationCode != null  and occupationCode != ''">and `occupation_code` = #{occupationCode}</if>
         </where>
+    </sql>
+
+    <select id="personNumCalc" resultType="map">
+        SELECT
+            SUM( IFNULL( total, 0 ) ) AS amountNum,
+            SUM( IFNULL( china_num, 0 ) ) AS chinaNum,
+            SUM( IFNULL( out_num, 0 ) ) AS foreignNum,
+            CASE
+
+                WHEN SUM( total ) = 0 THEN
+                    0
+                WHEN SUM( out_num ) = 0 THEN
+                    0 ELSE CONCAT( TRUNCATE ( ( SUM( out_num ) / SUM( total ) ), 0 ), '%' )
+                END AS rateNum
+        FROM
+            qqch_labour_demand_plan
+        <include refid="dynamicWhere"/>
+    </select>
+
+    <select id="getQqchLabourDemandPlan" resultMap="QqchLabourDemandPlanResultMap">
+        <include refid="selectQqchLabourDemandPlanVo"/>
+        <include refid="dynamicWhere"/>
         order by create_time desc
     </select>
 

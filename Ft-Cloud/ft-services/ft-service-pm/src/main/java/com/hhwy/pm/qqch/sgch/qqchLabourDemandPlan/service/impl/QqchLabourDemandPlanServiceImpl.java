@@ -103,6 +103,10 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         return qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlanByPks(qqchLabourDemandPlanPkList);
     }
 
+    @Override
+    public Map<String, Integer> personNumCalc(QqchLabourDemandPlan qqchLabourDemandPlanParam) {
+        return qqchLabourDemandPlanMapper.personNumCalc(qqchLabourDemandPlanParam);
+    }
 
     /**
      * 列表接口
