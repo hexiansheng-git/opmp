@@ -665,7 +665,7 @@
             `valid`,
             `occupation_code`
         FROM qqch_labour_demand_plan
-        WHERE del_flag = "0" AND pid = #{pid}
+        WHERE del_flag = "0" AND pid = #{pid} and entry_date is not null and exit_date is not null
         ORDER BY create_time DESC
     </select>
 
@@ -710,6 +710,7 @@
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="occupationCode != null  and occupationCode != ''">and `occupation_code` = #{occupationCode}</if>
         </where>
+        and entry_date is not null
         order by entry_date limit 1
     </select>
 
