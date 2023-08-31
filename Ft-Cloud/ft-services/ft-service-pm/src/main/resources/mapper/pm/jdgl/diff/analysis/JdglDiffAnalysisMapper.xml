@@ -164,6 +164,31 @@
         </where>
         order by period desc
     </select>
+    <select id="gmList" resultType="com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis">
+        <include refid="selectJdglDiffAnalysisVo"/>
+        <where>
+            del_flag = '0'
+            <if test="period != null ">and `period` = #{period}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="correctFlag != null  and correctFlag == 'N'">and `correct_grade` is null</if>
+            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+            <if test="sDiffGrade1 != null ">and `s_diff_grade` &gt; #{sDiffGrade1}</if>
+            <if test="sDiffGrade2 != null ">and `s_diff_grade` &lt; #{sDiffGrade2}</if>
+            <if test="keyGrade1 != null ">and `key_grade` &gt; #{keyGrade1}</if>
+            <if test="keyGrade2 != null ">and `key_grade` &lt; #{keyGrade2}</if>
+            <if test="contractOverGrade1 != null ">and `contract_over_grade` &gt; #{contractOverGrade1}</if>
+            <if test="contractOverGrade2 != null ">and `contract_over_grade` &lt; #{contractOverGrade2}</if>
+            <if test="valueGrade1 != null ">and `value_grade` &gt; #{valueGrade1}</if>
+            <if test="valueGrade2 != null ">and `value_grade` &lt; #{valueGrade2}</if>
+            <if test="importanceGrade1 != null ">and `importance_grade` &gt; #{importanceGrade1}</if>
+            <if test="importanceGrade2 != null ">and `importance_grade` &lt; #{importanceGrade2}</if>
+            <if test="scaleGrade1 != null ">and `scale_grade` &gt; #{scaleGrade1}</if>
+            <if test="scaleGrade2 != null ">and `scale_grade` &lt; #{scaleGrade2}</if>
+            <if test="correctGrade1 != null ">and `correct_grade` &gt; #{correctGrade1}</if>
+            <if test="correctGrade2 != null ">and `correct_grade` &lt; #{correctGrade2}</if>
+        </where>
+    </select>
 
     <insert id="insertJdglDiffAnalysis" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_diff_analysis

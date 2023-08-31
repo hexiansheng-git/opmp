@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,17 @@ public class JdglDiffAnalysisController extends BaseController {
         startPage();
         List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisService.getJdglDiffAnalysisList(jdglDiffAnalysisParam);
         return getDataTableAjaxResult(jdglDiffAnalysisList);
+    }
+
+    /**
+     * 查询租户下的数据
+     * @param queryVo
+     * @return
+     */
+    @PostMapping("/gmList")
+    public AjaxResult gmList(DiffAnalysisQueryVo queryVo) {
+        List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisService.gmList(queryVo);
+        return AjaxResult.success(jdglDiffAnalysisList);
     }
 
     @PreAuthorize(hasPermi = "jdglDiffAnalysis:add")

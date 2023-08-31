@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.diff.analysis.service;
 
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
 
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface IJdglDiffAnalysisService {
      * 生成差异化数据
      */
     void initDiffAnalysis();
+
+    List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo);
 }

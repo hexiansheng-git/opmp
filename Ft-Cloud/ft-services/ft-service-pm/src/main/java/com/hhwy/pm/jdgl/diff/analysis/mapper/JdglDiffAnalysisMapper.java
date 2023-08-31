@@ -1,9 +1,10 @@
 package com.hhwy.pm.jdgl.diff.analysis.mapper;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author 陈锦豪
@@ -27,4 +28,6 @@ public interface JdglDiffAnalysisMapper {
     int deleteJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis);
 
     int deleteJdglDiffAnalysisByPks(@Param("jdglDiffAnalysisPkList") List<Long> jdglDiffAnalysisPkList);
+
+    List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo);
 }

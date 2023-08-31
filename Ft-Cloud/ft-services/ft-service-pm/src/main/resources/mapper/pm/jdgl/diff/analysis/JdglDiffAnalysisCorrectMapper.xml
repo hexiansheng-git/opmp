@@ -135,7 +135,7 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
-        order by firstType asc, sort asc
+        order by first_type asc, sort asc
     </select>
 
     <insert id="insertJdglDiffAnalysisCorrect" useGeneratedKeys="true" keyProperty="id">

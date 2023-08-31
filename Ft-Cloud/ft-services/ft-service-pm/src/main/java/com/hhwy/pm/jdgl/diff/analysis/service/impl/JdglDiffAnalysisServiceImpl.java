@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect;
+import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
 import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisMapper;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisCorrectService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
@@ -118,6 +119,22 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         //同步SV偏差分析
         //获取本月计划
 
+    }
+
+    @Override
+    public List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo) {
+        List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisMapper.gmList(queryVo);
+        if(CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
+            return jdglDiffAnalysisList;
+        }
+        for (JdglDiffAnalysis diffAnalysis : jdglDiffAnalysisList) {
+            // 修正表单数据
+            JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
+            jdglDiffAnalysisCorrect.setDiffAnalysisId(diffAnalysis.getId());
+            Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectMapList = iJdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrect);
+            diffAnalysis.setJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectMapList);
+        }
+        return jdglDiffAnalysisList;
     }
 
 }
