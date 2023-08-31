@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.SecurityUtils;
 
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlan;
 import com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlanDetail;
@@ -171,7 +172,7 @@ public class SbchImportPlanServiceImpl implements ISbchImportPlanService {
         List<SbchImportPlanDetail> detailList = sbchImportPlan.getDetailList();
         SbchImportPlan temp = new SbchImportPlan();
         temp.setVersion(sbchImportPlan.getVersion());
-        List<SbchImportPlan> sbchImportPlans = sbchImportPlanMapper.selectSbchImportPlanList(sbchImportPlan);
+        List<SbchImportPlan> sbchImportPlans = sbchImportPlanMapper.selectSbchImportPlanList(temp);
         if(!ObjectNullUtil.isEmpty(sbchImportPlans)){
             sbchImportPlan.setId(sbchImportPlans.get(0).getId());
             MyUtilPrepareUtil.setUpdateInfoBase(sbchImportPlan);
@@ -199,6 +200,13 @@ public class SbchImportPlanServiceImpl implements ISbchImportPlanService {
             }
             //添加新的子表数据
             sbchImportPlanDetailService.batchInsert(detailList);
+        }
+        //判断是否是确认
+        if(ButtonMark.CONFIRM.equals(sbchImportPlan.getButtonMark())){
+            //插入确认记录
+            String menuId = sbchImportPlan.getMenuId();
+            String stageIdentity = sbchImportPlan.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
 }
