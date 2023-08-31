@@ -13,6 +13,8 @@ public interface IJdglYearPlanService {
 
     JdglYearPlan getJdglYearPlan(JdglYearPlan jdglYearPlan);
 
+    JdglYearPlan getUsingYearPlanByYear(String year);
+
     List<JdglYearPlan> getJdglYearPlanList(JdglYearPlan jdglYearPlan);
 
     int insertJdglYearPlan(JdglYearPlan jdglYearPlan);

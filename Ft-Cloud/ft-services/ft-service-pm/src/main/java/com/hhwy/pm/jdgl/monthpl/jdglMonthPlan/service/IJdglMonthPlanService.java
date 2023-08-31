@@ -13,6 +13,8 @@ public interface IJdglMonthPlanService {
 
     JdglMonthPlan getJdglMonthPlan(JdglMonthPlan jdglMonthPlan);
 
+    JdglMonthPlan getUsingMonthPlanByYearAndMonth(String year,String month);
+
     List<JdglMonthPlan> getJdglMonthPlanList(JdglMonthPlan jdglMonthPlan);
 
     int insertJdglMonthPlan(JdglMonthPlan jdglMonthPlan);

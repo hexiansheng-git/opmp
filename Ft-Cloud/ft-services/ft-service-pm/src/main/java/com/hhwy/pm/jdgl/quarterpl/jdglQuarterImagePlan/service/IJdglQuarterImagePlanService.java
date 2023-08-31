@@ -33,4 +33,6 @@ public interface IJdglQuarterImagePlanService {
     int deleteJdglQuarterImagePlanByPlanId(Long planId);
 
     List<JdglQuarterImagePlan> syncFromTotalPlan(JdglQuarterPlan jdglQuarterPlanParam);
+
+    List<JdglQuarterImagePlan> getWbsListByYearAndQuarter(String quarter, String year);
 }

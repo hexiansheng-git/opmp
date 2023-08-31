@@ -1,7 +1,9 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.mapper;
 
+import java.util.Date;
 import java.util.List;
 
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
 import org.apache.ibatis.annotations.Param;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
 
@@ -29,4 +31,8 @@ public interface JdglDayScheduleWbsMapper {
     int deleteJdglDayScheduleWbsByPks(@Param("jdglDayScheduleWbsPkList") List<Long> jdglDayScheduleWbsPkList);
 
     int deleteJdglDayScheduleWbsByDayScheduleId(Long dayScheduleId);
+
+    List<JdglDayScheduleWbs4Value> getWbsListByDateRange(@Param("startDate") Date startDate,@Param("endDate")  Date endDate);
+
+    List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(@Param("endDate") Date endDate);
 }

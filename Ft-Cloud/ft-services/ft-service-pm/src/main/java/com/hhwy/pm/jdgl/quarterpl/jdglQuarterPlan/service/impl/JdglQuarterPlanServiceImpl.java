@@ -53,6 +53,16 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         return jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
     }
 
+    @Override
+    public JdglQuarterPlan getUsingQuarterPlanByYearAndQuarter(String year, String quarter) {
+        JdglQuarterPlan jdglQuarterPlan = new JdglQuarterPlan();
+        jdglQuarterPlan.setYear(year);
+        jdglQuarterPlan.setQuarter(quarter);
+        jdglQuarterPlan.setTaskStatus("5");
+        jdglQuarterPlan.setIsUse("1");
+        return getJdglQuarterPlan(jdglQuarterPlan);
+    }
+
     /**
      * 获取初始数据&未完&
      * @param jdglQuarterPlanParam

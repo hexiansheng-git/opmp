@@ -140,6 +140,12 @@ public class JdglQuarterImagePlan extends TreeNode<JdglQuarterImagePlan> {
     @Excel(name = "wbsId")
     private Long wbsId;
     /**
+     * 字段描述：wbs编码
+     */
+    @JsonProperty
+    @Excel(name = "wbs编码")
+    private String wbsCode;
+    /**
      * 字段描述：wbs名称
      */
     @JsonProperty

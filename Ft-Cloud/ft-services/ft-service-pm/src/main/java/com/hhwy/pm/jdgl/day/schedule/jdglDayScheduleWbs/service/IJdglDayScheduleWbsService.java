@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
 
 /**
  * @author cjh
@@ -31,4 +32,8 @@ public interface IJdglDayScheduleWbsService {
     List<JdglDayScheduleWbs> getJdglDayScheduleWbsLazyList(JdglDayScheduleWbs jdglDayScheduleWbsParam);
 
     List<JdglDayScheduleWbs> getInitWbs(Date date);
+
+    List<JdglDayScheduleWbs4Value> getWbsListByDateRange(Date startDate, Date endDate);
+
+    List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(Date endDate);
 }

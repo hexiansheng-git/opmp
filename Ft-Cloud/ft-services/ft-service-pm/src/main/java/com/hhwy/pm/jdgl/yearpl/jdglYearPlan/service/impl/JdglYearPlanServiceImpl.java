@@ -55,6 +55,15 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         return jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
     }
 
+    @Override
+    public JdglYearPlan getUsingYearPlanByYear(String year) {
+        JdglYearPlan jdglYearPlan = new JdglYearPlan();
+        jdglYearPlan.setYear(year);
+        jdglYearPlan.setTaskStatus("5");
+        jdglYearPlan.setIsUse("1");
+        return getJdglYearPlan(jdglYearPlan);
+    }
+
     /**
      * 获取初始数据&未完&
      * @param jdglYearPlanParam

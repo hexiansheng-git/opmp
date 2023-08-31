@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 
@@ -46,6 +47,13 @@ public class JdglDayScheduleController extends BaseController {
     public AjaxResult getInit(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getInit(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
+    }
+
+    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+    @GetMapping("/getListByDateRange")
+    public AjaxResult getListByDateRange(Date startDate, Date endDate) {
+        List<JdglDaySchedule> listByDateRange = jdglDayScheduleService.getListByDateRange(startDate, endDate);
+        return AjaxResult.success(listByDateRange);
     }
 
     @PreAuthorize(hasPermi = "jdglDaySchedule:list")

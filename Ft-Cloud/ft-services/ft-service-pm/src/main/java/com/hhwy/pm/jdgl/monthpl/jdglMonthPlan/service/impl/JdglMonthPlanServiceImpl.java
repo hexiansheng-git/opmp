@@ -53,6 +53,16 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         return jdglMonthPlanMapper.getJdglMonthPlan(jdglMonthPlan);
     }
 
+    @Override
+    public JdglMonthPlan getUsingMonthPlanByYearAndMonth(String year, String month) {
+        JdglMonthPlan jdglMonthPlan = new JdglMonthPlan();
+        jdglMonthPlan.setYear("year");
+        jdglMonthPlan.setMonth("month");
+        jdglMonthPlan.setTaskStatus("5");
+        jdglMonthPlan.setIsUse("1");
+        return getJdglMonthPlan(jdglMonthPlan);
+    }
+
     /**
      * 获取初始数据&未完&
      * @param jdglMonthPlanParam

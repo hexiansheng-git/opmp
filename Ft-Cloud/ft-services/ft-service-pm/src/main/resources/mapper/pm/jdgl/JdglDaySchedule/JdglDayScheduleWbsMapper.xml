@@ -161,6 +161,31 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getWbsListByDateRange"
+            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
+        select jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,sum(jdsb.bill_value) this_value
+        from (select * from jdgl_day_schedule where `date` &gt;= #{startDate} and `date` &lt;= #{endDate} and jds.task_status = "5") jds
+                 inner join jdgl_day_schedule_wbs jdsw
+                            on jds.id = jdsw.day_schedule_id
+                 inner join jdgl_day_schedule_bill jdsb
+                            on jds.id = jdsb.day_schedule_id
+                                and jdsw.wbs_code = jdsb.wbs_code
+        group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit
+        order by sort asc
+    </select>
+
+    <select id="getTotalWbsListByDateRange"
+            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
+        select jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,sum(jdsb.bill_value) this_value
+        from (select * from jdgl_day_schedule where `date` &lt;= #{endDate} and jds.task_status = "5") jds
+                 inner join jdgl_day_schedule_wbs jdsw
+                            on jds.id = jdsw.day_schedule_id
+                 inner join jdgl_day_schedule_bill jdsb
+                            on jds.id = jdsb.day_schedule_id
+                                and jdsw.wbs_code = jdsb.wbs_code
+        group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit
+        order by sort asc
+    </select>
 
     <insert id="insertJdglDayScheduleWbs" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_day_schedule_wbs

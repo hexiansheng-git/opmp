@@ -13,6 +13,8 @@ public interface IJdglQuarterPlanService {
 
     JdglQuarterPlan getJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlan);
 
+    JdglQuarterPlan getUsingQuarterPlanByYearAndQuarter(String year,String quarter);
+
     List<JdglQuarterPlan> getJdglQuarterPlanList(JdglQuarterPlan jdglQuarterPlan);
 
     int insertJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlan);

@@ -127,4 +127,9 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
         return returnList;
     }
+
+    @Override
+    public List<JdglWeekImagePlan> getWbsListByYearAndWeek(String year, String week) {
+        return jdglWeekImagePlanMapper.getWbsListByYearAndWeek(year, week);
+    }
 }

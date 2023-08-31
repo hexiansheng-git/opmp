@@ -33,4 +33,6 @@ public interface IJdglYearImagePlanService {
     int deleteJdglYearImagePlanByYearPlanId(Long yearPlanId);
 
     List<JdglYearImagePlan> syncFromTotalPlan(JdglYearPlan jdglYearPlanParam);
+
+    List<JdglYearImagePlan> getWbsListByYear(String year);
 }

@@ -145,6 +145,12 @@ public class JdglMonthImagePlan extends TreeNode<JdglMonthImagePlan> {
     @JsonProperty
     @Excel(name = "wbs名称")
     private String wbsName;
+    /**
+     * 字段描述：wbscode
+     */
+    @JsonProperty
+    @Excel(name = "wbs编码")
+    private String wbsCode;
 
     /**
      * 字段描述：附件组id

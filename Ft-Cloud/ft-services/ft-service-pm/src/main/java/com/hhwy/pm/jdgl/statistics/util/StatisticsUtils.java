@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.statistics.util;
 
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsQueryVO;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -48,24 +49,39 @@ public class StatisticsUtils {
         return returnMap;
     }
 
-    public static Map<String, Object> initDateParams(String queryDateType, String year, String quarter, String month, Date startDate, Date endDate) {
+    public static void initDateParams(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+        String queryDateType = iPlanStatisticsQueryVO.getQueryDateType();
+        String year = iPlanStatisticsQueryVO.getYear();
+        String quarter = iPlanStatisticsQueryVO.getQuarter();
+        String month = iPlanStatisticsQueryVO.getMonth();
+        String weekStr = iPlanStatisticsQueryVO.getWeek();
+        Date startDate = iPlanStatisticsQueryVO.getStartDate();
+        Date endDate = iPlanStatisticsQueryVO.getEndDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Calendar cl = Calendar.getInstance();
         // 完善日期参数
         switch (queryDateType) {
             case "z":
                 if(startDate == null || endDate == null) {
-                    return null;
+                    return;
                 }
                 String start = sdf.format(startDate);
-                String end = sdf.format(startDate);
-                if(StringUtils.isEmpty(year)) year = start.split("-")[0];
-                if(StringUtils.isEmpty(month)) month = start.split("-")[1];
+                String end = sdf.format(endDate);
+                if(StringUtils.isEmpty(year)) year = end.split("-")[0];
+                if(StringUtils.isEmpty(month)) month = end.split("-")[1];
                 if(StringUtils.isEmpty(quarter)) quarter = StatisticsUtils.getQuarter(month);
+                if(StringUtils.isEmpty(weekStr)) {
+                    cl.setTime(endDate);
+                    int week = cl.get(Calendar.WEEK_OF_YEAR);
+                    if (cl.get(Calendar.MONTH)>=11 && week<=1 ){
+                        week +=52;
+                    }
+                    weekStr = week+"";
+                }
                 break;
             case "y":
                 if(StringUtils.isEmpty(month) || StringUtils.isEmpty(year)) {
-                    return null;
+                    return;
                 }
                 if(StringUtils.isEmpty(quarter)) quarter = StatisticsUtils.getQuarter(month);
                 cl.set(Integer.valueOf(year),Integer.valueOf(month),1);
@@ -78,7 +94,7 @@ public class StatisticsUtils {
                 break;
             case "j":
                 if(StringUtils.isEmpty(quarter) || StringUtils.isEmpty(year)) {
-                    return null;
+                    return;
                 }
                 Map<String, Date> dateRange = getDateRange4Quarter(year, quarter);
                 if(startDate == null) startDate = dateRange.get("start");
@@ -86,19 +102,18 @@ public class StatisticsUtils {
                 break;
             case "n":
                 if(StringUtils.isEmpty(year)) {
-                    return null;
+                    return;
                 }
                 break;
         }
 
-        Map<String, Object> returnMap = new HashMap<String, Object>();
-        returnMap.put("queryDateType",queryDateType);
-        returnMap.put("year",year);
-        returnMap.put("quarter",quarter);
-        returnMap.put("month",month);
-        returnMap.put("startDate",startDate);
-        returnMap.put("endDate",endDate);
-        return returnMap;
+        iPlanStatisticsQueryVO.setQueryDateType(queryDateType);
+        iPlanStatisticsQueryVO.setYear(year);
+        iPlanStatisticsQueryVO.setQuarter(quarter);
+        iPlanStatisticsQueryVO.setMonth(month);
+        iPlanStatisticsQueryVO.setWeek(weekStr);
+        iPlanStatisticsQueryVO.setStartDate(startDate);
+        iPlanStatisticsQueryVO.setEndDate(endDate);
     }
 
 
