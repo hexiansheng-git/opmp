@@ -49,6 +49,16 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         return jdglDayScheduleBillMapper.getJdglDayScheduleBillList(jdglDayScheduleBill);
     }
 
+    @Override
+    public List<JdglDayScheduleBill> getBillValueListByRangeDate(Date startDate, Date endDate) {
+        return jdglDayScheduleBillMapper.getBillValueListByRangeDate(startDate, endDate);
+    }
+
+    @Override
+    public List<JdglDayScheduleBill> getBillValueListByEndDate(Date endDate) {
+        return jdglDayScheduleBillMapper.getBillValueListByEndDate(endDate);
+    }
+
     @Transactional
     public int insertJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill) {
         jdglDayScheduleBill.setId(IdWorker.createId());
