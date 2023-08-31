@@ -216,4 +216,15 @@ public class CountryInfoController extends BaseController {
 //        List<SysTreeUtil> list = countryInfoService.countryProjectCascade(countryInfo);
 //        return AjaxResult.success(list);
 //    }
+
+    /**
+     * 查询国别列表
+     */
+//    @PreAuthorize(hasPermi ="country:info:list")
+    @GetMapping("/getAllList")
+//    @CustomLogger(title = "国别-列表查询",businessType = CustomBusinessType.SELECT)
+    public AjaxResult getAllList(@Validated(ValidationGroups.Select.class) CountryInfo countryInfo) {
+        List<CountryInfo> list = countryInfoService.selectCountryInfoList(countryInfo);
+        return AjaxResult.success(list);
+    }
 }

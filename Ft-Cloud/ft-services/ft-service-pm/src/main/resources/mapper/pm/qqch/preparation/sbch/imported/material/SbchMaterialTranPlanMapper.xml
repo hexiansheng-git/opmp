@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.imported.plan.mapper.SbchImportPlanMapper">
-    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlan" id="SbchImportPlanResult">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.imported.material.mapper.SbchMaterialTranPlanMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan" id="SbchMaterialTranPlanResult">
         <result property="id"    column="id"    />
         <result property="formNo"    column="form_no"    />
         <result property="titleName"    column="title_name"    />
@@ -31,12 +31,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="version" column="version"></result>
     </resultMap>
 
-    <sql id="selectSbchImportPlanVo">
-        select `id`, `version`,`valid`,`prj_code`,`form_no`, `title_name`, `create_user`, `create_time`, `create_user_name`, `update_user`, `update_time`, `update_user_name`, `del_user`, `del_time`, `del_flag`, `remark`, `file_group_id`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_import_plan` plan
+    <sql id="selectSbchMaterialTranPlanVo">
+        select `id`, `version`,`valid`,`prj_code`,`form_no`, `title_name`, `create_user`, `create_time`, `create_user_name`, `update_user`, `update_time`, `update_user_name`, `del_user`, `del_time`, `del_flag`, `remark`, `file_group_id`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_material_tran_plan` material
     </sql>
 
-    <select id="selectSbchImportPlanList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlan" resultMap="SbchImportPlanResult">
-        <include refid="selectSbchImportPlanVo"/>
+    <select id="selectSbchMaterialTranPlanList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan" resultMap="SbchMaterialTranPlanResult">
+        <include refid="selectSbchMaterialTranPlanVo"/>
         <where>
             `del_flag` = 0
             <if test="formNo != null  and formNo != ''"> and `form_no` = #{formNo}</if>
@@ -59,23 +59,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="version != null "> and `version` = #{version}</if>
             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
             <if test="prjCode != null  and prjCode != ''"> and `prj_code` = #{prjCode}</if>
-            <if test="ids != null">
-                 and id in
-                 <foreach collection="ids" item="id"  open="(" close=")" separator=",">
-                     #{id}
-                 </foreach>
-            </if>
         </where>
         ${params.dataScope}
         order by `id` desc
     </select>
     
-    <select id="selectSbchImportPlanById" parameterType="Long" resultMap="SbchImportPlanResult">
-        <include refid="selectSbchImportPlanVo"/>
+    <select id="selectSbchMaterialTranPlanById" parameterType="Long" resultMap="SbchMaterialTranPlanResult">
+        <include refid="selectSbchMaterialTranPlanVo"/>
         where `id` = #{id}
     </select>
-    <insert id="insertSbchImportPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlan">
-        insert into `sbch_import_plan`
+    <insert id="insertSbchMaterialTranPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan">
+        insert into `sbch_material_tran_plan`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="formNo != null">`form_no`,</if>
@@ -101,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptId != null">`dept_id`,</if>
             <if test="version != null">`version`,</if>
             <if test="valid != null">`valid`,</if>
-            <if test="deptId != prjCode">`prj_code`,</if>
+            <if test="prjCode != null">`prj_code`,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -133,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <insert id="batchInsert" parameterType="list">
-        insert `sbch_import_plan` (
+        insert `sbch_material_tran_plan` (
                                                 `id`,
                                                                 `form_no`,
                                                                 `title_name`,
@@ -189,189 +183,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     </foreach>
     </insert>
 
-    <update id="batchUpdate" parameterType="list">
-        update `sbch_import_plan`
-        <trim prefix="set" suffixOverrides=",">
-                                                                <trim prefix="form_no =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.formNo != null ">
-                                when `id` = #{item.id} then #{item.formNo}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="title_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.titleName != null ">
-                                when `id` = #{item.id} then #{item.titleName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="create_user =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.createUser != null ">
-                                when `id` = #{item.id} then #{item.createUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="create_time =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.createTime != null ">
-                                when `id` = #{item.id} then #{item.createTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="create_user_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.createUserName != null ">
-                                when `id` = #{item.id} then #{item.createUserName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="update_user =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.updateUser != null ">
-                                when `id` = #{item.id} then #{item.updateUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="update_time =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.updateTime != null ">
-                                when `id` = #{item.id} then #{item.updateTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="update_user_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.updateUserName != null ">
-                                when `id` = #{item.id} then #{item.updateUserName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="del_user =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.delUser != null ">
-                                when `id` = #{item.id} then #{item.delUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="del_time =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.delTime != null ">
-                                when `id` = #{item.id} then #{item.delTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="del_flag =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.delFlag != null ">
-                                when `id` = #{item.id} then #{item.delFlag}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="remark =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.remark != null ">
-                                when `id` = #{item.id} then #{item.remark}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="file_group_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.fileGroupId != null ">
-                                when `id` = #{item.id} then #{item.fileGroupId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var1 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar1 != null ">
-                                when `id` = #{item.id} then #{item.ptVar1}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var2 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar2 != null ">
-                                when `id` = #{item.id} then #{item.ptVar2}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var3 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar3 != null ">
-                                when `id` = #{item.id} then #{item.ptVar3}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="project_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.projectId != null ">
-                                when `id` = #{item.id} then #{item.projectId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="project_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.projectName != null ">
-                                when `id` = #{item.id} then #{item.projectName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="region_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.regionId != null ">
-                                when `id` = #{item.id} then #{item.regionId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="region_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.regionName != null ">
-                                when `id` = #{item.id} then #{item.regionName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="dept_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.deptId != null ">
-                                when `id` = #{item.id} then #{item.deptId}
-                            </if>
-                        </foreach>
-                    </trim>
-            <trim prefix="version =case" suffix="end,">
-                <foreach collection="dataList" item="item" index="index">
-                    <if test="item.version != null ">
-                        when `id` = #{item.id} then #{item.version}
-                    </if>
-                </foreach>
-            </trim>
-            <trim prefix="valid =case" suffix="end,">
-                <foreach collection="dataList" item="item" index="index">
-                    <if test="item.valid != null ">
-                        when `id` = #{item.id} then #{item.valid}
-                    </if>
-                </foreach>
-            </trim>
-            <trim prefix="prj_code =case" suffix="end,">
-                <foreach collection="dataList" item="item" index="index">
-                    <if test="item.prjCode != null ">
-                        when `id` = #{item.id} then #{item.prjCode}
-                    </if>
-                </foreach>
-            </trim>
-                                    </trim>
-        where
-        <foreach collection="dataList" separator="or" item="item" index="index" >
-            `id` = #{item.id}
-        </foreach>
-    </update>
 
 
-
-
-    <update id="updateSbchImportPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.plan.domain.SbchImportPlan">
-        update `sbch_import_plan`
+    <update id="updateSbchMaterialTranPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan">
+        update `sbch_material_tran_plan`
         <trim prefix="SET" suffixOverrides=",">
             <if test="formNo != null">`form_no` = #{formNo},</if>
             <if test="titleName != null">`title_name` = #{titleName},</if>
@@ -401,12 +216,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where `id` = #{id}
     </update>
 
-    <update id="deleteSbchImportPlanById" parameterType="Long">
-        update `sbch_import_plan` set del_flag = 1 where `id` = #{id}
+    <update id="deleteSbchMaterialTranPlanById" parameterType="Long">
+        update `sbch_material_tran_plan` set del_flag = 1 where `id` = #{id}
     </update>
 
-    <update id="deleteSbchImportPlanByIds" parameterType="String">
-        update `sbch_import_plan` set del_flag = 1,del_user = #{delUser},del_time = #{delTime} where `id` in
+    <update id="deleteSbchMaterialTranPlanByIds" parameterType="String">
+        update `sbch_material_tran_plan` set del_flag = 1,del_user = #{delUser},del_time = #{delTime} where `id` in
         <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
