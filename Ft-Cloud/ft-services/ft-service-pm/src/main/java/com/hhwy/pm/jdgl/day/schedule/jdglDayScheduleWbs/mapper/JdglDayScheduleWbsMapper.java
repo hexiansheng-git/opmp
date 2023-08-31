@@ -32,7 +32,7 @@ public interface JdglDayScheduleWbsMapper {
 
     int deleteJdglDayScheduleWbsByDayScheduleId(Long dayScheduleId);
 
-    List<JdglDayScheduleWbs4Value> getWbsListByDateRange(@Param("startDate") Date startDate,@Param("endDate")  Date endDate);
+    List<JdglDayScheduleWbs4Value> getWbsListByDateRange4Value(@Param("startDate") Date startDate,@Param("endDate")  Date endDate);
 
-    List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(@Param("endDate") Date endDate);
+    List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange4Value(@Param("endDate") Date endDate);
 }

@@ -114,4 +114,9 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
     public int deleteJdglWeekValuePlanByPks(List<Long> jdglWeekValuePlanPkList) {
         return jdglWeekValuePlanMapper.deleteJdglWeekValuePlanByPks(jdglWeekValuePlanPkList);
     }
+
+    @Override
+    public List<JdglWeekValuePlan> getBillListByYearAndWeek(String year, String week) {
+        return jdglWeekValuePlanMapper.getBillListByYearAndWeek(year, week);
+    }
 }

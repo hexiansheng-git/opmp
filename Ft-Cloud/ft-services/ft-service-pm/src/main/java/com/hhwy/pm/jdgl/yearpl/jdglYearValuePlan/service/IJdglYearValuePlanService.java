@@ -30,4 +30,6 @@ public interface IJdglYearValuePlanService {
     int deleteJdglYearValuePlanByYearPlanId(Long yearPlanId);
 
     int deleteJdglYearValuePlanByPks(List<Long> jdglYearValuePlanPkList);
+
+    List<JdglYearValuePlan> getBillListByYear(String year);
 }

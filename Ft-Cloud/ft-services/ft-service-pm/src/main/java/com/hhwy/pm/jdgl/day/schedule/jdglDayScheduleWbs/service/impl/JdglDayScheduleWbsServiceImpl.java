@@ -113,7 +113,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
      */
     @Override
     public List<JdglDayScheduleWbs4Value> getWbsListByDateRange(Date startDate, Date endDate) {
-        return jdglDayScheduleWbsMapper.getWbsListByDateRange(startDate, endDate);
+        return jdglDayScheduleWbsMapper.getWbsListByDateRange4Value(startDate, endDate);
     }
 
     /**
@@ -123,7 +123,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
      */
     @Override
     public List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(Date endDate) {
-        return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange(endDate);
+        return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange4Value(endDate);
     }
 
     @Transactional

@@ -49,6 +49,13 @@ public class JdglDayScheduleWbs extends TreeNode<JdglDayScheduleWbs> {
     @Excel(name = "wbsid")
     private Long wbsId;
     /**
+     * 字段描述：wbs父id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "wbsPid")
+    private Long wbsPid;
+    /**
      * 字段描述：项目WBS编码
      */
     @JsonProperty

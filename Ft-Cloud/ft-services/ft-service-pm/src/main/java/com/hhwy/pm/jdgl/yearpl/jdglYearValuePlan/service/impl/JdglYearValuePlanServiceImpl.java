@@ -115,4 +115,9 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
     public int deleteJdglYearValuePlanByPks(List<Long> jdglYearValuePlanPkList) {
         return jdglYearValuePlanMapper.deleteJdglYearValuePlanByPks(jdglYearValuePlanPkList);
     }
+
+    @Override
+    public List<JdglYearValuePlan> getBillListByYear(String year) {
+        return jdglYearValuePlanMapper.getBillListByYear(year);
+    }
 }

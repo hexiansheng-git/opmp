@@ -155,6 +155,7 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
 
                     JdglDayScheduleBill jdglDayScheduleBill = new JdglDayScheduleBill();
 
+                    jdglDayScheduleBill.setBillId(listId);
                     jdglDayScheduleBill.setBillCode(listCode);
                     jdglDayScheduleBill.setWbsId(wbsId);
                     jdglDayScheduleBill.setWbsCode(jdglDayScheduleWbs.getWbsCode());

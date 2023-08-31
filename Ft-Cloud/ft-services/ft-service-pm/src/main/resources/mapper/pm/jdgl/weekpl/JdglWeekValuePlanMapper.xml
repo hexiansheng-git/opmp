@@ -151,6 +151,12 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getBillListByYearAndWeek"
+            resultType="com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan">
+        select jwvp.* from jdgl_week_value_plan jwvp,
+                      (select * from jdgl_week_plan where year = #{year} and week = #{week}) jwp
+            where jwp.id = jwvp.week_plan_id
+    </select>
 
     <insert id="insertJdglWeekValuePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_week_value_plan

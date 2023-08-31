@@ -27,4 +27,6 @@ public interface JdglWeekValuePlanMapper {
     int deleteJdglWeekValuePlan(JdglWeekValuePlan jdglWeekValuePlan);
 
     int deleteJdglWeekValuePlanByPks(@Param("jdglWeekValuePlanPkList") List<Long> jdglWeekValuePlanPkList);
+
+    List<JdglWeekValuePlan> getBillListByYearAndWeek(@Param("year") String year,@Param("week")  String week);
 }

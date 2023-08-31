@@ -30,4 +30,6 @@ public interface IJdglWeekValuePlanService {
     int deleteJdglWeekValuePlanByPlanId(Long planId);
 
     int deleteJdglWeekValuePlanByPks(List<Long> jdglWeekValuePlanPkList);
+
+    List<JdglWeekValuePlan> getBillListByYearAndWeek(String year, String week);
 }

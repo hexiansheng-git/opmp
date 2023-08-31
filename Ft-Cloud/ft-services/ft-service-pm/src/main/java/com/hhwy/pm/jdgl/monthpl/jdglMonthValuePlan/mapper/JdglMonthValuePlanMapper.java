@@ -27,4 +27,6 @@ public interface JdglMonthValuePlanMapper {
     int deleteJdglMonthValuePlan(JdglMonthValuePlan jdglMonthValuePlan);
 
     int deleteJdglMonthValuePlanByPks(@Param("jdglMonthValuePlanPkList") List<Long> jdglMonthValuePlanPkList);
+
+    List<JdglMonthValuePlan> getBillListByYearAndMonth(@Param("year") String year,@Param("month") String month);
 }

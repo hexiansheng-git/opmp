@@ -114,4 +114,9 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
     public int deleteJdglMonthValuePlanByPks(List<Long> jdglMonthValuePlanPkList) {
         return jdglMonthValuePlanMapper.deleteJdglMonthValuePlanByPks(jdglMonthValuePlanPkList);
     }
+
+    @Override
+    public List<JdglMonthValuePlan> getBillListByYearAndMonth(String year, String month) {
+        return jdglMonthValuePlanMapper.getBillListByYearAndMonth(year, month);
+    }
 }

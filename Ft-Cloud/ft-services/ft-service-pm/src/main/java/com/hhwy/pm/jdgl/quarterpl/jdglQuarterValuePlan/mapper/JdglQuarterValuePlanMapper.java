@@ -27,4 +27,6 @@ public interface JdglQuarterValuePlanMapper {
     int deleteJdglQuarterValuePlan(JdglQuarterValuePlan jdglQuarterValuePlan);
 
     int deleteJdglQuarterValuePlanByPks(@Param("jdglQuarterValuePlanPkList") List<Long> jdglQuarterValuePlanPkList);
+
+    List<JdglQuarterValuePlan> getBillListByYearAndQuarter(@Param("year") String year, @Param("quarter") String quarter);
 }

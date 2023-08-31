@@ -46,6 +46,12 @@ public class JdglDayScheduleBill extends BaseEntity {
     @JsonProperty
     private Long wbsId;
     /**
+     * 字段描述：清单Id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long billId;
+    /**
      * 字段描述：项目WBS编码
      */
     @JsonProperty

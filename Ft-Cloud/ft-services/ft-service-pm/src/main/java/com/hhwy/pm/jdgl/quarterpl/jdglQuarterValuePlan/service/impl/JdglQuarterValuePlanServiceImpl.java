@@ -114,4 +114,9 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
     public int deleteJdglQuarterValuePlanByPks(List<Long> jdglQuarterValuePlanPkList) {
         return jdglQuarterValuePlanMapper.deleteJdglQuarterValuePlanByPks(jdglQuarterValuePlanPkList);
     }
+
+    @Override
+    public List<JdglQuarterValuePlan> getBillListByYearAndQuarter(String year, String quarter) {
+        return jdglQuarterValuePlanMapper.getBillListByYearAndQuarter(year, quarter);
+    }
 }

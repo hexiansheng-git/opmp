@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.statistics.util;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsQueryVO;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,21 +36,29 @@ public class StatisticsUtils {
     };
 
     public static Map<String, Date> getDateRange4Quarter(String yearStr, String quarterStr) {
-        int quarter = Integer.valueOf(quarterStr);
-        int year = Integer.valueOf(yearStr);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
         Map<String, Date> returnMap = new HashMap<String, Date>();
-        Calendar cl = Calendar.getInstance();
-        int endMonth = 3*quarter;
-        cl.set(year, endMonth-2, 1);
-        returnMap.put("start", cl.getTime());
-        cl.set(year, endMonth, 1);
-        int actualMaximum = cl.getActualMaximum(Calendar.DAY_OF_MONTH);
-        cl.set(Integer.valueOf(year),Integer.valueOf(endMonth),actualMaximum);
-        returnMap.put("end", cl.getTime());
+        try {
+            int quarter = Integer.valueOf(quarterStr);
+            int year = Integer.valueOf(yearStr);
+
+            Calendar cl = Calendar.getInstance();
+            int endMonth = 3*quarter;
+//        cl.set(year, endMonth-2, 1);
+            returnMap.put("start", sdf.parse("year" + "-" + (endMonth-3) + "-21"));
+//            cl.set(year, endMonth, 1);
+//            int actualMaximum = cl.getActualMaximum(Calendar.DAY_OF_MONTH);
+//            cl.set(Integer.valueOf(year),Integer.valueOf(endMonth),actualMaximum);
+            returnMap.put("end", sdf.parse("year" + "-" + (endMonth) + "-20"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return returnMap;
     }
 
-    public static void initDateParams(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+    public static void initDateParams(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException {
         String queryDateType = iPlanStatisticsQueryVO.getQueryDateType();
         String year = iPlanStatisticsQueryVO.getYear();
         String quarter = iPlanStatisticsQueryVO.getQuarter();
@@ -85,12 +94,22 @@ public class StatisticsUtils {
                 }
                 if(StringUtils.isEmpty(quarter)) quarter = StatisticsUtils.getQuarter(month);
                 cl.set(Integer.valueOf(year),Integer.valueOf(month),1);
-                if(startDate == null) startDate = cl.getTime();
-                if(endDate == null) {
-                    int actualMaximum = cl.getActualMaximum(Calendar.DAY_OF_MONTH);
-                    cl.set(Integer.valueOf(year),Integer.valueOf(month),actualMaximum);
-                    endDate = cl.getTime();
+
+//                if(startDate == null) startDate = cl.getTime();
+//                if(endDate == null) {
+//                    int actualMaximum = cl.getActualMaximum(Calendar.DAY_OF_MONTH);
+//                    cl.set(Integer.valueOf(year),Integer.valueOf(month),actualMaximum);
+//                    endDate = cl.getTime();
+//                }
+                if(startDate == null) {
+                    if(1 == Integer.valueOf(month)) {
+                        startDate = sdf.parse((Integer.valueOf(year)-1)+"-12"+"-21");
+                    } else {
+                        startDate = sdf.parse(year + "-" + (Integer.valueOf(month)-1) + "-21");
+                    }
                 }
+                if(endDate == null) sdf.parse(year+"-"+month+"-20");
+
                 break;
             case "j":
                 if(StringUtils.isEmpty(quarter) || StringUtils.isEmpty(year)) {
@@ -104,6 +123,7 @@ public class StatisticsUtils {
                 if(StringUtils.isEmpty(year)) {
                     return;
                 }
+                if(endDate == null) endDate = sdf.parse(year + "-12-20");
                 break;
         }
 

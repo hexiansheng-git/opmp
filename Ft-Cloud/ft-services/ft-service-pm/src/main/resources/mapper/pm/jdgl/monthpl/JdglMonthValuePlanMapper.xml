@@ -151,6 +151,12 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getBillListByYearAndMonth"
+            resultType="com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.domain.JdglMonthValuePlan">
+        select jwvp.* from jdgl_month_value_plan jwvp,
+                           (select * from jdgl_month_plan where year = #{year} and month = #{month}) jwp
+        where jwp.id = jwvp.month_plan_id
+    </select>
 
     <insert id="insertJdglMonthValuePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_month_value_plan

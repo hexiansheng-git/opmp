@@ -30,4 +30,6 @@ public interface IJdglQuarterValuePlanService {
     int deleteJdglQuarterValuePlanByPlanId(Long planId);
 
     int deleteJdglQuarterValuePlanByPks(List<Long> jdglQuarterValuePlanPkList);
+
+    List<JdglQuarterValuePlan> getBillListByYearAndQuarter(String year, String quarter);
 }

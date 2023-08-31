@@ -64,6 +64,13 @@ public class JdglDayScheduleController extends BaseController {
         return getDataTableAjaxResult(jdglDayScheduleList);
     }
 
+    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+    @GetMapping("/listByDateRange")
+    public AjaxResult getJdglDaySchedulelistByDateRange(Date startDate, Date endDate) {
+        List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleService.getListByDateRange(startDate, endDate);
+        return getDataTableAjaxResult(jdglDayScheduleList);
+    }
+
     @PreAuthorize(hasPermi = "jdglDaySchedule:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDaySchedule(@Validated(ValidationGroups.Save.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
