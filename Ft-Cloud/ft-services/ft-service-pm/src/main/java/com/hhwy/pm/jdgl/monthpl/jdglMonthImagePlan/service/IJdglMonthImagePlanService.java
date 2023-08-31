@@ -33,4 +33,6 @@ public interface IJdglMonthImagePlanService {
     int deleteJdglMonthImagePlanByPlanId(Long yearPlanId);
 
     List<JdglMonthImagePlan> syncFromTotalPlan(JdglMonthPlan jdglMonthPlanParam);
+
+    List<JdglMonthImagePlan> getWbsListByYearAndMonth(String year, String month);
 }

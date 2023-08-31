@@ -22,7 +22,7 @@
         <result property="planCompValue" column="plan_comp_value"/>
         <result property="planStartDate" column="plan_start_date"/>
         <result property="planEndDate" column="plan_end_date"/>
-        <result property="wbsId" column="wbs_id"/>
+        <result property="wbsCode" column="wbs_code"/>
         <result property="wbsName" column="wbs_name"/>
         <result property="responsePerson" column="response_person"/>
         <result property="fileGroupId" column="file_group_id"/>
@@ -61,7 +61,7 @@
              , `plan_comp_value`
              , `plan_start_date`
              , `plan_end_date`
-             , `wbs_id`
+             , `wbs_code`
              , `wbs_name`
              , `response_person`
              , `file_group_id`
@@ -104,7 +104,7 @@
             <if test="planCompValue != null ">and `plan_comp_value` = #{planCompValue}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
             <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
@@ -149,7 +149,7 @@
             <if test="planCompValue != null ">and `plan_comp_value` = #{planCompValue}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
             <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
@@ -173,6 +173,14 @@
         </where>
         order by sort asc
     </select>
+    <select id="getWbsListByYearAndWeek"
+            resultType="com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan">
+        select jyip.wbs_code,jyip.wbs_name,sum(plan_comp_value) plan_comp_value
+        from (select * from jdgl_week_plan where task_status = '5' and year = #{year} and week = #{week}) jyp ,
+             jdgl_week_image_plan jyip
+        where jyp.id = jyip.week_plan_id
+        group by jyip.wbs_code,jyip.wbs_name
+    </select>
 
     <insert id="insertJdglWeekImagePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_week_image_plan
@@ -193,7 +201,7 @@
             <if test="planCompValue != null ">`plan_comp_value`,</if>
             <if test="planStartDate != null ">`plan_start_date`,</if>
             <if test="planEndDate != null ">`plan_end_date`,</if>
-            <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="wbsCode != null ">`wbs_code`,</if>
             <if test="wbsName != null ">`wbs_name`,</if>
             <if test="responsePerson != null ">`response_person`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
@@ -232,7 +240,7 @@
             <if test="planCompValue != null ">#{planCompValue},</if>
             <if test="planStartDate != null ">#{planStartDate},</if>
             <if test="planEndDate != null ">#{planEndDate},</if>
-            <if test="wbsId != null ">#{wbsId},</if>
+            <if test="wbsCode != null ">#{wbsCode},</if>
             <if test="wbsName != null ">#{wbsName},</if>
             <if test="responsePerson != null ">#{responsePerson},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
@@ -276,7 +284,7 @@
             `plan_comp_value`,
             `plan_start_date`,
             `plan_end_date`,
-            `wbs_id`,
+            `wbs_code`,
             `wbs_name`,
             `response_person`,
             `file_group_id`,
@@ -316,7 +324,7 @@
                 #{item.planCompValue},
                 #{item.planStartDate},
                 #{item.planEndDate},
-                #{item.wbsId},
+                #{item.wbsCode},
                 #{item.wbsName},
                 #{item.responsePerson},
                 #{item.fileGroupId},
@@ -359,7 +367,7 @@
             <if test="planCompValue != null ">`plan_comp_value` = #{planCompValue},</if>
             <if test="planStartDate != null ">`plan_start_date` = #{planStartDate},</if>
             <if test="planEndDate != null ">`plan_end_date` = #{planEndDate},</if>
-            <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="wbsCode != null ">`wbs_code` = #{wbsCode},</if>
             <if test="wbsName != null ">`wbs_name` = #{wbsName},</if>
             <if test="responsePerson != null ">`response_person` = #{responsePerson},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
@@ -469,9 +477,9 @@
                     when `id`=#{item.id} then #{item.planEndDate}
                 </foreach>
             </trim>
-            <trim prefix="wbs_id  = case" suffix="end,">
+            <trim prefix="wbs_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.wbsId}
+                    when `id`=#{item.id} then #{item.wbsCode}
                 </foreach>
             </trim>
             <trim prefix="wbs_name  = case" suffix="end,">
@@ -599,7 +607,7 @@
             <if test="planCompValue != null ">and `plan_comp_value` = #{planCompValue}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
             <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>

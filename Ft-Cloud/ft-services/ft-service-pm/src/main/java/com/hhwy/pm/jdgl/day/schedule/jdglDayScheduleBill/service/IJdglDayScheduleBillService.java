@@ -17,6 +17,10 @@ public interface IJdglDayScheduleBillService {
 
     List<JdglDayScheduleBill> getJdglDayScheduleBillList(JdglDayScheduleBill jdglDayScheduleBill);
 
+    List<JdglDayScheduleBill> getBillValueListByRangeDate(Date startDate, Date endDate);
+
+    List<JdglDayScheduleBill> getBillValueListByEndDate(Date endDate);
+
     int insertJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill);
 
     int insertJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList);

@@ -13,6 +13,8 @@ public interface IJdglWeekPlanService {
 
     JdglWeekPlan getJdglWeekPlan(JdglWeekPlan jdglWeekPlan);
 
+    JdglWeekPlan getUsingWeekPlanByYearAndWeek(String year, String week);
+
     List<JdglWeekPlan> getJdglWeekPlanList(JdglWeekPlan jdglWeekPlan);
 
     int insertJdglWeekPlan(JdglWeekPlan jdglWeekPlan);

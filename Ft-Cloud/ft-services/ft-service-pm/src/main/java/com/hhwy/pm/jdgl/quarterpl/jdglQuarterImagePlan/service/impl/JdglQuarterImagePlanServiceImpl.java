@@ -127,4 +127,9 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
         return returnList;
     }
+
+    @Override
+    public List<JdglQuarterImagePlan> getWbsListByYearAndQuarter(String year, String quarter) {
+        return jdglQuarterImagePlanMapper.getWbsListByYearAndQuarter(year, quarter);
+    }
 }

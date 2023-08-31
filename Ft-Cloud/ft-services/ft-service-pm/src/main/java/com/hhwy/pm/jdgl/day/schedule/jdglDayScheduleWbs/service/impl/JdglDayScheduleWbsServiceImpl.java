@@ -9,6 +9,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -102,6 +103,27 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         iJdglDayScheduleBillService.getInitBill(jdglDayScheduleWbsList, date);
 
         return null;
+    }
+
+    /**
+     * 根据日期区间查询wbs数据
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<JdglDayScheduleWbs4Value> getWbsListByDateRange(Date startDate, Date endDate) {
+        return jdglDayScheduleWbsMapper.getWbsListByDateRange(startDate, endDate);
+    }
+
+    /**
+     * 根据日期获取开累信息
+     * @param endDate
+     * @return
+     */
+    @Override
+    public List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange(Date endDate) {
+        return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange(endDate);
     }
 
     @Transactional

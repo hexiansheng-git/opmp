@@ -128,4 +128,9 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
         return returnList;
     }
+
+    @Override
+    public List<JdglYearImagePlan> getWbsListByYear(String year) {
+        return jdglYearImagePlanMapper.getWbsListByYear(year);
+    }
 }

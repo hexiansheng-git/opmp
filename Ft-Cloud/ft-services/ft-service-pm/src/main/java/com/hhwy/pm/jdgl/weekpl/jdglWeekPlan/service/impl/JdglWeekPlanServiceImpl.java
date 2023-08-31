@@ -53,6 +53,16 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         return jdglWeekPlanMapper.getJdglWeekPlan(jdglWeekPlan);
     }
 
+    @Override
+    public JdglWeekPlan getUsingWeekPlanByYearAndWeek(String year, String week) {
+        JdglWeekPlan jdglWeekPlan = new JdglWeekPlan();
+        jdglWeekPlan.setYear(year);
+        jdglWeekPlan.setWeek(week);
+        jdglWeekPlan.setTaskStatus("5");
+        jdglWeekPlan.setIsUse("1");
+        return getJdglWeekPlan(jdglWeekPlan);
+    }
+
     /**
      * 获取初始数据&未完&
      * @param jdglWeekPlanParam

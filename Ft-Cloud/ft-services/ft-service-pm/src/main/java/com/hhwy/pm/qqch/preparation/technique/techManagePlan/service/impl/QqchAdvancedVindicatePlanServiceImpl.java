@@ -285,9 +285,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanVo.getList();
 
         //校验唯一
-        if(!ButtonMark.SAVE.equals(buttonMark)){
-            DataCheckUtil.checkSingle(qqchAdvancedVindicatePlanList,QqchAdvancedVindicatePlan::getTopicCode);
-        }
+        DataCheckUtil.checkSingle(qqchAdvancedVindicatePlanList,QqchAdvancedVindicatePlan::getTopicCode);
 
         this.insertQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanList,version);
 

@@ -30,7 +30,7 @@ public interface JdglDayScheduleMapper {
 
     int deleteJdglDayScheduleByPks(@Param("jdglDaySchedulePkList") List<Long> jdglDaySchedulePkList);
 
-    int updateJdglDayScheduleValue(@Param("id") Long id);
+    int updateJdglDayScheduleValue(@Param("id") Long id, @Param("date") Date date);
 
     JdglDaySchedule getHistoryValue(@Param("date") Date date);
 

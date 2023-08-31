@@ -128,4 +128,9 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
         return returnList;
     }
+
+    @Override
+    public List<JdglMonthImagePlan> getWbsListByYearAndMonth(String year, String month) {
+        return jdglMonthImagePlanMapper.getWbsListByYearAndMonth(year, month);
+    }
 }

@@ -5,10 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.*;
 import com.hhwy.pm.qqch.sgch.qqchconst.mapper.QqchConstMapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstFacilityPlanService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstJobService;
@@ -196,7 +193,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
     }
 
     @Override
-    public List<QqchConst> selectQqchConst(BigDecimal version) {
+    public List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version) {
         return qqchConstMapper.selectQqchConst(version);
     }
 }

@@ -78,7 +78,7 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "危大工程id")
-    private Long dangerousEngineerId;
+    private String dangerousEngineerId;
     /**
      * 字段描述：危大工程
      */

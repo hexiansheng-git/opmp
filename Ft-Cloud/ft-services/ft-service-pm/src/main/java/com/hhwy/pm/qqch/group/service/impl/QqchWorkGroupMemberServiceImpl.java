@@ -147,6 +147,7 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
                 Long key = map.getKey();
                 String value = map.getValue();
                 QqchWorkGroupMember member = new QqchWorkGroupMember();
+                member.setId(IdWorker.createId());
                 member.setDirector(value);
                 member.setDirectorId(key);
 

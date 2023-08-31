@@ -27,4 +27,6 @@ public interface JdglMonthImagePlanMapper {
     int deleteJdglMonthImagePlan(JdglMonthImagePlan jdglMonthImagePlan);
 
     int deleteJdglMonthImagePlanByPks(@Param("jdglMonthImagePlanPkList") List<Long> jdglMonthImagePlanPkList);
+
+    List<JdglMonthImagePlan> getWbsListByYearAndMonth(String year, String month);
 }

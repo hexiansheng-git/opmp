@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.imported.material.mapper.SbchMaterialTranPlanMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan" id="SbchMaterialTranPlanResult">
+        <result property="id"    column="id"    />
+        <result property="formNo"    column="form_no"    />
+        <result property="titleName"    column="title_name"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUserName"    column="update_user_name"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="fileGroupId"    column="file_group_id"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="regionId"    column="region_id"    />
+        <result property="regionName"    column="region_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="prjCode" column="prj_code"></result>
+        <result property="valid" column="valid"></result>
+        <result property="version" column="version"></result>
+    </resultMap>
+
+    <sql id="selectSbchMaterialTranPlanVo">
+        select `id`, `version`,`valid`,`prj_code`,`form_no`, `title_name`, `create_user`, `create_time`, `create_user_name`, `update_user`, `update_time`, `update_user_name`, `del_user`, `del_time`, `del_flag`, `remark`, `file_group_id`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_material_tran_plan` material
+    </sql>
+
+    <select id="selectSbchMaterialTranPlanList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan" resultMap="SbchMaterialTranPlanResult">
+        <include refid="selectSbchMaterialTranPlanVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="formNo != null  and formNo != ''"> and `form_no` = #{formNo}</if>
+            <if test="titleName != null  and titleName != ''"> and `title_name` like concat('%', #{titleName}, '%')</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%', #{regionName}, '%')</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+            <if test="prjCode != null  and prjCode != ''"> and `prj_code` = #{prjCode}</if>
+        </where>
+        ${params.dataScope}
+        order by `id` desc
+    </select>
+    
+    <select id="selectSbchMaterialTranPlanById" parameterType="Long" resultMap="SbchMaterialTranPlanResult">
+        <include refid="selectSbchMaterialTranPlanVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSbchMaterialTranPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan">
+        insert into `sbch_material_tran_plan`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="formNo != null">`form_no`,</if>
+            <if test="titleName != null">`title_name`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="version != null">`version`,</if>
+            <if test="valid != null">`valid`,</if>
+            <if test="prjCode != null">`prj_code`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="formNo != null">#{formNo},</if>
+            <if test="titleName != null">#{titleName},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="version != null">#{version},</if>
+            <if test="valid != null">#{valid},</if>
+            <if test="prjCode != null">#{prjCode},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `sbch_material_tran_plan` (
+                                                `id`,
+                                                                `form_no`,
+                                                                `title_name`,
+                                                                `create_user`,
+                                                                `create_time`,
+                                                                `create_user_name`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `update_user_name`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                `del_flag`,
+                                                                `remark`,
+                                                                `file_group_id`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `dept_id`,
+        `version`,
+        `valid`,
+        `prj_code`,
+                                    )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+                                                #{item.id}
+                                                                #{item.formNo}
+                                                                #{item.titleName}
+                                                                #{item.createUser}
+                                                                #{item.createTime}
+                                                                #{item.createUserName}
+                                                                #{item.updateUser}
+                                                                #{item.updateTime}
+                                                                #{item.updateUserName}
+                                                                #{item.delUser}
+                                                                #{item.delTime}
+                                                                #{item.delFlag}
+                                                                #{item.remark}
+                                                                #{item.fileGroupId}
+                                                                #{item.ptVar1}
+                                                                #{item.ptVar2}
+                                                                #{item.ptVar3}
+                                                                #{item.projectId}
+                                                                #{item.projectName}
+                                                                #{item.regionId}
+                                                                #{item.regionName}
+                                                                #{item.deptId}
+            #{item.version}
+            #{item.valid}
+            #{item.prjCode}
+                                    </foreach>
+    </insert>
+
+
+
+    <update id="updateSbchMaterialTranPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.material.domain.SbchMaterialTranPlan">
+        update `sbch_material_tran_plan`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="formNo != null">`form_no` = #{formNo},</if>
+            <if test="titleName != null">`title_name` = #{titleName},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="version != null">`version` = #{version},</if>
+            <if test="valid != null">`valid` = #{valid},</if>
+            <if test="prjCode != null">`prj_code` = #{prjCode},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchMaterialTranPlanById" parameterType="Long">
+        update `sbch_material_tran_plan` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchMaterialTranPlanByIds" parameterType="String">
+        update `sbch_material_tran_plan` set del_flag = 1,del_user = #{delUser},del_time = #{delTime} where `id` in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+</mapper>

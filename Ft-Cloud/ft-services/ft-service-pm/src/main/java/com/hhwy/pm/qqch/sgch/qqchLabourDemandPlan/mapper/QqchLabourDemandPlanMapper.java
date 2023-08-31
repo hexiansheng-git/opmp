@@ -5,6 +5,7 @@ import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlan
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -34,4 +35,6 @@ public interface QqchLabourDemandPlanMapper {
     QqchLabourDemandPlan getQqchLabourDemandPlan1(QqchLabourDemandPlan qqchLabourDemandPlan);
 
     QqchLabourDemandPlan getQqchLabourDemandPlan2(QqchLabourDemandPlan qqchLabourDemandPlan);
+
+    Map<String, Integer> personNumCalc(QqchLabourDemandPlan qqchLabourDemandPlanParam);
 }

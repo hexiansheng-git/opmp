@@ -27,4 +27,6 @@ public interface JdglYearImagePlanMapper {
     int deleteJdglYearImagePlan(JdglYearImagePlan jdglYearImagePlan);
 
     int deleteJdglYearImagePlanByPks(@Param("jdglYearImagePlanPkList") List<Long> jdglYearImagePlanPkList);
+
+    List<JdglYearImagePlan> getWbsListByYear(String year);
 }

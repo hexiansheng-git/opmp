@@ -1,20 +1,21 @@
 package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
-import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect;
-import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisCorrectService;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisMapper;
-import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect;
+import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisMapper;
+import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisCorrectService;
+import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author 陈锦豪
@@ -47,7 +48,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     public List<JdglDiffAnalysis> getJdglDiffAnalysisList(JdglDiffAnalysis jdglDiffAnalysis) {
         List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisMapper.getJdglDiffAnalysisList(jdglDiffAnalysis);
         if(CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
-            return null;
+            return jdglDiffAnalysisList;
         }
         for (JdglDiffAnalysis jdglDiffAnalysis1 : jdglDiffAnalysisList) {
             // 修正表单数据
@@ -104,4 +105,32 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     public int deleteJdglDiffAnalysisByPks(List<Long> jdglDiffAnalysisPkList) {
         return jdglDiffAnalysisMapper.deleteJdglDiffAnalysisByPks(jdglDiffAnalysisPkList);
     }
+
+    /**
+     * 生成差异化数据
+     */
+    @Override
+    public void initDiffAnalysis() {
+        JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
+        Date nowDate = new Date();
+        jdglDiffAnalysis.setPeriod(nowDate);
+
+        //同步SV偏差分析
+        //获取本月计划
+
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

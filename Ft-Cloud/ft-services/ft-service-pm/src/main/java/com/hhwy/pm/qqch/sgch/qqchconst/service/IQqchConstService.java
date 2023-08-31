@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.sgch.qqchconst.service;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlanResult;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -33,5 +34,5 @@ public interface IQqchConstService {
 
     CompileEntity list(QqchConst qqchConst);
 
-    List<QqchConst> selectQqchConst(BigDecimal version);
+    List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version);
 }

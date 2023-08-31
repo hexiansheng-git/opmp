@@ -5,6 +5,7 @@ import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlan
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -38,4 +39,6 @@ public interface IQqchLabourDemandPlanService {
 
 
     QqchLabourDemandPlanVo sychData(QqchLabourDemandPlanVo vo);
+
+    Map<String, Integer> personNumCalc(QqchLabourDemandPlan qqchLabourDemandPlanParam);
 }

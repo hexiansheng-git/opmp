@@ -618,11 +618,14 @@
         </where>
     </update>
 
-    <select id="selectQqchConst"  resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst">
+    <select id="selectQqchConst"  resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlanResult">
         SELECT
             p.id,
             p.occupation_code  occupationCode,
             p.occupation_name  occupationName,
+            p.chinese_side_count chineseSideCount,
+            p.local_count localCount,
+            p.total_count totalCount,
             c.const_desc  constDesc
         FROM
             qqch_const as c

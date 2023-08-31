@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="name != null  and name != ''"> and `name` = #{name}</if>
                             <if test="exerciseType != null  and exerciseType != ''"> and `exercise_type` = #{exerciseType}</if>
                             <if test="content != null  and content != ''"> and `content` = #{content}</if>
-                            <if test="dangerousEngineerId != null "> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
+                            <if test="dangerousEngineerId != null  and dangerousEngineerId != ''"> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
                             <if test="dangerousEngineerName != null  and dangerousEngineerName != ''"> and `dangerous_engineer_name` = #{dangerousEngineerName}</if>
                             <if test="ydate != null "> and `ydate` = #{ydate}</if>
                             <if test="address != null  and address != ''"> and `address` = #{address}</if>
@@ -142,7 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="name != null  and name != ''"> and `name` = #{name}</if>
                             <if test="exerciseType != null  and exerciseType != ''"> and `exercise_type` = #{exerciseType}</if>
                             <if test="content != null  and content != ''"> and `content` = #{content}</if>
-                            <if test="dangerousEngineerId != null "> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
+                            <if test="dangerousEngineerId != null  and dangerousEngineerId != ''"> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
                             <if test="dangerousEngineerName != null  and dangerousEngineerName != ''"> and `dangerous_engineer_name` = #{dangerousEngineerName}</if>
                             <if test="ydate != null "> and `ydate` = #{ydate}</if>
                             <if test="address != null  and address != ''"> and `address` = #{address}</if>
@@ -187,7 +187,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="name != null  and name != ''">`name`,</if>
                             <if test="exerciseType != null  and exerciseType != ''">`exercise_type`,</if>
                             <if test="content != null  and content != ''">`content`,</if>
-                            <if test="dangerousEngineerId != null ">`dangerous_engineer_id`,</if>
+                            <if test="dangerousEngineerId != null  and dangerousEngineerId != ''">`dangerous_engineer_id`,</if>
                             <if test="dangerousEngineerName != null  and dangerousEngineerName != ''">`dangerous_engineer_name`,</if>
                             <if test="ydate != null ">`ydate`,</if>
                             <if test="address != null  and address != ''">`address`,</if>
@@ -227,7 +227,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="name != null  and name != ''">#{name},</if>
                             <if test="exerciseType != null  and exerciseType != ''">#{exerciseType},</if>
                             <if test="content != null  and content != ''">#{content},</if>
-                            <if test="dangerousEngineerId != null ">#{dangerousEngineerId},</if>
+                            <if test="dangerousEngineerId != null  and dangerousEngineerId != ''">#{dangerousEngineerId},</if>
                             <if test="dangerousEngineerName != null  and dangerousEngineerName != ''">#{dangerousEngineerName},</if>
                             <if test="ydate != null ">#{ydate},</if>
                             <if test="address != null  and address != ''">#{address},</if>
@@ -357,7 +357,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                             <if test="name != null  and  name != ''">`name` = #{name},</if>
                             <if test="exerciseType != null  and  exerciseType != ''">`exercise_type` = #{exerciseType},</if>
                             <if test="content != null  and  content != ''">`content` = #{content},</if>
-                            <if test="dangerousEngineerId != null ">`dangerous_engineer_id` = #{dangerousEngineerId},</if>
+                            <if test="dangerousEngineerId != null  and dangerousEngineerId != ''">`dangerous_engineer_id` = #{dangerousEngineerId},</if>
                             <if test="dangerousEngineerName != null  and  dangerousEngineerName != ''">`dangerous_engineer_name` = #{dangerousEngineerName},</if>
                             <if test="ydate != null ">`ydate` = #{ydate},</if>
                             <if test="address != null  and  address != ''">`address` = #{address},</if>
@@ -604,7 +604,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                     <if test="name != null  and name != ''"> and `name` = #{name}</if>
                                     <if test="exerciseType != null  and exerciseType != ''"> and `exercise_type` = #{exerciseType}</if>
                                     <if test="content != null  and content != ''"> and `content` = #{content}</if>
-                                    <if test="dangerousEngineerId != null "> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
+                                    <if test="dangerousEngineerId != null  and dangerousEngineerId != ''"> and `dangerous_engineer_id` = #{dangerousEngineerId}</if>
                                     <if test="dangerousEngineerName != null  and dangerousEngineerName != ''"> and `dangerous_engineer_name` = #{dangerousEngineerName}</if>
                                     <if test="ydate != null "> and `ydate` = #{ydate}</if>
                                     <if test="address != null  and address != ''"> and `address` = #{address}</if>
