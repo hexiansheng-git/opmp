@@ -244,7 +244,7 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
                 QqchCostControlPostDuty::setChildren);
 
         //入库
-        this.insertQqchCostControlPostDutyList(tileList,qqchCostControlPostDutyVo.getVersion());
+        this.disposeData(tileList,qqchCostControlPostDutyVo.getVersion());
     }
 
     /**
