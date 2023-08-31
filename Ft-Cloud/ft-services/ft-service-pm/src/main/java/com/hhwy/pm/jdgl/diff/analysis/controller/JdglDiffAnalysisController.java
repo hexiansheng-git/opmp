@@ -53,7 +53,7 @@ public class JdglDiffAnalysisController extends BaseController {
      * @return
      */
     @PostMapping("/gmList")
-    public AjaxResult gmList(DiffAnalysisQueryVo queryVo) {
+    public AjaxResult gmList(@RequestBody DiffAnalysisQueryVo queryVo) {
         List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisService.gmList(queryVo);
         return AjaxResult.success(jdglDiffAnalysisList);
     }
