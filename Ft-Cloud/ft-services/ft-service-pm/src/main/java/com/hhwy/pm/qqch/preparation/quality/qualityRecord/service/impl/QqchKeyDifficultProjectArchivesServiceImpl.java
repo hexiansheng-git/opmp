@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -120,6 +122,11 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
         qqchKeyDifficultProjectArchives.setVersion(version);
         List<QqchKeyDifficultProjectArchives> qqchKeyDifficultProjectArchivesList = qqchKeyDifficultProjectArchivesMapper.getQqchKeyDifficultProjectArchivesList(qqchKeyDifficultProjectArchives);
 
+        Date nowDate = DateUtils.getNowDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(nowDate);
+        calendar.add(Calendar.DATE,5);
+        Date after5Date = calendar.getTime();
         List<KeyDifficultWbs> keyDifficultWbsList = new ArrayList<>();
         for (XmslWbs xmslWbs : keyDifficultProjectInventoryWbsList) {
             KeyDifficultWbs keyDifficultWbs = new KeyDifficultWbs();
@@ -128,6 +135,9 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
             keyDifficultWbs.setPid(Long.valueOf(xmslWbs.getParentId()));
             keyDifficultWbs.setWbsCode(xmslWbs.getCode());
             keyDifficultWbs.setWbsName(xmslWbs.getName());
+
+            keyDifficultWbs.setCompleteTime(nowDate);
+            keyDifficultWbs.setDataCompleteTime(after5Date);
 
             List<QqchKeyDifficultProjectArchives> sublist = new ArrayList<>();
             for (QqchKeyDifficultProjectArchives keyDifficultProjectArchives : qqchKeyDifficultProjectArchivesList) {
