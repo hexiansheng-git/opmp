@@ -77,7 +77,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      *  列表右上角统计信息
      *  劳动力总需人数： 154   中方人数： 35  外方人数 67  外方人员比例： 10%
      */
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping("/personTypeStatistics")
     public AjaxResult personTypeStatistics(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam){
         Map<String, Integer> result =  qqchLabourDemandPlanService.personNumCalc(qqchLabourDemandPlanParam);

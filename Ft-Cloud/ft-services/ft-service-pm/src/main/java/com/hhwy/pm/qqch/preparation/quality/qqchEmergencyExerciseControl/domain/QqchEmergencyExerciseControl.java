@@ -91,7 +91,7 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "演练时间", dateFormat = "yyyy-MM-dd")
-    private Date ydate;
+    private String ydate;
     /**
      * 字段描述：演练地点
      */
