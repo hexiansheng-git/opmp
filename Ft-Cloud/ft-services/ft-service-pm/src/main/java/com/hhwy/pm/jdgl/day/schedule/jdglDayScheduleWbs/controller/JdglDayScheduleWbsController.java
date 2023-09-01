@@ -51,7 +51,7 @@ public class JdglDayScheduleWbsController extends BaseController {
     @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
     @GetMapping("/list")
     public AjaxResult getJdglDayScheduleWbsList(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
-        startPage();
+//        startPage();
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbsParam);
         return getDataTableAjaxResult(jdglDayScheduleWbsList);
     }
@@ -59,7 +59,7 @@ public class JdglDayScheduleWbsController extends BaseController {
     @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
     @GetMapping("/lazyList")
     public AjaxResult getJdglDayScheduleWbsLazyList(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
-        startPage();
+//        startPage();
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbsParam);
         return getDataTableAjaxResult(jdglDayScheduleWbsList);
     }
@@ -124,5 +124,14 @@ public class JdglDayScheduleWbsController extends BaseController {
     @PostMapping("/getInitWbsByList")
     public AjaxResult getInitWbsByList(@RequestBody List<JdglDayScheduleWbs> jdglDayScheduleWbsListParam, @RequestParam("date") Date date) {
         return AjaxResult.success(iJdglDayScheduleBillService.getInitBill(jdglDayScheduleWbsListParam, date));
+    }
+
+    /**
+     * 获取wbs及图纸复核数据并过滤当前日报的wbs
+     * @return
+     */
+    @PostMapping("/getAllWbs4NoThis")
+    public AjaxResult getAllWbs4NoThis(Long datScheduleId) {
+        return AjaxResult.success(iJdglDayScheduleBillService.getAllWbs4NoThis(datScheduleId));
     }
 }

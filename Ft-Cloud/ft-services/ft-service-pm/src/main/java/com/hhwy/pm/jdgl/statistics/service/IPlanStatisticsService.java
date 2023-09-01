@@ -1,7 +1,6 @@
 package com.hhwy.pm.jdgl.statistics.service;
 
-import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsQueryVO;
-import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsWbsValueVO;
+import com.hhwy.pm.jdgl.statistics.domain.*;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -11,8 +10,16 @@ import java.util.Map;
 
 public interface IPlanStatisticsService {
 
-    Map<String, Map<String, BigDecimal>> getValueCompData(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException;
+    Map<String, Map<String, BigDecimal>> getValueCompData(PlanStatisticsQueryVO iPlanStatisticsQueryVO) ;
 
-    List<PlanStatisticsWbsValueVO> getWbsValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException;
+    List<PlanStatisticsWbsValueVO> getWbsValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) ;
+
+    List<PlanStatisticsBillValueVO> getBillValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+
+    List<PlanStatisticsWbsImageVO> getImageWbsList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+
+    Map<String, List<PlanStatisticsPeriodValueVO>> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+
+
 
 }

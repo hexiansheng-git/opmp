@@ -38,8 +38,14 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         if(jdglDaySchedule1 != null) {
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
             jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
-            // 懒加载
-            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
+            Long userId = SecurityUtils.getUserId();
+            String userName = SecurityUtils.getUserName();
+            jdglDayScheduleWbs.setEditerId(userId+"");
+            jdglDayScheduleWbs.setEditer(userName);
+//             懒加载
+//            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
+            // 获取wbs列表中的wbs数据
+            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
             jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
         }
         return jdglDaySchedule1;
@@ -47,15 +53,15 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
     public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleMapper.getJdglDayScheduleList(jdglDaySchedule);
-        if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
-            for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
-                JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
-                jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
-                // 懒加载
-                List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
-                jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
-            }
-        }
+//        if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
+//            for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
+//                JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
+//                jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
+//                // 懒加载
+//                List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
+//                jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
+//            }
+//        }
         return jdglDayScheduleList;
     }
 

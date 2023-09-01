@@ -50,8 +50,8 @@ public class JdglDayScheduleController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "jdglDaySchedule:list")
-    @GetMapping("/getListByDateRange")
-    public AjaxResult getListByDateRange(Date startDate, Date endDate) {
+    @PostMapping("/getListByDateRange")
+    public AjaxResult getListByDateRange( Date startDate, Date endDate) {
         List<JdglDaySchedule> listByDateRange = jdglDayScheduleService.getListByDateRange(startDate, endDate);
         return AjaxResult.success(listByDateRange);
     }
@@ -65,8 +65,8 @@ public class JdglDayScheduleController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "jdglDaySchedule:list")
-    @GetMapping("/listByDateRange")
-    public AjaxResult getJdglDaySchedulelistByDateRange(Date startDate, Date endDate) {
+    @PostMapping("/listByDateRange")
+    public AjaxResult getJdglDaySchedulelistByDateRange(Date startDate,Date endDate) {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleService.getListByDateRange(startDate, endDate);
         return getDataTableAjaxResult(jdglDayScheduleList);
     }
