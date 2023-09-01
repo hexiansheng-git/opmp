@@ -49,4 +49,7 @@ public interface SystemServiceApi {
 
     @PostMapping("/currency/info/selectList")
     List<CurrencyInfo> selectCurrencyList(CurrencyInfo where);
+
+    @GetMapping("/country/info/selectCountryInfoByNames")
+    AjaxResult selectCountryInfoByNames(@RequestParam("name") String name);;
 }

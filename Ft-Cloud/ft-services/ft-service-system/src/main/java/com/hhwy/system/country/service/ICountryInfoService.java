@@ -61,6 +61,8 @@ public interface ICountryInfoService {
      */
     int deleteCountryInfoById(Long id);
 
+    List<CountryInfo> selectCountryInfoByNames(String name);
+
 //    /**
 //     * 国家下的项目（级联）
 //     *

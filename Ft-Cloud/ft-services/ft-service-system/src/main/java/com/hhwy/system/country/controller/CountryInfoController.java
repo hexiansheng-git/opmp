@@ -227,4 +227,10 @@ public class CountryInfoController extends BaseController {
         List<CountryInfo> list = countryInfoService.selectCountryInfoList(countryInfo);
         return AjaxResult.success(list);
     }
+
+    @GetMapping("/selectCountryInfoByNames")
+    public AjaxResult selectCountryInfoByNames(@RequestParam("name") String name){
+        List<CountryInfo> countryInfo = countryInfoService.selectCountryInfoByNames(name);
+        return AjaxResult.success(countryInfo);
+    }
 }

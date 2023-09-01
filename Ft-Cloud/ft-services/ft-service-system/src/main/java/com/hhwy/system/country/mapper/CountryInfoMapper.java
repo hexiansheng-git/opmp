@@ -66,4 +66,6 @@ public interface CountryInfoMapper {
      * @return 结果
      */
     int deleteCountryInfoByIds(String[] ids);
+
+    List<CountryInfo> selectCountryInfoByNames(String name);
 }
