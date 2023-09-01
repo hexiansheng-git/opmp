@@ -98,7 +98,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
      * @return
      */
     @Override
-    public Map<String, Map<String, BigDecimal>> getValueCompData(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException {
+    public Map<String, Map<String, BigDecimal>> getValueCompData(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
 
         // 自动化补充参数
         StatisticsUtils.initDateParams(iPlanStatisticsQueryVO);
@@ -160,7 +160,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         BigDecimal contractAmt = new BigDecimal(0);
 
         //查询开累计划产值(有效合同额)
-        XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
         if(xmslContractInfo != null) {
             contractAmt = xmslContractInfo.getEffectiveAmout();
         }
@@ -228,7 +228,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
      * @return
      */
     @Override
-    public List<PlanStatisticsWbsValueVO> getWbsValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException {
+    public List<PlanStatisticsWbsValueVO> getWbsValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
 
         StatisticsUtils.initDateParams(iPlanStatisticsQueryVO);
 
@@ -332,7 +332,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
      * @param iPlanStatisticsQueryVO
      * @return
      */
-    public List<PlanStatisticsBillValueVO> getBillValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException {
+    public List<PlanStatisticsBillValueVO> getBillValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
 
         StatisticsUtils.initDateParams(iPlanStatisticsQueryVO);
 
@@ -477,7 +477,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
      * @param iPlanStatisticsQueryVO
      * @return
      */
-    public List<PlanStatisticsWbsImageVO> getImageWbsList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException {
+    public List<PlanStatisticsWbsImageVO> getImageWbsList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
 
         StatisticsUtils.initDateParams(iPlanStatisticsQueryVO);
 
@@ -520,7 +520,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
      * @param iPlanStatisticsQueryVO
      * @return
      */
-    public Map<String, List<PlanStatisticsPeriodValueVO>> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws ParseException {
+    public Map<String, List<PlanStatisticsPeriodValueVO>> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
 
         Map<String, List<PlanStatisticsPeriodValueVO>> returnMapList = new HashMap<>();
 
@@ -535,7 +535,12 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         Date endDate = iPlanStatisticsQueryVO.getEndDate();
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = sdf.parse((Integer.valueOf(year)-1)+"-12"+"-21");
+        Date date = null;
+        try {
+            date = sdf.parse((Integer.valueOf(year)-1)+"-12"+"-21");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         List<JdglDaySchedule> listByDateRange = iJdglDayScheduleService.getListByDateRange(date, endDate);
         List<JdglDaySchedule> listByDateRangeByEnd = iJdglDayScheduleService.getListByDateRange(null, endDate);
@@ -550,13 +555,15 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
                 for(int i = 1; i <= 4; i++) {
                     PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO = new PlanStatisticsPeriodValueVO();
-                    String period = 1+"";
+                    String period = i+"";
                     planStatisticsPeriodValueVO.setPeriod(period);
                     if(!CollectionUtils.isEmpty(jdglQuarterPlanList)) {
                         List<JdglQuarterPlan> collect = jdglQuarterPlanList.stream().filter(vo -> period.equals(vo.getQuarter()) && year.equals(vo.getYear())).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglQuarterPlan jdglQuarterPlan1 : collect) {
-                                planStatisticsPeriodValueVO.setPlanValue(jdglQuarterPlan1.getThisPlanValueDl().add(planStatisticsPeriodValueVO.getPlanValue()));
+                                if(jdglQuarterPlan1.getThisPlanValueDl() != null && planStatisticsPeriodValueVO.getPlanValue() != null) {
+                                    planStatisticsPeriodValueVO.setPlanValue(jdglQuarterPlan1.getThisPlanValueDl().add(planStatisticsPeriodValueVO.getPlanValue()));
+                                }
                             }
                         }
                     }
@@ -570,7 +577,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         ).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglDaySchedule jdglDaySchedule : collect) {
-                                planStatisticsPeriodValueVO.setCompValue(jdglDaySchedule.getDayValueDl().add(planStatisticsPeriodValueVO.getCompValue()));
+                                if(jdglDaySchedule.getDayValueDl() != null && planStatisticsPeriodValueVO.getCompValue()!= null) {
+                                    planStatisticsPeriodValueVO.setCompValue(jdglDaySchedule.getDayValueDl().add(planStatisticsPeriodValueVO.getCompValue()));
+                                }
+
                             }
                         }
                     }
@@ -598,15 +608,25 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     // 获取年实际产值数据
                     for (PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO: yearList) {
 
-                        Date start = sdf.parse((Integer.parseInt(year) - 1) + "-12-21");
-                        Date end = sdf.parse(year + "-12-20");
+                        Date start = null;
+                        Date end = null;
+                        try {
+                            start = sdf.parse((Integer.parseInt(year) - 1) + "-12-21");
+                            end = sdf.parse(year + "-12-20");
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         if(!CollectionUtils.isEmpty(listByDateRangeByEnd)) {
+                            Date finalStart = start;
+                            Date finalEnd = end;
                             List<JdglDaySchedule> collect = listByDateRangeByEnd.stream().filter(vo ->
-                                    start.before(vo.getDate()) && end.after(vo.getDate())
+                                    finalStart.before(vo.getDate()) && finalEnd.after(vo.getDate())
                             ).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (JdglDaySchedule jdglDaySchedule : collect) {
-                                    planStatisticsPeriodValueVO.setCompValue(jdglDaySchedule.getDayValueDl().add(planStatisticsPeriodValueVO.getCompValue()));
+                                    if(jdglDaySchedule.getDayValueDl() != null && planStatisticsPeriodValueVO.getCompValue() != null) {
+                                        planStatisticsPeriodValueVO.setCompValue(jdglDaySchedule.getDayValueDl().add(planStatisticsPeriodValueVO.getCompValue()));
+                                    }
                                 }
                             }
                         }

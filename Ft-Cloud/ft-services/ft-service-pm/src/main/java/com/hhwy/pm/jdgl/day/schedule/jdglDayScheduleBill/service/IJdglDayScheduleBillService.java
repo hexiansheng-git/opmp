@@ -36,4 +36,10 @@ public interface IJdglDayScheduleBillService {
     List<JdglDayScheduleWbs> getInitBill(List<JdglDayScheduleWbs> jdglDayScheduleWbsList, Date date);
 
     void deleteJdglDayScheduleBillByDayScheduleId(Long dayScheduleId);
+
+    /**
+     * 获取wbs及图纸复核数据并过滤当前日报的wbs
+     * @return
+     */
+    List<JdglDayScheduleWbs> getAllWbs4NoThis(Long datScheduleId);
 }

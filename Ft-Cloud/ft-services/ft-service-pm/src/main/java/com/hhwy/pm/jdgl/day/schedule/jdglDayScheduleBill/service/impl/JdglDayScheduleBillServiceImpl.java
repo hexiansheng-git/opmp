@@ -195,4 +195,25 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
     public void deleteJdglDayScheduleBillByDayScheduleId(Long dayScheduleId) {
         jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleId(dayScheduleId);
     }
+
+    /**
+     * 获取wbs及图纸复核数据并过滤当前日报的wbs
+     * @return
+     */
+    @Override
+    public List<JdglDayScheduleWbs> getAllWbs4NoThis(Long datScheduleId) {
+
+        List<JdglDayScheduleWbs> returnList = new ArrayList<>();
+
+        // 获取wbs数据
+
+
+        // 获取图纸复核清单数据
+
+        // 获取当前日填报wbs数据
+
+        //
+
+        return returnList;
+    }
 }
