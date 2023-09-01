@@ -17,11 +17,13 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.bouncycastle.jcajce.provider.util.SecretKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +60,8 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             qryParam.setWbsCode(paramVo.getWbsCode());
             List<QqchConstructionList> list = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
             vo.setList(list);
+        }else{
+            vo.setList(new ArrayList<>(2));
         }
         vo.setStageIdentity(qqchReviewService.getStage());
         return vo;
@@ -77,7 +81,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
                     // 方案编号 = 项目编码 + 三位流水号
                     String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
                     String newCode = code.replace(CodeEnum.QQCH_CONSTRUCTION_LIST.prefix(), "");
-                    qqchConstructionList.setSchemeCode(qqchConstructionListVo.getProjectCode() + newCode);
+                    qqchConstructionList.setSchemeCode(SecurityUtils.getSysUser().getTenantKey() + newCode);
                 }
                 qqchConstructionList.setId(IdWorker.createId());
                 qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));

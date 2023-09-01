@@ -1,6 +1,7 @@
 package com.hhwy.pm.gm.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.pm.gm.service.IGmThirdService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
@@ -29,6 +30,17 @@ public class GmThirdController {
     @Autowired
     private IGmThirdService gmThirdService;
 
+    /**
+     * 前期策划工作计划功能
+     * @param map  {planApprovalUnit,valid,pageNum,pageSize}
+     * @return
+     */
+    @PostMapping("/workPlanList")
+    public AjaxResult workPlanList(@RequestBody Map map) {
+        TableDataInfo tableDataInfo = gmThirdService.workPlanList(map);
+        return AjaxResult.success(tableDataInfo);
+    }
+    
     /**
      * 前期策划评审功能
      * @param map {planStage,tenantKeys}

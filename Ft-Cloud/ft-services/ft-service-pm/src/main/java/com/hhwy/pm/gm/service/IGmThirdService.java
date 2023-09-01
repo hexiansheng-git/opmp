@@ -1,7 +1,9 @@
 package com.hhwy.pm.gm.service;
 
+import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.review.domain.Review;
 
 import java.util.List;
@@ -18,6 +20,13 @@ import java.util.Map;
  */
 public interface IGmThirdService {
 
+    /**
+     * 前期策划工作计划
+     * @param map {}
+     * @return
+     */
+    TableDataInfo workPlanList(Map map);
+    
     /**
      * 前期策划评审
      * @param map {planStage,tenantKeys}

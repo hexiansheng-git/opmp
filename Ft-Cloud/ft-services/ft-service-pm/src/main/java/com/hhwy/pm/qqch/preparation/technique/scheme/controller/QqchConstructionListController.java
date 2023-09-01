@@ -60,9 +60,8 @@ public class QqchConstructionListController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchConstructionListVo qqchConstructionListParamVo)
-        throws IOException {
-        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService
-            .getQqchConstructionListList(qqchConstructionListParamVo);
+            throws IOException {
+        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList(qqchConstructionListParamVo);
         List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
         FtExcelUtil<QqchConstructionList> util = new FtExcelUtil<>(QqchConstructionList.class);
 

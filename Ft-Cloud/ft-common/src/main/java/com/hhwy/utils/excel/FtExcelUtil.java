@@ -167,6 +167,7 @@ public class FtExcelUtil<T> {
                 entity = entity == null ? (T) this.clazz.newInstance() : entity;
                 Field field = fieldsMap.get(integerFieldEntry.getKey());
                 Class<?> fieldType = field.getType();
+                FtExcel attr = field.getAnnotation(FtExcel.class);
                 // 对不同类型的属性进行处理
                 if (String.class == fieldType) {
                     String s = Convert.toStr(val);
@@ -198,11 +199,13 @@ public class FtExcelUtil<T> {
                     } else {
                         val = Convert.toLong(val);
                     }
+                }else if(StringUtils.isNotEmpty(attr.readConverterExp())){ //int类型的字段使用了readConvertExp直接进入else BUG修复 
+                    
                 } else {
                     val = Convert.toInt(val);
                 }
 
-                FtExcel attr = field.getAnnotation(FtExcel.class);
+                
                 String propertyName = field.getName();
                 if (StringUtils.isNotEmpty(attr.targetAttr())) {
                     propertyName = field.getName() + "." + attr.targetAttr();
