@@ -16,4 +16,6 @@ public interface SbchTotalDemandPlanDetailMapper {
     void deleteSbchTotalDemandPlanDetailByPlanId(@Param("planId") Long id, @Param("delUser") Long userId, @Param("delTime") Date date);
 
     void batchInsert(@Param("dataList") List<SbchTotalDemandPlanDetail> list);
+
+    List<SbchTotalDemandPlanDetail> selectSbchTotalDemandPlanDetailLeaderList(SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail);
 }

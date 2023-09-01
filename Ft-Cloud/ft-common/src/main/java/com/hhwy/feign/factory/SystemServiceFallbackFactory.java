@@ -54,6 +54,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             public List<CurrencyInfo> selectCurrencyList(CurrencyInfo where) {
                 return new ArrayList<>();
             }
+
+            @Override
+            public AjaxResult selectCountryInfoByNames(String name) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
         };
     }
 }
