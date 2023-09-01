@@ -2,8 +2,8 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.mapper.SbchEquipmentSpecialMapper">
-    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial" id="SbchEquipmentSpecialResult">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.mapper.SbchEquipmentSpecialPlanMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlan" id="SbchEquipmentSpecialPlanResult">
         <result property="id"    column="id"    />
         <result property="adjustCode"    column="adjust_code"    />
         <result property="title"    column="title"    />
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="version" column="version"></result>
     </resultMap>
 
-    <sql id="selectSbchEquipmentSpecialVo">
+    <sql id="selectSbchEquipmentSpecialPlanVo">
         select
             c.`id`,
             c.`adjust_code`,
@@ -56,12 +56,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.`pt_var1`,
             c.`pt_var2`,
             c.`pt_var3`,
-            c.`pt_var4`, c.`version`,c.`valid`,c.`prj_code`
-            from `sbch_equipment_special` c
+            c.`pt_var4`,
+            c.`version`,c.`valid`,c.`prj_code`
+            from `sbch_equipment_special_plan`c
     </sql>
 
-    <select id="selectSbchEquipmentSpecialList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial" resultMap="SbchEquipmentSpecialResult">
-        <include refid="selectSbchEquipmentSpecialVo"/>
+    <select id="selectSbchEquipmentSpecialPlanList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlan" resultMap="SbchEquipmentSpecialPlanResult">
+        <include refid="selectSbchEquipmentSpecialPlanVo"/>
         <where>
             c.`del_flag` = 0
             <if test="adjustCode != null  and adjustCode != ''"> and c.`adjust_code` = #{adjustCode}</if>
@@ -85,7 +86,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="version != null "> and `version` = #{version}</if>
             <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
             <if test="prjCode != null  and prjCode != ''"> and `prj_code` = #{prjCode}</if>
-
             <if test = "ids != null and ids.length>0">
                 and c.id in
                 <foreach collection="ids" item="id" separator="," open="(" close=")">
@@ -97,12 +97,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by c.`update_time` desc
     </select>
     
-    <select id="selectSbchEquipmentSpecialById" parameterType="Long" resultMap="SbchEquipmentSpecialResult">
-        <include refid="selectSbchEquipmentSpecialVo"/>
+    <select id="selectSbchEquipmentSpecialPlanById" parameterType="Long" resultMap="SbchEquipmentSpecialPlanResult">
+        <include refid="selectSbchEquipmentSpecialPlanVo"/>
         where c.`id` = #{id}
     </select>
-    <insert id="insertSbchEquipmentSpecial" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial">
-        insert into `sbch_equipment_special`
+    <insert id="insertSbchEquipmentSpecialPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlan">
+        insert into `sbch_equipment_special_plan`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
             <if test="adjustCode != null">`adjust_code`,</if>
@@ -162,7 +162,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <insert id="batchInsert" parameterType="list">
-        insert `sbch_equipment_special` (
+        insert `sbch_equipment_special_plan` (
                                                 `id`,
                                                                 `adjust_code`,
                                                                 `title`,
@@ -221,7 +221,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="batchUpdate" parameterType="list">
-        update `sbch_equipment_special`
+        update `sbch_equipment_special_plan`
         <trim prefix="set" suffixOverrides=",">
                                                                 <trim prefix="adjust_code =case" suffix="end,">
                         <foreach collection="dataList" item="item" index="index">
@@ -408,8 +408,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 
-    <update id="updateSbchEquipmentSpecial" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecial.domain.SbchEquipmentSpecial">
-        update `sbch_equipment_special`
+    <update id="updateSbchEquipmentSpecialPlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentspecialplan.domain.SbchEquipmentSpecialPlan">
+        update `sbch_equipment_special_plan`
         <trim prefix="SET" suffixOverrides=",">
             <if test="adjustCode != null">`adjust_code` = #{adjustCode},</if>
             <if test="title != null">`title` = #{title},</if>
@@ -440,12 +440,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where `id` = #{id}
     </update>
 
-    <update id="deleteSbchEquipmentSpecialById" parameterType="Long">
-        update `sbch_equipment_special` set del_flag = 1 where `id` = #{id}
+    <update id="deleteSbchEquipmentSpecialPlanById" parameterType="Long">
+        update `sbch_equipment_special_plan` set del_flag = 1 where `id` = #{id}
     </update>
 
-    <update id="deleteSbchEquipmentSpecialByIds" parameterType="String">
-        update `sbch_equipment_special` set del_flag = 1,del_user = #{delUser},del_time = NOW() where `id` in
+    <update id="deleteSbchEquipmentSpecialPlanByIds" parameterType="String">
+        update `sbch_equipment_special_plan` set del_flag = 1,del_user = #{delUser},del_time = NOW()  where `id` in
         <foreach item="id" collection="ids" open="(" separator="," close=")">
             #{id}
         </foreach>
