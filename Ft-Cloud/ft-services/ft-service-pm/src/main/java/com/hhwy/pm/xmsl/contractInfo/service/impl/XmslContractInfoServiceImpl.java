@@ -114,10 +114,11 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
-
-        //查询最大有效版本号，如果查不到，版本号赋默认值1.0
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
-        xmslContractInfoParam.setVersion(maxVersion);
+        if (xmslContractInfoParam.getId() == null){
+            //查询最大有效版本号，如果查不到，版本号赋默认值1.0
+            xmslContractInfoParam.setVersion(maxVersion);
+        }
         XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
 
         //如果为空,说明第一次进入，从项目信息中拉取项目数据
@@ -125,9 +126,15 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             getProjectInfo();
             xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
         }
-        //查询字表数据
+        //查询子表数据
         if(xmslContractInfo!=null){
             getSonTable(xmslContractInfo, maxVersion);
+        }
+        List<XmslContractInfo> historyList = this.getXmslContractInfoList(new XmslContractInfo());
+        if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1){
+            xmslContractInfo.setIsShowRecord(1);
+        }else {
+            xmslContractInfo.setIsShowRecord(0);
         }
         return xmslContractInfo;
     }
@@ -154,7 +161,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             version = version.add(new BigDecimal("1.0"));
             xmslContractInfo.setVersion(version);
             xmslContractInfo.setValid("0");
-
+            xmslContractInfo.setTaskStatus("");
             insertXmslContractInfo(xmslContractInfo);
             XmslContractInfo param = new XmslContractInfo();
             param.setVersion(version);

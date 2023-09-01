@@ -122,8 +122,8 @@ public class XmslContractInfoController extends BaseController {
      * @param id 主键
      * @return  监听器
      */
-    @PostMapping("/listener")
-    public AjaxResult listener(Long id) {
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    public AjaxResult updateContract(@RequestParam ("id") Long id) {
         XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
         xmslContractInfo1.setId(id);
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfo1);
