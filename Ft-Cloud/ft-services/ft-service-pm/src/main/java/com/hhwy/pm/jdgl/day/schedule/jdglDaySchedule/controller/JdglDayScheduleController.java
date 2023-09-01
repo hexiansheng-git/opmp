@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,26 +50,24 @@ public class JdglDayScheduleController extends BaseController {
         return AjaxResult.success(jdglDaySchedule);
     }
 
+    /**
+     * 总部版进度填报调用接口
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @PostMapping("/getListByDateRange")
-    public AjaxResult getListByDateRange( Date startDate, Date endDate) {
+    public AjaxResult getListByDateRange(@JsonFormat(pattern = "yyyy-MM-dd") Date startDate,@JsonFormat(pattern = "yyyy-MM-dd") Date endDate) {
         List<JdglDaySchedule> listByDateRange = jdglDayScheduleService.getListByDateRange(startDate, endDate);
         return AjaxResult.success(listByDateRange);
-    }
-
-    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
-    @GetMapping("/list")
-    public AjaxResult getJdglDayScheduleList(@Validated(ValidationGroups.Select.class) JdglDaySchedule jdglDayScheduleParam) {
-        startPage();
-        List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleService.getJdglDayScheduleList(jdglDayScheduleParam);
-        return getDataTableAjaxResult(jdglDayScheduleList);
     }
 
     @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @PostMapping("/listByDateRange")
     public AjaxResult getJdglDaySchedulelistByDateRange(Date startDate,Date endDate) {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleService.getListByDateRange(startDate, endDate);
-        return getDataTableAjaxResult(jdglDayScheduleList);
+        return AjaxResult.success(jdglDayScheduleList);
     }
 
     @PreAuthorize(hasPermi = "jdglDaySchedule:add")

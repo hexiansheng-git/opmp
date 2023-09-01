@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.material.MaterialInfo;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -18,18 +20,17 @@ import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myUtilPrepare.MyUtilPrepareUtil;
+import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -48,6 +49,10 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private GenCodeService genCodeService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
+    private SetMaterialNameUtils setMaterialNameUtils;
 
     @Override
     public SbchTotalDemandPlan getList(BigDecimal version) {
@@ -63,8 +68,17 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
             SbchTotalDemandPlanDetail detailVo = new SbchTotalDemandPlanDetail();
             detailVo.setPlanId(sbchTotalDemandPlan1.getId());
             List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(detailVo);
+
             ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
             if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)){
+                Map<String, String> busAndMaterialMap = new HashMap<>();
+                busAndMaterialMap.put("materialName", "materialName");
+                busAndMaterialMap.put("materialSpec", "materialSpec");
+                sbchTotalDemandPlanDetails = setMaterialNameUtils.setMaterialInfo(sbchTotalDemandPlanDetails, "materialCode", busAndMaterialMap);
+                Map<String, String> busAndCategoryMap = new HashMap<>();
+                busAndCategoryMap.put("ptVar1", "categoryName");
+                sbchTotalDemandPlanDetails = setMaterialNameUtils.setCategoryInfo(sbchTotalDemandPlanDetails, "materialType", busAndCategoryMap);
+
                 //根据设备编码分组  数量汇总展示
                 Map<String, List<SbchTotalDemandPlanDetail>> plamDetailMap = sbchTotalDemandPlanDetails.stream().collect(Collectors.groupingBy(t -> t.getMaterialCode()));
                 for (String materialCode : plamDetailMap.keySet()) {

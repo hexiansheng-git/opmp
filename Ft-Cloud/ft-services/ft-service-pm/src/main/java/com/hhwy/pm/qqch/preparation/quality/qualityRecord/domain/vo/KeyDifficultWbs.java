@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,6 +48,19 @@ public class KeyDifficultWbs {
      */
     @JsonProperty
     private String wbsName;
+
+    /**
+     * 字段描述：完工时间 根据WBS节点，自动代入总进度计划中该节点完工时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date completeTime;
+    /**
+     * 字段描述：资料完成时间 完工时间的后五天
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date dataCompleteTime;
 
     private List<KeyDifficultWbs> children;
 

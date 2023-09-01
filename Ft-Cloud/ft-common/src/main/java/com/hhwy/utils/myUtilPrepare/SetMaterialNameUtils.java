@@ -253,4 +253,113 @@ public class SetMaterialNameUtils {
         }
 
     }
+    /**
+     * 批量设置业务数据的分类信息
+     *
+     * @param tList                 业务数据
+     * @param categoryCodeFieldName 业务数据分类编码名称
+     * @param busAndCategoryMap     k:业务数据字段名称; v:信息字段名称
+     * @param <T>
+     * @return 封装有物资信息的业务数据
+     */
+    public <T> List<T> setCategoryInfo(List<T> tList, String categoryCodeFieldName, Map<String, String> busAndCategoryMap) {
+
+        try{
+            if (CollectionUtils.isEmpty(tList)) return tList;
+            T t = tList.get(0);
+            Class<?> aClass = t.getClass();
+            Field categoryCodeField = aClass.getDeclaredField(categoryCodeFieldName);
+            categoryCodeField.setAccessible(true);
+            List<Field> busFieldInfoList = new ArrayList<>(busAndCategoryMap.size());
+            for (String busFieldName : busAndCategoryMap.keySet()) {
+                Field busField;
+                try {
+                    busField = aClass.getDeclaredField(busFieldName);
+                } catch (Exception e) {
+                    log.error("获取字段异常", e);
+                    continue;
+                }
+                busField.setAccessible(true);
+                busFieldInfoList.add(busField);
+            }
+            // 分类编码
+            List categoryCodeList = null;
+            if (tList.size() > 1000) {
+                // 用多线程
+                categoryCodeList = this.mulThreadGetMaterialCodeList(tList, categoryCodeField);
+            } else {
+                // 单线程
+                categoryCodeList = this.getMaterialCodeList(tList, categoryCodeField);
+            }
+            List categoryListRedis = this.redisUtils.hMultiGet(PmsConstant.CATEGORYREDISKEY, categoryCodeList);
+            if (categoryListRedis.size() > 1000) {
+                // 用多线程
+                tList = this.mulThreadSetCategory(tList, categoryListRedis, categoryCodeField, busFieldInfoList, busAndCategoryMap);
+            } else {
+                // 单线程
+                tList = this.setCategory(tList, categoryListRedis, categoryCodeField, busFieldInfoList, busAndCategoryMap);
+            }
+        }catch (Exception e){
+            log.error("查询设备分类信息失败", e);
+        }
+        return tList;
+    }
+
+    private <T> List<T> mulThreadSetCategory(List<T> tList, List categoryListRedis, Field categoryCodeField, List<Field> busFieldInfoList, Map<String, String> busAndCategoryMap) {
+        CopyOnWriteArrayList<T> resList = new CopyOnWriteArrayList<>();
+        // 将原有集合每一百个分一组
+        List<List<T>> partition = ListUtils.partition(tList, 100);
+        CountDownLatch countDownLatch = new CountDownLatch(partition.size());
+        // 多线程
+        for (List<T> ts : partition) {
+            // 在这里使用默认的多线程
+            asyncExecutor.defaultAsyncExecute(() -> {
+                try {
+                    log.warn("start executeAsync");
+                    // 获取分类编码
+                    List<T> mtlList = this.setCategory(ts, categoryListRedis, categoryCodeField, busFieldInfoList, busAndCategoryMap);
+                    // 不为空才将数据加入
+                    if (CollectionUtils.isNotEmpty(mtlList)) resList.addAll(mtlList);
+                    log.warn("end executeAsync");
+                } catch (Exception e) {
+                    throw new RuntimeException("mulThreadSetCategory 异常");
+                } finally {
+                    // 很关键, 无论上面程序是否异常必须执行countDown,否则await无法释放
+                    countDownLatch.countDown();
+                }
+            });
+        }
+        try {
+            // 阻塞一下 保证之前的所有的线程都执行完成，才会走下面的；
+            countDownLatch.await();
+        } catch (Exception e) {
+            log.error("阻塞异常:" + e.getMessage());
+        }
+
+        return resList;
+    }
+
+    private <T> List<T> setCategory(List<T> tList, List categoryListRedis, Field categoryCodeField, List<Field> busFieldInfoList, Map<String, String> busAndCategoryMap) throws Exception {
+        List<JSONObject> categoryInfos = new ArrayList<>();
+        for (Object categoryRedis : categoryListRedis) {
+            String mtlStr = (String) categoryRedis;
+            JSONObject categoryInfo = JSONObject.parseObject(mtlStr);
+            categoryInfos.add(categoryInfo);
+        }
+        for (T t : tList) {
+            String categoryCode = (String) categoryCodeField.get(t);
+            categoryInfos.stream().filter(item->item != null && item.get("categoryCode") != null && item.get("categoryCode").equals(categoryCode))
+                    .findFirst()
+                    .ifPresent(materialInfo -> {
+                        for (String busFieldName : busAndCategoryMap.keySet()) {
+                            String categoryFieldName = busAndCategoryMap.get(busFieldName);
+                            busFieldInfoList.stream().filter(field -> field.getName().equals(busFieldName)).findFirst().ifPresent(fieldInfo -> {
+                                this.setFieldValue(t, fieldInfo, materialInfo.get(categoryFieldName));
+                            });
+                        }
+                    });
+        }
+        return tList;
+    }
+
 }

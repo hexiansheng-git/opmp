@@ -13,6 +13,7 @@ import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentT
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetails;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.dto.SbchEquipmentTeamDTO;
 import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.service.ISbchEquipmentTeamService;
+import com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.vo.ImportSbchEquipmentTeamDetailsDetails;
 import com.hhwy.utils.common.PmsConstant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -66,6 +67,37 @@ public class SbchEquipmentTeamController extends BaseController {
         }catch (CustomBusinessException e){
             e.printStackTrace();
             return AjaxResult.error(e.getMsg());
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 导入协作单位详情
+     * @param file
+     * @return
+     */
+    @PostMapping("/importUnitSb")
+    @ResponseBody
+    public AjaxResult importUnitSb(MultipartFile file){
+        try{
+            ExcelUtils<ImportSbchEquipmentTeamDetailsDetails> util = new ExcelUtils(ImportSbchEquipmentTeamDetailsDetails.class);
+            List<ImportSbchEquipmentTeamDetailsDetails> list = util.importExcel(file.getInputStream());
+            return AjaxResult.success(list);
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    @PostMapping("/importUnit")
+    @ResponseBody
+    public AjaxResult importUnit(MultipartFile file){
+        try{
+            ExcelUtils<SbchEquipmentTeamDetails> util = new ExcelUtils(SbchEquipmentTeamDetails.class);
+            List<SbchEquipmentTeamDetails> list = util.importExcel(file.getInputStream());
+            return AjaxResult.success(list);
         }catch (Exception e){
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());

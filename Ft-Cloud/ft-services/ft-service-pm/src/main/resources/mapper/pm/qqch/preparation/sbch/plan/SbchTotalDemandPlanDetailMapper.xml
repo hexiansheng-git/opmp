@@ -51,28 +51,25 @@
     <select id="selectSbchTotalDemandPlanDetailList"
             parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
             resultMap="SbchTotalDemandPlanDetailResult">
-        select detail.`id`, `plan_id`, detail.`material_type`,category.category_name pt_var1, detail.`material_code`,
-        info.`material_name`, info.`material_spec`,
+        select detail.`id`, `plan_id`, detail.`material_type`,detail.`material_code`,
         detail.`material_power`, `brand_ids`, `brand_names`, detail.`material_unit`, `total_num`, `allocate_num`,
         `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`,
         `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
         detail.`update_user`, detail.`update_user_name`, detail.`update_time`,
         detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var2`, detail.`pt_var3`,
-        detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
+        detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`,detail.material_type
         from `sbch_total_demand_plan_detail` detail
-        left join t_material_category category on category.category_code = detail.material_type
-        LEFT JOIN t_material_info info ON detail.material_code = info.material_code
         <where>
             detail.`del_flag` = 0
             <if test="planId != null ">and `plan_id` = #{planId}</if>
             <if test="materialType != null  and materialType != ''">and detail.`material_type` like concat('%',
                 #{materialType}, '%')
             </if>
-            <if test="materialCode != null  and materialCode != ''">and info.`material_code` like '${materialCode}%'
+            <if test="materialCode != null  and materialCode != ''">and detail.`material_code` like '${materialCode}%'
             </if>
-            <if test="materialName != null  and materialName != ''">and info.`material_name` like '${materialName}%'
+            <if test="materialName != null  and materialName != ''">and detail.`material_name` like '${materialName}%'
             </if>
-            <if test="materialSpec != null  and materialSpec != ''">and info.`material_spec` like '${materialSpec}%'
+            <if test="materialSpec != null  and materialSpec != ''">and detail.`material_spec` like '${materialSpec}%'
             </if>
             <if test="materialPower != null ">and detail.`material_power` = #{materialPower}</if>
             <if test="brandIds != null  and brandIds != ''">and `brand_ids` = #{brandIds}</if>
@@ -111,7 +108,6 @@
             </if>
             <if test="delUser != null ">and detail.`del_user` = #{delUser}</if>
             <if test="delTime != null ">and detail.`del_time` = #{delTime}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and category.category_name like concat('%', #{ptVar1}, '%')</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and detail.`pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and detail.`pt_var3` = #{ptVar3}</if>
             <if test="projectId != null ">and detail.`project_id` = #{projectId}</if>
@@ -623,8 +619,8 @@
     <select id="selectSbchTotalDemandPlanDetailLeaderList"
             parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
             resultMap="SbchTotalDemandPlanDetailResult">
-        select detail.`id`, `plan_id`, detail.`material_type`,category.category_name pt_var1, detail.`material_code`,
-        info.`material_name`, info.`material_spec`,
+        select detail.`id`, `plan_id`, detail.`material_type`, detail.`material_code`,
+        detail.`material_name`, detail.`material_spec`,
         detail.`material_power`, `brand_ids`, `brand_names`, detail.`material_unit`, `total_num`, `allocate_num`,
         `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`,
         `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
@@ -632,8 +628,6 @@
         detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var2`, detail.`pt_var3`,
         detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
         from `sbch_total_demand_plan_detail` detail
-        left join t_material_category category on category.category_code = detail.material_type
-        LEFT JOIN t_material_info info ON detail.material_code = info.material_code
         <where>
             detail.`del_flag` = 0
             and plan_id in
@@ -644,13 +638,13 @@
             <if test="materialType != null  and materialType != ''">and detail.`material_type` like concat('%',
                 #{materialType}, '%')
             </if>
-            <if test="materialCode != null  and materialCode != ''">and info.`material_code` like concat('%',
+            <if test="materialCode != null  and materialCode != ''">and detail.`material_code` like concat('%',
                 #{materialCode}, '%')
             </if>
-            <if test="materialName != null  and materialName != ''">and info.`material_name` like concat('%',
+            <if test="materialName != null  and materialName != ''">and detail.`material_name` like concat('%',
                 #{materialName}, '%')
             </if>
-            <if test="materialSpec != null  and materialSpec != ''">and info.`material_spec` like concat('%',
+            <if test="materialSpec != null  and materialSpec != ''">and detail.`material_spec` like concat('%',
                 #{materialSpec}, '%')
             </if>
             <if test="materialPower != null ">and detail.`material_power` = #{materialPower}</if>
@@ -693,7 +687,6 @@
             </if>
             <if test="delUser != null ">and detail.`del_user` = #{delUser}</if>
             <if test="delTime != null ">and detail.`del_time` = #{delTime}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and category.category_name like concat('%', #{ptVar1}, '%')</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and detail.`pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''">and detail.`pt_var3` = #{ptVar3}</if>
             <if test="projectId != null ">and detail.`project_id` = #{projectId}</if>

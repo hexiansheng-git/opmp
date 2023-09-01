@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -23,10 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -129,6 +127,10 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
 
         this.insertQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListList, version);
 
+        if (CollectionUtils.isEmpty(qqchFirstArticleEngineeringListList)) {
+            return;
+        }
+
         //处理确认状态是确认
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             //插入确认记录
@@ -167,14 +169,7 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
             //界面传入不为空，9.5.2数据为空，新增数据
             List<QqchFirstArticleEngineeringControl> objects = new ArrayList<>();
             firstArticleEngineeringList.forEach(param -> {
-                QqchFirstArticleEngineeringControl bean = new QqchFirstArticleEngineeringControl();
-                bean.setListId(param.getId());
-                bean.setName(param.getName());
-                bean.setWbsName(param.getWbsName());
-                bean.setPlanStartTime(param.getPlanStartTime());
-                bean.setWorkGroup(param.getWorkGroup());
-                bean.setFirstPersonId(param.getPersonId());
-                bean.setFirstPersonName(param.getPersonName());
+                QqchFirstArticleEngineeringControl bean = this.loadBean(param);
                 objects.add(bean);
             });
             firstArticleEngineService.insertList(objects, version, "save");
@@ -186,15 +181,8 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
             List<QqchFirstArticleEngineeringControl> objects = new ArrayList<>();
             List<QqchFirstArticleEngineeringControl> addObjects = new ArrayList<>();
             for (QqchFirstArticleEngineeringList param : firstArticleEngineeringList) {
+                QqchFirstArticleEngineeringControl bean = this.loadBean(param);
                 Long id = param.getId();
-                QqchFirstArticleEngineeringControl bean = new QqchFirstArticleEngineeringControl();
-                bean.setListId(id);
-                bean.setName(param.getName());
-                bean.setWbsName(param.getWbsName());
-                bean.setPlanStartTime(param.getPlanStartTime());
-                bean.setFirstPersonId(param.getPersonId());
-                bean.setWorkGroup(param.getWorkGroup());
-                bean.setFirstPersonName(param.getPersonName());
                 if (OriCollect.containsKey(id)) {
                     //执行修改
                     bean.setId(OriCollect.get(id));
@@ -227,20 +215,40 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         }
     }
 
+    private QqchFirstArticleEngineeringControl loadBean(QqchFirstArticleEngineeringList param) {
+        QqchFirstArticleEngineeringControl bean = new QqchFirstArticleEngineeringControl();
+        bean.setListId(param.getId());
+        bean.setName(param.getName());
+        bean.setWbsName(param.getWbsName());
+        Date planStartTime = param.getPlanStartTime();
+        bean.setPlanStartTime(planStartTime);
+        bean.setPersonTime(DateUtil.offsetDay(planStartTime, -10));
+        bean.setFinalizationTime(DateUtil.offsetMonth(planStartTime, -1));
+        bean.setDisclosureTime(DateUtil.offsetWeek(planStartTime, -2));
+        bean.setEquStartTime(DateUtil.offsetDay(planStartTime, -10));
+        bean.setMaterialStartTime(DateUtil.offsetDay(planStartTime, -10));
+        bean.setReleaseTime(planStartTime);
+        bean.setWorkGroup(param.getWorkGroup());
+        bean.setFirstPersonId(param.getPersonId());
+        bean.setFirstPersonName(param.getPersonName());
+        return bean;
+    }
+
     @Transactional
     public void insertQqchFirstArticleEngineeringListList(List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListList,BigDecimal version) {
-        //删除旧数据
-//        QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList = new QqchFirstArticleEngineeringList();
-//        qqchFirstArticleEngineeringList.setVersion(version);
-//        qqchFirstArticleEngineeringListMapper.deleteQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringList);
 
         QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList = new QqchFirstArticleEngineeringList();
         qqchFirstArticleEngineeringList.setVersion(version);
         List<QqchFirstArticleEngineeringList> oriList = qqchFirstArticleEngineeringListMapper.getQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringList);
 
         if (CollectionUtils.isEmpty(qqchFirstArticleEngineeringListList)) {
+            //删除旧数据
+            QqchFirstArticleEngineeringList param = new QqchFirstArticleEngineeringList();
+            param.setVersion(version);
+            qqchFirstArticleEngineeringListMapper.deleteQqchFirstArticleEngineeringList(param);
             return;
         }
+
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;

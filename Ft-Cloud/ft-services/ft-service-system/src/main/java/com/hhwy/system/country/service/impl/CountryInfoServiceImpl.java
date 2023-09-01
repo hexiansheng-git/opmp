@@ -130,7 +130,12 @@ public class CountryInfoServiceImpl implements ICountryInfoService {
         return countryInfoMapper.deleteCountryInfoById(id);
     }
 
-   /* *//**
+    @Override
+    public List<CountryInfo> selectCountryInfoByNames(String name) {
+        return countryInfoMapper.selectCountryInfoByNames(name);
+    }
+
+    /* *//**
      * 国家下的项目（级联）
      *
      * @param countryInfo

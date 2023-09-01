@@ -1,0 +1,441 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.preparation.sbch.single.mapper.SbchSingleCheckDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.single.domain.SbchSingleCheckDetail" id="SbchSingleCheckDetailResult">
+        <result property="id"    column="id"    />
+        <result property="infoId"    column="info_id"    />
+        <result property="workContent"    column="work_content"    />
+        <result property="middleDept"    column="middle_dept"    />
+        <result property="mainDept"    column="main_dept"    />
+        <result property="dataGetTime"    column="data_get_time"    />
+        <result property="useWay"    column="use_way"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateUserName"    column="update_user_name"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="contentRemark"    column="content_remark"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="regionId"    column="region_id"    />
+        <result property="regionName"    column="region_name"    />
+        <result property="deptId"    column="dept_id"    />
+    </resultMap>
+
+    <sql id="selectSbchSingleCheckDetailVo">
+        select `id`, `info_id`, `work_content`, `middle_dept`, `main_dept`, `data_get_time`, `use_way`, `create_user`, `create_time`, `create_user_name`, `update_user`, `update_time`, `update_user_name`, `del_user`, `del_time`, `del_flag`, `content_remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_single_check_detail`
+    </sql>
+
+    <select id="selectSbchSingleCheckDetailList" parameterType="com.hhwy.pm.qqch.preparation.sbch.single.domain.SbchSingleCheckDetail" resultMap="SbchSingleCheckDetailResult">
+        <include refid="selectSbchSingleCheckDetailVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="infoId != null "> and `info_id` = #{infoId}</if>
+            <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
+            <if test="middleDept != null  and middleDept != ''"> and `middle_dept` = #{middleDept}</if>
+            <if test="mainDept != null  and mainDept != ''"> and `main_dept` = #{mainDept}</if>
+            <if test="dataGetTime != null  and dataGetTime != ''"> and `data_get_time` = #{dataGetTime}</if>
+            <if test="useWay != null  and useWay != ''"> and `use_way` = #{useWay}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%', #{regionName}, '%')</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+        </where>
+        order by `id` desc
+    </select>
+
+    <select id="validList" parameterType="com.hhwy.pm.qqch.preparation.sbch.single.domain.SbchSingleCheckDetail" resultMap="SbchSingleCheckDetailResult">
+        select detail.`id`, detail.`info_id`, detail.`work_content`, detail.`middle_dept`, detail.`main_dept`, detail.`data_get_time`,
+        detail.`use_way`, detail.`create_user`, detail.`create_time`, detail.`create_user_name`, detail.`update_user`, detail.`update_time`,
+         detail.`update_user_name`, detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`content_remark`, detail.`pt_var1`,
+         detail.`pt_var2`, detail.`pt_var3`, detail.`project_id`, detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
+         from `sbch_single_check_detail` detail
+        <where>
+            detail.`del_flag` = 0
+            and detail.info_id in(
+            select id from sbch_single_check where del_flag = '0' and is_valid = '1' and project_id = #{projectId}
+            )
+            <if test="infoId != null "> and `info_id` = #{infoId}</if>
+            <if test="workContent != null  and workContent != ''"> and `work_content` = #{workContent}</if>
+            <if test="middleDept != null  and middleDept != ''"> and `middle_dept` = #{middleDept}</if>
+            <if test="mainDept != null  and mainDept != ''"> and `main_dept` = #{mainDept}</if>
+            <if test="dataGetTime != null  and dataGetTime != ''"> and `data_get_time` = #{dataGetTime}</if>
+            <if test="useWay != null  and useWay != ''"> and `use_way` = #{useWay}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="regionId != null "> and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%', #{regionName}, '%')</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+        </where>
+        order by detail.`id` desc
+    </select>
+    
+    <select id="selectSbchSingleCheckDetailById" parameterType="Long" resultMap="SbchSingleCheckDetailResult">
+        <include refid="selectSbchSingleCheckDetailVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertSbchSingleCheckDetail" parameterType="com.hhwy.pm.qqch.preparation.sbch.single.domain.SbchSingleCheckDetail">
+        insert into `sbch_single_check_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="infoId != null">`info_id`,</if>
+            <if test="workContent != null">`work_content`,</if>
+            <if test="middleDept != null">`middle_dept`,</if>
+            <if test="mainDept != null">`main_dept`,</if>
+            <if test="dataGetTime != null">`data_get_time`,</if>
+            <if test="useWay != null">`use_way`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="contentRemark != null">`content_remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="infoId != null">#{infoId},</if>
+            <if test="workContent != null">#{workContent},</if>
+            <if test="middleDept != null">#{middleDept},</if>
+            <if test="mainDept != null">#{mainDept},</if>
+            <if test="dataGetTime != null">#{dataGetTime},</if>
+            <if test="useWay != null">#{useWay},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="contentRemark != null">#{contentRemark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="deptId != null">#{deptId},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `sbch_single_check_detail` (
+                                                `id`,
+                                                                `info_id`,
+                                                                `work_content`,
+                                                                `middle_dept`,
+                                                                `main_dept`,
+                                                                `data_get_time`,
+                                                                `use_way`,
+                                                                `create_user`,
+                                                                `create_time`,
+                                                                `create_user_name`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `update_user_name`,
+                                                                `content_remark`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `region_id`,
+                                                                `region_name`,
+                                                                `dept_id`
+                                    )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+                                                (#{item.id},
+                                                                #{item.infoId},
+                                                                #{item.workContent},
+                                                                #{item.middleDept},
+                                                                #{item.mainDept},
+                                                                #{item.dataGetTime},
+                                                                #{item.useWay},
+                                                                #{item.createUser},
+                                                                #{item.createTime},
+                                                                #{item.createUserName},
+                                                                #{item.updateUser},
+                                                                #{item.updateTime},
+                                                                #{item.updateUserName},
+                                                                #{item.contentRemark},
+                                                                #{item.ptVar1},
+                                                                #{item.ptVar2},
+                                                                #{item.ptVar3},
+                                                                #{item.projectId},
+                                                                #{item.projectName},
+                                                                #{item.regionId},
+                                                                #{item.regionName},
+                                                                #{item.deptId})
+                                    </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sbch_single_check_detail`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="info_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.infoId != null ">
+                                when `id` = #{item.id} then #{item.infoId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="work_content =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.workContent != null ">
+                                when `id` = #{item.id} then #{item.workContent}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="middle_dept =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.middleDept != null ">
+                                when `id` = #{item.id} then #{item.middleDept}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="main_dept =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.mainDept != null ">
+                                when `id` = #{item.id} then #{item.mainDept}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="data_get_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.dataGetTime != null ">
+                                when `id` = #{item.id} then #{item.dataGetTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="use_way =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.useWay != null ">
+                                when `id` = #{item.id} then #{item.useWay}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUserName != null ">
+                                when `id` = #{item.id} then #{item.createUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUserName != null ">
+                                when `id` = #{item.id} then #{item.updateUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="content_remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.contentRemark != null ">
+                                when `id` = #{item.id} then #{item.contentRemark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectId != null ">
+                                when `id` = #{item.id} then #{item.projectId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionId != null ">
+                                when `id` = #{item.id} then #{item.regionId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="region_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.regionName != null ">
+                                when `id` = #{item.id} then #{item.regionName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dept_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.deptId != null ">
+                                when `id` = #{item.id} then #{item.deptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateSbchSingleCheckDetail" parameterType="com.hhwy.pm.qqch.preparation.sbch.single.domain.SbchSingleCheckDetail">
+        update `sbch_single_check_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="infoId != null">`info_id` = #{infoId},</if>
+            <if test="workContent != null">`work_content` = #{workContent},</if>
+            <if test="middleDept != null">`middle_dept` = #{middleDept},</if>
+            <if test="mainDept != null">`main_dept` = #{mainDept},</if>
+            <if test="dataGetTime != null">`data_get_time` = #{dataGetTime},</if>
+            <if test="useWay != null">`use_way` = #{useWay},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="contentRemark != null">`content_remark` = #{contentRemark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchSingleCheckDetailById" parameterType="Long">
+        update `sbch_single_check_detail` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteSbchSingleCheckDetailByIds" parameterType="String">
+        update `sbch_single_check_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteSbchSingleCheckDetailByInfoId">
+        update sbch_single_check_detail set del_flag = '1',del_user = #{delUser},del_time = #{delTime} where info_id = #{infoId}
+    </update>
+
+</mapper>

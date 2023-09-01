@@ -71,6 +71,33 @@ public enum MyDownTemplateEnum {
             map.put("commonYes", commonYesList);
             return map;
         }
+    },
+    importInquiryCustoms("importInquiryCustoms.xls", "港口详情导入") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            return map;
+        }
+    },
+    importEquUnitSbInfo("importEquUnitSbInfo.xls", "协作单位设备详情") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            List<String> isSpecialList = handleDict("is_special");
+            map.put("isSpecial", isSpecialList);
+            return map;
+        }
+    },
+    importMaterialTranPlan("importMaterialTranPlan.xls", "大型成套设备运输方案详情") {
+        @Override
+        public Map<String, List> pullLists() {
+            Map<String, List> map = new HashMap<>();
+            List<String> boxType = handleDict("box_type");
+            map.put("boxType", boxType);
+            List<String> trainWay = handleDict("train_way");
+            map.put("trainWay", trainWay);
+            return map;
+        }
     }
     ;
 
