@@ -131,12 +131,10 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
      * 选择特种设备风险识别和措施策划列表
      */
     @PreAuthorize(hasPermi ="equipmentspecial:plan:xzSpecialPlan")
-    @PostMapping("/xzSpecialPlan")
+    @GetMapping("/xzSpecialPlan")
     //@CustomLogger(title = "特种设备风险识别和措施策划-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
     public AjaxResult xzSpecialPlan(@Validated(ValidationGroups.Select.class) @RequestBody SbchEquipmentSpecialPlanDetails sbchEquipmentSpecialPlanDetails) {
-        //分页
-//        startPage(sbchEquipmentSpecialPlanDetails.getPageNum(),sbchEquipmentSpecialPlanDetails.getPageSize());
         List<SbchEquipmentSpecialPlanDetails> list = sbchEquipmentSpecialPlanDetailsService.selectSbchEquipmentSpecialPlanDetailshistoryList(sbchEquipmentSpecialPlanDetails);
         TableDataInfo dataTable = getDataTable(list);
         if(null==dataTable){
