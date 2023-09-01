@@ -1,6 +1,8 @@
 package com.hhwy.pm.jdgl.diff.track.service;
 
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
+
 import java.util.List;
 
 /**
@@ -26,4 +28,6 @@ public interface IJdglProgressCorrectionTrackService {
     int deleteJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 
     int deleteJdglProgressCorrectionTrackByPks(List<Long> jdglProgressCorrectionTrackPkList);
+
+    List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo);
 }

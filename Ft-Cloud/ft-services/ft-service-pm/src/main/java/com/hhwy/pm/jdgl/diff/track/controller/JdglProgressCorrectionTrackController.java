@@ -6,20 +6,17 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhenglili
@@ -63,6 +60,12 @@ public class JdglProgressCorrectionTrackController extends BaseController {
         List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService
             .getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrackParam);
         return getDataTableAjaxResult(jdglProgressCorrectionTrackList);
+    }
+
+    @PostMapping("/gmList")
+    public AjaxResult gmList(@RequestBody ProgressCorrectionTrackQueryVo queryVo) {
+        List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService.gmList(queryVo);
+        return AjaxResult.success(jdglProgressCorrectionTrackList);
     }
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:add")

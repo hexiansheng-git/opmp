@@ -1,8 +1,10 @@
 package com.hhwy.pm.jdgl.diff.track.mapper;
 
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
-import java.util.List;
+import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -29,4 +31,6 @@ public interface JdglProgressCorrectionTrackMapper {
 
     int deleteJdglProgressCorrectionTrackByPks(
         @Param("jdglProgressCorrectionTrackPkList") List<Long> jdglProgressCorrectionTrackPkList);
+
+    List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo);
 }

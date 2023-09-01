@@ -4,16 +4,18 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrackDetail;
+import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 import com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackMapper;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackDetailService;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
-import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -117,5 +119,10 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
     public int deleteJdglProgressCorrectionTrackByPks(List<Long> jdglProgressCorrectionTrackPkList) {
         return jdglProgressCorrectionTrackMapper
             .deleteJdglProgressCorrectionTrackByPks(jdglProgressCorrectionTrackPkList);
+    }
+
+    @Override
+    public List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo) {
+        return jdglProgressCorrectionTrackMapper.gmList(queryVo);
     }
 }
