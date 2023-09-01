@@ -40,7 +40,7 @@ public class DataCheckUtil {
     public static <T> boolean checkSingle1(List<T> source, Function<T, Object> getField){
 
         if(CollectionUtils.isEmpty(source) || getField == null){
-            return false;
+            return true;
         }
 
         Set<Object> valueSet = new HashSet<>();
@@ -54,11 +54,11 @@ public class DataCheckUtil {
                 continue;
             }
             if(valueSet.contains(value)){
-                return true;
+                return false;
             }
             valueSet.add(value);
         }
 
-        return false;
+        return true;
     }
 }
