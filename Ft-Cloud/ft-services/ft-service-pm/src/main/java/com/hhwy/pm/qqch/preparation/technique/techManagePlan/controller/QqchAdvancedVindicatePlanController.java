@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 
+import cn.hutool.core.date.DateException;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -91,9 +92,11 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
         try {
             qqchAdvancedVindicatePlanImportVoList = qqchAdvancedVindicatePlanService.importExcel(file);
         } catch (FileNotFoundException e) {
-            throw new RuntimeException("文件不存在");
+            throw new RuntimeException("文件不存在！");
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
+        } catch (DateException e){
+            throw new DateException("日期类型错误！");
         }
         return AjaxResult.success(qqchAdvancedVindicatePlanImportVoList);
     }

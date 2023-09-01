@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.impl;
 
+import cn.hutool.core.date.DateException;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.annotation.ExcelProperty;
@@ -403,7 +404,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
                             }else if(value.contains("/")){
                                 date = this.StringToDate(value,df2);
                             }else {
-                                throw new RuntimeException("日类类型错误！");
+                                throw new DateException("日类类型错误！");
                             }
                             field.set(importVo, date);
                         }else if("BigDecimal".equals(typeName)) {

@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * @author han
  * @date 2023-07-27 15:51:15
- * @remark 高新维护计划
+ * @remark version.compareTo(BigDecimal.ONE) == 0维护计划
  */
 @Data
 @NoArgsConstructor
