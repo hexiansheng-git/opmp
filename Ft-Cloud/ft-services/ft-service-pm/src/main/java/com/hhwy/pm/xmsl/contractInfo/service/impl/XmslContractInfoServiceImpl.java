@@ -2,6 +2,9 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
@@ -136,6 +139,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }else {
             xmslContractInfo.setIsShowRecord(0);
         }
+
         return xmslContractInfo;
     }
 
@@ -179,7 +183,17 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     }
 
     public List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo) {
-        return xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
+        List<XmslContractInfo> historyList =xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
+        if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1) {
+            for (XmslContractInfo contractInfo : historyList) {
+                FtActBusiness flowInfo = FlowInfoSearchUtil.getFlowInfo(FlowEnum.XMSL_CONTRACT.getTableName(), String.valueOf(contractInfo.getId()));
+                contractInfo.setProcessTaskMan(flowInfo.getAssignee());
+                contractInfo.setCreateUserName(flowInfo.getName());
+                contractInfo.setCreateUser(flowInfo.getCreateUser());
+                contractInfo.setCreateTime(flowInfo.getCreateTime());
+            }
+        }
+        return historyList;
     }
 
     /**

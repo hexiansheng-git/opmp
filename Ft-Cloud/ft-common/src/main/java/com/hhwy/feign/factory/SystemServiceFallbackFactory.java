@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.system.api.domain.SysUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
@@ -57,6 +58,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
 
             @Override
             public AjaxResult selectCountryInfoByNames(String name) {
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult selectSysUserInfo(SysUser sysUser) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }
         };

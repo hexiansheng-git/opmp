@@ -9,9 +9,13 @@ public enum FlowEnum {
 
 
     /**********************前期策划开始************************/
-    QQCH_REVIEW("qqch_receive", "qqch_receive_process");
+    QQCH_REVIEW("qqch_receive", "qqch_receive_process"),
 
     /**********************前期策划结束************************/
+
+
+    //项目设立，合同
+    XMSL_CONTRACT("xmsl_contract_info", "process_test_contract");
 
 
     public String getTableName() {
