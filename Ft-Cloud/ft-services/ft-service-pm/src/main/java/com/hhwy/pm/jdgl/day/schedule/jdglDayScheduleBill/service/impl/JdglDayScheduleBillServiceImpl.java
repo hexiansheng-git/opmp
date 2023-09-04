@@ -1,8 +1,6 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -75,6 +73,19 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
             jdglDayScheduleBill.setCreateTime(DateUtils.getNowDate());
         }
         return jdglDayScheduleBillMapper.insertJdglDayScheduleBillList(jdglDayScheduleBillList);
+    }
+
+    /**
+     * 根据wbs初始化插入清单数据
+     * @param jdglDayScheduleWbs
+     * @return
+     */
+    @Override
+    public int insertJdglDayScheduleBillList(JdglDayScheduleWbs jdglDayScheduleWbs) {
+
+
+
+        return 0;
     }
 
     @Transactional
@@ -196,24 +207,4 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleId(dayScheduleId);
     }
 
-    /**
-     * 获取wbs及图纸复核数据并过滤当前日报的wbs
-     * @return
-     */
-    @Override
-    public List<JdglDayScheduleWbs> getAllWbs4NoThis(Long datScheduleId) {
-
-        List<JdglDayScheduleWbs> returnList = new ArrayList<>();
-
-        // 获取wbs数据
-
-
-        // 获取图纸复核清单数据
-
-        // 获取当前日填报wbs数据
-
-        //
-
-        return returnList;
-    }
 }

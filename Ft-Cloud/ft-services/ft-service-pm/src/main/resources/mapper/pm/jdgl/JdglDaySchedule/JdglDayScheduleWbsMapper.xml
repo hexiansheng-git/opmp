@@ -12,6 +12,7 @@
         <result property="wbsPid" column="wbs_pid"/>
         <result property="wbsCode" column="wbs_code"/>
         <result property="wbsName" column="wbs_name"/>
+        <result property="ancestrals" column="ancestrals"/>
         <result property="unit" column="unit"/>
         <result property="designQuantity" column="design_quantity"/>
         <result property="remainQuantity" column="remain_quantity"/>
@@ -49,6 +50,7 @@
              , `wbs_pid`
              , `wbs_code`
              , `wbs_name`
+             , `ancestrals`
              , `unit`
              , `design_quantity`
              , `remain_quantity`
@@ -90,6 +92,7 @@
             <if test="wbsPid != null ">and `wbs_pid` = #{wbsPid}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="ancestrals != null  and ancestrals != ''">and `ancestrals` = #{ancestrals}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
             <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>
@@ -133,6 +136,7 @@
             <if test="wbsPid != null ">and `wbs_pid` = #{wbsPid}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="ancestrals != null  and ancestrals != ''">and `ancestrals` = #{ancestrals}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
             <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>
@@ -206,6 +210,7 @@
             <if test="wbsPid != null ">`wbs_pid`,</if>
             <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="ancestrals != null  and ancestrals != ''">`ancestrals`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
             <if test="designQuantity != null ">`design_quantity`,</if>
             <if test="remainQuantity != null ">`remain_quantity`,</if>
@@ -243,6 +248,7 @@
             <if test="wbsPid != null ">#{wbsPid},</if>
             <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="ancestrals != null  and ancestrals != ''">#{ancestrals},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
             <if test="designQuantity != null ">#{designQuantity},</if>
             <if test="remainQuantity != null ">#{remainQuantity},</if>
@@ -285,6 +291,7 @@
             `wbs_pid`,
             `wbs_code`,
             `wbs_name`,
+            `ancestrals`,
             `unit`,
             `design_quantity`,
             `remain_quantity`,
@@ -323,6 +330,7 @@
                 #{item.wbsPid},
                 #{item.wbsCode},
                 #{item.wbsName},
+                #{item.ancestrals},
                 #{item.unit},
                 #{item.designQuantity},
                 #{item.remainQuantity},
@@ -364,6 +372,7 @@
             <if test="wbsPid != null ">`wbs_pid` = #{wbsPid},</if>
             <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
             <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="ancestrals != null  and  ancestrals != ''">`ancestrals` = #{ancestrals},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
             <if test="designQuantity != null ">`design_quantity` = #{designQuantity},</if>
             <if test="remainQuantity != null ">`remain_quantity` = #{remainQuantity},</if>
@@ -430,6 +439,11 @@
             <trim prefix="wbs_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.wbsName}
+                </foreach>
+            </trim>
+            <trim prefix="ancestrals  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ancestrals}
                 </foreach>
             </trim>
             <trim prefix="unit  = case" suffix="end,">
@@ -593,6 +607,7 @@
             <if test="wbsPid != null ">and `wbs_pid` = #{wbsPid}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="ancestrals != null  and ancestrals != ''">and `ancestrals` = #{ancestrals}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
             <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
             <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>

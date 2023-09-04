@@ -68,6 +68,12 @@ public class JdglDayScheduleWbs extends TreeNode<JdglDayScheduleWbs> {
     @Excel(name = "项目WBS名称")
     private String wbsName;
     /**
+     * 字段描述：项目WBS祖籍id
+     */
+    @JsonProperty
+    @Excel(name = "项目WBS祖籍id")
+    private String ancestrals;
+    /**
      * 字段描述：单位
      */
     @JsonProperty
@@ -255,6 +261,12 @@ public class JdglDayScheduleWbs extends TreeNode<JdglDayScheduleWbs> {
     @JsonProperty
     @Excel(name = "孩子节点数量")
     private int haveChildren;
+
+    /**
+     * 数据是否存在
+     */
+    @JsonProperty
+    private String isExists;
 
     /**
      * 字段描述：进度填报bill集合

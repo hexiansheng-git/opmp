@@ -25,6 +25,8 @@ public interface IJdglDayScheduleBillService {
 
     int insertJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList);
 
+    int insertJdglDayScheduleBillList(JdglDayScheduleWbs jdglDayScheduleWbs);
+
     int updateJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill);
 
     int updateJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList, Long dayScheduleId, String wbsCode);
@@ -37,9 +39,4 @@ public interface IJdglDayScheduleBillService {
 
     void deleteJdglDayScheduleBillByDayScheduleId(Long dayScheduleId);
 
-    /**
-     * 获取wbs及图纸复核数据并过滤当前日报的wbs
-     * @return
-     */
-    List<JdglDayScheduleWbs> getAllWbs4NoThis(Long datScheduleId);
 }

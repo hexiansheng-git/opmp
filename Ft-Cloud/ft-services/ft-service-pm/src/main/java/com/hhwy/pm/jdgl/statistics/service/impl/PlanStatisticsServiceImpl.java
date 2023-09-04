@@ -271,7 +271,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             List<JdglYearImagePlan> jdglYearImagePlans = "n".equals(queryDateType) ? jdglYearImagePlanService.getWbsListByYear(year) : null;
             for (PlanStatisticsWbsValueVO planStatisticsWbsValueVO : returnList) {
                 String wbsCode = planStatisticsWbsValueVO.getWbsCode();
-                Stream<JdglDayScheduleWbs4Value> jdglDayScheduleWbs4ValueStream = totalWbsListByDateRange.stream().filter(vo -> !wbsCode.equals(vo.getWbsCode()));
+                Stream<JdglDayScheduleWbs4Value> jdglDayScheduleWbs4ValueStream = totalWbsListByDateRange.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
                 if(jdglDayScheduleWbs4ValueStream != null) {
                     JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = jdglDayScheduleWbs4ValueStream.findFirst().get();
                     if(jdglDayScheduleWbs4Value != null) {
@@ -283,7 +283,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 switch (queryDateType) {
                     case "z":
                         if(!CollectionUtils.isEmpty(jdglWeekImagePlans)) {
-                            Stream<JdglWeekImagePlan> jdglWeekImagePlanStream = jdglWeekImagePlans.stream().filter(vo -> !wbsCode.equals(vo.getWbsCode()));
+                            Stream<JdglWeekImagePlan> jdglWeekImagePlanStream = jdglWeekImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
                             if(jdglWeekImagePlanStream != null) {
                                 JdglWeekImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
                                 planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
@@ -292,7 +292,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         break;
                     case "y":
                         if(!CollectionUtils.isEmpty(jdglMonthImagePlans)) {
-                            Stream<JdglMonthImagePlan> jdglWeekImagePlanStream = jdglMonthImagePlans.stream().filter(vo -> !wbsCode.equals(vo.getWbsCode()));
+                            Stream<JdglMonthImagePlan> jdglWeekImagePlanStream = jdglMonthImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
                             if(jdglWeekImagePlanStream != null) {
                                 JdglMonthImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
                                 planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
@@ -301,7 +301,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         break;
                     case "j":
                         if(!CollectionUtils.isEmpty(jdglQuarterImagePlans)) {
-                            Stream<JdglQuarterImagePlan> jdglWeekImagePlanStream = jdglQuarterImagePlans.stream().filter(vo -> !wbsCode.equals(vo.getWbsCode()));
+                            Stream<JdglQuarterImagePlan> jdglWeekImagePlanStream = jdglQuarterImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
                             if(jdglWeekImagePlanStream != null) {
                                 JdglQuarterImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
                                 planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
@@ -310,7 +310,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         break;
                     case "n":
                         if(!CollectionUtils.isEmpty(jdglYearImagePlans)) {
-                            Stream<JdglYearImagePlan> jdglWeekImagePlanStream = jdglYearImagePlans.stream().filter(vo -> !wbsCode.equals(vo.getWbsCode()));
+                            Stream<JdglYearImagePlan> jdglWeekImagePlanStream = jdglYearImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
                             if(jdglWeekImagePlanStream != null) {
                                 JdglYearImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
                                 planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
@@ -413,7 +413,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             switch (queryDateType) {
                 case "z":
                     if(!CollectionUtils.isEmpty(jdglWeekValuePlans)){
-                        Stream<JdglWeekValuePlan> jdglWeekValuePlanStream = jdglWeekValuePlans.stream().filter(vo -> !billId.equals(vo.getInventoryId()));
+                        Stream<JdglWeekValuePlan> jdglWeekValuePlanStream = jdglWeekValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
                         if(jdglWeekValuePlanStream == null) {
                            continue;
                         }
@@ -426,7 +426,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     break;
                 case "y":
                     if(!CollectionUtils.isEmpty(jdglMonthValuePlans)){
-                        Stream<JdglMonthValuePlan> jdglMonthValuePlanStream = jdglMonthValuePlans.stream().filter(vo -> !billId.equals(vo.getInventoryId()));
+                        Stream<JdglMonthValuePlan> jdglMonthValuePlanStream = jdglMonthValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
                         if(jdglMonthValuePlanStream == null) {
                             continue;
                         }
@@ -439,7 +439,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     break;
                 case "j":
                     if(!CollectionUtils.isEmpty(jdglQuarterValuePlans)){
-                        Stream<JdglQuarterValuePlan> jdglQuarterValuePlanStream = jdglQuarterValuePlans.stream().filter(vo -> !billId.equals(vo.getInventoryId()));
+                        Stream<JdglQuarterValuePlan> jdglQuarterValuePlanStream = jdglQuarterValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
                         if(jdglQuarterValuePlanStream == null) {
                             continue;
                         }
@@ -452,7 +452,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     break;
                 case "n":
                     if(!CollectionUtils.isEmpty(jdglYearValuePlans)){
-                        Stream<JdglYearValuePlan> jdglYearValuePlanStream = jdglYearValuePlans.stream().filter(vo -> !billId.equals(vo.getInventoryId()));
+                        Stream<JdglYearValuePlan> jdglYearValuePlanStream = jdglYearValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
                         if(jdglYearValuePlanStream == null) {
                             continue;
                         }

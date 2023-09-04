@@ -130,8 +130,8 @@ public class JdglDayScheduleWbsController extends BaseController {
      * 获取wbs及图纸复核数据并过滤当前日报的wbs
      * @return
      */
-    @PostMapping("/getAllWbs4NoThis")
-    public AjaxResult getAllWbs4NoThis(Long datScheduleId) {
-        return AjaxResult.success(iJdglDayScheduleBillService.getAllWbs4NoThis(datScheduleId));
+    @PostMapping("/getLazyWbs4NoThis")
+    public AjaxResult getAllWbs4NoThis(@RequestBody JdglDayScheduleWbs jdglDayScheduleWbsParam) {
+        return AjaxResult.success(jdglDayScheduleWbsService.getLazyWbs4NoThis(jdglDayScheduleWbsParam));
     }
 }

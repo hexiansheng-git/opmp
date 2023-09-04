@@ -51,14 +51,14 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
         Map<String, List<JdglDiffAnalysisCorrect>> returnMapList = new HashMap<>();
         List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectList = jdglDiffAnalysisCorrectMapper.getJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrect);
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
-            List<JdglDiffAnalysisCorrect> headerVos = jdglDiffAnalysisCorrectList.stream().filter(vo -> StringUtils.isNotEmpty(vo.getSecondType())).collect(Collectors.toList());
+            List<JdglDiffAnalysisCorrect> headerVos = jdglDiffAnalysisCorrectList.stream().filter(vo -> StringUtils.isEmpty(vo.getSecondType())).collect(Collectors.toList());
             if(CollectionUtils.isEmpty(headerVos)) {
                 return returnMapList;
             }
             returnMapList.put("headerList", headerVos);
 
             for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect1 : headerVos) {
-                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> !vo.getFirstType().equals(jdglDiffAnalysisCorrect1.getFirstType())).collect(Collectors.toList());
+                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> vo.getFirstType().equals(jdglDiffAnalysisCorrect1.getFirstType())).collect(Collectors.toList());
                 returnMapList.put(jdglDiffAnalysisCorrect1.getFirstType(), collect);
             }
 
