@@ -1,18 +1,15 @@
 package com.hhwy.pm.qqch.preparation.workPlanning.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.qqch.common.domain.PreparationEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -22,7 +19,7 @@ import java.util.Date;
  * @remark qqch_work_planning_prj_img
  */
 @Data
-public class QqchWorkPlanningPrjImg extends BaseEntity {
+public class QqchWorkPlanningPrjImg extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -37,12 +34,12 @@ public class QqchWorkPlanningPrjImg extends BaseEntity {
     @JsonProperty
     @Excel(name = "附件id")
     private String fileId;
-    /**
-     * 字段描述：版本
-     */
-    @JsonProperty
-    @Excel(name = "版本")
-    private BigDecimal version;
+//    /**
+//     * 字段描述：版本
+//     */
+//    @JsonProperty
+//    @Excel(name = "版本")
+//    private BigDecimal version;
     /**
      * 字段描述：数据创建者id
      */
@@ -105,19 +102,7 @@ public class QqchWorkPlanningPrjImg extends BaseEntity {
     @Excel(name = "保存标识")
     private String valid;
 
-    @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
-    private String submitFlag;
+//    @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
+//    private String submitFlag;
 
-    /**
-     * 阶段标识（1：第一阶段，2：第二阶段，3：第三阶段）
-     */
-    @JsonProperty
-    private String stageIdentity;
-
-    @JsonProperty
-    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
-    private String moduleIdentity;
-
-    //菜单id
-    private String menuId;
 }
