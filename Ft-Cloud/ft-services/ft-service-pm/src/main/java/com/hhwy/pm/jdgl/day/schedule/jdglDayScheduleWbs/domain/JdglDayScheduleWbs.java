@@ -269,6 +269,12 @@ public class JdglDayScheduleWbs extends TreeNode<JdglDayScheduleWbs> {
     private String isExists;
 
     /**
+     * 是否是新增数据;
+     */
+    @JsonProperty
+    private String isAdd;
+
+    /**
      * 字段描述：进度填报bill集合
      */
     @JsonProperty

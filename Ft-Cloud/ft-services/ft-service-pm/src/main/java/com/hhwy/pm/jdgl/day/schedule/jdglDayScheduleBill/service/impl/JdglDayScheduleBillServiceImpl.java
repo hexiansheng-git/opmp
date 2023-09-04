@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,40 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
     }
 
     public List<JdglDayScheduleBill> getJdglDayScheduleBillList(JdglDayScheduleBill jdglDayScheduleBill) {
-        return jdglDayScheduleBillMapper.getJdglDayScheduleBillList(jdglDayScheduleBill);
+        Long wbsId = jdglDayScheduleBill.getWbsId();
+        String wbsCode = jdglDayScheduleBill.getWbsCode();
+        String wbsName = jdglDayScheduleBill.getWbsName();
+        Long dayScheduleId = jdglDayScheduleBill.getDayScheduleId();
+        List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleBillMapper.getJdglDayScheduleBillList(jdglDayScheduleBill);
+        if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
+            jdglDayScheduleBillList = new ArrayList<>();
+            XmslDrawReview last = xmslDrawReviewService.getLast();
+            if(last == null) {
+                return jdglDayScheduleBillList;
+            }
+            Integer version = last.getVersion();
+            Long id = last.getId();
+            List<XmslDrawReviewList> xmslDrawReviewLists = xmslDrawReviewService.relationWbsList(version, id, wbsCode, wbsId);
+            if(CollectionUtils.isEmpty(xmslDrawReviewLists)) {
+                return jdglDayScheduleBillList;
+            }
+            for (XmslDrawReviewList xmslDrawReviewList : xmslDrawReviewLists) {
+                JdglDayScheduleBill jdglDayScheduleBill1 = new JdglDayScheduleBill();
+                jdglDayScheduleBill1.setDayScheduleId(dayScheduleId);
+                jdglDayScheduleBill1.setWbsId(xmslDrawReviewList.getWbsId());
+                jdglDayScheduleBill1.setWbsCode(wbsCode);
+                jdglDayScheduleBill1.setWbsName(wbsName);
+                jdglDayScheduleBill1.setUnit(xmslDrawReviewList.getUnit());
+                jdglDayScheduleBill1.setDesignQuantity(xmslDrawReviewList.getCheckNum());
+                BigDecimal totalComp = new BigDecimal(0);
+                jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum().subtract(totalComp));
+//                jdglDayScheduleBill1.setBillPrice(xmslDrawReviewList.getP);
+                jdglDayScheduleBill1.setIsMain(xmslDrawReviewList.getImageProgress());
+                jdglDayScheduleBillList.add(jdglDayScheduleBill1);
+            }
+            
+        }
+        return jdglDayScheduleBillList;
     }
 
     @Override
@@ -106,7 +140,9 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
             jdglDayScheduleBill.setWbsCode(wbsCode);
             jdglDayScheduleBill.setUpdateUser(SecurityUtils.getUserName());
             jdglDayScheduleBill.setUpdateTime(DateUtils.getNowDate());
-            jdglDayScheduleBill.setBillValue(jdglDayScheduleBill.getThisQuantity().multiply(jdglDayScheduleBill.getBillPrice()));
+            if(jdglDayScheduleBill.getThisQuantity() != null && jdglDayScheduleBill.getBillPrice() != null) {
+                jdglDayScheduleBill.setBillValue(jdglDayScheduleBill.getThisQuantity().multiply(jdglDayScheduleBill.getBillPrice()));
+            }
         }
         return jdglDayScheduleBillMapper.insertJdglDayScheduleBillList(jdglDayScheduleBillList);
     }

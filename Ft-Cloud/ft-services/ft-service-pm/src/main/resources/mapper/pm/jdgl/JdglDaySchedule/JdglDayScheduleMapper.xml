@@ -140,7 +140,7 @@
     <select id="getHistoryValue"
             resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
         select sum(day_value_cu) totalValueCu,sum(day_value_dl) totalValueDl
-        from jdgl_day_schedule where date &lt; #{date} and taskStatus = "5" and del_flag != "1"
+        from jdgl_day_schedule where date &lt; #{date} and task_status = "5" and del_flag != "1"
     </select>
     <select id="getCountValue" resultType="java.math.BigDecimal">
         select sum(day_value_dl)

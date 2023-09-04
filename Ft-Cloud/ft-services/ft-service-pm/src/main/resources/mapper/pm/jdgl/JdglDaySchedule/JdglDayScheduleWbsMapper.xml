@@ -200,6 +200,16 @@
              order by sort asc
          ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
     </select>
+    <select id="getLeafWbsList"
+            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs">
+        <include refid="selectJdglDayScheduleWbsVo"/>
+        <where>
+            day_schedule_id = #{dayScheduleId}
+                and ancestrals like CONCAT(#{ancestrals} , '%')
+                and is_leaf = "1"
+        </where>
+
+    </select>
 
     <insert id="insertJdglDayScheduleWbs" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_day_schedule_wbs

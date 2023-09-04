@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Add;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
 
 /**
@@ -44,4 +45,14 @@ public interface IJdglDayScheduleWbsService {
      * @return
      */
     List<JdglDayScheduleWbs> getLazyWbs4NoThis(JdglDayScheduleWbs jdglDayScheduleWbsParam);
+
+    /**
+     * 获取末级节点wbs数据
+     * @param jdglDayScheduleWbsParam
+     * @return
+     */
+    List<JdglDayScheduleWbs> getLeafWbsList(JdglDayScheduleWbs jdglDayScheduleWbsParam);
+
+//    int  addWbsList(List<JdglDayScheduleWbs> jdglDayScheduleWbsListParam);
+    int  addWbsList(JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam);
 }
