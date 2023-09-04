@@ -26,12 +26,12 @@ import java.util.Map;
  * <br/>@UpdateRemark: 说明本次修改内容 
  * <br/>@Version:      v1.0    
  */
-//@Service
-//@RocketMQMessageListener(
-//        consumerGroup = "pm-project-g1",
-//        topic = "gm",
-//        selectorExpression = "wbs",
-//        consumeMode = ConsumeMode.ORDERLY)
+@Service
+@RocketMQMessageListener(
+        consumerGroup = "pm-project-g1",
+        topic = "gm",
+        selectorExpression = "wbs",
+        consumeMode = ConsumeMode.ORDERLY)
 public class TWbsConsumerListener implements RocketMQListener<String> , RocketMQPushConsumerLifecycleListener {
     @Autowired
     private ITWbsService wbsService;
