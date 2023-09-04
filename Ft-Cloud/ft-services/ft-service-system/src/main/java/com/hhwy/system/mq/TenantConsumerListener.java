@@ -33,13 +33,13 @@ import java.util.Map;
  * 配置RocketMQ监听
  * @author qzz
  */
-//@Service
-//@RocketMQMessageListener(
-//        consumerGroup = "pm-project-system",
-//        topic = "gm",
-//        selectorExpression = "prj",
-//        // 消费模式: 顺序消费
-//        consumeMode = ConsumeMode.ORDERLY)
+@Service
+@RocketMQMessageListener(
+        consumerGroup = "pm-project-system",
+        topic = "gm",
+        selectorExpression = "prj",
+        // 消费模式: 顺序消费
+        consumeMode = ConsumeMode.ORDERLY)
 public class TenantConsumerListener implements RocketMQListener<String> , RocketMQPushConsumerLifecycleListener {
 
 
