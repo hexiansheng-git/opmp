@@ -220,7 +220,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
 
         // 费用数据入库
-        List<QqchTaxCostDetail> allDetails = bean.saveCostList(allList);
+        List<QqchTaxCostDetail> allDetails = bean.saveCostList(CompileEntity.dealSaveDto(dto, allList));
         // 新增年份数据
         this.detailService.save(CompileEntity.dealSaveDto(dto, allDetails));
 
@@ -331,6 +331,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public List<QqchTaxCostDetail> saveCostList(List<QqchTaxCost> list) {
+        if (CollectionUtils.isEmpty(list)) return new ArrayList<>();
         List<QqchTaxCostDetail> allDetails = new ArrayList<>();
         for (QqchTaxCost item : list) {
             List<QqchTaxCostDetail> detailList = item.getDetailList();

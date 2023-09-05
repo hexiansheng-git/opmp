@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.mapper.QqchTaxCostDetailMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostDetailService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +85,7 @@ public class QqchTaxCostDetailServiceImpl implements IQqchTaxCostDetailService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void save(List<QqchTaxCostDetail> list) {
+        if (CollectionUtils.isEmpty(list)) return;
         this.qqchTaxCostDetailMapper.insertQqchTaxCostDetailList(list);
     }
 }
