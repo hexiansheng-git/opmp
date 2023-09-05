@@ -13,7 +13,6 @@ import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
-import org.springframework.beans.BeansException;
 
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
@@ -27,8 +26,9 @@ import java.util.List;
 @Data
 @ToString
 public class CompileEntity<T> extends TreeNode<T> {
-    
+
     private static RedisUtils redisUtils;
+
     static {
         try {
             redisUtils = SpringUtils.getBean(RedisUtils.class);
@@ -60,12 +60,11 @@ public class CompileEntity<T> extends TreeNode<T> {
     @NotBlank(message = "模块唯一标识不能为空！", groups = ValidationGroups.Save.class)
     private String moduleIdentity;
 
-   
-    
+
     private String dataType;
 
     /**
-     * 请求id 
+     * 请求id
      */
     private String reqId;
 
@@ -76,16 +75,14 @@ public class CompileEntity<T> extends TreeNode<T> {
     {
         reqId = reqId == null ? UUIDUtils.getUuid() : reqId;
     }
-    
-    
+
+
     public static <T> T dealListDto(BigDecimal version, T dto) {
         CompileEntity<T> tCompileDTO = new CompileEntity<>();
         tCompileDTO.setVersion(version);
         tCompileDTO.setDto(dto);
         return tCompileDTO.dealListDto();
     }
-
-
 
 
     public static <T> T dealSaveDto(CompileEntity param, T dto) {
@@ -100,8 +97,6 @@ public class CompileEntity<T> extends TreeNode<T> {
         return tCompileDTO.dealSaveDto();
     }
 
-    
-    
 
     public T dealListDto() {
         if (dto instanceof CompileEntity) {
@@ -113,7 +108,7 @@ public class CompileEntity<T> extends TreeNode<T> {
     }
 
     public T dealSaveDto() {
-        if (StringUtils.isEmpty(reqId)){
+        if (StringUtils.isEmpty(reqId)) {
             reqId = UUIDUtils.getUuid();
         }
         if (dto instanceof CompileEntity) {
@@ -131,7 +126,7 @@ public class CompileEntity<T> extends TreeNode<T> {
             compileEntities = TreeUtil.treeToListWithLevel(compileEntities);
             EntityUtils.setCreateUpdateInfo(compileEntities);
             for (CompileEntity o : compileEntities) {
-               setBaseInfo(o);
+                setBaseInfo(o);
             }
             return (T) compileEntities;
         }
@@ -147,14 +142,15 @@ public class CompileEntity<T> extends TreeNode<T> {
         }
         return dto;
     }
-    
-    
-    private void setBaseInfo(CompileEntity compileEntity){
-        
+
+
+    private void setBaseInfo(CompileEntity compileEntity) {
+
         compileEntity.setSubmitFlag(submitFlag);
         compileEntity.setModuleIdentity(moduleIdentity);
         compileEntity.setVersion(version == null ? new BigDecimal(InitVersionConstant.INIT_VERSION) : version);
-        compileEntity.setDataType(dataType);
+        String dataType1 = compileEntity.getDataType();
+        compileEntity.setDataType(StringUtils.isEmpty(dataType1) ? dataType : dataType1);
         compileEntity.setReqId(reqId);
         compileEntity.setStageIdentity(stageIdentity);
         if (StringUtils.isNotEmpty(submitFlag)) setValidStatus(compileEntity);

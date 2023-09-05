@@ -274,9 +274,6 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         // TODO 获取p6的计划开始时间和结束时间
         ArrayList<String> res = new ArrayList<>();
         res.add("2023");
-        res.add("2024");
-        res.add("2025");
-        res.add("2026");
         return res;
     }
 

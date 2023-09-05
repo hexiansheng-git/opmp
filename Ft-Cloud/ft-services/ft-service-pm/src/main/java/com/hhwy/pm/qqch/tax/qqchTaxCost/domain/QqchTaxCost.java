@@ -238,12 +238,6 @@ public class QqchTaxCost extends CompileEntity<QqchTaxCost> {
     @Excel(name = "预留字段2")
     private String ptVar2;
     /**
-     * 字段描述：预留字段3
-     */
-    @JsonProperty
-    @Excel(name = "预留字段3")
-    private String ptVar3;
-    /**
      * 字段描述：预留字段4
      */
     @JsonProperty
