@@ -2,6 +2,8 @@ package com.hhwy.pm.core.sync.service;
 
 import com.hhwy.pm.core.sync.domain.SysSyncInfo;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
@@ -54,4 +56,18 @@ public interface ISysSyncInfoService {
      */
     public void pushQqchPerformInspection(List<QqchPerformInspection> List);
     public void pushQqchPerformInspection(QqchPerformInspection inspection);
+
+    /**
+     * 推送差异化分析数据到总部
+     * @param list
+     */
+    void pushJdglDiffAnalysis(List<JdglDiffAnalysis> list);
+    void pushJdglDiffAnalysis(JdglDiffAnalysis diffAnalysis);
+
+    /**
+     * 推送进度纠偏跟踪数据到总部
+     * @param list
+     */
+    void pushJdglProgressCorrectionTrack(List<JdglProgressCorrectionTrack> list);
+    void pushJdglProgressCorrectionTrack(JdglProgressCorrectionTrack diffAnalysis);
 }

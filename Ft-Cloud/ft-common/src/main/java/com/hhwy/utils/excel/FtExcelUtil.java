@@ -177,7 +177,6 @@ public class FtExcelUtil<T> {
                         val = Convert.toStr(val);
                     }
                 } else if (Integer.TYPE != fieldType && Integer.class != fieldType) {
-
                     if (Long.TYPE != fieldType && Long.class != fieldType) {
                         if (Double.TYPE != fieldType && Double.class != fieldType) {
                             if (Float.TYPE != fieldType && Float.class != fieldType) {

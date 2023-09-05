@@ -1,17 +1,13 @@
 package com.hhwy.pm.core.sync.service.impl;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.alibaba.fastjson.JSONObject;
-import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.pm.core.sync.domain.SysSyncInfo;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoLogService;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
@@ -20,18 +16,17 @@ import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.AddBaseInfoUtil;
-import com.hhwy.utils.ObjectUtils;
-import com.hhwy.utils.PageFuncUtils;
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.SetUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.hhwy.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 数据同步节点记录Service业务层处理
@@ -208,5 +203,79 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
     @Override
     public void pushQqchPerformInspection(QqchPerformInspection inspection) {
         pushQqchPerformInspection(Arrays.asList(inspection)); 
+    }
+
+    /**
+     * 推送差异化分析
+     * @param list
+     */
+    @Override
+    public void pushJdglDiffAnalysis(List<JdglDiffAnalysis> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglDiffAnalysis temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_diff_analysis:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJdglDiffAnalysis(JdglDiffAnalysis diffAnalysis) {
+        pushJdglDiffAnalysis(Arrays.asList(diffAnalysis));
+    }
+
+    @Override
+    public void pushJdglProgressCorrectionTrack(List<JdglProgressCorrectionTrack> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglProgressCorrectionTrack temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_progress_correction_track:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJdglProgressCorrectionTrack(JdglProgressCorrectionTrack progressCorrectionTrack) {
+        pushJdglProgressCorrectionTrack(Arrays.asList(progressCorrectionTrack));
     }
 }
