@@ -158,7 +158,6 @@ public class JdglDayScheduleWbsController extends BaseController {
     @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
     @PostMapping("/addWbsList")
     public AjaxResult addWbsList(@Validated(ValidationGroups.Save.class) @RequestBody JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam) {
-        jdglDayScheduleWbsService.addWbsList(jdglDayScheduleWbsListParam);
-        return AjaxResult.success(jdglDayScheduleWbsListParam.getWbsTreeList());
+        return AjaxResult.success(jdglDayScheduleWbsService.addWbsList(jdglDayScheduleWbsListParam));
     }
 }

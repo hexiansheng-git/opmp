@@ -264,5 +264,11 @@ public class JdglMonthImagePlan extends TreeNode<JdglMonthImagePlan> {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+    /**
+     * 字段描述：是否是关键路径
+     */
+    @JsonProperty
+    @Excel(name = "是否是关键路径")
+    private String isCriticalPath;
 
 }

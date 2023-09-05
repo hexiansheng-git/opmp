@@ -29,6 +29,8 @@ public interface IJdglDayScheduleBillService {
 
     int updateJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill);
 
+    int updateJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList);
+
     int updateJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList, Long dayScheduleId, String wbsCode);
 
     int deleteJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill);
@@ -39,4 +41,5 @@ public interface IJdglDayScheduleBillService {
 
     void deleteJdglDayScheduleBillByDayScheduleId(Long dayScheduleId);
 
+    int deleteJdglDayScheduleBillByDayWbsIds(List<Long> jdglDayScheduleWbsPkList, Long dayScheduleId);
 }

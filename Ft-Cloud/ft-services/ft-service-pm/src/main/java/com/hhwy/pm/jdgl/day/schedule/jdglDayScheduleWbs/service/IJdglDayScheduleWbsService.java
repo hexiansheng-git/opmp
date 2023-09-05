@@ -54,5 +54,7 @@ public interface IJdglDayScheduleWbsService {
     List<JdglDayScheduleWbs> getLeafWbsList(JdglDayScheduleWbs jdglDayScheduleWbsParam);
 
 //    int  addWbsList(List<JdglDayScheduleWbs> jdglDayScheduleWbsListParam);
-    int  addWbsList(JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam);
+    List<JdglDayScheduleWbs> addWbsList(JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam);
+
+    int deleteJdglDayScheduleWbsByOrLevel(List<JdglDayScheduleWbs> deleteWbsList, Long dayScheduleId);
 }

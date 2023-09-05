@@ -144,4 +144,27 @@ public class StatisticsUtils {
     }
 
 
+    public static Map<String, Date> getDateRange4YearMonth(String yearStr, String monthStr) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Map<String, Date> returnMap = new HashMap<String, Date>();
+        try {
+            int month = Integer.valueOf(monthStr);
+            int year = Integer.valueOf(yearStr);
+
+            Calendar cl = Calendar.getInstance();
+            if(month == 1) {
+                returnMap.put("start", sdf.parse((year-1) + "-12-21"));
+            } else {
+                returnMap.put("start", sdf.parse(year + month<10?("-0"+month):"-"+month + "-20"));
+            }
+
+            returnMap.put("end", sdf.parse(year + month<10?("-0"+month):"-"+month + "-20"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return returnMap;
+
+    }
 }

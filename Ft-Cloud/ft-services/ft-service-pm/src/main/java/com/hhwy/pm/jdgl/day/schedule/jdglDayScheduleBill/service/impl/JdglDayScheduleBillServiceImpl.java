@@ -8,7 +8,9 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -62,21 +64,37 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
             if(CollectionUtils.isEmpty(xmslDrawReviewLists)) {
                 return jdglDayScheduleBillList;
             }
+
+            // 获取主合同清单数据
+            List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
+
             for (XmslDrawReviewList xmslDrawReviewList : xmslDrawReviewLists) {
+                Long listId = xmslDrawReviewList.getListId();
                 JdglDayScheduleBill jdglDayScheduleBill1 = new JdglDayScheduleBill();
                 jdglDayScheduleBill1.setDayScheduleId(dayScheduleId);
                 jdglDayScheduleBill1.setWbsId(xmslDrawReviewList.getWbsId());
                 jdglDayScheduleBill1.setWbsCode(wbsCode);
                 jdglDayScheduleBill1.setWbsName(wbsName);
+                jdglDayScheduleBill1.setBillId(xmslDrawReviewList.getListId());
+                jdglDayScheduleBill1.setBillCode(xmslDrawReviewList.getListCode());
+                jdglDayScheduleBill1.setBillName(xmslDrawReviewList.getChineseName());
+                if(!CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
+                    for (XmslContractList xmslContractList : validMaxVersionContractInventoryList) {
+                        if(listId != null && listId.equals(xmslContractList.getId())) {
+                            jdglDayScheduleBill1.setBillPrice(
+                                    xmslContractList.getChangeAmount() == null || Long.valueOf("0").equals(xmslContractList.getChangeAmount())
+                                    ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeAmount()
+                            );
+                        }
+                    }
+                }
                 jdglDayScheduleBill1.setUnit(xmslDrawReviewList.getUnit());
                 jdglDayScheduleBill1.setDesignQuantity(xmslDrawReviewList.getCheckNum());
                 BigDecimal totalComp = new BigDecimal(0);
                 jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum().subtract(totalComp));
-//                jdglDayScheduleBill1.setBillPrice(xmslDrawReviewList.getP);
                 jdglDayScheduleBill1.setIsMain(xmslDrawReviewList.getImageProgress());
                 jdglDayScheduleBillList.add(jdglDayScheduleBill1);
             }
-            
         }
         return jdglDayScheduleBillList;
     }
@@ -101,6 +119,9 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
 
     @Transactional
     public int insertJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList) {
+        if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
+            return 0;
+        }
         for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
             jdglDayScheduleBill.setId(IdWorker.createId());
             jdglDayScheduleBill.setCreateUser(SecurityUtils.getUserName());
@@ -129,22 +150,44 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         return jdglDayScheduleBillMapper.updateJdglDayScheduleBill(jdglDayScheduleBill);
     }
 
+    @Override
+    public int updateJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList) {
+        if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
+            return 0;
+        }
+        for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
+            jdglDayScheduleBill.setUpdateUser(SecurityUtils.getUserName());
+            jdglDayScheduleBill.setUpdateTime(DateUtils.getNowDate());
+        }
+        return jdglDayScheduleBillMapper.updateJdglDayScheduleBillList(jdglDayScheduleBillList);
+    }
+
     @Transactional
     public int updateJdglDayScheduleBillList(List<JdglDayScheduleBill> jdglDayScheduleBillList, Long dayScheduleId, String wbsCode) {
         if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
-            return jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleIdAndWbsCode(dayScheduleId, wbsCode);
+            return 0;
         }
-        jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleIdAndWbsCode(dayScheduleId, wbsCode);
         for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
             jdglDayScheduleBill.setDayScheduleId(dayScheduleId);
             jdglDayScheduleBill.setWbsCode(wbsCode);
             jdglDayScheduleBill.setUpdateUser(SecurityUtils.getUserName());
             jdglDayScheduleBill.setUpdateTime(DateUtils.getNowDate());
-            if(jdglDayScheduleBill.getThisQuantity() != null && jdglDayScheduleBill.getBillPrice() != null) {
-                jdglDayScheduleBill.setBillValue(jdglDayScheduleBill.getThisQuantity().multiply(jdglDayScheduleBill.getBillPrice()));
-            }
         }
-        return jdglDayScheduleBillMapper.insertJdglDayScheduleBillList(jdglDayScheduleBillList);
+        return jdglDayScheduleBillMapper.updateJdglDayScheduleBillList(jdglDayScheduleBillList);
+//        if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
+//            return jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleIdAndWbsCode(dayScheduleId, wbsCode);
+//        }
+//        jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleIdAndWbsCode(dayScheduleId, wbsCode);
+//        for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
+//            jdglDayScheduleBill.setDayScheduleId(dayScheduleId);
+//            jdglDayScheduleBill.setWbsCode(wbsCode);
+//            jdglDayScheduleBill.setUpdateUser(SecurityUtils.getUserName());
+//            jdglDayScheduleBill.setUpdateTime(DateUtils.getNowDate());
+//            if(jdglDayScheduleBill.getThisQuantity() != null && jdglDayScheduleBill.getBillPrice() != null) {
+//                jdglDayScheduleBill.setBillValue(jdglDayScheduleBill.getThisQuantity().multiply(jdglDayScheduleBill.getBillPrice()));
+//            }
+//        }
+//        return jdglDayScheduleBillMapper.insertJdglDayScheduleBillList(jdglDayScheduleBillList);
     }
 
     @Transactional
@@ -241,6 +284,11 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
     @Override
     public void deleteJdglDayScheduleBillByDayScheduleId(Long dayScheduleId) {
         jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayScheduleId(dayScheduleId);
+    }
+
+    @Override
+    public int deleteJdglDayScheduleBillByDayWbsIds(List<Long> jdglDayScheduleWbsPkList, Long dayScheduleId) {
+        return jdglDayScheduleBillMapper.deleteJdglDayScheduleBillByDayWbsIds(jdglDayScheduleWbsPkList, dayScheduleId);
     }
 
 }

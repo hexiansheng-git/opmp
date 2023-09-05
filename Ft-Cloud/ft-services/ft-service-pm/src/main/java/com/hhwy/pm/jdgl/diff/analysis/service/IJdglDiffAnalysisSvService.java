@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.diff.analysis.service;
 
 import java.util.List;
 
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
 
 /**
@@ -26,4 +27,6 @@ public interface IJdglDiffAnalysisSvService {
     int deleteJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv);
 
     int deleteJdglDiffAnalysisSvByPks(List<Long> jdglDiffAnalysisSvPkList);
+
+    int initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis);
 }

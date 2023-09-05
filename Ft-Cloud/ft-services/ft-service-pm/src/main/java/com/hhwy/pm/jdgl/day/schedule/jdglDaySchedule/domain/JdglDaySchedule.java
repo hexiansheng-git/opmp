@@ -211,7 +211,7 @@ public class JdglDaySchedule extends BaseEntity {
      * 需要删除的wbsid集合
      */
     @JsonProperty
-    private List<Long> deleteWbsIdList;
+    private List<JdglDayScheduleWbs> deleteWbsList;
 
     /**
      * 需要更新的wbs集合

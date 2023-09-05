@@ -23,7 +23,7 @@ public interface JdglDayScheduleBillMapper {
 
     int updateJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill);
 
-    int updateJdglDayScheduleBillList(@Param("jdglDayScheduleBillList") List<JdglDayScheduleBill> jdglDayScheduleBillList);
+    int updateJdglDayScheduleBillList(@Param("list") List<JdglDayScheduleBill> jdglDayScheduleBillList);
 
     int deleteJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill);
 
@@ -39,5 +39,5 @@ public interface JdglDayScheduleBillMapper {
 
     List<JdglDayScheduleBill> getBillValueListByEndDate(@Param("endDate") Date endDate);
 
-
+    int deleteJdglDayScheduleBillByDayWbsIds(@Param("wbsids")List<Long> wbsids,@Param("dayScheduleId") Long dayScheduleId);
 }

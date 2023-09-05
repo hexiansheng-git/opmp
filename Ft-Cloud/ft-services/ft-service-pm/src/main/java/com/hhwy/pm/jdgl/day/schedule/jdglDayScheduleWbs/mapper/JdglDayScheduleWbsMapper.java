@@ -24,7 +24,7 @@ public interface JdglDayScheduleWbsMapper {
 
     int updateJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs);
 
-    int updateJdglDayScheduleWbsList(@Param("jdglDayScheduleWbsList") List<JdglDayScheduleWbs> jdglDayScheduleWbsList);
+    int updateJdglDayScheduleWbsList(@Param("list") List<JdglDayScheduleWbs> jdglDayScheduleWbsList);
 
     int deleteJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs);
 

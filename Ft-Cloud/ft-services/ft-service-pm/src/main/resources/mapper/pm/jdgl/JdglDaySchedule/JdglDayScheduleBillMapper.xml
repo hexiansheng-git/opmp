@@ -533,7 +533,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -591,5 +591,15 @@
     </delete>
     <delete id="deleteJdglDayScheduleBillByDayScheduleId">
         delete from `jdgl_day_schedule_bill` where day_schedule_id = #{dayScheduleId}
+    </delete>
+    <delete id="deleteJdglDayScheduleBillByDayWbsIds">
+        update `jdgl_day_schedule_bill` set del_flag = 1
+        <where>
+            day_schedule_id = #{dayScheduleId} and
+            `wbs_id` in
+            <foreach item="id" collection="wbsids" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
     </delete>
 </mapper>

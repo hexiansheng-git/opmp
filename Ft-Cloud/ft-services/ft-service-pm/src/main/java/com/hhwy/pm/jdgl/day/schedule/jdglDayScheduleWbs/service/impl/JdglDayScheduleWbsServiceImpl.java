@@ -155,28 +155,29 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsMapper.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
 
         //
-        if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
-            list.stream().forEach(vo -> {
 
-                JdglDayScheduleWbs jdglDayScheduleWbs1 = new JdglDayScheduleWbs();
-                jdglDayScheduleWbs1.setId(Long.valueOf(vo.getId()));
-                jdglDayScheduleWbs1.setPid(Long.valueOf(vo.getParentId()));
-                jdglDayScheduleWbs1.setAncestrals(vo.getAncestors());
-                jdglDayScheduleWbs1.setSort(vo.getSort());
-                jdglDayScheduleWbs1.setIsLeaf(vo.getHaveChildren() == 0 ? "1" : "0");
-                jdglDayScheduleWbs1.setHaveChildren(vo.getHaveChildren());
-                jdglDayScheduleWbs1.setWbsCode(vo.getCode());
-                jdglDayScheduleWbs1.setWbsId(Long.valueOf(vo.getId()));
-                jdglDayScheduleWbs1.setWbsName(vo.getName());
-                jdglDayScheduleWbs1.setWbsPid(Long.valueOf(vo.getParentId()));
+        list.stream().forEach(vo -> {
+            JdglDayScheduleWbs jdglDayScheduleWbs1 = new JdglDayScheduleWbs();
+            jdglDayScheduleWbs1.setId(Long.valueOf(vo.getId()));
+            jdglDayScheduleWbs1.setPid(Long.valueOf(vo.getParentId()));
+            jdglDayScheduleWbs1.setAncestrals(vo.getAncestors());
+            jdglDayScheduleWbs1.setSort(vo.getSort());
+            jdglDayScheduleWbs1.setIsLeaf(vo.getHaveChildren() == 0 ? "1" : "0");
+            jdglDayScheduleWbs1.setHaveChildren(vo.getHaveChildren());
+            jdglDayScheduleWbs1.setWbsCode(vo.getCode());
+            jdglDayScheduleWbs1.setWbsId(Long.valueOf(vo.getId()));
+            jdglDayScheduleWbs1.setWbsName(vo.getName());
+            jdglDayScheduleWbs1.setWbsPid(Long.valueOf(vo.getParentId()));
+            if (!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
                 for (JdglDayScheduleWbs jdglDayScheduleWbs2 : jdglDayScheduleWbsList) {
-                    if(StringUtils.isNotEmpty(vo.getCode()) && vo.getCode().equals(jdglDayScheduleWbs2.getWbsCode())) {
+                    if (StringUtils.isNotEmpty(vo.getCode()) && vo.getCode().equals(jdglDayScheduleWbs2.getWbsCode())) {
                         jdglDayScheduleWbs1.setIsExists("1");
                     }
                 }
-                returnList.add(jdglDayScheduleWbs1);
-            });
-        }
+            }
+            returnList.add(jdglDayScheduleWbs1);
+        });
+
 
         return returnList;
     }
@@ -207,15 +208,15 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         Long id = jdglDayScheduleWbs.getId();
         jdglDayScheduleWbs.setId(null);
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsMapper.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
-        if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
-            for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsList) {
-                JdglDayScheduleBill jdglDayScheduleBill = new JdglDayScheduleBill();
-                jdglDayScheduleBill.setDayScheduleId(jdglDayScheduleWbs1.getDayScheduleId());
-                jdglDayScheduleBill.setWbsCode(jdglDayScheduleWbs1.getWbsCode());
-                List<JdglDayScheduleBill> jdglDayScheduleBillList = iJdglDayScheduleBillService.getJdglDayScheduleBillList(jdglDayScheduleBill);
-                jdglDayScheduleWbs1.setJdglDayScheduleBillList(jdglDayScheduleBillList);
-            }
-        }
+//        if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
+//            for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsList) {
+//                JdglDayScheduleBill jdglDayScheduleBill = new JdglDayScheduleBill();
+//                jdglDayScheduleBill.setDayScheduleId(jdglDayScheduleWbs1.getDayScheduleId());
+//                jdglDayScheduleBill.setWbsCode(jdglDayScheduleWbs1.getWbsCode());
+//                List<JdglDayScheduleBill> jdglDayScheduleBillList = iJdglDayScheduleBillService.getJdglDayScheduleBillList(jdglDayScheduleBill);
+//                jdglDayScheduleWbs1.setJdglDayScheduleBillList(jdglDayScheduleBillList);
+//            }
+//        }
         List<JdglDayScheduleWbs> build = TreeUtil.build(jdglDayScheduleWbsList, id);
         if(!CollectionUtils.isEmpty(build)) {
             for (JdglDayScheduleWbs jdglDayScheduleWbs1: build) {
@@ -281,24 +282,28 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         if(CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
             return 0;
         }
-        List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = TreeUtil.treeToList(jdglDayScheduleWbsList);
+
         for (JdglDayScheduleWbs jdglDayScheduleWbs : jdglDayScheduleWbsList) {
 //            jdglDayScheduleWbs.setId(IdWorker.createId());
             jdglDayScheduleWbs.setCreateUser(SecurityUtils.getUserName());
             jdglDayScheduleWbs.setCreateTime(DateUtils.getNowDate());
+            jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
+            jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserId()+"");
+            jdglDayScheduleWbs.setEditerDate(DateUtils.getNowDate());
         }
+
         return jdglDayScheduleWbsMapper.insertJdglDayScheduleWbsList(jdglDayScheduleWbsList);
     }
 
     @Override
-    public int addWbsList(JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam){
+    public List<JdglDayScheduleWbs> addWbsList(JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam){
 
         List<JdglDayScheduleWbs> addWbsList = jdglDayScheduleWbsListParam.getAddWbsList();
         List<JdglDayScheduleWbs> wbsTreeList = jdglDayScheduleWbsListParam.getWbsTreeList() == null ? new ArrayList<>() : jdglDayScheduleWbsListParam.getWbsTreeList();
         Long dayScheduleId = jdglDayScheduleWbsListParam.getDayScheduleId();
 
         if(CollectionUtils.isEmpty(addWbsList)) {
-            return 0;
+            return null;
         }
 
         Set<String> wbsIds = new HashSet<>();
@@ -321,7 +326,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         List<XmslWbs> wbs = WbsRedisUtils.getWbs(wbsIds);
 
         if(CollectionUtils.isEmpty(wbs)) {
-            return 0;
+            return null;
         }
 
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList = TreeUtil.treeToList(wbsTreeList);
@@ -334,7 +339,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             String id = xmslWbs.getId();
 
             if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
-                JdglDayScheduleWbs jdglDayScheduleWbs11 = jdglDayScheduleWbsList.stream().filter(vo -> id.equals(vo.getWbsId())).findFirst().get();
+                JdglDayScheduleWbs jdglDayScheduleWbs11 = jdglDayScheduleWbsList.stream().filter(vo -> id.equals(vo.getWbsId())).findFirst().orElse(null);
                 if(jdglDayScheduleWbs11 != null) {
                     continue;
                 }
@@ -359,13 +364,55 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 
         jdglDayScheduleWbsList.stream().forEach(vo->{
             if(vo.getPid() == null) {
-                JdglDayScheduleWbs jdglDayScheduleWbs1 = jdglDayScheduleWbsList.stream().filter(vo1 -> vo1.getWbsId().equals(vo.getWbsPid())).findFirst().get();
+                JdglDayScheduleWbs jdglDayScheduleWbs1 = jdglDayScheduleWbsList.stream().filter(vo1 -> vo1.getWbsId().equals(vo.getWbsPid())).findFirst().orElse(null);
                 vo.setPid(jdglDayScheduleWbs1 == null ? null : jdglDayScheduleWbs1.getId());
             }
         });
 
-        return wbs.size()+addWbsList.size();
+        List<JdglDayScheduleWbs> build = TreeUtil.build(jdglDayScheduleWbsList, null);
 
+        return build;
+
+    }
+
+    @Override
+    public int deleteJdglDayScheduleWbsByOrLevel(List<JdglDayScheduleWbs> deleteWbsList, Long dayScheduleId) {
+        if(CollectionUtils.isEmpty(deleteWbsList)) {
+            return 0;
+        }
+
+        List<JdglDayScheduleWbs> listNeedDelete = new ArrayList<>();
+        List<Long> ids = new ArrayList<>();
+        for (JdglDayScheduleWbs dayScheduleWbs: deleteWbsList) {
+
+            JdglDayScheduleWbs jdglDayScheduleWbs1 = new JdglDayScheduleWbs();
+            jdglDayScheduleWbs1.setDayScheduleId(dayScheduleWbs.getDayScheduleId());
+            jdglDayScheduleWbs1.setPid(dayScheduleWbs.getId());
+            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsMapper.getJdglDayScheduleWbsList(jdglDayScheduleWbs1);
+            if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
+                if(CollectionUtils.isEmpty(dayScheduleWbs.getChildren())) {
+                    listNeedDelete.add(dayScheduleWbs);
+                    ids.add(dayScheduleWbs.getId());
+                } else {
+                    if(jdglDayScheduleWbsList.size() == dayScheduleWbs.getChildren().size()) {
+                        listNeedDelete.add(dayScheduleWbs);
+                        ids.add(dayScheduleWbs.getId());
+                        List<JdglDayScheduleWbs> children = dayScheduleWbs.getChildren();
+                        List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = TreeUtil.treeToList(children);
+                        for (JdglDayScheduleWbs jdglDayScheduleWbs11 : jdglDayScheduleWbsList1) {
+                            listNeedDelete.add(jdglDayScheduleWbs11);
+                            ids.add(jdglDayScheduleWbs11.getId());;
+                        }
+                    }
+                }
+
+            } else {
+                listNeedDelete.add(dayScheduleWbs);
+                ids.add(dayScheduleWbs.getId());
+            }
+        }
+
+        return deleteJdglDayScheduleBillByDayWbsIds(ids, dayScheduleId);
     }
 
 
@@ -466,26 +513,33 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 
     @Transactional
     public int updateJdglDayScheduleWbsList(List<JdglDayScheduleWbs> jdglDayScheduleWbsList, Long dayScheduleId) {
+
         if(CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
-            iJdglDayScheduleBillService.deleteJdglDayScheduleBillByDayScheduleId(dayScheduleId);
-            return jdglDayScheduleWbsMapper.deleteJdglDayScheduleWbsByDayScheduleId(dayScheduleId);
+            return 0;
         }
-        jdglDayScheduleWbsMapper.deleteJdglDayScheduleWbsByDayScheduleId(dayScheduleId);
-//        List<JdglDayScheduleWbs> jdglDayScheduleWbs1 = TreeUtil.treeToList(jdglDayScheduleWbsList);
-        for (JdglDayScheduleWbs jdglDayScheduleWbs : jdglDayScheduleWbsList) {
-            List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleWbs.getJdglDayScheduleBillList();
-            if(!CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
-                for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
-                    jdglDayScheduleBill.setWbsCode(jdglDayScheduleWbs.getWbsCode());
-                    jdglDayScheduleBill.setDayScheduleId(dayScheduleId);
-                }
 
+        List<JdglDayScheduleBill> jdglDayScheduleBillListAdd = new ArrayList<>();
+        List<JdglDayScheduleBill> jdglDayScheduleBillListUpdate = new ArrayList<>();
+
+        for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsList ) {
+            List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleWbs1.getJdglDayScheduleBillList();
+            if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
+                continue;
             }
-            iJdglDayScheduleBillService.updateJdglDayScheduleBillList(jdglDayScheduleBillList, dayScheduleId, jdglDayScheduleWbs.getWbsCode());
-            // 更新完清单更新主表产值数据;
+            for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
+                jdglDayScheduleBill.setDayScheduleId(dayScheduleId);
+                if(jdglDayScheduleBill.getId() == null) {
+                    jdglDayScheduleBillListAdd.add(jdglDayScheduleBill);
+                } else {
+                    jdglDayScheduleBillListUpdate.add(jdglDayScheduleBill);
+                }
+            }
         }
 
-        return jdglDayScheduleWbsMapper.insertJdglDayScheduleWbsList(jdglDayScheduleWbsList);
+        iJdglDayScheduleBillService.insertJdglDayScheduleBillList(jdglDayScheduleBillListAdd);
+        iJdglDayScheduleBillService.updateJdglDayScheduleBillList(jdglDayScheduleBillListUpdate);
+
+        return jdglDayScheduleWbsMapper.updateJdglDayScheduleWbsList(jdglDayScheduleWbsList);
     }
 
     @Transactional
@@ -497,6 +551,21 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 
     @Transactional
     public int deleteJdglDayScheduleWbsByPks(List<Long> jdglDayScheduleWbsPkList) {
+        if(CollectionUtils.isEmpty(jdglDayScheduleWbsPkList)) {
+            return 0;
+        }
+//        iJdglDayScheduleBillService.deleteJdglDayScheduleBillByDayWbsIds(jdglDayScheduleWbsPkList);
+
+        return jdglDayScheduleWbsMapper.deleteJdglDayScheduleWbsByPks(jdglDayScheduleWbsPkList);
+    }
+
+    @Transactional
+    public int deleteJdglDayScheduleBillByDayWbsIds(List<Long> jdglDayScheduleWbsPkList, Long dayScheduleId) {
+        if(CollectionUtils.isEmpty(jdglDayScheduleWbsPkList)) {
+            return 0;
+        }
+        iJdglDayScheduleBillService.deleteJdglDayScheduleBillByDayWbsIds(jdglDayScheduleWbsPkList, dayScheduleId);
+
         return jdglDayScheduleWbsMapper.deleteJdglDayScheduleWbsByPks(jdglDayScheduleWbsPkList);
     }
 
