@@ -4,9 +4,11 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.system.api.domain.SysUser;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -51,5 +53,8 @@ public interface SystemServiceApi {
     List<CurrencyInfo> selectCurrencyList(CurrencyInfo where);
 
     @GetMapping("/country/info/selectCountryInfoByNames")
-    AjaxResult selectCountryInfoByNames(@RequestParam("name") String name);;
+    AjaxResult selectCountryInfoByNames(@RequestParam("name") String name);
+
+    @GetMapping("/selfSysUser/selectSysUserInfo")
+    AjaxResult selectSysUserInfo(@RequestBody SysUser sysUser);
 }

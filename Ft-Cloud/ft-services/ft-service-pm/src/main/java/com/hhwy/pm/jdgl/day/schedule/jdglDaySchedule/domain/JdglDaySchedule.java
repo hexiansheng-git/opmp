@@ -53,6 +53,12 @@ public class JdglDaySchedule extends BaseEntity {
     @Excel(name = "合同币种")
     private String custUnit;
     /**
+     * 字段描述：合同币种编码
+     */
+    @JsonProperty
+    @Excel(name = "合同币种编码")
+    private String custUnitCode;
+    /**
      * 字段描述：本日完成（合同币种）
      */
     @JsonProperty
@@ -200,4 +206,17 @@ public class JdglDaySchedule extends BaseEntity {
      */
     @JsonProperty
     private List<JdglDayScheduleWbs> jdglDayScheduleWbsList;
+
+    /**
+     * 需要删除的wbsid集合
+     */
+    @JsonProperty
+    private List<Long> deleteWbsIdList;
+
+    /**
+     * 需要更新的wbs集合
+     */
+    @JsonProperty
+    private List<JdglDayScheduleWbs> jdglDayScheduleWbsListNeedUpdate;
+
 }

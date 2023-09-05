@@ -10,6 +10,7 @@
         <result property="projectName" column="project_name"/>
         <result property="date" column="date"/>
         <result property="custUnit" column="cust_unit"/>
+        <result property="custUnitCode" column="cust_unit_code"/>
         <result property="dayValueCu" column="day_value_cu"/>
         <result property="totalValueCu" column="total_value_cu"/>
         <result property="exchangeRate" column="exchange_rate"/>
@@ -39,6 +40,7 @@
              , `project_name`
              , `date`
              , `cust_unit`
+             , `cust_unit_code`
              , `day_value_cu`
              , `total_value_cu`
              , `exchange_rate`
@@ -72,6 +74,7 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="date != null ">and `date` = #{date}</if>
             <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
+            <if test="custUnitCode != null  and custUnitCode != ''">and `cust_unit_code` = #{custUnitCode}</if>
             <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
             <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
             <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
@@ -96,7 +99,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
         </where>
-        order by create_time desc
+        order by date desc
     </select>
 
     <select id="getJdglDayScheduleList" resultMap="JdglDayScheduleResultMap">
@@ -107,6 +110,7 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="date != null ">and `date` = #{date}</if>
             <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
+            <if test="custUnitCode != null  and custUnitCode != ''">and `cust_unit_code` = #{custUnitCode}</if>
             <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
             <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
             <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>
@@ -131,24 +135,24 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
         </where>
-        order by create_time desc
+        order by date desc
     </select>
     <select id="getHistoryValue"
             resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
         select sum(day_value_cu) totalValueCu,sum(day_value_dl) totalValueDl
-        from jdgl_day_schedule where date &lt; #{date} and taskStatus = "5"
+        from jdgl_day_schedule where date &lt; #{date} and task_status = "5" and del_flag != "1"
     </select>
     <select id="getCountValue" resultType="java.math.BigDecimal">
         select sum(day_value_dl)
         from jdgl_day_schedule
-        where taskStatus = "5"
+        where taskStatus = "5" and del_flag != "1"
         <if test="startDate != null "> and date &gt;= #{startDate}</if>
         <if test="endDate != null "> and date &lt;= #{endDate}</if>
     </select>
 
     <select id="getListByDateRange" resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
         <include refid="selectJdglDayScheduleVo"/>
-        where task_status = "5"
+        where task_status = "5" and del_flag != "1"
             <if test="startDate != null "> and date &gt;= #{startDate}</if>
             <if test="endDate != null "> and date &lt;= #{endDate}</if>
          order by date asc
@@ -161,6 +165,7 @@
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
             <if test="date != null ">`date`,</if>
             <if test="custUnit != null  and custUnit != ''">`cust_unit`,</if>
+            <if test="custUnitCode != null  and custUnitCode != ''">`cust_unit_code`,</if>
             <if test="dayValueCu != null ">`day_value_cu`,</if>
             <if test="totalValueCu != null ">`total_value_cu`,</if>
             <if test="exchangeRate != null ">`exchange_rate`,</if>
@@ -190,6 +195,7 @@
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
             <if test="date != null ">#{date},</if>
             <if test="custUnit != null  and custUnit != ''">#{custUnit},</if>
+            <if test="custUnitCode != null  and custUnitCode != ''">#{custUnitCode},</if>
             <if test="dayValueCu != null ">#{dayValueCu},</if>
             <if test="totalValueCu != null ">#{totalValueCu},</if>
             <if test="exchangeRate != null ">#{exchangeRate},</if>
@@ -224,6 +230,7 @@
             `project_name`,
             `date`,
             `cust_unit`,
+            `cust_unit_code`,
             `day_value_cu`,
             `total_value_cu`,
             `exchange_rate`,
@@ -254,6 +261,7 @@
                 #{item.projectName},
                 #{item.date},
                 #{item.custUnit},
+                #{item.custUnitCode},
                 #{item.dayValueCu},
                 #{item.totalValueCu},
                 #{item.exchangeRate},
@@ -287,6 +295,7 @@
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
             <if test="date != null ">`date` = #{date},</if>
             <if test="custUnit != null  and  custUnit != ''">`cust_unit` = #{custUnit},</if>
+            <if test="custUnitCode != null  and  custUnitCode != ''">`cust_unit_code` = #{custUnitCode},</if>
             <if test="dayValueCu != null ">`day_value_cu` = #{dayValueCu},</if>
             <if test="totalValueCu != null ">`total_value_cu` = #{totalValueCu},</if>
             <if test="exchangeRate != null ">`exchange_rate` = #{exchangeRate},</if>
@@ -337,6 +346,11 @@
             <trim prefix="cust_unit  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.custUnit}
+                </foreach>
+            </trim>
+            <trim prefix="cust_unit_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.custUnitCode}
                 </foreach>
             </trim>
             <trim prefix="day_value_cu  = case" suffix="end,">
@@ -468,6 +482,7 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="date != null ">and `date` = #{date}</if>
             <if test="custUnit != null  and custUnit != ''">and `cust_unit` = #{custUnit}</if>
+            <if test="custUnitCode != null  and custUnitCode != ''">and `cust_unit_code` = #{custUnitCode}</if>
             <if test="dayValueCu != null ">and `day_value_cu` = #{dayValueCu}</if>
             <if test="totalValueCu != null ">and `total_value_cu` = #{totalValueCu}</if>
             <if test="exchangeRate != null ">and `exchange_rate` = #{exchangeRate}</if>

@@ -467,6 +467,32 @@ public class XmslContractInfo extends CommonBaseEntity {
     @Excel(name = "是否有效（0无效 1有效）")
     private String valid;
 
+    /**
+     * 字段描述：发布人
+     */
+    @JsonProperty
+    private String issuePersonName;
+
+    /**
+     * 字段描述：发布日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date issueDate;
+
+    /**
+     * 字段描述：当前处理人
+     */
+    @JsonProperty
+    private String assignee;
+
+    /**
+     * 字段描述：流程状态名称
+     */
+    @JsonProperty
+    private String taskStatusName;
+
+
     private  BigDecimal version;
 
     //投保险种

@@ -1140,4 +1140,8 @@
             </foreach>
         </where>
     </update>
+
+    <update id="updateAllToInvalid">
+        update `xmsl_contract_info` set valid = 0 WHERE  1=1
+    </update>
 </mapper>

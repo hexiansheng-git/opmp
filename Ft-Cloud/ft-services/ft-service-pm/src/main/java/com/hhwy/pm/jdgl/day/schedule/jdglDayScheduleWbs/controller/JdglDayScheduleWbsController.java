@@ -8,6 +8,7 @@ import java.util.List;
 import java.io.IOException;
 
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Add;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +54,14 @@ public class JdglDayScheduleWbsController extends BaseController {
     public AjaxResult getJdglDayScheduleWbsList(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
 //        startPage();
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbsParam);
+        return getDataTableAjaxResult(jdglDayScheduleWbsList);
+    }
+
+    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
+    @GetMapping("/list4Person")
+    public AjaxResult getJdglDayScheduleWbsList4Person(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
+//        startPage();
+        List<JdglDayScheduleWbs> jdglDayScheduleWbsList = jdglDayScheduleWbsService.getJdglDayScheduleWbsListByPerson(jdglDayScheduleWbsParam);
         return getDataTableAjaxResult(jdglDayScheduleWbsList);
     }
 
@@ -130,8 +139,26 @@ public class JdglDayScheduleWbsController extends BaseController {
      * 获取wbs及图纸复核数据并过滤当前日报的wbs
      * @return
      */
-    @PostMapping("/getAllWbs4NoThis")
-    public AjaxResult getAllWbs4NoThis(Long datScheduleId) {
-        return AjaxResult.success(iJdglDayScheduleBillService.getAllWbs4NoThis(datScheduleId));
+    @PostMapping("/getLazyWbs4NoThis")
+    public AjaxResult getAllWbs4NoThis(@RequestBody JdglDayScheduleWbs jdglDayScheduleWbsParam) {
+        return AjaxResult.success(jdglDayScheduleWbsService.getLazyWbs4NoThis(jdglDayScheduleWbsParam));
+    }
+
+    /**
+     * 获取末级节点wbs数据
+     * @param jdglDayScheduleWbsParam
+     * @return
+     */
+    @PostMapping("/getLeafWbsList")
+    public AjaxResult getLeafWbsList(@RequestBody JdglDayScheduleWbs jdglDayScheduleWbsParam) {
+        return AjaxResult.success(jdglDayScheduleWbsService.getLeafWbsList(jdglDayScheduleWbsParam));
+    }
+
+
+    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
+    @PostMapping("/addWbsList")
+    public AjaxResult addWbsList(@Validated(ValidationGroups.Save.class) @RequestBody JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam) {
+        jdglDayScheduleWbsService.addWbsList(jdglDayScheduleWbsListParam);
+        return AjaxResult.success(jdglDayScheduleWbsListParam.getWbsTreeList());
     }
 }

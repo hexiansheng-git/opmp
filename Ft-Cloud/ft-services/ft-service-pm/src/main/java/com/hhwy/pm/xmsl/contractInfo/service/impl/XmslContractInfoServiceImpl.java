@@ -2,6 +2,9 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
@@ -114,10 +117,11 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
-
-        //查询最大有效版本号，如果查不到，版本号赋默认值1.0
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
-        xmslContractInfoParam.setVersion(maxVersion);
+        if (xmslContractInfoParam.getId() == null){
+            //查询最大有效版本号，如果查不到，版本号赋默认值1.0
+            xmslContractInfoParam.setVersion(maxVersion);
+        }
         XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
 
         //如果为空,说明第一次进入，从项目信息中拉取项目数据
@@ -125,10 +129,17 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             getProjectInfo();
             xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
         }
-        //查询字表数据
+        //查询子表数据
         if(xmslContractInfo!=null){
             getSonTable(xmslContractInfo, maxVersion);
         }
+        List<XmslContractInfo> historyList = this.getXmslContractInfoList(new XmslContractInfo());
+        if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1){
+            xmslContractInfo.setIsShowRecord(1);
+        }else {
+            xmslContractInfo.setIsShowRecord(0);
+        }
+
         return xmslContractInfo;
     }
 
@@ -154,7 +165,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             version = version.add(new BigDecimal("1.0"));
             xmslContractInfo.setVersion(version);
             xmslContractInfo.setValid("0");
-
+            xmslContractInfo.setTaskStatus("");
             insertXmslContractInfo(xmslContractInfo);
             XmslContractInfo param = new XmslContractInfo();
             param.setVersion(version);
@@ -172,7 +183,17 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     }
 
     public List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo) {
-        return xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
+        List<XmslContractInfo> historyList =xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
+        if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1) {
+            for (XmslContractInfo contractInfo : historyList) {
+                FtActBusiness flowInfo = FlowInfoSearchUtil.getFlowInfo(FlowEnum.XMSL_CONTRACT.getTableName(), String.valueOf(contractInfo.getId()));
+                contractInfo.setAssignee(flowInfo.getAssignee());
+                contractInfo.setTaskStatusName(flowInfo.getName());
+                contractInfo.setIssuePersonName(flowInfo.getCreateUser());
+                contractInfo.setIssueDate(flowInfo.getCreateTime());
+            }
+        }
+        return historyList;
     }
 
     /**
@@ -240,7 +261,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //第三步 修改主表
         xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
         xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
-        xmslContractInfo.setValid("0");
+//        xmslContractInfo.setValid("0");
         return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 
@@ -355,5 +376,10 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
             xmslContractPayinfoService.insertXmslContractPayinfoList(xmslContractPayinfoList,xmslContractInfo);
         }
+    }
+
+    @Override
+    public void updateAllToInvalid() {
+        xmslContractInfoMapper.updateAllToInvalid();
     }
 }
