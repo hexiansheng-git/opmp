@@ -84,7 +84,7 @@ public class QqchConstructionList extends BaseEntity {
     /**
      * 字段描述：计划编制时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @FtExcel(name = "计划编制时间", dateFormat = "yyyy-MM-dd")
     private Date planPreparationTime;
