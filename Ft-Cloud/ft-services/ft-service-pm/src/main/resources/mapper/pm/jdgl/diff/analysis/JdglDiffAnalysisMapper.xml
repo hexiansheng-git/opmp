@@ -20,6 +20,7 @@
         <result property="contractStartDate" column="contract_start_date"/>
         <result property="contractEndDate" column="contract_end_date"/>
         <result property="meterValue" column="meter_value"/>
+        <result property="totalCompValue" column="total_comp_value"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
         <result property="createUser" column="create_user"/>
@@ -57,6 +58,7 @@
              , `contract_start_date`
              , `contract_end_date`
              , `meter_value`
+             , `total_comp_value`
              , `file_group_id`
              , `remark`
              , `create_user`
@@ -98,6 +100,7 @@
             <if test="contractStartDate != null ">and `contract_start_date` = #{contractStartDate}</if>
             <if test="contractEndDate != null ">and `contract_end_date` = #{contractEndDate}</if>
             <if test="meterValue != null ">and `meter_value` = #{meterValue}</if>
+            <if test="totalCompValue != null ">and `total_comp_value` = #{totalCompValue}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
@@ -141,6 +144,7 @@
             <if test="contractStartDate != null ">and `contract_start_date` = #{contractStartDate}</if>
             <if test="contractEndDate != null ">and `contract_end_date` = #{contractEndDate}</if>
             <if test="meterValue != null ">and `meter_value` = #{meterValue}</if>
+            <if test="totalCompValue != null ">and `total_comp_value` = #{totalCompValue}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
@@ -208,6 +212,7 @@
             <if test="contractStartDate != null ">`contract_start_date`,</if>
             <if test="contractEndDate != null ">`contract_end_date`,</if>
             <if test="meterValue != null ">`meter_value`,</if>
+            <if test="totalCompValue != null ">`total_comp_value`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
@@ -245,6 +250,7 @@
             <if test="contractStartDate != null ">#{contractStartDate},</if>
             <if test="contractEndDate != null ">#{contractEndDate},</if>
             <if test="meterValue != null ">#{meterValue},</if>
+            <if test="totalCompValue != null ">#{totalCompValue},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
@@ -287,6 +293,7 @@
             `contract_start_date`,
             `contract_end_date`,
             `meter_value`,
+            `total_comp_value`,
             `file_group_id`,
             `remark`,
             `create_user`,
@@ -325,6 +332,7 @@
                 #{item.contractStartDate},
                 #{item.contractEndDate},
                 #{item.meterValue},
+                #{item.totalCompValue},
                 #{item.fileGroupId},
                 #{item.remark},
                 #{item.createUser},
@@ -366,6 +374,7 @@
             <if test="contractStartDate != null ">`contract_start_date` = #{contractStartDate},</if>
             <if test="contractEndDate != null ">`contract_end_date` = #{contractEndDate},</if>
             <if test="meterValue != null ">`meter_value` = #{meterValue},</if>
+            <if test="totalCompValue != null ">`total_comp_value` = #{totalCompValue},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
@@ -468,6 +477,11 @@
             <trim prefix="meter_value  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.meterValue}
+                </foreach>
+            </trim>
+            <trim prefix="total_comp_value  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalCompValue}
                 </foreach>
             </trim>
             <trim prefix="file_group_id  = case" suffix="end,">
@@ -595,6 +609,7 @@
             <if test="contractStartDate != null ">and `contract_start_date` = #{contractStartDate}</if>
             <if test="contractEndDate != null ">and `contract_end_date` = #{contractEndDate}</if>
             <if test="meterValue != null ">and `meter_value` = #{meterValue}</if>
+            <if test="totalCompValue != null ">and `total_comp_value` = #{totalCompValue}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>

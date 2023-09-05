@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -17,6 +18,8 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.IJdglMonthImagePlanSe
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
+import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheService;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -104,12 +107,15 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
     }
 
     @Override
-    public int initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis) {
+    public BigDecimal initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis) {
 
         List<JdglDiffAnalysisSv> insertList = new ArrayList<>();
 
         Date period = jdglDiffAnalysis.getPeriod();
         Long id = jdglDiffAnalysis.getId();
+
+        BigDecimal thisTotalPlanAmt = new BigDecimal(0);
+        BigDecimal thisTotalActAmt = new BigDecimal(0);
 
         Calendar cl = Calendar.getInstance();
 
@@ -135,8 +141,9 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlans) {
                 JdglDiffAnalysisSv jdglDiffAnalysisSv = new JdglDiffAnalysisSv();
 
-                jdglDiffAnalysisSv.setId(jdglMonthImagePlan.getId());
-                jdglDiffAnalysisSv.setPid(jdglMonthImagePlan.getPid());
+                jdglDiffAnalysisSv.setId(IdWorker.createId());
+                jdglDiffAnalysisSv.setOldId(jdglMonthImagePlan.getId());
+                jdglDiffAnalysisSv.setOldPid(jdglMonthImagePlan.getPid());
                 jdglDiffAnalysisSv.setDiffAnalysisId(id);
                 jdglDiffAnalysisSv.setPlanItemCode(jdglMonthImagePlan.getWorkCode());
                 jdglDiffAnalysisSv.setPlanItemName(jdglMonthImagePlan.getWorkName());
@@ -151,20 +158,42 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                 if(!CollectionUtils.isEmpty(wbsListByDateRange)) {
                     JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWbsCode())).findFirst().orElse(null);
                     if(jdglDayScheduleWbs4Value != null) {
-                        if(jdglDayScheduleWbs4Value.getThisValue() != null && jdglMonthImagePlan.getPlanCompValue() != null) {
-                            jdglDiffAnalysisSv.setThisDeviationNum(jdglDayScheduleWbs4Value.getThisValue().subtract(jdglMonthImagePlan.getPlanCompValue()));
-
+                        BigDecimal planCompValue = jdglMonthImagePlan.getPlanCompValue();
+                        BigDecimal thisValue = jdglDayScheduleWbs4Value.getThisValue();
+                        if(thisValue != null && planCompValue!= null) {
+                            jdglDiffAnalysisSv.setThisDeviationNum(thisValue.subtract(planCompValue));
+                        }
+                        if(planCompValue != null) {
+                            thisTotalPlanAmt.add(planCompValue);
+                        }
+                        if(thisValue != null) {
+                            thisTotalActAmt.add(thisValue);
                         }
                         if(jdglDayScheduleWbs4Value.getThisQuantity() != null &&  jdglMonthImagePlan.getPlanCompQuantity() != null){
                             jdglDiffAnalysisSv.setSvNum(jdglDayScheduleWbs4Value.getThisQuantity().subtract(jdglMonthImagePlan.getPlanCompQuantity()));
                         }
                     }
                 }
+
+                insertList.add(jdglDiffAnalysisSv);
+            }
+
+            for (JdglDiffAnalysisSv jdglDiffAnalysisSv : insertList) {
+                JdglDiffAnalysisSv jdglDiffAnalysisSv1 = insertList.stream().filter(vo -> vo.getOldId().equals(jdglDiffAnalysisSv.getOldPid())).findFirst().orElse(null);
+                if(jdglDiffAnalysisSv1 != null) {
+                    jdglDiffAnalysisSv.setPid(jdglDiffAnalysisSv1.getId());
+                }
             }
         }
 
+        jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
 
+        jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
 
-        return 0;
+        if(new BigDecimal(0).equals(thisTotalPlanAmt)) {
+            return new BigDecimal(0);
+        }
+
+        return thisTotalActAmt.subtract(thisTotalPlanAmt).divide(thisTotalPlanAmt);
     }
 }

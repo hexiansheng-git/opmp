@@ -10,10 +10,17 @@ import java.math.BigDecimal;
 public class JdglDayScheduleWbs4Value extends JdglDayScheduleWbs{
 
     /**
-     * 字段描述：本日产值
+     * 字段描述：本阶段实际产值
      */
     @JsonProperty
-    @Excel(name = "本日产值")
+    @Excel(name = "本阶段实际产值")
     private BigDecimal thisValue;
+
+    /**
+     * 字段描述：本阶段计划产值
+     */
+    @JsonProperty
+    @Excel(name = "本阶段计划产值")
+    private BigDecimal thisPlanValue;
 
 }

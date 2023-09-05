@@ -1,7 +1,9 @@
 package com.hhwy.pm.jdgl.diff.analysis.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisPath;
 
 /**
@@ -26,4 +28,8 @@ public interface IJdglDiffAnalysisPathService {
     int deleteJdglDiffAnalysisPath(JdglDiffAnalysisPath jdglDiffAnalysisPath);
 
     int deleteJdglDiffAnalysisPathByPks(List<Long> jdglDiffAnalysisPathPkList);
+
+    BigDecimal initKeyJdglDiffAnalysisPath(JdglDiffAnalysis jdglDiffAnalysis);
+
+    BigDecimal initNotKeyJdglDiffAnalysisPath(JdglDiffAnalysis jdglDiffAnalysis);
 }

@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.diff.analysis.timer;
 
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
+import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;

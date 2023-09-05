@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.diff.analysis.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
@@ -28,5 +29,5 @@ public interface IJdglDiffAnalysisSvService {
 
     int deleteJdglDiffAnalysisSvByPks(List<Long> jdglDiffAnalysisSvPkList);
 
-    int initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis);
+    BigDecimal initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis);
 }

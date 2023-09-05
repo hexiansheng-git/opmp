@@ -121,6 +121,12 @@ public class JdglDiffAnalysis extends BaseEntity {
     @Excel(name = "计量产值")
     private BigDecimal meterValue;
     /**
+     * 字段描述：开累完成产值
+     */
+    @JsonProperty
+    @Excel(name = "开累完成产值")
+    private BigDecimal totalCompValue;
+    /**
      * 字段描述：附件组id
      */
     @JsonProperty

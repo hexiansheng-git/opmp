@@ -239,4 +239,8 @@ public class JdglDiffAnalysisSv extends TreeNode<JdglDiffAnalysisSv> {
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
+
+    private Long oldId;
+
+    private Long oldPid;
 }

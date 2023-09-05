@@ -167,4 +167,17 @@ public class StatisticsUtils {
         return returnMap;
 
     }
+
+    public static Map<String, Date> getDateRange4YearMonth(Date period) {
+        if(period == null) {
+            return new HashMap<>();
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String format = sdf.format(period);
+        String[] split = format.split("-");
+
+        return getDateRange4YearMonth(split[0], split[1]);
+
+    }
 }
