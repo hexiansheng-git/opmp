@@ -101,8 +101,7 @@ public class TreeUtil {
         Long id = IdWorker.createId();
         int sort = 1;
         List<T> children = node.getChildren();
-        Long oId = node.getId();
-        node.setId(oId == null ? id : oId);
+        node.setId(id);
         node.setChildren(null);
         resultList.add(node);
         if(!CollectionUtils.isEmpty(children)){
