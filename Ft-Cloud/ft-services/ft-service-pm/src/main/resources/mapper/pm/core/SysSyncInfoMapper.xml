@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.core.sync.mapper.SysSyncInfoMapper">
+    <resultMap type="com.hhwy.pm.core.sync.domain.SysSyncInfo" id="SysSyncInfoResult">
+        <result property="businessName"    column="business_name"    />
+        <result property="lastPushId"    column="last_push_id"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="ptVar4"    column="pt_var4"    />
+        <result property="ptVar5"    column="pt_var5"    />
+    </resultMap>
+
+    <sql id="selectSysSyncInfoVo">
+        select `business_name`, `last_push_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `sys_sync_info`
+    </sql>
+    
+    <select id="selectSysSyncInfoList" parameterType="com.hhwy.pm.core.sync.domain.SysSyncInfo" resultMap="SysSyncInfoResult">
+        <include refid="selectSysSyncInfoVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="lastPushId != null "> and `last_push_id` = #{lastPushId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+        </where>
+        </select>
+    
+    <select id="selectSysSyncInfoById" parameterType="String" resultMap="SysSyncInfoResult">
+        <include refid="selectSysSyncInfoVo"/>
+        where `business_name` = #{businessName}
+    </select>
+    <insert id="insertSysSyncInfo" parameterType="com.hhwy.pm.core.sync.domain.SysSyncInfo">
+        insert into `sys_sync_info`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="businessName != null">`business_name`,</if>
+            <if test="lastPushId != null">`last_push_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="ptVar5 != null">`pt_var5`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="businessName != null">#{businessName},</if>
+            <if test="lastPushId != null">#{lastPushId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert into `sys_sync_info` (
+                                    `business_name`,
+                                                `last_push_id`,
+                                                `create_user`,
+                                                `create_user_name`,
+                                                `create_time`,
+                                                `update_user`,
+                                                `update_time`,
+                                                `del_user`,
+                                                `del_time`,
+                                                `del_flag`,
+                                                `pt_var1`,
+                                                `pt_var2`,
+                                                `pt_var3`,
+                                                `pt_var4`,
+                                                `pt_var5`,
+                            )values
+        <foreach collection="dataList" separator="," item="item" index="index" >
+(
+                                                #{item.businessName},
+                                                                #{item.lastPushId},
+                                                                #{item.createUser},
+                                                                #{item.createUserName},
+                                                                #{item.createTime},
+                                                                #{item.updateUser},
+                                                                #{item.updateTime},
+                                                                #{item.delUser},
+                                                                #{item.delTime},
+                                                                #{item.delFlag},
+                                                                #{item.ptVar1},
+                                                                #{item.ptVar2},
+                                                                #{item.ptVar3},
+                                                                #{item.ptVar4},
+                                                                #{item.ptVar5},
+                                        )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `sys_sync_info`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="last_push_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.lastPushId != null ">
+                                when `id` = #{item.id} then #{item.lastPushId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUserName != null ">
+                                when `id` = #{item.id} then #{item.createUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var4 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar4 != null ">
+                                when `id` = #{item.id} then #{item.ptVar4}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var5 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar5 != null ">
+                                when `id` = #{item.id} then #{item.ptVar5}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateSysSyncInfo" parameterType="com.hhwy.pm.core.sync.domain.SysSyncInfo">
+        update `sys_sync_info`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lastPushId != null">`last_push_id` = #{lastPushId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        where `business_name` = #{businessName}
+    </update>
+
+    <update id="deleteSysSyncInfoById" parameterType="String">
+        update `sys_sync_info` set del_flag = 1 where `business_name` = #{businessName}
+    </update>
+
+    <update id="deleteSysSyncInfoByIds" parameterType="String">
+        update `sys_sync_info` set del_flag = 1 where `business_name` in
+        <foreach item="businessName" collection="array" open="(" separator="," close=")">
+            #{businessName}
+        </foreach>
+    </update>
+
+
+</mapper>

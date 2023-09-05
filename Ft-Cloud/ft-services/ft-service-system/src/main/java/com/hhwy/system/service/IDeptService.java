@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface IDeptService {
 
+    List<SysDept> list(SysDept dept);
+    
     //查询部门树形结构 update: zxb 2022-12-30
     List<SysTreeUtil> getDeptByTree();
 

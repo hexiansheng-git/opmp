@@ -28,6 +28,12 @@ public class DeptServiceImpl implements IDeptService {
     public static final String DATA_SCOPE_ALL = "1";//全部数据权限
 
     @Override
+    public List<SysDept> list(SysDept dept) {
+        
+        return null;
+    }
+
+    @Override
     public List<SysTreeUtil> getDeptByTree() {
         List<SysTreeUtil> list = deptMapper.getDeptByTree();
         List<SysTreeUtil> deptTree = TreeObject.getDeptTree(list);

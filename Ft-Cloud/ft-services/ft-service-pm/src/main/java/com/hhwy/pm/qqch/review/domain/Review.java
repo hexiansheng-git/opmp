@@ -222,5 +222,6 @@ public class Review extends CommonBaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date initDate;
 
-    
+    private Long projectId;
+    private String projectName;
 }
