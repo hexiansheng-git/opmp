@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
@@ -224,9 +225,6 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             jdglDiffAnalysis.setContractEndDate(validMaxVersionContractInfo.getCompletedTime());
         }
 
-        // 重要性
-        String isImportance = "";
-
         // 项目规模
         String type1 = "";
         String type2 = "";
@@ -277,7 +275,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 if(isOver.equals(contFlag)) {
                     jdglDiffAnalysis.setContractOverGrade(score);
                 }
-                if(isImportance.equals(importance)) {
+                if(StringUtils.isNotEmpty(importance)) {
                     jdglDiffAnalysis.setImportanceGrade(score);
                 }
                 if(type1.contains(projectInfo.getBusinessAreasAndProducts())
