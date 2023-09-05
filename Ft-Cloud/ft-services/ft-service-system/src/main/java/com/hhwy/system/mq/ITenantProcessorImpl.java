@@ -21,10 +21,12 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 
     @Override
     public void doPostForInsert(SysTenant sysTenant) {
-        System.out.println("122222********************************************************************************");
+        System.out.println("租户创建成功回调方法开始********************************************************************************");
         Map<String, Object> projectInfo = sysTenant.getParams();
         rocketMQTemplate.convertAndSend("pm:tenantSuccess",projectInfo);
         AjaxResult res = pmServiceApi.insertProjectTenant(projectInfo);
+        System.out.println("租户创建成功回调方法开始********************************************************************************");
+
 //        if(!res.get("code").toString().equals("200")){
 //            throw  new CustomBusinessException("同步项目信息到租户数据库失败！！");
 //        };
