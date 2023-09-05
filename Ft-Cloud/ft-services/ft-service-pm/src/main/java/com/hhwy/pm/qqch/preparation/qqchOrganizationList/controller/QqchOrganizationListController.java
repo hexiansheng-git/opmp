@@ -74,7 +74,8 @@ public class QqchOrganizationListController extends BaseController {
         try {
             qqchImportants = excelUtil.importTreeExcel(file.getInputStream());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
 
         if (!CollectionUtils.isEmpty(qqchImportants)) {

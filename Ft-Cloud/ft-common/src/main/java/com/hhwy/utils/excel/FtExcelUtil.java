@@ -891,6 +891,8 @@ public class FtExcelUtil<T> {
         } else {
             ts = importExcel(inputStream, startRow);
         }
+        List<T> collect = ts.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(collect)) throw new RuntimeException("请检查导入的数据是否正确或者模板是否正确");
 
         this.init(list, sheetName, FtExcel.Type.IMPORT);
         List<Object[]> fieldsAnno = this.fields;
