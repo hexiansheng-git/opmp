@@ -9,6 +9,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -123,7 +124,11 @@ public class XmslContractInfoController extends BaseController {
      * @return  监听器
      */
     @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
     public AjaxResult updateContract(@RequestParam ("id") Long id) {
+        //修改其它合同信息为无效
+        xmslContractInfoService.updateAllToInvalid();
+
         XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
         xmslContractInfo1.setId(id);
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfo1);

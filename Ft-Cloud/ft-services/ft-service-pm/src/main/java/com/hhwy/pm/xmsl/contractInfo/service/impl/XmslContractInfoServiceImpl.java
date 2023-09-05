@@ -187,10 +187,10 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1) {
             for (XmslContractInfo contractInfo : historyList) {
                 FtActBusiness flowInfo = FlowInfoSearchUtil.getFlowInfo(FlowEnum.XMSL_CONTRACT.getTableName(), String.valueOf(contractInfo.getId()));
-                contractInfo.setProcessTaskMan(flowInfo.getAssignee());
-                contractInfo.setCreateUserName(flowInfo.getName());
-                contractInfo.setCreateUser(flowInfo.getCreateUser());
-                contractInfo.setCreateTime(flowInfo.getCreateTime());
+                contractInfo.setAssignee(flowInfo.getAssignee());
+                contractInfo.setTaskStatusName(flowInfo.getName());
+                contractInfo.setIssuePersonName(flowInfo.getCreateUser());
+                contractInfo.setIssueDate(flowInfo.getCreateTime());
             }
         }
         return historyList;
@@ -261,7 +261,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //第三步 修改主表
         xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
         xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
-        xmslContractInfo.setValid("0");
+//        xmslContractInfo.setValid("0");
         return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 
@@ -376,5 +376,10 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if(CollectionUtils.isNotEmpty(xmslContractPayinfoList)){
             xmslContractPayinfoService.insertXmslContractPayinfoList(xmslContractPayinfoList,xmslContractInfo);
         }
+    }
+
+    @Override
+    public void updateAllToInvalid() {
+        xmslContractInfoMapper.updateAllToInvalid();
     }
 }
