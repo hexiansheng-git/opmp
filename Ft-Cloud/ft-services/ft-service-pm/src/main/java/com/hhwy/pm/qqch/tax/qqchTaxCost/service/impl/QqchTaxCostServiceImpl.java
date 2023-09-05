@@ -141,6 +141,10 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         taxCost.setDataType("2");
         taxInVO.setOtherList(bean.getCostList(taxCost));
 
+        // 在查询税费
+        taxCost.setDataType("3");
+        taxInVO.setTaxList(bean.getCostList(taxCost));
+
         entity.setStageIdentity(reviewService.getStage());
         entity.setVersion(VersionUtil.getVersion(TN, taxCost.getVersion()));
         entity.setDto(taxInVO);
@@ -162,8 +166,8 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         // 生成记录id // 分期会用到
         Long recordId = IdWorker.createId();
 
-        // 当税费不为空的时候才能进行插入数据
-        if (!CollectionUtils.isEmpty(dto.getDto().getTaxList())) {
+        // 当税费为空的时候才能进行插入数据
+        if (CollectionUtils.isEmpty(dto.getDto().getTaxList())) {
             // 在分期中插入数据
             qqchTaxStageService.saveStage(recordId, "2");
         }
@@ -257,7 +261,6 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         for (QqchTaxCost taxIn : costList) {
             taxIn.setDetailList(idMap.get(taxIn.getId()));
         }
-        // dealDetailList(costList);
         return costList;
     }
 
@@ -360,6 +363,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         EntityUtils.setCreateUpdateInfo(list);
         EntityUtils.setCreateUpdateInfo(allDetails);
         // 新增数据
+        //List<QqchTaxCost> taxCostList = dealDetailList(list);
         this.qqchTaxCostMapper.insertQqchTaxCostList(list);
         return allDetails;
     }
@@ -514,19 +518,22 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                         parent.setLocalAmt(parent.getUsdLocalAmt());
                         // 计算每一年的数据
                         List<QqchTaxCostDetail> detailList = parent.getDetailList();
-                        for (QqchTaxCostDetail detail : detailList) {
-                            String year = detail.getYear();
-                            List<QqchTaxCostDetail> details = t.getDetailList();
-                            details.stream().filter(ite -> year.equals(ite.getYear())).forEach(item -> {
-                                detail.setUsdInnerAmt(BigDecimalUtils.sum(detail.getUsdInnerAmt(), item.getUsdInnerAmt()));
-                                detail.setUsdLocalAmt(BigDecimalUtils.sum(detail.getUsdLocalAmt(), item.getUsdLocalAmt()));
-                                detail.setUsdReqAmt(BigDecimalUtils.sum(detail.getUsdReqAmt(), item.getUsdReqAmt()));
+                        if (!CollectionUtils.isEmpty(detailList)){
+                            for (QqchTaxCostDetail detail : detailList) {
+                                String year = detail.getYear();
+                                List<QqchTaxCostDetail> details = t.getDetailList();
+                                details.stream().filter(ite -> year.equals(ite.getYear())).forEach(item -> {
+                                    detail.setUsdInnerAmt(BigDecimalUtils.sum(detail.getUsdInnerAmt(), item.getUsdInnerAmt()));
+                                    detail.setUsdLocalAmt(BigDecimalUtils.sum(detail.getUsdLocalAmt(), item.getUsdLocalAmt()));
+                                    detail.setUsdReqAmt(BigDecimalUtils.sum(detail.getUsdReqAmt(), item.getUsdReqAmt()));
 
-                                detail.setInnerAmt(detail.getUsdInnerAmt());
-                                detail.setLocalAmt(detail.getUsdLocalAmt());
-                                detail.setReqAmt(detail.getUsdReqAmt());
-                            });
+                                    detail.setInnerAmt(detail.getUsdInnerAmt());
+                                    detail.setLocalAmt(detail.getUsdLocalAmt());
+                                    detail.setReqAmt(detail.getUsdReqAmt());
+                                });
+                            } 
                         }
+                       
                         children.add(t);
                         parent.setChildren(children);
                     });

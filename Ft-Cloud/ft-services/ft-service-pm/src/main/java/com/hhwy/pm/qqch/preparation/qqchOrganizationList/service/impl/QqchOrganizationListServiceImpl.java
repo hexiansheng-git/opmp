@@ -63,7 +63,6 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
 
     /**
      * 获取变更程序策划
-     *
      * @param version
      * @return
      */
@@ -202,6 +201,16 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
 
     @Override
     public List<QqchOrganizationList> mergeData(List<QqchOrganizationList> importDataList, List<QqchOrganizationList> oldDataList) {
+
+        for (QqchOrganizationList qqchOrganizationList : oldDataList) {
+            List<QqchOrganizationList> children = qqchOrganizationList.getChildren();
+            for (QqchOrganizationList child : children) {
+                if (StringUtils.isEmpty(child.getOrganization())) {
+                    throw new RuntimeException(qqchOrganizationList.getOrganization()+"的组织机构不能为空");
+                }
+            }
+        }
+
         LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
         Set<String> strings = organizationCat.keySet();
         this.checkData(importDataList);
