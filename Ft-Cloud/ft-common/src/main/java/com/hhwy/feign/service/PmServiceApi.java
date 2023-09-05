@@ -23,6 +23,6 @@ public interface PmServiceApi {
     /**
      *  拆入对应租户的项目信息
      */
-    @PostMapping("/projectBasicInfo/addTenant/")
+    @PostMapping("/projectBasicInfo/addTenant")
     AjaxResult insertProjectTenant(@RequestBody Map map);
 }

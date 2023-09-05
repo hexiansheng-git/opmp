@@ -58,7 +58,7 @@
             )
     </select>
 
-    <select id="selectDeptIdByProjectId" parameterType="Long" resultMap="SysDeptResult">
+    <select id="selectDeptIdByProjectId" parameterType="String" resultMap="SysDeptResult">
         SELECT
             dept_id ,
             parent_id ,
