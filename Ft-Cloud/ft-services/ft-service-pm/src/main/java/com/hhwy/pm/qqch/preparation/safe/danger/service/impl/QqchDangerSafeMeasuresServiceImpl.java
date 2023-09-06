@@ -89,7 +89,8 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             for (QqchDangerSafeMeasures qqchDangerSafeMeasures : newList) {
                 List<QqchDangerSafeMeasuresDetail> detailListChild = new ArrayList<>();
                 for (QqchDangerSafeMeasuresDetail deTail : deTailList) {
-                    if (qqchDangerSafeMeasures.getId().equals(deTail.getMasterId())) {
+                    if (qqchDangerSafeMeasures.getId() != null && qqchDangerSafeMeasures.getId()
+                        .equals(deTail.getMasterId())) {
                         detailListChild.add(deTail);
                     }
                 }
