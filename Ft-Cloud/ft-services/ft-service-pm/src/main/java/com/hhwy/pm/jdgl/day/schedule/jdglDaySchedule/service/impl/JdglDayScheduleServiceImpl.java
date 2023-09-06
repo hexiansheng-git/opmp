@@ -2,10 +2,9 @@ package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.impl;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -17,6 +16,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.IJdglQuarterPlanService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -73,6 +73,57 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
         }
         return jdglDaySchedule1;
+    }
+
+    @Override
+    public Map<String, BigDecimal> getMonthScheduleByMonthRange(Date startPeriod, Date endPeriod) {
+
+        Map<String, BigDecimal> map = new HashMap<>();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+
+        Map<String, Date> startPeriodRange = StatisticsUtils.getDateRange4YearMonth(startPeriod);
+        Map<String, Date> endPeriodRange = StatisticsUtils.getDateRange4YearMonth(endPeriod);
+        Date start = startPeriodRange.get("start");
+        Date end = endPeriodRange.get("end");
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(startPeriod);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(endPeriod);
+
+        LocalDate ofStart = LocalDate.of(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH + 1), 1);
+        LocalDate ofEnd = LocalDate.of(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH + 1), 1);
+
+        Period between = Period.between(ofStart, ofEnd);
+        int months = between.getYears() * 12 + between.getMonths();
+        List<JdglDaySchedule> listByDateRange = getListByDateRange(start, end);
+        for (int i = 0; i<=months; i++) {
+            calendar1.add(Calendar.MONTH, i);
+            Date time = calendar1.getTime();
+            String format = sdf.format(time);
+            Map<String, Date> dateRange4YearMonth = StatisticsUtils.getDateRange4YearMonth(time);
+
+            Date start1 = dateRange4YearMonth.get("start");
+            Date end1 = dateRange4YearMonth.get("end");
+
+            if(!CollectionUtils.isEmpty(listByDateRange)) {
+                BigDecimal bigDecimal = new BigDecimal(0);
+                for (JdglDaySchedule jdglDaySchedule : listByDateRange) {
+                    if((start1.before(jdglDaySchedule.getDate()) || start1.equals(jdglDaySchedule.getDate()))
+                            && end1.after(jdglDaySchedule.getDate())) {
+                        if(jdglDaySchedule.getDayValueDl() != null) {
+                            bigDecimal.add(jdglDaySchedule.getDayValueDl());
+                        }
+                    }
+                }
+                map.put(format, bigDecimal);
+            } else {
+                map.put(format, new BigDecimal(0));
+            }
+        }
+
+        return map;
     }
 
     public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {

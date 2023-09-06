@@ -140,6 +140,17 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
     @Transactional
     public int insertJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
+
+        String year = jdglMonthPlan.getYear();
+        String month = jdglMonthPlan.getMonth();
+        JdglMonthPlan queryExist = new JdglMonthPlan();
+        queryExist.setYear(year);
+        queryExist.setMonth(month);
+        List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
+            throw new RuntimeException("已存在"+year+"年"+month+"月数据!");
+        }
+
         Long id = IdWorker.createId();
         jdglMonthPlan.setId(id);
         jdglMonthPlan.setCreateUser(SecurityUtils.getUserName());

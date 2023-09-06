@@ -1,22 +1,27 @@
 package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
 import com.hhwy.pm.jdgl.diff.analysis.mapper.JdglDiffAnalysisSvMapper;
+import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.IJdglMonthImagePlanService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
+import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsPeriodValueVO;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheService;
@@ -45,7 +50,13 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
     private IJdglMonthImagePlanService jdglMonthImagePlanService;
 
     @Autowired
+    private IJdglDayScheduleService jdglDayScheduleService;
+
+    @Autowired
     private IJdglDayScheduleWbsService iJdglDayScheduleWbsService;
+
+    @Autowired
+    private IJdglDiffAnalysisService jdglDiffAnalysisService;
 
     public JdglDiffAnalysisSv getJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
         return jdglDiffAnalysisSvMapper.getJdglDiffAnalysisSv(jdglDiffAnalysisSv);
@@ -195,5 +206,56 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         }
 
         return thisTotalActAmt.subtract(thisTotalPlanAmt).divide(thisTotalPlanAmt);
+    }
+
+    @Override
+    public List<PlanStatisticsPeriodValueVO> getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
+        List<PlanStatisticsPeriodValueVO> returnList = new ArrayList<>();
+        Long diffAnalysisId = jdglDiffAnalysisSvParam.getDiffAnalysisId();
+        JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
+        jdglDiffAnalysis.setId(diffAnalysisId);
+        JdglDiffAnalysis jdglDiffAnalysis1 = jdglDiffAnalysisService.getJdglDiffAnalysis(jdglDiffAnalysis);
+        if(jdglDiffAnalysis1 == null) {
+            return returnList;
+        }
+
+        Date period = jdglDiffAnalysis1.getPeriod();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(period);
+
+        String year = cl.get(Calendar.YEAR) + "";
+        String nextMonth = (cl.get(Calendar.MONTH) + 2) < 10 ? "0" + (cl.get(Calendar.MONTH) + 2) : (cl.get(Calendar.MONTH) + 2)  + "";
+        Date startPeriod = cl.getTime();
+        try {
+            startPeriod = sdf.parse(year + "-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        JdglMonthPlan jdglMonthPlan = new JdglMonthPlan();
+        jdglMonthPlan.setTaskStatus("5");
+        jdglMonthPlan.setIsUse("1");
+        // 获取月计划产值
+        List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanService.getJdglMonthPlanList(jdglMonthPlan);
+        if(CollectionUtils.isEmpty(jdglMonthPlanList)) {
+           return returnList;
+        }
+        Map<String, BigDecimal> monthScheduleByMonthRange = jdglDayScheduleService.getMonthScheduleByMonthRange(startPeriod, period);
+        for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
+            if(year.equals(jdglMonthPlan1.getYear()) && nextMonth.compareTo(jdglMonthPlan1.getMonth()) > 0) {
+                PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO = new PlanStatisticsPeriodValueVO();
+                planStatisticsPeriodValueVO.setPeriod(jdglMonthPlan1.getYear() + jdglMonthPlan1.getMonth());
+                planStatisticsPeriodValueVO.setPlanValue(jdglMonthPlan1.getThisPlanValueDl());
+                if(monthScheduleByMonthRange != null) {
+                    planStatisticsPeriodValueVO.setCompValue(monthScheduleByMonthRange.get(planStatisticsPeriodValueVO.getPeriod()));
+                }
+                if(planStatisticsPeriodValueVO.getPlanValue() != null && planStatisticsPeriodValueVO.getCompValue() != null) {
+                    planStatisticsPeriodValueVO.setDiffValue(planStatisticsPeriodValueVO.getCompValue().subtract(planStatisticsPeriodValueVO.getPlanValue()));
+                }
+            }
+        }
+
+        return returnList;
     }
 }

@@ -140,6 +140,17 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     @Transactional
     public int insertJdglWeekPlan(JdglWeekPlan jdglWeekPlan) {
+        String week = jdglWeekPlan.getWeek();
+        String year = jdglWeekPlan.getYear();
+
+        JdglWeekPlan queryExist = new JdglWeekPlan();
+        queryExist.setYear(year);
+        queryExist.setWeek(week);
+        List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {
+            throw new RuntimeException("已存在"+year+"年第"+week+"周数据!");
+        }
+
         Long id = IdWorker.createId();
         jdglWeekPlan.setId(id);
         jdglWeekPlan.setCreateUser(SecurityUtils.getUserName());

@@ -26,6 +26,11 @@ public class PlanStatisticsPeriodValueVO {
     @JsonProperty
     private BigDecimal compValue;
 
+    /**
+     * 偏差
+     */
+    @JsonProperty
+    private BigDecimal diffValue;
 
 
 }

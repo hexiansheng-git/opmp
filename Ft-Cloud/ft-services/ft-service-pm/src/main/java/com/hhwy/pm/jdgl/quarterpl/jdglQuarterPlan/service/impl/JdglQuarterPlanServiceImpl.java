@@ -140,6 +140,17 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
     @Transactional
     public int insertJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlan) {
+
+        String year = jdglQuarterPlan.getYear();
+        String quarter = jdglQuarterPlan.getQuarter();
+        JdglQuarterPlan queryExist = new JdglQuarterPlan();
+        queryExist.setYear(year);
+        queryExist.setQuarter(quarter);
+        List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanMapper.getJdglQuarterPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglQuarterPlanList)) {
+            throw new RuntimeException("已存在"+year+"年第"+quarter+"季度数据!");
+        }
+
         Long id = IdWorker.createId();
         jdglQuarterPlan.setId(id);
         jdglQuarterPlan.setCreateUser(SecurityUtils.getUserName());

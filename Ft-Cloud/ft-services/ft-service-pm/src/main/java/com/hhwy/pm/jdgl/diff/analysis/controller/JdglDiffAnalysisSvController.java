@@ -90,4 +90,10 @@ public class JdglDiffAnalysisSvController extends BaseController {
         ExcelUtils<JdglDiffAnalysisSv> util = new ExcelUtils<>(JdglDiffAnalysisSv.class);
         util.exportExcel(response, jdglDiffAnalysisSvList, DateUtils.getDate());
     }
+
+    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    @GetMapping("/getPlanAndComp")
+    public AjaxResult getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
+        return AjaxResult.success(jdglDiffAnalysisSvService.getPlanAndComp(jdglDiffAnalysisSvParam));
+    }
 }
