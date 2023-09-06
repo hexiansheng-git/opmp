@@ -402,6 +402,7 @@
             <if test="winDate != null ">#{winDate},</if>
             <if test="signDate != null ">#{signDate},</if>
             <if test="brandName != null  and brandName != ''">#{brandName},</if>
+            <if test="projectType != null  and projectType != ''">#{projectType},</if>
             <if test="projectCategory != null  and projectCategory != ''">#{projectCategory},</if>
             <if test="contractType != null  and contractType != ''">#{contractType},</if>
             <if test="contractAttribute != null  and contractAttribute != ''">#{contractAttribute},</if>
@@ -626,7 +627,7 @@
             <if test="winDate != null ">`win_date` = #{winDate},</if>
             <if test="signDate != null ">`sign_date` = #{signDate},</if>
             <if test="brandName != null  and  brandName != ''">`brand_name` = #{brandName},</if>
-            <if test="projectType != null  and projectType != ''">and `project_type` = #{projectType}</if>
+            <if test="projectType != null  and projectType != ''">`project_type` = #{projectType},</if>
             <if test="projectCategory != null  and  projectCategory != ''">`project_category` = #{projectCategory},</if>
             <if test="contractType != null  and  contractType != ''">`contract_type` = #{contractType},</if>
             <if test="contractAttribute != null  and  contractAttribute != ''">`contract_attribute` = #{contractAttribute},</if>

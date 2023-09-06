@@ -12,6 +12,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.*;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ import java.util.List;
  * @remark
  */
 @Service
+@Log4j2
 public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
     @Autowired
@@ -53,9 +55,12 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      * 作者: fushudong
      * 时间: 2023/8/18
      */
-    private void getProjectInfo() {
-
-        ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
+    private synchronized XmslContractInfo getProjectInfo(ProjectBasicInfo projectInfo, XmslContractInfo xmslContractInfoParam) {
+        //双重判断，防止重复进入
+        XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
+        if (xmslContractInfo != null) {
+            return xmslContractInfo;
+        }
         XmslContractInfo contractInfo = new XmslContractInfo();
         contractInfo.setProjectCode(projectInfo.getProjectCode());
         contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
@@ -97,7 +102,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setCreateUser(SecurityUtils.getUserName());
         contractInfo.setCreateTime(DateUtils.getNowDate());
         xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
-
+        return xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
     }
 
 
@@ -122,24 +127,28 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             //查询最大有效版本号，如果查不到，版本号赋默认值1.0
             xmslContractInfoParam.setVersion(maxVersion);
         }
+        //查询最新合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
-
-        //如果为空,说明第一次进入，从项目信息中拉取项目数据
+        ProjectBasicInfo projectInfo = new ProjectBasicInfo();
         if (xmslContractInfo == null) {
-            getProjectInfo();
-            xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
+            //如果为空,说明第一次进入，执行项目信息拉取
+            projectInfo = projectBasicInfoService.projectInfo();
+            if (projectInfo == null) {
+                log.info("项目信息表无数据");
+                return new XmslContractInfo();
+            }
         }
+        //将项目信息写入合同表
+        xmslContractInfo = getProjectInfo(projectInfo, xmslContractInfoParam);
         //查询子表数据
-        if(xmslContractInfo!=null){
-            getSonTable(xmslContractInfo, maxVersion);
-        }
+        this.getSonTable(xmslContractInfo, maxVersion);
+        //查询历史记录，根据记录数给showRecord字段赋值
         List<XmslContractInfo> historyList = this.getXmslContractInfoList(new XmslContractInfo());
         if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1){
             xmslContractInfo.setIsShowRecord(1);
         }else {
             xmslContractInfo.setIsShowRecord(0);
         }
-
         return xmslContractInfo;
     }
 
@@ -184,9 +193,11 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
     public List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo) {
         List<XmslContractInfo> historyList =xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
+        String tenantKey = SecurityUtils.getTenantKey();
         if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1) {
             for (XmslContractInfo contractInfo : historyList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil.getFlowInfo(FlowEnum.XMSL_CONTRACT.getTableName(), String.valueOf(contractInfo.getId()));
+                FtActBusiness flowInfo = FlowInfoSearchUtil
+                        .getFlowInfo(FlowEnum.XMSL_CONTRACT.getTableName(), String.valueOf(contractInfo.getId()), tenantKey);
                 contractInfo.setAssignee(flowInfo.getAssignee());
                 contractInfo.setTaskStatusName(flowInfo.getName());
                 contractInfo.setIssuePersonName(flowInfo.getCreateUser());

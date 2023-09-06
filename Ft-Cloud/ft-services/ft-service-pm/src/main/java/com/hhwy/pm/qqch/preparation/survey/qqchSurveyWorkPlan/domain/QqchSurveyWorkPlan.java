@@ -88,16 +88,16 @@ public class QqchSurveyWorkPlan extends TreeNode<QqchSurveyWorkPlan> {
     /**
      * 字段描述：计划开始时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划开始时间", dateFormat = "yyyy-MM-dd")
     private Date startTime;
     /**
      * 字段描述：计划结束时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划结束时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计划结束时间", dateFormat = "yyyy-MM-dd")
     private Date endTime;
     /**
      * 字段描述：版本

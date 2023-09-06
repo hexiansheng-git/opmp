@@ -221,13 +221,15 @@ public class QqchFirstArticleEngineeringListServiceImpl implements IQqchFirstArt
         bean.setName(param.getName());
         bean.setWbsName(param.getWbsName());
         Date planStartTime = param.getPlanStartTime();
-        bean.setPlanStartTime(planStartTime);
-        bean.setPersonTime(DateUtil.offsetDay(planStartTime, -10));
-        bean.setFinalizationTime(DateUtil.offsetMonth(planStartTime, -1));
-        bean.setDisclosureTime(DateUtil.offsetWeek(planStartTime, -2));
-        bean.setEquStartTime(DateUtil.offsetDay(planStartTime, -10));
-        bean.setMaterialStartTime(DateUtil.offsetDay(planStartTime, -10));
-        bean.setReleaseTime(planStartTime);
+        if (planStartTime != null) {
+            bean.setPlanStartTime(planStartTime);
+            bean.setPersonTime(DateUtil.offsetDay(planStartTime, -10));
+            bean.setFinalizationTime(DateUtil.offsetMonth(planStartTime, -1));
+            bean.setDisclosureTime(DateUtil.offsetWeek(planStartTime, -2));
+            bean.setEquStartTime(DateUtil.offsetDay(planStartTime, -10));
+            bean.setMaterialStartTime(DateUtil.offsetDay(planStartTime, -10));
+            bean.setReleaseTime(planStartTime);
+        }
         bean.setWorkGroup(param.getWorkGroup());
         bean.setFirstPersonId(param.getPersonId());
         bean.setFirstPersonName(param.getPersonName());
