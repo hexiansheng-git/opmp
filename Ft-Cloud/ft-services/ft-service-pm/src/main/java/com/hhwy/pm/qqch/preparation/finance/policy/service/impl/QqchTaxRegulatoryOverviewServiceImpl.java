@@ -18,7 +18,6 @@ import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.List;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,32 +63,23 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
 
     @Transactional
     public void batchSave(QqchTaxRegulatoryOverviewVo voParam) {
-        // 查询数据库是否存在
-        QqchTaxRegulatoryOverview qryParam = new QqchTaxRegulatoryOverview();
-        qryParam.setVersion(voParam.getVersion());
-        QqchTaxRegulatoryOverview dbOverview = qqchTaxRegulatoryOverviewMapper.getQqchTaxRegulatoryOverview(qryParam);
+
+        // 清空数据库表中概述数据
+        QqchTaxRegulatoryOverview deleteOverviewParam = new QqchTaxRegulatoryOverview();
+        deleteOverviewParam.setVersion(voParam.getVersion());
+        qqchTaxRegulatoryOverviewMapper.deleteQqchTaxRegulatoryOverview(deleteOverviewParam);
 
         QqchTaxRegulatoryOverview overview = voParam.getOverview();
-
-        QqchTaxRegulatoryOverview newOverview = new QqchTaxRegulatoryOverview();
         if (overview != null) {
-            BeanUtils.copyProperties(overview, newOverview);
-        }
-        if (dbOverview == null) {
-            newOverview.setId(IdWorker.createId());
-            newOverview.setVersion(voParam.getVersion());
+            overview.setId(IdWorker.createId());
+            overview.setVersion(voParam.getVersion());
             if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
                 overview.setValid(Valid.YES);
             }
-            newOverview.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            newOverview.setCreateUserName(SecurityUtils.getUserName());
-            newOverview.setCreateTime(DateUtils.getNowDate());
-            qqchTaxRegulatoryOverviewMapper.insertQqchTaxRegulatoryOverview(newOverview);
-        } else {
-            newOverview.setId(dbOverview.getId());
-            newOverview.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            newOverview.setUpdateTime(DateUtils.getNowDate());
-            qqchTaxRegulatoryOverviewMapper.updateQqchTaxRegulatoryOverview(newOverview);
+            overview.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            overview.setCreateUserName(SecurityUtils.getUserName());
+            overview.setCreateTime(DateUtils.getNowDate());
+            qqchTaxRegulatoryOverviewMapper.insertQqchTaxRegulatoryOverview(overview);
         }
 
         // 清空数据库表中税法数据
