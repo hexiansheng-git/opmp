@@ -190,10 +190,10 @@ public class Review extends CommonBaseEntity {
     @FtExcel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 编制状态 0-未编制;1-编制完成;2-审批完成
      */
     @JsonProperty
-    private String ptVar1;
+    private String reviewStatus;
     /**
      * 字段描述：预留字段2
      */
