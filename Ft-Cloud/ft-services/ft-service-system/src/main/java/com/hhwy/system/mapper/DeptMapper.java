@@ -20,7 +20,7 @@ public interface DeptMapper {
     List<SysTreeUtil> selectRegionInfo();
 
 
-    SysDept selectDeptIdByProjectId(@Param("projectId") Long projectId);
+    SysDept selectDeptIdByProjectId(@Param("projectId") String projectId);
 
     List<SysDept> selectAllDept(@Param("deptId") Long deptId, @Param("ancestors") String ancestors);
 

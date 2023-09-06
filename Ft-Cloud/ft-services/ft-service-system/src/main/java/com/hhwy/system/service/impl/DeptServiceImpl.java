@@ -48,7 +48,7 @@ public class DeptServiceImpl implements IDeptService {
     }
 
     @Override
-    public SysDept selectDeptIdByprojectId(Long projectId) {
+    public SysDept selectDeptIdByprojectId(String projectId) {
         return deptMapper.selectDeptIdByProjectId(projectId);
     }
 
