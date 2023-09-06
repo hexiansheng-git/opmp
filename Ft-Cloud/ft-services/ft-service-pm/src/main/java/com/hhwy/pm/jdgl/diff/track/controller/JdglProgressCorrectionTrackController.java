@@ -38,7 +38,7 @@ public class JdglProgressCorrectionTrackController extends BaseController {
      * @return
      */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:list")
-    @GetMapping
+    @GetMapping("/getOne")
     public AjaxResult getOne(
         @Validated(ValidationGroups.Get.class) JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack = jdglProgressCorrectionTrackService
