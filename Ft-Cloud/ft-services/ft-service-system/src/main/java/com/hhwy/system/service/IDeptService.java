@@ -14,7 +14,7 @@ public interface IDeptService {
 
     Object getRegionInfo();
 
-    SysDept selectDeptIdByprojectId(Long projectId);
+    SysDept selectDeptIdByprojectId(String projectId);
 
     List<SysDept> selectAllDept(Long deptId, String ancestors);
 

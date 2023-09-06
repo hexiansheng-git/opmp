@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 
@@ -36,4 +37,6 @@ public interface IJdglDayScheduleService {
     List<JdglDaySchedule>  getListByDateRange(Date startDate, Date endDate);
 
     JdglDaySchedule getJdglDayScheduleByPerson(JdglDaySchedule jdglDayScheduleParam);
+
+    Map<String, BigDecimal> getMonthScheduleByMonthRange(Date startPeriod, Date endPeriod);
 }

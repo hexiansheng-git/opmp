@@ -225,12 +225,17 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             jdglDiffAnalysis.setContractEndDate(validMaxVersionContractInfo.getCompletedTime());
         }
 
+
+
+        ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
         // 项目规模
-        String type1 = "";
+        String type1 = "1-1,1-2";
         String type2 = "";
         BigDecimal scaleGradeValue = new BigDecimal(0);
 
-        ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
+        // 项目重要性
+        String weightedGrade = projectInfo.getWeightedGrade();
+
 
         if(validMaxVersionContractInfo != null) {
             BigDecimal effectiveAmout = validMaxVersionContractInfo.getEffectiveAmout();
@@ -275,7 +280,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 if(isOver.equals(contFlag)) {
                     jdglDiffAnalysis.setContractOverGrade(score);
                 }
-                if(StringUtils.isNotEmpty(importance)) {
+                if(StringUtils.isNotEmpty(weightedGrade) && weightedGrade.equals(importance)) {
                     jdglDiffAnalysis.setImportanceGrade(score);
                 }
                 if(type1.contains(projectInfo.getBusinessAreasAndProducts())

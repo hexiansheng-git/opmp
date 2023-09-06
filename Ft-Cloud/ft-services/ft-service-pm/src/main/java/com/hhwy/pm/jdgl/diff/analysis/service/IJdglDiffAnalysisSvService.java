@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
+import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsPeriodValueVO;
 
 /**
  * @author 陈锦豪
@@ -30,4 +31,6 @@ public interface IJdglDiffAnalysisSvService {
     int deleteJdglDiffAnalysisSvByPks(List<Long> jdglDiffAnalysisSvPkList);
 
     BigDecimal initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis);
+
+    List<PlanStatisticsPeriodValueVO> getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam);
 }

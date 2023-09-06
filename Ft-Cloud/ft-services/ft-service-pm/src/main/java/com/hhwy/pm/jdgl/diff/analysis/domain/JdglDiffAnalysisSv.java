@@ -45,10 +45,10 @@ public class JdglDiffAnalysisSv extends TreeNode<JdglDiffAnalysisSv> {
     @Excel(name = "计划项编号")
     private String planItemCode;
     /**
-     * 字段描述：计划项编号
+     * 字段描述：计划项名称
      */
     @JsonProperty
-    @Excel(name = "计划项编号")
+    @Excel(name = "计划项名称")
     private String planItemName;
     /**
      * 字段描述：是否关键路径

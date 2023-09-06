@@ -141,6 +141,15 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     @Transactional
     public int insertJdglYearPlan(JdglYearPlan jdglYearPlan) {
+
+        String year = jdglYearPlan.getYear();
+        JdglYearPlan queryExist = new JdglYearPlan();
+        queryExist.setYear(year);
+        List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
+            throw new RuntimeException("已存在"+year+"年数据!");
+        }
+
         Long id = IdWorker.createId();
         jdglYearPlan.setId(id);
         jdglYearPlan.setCreateUser(SecurityUtils.getUserName());
