@@ -202,15 +202,6 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
     @Override
     public List<QqchOrganizationList> mergeData(List<QqchOrganizationList> importDataList, List<QqchOrganizationList> oldDataList) {
 
-        for (QqchOrganizationList qqchOrganizationList : oldDataList) {
-            List<QqchOrganizationList> children = qqchOrganizationList.getChildren();
-            for (QqchOrganizationList child : children) {
-                if (StringUtils.isEmpty(child.getOrganization())) {
-                    throw new RuntimeException(qqchOrganizationList.getOrganization()+"的组织机构不能为空");
-                }
-            }
-        }
-
         LinkedHashMap<String, String> organizationCat = DictUtil.getDictData("organization_cat");
         Set<String> strings = organizationCat.keySet();
         this.checkData(importDataList);
@@ -225,13 +216,13 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
                         nChildren = impChildren;
                     } else {
                         for (QqchOrganizationList oldChild : oldChildren) {
-                            nChildren = impChildren.stream().filter(i -> !i.getOrganization().equals(oldChild.getOrganization())).collect(Collectors.toList());
+                            nChildren = impChildren.stream().filter(i ->i.getOrganization() == null || !i.getOrganization().equals(oldChild.getOrganization())).collect(Collectors.toList());
                         }
                     }
 
                     oldChildren.addAll(nChildren);
-                    TreeSet<QqchOrganizationList> distinctList = oldChildren.stream().collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(QqchOrganizationList::getOrganization))));
-                    old.setChildren(new ArrayList<>(distinctList));
+                    // TreeSet<QqchOrganizationList> distinctList = oldChildren.stream().collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(QqchOrganizationList::getOrganization))));
+                    old.setChildren(oldChildren);
                 });
             });
 

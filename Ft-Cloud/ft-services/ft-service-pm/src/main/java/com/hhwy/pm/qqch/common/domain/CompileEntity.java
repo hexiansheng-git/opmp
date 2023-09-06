@@ -97,6 +97,18 @@ public class CompileEntity<T> extends TreeNode<T> {
         return tCompileDTO.dealSaveDto();
     }
 
+    public static <T> T dealSaveDtoWithoutTree(CompileEntity param, T dto) {
+        CompileEntity<T> tCompileDTO = new CompileEntity<>();
+        tCompileDTO.setVersion(param.getVersion());
+        tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setModuleIdentity(param.getModuleIdentity());
+        tCompileDTO.setReqId(param.getReqId());
+        tCompileDTO.setStageIdentity(param.getStageIdentity());
+        tCompileDTO.setDataType(param.getDataType());
+        tCompileDTO.setDto(dto);
+        return tCompileDTO.dealSaveDto(false);
+    }
+
 
     public T dealListDto() {
         if (dto instanceof CompileEntity) {
@@ -108,6 +120,10 @@ public class CompileEntity<T> extends TreeNode<T> {
     }
 
     public T dealSaveDto() {
+        return dealSaveDto(true);
+    }
+
+    public T dealSaveDto(boolean tree) {
         if (StringUtils.isEmpty(reqId)) {
             reqId = UUIDUtils.getUuid();
         }
@@ -123,7 +139,7 @@ public class CompileEntity<T> extends TreeNode<T> {
         if (dto != null && dto instanceof List && (list = (List) dto).size() > 0 && list.get(0) instanceof CompileEntity) {
             List<CompileEntity> compileEntities = (List<CompileEntity>) dto;
             // 不用管是不是树形结构  就先转一下
-            compileEntities = TreeUtil.treeToListWithLevel(compileEntities);
+            if (tree) compileEntities = TreeUtil.treeToListWithLevel(compileEntities);
             EntityUtils.setCreateUpdateInfo(compileEntities);
             for (CompileEntity o : compileEntities) {
                 setBaseInfo(o);

@@ -6,13 +6,19 @@ import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
 import com.hhwy.pm.core.sync.mapper.SysSyncInfoMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoLogService;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
+import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.review.domain.Review;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.AddBaseInfoUtil;
@@ -88,8 +94,9 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkGroup temp =  list.get(i);
-                temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setProjectName(projectBasicInfo.getProjectName());
+                temp.setProjectId(projectBasicInfo.getProjectId());
+                temp.setRegionId(projectBasicInfo.getRegionId());
             }
             rocketMQTemplate.convertAndSend("qqch_work_group:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
@@ -120,8 +127,8 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkPlan temp =  list.get(i);
-                temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setProjectName(projectBasicInfo.getProjectName());
+                temp.setRegionId(projectBasicInfo.getRegionId());
             }
             rocketMQTemplate.convertAndSend("qqch_work_plan:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
@@ -244,6 +251,10 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         pushJdglDiffAnalysis(Arrays.asList(diffAnalysis));
     }
 
+    /**
+     * 推送进度纠偏
+     * @param list
+     */
     @Override
     public void pushJdglProgressCorrectionTrack(List<JdglProgressCorrectionTrack> list) {
         long beginMills = System.currentTimeMillis();
@@ -278,4 +289,244 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
     public void pushJdglProgressCorrectionTrack(JdglProgressCorrectionTrack progressCorrectionTrack) {
         pushJdglProgressCorrectionTrack(Arrays.asList(progressCorrectionTrack));
     }
+
+
+    /**
+     * 推送年度计划
+     * @param list
+     */
+    @Override
+    public void pushJdglYearPlan(List<JdglYearPlan> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglYearPlan temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_year_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJdglYearPlan(JdglYearPlan yearPlan) {
+        pushJdglYearPlan(Arrays.asList(yearPlan));
+    }
+
+
+    /**
+     * 推送季度计划
+     * @param list
+     */
+    @Override
+    public void pushJdglQuarterPlan(List<JdglQuarterPlan> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglQuarterPlan temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_quarter_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJJdglQuarterPlan(JdglQuarterPlan quarterPlan) {
+        pushJdglQuarterPlan(Arrays.asList(quarterPlan));
+    }
+
+
+    /**
+     * 推送月度计划
+     * @param list
+     */
+    @Override
+    public void pushJdglMonthPlan(List<JdglMonthPlan> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglMonthPlan temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_month_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJdglMonthPlan(JdglMonthPlan monthPlan) {
+        pushJdglMonthPlan(Arrays.asList(monthPlan));
+    }
+
+
+    /**
+     * 推送周计划
+     * @param list
+     */
+    @Override
+    public void pushJdglWeekPlan(List<JdglWeekPlan> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglWeekPlan temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_week_plan:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJdglWeekPlan(JdglWeekPlan weekPlan) {
+        pushJdglWeekPlan(Arrays.asList(weekPlan));
+    }
+
+
+    /**
+     * 推送合同信息
+     * @param list
+     */
+    @Override
+    public void pushXmslContractInfo(List<XmslContractInfo> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (XmslContractInfo temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("xmsl_contract_info:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushXmslContractInfo(XmslContractInfo xmslContractInfo) {
+        pushXmslContractInfo(Arrays.asList(xmslContractInfo));
+    }
+
+
+    /**
+     * 推送进度填报
+     * @param list
+     */
+    @Override
+    public void pushJdglDaySchedule(List<JdglDaySchedule> list) {
+        long beginMills = System.currentTimeMillis();
+        int status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjectList = new ArrayList<>();
+            for (JdglDaySchedule temp : list) {
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("projectId", projectBasicInfo.getProjectId());
+                jsonObject.put("projectName", projectBasicInfo.getProjectName());
+                jsonObject.put("projectCode", projectBasicInfo.getProjectCode());
+                jsonObjectList.add(jsonObject);
+            }
+            rocketMQTemplate.convertAndSend("jdgl_day_schedule:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids, (long) list.size(),System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushJdglDaySchedule(JdglDaySchedule daySchedule) {
+        pushJdglDaySchedule(Arrays.asList(daySchedule));
+    }
+
+
 }

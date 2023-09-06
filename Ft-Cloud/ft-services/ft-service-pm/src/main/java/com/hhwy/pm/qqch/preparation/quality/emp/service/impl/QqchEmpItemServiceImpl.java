@@ -111,7 +111,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         for (List<QqchEmpItem> qqchEmpItemList : empItemListList) {
             for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
                 qqchEmpItem.setId(IdWorker.createId());
-                qqchEmpItem.setStoreFlag(qqchEmpItem.getBstoreFlag() ? PmConstant.ONE : PmConstant.ZERO);
+                qqchEmpItem.setStoreFlag((qqchEmpItem.getBstoreFlag() == null || !qqchEmpItem.getBstoreFlag()) ? PmConstant.ZERO : PmConstant.ONE);
                 wbsCodeList.add(qqchEmpItem.getWbsCode());
                 CompileEntity.dealSaveDto(dto, qqchEmpItem);
                 EntityUtils.setCreateUpdateInfo(qqchEmpItem);

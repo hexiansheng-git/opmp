@@ -2,12 +2,18 @@ package com.hhwy.pm.core.sync.service;
 
 import com.hhwy.pm.core.sync.domain.SysSyncInfo;
 import com.hhwy.pm.core.sync.enums.SyncBusinessEnum;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
+import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.review.domain.Review;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 
 import java.util.List;
 
@@ -70,4 +76,46 @@ public interface ISysSyncInfoService {
      */
     void pushJdglProgressCorrectionTrack(List<JdglProgressCorrectionTrack> list);
     void pushJdglProgressCorrectionTrack(JdglProgressCorrectionTrack diffAnalysis);
+
+    /**
+     * 推送年度计划
+     * @param list
+     */
+    void pushJdglYearPlan(List<JdglYearPlan> list);
+    void pushJdglYearPlan(JdglYearPlan yearPlan);
+
+    /**
+     * 推送季度计划
+     * @param list
+     */
+    void pushJdglQuarterPlan(List<JdglQuarterPlan> list);
+    void pushJJdglQuarterPlan(JdglQuarterPlan quarterPlan);
+
+    /**
+     * 推送月度计划
+     * @param list
+     */
+    void pushJdglMonthPlan(List<JdglMonthPlan> list);
+    void pushJdglMonthPlan(JdglMonthPlan monthPlan);
+
+    /**
+     * 推送周计划
+     * @param list
+     */
+    void pushJdglWeekPlan(List<JdglWeekPlan> list);
+    void pushJdglWeekPlan(JdglWeekPlan weekPlan);
+
+    /**
+     * 推送合同信息
+     * @param list
+     */
+    void pushXmslContractInfo(List<XmslContractInfo> list);
+    void pushXmslContractInfo(XmslContractInfo xmslContractInfo);
+
+    /**
+     * 推送进度填报
+     * @param list
+     */
+    void pushJdglDaySchedule(List<JdglDaySchedule> list);
+    void pushJdglDaySchedule(JdglDaySchedule daySchedule);
 }
