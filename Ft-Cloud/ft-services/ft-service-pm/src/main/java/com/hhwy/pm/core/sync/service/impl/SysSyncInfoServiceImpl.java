@@ -123,6 +123,8 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 QqchWorkPlan temp =  list.get(i);
                 temp.setProjectName(projectBasicInfo.getProjectName());
                 temp.setRegionId(projectBasicInfo.getRegionId());
+                temp.setProjectId(projectBasicInfo.getProjectId());
+                temp.setPtVar1(projectBasicInfo.getProjectCategory());
             }
             rocketMQTemplate.convertAndSend("qqch_work_plan:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
@@ -150,12 +152,17 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         String errMsg = "";
         try{
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            List<JSONObject> jsonObjList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 Review temp =  list.get(i);
                 temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setProjectName(projectBasicInfo.getProjectName());
+                JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
+                jsonObject.put("regionId", projectBasicInfo.getRegionId());
+                jsonObject.put("regionName", projectBasicInfo.getRegionName());
+                jsonObjList.add(jsonObject);
             }
-            rocketMQTemplate.convertAndSend("qqch_review:tenantSuccess", JSONObject.toJSONString(list));
+            rocketMQTemplate.convertAndSend("qqch_review:tenantSuccess", JSONObject.toJSONString(jsonObjList));
         }catch(Exception e){
             e.printStackTrace();
             status = 0;
