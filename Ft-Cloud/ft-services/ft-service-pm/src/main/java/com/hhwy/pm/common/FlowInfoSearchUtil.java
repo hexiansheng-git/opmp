@@ -33,14 +33,18 @@ public class FlowInfoSearchUtil {
      * 作者: fushudong
      * 时间: 2023/9/4
      */
-    public static FtActBusiness getFlowInfo(String tableName, String businessId){
+    public static FtActBusiness getFlowInfo(String tableName, String businessId, String tenantKey){
         FtActBusiness result = new FtActBusiness();
-        //查询流程数据：1、ft_act_business查不到数据（根据 业务主键business_id、表名business_table_name），表明流程未发起
+        if (StringUtils.isEmpty(tableName) || StringUtils.isEmpty(businessId) || StringUtils.isEmpty(tenantKey)){
+            log.error("获取流程信息参数缺失, tableName:{},businessId:{},tenantKey:{}", tableName, businessId, tenantKey);
+            return result;
+        }
+        //查询流程数据：1、ft_act_business查不到数据（根据 业务主键business_id、表名business_table_name、租户标识tenant_key），表明流程未发起
         //           2、ft_act_business有数据，根据process_instance_id联查act_ru_task（PROC_INST_ID_），查到的记录即为当前流程待审核节点，
         //          如若没有数据，表明流程已结束，NAME_：当前审批节点名称，ASSIGNEE_：审批人
-        FtActBusiness ftActBusiness = flowInfoMapper.flowByTBNameAndId(tableName, businessId);
+        FtActBusiness ftActBusiness = flowInfoMapper.flowByTBNameAndId(tableName, businessId, tenantKey);
         if (null == ftActBusiness) {
-            log.info("流程未发起：tableName:{},businessId{}", tableName, businessId);
+            log.info("流程未发起：tableName:{},businessId:{},tenantKey:{}", tableName, businessId, tenantKey);
             //ft_act_business无数据，表明流程未开始,返回空
             result.setName(FlowStatusEnum.FLOW_STATUS_1.getName());
             return result;

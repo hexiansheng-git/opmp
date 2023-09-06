@@ -18,7 +18,8 @@
                     b.name_,
                     b.ASSIGNEE_
                 FROM
-                    ( SELECT process_instance_id, create_user, create_time FROM v_ft_act_business WHERE business_table_name = #{tableName} AND business_id = #{businessId} ) a
+                    ( SELECT process_instance_id, create_user, create_time FROM v_ft_act_business
+                                    WHERE business_table_name = #{tableName} AND business_id = #{businessId} AND tenant_key = #{tenantKey} ) a
                         LEFT JOIN ( SELECT PROC_INST_ID_, name_, ASSIGNEE_ FROM v_act_ru_task ) b ON a.process_instance_id = b.PROC_INST_ID_
             ) c
         GROUP BY

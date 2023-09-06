@@ -18,6 +18,6 @@ public interface FlowInfoMapper {
     /**
      * 查询流程信息
      */
-    FtActBusiness flowByTBNameAndId(@Param("tableName") String tableName, @Param("businessId") String businessId);
+    FtActBusiness flowByTBNameAndId(@Param("tableName") String tableName, @Param("businessId") String businessId, @Param("tenantKey") String tenantKey);
 
 }
