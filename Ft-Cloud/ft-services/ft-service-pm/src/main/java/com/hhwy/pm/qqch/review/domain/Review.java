@@ -193,7 +193,7 @@ public class Review extends CommonBaseEntity {
      * 字段描述：预留字段1
      */
     @JsonProperty
-    private String ptVar1;
+    private String reviewStatus;
     /**
      * 字段描述：预留字段2
      */
