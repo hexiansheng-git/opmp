@@ -224,10 +224,10 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
 
         // 费用数据入库
-        ArrayList<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDto(dto, allList);
+        ArrayList<QqchTaxCost> qqchTaxCosts = CompileEntity.dealSaveDtoWithoutTree(dto, allList);
         List<QqchTaxCostDetail> allDetails = bean.saveCostList(qqchTaxCosts);
         // 新增年份数据
-        this.detailService.save(CompileEntity.dealSaveDto(dto, allDetails));
+        this.detailService.save(CompileEntity.dealSaveDtoWithoutTree(dto, allDetails));
 
 
     }
