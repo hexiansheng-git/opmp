@@ -88,8 +88,9 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkGroup temp =  list.get(i);
-                temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setProjectName(projectBasicInfo.getProjectName());
+                temp.setProjectId(projectBasicInfo.getProjectId());
+                temp.setRegionId(projectBasicInfo.getRegionId());
             }
             rocketMQTemplate.convertAndSend("qqch_work_group:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
@@ -120,8 +121,8 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkPlan temp =  list.get(i);
-                temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setProjectName(projectBasicInfo.getProjectName());
+                temp.setRegionId(projectBasicInfo.getRegionId());
             }
             rocketMQTemplate.convertAndSend("qqch_work_plan:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
