@@ -24,6 +24,11 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+/***
+ * 功能描述: 汇率批次
+ */
+
 @Service
 public class CurrencyPeriodData {
 
