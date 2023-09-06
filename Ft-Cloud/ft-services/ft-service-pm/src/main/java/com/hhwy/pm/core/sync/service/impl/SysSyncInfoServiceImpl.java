@@ -196,9 +196,13 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             List<JSONObject> jsonObjectList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 QqchPerformInspection temp = list.get(i);
+                temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
                 jsonObject.put("projectId",projectBasicInfo.getProjectId());
                 jsonObject.put("projectName",projectBasicInfo.getProjectName());
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("ptVar1",projectBasicInfo.getProjectCategory());
                 jsonObjectList.add(jsonObject);
             }
             rocketMQTemplate.convertAndSend("qqch_performInspection:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
