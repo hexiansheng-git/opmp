@@ -4,6 +4,8 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
@@ -49,6 +51,8 @@ public class SyncController extends BaseController {
     private IQqchPerformInspectionService performInspectionService;
     @Autowired
     private IQqchSummaryEvaluationService summaryEvaluationService;
+    @Autowired
+    private IJdglDayScheduleService jdglDayScheduleService;
 
     /**
      * 前期策划测试用
@@ -186,6 +190,20 @@ public class SyncController extends BaseController {
             List<JdglProgressCorrectionTrack> list = jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrackList(new JdglProgressCorrectionTrack());
             syncInfoService.pushJdglProgressCorrectionTrack(list);
         }
+        return AjaxResult.success();
+    }
+
+    /**
+     * 进度填报测试用
+     * @param
+     * @return
+     */
+    @PostMapping("/jdglDaySchedule")
+    public AjaxResult jdglDaySchedule(@RequestBody JdglDaySchedule jdglDaySchedule) {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        List<JdglDaySchedule> list = jdglDayScheduleService.getListBy(new JdglDaySchedule());
+        syncInfoService.pushJdglDaySchedule(list);
         return AjaxResult.success();
     }
 }

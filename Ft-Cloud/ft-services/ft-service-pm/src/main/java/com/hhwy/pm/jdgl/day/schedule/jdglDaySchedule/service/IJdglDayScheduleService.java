@@ -1,11 +1,11 @@
 package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service;
 
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
+
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 
 /**
  * @author cjh
@@ -17,6 +17,8 @@ public interface IJdglDayScheduleService {
     JdglDaySchedule getJdglDaySchedule(JdglDaySchedule jdglDaySchedule);
 
     List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule);
+
+    List<JdglDaySchedule> getListBy(JdglDaySchedule jdglDaySchedule);
 
     int insertJdglDaySchedule(JdglDaySchedule jdglDaySchedule);
 

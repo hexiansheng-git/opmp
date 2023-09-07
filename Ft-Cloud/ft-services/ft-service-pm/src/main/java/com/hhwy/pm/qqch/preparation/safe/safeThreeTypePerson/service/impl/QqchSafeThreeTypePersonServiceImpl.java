@@ -64,7 +64,7 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
                         safeThreeTypePerson.setPId(parent.getId());
                     }
                 }
-                parent.setChildrenList(qqchSafeThreeTypePeople);
+                parent.setChildren(qqchSafeThreeTypePeople);
                 returnList.add(parent);
             }
             person.setList(returnList);
