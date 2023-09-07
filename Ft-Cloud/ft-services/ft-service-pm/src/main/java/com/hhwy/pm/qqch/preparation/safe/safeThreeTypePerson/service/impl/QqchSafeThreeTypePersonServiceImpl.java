@@ -1,11 +1,6 @@
 package com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.service.impl;
 
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -17,15 +12,16 @@ import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.vo.QqchSafeThreeTyp
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.dict.DictUtil;
-import com.hhwy.utils.myEnum.InitVersionConstant;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
-import com.hhwy.utils.tree.ListTreeUtil;
-import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.hhwy.utils.idworker.IdWorker;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author zq
@@ -56,13 +52,19 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
         //转树列表
         if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
             Map<String, List<QqchSafeThreeTypePerson>> dataListMap = qqchSafeThreeTypePersonList.stream().collect(Collectors.groupingBy(t -> t.getDuties()));
-            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictDataName("duties_type");
+            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
 
             for (String key : dutiesTypeMap.keySet()) {
                 QqchSafeThreeTypePerson parent = new QqchSafeThreeTypePerson();
-                parent.setId(Long.parseLong(key));
-                parent.setDuties(dutiesTypeMap.get(key));
-                parent.setChildrenList(dataListMap.get(key));
+                parent.setId(Long.parseLong(dutiesTypeMap.get(key)));
+                parent.setDuties(key);
+                List<QqchSafeThreeTypePerson> qqchSafeThreeTypePeople = dataListMap.get(key);
+                if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePeople)){
+                    for (QqchSafeThreeTypePerson safeThreeTypePerson : qqchSafeThreeTypePeople) {
+                        safeThreeTypePerson.setPId(parent.getId());
+                    }
+                }
+                parent.setChildrenList(qqchSafeThreeTypePeople);
                 returnList.add(parent);
             }
             person.setList(returnList);

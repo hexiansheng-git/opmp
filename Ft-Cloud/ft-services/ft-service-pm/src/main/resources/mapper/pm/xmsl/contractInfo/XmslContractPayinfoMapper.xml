@@ -547,7 +547,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     
-    <select id="getPayInfo" resultMap="XmslContractPayinfoResultMap">
+    <select id="getPayInfo" resultMap="XmslContractPayinfoResultMap" parameterType="com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo">
         SELECT
             DISTINCT
             p.currency_code,
@@ -560,6 +560,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.valid = '1'
           AND c.del_flag = '0'
           AND c.task_status = '5'
+        <if test="currencyCode != null and currencyCode!= ''">
+            and c.currency_code = #{currencyCode}
+        </if>
     </select>
     
 </mapper>
