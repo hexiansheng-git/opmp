@@ -361,6 +361,12 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @Excel(name = "备注/描述")
     private String remark;
     /**
+     * 字段描述：项目状态
+     */
+    @JsonProperty
+    @Excel(name = "项目状态")
+    private String projectStatus;
+    /**
      * 字段描述：所属区域id
      */
     @JsonProperty

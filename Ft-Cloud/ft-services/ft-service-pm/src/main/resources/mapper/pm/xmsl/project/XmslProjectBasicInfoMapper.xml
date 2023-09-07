@@ -59,6 +59,7 @@
         <result property="contractCurrency" column="contract_currency"/>
         <result property="contractCurrencyCode" column="contract_currency_code"/>
         <result property="remark" column="remark"/>
+        <result property="projectStatus" column="project_status"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="deptId" column="dept_id"/>
@@ -127,6 +128,7 @@
             ,`contract_currency`
             ,`contract_currency_code`
             ,`remark`
+            ,`project_status`
             ,`region_id`
             ,`region_name`
             ,`dept_id`
@@ -194,6 +196,7 @@
         ,`contract_currency`
         ,`contract_currency_code`
         ,`remark`
+        ,`project_status`
         ,`region_id`
         ,`region_name`
         ,`dept_id`
@@ -302,6 +305,7 @@
                 #{structureImageGroupId}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="projectStatus != null  and projectStatus != ''">and `project_status` = #{projectStatus}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -379,6 +383,7 @@
         ,`contract_currency`
         ,`contract_currency_code`
         ,`remark`
+        ,`project_status`
         ,`region_id`
         ,`region_name`
         ,`dept_id`
@@ -487,6 +492,7 @@
                 #{structureImageGroupId}
             </if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="projectStatus != null  and projectStatus != ''">and `project_status` = #{projectStatus}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
@@ -575,6 +581,7 @@
             <if test="contractCurrency != null  and contractCurrency != ''">`contract_currency`,</if>
             <if test="contractCurrencyCode != null  and contractCurrencyCode != ''">`contract_currency_code`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="projectStatus != null  and projectStatus != ''">`project_status`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="deptId != null ">`dept_id`,</if>
@@ -657,6 +664,7 @@
             <if test="contractCurrency != null  and contractCurrency != ''">#{contractCurrency},</if>
             <if test="contractCurrencyCode != null  and contractCurrencyCode != ''">#{contractCurrencyCode},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="projectStatus != null  and projectStatus != ''">#{projectStatus},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="deptId != null ">#{deptId},</if>
@@ -734,6 +742,7 @@
             `contract_currency`,
             `contract_currency_code`,
             `remark`,
+            `project_status`,
             `region_id`,
             `region_name`,
             `dept_id`,
@@ -807,6 +816,7 @@
                 #{item.contractCurrency},
                 #{item.contractCurrencyCode},
                 #{item.remark},
+                #{item.projectStatus},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.deptId},
@@ -925,6 +935,7 @@
                 #{contractCurrencyCode},
             </if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="projectStatus != null  and  projectStatus != ''">`project_status` = #{projectStatus},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>
@@ -1207,6 +1218,11 @@
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+           <trim prefix="project_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectStatus}
                 </foreach>
             </trim>
             <trim prefix="region_id  = case" suffix="end,">
