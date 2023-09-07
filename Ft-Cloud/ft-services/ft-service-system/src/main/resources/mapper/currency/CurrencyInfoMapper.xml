@@ -288,4 +288,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectMaxSort" resultType="integer">
         select MAX(sort) as sort from t_currency_info;
     </select>
+
+    <update id="deleteAll" parameterType="Long">
+        update `t_currency_info` set del_flag = 1 WHERE 1 = 1
+    </update>
 </mapper>

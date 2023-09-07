@@ -1,5 +1,6 @@
 package com.hhwy.system.dataReceive;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
@@ -17,6 +18,8 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -25,15 +28,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-/***
+/**
  * 功能描述: 汇率批次
  */
-
-@Service
+@RestController
 public class CurrencyPeriodData {
-
-    private String caiwuyun_url = "http://esb.cfhec.net/env-101/por-1002/esb/haiwai_ju_caiwuyun/caiwuyun_url";
-    private String caiwuyun_apiKey = "duZXF5cW654rhAOeSJrfVSXrePw4d5gl";
 
     @Autowired
     private IPeriodInfoService periodInfoService;
@@ -44,13 +43,16 @@ public class CurrencyPeriodData {
     @Autowired
     private IPeriodCurrencyService periodCurrencyService;
 
+    private String caiwuyun_url = "http://esb.cfhec.net/env-101/por-1002/esb/haiwai_ju_caiwuyun/caiwuyun_url";
+    private String caiwuyun_apiKey = "duZXF5cW654rhAOeSJrfVSXrePw4d5gl";
+
+    @GetMapping("test1")
     public void handleCurrencyPeriodData() {
-        String year = "2023";
+        String year = String.valueOf(DateUtil.thisYear());
         int pageNum = 1;
         Map<String, String> headerMap = new HashMap<>();
         headerMap.put("apikey", caiwuyun_apiKey);
 
-        List other = new ArrayList();
         Map<String, Map<String, Object>> qicihuilv = new HashMap<>();
         boolean flag = true;
         while (flag){
@@ -66,7 +68,6 @@ public class CurrencyPeriodData {
                 List<JSONObject> data = (List<JSONObject>) jsonObject.get("data");
                 //"RATEVALUETYPE": "1"  区间汇率
                 if(CollectionUtils.isEmpty(data)){
-                    flag = false;
                     return ;
                 }
                 BigDecimal zero = new BigDecimal(0);
@@ -117,7 +118,6 @@ public class CurrencyPeriodData {
                             //先临时插入redis缓存中
                             redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
                             System.out.println("放一次！！！！！");
-                            other.add(temp);
                         }else if("USD".equals(YBBH)){
                             //原币是美元的
                             Map<String, Object> tt = qicihuilv.get(no);
@@ -147,12 +147,8 @@ public class CurrencyPeriodData {
                             //先临时插入redis缓存中
                             redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
                             System.out.println("放一次！！！！！");
-                            other.add(temp);
 
                         }
-
-
-
                     }
                 }
                 if(pageNum >= TotalPage){
@@ -165,7 +161,6 @@ public class CurrencyPeriodData {
         System.out.println("执行结束------------------------------"+pageNum);
         System.out.println("结果数据--->"+JSONObject.toJSONString(qicihuilv));
         handleData(qicihuilv);
-        return ;
     }
 
 

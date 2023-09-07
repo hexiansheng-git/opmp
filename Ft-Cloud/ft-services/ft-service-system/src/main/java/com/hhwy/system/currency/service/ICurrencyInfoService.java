@@ -95,4 +95,9 @@ public interface ICurrencyInfoService {
      * @param rstList
      */
     void batchInsert(List<CurrencyInfo> rstList);
+
+    /**
+     * 数据同步
+     */
+    void dataSync(List<CurrencyInfo> rstList);
 }

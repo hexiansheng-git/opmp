@@ -57,7 +57,7 @@ public interface JobKindMapper {
      *
      * @return 结果
      */
-    int deleteJobKindAll();
+    int deleteAll();
 
     /**
      * 批量删除info
