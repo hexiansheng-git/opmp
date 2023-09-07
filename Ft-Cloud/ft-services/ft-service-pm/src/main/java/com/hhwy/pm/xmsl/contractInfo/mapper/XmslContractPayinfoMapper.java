@@ -36,6 +36,6 @@ public interface XmslContractPayinfoMapper {
      * 
      * @return 
      */
-    List<XmslContractPayinfo> getPayInfo();
+    List<XmslContractPayinfo> getPayInfo(XmslContractPayinfo xmslContractPayinfo);
     
 }
