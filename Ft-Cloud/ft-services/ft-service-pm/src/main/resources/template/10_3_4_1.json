@@ -54,7 +54,8 @@
     "id": 11,
     "pid": 5,
     "serNum": "3.4",
-    "feeName": "配件"
+    "feeName": "配件",
+    "leaf": "1"
   },
   {
     "id": 12,

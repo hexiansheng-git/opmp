@@ -52,12 +52,12 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
      */
     @JsonProperty
     @Excel(name = "作业名称")
-    private BigDecimal workName;
+    private String workName;
     /**
-     * 字段描述：是否关键线路 1-有效 0-失效
+     * 字段描述：是否关键线路 1-是 0-否
      */
     @JsonProperty
-    @Excel(name = "是否关键线路 1-有效 0-失效")
+    @Excel(name = "是否关键线路 1-是 0-否")
     private String isKeyLine;
     /**
      * 字段描述：单位

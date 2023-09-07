@@ -43,6 +43,7 @@ public interface IQqchTaxInService {
 
     public List<QqchTaxIn> getInList(QqchTaxIn taxIn);
 
+    public List<TaxInVO.CurrencyVO> getCurrencyInfo(String currencyCode);
     public List<TaxInVO.CurrencyVO> getCurrencyInfo();
 
     public List<String> getYearList();

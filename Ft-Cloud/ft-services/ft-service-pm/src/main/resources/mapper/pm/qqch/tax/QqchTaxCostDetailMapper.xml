@@ -173,7 +173,8 @@
                ifnull(c.fee_name, c.currency) AS currency,
                t.usd_req_amt                  as req_amt,
                t.usd_local_amt                   local_amt,
-               t.usd_inner_amt                   inner_amt
+               t.usd_inner_amt                   inner_amt,
+               c.level                          as level
         FROM qqch_tax_cost AS c
                  LEFT JOIN
              (SELECT d.master_id,
@@ -188,8 +189,9 @@
                        LEFT JOIN qqch_tax_cost_detail d ON c.id = d.master_id
               WHERE c.del_flag = '0'
                 AND d.del_flag = '0'
-                AND c.valid = '1'
-                AND d.`year` = #{year}
+                <if test="year != null and year != ''">
+                    AND d.`year` = #{year}
+                </if>
                 AND c.data_type = #{dataType}
 
                 AND c.record_id = #{recordId}
@@ -197,7 +199,6 @@
                        d.currency,
                        d.data_type) t ON c.id = t.master_id
         WHERE c.del_flag = '0'
-          AND c.valid = '1'
           AND c.data_type = #{dataType}
           AND c.record_id = #{recordId}
 
@@ -209,29 +210,30 @@
 
 
         SELECT
-            d.master_id,
-            d.currency AS currency 	,
-            sum(d.local_amt) as local_amt,
-            sum(d.req_amt) as req_amt,
-            sum(d.inner_amt) as inner_amt,
-            sum(d.usd_local_amt) as usd_local_amt,
-            sum(d.usd_req_amt) as usd_req_amt,
-            sum(d.usd_inner_amt) as usd_inner_amt
+        d.master_id,
+        d.currency AS currency ,
+        sum(d.local_amt) as local_amt,
+        sum(d.req_amt) as req_amt,
+        sum(d.inner_amt) as inner_amt,
+        sum(d.usd_local_amt) as usd_local_amt,
+        sum(d.usd_req_amt) as usd_req_amt,
+        sum(d.usd_inner_amt) as usd_inner_amt
 
         FROM
-            qqch_tax_cost  c
-                LEFT JOIN qqch_tax_cost_detail d ON c.id = d.master_id
+        qqch_tax_cost c
+        LEFT JOIN qqch_tax_cost_detail d ON c.id = d.master_id
         WHERE
-            c.del_flag = '0'
-          and d.del_flag = '0'
-          AND c.valid = '1'
-          AND c.data_type = #{dataType}
-          AND d.`year` = #{year}
-          and c.record_id = #{recordId}
+        c.del_flag = '0'
+        and d.del_flag = '0'
+        AND c.data_type = #{dataType}
+        <if test="year != null and year != ''">
+            AND d.`year` = #{year}
+        </if>
+        and c.record_id = #{recordId}
         GROUP BY
-            d.master_id,
-            d.currency,
-            d.data_type;
+        d.master_id,
+        d.currency,
+        d.data_type;
     </select>
 
     <insert id="insertQqchTaxCostDetail" useGeneratedKeys="true" keyProperty="id">
