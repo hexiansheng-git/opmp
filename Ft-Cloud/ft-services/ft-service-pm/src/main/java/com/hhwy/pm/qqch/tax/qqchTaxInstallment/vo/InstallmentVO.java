@@ -23,6 +23,7 @@ public class InstallmentVO extends CompileEntity<InstallmentVO> {
     @Data
     @ToString
     public static class ListVO extends TreeNode<ListVO> {
+        private List<ListVO> oChildren;
         private String digest;
         // 内账成本
         private BigDecimal innerAmt;
