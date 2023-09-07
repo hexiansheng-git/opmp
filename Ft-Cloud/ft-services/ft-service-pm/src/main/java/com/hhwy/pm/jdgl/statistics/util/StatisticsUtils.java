@@ -53,7 +53,7 @@ public class StatisticsUtils {
 //            int actualMaximum = cl.getActualMaximum(Calendar.DAY_OF_MONTH);
 //            cl.set(Integer.valueOf(year),Integer.valueOf(endMonth),actualMaximum);
             String endStr = endMonth<10?"0"+endMonth : endMonth+ "";
-            returnMap.put("end", sdf.parse(year + "-" + (endMonth) + "-20"));
+            returnMap.put("end", sdf.parse(year + "-" + endStr+ "-20"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -157,10 +157,11 @@ public class StatisticsUtils {
             if(month == 1) {
                 returnMap.put("start", sdf.parse((year-1) + "-12-21"));
             } else {
-                returnMap.put("start", sdf.parse(year + month<10?("-0"+month):"-"+month + "-20"));
+                String startM = (month-1)<10 ? "0"+(month-1) : "" + (month-1);
+                returnMap.put("start", sdf.parse(year + "-" + startM + "-21"));
             }
 
-            returnMap.put("end", sdf.parse(year + month<10?("-0"+month):"-"+month + "-20"));
+            returnMap.put("end", sdf.parse(year + "-" + monthStr + "-20"));
         } catch (ParseException e) {
             e.printStackTrace();
         }

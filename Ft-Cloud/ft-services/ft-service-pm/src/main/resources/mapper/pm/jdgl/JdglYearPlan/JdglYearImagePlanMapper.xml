@@ -174,7 +174,7 @@
         order by sort asc
     </select>
     <select id="getWbsListByYear"
-            resultType="com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan">
+            resultMap="JdglYearImagePlanResultMap">
         select jyip.wbs_code,jyip.wbs_name,sum(plan_comp_value) plan_comp_value
         from (select * from jdgl_year_plan where task_status = '5' and year = #{year} ) jyp ,
              jdgl_year_image_plan jyip

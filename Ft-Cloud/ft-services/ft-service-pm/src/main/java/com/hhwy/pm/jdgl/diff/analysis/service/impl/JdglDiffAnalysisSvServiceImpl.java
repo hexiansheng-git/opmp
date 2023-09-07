@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
@@ -175,10 +176,10 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                             jdglDiffAnalysisSv.setThisDeviationNum(thisValue.subtract(planCompValue));
                         }
                         if(planCompValue != null) {
-                            thisTotalPlanAmt.add(planCompValue);
+                            thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
                         }
                         if(thisValue != null) {
-                            thisTotalActAmt.add(thisValue);
+                            thisTotalActAmt = thisTotalActAmt.add(thisValue);
                         }
                         if(jdglDayScheduleWbs4Value.getThisQuantity() != null &&  jdglMonthImagePlan.getPlanCompQuantity() != null){
                             jdglDiffAnalysisSv.setSvNum(jdglDayScheduleWbs4Value.getThisQuantity().subtract(jdglMonthImagePlan.getPlanCompQuantity()));
@@ -209,14 +210,14 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
     }
 
     @Override
-    public List<PlanStatisticsPeriodValueVO> getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
-        List<PlanStatisticsPeriodValueVO> returnList = new ArrayList<>();
+    public Map<String, Object> getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
+        Map<String, Object> returnMap = new HashMap<>();
         Long diffAnalysisId = jdglDiffAnalysisSvParam.getDiffAnalysisId();
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
         jdglDiffAnalysis.setId(diffAnalysisId);
         JdglDiffAnalysis jdglDiffAnalysis1 = jdglDiffAnalysisService.getJdglDiffAnalysis(jdglDiffAnalysis);
         if(jdglDiffAnalysis1 == null) {
-            return returnList;
+            return returnMap;
         }
 
         Date period = jdglDiffAnalysis1.getPeriod();
@@ -234,28 +235,50 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         }
 
         JdglMonthPlan jdglMonthPlan = new JdglMonthPlan();
+        jdglMonthPlan.setYear(year);
         jdglMonthPlan.setTaskStatus("5");
         jdglMonthPlan.setIsUse("1");
         // 获取月计划产值
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanService.getJdglMonthPlanList(jdglMonthPlan);
-        if(CollectionUtils.isEmpty(jdglMonthPlanList)) {
-           return returnList;
-        }
+
+        List<PlanStatisticsPeriodValueVO> planStatisticsPeriodValueVOS = new ArrayList<>();
         Map<String, BigDecimal> monthScheduleByMonthRange = jdglDayScheduleService.getMonthScheduleByMonthRange(startPeriod, period);
-        for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
-            if(year.equals(jdglMonthPlan1.getYear()) && nextMonth.compareTo(jdglMonthPlan1.getMonth()) > 0) {
-                PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO = new PlanStatisticsPeriodValueVO();
-                planStatisticsPeriodValueVO.setPeriod(jdglMonthPlan1.getYear() + jdglMonthPlan1.getMonth());
-                planStatisticsPeriodValueVO.setPlanValue(jdglMonthPlan1.getThisPlanValueDl());
-                if(monthScheduleByMonthRange != null) {
-                    planStatisticsPeriodValueVO.setCompValue(monthScheduleByMonthRange.get(planStatisticsPeriodValueVO.getPeriod()));
-                }
-                if(planStatisticsPeriodValueVO.getPlanValue() != null && planStatisticsPeriodValueVO.getCompValue() != null) {
-                    planStatisticsPeriodValueVO.setDiffValue(planStatisticsPeriodValueVO.getCompValue().subtract(planStatisticsPeriodValueVO.getPlanValue()));
+        if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
+            for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
+                if(year.equals(jdglMonthPlan1.getYear()) && nextMonth.compareTo(jdglMonthPlan1.getMonth()) > 0) {
+                    PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO = new PlanStatisticsPeriodValueVO();
+                    planStatisticsPeriodValueVO.setPeriod(jdglMonthPlan1.getMonth());
+                    planStatisticsPeriodValueVO.setPlanValue(jdglMonthPlan1.getThisPlanValueDl());
+                    if(monthScheduleByMonthRange != null) {
+                        planStatisticsPeriodValueVO.setCompValue(monthScheduleByMonthRange.get(jdglMonthPlan1.getYear() + "-" + jdglMonthPlan1.getMonth()));
+                    }
+                    if(planStatisticsPeriodValueVO.getPlanValue() != null && planStatisticsPeriodValueVO.getCompValue() != null) {
+                        planStatisticsPeriodValueVO.setDiffValue(planStatisticsPeriodValueVO.getCompValue().subtract(planStatisticsPeriodValueVO.getPlanValue()));
+                    }
+                    planStatisticsPeriodValueVOS.add(planStatisticsPeriodValueVO);
                 }
             }
         }
 
-        return returnList;
+        List<String> periods = new ArrayList<>();
+        List<BigDecimal> planValues = new ArrayList<>();
+        List<BigDecimal> compValues = new ArrayList<>();
+        List<BigDecimal> diffValues = new ArrayList<>();
+
+        if(!CollectionUtils.isEmpty(planStatisticsPeriodValueVOS)) {
+            List<PlanStatisticsPeriodValueVO> collect = planStatisticsPeriodValueVOS.stream().sorted(Comparator.comparing(PlanStatisticsPeriodValueVO::getPeriod)).collect(Collectors.toList());
+            collect.forEach(vo-> {
+                periods.add(vo.getPeriod());
+                planValues.add(vo.getPlanValue());
+                compValues.add(vo.getCompValue());
+                diffValues.add(vo.getDiffValue());
+            });
+        }
+        returnMap.put("periods",periods);
+        returnMap.put("planValues",planValues);
+        returnMap.put("compValues",compValues);
+        returnMap.put("diffValues",diffValues);
+
+        return returnMap;
     }
 }

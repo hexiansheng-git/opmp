@@ -30,5 +30,5 @@ public interface IJdglDiffAnalysisCorrectService {
 
     int deleteJdglDiffAnalysisCorrectByPks(List<Long> jdglDiffAnalysisCorrectPkList);
 
-    Map<String, List<JdglDiffAnalysisCorrect>> getInitDiffAnalysisCorrect(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam);
+    List<JdglDiffAnalysisCorrect> getInitDiffAnalysisCorrect(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam);
 }
