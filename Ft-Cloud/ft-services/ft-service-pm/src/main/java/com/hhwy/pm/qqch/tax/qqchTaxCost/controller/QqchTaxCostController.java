@@ -138,7 +138,7 @@ public class QqchTaxCostController extends BaseController {
             return AjaxResult.success(qqchTaxCostService.importData(file, params));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 }

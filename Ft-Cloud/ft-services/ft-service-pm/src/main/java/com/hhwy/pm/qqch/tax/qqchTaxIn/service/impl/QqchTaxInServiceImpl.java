@@ -264,7 +264,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
             currencyVO.setCurrency(item.getCurrencyCode());
             currencyVO.setCurrencyName(item.getCurrencyName());
-            currencyVO.setRate(new BigDecimal(item.getObversionRate()));
+            currencyVO.setRate(item.getObversionRate() == null ? BigDecimal.ONE : new BigDecimal(item.getObversionRate()));
             return currencyVO;
 
         }).collect(Collectors.toList());
