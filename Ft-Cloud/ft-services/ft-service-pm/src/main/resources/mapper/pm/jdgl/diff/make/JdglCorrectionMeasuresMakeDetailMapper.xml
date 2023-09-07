@@ -102,7 +102,7 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="makeId != null ">and `make_id` = #{makeId}</if>
       <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
-      <if test="workName != null ">and `work_name` = #{workName}</if>
+      <if test="workName != null and workName != ''">and `work_name` = #{workName}</if>
       <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="quantity != null ">and `quantity` = #{quantity}</if>
@@ -155,7 +155,7 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="makeId != null ">and `make_id` = #{makeId}</if>
       <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
-      <if test="workName != null ">and `work_name` = #{workName}</if>
+      <if test="workName != null and workName != ''">and `work_name` = #{workName}</if>
       <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="quantity != null ">and `quantity` = #{quantity}</if>
@@ -207,7 +207,7 @@
       <if test="pid != null ">`pid`,</if>
       <if test="makeId != null ">`make_id`,</if>
       <if test="workCode != null  and workCode != ''">`work_code`,</if>
-      <if test="workName != null ">`work_name`,</if>
+      <if test="workName != null and workName != ''">`work_name`,</if>
       <if test="isKeyLine != null  and isKeyLine != ''">`is_key_line`,</if>
       <if test="unit != null  and unit != ''">`unit`,</if>
       <if test="quantity != null ">`quantity`,</if>
@@ -252,7 +252,7 @@
       <if test="pid != null ">#{pid},</if>
       <if test="makeId != null ">#{makeId},</if>
       <if test="workCode != null  and workCode != ''">#{workCode},</if>
-      <if test="workName != null ">#{workName},</if>
+      <if test="workName != null and workName != ''">#{workName},</if>
       <if test="isKeyLine != null  and isKeyLine != ''">#{isKeyLine},</if>
       <if test="unit != null  and unit != ''">#{unit},</if>
       <if test="quantity != null ">#{quantity},</if>
@@ -393,7 +393,7 @@
       <if test="pid != null ">`pid` = #{pid},</if>
       <if test="makeId != null ">`make_id` = #{makeId},</if>
       <if test="workCode != null  and  workCode != ''">`work_code` = #{workCode},</if>
-      <if test="workName != null ">`work_name` = #{workName},</if>
+      <if test="workName != null and workName != ''">`work_name` = #{workName},</if>
       <if test="isKeyLine != null  and  isKeyLine != ''">`is_key_line` = #{isKeyLine},</if>
       <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
       <if test="quantity != null ">`quantity` = #{quantity},</if>
@@ -661,7 +661,7 @@
       <if test="pid != null ">and `pid` = #{pid}</if>
       <if test="makeId != null ">and `make_id` = #{makeId}</if>
       <if test="workCode != null  and workCode != ''">and `work_code` = #{workCode}</if>
-      <if test="workName != null ">and `work_name` = #{workName}</if>
+      <if test="workName != null and workName != ''">and `work_name` = #{workName}</if>
       <if test="isKeyLine != null  and isKeyLine != ''">and `is_key_line` = #{isKeyLine}</if>
       <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
       <if test="quantity != null ">and `quantity` = #{quantity}</if>

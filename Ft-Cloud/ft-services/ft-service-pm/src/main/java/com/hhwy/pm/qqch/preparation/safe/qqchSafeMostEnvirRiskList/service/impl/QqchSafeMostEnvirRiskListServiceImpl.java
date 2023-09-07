@@ -121,15 +121,16 @@ public class QqchSafeMostEnvirRiskListServiceImpl implements IQqchSafeMostEnvirR
                         str = new StringBuffer("wbs"+safeMostEnvirRiskList.getWbsCode()+":").append(detailStr+";");
                     }
                 }
-                qqchSafeMostEnvirRiskListMapper.insertQqchSafeMostEnvirRiskListList(list);
-                detailService.insertQqchSafeMostEnvirRiskListDetailList(addDetailList);
-                String buttonMark = voParam.getButtonMark();
-                if (ButtonMark.CONFIRM.equals(buttonMark)) {
-                    // 插入确认状态
-                    qqchReviewService.updateFinishNum(voParam.getStageIdentity(), voParam.getModuleIdentity());
-                    qqchModuleConfirmCaseService.addConfirmRecord(voParam.getMenuId(), voParam.getStageIdentity());
-                }
             }
+            qqchSafeMostEnvirRiskListMapper.insertQqchSafeMostEnvirRiskListList(list);
+            detailService.insertQqchSafeMostEnvirRiskListDetailList(addDetailList);
+            String buttonMark = voParam.getButtonMark();
+            if (ButtonMark.CONFIRM.equals(buttonMark)) {
+                // 插入确认状态
+                qqchReviewService.updateFinishNum(voParam.getStageIdentity(), voParam.getModuleIdentity());
+                qqchModuleConfirmCaseService.addConfirmRecord(voParam.getMenuId(), voParam.getStageIdentity());
+            }
+
             if (!"".equals(str.toString())) {
                 log.error(str.toString());
                 throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, str.toString());

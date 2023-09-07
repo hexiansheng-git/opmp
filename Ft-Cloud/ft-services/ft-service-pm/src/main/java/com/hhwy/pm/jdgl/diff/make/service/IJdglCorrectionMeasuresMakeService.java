@@ -15,7 +15,7 @@ public interface IJdglCorrectionMeasuresMakeService {
     List<JdglCorrectionMeasuresMake> getJdglCorrectionMeasuresMakeList(
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake);
 
-    int insertJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake);
+    void insertJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake);
 
     int insertJdglCorrectionMeasuresMakeList(List<JdglCorrectionMeasuresMake> jdglCorrectionMeasuresMakeList);
 

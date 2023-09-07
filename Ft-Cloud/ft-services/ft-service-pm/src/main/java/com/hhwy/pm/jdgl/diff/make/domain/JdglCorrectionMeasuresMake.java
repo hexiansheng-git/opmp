@@ -37,9 +37,9 @@ public class JdglCorrectionMeasuresMake extends BaseEntity {
     /**
      * 字段描述：预警时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "预警时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "预警时间", dateFormat = "yyyy-MM-dd")
     private Date warnTime;
     /**
      * 字段描述：风险等级（字典类别track_risk_level）

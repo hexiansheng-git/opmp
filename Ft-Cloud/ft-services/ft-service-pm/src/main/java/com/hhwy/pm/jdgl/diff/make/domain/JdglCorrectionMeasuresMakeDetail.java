@@ -52,7 +52,7 @@ public class JdglCorrectionMeasuresMakeDetail extends TreeNode<JdglCorrectionMea
      */
     @JsonProperty
     @Excel(name = "作业名称")
-    private BigDecimal workName;
+    private String workName;
     /**
      * 字段描述：是否关键线路 1-有效 0-失效
      */

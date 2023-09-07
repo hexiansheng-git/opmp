@@ -57,12 +57,30 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         return jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
     }
 
+    /**
+     * 新增保存
+     *
+     * @param jdglCorrectionMeasuresMake
+     */
     @Transactional
-    public int insertJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
+    public void insertJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
         jdglCorrectionMeasuresMake.setId(IdWorker.createId());
-        jdglCorrectionMeasuresMake.setCreateUser(SecurityUtils.getUserName());
+        jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
-        return jdglCorrectionMeasuresMakeMapper.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
+        jdglCorrectionMeasuresMakeMapper.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
+
+        List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMake.getDetailList();
+        if (!CollectionUtils.isEmpty(detailList)) {
+            for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
+                detail.setId(IdWorker.createId());
+                detail.setMakeId(jdglCorrectionMeasuresMake.getId());
+                detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                detail.setCreateUserName(SecurityUtils.getUserName());
+                detail.setCreateTime(DateUtils.getNowDate());
+            }
+            jdglCorrectionMeasuresMakeDetailService.insertJdglCorrectionMeasuresMakeDetailList(detailList);
+        }
     }
 
     @Transactional
@@ -93,7 +111,13 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMake.getDetailList();
         if (!CollectionUtils.isEmpty(detailList)) {
             // 树转列表
-            List<JdglCorrectionMeasuresMakeDetail> treeList = TreeUtil.treeToList(detailList);
+            List<JdglCorrectionMeasuresMakeDetail> treeList = TreeUtil.treeToListWithoutId(detailList);
+            for (JdglCorrectionMeasuresMakeDetail detail : treeList) {
+                detail.setMakeId(jdglCorrectionMeasuresMake.getId());
+                detail.setUpdateUser(SecurityUtils.getUserName());
+                detail.setUpdateTime(DateUtils.getNowDate());
+            }
+
             // 执行更改下操作
             jdglCorrectionMeasuresMakeDetailService.updateJdglCorrectionMeasuresMakeDetailList(treeList);
         }
@@ -116,6 +140,12 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         return jdglCorrectionMeasuresMakeMapper.deleteJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param jdglCorrectionMeasuresMakePkList
+     * @return
+     */
     @Transactional
     public int deleteJdglCorrectionMeasuresMakeByPks(List<Long> jdglCorrectionMeasuresMakePkList) {
         return jdglCorrectionMeasuresMakeMapper.deleteJdglCorrectionMeasuresMakeByPks(jdglCorrectionMeasuresMakePkList);
