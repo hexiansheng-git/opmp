@@ -17,11 +17,11 @@ public interface IJdglProgressCorrectionTrackService {
     List<JdglProgressCorrectionTrack> getJdglProgressCorrectionTrackList(
         JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 
-    int insertJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
+    void insertJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 
     int insertJdglProgressCorrectionTrackList(List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList);
 
-    int updateJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
+    void updateJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 
     int updateJdglProgressCorrectionTrackList(List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList);
 

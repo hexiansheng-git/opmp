@@ -64,16 +64,26 @@ public class JdglProgressCorrectionTrackController extends BaseController {
 
     @PostMapping("/gmList")
     public AjaxResult gmList(@RequestBody ProgressCorrectionTrackQueryVo queryVo) {
-        List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService.gmList(queryVo);
+        List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList = jdglProgressCorrectionTrackService
+            .gmList(queryVo);
         return AjaxResult.success(jdglProgressCorrectionTrackList);
     }
 
+    /**
+     * 新增保存
+     *
+     * @param jdglProgressCorrectionTrackParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:add")
     @PostMapping("/add")
     public AjaxResult insertJdglProgressCorrectionTrack(
         @Validated(ValidationGroups.Save.class) @RequestBody JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
         jdglProgressCorrectionTrackService.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
-        return AjaxResult.success(jdglProgressCorrectionTrackParam);
+        JdglProgressCorrectionTrack jdglProgressCorrectionTrack = new JdglProgressCorrectionTrack();
+        jdglProgressCorrectionTrack.setId(jdglProgressCorrectionTrackParam.getId());
+        return AjaxResult
+            .success(jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrack(jdglProgressCorrectionTrack));
     }
 
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:add")
@@ -94,14 +104,13 @@ public class JdglProgressCorrectionTrackController extends BaseController {
     @PostMapping("/update")
     public AjaxResult updateJdglProgressCorrectionTrack(
         @Validated(ValidationGroups.Update.class) @RequestBody JdglProgressCorrectionTrack jdglProgressCorrectionTrackParam) {
-        return toAjax(
-            jdglProgressCorrectionTrackService.updateJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam));
+        jdglProgressCorrectionTrackService.updateJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam);
+        JdglProgressCorrectionTrack jdglProgressCorrectionTrack = new JdglProgressCorrectionTrack();
+        jdglProgressCorrectionTrack.setId(jdglProgressCorrectionTrackParam.getId());
+        return AjaxResult
+            .success(jdglProgressCorrectionTrackService.getJdglProgressCorrectionTrack(jdglProgressCorrectionTrack));
     }
 
-    /**
-     * @param jdglProgressCorrectionTrackListParam
-     * @return
-     */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglProgressCorrectionTrackList(
@@ -118,6 +127,12 @@ public class JdglProgressCorrectionTrackController extends BaseController {
             jdglProgressCorrectionTrackService.deleteJdglProgressCorrectionTrack(jdglProgressCorrectionTrackParam));
     }
 
+    /**
+     * 批量删除
+     *
+     * @param ids
+     * @return
+     */
     @PreAuthorize(hasPermi = "jdglProgressCorrectionTrack:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglProgressCorrectionTrackByPks(@PathVariable Long[] ids) {

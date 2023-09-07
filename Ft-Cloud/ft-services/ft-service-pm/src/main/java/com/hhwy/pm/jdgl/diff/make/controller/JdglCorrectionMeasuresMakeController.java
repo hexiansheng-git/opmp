@@ -65,12 +65,21 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
         return getDataTableAjaxResult(jdglCorrectionMeasuresMakeList);
     }
 
+    /**
+     * 新增保存
+     *
+     * @param jdglCorrectionMeasuresMakeParam
+     * @return
+     */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:add")
     @PostMapping("/add")
     public AjaxResult insertJdglCorrectionMeasuresMake(
         @Validated(ValidationGroups.Save.class) @RequestBody JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         jdglCorrectionMeasuresMakeService.insertJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
-        return AjaxResult.success(jdglCorrectionMeasuresMakeParam);
+        JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
+        jdglCorrectionMeasuresMake.setId(jdglCorrectionMeasuresMakeParam.getId());
+        return AjaxResult
+            .success(jdglCorrectionMeasuresMakeService.getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake));
     }
 
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:add")
@@ -92,7 +101,10 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
     public AjaxResult updateJdglCorrectionMeasuresMake(
         @Validated(ValidationGroups.Update.class) @RequestBody JdglCorrectionMeasuresMake jdglCorrectionMeasuresMakeParam) {
         jdglCorrectionMeasuresMakeService.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam);
-        return AjaxResult.success();
+        JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
+        jdglCorrectionMeasuresMake.setId(jdglCorrectionMeasuresMakeParam.getId());
+        return AjaxResult.success(jdglCorrectionMeasuresMakeService
+            .getJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake));
     }
 
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:update")
@@ -111,6 +123,11 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
             jdglCorrectionMeasuresMakeService.deleteJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMakeParam));
     }
 
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @PreAuthorize(hasPermi = "jdglCorrectionMeasuresMake:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglCorrectionMeasuresMakeByPks(@PathVariable Long[] ids) {

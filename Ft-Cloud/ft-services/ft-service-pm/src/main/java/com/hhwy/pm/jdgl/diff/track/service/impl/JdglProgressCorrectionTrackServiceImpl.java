@@ -10,12 +10,11 @@ import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackDetailSer
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
+import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * @author zhenglili
@@ -60,12 +59,30 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         return jdglProgressCorrectionTrackMapper.getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrack);
     }
 
+    /**
+     * 新增保存
+     *
+     * @param jdglProgressCorrectionTrack
+     */
     @Transactional
-    public int insertJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
+    public void insertJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
         jdglProgressCorrectionTrack.setId(IdWorker.createId());
-        jdglProgressCorrectionTrack.setCreateUser(SecurityUtils.getUserName());
+        jdglProgressCorrectionTrack.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        jdglProgressCorrectionTrack.setCreateUserName(SecurityUtils.getUserName());
         jdglProgressCorrectionTrack.setCreateTime(DateUtils.getNowDate());
-        return jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+        jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+
+        List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrack.getDetailList();
+        if (!CollectionUtils.isEmpty(detailList)) {
+            for (JdglProgressCorrectionTrackDetail detail : detailList) {
+                detail.setId(IdWorker.createId());
+                detail.setTrackId(jdglProgressCorrectionTrack.getId());
+                detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                detail.setCreateUserName(SecurityUtils.getUserName());
+                detail.setCreateTime(DateUtils.getNowDate());
+            }
+            jdglProgressCorrectionTrackDetailService.insertJdglProgressCorrectionTrackDetailList(detailList);
+        }
     }
 
     @Transactional
@@ -86,16 +103,26 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
      * @return
      */
     @Transactional
-    public int updateJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
+    public void updateJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack) {
+        if (jdglProgressCorrectionTrack == null || jdglProgressCorrectionTrack.getId() == null) {
+            return;
+        }
+        jdglProgressCorrectionTrack.setUpdateUser(SecurityUtils.getUserName());
+        jdglProgressCorrectionTrack.setUpdateTime(DateUtils.getNowDate());
+        jdglProgressCorrectionTrackMapper.updateJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+
         List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrack.getDetailList();
-        int num = 0;
         if (!CollectionUtils.isEmpty(detailList)) {
             // 树转列表
-            List<JdglProgressCorrectionTrackDetail> treeList = TreeUtil.treeToList(detailList);
+            List<JdglProgressCorrectionTrackDetail> treeList = TreeUtil.treeToListWithoutId(detailList);
+            for (JdglProgressCorrectionTrackDetail detail : treeList) {
+                detail.setTrackId(jdglProgressCorrectionTrack.getId());
+                detail.setUpdateUser(SecurityUtils.getUserName());
+                detail.setUpdateTime(DateUtils.getNowDate());
+            }
             // 执行更改下操作
-            num = jdglProgressCorrectionTrackDetailService.updateJdglProgressCorrectionTrackDetailList(treeList);
+            jdglProgressCorrectionTrackDetailService.updateJdglProgressCorrectionTrackDetailList(treeList);
         }
-        return num;
     }
 
     @Transactional
@@ -115,6 +142,12 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         return jdglProgressCorrectionTrackMapper.deleteJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
     }
 
+    /**
+     * 批量删除
+     *
+     * @param jdglProgressCorrectionTrackPkList
+     * @return
+     */
     @Transactional
     public int deleteJdglProgressCorrectionTrackByPks(List<Long> jdglProgressCorrectionTrackPkList) {
         return jdglProgressCorrectionTrackMapper
