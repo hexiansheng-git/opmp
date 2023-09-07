@@ -8,6 +8,8 @@ import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
+import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
+import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
@@ -45,6 +47,8 @@ public class SyncController extends BaseController {
     private IJdglProgressCorrectionTrackService jdglProgressCorrectionTrackService;
     @Autowired
     private IQqchPerformInspectionService performInspectionService;
+    @Autowired
+    private IQqchSummaryEvaluationService summaryEvaluationService;
 
     /**
      * 前期策划测试用
@@ -66,7 +70,7 @@ public class SyncController extends BaseController {
     }
 
     /**
-     * 前期策划测试用
+     * 前期策划工作计划测试用
      * @param
      * @return
      */
@@ -125,6 +129,21 @@ public class SyncController extends BaseController {
             List<QqchPerformInspection> list = performInspectionService.getQqchPerformInspectionList(new QqchPerformInspection());
             syncInfoService.pushQqchPerformInspection(list);
         }
+        return AjaxResult.success();
+    }
+
+    /**
+     * 推送前期策划总结评价
+     * @param summaryEvaluation
+     * @return
+     */
+    @PostMapping("/qqchSummaryEvaluationPush")
+    public AjaxResult qqchSummaryEvaluationPush(@RequestBody(required = false) QqchSummaryEvaluation summaryEvaluation) {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        QqchSummaryEvaluation query = new QqchSummaryEvaluation();
+        QqchSummaryEvaluation qqchSummaryEvaluation = summaryEvaluationService.getQqchSummaryEvaluation( new QqchSummaryEvaluation());
+        syncInfoService.pushQqchSummaryEvaluation(qqchSummaryEvaluation);
         return AjaxResult.success();
     }
 

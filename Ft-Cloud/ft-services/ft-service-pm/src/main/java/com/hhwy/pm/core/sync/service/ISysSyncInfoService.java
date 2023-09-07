@@ -9,6 +9,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
+import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
@@ -62,6 +63,13 @@ public interface ISysSyncInfoService {
      */
     public void pushQqchPerformInspection(List<QqchPerformInspection> List);
     public void pushQqchPerformInspection(QqchPerformInspection inspection);
+
+    /**
+     * 推送前期策划总结评价
+     * @param list
+     */
+    public void pushQqchSummaryEvaluation(List<QqchSummaryEvaluation> list);
+    public void pushQqchSummaryEvaluation(QqchSummaryEvaluation evaluation);
 
     /**
      * 推送差异化分析数据到总部
