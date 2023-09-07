@@ -482,7 +482,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
             List<QqchTaxCost> children = qqchTaxCost.getChildren();
             if (CollectionUtils.isEmpty(children)){
                 qqchTaxCost.setLeaf("1");
-                return;
+                continue;
             }
             setLeaf(children);
         }
