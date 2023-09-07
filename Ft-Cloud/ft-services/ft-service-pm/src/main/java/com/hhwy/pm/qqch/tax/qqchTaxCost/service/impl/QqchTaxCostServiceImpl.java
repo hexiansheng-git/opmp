@@ -470,8 +470,22 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                 qqchTaxCost.setUsdReqAmt(CommonServiceUtil.getUsdAmt(qqchTaxCost.getReqAmt(), rate));
             }
         }
+        List<QqchTaxCost> taxCostList = this.toTree(dataList, ".");
+        // 递归 找叶子节点
+        this.setLeaf(taxCostList);
 
-        return this.toTree(dataList, ".");
+        return taxCostList;
+    }
+
+    private void setLeaf(List<QqchTaxCost> taxCostList) {
+        for (QqchTaxCost qqchTaxCost : taxCostList) {
+            List<QqchTaxCost> children = qqchTaxCost.getChildren();
+            if (CollectionUtils.isEmpty(children)){
+                qqchTaxCost.setLeaf("1");
+                return;
+            }
+            setLeaf(children);
+        }
     }
 
 

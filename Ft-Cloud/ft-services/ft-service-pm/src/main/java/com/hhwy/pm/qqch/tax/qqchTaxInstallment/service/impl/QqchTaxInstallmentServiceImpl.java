@@ -318,7 +318,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         }
 
 
-        getLeaf(collect);
+        //getLeaf(collect);
 
 
         return collect;
