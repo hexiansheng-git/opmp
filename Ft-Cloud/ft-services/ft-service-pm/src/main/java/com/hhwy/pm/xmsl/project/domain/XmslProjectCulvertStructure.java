@@ -1,15 +1,17 @@
 package com.hhwy.pm.xmsl.project.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author han
@@ -56,19 +58,19 @@ public class XmslProjectCulvertStructure extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "孔数")
-    private String holeCount;
+    private Integer holeCount;
     /**
      * 字段描述：跨径
      */
     @JsonProperty
     @Excel(name = "跨径")
-    private String span;
+    private BigDecimal span;
     /**
      * 字段描述：净高
      */
     @JsonProperty
     @Excel(name = "净高")
-    private String clearHeight;
+    private BigDecimal clearHeight;
     /**
      * 字段描述：涵身结构
      */
