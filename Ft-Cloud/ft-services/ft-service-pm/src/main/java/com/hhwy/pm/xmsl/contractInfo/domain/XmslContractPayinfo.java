@@ -43,6 +43,7 @@ public class XmslContractPayinfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "支付货币币种(编码)")
     private String currencyCode;
+    private String [] currencyCodes;
     /**
      * 字段描述：支付货币币种(名称)
      */

@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
@@ -253,10 +254,10 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      *
      * @return
      */
-    public List<TaxInVO.CurrencyVO> getCurrencyInfo(String currencyCode) {
+    public List<TaxInVO.CurrencyVO> getCurrencyInfo(String currencyCodes) {
 
         XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
-        xmslContractPayinfo.setCurrencyCode(currencyCode);
+        xmslContractPayinfo.setCurrencyCodes(StringUtils.isEmpty(currencyCodes) ? null : currencyCodes.split(","));
         List<XmslContractPayinfo> payInfo = contractPayinfoService.getPayInfo(xmslContractPayinfo);
         payInfo = payInfo.stream().filter(Objects::nonNull).collect(Collectors.toList());
         List<TaxInVO.CurrencyVO> res = payInfo.stream().map(item -> {

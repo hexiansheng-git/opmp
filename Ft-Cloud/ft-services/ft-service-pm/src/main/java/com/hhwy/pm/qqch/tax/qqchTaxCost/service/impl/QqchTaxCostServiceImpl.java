@@ -402,7 +402,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     @Override
     public List<QqchTaxCost> importData(MultipartFile file, Map<String, Object> params) throws IOException {
         String dataType = String.valueOf(params.get("dataType"));
-        CommonAssert.notBlank(dataType,"dataType不能为空");
+        CommonAssert.notBlank(dataType, "dataType不能为空");
 
         List<QqchTaxCost> dataList = new ArrayList<>();
 
@@ -436,16 +436,18 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         List<String> currencyNameList = dataList.stream().map(QqchTaxCost::getFeeName).distinct().collect(Collectors.toList());
 
         Map<String, String> currencyInfoByNames = CommonServiceUtil.getCurrencyCodesByNames(currencyNameList);
-        if (currencyInfoByNames == null  || currencyInfoByNames.size() == 0) throw new RuntimeException("请检查币种是否书写错误");
+        if (currencyInfoByNames == null || currencyInfoByNames.size() == 0)
+            throw new RuntimeException("请检查币种是否书写错误");
         List<String> codes = new ArrayList<>(currencyInfoByNames.values());
 
-        Map<String, BigDecimal> rateMap = CommonServiceUtil.getRateByCodes(codes);
+        Map<String, BigDecimal> rateMap = getRateByCodes(codes);
+
 
         for (QqchTaxCost qqchTaxCost : dataList) {
             String feeName = qqchTaxCost.getFeeName();
             String code = currencyInfoByNames.get(feeName);
             if (StringUtils.isNotEmpty(code)) {
-                BigDecimal rate = rateMap.get(code) == null ? BigDecimal.ONE : rateMap.get(code);
+                BigDecimal rate = rateMap.get(code) == null ? new BigDecimal("2") : rateMap.get(code);
                 qqchTaxCost.setCurrency(code);
                 qqchTaxCost.setRate(rate);
 
@@ -477,10 +479,21 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
         return taxCostList;
     }
 
+    private Map<String, BigDecimal> getRateByCodes(List<String> codes) {
+        List<TaxInVO.CurrencyVO> currencyInfo = qqchTaxInService.getCurrencyInfo(String.join(",", codes));
+        Map<String, BigDecimal> res = new HashMap<>();
+
+        if (CollectionUtils.isEmpty(currencyInfo)) return res;
+        for (TaxInVO.CurrencyVO currencyVO : currencyInfo) {
+            res.put(currencyVO.getCurrency(), currencyVO.getRate());
+        }
+        return res;
+    }
+
     private void setLeaf(List<QqchTaxCost> taxCostList) {
         for (QqchTaxCost qqchTaxCost : taxCostList) {
             List<QqchTaxCost> children = qqchTaxCost.getChildren();
-            if (CollectionUtils.isEmpty(children)){
+            if (CollectionUtils.isEmpty(children)) {
                 qqchTaxCost.setLeaf("1");
                 continue;
             }
@@ -532,7 +545,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                         parent.setLocalAmt(parent.getUsdLocalAmt());
                         // 计算每一年的数据
                         List<QqchTaxCostDetail> detailList = parent.getDetailList();
-                        if (!CollectionUtils.isEmpty(detailList)){
+                        if (!CollectionUtils.isEmpty(detailList)) {
                             for (QqchTaxCostDetail detail : detailList) {
                                 String year = detail.getYear();
                                 List<QqchTaxCostDetail> details = t.getDetailList();
@@ -545,9 +558,9 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                                     detail.setLocalAmt(detail.getUsdLocalAmt());
                                     detail.setReqAmt(detail.getUsdReqAmt());
                                 });
-                            } 
+                            }
                         }
-                       
+
                         children.add(t);
                         parent.setChildren(children);
                     });

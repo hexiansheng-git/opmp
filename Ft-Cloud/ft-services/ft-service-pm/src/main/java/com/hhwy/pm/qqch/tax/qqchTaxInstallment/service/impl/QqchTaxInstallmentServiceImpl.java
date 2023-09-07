@@ -318,7 +318,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         }
 
 
-        //getLeaf(collect);
+        getLeaf(collect);
 
 
         return collect;
@@ -341,8 +341,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
                     listVO.setLocAmt(BigDecimalUtils.sum(listVO.getLocalAmt(), listVO.getReqAmt()));
                     listVO.setDiffAmt(BigDecimalUtils.subtract(listVO.getInnerAmt(), listVO.getReqAmt()));
                 }
-
-                return;
+                continue;
             }
             getLeaf(listVO.getChildren());
         }

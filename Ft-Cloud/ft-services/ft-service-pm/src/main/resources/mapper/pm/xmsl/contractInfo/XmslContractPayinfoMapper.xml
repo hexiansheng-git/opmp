@@ -560,8 +560,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             c.valid = '1'
           AND c.del_flag = '0'
           AND c.task_status = '5'
-        <if test="currencyCode != null and currencyCode!= ''">
-            and c.currency_code = #{currencyCode}
+        <if test="currencyCodes != null and currencyCodes.length != 0">
+            and p.currency_code in
+            <foreach item="id" collection="currencyCodes" open="(" separator="," close=")">
+                #{id}
+            </foreach>
         </if>
     </select>
     
