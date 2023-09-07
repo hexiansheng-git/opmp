@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.system.jobKind.mapper.JobKindMapper">
+    <resultMap type="com.hhwy.domain.base.system.jobKind.JobKind" id="JobKindResult">
+        <result property="id"    column="id"    />
+        <result property="jobName"    column="job_name"    />
+        <result property="jobCode"    column="job_code"    />
+        <result property="sort"    column="sort"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+    </resultMap>
+
+    <sql id="selectJobKindVo">
+        select `id`, `job_name`, `job_code`, `sort`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3` from `t_job_kind`
+    </sql>
+
+    <select id="selectJobKindList" parameterType="com.hhwy.domain.base.system.jobKind.JobKind" resultMap="JobKindResult">
+        <include refid="selectJobKindVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="jobName != null  and jobName != ''"> and `job_name` like concat('%', #{jobName}, '%')</if>
+            <if test="jobCode != null  and jobCode != ''"> and `job_code` = #{jobCode}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="params.jobCodes != null and params.jobCodes != '' ">
+                and job_code in
+                <foreach item="item" collection="params.jobCodes.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params!=null and params.jobNames != null and params.jobNames != '' ">
+                and job_name in
+                <foreach item="item" collection="params.jobNames.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectJobKindById" parameterType="Long" resultMap="JobKindResult">
+        <include refid="selectJobKindVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertJobKind" parameterType="com.hhwy.domain.base.system.jobKind.JobKind">
+        insert into `t_job_kind`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="jobName != null">`job_name`,</if>
+            <if test="jobCode != null">`job_code`,</if>
+            <if test="sort != null">`sort`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="jobName != null">#{jobName},</if>
+            <if test="jobCode != null">#{jobCode},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `t_job_kind` (
+                                                `id`,
+                                                                `job_name`,
+                                                                `job_code`,
+                                                                `sort`,
+                                                                `create_user`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                `remark`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`
+                                    )values
+        <foreach collection="dataList" separator="," item="item" index="index" >(
+                                        #{item.id},
+                                        #{item.jobName},
+                                        #{item.jobCode},
+                                        #{item.sort},
+                                        #{item.createUser},
+                                        #{item.createTime},
+                                        #{item.updateUser},
+                                        #{item.updateTime},
+                                        #{item.delUser},
+                                        #{item.delTime},
+                                        #{item.remark},
+                                        #{item.ptVar1},
+                                        #{item.ptVar2},
+                                        #{item.ptVar3}
+                            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `t_job_kind`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="job_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.jobName != null ">
+                                when `id` = #{item.id} then #{item.jobName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="job_code =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.jobCode != null ">
+                                when `id` = #{item.id} then #{item.jobCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="sort =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.sort != null ">
+                                when `id` = #{item.id} then #{item.sort}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateJobKind" parameterType="com.hhwy.domain.base.system.jobKind.JobKind">
+        update `t_job_kind`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="jobName != null">`job_name` = #{jobName},</if>
+            <if test="jobCode != null">`job_code` = #{jobCode},</if>
+            <if test="sort != null">`sort` = #{sort},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteJobKindById" parameterType="Long">
+        update `t_job_kind` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteJobKindAll" parameterType="Long">
+        update `t_job_kind` set del_flag = 1 WHERE 1 = 1
+    </update>
+
+    <update id="deleteJobKindByIds" parameterType="String">
+        update `t_job_kind` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="validRepeat" parameterType="com.hhwy.domain.base.system.jobKind.JobKind" resultMap="JobKindResult">
+        select * from t_job_kind
+        <where>
+         del_flag='0' and job_code=#{jobCode}
+         <if test="id!=null"> and id <![CDATA[!= ]]> #{id} </if>
+        </where>
+
+    </select>
+
+    <select id="selectMaxSort" resultType="integer">
+        select MAX(sort) as sort from t_job_kind;
+    </select>
+</mapper>

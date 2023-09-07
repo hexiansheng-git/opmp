@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -177,10 +179,17 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
         // 保存主要
         List<QqchTaxIn> inList = qqchTaxInParam.getDto().getInList();
+        List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
         List<QqchTaxIn> qqchTaxIns = CompileEntity.dealSaveDto(qqchTaxInParam, inList);
         for (QqchTaxIn qqchTaxIn : qqchTaxIns) {
             qqchTaxIn.setDataType("1");
             qqchTaxIn.setRecordId(recordId);
+            String currency = qqchTaxIn.getCurrency();
+            CommonAssert.notBlank(currency, "币种编码不能为空");
+            currencyInfo.stream().filter(i -> currency.equals(i.getCurrency())).findFirst().ifPresent(item -> {
+                BigDecimal rate = item.getRate();
+                qqchTaxIn.setRate(rate);
+            });
             allTaxInList.add(qqchTaxIn);
         }
 
@@ -244,9 +253,12 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      *
      * @return
      */
-    public List<TaxInVO.CurrencyVO> getCurrencyInfo() {
+    public List<TaxInVO.CurrencyVO> getCurrencyInfo(String currencyCode) {
 
-        List<XmslContractPayinfo> payInfo = contractPayinfoService.getPayInfo();
+        XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+        xmslContractPayinfo.setCurrencyCode(currencyCode);
+        List<XmslContractPayinfo> payInfo = contractPayinfoService.getPayInfo(xmslContractPayinfo);
+        payInfo = payInfo.stream().filter(Objects::nonNull).collect(Collectors.toList());
         List<TaxInVO.CurrencyVO> res = payInfo.stream().map(item -> {
             TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
             currencyVO.setCurrency(item.getCurrencyCode());
@@ -258,10 +270,14 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         // 假数据
         if (CollectionUtils.isEmpty(res)) {
             res = new ArrayList<>();
-            res.add(new TaxInVO.CurrencyVO("RMB", "比尔", new BigDecimal("6.9")));
-            res.add(new TaxInVO.CurrencyVO("USD", "中非法郎", new BigDecimal("1.1")));
+            res.add(new TaxInVO.CurrencyVO("BIRR", "比尔", new BigDecimal("6.9")));
+            res.add(new TaxInVO.CurrencyVO("CFA", "中非法郎", new BigDecimal("1.1")));
         }
         return res;
+    }
+
+    public List<TaxInVO.CurrencyVO> getCurrencyInfo() {
+        return this.getCurrencyInfo(null);
     }
 
     /**

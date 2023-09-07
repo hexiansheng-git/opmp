@@ -13,6 +13,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
+import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
@@ -196,9 +197,13 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
             List<JSONObject> jsonObjectList = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
                 QqchPerformInspection temp = list.get(i);
+                temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
                 jsonObject.put("projectId",projectBasicInfo.getProjectId());
                 jsonObject.put("projectName",projectBasicInfo.getProjectName());
+                jsonObject.put("regionId",projectBasicInfo.getRegionId());
+                jsonObject.put("regionName",projectBasicInfo.getRegionName());
+                jsonObject.put("ptVar1",projectBasicInfo.getProjectCategory());
                 jsonObjectList.add(jsonObject);
             }
             rocketMQTemplate.convertAndSend("qqch_performInspection:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
@@ -217,6 +222,40 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
     @Override
     public void pushQqchPerformInspection(QqchPerformInspection inspection) {
         pushQqchPerformInspection(Arrays.asList(inspection)); 
+    }
+
+    @Override
+    public void pushQqchSummaryEvaluation(List<QqchSummaryEvaluation> list) {
+        long beginMills = System.currentTimeMillis();
+        Integer status = 1;
+        String errMsg = "";
+        try{
+            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+            for (int i = 0; i < list.size(); i++) {
+                QqchSummaryEvaluation temp = list.get(i);
+                temp.setPtVar1(projectBasicInfo.getProjectCategory());
+                temp.setProjectId(projectBasicInfo.getProjectId());
+                temp.setProjectName(projectBasicInfo.getProjectName());
+                temp.setRegionId(projectBasicInfo.getRegionId());
+                temp.setRegionName(projectBasicInfo.getRegionName());
+                temp.setPtVar1(projectBasicInfo.getProjectCategory());
+            }
+            rocketMQTemplate.convertAndSend("qqch_evaluation:gm", JSONObject.toJSONString(list));
+        }catch(Exception e){
+            e.printStackTrace();
+            status = 0;
+            errMsg = e.getMessage();
+            throw e;
+        }finally {
+            String ids = list.stream().map(r->r.getId()+"").collect(Collectors.joining(","));
+            //3、更新syncInfo
+            sysSyncInfoLogService.insert(SyncBusinessEnum.QQCHWORKPLAN_ENUM,ids,list.size()+0L,System.currentTimeMillis()-beginMills,status,errMsg);
+        }
+    }
+
+    @Override
+    public void pushQqchSummaryEvaluation(QqchSummaryEvaluation evaluation) {
+        pushQqchSummaryEvaluation(Arrays.asList(evaluation));
     }
 
     /**

@@ -32,5 +32,5 @@ public interface IXmslContractPayinfoService {
     List<Map> selDictDate(String type);
 
 
-    public List<XmslContractPayinfo> getPayInfo();
+    public List<XmslContractPayinfo> getPayInfo(XmslContractPayinfo xmslContractPayinfo);
 }
