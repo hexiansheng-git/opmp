@@ -5,6 +5,9 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service.IJdglYearImagePlanService;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
@@ -128,8 +131,13 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     public List<JdglYearPlan> getJdglYearPlanList(JdglYearPlan jdglYearPlan) {
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(jdglYearPlan);
+        String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
             for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
+                FtActBusiness flowInfo = FlowInfoSearchUtil
+                        .getFlowInfo("jdgl_year_plan", String.valueOf(jdglYearPlan1.getId()), tenantKey);
+                jdglYearPlan1.setTaskStatus(flowInfo.getName());
+                jdglYearPlan1.setAssignee(flowInfo.getAssignee());
                 List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
                 jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
                 List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());

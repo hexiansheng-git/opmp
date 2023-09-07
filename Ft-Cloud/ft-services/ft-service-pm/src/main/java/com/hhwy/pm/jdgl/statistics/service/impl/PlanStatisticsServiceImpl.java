@@ -134,25 +134,25 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 if(endDate.before(date)) {
                     continue;
                 }
-                totalActAmt.add(dayValueDl);
+                totalActAmt = totalActAmt.add(dayValueDl);
                 if(!year.equals(cl.get(Calendar.YEAR))) {
                     continue;
                 }
-                yearActAmt.add(dayValueDl);
+                yearActAmt = yearActAmt.add(dayValueDl);
                 int dateMonth = cl.get(Calendar.MONTH) + 1;
 
                 if(Integer.parseInt(quarter)*3 > dateMonth || Integer.parseInt(quarter)*3-2 < dateMonth) {
                     continue;
                 }
-                quarterActAmt.add(dayValueDl);
+                quarterActAmt = quarterActAmt.add(dayValueDl);
 
                 if(!month.equals(dateMonth+"")){
                     continue;
                 }
-                monthActAmt.add(dayValueDl);
+                monthActAmt = monthActAmt.add(dayValueDl);
 
                 if(startDate.before(date) && endDate.after(date)) {
-                    weekActAmt.add(dayValueDl);
+                    weekActAmt = weekActAmt.add(dayValueDl);
                 }
             }
         }

@@ -42,8 +42,7 @@ public class JdglDiffAnalysisCorrectController extends BaseController {
     @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/getInit")
     public AjaxResult getInitDiffAnalysisCorrect(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
-        Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectList = jdglDiffAnalysisCorrectService.getInitDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam);
-        return AjaxResult.success(jdglDiffAnalysisCorrectList);
+        return AjaxResult.success(jdglDiffAnalysisCorrectService.getInitDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam));
     }
 
     @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")

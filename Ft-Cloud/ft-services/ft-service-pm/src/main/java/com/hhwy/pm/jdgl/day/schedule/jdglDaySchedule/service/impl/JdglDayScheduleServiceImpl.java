@@ -92,14 +92,14 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         Calendar calendar2 = Calendar.getInstance();
         calendar2.setTime(endPeriod);
 
-        LocalDate ofStart = LocalDate.of(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH + 1), 1);
-        LocalDate ofEnd = LocalDate.of(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH + 1), 1);
+        LocalDate ofStart = LocalDate.of(calendar1.get(Calendar.YEAR), calendar1.get(Calendar.MONTH) + 1, 1);
+        LocalDate ofEnd = LocalDate.of(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH) + 1, 1);
 
         Period between = Period.between(ofStart, ofEnd);
         int months = between.getYears() * 12 + between.getMonths();
         List<JdglDaySchedule> listByDateRange = getListByDateRange(start, end);
         for (int i = 0; i<=months; i++) {
-            calendar1.add(Calendar.MONTH, i);
+            calendar1.add(Calendar.MONTH, i==0?0:1);
             Date time = calendar1.getTime();
             String format = sdf.format(time);
             Map<String, Date> dateRange4YearMonth = StatisticsUtils.getDateRange4YearMonth(time);
@@ -113,7 +113,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
                     if((start1.before(jdglDaySchedule.getDate()) || start1.equals(jdglDaySchedule.getDate()))
                             && end1.after(jdglDaySchedule.getDate())) {
                         if(jdglDaySchedule.getDayValueDl() != null) {
-                            bigDecimal.add(jdglDaySchedule.getDayValueDl());
+                            bigDecimal = bigDecimal.add(jdglDaySchedule.getDayValueDl());
                         }
                     }
                 }

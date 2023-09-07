@@ -239,6 +239,12 @@ public class JdglYearPlan extends BaseEntity {
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
     /**
+     * 字段描述：当前审批人
+     */
+    @JsonProperty
+    @Excel(name = "当前审批人")
+    private String assignee;
+    /**
      * 字段描述：当前总计划版本
      */
     @JsonProperty

@@ -168,7 +168,7 @@
         </where>
         order by period desc
     </select>
-    <select id="gmList" resultType="com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis">
+    <select id="gmList" resultMap="JdglDiffAnalysisResultMap">
         <include refid="selectJdglDiffAnalysisVo"/>
         <where>
             del_flag = '0'

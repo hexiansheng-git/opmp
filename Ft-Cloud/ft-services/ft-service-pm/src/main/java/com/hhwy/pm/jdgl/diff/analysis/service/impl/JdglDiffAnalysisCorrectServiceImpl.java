@@ -44,7 +44,20 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
     }
 
     public List<JdglDiffAnalysisCorrect> getJdglDiffAnalysisCorrectList(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect) {
-        return jdglDiffAnalysisCorrectMapper.getJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrect);
+
+        List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectList = jdglDiffAnalysisCorrectMapper.getJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrect);
+        List<JdglDiffAnalysisCorrect> returnList = new ArrayList<>();
+        if(!CollectionUtils.isEmpty(jdglDiffAnalysisCorrectList)) {
+            returnList = jdglDiffAnalysisCorrectList.stream().filter(vo -> StringUtils.isEmpty(vo.getSecondType())).collect(Collectors.toList());
+            if(CollectionUtils.isEmpty(returnList)) {
+                return returnList;
+            }
+            for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect1 : returnList) {
+                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> vo.getFirstType().equals(jdglDiffAnalysisCorrect1.getFirstType()) && StringUtils.isNotEmpty(vo.getSecondType())).collect(Collectors.toList());
+                jdglDiffAnalysisCorrect1.setChildren(collect);
+            }
+        }
+        return returnList;
     }
 
     public Map<String, List<JdglDiffAnalysisCorrect>> getJdglDiffAnalysisCorrectMapList(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect) {
@@ -118,9 +131,9 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
      * @return
      */
     @Override
-    public Map<String, List<JdglDiffAnalysisCorrect>> getInitDiffAnalysisCorrect(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
+    public List<JdglDiffAnalysisCorrect> getInitDiffAnalysisCorrect(JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
 
-        Map<String, List<JdglDiffAnalysisCorrect>> returnMapList = new HashMap<>();
+//        Map<String, List<JdglDiffAnalysisCorrect>> returnMapList = new HashMap<>();
 
         List<JdglDiffAnalysisCorrect> headerVos = new ArrayList<JdglDiffAnalysisCorrect>();
 
@@ -154,7 +167,6 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
             JdglDiffAnalysisCorrect vo = new JdglDiffAnalysisCorrect();
             vo.setFirstType(headerValue);
             vo.setFirstTypeValue(headerName);
-            headerVos.add(vo);
             for (int i = 0; i < factorsVOList.size(); i++) {
                 List<QqchScheFactors> qqchScheFactors = factorsVOList.get(i);
                 if(!CollectionUtils.isEmpty(qqchScheFactors)) {
@@ -172,12 +184,14 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
                     }
                 }
             }
-            returnMapList.put(headerValue,dataVos);
+            vo.setChildren(dataVos);
+            headerVos.add(vo);
+//            returnMapList.put(headerValue,dataVos);
         }
 
-        returnMapList.put("headerList", headerVos);
+//        returnMapList.put("headerList", headerVos);
 
-        return returnMapList;
+        return headerVos;
 
     }
 }

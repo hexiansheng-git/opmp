@@ -138,7 +138,7 @@
         order by date desc
     </select>
     <select id="getHistoryValue"
-            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
+            resultMap="JdglDayScheduleResultMap">
         select sum(day_value_cu) totalValueCu,sum(day_value_dl) totalValueDl
         from jdgl_day_schedule where date &lt; #{date} and task_status = "5" and del_flag != "1"
     </select>
@@ -150,7 +150,7 @@
         <if test="endDate != null "> and date &lt;= #{endDate}</if>
     </select>
 
-    <select id="getListByDateRange" resultType="com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule">
+    <select id="getListByDateRange" resultMap="JdglDayScheduleResultMap">
         <include refid="selectJdglDayScheduleVo"/>
         where task_status = "5" and del_flag != "1"
             <if test="startDate != null "> and date &gt;= #{startDate}</if>

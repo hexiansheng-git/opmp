@@ -178,7 +178,7 @@
         order by sort asc
     </select>
     <select id="getWbsListByYearAndMonth"
-            resultType="com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan">
+            resultMap="JdglMonthImagePlanResultMap">
         select jyip.wbs_code,jyip.wbs_name,sum(plan_comp_value) plan_comp_value
         from (select * from jdgl_month_plan where task_status = '5' and year = #{year} and month = #{month}) jyp ,
              jdgl_month_image_plan jyip
