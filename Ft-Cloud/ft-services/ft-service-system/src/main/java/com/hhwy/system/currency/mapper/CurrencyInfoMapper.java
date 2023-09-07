@@ -82,4 +82,6 @@ public interface CurrencyInfoMapper {
      * @return
      */
     int batchInsert(@Param(value = "dataList") List<CurrencyInfo> list);
+
+    void deleteAll();
 }

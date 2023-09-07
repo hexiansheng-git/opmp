@@ -70,7 +70,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
      */
     @JsonProperty
     @Excel(name = "原定工期")
-    private Integer num;
+    private Integer planDuration;
     /**
      * 字段描述：总浮时
      */
@@ -203,4 +203,51 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
 
+    /**
+     * 字段描述：是否关键线路
+     */
+    @JsonProperty
+    @Excel(name = "是否关键线路")
+    private String isCritical;
+    /**
+     * 字段描述：wbs编码
+     */
+    @JsonProperty
+    @Excel(name = "wbs编码")
+    private String wbsCode;
+    /**
+     * 字段描述：wbs名称
+     */
+    @JsonProperty
+    @Excel(name = "wbs名称")
+    private String wbsName;
+
+    /**
+     * 字段描述：项目id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "项目id")
+    private Long projectId;
+
+    /**
+     * 字段描述：项目名称
+     */
+    @JsonProperty
+    @Excel(name = "项目名称")
+    private String projectName;
+
+    /**
+     * 字段描述：自由浮时
+     */
+    @JsonProperty
+    @Excel(name = "自由浮时")
+    private Integer freeFloat;
+
+    /**
+     * 字段描述：尚需工期
+     */
+    @JsonProperty
+    @Excel(name = "尚需工期")
+    private Integer remainingDuration;
 }

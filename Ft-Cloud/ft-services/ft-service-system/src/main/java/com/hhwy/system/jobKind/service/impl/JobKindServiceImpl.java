@@ -50,7 +50,7 @@ public class JobKindServiceImpl implements IJobKindService {
     @Override
     @Transactional
     public void dataSync(List<JobKind> rstList) {
-        jobKindMapper.deleteJobKindAll();
+        jobKindMapper.deleteAll();
         jobKindMapper.batchInsert(rstList);
     }
 }

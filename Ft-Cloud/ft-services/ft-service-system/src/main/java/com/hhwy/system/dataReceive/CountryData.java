@@ -23,27 +23,24 @@ public class CountryData {
     @Autowired
     private RedisUtils redisUtils;
 
+    private static final String reqParam = "{ \"ESB\": { \"DATA\": { \"DATAINFOS\": { \"PUUID\": \"1\", \"DATAINFO\": [ { \"zgbnum\": \"\", \"LASTMODIFYRECORDTIME\": \"~\" } ] }, \"SPLITPAGE\": { \"CURRENTPAGE\": \""+1+"\", \"COUNTPERPAGE\": \"500\" } } } }";
+    private static final String reqUrl = "https://esb.cfhec.net/env-101/por-902/mdm/route/esbmule/services/query/MDM_Q_SJFC_GJDQ";
+    private static final String apikey = "rPFLbaT5mWodSwjulaYENn8kMigDvyzj";
 
     @GetMapping("/test2")
     public AjaxResult getCountryInfo(){
-        Integer t=0;
-        for (int i = 0; i < 2; i++) {
-            t=t+1;
-            String  param="{ \"ESB\": { \"DATA\": { \"DATAINFOS\": { \"PUUID\": \"1\", \"DATAINFO\": [ { \"zgbnum\": \"\", \"LASTMODIFYRECORDTIME\": \"~\" } ] }, \"SPLITPAGE\": { \"CURRENTPAGE\": \""+t+"\", \"COUNTPERPAGE\": \"200\" } } } }";
-            String url="https://esb.cfhec.net/env-101/por-902/mdm/route/esbmule/services/query/MDM_Q_SJFC_GJDQ";
-            Map<String, String> headerMap=new HashMap<>();
-            headerMap.put("apikey","rPFLbaT5mWodSwjulaYENn8kMigDvyzj");
-            String s = HttpUtils.sendPost(url, param, headerMap);
-            JSONObject jsonObject = JSONObject.parseObject(s);
-            JSONObject object = JSONObject.parseObject(jsonObject.get("ESB").toString());
-            JSONObject data = JSONObject.parseObject(object.get("DATA").toString());
-            JSONObject das = JSONObject.parseObject(data.get("DATAINFOS").toString());
-            JSONArray datainfo = JSONObject.parseArray(das.get("DATAINFO").toString());
-            for (int j = 0; j <datainfo.size() ;j++) {
-                JSONObject o = (JSONObject)datainfo.get(j);
-                String code = o.get("CODE").toString();
-                redisUtils.hPut("baishanyunCountryInfo",code, JSONObject.toJSONString(o));
-            }
+        Map<String, String> reqHeader = new HashMap<>();
+        reqHeader.put("apikey", apikey);
+        String respStr = HttpUtils.sendPost(reqUrl, reqParam, reqHeader);
+        JSONObject jsonObject = JSONObject.parseObject(respStr);
+        JSONObject object = JSONObject.parseObject(jsonObject.get("ESB").toString());
+        JSONObject data = JSONObject.parseObject(object.get("DATA").toString());
+        JSONObject das = JSONObject.parseObject(data.get("DATAINFOS").toString());
+        JSONArray datainfo = JSONObject.parseArray(das.get("DATAINFO").toString());
+        for (int j = 0; j <datainfo.size() ;j++) {
+            JSONObject o = (JSONObject)datainfo.get(j);
+            String code = o.get("CODE").toString();
+            redisUtils.hPut("baishanyunCountryInfo",code, JSONObject.toJSONString(o));
         }
         return AjaxResult.success();
     }

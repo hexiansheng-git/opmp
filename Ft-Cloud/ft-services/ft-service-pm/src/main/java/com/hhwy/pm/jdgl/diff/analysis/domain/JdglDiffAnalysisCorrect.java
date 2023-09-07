@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 陈锦豪
@@ -202,4 +203,6 @@ public class JdglDiffAnalysisCorrect extends BaseEntity {
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
+
+    private List<JdglDiffAnalysisCorrect> children;
 }

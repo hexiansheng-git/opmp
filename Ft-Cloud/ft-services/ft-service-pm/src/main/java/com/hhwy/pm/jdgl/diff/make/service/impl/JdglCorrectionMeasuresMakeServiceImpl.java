@@ -2,6 +2,8 @@ package com.hhwy.pm.jdgl.diff.make.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeMapper;
@@ -54,7 +56,17 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      */
     public List<JdglCorrectionMeasuresMake> getJdglCorrectionMeasuresMakeList(
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
-        return jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
+        List<JdglCorrectionMeasuresMake> list =
+            jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
+        if (CollectionUtils.isNotEmpty(list)) {
+            for (JdglCorrectionMeasuresMake make : list) {
+                String tenantKey = SecurityUtils.getTenantKey();
+                FtActBusiness flowInfo = FlowInfoSearchUtil
+                    .getFlowInfo("jdgl_correction_measures_make", String.valueOf(make.getId()), tenantKey);
+                make.setTaskStatus(flowInfo.getName());
+            }
+        }
+        return list;
     }
 
     /**

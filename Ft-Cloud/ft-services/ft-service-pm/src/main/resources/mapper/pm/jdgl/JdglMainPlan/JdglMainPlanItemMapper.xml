@@ -7,12 +7,15 @@
     <resultMap type="com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem" id="JdglMainPlanItemResultMap">
         <result property="id" column="id"/>
         <result property="mainPlanId" column="main_plan_id"/>
+        <result property="projectId" column="project_id"/>
         <result property="pid" column="pid"/>
         <result property="sort" column="sort"/>
         <result property="itemCode" column="item_code"/>
         <result property="itemName" column="item_name"/>
-        <result property="num" column="num"/>
+        <result property="planDuration" column="plan_duration"/>
+        <result property="remainingDuration" column="remaining_duration"/>
         <result property="totalFloat" column="total_float"/>
+        <result property="freeFloat" column="free_float"/>
         <result property="executerId" column="executer_id"/>
         <result property="executer" column="executer"/>
         <result property="startDate" column="start_date"/>
@@ -33,16 +36,23 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="taskStatus" column="task_status"/>
+        <result property="isCritical" column="is_critical"/>
+        <result property="wbsCode" column="wbs_code"/>
+        <result property="wbsName" column="wbs_name"/>
+        <result property="projectName" column="project_name"/>
     </resultMap>
     <sql id="selectJdglMainPlanItemVo">
         select `id`
              , `main_plan_id`
+             , `project_id`
              , `pid`
              , `sort`
              , `item_code`
              , `item_name`
-             , `num`
+             , `plan_duration`
+             , `remaining_duration`
              , `total_float`
+             , `free_float`
              , `executer_id`
              , `executer`
              , `start_date`
@@ -63,6 +73,10 @@
              , `pt_var4`
              , `pt_var5`
              , `task_status`
+             , `is_critical`
+             , `wbs_code`
+             , `wbs_name`
+             , `project_name`
         from jdgl_main_plan_item
     </sql>
     <select id="getJdglMainPlanItem" resultMap="JdglMainPlanItemResultMap">
@@ -71,12 +85,15 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="mainPlanId != null ">and `main_plan_id` = #{mainPlanId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
             <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
-            <if test="num != null ">and `num` = #{num}</if>
+            <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
+            <if test="remainingDuration != null ">and `remaining_duration` = #{remainingDuration}</if>
             <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
+            <if test="freeFloat != null ">and `free_float` = #{freeFloat}</if>
             <if test="executerId != null  and executerId != ''">and `executer_id` = #{executerId}</if>
             <if test="executer != null  and executer != ''">and `executer` = #{executer}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
@@ -97,6 +114,10 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''">and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
         order by create_time desc
     </select>
@@ -107,12 +128,15 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="mainPlanId != null ">and `main_plan_id` = #{mainPlanId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
             <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
-            <if test="num != null ">and `num` = #{num}</if>
+            <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
+            <if test="remainingDuration != null ">and `remaining_duration` = #{remainingDuration}</if>
             <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
+            <if test="freeFloat != null ">and `free_float` = #{freeFloat}</if>
             <if test="executerId != null  and executerId != ''">and `executer_id` = #{executerId}</if>
             <if test="executer != null  and executer != ''">and `executer` = #{executer}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
@@ -133,6 +157,10 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''">and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
         order by sort desc
     </select>
@@ -142,12 +170,15 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="mainPlanId != null ">`main_plan_id`,</if>
+            <if test="projectId != null ">`project_id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="itemCode != null  and itemCode != ''">`item_code`,</if>
             <if test="itemName != null  and itemName != ''">`item_name`,</if>
-            <if test="num != null ">`num`,</if>
+            <if test="planDuration != null ">`plan_duration`,</if>
+            <if test="remainingDuration != null ">`remaining_duration`,</if>
             <if test="totalFloat != null ">`total_float`,</if>
+            <if test="freeFloat != null ">`free_float`,</if>
             <if test="executerId != null  and executerId != ''">`executer_id`,</if>
             <if test="executer != null  and executer != ''">`executer`,</if>
             <if test="startDate != null ">`start_date`,</if>
@@ -168,16 +199,23 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="isCritical != null  and isCritical != ''">`is_critical`,</if>
+            <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
+            <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="mainPlanId != null ">#{mainPlanId},</if>
+            <if test="projectId != null ">#{projectId},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="itemCode != null  and itemCode != ''">#{itemCode},</if>
             <if test="itemName != null  and itemName != ''">#{itemName},</if>
-            <if test="num != null ">#{num},</if>
+            <if test="planDuration != null ">#{planDuration},</if>
+            <if test="remainingDuration != null ">#{remainingDuration},</if>
             <if test="totalFloat != null ">#{totalFloat},</if>
+            <if test="freeFloat != null ">#{freeFloat},</if>
             <if test="executerId != null  and executerId != ''">#{executerId},</if>
             <if test="executer != null  and executer != ''">#{executer},</if>
             <if test="startDate != null ">#{startDate},</if>
@@ -198,6 +236,10 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="isCritical != null  and isCritical != ''">#{isCritical},</if>
+            <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
+            <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
         </trim>
     </insert>
 
@@ -207,12 +249,15 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `main_plan_id`,
+            `project_id`,
             `pid`,
             `sort`,
             `item_code`,
             `item_name`,
-            `num`,
+            `plan_duration`,
+            `remaining_duration`,
             `total_float`,
+            `free_float`,
             `executer_id`,
             `executer`,
             `start_date`,
@@ -232,18 +277,25 @@
             `pt_var4`,
             `pt_var5`,
             `task_status`,
+            `is_critical`,
+            `wbs_code`,
+            `wbs_name`,
+            `project_name`,
         </trim>
         values
         <foreach collection="jdglMainPlanItemList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.mainPlanId},
+                #{item.projectId},
                 #{item.pid},
                 #{item.sort},
                 #{item.itemCode},
                 #{item.itemName},
-                #{item.num},
+                #{item.planDuration},
+                #{item.remainingDuration},
                 #{item.totalFloat},
+                #{item.freeFloat},
                 #{item.executerId},
                 #{item.executer},
                 #{item.startDate},
@@ -263,6 +315,10 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.taskStatus},
+                #{item.isCritical},
+                #{item.wbsCode},
+                #{item.wbsName},
+                #{item.projectName},
             </trim>
         </foreach>
     </insert>
@@ -272,12 +328,15 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="mainPlanId != null ">`main_plan_id` = #{mainPlanId},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
             <if test="itemCode != null  and  itemCode != ''">`item_code` = #{itemCode},</if>
             <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
-            <if test="num != null ">`num` = #{num},</if>
+            <if test="planDuration != null ">`plan_duration` = #{planDuration},</if>
+            <if test="remainingDuration != null ">`remaining_duration` = #{remainingDuration},</if>
             <if test="totalFloat != null ">`total_float` = #{totalFloat},</if>
+            <if test="freeFloat != null ">`free_float` = #{freeFloat},</if>
             <if test="executerId != null  and  executerId != ''">`executer_id` = #{executerId},</if>
             <if test="executer != null  and  executer != ''">`executer` = #{executer},</if>
             <if test="startDate != null ">`start_date` = #{startDate},</if>
@@ -298,6 +357,10 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="isCritical != null  and  isCritical != ''">`is_critical` = #{isCritical},</if>
+            <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
+            <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -315,6 +378,11 @@
             <trim prefix="main_plan_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.mainPlanId}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
                 </foreach>
             </trim>
             <trim prefix="pid  = case" suffix="end,">
@@ -337,14 +405,24 @@
                     when `id`=#{item.id} then #{item.itemName}
                 </foreach>
             </trim>
-            <trim prefix="num  = case" suffix="end,">
+            <trim prefix="plan_duration  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.num}
+                    when `id`=#{item.id} then #{item.planDuration}
+                </foreach>
+            </trim>
+            <trim prefix="remaining_duration  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingDuration}
                 </foreach>
             </trim>
             <trim prefix="total_float  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.totalFloat}
+                </foreach>
+            </trim>
+            <trim prefix="free_float  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.freeFloat}
                 </foreach>
             </trim>
             <trim prefix="executer_id  = case" suffix="end,">
@@ -447,6 +525,26 @@
                     when `id`=#{item.id} then #{item.taskStatus}
                 </foreach>
             </trim>
+            <trim prefix="is_critical  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isCritical}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsCode}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsName}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
         </trim>
         where `id` in
         <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
@@ -459,12 +557,15 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="mainPlanId != null ">and `main_plan_id` = #{mainPlanId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
             <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
             <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
-            <if test="num != null ">and `num` = #{num}</if>
+            <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
+            <if test="remainingDuration != null ">and `remaining_duration` = #{remainingDuration}</if>
             <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
+            <if test="freeFloat != null ">and `free_float` = #{freeFloat}</if>
             <if test="executerId != null  and executerId != ''">and `executer_id` = #{executerId}</if>
             <if test="executer != null  and executer != ''">and `executer` = #{executer}</if>
             <if test="startDate != null ">and `start_date` = #{startDate}</if>
@@ -485,6 +586,10 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''">and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
     </update>
 

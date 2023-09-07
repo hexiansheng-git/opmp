@@ -201,7 +201,7 @@
          ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
     </select>
     <select id="getLeafWbsList"
-            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs">
+            resultMap="JdglDayScheduleWbsResultMap">
         <include refid="selectJdglDayScheduleWbsVo"/>
         <where>
             day_schedule_id = #{dayScheduleId}
