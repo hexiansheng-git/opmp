@@ -38,38 +38,36 @@
         <result property="pId" column="pId"/>
     </resultMap>
     <sql id="selectQqchSafeThreeTypePersonVo">
-        select
-                                                            `id`
-                                                         ,`duties`
-                                                         ,`duties` pId
-                                                         ,`person_name`
-                                                         ,`person_id`
-                                                         ,`card_name`
-                                                         ,`card_number`
-                                                         ,`sign_date`
-                                                         ,`valid_period`
-                                                         ,`notice_msg`
-                                                         ,`card_url`
-                                                         ,`contro_measures`
-                                                         ,`atten_point`
-                                                         ,`main_res_dept_id`
-                                                         ,`main_res_dept_name`
-                                                         ,`other_dept_id`
-                                                         ,`other_dept_name`
-                                                         ,`remark`
-                                                         ,`version`
-                                                         ,`valid`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                    from qqch_safe_three_type_person
+        select `id`
+             , `duties`
+             , `person_name`
+             , `person_id`
+             , `card_name`
+             , `card_number`
+             , `sign_date`
+             , `valid_period`
+             , `notice_msg`
+             , `card_url`
+             , `contro_measures`
+             , `atten_point`
+             , `main_res_dept_id`
+             , `main_res_dept_name`
+             , `other_dept_id`
+             , `other_dept_name`
+             , `remark`
+             , `version`
+             , `valid`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+        from qqch_safe_three_type_person
     </sql>
     <select id="getQqchSafeThreeTypePerson" resultMap="QqchSafeThreeTypePersonResultMap">
         <include refid="selectQqchSafeThreeTypePersonVo"/>
@@ -588,7 +586,7 @@
                 </foreach>
             </trim>
         </trim>
-        where verson  = #{version} and `person_id` in
+        where verson = #{version} and `person_id` in
         <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.personId}
         </foreach>
