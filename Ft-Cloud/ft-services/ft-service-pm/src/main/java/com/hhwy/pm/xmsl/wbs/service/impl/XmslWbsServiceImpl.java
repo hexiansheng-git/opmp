@@ -135,14 +135,14 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(StringUtils.isBlank(wbs.getParentId()) )
             wbs.setParentId("-1");
         boolean hasCondition = StringUtils.isNotBlank(wbs.getCode()) || StringUtils.isNotBlank(wbs.getName());
-        if(hasCondition && (StringUtils.trim(wbs.getCode())+StringUtils.trim(wbs.getCode())).length() < 3)
+        if(hasCondition && (StringUtils.trim(wbs.getCode())+StringUtils.trim(wbs.getName())).length() < 3)
             throw new RuntimeException("搜索参数过小");
         if(!hasCondition){
             List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
             return list;
         }
         //如果是懒加载,找出满足条件的id，扔redis
-        String key = "wbs::lazySearch_"+SecurityUtils.getTenantKey();
+        String key = "wbs::lazySearch_"+SecurityUtils.getTenantKey()+"::"+StringUtils.join(",",wbs.getCode(),wbs.getName());
         //获取ids
         Set<String> idSet = null;
         if(!redisUtils.hasKey(key) ){
@@ -161,6 +161,9 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         }
         wbs.setParams(wbs.getParams()==null?new HashMap<>():wbs.getParams());
         wbs.getParams().put("ids",idSet);
+        //清空搜索条件，用id当条件即可
+        wbs.setCode(null);
+        wbs.setName(null);
         List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
         return list;
     }
