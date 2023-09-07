@@ -1,15 +1,17 @@
 package com.hhwy.pm.xmsl.project.domain;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author han
@@ -57,19 +59,19 @@ public class XmslProjectBridgeStructure extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "长度(m)")
-    private String length;
+    private BigDecimal length;
     /**
      * 字段描述：跨度（m）
      */
     @JsonProperty
     @Excel(name = "跨度（m）")
-    private String span;
+    private BigDecimal span;
     /**
      * 字段描述：净高（m）
      */
     @JsonProperty
     @Excel(name = "净高（m）")
-    private String clearHeight;
+    private BigDecimal clearHeight;
     /**
      * 字段描述：基础形式
      */

@@ -66,7 +66,7 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="materialName != null  and materialName != ''">and `material_name` = #{materialName}</if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
-            <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
+            <if test="amount != null">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -123,7 +123,7 @@
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="materialName != null  and materialName != ''">and `material_name` = #{materialName}</if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
-            <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
+            <if test="amount != null">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -154,7 +154,7 @@
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
             <if test="materialName != null  and materialName != ''">`material_name`,</if>
             <if test="units != null  and units != ''">`units`,</if>
-            <if test="amount != null  and amount != ''">`amount`,</if>
+            <if test="amount != null">`amount`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
@@ -180,7 +180,7 @@
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
             <if test="materialName != null  and materialName != ''">#{materialName},</if>
             <if test="units != null  and units != ''">#{units},</if>
-            <if test="amount != null  and amount != ''">#{amount},</if>
+            <if test="amount != null">#{amount},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
@@ -267,7 +267,7 @@
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
             <if test="materialName != null  and  materialName != ''">`material_name` = #{materialName},</if>
             <if test="units != null  and  units != ''">`units` = #{units},</if>
-            <if test="amount != null  and  amount != ''">`amount` = #{amount},</if>
+            <if test="amount != null">`amount` = #{amount},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>

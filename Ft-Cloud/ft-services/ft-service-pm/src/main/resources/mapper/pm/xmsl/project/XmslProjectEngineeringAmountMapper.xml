@@ -73,7 +73,7 @@
                 #{engineeringProject}
             </if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
-            <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
+            <if test="amount != null">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -134,7 +134,7 @@
                 #{engineeringProject}
             </if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
-            <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
+            <if test="amount != null">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -173,7 +173,7 @@
                 #{engineeringProject}
             </if>
             <if test="units != null  and units != ''">and `units` = #{units}</if>
-            <if test="amount != null  and amount != ''">and `amount` = #{amount}</if>
+            <if test="amount != null">and `amount` = #{amount}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
@@ -328,7 +328,7 @@
                 #{engineeringProject},
             </if>
             <if test="units != null  and  units != ''">`units` = #{units},</if>
-            <if test="amount != null  and  amount != ''">`amount` = #{amount},</if>
+            <if test="amount != null">`amount` = #{amount},</if>
             <if test="sort != null">`sort` = #{sort},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>

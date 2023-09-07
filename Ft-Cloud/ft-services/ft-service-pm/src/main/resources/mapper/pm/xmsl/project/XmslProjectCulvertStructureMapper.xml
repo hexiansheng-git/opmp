@@ -71,9 +71,9 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="type != null  and type != ''">and `type` = #{type}</if>
-            <if test="holeCount != null  and holeCount != ''">and `hole_count` = #{holeCount}</if>
-            <if test="span != null  and span != ''">and `span` = #{span}</if>
-            <if test="clearHeight != null  and clearHeight != ''">and `clear_height` = #{clearHeight}</if>
+            <if test="holeCount != null">and `hole_count` = #{holeCount}</if>
+            <if test="span != null">and `span` = #{span}</if>
+            <if test="clearHeight != null">and `clear_height` = #{clearHeight}</if>
             <if test="culvertStructure != null  and culvertStructure != ''">and `culvert_structure` =
                 #{culvertStructure}
             </if>
@@ -138,9 +138,9 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
             <if test="type != null  and type != ''">and `type` = #{type}</if>
-            <if test="holeCount != null  and holeCount != ''">and `hole_count` = #{holeCount}</if>
-            <if test="span != null  and span != ''">and `span` = #{span}</if>
-            <if test="clearHeight != null  and clearHeight != ''">and `clear_height` = #{clearHeight}</if>
+            <if test="holeCount != null">and `hole_count` = #{holeCount}</if>
+            <if test="span != null">and `span` = #{span}</if>
+            <if test="clearHeight != null">and `clear_height` = #{clearHeight}</if>
             <if test="culvertStructure != null  and culvertStructure != ''">and `culvert_structure` =
                 #{culvertStructure}
             </if>
@@ -176,9 +176,9 @@
             <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
             <if test="type != null  and type != ''">`type`,</if>
-            <if test="holeCount != null  and holeCount != ''">`hole_count`,</if>
-            <if test="span != null  and span != ''">`span`,</if>
-            <if test="clearHeight != null  and clearHeight != ''">`clear_height`,</if>
+            <if test="holeCount != null">`hole_count`,</if>
+            <if test="span != null">`span`,</if>
+            <if test="clearHeight != null">`clear_height`,</if>
             <if test="culvertStructure != null  and culvertStructure != ''">`culvert_structure`,</if>
             <if test="importExportForm != null  and importExportForm != ''">`import_export_form`,</if>
             <if test="count != null  and count != ''">`count`,</if>
@@ -205,9 +205,9 @@
             <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
             <if test="type != null  and type != ''">#{type},</if>
-            <if test="holeCount != null  and holeCount != ''">#{holeCount},</if>
-            <if test="span != null  and span != ''">#{span},</if>
-            <if test="clearHeight != null  and clearHeight != ''">#{clearHeight},</if>
+            <if test="holeCount != null">#{holeCount},</if>
+            <if test="span != null">#{span},</if>
+            <if test="clearHeight != null">#{clearHeight},</if>
             <if test="culvertStructure != null  and culvertStructure != ''">#{culvertStructure},</if>
             <if test="importExportForm != null  and importExportForm != ''">#{importExportForm},</if>
             <if test="count != null  and count != ''">#{count},</if>
@@ -301,9 +301,9 @@
             <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
             <if test="type != null  and  type != ''">`type` = #{type},</if>
-            <if test="holeCount != null  and  holeCount != ''">`hole_count` = #{holeCount},</if>
-            <if test="span != null  and  span != ''">`span` = #{span},</if>
-            <if test="clearHeight != null  and  clearHeight != ''">`clear_height` = #{clearHeight},</if>
+            <if test="holeCount != null">`hole_count` = #{holeCount},</if>
+            <if test="span != null">`span` = #{span},</if>
+            <if test="clearHeight != null">`clear_height` = #{clearHeight},</if>
             <if test="culvertStructure != null  and  culvertStructure != ''">`culvert_structure` =
                 #{culvertStructure},
             </if>
