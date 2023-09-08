@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstFacilityPlanService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstJobService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
@@ -195,5 +196,20 @@ public class QqchConstServiceImpl implements IQqchConstService {
     @Override
     public List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version) {
         return qqchConstMapper.selectQqchConst(version);
+    }
+
+    /**
+     * 4.2弹窗
+     * @return
+     */
+    @Override
+    public List<QqchConst> popUpWindows() {
+        BigDecimal version = VersionUtil.getVersion(TN,null);
+        QqchConst qqchConst = new QqchConst();
+        qqchConst.setVersion(version);
+        List<QqchConst> list = qqchConstMapper.getQqchConstList(qqchConst);
+
+        list = TreeUtil.build(list, null);
+        return list;
     }
 }

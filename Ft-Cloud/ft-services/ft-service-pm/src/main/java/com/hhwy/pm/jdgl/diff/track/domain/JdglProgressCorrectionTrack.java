@@ -58,7 +58,7 @@ public class JdglProgressCorrectionTrack extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "预计纠偏完成日期")
-    private String planCorrectionCompleteDate;
+    private Date planCorrectionCompleteDate;
     /**
      * 字段描述：周报期次
      */

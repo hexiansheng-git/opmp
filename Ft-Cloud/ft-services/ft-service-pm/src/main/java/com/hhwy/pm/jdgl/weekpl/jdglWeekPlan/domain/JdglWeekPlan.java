@@ -8,6 +8,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * @remark jdgl_week_plan
  */
 @Data
-public class JdglWeekPlan extends BaseEntity {
+public class JdglWeekPlan extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -127,6 +128,12 @@ public class JdglWeekPlan extends BaseEntity {
     @Excel(name = "合同币种")
     private String custUnit;
     /**
+     * 字段描述：合同编码
+     */
+    @JsonProperty
+    @Excel(name = "合同编码")
+    private String custUnitCode;
+    /**
      * 字段描述：汇率
      */
     @JsonProperty
@@ -203,7 +210,7 @@ public class JdglWeekPlan extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @JsonProperty
-    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd")
     private Date updateTime;
     /**
      * 字段描述：数据删除者
@@ -260,6 +267,12 @@ public class JdglWeekPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+    /**
+     * 字段描述：当前审批人
+     */
+    @JsonProperty
+    @Excel(name = "当前审批人")
+    private String assignee;
     /**
      * 字段描述：当前总计划版本
      */

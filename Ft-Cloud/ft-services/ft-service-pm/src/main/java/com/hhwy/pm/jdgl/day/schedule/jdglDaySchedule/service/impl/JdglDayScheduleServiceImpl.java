@@ -2,6 +2,9 @@ package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper.JdglDayScheduleMapper;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
@@ -124,6 +127,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
     public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleMapper.getJdglDayScheduleList(jdglDaySchedule);
+        String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
             for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
                 JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
@@ -133,6 +137,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
                 jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglDayScheduleList,FlowEnum.JDGL_DAYSCHEDULE);
         return jdglDayScheduleList;
     }
 
@@ -206,8 +211,10 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         Long id = IdWorker.createId();
         if(jdglDaySchedule != null) {
             jdglDaySchedule.setId(id);
-            jdglDaySchedule.setCreateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglDaySchedule.setCreateTime(DateUtils.getNowDate());
+            jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+            jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
             JdglDaySchedule query = new JdglDaySchedule();
             Date date = jdglDaySchedule.getDate();
@@ -266,7 +273,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
         int i = jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
         Long id = jdglDaySchedule.getId();
-        jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+        jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = jdglDaySchedule.getJdglDayScheduleWbsList();

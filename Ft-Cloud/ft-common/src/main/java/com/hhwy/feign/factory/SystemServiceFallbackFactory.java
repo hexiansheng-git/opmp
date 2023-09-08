@@ -3,6 +3,7 @@ package com.hhwy.feign.factory;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
+import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
@@ -10,6 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,7 +72,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
 
             @Override
             public R<List<SysUser>> selectUserListByUsernames(String usernames) {
-                return R.fail("请求失败:"+throwable.getMessage());
+                return R.fail("请求失败:" + throwable.getMessage());
+            }
+            @Override
+            public AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo){
+                return AjaxResult.error("请求失败:",throwable.getMessage());
             }
         };
     }

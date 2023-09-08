@@ -27,31 +27,31 @@ public class CommonBaseEntity extends BaseEntity {
     /**
      * 下一步任务节点id
      */
-    private String nextNodeId;
+    private String nextNodeId;//未用
     /**
      * 下一步任务处理人
      */
-    private String nextTaskAssignee;
+    private String nextTaskAssignee;//未用
     /**
      * 流程实例id(如果是已经发起过的流程，则是必填)
      */
-    private String instanceId;
+    private String instanceId;//未用
     /**
      * 当前任务id(如果是已发起的流程)，则是必填
      */
-    private String currentTaskId;
+    private String currentTaskId;//未用
     /**
      * 流程key(如果是未发起的流程)，则是必填
      */
-    private String processKey;
+    private String processKey; //前端已用
     /**
      * 业务数据id
      */
-    private String businessId;
+    private String businessId; //前端已用
     /**
      * 业务表名称
      */
-    private String businessTableName;
+    private String businessTableName; //前端已用
     /**
      * 备注
      */
@@ -68,13 +68,13 @@ public class CommonBaseEntity extends BaseEntity {
     /**
      * 当前处理人
      */
-    private String processTaskMan;
-    private String processTaskManId;
+    private String processTaskMan;//当前处理人
+    private String processTaskManId;//当前处理人id
 
     /**
      * '流程状态 0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
      */
-    private String taskStatus;
+    private String taskStatus;//流程状态
 
     private String activityTableId;
 

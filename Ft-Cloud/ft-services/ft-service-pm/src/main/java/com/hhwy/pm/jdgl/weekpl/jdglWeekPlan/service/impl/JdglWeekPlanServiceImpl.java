@@ -1,7 +1,17 @@
 package com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.period.PeriodInfo;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
@@ -10,14 +20,22 @@ import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.IJdglWeekPlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.IJdglWeekValuePlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chenjinhao
@@ -31,6 +49,9 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
     private JdglWeekPlanMapper jdglWeekPlanMapper;
 
     @Autowired
+    private IJdglMonthPlanService jdglMonthPlanService;
+
+    @Autowired
     private IJdglWeekValuePlanService iJdglWeekValuePlanService;
 
     @Autowired
@@ -38,6 +59,15 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private IJdglDayScheduleService jdglDayScheduleService;
 
 //    @Autowired
 //    private IPeriodCurrencyService periodCurrencyService;
@@ -76,19 +106,73 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         // 获取项目及合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
 
+        ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
+
+        String year1 = jdglWeekPlanParam.getYear();
+        Date nowDate = DateUtils.getNowDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        String nowStr = sdf.format(nowDate);
+
+        if(projectBasicInfo != null) {
+            returnVO.setCustUnit(projectBasicInfo.getContractCurrency());
+            returnVO.setCustUnitCode(projectBasicInfo.getContractCurrencyCode());
+        }
+
         if(xmslContractInfo != null) {
             returnVO.setProjectName(xmslContractInfo.getProjectName());
             returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
             returnVO.setRemainMonthAmtDl(xmslContractInfo.getEffectiveAmout());
-            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
+
+            // 获取财务管理-风险管理-汇率登记
+            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
+                    returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
+                }
+            }
         }
 
-        // 获取财务管理-风险管理-汇率登记
+        if(returnVO.getExchangeRate() == null) {
+            PeriodInfo periodInfo = new PeriodInfo();
+            periodInfo.setCurrencyCode(returnVO.getCustUnitCode());
+            periodInfo.setQueryDate(year1);
+            AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
+            if(ajaxResult.get("data") != null) {
+                List<Map> data = (List<Map>) ajaxResult.get("data");
+                Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
+                if(periodMap != null && periodMap.get("rate") != null) {
+                    returnVO.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                }
+            }
+        }
 
         // 根据期次获取开累产值数据
-        String year = jdglWeekPlanParam.getWeek();
+        String week = jdglWeekPlanParam.getWeek();
+
+        Calendar cl = Calendar.getInstance();
+        cl.setWeekDate(Integer.valueOf(year1), Integer.valueOf(week), 1);
+
+        String month = cl.get(Calendar.MONTH + 1) + "";
+
+        JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year1, month);
+
+        if (usingMonthPlanByYearAndMonth != null) {
+            returnVO.setMonthPlanValueDl(usingMonthPlanByYearAndMonth.getThisPlanValueDl());
+        }
 
         // 计算合同、产值数据
+        Map<String, Date> dateRange4YearMonth = StatisticsUtils.getDateRange4YearMonth(year1, month);
+
+        Date startW = cl.getTime();
+        Date startM = dateRange4YearMonth.get("start");
+
+        BigDecimal countValue = jdglDayScheduleService.getCountValue(startM, startW);
+        returnVO.setMonthCompValueDl(countValue);
+
+        if(returnVO.getMonthPlanValueDl() == null) returnVO.setMonthPlanValueDl(new BigDecimal(0));
+        if(returnVO.getMonthCompValueDl()== null) returnVO.setMonthCompValueDl(new BigDecimal(0));
+        returnVO.setRemainMonthAmtDl(returnVO.getMonthPlanValueDl().subtract(returnVO.getMonthCompValueDl()));
 
         return returnVO;
     }
@@ -135,6 +219,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
                 jdglWeekPlan1.setJdglWeekValuePlanList(jdglWeekValuePlanListByPlanId);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglWeekPlanList,FlowEnum.JDGL_WEEKPLAN);
         return jdglWeekPlanList;
     }
 
@@ -153,8 +238,10 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
         Long id = IdWorker.createId();
         jdglWeekPlan.setId(id);
-        jdglWeekPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglWeekPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setCreateTime(DateUtils.getNowDate());
+        jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+        jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
         jdglWeekPlan.setVersion("1");
         jdglWeekPlan.setIsUse("0");
         return jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlan);
@@ -173,7 +260,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     @Transactional
     public int updateJdglWeekPlan(JdglWeekPlan jdglWeekPlan) {
-        jdglWeekPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglWeekValuePlanService.updateJdglWeekValuePlanList(jdglWeekPlan.getJdglWeekValuePlanList());
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();

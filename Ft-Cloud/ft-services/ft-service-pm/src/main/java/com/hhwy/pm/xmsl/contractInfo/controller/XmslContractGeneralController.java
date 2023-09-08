@@ -130,7 +130,7 @@ public class XmslContractGeneralController extends BaseController {
      * @return
      */
     @PostMapping("/provideList")
-    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) @RequestBody XmslContractGeneral xmslContractGeneralParam) {
+    public AjaxResult provideList(@Validated(ValidationGroups.Get.class) XmslContractGeneral xmslContractGeneralParam) {
         List<XmslContractGeneral> treeVOS = xmslContractGeneralService.provideList(xmslContractGeneralParam);
         return AjaxResult.success(treeVOS);
     }

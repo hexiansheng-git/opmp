@@ -4,28 +4,35 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.common.mapper.FlowInfoMapper">
 
-    <select id="flowByTBNameAndId" resultType="com.hhwy.pm.common.domain.FtActBusiness">
+    <select id="flowByTBNameAndId" resultType="com.hhwy.utils.common.CommonBaseEntity">
         SELECT
-            createTime,
-            createUser,
-            name_ AS name,
-            GROUP_CONCAT( ASSIGNEE_ ) AS assignee
+            process_instance_id instanceId,
+            business_id businessId,
+            taskId currentTaskId,
+            taskNode nextNodeId, 
+            name_ AS processTaskName,
+            GROUP_CONCAT( ASSIGNEE_ ) AS processTaskManId,
+            GROUP_CONCAT( taskId ) currentTaskId
         FROM
             (
                 SELECT
-                    a.create_time AS createTime,
-                    a.create_user AS createUser,
+                    a.process_instance_id,
+                    a.business_id, 
+                    b.id_ taskId,
                     b.name_,
+                    b.task_def_key_ taskNode, 
                     b.ASSIGNEE_
                 FROM
-                    ( SELECT process_instance_id, create_user, create_time FROM v_ft_act_business
-                                    WHERE business_table_name = #{tableName} AND business_id = #{businessId} AND tenant_key = #{tenantKey} ) a
-                        LEFT JOIN ( SELECT PROC_INST_ID_, name_, ASSIGNEE_ FROM v_act_ru_task ) b ON a.process_instance_id = b.PROC_INST_ID_
+                    ( SELECT process_instance_id,business_id  FROM v_ft_act_business
+                        WHERE business_table_name = #{tableName} AND business_id in
+                        <foreach collection="businessIds" item="id" separator="," open="(" close=")">
+                            #{id}
+                        </foreach> AND tenant_key = #{tenantKey}
+                    ) a
+                    LEFT JOIN ( SELECT id_,PROC_INST_ID_, name_,task_def_key_,ASSIGNEE_ FROM v_act_ru_task ) b ON a.process_instance_id = b.PROC_INST_ID_
             ) c
         GROUP BY
-            createTime,
-            createUser,
-            name_
+            process_instance_id
     </select>
 
 </mapper>

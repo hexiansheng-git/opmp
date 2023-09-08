@@ -94,5 +94,13 @@ public class QqchConstController extends BaseController {
         util.exportExcel(response, qqchConstList, DateUtils.getDate());
     }
 
-
+    /**
+     * 4.2弹窗
+     * @return
+     */
+    @GetMapping("popUpWindows")
+    public AjaxResult popUpWindows() {
+        List<QqchConst> list = qqchConstService.popUpWindows();
+        return AjaxResult.success(list);
+    }
 }

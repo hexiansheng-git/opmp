@@ -193,17 +193,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
     public List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo) {
         List<XmslContractInfo> historyList =xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
-        String tenantKey = SecurityUtils.getTenantKey();
-        if (CollectionUtils.isNotEmpty(historyList) && historyList.size() > 1) {
-            for (XmslContractInfo contractInfo : historyList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                        .getFlowInfo(FlowEnum.XMSL_CONTRACT.getTableName(), String.valueOf(contractInfo.getId()), tenantKey);
-                contractInfo.setAssignee(flowInfo.getAssignee());
-                contractInfo.setTaskStatusName(flowInfo.getName());
-                contractInfo.setIssuePersonName(flowInfo.getCreateUser());
-                contractInfo.setIssueDate(flowInfo.getCreateTime());
-            }
-        }
+        FlowInfoSearchUtil.getFlowInfo(historyList,FlowEnum.XMSL_CONTRACT);
         return historyList;
     }
 

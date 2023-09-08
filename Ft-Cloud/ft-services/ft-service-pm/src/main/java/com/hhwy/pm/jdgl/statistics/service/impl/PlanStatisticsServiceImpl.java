@@ -1,6 +1,5 @@
 package com.hhwy.pm.jdgl.statistics.service.impl;
 
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
@@ -39,7 +38,6 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
-import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,10 +108,6 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         String week = iPlanStatisticsQueryVO.getWeek();
         Date startDate = iPlanStatisticsQueryVO.getStartDate();
         Date endDate = iPlanStatisticsQueryVO.getEndDate();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateStr = sdf.format(startDate);
-        String endDateStr = sdf.format(endDate);
 
         Map<String, Map<String, BigDecimal>> return2Map = new HashMap<>();
 
@@ -200,23 +194,23 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return2Map.put("total", totalMap);
 
         Map<String, BigDecimal> yearMap = new HashMap<>();
-        totalMap.put("planAmt", yearPlanAmt);
-        totalMap.put("actAmt", yearActAmt);
+        yearMap.put("planAmt", yearPlanAmt);
+        yearMap.put("actAmt", yearActAmt);
         return2Map.put("year", yearMap);
 
         Map<String, BigDecimal> quarterMap = new HashMap<>();
-        totalMap.put("planAmt", quarterPlanAmt);
-        totalMap.put("actAmt", quarterActAmt);
+        quarterMap.put("planAmt", quarterPlanAmt);
+        quarterMap.put("actAmt", quarterActAmt);
         return2Map.put("quarter", quarterMap);
 
         Map<String, BigDecimal> monthMap = new HashMap<>();
-        totalMap.put("planAmt", monthPlanAmt);
-        totalMap.put("actAmt", monthActAmt);
+        monthMap.put("planAmt", monthPlanAmt);
+        monthMap.put("actAmt", monthActAmt);
         return2Map.put("month", monthMap);
 
         Map<String, BigDecimal> weekMap = new HashMap<>();
-        totalMap.put("planAmt", weekPlanAmt);
-        totalMap.put("actAmt", weekActAmt);
+        weekMap.put("planAmt", weekPlanAmt);
+        weekMap.put("actAmt", weekActAmt);
         return2Map.put("week", weekMap);
 
         return return2Map;
@@ -371,7 +365,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             Long billId = jdglDayScheduleBill.getBillId();
             for (XmslContractList xmslContractList : xmslContractListVos) {
                 if(xmslContractList.getAncestors().contains(billId+"")) {
-                    Long listId = Long.valueOf(xmslContractList.getId());
+                    Long listId = xmslContractList.getId();
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
                     planStatisticsBillValueVO.setPid(xmslContractList.getPid());

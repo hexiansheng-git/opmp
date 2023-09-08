@@ -5,180 +5,254 @@
 <mapper namespace="com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemMapper">
 
     <resultMap type="com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem" id="JdglMainPlanItemResultMap">
-        <result property="id" column="id"/>
-        <result property="mainPlanId" column="main_plan_id"/>
-        <result property="projectId" column="project_id"/>
-        <result property="pid" column="pid"/>
-        <result property="sort" column="sort"/>
-        <result property="itemCode" column="item_code"/>
-        <result property="itemName" column="item_name"/>
-        <result property="planDuration" column="plan_duration"/>
-        <result property="remainingDuration" column="remaining_duration"/>
-        <result property="totalFloat" column="total_float"/>
-        <result property="freeFloat" column="free_float"/>
-        <result property="executerId" column="executer_id"/>
-        <result property="executer" column="executer"/>
-        <result property="startDate" column="start_date"/>
-        <result property="endDate" column="end_date"/>
-        <result property="fileGroupId" column="file_group_id"/>
-        <result property="remark" column="remark"/>
-        <result property="createUser" column="create_user"/>
-        <result property="createUserName" column="create_user_name"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateUser" column="update_user"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="delUser" column="del_user"/>
-        <result property="delTime" column="del_time"/>
-        <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
-        <result property="ptVar2" column="pt_var2"/>
-        <result property="ptVar3" column="pt_var3"/>
-        <result property="ptVar4" column="pt_var4"/>
-        <result property="ptVar5" column="pt_var5"/>
-        <result property="taskStatus" column="task_status"/>
-        <result property="isCritical" column="is_critical"/>
-        <result property="wbsCode" column="wbs_code"/>
-        <result property="wbsName" column="wbs_name"/>
-        <result property="projectName" column="project_name"/>
+        <result property="id" column="id" />
+        <result property="mainPlanId" column="main_plan_id" />
+        <result property="pid" column="pid" />
+        <result property="sort" column="sort" />
+        <result property="itemCode" column="item_code" />
+        <result property="itemName" column="item_name" />
+        <result property="plannedDuration" column="planned_duration" />
+        <result property="totalFloat" column="total_float" />
+        <result property="executerId" column="executer_id" />
+        <result property="executer" column="executer" />
+        <result property="startDate" column="start_date" />
+        <result property="endDate" column="end_date" />
+        <result property="fileGroupId" column="file_group_id" />
+        <result property="remark" column="remark" />
+        <result property="createUser" column="create_user" />
+        <result property="createUserName" column="create_user_name" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="delUser" column="del_user" />
+        <result property="delTime" column="del_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="ptVar1" column="pt_var1" />
+        <result property="ptVar2" column="pt_var2" />
+        <result property="ptVar3" column="pt_var3" />
+        <result property="ptVar4" column="pt_var4" />
+        <result property="ptVar5" column="pt_var5" />
+        <result property="taskStatus" column="task_status" />
+        <result property="isCritical" column="is_critical" />
+        <result property="wbsCode" column="wbs_code" />
+        <result property="wbsName" column="wbs_name" />
+        <result property="projectId" column="project_id" />
+        <result property="projectName" column="project_name" />
+        <result property="freeFloat" column="free_float" />
+        <result property="remainingDuration" column="remaining_duration" />
+        <result property="actualStartDate" column="actual_start_date" />
+        <result property="actualEndDate" column="actual_end_date" />
+        <result property="unit" column="unit" />
+        <result property="leaf" column="leaf" />
+        <result property="quantity" column="quantity" />
+        <result property="projectCode" column="project_code" />
+        <result property="planCompRate" column="plan_comp_rate" />
+        <result property="expectedFinishDate" column="expected_finish_date" />
+        <result property="finishDateVariance" column="finish_date_variance" />
+        <result property="lagReason" column="lag_reason" />
+        <result property="correctionTarget" column="correction_target" />
+        <result property="concreteMeasure" column="concrete_measure" />
+        <result property="correctionCompDate" column="correction_comp_date" />
+        <result property="predecessorActivityCode" column="predecessor_activity_code" />
+        <result property="predecessorActivityName" column="predecessor_activity_name" />
     </resultMap>
     <sql id="selectJdglMainPlanItemVo">
-        select `id`
-             , `main_plan_id`
-             , `project_id`
-             , `pid`
-             , `sort`
-             , `item_code`
-             , `item_name`
-             , `plan_duration`
-             , `remaining_duration`
-             , `total_float`
-             , `free_float`
-             , `executer_id`
-             , `executer`
-             , `start_date`
-             , `end_date`
-             , `file_group_id`
-             , `remark`
-             , `create_user`
-             , `create_user_name`
-             , `create_time`
-             , `update_user`
-             , `update_time`
-             , `del_user`
-             , `del_time`
-             , `del_flag`
-             , `pt_var1`
-             , `pt_var2`
-             , `pt_var3`
-             , `pt_var4`
-             , `pt_var5`
-             , `task_status`
-             , `is_critical`
-             , `wbs_code`
-             , `wbs_name`
-             , `project_name`
+        select
+            `id`
+             ,`main_plan_id`
+             ,`pid`
+             ,`sort`
+             ,`item_code`
+             ,`item_name`
+             ,`planned_duration`
+             ,`total_float`
+             ,`executer_id`
+             ,`executer`
+             ,`start_date`
+             ,`end_date`
+             ,`file_group_id`
+             ,`remark`
+             ,`create_user`
+             ,`create_user_name`
+             ,`create_time`
+             ,`update_user`
+             ,`update_time`
+             ,`del_user`
+             ,`del_time`
+             ,`del_flag`
+             ,`pt_var1`
+             ,`pt_var2`
+             ,`pt_var3`
+             ,`pt_var4`
+             ,`pt_var5`
+             ,`task_status`
+             ,`is_critical`
+             ,`wbs_code`
+             ,`wbs_name`
+             ,`project_id`
+             ,`project_name`
+             ,`free_float`
+             ,`remaining_duration`
+             ,`actual_start_date`
+             ,`actual_end_date`
+             ,`unit`
+             ,`leaf`
+             ,`quantity`
+             ,`project_code`
+             ,`plan_comp_rate`
+             ,`expected_finish_date`
+             ,`finish_date_variance`
+             ,`lag_reason`
+             ,`correction_target`
+             ,`concrete_measure`
+             ,`correction_comp_date`
+             ,`predecessor_activity_code`
+             ,`predecessor_activity_name`
         from jdgl_main_plan_item
     </sql>
     <select id="getJdglMainPlanItem" resultMap="JdglMainPlanItemResultMap">
-        <include refid="selectJdglMainPlanItemVo"/>
+        <include refid="selectJdglMainPlanItemVo" />
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="mainPlanId != null ">and `main_plan_id` = #{mainPlanId}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
-            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
-            <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
-            <if test="remainingDuration != null ">and `remaining_duration` = #{remainingDuration}</if>
-            <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
-            <if test="freeFloat != null ">and `free_float` = #{freeFloat}</if>
-            <if test="executerId != null  and executerId != ''">and `executer_id` = #{executerId}</if>
-            <if test="executer != null  and executer != ''">and `executer` = #{executer}</if>
-            <if test="startDate != null ">and `start_date` = #{startDate}</if>
-            <if test="endDate != null ">and `end_date` = #{endDate}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="isCritical != null  and isCritical != ''">and `is_critical` = #{isCritical}</if>
-            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
-            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="mainPlanId != null "> and `main_plan_id` = #{mainPlanId}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
+            <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
+            <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
+            <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
+            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="freeFloat != null "> and `free_float` = #{freeFloat}</if>
+            <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
+            <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
+            <if test="actualEndDate != null "> and `actual_end_date` = #{actualEndDate}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
+            <if test="quantity != null "> and `quantity` = #{quantity}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="planCompRate != null "> and `plan_comp_rate` = #{planCompRate}</if>
+            <if test="expectedFinishDate != null "> and `expected_finish_date` = #{expectedFinishDate}</if>
+            <if test="finishDateVariance != null "> and `finish_date_variance` = #{finishDateVariance}</if>
+            <if test="lagReason != null  and lagReason != ''"> and `lag_reason` = #{lagReason}</if>
+            <if test="correctionTarget != null  and correctionTarget != ''"> and `correction_target` = #{correctionTarget}</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''"> and `concrete_measure` = #{concreteMeasure}</if>
+            <if test="correctionCompDate != null "> and `correction_comp_date` = #{correctionCompDate}</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''"> and `predecessor_activity_code` = #{predecessorActivityCode}</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''"> and `predecessor_activity_name` = #{predecessorActivityName}</if>
         </where>
-        order by create_time desc
+        order by sort asc
     </select>
 
     <select id="getJdglMainPlanItemList" resultMap="JdglMainPlanItemResultMap">
-        <include refid="selectJdglMainPlanItemVo"/>
+        <include refid="selectJdglMainPlanItemVo" />
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="mainPlanId != null ">and `main_plan_id` = #{mainPlanId}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
-            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
-            <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
-            <if test="remainingDuration != null ">and `remaining_duration` = #{remainingDuration}</if>
-            <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
-            <if test="freeFloat != null ">and `free_float` = #{freeFloat}</if>
-            <if test="executerId != null  and executerId != ''">and `executer_id` = #{executerId}</if>
-            <if test="executer != null  and executer != ''">and `executer` = #{executer}</if>
-            <if test="startDate != null ">and `start_date` = #{startDate}</if>
-            <if test="endDate != null ">and `end_date` = #{endDate}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="isCritical != null  and isCritical != ''">and `is_critical` = #{isCritical}</if>
-            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
-            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="mainPlanId != null "> and `main_plan_id` = #{mainPlanId}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
+            <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
+            <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
+            <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
+            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="freeFloat != null "> and `free_float` = #{freeFloat}</if>
+            <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
+            <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
+            <if test="actualEndDate != null "> and `actual_end_date` = #{actualEndDate}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
+            <if test="quantity != null "> and `quantity` = #{quantity}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="planCompRate != null "> and `plan_comp_rate` = #{planCompRate}</if>
+            <if test="expectedFinishDate != null "> and `expected_finish_date` = #{expectedFinishDate}</if>
+            <if test="finishDateVariance != null "> and `finish_date_variance` = #{finishDateVariance}</if>
+            <if test="lagReason != null  and lagReason != ''"> and `lag_reason` = #{lagReason}</if>
+            <if test="correctionTarget != null  and correctionTarget != ''"> and `correction_target` = #{correctionTarget}</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''"> and `concrete_measure` = #{concreteMeasure}</if>
+            <if test="correctionCompDate != null "> and `correction_comp_date` = #{correctionCompDate}</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''"> and `predecessor_activity_code` = #{predecessorActivityCode}</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''"> and `predecessor_activity_name` = #{predecessorActivityName}</if>
         </where>
-        order by sort desc
+        order by sort asc
+    </select>
+    <select id="getUsingJdglMainPlanItemListByDate" resultMap="JdglMainPlanItemResultMap">
+        <include refid="selectJdglMainPlanItemVo" />
+        <where>
+        del_flag = "0" and main_plan_id = #{mainPlanId}
+        and start_date &lt;= #{date} and end_date &gt;= #{date}
+        </where>
+    </select>
+    <select id="getUsingJdglMainPlanItemListByDateRange" resultMap="JdglMainPlanItemResultMap">
+        <include refid="selectJdglMainPlanItemVo" />
+        <where>
+        del_flag = "0"
+        and (start_date &lt;= #{startDate} and end_date &gt;= #{startDate})
+        or (end_date &lt;= #{endDate} and end_date &gt;= #{endDate})
+        or (start_date &gt;= #{startDate} and end_date &lt;= #{endDate})
+        </where>
     </select>
 
-    <insert id="insertJdglMainPlanItem" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertJdglMainPlanItem"  useGeneratedKeys="true" keyProperty="id"  >
         insert into jdgl_main_plan_item
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="mainPlanId != null ">`main_plan_id`,</if>
-            <if test="projectId != null ">`project_id`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="sort != null ">`sort`,</if>
             <if test="itemCode != null  and itemCode != ''">`item_code`,</if>
             <if test="itemName != null  and itemName != ''">`item_name`,</if>
-            <if test="planDuration != null ">`plan_duration`,</if>
-            <if test="remainingDuration != null ">`remaining_duration`,</if>
+            <if test="plannedDuration != null ">`planned_duration`,</if>
             <if test="totalFloat != null ">`total_float`,</if>
-            <if test="freeFloat != null ">`free_float`,</if>
             <if test="executerId != null  and executerId != ''">`executer_id`,</if>
             <if test="executer != null  and executer != ''">`executer`,</if>
             <if test="startDate != null ">`start_date`,</if>
@@ -202,20 +276,35 @@
             <if test="isCritical != null  and isCritical != ''">`is_critical`,</if>
             <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
             <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="freeFloat != null ">`free_float`,</if>
+            <if test="remainingDuration != null ">`remaining_duration`,</if>
+            <if test="actualStartDate != null ">`actual_start_date`,</if>
+            <if test="actualEndDate != null ">`actual_end_date`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
+            <if test="quantity != null ">`quantity`,</if>
+            <if test="projectCode != null  and projectCode != ''">`project_code`,</if>
+            <if test="planCompRate != null ">`plan_comp_rate`,</if>
+            <if test="expectedFinishDate != null ">`expected_finish_date`,</if>
+            <if test="finishDateVariance != null ">`finish_date_variance`,</if>
+            <if test="lagReason != null  and lagReason != ''">`lag_reason`,</if>
+            <if test="correctionTarget != null  and correctionTarget != ''">`correction_target`,</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''">`concrete_measure`,</if>
+            <if test="correctionCompDate != null ">`correction_comp_date`,</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''">`predecessor_activity_code`,</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''">`predecessor_activity_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="mainPlanId != null ">#{mainPlanId},</if>
-            <if test="projectId != null ">#{projectId},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="sort != null ">#{sort},</if>
             <if test="itemCode != null  and itemCode != ''">#{itemCode},</if>
             <if test="itemName != null  and itemName != ''">#{itemName},</if>
-            <if test="planDuration != null ">#{planDuration},</if>
-            <if test="remainingDuration != null ">#{remainingDuration},</if>
+            <if test="plannedDuration != null ">#{plannedDuration},</if>
             <if test="totalFloat != null ">#{totalFloat},</if>
-            <if test="freeFloat != null ">#{freeFloat},</if>
             <if test="executerId != null  and executerId != ''">#{executerId},</if>
             <if test="executer != null  and executer != ''">#{executer},</if>
             <if test="startDate != null ">#{startDate},</if>
@@ -239,7 +328,25 @@
             <if test="isCritical != null  and isCritical != ''">#{isCritical},</if>
             <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="projectId != null ">#{projectId},</if>
             <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="freeFloat != null ">#{freeFloat},</if>
+            <if test="remainingDuration != null ">#{remainingDuration},</if>
+            <if test="actualStartDate != null ">#{actualStartDate},</if>
+            <if test="actualEndDate != null ">#{actualEndDate},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
+            <if test="quantity != null ">#{quantity},</if>
+            <if test="projectCode != null  and projectCode != ''">#{projectCode},</if>
+            <if test="planCompRate != null ">#{planCompRate},</if>
+            <if test="expectedFinishDate != null ">#{expectedFinishDate},</if>
+            <if test="finishDateVariance != null ">#{finishDateVariance},</if>
+            <if test="lagReason != null  and lagReason != ''">#{lagReason},</if>
+            <if test="correctionTarget != null  and correctionTarget != ''">#{correctionTarget},</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''">#{concreteMeasure},</if>
+            <if test="correctionCompDate != null ">#{correctionCompDate},</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''">#{predecessorActivityCode},</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''">#{predecessorActivityName},</if>
         </trim>
     </insert>
 
@@ -249,15 +356,12 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `main_plan_id`,
-            `project_id`,
             `pid`,
             `sort`,
             `item_code`,
             `item_name`,
-            `plan_duration`,
-            `remaining_duration`,
+            `planned_duration`,
             `total_float`,
-            `free_float`,
             `executer_id`,
             `executer`,
             `start_date`,
@@ -280,22 +384,37 @@
             `is_critical`,
             `wbs_code`,
             `wbs_name`,
+            `project_id`,
             `project_name`,
+            `free_float`,
+            `remaining_duration`,
+            `actual_start_date`,
+            `actual_end_date`,
+            `unit`,
+            `leaf`,
+            `quantity`,
+            `project_code`,
+            `plan_comp_rate`,
+            `expected_finish_date`,
+            `finish_date_variance`,
+            `lag_reason`,
+            `correction_target`,
+            `concrete_measure`,
+            `correction_comp_date`,
+            `predecessor_activity_code`,
+            `predecessor_activity_name`,
         </trim>
         values
         <foreach collection="jdglMainPlanItemList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.mainPlanId},
-                #{item.projectId},
                 #{item.pid},
                 #{item.sort},
                 #{item.itemCode},
                 #{item.itemName},
-                #{item.planDuration},
-                #{item.remainingDuration},
+                #{item.plannedDuration},
                 #{item.totalFloat},
-                #{item.freeFloat},
                 #{item.executerId},
                 #{item.executer},
                 #{item.startDate},
@@ -318,7 +437,25 @@
                 #{item.isCritical},
                 #{item.wbsCode},
                 #{item.wbsName},
+                #{item.projectId},
                 #{item.projectName},
+                #{item.freeFloat},
+                #{item.remainingDuration},
+                #{item.actualStartDate},
+                #{item.actualEndDate},
+                #{item.unit},
+                #{item.leaf},
+                #{item.quantity},
+                #{item.projectCode},
+                #{item.planCompRate},
+                #{item.expectedFinishDate},
+                #{item.finishDateVariance},
+                #{item.lagReason},
+                #{item.correctionTarget},
+                #{item.concreteMeasure},
+                #{item.correctionCompDate},
+                #{item.predecessorActivityCode},
+                #{item.predecessorActivityName},
             </trim>
         </foreach>
     </insert>
@@ -328,15 +465,12 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="mainPlanId != null ">`main_plan_id` = #{mainPlanId},</if>
-            <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
             <if test="itemCode != null  and  itemCode != ''">`item_code` = #{itemCode},</if>
             <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
-            <if test="planDuration != null ">`plan_duration` = #{planDuration},</if>
-            <if test="remainingDuration != null ">`remaining_duration` = #{remainingDuration},</if>
+            <if test="plannedDuration != null ">`planned_duration` = #{plannedDuration},</if>
             <if test="totalFloat != null ">`total_float` = #{totalFloat},</if>
-            <if test="freeFloat != null ">`free_float` = #{freeFloat},</if>
             <if test="executerId != null  and  executerId != ''">`executer_id` = #{executerId},</if>
             <if test="executer != null  and  executer != ''">`executer` = #{executer},</if>
             <if test="startDate != null ">`start_date` = #{startDate},</if>
@@ -360,10 +494,28 @@
             <if test="isCritical != null  and  isCritical != ''">`is_critical` = #{isCritical},</if>
             <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
             <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
             <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="freeFloat != null ">`free_float` = #{freeFloat},</if>
+            <if test="remainingDuration != null ">`remaining_duration` = #{remainingDuration},</if>
+            <if test="actualStartDate != null ">`actual_start_date` = #{actualStartDate},</if>
+            <if test="actualEndDate != null ">`actual_end_date` = #{actualEndDate},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
+            <if test="quantity != null ">`quantity` = #{quantity},</if>
+            <if test="projectCode != null  and  projectCode != ''">`project_code` = #{projectCode},</if>
+            <if test="planCompRate != null ">`plan_comp_rate` = #{planCompRate},</if>
+            <if test="expectedFinishDate != null ">`expected_finish_date` = #{expectedFinishDate},</if>
+            <if test="finishDateVariance != null ">`finish_date_variance` = #{finishDateVariance},</if>
+            <if test="lagReason != null  and  lagReason != ''">`lag_reason` = #{lagReason},</if>
+            <if test="correctionTarget != null  and  correctionTarget != ''">`correction_target` = #{correctionTarget},</if>
+            <if test="concreteMeasure != null  and  concreteMeasure != ''">`concrete_measure` = #{concreteMeasure},</if>
+            <if test="correctionCompDate != null ">`correction_comp_date` = #{correctionCompDate},</if>
+            <if test="predecessorActivityCode != null  and  predecessorActivityCode != ''">`predecessor_activity_code` = #{predecessorActivityCode},</if>
+            <if test="predecessorActivityName != null  and  predecessorActivityName != ''">`predecessor_activity_name` = #{predecessorActivityName},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="id != null "> and `id` = #{id}</if>
         </where>
     </update>
 
@@ -378,11 +530,6 @@
             <trim prefix="main_plan_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.mainPlanId}
-                </foreach>
-            </trim>
-            <trim prefix="project_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectId}
                 </foreach>
             </trim>
             <trim prefix="pid  = case" suffix="end,">
@@ -405,24 +552,14 @@
                     when `id`=#{item.id} then #{item.itemName}
                 </foreach>
             </trim>
-            <trim prefix="plan_duration  = case" suffix="end,">
+            <trim prefix="planned_duration  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.planDuration}
-                </foreach>
-            </trim>
-            <trim prefix="remaining_duration  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remainingDuration}
+                    when `id`=#{item.id} then #{item.plannedDuration}
                 </foreach>
             </trim>
             <trim prefix="total_float  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.totalFloat}
-                </foreach>
-            </trim>
-            <trim prefix="free_float  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.freeFloat}
                 </foreach>
             </trim>
             <trim prefix="executer_id  = case" suffix="end,">
@@ -540,9 +677,99 @@
                     when `id`=#{item.id} then #{item.wbsName}
                 </foreach>
             </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
             <trim prefix="project_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="free_float  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.freeFloat}
+                </foreach>
+            </trim>
+            <trim prefix="remaining_duration  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingDuration}
+                </foreach>
+            </trim>
+            <trim prefix="actual_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="actual_end_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualEndDate}
+                </foreach>
+            </trim>
+            <trim prefix="unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.unit}
+                </foreach>
+            </trim>
+            <trim prefix="leaf  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaf}
+                </foreach>
+            </trim>
+            <trim prefix="quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.quantity}
+                </foreach>
+            </trim>
+            <trim prefix="project_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectCode}
+                </foreach>
+            </trim>
+            <trim prefix="plan_comp_rate  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.planCompRate}
+                </foreach>
+            </trim>
+            <trim prefix="expected_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.expectedFinishDate}
+                </foreach>
+            </trim>
+            <trim prefix="finish_date_variance  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.finishDateVariance}
+                </foreach>
+            </trim>
+            <trim prefix="lag_reason  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.lagReason}
+                </foreach>
+            </trim>
+            <trim prefix="correction_target  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.correctionTarget}
+                </foreach>
+            </trim>
+            <trim prefix="concrete_measure  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.concreteMeasure}
+                </foreach>
+            </trim>
+            <trim prefix="correction_comp_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.correctionCompDate}
+                </foreach>
+            </trim>
+            <trim prefix="predecessor_activity_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.predecessorActivityCode}
+                </foreach>
+            </trim>
+            <trim prefix="predecessor_activity_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.predecessorActivityName}
                 </foreach>
             </trim>
         </trim>
@@ -555,41 +782,56 @@
     <update id="deleteJdglMainPlanItem">
         update `jdgl_main_plan_item` set del_flag = 1
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="mainPlanId != null ">and `main_plan_id` = #{mainPlanId}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
-            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
-            <if test="planDuration != null ">and `plan_duration` = #{planDuration}</if>
-            <if test="remainingDuration != null ">and `remaining_duration` = #{remainingDuration}</if>
-            <if test="totalFloat != null ">and `total_float` = #{totalFloat}</if>
-            <if test="freeFloat != null ">and `free_float` = #{freeFloat}</if>
-            <if test="executerId != null  and executerId != ''">and `executer_id` = #{executerId}</if>
-            <if test="executer != null  and executer != ''">and `executer` = #{executer}</if>
-            <if test="startDate != null ">and `start_date` = #{startDate}</if>
-            <if test="endDate != null ">and `end_date` = #{endDate}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
-            <if test="isCritical != null  and isCritical != ''">and `is_critical` = #{isCritical}</if>
-            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
-            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="mainPlanId != null "> and `main_plan_id` = #{mainPlanId}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
+            <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
+            <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
+            <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
+            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="freeFloat != null "> and `free_float` = #{freeFloat}</if>
+            <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
+            <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
+            <if test="actualEndDate != null "> and `actual_end_date` = #{actualEndDate}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
+            <if test="quantity != null "> and `quantity` = #{quantity}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="planCompRate != null "> and `plan_comp_rate` = #{planCompRate}</if>
+            <if test="expectedFinishDate != null "> and `expected_finish_date` = #{expectedFinishDate}</if>
+            <if test="finishDateVariance != null "> and `finish_date_variance` = #{finishDateVariance}</if>
+            <if test="lagReason != null  and lagReason != ''"> and `lag_reason` = #{lagReason}</if>
+            <if test="correctionTarget != null  and correctionTarget != ''"> and `correction_target` = #{correctionTarget}</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''"> and `concrete_measure` = #{concreteMeasure}</if>
+            <if test="correctionCompDate != null "> and `correction_comp_date` = #{correctionCompDate}</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''"> and `predecessor_activity_code` = #{predecessorActivityCode}</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''"> and `predecessor_activity_name` = #{predecessorActivityName}</if>
         </where>
     </update>
 

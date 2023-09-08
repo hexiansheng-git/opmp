@@ -66,13 +66,15 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         QqchSafeRiskList qqchSafeRiskList1 = new QqchSafeRiskList();
         qqchSafeRiskList1.setVersion(qqchSafeRiskListVo.getVersion());
         qqchSafeRiskList1.setType(qqchSafeRiskListVo.getType());
-        qqchSafeRiskListMapper.deleteQqchSafeRiskList(qqchSafeRiskList1);
+
         //删除子表
         List<QqchSafeRiskList> infoList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList1);
         if(!ObjectNullUtil.isEmpty(infoList)){
             List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
             qqchSafeRiskListDetailService.deleteByInfoIds(infoIdList,String.valueOf(SecurityUtils.getUserId()),SecurityUtils.getUserName(), DateUtils.getNowDate());
         }
+
+        qqchSafeRiskListMapper.deleteQqchSafeRiskList(qqchSafeRiskList1);
 
         List<QqchSafeRiskList> list = qqchSafeRiskListVo.getList();
         if(!ObjectNullUtil.isEmpty(list)){
@@ -157,7 +159,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
                 if(!ObjectNullUtil.isEmpty(detailListMap.get(safeRiskList.getId()))){
                     List<QqchSafeRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeRiskList.getId());
                     List<QqchSafeRiskListDetail> parentList = detailList.stream().filter(t -> {
-                        if (t.getPid() == 0) {
+                        if ((t.getPid() == Long.parseLong("0"))) {
                             return true;
                         }
                         return false;

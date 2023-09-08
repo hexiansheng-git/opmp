@@ -35,4 +35,11 @@ public interface IQqchConstService {
     CompileEntity list(QqchConst qqchConst);
 
     List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version);
+
+    /**
+     * 4.2弹窗
+     * @return
+     */
+    List<QqchConst> popUpWindows();
+
 }

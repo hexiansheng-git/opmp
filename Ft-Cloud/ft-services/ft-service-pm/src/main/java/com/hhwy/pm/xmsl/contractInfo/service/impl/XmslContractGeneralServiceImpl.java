@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractGeneral;
@@ -18,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -156,43 +154,39 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
      */
     @Override
     public List<XmslContractGeneral> provideList(XmslContractGeneral xmslContractGeneralParam) {
+        List<XmslContractGeneral> resultList = new ArrayList<>();
         //查询 最大  生效的数据  masterId
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         XmslContractInfo xmslContractInfo = new XmslContractInfo();
         xmslContractInfo.setValid("1");
         xmslContractInfo.setVersion(maxVersion);
-        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
-        if(xmslContractInfo1!=null){
+        XmslContractInfo contractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+        if(contractInfo!=null){
             //无条件搜索
             XmslContractGeneral general = new XmslContractGeneral();
-            general.setMasterId(xmslContractInfo1.getId());
-            List<XmslContractGeneral> AllList = xmslContractGeneralMapper.getXmslContractGeneral(general); //这里搜索出来的是全量数据
-            Map<Long, XmslContractGeneral> allMap = AllList.stream().collect(Collectors.toMap(XmslContractGeneral::getId, Function.identity()));
-            //有条件搜索
-            xmslContractGeneralParam.setMasterId(xmslContractInfo1.getId());
-            List<XmslContractGeneral> list = xmslContractGeneralMapper.getXmslContractGeneral(xmslContractGeneralParam);//这里是根据前端传的条件搜索出来的结果
-            List<XmslContractGeneral> newList = new ArrayList<>();
-            newList.addAll(list);
-            //遍历寻找父集
-            for (XmslContractGeneral xmslContractGeneral : list) {
-                //递归查询出他的父集
-                List<XmslContractGeneral> xmslContractGenerals = this.selParent(xmslContractGeneral, new ArrayList<XmslContractGeneral>(), allMap);
-                newList.addAll(xmslContractGenerals);
-            }
-            //转树列表
-            List<XmslContractGeneral> treeList = ListTreeUtil.formatTree(newList, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
-            return  treeList;
-        }
-        return null;
-    }
+            general.setMasterId(contractInfo.getId());
+            List<XmslContractGeneral> allList = xmslContractGeneralMapper.getXmslContractGeneral(general); //这里搜索出来的是全量数据
 
-    //遍历查父集
-     public  List<XmslContractGeneral> selParent(XmslContractGeneral xmslContractGeneral,List<XmslContractGeneral> newList,Map<Long, XmslContractGeneral> allMap){
-        if(xmslContractGeneral.getPid()!=0){
-             XmslContractGeneral general1 = allMap.get(xmslContractGeneral.getPid());
-             newList.add(general1);
-             this.selParent(general1,newList,allMap);
-         }
-         return newList;
-     }
+            String name = xmslContractGeneralParam.getName();
+            String content = xmslContractGeneralParam.getContent();
+            if(StringUtils.isNotBlank(name) || StringUtils.isNotBlank(content)){
+                //有条件搜索
+                general.setName(name);
+                general.setContent(content);
+                List<XmslContractGeneral> subList = xmslContractGeneralMapper.getXmslContractGeneralList(general);//这里是根据前端传的条件搜索出来的结果
+                resultList = ListTreeUtil.getUpListBySublistToTree(
+                        subList,
+                        allList,
+                        XmslContractGeneral::getId,
+                        XmslContractGeneral::getPid,
+                        o -> o.getPid() == 0,
+                        (r, n) -> r.getId().equals(n.getPid()),
+                        XmslContractGeneral::getChildren,
+                        XmslContractGeneral::setChildren);
+            }else {
+                resultList = ListTreeUtil.formatTree(allList, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
+            }
+        }
+        return resultList;
+    }
 }

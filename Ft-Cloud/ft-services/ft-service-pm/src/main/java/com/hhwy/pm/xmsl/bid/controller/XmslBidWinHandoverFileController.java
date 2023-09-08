@@ -1,16 +1,19 @@
 package com.hhwy.pm.xmsl.bid.controller;
 
-import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import com.hhwy.pm.xmsl.bid.domain.XmslBidWinHandoverFile;
+import com.hhwy.pm.xmsl.bid.service.IXmslBidWinHandoverFileService;
+import com.hhwy.utils.validation.ValidationGroups;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhenglili
@@ -25,7 +28,7 @@ public class XmslBidWinHandoverFileController extends BaseController {
     @Autowired
     private IXmslBidWinHandoverFileService xmslBidWinHandoverFileService;
 
-//    @GetMapping
+    //    @GetMapping
 //    public AjaxResult getXmslBidWinHandoverFile(
 //        @Validated(ValidationGroups.Get.class) @RequestBody XmslBidWinHandoverFile xmslBidWinHandoverFileParam) {
 //        XmslBidWinHandoverFile xmslBidWinHandoverFile = xmslBidWinHandoverFileService
@@ -33,14 +36,14 @@ public class XmslBidWinHandoverFileController extends BaseController {
 //        return AjaxResult.success(xmslBidWinHandoverFile);
 //    }
 //
-//    @GetMapping("/list")
-//    public AjaxResult getXmslBidWinHandoverFileList(
-//        @Validated(ValidationGroups.Select.class) @RequestBody XmslBidWinHandoverFile xmslBidWinHandoverFileParam) {
-//        startPage();
-//        List<XmslBidWinHandoverFile> xmslBidWinHandoverFileList = xmslBidWinHandoverFileService
-//            .getXmslBidWinHandoverFileList(xmslBidWinHandoverFileParam);
-//        return getDataTableAjaxResult(xmslBidWinHandoverFileList);
-//    }
+    @GetMapping("/getList")
+    public AjaxResult getXmslBidWinHandoverFileList(
+        @Validated(ValidationGroups.Select.class) @RequestBody XmslBidWinHandoverFile xmslBidWinHandoverFileParam) {
+        startPage();
+        List<XmslBidWinHandoverFile> xmslBidWinHandoverFileList = xmslBidWinHandoverFileService
+            .getXmslBidWinHandoverFileList(xmslBidWinHandoverFileParam);
+        return getDataTableAjaxResult(xmslBidWinHandoverFileList);
+    }
 //
 //    @PostMapping("/add")
 //    public AjaxResult insertXmslBidWinHandoverFile(

@@ -1,28 +1,20 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
-import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
-import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
-import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.Version;
 
 /**
  * @author zhenglili
@@ -66,10 +57,10 @@ public class QqchConstructionListController extends BaseController {
     }
 
     @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchConstructionListVo qqchConstructionListParamVo)
+    public void export(HttpServletResponse response, @RequestBody(required = false) QqchConstructionList qqchConstructionList)
             throws IOException {
-        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList(qqchConstructionListParamVo);
-        List<QqchConstructionList> qqchConstructionListList = qqchConstructionListVo.getList();
+//        QqchConstructionListVo qqchConstructionListVo = qqchConstructionListService.getQqchConstructionListList(qqchConstructionListParamVo);
+        List<QqchConstructionList> qqchConstructionListList = qqchConstructionListService.list(qqchConstructionList);
         FtExcelUtil<QqchConstructionList> util = new FtExcelUtil<>(QqchConstructionList.class);
 
         // 导出维护序号

@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ContractListQueryVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 
@@ -48,4 +49,12 @@ public interface IXmslContractListService {
 
 
     XmslContractList getContractPriceByListtype(XmslContractList xmslContractList);
+
+
+    /**
+     * 4.1.4合同清单弹窗
+     * @param queryVo
+     * @return
+     */
+    List<XmslContractList> popUpWindows(ContractListQueryVo queryVo);
 }

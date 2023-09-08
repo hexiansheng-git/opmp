@@ -1,10 +1,13 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,6 +28,9 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
 
     @Autowired
     private JdglMainPlanItemMapper jdglMainPlanItemMapper;
+
+    @Autowired
+    private IJdglMainPlanService jdglMainPlanService;
 
 
     public JdglMainPlanItem getJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem) {
@@ -88,5 +94,41 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     @Transactional
     public int deleteJdglMainPlanItemByPks(List<Long> jdglMainPlanItemPkList) {
         return jdglMainPlanItemMapper.deleteJdglMainPlanItemByPks(jdglMainPlanItemPkList);
+    }
+
+    @Override
+    public List<JdglMainPlanItem> getUsingJdglMainPlanItemList(JdglMainPlanItem jdglMainPlanItem) {
+
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+
+        if(usingJdglMainPlan != null) {
+            Long id = usingJdglMainPlan.getId();
+            if(jdglMainPlanItem == null) jdglMainPlanItem = new JdglMainPlanItem();
+            jdglMainPlanItem.setMainPlanId(id);
+            return getJdglMainPlanItemList(jdglMainPlanItem);
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDate(Date date) {
+        Long mainPlanId = 0l;
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        if(usingJdglMainPlan != null) {
+            mainPlanId = usingJdglMainPlan.getId();
+        }
+        return jdglMainPlanItemMapper.getUsingJdglMainPlanItemListByDate(date, mainPlanId);
+    }
+
+    @Override
+    public List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(Date startDate, Date endDate) {
+        Long mainPlanId = 0l;
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        if(usingJdglMainPlan != null) {
+            mainPlanId = usingJdglMainPlan.getId();
+        }
+        return jdglMainPlanItemMapper.getUsingJdglMainPlanItemListByDateRange(startDate, endDate, mainPlanId);
     }
 }

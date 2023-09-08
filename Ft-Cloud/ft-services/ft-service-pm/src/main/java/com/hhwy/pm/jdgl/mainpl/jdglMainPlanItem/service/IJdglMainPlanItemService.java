@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
@@ -26,4 +27,10 @@ public interface IJdglMainPlanItemService {
     int deleteJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem);
 
     int deleteJdglMainPlanItemByPks(List<Long> jdglMainPlanItemPkList);
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemList(JdglMainPlanItem jdglMainPlanItem);
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDate(Date date);
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(Date startDate, Date endDate);
 }

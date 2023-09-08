@@ -91,7 +91,7 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="dataClassify != null  and dataClassify != ''">and `data_classify` = #{dataClassify}</if>
+            <if test="dataClassify != null  and dataClassify != ''">and `data_classify` like concat('%' , #{dataClassify} , '%')</if>
             <if test="desc != null  and desc != ''">and `desc` = #{desc}</if>
             <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>

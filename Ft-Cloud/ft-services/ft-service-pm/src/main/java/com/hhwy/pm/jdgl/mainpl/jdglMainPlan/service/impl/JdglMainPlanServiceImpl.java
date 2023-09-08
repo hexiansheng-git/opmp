@@ -35,9 +35,18 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         if(jdglMainPlan1 == null) {
             return jdglMainPlan1;
         }
-        List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemList(new JdglMainPlanItem());
+        JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
+        jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
+        List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemList(jdglMainPlanItem);
         jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList);
         return jdglMainPlan1;
+    }
+
+    @Override
+    public JdglMainPlan getUsingJdglMainPlan() {
+        JdglMainPlan jdglMainPlan = new JdglMainPlan();
+        jdglMainPlan.setIsUse("1");
+        return getJdglMainPlan(jdglMainPlan);
     }
 
     public List<JdglMainPlan> getJdglMainPlanList(JdglMainPlan jdglMainPlan) {

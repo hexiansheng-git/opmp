@@ -396,7 +396,7 @@
     </update>
 
     <update id="deleteByInfoIds">
-        update `qqch_safe_risk_list_detail` set del_flag = 1,del_user = #{delUser},del_time = #{delTime}
+        update `qqch_safe_risk_list_detail` set del_flag = '1',del_user = #{delUser},del_time = #{delTime}
         <where>
             `info_id` in
             <foreach item="infoId" collection="infoIdList" open="(" separator="," close=")">

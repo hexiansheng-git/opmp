@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 /**
@@ -23,7 +24,7 @@ import lombok.Data;
  * @remark jdgl_day_schedule
  */
 @Data
-public class JdglDaySchedule extends BaseEntity {
+public class JdglDaySchedule extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -141,7 +142,7 @@ public class JdglDaySchedule extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
@@ -200,6 +201,12 @@ public class JdglDaySchedule extends BaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+    /**
+     * 字段描述：当前审批人
+     */
+    @JsonProperty
+    @Excel(name = "当前审批人")
+    private String assignee;
 
     /**
      * 字段描述：进度填报wbs集合

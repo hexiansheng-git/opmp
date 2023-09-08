@@ -77,6 +77,11 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         return vo;
     }
 
+    @Override
+    public List<QqchConstructionList> list(QqchConstructionList list) {
+        return qqchConstructionListMapper.getQqchConstructionListList(list);
+    }
+
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
         // 先批量删除当前版本所有数据
@@ -84,9 +89,17 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
 //        deleteParam.setVersion(qqchConstructionListVo.getVersion());
 //        deleteParam.setDelFlag("1");
 //        qqchConstructionListMapper.updateQqchConstructionList(deleteParam);
-        Set<String> delWbsCodeSet = new HashSet<>(); 
+        Set<String> delWbsCodeSet = new HashSet<>();
+        Date passTime = null;
         if (!CollectionUtils.isEmpty(qqchConstructionListVo.getList())) {
-            for (QqchConstructionList qqchConstructionList : qqchConstructionListVo.getList()) {
+            for (int i = 0; i < qqchConstructionListVo.getList().size(); i++) {
+                QqchConstructionList qqchConstructionList = qqchConstructionListVo.getList().get(i);
+                if(passTime != null){
+                    if(i==0)
+                        passTime = qqchConstructionList.getListPassTime();
+                    else
+                        Assert.isTrue(passTime.getTime() == qqchConstructionList.getListPassTime().getTime(), "清单通过时间必须一致");
+                }
                 if (StringUtils.isBlank(qqchConstructionList.getSchemeCode())) {
                     // 方案编号 = 项目编码 + 三位流水号
                     String code = genCodeService.getSetCode(CodeEnum.QQCH_CONSTRUCTION_LIST);
@@ -121,6 +134,9 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             String stageIdentity = qqchConstructionListVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+        //更新清单通过时间
+        if(passTime != null)
+            qqchConstructionListMapper.updatePassTime(passTime);
     }
 
     @Override

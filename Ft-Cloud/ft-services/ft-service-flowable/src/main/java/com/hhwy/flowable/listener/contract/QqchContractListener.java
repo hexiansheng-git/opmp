@@ -31,5 +31,5 @@ public class QqchContractListener implements TaskListener{
         System.out.println(businessKey);
         PmServiceApi bean = SpringUtils.getBean(PmServiceApi.class);
         bean.updateContract(Long.valueOf(businessKey));
-    }
+    }                                               
 }

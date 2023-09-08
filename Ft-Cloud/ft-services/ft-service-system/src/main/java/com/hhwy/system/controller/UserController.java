@@ -6,6 +6,7 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.api.model.LoginUser;
+import com.hhwy.system.core.service.ISysUserService;
 import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.service.IUserService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -35,6 +36,8 @@ public class UserController extends BaseController {
     private TokenService tokenService;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private ISysUserService userService;
 
 
 //    @CustomLogger(title = "根据4A编码获取人员信息", businessType = CustomBusinessType.SELECT)
@@ -110,7 +113,6 @@ public class UserController extends BaseController {
         List<SysUser> userList= iUserService.select4AByUserNames(map);
         return AjaxResult.success(userList);
     }
-
 
 
 }

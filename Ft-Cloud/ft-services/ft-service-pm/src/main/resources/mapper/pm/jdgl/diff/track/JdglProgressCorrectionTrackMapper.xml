@@ -103,7 +103,7 @@
             <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
             <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
             <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
-            <if test="planCorrectionCompleteDate != null  and planCorrectionCompleteDate != ''">and
+            <if test="planCorrectionCompleteDate != null">and
                 `plan_correction_complete_date` = #{planCorrectionCompleteDate}
             </if>
             <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
@@ -164,7 +164,7 @@
             <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
             <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
             <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
-            <if test="planCorrectionCompleteDate != null  and planCorrectionCompleteDate != ''">and
+            <if test="planCorrectionCompleteDate != null">and
                 `plan_correction_complete_date` = #{planCorrectionCompleteDate}
             </if>
             <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
@@ -232,7 +232,7 @@
             <if test="riskLevel != null  and riskLevel != ''">`risk_level`,</if>
             <if test="periodTotalScore != null ">`period_total_score`,</if>
             <if test="correctionDate != null ">`correction_date`,</if>
-            <if test="planCorrectionCompleteDate != null  and planCorrectionCompleteDate != ''">
+            <if test="planCorrectionCompleteDate != null">
                 `plan_correction_complete_date`,
             </if>
             <if test="weekReportPeriod != null  and weekReportPeriod != ''">`week_report_period`,</if>
@@ -278,7 +278,7 @@
             <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
             <if test="periodTotalScore != null ">#{periodTotalScore},</if>
             <if test="correctionDate != null ">#{correctionDate},</if>
-            <if test="planCorrectionCompleteDate != null  and planCorrectionCompleteDate != ''">
+            <if test="planCorrectionCompleteDate != null">
                 #{planCorrectionCompleteDate},
             </if>
             <if test="weekReportPeriod != null  and weekReportPeriod != ''">#{weekReportPeriod},</if>
@@ -422,7 +422,7 @@
             <if test="riskLevel != null  and  riskLevel != ''">`risk_level` = #{riskLevel},</if>
             <if test="periodTotalScore != null ">`period_total_score` = #{periodTotalScore},</if>
             <if test="correctionDate != null ">`correction_date` = #{correctionDate},</if>
-            <if test="planCorrectionCompleteDate != null  and  planCorrectionCompleteDate != ''">
+            <if test="planCorrectionCompleteDate != null">
                 `plan_correction_complete_date` = #{planCorrectionCompleteDate},
             </if>
             <if test="weekReportPeriod != null  and  weekReportPeriod != ''">`week_report_period` =
@@ -703,7 +703,7 @@
             <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
             <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
             <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
-            <if test="planCorrectionCompleteDate != null  and planCorrectionCompleteDate != ''">and
+            <if test="planCorrectionCompleteDate != null">and
                 `plan_correction_complete_date` = #{planCorrectionCompleteDate}
             </if>
             <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =

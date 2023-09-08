@@ -70,7 +70,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
      */
     @JsonProperty
     @Excel(name = "原定工期")
-    private Integer planDuration;
+    private Integer plannedDuration;
     /**
      * 字段描述：总浮时
      */
@@ -250,4 +250,93 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonProperty
     @Excel(name = "尚需工期")
     private Integer remainingDuration;
+
+    /**
+        * 字段描述：实际开始日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "实际开始日期"    ,dateFormat = "yyyy-MM-dd"  )
+    private Date actualStartDate;
+    /**
+     * 字段描述：实际结束日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "实际结束日期"    ,dateFormat = "yyyy-MM-dd"  )
+    private Date actualEndDate;
+    /**
+     * 字段描述：单位
+     */
+    @JsonProperty
+    @Excel(name = "单位"    )
+    private String unit;
+    /**
+     * 字段描述：工程量
+     */
+    @JsonProperty
+    @Excel(name = "工程量"    )
+    private BigDecimal quantity;
+    /**
+     * 字段描述：项目编码
+     */
+    @JsonProperty
+    @Excel(name = "项目编码"    )
+    private String projectCode;
+    /**
+     * 字段描述：计划完成百分比
+     */
+    @JsonProperty
+    @Excel(name = "计划完成百分比"    )
+    private BigDecimal planCompRate;
+    /**
+     * 字段描述：期望完成日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "期望完成日期"    ,dateFormat = "yyyy-MM-dd"  )
+    private Date expectedFinishDate;
+    /**
+     * 字段描述：滞后天数
+     */
+    @JsonProperty
+    @Excel(name = "滞后天数"    )
+    private Integer finishDateVariance;
+    /**
+     * 字段描述：滞后原因
+     */
+    @JsonProperty
+    @Excel(name = "滞后原因"    )
+    private String lagReason;
+    /**
+     * 字段描述：纠偏目标
+     */
+    @JsonProperty
+    @Excel(name = "纠偏目标"    )
+    private String correctionTarget;
+    /**
+     * 字段描述：具体措施
+     */
+    @JsonProperty
+    @Excel(name = "具体措施"    )
+    private String concreteMeasure;
+    /**
+     * 字段描述：纠偏完成日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "纠偏完成日期"    ,dateFormat = "yyyy-MM-dd"  )
+    private Date correctionCompDate;
+    /**
+     * 字段描述：紧前作业代码
+     */
+    @JsonProperty
+    @Excel(name = "紧前作业代码"    )
+    private String predecessorActivityCode;
+    /**
+     * 字段描述：紧前作业名称
+     */
+    @JsonProperty
+    @Excel(name = "紧前作业名称"    )
+    private String predecessorActivityName;
 }

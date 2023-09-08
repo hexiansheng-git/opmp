@@ -1,19 +1,31 @@
 package com.hhwy.pm.jdgl.yearpl.jdglYearPlan.service.impl;
 
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.domain.FtActBusiness;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service.IJdglYearImagePlanService;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.IJdglYearValuePlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,8 +56,14 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
 
-//    @Autowired
-//    private IPeriodCurrencyService periodCurrencyService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private IJdglDayScheduleService jdglDayScheduleService;
 
     public JdglYearPlan getJdglYearPlan(JdglYearPlan jdglYearPlan) {
         JdglYearPlan jdglYearPlan1 = jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
@@ -77,22 +95,60 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
         JdglYearPlan returnVO = new JdglYearPlan();
 
+        String year1 = jdglYearPlanParam.getYear();
+        Date nowDate = DateUtils.getNowDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        String nowStr = sdf.format(nowDate);
+
         // 获取项目及合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
+
+        ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
+
+        if(projectBasicInfo != null) {
+            returnVO.setCustUnit(projectBasicInfo.getContractCurrency());
+            returnVO.setCustUnitCode(projectBasicInfo.getContractCurrencyCode());
+        }
 
         if(xmslContractInfo != null) {
             returnVO.setProjectName(xmslContractInfo.getProjectName());
             returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
-            returnVO.setRemainContactAmtCu(xmslContractInfo.getEffectiveAmout());
-            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
+
+            // 获取财务管理-风险管理-汇率登记
+            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
+                    returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
+                }
+            }
         }
 
-        // 获取财务管理-风险管理-汇率登记
+        if(returnVO.getExchangeRate() == null) {
+            PeriodInfo periodInfo = new PeriodInfo();
+            periodInfo.setCurrencyCode(returnVO.getCustUnitCode());
+            periodInfo.setQueryDate(year1);
+            AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
+            if(ajaxResult.get("data") != null) {
+                List<Map> data = (List<Map>) ajaxResult.get("data");
+                Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
+                if(periodMap != null && periodMap.get("rate") != null) {
+                    returnVO.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                }
+            }
+        }
 
         // 根据期次获取开累产值数据
-        String year = jdglYearPlanParam.getYear();
+        Map<String, Date> dateRange4Year = StatisticsUtils.getDateRange4Year(year1);
+        Date start = dateRange4Year.get("start");
 
         // 计算合同、产值数据
+        BigDecimal countValue = jdglDayScheduleService.getCountValue(null, start);
+
+        returnVO.setTotalCompValueCu(countValue);
+        if(returnVO.getTotalCompValueCu() == null) returnVO.setTotalCompValueCu(new BigDecimal(0));
+        if(returnVO.getContactAmtCu()== null) returnVO.setContactAmtCu(new BigDecimal(0));
+        returnVO.setRemainContactAmtCu(returnVO.getContactAmtCu().subtract(returnVO.getTotalCompValueCu()));
 
         return returnVO;
     }
@@ -134,16 +190,13 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
             for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                        .getFlowInfo("jdgl_year_plan", String.valueOf(jdglYearPlan1.getId()), tenantKey);
-                jdglYearPlan1.setTaskStatus(flowInfo.getName());
-                jdglYearPlan1.setAssignee(flowInfo.getAssignee());
                 List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
                 jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
                 List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());
                 jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglYearPlanList,FlowEnum.JDGL_YEARPLAN);
         return jdglYearPlanList;
     }
 
@@ -160,8 +213,11 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
         Long id = IdWorker.createId();
         jdglYearPlan.setId(id);
-        jdglYearPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglYearPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setCreateTime(DateUtils.getNowDate());
+
+        jdglYearPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+        jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
         jdglYearPlan.setVersion("1");
         jdglYearPlan.setIsUse("0");
         return jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlan);
@@ -180,7 +236,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     @Transactional
     public int updateJdglYearPlan(JdglYearPlan jdglYearPlan) {
-        jdglYearPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglYearPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglYearValuePlanService.updateJdglYearValuePlanList(jdglYearPlan.getJdglYearValuePlanList());
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlan.getJdglYearImagePlanList();

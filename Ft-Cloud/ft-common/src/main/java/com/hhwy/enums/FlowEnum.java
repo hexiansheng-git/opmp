@@ -15,8 +15,22 @@ public enum FlowEnum {
 
 
     //项目设立，合同
-    XMSL_CONTRACT("xmsl_contract_info", "process_test_contract");
+    XMSL_CONTRACT("xmsl_contract_info", "process_test_contract"),
 
+    /*********************进度管理****************************/
+    // 进度管理-纠偏措施制定
+    JDGL_CORRECTION_MEASURES_MAKE("jdgl_correction_measures_make", "process_jdgl_correction_measures_make"),
+
+    // 进度管理年进度计划
+    JDGL_YEARPLAN("jdgl_year_plan", "process_jdgl_year_plan"),
+    // 进度管理季进度计划
+    JDGL_QUARTERPLAN("jdgl_quarter_plan", "process_jdgl_quarter_plan"),
+    // 进度管理月进度计划
+    JDGL_MONTHPLAN("jdgl_month_plan", "process_jdgl_month_plan"),
+    // 进度管理周进度计划
+    JDGL_WEEKPLAN("jdgl_week_plan", "process_jdgl_week_plan"),
+    // 进度管理进度填报
+    JDGL_DAYSCHEDULE("jdgl_day_schedule","process_jdgl_day_schedule");
 
     public String getTableName() {
         return this.tableName;
