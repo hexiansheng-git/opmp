@@ -290,6 +290,10 @@ public class ProjectInfoWithOther {
      * 字段描述：策划主导单位
      */
     private String planDominantUnit;
+    /**
+     * 字段描述：策划审批单位
+     */
+    private String planApprovalUnit;
 
     /**
      * 字段描述：策划编制负责人
