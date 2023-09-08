@@ -9,14 +9,20 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import sun.misc.Version;
 
 /**
  * @author zhenglili
@@ -78,14 +85,16 @@ public class QqchConstructionListController extends BaseController {
      * @return
      */
     @PostMapping("/importExcel")
-    public AjaxResult importExcel(@RequestPart("file") MultipartFile file) {
-        FtExcelUtil<QqchConstructionListImportVo> util = new FtExcelUtil<>(QqchConstructionListImportVo.class);
+    public AjaxResult importExcel(@RequestPart("file") MultipartFile file, BigDecimal version) {
+        FtExcelUtil<QqchConstructionList> util = new FtExcelUtil<>(QqchConstructionList.class);
         try {
             InputStream inputStream = file.getInputStream();
-            List<QqchConstructionListImportVo> list = util.importExcel(inputStream);
-            return AjaxResult.success(list);
+            List<QqchConstructionList> list = util.importExcel(inputStream);
+            qqchConstructionListService.importData(list, version);
+            return AjaxResult.success();
         } catch (Exception e) {
-            throw new RuntimeException("导入失败！");
+            e.printStackTrace();
+            throw new RuntimeException("导入失败！"+e.getMessage());
         }
     }
 }

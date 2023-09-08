@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.mapper;
 
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +19,12 @@ public interface QqchConstructionListMapper {
 
     List<QqchConstructionList> getQqchConstructionListList(QqchConstructionList qqchConstructionList);
 
+    /**
+     * 查询最大流水号
+     * @return
+     */
+    String selectMaxFlowCode();
+
     int insertQqchConstructionList(QqchConstructionList qqchConstructionList);
 
     int insertQqchConstructionListList(
@@ -27,6 +34,13 @@ public interface QqchConstructionListMapper {
 
     int updateQqchConstructionListList(@Param("list") List<QqchConstructionList> qqchConstructionListList);
 
+    /**
+     * 更新全部数据得清单通过时间
+     * @param listPassTime
+     * @return
+     */
+    int updatePassTime(Date listPassTime);
+    
     int deleteQqchConstructionList(QqchConstructionList qqchConstructionList);
 
     int deleteQqchConstructionListByPks(@Param("qqchConstructionListPkList") List<Long> qqchConstructionListPkList);

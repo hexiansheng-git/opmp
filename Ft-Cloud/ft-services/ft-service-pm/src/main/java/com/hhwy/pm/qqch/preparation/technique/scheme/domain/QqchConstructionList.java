@@ -37,7 +37,6 @@ public class QqchConstructionList extends BaseEntity {
      * 字段描述：方案编号
      */
     @JsonProperty
-    @FtExcel(name = "方案编号")
     private String schemeCode;
     /**
      * 字段描述：方案名称
@@ -86,14 +85,12 @@ public class QqchConstructionList extends BaseEntity {
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划编制时间", dateFormat = "yyyy-MM-dd")
     private Date planPreparationTime;
     /**
      * 字段描述：计划实施时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @FtExcel(name = "计划实施时间", dateFormat = "yyyy-MM-dd")
     private Date planImplementTime;
     /**
      * 字段描述：清单通过时间
@@ -106,7 +103,6 @@ public class QqchConstructionList extends BaseEntity {
      * 字段描述：项目联系人
      */
     @JsonProperty
-    @FtExcel(name = "项目联系人")
     private String contactPerson;
     /**
      * 字段描述：版本

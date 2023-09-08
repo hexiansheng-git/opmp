@@ -8,9 +8,12 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.redisUtil.RedisUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
+import javax.management.remote.rmi._RMIConnection_Stub;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -25,6 +28,8 @@ public class WbsRedisUtils {
     }
     //hashMap  wbs::租户标志  wbsId  wbsjson
     public static final String KEY = "WBS::";
+    //hashMap  wbs::租户标志  wbsCode  wbsId
+    public static final String CODE_KEY = "WBS_CODE::";
     //子级ID hashMap  WBS::child_id::租户标志   wbsId  子级Id(多个以逗号拼接)
     public static final String CHILD_KEY = "WBS::child_id::";
     //直属子级ID hashMap  WBS::dire_child_id::租户标志   wbsId  直属子级Id(多个以逗号拼接)
@@ -33,9 +38,6 @@ public class WbsRedisUtils {
     public static final String LIST_WBS_KEY = "WBS::list_wbs::";
     //wbs编号对应清单编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
     public static final String WBS_LIST_KEY = "WBS::wbs_list::";
-    
-    //wbs编号对应清单编号   WBS::list_wbs::租户标志   L+清单编号 :: wbsId
-//    public static final String WBS_LIST_KEY = "WBS_HIS::wbs_list::";
 
 
     /**
@@ -72,6 +74,41 @@ public class WbsRedisUtils {
         }
         return list;
     }
+
+    public static XmslWbs getWbsByCode(String wbsCode){
+        List<XmslWbs> list = getWbsByCodes(SetUtils.hashSet(wbsCode));
+        if(CollectionUtils.isEmpty(list) || list.get(0) ==null)
+            return null;
+        return list.get(0);
+    }
+    /**
+     * 根据wbs编号获取wbs
+     * @param wbsCodes
+     * @return
+     */
+    public static List<XmslWbs> getWbsByCodes(Collection wbsCodes){
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<Object> wbsIdList = redisUtils.hMultiGet(WbsRedisUtils.getCodeKey(tenantKey),wbsCodes);
+        wbsIdList = wbsIdList.stream().filter(r->r!=null).collect(Collectors.toList());
+        return getWbs(wbsIdList);
+    }
+
+    public static boolean hasWbsCode(String wbsCode){
+        return hasWbsCode(SetUtils.hashSet(wbsCode));
+    }
+
+    public static boolean hasWbsCode(Collection wbsCodes){
+        if(CollectionUtils.isEmpty(wbsCodes))
+            return true;
+        List<Object> list = redisUtils.hMultiGet(WbsRedisUtils.getCodeKey(SecurityUtils.getTenantKey()),wbsCodes);
+        int existNum = 0;
+        for (int i = 0; i < list.size(); i++) {
+            Object o = list.get(i);
+            existNum = existNum+(o==null?0:1);
+        }
+        return existNum>=wbsCodes.size();
+    }
+    
 
     public static List<XmslWbs> getWbs(Long[] wbsIds){
         if(ArrayUtils.isEmpty(wbsIds))
@@ -160,6 +197,15 @@ public class WbsRedisUtils {
     }
 
     /**
+     * 获取wbsCode redisKey
+     * @param tenantKey
+     * @return
+     */
+    public static String getCodeKey(String tenantKey){
+        return WbsRedisUtils.CODE_KEY + tenantKey;
+    }
+
+    /**
      * 子级wbskey
      * @param tenantKey
      * @return
@@ -182,5 +228,5 @@ public class WbsRedisUtils {
     public static String getWbsListKey(String tenantKey){
         return WbsRedisUtils.WBS_LIST_KEY+ tenantKey;
     }
-
+    
 }

@@ -400,6 +400,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         String tenantKey = tokenService.getTenantKey();
         ThreadPoolUtil.execute(()->{
             String key = WbsRedisUtils.getKey(tenantKey);
+            String codeKey = WbsRedisUtils.getCodeKey(tenantKey);
             String childKey = WbsRedisUtils.getChildKey(tenantKey);
             String direChildKey = WbsRedisUtils.getDireChildKey(tenantKey);
             String wbsListKey = WbsRedisUtils.getWbsListKey(tenantKey);
@@ -409,6 +410,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                     Long count = xmslWbsMapper.countByWbs(new XmslWbs());
                     int limitSize = 3;
                     Long pages = count/limitSize+(count%limitSize>0?1:0);
+                    Map<String,String> codeIdMap = new ConcurrentHashMap<>(limitSize); //wbsCode : wbsId
                     Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
                     Map<String,String> childRedisMap = new ConcurrentHashMap<>(limitSize); //wbs对应的全部子级（孙级）
                     Map<String,String> direChildRedisMap = new ConcurrentHashMap<>(limitSize);//wbs对应的直属子级
@@ -427,6 +429,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                                     ObjectUtils.addStr2MapList(listWbsMap,listCodes[j],r.getCode());
                                 }    
                             }
+                            codeIdMap.put(r.getCode(),r.getId()+"" );
                             redisMap.put(r.getId(), JSONObject.toJSONString(r));
                             //直属子级
                             if(StringUtils.isNotBlank(r.getParentId()))
@@ -443,6 +446,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                         });
                         redisUtils.hPutAll(key,redisMap);
                         redisMap.clear();
+                        redisUtils.hPutAll(codeKey,codeIdMap);
+                        codeIdMap.clear();
                     }
                     redisUtils.delete(childKey);
                     redisUtils.hPutAll(childKey,childRedisMap);
@@ -452,6 +457,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                     redisUtils.hPutAll(wbsListKey,wbsListMap);
                     redisUtils.delete(listWbsKey);
                     redisUtils.hPutAll(listWbsKey,listWbsMap);
+//                    redisUtils.hput
                 }
             }catch(Exception e){
                 e.printStackTrace();

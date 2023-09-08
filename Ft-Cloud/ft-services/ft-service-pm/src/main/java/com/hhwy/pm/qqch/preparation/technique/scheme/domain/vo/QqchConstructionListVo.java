@@ -34,6 +34,12 @@ public class QqchConstructionListVo extends PreparationEntity {
      * 字段描述：关联WBS编码（筛选条件）
      */
     private String wbsCode;
+    
+    //要删除的数据ID，逗号隔开
+    private String delIds;
+    //当前最大流水号
+    private String flowCode;
+    
 
     /**
      * 字段描述：施工方案清单集合

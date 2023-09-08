@@ -121,6 +121,10 @@
     order by create_time desc
   </select>
 
+  <select id="selectMaxFlowCode" resultType="String">
+        select max(pt_var1) from qqch_construction_list
+  </select>
+  
   <insert id="insertQqchConstructionList" useGeneratedKeys="true" keyProperty="id">
     insert into qqch_construction_list
     <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -498,6 +502,10 @@
     </foreach>
   </update>
 
+  <update id="updatePassTime">
+    update qqch_construction_list set list_pass_time = #{listPassTime} where del_flag = '0'
+  </update>
+  
   <update id="deleteQqchConstructionList">
     update `qqch_construction_list` set del_flag = 1
     <where>

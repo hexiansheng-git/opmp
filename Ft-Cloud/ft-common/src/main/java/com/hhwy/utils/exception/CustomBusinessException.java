@@ -10,15 +10,18 @@ public class CustomBusinessException extends RuntimeException{
     private Object data;
 
     public CustomBusinessException(String errorMsg){
+        super(errorMsg);
         this.errorCode = ErrorCodes.Error;
         this.msg = errorMsg;
     }
     public CustomBusinessException(ErrorCodes errorCode, String errorMsg){
+        super(errorMsg);
         this.errorCode = errorCode;
         this.msg = errorMsg;
     }
 
     public CustomBusinessException(ErrorCodes errorCode, String errorMsg, Object data){
+        super(errorMsg);
         this.errorCode = errorCode;
         this.msg = errorMsg;
         this.data = data;

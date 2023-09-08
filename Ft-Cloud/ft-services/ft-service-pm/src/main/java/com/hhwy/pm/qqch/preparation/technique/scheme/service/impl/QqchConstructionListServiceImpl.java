@@ -1,32 +1,38 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
+import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.bouncycastle.jcajce.provider.util.SecretKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 /**
  * @author zhenglili
@@ -64,6 +70,10 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             vo.setList(new ArrayList<>(2));
         }
         vo.setStageIdentity(qqchReviewService.getStage());
+        //返回最大流水号，方便前端生成
+        String flowCode = qqchConstructionListMapper.selectMaxFlowCode();
+        vo.setProjectCode(SecurityUtils.getTenantKey());
+        vo.setFlowCode(ObjectUtils.nvlString(flowCode,"001"));
         return vo;
     }
 
@@ -92,13 +102,18 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
                 if (qqchConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     qqchConstructionList.setValid(Valid.YES);
                 }
+                qqchConstructionList.setPtVar1(StringUtils.substring(qqchConstructionList.getSchemeCode(), qqchConstructionList.getSchemeCode().length()-3,qqchConstructionList.getSchemeCode().length())); //截取出流水号，方便统计最大流水
                 delWbsCodeSet.add(qqchConstructionList.getWbsCode());
             }
             //删除原wbsCode对应的数据
             qqchConstructionListMapper.deleteByWbsCode(delWbsCodeSet);
             qqchConstructionListMapper.insertQqchConstructionListList(qqchConstructionListVo.getList());
         }
-        
+        //删除
+        if(StringUtils.isNotBlank(qqchConstructionListVo.getDelIds())){
+            Long[] delIds = Convert.toLongArray(qqchConstructionListVo.getDelIds());
+            qqchConstructionListMapper.deleteQqchConstructionListByPks(Arrays.asList(delIds));
+        }
         String buttonMark = qqchConstructionListVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
@@ -112,5 +127,76 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
     public List<QqchConstructionList> getByWbsCodes(String[] wbsCodes) {
         BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
         return qqchConstructionListMapper.getByWbsCodes(wbsCodes, maxVersion);
+    }
+
+    @Override
+    @Transactional
+    public void importData(List<QqchConstructionList> list,BigDecimal version) {
+        if(CollectionUtils.isEmpty(list))
+            return;
+        //导入的wbs编号
+        Set<String> wbsCodeSet = new HashSet<>();
+        //导入的方案数据
+        Map<String,QqchConstructionList> map = new HashMap<>();
+        Date passTime = null;
+        //当前最大序号
+        Integer maxFlow = ObjectUtils.toInteger(this.qqchConstructionListMapper.selectMaxFlowCode(),1);
+        String prjCode = SecurityUtils.getTenantKey(); //租户key(项目编号)
+        //1、遍历清单，汇总必要数据并校验
+        for (int i = 0; i < list.size(); i++) {
+            try{
+                QqchConstructionList temp = list.get(i);
+                Assert.isTrue(StringUtils.isNotBlank(temp.getSchemeName()), "方案名称不能为空");
+                Assert.isTrue(StringUtils.isNotBlank(temp.getWbsCode()), "关联WBS编号不能为空");
+                if(passTime != null){
+                    if(i==0)
+                        passTime = temp.getListPassTime();
+                    else
+                        Assert.isTrue(passTime.getTime() == temp.getListPassTime().getTime(), "清单通过时间必须一致");
+                }
+                wbsCodeSet.add(temp.getWbsCode());
+                new AddBaseInfoUtil<>().addBaseEntity(temp);
+                temp.setSchemeCode(prjCode+String.format("%03d",(++maxFlow)));
+                XmslWbs wbs =WbsRedisUtils.getWbsByCode(temp.getWbsCode());
+                Assert.notNull(wbs,"WBS编号["+temp.getWbsCode()+"]不存在");
+                temp.setWbsName(wbs.getName());
+                map.put(ObjectUtils.nvlString(temp.getWbsCode()+"_"+temp.getSchemeName().trim()),temp);
+                temp.setPtVar1(StringUtils.substring(temp.getSchemeCode(), temp.getSchemeCode().length()-3,temp.getSchemeCode().length())); //截取出流水号，方便统计最大流水
+            }catch(Exception e){
+                e.printStackTrace();
+                throw new CustomBusinessException("第"+(i+2)+"行,"+e.getMessage());
+            }
+        }
+        //2、查库中wbs对应的清单，覆盖到map中
+        List<QqchConstructionList> dbList = this.qqchConstructionListMapper.getByWbsCodes(wbsCodeSet.toArray(new String[]{}),version);
+        for (int i = 0; i < dbList.size(); i++) {
+            QqchConstructionList temp = dbList.get(i);
+            String key = ObjectUtils.nvlString(temp.getWbsCode()+"_"+temp.getSchemeName().trim());
+            if(map.containsKey(key)){
+                QqchConstructionList listTemp =  map.get(key);
+                listTemp.setId(temp.getId());
+            }
+        }
+        //3、获取新增数据，
+        Iterator<QqchConstructionList> iterator = map.values().iterator();
+        List<QqchConstructionList> addList = new ArrayList<>();
+        List<QqchConstructionList> updateList = new ArrayList<>();
+        while(iterator.hasNext()){
+            QqchConstructionList temp = iterator.next();
+            temp.setVersion(version);
+            if(temp.getId() != null){
+                updateList.add(temp);
+                continue;
+            }
+            temp.setId(IdWorker.createId());
+            addList.add(temp);
+        }
+        if(CollectionUtils.isNotEmpty(addList))
+            qqchConstructionListMapper.insertQqchConstructionListList(addList);
+        if(CollectionUtils.isNotEmpty(updateList))
+            qqchConstructionListMapper.updateQqchConstructionListList(updateList);
+        //更新清单通过时间
+        if(passTime != null)
+            qqchConstructionListMapper.updatePassTime(passTime);
     }
 }
