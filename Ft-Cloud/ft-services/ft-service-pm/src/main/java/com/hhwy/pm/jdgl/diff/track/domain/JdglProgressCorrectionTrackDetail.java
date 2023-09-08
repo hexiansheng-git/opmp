@@ -130,7 +130,7 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
      */
     @JsonProperty
     @Excel(name = "纠偏完成日期")
-    private BigDecimal correctionCompleteDate;
+    private Date correctionCompleteDate;
     /**
      * 字段描述：作业队伍
      */
