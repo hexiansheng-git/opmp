@@ -122,7 +122,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         for (int i = 0; i < list.size(); i++) {
             XmslContractList temp = list.get(i);
             temp.setPtVar2(temp.getCode());
-            temp.setPtVar1(temp.getId());
+            temp.setPtVar1(String.valueOf(temp.getId()));
             temp.setId(null);
             listMap.put(temp.getCode(),temp);
         }
@@ -136,7 +136,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewList> drawList = drawReviewListService.getXmslDrawReviewListList(queryDrawList);
         for (int i = 0; i < drawList.size(); i++) {
             XmslContractList tempList = listMap.get(drawList.get(i).getListCode());
-            tempList.setId(drawList.get(i).getId()+"");
+            tempList.setId(drawList.get(i).getId());
         }
         return list;
     }
@@ -644,7 +644,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public XmslDrawReviewList copyToList(XmslContractList temp){
         XmslDrawReviewList drawList = new XmslDrawReviewList();
         drawList.setId(IdWorker.createId());
-        drawList.setListId(Long.valueOf(temp.getId()));
+        drawList.setListId(temp.getId());
         drawList.setListCode(temp.getCode());
         drawList.setPid(temp.getPid());
         drawList.setAncestors(temp.getAncestors());

@@ -141,7 +141,7 @@ public class JdglDaySchedule extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
@@ -200,6 +200,12 @@ public class JdglDaySchedule extends BaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+    /**
+     * 字段描述：当前审批人
+     */
+    @JsonProperty
+    @Excel(name = "当前审批人")
+    private String assignee;
 
     /**
      * 字段描述：进度填报wbs集合

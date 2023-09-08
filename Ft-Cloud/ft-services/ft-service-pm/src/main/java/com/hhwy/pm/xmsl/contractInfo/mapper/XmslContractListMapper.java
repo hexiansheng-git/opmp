@@ -39,4 +39,6 @@ public interface XmslContractListMapper {
     void updateXmslContractListList1(List<XmslContractList> list);
 
     XmslContractList getContractPriceByListtype(XmslContractList xmslContractList);
+
+    List<XmslContractList> getByAncestors(@Param("masterId") Long masterId, @Param("ancestors") String ancestors);
 }

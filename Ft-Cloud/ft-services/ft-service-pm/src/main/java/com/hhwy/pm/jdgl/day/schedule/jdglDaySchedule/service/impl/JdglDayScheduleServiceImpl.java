@@ -2,6 +2,9 @@ package com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.mapper.JdglDayScheduleMapper;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
@@ -124,8 +127,13 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
     public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleMapper.getJdglDayScheduleList(jdglDaySchedule);
+        String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
             for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
+                FtActBusiness flowInfo = FlowInfoSearchUtil
+                        .getFlowInfo(FlowEnum.JDGL_DAYSCHEDULE.getTableName(), String.valueOf(jdglDaySchedule1.getId()), tenantKey);
+                jdglDaySchedule1.setTaskStatus(flowInfo.getName());
+                jdglDaySchedule1.setAssignee(flowInfo.getAssignee());
                 JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
                 jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
                 // 懒加载
@@ -208,6 +216,8 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             jdglDaySchedule.setId(id);
             jdglDaySchedule.setCreateUser(SecurityUtils.getUserName());
             jdglDaySchedule.setCreateTime(DateUtils.getNowDate());
+            jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
             JdglDaySchedule query = new JdglDaySchedule();
             Date date = jdglDaySchedule.getDate();
