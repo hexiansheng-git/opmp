@@ -125,4 +125,12 @@ public interface IPeriodInfoService {
      * @return
      */
     int batchInsert(List<PeriodInfo> list);
+
+    /**
+     * 批量新增批次
+     *
+     * @param list
+     * @return
+     */
+    void dataSync(List<PeriodInfo> list);
 }

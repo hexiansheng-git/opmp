@@ -116,7 +116,7 @@ public class CurrencyPeriodData {
                             tt.put("data", list);
                             qicihuilv.put(no, tt);
                             //先临时插入redis缓存中
-                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
+//                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
                             System.out.println("放一次！！！！！");
                         }else if("USD".equals(YBBH)){
                             //原币是美元的
@@ -145,7 +145,7 @@ public class CurrencyPeriodData {
                             tt.put("data", list);
                             qicihuilv.put(no, tt);
                             //先临时插入redis缓存中
-                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
+//                            redisUtils.hPut("qicihuilv", no, JSONObject.toJSONString(tt));
                             System.out.println("放一次！！！！！");
 
                         }
@@ -243,11 +243,11 @@ public class CurrencyPeriodData {
         }
         //批量插入期次
         if(CollectionUtils.isNotEmpty(periodInfoList)){
-            periodInfoService.batchInsert(periodInfoList);
+            periodInfoService.dataSync(periodInfoList);
         }
         //批量插入
         if(CollectionUtils.isNotEmpty(periodCurrencyList)){
-            periodCurrencyService.batchInsert(periodCurrencyList);
+            periodCurrencyService.dataSync(periodCurrencyList);
         }
         return AjaxResult.success();
     }
@@ -295,7 +295,7 @@ public class CurrencyPeriodData {
         req.put("dicCode", "MDM26");
         Map<String, Object> whereCondition = new HashMap<>();
         whereCondition.put("year", year);
-        whereCondition.put("starttime", "2022-06-15T10:30:00.262+08:00");
+        whereCondition.put("starttime", "2023-08-15T10:30:00.262+08:00");
         whereCondition.put("endtime", "2024-06-15T10:30:00.262+08:00");
         whereCondition.put("PageNum", pageNum);
         whereCondition.put("IFPUB", "2");

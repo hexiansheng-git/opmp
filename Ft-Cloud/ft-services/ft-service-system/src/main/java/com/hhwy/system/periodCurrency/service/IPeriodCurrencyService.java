@@ -94,4 +94,12 @@ public interface IPeriodCurrencyService {
      * @return
      */
     int batchInsert(List<PeriodCurrency> list);
+
+    /**
+     * 批量新增汇率
+     *
+     * @param list
+     * @return
+     */
+    void dataSync(List<PeriodCurrency> list);
 }

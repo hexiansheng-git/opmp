@@ -263,4 +263,11 @@ public class PeriodInfoServiceImpl implements IPeriodInfoService {
         String startTime = sf.format(time);
         return startTime;
     }
+
+    @Transactional
+    @Override
+    public void dataSync(List<PeriodInfo> list) {
+        periodInfoMapper.deleteAll();
+        periodInfoMapper.batchInsert(list);
+    }
 }

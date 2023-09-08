@@ -17,3 +17,6 @@ INSERT INTO `qqch_survey_result_ask` VALUES (1694285806111428609, '勘察内容�
 INSERT INTO `qqch_survey_result_ask` VALUES (1694285806111428610, '勘察成果是否真实、可靠，重要工点是否进行了综合验证', NULL, 1.0, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', 'admin', '2023-08-23 17:49:49', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `qqch_survey_result_ask` VALUES (1694285806111428611, '勘察报告结论是否准确、合理，依据是否充分；对基本地质条件和重要地质问题的揭示和论证能否满足工程设计和方案比选的需要', NULL, 1.0, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1', 'admin', '2023-08-23 17:49:49', NULL, NULL, NULL, NULL, '0', NULL, NULL, NULL, NULL, NULL, NULL);
 
+-- 创建流程视图
+CREATE OR REPLACE VIEW v_act_ru_task AS SELECT * FROM `opmp-flowable`.act_ru_task;
+CREATE OR REPLACE VIEW v_ft_act_business AS SELECT * FROM `opmp-flowable`.ft_act_business;

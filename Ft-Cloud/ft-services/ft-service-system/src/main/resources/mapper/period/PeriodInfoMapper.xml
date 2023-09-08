@@ -405,4 +405,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          )
         order by create_time desc
     </select>
+
+    <update id="deleteAll" parameterType="Long">
+        update `t_period_info` set del_flag = 1 WHERE 1 = 1 AND  del_flag = 0
+    </update>
 </mapper>

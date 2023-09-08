@@ -37,7 +37,7 @@ public class CountryData {
         JSONObject data = JSONObject.parseObject(object.get("DATA").toString());
         JSONObject das = JSONObject.parseObject(data.get("DATAINFOS").toString());
         JSONArray datainfo = JSONObject.parseArray(das.get("DATAINFO").toString());
-        for (int j = 0; j <datainfo.size() ;j++) {
+        for (int j = 0; j <datainfo.size(); j++) {
             JSONObject o = (JSONObject)datainfo.get(j);
             String code = o.get("CODE").toString();
             redisUtils.hPut("baishanyunCountryInfo",code, JSONObject.toJSONString(o));

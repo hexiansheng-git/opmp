@@ -82,4 +82,6 @@ public interface PeriodCurrencyMapper {
      * @return
      */
     List<PeriodCurrency> selectRatePeriodByCodeAndCurrent(@Param("currency")String currency, @Param("periodCode") String periodCode  );
+
+    void deleteAll();
 }

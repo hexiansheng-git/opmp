@@ -134,4 +134,6 @@ public interface PeriodInfoMapper {
      * @return
      */
     int batchInsert(@Param(value = "dataList") List<PeriodInfo> list);
+
+    void deleteAll();
 }
