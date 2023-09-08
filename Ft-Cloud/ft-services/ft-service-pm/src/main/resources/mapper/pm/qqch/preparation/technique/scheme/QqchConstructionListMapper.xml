@@ -503,7 +503,7 @@
   </update>
 
   <update id="updatePassTime">
-    update qqch_construction_list set list_pass_time = #{listPassTime} where del_flag = '0'
+    update qqch_construction_list set list_pass_time = #{listPassTime} where version = #{version} and del_flag = '0' 
   </update>
   
   <update id="deleteQqchConstructionList">

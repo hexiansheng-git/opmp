@@ -77,7 +77,8 @@ public class FlowInfoSearchUtil {
             t.setInstanceId(flowInfo.getInstanceId());
             t.setProcessTaskManId(flowInfo.getProcessTaskManId());
             t.setNextNodeId(flowInfo.getNextNodeId());
-            userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
+            if(!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
+                userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
         }
         //查询流程审批人名称
         if(CollectionUtils.isNotEmpty(userNameSet)){

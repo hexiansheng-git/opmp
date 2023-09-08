@@ -136,7 +136,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         }
         //更新清单通过时间
         if(passTime != null)
-            qqchConstructionListMapper.updatePassTime(passTime);
+            qqchConstructionListMapper.updatePassTime(passTime,qqchConstructionListVo.getVersion());
     }
 
     @Override
@@ -213,6 +213,6 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
             qqchConstructionListMapper.updateQqchConstructionListList(updateList);
         //更新清单通过时间
         if(passTime != null)
-            qqchConstructionListMapper.updatePassTime(passTime);
+            qqchConstructionListMapper.updatePassTime(passTime,version);
     }
 }

@@ -39,7 +39,7 @@ public interface QqchConstructionListMapper {
      * @param listPassTime
      * @return
      */
-    int updatePassTime(Date listPassTime);
+    int updatePassTime(@Param("listPassTime") Date listPassTime,@Param("version") BigDecimal version);
     
     int deleteQqchConstructionList(QqchConstructionList qqchConstructionList);
 
