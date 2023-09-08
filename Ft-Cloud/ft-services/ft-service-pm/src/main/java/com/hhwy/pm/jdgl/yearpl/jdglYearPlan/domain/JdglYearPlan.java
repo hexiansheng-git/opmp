@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -27,7 +28,7 @@ import javax.validation.constraints.NotBlank;
  * @remark jdgl_year_plan
  */
 @Data
-public class JdglYearPlan extends BaseEntity {
+public class JdglYearPlan extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

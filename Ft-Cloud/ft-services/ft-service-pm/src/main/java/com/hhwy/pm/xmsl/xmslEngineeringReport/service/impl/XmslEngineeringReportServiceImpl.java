@@ -124,8 +124,8 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         report.setPartCode(wbs.getPartCode());
         report.setWbsUnit(wbs.getUnit());
         report.setLevel(wbs.getLevel());
-        report.setDesignQuanlity(wbs.getDesignQuanlity());
-        new AddBaseInfoUtil<>().addBaseEntity(report);
+        report.setDesignQuanlity(wbs.getDesignQuanlity()); 
+//        new AddBaseInfoUtil<>().addBaseEntity(report);
         report.setId(wbs.getId());
         report.setReportType(1);
         return report;
@@ -140,7 +140,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         report.setUnitCode(list.getUnitCode());
         report.setCheckQuanlity(list.getCheckNum());
         report.setImageProgress(list.getImageProgress());
-        new AddBaseInfoUtil<>().addBaseEntity(report);
+//        new AddBaseInfoUtil<>().addBaseEntity(report);
         report.setId(list.getId());
         report.setReportType(2);
         return report;

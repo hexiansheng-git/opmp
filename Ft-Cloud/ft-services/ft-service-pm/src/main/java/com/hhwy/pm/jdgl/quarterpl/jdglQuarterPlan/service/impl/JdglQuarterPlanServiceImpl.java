@@ -206,16 +206,13 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglQuarterPlanList)) {
             for (JdglQuarterPlan jdglQuarterPlan1 : jdglQuarterPlanList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                        .getFlowInfo(FlowEnum.JDGL_QUARTERPLAN.getTableName(), String.valueOf(jdglQuarterPlan1.getId()), tenantKey);
-                jdglQuarterPlan1.setTaskStatus(flowInfo.getName());
-                jdglQuarterPlan1.setAssignee(flowInfo.getAssignee());
                 List<JdglQuarterImagePlan> jdglQuarterImagePlanListByPlanId = iJdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(jdglQuarterPlan1.getId());
                 jdglQuarterPlan1.setJdglQuarterImagePlanList(jdglQuarterImagePlanListByPlanId);
                 List<JdglQuarterValuePlan> jdglQuarterValuePlanListByPlanId = iJdglQuarterValuePlanService.getJdglQuarterValuePlanListByPlanId(jdglQuarterPlan1.getId());
                 jdglQuarterPlan1.setJdglQuarterValuePlanList(jdglQuarterValuePlanListByPlanId);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglQuarterPlanList,FlowEnum.JDGL_QUARTERPLAN);
         return jdglQuarterPlanList;
     }
 
@@ -234,9 +231,9 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
         Long id = IdWorker.createId();
         jdglQuarterPlan.setId(id);
-        jdglQuarterPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglQuarterPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setCreateTime(DateUtils.getNowDate());
-        jdglQuarterPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
         jdglQuarterPlan.setVersion("1");
         jdglQuarterPlan.setIsUse("0");
@@ -256,7 +253,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
     @Transactional
     public int updateJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlan) {
-        jdglQuarterPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglQuarterValuePlanService.updateJdglQuarterValuePlanList(jdglQuarterPlan.getJdglQuarterValuePlanList());
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();

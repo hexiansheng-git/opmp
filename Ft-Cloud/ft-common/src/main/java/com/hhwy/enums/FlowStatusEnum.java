@@ -8,10 +8,10 @@ package com.hhwy.enums;
 public enum FlowStatusEnum {
 
 
-    //项目设立，合同
-    FLOW_STATUS_1("待发起", "1"),
-    FLOW_STATUS_2("审批中", "2"),
-    FLOW_STATUS_3("已结束", "3");
+    //流程状态 0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
+    FLOW_STATUS_INIT("待发起", "0"),
+    FLOW_STATUS_AUDITING("审批中", "1"),
+    FLOW_STATUS_END("已结束", "4");
 
 
     public String getName() {
@@ -30,5 +30,10 @@ public enum FlowStatusEnum {
     FlowStatusEnum(String name, String Key) {
         this.name = name;
         this.Key = Key;
+    }
+
+    @Override
+    public String toString() {
+        return this.getKey();
     }
 }

@@ -130,10 +130,6 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
             for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                        .getFlowInfo(FlowEnum.JDGL_DAYSCHEDULE.getTableName(), String.valueOf(jdglDaySchedule1.getId()), tenantKey);
-                jdglDaySchedule1.setTaskStatus(flowInfo.getName());
-                jdglDaySchedule1.setAssignee(flowInfo.getAssignee());
                 JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
                 jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
                 // 懒加载
@@ -141,6 +137,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
                 jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglDayScheduleList,FlowEnum.JDGL_DAYSCHEDULE);
         return jdglDayScheduleList;
     }
 
@@ -214,9 +211,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         Long id = IdWorker.createId();
         if(jdglDaySchedule != null) {
             jdglDaySchedule.setId(id);
-            jdglDaySchedule.setCreateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglDaySchedule.setCreateTime(DateUtils.getNowDate());
-            jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
             JdglDaySchedule query = new JdglDaySchedule();
@@ -276,7 +273,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
         int i = jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
         Long id = jdglDaySchedule.getId();
-        jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+        jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = jdglDaySchedule.getJdglDayScheduleWbsList();

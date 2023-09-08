@@ -18,7 +18,7 @@ public interface IPlanStatisticsService {
 
     List<PlanStatisticsWbsImageVO> getImageWbsList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 
-    Map<String, List<PlanStatisticsPeriodValueVO>> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+    Map<String, PlanStatisticsPeriodValueVO> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 
 
 

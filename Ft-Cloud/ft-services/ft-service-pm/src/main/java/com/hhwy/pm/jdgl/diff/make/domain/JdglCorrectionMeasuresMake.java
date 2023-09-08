@@ -9,6 +9,8 @@ import com.hhwy.common.core.web.domain.BaseEntity;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 /**
@@ -17,7 +19,7 @@ import lombok.Data;
  * @remark jdgl_correction_measures_make
  */
 @Data
-public class JdglCorrectionMeasuresMake extends BaseEntity {
+public class JdglCorrectionMeasuresMake extends CommonBaseEntity {
 
     private static final long serialVersionUID = 1L;
 

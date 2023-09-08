@@ -15,6 +15,8 @@ import java.util.List;
 public interface IQqchConstructionListService {
 
     QqchConstructionListVo getQqchConstructionListList(QqchConstructionListVo qqchConstructionListParamVo);
+    
+    List<QqchConstructionList> list(QqchConstructionList list);
 
     void batchSave(QqchConstructionListVo qqchConstructionListVo);
 

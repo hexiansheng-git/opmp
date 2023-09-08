@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Data
 public class PlanStatisticsPeriodValueVO {
@@ -31,6 +32,10 @@ public class PlanStatisticsPeriodValueVO {
      */
     @JsonProperty
     private BigDecimal diffValue;
+
+    private List<String> periodList;
+    private List<BigDecimal> planValueList;
+    private List<BigDecimal> compValueList;
 
 
 }

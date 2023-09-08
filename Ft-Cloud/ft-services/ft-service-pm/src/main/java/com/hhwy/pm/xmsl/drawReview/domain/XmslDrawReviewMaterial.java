@@ -1,17 +1,14 @@
 package com.hhwy.pm.xmsl.drawReview.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.pm.core.WarpBaseEntity;
+import com.hhwy.pm.core.base.WarpBaseEntity;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;

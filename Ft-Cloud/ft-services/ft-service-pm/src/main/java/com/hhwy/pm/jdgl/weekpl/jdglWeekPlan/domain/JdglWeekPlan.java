@@ -8,6 +8,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * @remark jdgl_week_plan
  */
 @Data
-public class JdglWeekPlan extends BaseEntity {
+public class JdglWeekPlan extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

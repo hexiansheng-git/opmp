@@ -8,6 +8,7 @@ import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -22,7 +23,7 @@ import java.util.List;
  * @remark jdgl_quarter_plan
  */
 @Data
-public class JdglQuarterPlan extends BaseEntity {
+public class JdglQuarterPlan extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

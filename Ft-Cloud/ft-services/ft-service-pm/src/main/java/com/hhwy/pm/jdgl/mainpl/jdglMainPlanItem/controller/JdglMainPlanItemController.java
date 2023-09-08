@@ -105,14 +105,14 @@ public class JdglMainPlanItemController extends BaseController {
 
     @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @PostMapping("/getUsingListByDate")
-    public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM") Date date) {
+    public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM-dd") Date date) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDate(date);
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }
 
     @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @PostMapping("/getUsingListByDateRange")
-    public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM") Date startDate,@JsonFormat(pattern = "yyyy-MM") Date endDate) {
+    public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM-dd") Date startDate,@JsonFormat(pattern = "yyyy-MM-dd") Date endDate) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(startDate, endDate);
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }

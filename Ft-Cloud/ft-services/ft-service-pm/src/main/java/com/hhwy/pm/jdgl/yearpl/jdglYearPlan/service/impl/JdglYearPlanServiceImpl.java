@@ -190,16 +190,13 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
             for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                        .getFlowInfo(FlowEnum.JDGL_YEARPLAN.getTableName(), String.valueOf(jdglYearPlan1.getId()), tenantKey);
-                jdglYearPlan1.setTaskStatus(flowInfo.getName());
-                jdglYearPlan1.setAssignee(flowInfo.getAssignee());
                 List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
                 jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
                 List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());
                 jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglYearPlanList,FlowEnum.JDGL_YEARPLAN);
         return jdglYearPlanList;
     }
 
@@ -216,9 +213,10 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
         Long id = IdWorker.createId();
         jdglYearPlan.setId(id);
-        jdglYearPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglYearPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setCreateTime(DateUtils.getNowDate());
-        jdglYearPlan.setUpdateUser(SecurityUtils.getUserName());
+
+        jdglYearPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
         jdglYearPlan.setVersion("1");
         jdglYearPlan.setIsUse("0");
@@ -238,7 +236,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     @Transactional
     public int updateJdglYearPlan(JdglYearPlan jdglYearPlan) {
-        jdglYearPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglYearPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglYearValuePlanService.updateJdglYearValuePlanList(jdglYearPlan.getJdglYearValuePlanList());
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlan.getJdglYearImagePlanList();

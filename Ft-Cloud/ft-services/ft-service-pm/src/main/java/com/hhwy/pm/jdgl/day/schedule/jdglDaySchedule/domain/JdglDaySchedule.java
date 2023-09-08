@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
 
 /**
@@ -23,7 +24,7 @@ import lombok.Data;
  * @remark jdgl_day_schedule
  */
 @Data
-public class JdglDaySchedule extends BaseEntity {
+public class JdglDaySchedule extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

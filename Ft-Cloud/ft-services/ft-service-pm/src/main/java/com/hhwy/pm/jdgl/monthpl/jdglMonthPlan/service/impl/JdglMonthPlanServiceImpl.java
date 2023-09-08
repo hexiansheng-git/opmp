@@ -216,16 +216,13 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
             for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                        .getFlowInfo(FlowEnum.JDGL_MONTHPLAN.getTableName(), String.valueOf(jdglMonthPlan1.getId()), tenantKey);
-                jdglMonthPlan1.setTaskStatus(flowInfo.getName());
-                jdglMonthPlan1.setAssignee(flowInfo.getAssignee());
                 List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = iJdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(jdglMonthPlan1.getId());
                 jdglMonthPlan1.setJdglMonthImagePlanList(jdglMonthImagePlanListByPlanId);
                 List<JdglMonthValuePlan> jdglMonthValuePlanListByPlanId = iJdglMonthValuePlanService.getJdglMonthValuePlanListByPlanId(jdglMonthPlan1.getId());
                 jdglMonthPlan1.setJdglMonthValuePlanList(jdglMonthValuePlanListByPlanId);
             }
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglMonthPlanList,FlowEnum.JDGL_MONTHPLAN);
         return jdglMonthPlanList;
     }
 
@@ -244,9 +241,9 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
         Long id = IdWorker.createId();
         jdglMonthPlan.setId(id);
-        jdglMonthPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglMonthPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setCreateTime(DateUtils.getNowDate());
-        jdglMonthPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
         jdglMonthPlan.setVersion("1");
         jdglMonthPlan.setIsUse("0");
@@ -266,7 +263,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
     @Transactional
     public int updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
-        jdglMonthPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglMonthValuePlanService.updateJdglMonthValuePlanList(jdglMonthPlan.getJdglMonthValuePlanList());
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();

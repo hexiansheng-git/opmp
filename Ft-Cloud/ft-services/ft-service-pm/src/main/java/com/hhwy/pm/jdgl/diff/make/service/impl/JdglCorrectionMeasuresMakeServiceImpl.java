@@ -74,15 +74,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
         List<JdglCorrectionMeasuresMake> list =
             jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
-        if (CollectionUtils.isNotEmpty(list)) {
-            for (JdglCorrectionMeasuresMake make : list) {
-                String tenantKey = SecurityUtils.getTenantKey();
-                FtActBusiness flowInfo = FlowInfoSearchUtil
-                    .getFlowInfo(FlowEnum.JDGL_CORRECTION_MEASURES_MAKE.getTableName(), String.valueOf(make.getId()),
-                        tenantKey);
-                make.setTaskStatus(flowInfo.getName());
-            }
-        }
+        FlowInfoSearchUtil.getFlowInfo(list,FlowEnum.JDGL_CORRECTION_MEASURES_MAKE);
         return list;
     }
 
