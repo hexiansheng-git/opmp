@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.diff.make.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
@@ -62,7 +63,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             for (JdglCorrectionMeasuresMake make : list) {
                 String tenantKey = SecurityUtils.getTenantKey();
                 FtActBusiness flowInfo = FlowInfoSearchUtil
-                    .getFlowInfo("jdgl_correction_measures_make", String.valueOf(make.getId()), tenantKey);
+                    .getFlowInfo(FlowEnum.JDGL_CORRECTION_MEASURES_MAKE.getTableName(), String.valueOf(make.getId()),
+                        tenantKey);
                 make.setTaskStatus(flowInfo.getName());
             }
         }
