@@ -21,13 +21,13 @@ public enum FlowEnum {
     // 进度管理年进度计划
     JDGL_YEARPLAN("jdgl_year_plan", "process_jdgl_year_plan"),
     // 进度管理季进度计划
-    QUARTER_YEARPLAN("jdgl_quarter_plan", "process_jdgl_quarter_plan"),
+    JDGL_QUARTERPLAN("jdgl_quarter_plan", "process_jdgl_quarter_plan"),
     // 进度管理月进度计划
-    MONTH_YEARPLAN("jdgl_month_plan", "process_jdgl_month_plan"),
+    JDGL_MONTHPLAN("jdgl_month_plan", "process_jdgl_month_plan"),
     // 进度管理周进度计划
-    WEEK_YEARPLAN("jdgl_week_plan", "process_jdgl_week_plan"),
+    JDGL_WEEKPLAN("jdgl_week_plan", "process_jdgl_week_plan"),
     // 进度管理进度填报
-    DAYSCHEDULE("jdgl_day_schedule","process_jdgl_day_schedule");
+    JDGL_DAYSCHEDULE("jdgl_day_schedule","process_jdgl_day_schedule");
 
     public String getTableName() {
         return this.tableName;
