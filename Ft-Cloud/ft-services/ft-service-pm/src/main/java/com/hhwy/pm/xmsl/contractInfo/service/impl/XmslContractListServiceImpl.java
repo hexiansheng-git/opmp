@@ -356,8 +356,10 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
                 Set<String> ancestorsSet = new HashSet<>();
                 for (XmslContractList contractList : subList) {
                     String ancestors = contractList.getAncestors();
-                    String[] split = ancestors.split(",");
-                    ancestorsSet.addAll(Arrays.asList(split));
+                    if(StringUtils.isNotBlank(ancestors)){
+                        String[] split = ancestors.split(",");
+                        ancestorsSet.addAll(Arrays.asList(split));
+                    }
                 }
                 StringBuilder ancestors = new StringBuilder();
                 for (String s : ancestorsSet) {
