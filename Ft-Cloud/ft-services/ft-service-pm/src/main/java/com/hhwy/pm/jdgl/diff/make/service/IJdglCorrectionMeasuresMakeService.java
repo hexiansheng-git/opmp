@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.diff.make.service;
 
 import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,4 +27,10 @@ public interface IJdglCorrectionMeasuresMakeService {
     int deleteJdglCorrectionMeasuresMake(JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake);
 
     int deleteJdglCorrectionMeasuresMakeByPks(List<Long> jdglCorrectionMeasuresMakePkList);
+
+    /**
+     * 同步差异化分析数据
+     * @param Period
+     */
+    void syncData(Date period);
 }
