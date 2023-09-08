@@ -2,6 +2,7 @@ package com.hhwy.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
+import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
@@ -57,4 +58,7 @@ public interface SystemServiceApi {
 
     @GetMapping("/selfSysUser/selectSysUserInfo")
     AjaxResult selectSysUserInfo(@RequestBody SysUser sysUser);
+
+    @PostMapping("/period/info/selectPeriodByYear")
+    AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo);
 }
