@@ -287,6 +287,24 @@ public class ListTreeUtil {
     }
 
     /**
+     * 根据子集递归查询父级数据 ，封装成树结构返回
+     * @param sublist 子集列表
+     * @param allList 全量数据
+     * @param getId
+     * @param getPid
+     * @param checkRoot
+     * @param checkParent
+     * @param getChildren
+     * @param setChildren
+     * @return
+     * @param <T>
+     */
+    public static <T> List<T> getUpListBySublistToTree(List<T> sublist,List<T> allList,Function<T,Long> getId,Function<T,Long> getPid,Predicate<T> checkRoot, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren){
+        List<T> tList = getUpListBySublist(sublist, allList, getId, getPid);
+        return formatTree(tList,checkRoot,checkParent,getChildren,setChildren);
+    }
+
+    /**
      * 根据子集递归查询父级数据
      * @param sublist
      * @param allList
