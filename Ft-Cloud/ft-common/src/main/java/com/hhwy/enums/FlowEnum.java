@@ -18,6 +18,9 @@ public enum FlowEnum {
     XMSL_CONTRACT("xmsl_contract_info", "process_test_contract"),
 
     /*********************进度管理****************************/
+    // 进度管理-纠偏措施制定
+    JDGL_CORRECTION_MEASURES_MAKE("jdgl_correction_measures_make", "process_jdgl_correction_measures_make"),
+
     // 进度管理年进度计划
     JDGL_YEARPLAN("jdgl_year_plan", "process_jdgl_year_plan"),
     // 进度管理季进度计划
