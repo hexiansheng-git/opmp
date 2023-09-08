@@ -1,28 +1,17 @@
 package com.hhwy.pm.qqch.preparation.doc.techmae.controller;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
-import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTechVo;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMaeV0;
+import com.hhwy.pm.qqch.preparation.doc.techmae.service.IQqchDocTechMaeService;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.qqch.preparation.doc.techmae.service.IQqchDocTechMaeService;
-import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.math.BigDecimal;
 
 /**
  * @author mls
@@ -60,6 +49,16 @@ public class QqchDocTechMaeController extends BaseController {
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
+    }
+
+    /**
+     * 3.11.2弹窗
+     * @param dataClassify
+     * @return
+     */
+    @GetMapping("/popUpWindows")
+    public AjaxResult popUpWindows(String dataClassify) {
+        return AjaxResult.success(qqchDocTechMaeService.popUpWindows(dataClassify));
     }
 
 }

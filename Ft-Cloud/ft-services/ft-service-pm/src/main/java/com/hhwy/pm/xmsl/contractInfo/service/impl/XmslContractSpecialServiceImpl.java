@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
@@ -18,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -137,44 +135,39 @@ public class XmslContractSpecialServiceImpl implements IXmslContractSpecialServi
 
     @Override
     public List<XmslContractSpecial> provideList(XmslContractSpecial xmslContractSpecialParam) {
+        List<XmslContractSpecial> resultList = new ArrayList<>();
         //查询 最大  生效的数据  masterId
         BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
         XmslContractInfo xmslContractInfo = new XmslContractInfo();
         xmslContractInfo.setValid("1");
         xmslContractInfo.setVersion(maxVersion);
-        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
-        if(xmslContractInfo1!=null){
+        XmslContractInfo contractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+        if(contractInfo != null){
             //无条件搜索
             XmslContractSpecial special = new XmslContractSpecial();
-            special.setMasterId(xmslContractInfo1.getId());
-            List<XmslContractSpecial> AllList = xmslContractSpecialMapper.getXmslContractSpecialList(special); //这里搜索出来的是全量数据
-            Map<Long, XmslContractSpecial> allMap = AllList.stream().collect(Collectors.toMap(XmslContractSpecial::getId, Function.identity()));
-            //有条件搜索
-            xmslContractSpecialParam.setMasterId(xmslContractInfo1.getId());
-            List<XmslContractSpecial> list = xmslContractSpecialMapper.getXmslContractSpecialList(xmslContractSpecialParam);//这里是根据前端传的条件搜索出来的结果
-            List<XmslContractSpecial> newList = new ArrayList<>();
-            newList.addAll(list);
-            //遍历寻找父集
-            for (XmslContractSpecial xmslContractSpecial : list) {
-                //递归查询出他的父集
-                List<XmslContractSpecial> xmslContractGenerals = this.selParent(xmslContractSpecial, new ArrayList<XmslContractSpecial>(), allMap);
-                newList.addAll(xmslContractGenerals);
+            special.setMasterId(contractInfo.getId());
+            List<XmslContractSpecial> allList = xmslContractSpecialMapper.getXmslContractSpecialList(special); //这里搜索出来的是全量数据
+
+            String name = xmslContractSpecialParam.getName();
+            String content = xmslContractSpecialParam.getContent();
+            if(StringUtils.isNotBlank(name) || StringUtils.isNotBlank(content)){
+                //有条件搜索
+                special.setName(name);
+                special.setContent(content);
+                List<XmslContractSpecial> subList = xmslContractSpecialMapper.getXmslContractSpecialList(special);//这里是根据前端传的条件搜索出来的结果
+                resultList = ListTreeUtil.getUpListBySublistToTree(
+                        subList,
+                        allList,
+                        XmslContractSpecial::getId,
+                        XmslContractSpecial::getPid,
+                        o -> o.getPid() == 0,
+                        (r, n) -> r.getId().equals(n.getPid()),
+                        XmslContractSpecial::getChildren,
+                        XmslContractSpecial::setChildren);
+            }else {
+                resultList = ListTreeUtil.formatTree(allList, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractSpecial::getChildren, XmslContractSpecial::setChildren);
             }
-            //转树列表
-            List<XmslContractSpecial> treeList = ListTreeUtil.formatTree(newList, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractSpecial::getChildren, XmslContractSpecial::setChildren);
-            return  treeList;
         }
-        return null;
-    }
-
-
-    //遍历查父集
-    public  List<XmslContractSpecial> selParent(XmslContractSpecial xmslContractSpecial,List<XmslContractSpecial> newList,Map<Long, XmslContractSpecial> allMap){
-        if(xmslContractSpecial.getPid()!=0){
-            XmslContractSpecial special1 = allMap.get(xmslContractSpecial.getPid());
-            newList.add(special1);
-            this.selParent(special1,newList,allMap);
-        }
-        return newList;
+        return resultList;
     }
 }

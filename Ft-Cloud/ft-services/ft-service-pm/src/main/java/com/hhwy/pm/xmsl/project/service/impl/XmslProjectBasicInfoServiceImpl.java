@@ -273,6 +273,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         QqchWorkGroup workGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
         if(workGroup != null){
             projectInfoWithOther.setPlanDominantUnit(workGroup.getPlanDominantUnit());
+            projectInfoWithOther.setPlanApprovalUnit(workGroup.getPlanApprovalUnit());
             projectInfoWithOther.setPlanEstablishDirector(workGroup.getPlanEstablishDirector());
             projectInfoWithOther.setContactWay(workGroup.getContactWay());
             projectInfoWithOther.setProjectOverview(workGroup.getProjectOverview());

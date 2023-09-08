@@ -159,7 +159,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
                 if(!ObjectNullUtil.isEmpty(detailListMap.get(safeRiskList.getId()))){
                     List<QqchSafeRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeRiskList.getId());
                     List<QqchSafeRiskListDetail> parentList = detailList.stream().filter(t -> {
-                        if (t.getPid() == 0) {
+                        if ((t.getPid() == Long.parseLong("0"))) {
                             return true;
                         }
                         return false;
