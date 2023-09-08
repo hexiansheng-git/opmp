@@ -1,4 +1,4 @@
-package com.hhwy.pm.core;
+package com.hhwy.pm.core.base;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.AddBaseInfoUtil;
