@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -53,6 +55,13 @@ public class GeneralProjectArchivesWbs {
      */
     @JsonProperty
     private Integer haveChildren;
+
+    /**
+     * 字段描述：完工时间 根据WBS节点，自动代入总进度计划中该节点完工时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date completeTime;
 
     /**
      * 字段描述：重难点工程清单标识（1：是，0：不是）
