@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.costControl.postDuty.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -20,12 +21,19 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author han
@@ -106,6 +114,20 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
 
         qqchCostControlPostDuty.setVersion(version);
         List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyMapper.getQqchCostControlPostDutyList(qqchCostControlPostDuty);
+
+        if(CollectionUtils.isEmpty(qqchCostControlPostDutyList)){
+            //初始化数据
+            try{
+                InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/5_1.json");
+                String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+                qqchCostControlPostDutyList = JSONObject.parseArray(json, QqchCostControlPostDuty.class);
+                for (QqchCostControlPostDuty costControlPostDuty : qqchCostControlPostDutyList) {
+                    costControlPostDuty.setId(IdWorker.createId());
+                }
+            } catch (IOException e) {
+                throw new RuntimeException("初始化数据失败！");
+            }
+        }
 
         //转树列表
         List<QqchCostControlPostDuty> treeList = ListTreeUtil.formatTree(
