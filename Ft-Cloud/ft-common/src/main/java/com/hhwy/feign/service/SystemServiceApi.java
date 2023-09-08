@@ -1,15 +1,13 @@
 package com.hhwy.feign.service;
 
+import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -57,4 +55,12 @@ public interface SystemServiceApi {
 
     @GetMapping("/selfSysUser/selectSysUserInfo")
     AjaxResult selectSysUserInfo(@RequestBody SysUser sysUser);
+
+    /**
+     * 根据用户名获取信息
+     * @param usernames
+     * @return
+     */
+    @GetMapping({"/user/selectUserListByUsernames/{usernames}"})
+    R<List<SysUser>> selectUserListByUsernames(@PathVariable("usernames") String usernames);
 }

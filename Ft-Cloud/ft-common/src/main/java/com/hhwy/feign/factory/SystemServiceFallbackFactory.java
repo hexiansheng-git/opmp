@@ -1,5 +1,6 @@
 package com.hhwy.feign.factory;
 
+import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.service.SystemServiceApi;
@@ -64,6 +65,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             @Override
             public AjaxResult selectSysUserInfo(SysUser sysUser) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
+            public R<List<SysUser>> selectUserListByUsernames(String usernames) {
+                return R.fail("请求失败:"+throwable.getMessage());
             }
         };
     }
