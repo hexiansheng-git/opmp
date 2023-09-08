@@ -242,9 +242,9 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
         Long id = IdWorker.createId();
         jdglWeekPlan.setId(id);
-        jdglWeekPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglWeekPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setCreateTime(DateUtils.getNowDate());
-        jdglWeekPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
         jdglWeekPlan.setVersion("1");
         jdglWeekPlan.setIsUse("0");
@@ -264,7 +264,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     @Transactional
     public int updateJdglWeekPlan(JdglWeekPlan jdglWeekPlan) {
-        jdglWeekPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglWeekValuePlanService.updateJdglWeekValuePlanList(jdglWeekPlan.getJdglWeekValuePlanList());
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();

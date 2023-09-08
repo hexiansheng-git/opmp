@@ -244,9 +244,9 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
         Long id = IdWorker.createId();
         jdglMonthPlan.setId(id);
-        jdglMonthPlan.setCreateUser(SecurityUtils.getUserName());
+        jdglMonthPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setCreateTime(DateUtils.getNowDate());
-        jdglMonthPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
         jdglMonthPlan.setVersion("1");
         jdglMonthPlan.setIsUse("0");
@@ -266,7 +266,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
     @Transactional
     public int updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
-        jdglMonthPlan.setUpdateUser(SecurityUtils.getUserName());
+        jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglMonthValuePlanService.updateJdglMonthValuePlanList(jdglMonthPlan.getJdglMonthValuePlanList());
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();

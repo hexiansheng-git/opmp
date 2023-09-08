@@ -214,9 +214,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         Long id = IdWorker.createId();
         if(jdglDaySchedule != null) {
             jdglDaySchedule.setId(id);
-            jdglDaySchedule.setCreateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglDaySchedule.setCreateTime(DateUtils.getNowDate());
-            jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+            jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
             JdglDaySchedule query = new JdglDaySchedule();
@@ -276,7 +276,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
         int i = jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
         Long id = jdglDaySchedule.getId();
-        jdglDaySchedule.setUpdateUser(SecurityUtils.getUserName());
+        jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
 
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = jdglDaySchedule.getJdglDayScheduleWbsList();

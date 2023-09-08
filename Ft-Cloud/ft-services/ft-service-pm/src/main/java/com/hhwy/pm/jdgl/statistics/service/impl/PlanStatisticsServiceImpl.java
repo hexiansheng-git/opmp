@@ -194,23 +194,23 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return2Map.put("total", totalMap);
 
         Map<String, BigDecimal> yearMap = new HashMap<>();
-        totalMap.put("planAmt", yearPlanAmt);
-        totalMap.put("actAmt", yearActAmt);
+        yearMap.put("planAmt", yearPlanAmt);
+        yearMap.put("actAmt", yearActAmt);
         return2Map.put("year", yearMap);
 
         Map<String, BigDecimal> quarterMap = new HashMap<>();
-        totalMap.put("planAmt", quarterPlanAmt);
-        totalMap.put("actAmt", quarterActAmt);
+        quarterMap.put("planAmt", quarterPlanAmt);
+        quarterMap.put("actAmt", quarterActAmt);
         return2Map.put("quarter", quarterMap);
 
         Map<String, BigDecimal> monthMap = new HashMap<>();
-        totalMap.put("planAmt", monthPlanAmt);
-        totalMap.put("actAmt", monthActAmt);
+        monthMap.put("planAmt", monthPlanAmt);
+        monthMap.put("actAmt", monthActAmt);
         return2Map.put("month", monthMap);
 
         Map<String, BigDecimal> weekMap = new HashMap<>();
-        totalMap.put("planAmt", weekPlanAmt);
-        totalMap.put("actAmt", weekActAmt);
+        weekMap.put("planAmt", weekPlanAmt);
+        weekMap.put("actAmt", weekActAmt);
         return2Map.put("week", weekMap);
 
         return return2Map;
