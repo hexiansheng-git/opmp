@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -27,4 +28,8 @@ public interface JdglMainPlanItemMapper {
     int deleteJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem);
 
     int deleteJdglMainPlanItemByPks(@Param("jdglMainPlanItemPkList") List<Long> jdglMainPlanItemPkList);
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDate(@Param("date") Date date,@Param("mainPlanId") Long mainPlanId);
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate,@Param("mainPlanId") Long mainPlanId);
 }

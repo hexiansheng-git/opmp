@@ -105,6 +105,12 @@ public class JdglYearPlan extends BaseEntity {
     @Excel(name = "合同币种")
     private String custUnit;
     /**
+     * 字段描述：合同编码
+     */
+    @JsonProperty
+    @Excel(name = "合同编码")
+    private String custUnitCode;
+    /**
      * 字段描述：汇率
      */
     @JsonProperty
@@ -179,7 +185,7 @@ public class JdglYearPlan extends BaseEntity {
     /**
      * 字段描述：数据修改系统时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;

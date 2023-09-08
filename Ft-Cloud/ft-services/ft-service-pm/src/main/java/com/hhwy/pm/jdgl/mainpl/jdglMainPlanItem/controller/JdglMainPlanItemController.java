@@ -1,9 +1,11 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +47,13 @@ public class JdglMainPlanItemController extends BaseController {
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanItemList(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getJdglMainPlanItemList(jdglMainPlanItemParam);
+        return getDataTableAjaxResult(jdglMainPlanItemList);
+    }
+
+    @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    @GetMapping("/getUsinglist")
+    public AjaxResult getUsingJdglMainPlanItemList(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemList(jdglMainPlanItemParam);
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }
 
@@ -93,4 +102,19 @@ public class JdglMainPlanItemController extends BaseController {
         ExcelUtils<JdglMainPlanItem> util = new ExcelUtils<>(JdglMainPlanItem.class);
         util.exportExcel(response, jdglMainPlanItemList, DateUtils.getDate());
     }
+
+    @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    @PostMapping("/getUsingListByDate")
+    public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM") Date date) {
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDate(date);
+        return getDataTableAjaxResult(jdglMainPlanItemList);
+    }
+
+    @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    @PostMapping("/getUsingListByDateRange")
+    public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM") Date startDate,@JsonFormat(pattern = "yyyy-MM") Date endDate) {
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(startDate, endDate);
+        return getDataTableAjaxResult(jdglMainPlanItemList);
+    }
+
 }

@@ -75,7 +75,10 @@ public class StatisticsUtils {
             switch (queryDateType) {
                 case "z":
                     if(startDate == null || endDate == null) {
-                        return;
+                        cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(weekStr), 1);
+                        startDate = cl.getTime();
+                        cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(weekStr), 7);
+                        endDate = cl.getTime();
                     }
                     String start = sdf.format(startDate);
                     String end = sdf.format(endDate);
@@ -141,6 +144,24 @@ public class StatisticsUtils {
         iPlanStatisticsQueryVO.setWeek(weekStr);
         iPlanStatisticsQueryVO.setStartDate(startDate);
         iPlanStatisticsQueryVO.setEndDate(endDate);
+    }
+
+    public static Map<String, Date> getDateRange4Year(String yearStr) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        Map<String, Date> returnMap = new HashMap<String, Date>();
+
+        Integer year = Integer.valueOf(yearStr);
+
+        try {
+            returnMap.put("start", sdf.parse((year-1)+"-12-21"));
+            returnMap.put("end", sdf.parse(yearStr+"-12-20"));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return returnMap;
     }
 
 

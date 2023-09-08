@@ -109,10 +109,6 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         Date startDate = iPlanStatisticsQueryVO.getStartDate();
         Date endDate = iPlanStatisticsQueryVO.getEndDate();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String startDateStr = sdf.format(startDate);
-        String endDateStr = sdf.format(endDate);
-
         Map<String, Map<String, BigDecimal>> return2Map = new HashMap<>();
 
         // 根据结束日期获取日填报数据

@@ -1,8 +1,10 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 
 /**
  * @author 陈锦豪
@@ -12,6 +14,8 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 public interface IJdglMainPlanService {
 
     JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan);
+
+    JdglMainPlan getUsingJdglMainPlan();
 
     List<JdglMainPlan> getJdglMainPlanList(JdglMainPlan jdglMainPlan);
 
