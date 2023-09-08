@@ -101,8 +101,8 @@
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
             <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
-            <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="chineseName != null  and chineseName != ''">and `chinese_name` = #{chineseName}</if>
+            <if test="code != null  and code != ''">and `code` like concat('%' , #{code} , '%')</if>
+            <if test="chineseName != null  and chineseName != ''">and `chinese_name` like concat('%' , #{chineseName} , '%')</if>
             <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
             <if test="listType != null  and listType != ''">and `list_type` = #{listType}</if>
             <if test="unitCode != null  and unitCode != ''">and `unit_code` = #{unitCode}</if>
@@ -1117,5 +1117,9 @@
                     and win_unit_price is not null
                     and list_type = #{listType} limit 1
             </where>
+    </select>
+    <select id="getByAncestors" resultMap="XmslContractListResultMap">
+        <include refid="selectXmslContractListVo"/>
+        where del_flag = '0' and master_id = #{masterId} and find_in_set(id,#{ancestors})
     </select>
 </mapper>

@@ -7,6 +7,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ContractListQueryVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
@@ -125,7 +126,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     @Transactional
     public int insertXmslContractList(XmslContractList xmslContractList) {
-        xmslContractList.setId(IdWorker.createId()+"");
+        xmslContractList.setId(IdWorker.createId());
         xmslContractList.setCreateUser(SecurityUtils.getUserName());
         xmslContractList.setCreateTime(DateUtils.getNowDate());
         return xmslContractListMapper.insertXmslContractList(xmslContractList);
@@ -259,43 +260,41 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         try{
             List<XmslContractList> list = this.xmslContractListMapper.getXmslContractList(new XmslContractList());
             //祖级id、名称map
-            Map<String,List<String>> parentIdMap = new HashMap<>(list.size());
-            Map<String,List<String>> parentNameMap = new HashMap<>(list.size());
-            Map<String,String> idNameMap = new HashMap<>(list.size());
+            Map<Long,List<Long>> parentIdMap = new HashMap<>(list.size());
+            Map<Long,List<String>> parentNameMap = new HashMap<>(list.size());
+            Map<Long,String> idNameMap = new HashMap<>(list.size());
             //是否为父级
             Function<String,Boolean> isParentFunc = (s)->{return StringUtils.isBlank(s) || StringUtils.equalsAny(s,"-1","0");};
             //遍历，获取祖级id、名称
-            for (int i = 0; i < list.size(); i++) {
-                XmslContractList temp = list.get(i);
-                if(func != null){
+            for (XmslContractList temp : list) {
+                if (func != null) {
                     func.apply(temp);
                 }
-                idNameMap.put(temp.getId(),temp.getChineseName().trim());
+                idNameMap.put(temp.getId(), temp.getChineseName().trim());
                 //若有父级，则放入parentIdMap、parentNameMap
-                if(isParentFunc.apply(temp.getPid()+"")){
+                if (isParentFunc.apply(String.valueOf(temp.getPid()))) {
                     parentIdMap.put(temp.getId(), ListUtil.toList(temp.getId()));
-                    parentNameMap.put(temp.getId(),ListUtil.toList(temp.getChineseName()));
+                    parentNameMap.put(temp.getId(), ListUtil.toList(temp.getChineseName()));
                     continue;
                 }
-                String pid = temp.getPid()+"";
+                Long pid = temp.getPid();
                 String pname = idNameMap.get(pid);
-                if(StringUtils.isBlank(pname))
-                    logger.warn("合同清单同步祖级名称ID时，未找到父级名称,子级ID:{},父级ID:{}",temp.getId(),pid);
-                List<String> pidList = ListUtils.defaultIfNull(parentIdMap.get(pid),new ArrayList<>());
-                List<String> pnameList = ListUtils.defaultIfNull(parentNameMap.get(pid),new ArrayList<>());
-                parentIdMap.put(temp.getId(),copyAndAdd(pidList,temp.getId()));
-                parentNameMap.put(temp.getId(),copyAndAdd(pnameList,temp.getChineseName()));
+                if (StringUtils.isBlank(pname))
+                    logger.warn("合同清单同步祖级名称ID时，未找到父级名称,子级ID:{},父级ID:{}", temp.getId(), pid);
+                List<Long> pidList = ListUtils.defaultIfNull(parentIdMap.get(pid), new ArrayList<>());
+                List<String> pnameList = ListUtils.defaultIfNull(parentNameMap.get(pid), new ArrayList<>());
+                parentIdMap.put(temp.getId(), copyAndAdd(pidList, temp.getId()));
+                parentNameMap.put(temp.getId(), copyAndAdd(pnameList, temp.getChineseName()));
             }
             //填充祖级id、名称
-            for (int i = 0; i < list.size(); i++) {
-                XmslContractList temp = list.get(i);
-                if(isParentFunc.apply(temp.getPid()+"")){
-                    temp.setAncestors(temp.getId());
+            for (XmslContractList temp : list) {
+                if (isParentFunc.apply(String.valueOf(temp.getPid()))) {
+                    temp.setAncestors(String.valueOf(temp.getId()));
                     temp.setAncestorsName(temp.getChineseName());
                     continue;
                 }
-                temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()),","));
-                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()),","));
+                temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()), ","));
+                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()), ","));
             }
             xmslContractListMapper.updateXmslContractListList1(list);
         }finally{
@@ -304,8 +303,8 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         }
     }
 
-    private List<String> copyAndAdd(List<String> list,String str){
-        List<String> result = new ArrayList<>(list);
+    private <T> List<T> copyAndAdd(List<T> list,T str){
+        List<T> result = new ArrayList<>(list);
         result.add(str);
         return result;
     }
@@ -320,5 +319,67 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
         //查询结果
         return xmslContractListMapper.getContractPriceByListtype(xmslContractList);
+    }
+
+
+    /**
+     * 4.1.4合同清单弹窗
+     * @param queryVo
+     * @return
+     */
+    @Override
+    public List<XmslContractList> popUpWindows(ContractListQueryVo queryVo) {
+        List<XmslContractList> resultList = new ArrayList<>();
+
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
+        XmslContractInfo xmslContractInfo = new XmslContractInfo();
+        xmslContractInfo.setValid("1");
+        xmslContractInfo.setVersion(maxVersion);
+        //查询有效的合同信息
+        xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+
+        if(xmslContractInfo != null){
+            Long masterId = xmslContractInfo.getId();
+            XmslContractList xmslContractList = new XmslContractList();
+            xmslContractList.setMasterId(masterId);
+            /*全量数据*/
+            List<XmslContractList> allList = xmslContractListMapper.getXmslContractList(xmslContractList);
+
+            String code = queryVo.getCode();
+            String chineseName = queryVo.getChineseName();
+            if(StringUtils.isNotBlank(code) || StringUtils.isNotBlank(chineseName)){
+                xmslContractList.setCode(code);
+                xmslContractList.setChineseName(chineseName);
+                /*根据条件查询出来的数据*/
+                List<XmslContractList> subList = xmslContractListMapper.getXmslContractList(xmslContractList);
+                //组装祖级id
+                Set<String> ancestorsSet = new HashSet<>();
+                for (XmslContractList contractList : subList) {
+                    String ancestors = contractList.getAncestors();
+                    String[] split = ancestors.split(",");
+                    ancestorsSet.addAll(Arrays.asList(split));
+                }
+                StringBuilder ancestors = new StringBuilder();
+                for (String s : ancestorsSet) {
+                    ancestors.append(s).append(",");
+                }
+                //根据祖级id查询数据
+                List<XmslContractList> rList = xmslContractListMapper.getByAncestors(masterId,ancestors.toString());
+                resultList = ListTreeUtil.formatTree(
+                        rList,
+                        o -> o.getPid() == null,
+                        (r, n) -> r.getId().equals(n.getPid()),
+                        XmslContractList::getChildren,
+                        XmslContractList::setChildren);
+            }else {
+                resultList = ListTreeUtil.formatTree(
+                        allList,
+                        o -> o.getPid() == null,
+                        (r, n) -> r.getId().equals(n.getPid()),
+                        XmslContractList::getChildren,
+                        XmslContractList::setChildren);
+            }
+        }
+        return resultList;
     }
 }

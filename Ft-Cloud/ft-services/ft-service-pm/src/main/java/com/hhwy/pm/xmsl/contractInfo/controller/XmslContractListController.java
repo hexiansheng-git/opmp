@@ -6,6 +6,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ContractListQueryVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
@@ -165,6 +166,17 @@ public class XmslContractListController extends BaseController {
             return AjaxResult.error("ERROR");
         xmslContractListService.handlerAncestors();
         return AjaxResult.success();
+    }
+
+    /**
+     * 4.1.4合同清单弹窗
+     * @param queryVo
+     * @return
+     */
+    @GetMapping("popUpWindows")
+    public AjaxResult popUpWindows(ContractListQueryVo queryVo){
+        List<XmslContractList> list = xmslContractListService.popUpWindows(queryVo);
+        return AjaxResult.success(list);
     }
 
 }
