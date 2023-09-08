@@ -1,29 +1,29 @@
 package com.hhwy.pm.qqch.preparation.doc.techmae.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
-import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTech;
-import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTechVo;
+import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMaeV0;
+import com.hhwy.pm.qqch.preparation.doc.techmae.mapper.QqchDocTechMaeMapper;
+import com.hhwy.pm.qqch.preparation.doc.techmae.service.IQqchDocTechMaeService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myEnum.InitVersionConstant;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.qqch.preparation.doc.techmae.mapper.QqchDocTechMaeMapper;
-import com.hhwy.pm.qqch.preparation.doc.techmae.service.IQqchDocTechMaeService;
-import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae;
-import com.hhwy.utils.idworker.IdWorker;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author mls
@@ -162,5 +162,41 @@ public class QqchDocTechMaeServiceImpl implements IQqchDocTechMaeService {
 
         qqchDocTechMaeMapper.insertQqchDocTechMaeList(qqchDocTechMaes);
         return 1;
+    }
+
+    /**
+     * 3.11.2弹窗
+     * @param dataClassify
+     * @return
+     */
+    @Override
+    public List<QqchDocTechMae> popUpWindows(String dataClassify) {
+        List<QqchDocTechMae> resultList;
+        /*获取当前最大有效版本*/
+        BigDecimal version = VersionUtil.getVersion("qqch_doc_tech_mae", null);
+        QqchDocTechMae qqchDocTechMae = new QqchDocTechMae();
+        qqchDocTechMae.setVersion(version);
+        List<QqchDocTechMae> allList = qqchDocTechMaeMapper.getQqchDocTechMaeList(qqchDocTechMae);
+        if(StringUtils.isNotBlank(dataClassify)){
+            qqchDocTechMae.setDataClassify(dataClassify);
+            List<QqchDocTechMae> subList = qqchDocTechMaeMapper.getQqchDocTechMaeList(qqchDocTechMae);
+            resultList = ListTreeUtil.getUpListBySublistToTree(
+                    subList,
+                    allList,
+                    QqchDocTechMae::getId,
+                    QqchDocTechMae::getPid,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchDocTechMae::getChildren,
+                    QqchDocTechMae::setChildren);
+        }else {
+            resultList = ListTreeUtil.formatTree(
+                    allList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchDocTechMae::getChildren,
+                    QqchDocTechMae::setChildren);
+        }
+        return resultList;
     }
 }

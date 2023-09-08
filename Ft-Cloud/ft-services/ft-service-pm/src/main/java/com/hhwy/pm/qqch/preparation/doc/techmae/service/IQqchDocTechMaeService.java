@@ -1,11 +1,10 @@
 package com.hhwy.pm.qqch.preparation.doc.techmae.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
-import com.hhwy.pm.qqch.preparation.doc.tech.domain.QqchDocTechVo;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae;
 import com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMaeV0;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author mls
@@ -33,4 +32,11 @@ public interface IQqchDocTechMaeService {
     QqchDocTechMaeV0 geteQqchDocTechMaeVo(BigDecimal version);
 
     int inserteQqchDocTechMaeVo(QqchDocTechMaeV0 qqchDocTechVo);
+
+    /**
+     * 3.11.2弹窗
+     * @param dataClassify
+     * @return
+     */
+    List<QqchDocTechMae> popUpWindows(String dataClassify);
 }
