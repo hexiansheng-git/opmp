@@ -110,8 +110,8 @@
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
-            <if test="name != null  and name != ''">and `name` = #{name}</if>
-            <if test="content != null  and content != ''">and `content` = #{content}</if>
+            <if test="name != null  and name != ''">and `name` like concat('%' , #{name} , '%')</if>
+            <if test="content != null  and content != ''">and `content` like concat('%' , #{content} , '%') </if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
