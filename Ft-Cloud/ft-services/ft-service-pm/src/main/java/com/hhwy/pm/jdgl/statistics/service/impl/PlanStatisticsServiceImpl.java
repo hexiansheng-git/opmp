@@ -1,6 +1,5 @@
 package com.hhwy.pm.jdgl.statistics.service.impl;
 
-import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
@@ -39,7 +38,6 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
-import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -371,7 +369,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             Long billId = jdglDayScheduleBill.getBillId();
             for (XmslContractList xmslContractList : xmslContractListVos) {
                 if(xmslContractList.getAncestors().contains(billId+"")) {
-                    Long listId = Long.valueOf(xmslContractList.getId());
+                    Long listId = xmslContractList.getId();
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
                     planStatisticsBillValueVO.setPid(xmslContractList.getPid());
