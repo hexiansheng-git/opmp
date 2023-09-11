@@ -93,9 +93,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setProjectScale(projectInfo.getProjectScale());
         contractInfo.setContractPrice(projectInfo.getContractPrice());
         //编制日期
-        contractInfo.setOperateTime(projectInfo.getEstablishDate());
+        contractInfo.setOperateTime(DateUtils.getNowDate());
         //编制人
-        contractInfo.setOperateUserName(projectInfo.getEstablishPersonnel());
+        contractInfo.setOperateUserName(SecurityUtils.getUserName());
 
         contractInfo.setVersion(BigDecimal.valueOf(1.0));
         contractInfo.setId(IdWorker.createId());
@@ -175,6 +175,12 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             xmslContractInfo.setVersion(version);
             xmslContractInfo.setValid("0");
             xmslContractInfo.setTaskStatus("");
+            //编制日期
+            xmslContractInfo.setOperateTime(DateUtils.getNowDate());
+            //编制人
+            xmslContractInfo.setOperateUserName(SecurityUtils.getUserName());
+            xmslContractInfo.setCreateUser(SecurityUtils.getUserName());
+            xmslContractInfo.setCreateTime(DateUtils.getNowDate());
             insertXmslContractInfo(xmslContractInfo);
             XmslContractInfo param = new XmslContractInfo();
             param.setVersion(version);
@@ -382,5 +388,18 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     @Override
     public void updateAllToInvalid() {
         xmslContractInfoMapper.updateAllToInvalid();
+    }
+
+    /***
+     * 功能描述: 发起流程时，回填发布人和发布时间
+     */
+    @Override
+    public void updateIssueNameAndDate(Long id) {
+        XmslContractInfo xmslContractInfo = new XmslContractInfo();
+        xmslContractInfo.setId(id);
+        xmslContractInfo.setIssueDate(DateUtils.getNowDate());
+        xmslContractInfo.setIssuePersonName(SecurityUtils.getUserName());
+        xmslContractInfo.setIssuePersonId(String.valueOf(SecurityUtils.getUserId()));
+        xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 }

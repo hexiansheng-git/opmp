@@ -468,6 +468,12 @@ public class XmslContractInfo extends CommonBaseEntity {
     private String valid;
 
     /**
+     * 字段描述：发布人id
+     */
+    @JsonProperty
+    private String issuePersonId;
+
+    /**
      * 字段描述：发布人
      */
     @JsonProperty
@@ -479,18 +485,6 @@ public class XmslContractInfo extends CommonBaseEntity {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date issueDate;
-
-    /**
-     * 字段描述：当前处理人
-     */
-    @JsonProperty
-    private String assignee;
-
-    /**
-     * 字段描述：流程状态名称
-     */
-    @JsonProperty
-    private String taskStatusName;
 
 
     private  BigDecimal version;
