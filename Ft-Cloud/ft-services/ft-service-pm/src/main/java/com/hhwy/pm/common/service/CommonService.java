@@ -1,6 +1,8 @@
 package com.hhwy.pm.common.service;
 
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.CommonYesNo;
+import com.hhwy.pm.common.constant.PermissionMark;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
@@ -78,16 +80,21 @@ public class CommonService {
 
     /**
      * 检验菜单是否有编辑权限
+     *
      * @param menuId 菜单id
      * @return
      */
-    public boolean checkIsEditable(String menuId) {
+    public PermissionMark checkIsEditable(String menuId) {
+        PermissionMark permissionMark = new PermissionMark();
 
         //获取当前阶段
         String currentStage = qqchReviewService.getStage();
         if (PmConstant.END_STAGE.equals(currentStage)) {
-            throw new RuntimeException("前期策划评审已结束");
+            permissionMark.setReviewEnd(CommonYesNo.YES);
+            permissionMark.setMsg("前期策划评审已结束");
+            return permissionMark;
         }
+
         //获取当前登录人信息
         Long userId = SecurityUtils.getUserId();
         // 根据当前阶段和登录人查询有没有编辑权限
@@ -97,8 +104,9 @@ public class CommonService {
         qqchWorkPlan.setDelFlag("0");
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlan);
         // 查询到的数量不是0个的话 工作计划
-        if (qqchWorkPlanList.size() != 1)
+        if (qqchWorkPlanList.size() != 1){
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Warning, "前期策划工作计划数据异常");
+        }
 
         // 有效的工作计划
         QqchWorkPlan workPlan = qqchWorkPlanList.get(0);
@@ -127,15 +135,20 @@ public class CommonService {
         // 根据阶段 编制人 页面唯一标识查询有没有编辑权限
         List<QqchWorkPlanDetail> qqchWorkPlanDetailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(planDetail);
         // 如果没有查询到数据
-        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList))
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Warning, "当前用户在当前阶段没有当前页面的编辑权限");
+        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)){
+            permissionMark.setMsg("当前用户在当前阶段没有当前页面的编辑权限!");
+            permissionMark.setEditable(CommonYesNo.NO);
+            return permissionMark;
+        }
 
         // 获取当前菜单 当前阶段 当前登录人有没有确认过
         List<QqchModuleConfirmCase> confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, "" + userId);
         // 确认记录不为空的话 则证明当前阶段已经被确认过 无需再进行确认
-        if (!CollectionUtils.isEmpty(confirmStatus))
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Warning, "当前用户在当前页面的当前阶段已经确认过 无需重复确认");
+        if (!CollectionUtils.isEmpty(confirmStatus)){
+            permissionMark.setMsg("当前用户在当前页面的当前阶段已确认完成!");
+            permissionMark.setConfirmed(CommonYesNo.YES);
+        }
 
-        return true;
+        return permissionMark;
     }
 }

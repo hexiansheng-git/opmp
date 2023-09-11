@@ -2,12 +2,12 @@ package com.hhwy.pm.common.controller;
 
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.common.constant.PermissionMark;
 import com.hhwy.pm.common.service.CommonService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 
@@ -48,8 +48,8 @@ public class CommonController2 {
      */
     @GetMapping("checkIsEditable")
     public AjaxResult checkIsEditable(String menuId){
-        boolean isEditable = commonService.checkIsEditable(menuId);
-        return AjaxResult.success(isEditable);
+        PermissionMark permissionMark = commonService.checkIsEditable(menuId);
+        return AjaxResult.success(permissionMark.getMsg(),permissionMark);
     }
 
 }
