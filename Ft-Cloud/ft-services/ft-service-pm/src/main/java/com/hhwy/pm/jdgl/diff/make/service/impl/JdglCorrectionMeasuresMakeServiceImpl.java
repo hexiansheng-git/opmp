@@ -4,7 +4,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
-import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisSv;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
@@ -16,9 +15,11 @@ import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailServi
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,7 +75,7 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake) {
         List<JdglCorrectionMeasuresMake> list =
             jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMake);
-        FlowInfoSearchUtil.getFlowInfo(list,FlowEnum.JDGL_CORRECTION_MEASURES_MAKE);
+        FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.JDGL_CORRECTION_MEASURES_MAKE);
         return list;
     }
 
@@ -180,13 +181,12 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      */
     @Transactional
     public void syncData(Date period) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        String periodStr = sdf.format(period);
+        String periodStr = FtDateUtils.getYearMonthStr(period);
 
         JdglCorrectionMeasuresMake qryMake = new JdglCorrectionMeasuresMake();
         qryMake.setWarnPeriod(periodStr);
         JdglCorrectionMeasuresMake make = jdglCorrectionMeasuresMakeMapper.getJdglCorrectionMeasuresMake(qryMake);
-        if (make == null) {
+        if (make != null) {
             return;
         }
 
@@ -203,10 +203,13 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         jdglCorrectionMeasuresMake.setId(IdWorker.createId());
+        jdglCorrectionMeasuresMake.setProjectId(projectBasicInfo.getProjectId());
         jdglCorrectionMeasuresMake.setProjectName(projectBasicInfo.getProjectName());
         jdglCorrectionMeasuresMake.setWarnPeriod(periodStr);
+        jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
+        //jdglCorrectionMeasuresMake.setCorrectionDate(FtDateUtils.getNowDate());
         jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
@@ -229,21 +232,29 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             JdglCorrectionMeasuresMakeDetail JdglCorrectionMeasuresMakeDetail = new JdglCorrectionMeasuresMakeDetail();
             JdglCorrectionMeasuresMakeDetail.setId(jdglDiffAnalysisSv.getId());
             JdglCorrectionMeasuresMakeDetail.setPid(jdglDiffAnalysisSv.getPid());
-            JdglCorrectionMeasuresMakeDetail.setMakeId(make.getId());
+            JdglCorrectionMeasuresMakeDetail.setMakeId(jdglCorrectionMeasuresMake.getId());
             JdglCorrectionMeasuresMakeDetail.setWorkCode(jdglDiffAnalysisSv.getPlanItemCode());
             JdglCorrectionMeasuresMakeDetail.setWorkName(jdglDiffAnalysisSv.getPlanItemName());
             JdglCorrectionMeasuresMakeDetail.setIsKeyLine(jdglDiffAnalysisSv.getIsCriticalPath());
             JdglCorrectionMeasuresMakeDetail.setUnit(jdglDiffAnalysisSv.getUnit());
-            JdglCorrectionMeasuresMakeDetail.setQuantity(jdglDiffAnalysisSv.getDesignNum());
-            JdglCorrectionMeasuresMakeDetail.setDeviationQuantity(jdglDiffAnalysisSv.getThisDeviationNum());
+            JdglCorrectionMeasuresMakeDetail.setQuantity(
+                jdglDiffAnalysisSv.getDesignNum() == null ? BigDecimal.ZERO : jdglDiffAnalysisSv.getDesignNum());
+            JdglCorrectionMeasuresMakeDetail.setDeviationQuantity(jdglDiffAnalysisSv.getThisDeviationNum() == null ?
+                BigDecimal.ZERO : jdglDiffAnalysisSv.getThisDeviationNum());
             // todo 总时差 暂无来源
             //JdglCorrectionMeasuresMakeDetail.setTotalFloat();
             JdglCorrectionMeasuresMakeDetail.setSvValue(jdglDiffAnalysisSv.getSvNum());
-            // todo 完成进度百分比 暂无来源
-            //JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage();
-            // todo 完成工期百分比 暂无来源
+            // 实际工程量
+            BigDecimal actQuantity =
+                JdglCorrectionMeasuresMakeDetail.getQuantity()
+                    .add(JdglCorrectionMeasuresMakeDetail.getDeviationQuantity());
+            if (JdglCorrectionMeasuresMakeDetail.getQuantity().compareTo(BigDecimal.ZERO) != 0) {
+                actQuantity.divide(actQuantity, 2, RoundingMode.HALF_UP);
+            }
+            JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(actQuantity);
+            // todo 完成工期百分比 暂无来源 总体计划：当前开始时间—实际开始时间/总体计划时间
             //JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage();
-            // todo 完成工期百分比 暂无来源
+            // todo 责任人 暂无来源
             //JdglCorrectionMeasuresMakeDetail.setDirector();
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }

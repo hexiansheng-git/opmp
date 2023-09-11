@@ -10,6 +10,7 @@ import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -125,6 +127,7 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
 
     /**
      * 批量删除
+     *
      * @param ids
      * @return
      */
@@ -143,5 +146,17 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
             .getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMakeParam);
         ExcelUtils<JdglCorrectionMeasuresMake> util = new ExcelUtils<>(JdglCorrectionMeasuresMake.class);
         util.exportExcel(response, jdglCorrectionMeasuresMakeList, DateUtils.getDate());
+    }
+
+    /**
+     * 同步差异化分析数据
+     *
+     * @param period
+     * @return
+     */
+    @PostMapping("/syncData")
+    public AjaxResult syncData(@RequestParam Date period) {
+        jdglCorrectionMeasuresMakeService.syncData(period);
+        return AjaxResult.success();
     }
 }

@@ -107,9 +107,6 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         if (jdglProgressCorrectionTrack == null || jdglProgressCorrectionTrack.getId() == null) {
             return;
         }
-        jdglProgressCorrectionTrack.setUpdateUser(SecurityUtils.getUserName());
-        jdglProgressCorrectionTrack.setUpdateTime(DateUtils.getNowDate());
-        jdglProgressCorrectionTrackMapper.updateJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
 
         List<JdglProgressCorrectionTrackDetail> detailList = jdglProgressCorrectionTrack.getDetailList();
         if (!CollectionUtils.isEmpty(detailList)) {
