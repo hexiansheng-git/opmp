@@ -6,6 +6,7 @@ import java.util.List;
 import java.io.IOException;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -129,5 +130,18 @@ public class JdglDayScheduleController extends BaseController {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleService.getJdglDayScheduleList(jdglDayScheduleParam);
         ExcelUtils<JdglDaySchedule> util = new ExcelUtils<>(JdglDaySchedule.class);
         util.exportExcel(response, jdglDayScheduleList, DateUtils.getDate());
+    }
+
+    /**
+     *
+     * 更新流程数据
+     * @param id 主键
+     * @return  监听器
+     */
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
+        jdglDayScheduleService.updateTaskStatus(id);
+        return AjaxResult.success();
     }
 }

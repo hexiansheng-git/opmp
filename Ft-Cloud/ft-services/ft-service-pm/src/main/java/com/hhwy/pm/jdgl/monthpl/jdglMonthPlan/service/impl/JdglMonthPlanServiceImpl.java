@@ -211,6 +211,23 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         return i;
     }
 
+    @Override
+    public void updateTaskStatus(Long id) {
+        JdglMonthPlan queryThis = new JdglMonthPlan();
+        queryThis.setId(id);
+        JdglMonthPlan jdglMonthPlan = jdglMonthPlanMapper.getJdglMonthPlan(queryThis);
+        if(jdglMonthPlan != null) {
+            JdglMonthPlan usingMonthPlanByYearAndMonth = getUsingMonthPlanByYearAndMonth(jdglMonthPlan.getYear(), jdglMonthPlan.getMonth());
+            if(usingMonthPlanByYearAndMonth != null) {
+                usingMonthPlanByYearAndMonth.setIsUse("-1");
+                jdglMonthPlanMapper.updateJdglMonthPlan(usingMonthPlanByYearAndMonth);
+            }
+            jdglMonthPlan.setIsUse("1");
+            jdglMonthPlan.setTaskStatus("5");
+            jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
+        }
+    }
+
     public List<JdglMonthPlan> getJdglMonthPlanList(JdglMonthPlan jdglMonthPlan) {
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(jdglMonthPlan);
         String tenantKey = SecurityUtils.getTenantKey();

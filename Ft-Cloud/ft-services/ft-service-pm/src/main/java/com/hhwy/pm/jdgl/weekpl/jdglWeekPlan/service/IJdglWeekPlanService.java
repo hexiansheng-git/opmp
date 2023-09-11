@@ -32,4 +32,6 @@ public interface IJdglWeekPlanService {
     JdglWeekPlan getInitJdglWeekPlan(JdglWeekPlan jdglWeekPlanParam);
 
     int adjust(JdglWeekPlan jdglWeekPlanParam);
+
+    void updateTaskStatus(Long id);
 }

@@ -185,6 +185,24 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         return i;
     }
 
+    @Override
+    public void updateTaskStatus(Long id) {
+        JdglYearPlan queryThis = new JdglYearPlan();
+        queryThis.setId(id);
+        JdglYearPlan jdglYearPlan = jdglYearPlanMapper.getJdglYearPlan(queryThis);
+        if(jdglYearPlan != null) {
+            JdglYearPlan usingYearPlanByYear = getUsingYearPlanByYear(jdglYearPlan.getYear());
+            if(usingYearPlanByYear != null) {
+                usingYearPlanByYear.setIsUse("-1");
+                jdglYearPlanMapper.updateJdglYearPlan(usingYearPlanByYear);
+            }
+            jdglYearPlan.setTaskStatus("5");
+            jdglYearPlan.setIsUse("1");
+            jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
+        }
+
+    }
+
     public List<JdglYearPlan> getJdglYearPlanList(JdglYearPlan jdglYearPlan) {
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(jdglYearPlan);
         String tenantKey = SecurityUtils.getTenantKey();

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -111,5 +112,18 @@ public class JdglYearPlanController extends BaseController {
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanService.getJdglYearPlanList(jdglYearPlanParam);
         ExcelUtils<JdglYearPlan> util = new ExcelUtils<>(JdglYearPlan.class);
         util.exportExcel(response, jdglYearPlanList, DateUtils.getDate());
+    }
+
+    /**
+     *
+     * 更新流程数据
+     * @param id 主键
+     * @return  监听器
+     */
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
+        jdglYearPlanService.updateTaskStatus(id);
+        return AjaxResult.success();
     }
 }

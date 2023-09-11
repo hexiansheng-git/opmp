@@ -209,6 +209,23 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         return i;
     }
 
+    @Override
+    public void updateTaskStatus(Long id) {
+        JdglWeekPlan queryThis = new JdglWeekPlan();
+        queryThis.setId(id);
+        JdglWeekPlan jdglWeekPlan = jdglWeekPlanMapper.getJdglWeekPlan(queryThis);
+        if(jdglWeekPlan != null) {
+            JdglWeekPlan usingWeekPlanByYearAndWeek = getUsingWeekPlanByYearAndWeek(jdglWeekPlan.getYear(), jdglWeekPlan.getWeek());
+            if(usingWeekPlanByYearAndWeek != null) {
+                usingWeekPlanByYearAndWeek.setIsUse("-1");
+                jdglWeekPlanMapper.updateJdglWeekPlan(usingWeekPlanByYearAndWeek);
+            }
+            jdglWeekPlan.setTaskStatus("5");
+            jdglWeekPlan.setIsUse("1");
+            jdglWeekPlanMapper.updateJdglWeekPlan(jdglWeekPlan);
+        }
+    }
+
     public List<JdglWeekPlan> getJdglWeekPlanList(JdglWeekPlan jdglWeekPlan) {
         List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(jdglWeekPlan);
         if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {

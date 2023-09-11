@@ -201,6 +201,23 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         return i;
     }
 
+    @Override
+    public void updateTaskStatus(Long id) {
+        JdglQuarterPlan queryThis = new JdglQuarterPlan();
+        queryThis.setId(id);
+        JdglQuarterPlan jdglQuarterPlan = jdglQuarterPlanMapper.getJdglQuarterPlan(queryThis);
+        if (jdglQuarterPlan != null) {
+            JdglQuarterPlan usingQuarterPlanByYearAndQuarter = getUsingQuarterPlanByYearAndQuarter(jdglQuarterPlan.getYear(), jdglQuarterPlan.getQuarter());
+            if(usingQuarterPlanByYearAndQuarter != null) {
+                usingQuarterPlanByYearAndQuarter.setIsUse("-1");
+                jdglQuarterPlanMapper.updateJdglQuarterPlan(usingQuarterPlanByYearAndQuarter);
+            }
+            jdglQuarterPlan.setTaskStatus("5");
+            jdglQuarterPlan.setIsUse("1");
+            jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);
+        }
+    }
+
     public List<JdglQuarterPlan> getJdglQuarterPlanList(JdglQuarterPlan jdglQuarterPlan) {
         List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanMapper.getJdglQuarterPlanList(jdglQuarterPlan);
         String tenantKey = SecurityUtils.getTenantKey();
