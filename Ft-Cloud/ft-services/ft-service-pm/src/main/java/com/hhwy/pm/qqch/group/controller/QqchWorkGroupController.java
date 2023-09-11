@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.group.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -33,6 +35,7 @@ public class QqchWorkGroupController extends BaseController {
     @GetMapping("/getById")
     public AjaxResult getQqchWorkGroupById(Long id){
         QqchWorkGroup qqchWorkGroup = qqchWorkGroupService.getQqchWorkGroupById(id);
+        FlowInfoSearchUtil.getFlowInfo(qqchWorkGroup, FlowEnum.QQCH_WORK_GROUP);
         return AjaxResult.success(qqchWorkGroup);
     }
 
@@ -56,6 +59,7 @@ public class QqchWorkGroupController extends BaseController {
     @GetMapping("/adjust")
     public AjaxResult adjustQqchWorkGroup(Long id){
         QqchWorkGroup qqchWorkGroup = qqchWorkGroupService.adjustQqchWorkGroup(id);
+        FlowInfoSearchUtil.getFlowInfo(qqchWorkGroup, FlowEnum.QQCH_WORK_GROUP);
         return AjaxResult.success(qqchWorkGroup);
     }
 

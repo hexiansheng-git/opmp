@@ -11,6 +11,12 @@ public enum FlowEnum {
     /**********************前期策划开始************************/
     QQCH_REVIEW("qqch_receive", "qqch_receive_process"),
 
+    /*前期策划工作小组*/
+    QQCH_WORK_GROUP("qqch_work_group", "process_qqch_work_group"),
+
+    /*前期策划工作计划*/
+    QQCH_WORK_PLAN("qqch_work_plan", "process_qqch_work_plan"),
+
     /**********************前期策划结束************************/
 
 

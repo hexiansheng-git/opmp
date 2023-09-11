@@ -6,6 +6,8 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
@@ -14,7 +16,6 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
-import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author han
@@ -58,6 +57,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         for (QqchWorkGroup workGroup : qqchWorkGroupList) {
             workGroup.setVersionStr("v" + workGroup.getVersion());
         }
+        FlowInfoSearchUtil.getFlowInfo(qqchWorkGroupList, FlowEnum.QQCH_WORK_GROUP);
         return qqchWorkGroupList;
     }
 

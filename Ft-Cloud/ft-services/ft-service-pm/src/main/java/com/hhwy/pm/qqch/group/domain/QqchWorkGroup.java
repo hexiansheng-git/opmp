@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.constant.CommonYesNo;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +27,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QqchWorkGroup extends BaseEntity {
+public class QqchWorkGroup extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
