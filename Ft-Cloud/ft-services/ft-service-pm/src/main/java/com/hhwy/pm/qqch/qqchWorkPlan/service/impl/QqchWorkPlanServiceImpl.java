@@ -119,7 +119,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     throw new CustomBusinessException("调整之前必须有生效数据");
                 }
                 //判断评审数据是否有审批中，若有就报异常
-                qqchReviewService.canAdjust();
+//                qqchReviewService.canAdjust();
                 QqchWorkPlan qqchWorkPlan = new QqchWorkPlan();
                 qqchWorkPlan.setId(idMax);
                 BeanUtils.copyProperties(this.getQqchWorkPlan(qqchWorkPlan), busData);
@@ -187,9 +187,9 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         if (!ObjectNullUtil.isEmpty(detailList)) {
             collect = detailList.stream().collect(Collectors.groupingBy(QqchWorkPlanDetail::getItemName));
         }
-        AjaxResult ajaxResult = systemServiceApi.getQqchMenu("项目设立 ");
+        AjaxResult ajaxResult = systemServiceApi.getQqchMenu("前期策划编制");
         if(!ajaxResult.get("code").toString().equals("200")){
-            throw new CustomBusinessException("根据菜单名【项目设立 】查询菜单信息异常");
+            throw new CustomBusinessException("根据菜单名【前期策划编制】查询菜单信息异常");
         }
         List<QqchWorkPlanDetail> list = new ArrayList<>();
         List<SysMenu> menuList = JSONArray.parseArray(JSON.toJSONString(ajaxResult.get("data")), SysMenu.class);

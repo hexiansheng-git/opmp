@@ -9,6 +9,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -108,5 +109,18 @@ public class JdglMonthPlanController extends BaseController {
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanService.getJdglMonthPlanList(jdglMonthPlanParam);
         ExcelUtils<JdglMonthPlan> util = new ExcelUtils<>(JdglMonthPlan.class);
         util.exportExcel(response, jdglMonthPlanList, DateUtils.getDate());
+    }
+
+    /**
+     *
+     * 更新流程数据
+     * @param id 主键
+     * @return  监听器
+     */
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
+        jdglMonthPlanService.updateTaskStatus(id);
+        return AjaxResult.success();
     }
 }

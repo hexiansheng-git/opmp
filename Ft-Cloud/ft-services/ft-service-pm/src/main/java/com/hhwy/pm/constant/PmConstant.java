@@ -10,6 +10,6 @@ public interface PmConstant {
     String ZERO = "0";
     String ONE = "1";
     String TWO = "2";
-    String THREE = "end";
+    String THREE = "3";
     String MINUS_ONE = "-1";
 }

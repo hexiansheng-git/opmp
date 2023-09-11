@@ -30,7 +30,7 @@ public interface IJdglCorrectionMeasuresMakeService {
 
     /**
      * 同步差异化分析数据
-     * @param Period
+     * @param period
      */
     void syncData(Date period);
 }
