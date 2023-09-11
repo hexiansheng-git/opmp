@@ -44,4 +44,6 @@ public interface IXmslContractInfoService {
     XmslContractInfo adjustXmslContractInfo(XmslContractInfo xmslContractInfoParam);
 
     void updateAllToInvalid();
+
+    void updateIssueNameAndDate(Long id);
 }

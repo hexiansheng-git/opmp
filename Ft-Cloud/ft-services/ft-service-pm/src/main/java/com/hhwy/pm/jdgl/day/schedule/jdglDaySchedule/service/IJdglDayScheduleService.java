@@ -41,4 +41,6 @@ public interface IJdglDayScheduleService {
     JdglDaySchedule getJdglDayScheduleByPerson(JdglDaySchedule jdglDayScheduleParam);
 
     Map<String, BigDecimal> getMonthScheduleByMonthRange(Date startPeriod, Date endPeriod);
+
+    void updateTaskStatus(Long id);
 }

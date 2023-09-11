@@ -102,7 +102,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "基线项目结束", dateFormat = "yyyy-MM-dd")
-    private Date endDate;
+    private Date finishDate;
     /**
      * 字段描述：附件组id
      */

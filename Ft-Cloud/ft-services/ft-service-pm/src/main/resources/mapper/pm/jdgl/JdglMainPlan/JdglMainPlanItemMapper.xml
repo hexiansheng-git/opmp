@@ -16,7 +16,7 @@
         <result property="executerId" column="executer_id" />
         <result property="executer" column="executer" />
         <result property="startDate" column="start_date" />
-        <result property="endDate" column="end_date" />
+        <result property="finishDate" column="finish_date" />
         <result property="fileGroupId" column="file_group_id" />
         <result property="remark" column="remark" />
         <result property="createUser" column="create_user" />
@@ -69,7 +69,7 @@
              ,`executer_id`
              ,`executer`
              ,`start_date`
-             ,`end_date`
+             ,`finish_date`
              ,`file_group_id`
              ,`remark`
              ,`create_user`
@@ -125,7 +125,7 @@
             <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
             <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
             <if test="startDate != null "> and `start_date` = #{startDate}</if>
-            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="finishDate != null "> and `finish_date` = #{finishDate}</if>
             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
             <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
@@ -183,7 +183,7 @@
             <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
             <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
             <if test="startDate != null "> and `start_date` = #{startDate}</if>
-            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="finishDate != null "> and `finish_date` = #{finishDate}</if>
             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
             <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
@@ -229,16 +229,16 @@
         <include refid="selectJdglMainPlanItemVo" />
         <where>
         del_flag = "0" and main_plan_id = #{mainPlanId}
-        and start_date &lt;= #{date} and end_date &gt;= #{date}
+        and start_date &lt;= #{date} and finish_date &gt;= #{date}
         </where>
     </select>
     <select id="getUsingJdglMainPlanItemListByDateRange" resultMap="JdglMainPlanItemResultMap">
         <include refid="selectJdglMainPlanItemVo" />
         <where>
         del_flag = "0"
-        and (start_date &lt;= #{startDate} and end_date &gt;= #{startDate})
-        or (end_date &lt;= #{endDate} and end_date &gt;= #{endDate})
-        or (start_date &gt;= #{startDate} and end_date &lt;= #{endDate})
+        and (start_date &lt;= #{startDate} and finish_date &gt;= #{startDate})
+        or (finish_date &lt;= #{finishDate} and finish_date &gt;= #{finishDate})
+        or (start_date &gt;= #{startDate} and finish_date &lt;= #{finishDate})
         </where>
     </select>
 
@@ -256,7 +256,7 @@
             <if test="executerId != null  and executerId != ''">`executer_id`,</if>
             <if test="executer != null  and executer != ''">`executer`,</if>
             <if test="startDate != null ">`start_date`,</if>
-            <if test="endDate != null ">`end_date`,</if>
+            <if test="finishDate != null ">`finish_date`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
@@ -308,7 +308,7 @@
             <if test="executerId != null  and executerId != ''">#{executerId},</if>
             <if test="executer != null  and executer != ''">#{executer},</if>
             <if test="startDate != null ">#{startDate},</if>
-            <if test="endDate != null ">#{endDate},</if>
+            <if test="finishDate != null ">#{finishDate},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
@@ -365,7 +365,7 @@
             `executer_id`,
             `executer`,
             `start_date`,
-            `end_date`,
+            `finish_date`,
             `file_group_id`,
             `remark`,
             `create_user`,
@@ -418,7 +418,7 @@
                 #{item.executerId},
                 #{item.executer},
                 #{item.startDate},
-                #{item.endDate},
+                #{item.finishDate},
                 #{item.fileGroupId},
                 #{item.remark},
                 #{item.createUser},
@@ -474,7 +474,7 @@
             <if test="executerId != null  and  executerId != ''">`executer_id` = #{executerId},</if>
             <if test="executer != null  and  executer != ''">`executer` = #{executer},</if>
             <if test="startDate != null ">`start_date` = #{startDate},</if>
-            <if test="endDate != null ">`end_date` = #{endDate},</if>
+            <if test="finishDate != null ">`finish_date` = #{finishDate},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
@@ -577,9 +577,9 @@
                     when `id`=#{item.id} then #{item.startDate}
                 </foreach>
             </trim>
-            <trim prefix="end_date  = case" suffix="end,">
+            <trim prefix="finish_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.endDate}
+                    when `id`=#{item.id} then #{item.finishDate}
                 </foreach>
             </trim>
             <trim prefix="file_group_id  = case" suffix="end,">
@@ -793,7 +793,7 @@
             <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
             <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
             <if test="startDate != null "> and `start_date` = #{startDate}</if>
-            <if test="endDate != null "> and `end_date` = #{endDate}</if>
+            <if test="finishDate != null "> and `finish_date` = #{finishDate}</if>
             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
             <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>

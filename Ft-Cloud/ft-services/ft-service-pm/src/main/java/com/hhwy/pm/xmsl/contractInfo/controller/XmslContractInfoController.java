@@ -90,6 +90,19 @@ public class XmslContractInfoController extends BaseController {
         return AjaxResult.success(xmslContractInfoParam.getId());
     }
 
+    /**
+     *  添加发布人和发布时间
+     *
+     * @param xmslContractInfoParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "xmslContractInfo:update")
+    @PostMapping("/addIssueInfo")
+    public AjaxResult addIssueInfo(@RequestParam("id") Long id) {
+        xmslContractInfoService.updateIssueNameAndDate(id);
+        return AjaxResult.success();
+    }
+
 
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
     @PostMapping("/batchUpdate")

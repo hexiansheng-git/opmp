@@ -9,6 +9,7 @@ import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.IJdglQuarterPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -109,4 +110,18 @@ public class JdglQuarterPlanController extends BaseController {
         ExcelUtils<JdglQuarterPlan> util = new ExcelUtils<>(JdglQuarterPlan.class);
         util.exportExcel(response, jdglQuarterPlanList, DateUtils.getDate());
     }
+
+    /**
+     *
+     * 更新流程数据
+     * @param id 主键
+     * @return  监听器
+     */
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
+        jdglQuarterPlanService.updateTaskStatus(id);
+        return AjaxResult.success();
+    }
+
 }

@@ -125,6 +125,16 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         return map;
     }
 
+    @Override
+    public void updateTaskStatus(Long id) {
+
+        JdglDaySchedule jdglDaySchedule = new JdglDaySchedule();
+        jdglDaySchedule.setId(id);
+        jdglDaySchedule.setTaskStatus("5");
+        jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
+
+    }
+
     public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleMapper.getJdglDayScheduleList(jdglDaySchedule);
         String tenantKey = SecurityUtils.getTenantKey();
