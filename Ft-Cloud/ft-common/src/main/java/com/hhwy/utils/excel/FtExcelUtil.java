@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -184,7 +185,11 @@ public class FtExcelUtil<T> {
                                     val = Convert.toBigDecimal(val);
                                 } else if (Date.class == fieldType) {
                                     if (val instanceof String) {
-                                        val = DateUtils.parseDate(val);
+                                        try{
+                                            val = com.hhwy.utils.core.DateUtil.parseDate(val);
+                                        }catch(Exception e ){
+                                            throw new RuntimeException("第"+(i+1)+"行,解析日期失败，日期格式有误,原数据为："+val);
+                                        }
                                     } else if (val instanceof Double) {
                                         val = DateUtil.getJavaDate((Double) val);
                                     }

@@ -52,6 +52,7 @@
       ,`scheme_level`
       ,`danger_level`
       ,`is_change`
+      ,`plan_preparation_time`
       ,`plan_implement_time`
       ,`list_pass_time`
       ,`contact_person`

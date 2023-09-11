@@ -2,6 +2,7 @@ package com.hhwy.utils.core;
 
 import com.hhwy.common.core.utils.DateUtils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,6 +11,8 @@ import java.util.List;
 
 public class DateUtil {
 
+    private static String[] parsePatterns = new String[]{"yyyy-MM-dd", "yyyy-MM-dd HH:mm:ss", "yyyy-MM-dd HH:mm", "yyyy-MM", "yyyy/MM/dd", "yyyy/MM/dd HH:mm:ss", "yyyy/MM/dd HH:mm", "yyyy/MM", "yyyy.MM.dd", "yyyy.MM.dd HH:mm:ss", "yyyy.MM.dd HH:mm", "yyyy.MM"};
+    
     /**
      * 获取当前月的第一天日期
      *
@@ -126,5 +129,17 @@ public class DateUtil {
         long diff = endDate.getTime()-startDate.getTime();
         long day = diff / nd;
         return day;
+    }
+
+    public static Date parseDate(Object str) throws ParseException{
+        if (str == null) {
+            return null;
+        } else {
+            try {
+                return DateUtils.parseDate(str.toString(), parsePatterns);
+            } catch (ParseException var2) {
+                throw var2;
+            }
+        }
     }
 }

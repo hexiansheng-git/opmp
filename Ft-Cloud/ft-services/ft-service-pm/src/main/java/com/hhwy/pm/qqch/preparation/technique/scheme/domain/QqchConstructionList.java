@@ -54,7 +54,6 @@ public class QqchConstructionList extends BaseEntity {
      * 字段描述：关联WBS
      */
     @JsonProperty
-    @FtExcel(name = "关联WBS")
     private String wbsName;
     /**
      * 字段描述：方案类型（字典类型scheme_type）
