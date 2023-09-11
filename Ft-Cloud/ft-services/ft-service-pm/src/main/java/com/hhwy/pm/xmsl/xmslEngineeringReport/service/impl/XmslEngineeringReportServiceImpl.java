@@ -159,9 +159,9 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         report.setParentId(ObjectUtils.nvlLong(report.getParentId(),-1L));
         boolean hasCondition = StringUtils.isNotBlank(report.getWbsCode()) || StringUtils.isNotBlank(report.getWbsName())
                 || StringUtils.isNotBlank(report.getListCode()) || StringUtils.isNotBlank(report.getListName()) ;
-        if(hasCondition && ( (StringUtils.trim(report.getWbsCode())+StringUtils.trim(report.getWbsName())).length() < 3
-                            && (StringUtils.trim(report.getListCode())+StringUtils.trim(report.getListName())).length() < 3) )
-            throw new RuntimeException("搜索参数过小");
+//        if(hasCondition && ( (StringUtils.trim(report.getWbsCode())+StringUtils.trim(report.getWbsName())).length() < 3
+//                            && (StringUtils.trim(report.getListCode())+StringUtils.trim(report.getListName())).length() < 3) )
+//            throw new RuntimeException("搜索参数过小");
         if(!hasCondition){
             return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
         }

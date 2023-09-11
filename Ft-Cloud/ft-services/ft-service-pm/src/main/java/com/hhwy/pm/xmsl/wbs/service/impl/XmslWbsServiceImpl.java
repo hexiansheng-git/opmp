@@ -135,8 +135,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(StringUtils.isBlank(wbs.getParentId()) )
             wbs.setParentId("-1");
         boolean hasCondition = StringUtils.isNotBlank(wbs.getCode()) || StringUtils.isNotBlank(wbs.getName());
-        if(hasCondition && (StringUtils.trim(wbs.getCode())+StringUtils.trim(wbs.getName())).length() < 3)
-            throw new RuntimeException("搜索参数过小");
+//        if(hasCondition && (StringUtils.trim(wbs.getCode())+StringUtils.trim(wbs.getName())).length() < 3)
+//            throw new RuntimeException("搜索参数过小");
         if(!hasCondition){
             List<XmslWbs> list = xmslWbsMapper.latestWbsList(wbs);
             return list;

@@ -57,8 +57,8 @@ public class TWbsServiceImpl implements ITWbsService {
     @Override
     public List<TWbs> lazySearchList(TWbs wbs) {
         boolean hasCondition = StringUtils.isNotBlank(wbs.getNodeType()) || StringUtils.isNotBlank(wbs.getName());
-        if(hasCondition && (StringUtils.trim(wbs.getNodeType())+StringUtils.trim(wbs.getName())).length() < 3)
-            throw new RuntimeException("搜索参数过小");
+//        if(hasCondition && (StringUtils.trim(wbs.getNodeType())+StringUtils.trim(wbs.getName())).length() < 3)
+//            throw new RuntimeException("搜索参数过小");
         if(!hasCondition){
             List<TWbs> list = tWbsMapper.getTWbsList(wbs);
             return list;

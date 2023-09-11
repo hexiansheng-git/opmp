@@ -15,8 +15,10 @@ import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewWbsService;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
+import org.apache.tomcat.util.bcel.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -63,7 +65,7 @@ public class XmslDrawReviewController extends BaseController{
 
     @PreAuthorize(hasAnyPermi = {"xmslDrawReview:list"})
     @PostMapping("/detail")
-    public AjaxResult detail(@RequestBody XmslDrawReview drawReview) {
+    public AjaxResult detali(@RequestBody XmslDrawReview drawReview) {
         if(drawReview.getId() == null){
             drawReview =xmslDrawReviewService.getLast();
         }else{
@@ -74,6 +76,22 @@ public class XmslDrawReviewController extends BaseController{
         if(drawReview != null)
             drawReview.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,hasChange));
         return AjaxResult.success(drawReview==null?new HashMap<>(2):drawReview);
+    }
+
+    /**
+     * 获取调整明细
+     * @return
+     */
+    @PostMapping("/adjustDetail")
+    public AjaxResult adjustDetail() {
+        XmslDrawReview last =xmslDrawReviewService.getLast();
+        if(last.getValid() == Constant.YES_INT){
+            last.setId(null);
+            last.setVersion(last.getVersion()+1);
+            last.setValid(Constant.NO_INT);
+            new AddBaseInfoUtil<>().add(last);
+        }
+        return AjaxResult.success(last);
     }
 
     /**
