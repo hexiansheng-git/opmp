@@ -96,7 +96,9 @@ public class FtDateUtils extends DateUtils {
     }
 
     public static Date parseDate(String date) {
-        if (StringUtils.isEmpty(date)) return null;
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return dateFormat.parse(date);
@@ -107,7 +109,6 @@ public class FtDateUtils extends DateUtils {
 
 
     public static int compareMonth(Date bigDate, Date smallDate) {
-
 
         Calendar c1 = Calendar.getInstance();
         Calendar c2 = Calendar.getInstance();
@@ -135,7 +136,6 @@ public class FtDateUtils extends DateUtils {
         return monthsDiff;
 
     }
-
 
 
     public static List<Date> getDateList(Date startDate, Date endDate) {
@@ -174,10 +174,7 @@ public class FtDateUtils extends DateUtils {
 
         return c.getTime();
     }
-    
-    
-    
-    
+
 
     public static Date getLastDay(Date date) {
         // 获取Calendar类的实例
@@ -194,8 +191,31 @@ public class FtDateUtils extends DateUtils {
 
         return c.getTime();
     }
-    
 
+    /**
+     * 把日期转为字符串 yyyy-MM
+     *
+     * @param date
+     * @return
+     */
+    public static String getYearMonthStr(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        return sdf.format(date);
+    }
 
-
+    /**
+     * 获取当前日期 格式yyyy-MM-dd
+     *
+     * @return
+     * @throws ParseException
+     */
+    public static Date getYearMonthDayDate() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return simpleDateFormat.parse(simpleDateFormat.format(new Date()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
