@@ -376,7 +376,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             }else {
                 resultList = ListTreeUtil.formatTree(
                         allList,
-                        o -> o.getPid() == null,
+                        o -> o.getPid() == 0,
                         (r, n) -> r.getId().equals(n.getPid()),
                         XmslContractList::getChildren,
                         XmslContractList::setChildren);
