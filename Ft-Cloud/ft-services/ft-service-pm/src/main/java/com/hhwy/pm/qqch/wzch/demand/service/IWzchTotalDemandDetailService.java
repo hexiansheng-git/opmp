@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.wzch.demand.service;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
@@ -72,6 +73,11 @@ public interface IWzchTotalDemandDetailService {
      * @return
      */
     Long save(WzchTotalDemand wzchTotalDemand);
+
+    /**
+     * 同步施工策划
+     */
+    void syncQqchTotal(BigDecimal version);
 
     /**
      * 查询详情

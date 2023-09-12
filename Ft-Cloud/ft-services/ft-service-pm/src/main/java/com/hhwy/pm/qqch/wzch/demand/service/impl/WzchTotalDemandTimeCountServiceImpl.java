@@ -10,6 +10,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -93,6 +94,13 @@ public class WzchTotalDemandTimeCountServiceImpl implements IWzchTotalDemandTime
     @Override
     public int deleteWzchTotalDemandTimeCountById(Long id) {
         return wzchTotalDemandTimeCountMapper.deleteWzchTotalDemandTimeCountById(id);
+    }
+
+    @Override
+    public int deleteByVersion(BigDecimal version) {
+        if(version == null)
+            return 0;
+        return wzchTotalDemandTimeCountMapper.deleteByVersion(version);
     }
 
     @Override

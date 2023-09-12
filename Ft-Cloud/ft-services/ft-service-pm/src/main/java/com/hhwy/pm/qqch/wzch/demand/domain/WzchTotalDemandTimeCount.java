@@ -32,6 +32,8 @@ public class WzchTotalDemandTimeCount extends BaseEntity {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long totalDemandDetailId;
+    
+    private BigDecimal version;
 
     /** 物资编码 */
     @Excel(name = "物资编码")

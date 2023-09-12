@@ -136,6 +136,10 @@ public class QqchTotalDemandServiceImpl implements IQqchTotalDemandService{
         return vo;
     }
 
+    @Override
+    public List<QqchTotalDemand> getQqchTotalDemandListSource(QqchTotalDemand totalDemand) {
+        return this.qqchTotalDemandMapper.getQqchTotalDemandList(totalDemand);
+    }
 
     /**
      *  新增接口

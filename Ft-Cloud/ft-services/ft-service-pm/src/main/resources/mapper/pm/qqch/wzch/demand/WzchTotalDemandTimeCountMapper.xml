@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="delFlag"    column="del_flag"    />
         <result property="projectId"    column="project_id"    />
         <result property="materialStandard"    column="material_standard"    />
-
+        <result property="version"    column="version"    />
     </resultMap>
 
     <sql id="selectWzchTotalDemandTimeCountVo">
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                `fourth_quarter_num`,
                `create_time`,
                `update_time`,
-               `del_flag`
+               `del_flag`,version
         from `wzch_total_demand_time_count`
     </sql>
     <delete id="deleteByTotalDemandDetailIds" parameterType="java.lang.Long">
@@ -68,6 +68,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach collection="list" item="item" open="(" separator="," close=")">
             #{item}
         </foreach>
+    </delete>
+    <delete id="deleteByVersion" parameterType="java.math.BigDecimal">
+        delete from wzch_total_demand_time_count where version = #{version}
     </delete>
 
     <select id="selectWzchTotalDemandTimeCountList" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount" resultMap="WzchTotalDemandTimeCountResult">
@@ -128,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">`create_time`,</if>
             <if test="updateTime != null">`update_time`,</if>
             <if test="delFlag != null">`del_flag`,</if>
+            <if test="version != null">`version`,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="totalDemandDetailId != null">#{totalDemandDetailId},</if>
@@ -153,11 +157,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="delFlag != null">#{delFlag},</if>
+            <if test="version != null">#{version},</if>
          </trim>
     </insert>
 
     <insert id="batchInsert" parameterType="list">
-        insert `wzch_total_demand_time_count` (
+        insert into `wzch_total_demand_time_count` (
                                                                                 id,
                                                                             `total_demand_detail_id`,
                                                                 `material_code`,
@@ -183,7 +188,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `update_time`,
                                                                 `del_flag`,
                                                                 `project_id`,
-                                                                `material_standard`
+                                                                `material_standard`,
+                                                        `version`
                                     )values
         <foreach collection="list" separator="," item="item" index="index" >
         (
@@ -212,7 +218,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.updateTime},
             #{item.delFlag},
             #{item.projectId},
-            #{item.materialStandard}
+            #{item.materialStandard},
+            #{item.version}
             )
         </foreach>
     </insert>
@@ -378,6 +385,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                         <foreach collection="list" item="item" index="index">
                             <if test="item.delFlag != null ">
                                 when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                    <trim prefix="version =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.version}
                             </if>
                         </foreach>
                     </trim>
