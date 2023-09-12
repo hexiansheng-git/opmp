@@ -98,7 +98,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null  and sort != ''"> and `sort` = #{sort}</if>
         </where>
-        order by create_time desc
+#         order by create_time desc
     </select>
 
     <select id="getXmslContractGeneralList" resultMap="XmslContractGeneralResultMap">

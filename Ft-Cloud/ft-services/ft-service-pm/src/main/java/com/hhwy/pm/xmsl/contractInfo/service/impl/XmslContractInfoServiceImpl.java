@@ -1,5 +1,6 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
@@ -7,6 +8,7 @@ import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.*;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
@@ -95,7 +97,8 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //编制日期
         contractInfo.setOperateTime(DateUtils.getNowDate());
         //编制人
-        contractInfo.setOperateUserName(SecurityUtils.getUserName());
+        contractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
+        contractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
 
         contractInfo.setVersion(BigDecimal.valueOf(1.0));
         contractInfo.setId(IdWorker.createId());
@@ -178,10 +181,15 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             //编制日期
             xmslContractInfo.setOperateTime(DateUtils.getNowDate());
             //编制人
-            xmslContractInfo.setOperateUserName(SecurityUtils.getUserName());
+            xmslContractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
+            xmslContractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
             xmslContractInfo.setCreateUser(SecurityUtils.getUserName());
             xmslContractInfo.setCreateTime(DateUtils.getNowDate());
-            insertXmslContractInfo(xmslContractInfo);
+            //保存主表信息
+            Long id = insertXmslContractInfo(xmslContractInfo);
+            //保存清单、通用、专用信息
+            this.adjustSonTable(xmslContractInfo, id);
+            //查询结果返回
             XmslContractInfo param = new XmslContractInfo();
             param.setVersion(version);
             XmslContractInfo result = xmslContractInfoMapper.getXmslContractInfo(param);
@@ -194,6 +202,32 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             XmslContractInfo result = xmslContractInfoMapper.getXmslContractInfo(param);
             getSonTable(result, bean.getVersion());
             return result;
+        }
+    }
+
+    //调整时，新增字表数据
+    private void adjustSonTable(XmslContractInfo xmslContractInfo, Long id) {
+        XmslContractList xmslContractList = new XmslContractList();
+        xmslContractList.setMasterId(xmslContractInfo.getId());
+        List<XmslContractList> xmslContractListList = xmslContractListService.getXmslContractListList(xmslContractList);
+        if (CollectionUtils.isNotEmpty(xmslContractListList)){
+            xmslContractListList.forEach(p -> p.setMasterId(id));
+            List<XmslContractListVo> xmslContractListVos = BeanUtil.copyToList(xmslContractListList, XmslContractListVo.class);
+            xmslContractListService.insertXmslContractListList(xmslContractListVos);
+        }
+        XmslContractGeneral xmslContractGeneral = new XmslContractGeneral();
+        xmslContractGeneral.setMasterId(xmslContractInfo.getId());
+        List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneral);
+        if (CollectionUtils.isNotEmpty(xmslContractGeneralList)){
+            xmslContractGeneralList.forEach(p -> p.setMasterId(id));
+            xmslContractGeneralService.insertXmslContractGeneralList(xmslContractGeneralList);
+        }
+        XmslContractSpecial xmslContractSpecial = new XmslContractSpecial();
+        xmslContractSpecial.setMasterId(xmslContractInfo.getId());
+        List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecial);
+        if (CollectionUtils.isNotEmpty(xmslContractSpecialList)){
+            xmslContractSpecialList.forEach(p -> p.setMasterId(id));
+            xmslContractSpecialService.insertXmslContractSpecialList(xmslContractSpecialList);
         }
     }
 
@@ -398,7 +432,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         XmslContractInfo xmslContractInfo = new XmslContractInfo();
         xmslContractInfo.setId(id);
         xmslContractInfo.setIssueDate(DateUtils.getNowDate());
-        xmslContractInfo.setIssuePersonName(SecurityUtils.getUserName());
+        xmslContractInfo.setIssuePersonName(SecurityUtils.getSysUser().getNickName());
         xmslContractInfo.setIssuePersonId(String.valueOf(SecurityUtils.getUserId()));
         xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }

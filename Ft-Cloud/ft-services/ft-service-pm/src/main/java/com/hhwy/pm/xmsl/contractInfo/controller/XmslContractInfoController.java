@@ -92,9 +92,6 @@ public class XmslContractInfoController extends BaseController {
 
     /**
      *  添加发布人和发布时间
-     *
-     * @param xmslContractInfoParam
-     * @return
      */
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
     @PostMapping("/addIssueInfo")

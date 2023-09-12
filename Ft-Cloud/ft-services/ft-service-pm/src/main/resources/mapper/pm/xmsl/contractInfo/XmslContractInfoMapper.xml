@@ -715,7 +715,7 @@
             <if test="contractingMethod != null  and  contractingMethod != ''">`contracting_method` = #{contractingMethod},</if>
             <if test="issuePersonId != null  and  issuePersonId != ''">`issue_person_id` = #{issuePersonId},</if>
             <if test="issuePersonName != null  and  issuePersonName != ''">`issue_person_name` = #{issuePersonName},</if>
-            <if test="issueDate != null  and  issueDate != ''">`issue_date` = #{issueDate},</if>
+            <if test="issueDate != null ">`issue_date` = #{issueDate},</if>
         </trim>
         <where>
             <if test="id != null "> and `id` = #{id}</if>
