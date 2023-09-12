@@ -136,7 +136,7 @@
             <if test="stakeMark != null  and stakeMark != ''">and `stake_mark` = #{stakeMark}</if>
             <if test="length != null">and `length` = #{length}</if>
             <if test="span != null ">and `span` = #{span}</if>
-            <if test="clearHeight != null ''">and `clear_height` = #{clearHeight}</if>
+            <if test="clearHeight != null">and `clear_height` = #{clearHeight}</if>
             <if test="baseForm != null  and baseForm != ''">and `base_form` = #{baseForm}</if>
             <if test="substruction != null  and substruction != ''">and `substruction` = #{substruction}</if>
             <if test="superstructure != null  and superstructure != ''">and `superstructure` = #{superstructure}</if>
