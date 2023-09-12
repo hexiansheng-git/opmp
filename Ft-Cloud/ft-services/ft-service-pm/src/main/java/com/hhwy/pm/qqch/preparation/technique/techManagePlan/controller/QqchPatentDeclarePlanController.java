@@ -10,6 +10,7 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPaten
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchPatentDeclarePlanService;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -90,7 +91,7 @@ public class QqchPatentDeclarePlanController extends BaseController {
      */
     @PostMapping("/import")
     public AjaxResult importData(@RequestPart("file") MultipartFile file){
-        ExcelUtils<QqchPatentDeclarePlanImportVo> util = new ExcelUtils<>(QqchPatentDeclarePlanImportVo.class);
+        FtExcelUtil<QqchPatentDeclarePlanImportVo> util = new FtExcelUtil<>(QqchPatentDeclarePlanImportVo.class);
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchPatentDeclarePlanImportVo> qqchPatentDeclarePlanImportVoList = util.importExcel(inputStream);
