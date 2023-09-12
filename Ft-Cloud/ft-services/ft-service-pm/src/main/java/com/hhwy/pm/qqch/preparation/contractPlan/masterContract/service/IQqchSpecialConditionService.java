@@ -39,4 +39,11 @@ public interface IQqchSpecialConditionService {
      * @return
      */
     void save(QqchSpecialConditionVo qqchSpecialConditionVo);
+
+    /**
+     * 10.1财务相关主合同条款 弹窗
+     * @param qqchSpecialCondition
+     * @return
+     */
+    List<QqchSpecialCondition> popUpWindows(QqchSpecialCondition qqchSpecialCondition);
 }

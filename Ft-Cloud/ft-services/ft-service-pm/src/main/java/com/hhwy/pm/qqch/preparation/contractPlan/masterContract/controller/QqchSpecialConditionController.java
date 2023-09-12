@@ -108,4 +108,15 @@ public class QqchSpecialConditionController extends BaseController {
         qqchSpecialConditionService.save(qqchSpecialConditionVo);
         return AjaxResult.success();
     }
+
+    /**
+     * 10.1财务相关主合同条款 弹窗
+     * @param qqchSpecialCondition
+     * @return
+     */
+    @GetMapping("popUpWindows")
+    public AjaxResult popUpWindows(QqchSpecialCondition qqchSpecialCondition) {
+        List<QqchSpecialCondition> list = qqchSpecialConditionService.popUpWindows(qqchSpecialCondition);
+        return AjaxResult.success(list);
+    }
 }

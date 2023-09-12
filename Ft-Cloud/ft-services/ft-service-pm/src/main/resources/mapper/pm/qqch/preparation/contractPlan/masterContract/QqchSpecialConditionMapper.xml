@@ -138,8 +138,8 @@
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="specialCode != null  and specialCode != ''">and `special_code` = #{specialCode}</if>
-            <if test="name != null  and name != ''">and `name` = #{name}</if>
-            <if test="content != null  and content != ''">and `content` = #{content}</if>
+            <if test="name != null  and name != ''">and `name` like concat('%' , #{name} , '%')</if>
+            <if test="content != null  and content != ''">and `content` like concat('%' , #{content} , '%')</if>
             <if test="generalCode != null  and generalCode != ''">and `general_code` = #{generalCode}</if>
             <if test="advantageAnalyse != null  and advantageAnalyse != ''">and `advantage_analyse` =
                 #{advantageAnalyse}

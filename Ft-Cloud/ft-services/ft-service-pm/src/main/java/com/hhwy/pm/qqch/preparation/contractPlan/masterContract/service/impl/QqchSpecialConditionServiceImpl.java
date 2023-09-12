@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -41,6 +43,9 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+
+    @Autowired
+    private CommonMapper commonMapper;
 
 
     public QqchSpecialCondition getQqchSpecialCondition(QqchSpecialCondition qqchSpecialCondition) {
@@ -182,5 +187,49 @@ public class QqchSpecialConditionServiceImpl implements IQqchSpecialConditionSer
             String stageIdentity = qqchSpecialConditionVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
+    }
+
+    /**
+     * 10.1财务相关主合同条款 弹窗
+     * @param qqchSpecialCondition
+     * @return
+     */
+    @Override
+    public List<QqchSpecialCondition> popUpWindows(QqchSpecialCondition qqchSpecialCondition) {
+        List<QqchSpecialCondition> resultList;
+        //获取最大有效版本
+        BigDecimal version = commonMapper.selectMaxVersion("qqch_special_condition");
+
+        /*查询版本全量数据*/
+        QqchSpecialCondition query = new QqchSpecialCondition();
+        query.setVersion(version);
+        List<QqchSpecialCondition> allList = qqchSpecialConditionMapper.getQqchSpecialConditionList(query);
+
+        /*条件名称*/
+        String name = qqchSpecialCondition.getName();
+        /*条件内容*/
+        String content = qqchSpecialCondition.getContent();
+        if(StringUtils.isNotBlank(name) || StringUtils.isNotBlank(content)){
+            query.setName(name);
+            query.setContent(content);
+            List<QqchSpecialCondition> subList = qqchSpecialConditionMapper.getQqchSpecialConditionList(query);
+            resultList = ListTreeUtil.getUpListBySublistToTree(
+                    subList,
+                    allList,
+                    QqchSpecialCondition::getId,
+                    QqchSpecialCondition::getPid,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSpecialCondition::getChildren,
+                    QqchSpecialCondition::setChildren);
+        }else {
+            resultList = ListTreeUtil.formatTree(
+                    allList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSpecialCondition::getChildren,
+                    QqchSpecialCondition::setChildren);
+        }
+        return resultList;
     }
 }
