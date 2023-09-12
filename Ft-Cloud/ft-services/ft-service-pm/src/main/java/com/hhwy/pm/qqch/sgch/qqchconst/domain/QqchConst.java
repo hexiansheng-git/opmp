@@ -286,5 +286,8 @@ public class QqchConst extends CompileEntity<QqchConst> {
     @Excel(name = "工种名称")
     private String occupationName;
 
-
+    /*分包收入*/
+    private BigDecimal subpackageIncome;
+    /*总产值占比*/
+    private BigDecimal totalOutputValueProportion;
 }
