@@ -4,6 +4,7 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import com.github.pagehelper.PageHelper;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -21,6 +22,7 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
+import com.hhwy.utils.tree.TreeUtil;
 import io.lettuce.core.protocol.RedisProtocolException;
 import io.netty.handler.codec.http.QueryStringDecoder;
 import org.apache.commons.lang3.StringUtils;
@@ -193,6 +195,14 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         query.setParentId(report.getParentId());
         query.setParams(ObjectUtils.toMap("ids", idSet));
         return xmslEngineeringReportMapper.getXmslEngineeringReportList(query);
+    }
+
+
+
+    public List<XmslEngineeringReport> getTreeListByPid(XmslEngineeringReport report) {
+        List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
+        List<XmslEngineeringReport> build = TreeUtil.build(xmslEngineeringReportList, -1L);
+        return build;
     }
 
     @Transactional

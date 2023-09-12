@@ -35,4 +35,7 @@ public interface IXmslEngineeringReportService {
     int deleteXmslEngineeringReport(XmslEngineeringReport xmslEngineeringReport);
 
     int deleteXmslEngineeringReportByPks(List<Long> xmslEngineeringReportPkList);
+
+
+    public List<XmslEngineeringReport> getTreeListByPid(XmslEngineeringReport report);
 }

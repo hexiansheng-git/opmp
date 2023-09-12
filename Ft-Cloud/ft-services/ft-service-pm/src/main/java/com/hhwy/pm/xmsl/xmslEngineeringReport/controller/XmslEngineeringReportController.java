@@ -42,6 +42,14 @@ public class XmslEngineeringReportController extends BaseController {
         return AjaxResult.success(xmslEngineeringReportList);
     }
 
+
+    @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
+    @PostMapping("/getTreeListByPid")
+    public AjaxResult getTreeListByPid(@RequestBody @Validated(ValidationGroups.Select.class) XmslEngineeringReport xmslEngineeringReportParam) {
+        List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportService.getTreeListByPid(xmslEngineeringReportParam);
+        return AjaxResult.success(xmslEngineeringReportList);
+    }
+
     @PreAuthorize(hasPermi = "xmslEngineeringReport:export")
     @PostMapping("/exportData")
     public void exportData(HttpServletRequest request,HttpServletResponse response, @RequestBody XmslEngineeringReport xmslEngineeringReportParam) throws IOException {
