@@ -11,6 +11,7 @@
         <result property="mainId" column="main_id"/>
         <result property="listId" column="list_id"/>
         <result property="wbsId" column="wbs_id"/>
+        <result property="wbsCode" column="wbs_code"/>
         <result property="pid" column="pid"/>
         <result property="ancestors" column="ancestors"/>
         <result property="chineseName" column="chinese_name"/>
@@ -45,6 +46,7 @@
              ,`main_id`
              ,`list_id`
              ,`wbs_id`
+             ,`wbs_code`
              ,`pid`
              ,`ancestors`
              ,`chinese_name`
@@ -173,6 +175,7 @@
             <if test="mainId != null ">`main_id`,</if>
             <if test="listId != null ">`list_id`,</if>
             <if test="wbsId != null ">`wbs_id`,</if>
+            <if test="wbsCode != null ">`wbs_code`,</if>
             <if test="pid != null ">`pid`,</if>
             <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
             <if test="chineseName != null  and chineseName != ''">`chinese_name`,</if>
@@ -205,6 +208,7 @@
             <if test="listCode != null  and listCode != ''">#{listCode},</if>
             <if test="mainId != null ">#{mainId},</if>
             <if test="listId != null ">#{listId},</if>
+            <if test="wbsCode != null ">#{wbsCode},</if>
             <if test="wbsId != null ">#{wbsId},</if>
             <if test="pid != null ">#{pid},</if>
             <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
@@ -244,6 +248,7 @@
             `main_id`,
             `list_id`,
             `wbs_id`,
+            `wbs_code`,
             `pid`,
             `ancestors`,
             `chinese_name`,
@@ -278,6 +283,7 @@
                 #{item.mainId},
                 #{item.listId},
                 #{item.wbsId},
+                #{item.wbsCode},
                 #{item.pid},
                 #{item.ancestors},
                 #{item.chineseName},
@@ -314,6 +320,7 @@
             <if test="mainId != null ">`main_id` = #{mainId},</if>
             <if test="listId != null ">`list_id` = #{listId},</if>
             <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
+            <if test="wbsCode != null ">`wbs_code` = #{wbsCode},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
             <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
             <if test="chineseName != null  and  chineseName != ''">`chinese_name` = #{chineseName},</if>
@@ -368,6 +375,11 @@
             <trim prefix="wbs_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `main_id`=#{item.mainId} then #{item.wbsId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `main_id`=#{item.mainId} then #{item.wbsCode}
                 </foreach>
             </trim>
             <trim prefix="pid  = case" suffix="end,">

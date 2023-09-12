@@ -50,6 +50,10 @@ public class XmslDrawReviewList extends WarpBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long wbsId;
+    
+    //wbs编号
+    private String wbsCode;
+    
     /**
      * 字段描述：父id
      */
