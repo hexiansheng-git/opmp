@@ -39,7 +39,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
     public List<XmslContractGeneral> getXmslContractGeneral(XmslContractGeneral xmslContractGeneral) {
         List<XmslContractGeneral> list = xmslContractGeneralMapper.getXmslContractGeneral(xmslContractGeneral);
         //转树列表
-        List<XmslContractGeneral> treeList = ListTreeUtil.formatTree(list, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
+        List<XmslContractGeneral> treeList = ListTreeUtil.formatTree(list, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
         return  treeList;
     }
 
@@ -76,8 +76,6 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
             insertList.forEach(q->{
                 if (q.getPid() != null) {
                     q.setPid(q.getPid());
-                } else {
-                    q.setPid(0l);
                 }
             });
             xmslContractGeneralMapper.insertXmslContractGeneralList(insertList);
@@ -179,12 +177,12 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
                         allList,
                         XmslContractGeneral::getId,
                         XmslContractGeneral::getPid,
-                        o -> o.getPid() == 0,
+                        o -> o.getPid() == null,
                         (r, n) -> r.getId().equals(n.getPid()),
                         XmslContractGeneral::getChildren,
                         XmslContractGeneral::setChildren);
             }else {
-                resultList = ListTreeUtil.formatTree(allList, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
+                resultList = ListTreeUtil.formatTree(allList, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), XmslContractGeneral::getChildren, XmslContractGeneral::setChildren);
             }
         }
         return resultList;
