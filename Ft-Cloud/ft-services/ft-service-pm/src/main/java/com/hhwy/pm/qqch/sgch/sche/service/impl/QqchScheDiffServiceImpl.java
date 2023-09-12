@@ -174,13 +174,6 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
     }
 
 
-    @Data
-    @ToString
-    @AllArgsConstructor
-    public static class ScoreInfo {
-        private BigDecimal score;
-        private int rowNum;
-    }
 
 
 }

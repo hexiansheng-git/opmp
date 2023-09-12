@@ -200,9 +200,16 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
 
 
     public List<XmslEngineeringReport> getTreeListByPid(XmslEngineeringReport report) {
+        if (report.getParams().get("pids") == null || "".equals(report.getParams().get("pids"))) {
+            report.setParentId(ObjectUtils.nvlLong(report.getParentId(), -1L));
+        }
         List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
-        List<XmslEngineeringReport> build = TreeUtil.build(xmslEngineeringReportList, -1L);
-        return build;
+        // 当parentIdb为空的时候 才转树
+        if (report.getParentId() == null){
+            xmslEngineeringReportList = TreeUtil.build(xmslEngineeringReportList, -1L);
+        }
+        
+        return xmslEngineeringReportList;
     }
 
     @Transactional

@@ -152,7 +152,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
         this.qqchConstMapper.insertQqchConstList(qqchConsts);
 
         // 保存
-        jobService.saveList(CompileEntity.dealSaveDto(dtoList, iJobList));
+        jobService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iJobList));
         staffPlanService.saveList(CompileEntity.dealSaveDto(dtoList, iStaffList));
         facilityPlanService.saveList(CompileEntity.dealSaveDto(dtoList, iFacList));
 
@@ -174,7 +174,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
         for (QqchConst qqchConst : qqchConstList) {
             List<QqchConstJob> jobRes = jobListMap.get(qqchConst.getId());
-            List<QqchConstJob> build = TreeUtil.build(jobRes, null);
+            List<QqchConstJob> build = TreeUtil.build(jobRes, -1L);
             qqchConst.setJobList(build);
             List<QqchConstStaffPlan> staffLRes = staffPlanListMap.get(qqchConst.getId());
             qqchConst.setStaffList(staffLRes);
