@@ -67,9 +67,9 @@ public class QqchSummaryEvaluation extends BaseEntity {
     /**
      * 字段描述：初评价时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "初评价时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "初评价时间", dateFormat = "yyyy-MM-dd")
     private Date initialDate;
     /**
      * 字段描述：初评概述
@@ -112,9 +112,9 @@ public class QqchSummaryEvaluation extends BaseEntity {
     /**
      * 字段描述：终评价时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "终评价时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "终评价时间", dateFormat = "yyyy-MM-dd")
     private Date finalDate;
     /**
      * 字段描述：终评概述
