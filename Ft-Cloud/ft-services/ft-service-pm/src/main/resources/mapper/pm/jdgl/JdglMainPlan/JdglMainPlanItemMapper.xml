@@ -235,10 +235,10 @@
     <select id="getUsingJdglMainPlanItemListByDateRange" resultMap="JdglMainPlanItemResultMap">
         <include refid="selectJdglMainPlanItemVo" />
         <where>
-        del_flag = "0"
-        and (start_date &lt;= #{startDate} and finish_date &gt;= #{startDate})
+        del_flag = "0" and main_plan_id = #{mainPlanId}
+        and ((start_date &lt;= #{startDate} and finish_date &gt;= #{startDate})
         or (finish_date &lt;= #{finishDate} and finish_date &gt;= #{finishDate})
-        or (start_date &gt;= #{startDate} and finish_date &lt;= #{finishDate})
+        or (start_date &gt;= #{startDate} and finish_date &lt;= #{finishDate}))
         </where>
     </select>
 

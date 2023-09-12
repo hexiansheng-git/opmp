@@ -111,7 +111,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
      * @return
      */
     @Override
-    public List<JdglQuarterImagePlan> syncFromTotalPlan(JdglQuarterPlan jdglQuarterPlanParam) {
+    public JdglQuarterPlan syncFromTotalPlan(JdglQuarterPlan jdglQuarterPlanParam) {
 
         List<JdglQuarterImagePlan> returnList = new ArrayList<JdglQuarterImagePlan>();
 
@@ -125,7 +125,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
         // 修改年进度计划主表引用总体计划的版本号
 
-        return returnList;
+        return null;
     }
 
     @Override

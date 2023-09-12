@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service;
 
 import java.util.List;
 
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
 
 /**
@@ -32,4 +33,6 @@ public interface IJdglYearValuePlanService {
     int deleteJdglYearValuePlanByPks(List<Long> jdglYearValuePlanPkList);
 
     List<JdglYearValuePlan> getBillListByYear(String year);
+
+    List<JdglYearValuePlan> updateValuePlanData(Long yearplanId, List<JdglYearImagePlan> imagePlans);
 }

@@ -1,10 +1,19 @@
 package com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.impl;
 
-import java.util.List;
+import java.util.*;
 
+import cn.hutool.core.lang.hash.Hash;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service.IJdglYearImagePlanService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
+import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -26,6 +35,14 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
     @Autowired
     private JdglYearValuePlanMapper jdglYearValuePlanMapper;
 
+    @Autowired
+    private IJdglYearImagePlanService jdglYearImagePlanService;
+
+    @Autowired
+    private IXmslDrawReviewListService drawReviewListService;
+    
+    @Autowired
+    private IXmslContractListService xmslContractListService;
 
     public JdglYearValuePlan getJdglYearValuePlan(JdglYearValuePlan jdglYearValuePlan) {
         return jdglYearValuePlanMapper.getJdglYearValuePlan(jdglYearValuePlan);
@@ -119,5 +136,43 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
     @Override
     public List<JdglYearValuePlan> getBillListByYear(String year) {
         return jdglYearValuePlanMapper.getBillListByYear(year);
+    }
+
+
+    @Override
+    public List<JdglYearValuePlan> updateValuePlanData(Long yearplanId, List<JdglYearImagePlan> imagePlans) {
+        List<JdglYearValuePlan> returnList = new ArrayList<>();
+        if(yearplanId == null) {
+            return returnList;
+        }
+
+        if(CollectionUtils.isEmpty(imagePlans)) {
+            imagePlans = jdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(yearplanId);
+        }
+
+        if(!CollectionUtils.isEmpty(imagePlans)) {
+            // 获取图纸复核的清单
+            List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
+            // 获取主合同清单
+            List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
+            if(CollectionUtils.isEmpty(list)) {
+                return returnList;
+            }
+            Set<Long> listids = new HashSet<>();
+            for (JdglYearImagePlan jdglYearImagePlan : imagePlans) {
+                for (XmslDrawReviewList xmslDrawReviewList: list) {
+                    if(jdglYearImagePlan.getWbsId() != null && jdglYearImagePlan.getWbsId().equals(xmslDrawReviewList.getWbsId())) {
+                        listids.add(xmslDrawReviewList.getListId());
+                    }
+                }
+            }
+            if(!CollectionUtils.isEmpty(listids)) {
+                for (Long listid : listids) {
+
+                }
+            }
+        }
+
+        return returnList;
     }
 }

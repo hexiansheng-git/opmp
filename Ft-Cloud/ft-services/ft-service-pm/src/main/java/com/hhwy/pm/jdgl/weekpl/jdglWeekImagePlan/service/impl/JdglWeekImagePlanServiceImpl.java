@@ -111,7 +111,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
      * @return
      */
     @Override
-    public List<JdglWeekImagePlan> syncFromTotalPlan(JdglWeekPlan jdglWeekPlanParam) {
+    public JdglWeekPlan syncFromTotalPlan(JdglWeekPlan jdglWeekPlanParam) {
 
         List<JdglWeekImagePlan> returnList = new ArrayList<JdglWeekImagePlan>();
 
@@ -125,7 +125,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
         // 修改年进度计划主表引用总体计划的版本号
 
-        return returnList;
+        return null;
     }
 
     @Override

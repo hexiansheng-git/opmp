@@ -112,7 +112,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
      * @return
      */
     @Override
-    public List<JdglMonthImagePlan> syncFromTotalPlan(JdglMonthPlan jdglMonthPlanParam) {
+    public JdglMonthPlan syncFromTotalPlan(JdglMonthPlan jdglMonthPlanParam) {
 
         List<JdglMonthImagePlan> returnList = new ArrayList<JdglMonthImagePlan>();
 
@@ -126,7 +126,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
         // 修改年进度计划主表引用总体计划的版本号
 
-        return returnList;
+        return null;
     }
 
     @Override

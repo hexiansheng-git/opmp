@@ -373,7 +373,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     planStatisticsBillValueVO.setBillCode(xmslContractList.getCode());
                     planStatisticsBillValueVO.setBillName(xmslContractList.getChineseName());
                     planStatisticsBillValueVO.setBillUnit(xmslContractList.getUnit());
-                    BigDecimal price = xmslContractList.getChangeUnitPrice();
+                    BigDecimal price = xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
                     planStatisticsBillValueVO.setBillPrice(price);
 
                     if(xmslContractList.getChangeNum() != null) {

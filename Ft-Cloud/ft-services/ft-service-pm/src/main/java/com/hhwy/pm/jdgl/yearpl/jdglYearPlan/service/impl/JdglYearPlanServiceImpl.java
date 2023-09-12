@@ -165,8 +165,10 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         if(jdglYearPlanParam != null) {
             Long id = IdWorker.createId();
             jdglYearPlanParam.setId(id);
-            jdglYearPlanParam.setCreateUser(SecurityUtils.getUserName());
+            jdglYearPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglYearPlanParam.setCreateTime(DateUtils.getNowDate());
+            jdglYearPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+            jdglYearPlanParam.setUpdateTime(DateUtils.getNowDate());
             jdglYearPlanParam.setVersion(Integer.parseInt(jdglYearPlanParam.getVersion()) + 1 + "");
             jdglYearPlanParam.setTaskStatus("0");
             jdglYearPlanParam.setIsUse("0");

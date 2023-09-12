@@ -191,8 +191,10 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         if(jdglMonthPlanParam != null) {
             Long id = IdWorker.createId();
             jdglMonthPlanParam.setId(id);
-            jdglMonthPlanParam.setCreateUser(SecurityUtils.getUserName());
+            jdglMonthPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglMonthPlanParam.setCreateTime(DateUtils.getNowDate());
+            jdglMonthPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+            jdglMonthPlanParam.setUpdateTime(DateUtils.getNowDate());
             jdglMonthPlanParam.setVersion(Integer.parseInt(jdglMonthPlanParam.getVersion()) + 1 + "");
             jdglMonthPlanParam.setTaskStatus("0");
             jdglMonthPlanParam.setIsUse("0");

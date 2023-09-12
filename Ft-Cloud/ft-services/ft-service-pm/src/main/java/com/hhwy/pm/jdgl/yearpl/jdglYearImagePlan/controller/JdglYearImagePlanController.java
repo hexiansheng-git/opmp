@@ -94,8 +94,9 @@ public class JdglYearImagePlanController extends BaseController {
      * @return
      */
     @PostMapping("/syncFromTotalPlan")
-    public AjaxResult syncFromTotalPlan(JdglYearPlan jdglYearPlanParam) {
-        return AjaxResult.success(jdglYearImagePlanService.syncFromTotalPlan(jdglYearPlanParam));
+    public AjaxResult syncFromTotalPlan(@RequestBody JdglYearPlan jdglYearPlanParam) {
+        JdglYearPlan jdglYearPlan = jdglYearImagePlanService.syncFromTotalPlan(jdglYearPlanParam);
+        return AjaxResult.success(jdglYearPlan);
     }
 
     @GetMapping("/export")

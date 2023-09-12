@@ -32,7 +32,7 @@ public interface IJdglWeekImagePlanService {
 
     int deleteJdglWeekImagePlanByPlanId(Long yearPlanId);
 
-    List<JdglWeekImagePlan> syncFromTotalPlan(JdglWeekPlan jdglWeekPlanParam);
+    JdglWeekPlan syncFromTotalPlan(JdglWeekPlan jdglWeekPlanParam);
 
     List<JdglWeekImagePlan> getWbsListByYearAndWeek(String year, String week);
 }
