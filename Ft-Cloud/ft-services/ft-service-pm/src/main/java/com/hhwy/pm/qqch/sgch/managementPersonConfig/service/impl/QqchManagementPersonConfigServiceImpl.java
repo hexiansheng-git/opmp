@@ -225,7 +225,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         for (QqchManagementPersonConfig managementPersonConfig : configs) {
             managementPersonConfig.setValid(valid);
             managementPersonConfig.setVersion(version);
-            if(managementPersonConfig.getRelevancyId() != null){
+            if(managementPersonConfig.getRelevancyId() == null){
                 managementPersonConfig.setRelevancyId(IdWorker.createId());
             }
             managementPersonConfig.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
