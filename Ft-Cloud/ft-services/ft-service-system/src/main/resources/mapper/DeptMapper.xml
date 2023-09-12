@@ -107,6 +107,19 @@
            OR  FIND_IN_SET(dept_id,#{ancestors})
 
     </select>
+    <select id="getProjectOrgInfo" resultMap="SysDeptResult">
+        SELECT
+            dept_id ,
+            parent_id ,
+            dept_name ,
+            pt_var_5 ,
+            dept_type
+        FROM
+            sys_dept
+        WHERE
+            del_flag = '0'
+                AND dept_type = "prjInfo"
+    </select>
 
 
 </mapper>

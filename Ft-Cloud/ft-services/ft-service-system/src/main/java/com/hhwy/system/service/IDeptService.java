@@ -20,4 +20,5 @@ public interface IDeptService {
 
     List<SysDept> selectPrjInfo(Long deptId, String ancestors);
 
+    List<SysDept> getProjectOrgInfo();
 }

@@ -31,5 +31,5 @@ public interface JdglMainPlanItemMapper {
 
     List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDate(@Param("date") Date date,@Param("mainPlanId") Long mainPlanId);
 
-    List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate,@Param("mainPlanId") Long mainPlanId);
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(@Param("startDate") Date startDate, @Param("finishDate") Date endDate,@Param("mainPlanId") Long mainPlanId);
 }

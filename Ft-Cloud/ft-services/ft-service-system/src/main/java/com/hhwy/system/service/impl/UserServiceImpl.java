@@ -132,4 +132,14 @@ public class UserServiceImpl implements IUserService {
     public List<SysUser> selectAllUser(List<SysDept> deptList) {
         return  userMapper.selectAllUser(deptList);
     }
+
+    /**
+     * 插入用户集合
+     * @param sysUserList
+     * @return
+     */
+    @Override
+    public int insertSysUserList(List<SysUser> sysUserList) {
+        return userMapper.insertSysUserList(sysUserList);
+    }
 }

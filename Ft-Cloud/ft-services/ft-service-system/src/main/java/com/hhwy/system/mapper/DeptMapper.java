@@ -25,4 +25,6 @@ public interface DeptMapper {
     List<SysDept> selectAllDept(@Param("deptId") Long deptId, @Param("ancestors") String ancestors);
 
     List<SysDept> selectPrjInfo(@Param("deptId") Long deptId, @Param("ancestors") String ancestors);
+
+    List<SysDept> getProjectOrgInfo();
 }

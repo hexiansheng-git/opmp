@@ -62,5 +62,10 @@ public class DeptServiceImpl implements IDeptService {
         return deptMapper.selectPrjInfo(deptId,ancestors);
     }
 
+    @Override
+    public List<SysDept> getProjectOrgInfo() {
+        return deptMapper.getProjectOrgInfo();
+    }
+
 
 }

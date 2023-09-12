@@ -119,4 +119,6 @@ public interface UserMapper {
     List<SysUser> selectBy4AList(@Param(value = "fourAList") List<String> fourAList);
 
     List<SysUser> selectAllUser(@Param("deptList") List<SysDept> deptList);
+
+    int insertSysUserList(@Param(value = "sysUserList") List<SysUser> sysUserList);
 }
