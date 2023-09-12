@@ -9,6 +9,11 @@ import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.domain.QqchTotalDemand;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.domain.vo.QqchTotalDemandVo;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.service.IQqchTotalDemandService;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount;
+import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.service.IQqchTotalDemandTimeCountService;
 import com.hhwy.pm.qqch.utils.EasyExeclUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
@@ -25,13 +30,17 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailRequest;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandValidVO;
 import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.MaterialUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.compress.utils.Lists;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -68,6 +77,10 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     private SystemApiService systemApiService;
     @Resource
     private WzchTotalDemandMapper wzchTotalDemandMapper;
+    @Resource
+    private IQqchTotalDemandService qqchTotalDemandService;
+    @Resource
+    private IQqchTotalDemandTimeCountService qqchTotalDemandTimeCountService;
 
     /**
      * 查询物资总需用详情
@@ -173,6 +186,60 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         }
         wzchTotalDemandTimeCountService.batchInsert(totalDemandTimeCounts);
         return wzchTotalDemand.getId();
+    }
+
+    
+    @Override
+    @Transactional
+    public void syncQqchTotal(BigDecimal version) {
+        //1、删除物资总需、日期明细
+        this.wzchTotalDemandDetailMapper.deleteByVersion(version);
+        wzchTotalDemandTimeCountService.deleteByVersion(version);
+        //2、获取施工策划  
+        QqchTotalDemand queryDemand = new QqchTotalDemand();
+        queryDemand.setVersion(version);
+        List<QqchTotalDemand> totalDemandList = qqchTotalDemandService.getQqchTotalDemandListSource(queryDemand);
+        if(CollectionUtils.isEmpty(totalDemandList))
+            return ;
+        QqchTotalDemandTimeCount query = new QqchTotalDemandTimeCount();
+        query.setVersion(version);
+        List<QqchTotalDemandTimeCount> timeCountList = qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCountList(query);
+        //3、转换为物资总需
+        List<WzchTotalDemandDetail> addList = new ArrayList<>(totalDemandList.size());
+        List<WzchTotalDemandTimeCount> addTimeList = new ArrayList<>(timeCountList.size());
+        for (int i = 0; i < totalDemandList.size(); i++) {
+            QqchTotalDemand temp = totalDemandList.get(i);
+            WzchTotalDemandDetail tempTotal = new WzchTotalDemandDetail();
+            BeanUtils.copyProperties(temp, tempTotal);
+            tempTotal.setCategoryName(temp.getMaterialType());
+            new AddBaseInfoUtil().addBaseEntity(tempTotal);
+            addList.add(tempTotal);
+        }
+        for (int i = 0; i < timeCountList.size(); i++) {
+            QqchTotalDemandTimeCount temp = timeCountList.get(i);
+            WzchTotalDemandTimeCount tempTotal = new WzchTotalDemandTimeCount();
+            BeanUtils.copyProperties(temp, tempTotal);
+            tempTotal.setTotalDemandDetailId(temp.getDemandId());
+            //计算季度和年数量
+            BigDecimal[] months = new BigDecimal[]{tempTotal.getJanNum(),tempTotal.getFebNum(),tempTotal.getMarNum(),tempTotal.getAprNum()
+                    ,tempTotal.getMayNum(),tempTotal.getJunNum(),temp.getJulNum(),temp.getAugNum()
+                    ,tempTotal.getSeptNum(),tempTotal.getOctNum(),temp.getNovNum(),temp.getDecNum()};
+            BigDecimal quarter1 = BigDecimalUtils.sum(ArrayUtils.subarray(months, 0, 3));
+            BigDecimal quarter2 = BigDecimalUtils.sum(ArrayUtils.subarray(months, 3, 6));
+            BigDecimal quarter3 = BigDecimalUtils.sum(ArrayUtils.subarray(months, 6, 9));
+            BigDecimal quarter4 = BigDecimalUtils.sum(ArrayUtils.subarray(months, 9, 12));
+            BigDecimal yearSum = BigDecimalUtils.sum(quarter1,quarter2,quarter3,quarter4);
+            tempTotal.setFirstQuarterNum(quarter1);
+            tempTotal.setSecondQuarterNum(quarter2);
+            tempTotal.setThirdQuarterNum(quarter3);
+            tempTotal.setFourthQuarterNum(quarter4);
+            tempTotal.setYearNum(yearSum);
+            new AddBaseInfoUtil().addBaseEntity(tempTotal);
+            addTimeList.add(tempTotal);
+        }
+        this.wzchTotalDemandDetailMapper.batchInsert(addList);
+        this.wzchTotalDemandTimeCountService.batchInsert(addTimeList);
+        
     }
 
     /**

@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.wzch.demand.mapper;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -59,6 +60,8 @@ public interface WzchTotalDemandTimeCountMapper {
      * @return 结果
      */
     int deleteWzchTotalDemandTimeCountByIds(List<Long> ids);
+
+    int deleteByVersion(BigDecimal version);
 
     List<WzchTotalDemandTimeCount> selectByTotalDemandDetailIds(List<Long> list);
 

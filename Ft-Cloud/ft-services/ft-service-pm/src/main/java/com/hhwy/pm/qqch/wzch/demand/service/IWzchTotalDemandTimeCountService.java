@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.wzch.demand.service;
 
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -58,6 +59,8 @@ public interface IWzchTotalDemandTimeCountService {
      * @return 结果
      */
     int deleteWzchTotalDemandTimeCountById(Long id);
+    
+    int deleteByVersion(BigDecimal version);
     /**
      * 查询通过详情id
      *

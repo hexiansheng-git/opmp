@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.wzch.demand.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,9 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailVO;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandExportRequest;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -79,4 +82,18 @@ public class WzchTotalDemandController extends BaseController {
     public AjaxResult detail(WzchTotalDemandDetailVO vo) {
         return AjaxResult.success(wzchTotalDemandService.detail(vo));
     }
+
+    /**
+     * 同步施工策划数据 覆盖
+     * @param version
+     * @return
+     */
+    @PostMapping("/sync")
+//    @CustomLogger(title = "物资总需-详情",businessType = CustomBusinessType.SELECT)
+    public AjaxResult sync(String version) {
+        Assert.isTrue(StringUtils.isNotBlank(version), "version不能为空");
+        wzchTotalDemandDetailService.syncQqchTotal(new  BigDecimal(version));
+        return AjaxResult.success();
+    }
+    
 }

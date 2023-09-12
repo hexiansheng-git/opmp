@@ -16,6 +16,8 @@ public interface IQqchTotalDemandService {
 
     QqchTotalDemandVo getQqchTotalDemandList(QqchTotalDemand qqchTotalDemand);
 
+    List<QqchTotalDemand> getQqchTotalDemandListSource(QqchTotalDemand totalDemand);
+
     int insertQqchTotalDemand(QqchTotalDemand qqchTotalDemand);
 
     int updateQqchTotalDemand(QqchTotalDemand qqchTotalDemand);
