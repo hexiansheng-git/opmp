@@ -41,4 +41,6 @@ public interface IUserService {
     List<SysUser> select4AByUserNames(Map<String, String> map);
 
     List<SysUser> selectAllUser(List<SysDept> deptList);
+
+    int insertSysUserList(List<SysUser> sysUserList);
 }

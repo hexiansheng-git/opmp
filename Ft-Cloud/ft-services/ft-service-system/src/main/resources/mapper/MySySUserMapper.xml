@@ -29,6 +29,50 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{info.phoneNumber}, #{info.sex},#{info.idCard},#{info.password},#{info.status},#{info.ptVar4},#{info.ptVar5},#{info.createTime},#{info.delFlag},#{info.ptVar1}  )
         </foreach>
     </insert>
+    <insert id="insertSysUserList">
+        insert into sys_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            user_id,
+            dept_id,
+            user_name,
+            nick_name,
+            user_type,
+            email,
+            avatar,
+            phone_number,
+            sex,
+            id_card,
+            password,
+            status,
+            create_user,
+            remark,
+            super_flag,
+            tenant_key,
+            create_time
+        </trim>
+        values
+        <foreach collection="sysUserList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.userId},
+                #{item.deptId},
+                #{item.userName},
+                #{item.nickName},
+                #{item.userType},
+                #{item.email},
+                #{item.avatar},
+                #{item.phoneNumber},
+                #{item.sex},
+                #{item.idCard},
+                #{item.password},
+                #{item.status},
+                #{item.createUser},
+                #{item.remark},
+                #{item.superFlag},
+                #{item.tenantKey},
+                sysdate()
+            </trim>
+        </foreach>
+    </insert>
 
     <update id="bathUpdate" parameterType="list">
         update `sys_user`
