@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.common.mapper.WzchCommonMapper">
+    <update id="updateValidStatus">
+        update ${tableName}
+        set valid = 1
+        where ${fieldName} = #{fieldValue}
+    </update>
+    <update id="updateValidStatusByProjectId">
+        update ${tableName}
+        set valid = 0
+        where project_id = #{projectId}
+    </update>
+
+    <select id="verifyProjectSelected" resultType="java.lang.Integer">
+        SELECT
+        count( 0 )
+        FROM
+        ${tableName} AS t
+
+        WHERE
+        t.del_flag = 0
+        AND t.project_id = #{projectId}
+        <if test="businessId != null">
+            AND t.id != #{businessId}
+        </if>
+        <if test="code != null and code!=''">
+            AND ${codeFiledName} != #{code}
+        </if>
+    </select>
+    <select id="selectCanAdjust" resultType="java.lang.String">
+        SELECT t.valid
+        FROM ${tableName} AS t
+        WHERE t.id = #{businessId}
+    </select>
+
+    <select id="selectCanAdjust2" resultType="java.lang.String">
+        SELECT t.is_valid
+        FROM ${tableName} AS t
+        WHERE t.id = #{businessId}
+    </select>
+
+    <select id="selectCanAdjustOnly" resultType="java.lang.Long">
+        select id
+        from ${tableName} s
+        where s.del_flag = 0
+          AND s.version_code=(SELECT max(t.version_code)
+                              FROM ${tableName} AS t
+                              WHERE t.del_flag = 0 AND t.project_id = #{projectId})
+          AND s.project_id = #{projectId}
+    </select>
+
+    <select id="selectCanAdjustOnly2" resultType="java.lang.Long">
+        select id
+        from ${tableName} s
+        where s.del_flag = 0
+          AND s.version_no=(SELECT max(t.version_no)
+                              FROM ${tableName} AS t
+                              WHERE t.del_flag = 0 AND t.project_id = #{projectId})
+          AND s.project_id = #{projectId}
+    </select>
+
+
+    <update id="deleteByField">
+        update ${tableName}
+        set del_flag = '1'
+        where ${fieldName} = #{fieldValue}
+    </update>
+
+    <update id="batchDeleteByField">
+        update ${tableName}
+        set del_flag = '1'
+        where ${fieldName} in
+        <foreach item="item" collection="fieldValues" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+</mapper>

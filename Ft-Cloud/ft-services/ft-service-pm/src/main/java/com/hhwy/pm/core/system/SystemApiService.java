@@ -1,7 +1,11 @@
 package com.hhwy.pm.core.system;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.domain.R;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.constant.DictType;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysUser;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  *  简化调用SystemApi接口 
@@ -37,6 +42,17 @@ public class SystemApiService {
             return new ArrayList<>(2);
         }
         return r.getData();
+    }
+
+    /**
+     * 查询字典项
+     * @param dictType 字典key
+     * @return
+     */
+    public List<SysDictData> selectDictDataByType(String dictType){
+        AjaxResult result = systemServiceApi.dictType(dictType);
+        List<SysDictData> list = JSONObject.parseArray(JSONObject.toJSONString(result.get("data")),SysDictData.class);
+        return list;
     }
     
     

@@ -1,0 +1,764 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.demand.mapper.WzchTotalDemandMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand" id="WzchTotalDemandResult">
+        <result property="id" column="id"/>
+        <result property="demandCode" column="demand_code"/>
+        <result property="title" column="title"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="versionCode" column="version_code"/>
+        <result property="planStartTime" column="plan_start_time"/>
+        <result property="planEndTime" column="plan_end_time"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="valid" column="valid"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+    </resultMap>
+
+    <sql id="selectWzchTotalDemandVo">
+        select valid, `id`,
+               `demand_code`,
+               `title`,
+               `region_id`,
+               `region_name`,
+               `version_code`,
+               CONCAT('V',`version_code`) as versionCodeStr,
+               `plan_start_time`,
+               `plan_end_time`,
+               `file_group_id`,
+               `remark`,
+               `project_id`,
+               `project_name`,
+               `dept_id`,
+               `create_user`,
+               `create_user_name`,
+               `create_time`,
+               `update_user`,
+               `update_user_name`,
+               `update_time`,
+               `del_user`,
+               `del_time`,
+               `del_flag`,
+               `pt_var1`,
+               `pt_var2`,
+               `pt_var3`,
+               `pt_var4`,
+               `pt_var5`,
+                valid
+        from `wzch_total_demand`
+    </sql>
+
+    <sql id="selectWzchTotalDemandVo2">
+        select a.valid,
+               a.`id`,
+               a.`demand_code`      demandCode,
+               a.`title`,
+               a.`region_id`        regionId,
+               a.`region_name`      regionName,
+               a.`version_code`     versionCode,
+               a.`plan_start_time`  planStartTime,
+               a.`plan_end_time`    planEndTime,
+               a.`file_group_id`    fileGroupId,
+               a.`remark`,
+               a.`project_id`       projectId,
+               a.`project_name`     projectName,
+               a.`dept_id`          deptId,
+               a.`create_user`      createUser,
+               a.`create_user_name` createUserName,
+               a.`create_time`      createTime,
+
+
+               abi.process_task_name as processTaskName,
+               abi.process_task_man as processTaskMan ,
+               abi.task_status taskStatus,
+               abi.process_instance_id AS instanceId,
+               abi.id AS activityTableId,
+               abi.process_task_id AS taskId,
+               abi.is_doc AS isDoc,
+               abi.form_url AS formUrl,
+
+               a.valid
+        from `wzch_total_demand` a
+                 left join activity_business_info as abi
+                           on a.id = abi.business_id and abi.business_table_name = 'wzch_total_demand'
+    </sql>
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from wzch_total_demand where id =#{id}
+    </delete>
+
+    <select id="selectList" resultType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand">
+        <include refid="selectWzchTotalDemandVo2"/>
+        <where>
+            `del_flag` = 0
+            <if test="demandCode != null  and demandCode != ''">and `demand_code` = #{demandCode}</if>
+            <if test="title != null  and title != ''">and `title` like concat('%',#{title},'%') </if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` like concat('%',#{regionName},'%')</if>
+            <if test="versionCode != null ">and `version_code` = #{versionCode}</if>
+            <if test="planStartTime != null ">and `plan_start_time` = #{planStartTime}</if>
+            <if test="planEndTime != null ">and `plan_end_time` = #{planEndTime}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and `update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="valid!=null and valid!=''">and valid = #{valid}</if>
+
+        </where>
+        ${params.dataScope}
+        order by `id` desc
+    </select>
+
+    <select id="selectWzchTotalDemandList" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand"
+            resultMap="WzchTotalDemandResult">
+        <include refid="selectWzchTotalDemandVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="demandCode != null  and demandCode != ''">and `demand_code` = #{demandCode}</if>
+            <if test="title != null  and title != ''">and `title` = #{title}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="versionCode != null ">and `version_code` = #{versionCode}</if>
+            <if test="planStartTime != null ">and `plan_start_time` = #{planStartTime}</if>
+            <if test="planEndTime != null ">and `plan_end_time` = #{planEndTime}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and `update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="valid!=null and valid!=''">and valid = #{valid}</if>
+        </where>
+        order by `id` desc
+    </select>
+
+    <select id="selectWzchTotalDemandById" parameterType="Long" resultMap="WzchTotalDemandResult">
+        <include refid="selectWzchTotalDemandVo"/>
+        where `id` = #{id} and `del_flag` = '0'
+    </select>
+    <insert id="insertWzchTotalDemand" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand">
+        insert into `wzch_total_demand`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="demandCode != null">`demand_code`,</if>
+            <if test="title != null">`title`,</if>
+            <if test="regionId != null">`region_id`,</if>
+            <if test="regionName != null">`region_name`,</if>
+            <if test="versionCode != null">`version_code`,</if>
+            <if test="planStartTime != null">`plan_start_time`,</if>
+            <if test="planEndTime != null">`plan_end_time`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="valid != null">`valid`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="ptVar5 != null">`pt_var5`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="demandCode != null">#{demandCode},</if>
+            <if test="title != null">#{title},</if>
+            <if test="regionId != null">#{regionId},</if>
+            <if test="regionName != null">#{regionName},</if>
+            <if test="versionCode != null">#{versionCode},</if>
+            <if test="planStartTime != null">#{planStartTime},</if>
+            <if test="planEndTime != null">#{planEndTime},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="valid != null">#{valid},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_total_demand` (
+        `id`,
+        `demand_code`,
+        `title`,
+        `region_id`,
+        `region_name`,
+        `version_code`,
+        `plan_start_time`,
+        `plan_end_time`,
+        `file_group_id`,
+        `remark`,
+        `project_id`,
+        `project_name`,
+        `dept_id`,
+        `create_user`,
+        `create_user_name`,
+        `create_time`,
+        `update_user`,
+        `update_user_name`,
+        `update_time`,
+        `del_user`,
+        `del_time`,
+        `del_flag`,
+        `valid`,
+        `pt_var1`,
+        `pt_var2`,
+        `pt_var3`,
+        `pt_var4`,
+        `pt_var5`,
+        )values
+        <foreach collection="dataList" separator="," item="item" index="index">
+            (
+            #{item.id},
+            #{item.demandCode},
+            #{item.title},
+            #{item.regionId},
+            #{item.regionName},
+            #{item.versionCode},
+            #{item.planStartTime},
+            #{item.planEndTime},
+            #{item.fileGroupId},
+            #{item.remark},
+            #{item.projectId},
+            #{item.projectName},
+            #{item.deptId},
+            #{item.createUser},
+            #{item.createUserName},
+            #{item.createTime},
+            #{item.updateUser},
+            #{item.updateUserName},
+            #{item.updateTime},
+            #{item.delUser},
+            #{item.delTime},
+            #{item.delFlag},
+            @{item.valid},
+            #{item.ptVar1},
+            #{item.ptVar2},
+            #{item.ptVar3},
+            #{item.ptVar4},
+            #{item.ptVar5}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_total_demand`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="demand_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.demandCode != null ">
+                        when `id` = #{item.id} then #{item.demandCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="title =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.title != null ">
+                        when `id` = #{item.id} then #{item.title}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.regionId != null ">
+                        when `id` = #{item.id} then #{item.regionId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.regionName != null ">
+                        when `id` = #{item.id} then #{item.regionName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="version_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.versionCode != null ">
+                        when `id` = #{item.id} then #{item.versionCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_start_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planStartTime != null ">
+                        when `id` = #{item.id} then #{item.planStartTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_end_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planEndTime != null ">
+                        when `id` = #{item.id} then #{item.planEndTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.fileGroupId != null ">
+                        when `id` = #{item.id} then #{item.fileGroupId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id` = #{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id` = #{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectName != null ">
+                        when `id` = #{item.id} then #{item.projectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id` = #{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id` = #{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id` = #{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id` = #{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUserName != null ">
+                        when `id` = #{item.id} then #{item.updateUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id` = #{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id` = #{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id` = #{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="valid =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.valid != null ">
+                        when `id` = #{item.id} then #{item.valid}
+                    </if>
+                </foreach>
+            </trim>
+
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar4 != null ">
+                        when `id` = #{item.id} then #{item.ptVar4}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar5 != null ">
+                        when `id` = #{item.id} then #{item.ptVar5}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index">
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="updateWzchTotalDemand" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand">
+        update `wzch_total_demand`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="demandCode != null">`demand_code` = #{demandCode},</if>
+            <if test="title != null">`title` = #{title},</if>
+            <if test="regionId != null">`region_id` = #{regionId},</if>
+            <if test="regionName != null">`region_name` = #{regionName},</if>
+            <if test="versionCode != null">`version_code` = #{versionCode},</if>
+            <if test="planStartTime != null">`plan_start_time` = #{planStartTime},</if>
+            <if test="planEndTime != null">`plan_end_time` = #{planEndTime},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="valid != null">`valid` = #{valid},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchTotalDemandById" parameterType="Long">
+        update `wzch_total_demand`
+        set del_flag = 1
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchTotalDemandByIds" parameterType="String">
+        update `wzch_total_demand` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <select id="setlectByProjectIdsAndValid">
+        <include refid="selectWzchTotalDemandVo"/>
+       where
+        `del_flag` = 0  and valid = #{valid}
+        and project_id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <select id="selectByIds" resultMap="WzchTotalDemandResult">
+        <include refid="selectWzchTotalDemandVo"/>
+        where
+        `del_flag` = 0  and  id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectWzchTotalDemandsByProjectIds" resultType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand">
+        <include refid="selectWzchTotalDemandVo2"/>
+        where   del_flag = 0 and valid = '0'
+        <if test="list!= null and list.size>0">
+            <foreach collection="list" item="projectId" open="(" separator="," close=")">
+                project_id = #{projectId}
+            </foreach>
+        </if>
+
+    </select>
+
+    <select id="selectByProjectIdAndVersionCode" resultMap="WzchTotalDemandResult">
+        <include refid="selectWzchTotalDemandVo"/>
+        where `del_flag` = 0
+        and project_id = #{projectId}
+        and version_code = #{versionCode}
+
+    </select>
+
+    <select id="selectByProjectId" resultMap="WzchTotalDemandResult">
+        <include refid="selectWzchTotalDemandVo"/>
+        where `del_flag` = 0
+        and project_id = #{projectId}
+
+    </select>
+    <select id="selectIdsByProjectIdAndVersionCodes" resultType="java.lang.Long">
+      select id from wzch_total_demand
+        where `del_flag` = 0
+        <if test="projectId!=null">
+            and project_id =#{projectId}
+        </if>
+        <if test="versionCodes!=null and versionCodes.size>0">
+            and version_code in
+            <foreach collection="versionCodes" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectMaxValidVersionCodeWzchTotalDemandByProjectId"
+            resultMap="WzchTotalDemandResult">
+        <include refid="selectWzchTotalDemandVo"/>
+        where
+        `del_flag` = 0 and valid = '1' and project_id = #{projectId} order by version_code desc limit 1
+    </select>
+
+    <update id="updateOfValid">
+        update `wzch_total_demand` set valid = #{valid} where `id` in
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+
+
+    <resultMap type="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand" id="Map3">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="versionCodeStr" column="versionCodeStr"/>
+        <result property="planStartTime" column="plan_start_time"/>
+        <result property="planEndTime" column="plan_end_time"/>
+        <result property="projectName" column="project_name"/>
+        <collection property="wzchTotalDemandDetailList" ofType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail">
+            <id property="id" column="dId"/>
+            <result property="materialCode"    column="material_code"    />
+            <result property="materialTechParam"    column="material_tech_param"    />
+            <result property="materialStandard"    column="material_standard"    />
+            <result property="categoryName"    column="category_name"    />
+            <result property="totalDemandAmount"    column="total_demand_amount"    />
+            <result property="selfDemandAmount"    column="self_demand_amount"    />
+            <result property="nonSelfAmount"    column="non_self_amount"    />
+            <result property="firstEnterFlag"    column="first_enter_flag"    />
+            <result property="contStandard"    column="cont_standard"    />
+            <result property="resourceSurvey"    column="resource_survey"    />
+            <result property="fileGroupId"    column="file_group_id"    />
+            <collection property="wzchTotalDemandTimeCountList" ofType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount">
+                <id column="timeId" property="id"/>
+                <result property="materialCode"    column="t_material_code"    />
+                <result property="materialStandard"    column="t_material_standard"    />
+                <result property="year"    column="year"    />
+                <result property="yearNum"    column="year_num"    />
+                <result property="janNum"    column="jan_num"    />
+                <result property="febNum"    column="feb_num"    />
+                <result property="marNum"    column="mar_num"    />
+                <result property="aprNum"    column="apr_num"    />
+                <result property="mayNum"    column="may_num"    />
+                <result property="junNum"    column="jun_num"    />
+                <result property="julNum"    column="jul_num"    />
+                <result property="augNum"    column="aug_num"    />
+                <result property="septNum"    column="sept_num"    />
+                <result property="octNum"    column="oct_num"    />
+                <result property="novNum"    column="nov_num"    />
+                <result property="decNum"    column="dec_num"    />
+                <result property="firstQuarterNum"    column="first_quarter_num"    />
+                <result property="secondQuarterNum"    column="second_quarter_num"    />
+                <result property="thirdQuarterNum"    column="third_quarter_num"    />
+                <result property="fourthQuarterNum"    column="fourth_quarter_num"    />
+            </collection>
+        </collection>
+    </resultMap>
+
+    <select id="selectExportList" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand" resultMap="Map3">
+        SELECT
+        t.id,
+        t.title,
+        concat( 'V', t.`version_code` ) AS versionCodeStr,
+        t.project_name,
+        t.plan_start_time,
+        t.plan_end_time,
+        td.id AS dId,
+        td.`category_name`,
+        td.`material_code`,
+        td.`material_tech_param`,
+        td.`material_standard`,
+        td.`total_demand_amount`,
+        td.`self_demand_amount`,
+        td.`non_self_amount`,
+        td.`first_enter_flag`,
+        td.`cont_standard`,
+        td.`resource_survey`,
+        td.`file_group_id`,
+        td.`remark`,
+        tdt.`id` timeId,
+        tdt.`material_standard` t_material_standard,
+        tdt.`material_code` t_material_code,
+        tdt.`year`,
+        tdt.`year_num`,
+        tdt.`jan_num`,
+        tdt.`feb_num`,
+        tdt.`mar_num`,
+        tdt.`apr_num`,
+        tdt.`may_num`,
+        tdt.`jun_num`,
+        tdt.`jul_num`,
+        tdt.`aug_num`,
+        tdt.`sept_num`,
+        tdt.`oct_num`,
+        tdt.`nov_num`,
+        tdt.`dec_num`,
+        tdt.`first_quarter_num`,
+        tdt.`second_quarter_num`,
+        tdt.`third_quarter_num`,
+        tdt.`fourth_quarter_num`
+        FROM
+        wzch_total_demand AS t
+        LEFT JOIN wzch_total_demand_detail AS td ON t.id = td.total_demand_id
+        LEFT JOIN wzch_total_demand_time_count AS tdt ON td.id = tdt.total_demand_detail_id
+        <where>
+            t.`del_flag` = 0
+            <if test="demandCode != null  and demandCode != ''">and t.`demand_code` = #{demandCode}</if>
+            <if test="title != null  and title != ''">and t.`title` like concat('%',#{title},'%')</if>
+            <if test="regionId != null ">and t.`region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and t.`region_name` like concat('%',#{regionName},'%')
+            </if>
+            <if test="versionCode != null ">and t.`version_code` = #{versionCode}</if>
+            <if test="planStartTime != null ">and t.`plan_start_time` = #{planStartTime}</if>
+            <if test="planEndTime != null ">and t.`plan_end_time` = #{planEndTime}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and t.`file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null ">and t.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and t.`project_name` like concat('%', #{projectName},
+                '%')
+            </if>
+            <if test="deptId != null ">and t.`dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and t.`create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and t.`create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and t.`update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and t.`update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="valid!=null and valid!=''">and t.valid = #{valid}</if>
+            <if test="ids!=null and ids.size()>0">
+                and t.id in
+                <foreach item="id" collection="ids" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+
+        </where>
+        ${params.dataScope}
+        order by t.`id` desc
+    </select>
+
+
+</mapper>

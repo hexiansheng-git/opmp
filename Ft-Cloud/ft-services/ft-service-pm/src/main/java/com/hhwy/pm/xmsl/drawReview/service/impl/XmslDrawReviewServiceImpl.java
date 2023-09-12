@@ -340,7 +340,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 tempList.setMainId(dto.getId());
                 tempList.setWbsId(temp.getId());
                 tempList.setListCode(ObjectUtils.nvlString(tempList.getListCode(),tempList.getPtVar2()));
-                tempList.setListId(ObjectUtils.nvlLong(tempList.getListId(),Long.valueOf(tempList.getPtVar1())));
+                tempList.setListId(ObjectUtils.nvlLong(tempList.getListId()));
+                tempList.setPtVar1("1");
                 tempList.initAdd();
                 addList.add(tempList);
                 addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
@@ -414,6 +415,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 BeanUtils.copyProperties(tempList,newList);
                 newList.initAdd();
                 newList.setWbsCode(temp.getCode());
+                newList.setPtVar1("1");
                 addList.add(newList);
                 addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
                         tempList.getListCode(),tempList.getId(),version));
@@ -586,6 +588,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 XmslDrawReviewList temp = l.get(i);
                 temp.setPid(ObjectUtils.nvlLong(map.get(temp.getPid()),-1L));
                 temp.setAncestors(ObjectUtils.replaceWithLongMap(temp.getAncestors(),map));
+                temp.setPtVar1("0");
             }
             return 0;
         };

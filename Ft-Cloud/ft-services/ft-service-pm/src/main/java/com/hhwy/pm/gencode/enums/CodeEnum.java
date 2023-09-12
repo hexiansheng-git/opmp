@@ -62,7 +62,12 @@ public enum CodeEnum {
     /*特种设备风险识别和措施策划对象管理*/
     EQU_SPECIALPLAN("TZSBJH", "yyyy", 3),
     /*特种设备管控策划管理*/
-    EQU_SPECIALCONTROLPLAN("TZSBGKJH", "yyyy", 3);
+    EQU_SPECIALCONTROLPLAN("TZSBGKJH", "yyyy", 3),
+
+
+    /**物资总需*/
+    EQU_TOTAL_DEMAND("WZZX","yyyyMMdd",3);
+        
     /**
      * 前缀
      */

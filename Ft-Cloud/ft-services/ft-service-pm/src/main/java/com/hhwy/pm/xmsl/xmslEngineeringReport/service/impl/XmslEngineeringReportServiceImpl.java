@@ -143,6 +143,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
 //        new AddBaseInfoUtil<>().addBaseEntity(report);
         report.setId(list.getId());
         report.setReportType(2);
+        report.setPtVar1(list.getPtVar1()); //是否直接挂接了wbs  
         return report;
     }
 

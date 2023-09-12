@@ -17,6 +17,9 @@ public enum FlowEnum {
     /*前期策划工作计划*/
     QQCH_WORK_PLAN("qqch_work_plan", "process_qqch_work_plan"),
 
+    /*物资总需求*/
+    WZZX("wzch_total_demand", "total_material_demand_process"),
+    
     /**********************前期策划结束************************/
 
 

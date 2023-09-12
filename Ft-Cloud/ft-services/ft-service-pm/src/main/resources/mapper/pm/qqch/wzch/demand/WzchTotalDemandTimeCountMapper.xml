@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.demand.mapper.WzchTotalDemandTimeCountMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount" id="WzchTotalDemandTimeCountResult">
+        <result property="id"    column="id"    />
+        <result property="totalDemandDetailId"    column="total_demand_detail_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="year"    column="year"    />
+        <result property="yearNum"    column="year_num"    />
+        <result property="janNum"    column="jan_num"    />
+        <result property="febNum"    column="feb_num"    />
+        <result property="marNum"    column="mar_num"    />
+        <result property="aprNum"    column="apr_num"    />
+        <result property="mayNum"    column="may_num"    />
+        <result property="junNum"    column="jun_num"    />
+        <result property="julNum"    column="jul_num"    />
+        <result property="augNum"    column="aug_num"    />
+        <result property="septNum"    column="sept_num"    />
+        <result property="octNum"    column="oct_num"    />
+        <result property="novNum"    column="nov_num"    />
+        <result property="decNum"    column="dec_num"    />
+        <result property="firstQuarterNum"    column="first_quarter_num"    />
+        <result property="secondQuarterNum"    column="second_quarter_num"    />
+        <result property="thirdQuarterNum"    column="third_quarter_num"    />
+        <result property="fourthQuarterNum"    column="fourth_quarter_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="materialStandard"    column="material_standard"    />
+
+    </resultMap>
+
+    <sql id="selectWzchTotalDemandTimeCountVo">
+        select `id`,
+               `total_demand_detail_id`,
+               project_id,
+               material_standard,
+               `material_code`,
+               `year`,
+               `year_num`,
+               `jan_num`,
+               `feb_num`,
+               `mar_num`,
+               `apr_num`,
+               `may_num`,
+               `jun_num`,
+               `jul_num`,
+               `aug_num`,
+               `sept_num`,
+               `oct_num`,
+               `nov_num`,
+               `dec_num`,
+               `first_quarter_num`,
+               `second_quarter_num`,
+               `third_quarter_num`,
+               `fourth_quarter_num`,
+               `create_time`,
+               `update_time`,
+               `del_flag`
+        from `wzch_total_demand_time_count`
+    </sql>
+    <delete id="deleteByTotalDemandDetailIds" parameterType="java.lang.Long">
+        delete from wzch_total_demand_time_count where
+        total_demand_detail_id in
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="selectWzchTotalDemandTimeCountList" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount" resultMap="WzchTotalDemandTimeCountResult">
+        <include refid="selectWzchTotalDemandTimeCountVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="totalDemandDetailId != null "> and `total_demand_detail_id` = #{totalDemandDetailId}</if>
+            <if test="materialCode != null "> and `material_code` = #{materialCode}</if>
+            <if test="year != null  and year != ''"> and `year` = #{year}</if>
+            <if test="yearNum != null  and yearNum != ''"> and `year_num` = #{yearNum}</if>
+            <if test="janNum != null "> and `jan_num` = #{janNum}</if>
+            <if test="febNum != null "> and `feb_num` = #{febNum}</if>
+            <if test="marNum != null "> and `mar_num` = #{marNum}</if>
+            <if test="aprNum != null "> and `apr_num` = #{aprNum}</if>
+            <if test="mayNum != null "> and `may_num` = #{mayNum}</if>
+            <if test="junNum != null "> and `jun_num` = #{junNum}</if>
+            <if test="julNum != null "> and `jul_num` = #{julNum}</if>
+            <if test="augNum != null "> and `aug_num` = #{augNum}</if>
+            <if test="septNum != null "> and `sept_num` = #{septNum}</if>
+            <if test="octNum != null "> and `oct_num` = #{octNum}</if>
+            <if test="novNum != null "> and `nov_num` = #{novNum}</if>
+            <if test="decNum != null "> and `dec_num` = #{decNum}</if>
+            <if test="firstQuarterNum != null "> and `first_quarter_num` = #{firstQuarterNum}</if>
+            <if test="secondQuarterNum != null "> and `second_quarter_num` = #{secondQuarterNum}</if>
+            <if test="thirdQuarterNum != null "> and `third_quarter_num` = #{thirdQuarterNum}</if>
+            <if test="fourthQuarterNum != null "> and `fourth_quarter_num` = #{fourthQuarterNum}</if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectWzchTotalDemandTimeCountById" parameterType="Long" resultMap="WzchTotalDemandTimeCountResult">
+        <include refid="selectWzchTotalDemandTimeCountVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertWzchTotalDemandTimeCount" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount" useGeneratedKeys="true" keyProperty="id">
+        insert into `wzch_total_demand_time_count`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="totalDemandDetailId != null">`total_demand_detail_id`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="year != null">`year`,</if>
+            <if test="yearNum != null">`year_num`,</if>
+            <if test="janNum != null">`jan_num`,</if>
+            <if test="febNum != null">`feb_num`,</if>
+            <if test="marNum != null">`mar_num`,</if>
+            <if test="aprNum != null">`apr_num`,</if>
+            <if test="mayNum != null">`may_num`,</if>
+            <if test="junNum != null">`jun_num`,</if>
+            <if test="julNum != null">`jul_num`,</if>
+            <if test="augNum != null">`aug_num`,</if>
+            <if test="septNum != null">`sept_num`,</if>
+            <if test="octNum != null">`oct_num`,</if>
+            <if test="novNum != null">`nov_num`,</if>
+            <if test="decNum != null">`dec_num`,</if>
+            <if test="firstQuarterNum != null">`first_quarter_num`,</if>
+            <if test="secondQuarterNum != null">`second_quarter_num`,</if>
+            <if test="thirdQuarterNum != null">`third_quarter_num`,</if>
+            <if test="fourthQuarterNum != null">`fourth_quarter_num`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="totalDemandDetailId != null">#{totalDemandDetailId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="year != null">#{year},</if>
+            <if test="yearNum != null">#{yearNum},</if>
+            <if test="janNum != null">#{janNum},</if>
+            <if test="febNum != null">#{febNum},</if>
+            <if test="marNum != null">#{marNum},</if>
+            <if test="aprNum != null">#{aprNum},</if>
+            <if test="mayNum != null">#{mayNum},</if>
+            <if test="junNum != null">#{junNum},</if>
+            <if test="julNum != null">#{julNum},</if>
+            <if test="augNum != null">#{augNum},</if>
+            <if test="septNum != null">#{septNum},</if>
+            <if test="octNum != null">#{octNum},</if>
+            <if test="novNum != null">#{novNum},</if>
+            <if test="decNum != null">#{decNum},</if>
+            <if test="firstQuarterNum != null">#{firstQuarterNum},</if>
+            <if test="secondQuarterNum != null">#{secondQuarterNum},</if>
+            <if test="thirdQuarterNum != null">#{thirdQuarterNum},</if>
+            <if test="fourthQuarterNum != null">#{fourthQuarterNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_total_demand_time_count` (
+                                                                                id,
+                                                                            `total_demand_detail_id`,
+                                                                `material_code`,
+                                                                `year`,
+                                                                `year_num`,
+                                                                `jan_num`,
+                                                                `feb_num`,
+                                                                `mar_num`,
+                                                                `apr_num`,
+                                                                `may_num`,
+                                                                `jun_num`,
+                                                                `jul_num`,
+                                                                `aug_num`,
+                                                                `sept_num`,
+                                                                `oct_num`,
+                                                                `nov_num`,
+                                                                `dec_num`,
+                                                                `first_quarter_num`,
+                                                                `second_quarter_num`,
+                                                                `third_quarter_num`,
+                                                                `fourth_quarter_num`,
+                                                                `create_time`,
+                                                                `update_time`,
+                                                                `del_flag`,
+                                                                `project_id`,
+                                                                `material_standard`
+                                    )values
+        <foreach collection="list" separator="," item="item" index="index" >
+        (
+            #{item.id},
+            #{item.totalDemandDetailId},
+            #{item.materialCode},
+            #{item.year},
+            #{item.yearNum},
+            #{item.janNum},
+            #{item.febNum},
+            #{item.marNum},
+            #{item.aprNum},
+            #{item.mayNum},
+            #{item.junNum},
+            #{item.julNum},
+            #{item.augNum},
+            #{item.septNum},
+            #{item.octNum},
+            #{item.novNum},
+            #{item.decNum},
+            #{item.firstQuarterNum},
+            #{item.secondQuarterNum},
+            #{item.thirdQuarterNum},
+            #{item.fourthQuarterNum},
+            #{item.createTime},
+            #{item.updateTime},
+            #{item.delFlag},
+            #{item.projectId},
+            #{item.materialStandard}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_total_demand_time_count`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="total_demand_detail_id =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.totalDemandDetailId != null ">
+                                when `id` = #{item.id} then #{item.totalDemandDetailId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="material_code =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialCode != null ">
+                                when `id` = #{item.id} then #{item.materialCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="year =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.year != null ">
+                                when `id` = #{item.id} then #{item.year}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="year_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.yearNum != null ">
+                                when `id` = #{item.id} then #{item.yearNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="jan_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.janNum != null ">
+                                when `id` = #{item.id} then #{item.janNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="feb_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.febNum != null ">
+                                when `id` = #{item.id} then #{item.febNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="mar_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.marNum != null ">
+                                when `id` = #{item.id} then #{item.marNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="apr_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.aprNum != null ">
+                                when `id` = #{item.id} then #{item.aprNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="may_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.mayNum != null ">
+                                when `id` = #{item.id} then #{item.mayNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="jun_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.junNum != null ">
+                                when `id` = #{item.id} then #{item.junNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="jul_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.julNum != null ">
+                                when `id` = #{item.id} then #{item.julNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="aug_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.augNum != null ">
+                                when `id` = #{item.id} then #{item.augNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="sept_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.septNum != null ">
+                                when `id` = #{item.id} then #{item.septNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="oct_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.octNum != null ">
+                                when `id` = #{item.id} then #{item.octNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="nov_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.novNum != null ">
+                                when `id` = #{item.id} then #{item.novNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dec_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.decNum != null ">
+                                when `id` = #{item.id} then #{item.decNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="first_quarter_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.firstQuarterNum != null ">
+                                when `id` = #{item.id} then #{item.firstQuarterNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="second_quarter_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.secondQuarterNum != null ">
+                                when `id` = #{item.id} then #{item.secondQuarterNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="third_quarter_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.thirdQuarterNum != null ">
+                                when `id` = #{item.id} then #{item.thirdQuarterNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="fourth_quarter_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.fourthQuarterNum != null ">
+                                when `id` = #{item.id} then #{item.fourthQuarterNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="list" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateWzchTotalDemandTimeCount" parameterType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount">
+        update `wzch_total_demand_time_count`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="totalDemandDetailId != null">`total_demand_detail_id` = #{totalDemandDetailId},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="year != null">`year` = #{year},</if>
+            <if test="yearNum != null">`year_num` = #{yearNum},</if>
+            <if test="janNum != null">`jan_num` = #{janNum},</if>
+            <if test="febNum != null">`feb_num` = #{febNum},</if>
+            <if test="marNum != null">`mar_num` = #{marNum},</if>
+            <if test="aprNum != null">`apr_num` = #{aprNum},</if>
+            <if test="mayNum != null">`may_num` = #{mayNum},</if>
+            <if test="junNum != null">`jun_num` = #{junNum},</if>
+            <if test="julNum != null">`jul_num` = #{julNum},</if>
+            <if test="augNum != null">`aug_num` = #{augNum},</if>
+            <if test="septNum != null">`sept_num` = #{septNum},</if>
+            <if test="octNum != null">`oct_num` = #{octNum},</if>
+            <if test="novNum != null">`nov_num` = #{novNum},</if>
+            <if test="decNum != null">`dec_num` = #{decNum},</if>
+            <if test="firstQuarterNum != null">`first_quarter_num` = #{firstQuarterNum},</if>
+            <if test="secondQuarterNum != null">`second_quarter_num` = #{secondQuarterNum},</if>
+            <if test="thirdQuarterNum != null">`third_quarter_num` = #{thirdQuarterNum},</if>
+            <if test="fourthQuarterNum != null">`fourth_quarter_num` = #{fourthQuarterNum},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchTotalDemandTimeCountById" parameterType="Long">
+        update `wzch_total_demand_time_count` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchTotalDemandTimeCountByTotalDemandDetailIds" parameterType="String">
+        update `wzch_total_demand_time_count` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <update id="deleteWzchTotalDemandTimeCountByIds" parameterType="String">
+        update `wzch_total_demand_time_count` set del_flag = 1 where `id` in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectByTotalDemandDetailIds" resultMap="WzchTotalDemandTimeCountResult">
+        <include refid="selectWzchTotalDemandTimeCountVo"/>
+        where
+         `del_flag` = '0'
+         and total_demand_detail_id in
+        <foreach item="totalDemandDetailId" collection="list" open="(" separator="," close=")">
+            #{totalDemandDetailId}
+        </foreach>
+    </select>
+    <select id="selectTotalDemandTimeCounts" resultType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount">
+
+        select `id`, `total_demand_detail_id` totalDemandDetailId, `material_code` materialCode,
+        <if test='viewType!=null and viewType=="Y"'>
+         `year`, `year_num` yearNum,
+        </if>
+        <if test='viewType!=null and viewType=="M"'>
+            `year`,
+          `jan_num` janNum , `feb_num` febNum, `mar_num` marNum,
+         `apr_num` aprNum, `may_num` mayNum, `jun_num` junNum,
+         `jul_num` julNum, `aug_num` augNum, `sept_num` septNum,
+         `oct_num` octNum, `nov_num` novNum, `dec_num` decNum,
+        </if>
+        <if test='viewType!=null and viewType=="Q"'>
+            `year`,
+          `first_quarter_num` firstQuarterNum, `second_quarter_num` secondQuarterNum,
+          `third_quarter_num` thirdQuarterNum,`fourth_quarter_num` fourthQuarterNum,
+        </if>
+         `create_time` createTime, `update_time` updateTime, `del_flag` delFlag from `wzch_total_demand_time_count`
+        where
+        `del_flag` = 0
+        and total_demand_detail_id in
+        <foreach item="totalDemandDetailId" collection="list" open="(" separator="," close=")">
+            #{totalDemandDetailId}
+        </foreach>
+    </select>
+    <select id="selectByTotalDemandDetailIdsAndYears" resultMap="WzchTotalDemandTimeCountResult">
+        <include refid="selectWzchTotalDemandTimeCountVo"/>
+        where `del_flag` = 0
+        <if test="detailIdList!=null and detailIdList.size>0">
+            <foreach item="item" collection="detailIdList" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="countYears!=null and countYears.size>0">
+            <foreach item="item" collection="countYears" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectByTotalDemandDetailIdsOfTotal"
+            resultType="com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandTimeCount">
+        select
+            year,
+            material_code materialCode,
+            material_standard materialStandard,
+            total_demand_detail_id totalDemandDetailId,
+             SUM(IFNULL( year_num, 0 )) yearNum,
+             SUM(IFNULL( jan_num, 0 )) janNum,
+             SUM(IFNULL( feb_num, 0 )) febNum,
+             SUM(IFNULL( mar_num, 0 )) marNum,
+             SUM(IFNULL( apr_num, 0 )) aprNum,
+             SUM(IFNULL( may_num, 0 )) mayNum,
+             SUM(IFNULL( jun_num, 0 )) junMay,
+             SUM(IFNULL( jul_num, 0 )) julMay,
+             SUM(IFNULL( aug_num, 0 )) augMay,
+             SUM(IFNULL( sept_num, 0 )) septNum,
+             SUM(IFNULL( oct_num, 0 )) octNum,
+             SUM(IFNULL( nov_num, 0 )) novNum,
+             SUM(IFNULL( first_quarter_num, 0 )) firstQuarterNum,
+             SUM(IFNULL( second_quarter_num, 0 )) secondQuarterNum,
+             SUM(IFNULL( third_quarter_num, 0 )) thirdQuarterNum,
+             SUM(IFNULL( fourth_quarter_num, 0 )) fourthQuarterNum
+        from
+         wzch_total_demand_time_count
+        where
+         del_flag = 0 and
+            total_demand_detail_id in
+                <foreach item="totalDemandDetailId" collection="list" open="(" separator="," close=")">
+                    #{totalDemandDetailId}
+                </foreach>
+        group by
+            year ,
+            material_code,
+            material_standard
+    </select>
+
+
+</mapper>
