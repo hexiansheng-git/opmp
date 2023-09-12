@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -343,9 +344,8 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         xmslContractSpecial.setMasterId(xmslContractInfo.getId());
         xmslContractSpecialService.deleteXmslContractSpecial(xmslContractSpecial);
         //删除子表
-        xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
-        xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
-        return xmslContractInfoMapper.deleteXmslContractInfo(xmslContractInfo);
+        List<Long> longs = Arrays.asList(xmslContractInfo.getId());
+        return xmslContractInfoMapper.deleteXmslContractInfoByPks(longs);
     }
 
     @Transactional

@@ -109,7 +109,9 @@ public class XmslContractInfoController extends BaseController {
 
     @PreAuthorize(hasPermi = "xmslContractInfo:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteXmslContractInfo(@Validated(ValidationGroups.Delete.class) @RequestBody XmslContractInfo xmslContractInfoParam) {
+    public AjaxResult deleteXmslContractInfo(@RequestParam ("id") Long id) {
+        XmslContractInfo xmslContractInfoParam = new XmslContractInfo();
+        xmslContractInfoParam.setId(id);
         return toAjax(xmslContractInfoService.deleteXmslContractInfo(xmslContractInfoParam));
     }
 
