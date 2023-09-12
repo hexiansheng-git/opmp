@@ -13,6 +13,8 @@ import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractListMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
@@ -47,6 +49,8 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     private XmslContractInfoMapper xmslContractInfoMapper;
     @Autowired
     private CommonMapper commonMapper;
+    @Autowired
+    private IXmslDrawReviewListService xmslDrawReviewListService;
 
 
     /**
@@ -367,6 +371,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
                 }
                 //根据祖级id查询数据
                 List<XmslContractList> rList = xmslContractListMapper.getByAncestors(masterId,ancestors.toString());
+                this.setDrawReview(rList);
                 resultList = ListTreeUtil.formatTree(
                         rList,
                         o -> o.getPid() == null,
@@ -374,6 +379,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
                         XmslContractList::getChildren,
                         XmslContractList::setChildren);
             }else {
+                this.setDrawReview(allList);
                 resultList = ListTreeUtil.formatTree(
                         allList,
                         o -> o.getPid() == 0,
@@ -383,5 +389,37 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             }
         }
         return resultList;
+    }
+
+    /**
+     * 设置所属wbs和图纸复核数量
+     * @param list
+     */
+    public void setDrawReview(List<XmslContractList> list){
+        /*全量图纸复核数据*/
+        List<XmslDrawReviewList> drawReviewListList = xmslDrawReviewListService.getFullList();
+
+        for (XmslContractList contractList : list) {
+            String code = contractList.getCode();
+            StringBuilder wbsCodes = new StringBuilder();
+            BigDecimal listCheckNum = BigDecimal.ZERO;
+
+            for (XmslDrawReviewList drawReviewList : drawReviewListList) {
+                if(code.equals(drawReviewList.getListCode())){
+                    String wbsCode = drawReviewList.getWbsCode();
+                    if(StringUtils.isNotBlank(wbsCode)){
+                        wbsCodes.append(wbsCode).append(",");
+                    }
+
+                    BigDecimal checkNum = drawReviewList.getCheckNum();
+                    if(checkNum != null){
+                        listCheckNum = listCheckNum.add(checkNum);
+                    }
+                }
+            }
+
+            contractList.setWbsCodes(wbsCodes.toString());
+            contractList.setListCheckNum(listCheckNum);
+        }
     }
 }

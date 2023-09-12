@@ -7,7 +7,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewListMapper;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
@@ -75,6 +74,23 @@ public class XmslDrawReviewListServiceImpl implements IXmslDrawReviewListService
         }
         return resuList;
     }
+
+    /**
+     * 获取全量图纸复核数据
+     * @return
+     */
+    @Override
+    public List<XmslDrawReviewList> getFullList() {
+        List<XmslDrawReviewList> resuList = new ArrayList<>();
+
+        XmslDrawReview drawReview = drawReviewService.getLast();
+        if(drawReview != null){
+            int version = drawReview.getVersion();
+            resuList = xmslDrawReviewListMapper.getFullList(version);
+        }
+        return resuList;
+    }
+
 
     @Override
     public List<XmslDrawReviewList> getByIds(Collection collection) {

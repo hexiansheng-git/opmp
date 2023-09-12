@@ -1,7 +1,6 @@
 package com.hhwy.pm.xmsl.drawReview.service;
 
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,6 +21,12 @@ public interface IXmslDrawReviewListService {
      * @return
      */
     List<XmslDrawReviewList> getFullEffectList();
+
+    /**
+     * 获取全量图纸复核数据
+     * @return
+     */
+    List<XmslDrawReviewList> getFullList();
 
     List<XmslDrawReviewList> getByIds(Collection collection);
 

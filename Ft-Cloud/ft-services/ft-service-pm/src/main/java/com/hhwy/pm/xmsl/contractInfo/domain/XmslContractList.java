@@ -288,8 +288,6 @@ public class XmslContractList extends BaseEntity {
 
     private Long[] ids;
 
-    private List<XmslContractList> children;
-
     /**
      * 字段描述：排序
      */
@@ -297,4 +295,14 @@ public class XmslContractList extends BaseEntity {
     @Excel(name = "排序")
     private Integer sort;
 
+    /**
+     * 字段描述：所属wbs编码
+     */
+    private String wbsCodes;
+    /**
+     * 字段描述：清单复核数量
+     */
+    private BigDecimal  listCheckNum;
+
+    private List<XmslContractList> children;
 }
