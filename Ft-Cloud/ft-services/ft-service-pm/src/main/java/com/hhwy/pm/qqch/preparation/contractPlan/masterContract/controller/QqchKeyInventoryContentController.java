@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchKeyInventoryContent;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyQueryVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchKeyInventoryContentVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchKeyInventoryContentService;
@@ -70,12 +71,12 @@ public class QqchKeyInventoryContentController extends BaseController {
 
     /**
      * 获取分项清单Vo
-     * @param qqchKeyInventoryContent
+     * @param queryVo
      * @return
      */
-    @GetMapping("/list")
-    public AjaxResult getSubentryInventoryByType(@Validated(ValidationGroups.Select.class) QqchKeyInventoryContent qqchKeyInventoryContent) {
-        KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = qqchKeyInventoryContentService.getSubentryInventoryByType(qqchKeyInventoryContent);
+    @PostMapping("/list")
+    public AjaxResult getSubentryInventoryByType(@RequestBody KeyInventoryContentItemClassifyQueryVo queryVo) {
+        KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = qqchKeyInventoryContentService.getSubentryInventoryByType(queryVo);
         return AjaxResult.success(keyInventoryContentItemClassifyVo);
     }
 

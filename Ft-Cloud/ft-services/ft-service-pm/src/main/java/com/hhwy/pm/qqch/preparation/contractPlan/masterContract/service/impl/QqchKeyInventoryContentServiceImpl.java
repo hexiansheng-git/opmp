@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchKeyInventoryContent;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassify;
+import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyQueryVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchKeyInventoryContentVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.mapper.QqchKeyInventoryContentMapper;
@@ -28,7 +29,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,23 +60,31 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
     /**
      * 获取分项清单Vo
      *
-     * @param qqchKeyInventoryContent
+     * @param queryVo
      * @return
      */
-    public KeyInventoryContentItemClassifyVo getSubentryInventoryByType(QqchKeyInventoryContent qqchKeyInventoryContent) {
-        String itemClassify = qqchKeyInventoryContent.getItemClassify();
+    public KeyInventoryContentItemClassifyVo getSubentryInventoryByType(KeyInventoryContentItemClassifyQueryVo queryVo) {
+        String itemClassify = queryVo.getItemClassify();
         CommonAssert.notBlank(itemClassify,"事项分类不能为空！");
-        BigDecimal version = qqchKeyInventoryContent.getVersion();
+        BigDecimal version = queryVo.getVersion();
         CommonAssert.isEmpty(version,"版本不能为空！");
 
         KeyInventoryContentItemClassifyVo keyInventoryContentItemClassifyVo = new KeyInventoryContentItemClassifyVo();
 
-        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = qqchKeyInventoryContentMapper.getQqchKeyInventoryContentList(qqchKeyInventoryContent);
+        List<QqchKeyInventoryContent> qqchKeyInventoryContentList = queryVo.getList();
+        if(CollectionUtils.isEmpty(qqchKeyInventoryContentList)){
+            return keyInventoryContentItemClassifyVo;
+        }
+
+        qqchKeyInventoryContentList = ListTreeUtil.formatList(qqchKeyInventoryContentList,QqchKeyInventoryContent::getChildren,QqchKeyInventoryContent::setChildren);
+
         List<KeyInventoryContentItemClassify> keyInventoryContentItemClassifyList = new ArrayList<>();
         for (QqchKeyInventoryContent keyInventoryContent : qqchKeyInventoryContentList) {
-            KeyInventoryContentItemClassify keyInventoryContentItemClassify = new KeyInventoryContentItemClassify();
-            BeanUtils.copyProperties(keyInventoryContent,keyInventoryContentItemClassify);
-            keyInventoryContentItemClassifyList.add(keyInventoryContentItemClassify);
+            if(itemClassify.equals(keyInventoryContent.getItemClassify())){
+                KeyInventoryContentItemClassify keyInventoryContentItemClassify = new KeyInventoryContentItemClassify();
+                BeanUtils.copyProperties(keyInventoryContent,keyInventoryContentItemClassify);
+                keyInventoryContentItemClassifyList.add(keyInventoryContentItemClassify);
+            }
         }
 
         /*量差较大清单*/
@@ -109,7 +117,7 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
                 if(forecastUnivalence == null){
                     forecastUnivalence = BigDecimal.ZERO;
                 }
-                BigDecimal univalenceDifference = forecastUnivalence.divide(contractUnivalence,2, RoundingMode.HALF_UP);
+                BigDecimal univalenceDifference = forecastUnivalence.subtract(contractUnivalence);
                 keyInventoryContentItemClassify.setUnivalenceDifference(univalenceDifference);
             }
         }
@@ -125,6 +133,16 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
         keyInventoryContentItemClassifyVo.setTotalPriceDifferenceTotal(totalPriceDifferenceTotal);
         keyInventoryContentItemClassifyVo.setList(keyInventoryContentItemClassifyList);
         return keyInventoryContentItemClassifyVo;
+    }
+
+    public List<QqchKeyInventoryContent> getItemClassifyList(List<QqchKeyInventoryContent> source,String itemClassify){
+        List<QqchKeyInventoryContent> resultList = new ArrayList<>();
+        for (QqchKeyInventoryContent qqchKeyInventoryContent : source) {
+            if(itemClassify.equals(qqchKeyInventoryContent.getItemClassify())){
+                resultList.add(qqchKeyInventoryContent);
+            }
+        }
+        return resultList;
     }
 
     @Transactional
