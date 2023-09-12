@@ -432,6 +432,11 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
                     }
                 }
             }
+            Date startDate = importVo.getStartDate();
+            Date endDate = importVo.getEndDate();
+            if(startDate != null && endDate != null && endDate.compareTo(startDate) <= 0){
+                throw new RuntimeException("结束日期不能在开始日期之前！");
+            }
             importVo.setVintageBudgetMap(vintageBudgetMap);
             importVoList.add(importVo);
         }
