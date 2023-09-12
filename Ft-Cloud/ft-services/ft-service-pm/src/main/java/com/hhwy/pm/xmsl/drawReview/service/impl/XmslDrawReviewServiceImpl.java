@@ -334,6 +334,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             List<XmslDrawReviewList> list = temp.getList();
             for (int j = 0; j < list.size(); j++) {
                 XmslDrawReviewList tempList = list.get(j);
+                tempList.setWbsCode(temp.getCode());
                 tempList.setVersion(version);
                 tempList.setVersionFlag(Constant.YES_INT);
                 tempList.setMainId(dto.getId());
@@ -412,6 +413,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 tempList.setWbsId(temp.getId());
                 BeanUtils.copyProperties(tempList,newList);
                 newList.initAdd();
+                newList.setWbsCode(temp.getCode());
                 addList.add(newList);
                 addRelationList.add(new XmslDrawReviewRelation(dto.getId(),temp.getId(),temp.getCode(),
                         tempList.getListCode(),tempList.getId(),version));
