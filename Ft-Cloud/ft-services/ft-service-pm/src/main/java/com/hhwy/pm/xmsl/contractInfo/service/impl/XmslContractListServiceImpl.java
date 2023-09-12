@@ -75,7 +75,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     public List<XmslContractList> getXmslContractList(XmslContractList xmslContractList) {
         List<XmslContractList> xmslContractList1 = xmslContractListMapper.getXmslContractList(xmslContractList);
-        List<XmslContractList> treeList = ListTreeUtil.formatTree(xmslContractList1, o -> o.getPid() == 0, (r, n) -> r.getId().equals(n.getPid()), XmslContractList::getChildren, XmslContractList::setChildren);
+        List<XmslContractList> treeList = ListTreeUtil.formatTree(xmslContractList1, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), XmslContractList::getChildren, XmslContractList::setChildren);
         return treeList;
     }
 
@@ -152,8 +152,6 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             insertList.forEach(q->{
                 if (q.getPid() != null) {
                     q.setPid(q.getPid());
-                } else {
-                    q.setPid(0l);
                 }
             });
             xmslContractListMapper.insertXmslContractListList(insertList);
@@ -382,7 +380,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
                 this.setDrawReview(allList);
                 resultList = ListTreeUtil.formatTree(
                         allList,
-                        o -> o.getPid() == 0,
+                        o -> o.getPid() == null,
                         (r, n) -> r.getId().equals(n.getPid()),
                         XmslContractList::getChildren,
                         XmslContractList::setChildren);
