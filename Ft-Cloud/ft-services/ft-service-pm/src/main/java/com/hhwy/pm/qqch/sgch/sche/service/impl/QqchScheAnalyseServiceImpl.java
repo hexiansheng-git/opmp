@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.sgch.sche.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -101,6 +104,22 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
 
     private void checkData(List<QqchScheAnalyse> dealSaveDto) {
         // 校验区间值
+        if (CollectionUtils.isEmpty(dealSaveDto)) return;
+        QqchScheAnalyse qqchScheAnalyse = dealSaveDto.get(0);
+        // 保存不做校验
+        if (PmConstant.ZERO.equals(qqchScheAnalyse.getSubmitFlag())) return;
+
+        // 按照顺序放在队列里面
+        
+        LinkedList<BigDecimal> diffList = new LinkedList<>();
+        LinkedList<BigDecimal> lineList = new LinkedList<>();
+        LinkedList<BigDecimal> sumProdList = new LinkedList<>();
+        LinkedList<BigDecimal> roadList = new LinkedList<>();
+        LinkedList<BigDecimal> buildList = new LinkedList<>();
+        
+        
+        
+
 
     }
 }
