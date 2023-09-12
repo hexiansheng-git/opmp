@@ -10,6 +10,7 @@
         <result property="reportType" column="report_type"/>
         <result property="mainId" column="main_id"/>
         <result property="parentId" column="parent_id"/>
+        <result property="pid" column="parent_id"/>
         <result property="wbsId" column="wbs_id"/>
         <result property="wbsCode" column="wbs_code"/>
         <result property="wbsName" column="wbs_name"/>
@@ -198,6 +199,20 @@
                 <foreach item="id" collection="params.ids" open="(" separator="," close=")">
                     #{id}
                 </foreach>
+            </if>
+            <if test="params !=  null and params.pids != null and params.pids != '' ">
+                and 
+                (
+                parent_id in
+                <foreach item="item" collection="params.pids.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                or
+                id in
+                <foreach item="item" collection="params.pids.split(',')" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
             </if>
         </where>
         order by sort

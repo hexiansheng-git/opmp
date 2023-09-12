@@ -94,7 +94,7 @@ public class XmslContractInfoController extends BaseController {
      *  添加发布人和发布时间
      */
     @PreAuthorize(hasPermi = "xmslContractInfo:update")
-    @PostMapping("/addIssueInfo")
+    @GetMapping("/addIssueInfo")
     public AjaxResult addIssueInfo(@RequestParam("id") Long id) {
         xmslContractInfoService.updateIssueNameAndDate(id);
         return AjaxResult.success();
@@ -108,7 +108,7 @@ public class XmslContractInfoController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "xmslContractInfo:remove")
-    @PostMapping("/delete")
+    @GetMapping("/delete")
     public AjaxResult deleteXmslContractInfo(@RequestParam ("id") Long id) {
         XmslContractInfo xmslContractInfoParam = new XmslContractInfo();
         xmslContractInfoParam.setId(id);
