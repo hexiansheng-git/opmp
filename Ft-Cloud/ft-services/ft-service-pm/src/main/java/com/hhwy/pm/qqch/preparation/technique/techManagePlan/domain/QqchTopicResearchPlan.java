@@ -86,7 +86,7 @@ public class QqchTopicResearchPlan extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "项目自筹")
-    private String projectFunds;
+    private BigDecimal projectFunds;
     /**
      * 字段描述：阶段性工作计划
      */

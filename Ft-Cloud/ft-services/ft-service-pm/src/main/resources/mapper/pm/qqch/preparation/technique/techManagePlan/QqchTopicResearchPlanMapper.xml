@@ -94,7 +94,7 @@
                 #{projectDirectorId}
             </if>
             <if test="applyCost != null ">and `apply_cost` = #{applyCost}</if>
-            <if test="projectFunds != null  and projectFunds != ''">and `project_funds` = #{projectFunds}</if>
+            <if test="projectFunds != null">and `project_funds` = #{projectFunds}</if>
             <if test="stageWorkPlan != null  and stageWorkPlan != ''">and `stage_work_plan` = #{stageWorkPlan}</if>
             <if test="matchedResearchAchievement != null  and matchedResearchAchievement != ''">and
                 `matched_research_achievement` = #{matchedResearchAchievement}
@@ -141,7 +141,7 @@
                 #{projectDirectorId}
             </if>
             <if test="applyCost != null ">and `apply_cost` = #{applyCost}</if>
-            <if test="projectFunds != null  and projectFunds != ''">and `project_funds` = #{projectFunds}</if>
+            <if test="projectFunds != null">and `project_funds` = #{projectFunds}</if>
             <if test="stageWorkPlan != null  and stageWorkPlan != ''">and `stage_work_plan` = #{stageWorkPlan}</if>
             <if test="matchedResearchAchievement != null  and matchedResearchAchievement != ''">and
                 `matched_research_achievement` = #{matchedResearchAchievement}
@@ -184,7 +184,7 @@
             <if test="projectDirector != null  and projectDirector != ''">`project_director`,</if>
             <if test="projectDirectorId != null  and projectDirectorId != ''">`project_director_id`,</if>
             <if test="applyCost != null ">`apply_cost`,</if>
-            <if test="projectFunds != null  and projectFunds != ''">`project_funds`,</if>
+            <if test="projectFunds != null">`project_funds`,</if>
             <if test="stageWorkPlan != null  and stageWorkPlan != ''">`stage_work_plan`,</if>
             <if test="matchedResearchAchievement != null  and matchedResearchAchievement != ''">
                 `matched_research_achievement`,
@@ -222,7 +222,7 @@
             <if test="projectDirector != null  and projectDirector != ''">#{projectDirector},</if>
             <if test="projectDirectorId != null  and projectDirectorId != ''">#{projectDirectorId},</if>
             <if test="applyCost != null ">#{applyCost},</if>
-            <if test="projectFunds != null  and projectFunds != ''">#{projectFunds},</if>
+            <if test="projectFunds != null">#{projectFunds},</if>
             <if test="stageWorkPlan != null  and stageWorkPlan != ''">#{stageWorkPlan},</if>
             <if test="matchedResearchAchievement != null  and matchedResearchAchievement != ''">
                 #{matchedResearchAchievement},
@@ -343,7 +343,7 @@
                 #{projectDirectorId},
             </if>
             <if test="applyCost != null ">`apply_cost` = #{applyCost},</if>
-            <if test="projectFunds != null  and  projectFunds != ''">`project_funds` = #{projectFunds},</if>
+            <if test="projectFunds != null">`project_funds` = #{projectFunds},</if>
             <if test="stageWorkPlan != null  and  stageWorkPlan != ''">`stage_work_plan` = #{stageWorkPlan},</if>
             <if test="matchedResearchAchievement != null  and  matchedResearchAchievement != ''">
                 `matched_research_achievement` = #{matchedResearchAchievement},
@@ -530,7 +530,7 @@
                 #{projectDirectorId}
             </if>
             <if test="applyCost != null ">and `apply_cost` = #{applyCost}</if>
-            <if test="projectFunds != null  and projectFunds != ''">and `project_funds` = #{projectFunds}</if>
+            <if test="projectFunds != null">and `project_funds` = #{projectFunds}</if>
             <if test="stageWorkPlan != null  and stageWorkPlan != ''">and `stage_work_plan` = #{stageWorkPlan}</if>
             <if test="matchedResearchAchievement != null  and matchedResearchAchievement != ''">and
                 `matched_research_achievement` = #{matchedResearchAchievement}
