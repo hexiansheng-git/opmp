@@ -97,7 +97,8 @@ public class JdglDiffAnalysisController extends BaseController {
         return toAjax(jdglDiffAnalysisService.deleteJdglDiffAnalysisByPks(jdglDiffAnalysisPkList));
     }
 
-    @GetMapping("/export")
+    @PostMapping("/export")
+    @ResponseBody
     public void export(HttpServletResponse response, JdglDiffAnalysis jdglDiffAnalysisParam) throws IOException {
         List<JdglDiffAnalysis> jdglDiffAnalysisList = jdglDiffAnalysisService.getJdglDiffAnalysisList(jdglDiffAnalysisParam);
         ExcelUtils<JdglDiffAnalysis> util = new ExcelUtils<>(JdglDiffAnalysis.class);

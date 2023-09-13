@@ -5,6 +5,7 @@ import java.util.*;
 import cn.hutool.core.lang.hash.Hash;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service.IJdglYearImagePlanService;
@@ -167,7 +168,23 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                 }
             }
             if(!CollectionUtils.isEmpty(listids)) {
+                Set<Long> allListId = new HashSet<>();
+                allListId.addAll(listids);
                 for (Long listid : listids) {
+                    if(!CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
+                        XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listid.equals(vo.getId())).findFirst().orElse(null);
+                        if(xmslContractList != null) {
+                            String ancestors = xmslContractList.getAncestors();
+                            if(StringUtils.isNotEmpty(ancestors)) {
+                                String[] split = ancestors.split(",");
+                                for (String id : split) {
+                                    allListId.add(Long.valueOf(id));
+                                }
+                            }
+                        }
+                    }
+                }
+                if(!CollectionUtils.isEmpty(allListId)) {
 
                 }
             }

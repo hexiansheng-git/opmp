@@ -90,18 +90,18 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @Excel(name = "负责人")
     private String executer;
     /**
-     * 字段描述：基线项目开始
+     * 字段描述：开始时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "基线项目开始", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "开始时间", dateFormat = "yyyy-MM-dd")
     private Date startDate;
     /**
-     * 字段描述：基线项目结束
+     * 字段描述：结束时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "基线项目结束", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "结束时间", dateFormat = "yyyy-MM-dd")
     private Date finishDate;
     /**
      * 字段描述：附件组id
@@ -264,7 +264,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     @Excel(name = "实际结束日期"    ,dateFormat = "yyyy-MM-dd"  )
-    private Date actualEndDate;
+    private Date actualFinishDate;
     /**
      * 字段描述：单位
      */
@@ -288,7 +288,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
      */
     @JsonProperty
     @Excel(name = "计划完成百分比"    )
-    private BigDecimal planCompRate;
+    private BigDecimal schedulePercentComplete;
     /**
      * 字段描述：期望完成日期
      */
@@ -339,4 +339,35 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonProperty
     @Excel(name = "紧前作业名称"    )
     private String predecessorActivityName;
+
+    /**
+     * wbs父id
+     */
+    @JsonProperty
+    private String wbsPcode;
+
+    /**
+     * 数据类型
+     */
+    @JsonProperty
+    private String itemType;
+
+    /**
+     * 祖籍编码
+     */
+    @JsonProperty
+    private String ancestors;
+
+    /**
+     * p6的wbsid
+     */
+    @JsonProperty
+    private String wbsObjectId;
+
+
+    /**
+     * p6的wbs父id
+     */
+    @JsonProperty
+    private String wbsParentObjectId;
 }

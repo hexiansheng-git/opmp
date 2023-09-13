@@ -46,6 +46,10 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         return build;
     }
 
+    public List<JdglMainPlanItem> getJdglMainPlanItemListNoTree(JdglMainPlanItem jdglMainPlanItem) {
+        return jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
+    }
+
     @Transactional
     public int insertJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem) {
         jdglMainPlanItem.setId(IdWorker.createId());
@@ -57,9 +61,11 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     @Transactional
     public int insertJdglMainPlanItemList(List<JdglMainPlanItem> jdglMainPlanItemList) {
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
-            jdglMainPlanItem.setId(IdWorker.createId());
-            jdglMainPlanItem.setCreateUser(SecurityUtils.getUserName());
+//            jdglMainPlanItem.setId(IdWorker.createId());
+            jdglMainPlanItem.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglMainPlanItem.setCreateTime(DateUtils.getNowDate());
+//            jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
+//            jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
         }
         return jdglMainPlanItemMapper.insertJdglMainPlanItemList(jdglMainPlanItemList);
     }
