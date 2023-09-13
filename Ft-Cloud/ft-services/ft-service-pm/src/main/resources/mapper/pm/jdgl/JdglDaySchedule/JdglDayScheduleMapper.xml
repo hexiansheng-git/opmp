@@ -529,4 +529,12 @@
         where jds.id = #{id}
 
     </update>
+
+    <select id="getCountValueNotApprove" resultType="java.math.BigDecimal">
+        select sum(day_value_dl)
+        from jdgl_day_schedule
+        where del_flag != "1"
+        <if test="startDate != null "> and date &gt;= #{startDate}</if>
+        <if test="endDate != null "> and date &lt;= #{endDate}</if>
+    </select>
 </mapper>

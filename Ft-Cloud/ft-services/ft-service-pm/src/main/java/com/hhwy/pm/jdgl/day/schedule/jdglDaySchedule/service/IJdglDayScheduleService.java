@@ -43,4 +43,6 @@ public interface IJdglDayScheduleService {
     Map<String, BigDecimal> getMonthScheduleByMonthRange(Date startPeriod, Date endPeriod);
 
     void updateTaskStatus(Long id);
+
+    BigDecimal getCountValueNotApprove(Date startDate, Date endDate);
 }

@@ -14,12 +14,14 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -146,6 +148,19 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
             .getJdglCorrectionMeasuresMakeList(jdglCorrectionMeasuresMakeParam);
         ExcelUtils<JdglCorrectionMeasuresMake> util = new ExcelUtils<>(JdglCorrectionMeasuresMake.class);
         util.exportExcel(response, jdglCorrectionMeasuresMakeList, DateUtils.getDate());
+    }
+
+    /**
+     *
+     * 更新流程数据
+     * @param id 主键
+     * @return  监听器
+     */
+    @RequestMapping(value ="/listener",method = RequestMethod.POST)
+    @Transactional
+    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
+        jdglCorrectionMeasuresMakeService.updateTaskStatus(id);
+        return AjaxResult.success();
     }
 
     /**

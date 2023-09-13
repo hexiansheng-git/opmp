@@ -29,6 +29,12 @@ public interface IJdglCorrectionMeasuresMakeService {
     int deleteJdglCorrectionMeasuresMakeByPks(List<Long> jdglCorrectionMeasuresMakePkList);
 
     /**
+     * 更新流程数据
+     * @param id
+     */
+    void updateTaskStatus(Long id);
+
+    /**
      * 同步差异化分析数据
      * @param period
      */

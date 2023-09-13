@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.diff.track.mapper;
 
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
+import java.math.BigDecimal;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,7 +26,8 @@ public interface JdglProgressCorrectionTrackMapper {
 
     int updateJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 
-    int updateJdglProgressCorrectionTrackList(@Param("list") List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList);
+    int updateJdglProgressCorrectionTrackList(
+        @Param("list") List<JdglProgressCorrectionTrack> jdglProgressCorrectionTrackList);
 
     int deleteJdglProgressCorrectionTrack(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 
@@ -33,4 +35,6 @@ public interface JdglProgressCorrectionTrackMapper {
         @Param("jdglProgressCorrectionTrackPkList") List<Long> jdglProgressCorrectionTrackPkList);
 
     List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo);
+
+    List<BigDecimal> getLastThreeMonthData(JdglProgressCorrectionTrack jdglProgressCorrectionTrack);
 }

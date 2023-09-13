@@ -48,7 +48,7 @@ public class JdglProgressCorrectionTrackDetailServiceImpl implements IJdglProgre
     public int insertJdglProgressCorrectionTrackDetailList(
         List<JdglProgressCorrectionTrackDetail> jdglProgressCorrectionTrackDetailList) {
         for (JdglProgressCorrectionTrackDetail jdglProgressCorrectionTrackDetail : jdglProgressCorrectionTrackDetailList) {
-            jdglProgressCorrectionTrackDetail.setId(IdWorker.createId());
+//            jdglProgressCorrectionTrackDetail.setId(IdWorker.createId());
             jdglProgressCorrectionTrackDetail.setCreateUser(SecurityUtils.getUserName());
             jdglProgressCorrectionTrackDetail.setCreateTime(DateUtils.getNowDate());
         }

@@ -1,17 +1,46 @@
 package com.hhwy.pm.jdgl.diff.track.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
+import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
+import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
+import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMake;
+import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
+import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailService;
+import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrackDetail;
 import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 import com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackMapper;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackDetailService;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
+import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsQueryVO;
+import com.hhwy.pm.jdgl.statistics.service.IPlanStatisticsService;
+import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
+import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.IJdglWeekPlanService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.core.DateUtil;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +58,33 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
 
     @Autowired
     private IJdglProgressCorrectionTrackDetailService jdglProgressCorrectionTrackDetailService;
+
+    @Autowired
+    private IJdglCorrectionMeasuresMakeService jdglCorrectionMeasuresMakeService;
+
+    @Autowired
+    private IJdglCorrectionMeasuresMakeDetailService jdglCorrectionMeasuresMakeDetailService;
+
+    @Autowired
+    private IJdglWeekPlanService jdglWeekPlanService;
+
+    @Autowired
+    private IJdglDayScheduleService jdglDayScheduleService;
+
+    @Autowired
+    private IJdglMonthPlanService jdglMonthPlanService;
+
+    @Autowired
+    private IJdglDiffAnalysisService jdglDiffAnalysisService;
+
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private IJdglMainPlanItemService jdglMainPlanItemService;
+
+    @Autowired
+    private IPlanStatisticsService planStatisticsService;
 
     /**
      * 查询单条数据-详情
@@ -154,5 +210,311 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
     @Override
     public List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo) {
         return jdglProgressCorrectionTrackMapper.gmList(queryVo);
+    }
+
+    /**
+     * 每周定时生成追踪数据
+     */
+    @Transactional
+    public void weekTimerTrack() {
+        // 判断第几周
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        // 当前年份
+        int year = calendar.get(Calendar.YEAR);
+        // 当前月份
+        int month = calendar.get(Calendar.MONTH) + 1;
+        // 当年第几周
+        int week = calendar.get(Calendar.WEEK_OF_YEAR);
+
+        // 设置当前年当前周开始日
+        calendar.setWeekDate(year, week, 2);
+        int startYear = calendar.get(Calendar.YEAR);
+        int startMonth = calendar.get(Calendar.MONTH) + 1;
+        int startDate = calendar.get(Calendar.DATE);
+        String startTimeStr = startYear + "年" + startMonth + "月" + startDate + "日";
+        Date startTime = calendar.getTime();
+
+        // 设置当前年当前周结束日
+        calendar.setWeekDate(year, week, 1);
+        int endYear = calendar.get(Calendar.YEAR);
+        int endMonth = calendar.get(Calendar.MONTH) + 1;
+        int endDate = calendar.get(Calendar.DATE);
+        // 最后一周剩余几天就是几天，不跨年
+        if (endYear > startYear) {
+            endYear = startYear;
+            endMonth = 12;
+            endDate = 31;
+        }
+        String endTimeStr = endYear + "年" + endMonth + "月" + endDate + "日";
+        Date endTime = calendar.getTime();
+
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.set(Calendar.DAY_OF_MONTH, 1);
+        // 当月第一天
+        Date firstDayMonth = calendar1.getTime();
+        calendar1.roll(Calendar.DAY_OF_MONTH, -1);
+        // 当月最后一天
+        Date lastDayMonth = calendar1.getTime();
+
+        // 查询最新制定数据
+        List<JdglCorrectionMeasuresMake> makeList = jdglCorrectionMeasuresMakeService
+            .getJdglCorrectionMeasuresMakeList(new JdglCorrectionMeasuresMake());
+        if (CollectionUtils.isEmpty(makeList)) {
+            return;
+        }
+        JdglCorrectionMeasuresMake make = makeList.get(0);
+
+        // 查询纠偏方案详情
+        List<JdglCorrectionMeasuresMakeDetail> detailList = this.getDetailList(make.getId());
+        if (CollectionUtils.isEmpty(detailList)) {
+            return;
+        }
+
+        // 获取每周计划数据
+        JdglWeekPlan jdglWeekPlan = jdglWeekPlanService.getUsingWeekPlanByYearAndWeek(String.valueOf(year),
+            String.valueOf(week));
+
+        // 获取月度计划数据
+        JdglMonthPlan jdglMonthPlan = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(String.valueOf(year),
+            String.valueOf(month));
+
+        // 合同信息
+        XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+
+        // 获取总体计划,获取实际开工日期最早的数据
+        JdglMainPlanItem maxActualStartDateMainPlanItem = jdglMainPlanItemService.getMaxActualStartDate();
+
+        // 获取总体计划, 获取当月数据 todo 涉及版本
+        List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService
+            .getUsingJdglMainPlanItemListByDateRange(firstDayMonth, lastDayMonth);
+
+        // 进度统计
+        PlanStatisticsQueryVO planStatisticsQueryVO = new PlanStatisticsQueryVO();
+        planStatisticsQueryVO.setQueryDateType("j");
+        planStatisticsQueryVO.setEndDate(endTime);
+        planStatisticsQueryVO.setYear(String.valueOf(year));
+        Map<String, Map<String, BigDecimal>> statisticsMap =
+            planStatisticsService.getValueCompData(planStatisticsQueryVO);
+        Map<String, BigDecimal> quarterMap = statisticsMap.get("quarter");
+        // 计划产值
+        BigDecimal planAmt = quarterMap.get("planAmt");
+        // 实际产值
+        BigDecimal actAmt = quarterMap.get("actAmt");
+
+        JdglProgressCorrectionTrack jdglProgressCorrectionTrack = new JdglProgressCorrectionTrack();
+        jdglProgressCorrectionTrack.setId(IdWorker.createId());
+        jdglProgressCorrectionTrack.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        jdglProgressCorrectionTrack.setCreateUserName(SecurityUtils.getUserName());
+        jdglProgressCorrectionTrack.setCreateTime(DateUtils.getNowDate());
+
+        jdglProgressCorrectionTrack.setPeriod(make.getWarnPeriod());
+        jdglProgressCorrectionTrack.setRiskLevel(make.getRiskLevel());
+        jdglProgressCorrectionTrack.setPeriodTotalScore(make.getPeriodTotalScore());
+        jdglProgressCorrectionTrack.setCorrectionDate(make.getCorrectionDate());
+
+        if (CollectionUtils.isNotEmpty(detailList)) {
+            // 获取纠偏完成日期最大值
+            List<Date> dateList =
+                detailList.stream().filter(p -> p.getCorrectionCompleteDate() != null)
+                    .map(JdglCorrectionMeasuresMakeDetail::getCorrectionCompleteDate).distinct()
+                    .collect(Collectors.toList());
+
+            if (!CollectionUtils.isEmpty(dateList)) {
+                Date correctionCompleteDate = dateList.stream().max(Date::compareTo).get();
+                // 预计纠偏完成日期 预计纠偏方案最晚日期
+                jdglProgressCorrectionTrack.setPlanCorrectionCompleteDate(correctionCompleteDate);
+            }
+        }
+        // 周报期数
+        jdglProgressCorrectionTrack.setWeekReportPeriod(year + "年第" + week + "周");
+        // 周报生成日期
+        jdglProgressCorrectionTrack.setWeekReportBuildDate(FtDateUtils.getYearMonthDayDate());
+        // 周报时间
+        jdglProgressCorrectionTrack.setWeekReportTime(startTimeStr + "-" + endTimeStr);
+
+        BigDecimal thisPlanValueDl = BigDecimal.ZERO;
+        if (jdglWeekPlan != null && jdglWeekPlan.getThisPlanValueDl().compareTo(BigDecimal.ZERO) != 0) {
+            thisPlanValueDl = jdglWeekPlan.getThisPlanValueDl();
+        }
+        // 本周计划产值
+        jdglProgressCorrectionTrack.setWeekValuePlan(thisPlanValueDl);
+        // 本周产值完成
+        BigDecimal weekValueComplete = jdglDayScheduleService.getCountValueNotApprove(startTime, endTime);
+        jdglProgressCorrectionTrack.setWeekValueComplete(weekValueComplete);
+        // 周完成比例 本周产值完成/本周产值计划*100%
+        BigDecimal weekCompleteRatio = BigDecimalUtils.divide0(jdglProgressCorrectionTrack.getWeekValuePlan(),
+            jdglProgressCorrectionTrack.getWeekValueComplete(), 4).multiply(new BigDecimal(100));
+        jdglProgressCorrectionTrack.setWeekCompleteRatio(weekCompleteRatio);
+
+        if (jdglMonthPlan != null) {
+            // 当月产值计划
+            jdglProgressCorrectionTrack.setMonthValuePlan(
+                jdglMonthPlan.getThisPlanValueDl() == null ? BigDecimal.ZERO : jdglMonthPlan.getThisPlanValueDl());
+        }
+        // 当月产值完成
+        BigDecimal monthValueComplete = jdglDayScheduleService.getCountValueNotApprove(firstDayMonth, lastDayMonth);
+        jdglProgressCorrectionTrack.setMonthValueComplete(monthValueComplete);
+
+        // 开累产值完成
+        BigDecimal sumValueComplete = jdglDayScheduleService.getCountValueNotApprove(null, endTime);
+        jdglProgressCorrectionTrack.setSumValueComplete(sumValueComplete);
+
+        // 纠偏期次
+        Date warnPeriod = FtDateUtils.parseDateYm(jdglProgressCorrectionTrack.getPeriod());
+        // 纠偏期次当月，最后一天日期
+        Date warnPeriodLastDay = DateUtil.getLastDay(warnPeriod);
+        // 纠偏期次开累产值完成
+        BigDecimal sumValueCompleteWarnPeriod = jdglDayScheduleService.getCountValueNotApprove(null, warnPeriodLastDay);
+
+        // 开累计量
+        BigDecimal totalMeterValue = sumMeter(FtDateUtils.getYearMonthDate(endTime));
+        jdglProgressCorrectionTrack.setSumMeterage(totalMeterValue);
+
+        jdglProgressCorrectionTrack.setDurationCompletePercentage(BigDecimal.ZERO);
+        jdglProgressCorrectionTrack.setMonthDiffValue(BigDecimal.ZERO);
+        if (contractInfo != null && StringUtils.isNotBlank(contractInfo.getDuration())) {
+            // 工期
+            BigDecimal duration = new BigDecimal(contractInfo.getDuration());
+            // 实际开工日期
+            Date actualStartDate = maxActualStartDateMainPlanItem.getActualStartDate();
+
+            // 有效合同额
+            BigDecimal effectiveAmt = contractInfo.getEffectiveAmout();
+            // 纠偏期次开累产值完成/总产值(合同信息的有效合同额)(%)
+            BigDecimal sumValuePercentagePeriod = BigDecimalUtils.divide0(sumValueCompleteWarnPeriod, effectiveAmt, 4)
+                .multiply(new BigDecimal(100));
+            BigDecimal durationCompletePercentagePeriod = BigDecimal.ZERO;
+            if (actualStartDate != null) {
+                // 周报结束日到实际开始日相差天数
+                BigDecimal days = new BigDecimal(FtDateUtils.getDays(actualStartDate, endTime).longValue());
+                // 工期完成百分比 周报结束日期-实际开始日期/工期
+                BigDecimal durationCompletePercentage = BigDecimalUtils.divide0(days, duration, 4)
+                    .multiply(new BigDecimal(100));
+                jdglProgressCorrectionTrack.setDurationCompletePercentage(durationCompletePercentage);
+
+                // 纠偏期次当月最后一天到实际开始日相差天数
+                BigDecimal daysPeriod = new BigDecimal(
+                    FtDateUtils.getDays(actualStartDate, warnPeriodLastDay).longValue());
+                // 截止纠偏期次工期完成百分比 纠偏期次当月最后一天-实际开始日期/工期
+                durationCompletePercentagePeriod = BigDecimalUtils.divide0(daysPeriod, duration, 4)
+                    .multiply(new BigDecimal(100));
+            }
+            // 差异值 开累产值完成/总产值(合同信息的有效合同额)(%)-工期完成百分比(%)
+            BigDecimal diffValue = sumValuePercentagePeriod.subtract(durationCompletePercentagePeriod);
+            jdglProgressCorrectionTrack.setMonthDiffValue(diffValue);
+        }
+
+        // 项目计划当月总时差
+        BigDecimal planMathTotalTimeDiff = BigDecimal.valueOf(sumTotalFloat(mainPlanItemList));
+        jdglProgressCorrectionTrack.setPlanMathTotalTimeDiff(planMathTotalTimeDiff);
+        // 季度产值计划完成百分比
+        BigDecimal quarterValuePlanCompletePercentage = BigDecimalUtils.divide0(actAmt, planAmt, 4)
+            .multiply(new BigDecimal(100));
+        jdglProgressCorrectionTrack.setQuarterValuePlanCompletePercentage(quarterValuePlanCompletePercentage);
+        // 关键线路形象完成百分比 todo
+        //jdglProgressCorrectionTrack.setKeyLineImageCompletePercentage();
+
+        // 近三个月差异化值 存3个值，逗号隔开 不包含本月
+        List<BigDecimal> valueList = jdglProgressCorrectionTrackMapper
+            .getLastThreeMonthData(new JdglProgressCorrectionTrack());
+        if (CollectionUtils.isNotEmpty(valueList)) {
+            String valueStr = valueList.stream().map(String::valueOf).collect(Collectors.joining(","));
+            jdglProgressCorrectionTrack.setLastThreeMonthDiffValue(valueStr);
+        }
+
+        // 周期信息入库
+        jdglProgressCorrectionTrackMapper.insertJdglProgressCorrectionTrack(jdglProgressCorrectionTrack);
+
+        List<JdglProgressCorrectionTrackDetail> trackDetailList = new ArrayList<>();
+        for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
+            JdglProgressCorrectionTrackDetail trackDetail = new JdglProgressCorrectionTrackDetail();
+            BeanUtils.copyProperties(detail, trackDetail);
+            trackDetailList.add(trackDetail);
+        }
+        // 纠偏方案详情入库
+        jdglProgressCorrectionTrackDetailService.insertJdglProgressCorrectionTrackDetailList(trackDetailList);
+    }
+
+
+    /**
+     * 合计开累计量 从差异化分析-计量填报获取
+     *
+     * @param currentDate
+     * @return
+     */
+    public BigDecimal sumMeter(Date currentDate) {
+        List<JdglDiffAnalysis> list = jdglDiffAnalysisService.getJdglDiffAnalysisList(new JdglDiffAnalysis());
+        BigDecimal totalMeterValue = BigDecimal.ZERO;
+        if (!CollectionUtils.isEmpty(list)) {
+            for (JdglDiffAnalysis jdglDiffAnalysis : list) {
+                // 当前日期在指定日期之后或与指定日期相等
+                if (!currentDate.before(jdglDiffAnalysis.getPeriod())) {
+                    totalMeterValue = totalMeterValue.add(jdglDiffAnalysis.getMeterValue());
+                }
+            }
+        }
+        return totalMeterValue;
+    }
+
+    /**
+     * p6 合计总差时
+     *
+     * @param list
+     * @return
+     */
+    public Integer sumTotalFloat(List<JdglMainPlanItem> list) {
+        Integer totalFloat = 0;
+        if (!CollectionUtils.isEmpty(list)) {
+            for (JdglMainPlanItem jdglMainPlanItem : list) {
+                totalFloat = totalFloat + jdglMainPlanItem.getTotalFloat();
+            }
+        }
+        return totalFloat;
+    }
+
+    /**
+     * 获取纠偏方案详情
+     *
+     * @param id
+     * @return
+     */
+    public List<JdglCorrectionMeasuresMakeDetail> getDetailList(Long id) {
+        List<JdglCorrectionMeasuresMakeDetail> newList = new ArrayList<>();
+
+        JdglCorrectionMeasuresMakeDetail qryDetail = new JdglCorrectionMeasuresMakeDetail();
+        qryDetail.setMakeId(id);
+        // 查询全部纠偏方案详情
+        List<JdglCorrectionMeasuresMakeDetail> detailList = jdglCorrectionMeasuresMakeDetailService
+            .getJdglCorrectionMeasuresMakeDetailList(qryDetail);
+
+        // 查询偏差值为负的方案详情
+        List<JdglCorrectionMeasuresMakeDetail> diffDetailList = new ArrayList<>();
+        if (CollectionUtils.isEmpty(detailList)) {
+            return newList;
+        }
+        for (JdglCorrectionMeasuresMakeDetail detail : detailList) {
+            if (detail.getDeviationQuantity() != null
+                && detail.getDeviationQuantity().compareTo(BigDecimal.ZERO) < 0) {
+                diffDetailList.add(detail);
+            }
+        }
+        if (CollectionUtils.isEmpty(diffDetailList)) {
+            return newList;
+        }
+
+        // 根据子集递归查询父级数据 ，封装成树结构返回
+        newList = ListTreeUtil.getUpListBySublistToTree(
+            diffDetailList,
+            detailList,
+            JdglCorrectionMeasuresMakeDetail::getId,
+            JdglCorrectionMeasuresMakeDetail::getPid,
+            o -> o.getPid() == null,
+            (r, n) -> r.getId().equals(n.getPid()),
+            JdglCorrectionMeasuresMakeDetail::getChildren,
+            JdglCorrectionMeasuresMakeDetail::setChildren);
+
+        // 再树转list返回，为了生成新的id和pid
+        return TreeUtil.treeToList(newList);
     }
 }
