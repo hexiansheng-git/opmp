@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.wzch.source.service;
 
 
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailVO;
+import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandVO;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail;
 import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailReminderOfChangeRequest;
@@ -10,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -66,10 +68,16 @@ public interface IWzchSourceDetailService {
     boolean save(WzchSource wzchSource);
 
     /**
+     * 同步物资总需用
+     * @param version
+     */
+    void sync(BigDecimal version);
+
+    /**
      * 通过项目ID获取物资总需详情
      * @return
      */
-    List<WzchSourceDetailResponse>  getProjectTotalDemandDetail();
+    WzchSourceTotalDemandVO getProjectTotalDemandDetail(WzchSourceTotalDemandVO vo);
 
     /**
      * 总需变更提醒

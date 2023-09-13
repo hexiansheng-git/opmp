@@ -5,20 +5,23 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailVO;
+import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandVO;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceDetailService;
 import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailReminderOfChangeRequest;
-import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailResponse;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -100,7 +103,26 @@ public class WzchSourceDetailController extends BaseController {
             throw new BaseException("保存异常");
         }
 
+    }
 
+    /**
+     * 从物资总需同步数据到来源策划
+     * @param version
+     * @return
+     */
+    @PostMapping("/sync")
+    public AjaxResult sync(String version) {
+        try{
+            Assert.isTrue(StringUtils.isNotBlank(version), "version不能为空");
+            wzchSourceDetailService.sync(new BigDecimal(version));
+            return AjaxResult.success();
+        }catch (BaseException b){
+            b.printStackTrace();
+            throw new BaseException(b.getDefaultMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new BaseException("保存异常");
+        }
     }
 
     /**
@@ -108,10 +130,9 @@ public class WzchSourceDetailController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "wzch:sourceDetail:add")
     @GetMapping("/getProjectTotalDemandDetail")
-    public AjaxResult getProjectTotalDemandDetail() {
-        List<WzchSourceDetailResponse> list = null;
+    public AjaxResult getProjectTotalDemandDetail(@RequestBody WzchSourceTotalDemandVO demandVO) {
         try {
-             list = wzchSourceDetailService.getProjectTotalDemandDetail();
+            demandVO = wzchSourceDetailService.getProjectTotalDemandDetail(demandVO);
         }catch (BaseException b){
             b.printStackTrace();
             throw new BaseException(b.getDefaultMessage());
@@ -119,7 +140,7 @@ public class WzchSourceDetailController extends BaseController {
             e.printStackTrace();
             throw new BaseException("获取详情异常");
         }
-        return new AjaxResult(200,"成功",list);
+        return new AjaxResult(200,"成功",demandVO);
     }
 
 

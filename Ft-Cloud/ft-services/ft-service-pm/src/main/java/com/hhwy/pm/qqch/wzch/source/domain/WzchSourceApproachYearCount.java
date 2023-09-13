@@ -4,6 +4,7 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
@@ -13,7 +14,7 @@ import java.math.BigDecimal;
  * @author mls
  * @date 2022-11-21
  */
-
+@Data
 public class WzchSourceApproachYearCount extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -57,6 +58,8 @@ public class WzchSourceApproachYearCount extends BaseEntity {
     
    @ExcelProperty
     private BigDecimal innerAdjustNum;
+
+    private BigDecimal version;
 
     /** 删除标识：0有效1无效 */
     private String delFlag = "0";

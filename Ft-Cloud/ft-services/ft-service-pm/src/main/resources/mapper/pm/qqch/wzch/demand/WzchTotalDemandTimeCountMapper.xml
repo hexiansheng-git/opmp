@@ -97,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="secondQuarterNum != null "> and `second_quarter_num` = #{secondQuarterNum}</if>
             <if test="thirdQuarterNum != null "> and `third_quarter_num` = #{thirdQuarterNum}</if>
             <if test="fourthQuarterNum != null "> and `fourth_quarter_num` = #{fourthQuarterNum}</if>
+            <if test="version != null "> and `version` = #{version}</if> 
         </where>
         order by `id` desc
     </select>

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.wzch.source.service;
 
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailVO;
+import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandVO;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.vo.ProjectOfChangeInfoRequest;
 import com.hhwy.pm.qqch.wzch.source.vo.ReminderOfChangeResponse;
@@ -64,10 +65,9 @@ public interface IWzchSourceService {
 
     /**
      * 获取详情
-     * @param id
      * @return
      */
-    WzchSource detail(Long id);
+    WzchSource detail(WzchSourceTotalDemandVO vo);
 
     /**
      * 变更情况提醒

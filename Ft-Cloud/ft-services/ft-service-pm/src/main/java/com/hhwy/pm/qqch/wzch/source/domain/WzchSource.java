@@ -1,13 +1,18 @@
 package com.hhwy.pm.qqch.wzch.source.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -84,6 +89,33 @@ public class WzchSource extends CommonBaseEntity {
     @Excel(name = "编制时间",dateFormat = "yyyy-MM-dd HH:mm")
     private Date createTime;
 
+    /**
+     * 字段描述：阶段标识
+     */
+    @NotBlank(message = "阶段标识不能为空！",groups = ValidationGroups.Save.class)
+    private String stageIdentity;
+    /**
+     * 字段描述：版本
+     */
+    @NotNull(message = "版本不能为空！",groups = ValidationGroups.Save.class)
+    private BigDecimal version;
+    /**
+     * 字段描述：菜单id
+     */
+    @NotBlank(message = "菜单id不能为空！",groups = ValidationGroups.Save.class)
+    private String menuId;
+    /**
+     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
+     */
+    @NotBlank(message = "按钮标识不能为空！",groups = ValidationGroups.Save.class)
+    private String buttonMark;
+
+    @JsonProperty
+    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
+    private String moduleIdentity;
+
+    private String valid;
+    
     private List<Long> idList;
 
     public WzchSource(Long id, Long projectId) {

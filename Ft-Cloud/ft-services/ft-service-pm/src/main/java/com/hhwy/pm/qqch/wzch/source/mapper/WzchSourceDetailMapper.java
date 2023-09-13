@@ -4,6 +4,7 @@ package com.hhwy.pm.qqch.wzch.source.mapper;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail;
 import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailExportRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -93,4 +94,18 @@ public interface WzchSourceDetailMapper {
     int deleteWzchSourceDetailBySourdeId(Long sourceId);
 
     List<WzchSourceDetail> selectByMaterialCodeAndMaterialStandard(List<WzchSourceDetail> removeWzchSourceDetail);
+
+    /**
+     * 直接删除来源策划
+     * @param version
+     * @return
+     */
+    int deleteDirectByVersion(BigDecimal version);
+
+    /**
+     * 直接删除来源策划年度信息
+     * @param version
+     * @return
+     */
+    int deleteTimeDirectByVersion(BigDecimal version);
 }

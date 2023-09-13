@@ -4,6 +4,8 @@ import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail;
@@ -51,6 +53,8 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
     private IWzchTotalDemandDetailService wzchTotalDemandDetailService;
     @Resource
     private WzchCommonService wzchCommonService;
+    @Resource
+    private IQqchReviewService qqchReviewService;
 
     /**
      * 查询来源策划
@@ -124,13 +128,21 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
     }
 
     @Override
-    public WzchSource detail(Long id) {
-
-        WzchSource wzchSource = wzchSourceMapper.selectWzchSourceById(id);
-        if(wzchSource==null){
-            throw new BaseException("未查询到数据");
+    public WzchSource detail(WzchSourceTotalDemandVO vo) {
+//        WzchSource wzchSource = wzchSourceMapper.selectWzchSourceById(id);
+//        if(wzchSource==null){
+//            throw new BaseException("未查询到数据");
+//        }
+        WzchSource wzchSource = new WzchSource();
+        BigDecimal version = VersionUtil.getVersion("wzch_source_detail", vo.getVersion());
+        wzchSource.setVersion(version);
+        wzchSource.setStageIdentity(qqchReviewService.getStage());
+        if(version == null){
+            wzchSource.setWzchSourceDetailList(new ArrayList<>(2));    
+            return wzchSource;
         }
-        List<WzchSourceDetail> wzchSourceDetails = queryWzchSourceDetailList(id);
+            
+        List<WzchSourceDetail> wzchSourceDetails = queryWzchSourceDetailList(version);
         wzchSourceDetails = wzchSourceDetails.stream().sorted(Comparator.comparing(WzchSourceDetail::getMaterialCode)).collect(Collectors.toList());
         wzchSource.setWzchSourceDetailList(wzchSourceDetails);
         return wzchSource;
@@ -404,18 +416,21 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
 
     /**
      * 封装WzchSourceDetailList
-     * @param sourceId
+     * @param version
      * @return
      */
-    public List<WzchSourceDetail> queryWzchSourceDetailList(Long sourceId){
-        List<WzchSourceDetail> wzchSourceDetails = wzchSourceDetailMapper.selectWzchSourceDetailBySourceId(sourceId);
+    public List<WzchSourceDetail> queryWzchSourceDetailList(BigDecimal version){
+        WzchSourceDetail queryDetail = new WzchSourceDetail();
+        queryDetail.setVersion(version);
+        List<WzchSourceDetail> wzchSourceDetails = wzchSourceDetailMapper.selectWzchSourceDetailList(queryDetail);
+//        List<WzchSourceDetail> wzchSourceDetails = wzchSourceDetailMapper.selectWzchSourceDetailBySourceId(sourceId);
         if(CollectionUtils.isEmpty(wzchSourceDetails)){
-            throw new CustomBusinessException("编辑失败");
+            return new ArrayList<>(2);
         }
         List<Long> detailIds = wzchSourceDetails.stream().map(WzchSourceDetail::getId).collect(Collectors.toList());
         List<WzchSourceApproachYearCount> yearCounts =  wzchSourceApproachYearCountMapper.selectWzchSourceApproachYearCountByDetailIds(detailIds);
         if(CollectionUtils.isEmpty(yearCounts)){
-            throw new CustomBusinessException("编辑失败");
+            yearCounts = new ArrayList<>(2);
         }
         List<String> yearList = yearCounts.stream().map(WzchSourceApproachYearCount::getYear).collect(Collectors.toList());
          yearList = yearList.stream().distinct().sorted().collect(Collectors.toList());

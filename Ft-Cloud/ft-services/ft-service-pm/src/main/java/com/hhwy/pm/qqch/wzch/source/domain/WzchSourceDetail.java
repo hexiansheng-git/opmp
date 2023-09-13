@@ -135,6 +135,8 @@ public class WzchSourceDetail extends CommonBaseEntity {
     private String valid;
 
     private String orderNo;
+    
+    private BigDecimal version;
 
     public WzchSourceDetail() {
     }

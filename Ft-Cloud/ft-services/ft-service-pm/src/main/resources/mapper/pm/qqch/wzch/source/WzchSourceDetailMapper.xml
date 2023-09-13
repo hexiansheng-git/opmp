@@ -89,6 +89,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
             <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="version != null "> and `version` = #{version}</if>
         </where>
         order by `id` desc
     </select>
@@ -227,7 +228,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                                                                 `category_name`,
                                                                 `pt_var1`,
                                                                 `pt_var2`,
-                                                                `pt_var3`
+                                                                `pt_var3`,
+                                                                version
                                     )values
         <foreach collection="list" separator="," item="item" index="index" >
         (
@@ -256,7 +258,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{item.categoryName},
             #{item.ptVar1},
             #{item.ptVar2},
-            #{item.ptVar3}
+            #{item.ptVar3},
+            #{item.version}
         )
         </foreach>
     </insert>
@@ -486,5 +489,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
+    <update id="deleteDirectByVersion" parameterType="java.math.BigDecimal">
+        delete from `wzch_source_detail` where `version` = #{version}
+    </update>
+
+    <update id="deleteTimeDirectByVersion" parameterType="java.math.BigDecimal">
+        delete from `wzch_source_approach_year_count` where `version` = #{version}
+    </update>
 
 </mapper>

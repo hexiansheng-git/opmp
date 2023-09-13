@@ -10,6 +10,7 @@ import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailVO;
+import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandVO;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.pm.qqch.wzch.source.vo.ProjectOfChangeInfoRequest;
@@ -78,27 +79,13 @@ public class WzchSourceController extends BaseController {
      * 编辑操作获取详情
      */
 //    @CustomLogger(title = "来源策划-详情",businessType = CustomBusinessType.SELECT)
-    @GetMapping("/detail")
-    public AjaxResult detail(Long id) {
+    @PostMapping("/detail")
+    public AjaxResult detail(@RequestBody WzchSourceTotalDemandVO vo) {
         //通过来源策划获取详情
-        WzchSource wzchSource = wzchSourceService.detail(id);
+        WzchSource wzchSource = wzchSourceService.detail(vo);
 
         return AjaxResult.success(wzchSource);
     }
-
-    /**
-     * 编辑操作获取详情
-     */
-    @PreAuthorize(hasPermi ="wzch:source:edit")
-//    @CustomLogger(title = "来源策划-详情",businessType = CustomBusinessType.SELECT)
-    @GetMapping("/edit")
-    public AjaxResult edit(Long id) {
-        //通过来源策划获取详情
-        WzchSource wzchSource = wzchSourceService.detail(id);
-
-        return AjaxResult.success(wzchSource);
-    }
-
 
     /**
      * 删除来源策划

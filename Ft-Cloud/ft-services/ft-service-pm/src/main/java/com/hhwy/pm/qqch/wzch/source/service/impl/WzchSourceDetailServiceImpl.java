@@ -12,7 +12,11 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.EasyExeclUtil;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail;
@@ -21,6 +25,7 @@ import com.hhwy.pm.qqch.wzch.demand.mapper.WzchTotalDemandTimeCountMapper;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandDetailService;
 import com.hhwy.pm.qqch.wzch.demand.service.IWzchTotalDemandService;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailVO;
+import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandVO;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceApproachYearCount;
 import com.hhwy.pm.qqch.wzch.source.domain.WzchSourceDetail;
@@ -33,6 +38,8 @@ import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailExportRequest;
 import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailReminderOfChangeRequest;
 import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailResponse;
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -41,6 +48,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -81,6 +89,10 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
     private WzchCommonService wzchCommonService;
     @Resource
     private SystemApiService systemApiService;
+    @Resource
+    private IQqchReviewService qqchReviewService;
+    @Resource
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
 
@@ -166,10 +178,17 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             yearCounts.addAll(wzchSourceDetail.getWzchSourceApproachYearCountList());
         }
         wzchSourceApproachYearCountMapper.batchInsert(yearCounts);
+        if (ButtonMark.CONFIRM.equals(wzchSource.getButtonMark())) {
+            // 插入确认状态
+            String menuId = wzchSource.getMenuId();
+            String stageIdentity = wzchSource.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
         return true;
     }
-
+    
     private void fillWzchSourceDetail(WzchSource wzchSource) {
+        int index = 1;
         for (WzchSourceDetail wzchSourceDetail : wzchSource.getWzchSourceDetailList()) {
             if(wzchSourceDetail==null ||
                     CollectionUtils.isEmpty(wzchSourceDetail.getWzchSourceApproachYearCountList())) {
@@ -267,8 +286,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             }
             int i = big.compareTo(wzchSourceDetail.getTotalDemandAmount());
             if(i!=0){
-                throw new BaseException("第【"+wzchSourceDetail.getOrderNo()+"】行的来源数量与总需数量不符");
+                throw new BaseException("第【"+index+"】行的来源数量与总需数量不符");
             }
+            index++;
         }
 
     }
@@ -305,9 +325,11 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         } else {
             Long projectId = wzchSource.getProjectId();
             WzchTotalDemand wzchTotalDemand = this.wzchTotalDemandService.selectMaxValidVersionCodeWzchTotalDemandByProjectId(projectId);
-            String versionCode = wzchTotalDemand.getVersionCode();
-            wzchSource.setDemandVersion(versionCode);
-            wzchSource.setDemandNewVersion(versionCode);
+            if(wzchTotalDemand != null){
+                String versionCode = wzchTotalDemand.getVersionCode();
+                wzchSource.setDemandVersion(versionCode);
+                wzchSource.setDemandNewVersion(versionCode);    
+            }
         }
 
     }
@@ -321,15 +343,66 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             throw new BaseException("数据缺失");
         }
     }
+
     @Override
-    public List<WzchSourceDetailResponse> getProjectTotalDemandDetail() {
-        
-        List<WzchTotalDemandDetail> wzchTotalDemandDetails = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(new WzchTotalDemandDetail("1",null));
-        if(CollectionUtils.isEmpty(wzchTotalDemandDetails)){
-            return new ArrayList<>();
+    @Transactional()
+    public void sync(BigDecimal version) {
+        //1、根据版本号获取总需用数据
+        WzchTotalDemandDetail queryDetail = new WzchTotalDemandDetail();
+        queryDetail.setVersion(version);
+        List<WzchTotalDemandDetail> list = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(queryDetail);
+        if(CollectionUtils.isEmpty(list))
+            return;
+        WzchTotalDemandTimeCount queryTime = new WzchTotalDemandTimeCount();
+        queryTime.setVersion(version);
+        List<WzchTotalDemandTimeCount> timeList = wzchTotalDemandTimeCountMapper.selectWzchTotalDemandTimeCountList(queryTime);
+        //2、转换总需用>来源策划
+        List<WzchSourceDetail> detailList = new ArrayList<>();
+        List<WzchSourceApproachYearCount> detailTimeList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            WzchTotalDemandDetail temp = list.get(i);
+            WzchSourceDetail tempSource = new WzchSourceDetail();
+            BeanUtils.copyProperties(temp, tempSource);
+            new AddBaseInfoUtil<>().addBaseEntity(tempSource);
+            tempSource.setValid(Constant.NO_INT+"");
+            detailList.add(tempSource);
         }
-        Long id = wzchTotalDemandDetails.get(0).getTotalDemandId();
-        WzchTotalDemand wzchTotalDemands = wzchTotalDemandService.selectWzchTotalDemandById(id);
+        for (int i = 0; i < timeList.size(); i++) {
+            WzchTotalDemandTimeCount temp = timeList.get(i);
+            WzchSourceApproachYearCount tempSource = new WzchSourceApproachYearCount();
+            tempSource.setDetailId(temp.getTotalDemandDetailId());
+            tempSource.setMaterialCode(temp.getMaterialCode());
+            tempSource.setYear(temp.getYear());
+            tempSource.setVersion(version);
+            tempSource.setId(IdWorker.createId());
+            detailTimeList.add(tempSource);
+        }
+        //3、清理当前版本数据
+        wzchSourceDetailMapper.deleteDirectByVersion(version);
+        wzchSourceDetailMapper.deleteTimeDirectByVersion(version);
+        //3、插入来源策划、明细、年份明细                    
+        if(CollectionUtils.isNotEmpty(detailList))
+            wzchSourceDetailMapper.batchInsert(detailList);
+        if(CollectionUtils.isNotEmpty(detailTimeList))
+            wzchSourceApproachYearCountMapper.batchInsert(detailTimeList);
+    }
+
+    @Override
+    public WzchSourceTotalDemandVO getProjectTotalDemandDetail(WzchSourceTotalDemandVO vo) {
+//        wzchTotalDemandDetailService.selectWzchTotalDemandDetailList();
+        BigDecimal version = VersionUtil.getVersion("wzch_source_detail", vo.getVersion());
+        vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
+
+        WzchTotalDemandDetail queryDetail = new WzchTotalDemandDetail();
+        queryDetail.setVersion(version);
+        List<WzchTotalDemandDetail> wzchTotalDemandDetails = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(queryDetail);
+        if(CollectionUtils.isEmpty(wzchTotalDemandDetails)){
+            vo.setResponseList(new ArrayList<>(2));
+            return vo;
+        }
+//        Long id = wzchTotalDemandDetails.get(0).getTotalDemandId();
+//        WzchTotalDemand wzchTotalDemands = wzchTotalDemandService.selectWzchTotalDemandById(id);
         List<Long> detailIds = wzchTotalDemandDetails.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
         List<WzchTotalDemandTimeCount> timeCounts = wzchTotalDemandTimeCountMapper.selectByTotalDemandDetailIds(detailIds);
         if(CollectionUtils.isEmpty(timeCounts)){
@@ -351,16 +424,17 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
                 });
             }
             detailResponse.setWzchSourceApproachYearCountList(wzchSourceApproachYearCountList);
-            detailResponse.setDemandVersion(wzchTotalDemands.getVersionCode());
-            detailResponse.setDemandNewVersion(wzchTotalDemands.getVersionCode());
-            detailResponse.setDemandValidDate(wzchTotalDemands.getUpdateTime());
+//            detailResponse.setDemandVersion(wzchTotalDemands.getVersionCode());
+//            detailResponse.setDemandNewVersion(wzchTotalDemands.getVersionCode());
+//            detailResponse.setDemandValidDate(wzchTotalDemands.getUpdateTime());
             wzchSourceDetailResponseList.add(detailResponse);
         }
         if(CollectionUtils.isNotEmpty(wzchSourceDetailResponseList)){
             wzchCommonService.setWzchtMaterialInfo(wzchSourceDetailResponseList);
             wzchSourceDetailResponseList = wzchSourceDetailResponseList.stream().sorted(Comparator.comparing(WzchSourceDetailResponse::getMaterialCode)).collect(Collectors.toList());
         }
-        return wzchSourceDetailResponseList;
+        vo.setResponseList(wzchSourceDetailResponseList);
+        return vo;
     }
 
     @Override

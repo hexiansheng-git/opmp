@@ -1,6 +1,8 @@
 package com.hhwy.pm.qqch.wzch.demand.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.hhwy.pm.qqch.common.domain.PreparationEntity;
+import com.hhwy.pm.qqch.wzch.source.vo.WzchSourceDetailResponse;
 import lombok.Data;
 import java.io.Serializable;
 import java.util.Date;
@@ -11,7 +13,7 @@ import java.util.List;
  * @author HCT
  */
 @Data
-public class WzchSourceTotalDemandVO implements Serializable {
+public class WzchSourceTotalDemandVO extends PreparationEntity {
 
 
     private Long newId;
@@ -37,6 +39,8 @@ public class WzchSourceTotalDemandVO implements Serializable {
     private String projectId;
 
     private List<WzchSourceTotalDemandDetailVO> wzchSourceTotalDemandDetailVOList;
+
+    private List<WzchSourceDetailResponse> responseList;
 
 
 }
