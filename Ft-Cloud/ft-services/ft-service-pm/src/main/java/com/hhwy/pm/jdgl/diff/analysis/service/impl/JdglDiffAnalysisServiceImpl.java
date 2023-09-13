@@ -1,8 +1,11 @@
 package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysisCorrect;
@@ -19,6 +22,8 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -61,6 +67,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     @Autowired
     private ISysSyncInfoService sysSyncInfoService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     public JdglDiffAnalysis getJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis) {
@@ -183,6 +192,36 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
      */
     @Override
     public void initDiffAnalysis() {
+
+        // 获取租户集合
+        List<String> tenantKeyList = new ArrayList<>();
+        //
+        List<SysTenant> sysTenants = systemServiceApi.tenantList();
+
+        if(!CollectionUtils.isEmpty(sysTenants)) {
+            sysTenants.forEach(vo -> tenantKeyList.add(vo.getTenantKey()));
+        }
+
+        if(!CollectionUtils.isEmpty(tenantKeyList)) {
+            for (String tenantKey : tenantKeyList) {
+                //切换租户
+                String oldDataSource = DynamicDataSourceContextHolder.peek();
+                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                try {
+                    initDiffData();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    throw new CustomBusinessException(e.getMessage());
+                }finally {
+                    DynamicDataSourceContextHolder.poll();
+                    DynamicDataSourceContextHolder.push(oldDataSource);
+                }
+            }
+        }
+
+    }
+
+    public void initDiffData() {
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
         Date nowDate = new Date();
         jdglDiffAnalysis.setId(IdWorker.createId());
@@ -203,7 +242,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         // 初始化sv曲线
         BigDecimal diffGradeValue = iJdglDiffAnalysisSvService.initJdglDiffAnalysisSv(jdglDiffAnalysis);
-        
+
         // 初始化关键线路
         BigDecimal keyGradeValue = jdglDiffAnalysisPathService.initKeyJdglDiffAnalysisPath(jdglDiffAnalysis);
 
@@ -299,7 +338,6 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(i > 0) {
             sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
         }
-
     }
 
     @Override
