@@ -24,6 +24,11 @@ import java.util.Map;
 public class QqchAdvancedVindicatePlanImportVo {
 
     /**
+     * 字段描述：单位名称
+     */
+    @JsonProperty
+    private String unitName;
+    /**
      * 字段描述：研发课题名称
      */
     @JsonProperty

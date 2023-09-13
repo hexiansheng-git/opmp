@@ -23,6 +23,8 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.DataCheckUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.excelUtil.ExcelHeadStyle;
 import com.hhwy.utils.excelUtil.HeadVo;
 import com.hhwy.utils.idworker.IdWorker;
@@ -66,6 +68,8 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
 
     public QqchAdvancedVindicatePlan getQqchAdvancedVindicatePlan(QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan) {
@@ -308,7 +312,19 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
      */
     @Override
     public List<QqchAdvancedVindicatePlanImportVo> importExcel(MultipartFile file) throws FileNotFoundException, IllegalAccessException {
-        return this.makeData(file);
+        List<QqchAdvancedVindicatePlanImportVo> importVoList = this.makeData(file);
+        if(CollectionUtils.isEmpty(importVoList)){
+            return new ArrayList<>();
+        }
+        //获取项目信息
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        if(projectInfo != null){
+            String projectName = projectInfo.getProjectName();
+            for (QqchAdvancedVindicatePlanImportVo importVo : importVoList) {
+                importVo.setUnitName(projectName);
+            }
+        }
+        return importVoList;
     }
 
 
