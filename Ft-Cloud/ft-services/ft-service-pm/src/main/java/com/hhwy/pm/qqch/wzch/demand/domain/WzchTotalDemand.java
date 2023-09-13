@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.wzch.demand.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -30,7 +32,6 @@ public class WzchTotalDemand extends CommonBaseEntity {
     /** id */
 
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    @NotNull(message = "ID不能为空",groups = {ValidationGroups.Save.class})
     private Long id;
 
     private List<Long> ids;
@@ -40,34 +41,28 @@ public class WzchTotalDemand extends CommonBaseEntity {
     private String demandCode;
 
     /** 标题 */
-    @NotBlank(message = "标题不能为空",groups = {ValidationGroups.Save.class})
     @Excel(name = "标题")
     private String title;
 
     /** 所属区域id */
-    @NotNull(message = "所属区域ID不能为空",groups = {ValidationGroups.Save.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long regionId;
 
     /** 所属区域 */
-    @NotBlank(message = "所属区域不能为空",groups = {ValidationGroups.Save.class})
     @Excel(name = "所属区域")
     private String regionName;
 
     /** 版本号 */
-    @NotBlank(message = "版本号不能为空",groups = {ValidationGroups.Save.class})
     @Excel(name = "版本号")
     private String versionCode;
     private String versionCodeStr;
 
     /** 计划开始时间 */
-    @NotNull(message = "计划开始时间不能为空",groups = {ValidationGroups.Save.class})
     @Excel(name = "计划开始时间", width = 30, dateFormat = "yyyy-MM")
     @JsonFormat(pattern = "yyyy-MM", timezone = "GMT+8")
     private Date planStartTime;
 
     /** 计划结束时间 */
-    @NotNull(message = "计划结束时间不能为空",groups = {ValidationGroups.Save.class})
     @Excel(name = "计划结束时间", width = 30, dateFormat = "yyyy-MM")
     @JsonFormat(pattern = "yyyy-MM", timezone = "GMT+8")
     private Date planEndTime;
@@ -77,12 +72,10 @@ public class WzchTotalDemand extends CommonBaseEntity {
     private String fileGroupId;
 
     /** 项目id */
-    @NotNull(message = "项目ID不能为空",groups = {ValidationGroups.Save.class})
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long projectId;
 
     /** 项目名称 */
-    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Save.class})
     @Excel(name = "项目名称")
     private String projectName;
 
@@ -149,6 +142,31 @@ public class WzchTotalDemand extends CommonBaseEntity {
 
     //视角类型
     private String viewType;
+
+    /**
+     * 字段描述：阶段标识
+     */
+    @NotBlank(message = "阶段标识不能为空！",groups = ValidationGroups.Save.class)
+    private String stageIdentity;
+    /**
+     * 字段描述：版本
+     */
+    @NotNull(message = "版本不能为空！",groups = ValidationGroups.Save.class)
+    private BigDecimal version;
+    /**
+     * 字段描述：菜单id
+     */
+    @NotBlank(message = "菜单id不能为空！",groups = ValidationGroups.Save.class)
+    private String menuId;
+    /**
+     * 字段描述：按钮标识（0：保存，1：确认，2：提交）
+     */
+    @NotBlank(message = "按钮标识不能为空！",groups = ValidationGroups.Save.class)
+    private String buttonMark;
+
+    @JsonProperty
+    @Excel(name = "模块标识（页面唯一标识）1： 2： ...")
+    private String moduleIdentity;
 
     private List<WzchTotalDemandDetail> wzchTotalDemandDetailList;
 

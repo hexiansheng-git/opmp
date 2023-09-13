@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.source.mapper.WzchSourceApproachYearCountMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.source.domain.WzchSourceApproachYearCount" id="WzchSourceApproachYearCountResult">
+        <result property="id"    column="id"    />
+        <result property="detailId"    column="detail_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="year"    column="year"    />
+        <result property="internalNum"    column="internal_num"    />
+        <result property="otherStateNum"    column="other_state_num"    />
+        <result property="localNum"    column="local_num"    />
+        <result property="rentNum"    column="rent_num"    />
+        <result property="innerAdjustNum"    column="inner_adjust_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+    </resultMap>
+
+    <sql id="selectWzchSourceApproachYearCountVo">
+        select `id`, `detail_id`, `material_code`, `year`, `internal_num`, `other_state_num`, `local_num`, `rent_num`, `inner_adjust_num`, `create_time`, `update_time`, `del_flag` from `wzch_source_approach_year_count`
+    </sql>
+    <delete id="deleteWzchSourceApproachYearCountByDetailIds">
+        delete from wzch_source_approach_year_count where detail_id in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <select id="selectWzchSourceApproachYearCountList" parameterType="com.hhwy.pm.qqch.wzch.source.domain.WzchSourceApproachYearCount" resultMap="WzchSourceApproachYearCountResult">
+        <include refid="selectWzchSourceApproachYearCountVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="detailId != null "> and `detail_id` = #{detailId}</if>
+            <if test="materialCode != null "> and `material_code` = #{materialCode}</if>
+            <if test="year != null  and year != ''"> and `year` = #{year}</if>
+            <if test="internalNum != null "> and `internal_num` = #{internalNum}</if>
+            <if test="otherStateNum != null "> and `other_state_num` = #{otherStateNum}</if>
+            <if test="localNum != null "> and `local_num` = #{localNum}</if>
+            <if test="rentNum != null "> and `rent_num` = #{rentNum}</if>
+            <if test="innerAdjustNum != null "> and `inner_adjust_num` = #{innerAdjustNum}</if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectWzchSourceApproachYearCountById" parameterType="Long" resultMap="WzchSourceApproachYearCountResult">
+        <include refid="selectWzchSourceApproachYearCountVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertWzchSourceApproachYearCount" parameterType="com.hhwy.pm.qqch.wzch.source.domain.WzchSourceApproachYearCount" useGeneratedKeys="true" keyProperty="id">
+        insert into `wzch_source_approach_year_count`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="detailId != null">`detail_id`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="year != null">`year`,</if>
+            <if test="internalNum != null">`internal_num`,</if>
+            <if test="otherStateNum != null">`other_state_num`,</if>
+            <if test="localNum != null">`local_num`,</if>
+            <if test="rentNum != null">`rent_num`,</if>
+            <if test="innerAdjustNum != null">`inner_adjust_num`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="detailId != null">#{detailId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="year != null">#{year},</if>
+            <if test="internalNum != null">#{internalNum},</if>
+            <if test="otherStateNum != null">#{otherStateNum},</if>
+            <if test="localNum != null">#{localNum},</if>
+            <if test="rentNum != null">#{rentNum},</if>
+            <if test="innerAdjustNum != null">#{innerAdjustNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_source_approach_year_count` (
+                                                                id,
+                                                                `detail_id`,
+                                                                `material_code`,
+                                                                `year`,
+                                                                `internal_num`,
+                                                                `other_state_num`,
+                                                                `local_num`,
+                                                                `rent_num`,
+                                                                `inner_adjust_num`,
+                                                                `create_time`,
+                                                                `update_time`,
+                                                                `del_flag`
+                                    )values
+        <foreach collection="list" separator="," item="item" index="index" >
+        (                                                       #{item.id},
+                                                                #{item.detailId},
+                                                                #{item.materialCode},
+                                                                #{item.year},
+                                                                #{item.internalNum},
+                                                                #{item.otherStateNum},
+                                                                #{item.localNum},
+                                                                #{item.rentNum},
+                                                                #{item.innerAdjustNum},
+                                                                #{item.createTime},
+                                                                #{item.updateTime},
+                                                                #{item.delFlag}
+            )
+                                    </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_source_approach_year_count`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="detail_id =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.detailId != null ">
+                                when `id` = #{item.id} then #{item.detailId}
+                            </if>
+                        </foreach>
+                    </trim>
+
+                                                    <trim prefix="material_code =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialCode != null ">
+                                when `id` = #{item.id} then #{item.materialCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="year =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.year != null ">
+                                when `id` = #{item.id} then #{item.year}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="internal_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.internalNum != null ">
+                                when `id` = #{item.id} then #{item.internalNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="other_state_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.otherStateNum != null ">
+                                when `id` = #{item.id} then #{item.otherStateNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="local_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.localNum != null ">
+                                when `id` = #{item.id} then #{item.localNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="rent_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.rentNum != null ">
+                                when `id` = #{item.id} then #{item.rentNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="inner_adjust_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.innerAdjustNum != null ">
+                                when `id` = #{item.id} then #{item.innerAdjustNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="list" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateWzchSourceApproachYearCount" parameterType="com.hhwy.pm.qqch.wzch.source.domain.WzchSourceApproachYearCount">
+        update `wzch_source_approach_year_count`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="detailId != null">`detail_id` = #{detailId},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="year != null">`year` = #{year},</if>
+            <if test="internalNum != null">`internal_num` = #{internalNum},</if>
+            <if test="otherStateNum != null">`other_state_num` = #{otherStateNum},</if>
+            <if test="localNum != null">`local_num` = #{localNum},</if>
+            <if test="rentNum != null">`rent_num` = #{rentNum},</if>
+            <if test="innerAdjustNum != null">`inner_adjust_num` = #{innerAdjustNum},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchSourceApproachYearCountById" parameterType="Long">
+        update `wzch_source_approach_year_count` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchSourceApproachYearCountByIds" parameterType="String">
+        update `wzch_source_approach_year_count` set del_flag = 1 where `id` in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectWzchSourceApproachYearCountByDetailIds" resultMap="WzchSourceApproachYearCountResult">
+        <include refid="selectWzchSourceApproachYearCountVo"/>
+        where del_flag = '0' and detail_id in
+        <foreach item="detailId" collection="list" open="(" separator="," close=")">
+            #{detailId}
+        </foreach>
+    </select>
+
+
+
+</mapper>

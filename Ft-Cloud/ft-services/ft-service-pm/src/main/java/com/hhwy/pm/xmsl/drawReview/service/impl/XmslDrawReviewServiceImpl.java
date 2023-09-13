@@ -2,6 +2,8 @@ package com.hhwy.pm.xmsl.drawReview.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.material.MaterialInfo;
+import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.*;
@@ -13,6 +15,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.*;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -57,6 +60,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     private IXmslEngineeringReportService engineeringReportService;
     @Autowired
     private IXmslMaterialReportService materialReportService;
+    @Autowired
+    private SystemApiService systemApiService;
 
     public XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview) {
         return xmslDrawReviewMapper.getXmslDrawReview(xmslDrawReview);
@@ -64,6 +69,21 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 
     public List<XmslDrawReview> getXmslDrawReviewList(XmslDrawReview xmslDrawReview) {
         return xmslDrawReviewMapper.getXmslDrawReviewList(xmslDrawReview);
+    }
+
+    @Override
+    public List<XmslDrawReviewSourceMaterial> sourceMaterList() {
+        List<SysDictData> list = systemApiService.selectDictDataByType("xmsl_source_material");
+        List<MaterialInfo> materialInfoList = MaterialUtils.getMaterialInfoByCodes(list.stream().map(r->r.getDictValue()).collect(Collectors.toSet()));
+        List<XmslDrawReviewSourceMaterial> resuList = materialInfoList.stream().map(r->{
+            XmslDrawReviewSourceMaterial temp = new XmslDrawReviewSourceMaterial();
+            temp.setCode(r.getMaterialCode());
+            temp.setName(r.getMaterialName());
+            temp.setSpec(r.getMaterialSpec());
+            temp.setUnit(r.getUnit());
+            return temp;
+        }).collect(Collectors.toList());
+        return resuList;
     }
 
     @Override

@@ -66,7 +66,9 @@ public enum CodeEnum {
 
 
     /**物资总需*/
-    EQU_TOTAL_DEMAND("WZZX","yyyyMMdd",3);
+    EQU_TOTAL_DEMAND("WZZX","yyyyMMdd",3),
+    /**来源策划*/
+    EQU_SOURCE("LUCH","yyyyMMdd",3);
         
     /**
      * 前缀
