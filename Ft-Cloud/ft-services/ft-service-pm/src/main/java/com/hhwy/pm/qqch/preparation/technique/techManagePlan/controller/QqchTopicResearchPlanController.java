@@ -9,6 +9,8 @@ import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopic
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.IQqchTopicResearchPlanService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,8 @@ public class QqchTopicResearchPlanController extends BaseController {
 
     @Autowired
     private IQqchTopicResearchPlanService qqchTopicResearchPlanService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
 
     @PreAuthorize(hasPermi = "qqchTopicResearchPlan:list")
@@ -94,6 +98,18 @@ public class QqchTopicResearchPlanController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<QqchTopicResearchPlanImportVo> qqchTopicResearchPlanImportVoList = util.importExcel(inputStream);
+            //获取项目信息
+            ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+            if(projectInfo != null){
+                Long regionId = projectInfo.getRegionId();
+                String regionName = projectInfo.getRegionName();
+                String projectName = projectInfo.getProjectName();
+                for (QqchTopicResearchPlanImportVo qqchTopicResearchPlanImportVo : qqchTopicResearchPlanImportVoList) {
+                    qqchTopicResearchPlanImportVo.setRegionId(regionId);
+                    qqchTopicResearchPlanImportVo.setRegionName(regionName);
+                    qqchTopicResearchPlanImportVo.setProjectName(projectName);
+                }
+            }
             return AjaxResult.success(qqchTopicResearchPlanImportVoList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

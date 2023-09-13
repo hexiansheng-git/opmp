@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +23,22 @@ import java.util.Date;
 public class QqchTopicResearchPlanImportVo {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 字段描述：所属区域id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long regionId;
+    /**
+     * 字段描述：所属区域名称
+     */
+    @JsonProperty
+    private String regionName;
+    /**
+     * 字段描述：项目名称
+     */
+    @JsonProperty
+    private String projectName;
     /**
      * 字段描述：课题名称
      */
