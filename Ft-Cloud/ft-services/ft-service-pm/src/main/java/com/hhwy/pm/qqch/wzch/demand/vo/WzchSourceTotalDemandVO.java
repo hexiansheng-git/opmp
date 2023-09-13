@@ -36,7 +36,7 @@ public class WzchSourceTotalDemandVO implements Serializable {
      */
     private String projectId;
 
-    private List<WzchTotalDemandDetailVO> wzchSourceTotalDemandDetailVOList;
+    private List<WzchSourceTotalDemandDetailVO> wzchSourceTotalDemandDetailVOList;
 
 
 }

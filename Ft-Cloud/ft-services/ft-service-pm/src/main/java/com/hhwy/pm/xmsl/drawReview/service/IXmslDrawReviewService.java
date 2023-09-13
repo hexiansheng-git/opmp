@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewSourceMaterial;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
 
@@ -18,6 +19,12 @@ public interface IXmslDrawReviewService {
     XmslDrawReview getXmslDrawReview(XmslDrawReview xmslDrawReview);
 
     List<XmslDrawReview> getXmslDrawReviewList(XmslDrawReview xmslDrawReview);
+
+    /**
+     * 获取库中 图纸复核-细目-原材料
+     * @return
+     */
+    List<XmslDrawReviewSourceMaterial> sourceMaterList();
 
     XmslDrawReview getById(Long id);
 

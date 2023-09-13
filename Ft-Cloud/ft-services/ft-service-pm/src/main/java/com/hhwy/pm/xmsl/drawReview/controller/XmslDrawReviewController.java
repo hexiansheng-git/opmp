@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -45,6 +46,8 @@ public class XmslDrawReviewController extends BaseController{
     Logger logger = LoggerFactory.getLogger(XmslDrawReviewController.class);
     @Autowired
     private IXmslDrawReviewService xmslDrawReviewService;
+    @Autowired
+    private SystemApiService systemApiService;
     @Autowired
     private IXmslDrawReviewWbsService drawReviewWbsService;
     @Autowired
@@ -190,10 +193,22 @@ public class XmslDrawReviewController extends BaseController{
         return AjaxResult.success();
     }
 
+    
 //    @GetMapping("/export")
 //    public void export(HttpServletResponse response, XmslDrawReview xmslDrawReviewParam) throws IOException {
 //        List<XmslDrawReview> xmslDrawReviewList = xmslDrawReviewService.getXmslDrawReviewList(xmslDrawReviewParam);
 //        ExcelUtils<XmslDrawReview> util = new ExcelUtils<>(XmslDrawReview.class);
 //        util.exportExcel(response, xmslDrawReviewList, DateUtils.getDate());
 //    }
+
+    /**
+     * 图纸复核-细目-原材料
+     * @param 
+     * @return
+     */
+    @PostMapping("/sourceMaterList")
+    public AjaxResult sourceMaterList(){
+        List list = xmslDrawReviewService.sourceMaterList();
+        return AjaxResult.success(list);
+    }
 }
