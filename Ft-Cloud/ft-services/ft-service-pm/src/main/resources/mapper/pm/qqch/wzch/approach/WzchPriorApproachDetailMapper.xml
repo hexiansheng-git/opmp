@@ -1,0 +1,495 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.approach.mapper.WzchPriorApproachDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproachDetail" id="WzchPriorApproachDetailResult">
+        <result property="id"    column="id"    />
+        <result property="priorApproachId"    column="prior_approach_id"    />
+        <result property="materialCode"    column="material_code"    />
+        <result property="materialTechParam"    column="material_tech_param"    />
+        <result property="materialStandard"    column="material_standard"    />
+        <result property="totalDemandAmount"    column="total_demand_amount"    />
+        <result property="selfDemandAmount"    column="self_demand_amount"    />
+        <result property="priorApproachNum"    column="prior_approach_num"    />
+        <result property="earliestReqTime"    column="earliest_req_time"    />
+        <result property="presentTime"    column="present_time"    />
+        <result property="fileGroupId"    column="file_group_id"    />
+        <result property="remark"    column="remark"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="categoryName"    column="category_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateUserName"    column="update_user_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="version"    column="version"    />
+        <result property="valid"    column="valid"    />
+    </resultMap>
+
+    <sql id="selectWzchPriorApproachDetailVo">
+        select `id`,version,valid,`category_name`, `prior_approach_id`, `material_code`, `material_tech_param`, `material_standard`, `total_demand_amount`, `self_demand_amount`, `prior_approach_num`, `earliest_req_time`, `present_time`, `file_group_id`, `remark`, `project_id`, `project_name`, `dept_id`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3` from `wzch_prior_approach_detail`
+    </sql>
+    <delete id="deleteByIds" parameterType="java.lang.Long">
+        delete from `wzch_prior_approach_detail` where `id` in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectWzchPriorApproachDetailList" parameterType="com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproachDetail" resultMap="WzchPriorApproachDetailResult">
+        <include refid="selectWzchPriorApproachDetailVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="priorApproachId != null "> and `prior_approach_id` = #{priorApproachId}</if>
+            <if test="categoryName != null "> and `category_name` = #{categoryName}</if>
+            <if test="materialCode != null  and materialCode != ''"> and `material_code` = #{materialCode}</if>
+            <if test="materialTechParam != null  and materialTechParam != ''"> and `material_tech_param` = #{materialTechParam}</if>
+            <if test="materialStandard != null  and materialStandard != ''"> and `material_standard` = #{materialStandard}</if>
+            <if test="totalDemandAmount != null "> and `total_demand_amount` = #{totalDemandAmount}</if>
+            <if test="selfDemandAmount != null "> and `self_demand_amount` = #{selfDemandAmount}</if>
+            <if test="priorApproachNum != null "> and `prior_approach_num` = #{priorApproachNum}</if>
+            <if test="earliestReqTime != null "> and `earliest_req_time` = #{earliestReqTime}</if>
+            <if test="presentTime != null "> and `present_time` = #{presentTime}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="version != null  "> and `version` = #{version}</if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectWzchPriorApproachDetailById" parameterType="Long" resultMap="WzchPriorApproachDetailResult">
+        <include refid="selectWzchPriorApproachDetailVo"/>
+        where `id` = #{id}
+    </select>
+
+
+    <insert id="insertWzchPriorApproachDetail" parameterType="com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproachDetail">
+        insert into `wzch_prior_approach_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="priorApproachId != null">`prior_approach_id`,</if>
+            <if test="categoryName != null">`category_name`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="materialTechParam != null">`material_tech_param`,</if>
+            <if test="materialStandard != null">`material_standard`,</if>
+            <if test="totalDemandAmount != null">`total_demand_amount`,</if>
+            <if test="selfDemandAmount != null">`self_demand_amount`,</if>
+            <if test="priorApproachNum != null">`prior_approach_num`,</if>
+            <if test="earliestReqTime != null">`earliest_req_time`,</if>
+            <if test="presentTime != null">`present_time`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="version != null">`version`,</if>
+            <if test="valid != null">`valid`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="priorApproachId != null">#{priorApproachId},</if>
+            <if test="categoryName != null">#{categoryName},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialTechParam != null">#{materialTechParam},</if>
+            <if test="materialStandard != null">#{materialStandard},</if>
+            <if test="totalDemandAmount != null">#{totalDemandAmount},</if>
+            <if test="selfDemandAmount != null">#{selfDemandAmount},</if>
+            <if test="priorApproachNum != null">#{priorApproachNum},</if>
+            <if test="earliestReqTime != null">#{earliestReqTime},</if>
+            <if test="presentTime != null">#{presentTime},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="version != null">#{version},</if>
+            <if test="valid != null">#{valid},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_prior_approach_detail` (
+                                                `id`,
+                                                                `prior_approach_id`,
+                                                                `category_name`,
+                                                                `material_code`,
+                                                                `material_tech_param`,
+                                                                `material_standard`,
+                                                                `total_demand_amount`,
+                                                                `self_demand_amount`,
+                                                                `prior_approach_num`,
+                                                                `earliest_req_time`,
+                                                                `present_time`,
+                                                                `file_group_id`,
+                                                                `remark`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `dept_id`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_user_name`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                `del_flag`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                version,
+                                                                valid
+                                    )values
+        <foreach collection="list" separator="," item="item" index="index" >
+        ( #{item.id },
+            #{item.priorApproachId},
+            #{item.categoryName},
+            #{item.materialCode},
+            #{item.materialTechParam},
+            #{item.materialStandard},
+            #{item.totalDemandAmount},
+            #{item.selfDemandAmount},
+            #{item.priorApproachNum},
+            #{item.earliestReqTime},
+            #{item.presentTime},
+            #{item.fileGroupId},
+            #{item.remark},
+            #{item.projectId},
+            #{item.projectName},
+            #{item.deptId},
+            #{item.createUser},
+            #{item.createUserName},
+            #{item.createTime},
+            #{item.updateUser},
+            #{item.updateUserName},
+            #{item.updateTime},
+            #{item.delUser},
+            #{item.delTime},
+            #{item.delFlag},
+            #{item.ptVar1},
+            #{item.ptVar2},
+            #{item.ptVar3},
+            #{item.version},
+            #{item.valid}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_prior_approach_detail`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="prior_approach_id =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.priorApproachId != null ">
+                                when `id` = #{item.id} then #{item.priorApproachId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                                <trim prefix="category_name =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.categoryName != null ">
+                                when `id` = #{item.id} then #{item.categoryName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="material_code =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialCode != null ">
+                                when `id` = #{item.id} then #{item.materialCode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="material_tech_param =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialTechParam != null ">
+                                when `id` = #{item.id} then #{item.materialTechParam}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="material_standard =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.materialStandard != null ">
+                                when `id` = #{item.id} then #{item.materialStandard}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="total_demand_amount =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.totalDemandAmount != null ">
+                                when `id` = #{item.id} then #{item.totalDemandAmount}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="self_demand_amount =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.selfDemandAmount != null ">
+                                when `id` = #{item.id} then #{item.selfDemandAmount}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="prior_approach_num =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.priorApproachNum != null ">
+                                when `id` = #{item.id} then #{item.priorApproachNum}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="earliest_req_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.earliestReqTime != null ">
+                                when `id` = #{item.id} then #{item.earliestReqTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="present_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.presentTime != null ">
+                                when `id` = #{item.id} then #{item.presentTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="file_group_id =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.fileGroupId != null ">
+                                when `id` = #{item.id} then #{item.fileGroupId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_id =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.projectId != null ">
+                                when `id` = #{item.id} then #{item.projectId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_name =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dept_id =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.deptId != null ">
+                                when `id` = #{item.id} then #{item.deptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user_name =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createUserName != null ">
+                                when `id` = #{item.id} then #{item.createUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user_name =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateUserName != null ">
+                                when `id` = #{item.id} then #{item.updateUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.delFlag != null  and delFlag != ''">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="list" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="list" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateWzchPriorApproachDetail" parameterType="com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproachDetail">
+        update `wzch_prior_approach_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="priorApproachId != null">`prior_approach_id` = #{priorApproachId},</if>
+            <if test="categoryName != null">`category_name` = #{categoryName},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="materialTechParam != null">`material_tech_param` = #{materialTechParam},</if>
+            <if test="materialStandard != null">`material_standard` = #{materialStandard},</if>
+            <if test="totalDemandAmount != null">`total_demand_amount` = #{totalDemandAmount},</if>
+            <if test="selfDemandAmount != null">`self_demand_amount` = #{selfDemandAmount},</if>
+            <if test="priorApproachNum != null">`prior_approach_num` = #{priorApproachNum},</if>
+            <if test="earliestReqTime != null">`earliest_req_time` = #{earliestReqTime},</if>
+            <if test="presentTime != null">`present_time` = #{presentTime},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null and delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="version != null">`version` = #{version},</if>
+            <if test="valid != null">`valid` = #{valid},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchPriorApproachDetailById" parameterType="Long">
+        update `wzch_prior_approach_detail` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchPriorApproachDetailByIds" parameterType="String">
+        update `wzch_prior_approach_detail` set del_flag = '1' where `id` in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="selectByPriorApproachIdAndIdList" resultMap="WzchPriorApproachDetailResult">
+        <include refid="selectWzchPriorApproachDetailVo"/>
+        where
+        `del_flag` = 0
+        <if test="priorApproachId!=null">
+          and  `prior_approach_id` = #{priorApproachId}
+        </if>
+        <if test="idList!=null and idList.size >0">
+            and id in
+            <foreach collection="idList" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+
+    </select>
+
+    <update id="deleteDirectByVersion" parameterType="java.math.BigDecimal">
+        delete from `wzch_prior_approach_detail` where version = #{version}
+    </update>
+    <update id="deleteYearDirectByVersion" parameterType="java.math.BigDecimal">
+        delete from `wzch_prior_approach_year_count` where version = #{version}
+    </update>
+    
+</mapper>
