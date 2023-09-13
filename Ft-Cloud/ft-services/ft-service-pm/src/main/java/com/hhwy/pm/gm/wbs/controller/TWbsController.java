@@ -2,13 +2,19 @@ package com.hhwy.pm.gm.wbs.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.WatchService;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +43,13 @@ public class TWbsController extends BaseController{
         Long parentId = ObjectUtils.nvlLong(map.get("parentId"),-1L);
         List<TWbs> list = tWbsService.wbsListByType(engineeringType,ObjectUtils.nvlString(map.get("name")),ObjectUtils.nvlString(map.get("nodeType")),parentId);
         return AjaxResult.success(list);
+    }
+
+    @PostMapping("/detail")
+    public AjaxResult detail(@RequestBody TWbs wbs) {
+        TWbs query = new TWbs();
+        query.setId(wbs.getId());
+        TWbs result = tWbsService.getTWbs(query);
+        return AjaxResult.success(result==null?new TWbs():result);
     }
 }

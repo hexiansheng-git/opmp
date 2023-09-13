@@ -194,7 +194,6 @@ public class WzchTotalDemandDetail extends BaseEntity {
         this.valid = valid;
         this.firstEnterFlag = firstEnterFlag;
         this.projectId = projectId;
-
     }
 
 
