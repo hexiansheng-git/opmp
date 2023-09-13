@@ -129,15 +129,7 @@ public class QqchOptimizeProcedurePlanServiceImpl implements IQqchOptimizeProced
 
         //维护附件
         String fileGroupId = qqchOptimizeProcedurePlanVo.getFileGroupId();
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, qqchOptimizeProcedurePlanVo.getVersion());
-        if(qqchPreparationSurveyExtend == null){
-            qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
-            qqchPreparationSurveyExtend.setFileGroupId(fileGroupId);
-            qqchPreparationSurveyExtend.setModuleIdentity(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN);
-            qqchPreparationSurveyExtend.setVersion(qqchOptimizeProcedurePlanVo.getVersion());
-            qqchPreparationSurveyExtend.setValid(Valid.YES);
-            qqchPreparationSurveyExtendService.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-        }
+        qqchPreparationSurveyExtendService.preserveFile(ModuleIdentity.OPTIMIZE_PROCEDURE_PLAN, qqchOptimizeProcedurePlanVo.getVersion(),fileGroupId);
 
         //插入新数据
         this.insertQqchOptimizeProcedurePlanList(qqchOptimizeProcedurePlanVo.getQqchOptimizeProcedurePlanList(),qqchOptimizeProcedurePlanVo.getVersion());

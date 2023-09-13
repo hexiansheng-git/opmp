@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.survey.extend.service;
 
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -10,6 +11,14 @@ import java.util.List;
  * @remark 前期策划-前期策划编制-勘察设计策划-扩展
  */
 public interface IQqchPreparationSurveyExtendService {
+
+    /**
+     * 维护附件
+     * @param moduleIdentity
+     * @param version
+     * @param fileGroupId
+     */
+    void preserveFile(String moduleIdentity, BigDecimal version, String fileGroupId);
 
     /**
      * 获取扩展数据
