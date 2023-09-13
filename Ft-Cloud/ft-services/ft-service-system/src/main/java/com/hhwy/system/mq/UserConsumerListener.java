@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
 @Service
 @RocketMQMessageListener(
         consumerGroup = "pm-leader-user",
-        topic = "gm",
+        topic = "gm-system",
         selectorExpression = "sysUser",
         // 消费模式: 顺序消费
         consumeMode = ConsumeMode.ORDERLY)

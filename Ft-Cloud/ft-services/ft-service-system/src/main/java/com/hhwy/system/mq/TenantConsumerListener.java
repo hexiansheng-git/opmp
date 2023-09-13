@@ -25,6 +25,8 @@ import org.mybatis.spring.MyBatisSystemException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,8 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
                 String projectName = (String) projectBasicInfo.get("projectName");
                 String projectCode = (String) projectBasicInfo.get("projectCode");
                 String projectId = (String) projectBasicInfo.get("projectId");
+                Map<String,List<SysUser>> params =  (Map<String,List<SysUser>>) projectBasicInfo.get("params");
+
                 SysTenant sysTenant = new SysTenant();
 
                 sysTenant.setParams(projectBasicInfo);
@@ -82,7 +86,14 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
                 sysTenant.setDeptList(deptList);
 
                 List<SysUser> userList=userService.selectAllUser(deptList);
+                List<SysUser> roleUserList = params.get("roleUserList");
+                List<SysUser> partUserList = params.get("partUserList");
+
+                List<SysUser> idList = this.handUserInfo(userList, roleUserList, partUserList);
+
+//                sysTenant.setUserList(idList);
                 sysTenant.setUserList(userList);
+
                 this.tenantService.insertSysTenant(sysTenant);
         System.out.println("mq创建租户方法结束*************************************"+s);
 
@@ -99,4 +110,27 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
         defaultMQPushConsumer.setMaxReconsumeTimes(3);
         defaultMQPushConsumer.setInstanceName("mqconsumer_system");
     }
+
+
+    public List<SysUser> handUserInfo(List<SysUser> userList,List<SysUser> roleUserList,List<SysUser> partUserList) {
+        List<SysUser> list=new ArrayList<>();
+        Map<Long, Object> idmap = new HashMap<>();
+        for(SysUser item:userList){
+            if(!idmap.containsKey(item.getUserId())){
+                list.add(item);
+            }
+        }
+        for(SysUser item:roleUserList){
+            if(!idmap.containsKey(item.getUserId())){
+                list.add(item);
+            }
+        }
+        for(SysUser item:partUserList){
+            if(!idmap.containsKey(item.getUserId())){
+                list.add(item);
+            }
+        }
+        return  list;
+    }
+
 }
