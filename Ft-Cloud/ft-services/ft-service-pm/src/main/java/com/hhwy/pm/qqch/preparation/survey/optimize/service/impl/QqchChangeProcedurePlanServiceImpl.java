@@ -123,15 +123,7 @@ public class QqchChangeProcedurePlanServiceImpl implements IQqchChangeProcedureP
 
         //维护附件
         String fileGroupId = qqchChangeProcedurePlanVo.getFileGroupId();
-        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = qqchPreparationSurveyExtendService.getQqchPreparationSurveyExtend(ModuleIdentity.CHANGE_PROCEDURE_PLAN, qqchChangeProcedurePlanVo.getVersion());
-        if(qqchPreparationSurveyExtend == null){
-            qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
-            qqchPreparationSurveyExtend.setModuleIdentity(ModuleIdentity.CHANGE_PROCEDURE_PLAN);
-            qqchPreparationSurveyExtend.setVersion(qqchChangeProcedurePlanVo.getVersion());
-            qqchPreparationSurveyExtend.setValid(Valid.YES);
-            qqchChangeProcedurePlanVo.setFileGroupId(fileGroupId);
-            qqchPreparationSurveyExtendService.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-        }
+        qqchPreparationSurveyExtendService.preserveFile(ModuleIdentity.CHANGE_PROCEDURE_PLAN, qqchChangeProcedurePlanVo.getVersion(),fileGroupId);
 
         //插入新数据
         List<QqchChangeProcedurePlan> qqchChangeProcedurePlanList = qqchChangeProcedurePlanVo.getQqchChangeProcedurePlanList();

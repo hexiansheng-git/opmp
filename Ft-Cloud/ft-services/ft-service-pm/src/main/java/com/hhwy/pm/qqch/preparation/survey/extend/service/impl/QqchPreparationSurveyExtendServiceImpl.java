@@ -1,18 +1,19 @@
 package com.hhwy.pm.qqch.preparation.survey.extend.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.survey.extend.domain.QqchPreparationSurveyExtend;
 import com.hhwy.pm.qqch.preparation.survey.extend.mapper.QqchPreparationSurveyExtendMapper;
 import com.hhwy.pm.qqch.preparation.survey.extend.service.IQqchPreparationSurveyExtendService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author han
@@ -34,7 +35,40 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
         QqchPreparationSurveyExtend qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
         qqchPreparationSurveyExtend.setModuleIdentity(moduleIdentity);
         qqchPreparationSurveyExtend.setVersion(version);
-        return  qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        return qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+    }
+
+    /**
+     * 根据模块名和版本删除附件信息
+     * @param moduleIdentity
+     * @param version
+     */
+    public void deleteBy(String moduleIdentity, BigDecimal version){
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
+        qqchPreparationSurveyExtend.setModuleIdentity(moduleIdentity);
+        qqchPreparationSurveyExtend.setVersion(version);
+        qqchPreparationSurveyExtendMapper.deleteQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+    }
+
+
+    /**
+     * 维护附件
+     * @param moduleIdentity
+     * @param version
+     * @param fileGroupId
+     */
+    @Transactional
+    public void preserveFile(String moduleIdentity, BigDecimal version, String fileGroupId){
+        //删除附件
+        QqchPreparationSurveyExtend qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
+        qqchPreparationSurveyExtend.setModuleIdentity(moduleIdentity);
+        qqchPreparationSurveyExtend.setVersion(version);
+        qqchPreparationSurveyExtendMapper.deleteQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+
+        //插入附件
+        qqchPreparationSurveyExtend.setFileGroupId(fileGroupId);
+        qqchPreparationSurveyExtend.setValid(Valid.YES);
+        this.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
     }
 
     /**
