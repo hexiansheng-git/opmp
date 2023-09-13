@@ -9,6 +9,8 @@ import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.domain.QqchTotalDemand;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.domain.vo.QqchTotalDemandVo;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.service.IQqchTotalDemandService;
@@ -29,6 +31,8 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchSourceTotalDemandDetailExportRequest;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailRequest;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandValidVO;
 import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
+import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
+import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.MaterialUtils;
@@ -40,7 +44,9 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.ObjectUtils;
+import org.apache.xmlbeans.impl.xb.ltgfmt.impl.TestsDocumentImpl;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,6 +80,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     @Resource
     private WzchCommonService wzchCommonService;
     @Resource
+    private IWzchSourceService wzchSourceService;
+    @Resource
     private SystemApiService systemApiService;
     @Resource
     private WzchTotalDemandMapper wzchTotalDemandMapper;
@@ -81,6 +89,8 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
     private IQqchTotalDemandService qqchTotalDemandService;
     @Resource
     private IQqchTotalDemandTimeCountService qqchTotalDemandTimeCountService;
+    @Autowired
+    private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
 
     /**
      * 查询物资总需用详情
@@ -168,23 +178,47 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         fillWzchTotalDemand(wzchTotalDemand);
         fillWzchTotalDemandDetail(wzchTotalDemand);
 
-        WzchTotalDemand demand = wzchTotalDemandService.selectWzchTotalDemandById(wzchTotalDemand.getId());
-        if (demand != null) {
-            wzchTotalDemandService.updateWzchTotalDemand(wzchTotalDemand);
-        } else {
-            wzchTotalDemandService.insertWzchTotalDemand(wzchTotalDemand);
-        }
-        wzchTotalDemandDetailMapper.deleteByTotalDemandId(wzchTotalDemand.getId());
+//        WzchTotalDemand demand = wzchTotalDemandService.selectWzchTotalDemandById(wzchTotalDemand.getId());
+//        if (demand != null) {
+//            wzchTotalDemandService.updateWzchTotalDemand(wzchTotalDemand);
+//        } else {
+//            wzchTotalDemandService.insertWzchTotalDemand(wzchTotalDemand);
+//        }
+        wzchTotalDemandDetailMapper.deleteByVersion(wzchTotalDemand.getVersion());
         List<WzchTotalDemandDetail> wzchTotalDemandDetailList = wzchTotalDemand.getWzchTotalDemandDetailList();
         wzchTotalDemandDetailList = wzchCommonService.setTotalDemadCategoryCode(wzchTotalDemandDetailList);
+        List<WzchTotalDemandTimeCount> totalDemandTimeCounts = new ArrayList<>();
+        //设置version
+        for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemandDetailList) {
+            totalDemandTimeCounts.addAll(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList());
+            List<WzchTotalDemandTimeCount> timeCountList = wzchTotalDemandDetail.getWzchTotalDemandTimeCountList();
+            for (int i = 0; i < timeCountList.size(); i++) {
+                WzchTotalDemandTimeCount time = timeCountList.get(i);
+                time.setVersion(wzchTotalDemand.getVersion());
+            }
+            wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
+        }
         wzchTotalDemandDetailMapper.batchInsert(wzchTotalDemandDetailList);
         List<Long> detailIds = wzchTotalDemandDetailList.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
         wzchTotalDemandTimeCountService.deleteByTotalDemandDetailIds(detailIds);
-        List<WzchTotalDemandTimeCount> totalDemandTimeCounts = new ArrayList<>();
-        for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemandDetailList) {
-            totalDemandTimeCounts.addAll(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList());
-        }
         wzchTotalDemandTimeCountService.batchInsert(totalDemandTimeCounts);
+        //确认处理
+        String buttonMark = wzchTotalDemand.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            String menuId = wzchTotalDemand.getMenuId();
+            String stageIdentity = wzchTotalDemand.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+            //修改wzch_source
+//            List<WzchSource> wzchSources = wzchSourceService.selectWzchSourceList(new WzchSource(null, wzchTotalDemand.getProjectId()));
+//            if (CollectionUtils.isEmpty(wzchSources)) {
+//                log.error("wzchSources为空");
+//                return wzchTotalDemand.getId();
+//            }
+//            WzchSource wzchSource = wzchSources.get(0);
+//            wzchSource.setDemandNewVersion(demand.getVersionCode());
+//            wzchSource.setDemandValidDate(new Date());
+        }
         return wzchTotalDemand.getId();
     }
 
@@ -248,7 +282,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
      * @param wzchTotalDemand
      */
     private void checkWzchTotalDemand(WzchTotalDemand wzchTotalDemand) {
-        if (wzchTotalDemand == null || wzchTotalDemand.getId() == null || CollectionUtils.isEmpty(wzchTotalDemand.getWzchTotalDemandDetailList())) {
+        if (wzchTotalDemand == null || CollectionUtils.isEmpty(wzchTotalDemand.getWzchTotalDemandDetailList())) {
             throw new BaseException("保存数据失败，请确认数据是否完整！");
         }
         StringBuilder errorMessage = new StringBuilder("提示：序号");
@@ -436,9 +470,9 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         if (StringUtils.isBlank(wzchTotalDemand.getUpdateUserName())) {
             wzchTotalDemand.setUpdateUserName(SecurityUtils.getSysUser().getNickName());
         }
-        if (ObjectUtils.isEmpty(wzchTotalDemand.getUpdateTime())) {
-            wzchTotalDemand.setUpdateTime(DateUtils.getNowDate());
-        }
+//        if (ObjectUtils.isEmpty(wzchTotalDemand.getUpdateTime())) {
+//            wzchTotalDemand.setUpdateTime(DateUtils.getNowDate());
+//        }
         if (StringUtils.isBlank(wzchTotalDemand.getDelFlag())) {
             wzchTotalDemand.setDelFlag("0");
         }

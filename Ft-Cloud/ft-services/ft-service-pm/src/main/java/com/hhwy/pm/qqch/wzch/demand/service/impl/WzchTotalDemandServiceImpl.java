@@ -24,11 +24,12 @@ import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandAddVO;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandDetailRequest;
 import com.hhwy.pm.qqch.wzch.demand.vo.WzchTotalDemandExportRequest;
 import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
+import com.hhwy.pm.qqch.wzch.source.domain.WzchSource;
+import com.hhwy.pm.qqch.wzch.source.service.IWzchSourceService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.*;
@@ -41,7 +42,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -76,6 +79,8 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
     SystemApiService systemApiService;
     @Resource
     IQqchReviewService qqchReviewService;
+    @Resource
+    IWzchSourceService wzchSourceService;
 //    @Resource
 //    private IWzchSourceService wzchSourceService;
 //    private SysDictDataMappe sysDictDataMapper;
@@ -181,11 +186,11 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
 
             for (int i = 0; i < wzchTotalDemands.size(); i++) {
                 WzchTotalDemand totalDemand = wzchTotalDemands.get(i);
-                ByteOutputStream byteOutputStream = new ByteOutputStream();
+                ByteArrayOutputStream byteOutputStream = new ByteArrayOutputStream();
                 // 生成文件
                 this.createWorkbook(totalDemand, byteOutputStream);
                 zipOutputStream.putNextEntry(new ZipEntry(totalDemand.getProjectName() + "_" + totalDemand.getVersionCodeStr() + "_" + i + ".xlsx"));
-                zipOutputStream.write(byteOutputStream.getBytes());
+                zipOutputStream.write(byteOutputStream.toByteArray());
                 zipOutputStream.closeEntry();
             }
         } catch (Exception e) {
@@ -203,7 +208,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
     }
 
 
-    private void createWorkbook(WzchTotalDemand totalDemand, ByteOutputStream outputStream) {
+    private void createWorkbook(WzchTotalDemand totalDemand, OutputStream outputStream) {
         // 创建一个工作簿
         Workbook workbook = new SXSSFWorkbook();
 
@@ -215,7 +220,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
             this.creatQuarterSheet(workbook, totalDemand);
             // 月度视角
             this.creatMouthSheet(workbook, totalDemand);
-
+            
             // 写入流
             workbook.write(outputStream);
         } catch (IOException e) {
@@ -596,15 +601,15 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
         }
         //修改wzch_source
         //TODO
-//        List<WzchSource> wzchSources = wzchSourceService.selectWzchSourceList(new WzchSource(null, demand.getProjectId()));
-//        if (CollectionUtils.isEmpty(wzchSources)) {
-//            log.error("wzchSources为空");
-//            return;
-//        }
-//        WzchSource wzchSource = wzchSources.get(0);
-//        wzchSource.setDemandNewVersion(demand.getVersionCode());
-//        wzchSource.setDemandValidDate(new Date());
-//        wzchSourceService.updateWzchSource(wzchSource);
+        List<WzchSource> wzchSources = wzchSourceService.selectWzchSourceList(new WzchSource(null, demand.getProjectId()));
+        if (CollectionUtils.isEmpty(wzchSources)) {
+            log.error("wzchSources为空");
+            return;
+        }
+        WzchSource wzchSource = wzchSources.get(0);
+        wzchSource.setDemandNewVersion(demand.getVersionCode());
+        wzchSource.setDemandValidDate(new Date());
+        wzchSourceService.updateWzchSource(wzchSource);
 
     }
 
