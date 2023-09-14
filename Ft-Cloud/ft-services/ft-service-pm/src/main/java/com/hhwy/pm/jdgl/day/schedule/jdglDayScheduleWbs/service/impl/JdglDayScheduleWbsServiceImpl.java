@@ -314,6 +314,9 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             vo.setIsAdd("1");
             vo.setIsExists("1");
             vo.setIsLeaf("1");
+            vo.setEditerDate(DateUtils.getNowDate());
+            vo.setEditer(SecurityUtils.getSysUser().getNickName());
+            vo.setEditerId(SecurityUtils.getUserId() + "");
             String ancestrals = vo.getAncestrals();
             Long wbsId = vo.getWbsId();
             if(StringUtils.isNotEmpty(ancestrals)) {

@@ -94,7 +94,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setDetailedAddress(projectInfo.getDetailedAddress());
         //项目规模
         contractInfo.setProjectScale(projectInfo.getProjectScale());
-        contractInfo.setContractPrice(projectInfo.getContractPrice());
+//        contractInfo.setContractPrice(projectInfo.getContractPrice());
         //编制日期
         contractInfo.setOperateTime(DateUtils.getNowDate());
         //编制人
@@ -169,31 +169,16 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     public XmslContractInfo adjustXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
         //获取当前版本数据
         XmslContractInfo xmslContractInfo = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
-        getSonTable(xmslContractInfo, xmslContractInfo.getVersion());
+        if (xmslContractInfo == null)
+            return new XmslContractInfo();
         //查询当前版本是否是数据库中最大版本
         XmslContractInfo bean = xmslContractInfoMapper.getMaxVersionRecordByVersion(xmslContractInfoParam);
         if (bean == null){
-            //当前版本是数据库中最大版本，新增一条数据，内容与当前版本一致，只有版本号+1
-            BigDecimal version = xmslContractInfo.getVersion();
-            version = version.add(new BigDecimal("1.0"));
-            xmslContractInfo.setVersion(version);
-            xmslContractInfo.setValid("0");
-            xmslContractInfo.setTaskStatus("");
-            //编制日期
-            xmslContractInfo.setOperateTime(DateUtils.getNowDate());
-            //编制人
-            xmslContractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
-            xmslContractInfo.setCreateUser(SecurityUtils.getUserName());
-            xmslContractInfo.setCreateTime(DateUtils.getNowDate());
-            //保存主表信息
-            Long id = insertXmslContractInfo(xmslContractInfo);
-            //保存清单、通用、专用信息
-            this.adjustSonTable(xmslContractInfo, id);
-            //查询结果返回
-            XmslContractInfo param = new XmslContractInfo();
-            param.setVersion(version);
-            XmslContractInfo result = xmslContractInfoMapper.getXmslContractInfo(param);
+            //返回当前有效数据，并将版本号加1
+            XmslContractInfo result = xmslContractInfo;
+            result.setVersion(result.getVersion().add(new BigDecimal("1.0")));
+            result.setValid("0");
+            result.setTaskStatus("");
             getSonTable(result, result.getVersion());
             return result;
         }else {
@@ -267,6 +252,11 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }
         xmslContractInfo.setId(IdWorker.createId());
         this.addSonTable(xmslContractInfo);
+        //编制日期
+        xmslContractInfo.setOperateTime(DateUtils.getNowDate());
+        //编制人
+        xmslContractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
+        xmslContractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
         xmslContractInfo.setCreateUser(SecurityUtils.getUserName());
         xmslContractInfo.setCreateTime(DateUtils.getNowDate());
         xmslContractInfoMapper.insertXmslContractInfo(xmslContractInfo);

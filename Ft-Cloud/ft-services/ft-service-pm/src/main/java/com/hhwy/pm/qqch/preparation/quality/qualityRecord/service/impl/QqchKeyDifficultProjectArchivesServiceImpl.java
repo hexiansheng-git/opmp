@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -23,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author han
@@ -113,8 +111,11 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
     public KeyDifficultWbsVo getKeyDifficultWbsVo(QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchives) {
         KeyDifficultWbsVo keyDifficultWbsVo = new KeyDifficultWbsVo();
 
-        //获取重难点工程清单wbs
+        //获取重难点工程清单wbs（包含父级结构）
         List<XmslWbs> keyDifficultProjectInventoryWbsList = qqchWeightEngineeringListService.keyDifficultProjectInventoryWbsList();
+
+        //获取重难点工程清单对应的wbsId（不包含父级id)
+        Set<Long> keyPointWbsIds = qqchWeightEngineeringListService.getCurrentAndLowerLevelWbsIds();
 
         //获取重难点工程档案清单
         BigDecimal version = qqchKeyDifficultProjectArchives.getVersion();
@@ -131,6 +132,7 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
         for (XmslWbs xmslWbs : keyDifficultProjectInventoryWbsList) {
             KeyDifficultWbs keyDifficultWbs = new KeyDifficultWbs();
 
+            Long id = Long.valueOf(xmslWbs.getId());
             keyDifficultWbs.setId(Long.valueOf(xmslWbs.getId()));
             keyDifficultWbs.setPid(Long.valueOf(xmslWbs.getParentId()));
             keyDifficultWbs.setWbsCode(xmslWbs.getCode());
@@ -144,6 +146,10 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
                 if(xmslWbs.getCode().equals(keyDifficultProjectArchives.getWbsCode())){
                     sublist.add(keyDifficultProjectArchives);
                 }
+            }
+
+            if(keyPointWbsIds.contains(id)){
+                keyDifficultWbs.setKeyDifficultPointFlag(CommonYesNo.YES);
             }
 
             keyDifficultWbs.setSublist(sublist);
@@ -161,6 +167,7 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
         keyDifficultWbsVo.setVersion(version);
         keyDifficultWbsVo.setStageIdentity(qqchReviewService.getStage());
         keyDifficultWbsVo.setList(keyDifficultWbsList);
+        keyDifficultWbsVo.setAllList(qqchKeyDifficultProjectArchivesList);
         return keyDifficultWbsVo;
     }
 

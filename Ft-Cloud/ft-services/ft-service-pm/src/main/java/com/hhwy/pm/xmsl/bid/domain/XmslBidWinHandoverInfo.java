@@ -55,9 +55,9 @@ public class XmslBidWinHandoverInfo extends BaseEntity {
     /**
      * 字段描述：移交时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "移交时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "移交时间", dateFormat = "yyyy-MM-dd")
     private Date handoverTime;
     /**
      * 字段描述：投标策略及风险点交底

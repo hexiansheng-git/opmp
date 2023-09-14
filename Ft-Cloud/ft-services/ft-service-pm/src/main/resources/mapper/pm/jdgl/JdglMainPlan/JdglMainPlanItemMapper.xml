@@ -243,7 +243,7 @@
             <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
             <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
         </where>
-        order by wbs_code,item_code asc
+        order by wbs_code asc,item_code asc
     </select>
     <select id="getUsingJdglMainPlanItemListByDate" resultMap="JdglMainPlanItemResultMap">
         <include refid="selectJdglMainPlanItemVo" />

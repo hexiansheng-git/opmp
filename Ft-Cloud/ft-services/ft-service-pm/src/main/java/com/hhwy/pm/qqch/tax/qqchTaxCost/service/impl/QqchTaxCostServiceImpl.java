@@ -243,8 +243,11 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
     @CompileAspect(type = CompileOptEnum.TREE, tableName = TN)
     public List<QqchTaxCost> getCostList(QqchTaxCost qqchTaxIn) {
         List<QqchTaxCost> costList = this.qqchTaxCostMapper.getQqchTaxCostList(qqchTaxIn);
-
-        if (CollectionUtils.isEmpty(costList)) {
+        String delFlag = qqchTaxIn.getDelFlag();
+        qqchTaxIn.setDelFlag(PmConstant.ONE);
+        List<QqchTaxCost> costListAll = this.qqchTaxCostMapper.getQqchTaxCostList(qqchTaxIn);
+        qqchTaxIn.setDelFlag(delFlag);
+        if (CollectionUtils.isEmpty(costList) && CollectionUtils.isEmpty(costListAll)) {
             costList = this.getInitData(qqchTaxIn);
         }
         List<Long> collect = costList.stream().map(QqchTaxCost::getId).collect(Collectors.toList());
@@ -271,6 +274,8 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
      * @return
      */
     private List<QqchTaxCost> getInitData(QqchTaxCost qqchTaxIn) {
+
+
         List<QqchTaxCost> currencyChildren = this.getCurrencyChildren();
         List<QqchTaxCost> costList = new ArrayList<>();
 
@@ -437,7 +442,7 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
 
         Map<String, String> currencyInfoByNames = CommonServiceUtil.getCurrencyCodesByNames(currencyNameList);
         if (currencyInfoByNames == null || currencyInfoByNames.size() == 0)
-            throw new RuntimeException("请检查币种是否书写错误");
+            throw new RuntimeException("请检查导入数据中的币种是否与基础信息中的币种名称是否匹配");
         List<String> codes = new ArrayList<>(currencyInfoByNames.values());
 
         Map<String, BigDecimal> rateMap = getRateByCodes(codes);

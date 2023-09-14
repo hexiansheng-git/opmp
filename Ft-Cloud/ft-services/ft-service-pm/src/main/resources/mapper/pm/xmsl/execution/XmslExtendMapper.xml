@@ -263,13 +263,9 @@
     update xmsl_extend
     <trim prefix="SET" suffixOverrides=",">
       <if test="id != null ">`id` = #{id},</if>
-      <if test="policyKeyPointsExplanation != null  and  policyKeyPointsExplanation != ''">
-        `policy_key_points_explanation` = #{policyKeyPointsExplanation},
-      </if>
-      <if test="socialHumanisticExplanation != null  and  socialHumanisticExplanation != ''">
-        `social_humanistic_explanation` = #{socialHumanisticExplanation},
-      </if>
-      <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+      `policy_key_points_explanation` = #{policyKeyPointsExplanation},
+      `social_humanistic_explanation` = #{socialHumanisticExplanation},
+      `file_group_id` = #{fileGroupId},
       <if test="regionId != null ">`region_id` = #{regionId},</if>
       <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
       <if test="projectId != null ">`project_id` = #{projectId},</if>
