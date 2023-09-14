@@ -114,7 +114,7 @@ public class StatisticsUtils {
                             startDate = sdf.parse(year + "-" + (Integer.valueOf(month)-1) + "-21");
                         }
                     }
-                    if(endDate == null) sdf.parse(year+"-"+month+"-20");
+                    if(endDate == null) endDate = sdf.parse(year+"-"+month+"-20");
 
                     break;
                 case "j":
