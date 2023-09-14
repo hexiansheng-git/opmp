@@ -8,10 +8,9 @@ import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionReviewPlanVo;
+import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionReviewPlanMapper;
-import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
@@ -36,7 +35,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     @Autowired
     private QqchConstructionReviewPlanMapper qqchConstructionReviewPlanMapper;
     @Autowired
-    private IQqchConstructionListService qqchConstructionListService;
+    private QqchConstructionListMapper qqchConstructionListMapper;
     @Autowired
     private CommonMapper commonMapper;
     @Autowired
@@ -91,25 +90,28 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         this.batchSave(qqchConstructionReviewPlanVo);
 
         // 获取当前数据库表数据
-        List<QqchConstructionReviewPlan> dbList = this.getQqchConstructionReviewPlanList(null).getList();
+        QqchConstructionReviewPlanVo dbVo = this.getQqchConstructionReviewPlanList(null);
 
+        // 获取方案清单最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        QqchConstructionList qryParam = new QqchConstructionList();
+        qryParam.setVersion(maxVersion);
         // 获取方案清单数据
-        QqchConstructionListVo listVo = qqchConstructionListService
-            .getQqchConstructionListList(new QqchConstructionListVo());
+        List<QqchConstructionList> constructionList = qqchConstructionListMapper.getQqchConstructionListList(qryParam);
 
         // 构造新的list
         List<QqchConstructionReviewPlan> insertList = new ArrayList<>();
-        for (QqchConstructionList construction : listVo.getList()) {
+        for (QqchConstructionList construction : constructionList) {
             QqchConstructionReviewPlan insert = new QqchConstructionReviewPlan();
             BeanUtils.copyProperties(construction, insert);
 
             insert.setId(IdWorker.createId());
             insert.setCreateUser(SecurityUtils.getUserName());
             insert.setCreateTime(DateUtils.getNowDate());
-            insert.setVersion(listVo.getVersion());
+            insert.setVersion(dbVo.getVersion());
             insert.setValid(Valid.YES);
 
-            for (QqchConstructionReviewPlan db : dbList) {
+            for (QqchConstructionReviewPlan db : dbVo.getList()) {
                 for (QqchConstructionReviewPlan dbPlan : db.getChildren()) {
                     if (insert.getSchemeCode().equals(dbPlan.getSchemeCode())) {
                         insert.setSchemeLevelDescription(dbPlan.getSchemeLevelDescription());
