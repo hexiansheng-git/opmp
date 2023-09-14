@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -239,7 +240,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             // 不为空才循环
             if (!CollectionUtils.isEmpty(detailList)) {
                 String currency = item.getCurrency();
-                CommonAssert.notBlank(currency, "币种编码不能为空");
+                currency = StringUtils.isEmpty(currency) ? PmConstant.USD: currency;
                 item.setRate(currencyRateMap.get(currency));
                 for (QqchTaxInDetail detail : detailList) {
                     detail.setId(IdWorker.createId());
