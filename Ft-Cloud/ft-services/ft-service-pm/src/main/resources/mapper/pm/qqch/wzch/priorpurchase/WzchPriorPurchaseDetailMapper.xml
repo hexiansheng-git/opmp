@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.priorpurchase.mapper.WzchPriorPurchaseDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.priorpurchase.dto.WzchPriorPurchaseDetailDTO" id="WzchPriorPurchaseDetailResult">
+        <result property="id" column="id"/>
+        <result property="materialName" column="material_name"/>
+        <result property="materialSpec" column="material_spec"/>
+        <result property="unit" column="unit"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="priorPurchaseId" column="prior_purchase_id"/>
+        <result property="materialCode" column="material_code"/>
+        <result property="materialTechParam" column="material_tech_param"/>
+        <result property="brand" column="brand"/>
+        <result property="materialStandard" column="material_standard"/>
+        <result property="totalDemandAmount" column="total_demand_amount"/>
+        <result property="selfDemandAmount" column="self_demand_amount"/>
+        <result property="priorApproachAmount" column="prior_approach_amount"/>
+        <result property="earliestReqTime" column="earliest_req_time"/>
+        <result property="presentTime" column="present_time"/>
+        <result property="source" column="source"/>
+        <result property="currency" column="currency"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="avgPurchasePrice" column="avg_purchase_price"/>
+        <result property="avgDespatchPrice" column="avg_despatch_price"/>
+        <result property="avgCustClearPrice" column="avg_cust_clear_price"/>
+        <result property="avgLocalTransportPrice" column="avg_local_transport_price"/>
+        <result property="avgLandingPrice" column="avg_landing_price"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+    </resultMap>
+
+    <sql id="selectWzchPriorPurchaseDetailVo">
+        SELECT ppd.`id`,
+            /*物资总需信息*/
+               tdd.material_tech_param,
+               tdd.material_standard,
+               tdd.total_demand_amount,
+               tdd.self_demand_amount,
+               tdd.category_name,
+
+            /*优先进场物资信息*/
+               pad.prior_approach_num as prior_approach_amount,
+               pad.earliest_req_time,
+               pad.present_time,
+
+               ppd.`prior_purchase_id`,
+               ppd.`material_code`,
+               ppd.`brand`,
+               ppd.`source`,
+               ppd.`currency`,
+               ppd.`unit_price`,
+               ppd.`total_price`,
+               ppd.`file_group_id`,
+               ppd.`remark`,
+               ppd.`project_id`,
+               ppd.`project_name`,
+               ppd.`dept_id`,
+               ppd.`create_user`,
+               ppd.`create_user_name`,
+               ppd.`create_time`,
+               ppd.`update_user`,
+               ppd.`update_user_name`,
+               ppd.`update_time`,
+               ppd.`del_user`,
+               ppd.`del_time`,
+               ppd.`del_flag`,
+               ppd.`pt_var1`,
+               ppd.`pt_var2`,
+               ppd.`pt_var3`
+        FROM `wzch_prior_purchase_detail` AS ppd
+
+                 /*查询物资总需信息*/
+                 LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = ppd.project_id
+            AND tdd.material_code = ppd.material_code
+            AND tdd.material_standard = ppd.material_standard
+            AND tdd.valid = 1
+            AND tdd.del_flag = 0
+            /*查询优先进场物资信息*/
+                 LEFT JOIN wzch_prior_approach_detail AS pad ON pad.project_id = ppd.project_id
+            AND pad.del_flag = '0'
+            AND pad.material_code = ppd.material_code
+            AND pad.material_standard = ppd.material_standard
+
+    </sql>
+
+    <select id="selectWzchPriorPurchaseDetailList"
+            parameterType="com.hhwy.pm.qqch.wzch.priorpurchase.domain.WzchPriorPurchaseDetail"
+            resultMap="WzchPriorPurchaseDetailResult">
+        <include refid="selectWzchPriorPurchaseDetailVo"/>
+        <where>
+            ppd.`del_flag` = 0
+            <if test="priorPurchaseId != null ">and ppd.`prior_purchase_id` = #{priorPurchaseId}</if>
+            <if test="materialCode != null  and materialCode != ''">and ppd.`material_code` = #{materialCode}</if>
+            <if test="brand != null  and brand != ''">and ppd.`brand` = #{brand}</if>
+            <if test="source != null  and source != ''">and ppd.`source` = #{source}</if>
+            <if test="currency != null  and currency != ''">and ppd.`currency` = #{currency}</if>
+            <if test="unitPrice != null ">and ppd.`unit_price` = #{unitPrice}</if>
+            <if test="avgPurchasePrice != null ">and ppd.`avg_purchase_price` = #{avgPurchasePrice}</if>
+            <if test="avgDespatchPrice != null ">and ppd.`avg_despatch_price` = #{avgDespatchPrice}</if>
+            <if test="avgCustClearPrice != null ">and ppd.`avg_cust_clear_price` = #{avgCustClearPrice}</if>
+            <if test="avgLocalTransportPrice != null ">and ppd.`avg_local_transport_price` = #{avgLocalTransportPrice}
+            </if>
+            <if test="avgLandingPrice != null ">and ppd.`avg_landing_price` = #{avgLandingPrice}</if>
+            <if test="totalPrice != null ">and ppd.`total_price` = #{totalPrice}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and ppd.`file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null ">and ppd.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and ppd.`project_name` like concat('%',
+                #{projectName}, '%')
+            </if>
+            <if test="deptId != null ">and ppd.`dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and ppd.`create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and ppd.`create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and ppd.`update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and ppd.`update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null  and delUser != ''">and ppd.`del_user` = #{delUser}</if>
+            <if test="delTime != null ">and ppd.`del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and ppd.`pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and ppd.`pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and ppd.`pt_var3` = #{ptVar3}</if>
+
+            <!-- 2023年6月27日10:44:23  添加-->
+            <if test="planPurchaseDateStart != null  and planPurchaseDateEnd != null ">and pad.earliest_req_time between #{planPurchaseDateStart} and #{planPurchaseDateEnd}</if>
+            <if test="valid != null  and valid != '' ">and ppd.`valid` =#{valid}</if>
+        </where>
+        order by ppd.`material_code` asc
+    </select>
+
+    <select id="selectWzchPriorPurchaseDetailById" parameterType="Long" resultMap="WzchPriorPurchaseDetailResult">
+        <include refid="selectWzchPriorPurchaseDetailVo"/>
+        where ppd.`id` = #{id}
+        AND pad.material_code = ppd.material_code
+        AND tdd.material_code = ppd.material_code
+    </select>
+    <insert id="insertWzchPriorPurchaseDetail"
+            parameterType="com.hhwy.pm.qqch.wzch.priorpurchase.domain.WzchPriorPurchaseDetail">
+        insert into `wzch_prior_purchase_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="priorPurchaseId != null">`prior_purchase_id`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="materialStandard != null">`material_standard`,</if>
+            <if test="brand != null">`brand`,</if>
+            <if test="source != null">`source`,</if>
+            <if test="currency != null">`currency`,</if>
+            <if test="unitPrice != null">`unit_price`,</if>
+            <if test="avgPurchasePrice != null">`avg_purchase_price`,</if>
+            <if test="avgDespatchPrice != null">`avg_despatch_price`,</if>
+            <if test="avgCustClearPrice != null">`avg_cust_clear_price`,</if>
+            <if test="avgLocalTransportPrice != null">`avg_local_transport_price`,</if>
+            <if test="avgLandingPrice != null">`avg_landing_price`,</if>
+            <if test="totalPrice != null">`total_price`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="priorPurchaseId != null">#{priorPurchaseId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialStandard != null">#{materialStandard},</if>
+            <if test="brand != null">#{brand},</if>
+            <if test="source != null">#{source},</if>
+            <if test="currency != null">#{currency},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="avgPurchasePrice != null">#{avgPurchasePrice},</if>
+            <if test="avgDespatchPrice != null">#{avgDespatchPrice},</if>
+            <if test="avgCustClearPrice != null">#{avgCustClearPrice},</if>
+            <if test="avgLocalTransportPrice != null">#{avgLocalTransportPrice},</if>
+            <if test="avgLandingPrice != null">#{avgLandingPrice},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+        </trim>
+    </insert>
+
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_prior_purchase_detail`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="prior_purchase_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.priorPurchaseId != null ">
+                        when `id` = #{item.id} then #{item.priorPurchaseId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialCode != null ">
+                        when `id` = #{item.id} then #{item.materialCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="brand =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.brand != null ">
+                        when `id` = #{item.id} then #{item.brand}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="source =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.source != null ">
+                        when `id` = #{item.id} then #{item.source}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="currency =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.currency != null ">
+                        when `id` = #{item.id} then #{item.currency}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="unit_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.unitPrice != null ">
+                        when `id` = #{item.id} then #{item.unitPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="avg_purchase_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.avgPurchasePrice != null ">
+                        when `id` = #{item.id} then #{item.avgPurchasePrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="avg_despatch_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.avgDespatchPrice != null ">
+                        when `id` = #{item.id} then #{item.avgDespatchPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="avg_cust_clear_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.avgCustClearPrice != null ">
+                        when `id` = #{item.id} then #{item.avgCustClearPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="avg_local_transport_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.avgLocalTransportPrice != null ">
+                        when `id` = #{item.id} then #{item.avgLocalTransportPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="avg_landing_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.avgLandingPrice != null ">
+                        when `id` = #{item.id} then #{item.avgLandingPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.totalPrice != null ">
+                        when `id` = #{item.id} then #{item.totalPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.fileGroupId != null ">
+                        when `id` = #{item.id} then #{item.fileGroupId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id` = #{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id` = #{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectName != null ">
+                        when `id` = #{item.id} then #{item.projectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id` = #{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id` = #{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id` = #{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id` = #{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUserName != null ">
+                        when `id` = #{item.id} then #{item.updateUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id` = #{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id` = #{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id` = #{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index">
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="updateWzchPriorPurchaseDetail"
+            parameterType="com.hhwy.pm.qqch.wzch.priorpurchase.domain.WzchPriorPurchaseDetail">
+        update `wzch_prior_purchase_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="priorPurchaseId != null">`prior_purchase_id` = #{priorPurchaseId},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="brand != null">`brand` = #{brand},</if>
+            <if test="source != null">`source` = #{source},</if>
+            <if test="currency != null">`currency` = #{currency},</if>
+            <if test="unitPrice != null">`unit_price` = #{unitPrice},</if>
+            <if test="avgPurchasePrice != null">`avg_purchase_price` = #{avgPurchasePrice},</if>
+            <if test="avgDespatchPrice != null">`avg_despatch_price` = #{avgDespatchPrice},</if>
+            <if test="avgCustClearPrice != null">`avg_cust_clear_price` = #{avgCustClearPrice},</if>
+            <if test="avgLocalTransportPrice != null">`avg_local_transport_price` = #{avgLocalTransportPrice},</if>
+            <if test="avgLandingPrice != null">`avg_landing_price` = #{avgLandingPrice},</if>
+            <if test="totalPrice != null">`total_price` = #{totalPrice},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchPriorPurchaseDetailById" parameterType="Long">
+        update `wzch_prior_purchase_detail`
+        set del_flag = 1
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchPriorPurchaseDetailByIds" parameterType="String">
+        update `wzch_prior_purchase_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <!-- 批量插入或按主键更新 -->
+    <insert id="insertOrUpdateBatch" keyProperty="id">
+
+
+        INSERT INTO wzch_prior_purchase_detail (
+        id,
+        prior_purchase_id,
+        material_code,
+        material_standard,
+        brand,
+        source,
+        currency,
+        unit_price,
+        avg_purchase_price,
+        avg_despatch_price,
+        avg_cust_clear_price,
+        avg_local_transport_price,
+        avg_landing_price,
+        total_price,
+        file_group_id,
+        remark,
+        project_id,
+        project_name,
+        dept_id,
+        create_user,
+        create_user_name,
+        create_time,
+        update_user,
+        update_user_name,
+        update_time,
+        del_user,
+        del_time,
+        del_flag,
+        valid,
+        pt_var1,
+        pt_var2,
+        pt_var3
+        )
+        VALUES
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},
+            #{entity.priorPurchaseId},
+            #{entity.materialCode},
+            #{entity.materialStandard},
+            #{entity.brand},
+            #{entity.source},
+            #{entity.currency},
+            #{entity.unitPrice},
+            #{entity.avgPurchasePrice},
+            #{entity.avgDespatchPrice},
+            #{entity.avgCustClearPrice},
+            #{entity.avgLocalTransportPrice},
+            #{entity.avgLandingPrice},
+            #{entity.totalPrice},
+            #{entity.fileGroupId},
+            #{entity.remark},
+            #{entity.projectId},
+            #{entity.projectName},
+            #{entity.deptId},
+            #{entity.createUser},
+            #{entity.createUserName},
+            #{entity.createTime},
+            #{entity.updateUser},
+            #{entity.updateUserName},
+            #{entity.updateTime},
+            #{entity.delUser},
+            #{entity.delTime},
+            #{entity.delFlag},
+            #{entity.valid},
+            #{entity.ptVar1},
+            #{entity.ptVar2},
+            #{entity.ptVar3})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+        prior_purchase_id = VALUES( prior_purchase_id ),
+        material_code = VALUES( material_code ),
+        brand = VALUES( brand ),
+        source = VALUES( source ),
+        currency = VALUES( currency ),
+        unit_price = VALUES( unit_price ),
+        avg_purchase_price = VALUES( avg_purchase_price ),
+        avg_despatch_price = VALUES( avg_despatch_price ),
+        avg_cust_clear_price = VALUES( avg_cust_clear_price ),
+        avg_local_transport_price = VALUES( avg_local_transport_price ),
+        avg_landing_price = VALUES( avg_landing_price ),
+        total_price = VALUES( total_price ),
+        file_group_id = VALUES( file_group_id ),
+        remark = VALUES( remark ),
+        project_id = VALUES( project_id ),
+        project_name = VALUES( project_name ),
+        dept_id = VALUES( dept_id ),
+        create_user = VALUES( create_user ),
+        create_user_name = VALUES( create_user_name ),
+        create_time = VALUES( create_time ),
+        update_user = VALUES( update_user ),
+        update_user_name = VALUES( update_user_name ),
+        update_time = VALUES( update_time ),
+        del_user = VALUES( del_user ),
+        del_time = VALUES( del_time ),
+        del_flag = VALUES( del_flag ),
+        valid = VALUES( valid ),
+        pt_var1 = VALUES( pt_var1 ),
+        pt_var2 = VALUES( pt_var2 ),
+        pt_var3 = VALUES(pt_var3)
+    </insert>
+    <delete id="deleteByPurchaseId">
+        delete
+        from wzch_prior_purchase_detail
+        where prior_purchase_id = #{purchaseId}
+    </delete>
+    <update id="deleteByPriorPurchaseIds">
+        update `wzch_prior_purchase_detail` set del_flag = 1 where `prior_purchase_id` in
+        <foreach item="id" collection="priorPurchaseIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <select id="getMtlDetailList" resultMap="WzchPriorPurchaseDetailResult">
+
+        SELECT
+        pad.`id`,
+        tdd.project_id AS totalPrjId,
+        pad.project_id AS priorPrjId,
+        pad.material_code,
+        /*物资总需信息*/
+        tdd.material_tech_param,
+        tdd.material_standard,
+        tdd.total_demand_amount,
+        tdd.self_demand_amount,
+        tdd.category_name,
+        /*优先进场物资信息*/
+        pad.prior_approach_num AS prior_approach_amount,
+        pad.earliest_req_time,
+        pad.present_time
+        FROM
+        `wzch_prior_approach_detail` as pad
+        /*查询物资总需信息*/
+        LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = pad.project_id
+        AND tdd.material_code = pad.material_code
+        AND tdd.material_standard = pad.material_standard
+        AND tdd.del_flag = 0
+
+        <where>
+            pad.del_flag = 0
+            AND tdd.material_code = pad.material_code
+            AND tdd.material_standard = pad.material_standard
+            AND tdd.del_flag = 0
+            <if test="projectId != null ">AND pad.`project_id` = #{projectId}</if>
+        </where>
+        ORDER BY pad.material_code ASC
+    </select>
+
+    <resultMap type="com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDetailDTO" id="WzchPurchaseSupplyDetailResult">
+        <result property="materialCode" column="material_code"/>
+        <result property="materialStandard" column="material_standard"/>
+        <result property="internalNum" column="internal_num"/>
+        <result property="otherStateNum" column="other_state_num"/>
+        <result property="localNum" column="local_num"/>
+    </resultMap>
+
+    <select id="selectPurchaseSource" resultMap="WzchPurchaseSupplyDetailResult">
+
+        SELECT
+        pad.material_code,
+        pad.material_standard,
+        sum( payc.internal_num ) AS internal_num,
+        sum( payc.other_state_num ) AS other_state_num,
+        sum( payc.local_num ) AS local_num
+        FROM
+        wzch_prior_approach_detail AS pad
+        LEFT JOIN wzch_prior_approach_year_count AS payc ON pad.id = payc.detail_id
+        WHERE
+        pad.material_code IN
+        <foreach item="code" collection="materialCodeList" open="(" separator="," close=")">
+            #{code}
+        </foreach>
+        GROUP BY
+        pad.material_code, pad.material_standard;
+
+
+    </select>
+
+</mapper>

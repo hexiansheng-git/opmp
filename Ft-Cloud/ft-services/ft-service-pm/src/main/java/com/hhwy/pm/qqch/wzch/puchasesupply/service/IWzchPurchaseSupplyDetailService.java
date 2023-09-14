@@ -1,0 +1,133 @@
+package com.hhwy.pm.qqch.wzch.puchasesupply.service;
+
+import java.util.List;
+import java.util.Map;
+
+import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupplyDetail;
+import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDetailDTO;
+import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseViewDetailDTO;
+
+/**
+ * 采购供应策划材料视角物资详情Service接口
+ *
+ * @author mls
+ * @date 2022-11-17
+ */
+public interface IWzchPurchaseSupplyDetailService {
+    /**
+     * 查询采购供应策划材料视角物资详情
+     *
+     * @param id 采购供应策划材料视角物资详情ID
+     * @return 采购供应策划材料视角物资详情
+     */
+    WzchPurchaseSupplyDetail selectWzchPurchaseSupplyDetailById(Long id);
+
+    /**
+     * 查询采购供应策划材料视角物资详情列表
+     *
+     * @param wzchPurchaseSupplyDetail 采购供应策划材料视角物资详情
+     * @return 采购供应策划材料视角物资详情集合
+     */
+    List<WzchPurchaseSupplyDetailDTO> selectWzchPurchaseSupplyDetailList(WzchPurchaseSupplyDetail wzchPurchaseSupplyDetail);
+
+    /**
+     * 新增采购供应策划材料视角物资详情
+     *
+     * @param wzchPurchaseSupplyDetail 采购供应策划材料视角物资详情
+     * @return 结果
+     */
+    int insertWzchPurchaseSupplyDetail(WzchPurchaseSupplyDetail wzchPurchaseSupplyDetail);
+
+    /**
+     * 修改采购供应策划材料视角物资详情
+     *
+     * @param wzchPurchaseSupplyDetail 采购供应策划材料视角物资详情
+     * @return 结果
+     */
+    int updateWzchPurchaseSupplyDetail(WzchPurchaseSupplyDetail wzchPurchaseSupplyDetail);
+
+    /**
+     * 批量删除采购供应策划材料视角物资详情
+     *
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+    int deleteWzchPurchaseSupplyDetailByIds(String ids);
+
+    /**
+     * 删除采购供应策划材料视角物资详情信息
+     *
+     * @param id 采购供应策划材料视角物资详情ID
+     * @return 结果
+     */
+    int deleteWzchPurchaseSupplyDetailById(Long id);
+
+    /**
+     * 根据项目id获取物资详情 获取的是来源策划的数据  如果物资在有采购相关的数据 就拿取物资 如果没有 就不用拿取
+     *
+     * @param dto
+     * @return
+     */
+    List<WzchPurchaseSupplyDetailDTO> getListByPrjId(WzchPurchaseSupplyDetailDTO dto);
+    List<WzchPurchaseSupplyDetailDTO> getListByPrjId(WzchPurchaseSupplyDetailDTO dto, String dataType);
+
+    /**
+     * 批量新增获取删除
+     *
+     * @param detailList
+     * @param supplyId
+     * @return
+     */
+    int insertOrUpdateBatch(List<WzchPurchaseSupplyDetailDTO> detailList, Long supplyId);
+
+    /**
+     * 根据采购供应策划id获取物资详情
+     *
+     * @param dto
+     * @return
+     */
+    List<WzchPurchaseSupplyDetailDTO> selectSupplyDetailListBySupplyId(WzchPurchaseSupplyDetailDTO dto);
+
+    /**
+     * 将数据进行分级
+     *
+     * @param dtoList
+     * @return
+     */
+    List<WzchPurchaseSupplyDetailDTO> getLevelList(List<WzchPurchaseSupplyDetailDTO> dtoList);
+
+    /**
+     * 采购视角接口
+     *
+     * @param map
+     * @return
+     */
+    List<WzchPurchaseViewDetailDTO> purchaseView(Map<String, String> map);
+
+    /**
+     * 保存采购视角
+     *
+     * @param list
+     * @param projectId
+     */
+    void savePurchaseView(List<WzchPurchaseViewDetailDTO> list, String projectId);
+
+    /**
+     * 根据单据id删除详情
+     *
+     * @param ids
+     * @return
+     */
+    int deleteBySupplyIds(String ids);
+
+
+    /**
+     * 处理集合 给集合数据加序号 1   1.1   2    2.1
+     *
+     * @param detailList
+     * @return
+     */
+    List<WzchPurchaseSupplyDetailDTO> dealList(List<WzchPurchaseSupplyDetailDTO> detailList);
+
+
+}
