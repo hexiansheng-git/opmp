@@ -1,35 +1,31 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
+import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
+import com.hhwy.pm.qqch.qqchPerformInspection.mapper.QqchPerformInspectionMapper;
+import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionDetailService;
+import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
+import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
+import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import com.alibaba.fastjson.JSON;
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
-import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
-import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionDetailService;
-import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
-import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
-import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
-import com.hhwy.system.api.domain.SysTenant;
-import com.hhwy.utils.exception.CustomBusinessException;
-import com.hhwy.utils.objectUtil.ObjectNullUtil;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.qqch.qqchPerformInspection.mapper.QqchPerformInspectionMapper;
-import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
-import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
-import com.hhwy.utils.idworker.IdWorker;
 
 /**
  * @author zqq
@@ -135,31 +131,48 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         QqchWorkPlan qqchWorkPlan = JSON.parseObject(JSON.toJSONString(baseEntity), QqchWorkPlan.class);
         List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
 
-        ArrayList<QqchPerformInspectionDetail> returnList = new ArrayList<>();
+        detailList = ListTreeUtil.formatList(
+                detailList,
+                QqchWorkPlanDetail::setId,
+                QqchWorkPlanDetail::setPid,
+                QqchWorkPlanDetail::setSort,
+                QqchWorkPlanDetail::getChildren,
+                QqchWorkPlanDetail::setChildren);
+
+        List<QqchPerformInspectionDetail> returnList = new ArrayList<>();
         for (QqchWorkPlanDetail qqchWorkPlanDetail : detailList) {
             QqchPerformInspectionDetail detail = new QqchPerformInspectionDetail();
             detail.setId(qqchWorkPlanDetail.getId());
+            detail.setPid(qqchWorkPlanDetail.getPid());
             detail.setItemName(qqchWorkPlanDetail.getItemName());
             detail.setItemId(qqchWorkPlanDetail.getItemId());
             detail.setSort(qqchWorkPlanDetail.getSort());
             detail.setWorkExplain(qqchWorkPlanDetail.getWorkExplain());
-            List<QqchPerformInspectionDetail> childrenList = new ArrayList<>();
-            List<QqchWorkPlanDetail> children = qqchWorkPlanDetail.getChildren();
-            if(!ObjectNullUtil.isEmpty(children)){
-                for (QqchWorkPlanDetail child : children) {
-                    QqchPerformInspectionDetail childDetail = new QqchPerformInspectionDetail();
-                    childDetail.setId(child.getId());
-                    childDetail.setPid(child.getPid());
-                    childDetail.setItemName(child.getItemName());
-                    childDetail.setItemId(child.getItemId());
-                    childDetail.setSort(child.getSort());
-                    childDetail.setWorkExplain(child.getWorkExplain());
-                    childrenList.add(childDetail);
-                }
-            }
-            detail.setChildrenList(childrenList);
+//            List<QqchPerformInspectionDetail> childrenList = new ArrayList<>();
+//            List<QqchWorkPlanDetail> children = qqchWorkPlanDetail.getChildren();
+//            if(!ObjectNullUtil.isEmpty(children)){
+//                for (QqchWorkPlanDetail child : children) {
+//                    QqchPerformInspectionDetail childDetail = new QqchPerformInspectionDetail();
+//                    childDetail.setId(child.getId());
+//                    childDetail.setPid(child.getPid());
+//                    childDetail.setItemName(child.getItemName());
+//                    childDetail.setItemId(child.getItemId());
+//                    childDetail.setSort(child.getSort());
+//                    childDetail.setWorkExplain(child.getWorkExplain());
+//                    childrenList.add(childDetail);
+//                }
+//            }
+//            detail.setChildrenList(childrenList);
             returnList.add(detail);
         }
+
+        returnList = ListTreeUtil.formatTree(
+                returnList,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchPerformInspectionDetail::getChildren,
+                QqchPerformInspectionDetail::setChildren);
+
         return returnList;
     }
 
@@ -177,7 +190,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
             Map<Long, List<QqchPerformInspectionDetail>> pidMap = detailList.stream().filter(t -> !ObjectNullUtil.isEmpty(t.getPid())).collect(Collectors.groupingBy(t -> t.getPid()));
             for (QqchPerformInspectionDetail qqchPerformInspectionDetail : parentList) {
                 List<QqchPerformInspectionDetail> detailList1 = pidMap.get(qqchPerformInspectionDetail.getId());
-                qqchPerformInspectionDetail.setChildrenList(detailList1);
+                qqchPerformInspectionDetail.setChildren(detailList1);
             }
             temp.setDetailList(parentList);
         }
@@ -191,7 +204,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         for (QqchPerformInspectionDetail detail : detailList) {
             detail.setInfoId(qqchPerformInspection.getId());
             detail.setId(IdWorker.createId());
-            List<QqchPerformInspectionDetail> childrenList = detail.getChildrenList();
+            List<QqchPerformInspectionDetail> childrenList = detail.getChildren();
             if(!ObjectNullUtil.isEmpty(childrenList)){
                 for (QqchPerformInspectionDetail qqchPerformInspectionDetail : childrenList) {
                     QqchPerformInspectionDetail detail1 = new QqchPerformInspectionDetail();

@@ -134,9 +134,6 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             entity.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             entity.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             entity.setCreateTime(DateUtils.getNowDate());
-            if(entity.getPid()==null){
-                entity.setPid(0l);
-            }
             entity.setDelFlag("0");
             list.add(entity);
         }
@@ -167,7 +164,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         version = VersionUtil.getVersion("qqch_management_person_config", version);
         qqchManagementPersonConfig.setVersion(version);
         List<QqchManagementPersonConfig> qqchManagementPersonConfigList = qqchManagementPersonConfigMapper.getQqchManagementPersonConfigList(qqchManagementPersonConfig);
-        List<QqchManagementPersonConfig> treeList = TreeUtil.build(qqchManagementPersonConfigList, 0l);
+        List<QqchManagementPersonConfig> treeList = TreeUtil.build(qqchManagementPersonConfigList, null);
         qqchManagementPersonConfigVo.setVersion(version);
         qqchManagementPersonConfigVo.setStageIdentity(qqchReviewService.getStage());
         qqchManagementPersonConfigVo.setQqchManagementPersonConfigList(treeList);
@@ -231,9 +228,6 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             managementPersonConfig.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             managementPersonConfig.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             managementPersonConfig.setCreateTime(DateUtils.getNowDate());
-            if(managementPersonConfig.getPid()==null){
-                managementPersonConfig.setPid(0l);
-            }
         }
         qqchManagementPersonConfigMapper.insertQqchManagementPersonConfigList(configs);
     }

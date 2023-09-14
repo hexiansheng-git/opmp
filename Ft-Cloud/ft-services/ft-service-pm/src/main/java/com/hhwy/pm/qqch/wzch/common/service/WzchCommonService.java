@@ -1035,6 +1035,46 @@ public class WzchCommonService {
         setCurrentName(tList, "currency", "currencyName");
     }
 
+    /**
+     * 设置币种名称
+     *
+     * @param tList
+     * @param currencyFiledName
+     * @param currencyNameFiledName
+     * @param <T>
+     */
+    public <T> void setCurrentName(List<T> tList, String currencyFiledName, String currencyNameFiledName) {
+        StringBuilder codes = new StringBuilder();
+        FieldUtils fieldUtils = FieldUtils.init();
+
+        if (CollectionUtils.isEmpty(tList)) return;
+        try {
+            // 获取所有的币种编码
+            for (T t : tList) {
+                // 获取字段值
+                Object fieldValue = fieldUtils.getFieldVal(currencyFiledName, t);
+                codes.append(fieldValue).append(",");
+            }
+
+            // 获取币种信息
+            CurrencyInfo currencyInfo = new CurrencyInfo();
+            currencyInfo.setParams(ParamUtils.init().add("currencyCodes", codes.toString()).get());
+
+            List<CurrencyInfo> currencyInfos = systemServiceApi.selectCurrencyList(currencyInfo);
+            for (T t : tList) {
+                // 获取字段值
+                String finalCode = String.valueOf(fieldUtils.getFieldVal(currencyFiledName, t));
+
+                currencyInfos.stream().filter(item -> finalCode != null && finalCode.equals(item.getCurrencyCode())).findFirst().ifPresent(curr -> {
+                    // 获取到币种名称并进行设置
+                    fieldUtils.setFieldVal(currencyNameFiledName, curr.getCurrencyName(), t);
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     public <T> void setCurrentName(T t) {
         setCurrentName(t, "currency", "currencyName");

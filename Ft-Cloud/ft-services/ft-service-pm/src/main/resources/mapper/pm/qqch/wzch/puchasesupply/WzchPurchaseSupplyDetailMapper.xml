@@ -1084,25 +1084,22 @@
                           LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id
 
                      /* 关联物资总需*/
-                          LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = sd.project_id
-                     AND tdd.valid = 1
-                     AND tdd.del_flag = 0
+                          LEFT JOIN wzch_total_demand_detail AS tdd ON 
+                     tdd.del_flag = 0
                      AND tdd.material_code = sd.material_code
                      AND tdd.material_standard = sd.material_standard
 
                      /* 关联优先采购物资台账*/
-                          LEFT JOIN wzch_prior_approach_detail AS pad ON pad.project_id = sd.project_id
-                     AND pad.del_flag = 0
+                          LEFT JOIN wzch_prior_approach_detail AS pad ON
+                     pad.del_flag = 0
                      AND pad.material_code = sd.material_code
 
                      /* 关联优先采购物资策划*/
-                          LEFT JOIN wzch_prior_purchase_detail AS ppd ON ppd.project_id = sd.project_id
-                     AND ppd.valid = 1
-                     AND ppd.del_flag = 0
+                          LEFT JOIN wzch_prior_purchase_detail AS ppd ON
+                     ppd.del_flag = 0
                      AND ppd.material_code = sd.material_code
 
                  WHERE sd.del_flag = '0'
-                   AND tdd.valid = 1
                    AND tdd.del_flag = 0
                    AND tdd.material_code = sd.material_code
                    AND tdd.material_standard = sd.material_standard
@@ -1174,17 +1171,16 @@
             `wzch_purchase_supply_batch_detail` AS psbd /* 关联物资总需*/
             LEFT JOIN wzch_purchase_supply_detail AS psd ON psd.id = psbd.purchase_supply_detail_id
             LEFT JOIN wzch_purchase_supply AS ps ON ps.id = psd.purchase_supply_id
-            LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = psd.project_id
-            AND tdd.valid = 1
+            LEFT JOIN wzch_total_demand_detail AS tdd ON 
+            tdd.valid = 1
             AND tdd.del_flag = 0
             AND tdd.material_code = psd.material_code
             AND tdd.material_standard = psd.material_standard /* 关联优先采购物资台账*/
-            LEFT JOIN wzch_prior_approach_detail AS pad ON pad.project_id = psd.project_id
-            AND pad.del_flag = 0
+            LEFT JOIN wzch_prior_approach_detail AS pad on
+            pad.del_flag = 0
             AND pad.material_code = psd.material_code
             WHERE
-            psd.project_id = #{projectId}
-            AND psbd.plan_purchase_date BETWEEN #{item.startTime} AND #{item.endTime}
+            psbd.plan_purchase_date BETWEEN #{item.startTime} AND #{item.endTime}
             <if test="dataType != null and dataType != ''">
                 AND ps.data_type = #{dataType}
             </if>

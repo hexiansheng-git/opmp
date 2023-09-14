@@ -10,6 +10,8 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
@@ -63,7 +65,8 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
     private GenCodeService genCodeService;
     @Resource
     private IQqchReviewService qqchReviewService;
-
+    @Resource
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
 
@@ -157,6 +160,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
     public WzchPurchaseSupplyDTO baseInfo(WzchPurchaseSupplyDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", vo.getVersion());
         vo.setVersion(version);
+        vo.setStageIdentity(qqchReviewService.getStage());
 //        String id = map.get("id");
         // 操作类型 1-新增; 2-编辑; 3-详情; 4-调整
 //        String type = map.get("type");
@@ -351,6 +355,12 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
         // 新增详情
         this.detailService.insertOrUpdateBatch(detailList, dto.getId());
         // 返回主键
+        if (ButtonMark.CONFIRM.equals(dto.getButtonMark())) {
+            // 插入确认状态
+            String menuId = dto.getMenuId();
+            String stageIdentity = dto.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
         return dto.getId();
     }
 
@@ -404,6 +414,10 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
             purchaseSupply.setId(IdWorker.createId());
             new AddBaseInfoUtil().addBaseEntity(purchaseSupply);
             this.wzchPurchaseSupplyMapper.insertWzchPurchaseSupply(purchaseSupply);
+        }else{
+            masterList.get(0).setLimitPriceDesc(purchaseSupply.getLimitPriceDesc());
+            purchaseSupply.setId(masterList.get(0).getId());
+            wzchPurchaseSupplyMapper.updateWzchPurchaseSupply(masterList.get(0));
         }                             
         //1、从来源策划中获取来源为国内采购、第三国采购、当地采购的数据
         List<WzchPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(new WzchPurchaseSupplyDetailDTO());
@@ -413,7 +427,15 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
             this.wzchPurchaseSupplyMapper.deleteBatchDirectByMasterId(purchaseSupply.getId());
         }
         //3、插入明细
-        this.wzchPurchaseSupplyDetailMapper.insertOrUpdateBatch(list);
+        if(CollectionUtils.isNotEmpty(list)){
+            for (int i = 0; i < list.size(); i++) {
+                WzchPurchaseSupplyDetailDTO temp = list.get(i);
+                temp.setPurchaseSupplyId(purchaseSupply.getId());
+                temp.setDelFlag("0");
+            }
+            this.wzchPurchaseSupplyDetailMapper.insertOrUpdateBatch(list);
+        }
+            
     }
 
     /**
