@@ -11,6 +11,9 @@ import com.hhwy.pm.qqch.preparation.safe.cost.mapper.QqchSafeMeasureCostPlanMapp
 import com.hhwy.pm.qqch.preparation.safe.cost.service.IQqchSafeMeasureCostPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -35,6 +38,8 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
 
     /**
      * 列表
@@ -49,19 +54,31 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         QqchSafeMeasureCostPlan qryParam = new QqchSafeMeasureCostPlan();
         qryParam.setVersion(version);
         List<QqchSafeMeasureCostPlan> list = qqchSafeMeasureCostPlanMapper.getQqchSafeMeasureCostPlanList(qryParam);
+
+        // 查询合同信息
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        // 有效合同金额
+        BigDecimal effectiveAmt =
+            xmslContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmout();
+
         BigDecimal expectInvestCostTotal = BigDecimal.ZERO;
-        // todo 需求未定数据来源
+        // 占工程造价百分比（%）= 预计投入/合同总额
         BigDecimal projectCostPercentage = BigDecimal.ZERO;
         for (QqchSafeMeasureCostPlan qqchSafeMeasureCostPlan : list) {
             if (qqchSafeMeasureCostPlan.getExpectInvestCost() == null) {
                 qqchSafeMeasureCostPlan.setExpectInvestCost(BigDecimal.ZERO);
             }
             expectInvestCostTotal = expectInvestCostTotal.add(qqchSafeMeasureCostPlan.getExpectInvestCost());
-            qqchSafeMeasureCostPlan.setExpectInvestCost(
-                new BigDecimal(String.format("%.2f", qqchSafeMeasureCostPlan.getExpectInvestCost())));
         }
-        vo.setExpectInvestCostTotal(new BigDecimal(String.format("%.2f", expectInvestCostTotal)));
-        vo.setProjectCostPercentage(new BigDecimal(String.format("%.2f", projectCostPercentage)));
+        if (effectiveAmt.compareTo(BigDecimal.ZERO) != 0) {
+            projectCostPercentage = BigDecimalUtils.divide0(expectInvestCostTotal, effectiveAmt, 4)
+                .multiply(new BigDecimal(100));
+        }
+
+        // 换算为万美元
+        expectInvestCostTotal = BigDecimalUtils.divide0(expectInvestCostTotal, new BigDecimal(10000), 4);
+        vo.setExpectInvestCostTotal(expectInvestCostTotal);
+        vo.setProjectCostPercentage(projectCostPercentage);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
