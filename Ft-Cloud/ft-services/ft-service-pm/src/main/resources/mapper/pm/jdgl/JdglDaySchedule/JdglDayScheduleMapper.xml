@@ -139,7 +139,7 @@
     </select>
     <select id="getHistoryValue"
             resultMap="JdglDayScheduleResultMap">
-        select sum(day_value_cu) totalValueCu,sum(day_value_dl) totalValueDl
+        select sum(day_value_cu) total_value_cu,sum(day_value_dl) total_value_dl
         from jdgl_day_schedule where date &lt; #{date} and task_status = "5" and del_flag != "1"
     </select>
     <select id="getCountValue" resultType="java.math.BigDecimal">
@@ -523,9 +523,9 @@
         update jdgl_day_schedule jds,(select * from jdgl_day_schedule where date = DATE_SUB(#{date},INTERVAL 1 DAY) and task_status = '5') queryjds
         set
             jds.day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
-            jds.day_value_dl= jds.day_value_cu*jds.exchange_rate/10000,
-            jds.total_value_cu = ifnull(queryjds.total_value_cu, 0)+jds.day_value_cu,
-            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+jds.day_value_dl
+            jds.day_value_dl= jds.day_value_cu*ifnull(jds.exchange_rate,0)/10000,
+            jds.total_value_cu = ifnull(queryjds.total_value_cu, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),0),
+            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),0)*ifnull(jds.exchange_rate,0)/10000
         where jds.id = #{id}
 
     </update>

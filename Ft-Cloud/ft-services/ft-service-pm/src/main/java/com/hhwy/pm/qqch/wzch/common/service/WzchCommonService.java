@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.qqch.wzch.common.mapper.WzchCommonMapper;
 import com.hhwy.system.api.domain.SysDictData;
@@ -57,6 +58,8 @@ public class WzchCommonService {
     private WzchCommonMapper commonMapper;
     @Resource
     private SystemApiService systemApiService;
+    @Resource
+    private SystemServiceApi systemServiceApi;
 //    @Resource
 //    private IMaterialInfoService materialInfoService;
 
@@ -990,9 +993,51 @@ public class WzchCommonService {
     private static BigDecimal getRmbAmount(BigDecimal amount, BigDecimal currRate, BigDecimal rmbRate) {
         return BigDecimalUtils.multiply(BigDecimalUtils.divide(amount, currRate, 4), rmbRate);
     }
+    public <T> void setCurrency(List<T> tList, String currencyFiledName, String currencyNameFiledName) {
+        StringBuilder codes = new StringBuilder();
+        FieldUtils fieldUtils = FieldUtils.init();
+
+        if (CollectionUtils.isEmpty(tList)) return;
+        try {
+            // 获取所有的币种编码
+            for (T t : tList) {
+                // 获取字段值
+                Object fieldValue = fieldUtils.getFieldVal(currencyNameFiledName, t);
+                codes.append(fieldValue).append(",");
+            }
+
+            // 获取币种信息
+            CurrencyInfo currencyInfo = new CurrencyInfo();
+            currencyInfo.setParams(ParamUtils.init().add("currencyNames", codes.toString()).get());
+
+            List<CurrencyInfo> currencyInfos = systemServiceApi.selectCurrencyList(currencyInfo);
+            for (T t : tList) {
+                // 获取字段值
+                String finalName = String.valueOf(fieldUtils.getFieldVal(currencyNameFiledName, t));
+
+                currencyInfos.stream().filter(item -> finalName != null && finalName.equals(item.getCurrencyName())).findFirst().ifPresent(curr -> {
+                    // 获取到币种名称并进行设置
+                    fieldUtils.setFieldVal(currencyFiledName, curr.getCurrencyCode(), t);
+                });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+    
 
     public <T> void setCurrentName(T t, String currencyFiledName, String currencyNameFiledName) {
         setCurrentName(Collections.singletonList(t), "currency", "currencyName");
+    }
+
+    public <T> void setCurrentName(List<T> tList) {
+        setCurrentName(tList, "currency", "currencyName");
+    }
+
+
+    public <T> void setCurrentName(T t) {
+        setCurrentName(t, "currency", "currencyName");
     }
 
     public <T> List<T> setTotalDemadCategoryCode(List<T> wzchTotalDemandDetailList) {

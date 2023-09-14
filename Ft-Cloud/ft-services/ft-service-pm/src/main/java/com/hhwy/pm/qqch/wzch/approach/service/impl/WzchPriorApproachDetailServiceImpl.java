@@ -9,6 +9,8 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.utils.EasyExeclUtil;
 import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproach;
 import com.hhwy.pm.qqch.wzch.approach.domain.WzchPriorApproachDetail;
@@ -69,6 +71,8 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
     private WzchCommonService wzchCommonService;
     @Resource
     private SystemApiService dictTypeService;
+    @Resource
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
     /**
      * 查询优先进场物资详情
@@ -156,8 +160,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
     @Override
     @Transactional
     public void save(WzchPriorApproach wzchPriorApproach) {
-        if(wzchPriorApproach==null || wzchPriorApproach.getId() == null
-                || CollectionUtils.isEmpty(wzchPriorApproach.getWzchPriorApproachDetailList())){
+        if(wzchPriorApproach==null || CollectionUtils.isEmpty(wzchPriorApproach.getWzchPriorApproachDetailList())){
             throw new BaseException("入参缺失");
         }
         fillWzchPriorApproach(wzchPriorApproach);
@@ -165,23 +168,23 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         if (wzchPriorApproach.getDeptId() == null) {
             wzchPriorApproach.setDeptId(SecurityUtils.getSysUser().getDeptId());
         }
-        WzchPriorApproach approach = wzchPriorApproachService.selectWzchPriorApproachById(wzchPriorApproach.getId());
+//        WzchPriorApproach approach = wzchPriorApproachService.selectWzchPriorApproachById(wzchPriorApproach.getId());
         List<WzchPriorApproachYearCount> wzchPriorApproachYearCounts = new ArrayList<>();
         for (WzchPriorApproachDetail wzchPriorApproachDetail : wzchPriorApproach.getWzchPriorApproachDetailList()) {
             wzchPriorApproachYearCounts.addAll(wzchPriorApproachDetail.getWzchPriorApproachYearCountList());
         }
-        if(approach==null){
-            wzchPriorApproachService.insertWzchPriorApproach(wzchPriorApproach);
-        }else{
-            wzchPriorApproachService.updateWzchPriorApproach(wzchPriorApproach);
-            List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());
-            wzchPriorApproachDetailMapper.deleteByIds(detialIds);
-            List<Long> countIds = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getId).collect(Collectors.toList());
-            wzchPriorApproachYearCountService.deleteByIds(countIds);
-        }
+        List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());
+        wzchPriorApproachDetailMapper.deleteByIds(detialIds);
+        List<Long> countIds = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getId).collect(Collectors.toList());
+        wzchPriorApproachYearCountService.deleteByIds(countIds);
         wzchPriorApproachDetailMapper.batchInsert(wzchPriorApproach.getWzchPriorApproachDetailList());
         wzchPriorApproachYearCountService.batchInsert(wzchPriorApproachYearCounts);
-
+        if (ButtonMark.CONFIRM.equals(wzchPriorApproach.getButtonMark())) {
+            // 插入确认状态
+            String menuId = wzchPriorApproach.getMenuId();
+            String stageIdentity = wzchPriorApproach.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
     }
 
     @Override

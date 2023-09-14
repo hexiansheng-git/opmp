@@ -26,7 +26,22 @@ public enum FlowEnum {
 
     /*物资总需求*/
     WZZX("wzch_total_demand", "total_material_demand_process"),
-    
+    /**
+     * 采购供应策划表
+     */
+    WPS("wzch_purchase_supply", "wzch_purchase_supply_process"),
+    /**
+     * 周转材租赁策划
+     */
+    WRR("wzch_revolve_rent", "wzch_revolve_rent_process"),
+    /**
+     * 内部调剂材料策划
+     */
+    WIA("wzch_internal_adjust", "wzch_internal_adjust_process"),
+    /**
+     * 属地采购供应策划
+     */
+    WLPS("wzch_local_purchase_supply", "wzch_local_purchase_supply_process"),
     /**********************前期策划结束************************/
 
 
