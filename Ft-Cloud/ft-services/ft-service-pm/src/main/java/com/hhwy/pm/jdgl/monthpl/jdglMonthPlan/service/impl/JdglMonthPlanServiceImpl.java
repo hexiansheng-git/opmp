@@ -81,7 +81,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             jdglMonthPlan1.setJdglMonthImagePlanList(jdglMonthImagePlanListByPlanId);
             FlowInfoSearchUtil.getFlowInfo(jdglMonthPlan1,FlowEnum.JDGL_WEEKPLAN);
         }
-        return jdglMonthPlanMapper.getJdglMonthPlan(jdglMonthPlan);
+        return jdglMonthPlan1;
     }
 
     @Override

@@ -76,7 +76,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
             FlowInfoSearchUtil.getFlowInfo(jdglYearPlan1,FlowEnum.JDGL_YEARPLAN);
         }
-        return jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
+        return jdglYearPlan1;
     }
 
     @Override

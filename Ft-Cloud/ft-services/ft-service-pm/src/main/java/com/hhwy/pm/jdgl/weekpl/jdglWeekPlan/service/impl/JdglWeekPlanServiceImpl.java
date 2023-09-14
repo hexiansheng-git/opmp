@@ -82,7 +82,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             jdglWeekPlan1.setJdglWeekImagePlanList(jdglWeekImagePlanListByPlanId);
             FlowInfoSearchUtil.getFlowInfo(jdglWeekPlan1,FlowEnum.JDGL_WEEKPLAN);
         }
-        return jdglWeekPlanMapper.getJdglWeekPlan(jdglWeekPlan);
+        return jdglWeekPlan1;
     }
 
     @Override
