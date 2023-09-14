@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +62,7 @@ public class QqchWorkPlanController extends BaseController {
     public AjaxResult getQqchWorkPlanList(@Validated(ValidationGroups.Select.class) QqchWorkPlan qqchWorkPlanParam) {
         startPage();
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlanParam);
+        FlowInfoSearchUtil.getFlowInfo(qqchWorkPlanList, FlowEnum.QQCH_WORK_PLAN);
         return getDataTableAjaxResult(qqchWorkPlanList);
     }
 
