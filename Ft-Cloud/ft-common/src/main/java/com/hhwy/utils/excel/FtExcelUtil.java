@@ -4,6 +4,7 @@ import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.reflect.ReflectUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.field.FieldUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -184,7 +185,7 @@ public class FtExcelUtil<T> {
                                 if (BigDecimal.class == fieldType) {
                                     val = Convert.toBigDecimal(val);
                                 } else if (Date.class == fieldType) {
-                                    if (val instanceof String) {
+                                    if (val instanceof String && ObjectUtils.isNotBlank(val)) {
                                         try{
                                             val = com.hhwy.utils.core.DateUtil.parseDate(val);
                                         }catch(Exception e ){

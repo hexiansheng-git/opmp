@@ -114,7 +114,7 @@ public interface WzchPurchaseSupplyDetailMapper {
      */
     List<WzchPurchaseSupplyDetailDTO> selectPurchaseSource(@Param("materialCodeList") List<String> materialCodeList);
 
-    List<WzchPurchaseSupplyDetailDTO> selectPurchaseView(@Param("list") List<Map<String, Object>> list, @Param("projectId") String projectId, @Param("dataType")String dataType);
+    List<WzchPurchaseSupplyDetailDTO> selectPurchaseView(@Param("list") List<Map<String, Object>> list,  @Param("dataType")String dataType);
 
 
     /**

@@ -164,17 +164,28 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         fillWzchSourceDetail(wzchSource);
         WzchSource source = wzchSourceService.selectWzchSourceById(wzchSource.getId());
         if(source==null) {
+            wzchSource.setId(IdWorker.createId());
             wzchSourceService.insertWzchSource(wzchSource);
         }else{
             wzchSourceService.updateWzchSource(wzchSource);
         }
         wzchSourceDetailMapper.deleteWzchSourceDetailBySourdeId(wzchSource.getId());
         List<WzchSourceDetail> detailList = wzchSource.getWzchSourceDetailList();
+        List<Long> detailIds = new ArrayList<>();
+        detailList.forEach(r->{
+            r.setVersion(wzchSource.getVersion());
+            r.setSourceId(wzchSource.getId());
+            detailIds.add(wzchSource.getId());
+        });
         wzchSourceDetailMapper.batchInsert(detailList);
-        List<Long> detailIds = detailList.stream().map(WzchSourceDetail::getId).collect(Collectors.toList());
         wzchSourceApproachYearCountMapper.deleteWzchSourceApproachYearCountByDetailIds(detailIds);
         List<WzchSourceApproachYearCount> yearCounts = new ArrayList<>();
         for (WzchSourceDetail wzchSourceDetail : detailList) {
+            List<WzchSourceApproachYearCount> yearCountList = wzchSourceDetail.getWzchSourceApproachYearCountList();
+            for (int i = 0; i < yearCountList.size(); i++) {
+                WzchSourceApproachYearCount temp =  yearCountList.get(i);
+                temp.setVersion(wzchSource.getVersion());
+            }
             yearCounts.addAll(wzchSourceDetail.getWzchSourceApproachYearCountList());
         }
         wzchSourceApproachYearCountMapper.batchInsert(yearCounts);

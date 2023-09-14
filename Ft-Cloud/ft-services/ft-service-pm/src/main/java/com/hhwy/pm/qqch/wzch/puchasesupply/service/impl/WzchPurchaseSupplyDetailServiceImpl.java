@@ -337,22 +337,20 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
     public List<WzchPurchaseViewDetailDTO> purchaseView(Map<String, String> map) {
         String startTime = map.get("startTime");
         String endTime = map.get("endTime");
-        String projectId = map.get("projectId");
-        Assert.notNull(projectId, "项目id不能为空");
 
         String searchTimeGroup = "";
         String timeGroupsFromRedis;
         String dataType = map.get(IWzchPurchaseSupplyService.DATATYPE);
 
         if (IWzchPurchaseSupplyService.TWO.equals(dataType)) {
-            timeGroupsFromRedis = (String) redisUtils.hGet(PmsConstant.WPP_LOCAL_PURCHASE_VIEW + projectId, String.valueOf(SecurityUtils.getUserId()));
+            timeGroupsFromRedis = (String) redisUtils.hGet(PmsConstant.WPP_LOCAL_PURCHASE_VIEW+SecurityUtils.getTenantKey(), String.valueOf(SecurityUtils.getUserId()));
         } else {
-            timeGroupsFromRedis = (String) redisUtils.hGet(PmsConstant.WPP_PURCHASE_VIEW + projectId, String.valueOf(SecurityUtils.getUserId()));
+            timeGroupsFromRedis = (String) redisUtils.hGet(PmsConstant.WPP_PURCHASE_VIEW+SecurityUtils.getTenantKey() , String.valueOf(SecurityUtils.getUserId()));
         }
 
 
         // 如果前端传入的条件不为空 就先将searchTimeGroup赋值为前端传入的条件
-        searchTimeGroup = StringUtils.isNotEmpty(startTime) && StringUtils.isNotEmpty(startTime) ? startTime + TO + endTime : searchTimeGroup;
+        searchTimeGroup = StringUtils.isNotEmpty(startTime) && StringUtils.isNotEmpty(endTime) ? startTime + TO + endTime : searchTimeGroup;
 
         // 只有当传入的条件和从缓存中拿取的条件都不为空的时候才能进行拼接
         searchTimeGroup = StringUtils.isNotEmpty(searchTimeGroup) && StringUtils.isNotEmpty(timeGroupsFromRedis) ? searchTimeGroup + "," + timeGroupsFromRedis : searchTimeGroup;
@@ -366,7 +364,7 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
         List<Map<String, Object>> sqlConditions = this.getSqlConditions(searchTimeGroup);
 
         // 查询数据
-        List<WzchPurchaseSupplyDetailDTO> resFromDB = this.wzchPurchaseSupplyDetailMapper.selectPurchaseView(sqlConditions, projectId,dataType);
+        List<WzchPurchaseSupplyDetailDTO> resFromDB = this.wzchPurchaseSupplyDetailMapper.selectPurchaseView(sqlConditions,dataType);
 
         // 结果为空直接返回
         if (CollectionUtils.isEmpty(resFromDB)) return new ArrayList<>();
@@ -461,7 +459,7 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
         if (!CollectionUtils.isEmpty(list)) {
             collect = list.stream().map(WzchPurchaseViewDetailDTO::getPlanPurchaseDateGroup).collect(Collectors.joining(","));
         }
-        redisUtils.hPut(PmsConstant.WPP_PURCHASE_VIEW + projectId, String.valueOf(SecurityUtils.getUserId()), collect);
+        redisUtils.hPut(PmsConstant.WPP_PURCHASE_VIEW + SecurityUtils.getTenantKey()+projectId, String.valueOf(SecurityUtils.getUserId()), collect);
     }
 
     @Transactional(rollbackFor = Exception.class)
