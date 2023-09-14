@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.period.PeriodInfo;
@@ -78,6 +79,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             jdglQuarterPlan1.setJdglQuarterValuePlanList(jdglQuarterValuePlanListByPlanId);
             List<JdglQuarterImagePlan> jdglQuarterImagePlanListByPlanId = iJdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(jdglQuarterPlan1.getId());
             jdglQuarterPlan1.setJdglQuarterImagePlanList(jdglQuarterImagePlanListByPlanId);
+            FlowInfoSearchUtil.getFlowInfo(jdglQuarterPlan1,FlowEnum.JDGL_WEEKPLAN);
         }
         return jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
     }
@@ -100,12 +102,17 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
     @Override
     public JdglQuarterPlan getInitJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlanParam) {
 
-        JdglQuarterPlan returnVO = new JdglQuarterPlan();
 
         String year1 = jdglQuarterPlanParam.getYear();
+        String quarter = jdglQuarterPlanParam.getQuarter();
+        if(StringUtils.isEmpty(year1) || StringUtils.isEmpty(quarter)) {
+            throw new RuntimeException("参数传入异常!");
+        }
+
         Date nowDate = DateUtils.getNowDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         String nowStr = sdf.format(nowDate);
+        jdglQuarterPlanParam.setVersion("V1.0");
 
         // 获取项目及合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
@@ -118,43 +125,43 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         }
 
         if(xmslContractInfo != null) {
-            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
-            returnVO.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
-            returnVO.setProjectName(xmslContractInfo.getProjectName());
-            returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
-            returnVO.setRemainYearAmtDl(xmslContractInfo.getEffectiveAmout());
+            jdglQuarterPlanParam.setCustUnit(xmslContractInfo.getListCurrencyName());
+            jdglQuarterPlanParam.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
+            jdglQuarterPlanParam.setProjectName(xmslContractInfo.getProjectName());
+            jdglQuarterPlanParam.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
+            jdglQuarterPlanParam.setRemainYearAmtDl(xmslContractInfo.getEffectiveAmout());
 
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && returnVO.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglQuarterPlanParam.getCustUnitCode() != null) {
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglQuarterPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-                    returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
+                    jdglQuarterPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
             }
         }
 
-        if(returnVO.getExchangeRate() == null) {
+        if(jdglQuarterPlanParam.getExchangeRate() == null) {
             PeriodInfo periodInfo = new PeriodInfo();
-            periodInfo.setCurrencyCode(returnVO.getCustUnitCode());
+            periodInfo.setCurrencyCode(jdglQuarterPlanParam.getCustUnitCode());
             periodInfo.setQueryDate(year1);
             AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
             if(ajaxResult.get("data") != null) {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    returnVO.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglQuarterPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
                 }
             }
         }
 
         JdglYearPlan usingYearPlanByYear = jdglYearPlanService.getUsingYearPlanByYear(year1);
         if(usingYearPlanByYear != null) {
-            returnVO.setYearPlanValueDl(usingYearPlanByYear.getYearPlanValueDl());
+            jdglQuarterPlanParam.setYearPlanValueDl(usingYearPlanByYear.getYearPlanValueDl());
         }
 
         // 根据期次获取开累产值数据
-        String quarter = jdglQuarterPlanParam.getQuarter();
+
 
         // 计算合同、产值数据
         Map<String, Date> dateRange4Quarter = StatisticsUtils.getDateRange4Quarter(year1, quarter);
@@ -163,12 +170,12 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         Date startY = dateRange4Year.get("start");
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startY, startQ);
-        returnVO.setYearCompValueDl(countValue);
-        if(returnVO.getYearCompValueDl() == null) returnVO.setYearCompValueDl(new BigDecimal(0));
-        if(returnVO.getYearPlanValueDl()== null) returnVO.setYearPlanValueDl(new BigDecimal(0));
-        returnVO.setRemainYearAmtDl(returnVO.getYearPlanValueDl().subtract(returnVO.getYearCompValueDl()));
+        jdglQuarterPlanParam.setYearCompValueDl(countValue);
+        if(jdglQuarterPlanParam.getYearCompValueDl() == null) jdglQuarterPlanParam.setYearCompValueDl(new BigDecimal(0));
+        if(jdglQuarterPlanParam.getYearPlanValueDl()== null) jdglQuarterPlanParam.setYearPlanValueDl(new BigDecimal(0));
+        jdglQuarterPlanParam.setRemainYearAmtDl(jdglQuarterPlanParam.getYearPlanValueDl().subtract(jdglQuarterPlanParam.getYearCompValueDl()));
 
-        return returnVO;
+        return jdglQuarterPlanParam;
     }
 
     /**
@@ -177,9 +184,10 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
      * @return
      */
     @Override
-    public int adjust(JdglQuarterPlan jdglQuarterPlanParam) {
+    public int adjust(JdglQuarterPlan jdglQuarterPlan) {
         int i = 0;
 
+        JdglQuarterPlan jdglQuarterPlanParam = getJdglQuarterPlan(jdglQuarterPlan);
         if(jdglQuarterPlanParam != null) {
             Long id = IdWorker.createId();
             jdglQuarterPlanParam.setId(id);
@@ -187,7 +195,12 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             jdglQuarterPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglQuarterPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglQuarterPlanParam.setUpdateTime(DateUtils.getNowDate());
-            jdglQuarterPlanParam.setVersion(Integer.parseInt(jdglQuarterPlanParam.getVersion()) + 1 + "");
+            String version = jdglQuarterPlanParam.getVersion();
+            if(StringUtils.isNotEmpty(version)) {
+                String v = version.replace("V", "");
+                String replace = v.replace(".0", "");
+                jdglQuarterPlanParam.setVersion("V" + (Integer.valueOf(replace)+1) + ".0");
+            }
             jdglQuarterPlanParam.setTaskStatus("0");
             jdglQuarterPlanParam.setIsUse("0");
 
@@ -256,7 +269,6 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setCreateTime(DateUtils.getNowDate());
         jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
-        jdglQuarterPlan.setVersion("1");
         jdglQuarterPlan.setIsUse("0");
         return jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
     }
@@ -267,13 +279,26 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             jdglQuarterPlan.setId(IdWorker.createId());
             jdglQuarterPlan.setCreateUser(SecurityUtils.getUserName());
             jdglQuarterPlan.setCreateTime(DateUtils.getNowDate());
-            jdglQuarterPlan.setVersion("1");
         }
         return jdglQuarterPlanMapper.insertJdglQuarterPlanList(jdglQuarterPlanList);
     }
 
     @Transactional
     public int updateJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlan) {
+        Long id = jdglQuarterPlan.getId();
+        String year = jdglQuarterPlan.getYear();
+        String quarter = jdglQuarterPlan.getQuarter();
+        JdglQuarterPlan queryExist = new JdglQuarterPlan();
+        queryExist.setYear(year);
+        queryExist.setQuarter(quarter);
+        List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanMapper.getJdglQuarterPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglQuarterPlanList)) {
+            JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanList.stream().filter(vo -> id.equals(vo.getId())).findFirst().orElse(null);
+            if(jdglQuarterPlan1 == null) {
+                throw new RuntimeException("已存在"+year+"年第"+quarter+"季度数据!");
+            }
+        }
+
         jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglQuarterValuePlanService.updateJdglQuarterValuePlanList(jdglQuarterPlan.getJdglQuarterValuePlanList());
