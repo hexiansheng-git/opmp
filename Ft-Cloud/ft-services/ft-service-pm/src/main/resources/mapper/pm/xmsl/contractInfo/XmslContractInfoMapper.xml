@@ -406,7 +406,7 @@
             <if test="contractingMethod != null  and contractingMethod != ''">`contracting_method`,</if>
             <if test="issuePersonId != null  and issuePersonId != ''">`issue_person_id`,</if>
             <if test="issuePersonName != null  and issuePersonName != ''">`issue_person_name`,</if>
-            <if test="issueDate != null  and issueDate != ''">`issue_date`,</if>
+            <if test="issueDate != null ">`issue_date`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -481,7 +481,7 @@
             <if test="contractingMethod != null  and contractingMethod != ''">#{contractingMethod},</if>
             <if test="issuePersonId != null  and issuePersonId != ''">#{issuePersonId},</if>
             <if test="issuePersonName != null  and issuePersonName != ''">#{issuePersonName},</if>
-            <if test="issueDate != null  and issueDate != ''">#{issueDate},</if>
+            <if test="issueDate != null ">#{issueDate},</if>
         </trim>
     </insert>
 
