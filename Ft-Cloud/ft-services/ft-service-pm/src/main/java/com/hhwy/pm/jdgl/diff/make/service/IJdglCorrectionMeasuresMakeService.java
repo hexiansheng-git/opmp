@@ -32,7 +32,7 @@ public interface IJdglCorrectionMeasuresMakeService {
      * 更新流程数据
      * @param id
      */
-    void updateTaskStatus(Long id);
+    void updateJdglCorrectionMeasuresMakeProcess(Long id);
 
     /**
      * 同步差异化分析数据

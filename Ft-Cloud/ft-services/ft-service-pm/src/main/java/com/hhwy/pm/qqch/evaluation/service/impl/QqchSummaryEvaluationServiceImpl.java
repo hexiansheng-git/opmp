@@ -59,7 +59,18 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         qqchSummaryEvaluation.setTaskStatus("5");
         // 保存数据
         this.save(qqchSummaryEvaluation);
+    }
 
-        // todo 发起流程
+    /**
+     * 修改流程数据
+     *
+     * @param id
+     */
+    @Transactional
+    public void updateQqchSummaryEvaluationProcess(Long id) {
+        QqchSummaryEvaluation qqchSummaryEvaluation = new QqchSummaryEvaluation();
+        qqchSummaryEvaluation.setId(id);
+        qqchSummaryEvaluation.setTaskStatus("5");
+        qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(qqchSummaryEvaluation);
     }
 }

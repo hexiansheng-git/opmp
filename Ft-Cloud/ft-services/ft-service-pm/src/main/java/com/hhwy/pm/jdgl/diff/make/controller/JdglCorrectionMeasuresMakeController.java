@@ -14,7 +14,6 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -157,10 +156,9 @@ public class JdglCorrectionMeasuresMakeController extends BaseController {
      * @return  监听器
      */
     @RequestMapping(value ="/listener",method = RequestMethod.POST)
-    @Transactional
-    public AjaxResult updateTaskStatus(@RequestParam ("id") Long id) {
-        jdglCorrectionMeasuresMakeService.updateTaskStatus(id);
-        return AjaxResult.success();
+    public AjaxResult updateJdglCorrectionMeasuresMakeProcess(@RequestParam ("id") Long id) {
+        jdglCorrectionMeasuresMakeService.updateJdglCorrectionMeasuresMakeProcess(id);
+        return AjaxResult.success("成功");
     }
 
     /**

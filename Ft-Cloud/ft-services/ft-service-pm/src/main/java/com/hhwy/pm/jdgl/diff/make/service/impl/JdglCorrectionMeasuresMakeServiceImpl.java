@@ -184,14 +184,13 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
      * @param id
      */
     @Transactional
-    public void updateTaskStatus(Long id) {
+    public void updateJdglCorrectionMeasuresMakeProcess(Long id) {
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         jdglCorrectionMeasuresMake.setId(id);
         jdglCorrectionMeasuresMake.setTaskStatus("5");
         // 纠偏日期
         jdglCorrectionMeasuresMake.setCorrectionDate(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMakeMapper.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
-
     }
 
     /**
@@ -239,7 +238,6 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         jdglCorrectionMeasuresMake.setWarnTime(FtDateUtils.getYearMonthDayDate());
         jdglCorrectionMeasuresMake.setRiskLevel(JdglDiffAnalysis.getRiskLevel());
         jdglCorrectionMeasuresMake.setPeriodTotalScore(JdglDiffAnalysis.getTotalGrade());
-        //jdglCorrectionMeasuresMake.setCorrectionDate(FtDateUtils.getNowDate());
         jdglCorrectionMeasuresMake.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         jdglCorrectionMeasuresMake.setCreateUserName(SecurityUtils.getUserName());
         jdglCorrectionMeasuresMake.setCreateTime(DateUtils.getNowDate());
@@ -286,8 +284,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             //JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage();
 
             // 责任人
-            for (JdglMainPlanItem item : mainPlanItemList){
-                if(item.getItemCode().equals(jdglDiffAnalysisSv.getPlanItemCode())) {
+            for (JdglMainPlanItem item : mainPlanItemList) {
+                if (item.getItemCode().equals(jdglDiffAnalysisSv.getPlanItemCode())) {
                     JdglCorrectionMeasuresMakeDetail.setDirectorId(item.getExecuterId());
                     JdglCorrectionMeasuresMakeDetail.setDirector(item.getExecuter());
                 }

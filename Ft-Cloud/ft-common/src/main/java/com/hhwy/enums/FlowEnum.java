@@ -24,6 +24,9 @@ public enum FlowEnum {
     /*前期策划执行检查*/
     QQCH_PERFORM_INSPECTION("qqch_perform_inspection","process_qqch_perform_inspection"),
 
+    // 前期策划总结评价
+    QQCH_SUMMARY_EVALUATION("qqch_summary_evaluation", "process_qqch_summary_evaluation"),
+
     /*物资总需求*/
     WZZX("wzch_total_demand", "total_material_demand_process"),
     /**
