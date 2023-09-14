@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.constant.DictType;
+import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.system.api.domain.SysUser;
@@ -54,6 +55,8 @@ public class SystemApiService {
         List<SysDictData> list = JSONObject.parseArray(JSONObject.toJSONString(result.get("data")),SysDictData.class);
         return list;
     }
+
+    
     
     
 }
