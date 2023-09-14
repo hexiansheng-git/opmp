@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.period.PeriodInfo;
@@ -79,6 +80,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             jdglWeekPlan1.setJdglWeekValuePlanList(jdglWeekValuePlanListByPlanId);
             List<JdglWeekImagePlan> jdglWeekImagePlanListByPlanId = iJdglWeekImagePlanService.getJdglWeekImagePlanListByPlanId(jdglWeekPlan1.getId());
             jdglWeekPlan1.setJdglWeekImagePlanList(jdglWeekImagePlanListByPlanId);
+            FlowInfoSearchUtil.getFlowInfo(jdglWeekPlan1,FlowEnum.JDGL_WEEKPLAN);
         }
         return jdglWeekPlanMapper.getJdglWeekPlan(jdglWeekPlan);
     }
@@ -101,17 +103,20 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
     @Override
     public JdglWeekPlan getInitJdglWeekPlan(JdglWeekPlan jdglWeekPlanParam) {
 
-        JdglWeekPlan returnVO = new JdglWeekPlan();
-
         // 获取项目及合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
 
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
 
+        String week = jdglWeekPlanParam.getWeek();
         String year1 = jdglWeekPlanParam.getYear();
+        if(StringUtils.isEmpty(year1) || StringUtils.isEmpty(week)) {
+            throw new RuntimeException("参数传入异常!");
+        }
         Date nowDate = DateUtils.getNowDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         String nowStr = sdf.format(nowDate);
+        jdglWeekPlanParam.setVersion("V1.0");
 
         if(projectBasicInfo != null) {
 //            returnVO.setCustUnit(projectBasicInfo.getContractCurrency());
@@ -119,38 +124,38 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         }
 
         if(xmslContractInfo != null) {
-            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
-            returnVO.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
-            returnVO.setProjectName(xmslContractInfo.getProjectName());
-            returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
-            returnVO.setRemainMonthAmtDl(xmslContractInfo.getEffectiveAmout());
+            jdglWeekPlanParam.setCustUnit(xmslContractInfo.getListCurrencyName());
+            jdglWeekPlanParam.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
+            jdglWeekPlanParam.setProjectName(xmslContractInfo.getProjectName());
+            jdglWeekPlanParam.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
+            jdglWeekPlanParam.setRemainMonthAmtDl(xmslContractInfo.getEffectiveAmout());
 
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && returnVO.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglWeekPlanParam.getCustUnitCode() != null) {
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglWeekPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-                    returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
+                    jdglWeekPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
             }
         }
 
-        if(returnVO.getExchangeRate() == null) {
+        if(jdglWeekPlanParam.getExchangeRate() == null) {
             PeriodInfo periodInfo = new PeriodInfo();
-            periodInfo.setCurrencyCode(returnVO.getCustUnitCode());
+            periodInfo.setCurrencyCode(jdglWeekPlanParam.getCustUnitCode());
             periodInfo.setQueryDate(year1);
             AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
             if(ajaxResult.get("data") != null) {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    returnVO.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglWeekPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
                 }
             }
         }
 
         // 根据期次获取开累产值数据
-        String week = jdglWeekPlanParam.getWeek();
+
 
         Calendar cl = Calendar.getInstance();
         cl.setWeekDate(Integer.valueOf(year1), Integer.valueOf(week), 1);
@@ -160,7 +165,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year1, month);
 
         if (usingMonthPlanByYearAndMonth != null) {
-            returnVO.setMonthPlanValueDl(usingMonthPlanByYearAndMonth.getThisPlanValueDl());
+            jdglWeekPlanParam.setMonthPlanValueDl(usingMonthPlanByYearAndMonth.getThisPlanValueDl());
         }
 
         // 计算合同、产值数据
@@ -170,13 +175,13 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         Date startM = dateRange4YearMonth.get("start");
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startM, startW);
-        returnVO.setMonthCompValueDl(countValue);
+        jdglWeekPlanParam.setMonthCompValueDl(countValue);
 
-        if(returnVO.getMonthPlanValueDl() == null) returnVO.setMonthPlanValueDl(new BigDecimal(0));
-        if(returnVO.getMonthCompValueDl()== null) returnVO.setMonthCompValueDl(new BigDecimal(0));
-        returnVO.setRemainMonthAmtDl(returnVO.getMonthPlanValueDl().subtract(returnVO.getMonthCompValueDl()));
+        if(jdglWeekPlanParam.getMonthPlanValueDl() == null) jdglWeekPlanParam.setMonthPlanValueDl(new BigDecimal(0));
+        if(jdglWeekPlanParam.getMonthCompValueDl()== null) jdglWeekPlanParam.setMonthCompValueDl(new BigDecimal(0));
+        jdglWeekPlanParam.setRemainMonthAmtDl(jdglWeekPlanParam.getMonthPlanValueDl().subtract(jdglWeekPlanParam.getMonthCompValueDl()));
 
-        return returnVO;
+        return jdglWeekPlanParam;
     }
 
     /**
@@ -185,9 +190,9 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
      * @return
      */
     @Override
-    public int adjust(JdglWeekPlan jdglWeekPlanParam) {
+    public int adjust(JdglWeekPlan jdglWeekPlan) {
         int i = 0;
-
+        JdglWeekPlan jdglWeekPlanParam = getJdglWeekPlan(jdglWeekPlan);
         if(jdglWeekPlanParam != null) {
             Long id = IdWorker.createId();
             jdglWeekPlanParam.setId(id);
@@ -195,7 +200,12 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             jdglWeekPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglWeekPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglWeekPlanParam.setUpdateTime(DateUtils.getNowDate());
-            jdglWeekPlanParam.setVersion(Integer.parseInt(jdglWeekPlanParam.getVersion()) + 1 + "");
+            String version = jdglWeekPlanParam.getVersion();
+            if(StringUtils.isNotEmpty(version)) {
+                String v = version.replace("V", "");
+                String replace = v.replace(".0", "");
+                jdglWeekPlanParam.setVersion("V" + (Integer.valueOf(replace)+1) + ".0");
+            }
             jdglWeekPlanParam.setTaskStatus("0");
             jdglWeekPlanParam.setIsUse("0");
 
@@ -263,7 +273,6 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         jdglWeekPlan.setCreateTime(DateUtils.getNowDate());
         jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
-        jdglWeekPlan.setVersion("1");
         jdglWeekPlan.setIsUse("0");
         return jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlan);
     }
@@ -274,13 +283,26 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             jdglWeekPlan.setId(IdWorker.createId());
             jdglWeekPlan.setCreateUser(SecurityUtils.getUserName());
             jdglWeekPlan.setCreateTime(DateUtils.getNowDate());
-            jdglWeekPlan.setVersion("1");
         }
         return jdglWeekPlanMapper.insertJdglWeekPlanList(jdglWeekPlanList);
     }
 
     @Transactional
     public int updateJdglWeekPlan(JdglWeekPlan jdglWeekPlan) {
+        Long id = jdglWeekPlan.getId();
+        String week = jdglWeekPlan.getWeek();
+        String year = jdglWeekPlan.getYear();
+
+        JdglWeekPlan queryExist = new JdglWeekPlan();
+        queryExist.setYear(year);
+        queryExist.setWeek(week);
+        List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {
+            JdglWeekPlan jdglWeekPlan1 = jdglWeekPlanList.stream().filter(vo -> id.equals(vo.getId())).findFirst().orElse(null);
+            if(jdglWeekPlan1 == null) {
+                throw new RuntimeException("已存在"+year+"年第"+week+"周数据!");
+            }
+        }
         jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglWeekValuePlanService.updateJdglWeekValuePlanList(jdglWeekPlan.getJdglWeekValuePlanList());

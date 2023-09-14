@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -191,6 +192,15 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
                 BigDecimal rate = item.getRate();
                 qqchTaxIn.setRate(rate);
             });
+
+            List<QqchTaxInDetail> detailList = qqchTaxIn.getDetailList();
+            if (!CollectionUtils.isEmpty(detailList)) {
+                for (QqchTaxInDetail qqchTaxInDetail : detailList) {
+                    qqchTaxInDetail.setCurrency(currency);
+                }
+            }
+
+
             allTaxInList.add(qqchTaxIn);
         }
 
@@ -220,12 +230,24 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     public List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list) {
         List<QqchTaxInDetail> allDetails = new ArrayList<>();
 
+        List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
+
+        Map<String, BigDecimal> currencyRateMap = currencyInfo.stream()
+                .filter(ite -> StringUtils.isNotEmpty(ite.getCurrency()))
+                .collect(Collectors.toMap(TaxInVO.CurrencyVO::getCurrency, TaxInVO.CurrencyVO::getRate, (v1, v2) -> v1));
         for (QqchTaxIn item : list) {
             List<QqchTaxInDetail> detailList = item.getDetailList();
             // 不为空才循环
             if (!CollectionUtils.isEmpty(detailList)) {
+                String currency = item.getCurrency();
+                currency = StringUtils.isEmpty(currency) ? PmConstant.USD: currency;
+                item.setRate(currencyRateMap.get(currency));
                 for (QqchTaxInDetail detail : detailList) {
                     detail.setId(IdWorker.createId());
+                    // 设置币种
+                    detail.setCurrency(currency);
+                    // 设置汇率
+                    detail.setRate(currencyRateMap.get(currency));
                     detail.setMasterId(item.getId());
                     detail.setDataType(item.getDataType());
                     detail.setVersion(item.getVersion());
@@ -264,7 +286,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
             currencyVO.setCurrency(item.getCurrencyCode());
             currencyVO.setCurrencyName(item.getCurrencyName());
-            currencyVO.setRate(item.getObversionRate() == null ? BigDecimal.ONE : new BigDecimal(item.getObversionRate()));
+            currencyVO.setRate(StringUtils.isEmpty(item.getObversionRate()) ? BigDecimal.ONE : new BigDecimal(item.getObversionRate()));
             return currencyVO;
 
         }).collect(Collectors.toList());

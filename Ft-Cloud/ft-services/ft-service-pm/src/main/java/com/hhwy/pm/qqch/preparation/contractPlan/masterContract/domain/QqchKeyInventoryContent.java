@@ -63,7 +63,7 @@ public class QqchKeyInventoryContent extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "清单数量")
-    private Integer inventoryCount;
+    private BigDecimal inventoryCount;
     /**
      * 字段描述：合同单价
      */
@@ -81,7 +81,7 @@ public class QqchKeyInventoryContent extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "图纸复核数量")
-    private Integer blueprintReviewCount;
+    private BigDecimal blueprintReviewCount;
     /**
      * 字段描述：预估单价
      */

@@ -317,7 +317,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         List<PlanStatisticsWbsValueVO> build = TreeUtil.build(returnList, null);
 
-        return build;
+        return CollectionUtils.isEmpty(build)?new ArrayList<>():build;
     }
 
 

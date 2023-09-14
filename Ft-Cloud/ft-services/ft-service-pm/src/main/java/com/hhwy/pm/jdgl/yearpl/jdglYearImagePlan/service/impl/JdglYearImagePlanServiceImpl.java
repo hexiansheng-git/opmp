@@ -75,7 +75,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
     @Transactional
     public int insertJdglYearImagePlanList(List<JdglYearImagePlan> jdglYearImagePlanList) {
         for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
-            jdglYearImagePlan.setId(IdWorker.createId());
+//            jdglYearImagePlan.setId(IdWorker.createId());
             jdglYearImagePlan.setCreateUser(SecurityUtils.getUserName());
             jdglYearImagePlan.setCreateTime(DateUtils.getNowDate());
         }
@@ -92,12 +92,14 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
     @Transactional
     public int updateJdglYearImagePlanList(List<JdglYearImagePlan> jdglYearImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
-            List<JdglYearImagePlan> jdglYearImagePlanList1 = TreeUtil.treeToList(jdglYearImagePlanList);
-            for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList1) {
-                jdglYearImagePlan.setUpdateUser(SecurityUtils.getUserName());
+//            List<JdglYearImagePlan> jdglYearImagePlanList1 = TreeUtil.treeToList(jdglYearImagePlanList);
+            Long yearPlanId = jdglYearImagePlanList.get(0).getYearPlanId();
+            for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
+                jdglYearImagePlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
                 jdglYearImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-            return jdglYearImagePlanMapper.updateJdglYearImagePlanList(jdglYearImagePlanList1);
+//            deleteJdglYearImagePlanByYearPlanId(yearPlanId);
+            return jdglYearImagePlanMapper.updateJdglYearImagePlanList(jdglYearImagePlanList);
         }
         return 0;
     }
@@ -150,6 +152,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         // 获取当前版本形象计划数据
         if(jdglYearPlanParam.getId() != null) {
             // 增修年进度计划数据
+
         } else {
             for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
                 JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();

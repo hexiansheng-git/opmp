@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchKeyDifficultProjectArchives;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -61,6 +62,11 @@ public class KeyDifficultWbs {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date dataCompleteTime;
+
+    /**
+     * 字段描述：重难点工程清单标识（1：是，0：不是）
+     */
+    private String keyDifficultPointFlag = CommonYesNo.NO;
 
     private List<KeyDifficultWbs> children;
 

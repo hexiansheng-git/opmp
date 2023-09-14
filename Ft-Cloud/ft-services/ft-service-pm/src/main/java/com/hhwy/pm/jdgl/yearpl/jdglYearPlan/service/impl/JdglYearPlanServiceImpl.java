@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.period.PeriodInfo;
@@ -26,6 +27,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.tree.TreeUtil;
 import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -72,6 +74,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
             List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
             jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
+            FlowInfoSearchUtil.getFlowInfo(jdglYearPlan1,FlowEnum.JDGL_YEARPLAN);
         }
         return jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
     }
@@ -93,12 +96,16 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
     @Override
     public JdglYearPlan getInitJdglYearPlan(JdglYearPlan jdglYearPlanParam) {
 
-        JdglYearPlan returnVO = new JdglYearPlan();
+//        JdglYearPlan returnVO = new JdglYearPlan();
 
         String year1 = jdglYearPlanParam.getYear();
+        if(StringUtils.isEmpty(year1)) {
+            throw new RuntimeException("参数传入异常!");
+        }
         Date nowDate = DateUtils.getNowDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         String nowStr = sdf.format(nowDate);
+        jdglYearPlanParam.setVersion("V1.0");
 
         // 获取项目及合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
@@ -112,31 +119,31 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         }
 
         if(xmslContractInfo != null) {
-            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
-            returnVO.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
-            returnVO.setProjectName(xmslContractInfo.getProjectName());
-            returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
+            jdglYearPlanParam.setCustUnit(xmslContractInfo.getListCurrencyName());
+            jdglYearPlanParam.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
+            jdglYearPlanParam.setProjectName(xmslContractInfo.getProjectName());
+            jdglYearPlanParam.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
 
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && returnVO.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglYearPlanParam.getCustUnitCode() != null) {
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglYearPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-                    returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
+                    jdglYearPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
             }
         }
 
-        if(returnVO.getExchangeRate() == null) {
+        if(jdglYearPlanParam.getExchangeRate() == null) {
             PeriodInfo periodInfo = new PeriodInfo();
-            periodInfo.setCurrencyCode(returnVO.getCustUnitCode());
+            periodInfo.setCurrencyCode(jdglYearPlanParam.getCustUnitCode());
             periodInfo.setQueryDate(year1);
             AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
             if(ajaxResult.get("data") != null) {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    returnVO.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglYearPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
                 }
             }
         }
@@ -148,23 +155,24 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         // 计算合同、产值数据
         BigDecimal countValue = jdglDayScheduleService.getCountValue(null, start);
 
-        returnVO.setTotalCompValueCu(countValue);
-        if(returnVO.getTotalCompValueCu() == null) returnVO.setTotalCompValueCu(new BigDecimal(0));
-        if(returnVO.getContactAmtCu()== null) returnVO.setContactAmtCu(new BigDecimal(0));
-        returnVO.setRemainContactAmtCu(returnVO.getContactAmtCu().subtract(returnVO.getTotalCompValueCu()));
+        jdglYearPlanParam.setTotalCompValueCu(countValue);
+        if(jdglYearPlanParam.getTotalCompValueCu() == null) jdglYearPlanParam.setTotalCompValueCu(new BigDecimal(0));
+        if(jdglYearPlanParam.getContactAmtCu()== null) jdglYearPlanParam.setContactAmtCu(new BigDecimal(0));
+        jdglYearPlanParam.setRemainContactAmtCu(jdglYearPlanParam.getContactAmtCu().subtract(jdglYearPlanParam.getTotalCompValueCu()));
 
-        return returnVO;
+        return jdglYearPlanParam;
     }
 
     /**
      * 调整版本&未完&
-     * @param jdglYearPlanParam
+     * @param jdglYearPlan
      * @return
      */
     @Override
-    public int adjust(JdglYearPlan jdglYearPlanParam) {
+    public int adjust(JdglYearPlan jdglYearPlan) {
         int i = 0;
 
+        JdglYearPlan jdglYearPlanParam = getJdglYearPlan(jdglYearPlan);
         if(jdglYearPlanParam != null) {
             Long id = IdWorker.createId();
             jdglYearPlanParam.setId(id);
@@ -172,7 +180,12 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             jdglYearPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglYearPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglYearPlanParam.setUpdateTime(DateUtils.getNowDate());
-            jdglYearPlanParam.setVersion(Integer.parseInt(jdglYearPlanParam.getVersion()) + 1 + "");
+            String version = jdglYearPlanParam.getVersion();
+            if(StringUtils.isNotEmpty(version)) {
+                String v = version.replace("V", "");
+                String replace = v.replace(".0", "");
+                jdglYearPlanParam.setVersion("V" + (Integer.valueOf(replace)+1) + ".0");
+            }
             jdglYearPlanParam.setTaskStatus("0");
             jdglYearPlanParam.setIsUse("0");
 
@@ -241,9 +254,20 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
         jdglYearPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
-        jdglYearPlan.setVersion("1");
         jdglYearPlan.setIsUse("0");
-        return jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlan);
+
+        int i = jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlan);
+
+        List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlan.getJdglYearImagePlanList();
+        if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+            List<JdglYearImagePlan> jdglYearImagePlans = TreeUtil.treeToList(jdglYearImagePlanList);
+            jdglYearImagePlans.forEach(vo -> {
+                vo.setYearPlanId(id);
+            });
+            iJdglYearImagePlanService.insertJdglYearImagePlanList(jdglYearImagePlans);
+        }
+
+        return i;
     }
 
     @Transactional
@@ -252,25 +276,34 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             jdglYearPlan.setId(IdWorker.createId());
             jdglYearPlan.setCreateUser(SecurityUtils.getUserName());
             jdglYearPlan.setCreateTime(DateUtils.getNowDate());
-            jdglYearPlan.setVersion("1");
         }
         return jdglYearPlanMapper.insertJdglYearPlanList(jdglYearPlanList);
     }
 
     @Transactional
     public int updateJdglYearPlan(JdglYearPlan jdglYearPlan) {
+        Long id = jdglYearPlan.getId();
+        String year = jdglYearPlan.getYear();
+        JdglYearPlan queryExist = new JdglYearPlan();
+        queryExist.setYear(year);
+        List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
+            JdglYearPlan jdglYearPlan1 = jdglYearPlanList.stream().filter(vo -> id.equals(vo.getId())).findFirst().orElse(null);
+            if(jdglYearPlan1 == null) {
+                throw new RuntimeException("已存在"+year+"年数据!");
+            }
+        }
         jdglYearPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglYearValuePlanService.updateJdglYearValuePlanList(jdglYearPlan.getJdglYearValuePlanList());
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlan.getJdglYearImagePlanList();
         if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
-            for (JdglYearImagePlan jdglYearImagePlan: jdglYearImagePlanList) {
+            List<JdglYearImagePlan> jdglYearImagePlans = TreeUtil.treeToListWithoutId(jdglYearImagePlanList);
+            for (JdglYearImagePlan jdglYearImagePlan: jdglYearImagePlans) {
                 jdglYearImagePlan.setYearPlanId(jdglYearPlan.getId());
             }
+            iJdglYearImagePlanService.updateJdglYearImagePlanList(jdglYearImagePlans);
         }
-        iJdglYearImagePlanService.updateJdglYearImagePlanList(jdglYearImagePlanList);
-
-        // 根据计划完成产值汇总更新年计划产值&未完&
 
         return jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
     }
