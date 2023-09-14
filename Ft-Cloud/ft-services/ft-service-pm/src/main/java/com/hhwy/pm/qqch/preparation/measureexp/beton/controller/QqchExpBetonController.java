@@ -86,7 +86,7 @@ public class QqchExpBetonController extends BaseController {
     }
 
     /**
-     * 树列表导出导入
+     * 树列表导入
      *
      * @param file
      * @return

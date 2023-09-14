@@ -57,6 +57,7 @@ public class ExportUtil {
                 String serial = parentSerialNum + "." + serialNum;
                 serialNum++;
                 setSerialNumber.accept(child, serial);
+                setSerialNumber(child, getSerialNumber, setSerialNumber, getChildren);
             }
         }
     }
