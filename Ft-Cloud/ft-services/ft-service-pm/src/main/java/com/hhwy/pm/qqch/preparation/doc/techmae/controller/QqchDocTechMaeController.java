@@ -65,8 +65,8 @@ public class QqchDocTechMaeController extends BaseController {
      * @return
      */
     @PreAuthorize(hasPermi = "qqchDocTech:add")
-    @PostMapping("/export")
-    public AjaxResult export(MultipartFile file) {
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file) {
 
         FtExcelUtil<QqchDocTechMae> excelUtil = new FtExcelUtil<>(QqchDocTechMae.class);
         try {
