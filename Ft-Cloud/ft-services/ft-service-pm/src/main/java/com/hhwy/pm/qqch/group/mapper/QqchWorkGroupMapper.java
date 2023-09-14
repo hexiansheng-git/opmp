@@ -46,4 +46,6 @@ public interface QqchWorkGroupMapper {
     int deleteQqchWorkGroup(QqchWorkGroup qqchWorkGroup);
 
     int deleteQqchWorkGroupByPks(@Param("qqchWorkGroupPkList") List<Long> qqchWorkGroupPkList);
+
+    void updateAllToInvalid();
 }

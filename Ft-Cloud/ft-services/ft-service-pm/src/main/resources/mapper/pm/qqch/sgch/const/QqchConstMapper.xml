@@ -131,10 +131,10 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="pid != null ">and `pid` = #{pid}</if>
-            <if test="constName != null  and constName != ''">and `const_name` = #{constName}</if>
+            <if test="constName != null  and constName != ''">and `const_name` like concat('%' , #{constName} , '%')</if>
             <if test="constDesc != null  and constDesc != ''">and `const_desc` = #{constDesc}</if>
             <if test="constType != null  and constType != ''">and `const_type` = #{constType}</if>
-            <if test="constContent != null  and constContent != ''">and `const_content` = #{constContent}</if>
+            <if test="constContent != null  and constContent != ''">and `const_content` like concat('%' , #{constContent} , '%')</if>
             <if test="orgPattern != null  and orgPattern != ''">and `org_pattern` = #{orgPattern}</if>
             <if test="teamId != null ">and `team_id` = #{teamId}</if>
             <if test="teamName != null  and teamName != ''">and `team_name` = #{teamName}</if>

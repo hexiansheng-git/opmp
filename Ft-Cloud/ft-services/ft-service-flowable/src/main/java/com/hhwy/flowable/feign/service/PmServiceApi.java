@@ -2,9 +2,10 @@ package com.hhwy.flowable.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 文件服务
@@ -46,4 +47,12 @@ public interface PmServiceApi {
      */
     @RequestMapping(value = "/jdglDaySchedule/listener/", method = RequestMethod.POST)
     AjaxResult updateJdglDaySchedule(@RequestParam("id") Long id);
+
+    /**
+     * 修改前期策划工作小组流程状态
+     * @param id
+     * @return
+     */
+    @PostMapping("/qqchWorkGroup/listener")
+    AjaxResult updateWorkGroupProcess(@RequestParam("id") Long id);
 }
