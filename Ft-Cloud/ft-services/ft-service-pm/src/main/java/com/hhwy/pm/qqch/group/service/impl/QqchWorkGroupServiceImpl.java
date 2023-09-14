@@ -16,6 +16,8 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
 
     /**
@@ -226,6 +231,13 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setCreateUserName(SecurityUtils.getUserName());
         qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setCreateTime(DateUtils.getNowDate());
+
+        //获取项目信息
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        if(projectInfo != null){
+            qqchWorkGroup.setProjectId(projectInfo.getProjectId());
+            qqchWorkGroup.setProjectName(projectInfo.getProjectName());
+        }
         return qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
     }
 
