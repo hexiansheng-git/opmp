@@ -180,6 +180,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             result.setValid("0");
             result.setTaskStatus("");
             getSonTable(result, result.getVersion());
+            result.setId(IdWorker.createId());
+            //旧数据ID，用于子表获取数据
+            result.setPtVar1(String.valueOf(result.getId()));
             return result;
         }else {
             //当前版本不是最大版本，将大于当前版本的最小版本记录返回前端
