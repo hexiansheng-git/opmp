@@ -99,8 +99,8 @@ public class QqchConstController extends BaseController {
      * @return
      */
     @GetMapping("popUpWindows")
-    public AjaxResult popUpWindows() {
-        List<QqchConst> list = qqchConstService.popUpWindows();
+    public AjaxResult popUpWindows(QqchConst qqchConst) {
+        List<QqchConst> list = qqchConstService.popUpWindows(qqchConst);
         return AjaxResult.success(list);
     }
 }
