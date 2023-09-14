@@ -253,7 +253,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             xmslContractPayinfoService.deleteXmslContractPayinfo(xmslContractPayinfo);
             xmslContractInfoMapper.deleteXmslContractInfo(info);
         }
-        xmslContractInfo.setId(IdWorker.createId());
+        if (xmslContractInfo.getId() == null){
+            xmslContractInfo.setId(IdWorker.createId());
+        }
         this.addSonTable(xmslContractInfo);
         //编制日期
         xmslContractInfo.setOperateTime(DateUtils.getNowDate());
