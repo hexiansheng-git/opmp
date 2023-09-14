@@ -131,10 +131,5 @@ public class CommonServiceUtil {
         setCurrentName(tList, "currency", "currencyName");
     }
 
-
-    public static Map<String, BigDecimal> getRateByCodes(List<String> codes) {
-        
-        // TODO 获取币种的汇率
-        return new HashMap<>();
-    }
+    
 }
