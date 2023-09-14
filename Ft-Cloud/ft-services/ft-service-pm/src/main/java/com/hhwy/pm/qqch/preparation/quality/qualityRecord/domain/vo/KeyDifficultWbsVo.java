@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo;
 
 import com.hhwy.pm.qqch.common.domain.PreparationEntity;
+import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchKeyDifficultProjectArchives;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,9 @@ import java.util.List;
 public class KeyDifficultWbsVo extends PreparationEntity {
     private static final long serialVersionUID = 1L;
 
-    List<KeyDifficultWbs> list;
+    //主数据
+    private List<KeyDifficultWbs> list;
+
+    //右侧全量数据
+    private List<QqchKeyDifficultProjectArchives> allList;
 }

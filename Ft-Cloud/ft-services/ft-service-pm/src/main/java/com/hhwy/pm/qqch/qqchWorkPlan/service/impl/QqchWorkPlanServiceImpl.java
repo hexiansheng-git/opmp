@@ -19,6 +19,8 @@ import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
@@ -29,6 +31,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,6 +66,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchWorkGroupService qqchWorkGroupService;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -210,7 +215,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }
         if (type == 0) {
             List<QqchWorkPlanDetail> tree = ListTreeUtil.formatTree(list, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), QqchWorkPlanDetail::getChildren, QqchWorkPlanDetail::setChildren);
-            return list;
+            return tree;
         }
         if (!ObjectNullUtil.isEmpty(list)) {
             Map<String, List<QqchWorkPlanDetail>> finalCollect = collect;
@@ -266,6 +271,9 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }
         // 是否生效
         qqchWorkPlan.setValid("0");
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        qqchWorkPlan.setProjectName(projectInfo.getProjectName());
+        qqchWorkPlan.setProjectId(projectInfo.getProjectId());
         qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
         // 明细
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast, qqchWorkPlan.getId());
@@ -286,6 +294,9 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         if (ObjectNullUtil.isEmpty(qqchWorkPlan.getVersion())) {
             qqchWorkPlan.setVersion(new BigDecimal("1.0"));
         }
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        qqchWorkPlan.setProjectName(projectInfo.getProjectName());
+        qqchWorkPlan.setProjectId(projectInfo.getProjectId());
         qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
         // 明细
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast, qqchWorkPlan.getId());

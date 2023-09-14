@@ -19,6 +19,7 @@ public enum FtExcelEnum {
 
     QQCH_TAX_GLOBAL("importTaxGlobal.xlsx", "整体资金策划.xlsx", "com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal"),
     QQCH_TAX_GOAL("importTaxGoal.xlsx", "财务目标.xlsx", "com.hhwy.pm.qqch.tax.qqchTaxGoal.domain.QqchTaxGoal"),
+    QQCH_TEC_MAE("importTecMae.xlsx", "技术材料清单.xlsx", "com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae"),
 
 
     QQCH_CONTRACT_INSURE("importContractInsure.xlsx", "主合同信息-投保险种.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure"),

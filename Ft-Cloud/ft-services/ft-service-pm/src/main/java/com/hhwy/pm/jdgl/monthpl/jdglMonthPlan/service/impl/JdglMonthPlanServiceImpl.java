@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.period.PeriodInfo;
@@ -78,6 +79,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             jdglMonthPlan1.setJdglMonthValuePlanList(jdglMonthValuePlanListByPlanId);
             List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = iJdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(jdglMonthPlan1.getId());
             jdglMonthPlan1.setJdglMonthImagePlanList(jdglMonthImagePlanListByPlanId);
+            FlowInfoSearchUtil.getFlowInfo(jdglMonthPlan1,FlowEnum.JDGL_WEEKPLAN);
         }
         return jdglMonthPlanMapper.getJdglMonthPlan(jdglMonthPlan);
     }
@@ -100,11 +102,14 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
     @Override
     public JdglMonthPlan getInitJdglMonthPlan(JdglMonthPlan jdglMonthPlanParam) {
 
-        JdglMonthPlan returnVO = new JdglMonthPlan();
-
         String year1 = jdglMonthPlanParam.getYear();
+        String month = jdglMonthPlanParam.getMonth();
+        if(StringUtils.isEmpty(year1) || StringUtils.isEmpty(month)) {
+            throw new RuntimeException("参数传入异常!");
+        }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         String nowStr =year1 + jdglMonthPlanParam.getMonth();
+        jdglMonthPlanParam.setVersion("V1.0");
 
         // 获取项目及合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
@@ -117,38 +122,38 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         }
 
         if(xmslContractInfo != null) {
-            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
-            returnVO.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
-            returnVO.setProjectName(xmslContractInfo.getProjectName());
-            returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
-            returnVO.setRemainQuarterAmtDl(xmslContractInfo.getEffectiveAmout());
+            jdglMonthPlanParam.setCustUnit(xmslContractInfo.getListCurrencyName());
+            jdglMonthPlanParam.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
+            jdglMonthPlanParam.setProjectName(xmslContractInfo.getProjectName());
+            jdglMonthPlanParam.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
+            jdglMonthPlanParam.setRemainQuarterAmtDl(xmslContractInfo.getEffectiveAmout());
 
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && returnVO.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglMonthPlanParam.getCustUnitCode() != null) {
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglMonthPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-                    returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
+                    jdglMonthPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
             }
         }
 
-        if(returnVO.getExchangeRate() == null) {
+        if(jdglMonthPlanParam.getExchangeRate() == null) {
             PeriodInfo periodInfo = new PeriodInfo();
-            periodInfo.setCurrencyCode(returnVO.getCustUnitCode());
+            periodInfo.setCurrencyCode(jdglMonthPlanParam.getCustUnitCode());
             periodInfo.setQueryDate(year1);
             AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
             if(ajaxResult.get("data") != null) {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    returnVO.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglMonthPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
                 }
             }
         }
 
         // 根据期次获取开累产值数据
-        String month = jdglMonthPlanParam.getMonth();
+
 
         String quarter = StatisticsUtils.getQuarter(month);
 
@@ -162,7 +167,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
 
         if(jdglQuarterPlan1 != null) {
-            returnVO.setQuarterPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl());
+            jdglMonthPlanParam.setQuarterPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl());
         }
 
         // 计算合同、产值数据
@@ -173,12 +178,12 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startQ, startM);
 
-        returnVO.setQuarterCompValueDl(countValue);
-        if(returnVO.getQuarterPlanValueDl() == null) returnVO.setQuarterPlanValueDl(new BigDecimal(0));
-        if(returnVO.getQuarterCompValueDl()== null) returnVO.setQuarterCompValueDl(new BigDecimal(0));
-        returnVO.setRemainQuarterAmtDl(returnVO.getQuarterPlanValueDl().subtract(returnVO.getQuarterCompValueDl()));
+        jdglMonthPlanParam.setQuarterCompValueDl(countValue);
+        if(jdglMonthPlanParam.getQuarterPlanValueDl() == null) jdglMonthPlanParam.setQuarterPlanValueDl(new BigDecimal(0));
+        if(jdglMonthPlanParam.getQuarterCompValueDl()== null) jdglMonthPlanParam.setQuarterCompValueDl(new BigDecimal(0));
+        jdglMonthPlanParam.setRemainQuarterAmtDl(jdglMonthPlanParam.getQuarterPlanValueDl().subtract(jdglMonthPlanParam.getQuarterCompValueDl()));
 
-        return returnVO;
+        return jdglMonthPlanParam;
     }
 
     /**
@@ -187,9 +192,10 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
      * @return
      */
     @Override
-    public int adjust(JdglMonthPlan jdglMonthPlanParam) {
+    public int adjust(JdglMonthPlan jdglMonthPlan) {
         int i = 0;
 
+        JdglMonthPlan jdglMonthPlanParam = getJdglMonthPlan(jdglMonthPlan);
         if(jdglMonthPlanParam != null) {
             Long id = IdWorker.createId();
             jdglMonthPlanParam.setId(id);
@@ -197,7 +203,12 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             jdglMonthPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglMonthPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglMonthPlanParam.setUpdateTime(DateUtils.getNowDate());
-            jdglMonthPlanParam.setVersion(Integer.parseInt(jdglMonthPlanParam.getVersion()) + 1 + "");
+            String version = jdglMonthPlanParam.getVersion();
+            if(StringUtils.isNotEmpty(version)) {
+                String v = version.replace("V", "");
+                String replace = v.replace(".0", "");
+                jdglMonthPlanParam.setVersion("V" + (Integer.valueOf(replace)+1) + ".0");
+            }
             jdglMonthPlanParam.setTaskStatus("0");
             jdglMonthPlanParam.setIsUse("0");
 
@@ -266,7 +277,6 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         jdglMonthPlan.setCreateTime(DateUtils.getNowDate());
         jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
-        jdglMonthPlan.setVersion("1");
         jdglMonthPlan.setIsUse("0");
         return jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
     }
@@ -277,13 +287,27 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             jdglMonthPlan.setId(IdWorker.createId());
             jdglMonthPlan.setCreateUser(SecurityUtils.getUserName());
             jdglMonthPlan.setCreateTime(DateUtils.getNowDate());
-            jdglMonthPlan.setVersion("1");
         }
         return jdglMonthPlanMapper.insertJdglMonthPlanList(jdglMonthPlanList);
     }
 
     @Transactional
     public int updateJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
+
+        Long id = jdglMonthPlan.getId();
+        String year = jdglMonthPlan.getYear();
+        String month = jdglMonthPlan.getMonth();
+        JdglMonthPlan queryExist = new JdglMonthPlan();
+        queryExist.setYear(year);
+        queryExist.setMonth(month);
+        List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(queryExist);
+        if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
+            JdglMonthPlan jdglMonthPlan1 = jdglMonthPlanList.stream().filter(vo -> id.equals(vo.getId())).findFirst().orElse(null);
+            if(jdglMonthPlan1 == null) {
+                throw new RuntimeException("已存在"+year+"年"+month+"月数据!");
+            }
+        }
+
         jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
 //        iJdglMonthValuePlanService.updateJdglMonthValuePlanList(jdglMonthPlan.getJdglMonthValuePlanList());
