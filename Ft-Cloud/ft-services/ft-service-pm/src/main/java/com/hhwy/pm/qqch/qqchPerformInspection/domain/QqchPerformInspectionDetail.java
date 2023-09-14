@@ -1,20 +1,15 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zqq
@@ -149,5 +144,5 @@ public class QqchPerformInspectionDetail extends BaseEntity {
     @Excel(name = "预留字段3")
     private String ptVar3;
 
-    private List<QqchPerformInspectionDetail> childrenList;
+    private List<QqchPerformInspectionDetail> children;
 }
