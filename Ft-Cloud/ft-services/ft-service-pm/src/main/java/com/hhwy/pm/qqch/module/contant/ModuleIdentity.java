@@ -32,4 +32,9 @@ public class ModuleIdentity {
     public static final String QQCH_SURVEY_DESIGN_RISK_PLAN = "qqch_survey_design_risk_plan";
     /*日常管控策划*/
     public static final String QQCH_DAILY_CONTROL_PLAN = "qqch_survey_design_risk_plan";
+
+    /*
+    成本管控岗位责任
+     */
+    public static final String QQCH_COST_CONTROL_POST_DUTY = "qqch_cost_control_post_duty";
 }

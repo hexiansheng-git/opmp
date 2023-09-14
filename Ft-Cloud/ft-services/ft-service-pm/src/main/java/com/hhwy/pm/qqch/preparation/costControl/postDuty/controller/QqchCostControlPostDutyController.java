@@ -114,10 +114,10 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDutyVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
-    @PostMapping("/synchronization")
-    public AjaxResult synchronization(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo){
-        qqchCostControlPostDutyService.synchronization(qqchCostControlPostDutyVo);
-        return AjaxResult.success();
-    }
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
+//    @PostMapping("/synchronization")
+//    public AjaxResult synchronization(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo){
+//        qqchCostControlPostDutyService.synchronization(qqchCostControlPostDutyVo, );
+//        return AjaxResult.success();
+//    }
 }

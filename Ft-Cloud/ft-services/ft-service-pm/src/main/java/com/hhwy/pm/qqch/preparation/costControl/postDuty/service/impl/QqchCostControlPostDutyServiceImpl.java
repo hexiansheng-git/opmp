@@ -3,9 +3,11 @@ package com.hhwy.pm.qqch.preparation.costControl.postDuty.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.common.defaultData.service.IQqchDefaultDataInitializeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.constant.DataSource;
 import com.hhwy.pm.qqch.constant.WorkGroup;
+import com.hhwy.pm.qqch.module.contant.ModuleIdentity;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.QqchCostControlPostDuty;
@@ -31,9 +33,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author han
@@ -54,6 +54,9 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
 
     @Autowired
     private IQqchManagementPersonConfigService qqchManagementPersonConfigService;
+
+    @Autowired
+    private IQqchDefaultDataInitializeService qqchDefaultDataInitializeService;
 
 
     public QqchCostControlPostDuty getQqchCostControlPostDuty(QqchCostControlPostDuty qqchCostControlPostDuty) {
@@ -106,6 +109,7 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
      * @return
      */
     @Override
+    @Transactional
     public QqchCostControlPostDutyVo getQqchCostControlPostDutyVo(QqchCostControlPostDuty qqchCostControlPostDuty) {
         QqchCostControlPostDutyVo qqchCostControlPostDutyVo = new QqchCostControlPostDutyVo();
 
@@ -116,17 +120,14 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         List<QqchCostControlPostDuty> qqchCostControlPostDutyList = qqchCostControlPostDutyMapper.getQqchCostControlPostDutyList(qqchCostControlPostDuty);
 
         if(CollectionUtils.isEmpty(qqchCostControlPostDutyList)){
-            //初始化数据
-            try{
-                InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/5_1.json");
-                String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
-                qqchCostControlPostDutyList = JSONObject.parseArray(json, QqchCostControlPostDuty.class);
-                for (QqchCostControlPostDuty costControlPostDuty : qqchCostControlPostDutyList) {
-                    costControlPostDuty.setId(IdWorker.createId());
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("初始化数据失败！");
+            //数据库中没有数据，需要初始化
+            //判断是否已经初始化过
+            boolean initialize = qqchDefaultDataInitializeService.interpretInitializeStatus(ModuleIdentity.QQCH_COST_CONTROL_POST_DUTY, version);
+            if(!initialize){
+                //初始化数据
+                this.initData(version);
             }
+
         }
 
         //转树列表
@@ -223,38 +224,53 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
         qqchCostControlPostDutyMapper.insertQqchCostControlPostDutyList(qqchCostControlPostDutyList);
     }
 
+    @Transactional
+    public List<QqchCostControlPostDuty> initData(BigDecimal version) {
+        //初始化数据
+        try{
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/5_1.json");
+            String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            List<QqchCostControlPostDuty> qqchCostControlPostDutyList = JSONObject.parseArray(json, QqchCostControlPostDuty.class);
+            for (QqchCostControlPostDuty costControlPostDuty : qqchCostControlPostDutyList) {
+                costControlPostDuty.setId(IdWorker.createId());
+            }
+            List<QqchCostControlPostDuty> list = this.synchronization(qqchCostControlPostDutyList, version);
+            list = ListTreeUtil.formatTree(
+                    list,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchCostControlPostDuty::getChildren,
+                    QqchCostControlPostDuty::setChildren);
+            return list;
+        } catch (IOException e) {
+            throw new RuntimeException("初始化数据失败！");
+        }
+    }
+
     private static final String OVERALL_MANAGEMENT = "统筹管理";
     private static final String PROJECT_LEADER = "项目经理";
 
     /**
      * 同步人员总需计划
-     * @param qqchCostControlPostDutyVo
+     *
+     * @param list
+     * @param version
      * @return
      */
-    @Override
     @Transactional
-    public void synchronization(QqchCostControlPostDutyVo qqchCostControlPostDutyVo) {
-        List<QqchCostControlPostDuty> list = qqchCostControlPostDutyVo.getList();
+    public List<QqchCostControlPostDuty> synchronization(List<QqchCostControlPostDuty> list, BigDecimal version) {
 
         QqchCostControlPostDuty overallManagement = null;
         for (QqchCostControlPostDuty qqchCostControlPostDuty : list) {
             if(OVERALL_MANAGEMENT.equals(qqchCostControlPostDuty.getWorkGroup())){
                 overallManagement = qqchCostControlPostDuty;
-                list.remove(qqchCostControlPostDuty);
                 break;
             }
         }
 
-        List<QqchCostControlPostDuty> originalList = new ArrayList<>();
-        if (overallManagement == null){
-            overallManagement = new QqchCostControlPostDuty();
-            overallManagement.setWorkGroup(OVERALL_MANAGEMENT);
-        }else {
-            originalList = overallManagement.getChildren();
+        if(overallManagement != null){
+            this.getOverallManagementList(overallManagement);
         }
-        List<QqchCostControlPostDuty> finalList = this.mergeData(originalList);
-        overallManagement.setChildren(finalList);
-        list.add(0,overallManagement);
 
         List<QqchCostControlPostDuty> tileList = ListTreeUtil.formatList(
                 list,
@@ -266,27 +282,14 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
                 QqchCostControlPostDuty::setChildren);
 
         //入库
-        this.disposeData(tileList,qqchCostControlPostDutyVo.getVersion());
+        this.disposeData(tileList, version);
+        return tileList;
     }
 
     /**
-     * 合并数据
-     * @param originalList 原始数据
+     * 获取人员总需计划中层级为 ”项目领导层“ 的下级人员数据
      */
-    public List<QqchCostControlPostDuty> mergeData(List<QqchCostControlPostDuty> originalList){
-
-        //手动新增的数据集
-        List<QqchCostControlPostDuty> manualAdditionList = new ArrayList<>();
-        //原始数据中之前同步过的数据，封装成map
-        Map<Long,QqchCostControlPostDuty> originalRelevancyIdMap = new HashMap<>();
-        for (QqchCostControlPostDuty qqchCostControlPostDuty : originalList) {
-            if(qqchCostControlPostDuty.getRelevancyId() != null){
-                originalRelevancyIdMap.put(qqchCostControlPostDuty.getRelevancyId(),qqchCostControlPostDuty);
-            }else {
-                manualAdditionList.add(qqchCostControlPostDuty);
-            }
-        }
-
+    public void getOverallManagementList(QqchCostControlPostDuty overallManagement){
         //获取人员总需计划中层级为 ”项目领导层“ 的下级人员数据
         List<QqchManagementPersonConfig> projectLeadershipPersonList = qqchManagementPersonConfigService.getProjectLeadershipPersonList();
 
@@ -299,6 +302,7 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
             qqchCostControlPostDuty.setName(qqchManagementPersonConfig.getName());
             qqchCostControlPostDuty.setSource(DataSource.CHOICE);
             qqchCostControlPostDuty.setRelevancyId(qqchManagementPersonConfig.getRelevancyId());
+            qqchCostControlPostDuty.setPtVar1(overallManagement.getPtVar1());
             if(PROJECT_LEADER.equals(post)){
                 qqchCostControlPostDuty.setWorkGroup(WorkGroup.GROUP_LEADER);
             }else {
@@ -306,27 +310,6 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
             }
             overallManagementList.add(qqchCostControlPostDuty);
         }
-
-        List<QqchCostControlPostDuty> resultList = new ArrayList<>();
-        //数据合并
-        for (QqchCostControlPostDuty qqchCostControlPostDuty : overallManagementList) {
-            Long relevancyId = qqchCostControlPostDuty.getRelevancyId();
-
-            //在map中查询是否存在关联的原始数据
-            QqchCostControlPostDuty original = originalRelevancyIdMap.get(relevancyId);
-            if(original != null){
-                //存在关联数据
-                original.setWorkGroup(qqchCostControlPostDuty.getWorkGroup());
-                original.setPost(qqchCostControlPostDuty.getPost());
-                original.setName(qqchCostControlPostDuty.getName());
-                resultList.add(original);
-            }else {
-                //不存在关联数据
-                resultList.add(qqchCostControlPostDuty);
-            }
-        }
-
-        resultList.addAll(manualAdditionList);
-        return resultList;
+        overallManagement.setChildren(overallManagementList);
     }
 }
