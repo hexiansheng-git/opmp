@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.jdgl.diff.track.mapper.JdglProgressCorrectionTrackMapper">
 
-    <resultMap type="com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack"
-               id="JdglProgressCorrectionTrackResultMap">
-        <result property="id" column="id"/>
-        <result property="period" column="period"/>
-        <result property="riskLevel" column="risk_level"/>
-        <result property="periodTotalScore" column="period_total_score"/>
-        <result property="correctionDate" column="correction_date"/>
-        <result property="planCorrectionCompleteDate" column="plan_correction_complete_date"/>
-        <result property="weekReportPeriod" column="week_report_period"/>
-        <result property="weekReportBuildDate" column="week_report_build_date"/>
-        <result property="monthTotalScore" column="month_total_score"/>
-        <result property="weekReportTime" column="week_report_time"/>
-        <result property="weekValuePlan" column="week_value_plan"/>
-        <result property="weekValueComplete" column="week_value_complete"/>
-        <result property="weekCompleteRatio" column="week_complete_ratio"/>
-        <result property="monthValuePlan" column="month_value_plan"/>
-        <result property="monthValueComplete" column="month_value_complete"/>
-        <result property="sumValueComplete" column="sum_value_complete"/>
-        <result property="sumMeterage" column="sum_meterage"/>
-        <result property="durationCompletePercentage" column="duration_complete_percentage"/>
-        <result property="planMathTotalTimeDiff" column="plan_math_total_time_diff"/>
-        <result property="quarterValuePlanCompletePercentage" column="quarter_value_plan_complete_percentage"/>
-        <result property="keyLineImageCompletePercentage" column="key_line_image_complete_percentage"/>
-        <result property="monthDiffValue" column="month_diff_value"/>
-        <result property="lastThreeMonthDiffValue" column="last_three_month_diff_value"/>
-        <result property="remark" column="remark"/>
-        <result property="regionId" column="region_id"/>
-        <result property="regionName" column="region_name"/>
-        <result property="projectId" column="project_id"/>
-        <result property="projectName" column="project_name"/>
-        <result property="deptId" column="dept_id"/>
-        <result property="createUser" column="create_user"/>
-        <result property="createUserName" column="create_user_name"/>
-        <result property="createTime" column="create_time"/>
-        <result property="updateUser" column="update_user"/>
-        <result property="updateTime" column="update_time"/>
-        <result property="delUser" column="del_user"/>
-        <result property="delTime" column="del_time"/>
-        <result property="delFlag" column="del_flag"/>
-        <result property="ptVar1" column="pt_var1"/>
-        <result property="ptVar2" column="pt_var2"/>
-        <result property="ptVar3" column="pt_var3"/>
-        <result property="ptVar4" column="pt_var4"/>
-        <result property="ptVar5" column="pt_var5"/>
-    </resultMap>
-    <sql id="selectJdglProgressCorrectionTrackVo">
+  <resultMap type="com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack"
+    id="JdglProgressCorrectionTrackResultMap">
+    <result property="id" column="id"/>
+    <result property="period" column="period"/>
+    <result property="riskLevel" column="risk_level"/>
+    <result property="periodTotalScore" column="period_total_score"/>
+    <result property="correctionDate" column="correction_date"/>
+    <result property="planCorrectionCompleteDate" column="plan_correction_complete_date"/>
+    <result property="weekReportPeriod" column="week_report_period"/>
+    <result property="weekReportBuildDate" column="week_report_build_date"/>
+    <result property="monthTotalScore" column="month_total_score"/>
+    <result property="weekReportTime" column="week_report_time"/>
+    <result property="weekValuePlan" column="week_value_plan"/>
+    <result property="weekValueComplete" column="week_value_complete"/>
+    <result property="weekCompleteRatio" column="week_complete_ratio"/>
+    <result property="monthValuePlan" column="month_value_plan"/>
+    <result property="monthValueComplete" column="month_value_complete"/>
+    <result property="sumValueComplete" column="sum_value_complete"/>
+    <result property="sumMeterage" column="sum_meterage"/>
+    <result property="durationCompletePercentage" column="duration_complete_percentage"/>
+    <result property="planMathTotalTimeDiff" column="plan_math_total_time_diff"/>
+    <result property="quarterValuePlanCompletePercentage" column="quarter_value_plan_complete_percentage"/>
+    <result property="keyLineImageCompletePercentage" column="key_line_image_complete_percentage"/>
+    <result property="monthDiffValue" column="month_diff_value"/>
+    <result property="lastThreeMonthDiffValue" column="last_three_month_diff_value"/>
+    <result property="remark" column="remark"/>
+    <result property="regionId" column="region_id"/>
+    <result property="regionName" column="region_name"/>
+    <result property="projectId" column="project_id"/>
+    <result property="projectName" column="project_name"/>
+    <result property="deptId" column="dept_id"/>
+    <result property="createUser" column="create_user"/>
+    <result property="createUserName" column="create_user_name"/>
+    <result property="createTime" column="create_time"/>
+    <result property="updateUser" column="update_user"/>
+    <result property="updateTime" column="update_time"/>
+    <result property="delUser" column="del_user"/>
+    <result property="delTime" column="del_time"/>
+    <result property="delFlag" column="del_flag"/>
+    <result property="ptVar1" column="pt_var1"/>
+    <result property="ptVar2" column="pt_var2"/>
+    <result property="ptVar3" column="pt_var3"/>
+    <result property="ptVar4" column="pt_var4"/>
+    <result property="ptVar5" column="pt_var5"/>
+  </resultMap>
+  <sql id="selectJdglProgressCorrectionTrackVo">
         select `id`
              , `period`
              , `risk_level`
@@ -94,673 +94,740 @@
              , `pt_var5`
         from jdgl_progress_correction_track
     </sql>
-    <select id="getJdglProgressCorrectionTrack" resultMap="JdglProgressCorrectionTrackResultMap">
-        <include refid="selectJdglProgressCorrectionTrackVo"/>
-        <where>
-            del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="period != null  and period != ''">and `period` = #{period}</if>
-            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
-            <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
-            <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
-            <if test="planCorrectionCompleteDate != null">and
-                `plan_correction_complete_date` = #{planCorrectionCompleteDate}
-            </if>
-            <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
-                #{weekReportPeriod}
-            </if>
-            <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
-            <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
-            <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
-            <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
-            <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
-            <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
-            <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
-            <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
-            <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
-            <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
-            <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
-                #{durationCompletePercentage}
-            </if>
-            <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
-            <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
-                #{quarterValuePlanCompletePercentage}
-            </if>
-            <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
-                #{keyLineImageCompletePercentage}
-            </if>
-            <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
-            <if test="lastThreeMonthDiffValue != null ">and `last_three_month_diff_value` = #{lastThreeMonthDiffValue}
-            </if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-        </where>
-        order by create_time desc
-    </select>
+  <select id="getJdglProgressCorrectionTrack" resultMap="JdglProgressCorrectionTrackResultMap">
+    <include refid="selectJdglProgressCorrectionTrackVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="period != null  and period != ''">and `period` = #{period}</if>
+      <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+      <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
+      <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
+      <if test="planCorrectionCompleteDate != null">and
+        `plan_correction_complete_date` = #{planCorrectionCompleteDate}
+      </if>
+      <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
+        #{weekReportPeriod}
+      </if>
+      <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
+      <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
+      <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
+      <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
+      <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
+      <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
+      <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
+      <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
+      <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
+      <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
+      <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
+        #{durationCompletePercentage}
+      </if>
+      <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
+      <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
+        #{quarterValuePlanCompletePercentage}
+      </if>
+      <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
+        #{keyLineImageCompletePercentage}
+      </if>
+      <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
+      <if test="lastThreeMonthDiffValue != null and lastThreeMonthDiffValue != ''">and `last_three_month_diff_value` =
+        #{lastThreeMonthDiffValue}
+      </if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by create_time desc
+  </select>
 
-    <select id="getJdglProgressCorrectionTrackList" resultMap="JdglProgressCorrectionTrackResultMap">
-        <include refid="selectJdglProgressCorrectionTrackVo"/>
-        <where>
-            del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="period != null  and period != ''">and `period` = #{period}</if>
-            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
-            <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
-            <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
-            <if test="planCorrectionCompleteDate != null">and
-                `plan_correction_complete_date` = #{planCorrectionCompleteDate}
-            </if>
-            <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
-                #{weekReportPeriod}
-            </if>
-            <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
-            <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
-            <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
-            <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
-            <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
-            <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
-            <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
-            <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
-            <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
-            <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
-            <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
-                #{durationCompletePercentage}
-            </if>
-            <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
-            <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
-                #{quarterValuePlanCompletePercentage}
-            </if>
-            <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
-                #{keyLineImageCompletePercentage}
-            </if>
-            <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
-            <if test="lastThreeMonthDiffValue != null ">and `last_three_month_diff_value` = #{lastThreeMonthDiffValue}
-            </if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-        </where>
-        order by create_time desc
-    </select>
+  <select id="getJdglProgressCorrectionTrackList" resultMap="JdglProgressCorrectionTrackResultMap">
+    <include refid="selectJdglProgressCorrectionTrackVo"/>
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="period != null  and period != ''">and `period` = #{period}</if>
+      <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+      <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
+      <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
+      <if test="planCorrectionCompleteDate != null">and
+        `plan_correction_complete_date` = #{planCorrectionCompleteDate}
+      </if>
+      <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
+        #{weekReportPeriod}
+      </if>
+      <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
+      <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
+      <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
+      <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
+      <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
+      <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
+      <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
+      <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
+      <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
+      <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
+      <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
+        #{durationCompletePercentage}
+      </if>
+      <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
+      <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
+        #{quarterValuePlanCompletePercentage}
+      </if>
+      <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
+        #{keyLineImageCompletePercentage}
+      </if>
+      <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
+      <if test="lastThreeMonthDiffValue != null and lastThreeMonthDiffValue != ''">and `last_three_month_diff_value` =
+        #{lastThreeMonthDiffValue}
+      </if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    order by week_report_build_date desc
+  </select>
 
-    <select id="gmList" resultMap="JdglProgressCorrectionTrackResultMap">
-        <include refid="selectJdglProgressCorrectionTrackVo"/>
-        <where>
-            del_flag = '0'
-            <if test="period != null  and period != ''">and `period` = #{period}</if>
-        </where>
-    </select>
+  <select id="gmList" resultMap="JdglProgressCorrectionTrackResultMap">
+    <include refid="selectJdglProgressCorrectionTrackVo"/>
+    <where>
+      del_flag = '0'
+      <if test="period != null  and period != ''">and `period` = #{period}</if>
+    </where>
+  </select>
 
-    <insert id="insertJdglProgressCorrectionTrack" useGeneratedKeys="true" keyProperty="id">
-        insert into jdgl_progress_correction_track
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null ">`id`,</if>
-            <if test="period != null  and period != ''">`period`,</if>
-            <if test="riskLevel != null  and riskLevel != ''">`risk_level`,</if>
-            <if test="periodTotalScore != null ">`period_total_score`,</if>
-            <if test="correctionDate != null ">`correction_date`,</if>
-            <if test="planCorrectionCompleteDate != null">
-                `plan_correction_complete_date`,
-            </if>
-            <if test="weekReportPeriod != null  and weekReportPeriod != ''">`week_report_period`,</if>
-            <if test="weekReportBuildDate != null ">`week_report_build_date`,</if>
-            <if test="monthTotalScore != null ">`month_total_score`,</if>
-            <if test="weekReportTime != null  and weekReportTime != ''">`week_report_time`,</if>
-            <if test="weekValuePlan != null ">`week_value_plan`,</if>
-            <if test="weekValueComplete != null ">`week_value_complete`,</if>
-            <if test="weekCompleteRatio != null ">`week_complete_ratio`,</if>
-            <if test="monthValuePlan != null ">`month_value_plan`,</if>
-            <if test="monthValueComplete != null ">`month_value_complete`,</if>
-            <if test="sumValueComplete != null ">`sum_value_complete`,</if>
-            <if test="sumMeterage != null ">`sum_meterage`,</if>
-            <if test="durationCompletePercentage != null ">`duration_complete_percentage`,</if>
-            <if test="planMathTotalTimeDiff != null ">`plan_math_total_time_diff`,</if>
-            <if test="quarterValuePlanCompletePercentage != null ">`quarter_value_plan_complete_percentage`,</if>
-            <if test="keyLineImageCompletePercentage != null ">`key_line_image_complete_percentage`,</if>
-            <if test="monthDiffValue != null ">`month_diff_value`,</if>
-            <if test="lastThreeMonthDiffValue != null ">`last_three_month_diff_value`,</if>
-            <if test="remark != null  and remark != ''">`remark`,</if>
-            <if test="regionId != null ">`region_id`,</if>
-            <if test="regionName != null  and regionName != ''">`region_name`,</if>
-            <if test="projectId != null ">`project_id`,</if>
-            <if test="projectName != null  and projectName != ''">`project_name`,</if>
-            <if test="deptId != null ">`dept_id`,</if>
-            <if test="createUser != null  and createUser != ''">`create_user`,</if>
-            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
-            <if test="createTime != null ">`create_time`,</if>
-            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
-            <if test="updateTime != null ">`update_time`,</if>
-            <if test="delUser != null  and delUser != ''">`del_user`,</if>
-            <if test="delTime != null ">`del_time`,</if>
-            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null ">#{id},</if>
-            <if test="period != null  and period != ''">#{period},</if>
-            <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
-            <if test="periodTotalScore != null ">#{periodTotalScore},</if>
-            <if test="correctionDate != null ">#{correctionDate},</if>
-            <if test="planCorrectionCompleteDate != null">
-                #{planCorrectionCompleteDate},
-            </if>
-            <if test="weekReportPeriod != null  and weekReportPeriod != ''">#{weekReportPeriod},</if>
-            <if test="weekReportBuildDate != null ">#{weekReportBuildDate},</if>
-            <if test="monthTotalScore != null ">#{monthTotalScore},</if>
-            <if test="weekReportTime != null  and weekReportTime != ''">#{weekReportTime},</if>
-            <if test="weekValuePlan != null ">#{weekValuePlan},</if>
-            <if test="weekValueComplete != null ">#{weekValueComplete},</if>
-            <if test="weekCompleteRatio != null ">#{weekCompleteRatio},</if>
-            <if test="monthValuePlan != null ">#{monthValuePlan},</if>
-            <if test="monthValueComplete != null ">#{monthValueComplete},</if>
-            <if test="sumValueComplete != null ">#{sumValueComplete},</if>
-            <if test="sumMeterage != null ">#{sumMeterage},</if>
-            <if test="durationCompletePercentage != null ">#{durationCompletePercentage},</if>
-            <if test="planMathTotalTimeDiff != null ">#{planMathTotalTimeDiff},</if>
-            <if test="quarterValuePlanCompletePercentage != null ">#{quarterValuePlanCompletePercentage},</if>
-            <if test="keyLineImageCompletePercentage != null ">#{keyLineImageCompletePercentage},</if>
-            <if test="monthDiffValue != null ">#{monthDiffValue},</if>
-            <if test="lastThreeMonthDiffValue != null ">#{lastThreeMonthDiffValue},</if>
-            <if test="remark != null  and remark != ''">#{remark},</if>
-            <if test="regionId != null ">#{regionId},</if>
-            <if test="regionName != null  and regionName != ''">#{regionName},</if>
-            <if test="projectId != null ">#{projectId},</if>
-            <if test="projectName != null  and projectName != ''">#{projectName},</if>
-            <if test="deptId != null ">#{deptId},</if>
-            <if test="createUser != null  and createUser != ''">#{createUser},</if>
-            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
-            <if test="createTime != null ">#{createTime},</if>
-            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
-            <if test="updateTime != null ">#{updateTime},</if>
-            <if test="delUser != null  and delUser != ''">#{delUser},</if>
-            <if test="delTime != null ">#{delTime},</if>
-            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
-        </trim>
-    </insert>
+  <insert id="insertJdglProgressCorrectionTrack" useGeneratedKeys="true" keyProperty="id">
+    insert into jdgl_progress_correction_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null ">`id`,</if>
+      <if test="period != null  and period != ''">`period`,</if>
+      <if test="riskLevel != null  and riskLevel != ''">`risk_level`,</if>
+      <if test="periodTotalScore != null ">`period_total_score`,</if>
+      <if test="correctionDate != null ">`correction_date`,</if>
+      <if test="planCorrectionCompleteDate != null">
+        `plan_correction_complete_date`,
+      </if>
+      <if test="weekReportPeriod != null  and weekReportPeriod != ''">`week_report_period`,</if>
+      <if test="weekReportBuildDate != null ">`week_report_build_date`,</if>
+      <if test="monthTotalScore != null ">`month_total_score`,</if>
+      <if test="weekReportTime != null  and weekReportTime != ''">`week_report_time`,</if>
+      <if test="weekValuePlan != null ">`week_value_plan`,</if>
+      <if test="weekValueComplete != null ">`week_value_complete`,</if>
+      <if test="weekCompleteRatio != null ">`week_complete_ratio`,</if>
+      <if test="monthValuePlan != null ">`month_value_plan`,</if>
+      <if test="monthValueComplete != null ">`month_value_complete`,</if>
+      <if test="sumValueComplete != null ">`sum_value_complete`,</if>
+      <if test="sumMeterage != null ">`sum_meterage`,</if>
+      <if test="durationCompletePercentage != null ">`duration_complete_percentage`,</if>
+      <if test="planMathTotalTimeDiff != null ">`plan_math_total_time_diff`,</if>
+      <if test="quarterValuePlanCompletePercentage != null ">`quarter_value_plan_complete_percentage`,</if>
+      <if test="keyLineImageCompletePercentage != null ">`key_line_image_complete_percentage`,</if>
+      <if test="monthDiffValue != null ">`month_diff_value`,</if>
+      <if test="lastThreeMonthDiffValue != null  and lastThreeMonthDiffValue != ''">`last_three_month_diff_value`,</if>
+      <if test="remark != null  and remark != ''">`remark`,</if>
+      <if test="regionId != null ">`region_id`,</if>
+      <if test="regionName != null  and regionName != ''">`region_name`,</if>
+      <if test="projectId != null ">`project_id`,</if>
+      <if test="projectName != null  and projectName != ''">`project_name`,</if>
+      <if test="deptId != null ">`dept_id`,</if>
+      <if test="createUser != null  and createUser != ''">`create_user`,</if>
+      <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+      <if test="createTime != null ">`create_time`,</if>
+      <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+      <if test="updateTime != null ">`update_time`,</if>
+      <if test="delUser != null  and delUser != ''">`del_user`,</if>
+      <if test="delTime != null ">`del_time`,</if>
+      <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null ">#{id},</if>
+      <if test="period != null  and period != ''">#{period},</if>
+      <if test="riskLevel != null  and riskLevel != ''">#{riskLevel},</if>
+      <if test="periodTotalScore != null ">#{periodTotalScore},</if>
+      <if test="correctionDate != null ">#{correctionDate},</if>
+      <if test="planCorrectionCompleteDate != null">
+        #{planCorrectionCompleteDate},
+      </if>
+      <if test="weekReportPeriod != null  and weekReportPeriod != ''">#{weekReportPeriod},</if>
+      <if test="weekReportBuildDate != null ">#{weekReportBuildDate},</if>
+      <if test="monthTotalScore != null ">#{monthTotalScore},</if>
+      <if test="weekReportTime != null  and weekReportTime != ''">#{weekReportTime},</if>
+      <if test="weekValuePlan != null ">#{weekValuePlan},</if>
+      <if test="weekValueComplete != null ">#{weekValueComplete},</if>
+      <if test="weekCompleteRatio != null ">#{weekCompleteRatio},</if>
+      <if test="monthValuePlan != null ">#{monthValuePlan},</if>
+      <if test="monthValueComplete != null ">#{monthValueComplete},</if>
+      <if test="sumValueComplete != null ">#{sumValueComplete},</if>
+      <if test="sumMeterage != null ">#{sumMeterage},</if>
+      <if test="durationCompletePercentage != null ">#{durationCompletePercentage},</if>
+      <if test="planMathTotalTimeDiff != null ">#{planMathTotalTimeDiff},</if>
+      <if test="quarterValuePlanCompletePercentage != null ">#{quarterValuePlanCompletePercentage},</if>
+      <if test="keyLineImageCompletePercentage != null ">#{keyLineImageCompletePercentage},</if>
+      <if test="monthDiffValue != null ">#{monthDiffValue},</if>
+      <if test="lastThreeMonthDiffValue != null  and lastThreeMonthDiffValue != ''">#{lastThreeMonthDiffValue},</if>
+      <if test="remark != null  and remark != ''">#{remark},</if>
+      <if test="regionId != null ">#{regionId},</if>
+      <if test="regionName != null  and regionName != ''">#{regionName},</if>
+      <if test="projectId != null ">#{projectId},</if>
+      <if test="projectName != null  and projectName != ''">#{projectName},</if>
+      <if test="deptId != null ">#{deptId},</if>
+      <if test="createUser != null  and createUser != ''">#{createUser},</if>
+      <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+      <if test="createTime != null ">#{createTime},</if>
+      <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+      <if test="updateTime != null ">#{updateTime},</if>
+      <if test="delUser != null  and delUser != ''">#{delUser},</if>
+      <if test="delTime != null ">#{delTime},</if>
+      <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+    </trim>
+  </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglProgressCorrectionTrack -->
-    <insert id="insertJdglProgressCorrectionTrackList">
-        insert into jdgl_progress_correction_track
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            `id`,
-            `period`,
-            `risk_level`,
-            `period_total_score`,
-            `correction_date`,
-            `plan_correction_complete_date`,
-            `week_report_period`,
-            `week_report_build_date`,
-            `month_total_score`,
-            `week_report_time`,
-            `week_value_plan`,
-            `week_value_complete`,
-            `week_complete_ratio`,
-            `month_value_plan`,
-            `month_value_complete`,
-            `sum_value_complete`,
-            `sum_meterage`,
-            `duration_complete_percentage`,
-            `plan_math_total_time_diff`,
-            `quarter_value_plan_complete_percentage`,
-            `key_line_image_complete_percentage`,
-            `month_diff_value`,
-            `last_three_month_diff_value`,
-            `remark`,
-            `region_id`,
-            `region_name`,
-            `project_id`,
-            `project_name`,
-            `dept_id`,
-            `create_user`,
-            `create_user_name`,
-            `create_time`,
-            `update_user`,
-            `update_time`,
-            `del_user`,
-            `del_time`,
-            `pt_var1`,
-            `pt_var2`,
-            `pt_var3`,
-            `pt_var4`,
-            `pt_var5`,
-        </trim>
-        values
-        <foreach collection="jdglProgressCorrectionTrackList" item="item" separator=",">
-            <trim prefix="(" suffix=")" suffixOverrides=",">
-                #{item.id},
-                #{item.period},
-                #{item.riskLevel},
-                #{item.periodTotalScore},
-                #{item.correctionDate},
-                #{item.planCorrectionCompleteDate},
-                #{item.weekReportPeriod},
-                #{item.weekReportBuildDate},
-                #{item.monthTotalScore},
-                #{item.weekReportTime},
-                #{item.weekValuePlan},
-                #{item.weekValueComplete},
-                #{item.weekCompleteRatio},
-                #{item.monthValuePlan},
-                #{item.monthValueComplete},
-                #{item.sumValueComplete},
-                #{item.sumMeterage},
-                #{item.durationCompletePercentage},
-                #{item.planMathTotalTimeDiff},
-                #{item.quarterValuePlanCompletePercentage},
-                #{item.keyLineImageCompletePercentage},
-                #{item.monthDiffValue},
-                #{item.lastThreeMonthDiffValue},
-                #{item.remark},
-                #{item.regionId},
-                #{item.regionName},
-                #{item.projectId},
-                #{item.projectName},
-                #{item.deptId},
-                #{item.createUser},
-                #{item.createUserName},
-                #{item.createTime},
-                #{item.updateUser},
-                #{item.updateTime},
-                #{item.delUser},
-                #{item.delTime},
-                #{item.ptVar1},
-                #{item.ptVar2},
-                #{item.ptVar3},
-                #{item.ptVar4},
-                #{item.ptVar5},
-            </trim>
+  <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertJdglProgressCorrectionTrack -->
+  <insert id="insertJdglProgressCorrectionTrackList">
+    insert into jdgl_progress_correction_track
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      `id`,
+      `period`,
+      `risk_level`,
+      `period_total_score`,
+      `correction_date`,
+      `plan_correction_complete_date`,
+      `week_report_period`,
+      `week_report_build_date`,
+      `month_total_score`,
+      `week_report_time`,
+      `week_value_plan`,
+      `week_value_complete`,
+      `week_complete_ratio`,
+      `month_value_plan`,
+      `month_value_complete`,
+      `sum_value_complete`,
+      `sum_meterage`,
+      `duration_complete_percentage`,
+      `plan_math_total_time_diff`,
+      `quarter_value_plan_complete_percentage`,
+      `key_line_image_complete_percentage`,
+      `month_diff_value`,
+      `last_three_month_diff_value`,
+      `remark`,
+      `region_id`,
+      `region_name`,
+      `project_id`,
+      `project_name`,
+      `dept_id`,
+      `create_user`,
+      `create_user_name`,
+      `create_time`,
+      `update_user`,
+      `update_time`,
+      `del_user`,
+      `del_time`,
+      `pt_var1`,
+      `pt_var2`,
+      `pt_var3`,
+      `pt_var4`,
+      `pt_var5`,
+    </trim>
+    values
+    <foreach collection="jdglProgressCorrectionTrackList" item="item" separator=",">
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        #{item.id},
+        #{item.period},
+        #{item.riskLevel},
+        #{item.periodTotalScore},
+        #{item.correctionDate},
+        #{item.planCorrectionCompleteDate},
+        #{item.weekReportPeriod},
+        #{item.weekReportBuildDate},
+        #{item.monthTotalScore},
+        #{item.weekReportTime},
+        #{item.weekValuePlan},
+        #{item.weekValueComplete},
+        #{item.weekCompleteRatio},
+        #{item.monthValuePlan},
+        #{item.monthValueComplete},
+        #{item.sumValueComplete},
+        #{item.sumMeterage},
+        #{item.durationCompletePercentage},
+        #{item.planMathTotalTimeDiff},
+        #{item.quarterValuePlanCompletePercentage},
+        #{item.keyLineImageCompletePercentage},
+        #{item.monthDiffValue},
+        #{item.lastThreeMonthDiffValue},
+        #{item.remark},
+        #{item.regionId},
+        #{item.regionName},
+        #{item.projectId},
+        #{item.projectName},
+        #{item.deptId},
+        #{item.createUser},
+        #{item.createUserName},
+        #{item.createTime},
+        #{item.updateUser},
+        #{item.updateTime},
+        #{item.delUser},
+        #{item.delTime},
+        #{item.ptVar1},
+        #{item.ptVar2},
+        #{item.ptVar3},
+        #{item.ptVar4},
+        #{item.ptVar5},
+      </trim>
+    </foreach>
+  </insert>
+
+  <update id="updateJdglProgressCorrectionTrack">
+    update jdgl_progress_correction_track
+    <trim prefix="SET" suffixOverrides=",">
+      <if test="id != null ">`id` = #{id},</if>
+      <if test="period != null  and  period != ''">`period` = #{period},</if>
+      <if test="riskLevel != null  and  riskLevel != ''">`risk_level` = #{riskLevel},</if>
+      <if test="periodTotalScore != null ">`period_total_score` = #{periodTotalScore},</if>
+      <if test="correctionDate != null ">`correction_date` = #{correctionDate},</if>
+      <if test="planCorrectionCompleteDate != null">
+        `plan_correction_complete_date` = #{planCorrectionCompleteDate},
+      </if>
+      <if test="weekReportPeriod != null  and  weekReportPeriod != ''">`week_report_period` =
+        #{weekReportPeriod},
+      </if>
+      <if test="weekReportBuildDate != null ">`week_report_build_date` = #{weekReportBuildDate},</if>
+      <if test="monthTotalScore != null ">`month_total_score` = #{monthTotalScore},</if>
+      <if test="weekReportTime != null  and  weekReportTime != ''">`week_report_time` = #{weekReportTime},</if>
+      <if test="weekValuePlan != null ">`week_value_plan` = #{weekValuePlan},</if>
+      <if test="weekValueComplete != null ">`week_value_complete` = #{weekValueComplete},</if>
+      <if test="weekCompleteRatio != null ">`week_complete_ratio` = #{weekCompleteRatio},</if>
+      <if test="monthValuePlan != null ">`month_value_plan` = #{monthValuePlan},</if>
+      <if test="monthValueComplete != null ">`month_value_complete` = #{monthValueComplete},</if>
+      <if test="sumValueComplete != null ">`sum_value_complete` = #{sumValueComplete},</if>
+      <if test="sumMeterage != null ">`sum_meterage` = #{sumMeterage},</if>
+      <if test="durationCompletePercentage != null ">`duration_complete_percentage` =
+        #{durationCompletePercentage},
+      </if>
+      <if test="planMathTotalTimeDiff != null ">`plan_math_total_time_diff` = #{planMathTotalTimeDiff},</if>
+      <if test="quarterValuePlanCompletePercentage != null ">`quarter_value_plan_complete_percentage` =
+        #{quarterValuePlanCompletePercentage},
+      </if>
+      <if test="keyLineImageCompletePercentage != null ">`key_line_image_complete_percentage` =
+        #{keyLineImageCompletePercentage},
+      </if>
+      <if test="monthDiffValue != null ">`month_diff_value` = #{monthDiffValue},</if>
+      <if test="lastThreeMonthDiffValue != null  and lastThreeMonthDiffValue != ''">`last_three_month_diff_value` =
+        #{lastThreeMonthDiffValue},
+      </if>
+      <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+      <if test="regionId != null ">`region_id` = #{regionId},</if>
+      <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+      <if test="projectId != null ">`project_id` = #{projectId},</if>
+      <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+      <if test="deptId != null ">`dept_id` = #{deptId},</if>
+      <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+      <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+      <if test="createTime != null ">`create_time` = #{createTime},</if>
+      <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+      <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+      <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+      <if test="delTime != null ">`del_time` = #{delTime},</if>
+      <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+      <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+      <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+      <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+      <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+      <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+    </trim>
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+    </where>
+  </update>
+
+  <update id="updateJdglProgressCorrectionTrackList">
+    update jdgl_progress_correction_track
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.id}
         </foreach>
-    </insert>
-
-    <update id="updateJdglProgressCorrectionTrack">
-        update jdgl_progress_correction_track
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="id != null ">`id` = #{id},</if>
-            <if test="period != null  and  period != ''">`period` = #{period},</if>
-            <if test="riskLevel != null  and  riskLevel != ''">`risk_level` = #{riskLevel},</if>
-            <if test="periodTotalScore != null ">`period_total_score` = #{periodTotalScore},</if>
-            <if test="correctionDate != null ">`correction_date` = #{correctionDate},</if>
-            <if test="planCorrectionCompleteDate != null">
-                `plan_correction_complete_date` = #{planCorrectionCompleteDate},
-            </if>
-            <if test="weekReportPeriod != null  and  weekReportPeriod != ''">`week_report_period` =
-                #{weekReportPeriod},
-            </if>
-            <if test="weekReportBuildDate != null ">`week_report_build_date` = #{weekReportBuildDate},</if>
-            <if test="monthTotalScore != null ">`month_total_score` = #{monthTotalScore},</if>
-            <if test="weekReportTime != null  and  weekReportTime != ''">`week_report_time` = #{weekReportTime},</if>
-            <if test="weekValuePlan != null ">`week_value_plan` = #{weekValuePlan},</if>
-            <if test="weekValueComplete != null ">`week_value_complete` = #{weekValueComplete},</if>
-            <if test="weekCompleteRatio != null ">`week_complete_ratio` = #{weekCompleteRatio},</if>
-            <if test="monthValuePlan != null ">`month_value_plan` = #{monthValuePlan},</if>
-            <if test="monthValueComplete != null ">`month_value_complete` = #{monthValueComplete},</if>
-            <if test="sumValueComplete != null ">`sum_value_complete` = #{sumValueComplete},</if>
-            <if test="sumMeterage != null ">`sum_meterage` = #{sumMeterage},</if>
-            <if test="durationCompletePercentage != null ">`duration_complete_percentage` =
-                #{durationCompletePercentage},
-            </if>
-            <if test="planMathTotalTimeDiff != null ">`plan_math_total_time_diff` = #{planMathTotalTimeDiff},</if>
-            <if test="quarterValuePlanCompletePercentage != null ">`quarter_value_plan_complete_percentage` =
-                #{quarterValuePlanCompletePercentage},
-            </if>
-            <if test="keyLineImageCompletePercentage != null ">`key_line_image_complete_percentage` =
-                #{keyLineImageCompletePercentage},
-            </if>
-            <if test="monthDiffValue != null ">`month_diff_value` = #{monthDiffValue},</if>
-            <if test="lastThreeMonthDiffValue != null ">`last_three_month_diff_value` = #{lastThreeMonthDiffValue},</if>
-            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-            <if test="regionId != null ">`region_id` = #{regionId},</if>
-            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
-            <if test="projectId != null ">`project_id` = #{projectId},</if>
-            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-            <if test="deptId != null ">`dept_id` = #{deptId},</if>
-            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
-            <if test="createTime != null ">`create_time` = #{createTime},</if>
-            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
-            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-            <if test="delTime != null ">`del_time` = #{delTime},</if>
-            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
-            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
-            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
-            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
-            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
-        </trim>
-        <where>
-            <if test="id != null ">and `id` = #{id}</if>
-        </where>
-    </update>
-
-    <update id="updateJdglProgressCorrectionTrackList">
-        update jdgl_progress_correction_track
-        <trim prefix="set" suffixOverrides=",">
-            <trim prefix="id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.id}
-                </foreach>
-            </trim>
-            <trim prefix="period  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.period}
-                </foreach>
-            </trim>
-            <trim prefix="risk_level  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.riskLevel}
-                </foreach>
-            </trim>
-            <trim prefix="period_total_score  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.periodTotalScore}
-                </foreach>
-            </trim>
-            <trim prefix="correction_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.correctionDate}
-                </foreach>
-            </trim>
-            <trim prefix="plan_correction_complete_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.planCorrectionCompleteDate}
-                </foreach>
-            </trim>
-            <trim prefix="week_report_period  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.weekReportPeriod}
-                </foreach>
-            </trim>
-            <trim prefix="week_report_build_date  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.weekReportBuildDate}
-                </foreach>
-            </trim>
-            <trim prefix="month_total_score  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.monthTotalScore}
-                </foreach>
-            </trim>
-            <trim prefix="week_report_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.weekReportTime}
-                </foreach>
-            </trim>
-            <trim prefix="week_value_plan  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.weekValuePlan}
-                </foreach>
-            </trim>
-            <trim prefix="week_value_complete  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.weekValueComplete}
-                </foreach>
-            </trim>
-            <trim prefix="week_complete_ratio  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.weekCompleteRatio}
-                </foreach>
-            </trim>
-            <trim prefix="month_value_plan  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.monthValuePlan}
-                </foreach>
-            </trim>
-            <trim prefix="month_value_complete  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.monthValueComplete}
-                </foreach>
-            </trim>
-            <trim prefix="sum_value_complete  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.sumValueComplete}
-                </foreach>
-            </trim>
-            <trim prefix="sum_meterage  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.sumMeterage}
-                </foreach>
-            </trim>
-            <trim prefix="duration_complete_percentage  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.durationCompletePercentage}
-                </foreach>
-            </trim>
-            <trim prefix="plan_math_total_time_diff  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.planMathTotalTimeDiff}
-                </foreach>
-            </trim>
-            <trim prefix="quarter_value_plan_complete_percentage  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.quarterValuePlanCompletePercentage}
-                </foreach>
-            </trim>
-            <trim prefix="key_line_image_complete_percentage  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.keyLineImageCompletePercentage}
-                </foreach>
-            </trim>
-            <trim prefix="month_diff_value  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.monthDiffValue}
-                </foreach>
-            </trim>
-            <trim prefix="last_three_month_diff_value  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.lastThreeMonthDiffValue}
-                </foreach>
-            </trim>
-            <trim prefix="remark  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.remark}
-                </foreach>
-            </trim>
-            <trim prefix="region_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.regionId}
-                </foreach>
-            </trim>
-            <trim prefix="region_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.regionName}
-                </foreach>
-            </trim>
-            <trim prefix="project_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectId}
-                </foreach>
-            </trim>
-            <trim prefix="project_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.projectName}
-                </foreach>
-            </trim>
-            <trim prefix="dept_id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.deptId}
-                </foreach>
-            </trim>
-            <trim prefix="create_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUser}
-                </foreach>
-            </trim>
-            <trim prefix="create_user_name  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createUserName}
-                </foreach>
-            </trim>
-            <trim prefix="create_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.createTime}
-                </foreach>
-            </trim>
-            <trim prefix="update_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.updateUser}
-                </foreach>
-            </trim>
-            <trim prefix="update_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.updateTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_user  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delUser}
-                </foreach>
-            </trim>
-            <trim prefix="del_time  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delTime}
-                </foreach>
-            </trim>
-            <trim prefix="del_flag  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.delFlag}
-                </foreach>
-            </trim>
-            <trim prefix="pt_var1  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar1}
-                </foreach>
-            </trim>
-            <trim prefix="pt_var2  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar2}
-                </foreach>
-            </trim>
-            <trim prefix="pt_var3  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar3}
-                </foreach>
-            </trim>
-            <trim prefix="pt_var4  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar4}
-                </foreach>
-            </trim>
-            <trim prefix="pt_var5  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar5}
-                </foreach>
-            </trim>
-        </trim>
-        where `id` in
-        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-            #{item.id}
+      </trim>
+      <trim prefix="period  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.period}
         </foreach>
-    </update>
+      </trim>
+      <trim prefix="risk_level  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.riskLevel}
+        </foreach>
+      </trim>
+      <trim prefix="period_total_score  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.periodTotalScore}
+        </foreach>
+      </trim>
+      <trim prefix="correction_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.correctionDate}
+        </foreach>
+      </trim>
+      <trim prefix="plan_correction_complete_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.planCorrectionCompleteDate}
+        </foreach>
+      </trim>
+      <trim prefix="week_report_period  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.weekReportPeriod}
+        </foreach>
+      </trim>
+      <trim prefix="week_report_build_date  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.weekReportBuildDate}
+        </foreach>
+      </trim>
+      <trim prefix="month_total_score  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.monthTotalScore}
+        </foreach>
+      </trim>
+      <trim prefix="week_report_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.weekReportTime}
+        </foreach>
+      </trim>
+      <trim prefix="week_value_plan  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.weekValuePlan}
+        </foreach>
+      </trim>
+      <trim prefix="week_value_complete  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.weekValueComplete}
+        </foreach>
+      </trim>
+      <trim prefix="week_complete_ratio  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.weekCompleteRatio}
+        </foreach>
+      </trim>
+      <trim prefix="month_value_plan  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.monthValuePlan}
+        </foreach>
+      </trim>
+      <trim prefix="month_value_complete  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.monthValueComplete}
+        </foreach>
+      </trim>
+      <trim prefix="sum_value_complete  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.sumValueComplete}
+        </foreach>
+      </trim>
+      <trim prefix="sum_meterage  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.sumMeterage}
+        </foreach>
+      </trim>
+      <trim prefix="duration_complete_percentage  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.durationCompletePercentage}
+        </foreach>
+      </trim>
+      <trim prefix="plan_math_total_time_diff  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.planMathTotalTimeDiff}
+        </foreach>
+      </trim>
+      <trim prefix="quarter_value_plan_complete_percentage  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.quarterValuePlanCompletePercentage}
+        </foreach>
+      </trim>
+      <trim prefix="key_line_image_complete_percentage  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.keyLineImageCompletePercentage}
+        </foreach>
+      </trim>
+      <trim prefix="month_diff_value  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.monthDiffValue}
+        </foreach>
+      </trim>
+      <trim prefix="last_three_month_diff_value  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.lastThreeMonthDiffValue}
+        </foreach>
+      </trim>
+      <trim prefix="remark  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.remark}
+        </foreach>
+      </trim>
+      <trim prefix="region_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionId}
+        </foreach>
+      </trim>
+      <trim prefix="region_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.regionName}
+        </foreach>
+      </trim>
+      <trim prefix="project_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectId}
+        </foreach>
+      </trim>
+      <trim prefix="project_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.projectName}
+        </foreach>
+      </trim>
+      <trim prefix="dept_id  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.deptId}
+        </foreach>
+      </trim>
+      <trim prefix="create_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUser}
+        </foreach>
+      </trim>
+      <trim prefix="create_user_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createUserName}
+        </foreach>
+      </trim>
+      <trim prefix="create_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.createTime}
+        </foreach>
+      </trim>
+      <trim prefix="update_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateUser}
+        </foreach>
+      </trim>
+      <trim prefix="update_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.updateTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_user  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delUser}
+        </foreach>
+      </trim>
+      <trim prefix="del_time  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delTime}
+        </foreach>
+      </trim>
+      <trim prefix="del_flag  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.delFlag}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var1  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar1}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var2  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar2}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var3  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar3}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var4  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar4}
+        </foreach>
+      </trim>
+      <trim prefix="pt_var5  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.ptVar5}
+        </foreach>
+      </trim>
+    </trim>
+    where `id` in
+    <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+      #{item.id}
+    </foreach>
+  </update>
 
-    <update id="deleteJdglProgressCorrectionTrack">
-        update `jdgl_progress_correction_track` set del_flag = 1
-        <where>
-            <if test="id != null ">and `id` = #{id}</if>
-            <if test="period != null  and period != ''">and `period` = #{period}</if>
-            <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
-            <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
-            <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
-            <if test="planCorrectionCompleteDate != null">and
-                `plan_correction_complete_date` = #{planCorrectionCompleteDate}
-            </if>
-            <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
-                #{weekReportPeriod}
-            </if>
-            <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
-            <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
-            <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
-            <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
-            <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
-            <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
-            <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
-            <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
-            <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
-            <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
-            <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
-                #{durationCompletePercentage}
-            </if>
-            <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
-            <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
-                #{quarterValuePlanCompletePercentage}
-            </if>
-            <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
-                #{keyLineImageCompletePercentage}
-            </if>
-            <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
-            <if test="lastThreeMonthDiffValue != null ">and `last_three_month_diff_value` = #{lastThreeMonthDiffValue}
-            </if>
-            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
-            <if test="regionId != null ">and `region_id` = #{regionId}</if>
-            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
-            <if test="projectId != null ">and `project_id` = #{projectId}</if>
-            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
-            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
-            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
-            <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
-            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
-            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-        </where>
-    </update>
+  <update id="deleteJdglProgressCorrectionTrack">
+    update `jdgl_progress_correction_track` set del_flag = 1
+    <where>
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="period != null  and period != ''">and `period` = #{period}</if>
+      <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+      <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
+      <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
+      <if test="planCorrectionCompleteDate != null">and
+        `plan_correction_complete_date` = #{planCorrectionCompleteDate}
+      </if>
+      <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
+        #{weekReportPeriod}
+      </if>
+      <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
+      <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
+      <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
+      <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
+      <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
+      <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
+      <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
+      <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
+      <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
+      <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
+      <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
+        #{durationCompletePercentage}
+      </if>
+      <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
+      <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
+        #{quarterValuePlanCompletePercentage}
+      </if>
+      <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
+        #{keyLineImageCompletePercentage}
+      </if>
+      <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
+      <if test="lastThreeMonthDiffValue != null  and lastThreeMonthDiffValue != ''">and `last_three_month_diff_value` =
+        #{lastThreeMonthDiffValue}
+      </if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+  </update>
 
-    <update id="deleteJdglProgressCorrectionTrackByPks">
-        update `jdgl_progress_correction_track` set del_flag = 1
-        <where>
-            `id` in
-            <foreach item="id" collection="jdglProgressCorrectionTrackPkList" open="(" separator="," close=")">
-                #{id}
-            </foreach>
-        </where>
-    </update>
+  <update id="deleteJdglProgressCorrectionTrackByPks">
+    update `jdgl_progress_correction_track` set del_flag = 1
+    <where>
+      `id` in
+      <foreach item="id" collection="jdglProgressCorrectionTrackPkList" open="(" separator="," close=")">
+        #{id}
+      </foreach>
+    </where>
+  </update>
+
+  <select id="getLastThreeMonthData" resultType="java.math.BigDecimal">
+    select month_diff_value monthDiffValue from jdgl_progress_correction_track
+    <where>
+      del_flag = "0"
+      <if test="id != null ">and `id` = #{id}</if>
+      <if test="period != null  and period != ''">and `period` = #{period}</if>
+      <if test="riskLevel != null  and riskLevel != ''">and `risk_level` = #{riskLevel}</if>
+      <if test="periodTotalScore != null ">and `period_total_score` = #{periodTotalScore}</if>
+      <if test="correctionDate != null ">and `correction_date` = #{correctionDate}</if>
+      <if test="planCorrectionCompleteDate != null">and
+        `plan_correction_complete_date` = #{planCorrectionCompleteDate}
+      </if>
+      <if test="weekReportPeriod != null  and weekReportPeriod != ''">and `week_report_period` =
+        #{weekReportPeriod}
+      </if>
+      <if test="weekReportBuildDate != null ">and `week_report_build_date` = #{weekReportBuildDate}</if>
+      <if test="monthTotalScore != null ">and `month_total_score` = #{monthTotalScore}</if>
+      <if test="weekReportTime != null  and weekReportTime != ''">and `week_report_time` = #{weekReportTime}</if>
+      <if test="weekValuePlan != null ">and `week_value_plan` = #{weekValuePlan}</if>
+      <if test="weekValueComplete != null ">and `week_value_complete` = #{weekValueComplete}</if>
+      <if test="weekCompleteRatio != null ">and `week_complete_ratio` = #{weekCompleteRatio}</if>
+      <if test="monthValuePlan != null ">and `month_value_plan` = #{monthValuePlan}</if>
+      <if test="monthValueComplete != null ">and `month_value_complete` = #{monthValueComplete}</if>
+      <if test="sumValueComplete != null ">and `sum_value_complete` = #{sumValueComplete}</if>
+      <if test="sumMeterage != null ">and `sum_meterage` = #{sumMeterage}</if>
+      <if test="durationCompletePercentage != null ">and `duration_complete_percentage` =
+        #{durationCompletePercentage}
+      </if>
+      <if test="planMathTotalTimeDiff != null ">and `plan_math_total_time_diff` = #{planMathTotalTimeDiff}</if>
+      <if test="quarterValuePlanCompletePercentage != null ">and `quarter_value_plan_complete_percentage` =
+        #{quarterValuePlanCompletePercentage}
+      </if>
+      <if test="keyLineImageCompletePercentage != null ">and `key_line_image_complete_percentage` =
+        #{keyLineImageCompletePercentage}
+      </if>
+      <if test="monthDiffValue != null ">and `month_diff_value` = #{monthDiffValue}</if>
+      <if test="lastThreeMonthDiffValue != null and lastThreeMonthDiffValue != ''">and `last_three_month_diff_value` =
+        #{lastThreeMonthDiffValue}
+      </if>
+      <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+      <if test="regionId != null ">and `region_id` = #{regionId}</if>
+      <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+      <if test="projectId != null ">and `project_id` = #{projectId}</if>
+      <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+      <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+      <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+      <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+      <if test="createTime != null ">and `create_time` = #{createTime}</if>
+      <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+      <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+      <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+      <if test="delTime != null ">and `del_time` = #{delTime}</if>
+      <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+      <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+      <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+      <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+      <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+      <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+    </where>
+    group by period order by period desc limit 1,3
+  </select>
 </mapper>

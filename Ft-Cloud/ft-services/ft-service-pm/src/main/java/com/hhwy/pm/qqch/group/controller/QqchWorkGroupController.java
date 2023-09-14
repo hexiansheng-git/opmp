@@ -107,6 +107,15 @@ public class QqchWorkGroupController extends BaseController {
     }
 
     /**
+     * 监听器
+     */
+    @PostMapping("/listener")
+    public AjaxResult updateWorkGroupProcess(@RequestParam("id") Long id) {
+        qqchWorkGroupService.updateWorkGroupProcess(id);
+        return AjaxResult.success("成功");
+    }
+
+    /**
      * 查询指定租户下的工作小组
      * @param qqchWorkGroupParam
      * @return

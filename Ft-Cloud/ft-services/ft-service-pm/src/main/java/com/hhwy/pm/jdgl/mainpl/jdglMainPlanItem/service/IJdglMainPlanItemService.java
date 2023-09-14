@@ -35,4 +35,6 @@ public interface IJdglMainPlanItemService {
     List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDate(Date date);
 
     List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(Date startDate, Date endDate);
+
+    JdglMainPlanItem getMaxActualStartDate();
 }

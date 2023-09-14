@@ -9,14 +9,18 @@ import com.hhwy.pm.jdgl.diff.track.domain.JdglProgressCorrectionTrack;
 import com.hhwy.pm.jdgl.diff.track.domain.vo.ProgressCorrectionTrackQueryVo;
 import com.hhwy.pm.jdgl.diff.track.service.IJdglProgressCorrectionTrackService;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhenglili
@@ -148,5 +152,17 @@ public class JdglProgressCorrectionTrackController extends BaseController {
             .getJdglProgressCorrectionTrackList(jdglProgressCorrectionTrackParam);
         ExcelUtils<JdglProgressCorrectionTrack> util = new ExcelUtils<>(JdglProgressCorrectionTrack.class);
         util.exportExcel(response, jdglProgressCorrectionTrackList, DateUtils.getDate());
+    }
+
+
+    /**
+     * 每周定时生成追踪数据。（偏差小于0的最新一条纠偏措施制定数据）
+     *
+     * @return
+     */
+    @PostMapping("/weekTimerTrack")
+    public AjaxResult weekTimerTrack() {
+        jdglProgressCorrectionTrackService.weekTimerTrack();
+        return AjaxResult.success();
     }
 }

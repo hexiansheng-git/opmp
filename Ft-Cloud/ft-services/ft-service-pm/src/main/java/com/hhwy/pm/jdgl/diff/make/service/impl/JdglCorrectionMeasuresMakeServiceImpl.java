@@ -13,8 +13,11 @@ import com.hhwy.pm.jdgl.diff.make.domain.JdglCorrectionMeasuresMakeDetail;
 import com.hhwy.pm.jdgl.diff.make.mapper.JdglCorrectionMeasuresMakeMapper;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailService;
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.core.DateUtil;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
@@ -46,6 +49,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
     @Autowired
     private IJdglDiffAnalysisSvService jdglDiffAnalysisSvService;
+    @Autowired
+    private IJdglMainPlanItemService jdglMainPlanItemService;
 
     /**
      * 查询单条数据-详情
@@ -174,6 +179,22 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     }
 
     /**
+     * 修改流程数据
+     *
+     * @param id
+     */
+    @Transactional
+    public void updateTaskStatus(Long id) {
+        JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
+        jdglCorrectionMeasuresMake.setId(id);
+        jdglCorrectionMeasuresMake.setTaskStatus("5");
+        // 纠偏日期
+        jdglCorrectionMeasuresMake.setCorrectionDate(FtDateUtils.getYearMonthDayDate());
+        jdglCorrectionMeasuresMakeMapper.updateJdglCorrectionMeasuresMake(jdglCorrectionMeasuresMake);
+
+    }
+
+    /**
      * 同步差异化分析数据
      *
      * @param period
@@ -182,6 +203,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     @Transactional
     public void syncData(Date period) {
         String periodStr = FtDateUtils.getYearMonthStr(period);
+
+        Date firstDay = DateUtil.getfirstDay(period);
+        Date lastDay = DateUtil.getLastDay(period);
 
         JdglCorrectionMeasuresMake qryMake = new JdglCorrectionMeasuresMake();
         qryMake.setWarnPeriod(periodStr);
@@ -200,6 +224,12 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
 
         // 获取项目信息数据
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
+
+        // 获取总体计划, 获取当月数据
+        List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService
+            .getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
+        // 树转列表
+        List<JdglMainPlanItem> mainPlanItemList = TreeUtil.treeToList(mainPlanItemListTree);
 
         JdglCorrectionMeasuresMake jdglCorrectionMeasuresMake = new JdglCorrectionMeasuresMake();
         jdglCorrectionMeasuresMake.setId(IdWorker.createId());
@@ -254,8 +284,15 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(actQuantity);
             // todo 完成工期百分比 暂无来源 总体计划：当前开始时间—实际开始时间/总体计划时间
             //JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage();
-            // todo 责任人 暂无来源
-            //JdglCorrectionMeasuresMakeDetail.setDirector();
+
+            // 责任人
+            for (JdglMainPlanItem item : mainPlanItemList){
+                if(item.getItemCode().equals(jdglDiffAnalysisSv.getPlanItemCode())) {
+                    JdglCorrectionMeasuresMakeDetail.setDirectorId(item.getExecuterId());
+                    JdglCorrectionMeasuresMakeDetail.setDirector(item.getExecuter());
+                }
+            }
+
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }
         // 纠偏方案入库

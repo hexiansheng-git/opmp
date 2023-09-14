@@ -106,17 +106,20 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
 
         if(projectBasicInfo != null) {
-            returnVO.setCustUnit(projectBasicInfo.getContractCurrency());
-            returnVO.setCustUnitCode(projectBasicInfo.getContractCurrencyCode());
+
+//            returnVO.setCustUnit(projectBasicInfo.getContractCurrency());
+//            returnVO.setCustUnitCode(projectBasicInfo.getContractCurrencyCode());
         }
 
         if(xmslContractInfo != null) {
+            returnVO.setCustUnit(xmslContractInfo.getListCurrencyName());
+            returnVO.setCustUnitCode(xmslContractInfo.getListCurrencyCode());
             returnVO.setProjectName(xmslContractInfo.getProjectName());
             returnVO.setContactAmtCu(xmslContractInfo.getEffectiveAmout());
 
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && returnVO.getCustUnitCode() != null) {
                 XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> returnVO.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
                     returnVO.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));

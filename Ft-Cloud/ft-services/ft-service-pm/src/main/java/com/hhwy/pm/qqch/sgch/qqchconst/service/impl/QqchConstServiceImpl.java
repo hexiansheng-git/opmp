@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
@@ -13,6 +14,7 @@ import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -203,13 +205,35 @@ public class QqchConstServiceImpl implements IQqchConstService {
      * @return
      */
     @Override
-    public List<QqchConst> popUpWindows() {
-        BigDecimal version = VersionUtil.getVersion(TN,null);
-        QqchConst qqchConst = new QqchConst();
-        qqchConst.setVersion(version);
-        List<QqchConst> list = qqchConstMapper.getQqchConstList(qqchConst);
+    public List<QqchConst> popUpWindows(QqchConst qqchConst) {
+        List<QqchConst> resultList;
 
-        list = TreeUtil.build(list, null);
-        return list;
+        BigDecimal version = VersionUtil.getVersion(TN,null);
+        QqchConst query = new QqchConst();
+        qqchConst.setVersion(version);
+        //版本全量数据
+        List<QqchConst> allList = qqchConstMapper.getQqchConstList(query);
+
+        String constName = qqchConst.getConstName();
+        String constContent = qqchConst.getConstContent();
+        if(StringUtils.isNotBlank(constName) || StringUtils.isNotBlank(constContent)){
+            query.setConstName(constName);
+            query.setConstContent(constContent);
+
+            List<QqchConst> subList = qqchConstMapper.getQqchConstList(query);
+
+            resultList = ListTreeUtil.getUpListBySublistToTree(
+                    subList,
+                    allList,
+                    QqchConst::getId,
+                    QqchConst::getPid,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchConst::getChildren,
+                    QqchConst::setChildren);
+        }else {
+            resultList = ListTreeUtil.formatTree(allList, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), QqchConst::getChildren, QqchConst::setChildren);
+        }
+        return resultList;
     }
 }

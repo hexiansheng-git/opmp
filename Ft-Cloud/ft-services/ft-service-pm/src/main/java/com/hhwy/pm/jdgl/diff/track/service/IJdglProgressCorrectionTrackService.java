@@ -30,4 +30,6 @@ public interface IJdglProgressCorrectionTrackService {
     int deleteJdglProgressCorrectionTrackByPks(List<Long> jdglProgressCorrectionTrackPkList);
 
     List<JdglProgressCorrectionTrack> gmList(ProgressCorrectionTrackQueryVo queryVo);
+
+    void weekTimerTrack();
 }

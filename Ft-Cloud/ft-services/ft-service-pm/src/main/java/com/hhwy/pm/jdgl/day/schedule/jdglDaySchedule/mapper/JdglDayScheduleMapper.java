@@ -37,4 +37,6 @@ public interface JdglDayScheduleMapper {
     BigDecimal getCountValue(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 
     List<JdglDaySchedule> getListByDateRange(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
+
+    BigDecimal getCountValueNotApprove(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
 }

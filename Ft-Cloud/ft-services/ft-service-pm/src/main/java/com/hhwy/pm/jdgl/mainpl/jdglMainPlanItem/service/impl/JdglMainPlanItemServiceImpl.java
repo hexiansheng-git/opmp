@@ -1,22 +1,20 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
-import com.hhwy.utils.tree.TreeUtil;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemMapper;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
+import java.util.Date;
+import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author 陈锦豪
@@ -136,5 +134,14 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             mainPlanId = usingJdglMainPlan.getId();
         }
         return jdglMainPlanItemMapper.getUsingJdglMainPlanItemListByDateRange(startDate, endDate, mainPlanId);
+    }
+
+    public JdglMainPlanItem getMaxActualStartDate() {
+        Long mainPlanId = 0l;
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        if(usingJdglMainPlan != null) {
+            mainPlanId = usingJdglMainPlan.getId();
+        }
+        return jdglMainPlanItemMapper.getMaxActualStartDate(mainPlanId);
     }
 }

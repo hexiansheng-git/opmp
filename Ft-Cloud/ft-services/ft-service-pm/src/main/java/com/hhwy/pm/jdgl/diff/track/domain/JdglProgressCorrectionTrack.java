@@ -161,7 +161,7 @@ public class JdglProgressCorrectionTrack extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "近三个月差异化值（%）")
-    private BigDecimal lastThreeMonthDiffValue;
+    private String lastThreeMonthDiffValue;
     /**
      * 字段描述：备注
      */

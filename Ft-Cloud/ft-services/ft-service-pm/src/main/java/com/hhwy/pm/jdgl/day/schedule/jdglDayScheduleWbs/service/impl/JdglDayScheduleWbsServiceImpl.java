@@ -358,6 +358,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             jdglDayScheduleWbs1.setIsAdd("1");
             jdglDayScheduleWbs1.setIsExists("0");
             jdglDayScheduleWbs1.setSort(xmslWbs.getSort());
+            jdglDayScheduleWbs1.setAncestrals(xmslWbs.getAncestors());
 
             jdglDayScheduleWbsList.add(jdglDayScheduleWbs1);
         }

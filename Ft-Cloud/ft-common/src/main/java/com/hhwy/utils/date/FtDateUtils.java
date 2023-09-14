@@ -2,7 +2,6 @@ package com.hhwy.utils.date;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -107,6 +106,18 @@ public class FtDateUtils extends DateUtils {
         }
     }
 
+    public static Date parseDateYm(String date) {
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
 
     public static int compareMonth(Date bigDate, Date smallDate) {
 
@@ -204,6 +215,23 @@ public class FtDateUtils extends DateUtils {
     }
 
     /**
+     * 格式yyyy-MM
+     *
+     * @return
+     * @throws ParseException
+     */
+    public static Date getYearMonthDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String str = sdf.format(date);
+        try {
+            return sdf.parse(str);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 获取当前日期 格式yyyy-MM-dd
      *
      * @return
@@ -217,5 +245,22 @@ public class FtDateUtils extends DateUtils {
             e.printStackTrace();
         }
         return null;
+    }
+
+    /**
+     * 日期天数差
+     *
+     * @return
+     */
+    public static Long getDays(Date startDate, Date endDate) {
+        long nd = 86400000L;
+        long diff = endDate.getTime() - startDate.getTime();
+        long day = diff / nd;
+        return day;
+    }
+
+    public static void main(String[] args) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
     }
 }
