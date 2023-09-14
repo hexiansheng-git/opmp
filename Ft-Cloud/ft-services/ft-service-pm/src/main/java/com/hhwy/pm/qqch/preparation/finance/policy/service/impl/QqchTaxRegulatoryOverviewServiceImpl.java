@@ -13,6 +13,8 @@ import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchTaxLawService;
 import com.hhwy.pm.qqch.preparation.finance.policy.service.IQqchTaxRegulatoryOverviewService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -39,6 +41,8 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
 
     public QqchTaxRegulatoryOverviewVo getQqchTaxRegulatoryOverview(BigDecimal version) {
         QqchTaxRegulatoryOverviewVo vo = new QqchTaxRegulatoryOverviewVo();
@@ -48,6 +52,10 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
         qryOverviewParam.setVersion(version);
         QqchTaxRegulatoryOverview overview = qqchTaxRegulatoryOverviewMapper
             .getQqchTaxRegulatoryOverview(qryOverviewParam);
+
+        // 查询合同信息，获取合同所在国家
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        overview.setCountryName(xmslContractInfo.getProjectLocation());
 
         // 税法列表
         QqchTaxLaw taxLawParam = new QqchTaxLaw();
