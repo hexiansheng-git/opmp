@@ -40,6 +40,6 @@ public interface IQqchConstService {
      * 4.2弹窗
      * @return
      */
-    List<QqchConst> popUpWindows();
+    List<QqchConst> popUpWindows(QqchConst qqchConst);
 
 }

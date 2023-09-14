@@ -562,7 +562,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             XmslWbsMain query = new XmslWbsMain();
             query.setValid(Constant.NO_INT);
             Long count = wbsMainService.getXmslWbsMainCount(query);
-            Assert.isTrue(count!= null && count > 0,"已存在未生效的历史，无法再新增新数据");
+            Assert.isTrue(count!= null && count < 1,"已存在未生效的历史，无法再新增新数据");
             return;
         }
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());

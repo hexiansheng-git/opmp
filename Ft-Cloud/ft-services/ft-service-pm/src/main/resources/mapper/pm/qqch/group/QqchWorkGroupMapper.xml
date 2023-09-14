@@ -599,4 +599,8 @@
             </foreach>
         </where>
     </update>
+
+    <update id="updateAllToInvalid">
+        update `qqch_work_group` set effective = '0' where del_flag = '0'
+    </update>
 </mapper>
