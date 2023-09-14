@@ -94,7 +94,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setDetailedAddress(projectInfo.getDetailedAddress());
         //项目规模
         contractInfo.setProjectScale(projectInfo.getProjectScale());
-        contractInfo.setContractPrice(projectInfo.getContractPrice());
+//        contractInfo.setContractPrice(projectInfo.getContractPrice());
         //编制日期
         contractInfo.setOperateTime(DateUtils.getNowDate());
         //编制人
