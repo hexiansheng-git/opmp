@@ -11,9 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author han
@@ -206,5 +204,5 @@ public class QqchManageProcedure extends BaseEntity {
     /**
      * 字段描述：子集
      */
-    private List<QqchManageProcedure> children = new ArrayList<>();
+//    private List<QqchManageProcedure> children = new ArrayList<>();
 }

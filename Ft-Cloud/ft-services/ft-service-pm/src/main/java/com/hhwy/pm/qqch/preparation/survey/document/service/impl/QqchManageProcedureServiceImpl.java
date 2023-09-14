@@ -11,7 +11,6 @@ import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMa
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import com.hhwy.utils.tree.ListTreeUtil;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,14 +49,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
         QqchManageProcedure qqchManageProcedure = new QqchManageProcedure();
         qqchManageProcedure.setVersion(version);
         List<QqchManageProcedure> qqchManageProcedureList = qqchManageProcedureMapper.getQqchManageProcedureList(qqchManageProcedure);
-        //转换树列表
-        List<QqchManageProcedure> treeList = ListTreeUtil.formatTree(
-                qqchManageProcedureList,
-                o -> o.getPid() == null,
-                (r, n) -> r.getId().equals(n.getPid()),
-                QqchManageProcedure::getChildren,
-                QqchManageProcedure::setChildren);
-        qqchManageProcedureVo.setQqchManageProcedureList(treeList);
+        qqchManageProcedureVo.setQqchManageProcedureList(qqchManageProcedureList);
 
         qqchManageProcedureVo.setVersion(version);
         qqchManageProcedureVo.setStageIdentity(qqchReviewService.getStage());
@@ -110,14 +102,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
         if(CollectionUtils.isEmpty(qqchManageProcedureList)){
             return;
         }
-        List<QqchManageProcedure> insertList = ListTreeUtil.formatList(
-                qqchManageProcedureList,
-                QqchManageProcedure::setId,
-                QqchManageProcedure::setPid,
-                QqchManageProcedure::setSort,
-                QqchManageProcedure::getChildren,
-                QqchManageProcedure::setChildren);
-        for (QqchManageProcedure qqchManageProcedure : insertList) {
+        for (QqchManageProcedure qqchManageProcedure : qqchManageProcedureList) {
             qqchManageProcedure.setVersion(version);
             if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchManageProcedure.setValid(Valid.YES);
@@ -126,6 +111,6 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
             qqchManageProcedure.setCreateUserName(SecurityUtils.getUserName());
             qqchManageProcedure.setCreateTime(DateUtils.getNowDate());
         }
-        qqchManageProcedureMapper.insertQqchManageProcedureList(insertList);
+        qqchManageProcedureMapper.insertQqchManageProcedureList(qqchManageProcedureList);
     }
 }
