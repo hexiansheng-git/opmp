@@ -373,4 +373,17 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         
         return list;
     }
+
+    @Override
+    public void updateWorkGroupProcess(Long id) {
+        //所有都改为无效
+        qqchWorkGroupMapper.updateAllToInvalid();
+
+        QqchWorkGroup query = new QqchWorkGroup();
+        query.setId(id);
+        QqchWorkGroup qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(query);
+        qqchWorkGroup.setEffective(CommonYesNo.YES);
+        qqchWorkGroup.setTaskStatus("5");//流程结束
+        qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+    }
 }
