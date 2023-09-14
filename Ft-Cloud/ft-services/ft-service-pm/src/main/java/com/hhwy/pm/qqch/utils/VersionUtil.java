@@ -28,9 +28,9 @@ public class VersionUtil {
         } else {
             /*查询当前最接近（小于等于）指定版本的版本号*/
             version = commonMapper.selectLessOrEqualAssignVersion(tableName, version);
-            if(version == null){
-                version = BigDecimal.ONE;
-            }
+        }
+        if(version == null){
+            version = BigDecimal.ONE;
         }
         return version;
     }
