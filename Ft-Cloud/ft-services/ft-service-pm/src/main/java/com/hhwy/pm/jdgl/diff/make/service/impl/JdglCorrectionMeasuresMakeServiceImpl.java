@@ -17,6 +17,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.core.DateUtil;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
@@ -280,17 +281,28 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                 actQuantity.divide(actQuantity, 2, RoundingMode.HALF_UP);
             }
             JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(actQuantity);
-            // todo 完成工期百分比 暂无来源 总体计划：当前开始时间—实际开始时间/总体计划时间
-            //JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage();
 
             // 责任人
             for (JdglMainPlanItem item : mainPlanItemList) {
                 if (item.getItemCode().equals(jdglDiffAnalysisSv.getPlanItemCode())) {
                     JdglCorrectionMeasuresMakeDetail.setDirectorId(item.getExecuterId());
                     JdglCorrectionMeasuresMakeDetail.setDirector(item.getExecuter());
+
+                    // 当前开始时间(当月底)—实际开始时间
+                    BigDecimal days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), lastDay));
+                    // 总体计划时间
+                    BigDecimal totalDays = new BigDecimal(
+                        FtDateUtils.getDays(item.getStartDate(), item.getFinishDate()).longValue());
+
+                    // 完成工期百分比 = 总体计划：当前开始时间(当月底)—实际开始时间/总体计划时间
+                    BigDecimal completeDatePercentage = BigDecimal.ZERO;
+                    if (BigDecimal.ZERO.compareTo(totalDays) != 0) {
+                        completeDatePercentage = BigDecimalUtils.divide0(days, totalDays, 4)
+                            .multiply(new BigDecimal(100));
+                    }
+                    JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage(completeDatePercentage);
                 }
             }
-
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }
         // 纠偏方案入库
