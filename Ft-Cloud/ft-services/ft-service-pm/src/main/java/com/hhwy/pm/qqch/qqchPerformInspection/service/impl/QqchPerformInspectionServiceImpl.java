@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
 import com.hhwy.pm.qqch.qqchPerformInspection.mapper.QqchPerformInspectionMapper;
@@ -17,6 +19,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,7 +53,9 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     }
 
     public List<QqchPerformInspection> getQqchPerformInspectionList(QqchPerformInspection qqchPerformInspection) {
-        return qqchPerformInspectionMapper.getQqchPerformInspectionList(qqchPerformInspection);
+        List<QqchPerformInspection> qqchPerformInspectionList = qqchPerformInspectionMapper.getQqchPerformInspectionList(qqchPerformInspection);
+        FlowInfoSearchUtil.getFlowInfo(qqchPerformInspectionList, FlowEnum.QQCH_ZXJC);
+        return qqchPerformInspectionList;
     }
 
     @Transactional
