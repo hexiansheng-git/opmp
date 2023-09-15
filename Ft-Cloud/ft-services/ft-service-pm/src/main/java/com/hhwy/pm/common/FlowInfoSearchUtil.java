@@ -102,6 +102,7 @@ public class FlowInfoSearchUtil {
      * @return
      */
     public static <T extends CommonBaseEntity> T getFlowInfo(T t,FlowEnum flowEnum){
+        getFlowInfo(Arrays.asList(t), flowEnum);
         t.setProcessKey(flowEnum.getProcessKey());
         t.setBusinessTableName(flowEnum.getTableName());
         return t;
