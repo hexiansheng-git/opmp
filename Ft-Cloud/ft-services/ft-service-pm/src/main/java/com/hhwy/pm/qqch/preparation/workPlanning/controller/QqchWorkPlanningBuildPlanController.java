@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.preparation.workPlanning.service.IQqchWorkPlanningBuildP
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -130,7 +131,13 @@ public class QqchWorkPlanningBuildPlanController extends BaseController {
         try{
             InputStream inputStream = file.getInputStream();
             List<QqchWorkPlanningBuildPlan> list = util.importExcel(inputStream);
+            if(!ObjectNullUtil.isEmpty(list)){
+                JyDetailsUtil.jyDetails(list, ValidationGroups.Save.class);
+            }
             return AjaxResult.success(list);
+        }catch (CustomBusinessException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMsg());
         }catch (Exception e){
             e.printStackTrace();
             throw new RuntimeException("导入失败！");

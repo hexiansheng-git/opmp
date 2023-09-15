@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -293,14 +294,19 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             }
             QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
             qqchLabourDemandPlan1.setOutId(result.getId());
-            qqchLabourDemandPlan1.setOccupationCode(result.getOccupationCode());
-            qqchLabourDemandPlan1.setJobName(result.getOccupationName());
-            qqchLabourDemandPlan1.setWorkTeam(result.getConstDesc());
-            qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(result.getChineseSideCount()));
-            qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(result.getLocalCount()));
-            qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(result.getTotalCount()));
-            BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / result.getTotalCount());
-            qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
+            qqchLabourDemandPlan1.setOccupationCode(StringUtils.isEmpty(result.getOccupationCode())?null:result.getOccupationCode());
+            qqchLabourDemandPlan1.setJobName(StringUtils.isEmpty(result.getOccupationName())?null:result.getOccupationName());
+            qqchLabourDemandPlan1.setWorkTeam(StringUtils.isEmpty(result.getConstDesc())?null:result.getConstDesc());
+            Integer chinaNum = result.getChineseSideCount()==null?0:result.getChineseSideCount();
+            qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(chinaNum));
+            Integer outNum = result.getLocalCount()==null?0:result.getLocalCount();
+            qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(outNum));
+            Integer total = result.getTotalCount()==null?0:result.getTotalCount();
+            qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(total));
+            if (total > 0){
+                BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / total);
+                qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
+            }
             saveList.add(qqchLabourDemandPlan1);
         }
         if (CollectionUtils.isNotEmpty(delList)) {

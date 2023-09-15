@@ -55,7 +55,9 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
 
         // 查询合同信息，获取合同所在国家
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-        overview.setCountryName(xmslContractInfo.getProjectLocation());
+        if (xmslContractInfo != null) {
+            overview.setCountryName(xmslContractInfo.getProjectLocation());
+        }
 
         // 税法列表
         QqchTaxLaw taxLawParam = new QqchTaxLaw();
