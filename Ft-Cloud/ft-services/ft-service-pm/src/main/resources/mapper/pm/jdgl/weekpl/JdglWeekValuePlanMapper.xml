@@ -155,7 +155,7 @@
             resultMap="JdglWeekValuePlanResultMap">
         select jwvp.* from jdgl_week_value_plan jwvp,
                       (select * from jdgl_week_plan where year = #{year} and week = #{week}) jwp
-            where jwp.id = jwvp.week_plan_id
+            where jwp.id = jwvp.plan_id
     </select>
 
     <insert id="insertJdglWeekValuePlan" useGeneratedKeys="true" keyProperty="id">

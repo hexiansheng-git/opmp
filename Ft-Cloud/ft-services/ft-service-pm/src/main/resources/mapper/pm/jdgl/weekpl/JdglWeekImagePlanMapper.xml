@@ -178,7 +178,7 @@
         select jyip.wbs_code,jyip.wbs_name,sum(plan_comp_value) plan_comp_value
         from (select * from jdgl_week_plan where task_status = '5' and year = #{year} and week = #{week}) jyp ,
              jdgl_week_image_plan jyip
-        where jyp.id = jyip.week_plan_id
+        where jyp.id = jyip.plan_id
         group by jyip.wbs_code,jyip.wbs_name
     </select>
 

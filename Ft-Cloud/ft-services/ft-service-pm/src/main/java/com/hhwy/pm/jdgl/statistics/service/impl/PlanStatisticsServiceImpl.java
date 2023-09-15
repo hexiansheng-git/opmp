@@ -364,7 +364,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         for (JdglDayScheduleBill jdglDayScheduleBill : billValueListByRangeDate) {
             Long billId = jdglDayScheduleBill.getBillId();
             for (XmslContractList xmslContractList : xmslContractListVos) {
-                if(xmslContractList.getAncestors().contains(billId+"")) {
+                if(xmslContractList.getAncestors() != null && xmslContractList.getAncestors().contains(billId+"")) {
                     Long listId = xmslContractList.getId();
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
@@ -495,17 +495,21 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         for (JdglDayScheduleWbs4Value dayScheduleWbs4Value : wbsListByDateRange) {
             PlanStatisticsWbsImageVO planStatisticsWbsImageVO = new PlanStatisticsWbsImageVO();
 
-            planStatisticsWbsImageVO.setId(dayScheduleWbs4Value.getWbsId());
-            planStatisticsWbsImageVO.setPid(dayScheduleWbs4Value.getWbsPid());
+            planStatisticsWbsImageVO.setId(dayScheduleWbs4Value.getId());
+            planStatisticsWbsImageVO.setPid(dayScheduleWbs4Value.getPid());
             planStatisticsWbsImageVO.setWbsUnit(dayScheduleWbs4Value.getUnit());
             planStatisticsWbsImageVO.setDesignNum(dayScheduleWbs4Value.getDesignQuantity());
             planStatisticsWbsImageVO.setThisCompNum(dayScheduleWbs4Value.getThisQuantity());
             returnList.add(planStatisticsWbsImageVO);
         }
 
-        List<PlanStatisticsWbsImageVO> build = TreeUtil.build(returnList, null);
+        List<PlanStatisticsWbsImageVO> build = null;
+        if(!CollectionUtils.isEmpty(returnList)) {
+            build = TreeUtil.build(returnList, null);
+        }
 
-        return build;
+
+        return CollectionUtils.isEmpty(build) ? new ArrayList<>() : build;
 
     }
 

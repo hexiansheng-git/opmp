@@ -155,7 +155,7 @@
             resultMap="JdglMonthValuePlanResultMap">
         select jwvp.* from jdgl_month_value_plan jwvp,
                            (select * from jdgl_month_plan where year = #{year} and month = #{month}) jwp
-        where jwp.id = jwvp.month_plan_id
+        where jwp.id = jwvp.plan_id
     </select>
 
     <insert id="insertJdglMonthValuePlan" useGeneratedKeys="true" keyProperty="id">
