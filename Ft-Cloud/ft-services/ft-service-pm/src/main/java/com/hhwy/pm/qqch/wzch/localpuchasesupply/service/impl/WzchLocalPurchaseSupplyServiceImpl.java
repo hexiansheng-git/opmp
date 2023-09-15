@@ -161,7 +161,7 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
      */
     @Override
     public WzchLocalPurchaseSupplyDTO baseInfo(WzchLocalPurchaseSupplyDTO vo) {
-        BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", vo.getVersion());
+        BigDecimal version = VersionUtil.getVersion("wzch_local_purchase_supply", vo.getVersion());
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
 
@@ -377,6 +377,12 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         }
         // 新增详情
         this.detailService.insertOrUpdateBatch(detailList, dto.getId(),false);
+        if (ButtonMark.CONFIRM.equals(dto.getButtonMark())) {
+            // 插入确认状态
+            String menuId = dto.getMenuId();
+            String stageIdentity = dto.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
         // 返回主键
         return dto.getId();
     }
@@ -410,12 +416,6 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
                 temp.setDelFlag("0");
             }
             this.detailService.insertOrUpdateBatch(list, purchaseSupply.getId(),true);
-        }
-        if (ButtonMark.CONFIRM.equals(purchaseSupply.getButtonMark())) {
-            // 插入确认状态
-            String menuId = purchaseSupply.getMenuId();
-            String stageIdentity = purchaseSupply.getStageIdentity();
-            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
 
