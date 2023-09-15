@@ -282,27 +282,34 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
             }
             JdglCorrectionMeasuresMakeDetail.setCompleteProgressPercentage(actQuantity);
 
+            // 完成工期百分比
+            BigDecimal completeDatePercentage = BigDecimal.ZERO;
             // 责任人
             for (JdglMainPlanItem item : mainPlanItemList) {
                 if (item.getItemCode().equals(jdglDiffAnalysisSv.getPlanItemCode())) {
                     JdglCorrectionMeasuresMakeDetail.setDirectorId(item.getExecuterId());
                     JdglCorrectionMeasuresMakeDetail.setDirector(item.getExecuter());
 
-                    // 当前开始时间(当月底)—实际开始时间
-                    BigDecimal days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), lastDay));
-                    // 总体计划时间
-                    BigDecimal totalDays = new BigDecimal(
-                        FtDateUtils.getDays(item.getStartDate(), item.getFinishDate()).longValue());
+                    BigDecimal days = BigDecimal.ZERO;
+                    if (item.getActualStartDate() != null) {
+                        // 当前开始时间(当月底)—实际开始时间
+                        days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), lastDay));
+                    }
 
+                    // 总体计划时间
+                    BigDecimal totalDays = BigDecimal.ZERO;
+                    if (item.getStartDate() != null && item.getFinishDate() != null) {
+                        totalDays = new BigDecimal(
+                            FtDateUtils.getDays(item.getStartDate(), item.getFinishDate()).longValue());
+                    }
                     // 完成工期百分比 = 总体计划：当前开始时间(当月底)—实际开始时间/总体计划时间
-                    BigDecimal completeDatePercentage = BigDecimal.ZERO;
                     if (BigDecimal.ZERO.compareTo(totalDays) != 0) {
                         completeDatePercentage = BigDecimalUtils.divide0(days, totalDays, 4)
                             .multiply(new BigDecimal(100));
                     }
-                    JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage(completeDatePercentage);
                 }
             }
+            JdglCorrectionMeasuresMakeDetail.setCompleteDatePercentage(completeDatePercentage);
             newDetailList.add(JdglCorrectionMeasuresMakeDetail);
         }
         // 纠偏方案入库
