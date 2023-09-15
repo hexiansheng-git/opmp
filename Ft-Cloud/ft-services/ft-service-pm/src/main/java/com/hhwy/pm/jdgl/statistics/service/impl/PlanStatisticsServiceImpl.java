@@ -129,23 +129,29 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     continue;
                 }
                 totalActAmt = totalActAmt.add(dayValueDl);
-                if(!year.equals(cl.get(Calendar.YEAR))) {
+                int yearI = cl.get(Calendar.YEAR);
+                if(!year.equals(yearI + "")) {
                     continue;
                 }
                 yearActAmt = yearActAmt.add(dayValueDl);
                 int dateMonth = cl.get(Calendar.MONTH) + 1;
 
-                if(Integer.parseInt(quarter)*3 > dateMonth || Integer.parseInt(quarter)*3-2 < dateMonth) {
+                if(quarter == null) {
+                    continue;
+                }
+                int i = Integer.parseInt(quarter);
+
+                if(i*3 < dateMonth || i*3-2 > dateMonth) {
                     continue;
                 }
                 quarterActAmt = quarterActAmt.add(dayValueDl);
 
-                if(!month.equals(dateMonth+"")){
+                if(month == null || Integer.parseInt(month) != dateMonth){
                     continue;
                 }
                 monthActAmt = monthActAmt.add(dayValueDl);
 
-                if(startDate.before(date) && endDate.after(date)) {
+                if((startDate.before(date) || startDate.equals(date)) && (endDate.after(date)||endDate.equals(date))) {
                     weekActAmt = weekActAmt.add(dayValueDl);
                 }
             }
@@ -554,6 +560,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 // 获取季计划产值数据
                 JdglQuarterPlan jdglQuarterPlan = new JdglQuarterPlan();
                 jdglQuarterPlan.setYear(year);
+                jdglQuarterPlan.setIsUse("1");
+                jdglQuarterPlan.setTaskStatus("5");
                 List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanService.getJdglQuarterPlanList(jdglQuarterPlan);
 
                 for(int i = 1; i <= 4; i++) {
@@ -565,8 +573,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         List<JdglQuarterPlan> collect = jdglQuarterPlanList.stream().filter(vo -> period.equals(vo.getQuarter()) && year.equals(vo.getYear())).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglQuarterPlan jdglQuarterPlan1 : collect) {
-                                if(jdglQuarterPlan1.getThisPlanValueDl() != null && planStatisticsPeriodValueVO.getPlanValue() != null) {
-                                    planStatisticsPeriodValueVO.setPlanValue(jdglQuarterPlan1.getThisPlanValueDl().add(planStatisticsPeriodValueVO.getPlanValue()));
+                                if(planStatisticsPeriodValueVO.getPlanValue() == null) planStatisticsPeriodValueVO.setPlanValue(new BigDecimal(0));
+                                if(jdglQuarterPlan1.getThisPlanValueDl() != null) {
+                                    planStatisticsPeriodValueVO.setPlanValue(planStatisticsPeriodValueVO.getPlanValue().add(jdglQuarterPlan1.getThisPlanValueDl()));
                                 }
                             }
                         }
@@ -581,8 +590,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         ).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglDaySchedule jdglDaySchedule : collect) {
-                                if(jdglDaySchedule.getDayValueDl() != null && planStatisticsPeriodValueVO.getCompValue()!= null) {
-                                    planStatisticsPeriodValueVO.setCompValue(jdglDaySchedule.getDayValueDl().add(planStatisticsPeriodValueVO.getCompValue()));
+                                if (planStatisticsPeriodValueVO.getCompValue() == null) planStatisticsPeriodValueVO.setCompValue(new BigDecimal(0));
+                                if(jdglDaySchedule.getDayValueDl() != null) {
+                                    planStatisticsPeriodValueVO.setCompValue(planStatisticsPeriodValueVO.getCompValue().add(jdglDaySchedule.getDayValueDl()));
                                 }
 
                             }
@@ -606,13 +616,15 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 List<PlanStatisticsPeriodValueVO> yearList = new ArrayList<>();
                 // 获取年计划产值数据
                 List<JdglYearPlan> jdglYearPlanList = jdglYearPlanService.getJdglYearPlanList(new JdglYearPlan());
+
                 if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
-                    for (JdglYearPlan jdglYearPlan : jdglYearPlanList) {
-                        PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO = new PlanStatisticsPeriodValueVO();
+                    List<JdglYearPlan> collect1 = jdglYearPlanList.stream().sorted(Comparator.comparing(JdglYearPlan::getYear)).collect(Collectors.toList());
+                    for (JdglYearPlan jdglYearPlan : collect1) {
                         if(year.compareTo(jdglYearPlan.getYear()) >= 0) {
+                            PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO = new PlanStatisticsPeriodValueVO();
                             planStatisticsPeriodValueVO.setPeriod(jdglYearPlan.getYear());
-                            planStatisticsPeriodValueVO.setPlanValue(jdglYearPlan.getYearPlanValueDl());
                             periodListY.add(jdglYearPlan.getYear());
+                            planStatisticsPeriodValueVO.setPlanValue(jdglYearPlan.getYearPlanValueDl());
                             planValueListY.add(jdglYearPlan.getYearPlanValueDl() == null ? new BigDecimal(0) : jdglYearPlan.getYearPlanValueDl());
                             yearList.add(planStatisticsPeriodValueVO);
                         }
@@ -623,14 +635,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 // 获取年实际产值数据
                 for (PlanStatisticsPeriodValueVO planStatisticsPeriodValueVO: yearList) {
 
-                    Date start = null;
-                    Date end = null;
-                    try {
-                        start = sdf.parse((Integer.parseInt(year) - 1) + "-12-21");
-                        end = sdf.parse(year + "-12-20");
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    Map<String, Date> dateRange4Year = StatisticsUtils.getDateRange4Year(planStatisticsPeriodValueVO.getPeriod());
+                    Date start = dateRange4Year.get("start");
+                    Date end = dateRange4Year.get("end");
+
                     if(!CollectionUtils.isEmpty(listByDateRangeByEnd)) {
                         Date finalStart = start;
                         Date finalEnd = end;
@@ -639,8 +647,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         ).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglDaySchedule jdglDaySchedule : collect) {
-                                if(jdglDaySchedule.getDayValueDl() != null && planStatisticsPeriodValueVO.getCompValue() != null) {
-                                    planStatisticsPeriodValueVO.setCompValue(jdglDaySchedule.getDayValueDl().add(planStatisticsPeriodValueVO.getCompValue()));
+                                if(planStatisticsPeriodValueVO.getCompValue() == null)planStatisticsPeriodValueVO.setCompValue(new BigDecimal(0));
+                                if(jdglDaySchedule.getDayValueDl() != null) {
+                                    planStatisticsPeriodValueVO.setCompValue(planStatisticsPeriodValueVO.getCompValue().add(jdglDaySchedule.getDayValueDl()));
                                 }
                             }
                         }
