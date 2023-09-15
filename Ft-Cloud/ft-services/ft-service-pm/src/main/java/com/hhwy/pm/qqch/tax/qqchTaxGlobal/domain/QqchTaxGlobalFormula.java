@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import lombok.Data;
 import lombok.ToString;
@@ -266,53 +265,59 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
         return recAmt = BigDecimalUtils.sum(b, aloneInterestInAmt, claimInAmt);
     }
 
-    public BigDecimal getUsdRecAmt() {
-        return usdRecAmt = CommonServiceUtil.getUsdAmt(this.getRecAmt(), this.rate);
-    }
-
-    public BigDecimal getCnyRecAmt() {
-        return cnyRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getCnyRate());
-    }
-
-
-    public BigDecimal getLocalRecAmt() {
-        return localRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getLocalRate());
-    }
-
-
     public BigDecimal getBackAmt() {
         return backAmt = BigDecimalUtils.multiply(guaAmt, nodeRecoveryRate);
-    }
-
-    public BigDecimal getUsdBackAmt() {
-        return usdBackAmt = CommonServiceUtil.getUsdAmt(this.getBackAmt(), this.rate);
-    }
-
-    public BigDecimal getCnyBackAmt() {
-        return cnyBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getCnyRate());
-    }
-
-    public BigDecimal getLocalBackAmt() {
-        return localBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getLocalRate());
     }
 
     public BigDecimal getPayAmt() {
         return payAmt = BigDecimalUtils.multiply(this.excContAmt, this.prePayRate);
     }
 
+
+    public BigDecimal getUsdRecAmt() {
+        return usdRecAmt = CommonServiceUtil.getUsdAmt(this.getRecAmt(), this.rate);
+    }
+
+    public BigDecimal getUsdBackAmt() {
+        return usdBackAmt = CommonServiceUtil.getUsdAmt(this.getBackAmt(), this.rate);
+    }
+
+
     public BigDecimal getUsdPayAmt() {
         return usdPayAmt = CommonServiceUtil.getUsdAmt(this.getPayAmt(), this.rate);
     }
 
-    public BigDecimal getCnyPayAmt() {
-        return cnyPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getCnyRate());
-    }
+//    public BigDecimal getCnyRecAmt() {
+//        return cnyRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getCnyRate());
+//    }
+//
+//
+//    public BigDecimal getLocalRecAmt() {
+//        return localRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getLocalRate());
+//    }
+//
+//
+//
 
-    public BigDecimal getLocalPayAmt() {
-        return localPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getLocalRate());
-    }
+//
+//    public BigDecimal getCnyBackAmt() {
+//        return cnyBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getCnyRate());
+//    }
+//
+//    public BigDecimal getLocalBackAmt() {
+//        return localBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getLocalRate());
+//    }
+//
+//    
+//
 
-    public static void main(String[] args) {
-        JsonUtils.soutJsonStr(QqchTaxGlobalFormula.class);
-    }
+//
+//    public BigDecimal getCnyPayAmt() {
+//        return cnyPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getCnyRate());
+//    }
+//
+//    public BigDecimal getLocalPayAmt() {
+//        return localPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getLocalRate());
+//    }
+
 }

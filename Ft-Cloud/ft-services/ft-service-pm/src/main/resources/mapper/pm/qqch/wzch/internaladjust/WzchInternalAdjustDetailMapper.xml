@@ -1,0 +1,761 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.internaladjust.mapper.WzchInternalAdjustDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail" id="WzchInternalAdjustDetailResult">
+        <result property="id" column="id"/>
+        <result property="internalAdjustId" column="internal_adjust_id"/>
+        <result property="materialCode" column="material_code"/>
+        <result property="materialCodeAndStandard" column="materialCodeAndStandard"/>
+        <result property="materialTechParam" column="material_tech_param"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="brand" column="brand"/>
+        <result property="materialStandard" column="material_standard"/>
+        <result property="totalDemandAmount" column="total_demand_amount"/>
+        <result property="innerAdjustNum" column="inner_adjust_num"/>
+        <result property="planReqDate" column="plan_req_date"/>
+        <result property="adjustableNum" column="adjustable_num"/>
+        <result property="adjustProjectId" column="adjust_project_id"/>
+        <result property="adjustProjectName" column="adjust_project_name"/>
+        <result property="adjustableDate" column="adjustable_date"/>
+        <result property="adjustUnitPrice" column="adjust_unit_price"/>
+        <result property="currency" column="currency"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+    </resultMap>
+
+    <sql id="selectWzchInternalAdjustDetailVo">
+        SELECT
+            iad.`id`,
+/*物资总需信息*/
+            tdd.material_tech_param,
+            tdd.total_demand_amount,
+            tdd.category_name,
+/*来源策划需用量*/
+            (
+                SELECT
+                    SUM(
+                            IFNULL( sayc.inner_adjust_num, 0 ))
+                FROM
+                    wzch_source_detail AS sd
+                        LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id
+                WHERE
+                    sd.project_id = iad.project_id
+                  AND sd.material_code = iad.material_code
+                  AND sd.material_standard = iad.material_standard
+                  AND sd.del_flag = 0
+            ) AS inner_adjust_num,
+/*内部调剂材料策划*/
+            iad.`internal_adjust_id`,
+            iad.`material_code`,
+            concat( iad.material_code, '_', iad.material_standard ) materialCodeAndStandard,
+            iad.`brand`,
+            iad.`material_standard`,
+            iad.`plan_req_date`,
+            iad.`adjustable_num`,
+            iad.`adjust_project_id`,
+            iad.`adjust_project_name`,
+            iad.`adjustable_date`,
+            iad.`adjust_unit_price`,
+            iad.`currency`,
+            iad.`total_price`,
+            iad.`file_group_id`,
+            iad.`remark`,
+            iad.`project_id`,
+            iad.`project_name`,
+            iad.`dept_id`,
+            iad.`create_user`,
+            iad.`create_user_name`,
+            iad.`create_time`,
+            iad.`update_user`,
+            iad.`update_user_name`,
+            iad.`update_time`,
+            iad.`del_user`,
+            iad.`del_time`,
+            iad.`del_flag`,
+            iad.`pt_var1`,
+            iad.`pt_var2`,
+            iad.`pt_var3`
+        FROM
+            `wzch_internal_adjust_detail` AS iad /*查询物资总需信息*/
+                LEFT JOIN wzch_total_demand_detail AS tdd ON 
+                tdd.material_code = iad.material_code
+                AND tdd.material_standard = iad.material_standard
+                AND tdd.del_flag = 0
+
+    </sql>
+
+    <select id="selectWzchInternalAdjustDetailList"
+            parameterType="com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail"
+            resultMap="WzchInternalAdjustDetailResult">
+        <include refid="selectWzchInternalAdjustDetailVo"/>
+        <where>
+            iad.`del_flag` = 0
+            AND tdd.material_code = iad.material_code
+            AND tdd.material_standard = iad.material_standard
+            AND tdd.del_flag = 0
+            <if test="internalAdjustId != null ">and iad.`internal_adjust_id` = #{internalAdjustId}</if>
+            <if test="materialCode != null  and materialCode != ''">and iad.`material_code` = #{materialCode}</if>
+            <if test="materialTechParam != null  and materialTechParam != ''">and iad.`material_tech_param` =
+                #{materialTechParam}
+            </if>
+            <if test="brand != null  and brand != ''">and iad.`brand` = #{brand}</if>
+            <if test="materialStandard != null  and materialStandard != ''">and iad.`material_standard` =
+                #{materialStandard}
+            </if>
+            <if test="totalDemandAmount != null ">and iad.`total_demand_amount` = #{totalDemandAmount}</if>
+            <if test="innerAdjustNum != null ">and iad.`inner_adjust_num` = #{innerAdjustNum}</if>
+            <if test="planReqDate != null ">and iad.`plan_req_date` = #{planReqDate}</if>
+            <if test="adjustableNum != null ">and iad.`adjustable_num` = #{adjustableNum}</if>
+            <if test="adjustProjectId != null ">and iad.`adjust_project_id` = #{adjustProjectId}</if>
+            <if test="adjustProjectName != null  and adjustProjectName != ''">and iad.`adjust_project_name` like
+                concat('%',
+                #{adjustProjectName}, '%')
+            </if>
+            <if test="adjustableDate != null ">and iad.`adjustable_date` = #{adjustableDate}</if>
+            <if test="adjustUnitPrice != null ">and iad.`adjust_unit_price` = #{adjustUnitPrice}</if>
+            <if test="currency != null  and currency != ''">and iad.`currency` = #{currency}</if>
+            <if test="totalPrice != null ">and iad.`total_price` = #{totalPrice}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and iad.`file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null ">and iad.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and iad.`project_name` like concat('%',
+                #{projectName},
+                '%')
+            </if>
+            <if test="deptId != null ">and iad.`dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and iad.`create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and iad.`create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and iad.`update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and iad.`update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null  and delUser != ''">and iad.`del_user` = #{delUser}</if>
+            <if test="delTime != null ">and iad.`del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and iad.`pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and iad.`pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and iad.`pt_var3` = #{ptVar3}</if>
+        </where>
+        order by iad.`material_code` asc
+    </select>
+
+    <select id="selectWzchInternalAdjustDetailById" parameterType="Long" resultMap="WzchInternalAdjustDetailResult">
+        <include refid="selectWzchInternalAdjustDetailVo"/>
+        where iad.`id` = #{id}
+    </select>
+    <insert id="insertWzchInternalAdjustDetail"
+            parameterType="com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail">
+        insert into `wzch_internal_adjust_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="internalAdjustId != null">`internal_adjust_id`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="materialTechParam != null">`material_tech_param`,</if>
+            <if test="brand != null">`brand`,</if>
+            <if test="materialStandard != null">`material_standard`,</if>
+            <if test="totalDemandAmount != null">`total_demand_amount`,</if>
+            <if test="innerAdjustNum != null">`inner_adjust_num`,</if>
+            <if test="planReqDate != null">`plan_req_date`,</if>
+            <if test="adjustableNum != null">`adjustable_num`,</if>
+            <if test="adjustProjectId != null">`adjust_project_id`,</if>
+            <if test="adjustProjectName != null">`adjust_project_name`,</if>
+            <if test="adjustableDate != null">`adjustable_date`,</if>
+            <if test="adjustUnitPrice != null">`adjust_unit_price`,</if>
+            <if test="currency != null">`currency`,</if>
+            <if test="totalPrice != null">`total_price`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="internalAdjustId != null">#{internalAdjustId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialTechParam != null">#{materialTechParam},</if>
+            <if test="brand != null">#{brand},</if>
+            <if test="materialStandard != null">#{materialStandard},</if>
+            <if test="totalDemandAmount != null">#{totalDemandAmount},</if>
+            <if test="innerAdjustNum != null">#{innerAdjustNum},</if>
+            <if test="planReqDate != null">#{planReqDate},</if>
+            <if test="adjustableNum != null">#{adjustableNum},</if>
+            <if test="adjustProjectId != null">#{adjustProjectId},</if>
+            <if test="adjustProjectName != null">#{adjustProjectName},</if>
+            <if test="adjustableDate != null">#{adjustableDate},</if>
+            <if test="adjustUnitPrice != null">#{adjustUnitPrice},</if>
+            <if test="currency != null">#{currency},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_internal_adjust_detail` (
+        `id`,
+        `internal_adjust_id`,
+        `material_code`,
+        `material_tech_param`,
+        `brand`,
+        `material_standard`,
+        `total_demand_amount`,
+        `inner_adjust_num`,
+        `plan_req_date`,
+        `adjustable_num`,
+        `adjust_project_id`,
+        `adjust_project_name`,
+        `adjustable_date`,
+        `adjust_unit_price`,
+        `currency`,
+        `total_price`,
+        `file_group_id`,
+        `remark`,
+        `project_id`,
+        `project_name`,
+        `dept_id`,
+        `create_user`,
+        `create_user_name`,
+        `create_time`,
+        `update_user`,
+        `update_user_name`,
+        `update_time`,
+        `del_user`,
+        `del_time`,
+        `del_flag`,
+        `pt_var1`,
+        `pt_var2`,
+        `pt_var3`,
+        )values
+        <foreach collection="dataList" separator="," item="item" index="index">
+            #{item.id}
+            #{item.internalAdjustId}
+            #{item.materialCode}
+            #{item.materialTechParam}
+            #{item.brand}
+            #{item.materialStandard}
+            #{item.totalDemandAmount}
+            #{item.innerAdjustNum}
+            #{item.planReqDate}
+            #{item.adjustableNum}
+            #{item.adjustProjectId}
+            #{item.adjustProjectName}
+            #{item.adjustableDate}
+            #{item.adjustUnitPrice}
+            #{item.currency}
+            #{item.totalPrice}
+            #{item.fileGroupId}
+            #{item.remark}
+            #{item.projectId}
+            #{item.projectName}
+            #{item.deptId}
+            #{item.createUser}
+            #{item.createUserName}
+            #{item.createTime}
+            #{item.updateUser}
+            #{item.updateUserName}
+            #{item.updateTime}
+            #{item.delUser}
+            #{item.delTime}
+            #{item.delFlag}
+            #{item.ptVar1}
+            #{item.ptVar2}
+            #{item.ptVar3}
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_internal_adjust_detail`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="internal_adjust_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.internalAdjustId != null ">
+                        when `id` = #{item.id} then #{item.internalAdjustId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialCode != null ">
+                        when `id` = #{item.id} then #{item.materialCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_tech_param =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialTechParam != null ">
+                        when `id` = #{item.id} then #{item.materialTechParam}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="brand =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.brand != null ">
+                        when `id` = #{item.id} then #{item.brand}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_standard =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialStandard != null ">
+                        when `id` = #{item.id} then #{item.materialStandard}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_demand_amount =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.totalDemandAmount != null ">
+                        when `id` = #{item.id} then #{item.totalDemandAmount}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="inner_adjust_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.innerAdjustNum != null ">
+                        when `id` = #{item.id} then #{item.innerAdjustNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_req_date =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planReqDate != null ">
+                        when `id` = #{item.id} then #{item.planReqDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="adjustable_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.adjustableNum != null ">
+                        when `id` = #{item.id} then #{item.adjustableNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="adjust_project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.adjustProjectId != null ">
+                        when `id` = #{item.id} then #{item.adjustProjectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="adjust_project_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.adjustProjectName != null ">
+                        when `id` = #{item.id} then #{item.adjustProjectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="adjustable_date =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.adjustableDate != null ">
+                        when `id` = #{item.id} then #{item.adjustableDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="adjust_unit_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.adjustUnitPrice != null ">
+                        when `id` = #{item.id} then #{item.adjustUnitPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="currency =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.currency != null ">
+                        when `id` = #{item.id} then #{item.currency}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.totalPrice != null ">
+                        when `id` = #{item.id} then #{item.totalPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.fileGroupId != null ">
+                        when `id` = #{item.id} then #{item.fileGroupId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id` = #{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id` = #{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectName != null ">
+                        when `id` = #{item.id} then #{item.projectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id` = #{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id` = #{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id` = #{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id` = #{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUserName != null ">
+                        when `id` = #{item.id} then #{item.updateUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id` = #{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id` = #{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id` = #{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index">
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="updateWzchInternalAdjustDetail"
+            parameterType="com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchInternalAdjustDetail">
+        update `wzch_internal_adjust_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="internalAdjustId != null">`internal_adjust_id` = #{internalAdjustId},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="materialTechParam != null">`material_tech_param` = #{materialTechParam},</if>
+            <if test="brand != null">`brand` = #{brand},</if>
+            <if test="materialStandard != null">`material_standard` = #{materialStandard},</if>
+            <if test="totalDemandAmount != null">`total_demand_amount` = #{totalDemandAmount},</if>
+            <if test="innerAdjustNum != null">`inner_adjust_num` = #{innerAdjustNum},</if>
+            <if test="planReqDate != null">`plan_req_date` = #{planReqDate},</if>
+            <if test="adjustableNum != null">`adjustable_num` = #{adjustableNum},</if>
+            <if test="adjustProjectId != null">`adjust_project_id` = #{adjustProjectId},</if>
+            <if test="adjustProjectName != null">`adjust_project_name` = #{adjustProjectName},</if>
+            <if test="adjustableDate != null">`adjustable_date` = #{adjustableDate},</if>
+            <if test="adjustUnitPrice != null">`adjust_unit_price` = #{adjustUnitPrice},</if>
+            <if test="currency != null">`currency` = #{currency},</if>
+            <if test="totalPrice != null">`total_price` = #{totalPrice},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchInternalAdjustDetailById" parameterType="Long">
+        update `wzch_internal_adjust_detail`
+        set del_flag = 1
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchInternalAdjustDetailByIds" parameterType="String">
+        update `wzch_internal_adjust_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+
+    <delete id="deleteByAdjustId">
+        delete
+        from wzch_internal_adjust_detail
+        where internal_adjust_id = #{adjustId}
+    </delete>
+    <update id="deleteByAdjustIds">
+        update `wzch_internal_adjust_detail` set del_flag = 1 where `internal_adjust_id` in
+        <foreach item="id" collection="adjustIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <insert id="insertOrUpdateBatch" keyProperty="id">
+        INSERT INTO wzch_internal_adjust_detail (
+        id,
+        internal_adjust_id,
+        material_code,
+        material_tech_param,
+        brand,
+        material_standard,
+        total_demand_amount,
+        inner_adjust_num,
+        plan_req_date,
+        adjustable_num,
+        adjust_project_id,
+        adjust_project_name,
+        adjustable_date,
+        adjust_unit_price,
+        currency,
+        total_price,
+        file_group_id,
+        remark,
+        project_id,
+        project_name,
+        dept_id,
+        create_user,
+        create_user_name,
+        create_time,
+        update_user,
+        update_user_name,
+        update_time,
+        del_user,
+        del_time,
+        del_flag,
+        valid,
+        pt_var1,
+        pt_var2,
+        pt_var3
+        )
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (
+            #{entity.id},
+            #{entity.internalAdjustId},
+            #{entity.materialCode},
+            #{entity.materialTechParam},
+            #{entity.brand},
+            #{entity.materialStandard},
+            #{entity.totalDemandAmount},
+            #{entity.innerAdjustNum},
+            #{entity.planReqDate},
+            #{entity.adjustableNum},
+            #{entity.adjustProjectId},
+            #{entity.adjustProjectName},
+            #{entity.adjustableDate},
+            #{entity.adjustUnitPrice},
+            #{entity.currency},
+            #{entity.totalPrice},
+            #{entity.fileGroupId},
+            #{entity.remark},
+            #{entity.projectId},
+            #{entity.projectName},
+            #{entity.deptId},
+            #{entity.createUser},
+            #{entity.createUserName},
+            #{entity.createTime},
+            #{entity.updateUser},
+            #{entity.updateUserName},
+            #{entity.updateTime},
+            #{entity.delUser},
+            #{entity.delTime},
+            #{entity.delFlag},
+            #{entity.valid},
+            #{entity.ptVar1},
+            #{entity.ptVar2},
+            #{entity.ptVar3})
+        </foreach>
+        on duplicate key update
+        internal_adjust_id = values(internal_adjust_id),
+        material_code = values(material_code),
+        material_tech_param = values(material_tech_param),
+        brand = values(brand),
+        material_standard = values(material_standard),
+        total_demand_amount = values(total_demand_amount),
+        inner_adjust_num = values(inner_adjust_num),
+        plan_req_date = values(plan_req_date),
+        adjustable_num = values(adjustable_num),
+        adjust_project_id = values(adjust_project_id),
+        adjust_project_name = values(adjust_project_name),
+        adjustable_date = values(adjustable_date),
+        adjust_unit_price = values(adjust_unit_price),
+        currency = values(currency),
+        total_price = values(total_price),
+        file_group_id = values(file_group_id),
+        remark = values(remark),
+        project_id = values(project_id),
+        project_name = values(project_name),
+        dept_id = values(dept_id),
+        create_user = values(create_user),
+        create_user_name = values(create_user_name),
+        create_time = values(create_time),
+        update_user = values(update_user),
+        update_user_name = values(update_user_name),
+        update_time = values(update_time),
+        del_user = values(del_user),
+        del_time = values(del_time),
+        del_flag = values(del_flag),
+        valid = values(valid),
+        pt_var1 = values(pt_var1),
+        pt_var2 = values(pt_var2),
+        pt_var3 = values(pt_var3)
+    </insert>
+
+
+    <select id="getMtlDetailList" resultMap="WzchInternalAdjustDetailResult">
+
+        SELECT *
+        FROM (
+                 SELECT sd.id,
+                        sd.material_code,
+                        concat(sd.material_code, '_', tdd.material_standard) materialCodeAndStandard,
+                     /*物资总需信息*/
+                        tdd.material_tech_param,
+                        tdd.material_standard,
+                        tdd.total_demand_amount,
+                        tdd.category_name,
+                     /*来源策划需用量*/
+                        SUM(IFNULL(sayc.inner_adjust_num, 0)) AS            inner_adjust_num
+                 FROM `wzch_source_detail` AS sd
+                          LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id
+                     /*查询物资总需信息*/
+                          LEFT JOIN wzch_total_demand_detail AS tdd ON 
+                     tdd.material_code = sd.material_code
+                     AND tdd.material_standard = sd.material_standard
+                     AND tdd.del_flag = 0
+                 WHERE tdd.material_code = sd.material_code
+                   AND tdd.material_standard = sd.material_standard
+                   and sd.version = #{version}
+                   AND tdd.del_flag = '0'
+                   AND sd.del_flag = '0'
+                 GROUP BY sayc.material_code,
+                          sayc.detail_id
+             ) AS temp
+        WHERE temp.inner_adjust_num > 0
+
+        order by temp.material_code asc
+
+
+    </select>
+
+
+</mapper>

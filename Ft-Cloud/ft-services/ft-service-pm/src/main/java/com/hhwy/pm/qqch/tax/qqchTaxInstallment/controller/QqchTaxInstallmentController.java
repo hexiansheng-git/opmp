@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
+import com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo.InstallmentVO;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
@@ -50,12 +51,21 @@ public class QqchTaxInstallmentController extends BaseController{
     @GetMapping("/list")
     public AjaxResult getQqchTaxInstallmentList(@Validated(ValidationGroups.Select.class) QqchTaxInstallment dto){
         QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto);
-        return AjaxResult.success(qqchTaxInstallmentService.refresh(qqchTaxInstallment));
+        InstallmentVO sss= qqchTaxInstallmentService.list(qqchTaxInstallment);
+        return AjaxResult.success(sss);
     }
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:save")
+
+    /**
+     * 确认接口
+     * 
+     * @param dto 
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchTaxInstallment:confirm")
     @PostMapping("/save")
-    public AjaxResult insertQqchTaxInstallment(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchTaxInstallment >dto){
-        qqchTaxInstallmentService.save(dto);
+    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchTaxInstallment >dto){
+        // 20230915 改成只有确认按钮 确认按钮就是为了在评审功能已确认功能加1
+        qqchTaxInstallmentService.confirm(dto.dealSaveDto());
         return AjaxResult.success(dto);
     }
 
@@ -63,8 +73,7 @@ public class QqchTaxInstallmentController extends BaseController{
     @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
     @GetMapping("/refresh")
     public AjaxResult refresh(QqchTaxInstallment dto){
-        QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(dto.getVersion(), dto);
-        return AjaxResult.success(qqchTaxInstallmentService.refresh(qqchTaxInstallment));
+        return AjaxResult.success(qqchTaxInstallmentService.refresh(dto));
     }
 
 

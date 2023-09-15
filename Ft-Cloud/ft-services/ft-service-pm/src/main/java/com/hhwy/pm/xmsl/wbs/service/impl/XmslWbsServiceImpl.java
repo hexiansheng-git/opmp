@@ -545,6 +545,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             main.setValid(Constant.NO_INT);
             main.setVersion(1);
             new AddBaseInfoUtil<>(main);
+            dto.setMainId(main.getId());
             wbsMainService.insertXmslWbsMain(main);
         }
 //        else{
