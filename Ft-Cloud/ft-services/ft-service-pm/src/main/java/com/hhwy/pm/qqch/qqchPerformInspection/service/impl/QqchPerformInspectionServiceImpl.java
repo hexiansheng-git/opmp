@@ -15,6 +15,8 @@ import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionServ
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -46,7 +48,8 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     private IQqchWorkPlanService workPlanService;
     @Autowired
     private SystemServiceApi systemServiceApi;
-    
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
     public QqchPerformInspection getQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         return qqchPerformInspectionMapper.getQqchPerformInspection(qqchPerformInspection);
@@ -60,6 +63,9 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
 
     @Transactional
     public int insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
+        ProjectInfoWithOther projectInfoWithOther = projectBasicInfoService.getProjectInfoWithOther();
+        String planEstablishDirector = projectInfoWithOther.getPlanEstablishDirector();
+        qqchPerformInspection.setPtVar1(planEstablishDirector);
         qqchPerformInspection.setId(IdWorker.createId());
         qqchPerformInspection.setCreateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setCreateUserName(SecurityUtils.getSysUser().getNickName());
