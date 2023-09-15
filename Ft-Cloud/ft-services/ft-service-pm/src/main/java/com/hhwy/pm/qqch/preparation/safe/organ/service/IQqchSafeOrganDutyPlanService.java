@@ -1,7 +1,9 @@
 package com.hhwy.pm.qqch.preparation.safe.organ.service;
 
+import com.hhwy.pm.qqch.preparation.safe.organ.domain.QqchSafeOrganDutyPlan;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchSafeOrganDutyPlanVo;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -13,4 +15,6 @@ public interface IQqchSafeOrganDutyPlanService {
     QqchSafeOrganDutyPlanVo getQqchSafeOrganDutyPlanList(BigDecimal version);
 
     void batchSave(QqchSafeOrganDutyPlanVo qqchSafeOrganDutyPlanVo);
+
+    List<QqchSafeOrganDutyPlan> getNewVersionList(BigDecimal version);
 }

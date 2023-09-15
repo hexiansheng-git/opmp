@@ -46,10 +46,7 @@ public class QqchSafeOrganDutyPlanServiceImpl implements IQqchSafeOrganDutyPlanS
         QqchSafeOrganDutyPlanVo vo = new QqchSafeOrganDutyPlanVo();
         version = VersionUtil.getVersion("qqch_safe_organ_duty_plan", version);
 
-        QqchSafeOrganDutyPlan qryParam = new QqchSafeOrganDutyPlan();
-        qryParam.setVersion(version);
-        List<QqchSafeOrganDutyPlan> list = qqchSafeOrganDutyPlanMapper.getQqchSafeOrganDutyPlanList(qryParam);
-
+        List<QqchSafeOrganDutyPlan> list = this.getNewVersionList(version);
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
@@ -97,4 +94,12 @@ public class QqchSafeOrganDutyPlanServiceImpl implements IQqchSafeOrganDutyPlanS
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
     }
+
+    public List<QqchSafeOrganDutyPlan> getNewVersionList(BigDecimal version) {
+        QqchSafeOrganDutyPlan qryParam = new QqchSafeOrganDutyPlan();
+        qryParam.setVersion(version);
+        List<QqchSafeOrganDutyPlan> list = qqchSafeOrganDutyPlanMapper.getQqchSafeOrganDutyPlanList(qryParam);
+        return list;
+    }
+
 }
