@@ -160,7 +160,7 @@
                 #{thisTotalVersion}
             </if>
         </where>
-        order by create_time desc
+        order by year desc
     </select>
 
     <insert id="insertJdglYearPlan" useGeneratedKeys="true" keyProperty="id">
