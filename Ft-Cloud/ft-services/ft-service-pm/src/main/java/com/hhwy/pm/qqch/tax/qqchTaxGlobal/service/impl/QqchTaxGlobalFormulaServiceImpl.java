@@ -146,6 +146,11 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         CompileEntity<QqchTaxGlobalFormula> formula1 = bean.getFormula(dealListDto);
         QqchTaxGlobalFormula formula = formula1.getDto();
         ArrayList<QqchTaxGlobal> qqchTaxGlobals = new ArrayList<>();
+        
+        
+        
+        
+        
 
         QqchTaxGlobal rec = new QqchTaxGlobal();
         rec.setItemName("本期预计实收工程款");

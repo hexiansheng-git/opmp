@@ -1,9 +1,9 @@
 package com.hhwy.pm.qqch.tax.qqchTaxInstallment.service;
 
-import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.domain.QqchTaxInstallment;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo.InstallmentVO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,8 +29,12 @@ public interface IQqchTaxInstallmentService {
 
     int deleteQqchTaxInstallmentByPks(List<Long> qqchTaxInstallmentPkList);
 
-    void save(CompileEntity<QqchTaxInstallment> dto);
+    void confirm(QqchTaxInstallment dto);
 
     InstallmentVO refresh(QqchTaxInstallment dto);
+
+    ArrayList<InstallmentVO.ListVO> getList(QqchTaxInstallment qqchTaxInstallment);
+
+    InstallmentVO list(QqchTaxInstallment qqchTaxInstallment);
     
 }

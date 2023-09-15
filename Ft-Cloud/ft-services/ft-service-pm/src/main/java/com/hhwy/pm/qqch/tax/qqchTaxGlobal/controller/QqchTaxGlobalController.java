@@ -101,9 +101,9 @@ public class QqchTaxGlobalController extends BaseController {
 
     @GetMapping("/export")
     public void export(HttpServletResponse response, QqchTaxGlobal qqchTaxGlobalParam) throws IOException {
-        List<QqchTaxGlobal> qqchTaxGlobalList = qqchTaxGlobalService.getQqchTaxGlobalList(qqchTaxGlobalParam);
+        CompileEntity<List<QqchTaxGlobal>> list = qqchTaxGlobalService.list(qqchTaxGlobalParam);
         FtExcelUtil<QqchTaxGlobal> util = new FtExcelUtil<>(QqchTaxGlobal.class);
-        util.exportWithTemplate(response, qqchTaxGlobalList, 3, FtExcelEnum.QQCH_TAX_GLOBAL.getTemplateName(), "sheet1");
+        util.exportWithTemplate(response, list.getDto(), 3, FtExcelEnum.QQCH_TAX_GLOBAL.getTemplateName(), "sheet1");
     }
 
 
@@ -147,9 +147,6 @@ public class QqchTaxGlobalController extends BaseController {
         return AjaxResult.success(res);
     }
     
-    
-    
-
 
 
 }
