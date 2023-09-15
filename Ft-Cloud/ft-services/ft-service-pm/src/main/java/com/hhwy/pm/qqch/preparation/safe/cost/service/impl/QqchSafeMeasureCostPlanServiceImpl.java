@@ -58,9 +58,13 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         // 查询合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
         // 有效合同金额
-        BigDecimal effectiveAmt =
-            xmslContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmout();
+        BigDecimal effectiveAmt = BigDecimal.ZERO;
+        if (xmslContractInfo != null) {
+            // 有效合同金额
+            effectiveAmt =
+                xmslContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmout();
 
+        }
         BigDecimal expectInvestCostTotal = BigDecimal.ZERO;
         // 占工程造价百分比（%）= 预计投入/合同总额
         BigDecimal projectCostPercentage = BigDecimal.ZERO;

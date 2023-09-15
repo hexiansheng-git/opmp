@@ -284,6 +284,11 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
 
         // 获取总体计划,获取实际开工日期最早的数据
         JdglMainPlanItem maxActualStartDateMainPlanItem = jdglMainPlanItemService.getMaxActualStartDate();
+        // 实际开工日
+        Date actualStartDate = null;
+        if (maxActualStartDateMainPlanItem != null) {
+            actualStartDate = maxActualStartDateMainPlanItem.getActualStartDate();
+        }
 
         // 获取总体计划, 获取当月数据 todo 涉及版本
         List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService
@@ -376,8 +381,6 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
         if (contractInfo != null && StringUtils.isNotBlank(contractInfo.getDuration())) {
             // 工期
             BigDecimal duration = new BigDecimal(contractInfo.getDuration());
-            // 实际开工日期
-            Date actualStartDate = maxActualStartDateMainPlanItem.getActualStartDate();
 
             // 有效合同额
             BigDecimal effectiveAmt = contractInfo.getEffectiveAmout();
