@@ -35,10 +35,11 @@
         <result property="delFlag" column="del_flag"/>
         <result property="ptVar1" column="pt_var1"/>
         <result property="ptVar2" column="pt_var2"/>
-        <result property="pId" column="pId"/>
+        <result property="pid" column="pid"/>
     </resultMap>
     <sql id="selectQqchSafeThreeTypePersonVo">
         select `id`
+             ,`pid`
              , `duties`
              , `person_name`
              , `person_id`
@@ -74,6 +75,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="duties != null  and duties != ''">and `duties` = #{duties}</if>
             <if test="personName != null  and personName != ''">and `person_name` = #{personName}</if>
             <if test="personId != null  and personId != ''">and `person_id` = #{personId}</if>
@@ -113,6 +115,7 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="duties != null  and duties != ''">and `duties` = #{duties}</if>
             <if test="personName != null  and personName != ''">and `person_name` = #{personName}</if>
             <if test="personId != null  and personId != ''">and `person_id` = #{personId}</if>
@@ -150,6 +153,7 @@
     <insert id="insertQqchSafeThreeTypePerson" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_safe_three_type_person
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pid != null"> `pid`,</if>
             <if test="id != null ">`id`,</if>
             <if test="duties != null  and duties != ''">`duties`,</if>
             <if test="personName != null  and personName != ''">`person_name`,</if>
@@ -181,6 +185,7 @@
             <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pid != null ">#{pid},</if>
             <if test="id != null ">#{id},</if>
             <if test="duties != null  and duties != ''">#{duties},</if>
             <if test="personName != null  and personName != ''">#{personName},</if>
@@ -218,6 +223,7 @@
         insert into qqch_safe_three_type_person
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
+            `pid`,
             `duties`,
             `person_name`,
             `person_id`,
@@ -250,6 +256,7 @@
         <foreach collection="qqchSafeThreeTypePersonList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
+                #{item.pid},
                 #{item.duties},
                 #{item.personName},
                 #{item.personId},
@@ -285,6 +292,7 @@
         update qqch_safe_three_type_person
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
             <if test="duties != null  and  duties != ''">`duties` = #{duties},</if>
             <if test="personName != null  and  personName != ''">`person_name` = #{personName},</if>
             <if test="personId != null  and  personId != ''">`person_id` = #{personId},</if>
@@ -326,6 +334,11 @@
             <trim prefix="id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.pid}
                 </foreach>
             </trim>
             <trim prefix="duties  = case" suffix="end,">
@@ -479,6 +492,7 @@
         update `qqch_safe_three_type_person` set del_flag = 1
         <where>
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="duties != null  and duties != ''">and `duties` = #{duties}</if>
             <if test="personName != null  and personName != ''">and `person_name` = #{personName}</if>
             <if test="personId != null  and personId != ''">and `person_id` = #{personId}</if>

@@ -14,6 +14,7 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,8 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
         version = VersionUtil.getVersion("qqch_safe_three_type_person",version);
         qqchSafeThreeTypePerson.setVersion(version);
         List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList = qqchSafeThreeTypePersonMapper.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePerson);
-        //转树列表
+        List<QqchSafeThreeTypePerson> build = TreeUtil.build(qqchSafeThreeTypePersonList,0l);
+        /*//转树列表
         if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
             Map<String, List<QqchSafeThreeTypePerson>> dataListMap = qqchSafeThreeTypePersonList.stream().collect(Collectors.groupingBy(t -> t.getDuties()));
             LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
@@ -68,7 +70,8 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
                 returnList.add(parent);
             }
             person.setList(returnList);
-        }
+        }*/
+        person.setList(build);
         person.setVersion(version);
         person.setStageIdentity(qqchReviewService.getStage());
         return person;
@@ -89,17 +92,21 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
         temp.setVersion(qqchSafeThreeTypePersonVo.getVersion());
         qqchSafeThreeTypePersonMapper.deleteQqchSafeThreeTypePerson(temp);
         if (!CollectionUtils.isEmpty(qqchSafeThreeTypePersonVo.getList())) {
-            List<QqchSafeThreeTypePerson> list = qqchSafeThreeTypePersonVo.getList();
-            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
+            List<QqchSafeThreeTypePerson> lists = qqchSafeThreeTypePersonVo.getList();
+            List<QqchSafeThreeTypePerson> list = TreeUtil.treeToList(lists);
+//            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
             for (QqchSafeThreeTypePerson person : list) {
-                person.setId(IdWorker.createId());
+                if(person.getPid()==null){
+                    person.setPid(0l);
+                }
+//                person.setId(IdWorker.createId());
                 person.setVersion(qqchSafeThreeTypePersonVo.getVersion());
                 if (qqchSafeThreeTypePersonVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     person.setValid(Valid.YES);
                 }else{
                     person.setValid(Valid.NO);
                 }
-                person.setDuties(dutiesTypeMap.get(person.getDuties()));
+//                person.setDuties(dutiesTypeMap.get(person.getDuties()));
                 person.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 person.setCreateUserName(SecurityUtils.getUserName());
                 person.setCreateTime(DateUtils.getNowDate());

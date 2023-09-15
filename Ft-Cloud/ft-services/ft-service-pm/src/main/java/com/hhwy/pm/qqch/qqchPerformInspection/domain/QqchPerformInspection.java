@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
@@ -25,7 +26,7 @@ import javax.validation.constraints.NotNull;
  * @remark qqch_perform_inspection
  */
 @Data
-public class QqchPerformInspection extends BaseEntity {
+public class QqchPerformInspection extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**

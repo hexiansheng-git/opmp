@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
 import com.hhwy.pm.qqch.qqchPerformInspection.mapper.QqchPerformInspectionMapper;
@@ -13,10 +15,13 @@ import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionServ
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,18 +48,24 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     private IQqchWorkPlanService workPlanService;
     @Autowired
     private SystemServiceApi systemServiceApi;
-    
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
     public QqchPerformInspection getQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         return qqchPerformInspectionMapper.getQqchPerformInspection(qqchPerformInspection);
     }
 
     public List<QqchPerformInspection> getQqchPerformInspectionList(QqchPerformInspection qqchPerformInspection) {
-        return qqchPerformInspectionMapper.getQqchPerformInspectionList(qqchPerformInspection);
+        List<QqchPerformInspection> qqchPerformInspectionList = qqchPerformInspectionMapper.getQqchPerformInspectionList(qqchPerformInspection);
+        FlowInfoSearchUtil.getFlowInfo(qqchPerformInspectionList, FlowEnum.QQCH_ZXJC);
+        return qqchPerformInspectionList;
     }
 
     @Transactional
     public int insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
+        ProjectInfoWithOther projectInfoWithOther = projectBasicInfoService.getProjectInfoWithOther();
+        String planEstablishDirector = projectInfoWithOther.getPlanEstablishDirector();
+        qqchPerformInspection.setPtVar1(planEstablishDirector);
         qqchPerformInspection.setId(IdWorker.createId());
         qqchPerformInspection.setCreateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setCreateUserName(SecurityUtils.getSysUser().getNickName());

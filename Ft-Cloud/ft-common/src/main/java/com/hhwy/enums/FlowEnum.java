@@ -64,7 +64,11 @@ public enum FlowEnum {
     // 进度管理周进度计划
     JDGL_WEEKPLAN("jdgl_week_plan", "process_jdgl_week_plan"),
     // 进度管理进度填报
-    JDGL_DAYSCHEDULE("jdgl_day_schedule","process_jdgl_day_schedule");
+    JDGL_DAYSCHEDULE("jdgl_day_schedule","process_jdgl_day_schedule"),
+
+    //前期策划执行检查
+    QQCH_ZXJC("qqch_perform_inspection","process_qqch_perform_inspection");;
+
 
     public String getTableName() {
         return this.tableName;
