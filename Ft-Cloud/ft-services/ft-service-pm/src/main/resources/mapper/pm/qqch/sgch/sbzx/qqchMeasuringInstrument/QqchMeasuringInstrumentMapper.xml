@@ -132,9 +132,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             del_flag = "0"
                             <if test="id != null "> and `id` = #{id}</if>
                             <if test="affiliationUnit != null  and affiliationUnit != ''"> and `affiliation_unit` = #{affiliationUnit}</if>
-                            <if test="equType != null  and equType != ''"> and `equ_type` = #{equType}</if>
+                            <if test="equType != null  and equType != ''"> and `equ_type` like concat('%' , #{equType} , '%')</if>
                             <if test="equCode != null  and equCode != ''"> and `equ_code` = #{equCode}</if>
-                            <if test="equName != null  and equName != ''"> and `equ_name` = #{equName}</if>
+                            <if test="equName != null  and equName != ''"> and `equ_name` like concat('%' , #{equName} , '%')</if>
                             <if test="brand != null  and brand != ''"> and `brand` = #{brand}</if>
                             <if test="spec != null  and spec != ''"> and `spec` = #{spec}</if>
                             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
