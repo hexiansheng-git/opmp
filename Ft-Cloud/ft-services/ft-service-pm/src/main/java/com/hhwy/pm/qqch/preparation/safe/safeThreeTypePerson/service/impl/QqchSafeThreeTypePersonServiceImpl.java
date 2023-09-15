@@ -44,13 +44,28 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
     }
 
     public QqchSafeThreeTypePersonVo getQqchSafeThreeTypePersonList(QqchSafeThreeTypePerson qqchSafeThreeTypePerson) {
-        ArrayList<QqchSafeThreeTypePerson> returnList = new ArrayList<>();
+
         QqchSafeThreeTypePersonVo person = new QqchSafeThreeTypePersonVo();
         BigDecimal version = qqchSafeThreeTypePerson.getVersion();
         version = VersionUtil.getVersion("qqch_safe_three_type_person",version);
         qqchSafeThreeTypePerson.setVersion(version);
         List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList = qqchSafeThreeTypePersonMapper.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePerson);
-        List<QqchSafeThreeTypePerson> build = TreeUtil.build(qqchSafeThreeTypePersonList,0l);
+        if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
+            List<QqchSafeThreeTypePerson> build = TreeUtil.build(qqchSafeThreeTypePersonList,0l);
+            person.setList(build);
+        }else{
+            ArrayList<QqchSafeThreeTypePerson> returnList = new ArrayList<>();
+            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
+            for (String key : dutiesTypeMap.keySet()) {
+                QqchSafeThreeTypePerson parent = new QqchSafeThreeTypePerson();
+                parent.setId(Long.parseLong(dutiesTypeMap.get(key)));
+                parent.setDuties(key);
+                parent.setPId(0l);
+                returnList.add(parent);
+            }
+            person.setList(returnList);
+        }
+
         /*//转树列表
         if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
             Map<String, List<QqchSafeThreeTypePerson>> dataListMap = qqchSafeThreeTypePersonList.stream().collect(Collectors.groupingBy(t -> t.getDuties()));
@@ -71,7 +86,7 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
             }
             person.setList(returnList);
         }*/
-        person.setList(build);
+
         person.setVersion(version);
         person.setStageIdentity(qqchReviewService.getStage());
         return person;
