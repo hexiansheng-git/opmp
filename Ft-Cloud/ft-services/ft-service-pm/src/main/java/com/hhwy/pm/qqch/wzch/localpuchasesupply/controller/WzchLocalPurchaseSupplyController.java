@@ -1,13 +1,4 @@
-package com.hhwy.pm.qqch.wzch.puchasesupply.controller;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+package com.hhwy.pm.qqch.wzch.localpuchasesupply.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.exception.BaseException;
@@ -16,19 +7,19 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.domain.WzchLocalPurchaseSupply;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.dto.WzchLocalPurchaseSupplyDTO;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.dto.WzchLocalPurchaseSupplyDetailDTO;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.dto.WzchLocalPurchaseViewDetailDTO;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupplyDetailService;
+import com.hhwy.pm.qqch.wzch.localpuchasesupply.service.IWzchLocalPurchaseSupplyService;
 import com.hhwy.pm.qqch.wzch.puchasesupply.domain.WzchPurchaseSupply;
-import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDTO;
-import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseSupplyDetailDTO;
-import com.hhwy.pm.qqch.wzch.puchasesupply.dto.WzchPurchaseViewDetailDTO;
-import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyDetailService;
-import com.hhwy.pm.qqch.wzch.puchasesupply.service.IWzchPurchaseSupplyService;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 import lombok.ToString;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -36,44 +27,92 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * 采购供应策划Controller
+ * 属地化采购供应策划Controller
  *
  * @author mls
  * @date 2022-11-17
  */
 @RestController
-@RequestMapping("wzch/purchaseSupply")
-public class WzchPurchaseSupplyController extends BaseController {
+@RequestMapping("wzch/localPurchaseSupply")
+public class WzchLocalPurchaseSupplyController extends BaseController {
+
     @Resource
-    private IWzchPurchaseSupplyService wzchPurchaseSupplyService;
-    @Resource
-    private IWzchPurchaseSupplyDetailService detailService;
+    private IWzchLocalPurchaseSupplyService wzchPurchaseSupplyService;
     @Resource
     private WzchCommonService wzchCommonService;
 
+    @Resource
+    private IWzchLocalPurchaseSupplyDetailService detailService;
+
+
     private final static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+
+//    @PostMapping("listener")
+////    @CustomLogger(title = "流程审批完成", businessType = CustomBusinessType.SELECT)
+//    public AjaxResult listener(@RequestBody Map<String, Object> map) {
+//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")), DelegateTask.class);
+//        Map varMap = delegateTask.getVariables();
+//        String businessId = (String) varMap.get("businessId");
+//        wzchPurchaseSupplyService.updateValidStatus(businessId);
+//        return AjaxResult.success("成功");
+//    }
+
 
     /**
      * 新增 编辑 详情数据回显
      */
     @GetMapping("baseInfo")
 //    @CustomLogger(title = "新增 编辑 详情数据回显", businessType = CustomBusinessType.SELECT)
-    public AjaxResult baseInfo(@RequestParam(required = false) WzchPurchaseSupplyDTO purchaseSupply) {
-        
-        return AjaxResult.success(wzchPurchaseSupplyService.baseInfo(purchaseSupply==null?new WzchPurchaseSupplyDTO():purchaseSupply));
+    public AjaxResult baseInfo(@RequestParam(required = false) WzchLocalPurchaseSupplyDTO dto) {
+        return AjaxResult.success(wzchPurchaseSupplyService.baseInfo(dto==null?new WzchLocalPurchaseSupplyDTO():dto));
     }
 
+    /**
+     * 查询采购供应策划列表
+     */
+    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:list")
+    @PostMapping("/list")
+//    @CustomLogger(title = "查询采购供应策划列表", businessType = CustomBusinessType.SELECT)
+    public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchLocalPurchaseSupply wzchPurchaseSupply) {
+        startPage();
+        List<WzchLocalPurchaseSupply> list = wzchPurchaseSupplyService.selectWzchPurchaseSupplyList(wzchPurchaseSupply);
+        return AjaxResult.success(getDataTable(list));
+    }
+
+    /**
+     * 导出采购供应策划列表
+     */
+    @PostMapping("/export")
+//    @CustomLogger(title = "导出采购供应策划列表", businessType = CustomBusinessType.EXPORT)
+    public void export(@RequestBody Map<String, List<WzchLocalPurchaseSupply>> params, HttpServletResponse response) {
+        try {
+            List<WzchLocalPurchaseSupply> detailList = params.get("detailList");
+            ExcelUtils<WzchLocalPurchaseSupply> util = new ExcelUtils<>(WzchLocalPurchaseSupply.class);
+            util.exportExcel(response, detailList, "属地采购供应策划");
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "导出异常");
+        }
+    }
 
 
     /**
      * 新增保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:add")
+    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存采购供应策划", businessType = CustomBusinessType.SAVE)
-    public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchPurchaseSupplyDTO dto) {
+    public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.insert(dto)));
 
     }
@@ -82,21 +121,21 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:edit")
+    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
-    public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchPurchaseSupplyDTO dto) {
+    public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.edit(dto)));
 
     }
 
     /**
-     * 修改保存采购供应策划
+     * 保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:save")
+    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
-    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchPurchaseSupplyDTO dto) {
+    public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.save(dto)));
 
     }
@@ -105,10 +144,10 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:adjust")
+    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:adjust")
     @PostMapping("/adjust")
 //    @CustomLogger(title = "调整保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
-    public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchPurchaseSupplyDTO dto) {
+    public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPurchaseSupplyService.adjust(dto)));
 
     }
@@ -116,7 +155,7 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 删除采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:remove")
+    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:remove")
     @PostMapping("/remove")
     public AjaxResult remove(@RequestBody Map<String, String> params) {
         String ids = params.get("ids");
@@ -129,20 +168,20 @@ public class WzchPurchaseSupplyController extends BaseController {
      */
     @PostMapping("detail/getMtlDetailList")
 //    @CustomLogger(title = "根据项目id获取物资详情", businessType = CustomBusinessType.SELECT)
-    public AjaxResult getListByPrjId(@RequestBody WzchPurchaseSupplyDetailDTO dto) {
+    public AjaxResult getListByPrjId(@RequestBody WzchLocalPurchaseSupplyDetailDTO dto) {
         try {
-            List<WzchPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(dto);
+            List<WzchLocalPurchaseSupplyDetailDTO> list = detailService.getListByPrjId(dto);
 
             Map<String, String> map = new HashMap<>(2);
             map.put("materialStandard_materialStandardName", "material_standard");
             map.put("currency_currencyName", "currency");
             map.put("categoryName_categoryNameName", "total_demand_category_name");
             list = wzchCommonService.setDicValue(list, map);
+
             return AjaxResult.success(list);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "导出异常");
-
+            return AjaxResult.error("获取详情失败");
         }
     }
 
@@ -152,12 +191,12 @@ public class WzchPurchaseSupplyController extends BaseController {
      */
     @PostMapping("detail/export")
 //    @CustomLogger(title = "导出采购供应策划详情列表", businessType = CustomBusinessType.EXPORT)
-    public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchPurchaseSupplyDetailDTO>> params, HttpServletResponse response) {
+    public void exportDetail(@Validated(ValidationGroups.Other.class) @RequestBody Map<String, List<WzchLocalPurchaseSupplyDetailDTO>> params, HttpServletResponse response) {
         try {
-            List<WzchPurchaseSupplyDetailDTO> detailList = params.get("detailList");
-            List<WzchPurchaseSupplyDetailDTO> children = new ArrayList<>();
-            for (WzchPurchaseSupplyDetailDTO wzchPurchaseSupplyDetailDTO : detailList) {
-                List<WzchPurchaseSupplyDetailDTO> children1 = wzchPurchaseSupplyDetailDTO.getChildren();
+            List<WzchLocalPurchaseSupplyDetailDTO> detailList = params.get("detailList");
+            List<WzchLocalPurchaseSupplyDetailDTO> children = new ArrayList<>();
+            for (WzchLocalPurchaseSupplyDetailDTO wzchPurchaseSupplyDetailDTO : detailList) {
+                List<WzchLocalPurchaseSupplyDetailDTO> children1 = wzchPurchaseSupplyDetailDTO.getChildren();
                 if(CollectionUtils.isNotEmpty(children1)) children.addAll(children1);
             }
             Map<String, String> map = new HashMap<>();
@@ -167,9 +206,8 @@ public class WzchPurchaseSupplyController extends BaseController {
             map.put("source", "wzch_purchase_source");
             wzchCommonService.exportDealDict(detailList, map);
             wzchCommonService.exportDealDict(children, map);
-            FtExcelUtil<WzchPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchPurchaseSupplyDetailDTO.class);
-            List<WzchPurchaseSupplyDetailDTO> importDatas = detailService.dealList(detailList);
-            util.exportExcel(response, importDatas, "采购供应策划物资详情");
+            FtExcelUtil<WzchLocalPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchLocalPurchaseSupplyDetailDTO.class);
+            util.exportExcel(response, detailService.dealList(detailList), "采购供应策划物资详情");
         } catch (Exception e) {
             e.printStackTrace();
             throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "导出异常");
@@ -184,8 +222,8 @@ public class WzchPurchaseSupplyController extends BaseController {
 //    @CustomLogger(title = "导入采购供应策划物资详情", businessType = CustomBusinessType.IMPORT)
     public AjaxResult importData(MultipartFile file, @RequestParam Map map) {
         try {
-            FtExcelUtil<WzchPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchPurchaseSupplyDetailDTO.class);
-            List<WzchPurchaseSupplyDetailDTO> dtoList = util.importExcel(file.getInputStream());
+            FtExcelUtil<WzchLocalPurchaseSupplyDetailDTO> util = new FtExcelUtil<>(WzchLocalPurchaseSupplyDetailDTO.class);
+            List<WzchLocalPurchaseSupplyDetailDTO> dtoList = util.importExcel(file.getInputStream());
 
             wzchCommonService.setCurrency(dtoList,"currency","currencyName");
             Map<String, String> dm = new HashMap<>(3);
@@ -207,10 +245,11 @@ public class WzchPurchaseSupplyController extends BaseController {
         }
     }
 
+
     @PostMapping("detail/purchaseView")
 //    @CustomLogger(title = "查询采购视角", businessType = CustomBusinessType.SELECT)
     public AjaxResult purchaseView(@RequestBody Map<String, String> map) {
-        List<WzchPurchaseViewDetailDTO> list = detailService.purchaseView(map);
+        List<WzchLocalPurchaseViewDetailDTO> list = detailService.purchaseView(map);
         return AjaxResult.success("成功", list);
     }
 
@@ -218,25 +257,22 @@ public class WzchPurchaseSupplyController extends BaseController {
     @PostMapping("detail/savePurchaseView")
 //    @CustomLogger(title = "保存采购视角", businessType = CustomBusinessType.SAVE)
     public AjaxResult savePurchaseView(@RequestBody SavePurchaseViewDTO dto) {
-        List<WzchPurchaseViewDetailDTO> viewList = dto.getViewList();
-        String projectId = dto.projectId;
-//        if (CollectionUtils.isEmpty(viewList))
-//            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "数据不能为空");
+        List<WzchLocalPurchaseViewDetailDTO> viewList = dto.getViewList();
+        String projectId = dto.getProjectId();
         detailService.savePurchaseView(viewList, projectId);
         return AjaxResult.success("操作成功");
     }
-
 
     @Data
     @ToString
     public static class SavePurchaseViewDTO implements Serializable {
         private String projectId;
-        private List<WzchPurchaseViewDetailDTO> viewList;
+        private List<WzchLocalPurchaseViewDetailDTO> viewList;
 
     }
 
     @PostMapping("/sync")
-    public AjaxResult sync(WzchPurchaseSupply purchaseSupply) {
+    public AjaxResult sync(WzchLocalPurchaseSupply purchaseSupply) {
         try{
             Assert.notNull(purchaseSupply.getVersion(), "version不能为空");
             wzchPurchaseSupplyService.sync(purchaseSupply);
