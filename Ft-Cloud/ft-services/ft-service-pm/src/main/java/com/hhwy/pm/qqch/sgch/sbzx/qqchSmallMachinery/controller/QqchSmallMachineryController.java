@@ -43,8 +43,8 @@ public class QqchSmallMachineryController extends BaseController{
      */
     @PostMapping("/syncData")
     public AjaxResult syncData(@Validated(ValidationGroups.Save.class) @RequestBody QqchSmallMachineryVo qqchSmallMachineryVo){
-        qqchSmallMachineryService.syncData(qqchSmallMachineryVo);
-        return AjaxResult.success();
+        QqchSmallMachineryVo vo = qqchSmallMachineryService.syncData(qqchSmallMachineryVo);
+        return AjaxResult.success(vo);
     }
 
     /**

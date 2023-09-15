@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.revolverent.mapper.WzchRevolveRentDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.revolverent.dto.WzchRevolveRentDetailDTO" id="WzchRevolveRentDetailResult">
+        <result property="id" column="id"/>
+        <result property="revolveRentId" column="revolve_rent_id"/>
+        <result property="materialCode" column="material_code"/>
+        <result property="materialName" column="material_name"/>
+        <result property="materialSpec" column="material_spec"/>
+        <result property="unit" column="unit"/>
+        <result property="materialTechParam" column="material_tech_param"/>
+        <result property="brand" column="brand"/>
+        <result property="materialStandard" column="material_standard"/>
+        <result property="totalDemandAmount" column="total_demand_amount"/>
+        <result property="categoryName" column="category_name"/>
+        <result property="rentNum" column="rent_num"/>
+        <result property="currency" column="currency"/>
+        <result property="unitPrice" column="unit_price"/>
+        <result property="planEnterDate" column="plan_enter_date"/>
+        <result property="rentDays" column="rent_days"/>
+        <result property="planExitDate" column="plan_exit_date"/>
+        <result property="otherCost" column="other_cost"/>
+        <result property="totalPrice" column="total_price"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+    </resultMap>
+
+    <sql id="selectWzchRevolveRentDetailVo">
+        select rrd.`id`,
+               rrd.`revolve_rent_id`,
+               rrd.`material_code`,
+               rrd.`material_tech_param`,
+               rrd.`brand`,
+               rrd.`material_standard`,
+               rrd.total_demand_amount,
+               rrd.`rent_num`,
+               rrd.`currency`,
+               rrd.`unit_price`,
+               rrd.`plan_enter_date`,
+               rrd.`rent_days`,
+               rrd.`plan_exit_date`,
+               rrd.`other_cost`,
+               rrd.`total_price`,
+               rrd.`file_group_id`,
+               rrd.`remark`,
+               rrd.`project_id`,
+               rrd.`project_name`,
+               rrd.`dept_id`,
+               rrd.`create_user`,
+               rrd.`create_user_name`,
+               rrd.`create_time`,
+               rrd.`update_user`,
+               rrd.`update_user_name`,
+               rrd.`update_time`,
+               rrd.`del_user`,
+               rrd.`del_time`,
+               rrd.`del_flag`,
+               rrd.`pt_var1`,
+               rrd.`pt_var2`,
+               rrd.`pt_var3`
+        from `wzch_revolve_rent_detail` as rrd
+    </sql>
+
+    <select id="selectWzchRevolveRentDetailList" parameterType="com.hhwy.pm.qqch.wzch.revolverent.domain.WzchRevolveRentDetail"
+            resultMap="WzchRevolveRentDetailResult">
+        SELECT
+        rrd.`id`,
+        rrd.`material_code`,
+
+        /****************物资总需信息****************/
+        tdd.id AS totalId,
+        /*技术参数*/
+        tdd.material_tech_param,
+        /*执行标准*/
+        tdd.material_standard,
+        /*总需用量*/
+        tdd.total_demand_amount,
+        /*类型*/
+        tdd.category_name,
+        /****************物资总需信息****************/
+
+        /****************来源策划租赁数据****************/
+        /*租赁需用量*/
+        SUM(IFNULL(sayc.rent_num ,0))as rent_num,
+
+
+        rrd.`revolve_rent_id`,
+        rrd.`brand`,
+        rrd.`currency`,
+        rrd.`unit_price`,
+        rrd.`plan_enter_date`,
+        rrd.`rent_days`,
+        rrd.`plan_exit_date`,
+        rrd.`other_cost`,
+        rrd.`total_price`,
+        rrd.`project_id`,
+        rrd.`project_name`,
+        rrd.`remark`
+        FROM
+        `wzch_revolve_rent_detail` AS rrd
+
+        /* 关联物资总需*/
+        LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = rrd.project_id
+        AND tdd.material_code = rrd.material_code
+        AND tdd.material_standard = rrd.material_standard
+        AND tdd.valid = 1
+        AND tdd.del_flag = 0
+
+        /* 关联来源策划*/
+        LEFT JOIN wzch_source_detail AS sd ON sd.project_id = rrd.project_id
+        AND sd.material_code = rrd.material_code
+        AND sd.material_standard = rrd.material_standard
+        AND sd.del_flag = 0
+        LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id
+        <where>
+            rrd.`del_flag` = 0
+          /*  AND sd.material_code = rrd.material_code
+            AND sd.material_standard = rrd.material_standard
+            AND sd.del_flag = 0
+            AND tdd.material_code = rrd.material_code
+            AND tdd.material_standard = rrd.material_standard
+            AND tdd.valid = 1
+            AND tdd.del_flag = 0*/
+            <if test="revolveRentId != null ">and rrd.`revolve_rent_id` = #{revolveRentId}</if>
+            <if test="materialCode != null  and materialCode != ''">and rrd.`material_code` = #{materialCode}</if>
+            <if test="materialTechParam != null  and materialTechParam != ''">and rrd.`material_tech_param` =
+                #{materialTechParam}
+            </if>
+            <if test="brand != null  and brand != ''">and rrd.`brand` = #{brand}</if>
+            <if test="materialStandard != null  and materialStandard != ''">and rrd.`material_standard` =
+                #{materialStandard}
+            </if>
+            <if test="totalDemandAmount != null ">and rrd.`total_demand_amount` = #{totalDemandAmount}</if>
+            <if test="rentNum != null ">and rrd.`rent_num` = #{rentNum}</if>
+            <if test="currency != null  and currency != ''">and rrd.`currency` = #{currency}</if>
+            <if test="unitPrice != null ">and rrd.`unit_price` = #{unitPrice}</if>
+            <if test="planEnterDate != null ">and rrd.`plan_enter_date` = #{planEnterDate}</if>
+            <if test="rentDays != null ">and rrd.`rent_days` = #{rentDays}</if>
+            <if test="planExitDate != null ">and rrd.`plan_exit_date` = #{planExitDate}</if>
+            <if test="otherCost != null ">and rrd.`other_cost` = #{otherCost}</if>
+            <if test="totalPrice != null ">and rrd.`total_price` = #{totalPrice}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and rrd.`file_group_id` = #{fileGroupId}</if>
+            <if test="projectId != null ">and rrd.`project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and rrd.`project_name` like concat('%',
+                #{projectName},
+                '%')
+            </if>
+            <if test="deptId != null ">and rrd.`dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and rrd.`create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and rrd.`create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and rrd.`update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and rrd.`update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null  and delUser != ''">and rrd.`del_user` = #{delUser}</if>
+            <if test="delTime != null ">and rrd.`del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and rrd.`pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and rrd.`pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and rrd.`pt_var3` = #{ptVar3}</if>
+            <if test="valid != null  and valid != ''">and rrd.`valid` = #{valid}</if>
+        </where>
+        GROUP BY rrd.material_code, sayc.detail_id
+
+        order by rrd.`material_code` asc
+    </select>
+
+    <select id="selectWzchRevolveRentDetailById" parameterType="Long" resultMap="WzchRevolveRentDetailResult">
+        <include refid="selectWzchRevolveRentDetailVo"/>
+        where rrd.`id` = #{id}
+    </select>
+    <insert id="insertWzchRevolveRentDetail" parameterType="com.hhwy.pm.qqch.wzch.revolverent.domain.WzchRevolveRentDetail">
+        insert into `wzch_revolve_rent_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="revolveRentId != null">`revolve_rent_id`,</if>
+            <if test="materialCode != null">`material_code`,</if>
+            <if test="materialTechParam != null">`material_tech_param`,</if>
+            <if test="brand != null">`brand`,</if>
+            <if test="materialStandard != null">`material_standard`,</if>
+            <if test="totalDemandAmount != null">`total_demand_amount`,</if>
+            <if test="rentNum != null">`rent_num`,</if>
+            <if test="currency != null">`currency`,</if>
+            <if test="unitPrice != null">`unit_price`,</if>
+            <if test="planEnterDate != null">`plan_enter_date`,</if>
+            <if test="rentDays != null">`rent_days`,</if>
+            <if test="planExitDate != null">`plan_exit_date`,</if>
+            <if test="otherCost != null">`other_cost`,</if>
+            <if test="totalPrice != null">`total_price`,</if>
+            <if test="fileGroupId != null">`file_group_id`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="revolveRentId != null">#{revolveRentId},</if>
+            <if test="materialCode != null">#{materialCode},</if>
+            <if test="materialTechParam != null">#{materialTechParam},</if>
+            <if test="brand != null">#{brand},</if>
+            <if test="materialStandard != null">#{materialStandard},</if>
+            <if test="totalDemandAmount != null">#{totalDemandAmount},</if>
+            <if test="rentNum != null">#{rentNum},</if>
+            <if test="currency != null">#{currency},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="planEnterDate != null">#{planEnterDate},</if>
+            <if test="rentDays != null">#{rentDays},</if>
+            <if test="planExitDate != null">#{planExitDate},</if>
+            <if test="otherCost != null">#{otherCost},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="fileGroupId != null">#{fileGroupId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_revolve_rent_detail` (
+        `id`,
+        `revolve_rent_id`,
+        `material_code`,
+        `material_tech_param`,
+        `brand`,
+        `material_standard`,
+        total_demand_amount,
+        `rent_num`,
+        `currency`,
+        `unit_price`,
+        `plan_enter_date`,
+        `rent_days`,
+        `plan_exit_date`,
+        `other_cost`,
+        `total_price`,
+        `file_group_id`,
+        `remark`,
+        `project_id`,
+        `project_name`,
+        `dept_id`,
+        `create_user`,
+        `create_user_name`,
+        `create_time`,
+        `update_user`,
+        `update_user_name`,
+        `update_time`,
+        `del_user`,
+        `del_time`,
+        `del_flag`,
+        `pt_var1`,
+        `pt_var2`,
+        `pt_var3`,
+        )values
+        <foreach collection="dataList" separator="," item="item" index="index">
+            #{item.id}
+            #{item.revolveRentId}
+            #{item.materialCode}
+            #{item.materialTechParam}
+            #{item.brand}
+            #{item.materialStandard}
+            #{item.totalDemandAmount}
+            #{item.rentNum}
+            #{item.currency}
+            #{item.unitPrice}
+            #{item.planEnterDate}
+            #{item.rentDays}
+            #{item.planExitDate}
+            #{item.otherCost}
+            #{item.totalPrice}
+            #{item.fileGroupId}
+            #{item.remark}
+            #{item.projectId}
+            #{item.projectName}
+            #{item.deptId}
+            #{item.createUser}
+            #{item.createUserName}
+            #{item.createTime}
+            #{item.updateUser}
+            #{item.updateUserName}
+            #{item.updateTime}
+            #{item.delUser}
+            #{item.delTime}
+            #{item.delFlag}
+            #{item.ptVar1}
+            #{item.ptVar2}
+            #{item.ptVar3}
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_revolve_rent_detail`
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="revolve_rent_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.revolveRentId != null ">
+                        when `id` = #{item.id} then #{item.revolveRentId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_code =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialCode != null ">
+                        when `id` = #{item.id} then #{item.materialCode}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_tech_param =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialTechParam != null ">
+                        when `id` = #{item.id} then #{item.materialTechParam}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="brand =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.brand != null ">
+                        when `id` = #{item.id} then #{item.brand}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_standard =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialStandard != null ">
+                        when `id` = #{item.id} then #{item.materialStandard}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_demand_amount =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.totalDemandAmount != null ">
+                        when `id` = #{item.id} then #{item.totalDemandAmount}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="rent_num =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.rentNum != null ">
+                        when `id` = #{item.id} then #{item.rentNum}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="currency =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.currency != null ">
+                        when `id` = #{item.id} then #{item.currency}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="unit_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.unitPrice != null ">
+                        when `id` = #{item.id} then #{item.unitPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_enter_date =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planEnterDate != null ">
+                        when `id` = #{item.id} then #{item.planEnterDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="rent_days =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.rentDays != null ">
+                        when `id` = #{item.id} then #{item.rentDays}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="plan_exit_date =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.planExitDate != null ">
+                        when `id` = #{item.id} then #{item.planExitDate}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="other_cost =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.otherCost != null ">
+                        when `id` = #{item.id} then #{item.otherCost}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="total_price =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.totalPrice != null ">
+                        when `id` = #{item.id} then #{item.totalPrice}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.fileGroupId != null ">
+                        when `id` = #{item.id} then #{item.fileGroupId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id` = #{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id` = #{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectName != null ">
+                        when `id` = #{item.id} then #{item.projectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id` = #{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id` = #{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id` = #{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id` = #{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUserName != null ">
+                        when `id` = #{item.id} then #{item.updateUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id` = #{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id` = #{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id` = #{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index">
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+    <update id="updateWzchRevolveRentDetail" parameterType="com.hhwy.pm.qqch.wzch.revolverent.domain.WzchRevolveRentDetail">
+        update `wzch_revolve_rent_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="revolveRentId != null">`revolve_rent_id` = #{revolveRentId},</if>
+            <if test="materialCode != null">`material_code` = #{materialCode},</if>
+            <if test="materialTechParam != null">`material_tech_param` = #{materialTechParam},</if>
+            <if test="brand != null">`brand` = #{brand},</if>
+            <if test="materialStandard != null">`material_standard` = #{materialStandard},</if>
+            <if test="totalDemandAmount != null">`total_demand_amount` = #{totalDemandAmount},</if>
+            <if test="rentNum != null">`rent_num` = #{rentNum},</if>
+            <if test="currency != null">`currency` = #{currency},</if>
+            <if test="unitPrice != null">`unit_price` = #{unitPrice},</if>
+            <if test="planEnterDate != null">`plan_enter_date` = #{planEnterDate},</if>
+            <if test="rentDays != null">`rent_days` = #{rentDays},</if>
+            <if test="planExitDate != null">`plan_exit_date` = #{planExitDate},</if>
+            <if test="otherCost != null">`other_cost` = #{otherCost},</if>
+            <if test="totalPrice != null">`total_price` = #{totalPrice},</if>
+            <if test="fileGroupId != null">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchRevolveRentDetailById" parameterType="Long">
+        update `wzch_revolve_rent_detail`
+        set del_flag = 1
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchRevolveRentDetailByIds" parameterType="String">
+        update `wzch_revolve_rent_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <select id="getMtlDetailList" resultMap="WzchRevolveRentDetailResult">
+
+        SELECT *
+        FROM (
+                 SELECT
+                     /*来源信息*/
+                     sd.id,
+                     SUM(ifnull(sayc.rent_num, 0)) AS rent_num,
+                     sd.`material_code`,
+                     /*优先进场的品牌 优先进场中有，则从优先进场中获取*/
+                     ppd.brand,
+                     /*物资总需信息*/
+                     tdd.id                        AS totalId,
+                     tdd.material_tech_param,
+                     tdd.material_standard,
+                     tdd.total_demand_amount,
+                     tdd.category_name
+
+                 FROM wzch_source_detail AS sd
+                          LEFT JOIN wzch_source_approach_year_count AS sayc ON sd.id = sayc.detail_id
+
+                     /* 关联物资总需*/
+                          LEFT JOIN wzch_total_demand_detail AS tdd ON 
+                     tdd.material_code = sd.material_code
+                     AND tdd.material_standard = sd.material_standard
+                     AND tdd.del_flag = 0
+
+                     /* 关联优先进场物资策划 */
+                          LEFT JOIN wzch_prior_purchase_detail AS ppd ON 
+                     ppd.material_code = sd.material_code
+                     AND ppd.material_standard = sd.material_standard
+                     AND ppd.del_flag = 0
+                 WHERE tdd.material_code = sd.material_code
+                   AND tdd.material_standard = sd.material_standard
+                   AND tdd.del_flag = 0
+                     /*类型为 周转材 的数据*/
+                   AND tdd.category_name = '2'
+                 GROUP BY sayc.material_code,
+                          sayc.detail_id
+             ) AS temp
+        WHERE temp.rent_num > 0
+        ORDER BY temp.material_code ASC
+    </select>
+
+
+    <delete id="deleteByRentId">
+        delete
+        from wzch_revolve_rent_detail
+        where revolve_rent_id = #{rentId}
+    </delete>
+    <update id="deleteByRentIds">
+        update `wzch_revolve_rent_detail` set del_flag = 1 where `revolve_rent_id` in
+        <foreach item="id" collection="rentIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <insert id="insertOrUpdateBatch">
+        insert into wzch_revolve_rent_detail(
+        id,
+        revolve_rent_id,
+        material_code,
+        material_tech_param,
+        brand,
+        material_standard,
+        total_demand_amount,
+        rent_num,
+        currency,
+        unit_price,
+        plan_enter_date,
+        rent_days,
+        plan_exit_date,
+        other_cost,
+        total_price,
+        file_group_id,
+        remark,
+        project_id,
+        project_name,
+        dept_id,
+        create_user,
+        create_user_name,
+        create_time,
+        update_user,
+        update_user_name,
+        update_time,
+        del_user,
+        del_time,
+        del_flag,
+        valid,
+        pt_var1,
+        pt_var2,
+        pt_var3
+        )
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (
+            #{entity.id},
+            #{entity.revolveRentId},
+            #{entity.materialCode},
+            #{entity.materialTechParam},
+            #{entity.brand},
+            #{entity.materialStandard},
+            #{entity.totalDemandAmount},
+            #{entity.rentNum},
+            #{entity.currency},
+            #{entity.unitPrice},
+            #{entity.planEnterDate},
+            #{entity.rentDays},
+            #{entity.planExitDate},
+            #{entity.otherCost},
+            #{entity.totalPrice},
+            #{entity.fileGroupId},
+            #{entity.remark},
+            #{entity.projectId},
+            #{entity.projectName},
+            #{entity.deptId},
+            #{entity.createUser},
+            #{entity.createUserName},
+            #{entity.createTime},
+            #{entity.updateUser},
+            #{entity.updateUserName},
+            #{entity.updateTime},
+            #{entity.delUser},
+            #{entity.delTime},
+            #{entity.delFlag},
+            #{entity.valid},
+            #{entity.ptVar1},
+            #{entity.ptVar2},
+            #{entity.ptVar3})
+        </foreach>
+        on duplicate key update
+        revolve_rent_id = values(revolve_rent_id),
+        material_code = values(material_code),
+        material_tech_param = values(material_tech_param),
+        brand = values(brand),
+        material_standard = values(material_standard),
+        total_demand_amount = values(total_demand_amount),
+        rent_num = values(rent_num),
+        currency = values(currency),
+        unit_price = values(unit_price),
+        plan_enter_date = values(plan_enter_date),
+        rent_days = values(rent_days),
+        plan_exit_date = values(plan_exit_date),
+        other_cost = values(other_cost),
+        total_price = values(total_price),
+        file_group_id = values(file_group_id),
+        remark = values(remark),
+        project_id = values(project_id),
+        project_name = values(project_name),
+        dept_id = values(dept_id),
+        create_user = values(create_user),
+        create_user_name = values(create_user_name),
+        create_time = values(create_time),
+        update_user = values(update_user),
+        update_user_name = values(update_user_name),
+        update_time = values(update_time),
+        del_user = values(del_user),
+        del_time = values(del_time),
+        del_flag = values(del_flag),
+        valid = values(valid),
+        pt_var1 = values(pt_var1),
+        pt_var2 = values(pt_var2),
+        pt_var3 = values(pt_var3)
+    </insert>
+
+</mapper>

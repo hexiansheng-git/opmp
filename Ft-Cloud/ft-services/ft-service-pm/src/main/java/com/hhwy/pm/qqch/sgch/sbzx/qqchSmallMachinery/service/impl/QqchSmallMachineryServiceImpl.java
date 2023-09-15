@@ -57,21 +57,21 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
      * 时间: 2023/8/17
      */
     @Override
-    public void syncData(QqchSmallMachineryVo param) {
-        //保存界面已有数据
+    public QqchSmallMachineryVo syncData(QqchSmallMachineryVo param) {
         BigDecimal version = param.getVersion();
         List<QqchSmallMachinery> paramList = param.getQqchSmallMachineryList();
-        this.insertQqchMeasuringInstrumentList(paramList, version);
-
+        if (CollectionUtils.isEmpty(paramList)){
+            QqchSmallMachinery qqchSmallMachinery = new QqchSmallMachinery();
+            qqchSmallMachinery.setVersion(param.getVersion());
+            return this.getQqchSmallMachineryList(qqchSmallMachinery);
+        }
         //按设备编号分组，用于判断是否已存在
         Map<String, List<QqchSmallMachinery>> collect = new HashMap<>();
         if (CollectionUtils.isNotEmpty(paramList)) {
             collect = paramList.stream().collect(Collectors.groupingBy(QqchSmallMachinery::getEquCode));
         }
-
         //获取设备策划数据
         List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(version, new QqchConstFacilityPlan()));
-
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
@@ -98,7 +98,18 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
             smallMachinery.setCreateTime(DateUtils.getNowDate());
             saveList.add(smallMachinery);
         }
+        //保存界面已有数据
+        this.insertQqchMeasuringInstrumentList(paramList, version);
+        if (CollectionUtils.isEmpty(saveList)){
+            QqchSmallMachinery qqchSmallMachinery = new QqchSmallMachinery();
+            qqchSmallMachinery.setVersion(param.getVersion());
+            return this.getQqchSmallMachineryList(qqchSmallMachinery);
+        }
+        //保存新增的数据
         qqchSmallMachineryMapper.insertQqchSmallMachineryList(saveList);
+        QqchSmallMachinery qqchSmallMachinery = new QqchSmallMachinery();
+        qqchSmallMachinery.setVersion(param.getVersion());
+        return this.getQqchSmallMachineryList(qqchSmallMachinery);
     }
 
     /**
