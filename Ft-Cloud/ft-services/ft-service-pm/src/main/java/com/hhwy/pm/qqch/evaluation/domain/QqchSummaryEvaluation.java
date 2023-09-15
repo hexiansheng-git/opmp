@@ -57,7 +57,7 @@ public class QqchSummaryEvaluation extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "初评价人id")
-    private Long initialPersonId;
+    private String initialPersonId;
     /**
      * 字段描述：初评价人
      */
@@ -102,7 +102,7 @@ public class QqchSummaryEvaluation extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "终评价人id")
-    private Long finalPersonId;
+    private String finalPersonId;
     /**
      * 字段描述：终评价人
      */

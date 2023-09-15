@@ -93,7 +93,7 @@
       </if>
       <if test="initialUnitId != null ">and `initial_unit_id` = #{initialUnitId}</if>
       <if test="initialUnit != null  and initialUnit != ''">and `initial_unit` = #{initialUnit}</if>
-      <if test="initialPersonId != null ">and `initial_person_id` = #{initialPersonId}</if>
+      <if test="initialPersonId != null and initialPersonId != ''">and `initial_person_id` = #{initialPersonId}</if>
       <if test="initialPerson != null  and initialPerson != ''">and `initial_person` = #{initialPerson}</if>
       <if test="initialDate != null ">and `initial_date` = #{initialDate}</if>
       <if test="initialOverview != null  and initialOverview != ''">and `initial_overview` = #{initialOverview}</if>
@@ -102,7 +102,7 @@
       </if>
       <if test="finalUnitId != null ">and `final_unit_id` = #{finalUnitId}</if>
       <if test="finalUnit != null  and finalUnit != ''">and `final_unit` = #{finalUnit}</if>
-      <if test="finalPersonId != null ">and `final_person_id` = #{finalPersonId}</if>
+      <if test="finalPersonId != null and finalPersonId != ''">and `final_person_id` = #{finalPersonId}</if>
       <if test="finalPerson != null  and finalPerson != ''">and `final_person` = #{finalPerson}</if>
       <if test="finalDate != null ">and `final_date` = #{finalDate}</if>
       <if test="finalOverview != null  and finalOverview != ''">and `final_overview` = #{finalOverview}</if>
@@ -142,7 +142,7 @@
       </if>
       <if test="initialUnitId != null ">and `initial_unit_id` = #{initialUnitId}</if>
       <if test="initialUnit != null  and initialUnit != ''">and `initial_unit` = #{initialUnit}</if>
-      <if test="initialPersonId != null ">and `initial_person_id` = #{initialPersonId}</if>
+      <if test="initialPersonId != null and initialPersonId != ''">and `initial_person_id` = #{initialPersonId}</if>
       <if test="initialPerson != null  and initialPerson != ''">and `initial_person` = #{initialPerson}</if>
       <if test="initialDate != null ">and `initial_date` = #{initialDate}</if>
       <if test="initialOverview != null  and initialOverview != ''">and `initial_overview` = #{initialOverview}</if>
@@ -151,7 +151,7 @@
       </if>
       <if test="finalUnitId != null ">and `final_unit_id` = #{finalUnitId}</if>
       <if test="finalUnit != null  and finalUnit != ''">and `final_unit` = #{finalUnit}</if>
-      <if test="finalPersonId != null ">and `final_person_id` = #{finalPersonId}</if>
+      <if test="finalPersonId != null and finalPersonId != ''">and `final_person_id` = #{finalPersonId}</if>
       <if test="finalPerson != null  and finalPerson != ''">and `final_person` = #{finalPerson}</if>
       <if test="finalDate != null ">and `final_date` = #{finalDate}</if>
       <if test="finalOverview != null  and finalOverview != ''">and `final_overview` = #{finalOverview}</if>
@@ -188,14 +188,14 @@
       <if test="overviewFileGroupId != null  and overviewFileGroupId != ''">`overview_file_group_id`,</if>
       <if test="initialUnitId != null ">`initial_unit_id`,</if>
       <if test="initialUnit != null  and initialUnit != ''">`initial_unit`,</if>
-      <if test="initialPersonId != null ">`initial_person_id`,</if>
+      <if test="initialPersonId != null and initialPersonId != ''">`initial_person_id`,</if>
       <if test="initialPerson != null  and initialPerson != ''">`initial_person`,</if>
       <if test="initialDate != null ">`initial_date`,</if>
       <if test="initialOverview != null  and initialOverview != ''">`initial_overview`,</if>
       <if test="initialFileGroupId != null  and initialFileGroupId != ''">`initial_file_group_id`,</if>
       <if test="finalUnitId != null ">`final_unit_id`,</if>
       <if test="finalUnit != null  and finalUnit != ''">`final_unit`,</if>
-      <if test="finalPersonId != null ">`final_person_id`,</if>
+      <if test="finalPersonId != null and finalPersonId != ''">`final_person_id`,</if>
       <if test="finalPerson != null  and finalPerson != ''">`final_person`,</if>
       <if test="finalDate != null ">`final_date`,</if>
       <if test="finalOverview != null  and finalOverview != ''">`final_overview`,</if>
@@ -226,14 +226,14 @@
       <if test="overviewFileGroupId != null  and overviewFileGroupId != ''">#{overviewFileGroupId},</if>
       <if test="initialUnitId != null ">#{initialUnitId},</if>
       <if test="initialUnit != null  and initialUnit != ''">#{initialUnit},</if>
-      <if test="initialPersonId != null ">#{initialPersonId},</if>
+      <if test="initialPersonId != null and initialPersonId != ''">#{initialPersonId},</if>
       <if test="initialPerson != null  and initialPerson != ''">#{initialPerson},</if>
       <if test="initialDate != null ">#{initialDate},</if>
       <if test="initialOverview != null  and initialOverview != ''">#{initialOverview},</if>
       <if test="initialFileGroupId != null  and initialFileGroupId != ''">#{initialFileGroupId},</if>
       <if test="finalUnitId != null ">#{finalUnitId},</if>
       <if test="finalUnit != null  and finalUnit != ''">#{finalUnit},</if>
-      <if test="finalPersonId != null ">#{finalPersonId},</if>
+      <if test="finalPersonId != null and finalPersonId != ''">#{finalPersonId},</if>
       <if test="finalPerson != null  and finalPerson != ''">#{finalPerson},</if>
       <if test="finalDate != null ">#{finalDate},</if>
       <if test="finalOverview != null  and finalOverview != ''">#{finalOverview},</if>
@@ -352,7 +352,7 @@
       </if>
       <if test="initialUnitId != null ">`initial_unit_id` = #{initialUnitId},</if>
       <if test="initialUnit != null  and  initialUnit != ''">`initial_unit` = #{initialUnit},</if>
-      <if test="initialPersonId != null ">`initial_person_id` = #{initialPersonId},</if>
+      <if test="initialPersonId != null and initialPersonId != ''">`initial_person_id` = #{initialPersonId},</if>
       <if test="initialPerson != null  and  initialPerson != ''">`initial_person` = #{initialPerson},</if>
       <if test="initialDate != null ">`initial_date` = #{initialDate},</if>
       <if test="initialOverview != null  and  initialOverview != ''">`initial_overview` = #{initialOverview},</if>
@@ -361,7 +361,7 @@
       </if>
       <if test="finalUnitId != null ">`final_unit_id` = #{finalUnitId},</if>
       <if test="finalUnit != null  and  finalUnit != ''">`final_unit` = #{finalUnit},</if>
-      <if test="finalPersonId != null ">`final_person_id` = #{finalPersonId},</if>
+      <if test="finalPersonId != null and finalPersonId != ''">`final_person_id` = #{finalPersonId},</if>
       <if test="finalPerson != null  and  finalPerson != ''">`final_person` = #{finalPerson},</if>
       <if test="finalDate != null ">`final_date` = #{finalDate},</if>
       <if test="finalOverview != null  and  finalOverview != ''">`final_overview` = #{finalOverview},</if>
@@ -591,7 +591,7 @@
       </if>
       <if test="initialUnitId != null ">and `initial_unit_id` = #{initialUnitId}</if>
       <if test="initialUnit != null  and initialUnit != ''">and `initial_unit` = #{initialUnit}</if>
-      <if test="initialPersonId != null ">and `initial_person_id` = #{initialPersonId}</if>
+      <if test="initialPersonId != null and initialPersonId != ''">and `initial_person_id` = #{initialPersonId}</if>
       <if test="initialPerson != null  and initialPerson != ''">and `initial_person` = #{initialPerson}</if>
       <if test="initialDate != null ">and `initial_date` = #{initialDate}</if>
       <if test="initialOverview != null  and initialOverview != ''">and `initial_overview` = #{initialOverview}</if>
@@ -600,7 +600,7 @@
       </if>
       <if test="finalUnitId != null ">and `final_unit_id` = #{finalUnitId}</if>
       <if test="finalUnit != null  and finalUnit != ''">and `final_unit` = #{finalUnit}</if>
-      <if test="finalPersonId != null ">and `final_person_id` = #{finalPersonId}</if>
+      <if test="finalPersonId != null and finalPersonId != ''">and `final_person_id` = #{finalPersonId}</if>
       <if test="finalPerson != null  and finalPerson != ''">and `final_person` = #{finalPerson}</if>
       <if test="finalDate != null ">and `final_date` = #{finalDate}</if>
       <if test="finalOverview != null  and finalOverview != ''">and `final_overview` = #{finalOverview}</if>
