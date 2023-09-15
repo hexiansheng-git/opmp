@@ -153,6 +153,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }else {
             xmslContractInfo.setIsShowRecord(0);
         }
+        FlowInfoSearchUtil.getFlowInfo(xmslContractInfo, FlowEnum.XMSL_CONTRACT);
         return xmslContractInfo;
     }
 
