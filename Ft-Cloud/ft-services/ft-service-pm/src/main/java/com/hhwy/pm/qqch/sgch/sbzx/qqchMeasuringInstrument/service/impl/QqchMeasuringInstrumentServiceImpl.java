@@ -61,17 +61,18 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
         //保存界面已有数据
         BigDecimal version = param.getVersion();
         List<QqchMeasuringInstrument> paramList = param.getQqchMeasuringInstrumentList();
-        this.insertQqchMeasuringInstrumentList(paramList, version);
-
+        if (CollectionUtils.isEmpty(paramList)){
+            QqchMeasuringInstrument qqchMeasuringInstrument = new QqchMeasuringInstrument();
+            qqchMeasuringInstrument.setVersion(param.getVersion());
+            return this.getQqchMeasuringInstrumentList(qqchMeasuringInstrument);
+        }
         //按设备编号分组，用于判断是否已存在
         Map<String, List<QqchMeasuringInstrument>> collect = new HashMap<>();
         if (CollectionUtils.isNotEmpty(paramList)) {
             collect = paramList.stream().collect(Collectors.groupingBy(QqchMeasuringInstrument::getEquCode));
         }
-
         //获取设备策划数据
         List<QqchConstFacilityPlan> facilityPlanList = this.facilityPlanService.list(CompileEntity.dealListDto(version, new QqchConstFacilityPlan()));
-
         String valid = Valid.NO;
         if (version.compareTo(BigDecimal.ONE) == 0) {
             valid = Valid.YES;
@@ -98,8 +99,16 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
             measuringInstrument.setCreateTime(DateUtils.getNowDate());
             saveList.add(measuringInstrument);
         }
+        this.insertQqchMeasuringInstrumentList(paramList, version);
+        if (CollectionUtils.isEmpty(saveList)){
+            QqchMeasuringInstrument qqchMeasuringInstrument = new QqchMeasuringInstrument();
+            qqchMeasuringInstrument.setVersion(param.getVersion());
+            return this.getQqchMeasuringInstrumentList(qqchMeasuringInstrument);
+        }
         qqchMeasuringInstrumentMapper.insertQqchMeasuringInstrumentList(saveList);
-        return null;
+        QqchMeasuringInstrument qqchMeasuringInstrument = new QqchMeasuringInstrument();
+        qqchMeasuringInstrument.setVersion(param.getVersion());
+        return this.getQqchMeasuringInstrumentList(qqchMeasuringInstrument);
     }
 
     /**

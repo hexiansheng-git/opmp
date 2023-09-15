@@ -29,5 +29,5 @@ public interface IQqchSmallMachineryService {
 
     void save(QqchSmallMachineryVo qqchSmallMachineryVo);
 
-    void syncData(QqchSmallMachineryVo qqchSmallMachineryVo);
+    QqchSmallMachineryVo syncData(QqchSmallMachineryVo qqchSmallMachineryVo);
 }
