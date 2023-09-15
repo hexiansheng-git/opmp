@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.internaladjust.mapper.WzchAllotMaterialRangeMapper">
+
+    <resultMap type="com.hhwy.pm.qqch.wzch.internaladjust.domain.WzchAllotMaterialRange" id="WzchAllotMaterialRangeMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="adjustRange" column="adjust_range" jdbcType="VARCHAR"/>
+        <result property="countryCodes" column="country_codes" jdbcType="VARCHAR"/>
+        <result property="projectIds" column="project_ids" jdbcType="VARCHAR"/>
+        <result property="deptId" column="dept_id" jdbcType="INTEGER"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="delUser" column="del_user" jdbcType="VARCHAR"/>
+        <result property="delTime" column="del_time" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="del_flag" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WzchAllotMaterialRangeMap">
+        select id,
+               project_id,
+               adjust_range,
+               country_codes,
+               project_ids,
+               dept_id,
+               create_user,
+               create_time,
+               update_user,
+               update_time,
+               del_user,
+               del_time,
+               del_flag
+        from wzch_allot_material_range
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="selectList" resultMap="WzchAllotMaterialRangeMap">
+        select
+        id, project_id, adjust_range,country_codes, project_ids, dept_id, create_user, create_time, update_user, update_time,
+        del_user, del_time, del_flag
+        from wzch_allot_material_range
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="projectId != null">
+                and project_id = #{projectId}
+            </if>
+            <if test="adjustRange != null and adjustRange != ''">
+                and adjust_range = #{adjustRange}
+            </if>
+            <if test="projectIds != null and projectIds != ''">
+                and project_ids = #{projectIds}
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="createUser != null and createUser != ''">
+                and create_user = #{createUser}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                and update_user = #{updateUser}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delUser != null and delUser != ''">
+                and del_user = #{delUser}
+            </if>
+            <if test="delTime != null">
+                and del_time = #{delTime}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+        </where>
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from wzch_allot_material_range
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="projectId != null">
+                and project_id = #{projectId}
+            </if>
+            <if test="adjustRange != null and adjustRange != ''">
+                and adjust_range = #{adjustRange}
+            </if>
+            <if test="projectIds != null and projectIds != ''">
+                and project_ids = #{projectIds}
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="createUser != null and createUser != ''">
+                and create_user = #{createUser}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                and update_user = #{updateUser}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delUser != null and delUser != ''">
+                and del_user = #{delUser}
+            </if>
+            <if test="delTime != null">
+                and del_time = #{delTime}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into wzch_allot_material_range(id, project_id, adjust_range, country_codes, project_ids, dept_id,
+                                              create_user, create_time, update_user, update_time, del_user, del_time,
+                                              del_flag)
+        values (#{id}, #{projectId}, #{adjustRange}, #{countryCodes}, #{projectIds}, #{deptId}, #{createUser},
+                #{createTime},
+                #{updateUser}, #{updateTime}, #{delUser}, #{delTime}, #{delFlag})
+    </insert>
+
+    <insert id="insertBatch">
+        insert into wzch_allot_material_range(id,project_id, adjust_range, country_codes, project_ids, dept_id,
+        create_user, create_time,
+        update_user, update_time, del_user, del_time, del_flag)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.projectId}, #{entity.adjustRange}, #{entity.projectIds}, #{entity.projectIds},
+            #{entity.deptId}, #{entity.createUser},
+            #{entity.createTime}, #{entity.updateUser}, #{entity.updateTime}, #{entity.delUser}, #{entity.delTime},
+            #{entity.delFlag})
+        </foreach>
+    </insert>
+
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update wzch_allot_material_range
+        <set>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="adjustRange != null and adjustRange != ''">
+                adjust_range = #{adjustRange},
+            </if>
+            <if test="countryCodes != null and countryCodes != ''">
+                country_codes = #{countryCodes},
+            </if>
+            <if test="projectIds != null and projectIds != ''">
+                project_ids = #{projectIds},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delUser != null and delUser != ''">
+                del_user = #{delUser},
+            </if>
+            <if test="delTime != null">
+                del_time = #{delTime},
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                del_flag = #{delFlag},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+
+    <update id="updateByProjectId">
+        update wzch_allot_material_range
+        <set>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="adjustRange != null and adjustRange != ''">
+                adjust_range = #{adjustRange},
+            </if>
+            <if test="countryCodes != null">
+                country_codes = #{countryCodes},
+            </if>
+            <if test="projectIds != null and projectIds != ''">
+                project_ids = #{projectIds},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delUser != null and delUser != ''">
+                del_user = #{delUser},
+            </if>
+            <if test="delTime != null">
+                del_time = #{delTime},
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                del_flag = #{delFlag},
+            </if>
+        </set>
+        where project_id = #{projectId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from wzch_allot_material_range where id = #{id}
+    </delete>
+
+</mapper>
+
