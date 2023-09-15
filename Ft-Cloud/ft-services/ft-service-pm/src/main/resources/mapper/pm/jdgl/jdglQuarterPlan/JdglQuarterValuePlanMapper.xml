@@ -155,7 +155,7 @@
             resultMap="JdglQuarterValuePlanResultMap">
         select jwvp.* from jdgl_quarter_value_plan jwvp,
                            (select * from jdgl_quarter_plan where year = #{year} and quarter = #{quarter}) jwp
-        where jwp.id = jwvp.quarter_plan_id
+        where jwp.id = jwvp.plan_id
     </select>
 
     <insert id="insertJdglQuarterValuePlan" useGeneratedKeys="true" keyProperty="id">

@@ -28,5 +28,5 @@ public interface JdglQuarterImagePlanMapper {
 
     int deleteJdglQuarterImagePlanByPks(@Param("jdglQuarterImagePlanPkList") List<Long> jdglQuarterImagePlanPkList);
 
-    List<JdglQuarterImagePlan> getWbsListByYearAndQuarter(String year, String quarter);
+    List<JdglQuarterImagePlan> getWbsListByYearAndQuarter(@Param("year") String year,@Param("quarter") String quarter);
 }
