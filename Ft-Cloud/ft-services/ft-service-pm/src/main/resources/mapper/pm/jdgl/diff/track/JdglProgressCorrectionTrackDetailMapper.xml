@@ -115,7 +115,7 @@
         #{completeProgressPercentage}
       </if>
       <if test="completeDatePercentage != null ">and `complete_date_percentage` = #{completeDatePercentage}</if>
-      <if test="deviationCausesAnalysis != null ">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
+      <if test="deviationCausesAnalysis != null and deviationCausesAnalysis != ''">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
       <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
       <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
@@ -168,7 +168,7 @@
         #{completeProgressPercentage}
       </if>
       <if test="completeDatePercentage != null ">and `complete_date_percentage` = #{completeDatePercentage}</if>
-      <if test="deviationCausesAnalysis != null ">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
+      <if test="deviationCausesAnalysis != null and deviationCausesAnalysis != ''">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
       <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
       <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>
@@ -218,7 +218,7 @@
       <if test="svValue != null ">`sv_value`,</if>
       <if test="completeProgressPercentage != null ">`complete_progress_percentage`,</if>
       <if test="completeDatePercentage != null ">`complete_date_percentage`,</if>
-      <if test="deviationCausesAnalysis != null ">`deviation_causes_analysis`,</if>
+      <if test="deviationCausesAnalysis != null and deviationCausesAnalysis != ''">`deviation_causes_analysis`,</if>
       <if test="correctionTarget != null  and correctionTarget != ''">`correction_target`,</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">`concrete_measure`,</if>
       <if test="correctionCompleteDate != null ">`correction_complete_date`,</if>
@@ -263,7 +263,7 @@
       <if test="svValue != null ">#{svValue},</if>
       <if test="completeProgressPercentage != null ">#{completeProgressPercentage},</if>
       <if test="completeDatePercentage != null ">#{completeDatePercentage},</if>
-      <if test="deviationCausesAnalysis != null ">#{deviationCausesAnalysis},</if>
+      <if test="deviationCausesAnalysis != null and deviationCausesAnalysis != ''">#{deviationCausesAnalysis},</if>
       <if test="correctionTarget != null  and correctionTarget != ''">#{correctionTarget},</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">#{concreteMeasure},</if>
       <if test="correctionCompleteDate != null ">#{correctionCompleteDate},</if>
@@ -405,7 +405,7 @@
       <if test="completeProgressPercentage != null ">`complete_progress_percentage` = #{completeProgressPercentage},
       </if>
       <if test="completeDatePercentage != null ">`complete_date_percentage` = #{completeDatePercentage},</if>
-      <if test="deviationCausesAnalysis != null ">`deviation_causes_analysis` = #{deviationCausesAnalysis},</if>
+      <if test="deviationCausesAnalysis != null and deviationCausesAnalysis != ''">`deviation_causes_analysis` = #{deviationCausesAnalysis},</if>
       <if test="correctionTarget != null  and  correctionTarget != ''">`correction_target` = #{correctionTarget},</if>
       <if test="concreteMeasure != null  and  concreteMeasure != ''">`concrete_measure` = #{concreteMeasure},</if>
       <if test="correctionCompleteDate != null ">`correction_complete_date` = #{correctionCompleteDate},</if>
@@ -674,7 +674,7 @@
         #{completeProgressPercentage}
       </if>
       <if test="completeDatePercentage != null ">and `complete_date_percentage` = #{completeDatePercentage}</if>
-      <if test="deviationCausesAnalysis != null ">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
+      <if test="deviationCausesAnalysis != null and deviationCausesAnalysis != ''">and `deviation_causes_analysis` = #{deviationCausesAnalysis}</if>
       <if test="correctionTarget != null  and correctionTarget != ''">and `correction_target` = #{correctionTarget}</if>
       <if test="concreteMeasure != null  and concreteMeasure != ''">and `concrete_measure` = #{concreteMeasure}</if>
       <if test="correctionCompleteDate != null ">and `correction_complete_date` = #{correctionCompleteDate}</if>

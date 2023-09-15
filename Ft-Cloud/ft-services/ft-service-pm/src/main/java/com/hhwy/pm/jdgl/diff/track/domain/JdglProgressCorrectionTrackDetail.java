@@ -112,7 +112,7 @@ public class JdglProgressCorrectionTrackDetail extends TreeNode<JdglProgressCorr
      */
     @JsonProperty
     @Excel(name = "偏差原因分析")
-    private BigDecimal deviationCausesAnalysis;
+    private String deviationCausesAnalysis;
     /**
      * 字段描述：纠偏目标
      */
