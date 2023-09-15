@@ -48,6 +48,13 @@ public class JdglYearValuePlan extends TreeNode<JdglYearValuePlan> {
     @Excel(name = "清单id")
     private Long inventoryId;
     /**
+     * 字段描述：清单父id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "清单父id")
+    private Long inventoryPid;
+    /**
      * 字段描述：清单编号
      */
     @JsonProperty

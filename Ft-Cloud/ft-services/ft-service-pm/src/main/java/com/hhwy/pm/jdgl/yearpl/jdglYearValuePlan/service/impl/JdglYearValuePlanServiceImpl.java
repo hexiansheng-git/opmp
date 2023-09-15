@@ -1,6 +1,8 @@
 package com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.impl;
 
+import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import cn.hutool.core.lang.hash.Hash;
 import com.hhwy.common.core.utils.DateUtils;
@@ -89,7 +91,7 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
     @Transactional
     public int insertJdglYearValuePlanList(List<JdglYearValuePlan> jdglYearValuePlanList) {
         for (JdglYearValuePlan jdglYearValuePlan : jdglYearValuePlanList) {
-            jdglYearValuePlan.setId(IdWorker.createId());
+//            jdglYearValuePlan.setId(IdWorker.createId());
             jdglYearValuePlan.setCreateUser(SecurityUtils.getUserName());
             jdglYearValuePlan.setCreateTime(DateUtils.getNowDate());
         }
@@ -156,13 +158,13 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
             List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
             // 获取主合同清单
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-            if(CollectionUtils.isEmpty(list)) {
+            if(CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
                 return returnList;
             }
             Set<Long> listids = new HashSet<>();
             for (JdglYearImagePlan jdglYearImagePlan : imagePlans) {
                 for (XmslDrawReviewList xmslDrawReviewList: list) {
-                    if(jdglYearImagePlan.getWbsId() != null && jdglYearImagePlan.getWbsId().equals(xmslDrawReviewList.getWbsId())) {
+                    if(jdglYearImagePlan.getWbsCode() != null && jdglYearImagePlan.getWbsCode().equals(xmslDrawReviewList.getWbsCode())) {
                         listids.add(xmslDrawReviewList.getListId());
                     }
                 }
@@ -171,21 +173,63 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                 Set<Long> allListId = new HashSet<>();
                 allListId.addAll(listids);
                 for (Long listid : listids) {
-                    if(!CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
-                        XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listid.equals(vo.getId())).findFirst().orElse(null);
-                        if(xmslContractList != null) {
-                            String ancestors = xmslContractList.getAncestors();
-                            if(StringUtils.isNotEmpty(ancestors)) {
-                                String[] split = ancestors.split(",");
-                                for (String id : split) {
-                                    allListId.add(Long.valueOf(id));
-                                }
+                    XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listid.equals(vo.getId())).findFirst().orElse(null);
+                    if(xmslContractList != null) {
+                        String ancestors = xmslContractList.getAncestors();
+                        if(StringUtils.isNotEmpty(ancestors)) {
+                            String[] split = ancestors.split(",");
+                            for (String id : split) {
+                                allListId.add(Long.valueOf(id));
                             }
                         }
                     }
                 }
-                if(!CollectionUtils.isEmpty(allListId)) {
-
+                for (Long listId : allListId) {
+                    JdglYearValuePlan jdglYearValuePlan = new JdglYearValuePlan();
+                    XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listId.equals(vo.getId())).findFirst().orElse(null);
+                    if(xmslContractList != null) {
+                        jdglYearValuePlan.setId(IdWorker.createId());
+//                            jdglYearValuePlan.setPid();
+                        jdglYearValuePlan.setInventoryId(xmslContractList.getId());
+                        jdglYearValuePlan.setInventoryPid(xmslContractList.getPid());
+                        jdglYearValuePlan.setInventoryCode(xmslContractList.getCode());
+                        jdglYearValuePlan.setInventoryName(xmslContractList.getChineseName());
+                        jdglYearValuePlan.setYearPlanId(yearplanId);
+                        jdglYearValuePlan.setUnit(xmslContractList.getUnit());
+                        jdglYearValuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
+                        jdglYearValuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
+//                            jdglYearValuePlan.setTotalCompDesignQuantity();
+                        if(jdglYearValuePlan.getDesignQuantity() != null && jdglYearValuePlan.getTotalCompDesignQuantity() != null) {
+                            jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity().subtract(jdglYearValuePlan.getTotalCompDesignQuantity()));
+                        }
+                        if(xmslContractList.getCode() != null) {
+                            BigDecimal yearplanCompQuantity = new BigDecimal(0);
+                            List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getId().equals(vo.getListId())).collect(Collectors.toList());
+                            if(!CollectionUtils.isEmpty(collect)) {
+                                for (XmslDrawReviewList xmslDrawReviewList :  collect) {
+                                    List<JdglYearImagePlan> collect1 = imagePlans.stream().filter(vo -> xmslDrawReviewList.getWbsCode().equals(vo.getWbsCode())).collect(Collectors.toList());
+                                    if(!CollectionUtils.isEmpty(collect1)) {
+                                        for (JdglYearImagePlan jdglYearImagePlan : collect1) {
+                                            if(jdglYearImagePlan.getPlanCompQuantity() != null) yearplanCompQuantity = yearplanCompQuantity.add(jdglYearImagePlan.getPlanCompQuantity());
+                                        }
+                                    }
+                                }
+                            }
+                            jdglYearValuePlan.setYearPlanCompDesignQuantity(yearplanCompQuantity);
+                        }
+                        if (jdglYearValuePlan.getPriceCu() != null && jdglYearValuePlan.getYearPlanCompDesignQuantity() != null) {
+                            jdglYearValuePlan.setYearPlanValueCu(jdglYearValuePlan.getPriceCu().multiply(jdglYearValuePlan.getYearPlanCompDesignQuantity()));
+                        }
+                        returnList.add(jdglYearValuePlan);
+                    }
+                }
+                if(!CollectionUtils.isEmpty(returnList)) {
+                    for (JdglYearValuePlan jdglYearValuePlan : returnList) {
+                        JdglYearValuePlan jdglYearValuePlan1 = returnList.stream().filter(vo -> jdglYearValuePlan.getInventoryPid().equals(vo.getInventoryId())).findFirst().orElse(null);
+                        if(jdglYearValuePlan1 != null) jdglYearValuePlan.setPid(jdglYearValuePlan1.getId());
+                    }
+                    deleteJdglYearValuePlanByYearPlanId(yearplanId);
+                    insertJdglYearValuePlanList(returnList);
                 }
             }
         }
