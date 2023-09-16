@@ -5,6 +5,9 @@ package com.hhwy.system.mq;/*
  **/
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.api.domain.SysTenant;
@@ -61,7 +64,7 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
                 String projectName = (String) projectBasicInfo.get("projectName");
                 String projectCode = (String) projectBasicInfo.get("projectCode");
                 String projectId = (String) projectBasicInfo.get("projectId");
-                Map<String,List<SysUser>> params =  (Map<String,List<SysUser>>) projectBasicInfo.get("params");
+                Map params = (Map) projectBasicInfo.get("params");
 
                 SysTenant sysTenant = new SysTenant();
 
@@ -86,8 +89,13 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
                 sysTenant.setDeptList(deptList);
 
                 List<SysUser> userList=userService.selectAllUser(deptList);
-                List<SysUser> roleUserList = params.get("roleUserList");
-                List<SysUser> partUserList = params.get("partUserList");
+
+                String roleUserStr=JSON.toJSONString(params.get("roleUserList"));
+                List<SysUser>  roleUserList = JSON.parseArray(roleUserStr,SysUser.class);
+
+                String partUserStr=JSON.toJSONString(params.get("partUserList"));
+                List<SysUser>  partUserList = JSON.parseArray(partUserStr,SysUser.class);
+
 
                 List<SysUser> idList = this.handUserInfo(userList, roleUserList, partUserList);
 
@@ -132,5 +140,6 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
         }
         return  list;
     }
+
 
 }
