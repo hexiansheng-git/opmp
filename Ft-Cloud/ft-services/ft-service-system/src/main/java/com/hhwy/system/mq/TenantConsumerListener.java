@@ -99,8 +99,8 @@ public class TenantConsumerListener implements RocketMQListener<String> , Rocket
 
                 List<SysUser> idList = this.handUserInfo(userList, roleUserList, partUserList);
 
-//                sysTenant.setUserList(idList);
-                sysTenant.setUserList(userList);
+                sysTenant.setUserList(idList);
+//                sysTenant.setUserList(userList);
 
                 this.tenantService.insertSysTenant(sysTenant);
         System.out.println("mq创建租户方法结束*************************************"+s);

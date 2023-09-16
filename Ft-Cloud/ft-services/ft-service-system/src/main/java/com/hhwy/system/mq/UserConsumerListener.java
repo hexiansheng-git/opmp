@@ -105,7 +105,9 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                     sysUser4Add.setUserId(id);
 
                     if(!CollectionUtils.isEmpty(sysRoles)) {
-                        SysRole sysRole1 = sysRoles.stream().filter(vo -> tenantKey.equals(vo.getTenantKey())).findFirst().orElse(null);
+                        //逻辑有问题暂时修改2023年9月13日17:27:37 todo
+                        //SysRole sysRole1 = sysRoles.stream().filter(vo -> tenantKey.equals(vo.getTenantKey())).findFirst().orElse(null);
+                        SysRole sysRole1 = sysRoles.get(0);
                         // 默认角色
                         if(sysRole1 != null) {
 
@@ -113,6 +115,7 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                             Long[] roleIds = new Long[1];
                             roleIds[0] = sysRole1.getRoleId();
                             sysUser4Add.setRoleIds(roleIds);
+                            sysUser4Add.setTenantKey(tenantKey);
 
                             // 角色用户关系维护
                             SysUserRole sysUserRole = new SysUserRole();
