@@ -52,7 +52,11 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     private IXmslProjectBasicInfoService projectBasicInfoService;
 
     public QqchPerformInspection getQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
-        return qqchPerformInspectionMapper.getQqchPerformInspection(qqchPerformInspection);
+        QqchPerformInspection inspection = qqchPerformInspectionMapper.getQqchPerformInspection(qqchPerformInspection);
+        List<QqchPerformInspection> list = new ArrayList<>();
+        list.add(inspection);
+        FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.QQCH_ZXJC);
+        return inspection;
     }
 
     public List<QqchPerformInspection> getQqchPerformInspectionList(QqchPerformInspection qqchPerformInspection) {
@@ -62,7 +66,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     }
 
     @Transactional
-    public int insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
+    public Long insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         ProjectInfoWithOther projectInfoWithOther = projectBasicInfoService.getProjectInfoWithOther();
         String planEstablishDirector = projectInfoWithOther.getPlanEstablishDirector();
         qqchPerformInspection.setPtVar1(planEstablishDirector);
@@ -78,7 +82,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         List<QqchPerformInspectionDetail> batchAddList = handleDetailList(qqchPerformInspection, detailList);
         qqchPerformInspectionMapper.insertQqchPerformInspection(qqchPerformInspection);
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
-        return 1;
+        return qqchPerformInspection.getId();
     }
 
     @Transactional
@@ -124,8 +128,8 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         //流程已完成的不可删除
         //暂时未加流程
 
-        qqchPerformInspection.setUpdateUser(SecurityUtils.getUserName());
-        qqchPerformInspection.setUpdateTime(DateUtils.getNowDate());
+        qqchPerformInspection.setDelUser(SecurityUtils.getUserName());
+        qqchPerformInspection.setDelTime(DateUtils.getNowDate());
         return qqchPerformInspectionMapper.deleteQqchPerformInspection(qqchPerformInspection);
     }
 

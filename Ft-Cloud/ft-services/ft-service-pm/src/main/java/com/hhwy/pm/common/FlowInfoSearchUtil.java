@@ -95,7 +95,7 @@ public class FlowInfoSearchUtil {
     }
 
     /**
-     * 明细接口查询使用
+     * 明细接口查询使用(新增走这个)
      * @param t
      * @param flowEnum
      * @param <T>

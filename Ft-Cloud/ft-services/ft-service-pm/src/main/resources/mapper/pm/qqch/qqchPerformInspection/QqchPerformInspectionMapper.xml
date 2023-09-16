@@ -358,7 +358,7 @@
     </update>
 
     <update id="deleteQqchPerformInspection">
-        update `qqch_perform_inspection` set del_flag = 1
+        update `qqch_perform_inspection` set del_flag = 1,del_user=#{delUser},del_time=#{delTime}
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="checkUnit != null  and checkUnit != ''">and `check_unit` = #{checkUnit}</if>
@@ -372,10 +372,10 @@
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
-            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
-            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
-            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+<!--            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>-->
+<!--            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>-->
+<!--            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>-->
+<!--            <if test="delTime != null ">and `del_time` = #{delTime}</if>-->
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
