@@ -17,6 +17,7 @@ import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemand.service.IQqchTotalDemandServic
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.domain.QqchTotalDemandTimeCount;
 import com.hhwy.pm.qqch.sgch.wzzx.qqchTotalDemandTimeCount.service.IQqchTotalDemandTimeCountService;
 import com.hhwy.pm.qqch.utils.EasyExeclUtil;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemand;
 import com.hhwy.pm.qqch.wzch.demand.domain.WzchTotalDemandDetail;
@@ -864,14 +865,18 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
 
     @Override
     public List<WzchTotalDemandValidVO> validMaterial(WzchTotalDemandDetail wzchTotalDemandDetail) {
-        if (wzchTotalDemandDetail == null || wzchTotalDemandDetail.getProjectId() == null) {
-            throw new BaseException("入参缺失");
-        }
-        WzchTotalDemand wzchTotalDemand = wzchTotalDemandService.selectMaxValidVersionCodeWzchTotalDemandByProjectId(wzchTotalDemandDetail.getProjectId());
-        if (wzchTotalDemand == null) {
-            return new ArrayList<>();
-        }
-        List<WzchTotalDemandDetail> wzchTotalDemandDetails = wzchTotalDemandDetailMapper.selectWzchTotalDemandDetailList(new WzchTotalDemandDetail(wzchTotalDemand.getId()));
+//        if (wzchTotalDemandDetail == null || wzchTotalDemandDetail.getProjectId() == null) {
+//            throw new BaseException("入参缺失");
+//        }
+//        WzchTotalDemand wzchTotalDemand = wzchTotalDemandService.selectMaxValidVersionCodeWzchTotalDemandByProjectId(wzchTotalDemandDetail.getProjectId());
+//        if (wzchTotalDemand == null) {
+//            return new ArrayList<>();
+//        }
+        BigDecimal version = VersionUtil.getVersion("wzch_total_demand_detail", null);
+
+        WzchTotalDemandDetail queryDetail = new WzchTotalDemandDetail();
+        queryDetail.setVersion(version);
+        List<WzchTotalDemandDetail> wzchTotalDemandDetails = wzchTotalDemandDetailMapper.selectWzchTotalDemandDetailList(queryDetail);
         if (CollectionUtils.isEmpty(wzchTotalDemandDetails)) {
             return new ArrayList<>();
         }

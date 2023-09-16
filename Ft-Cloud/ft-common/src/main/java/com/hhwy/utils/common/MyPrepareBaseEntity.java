@@ -16,7 +16,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class MyPrepareBaseEntity extends BaseEntity {
-    @NotBlank(message = "项目编码不能为空！",groups = ValidationGroups.Save.class)
+//    @NotBlank(message = "项目编码不能为空！",groups = ValidationGroups.Save.class)
     private String prjCode;
     private String unicode;
     private String valid;
@@ -24,7 +24,7 @@ public class MyPrepareBaseEntity extends BaseEntity {
     private BigDecimal versionNo;
     private String formNo;
     private String titleName;
-    @NotBlank(message = "项目名称不能为空！",groups = ValidationGroups.Save.class)
+//    @NotBlank(message = "项目名称不能为空！",groups = ValidationGroups.Save.class)
     private String projectName;
     private String createUserName;
     private Long deptId;

@@ -618,7 +618,7 @@
             resultMap="WzchTotalDemandResult">
         <include refid="selectWzchTotalDemandVo"/>
         where
-        `del_flag` = 0 and valid = '1' and project_id = #{projectId} order by version_code desc limit 1
+        `del_flag` = 0 and valid = '1' order by version_code desc limit 1
     </select>
 
     <update id="updateOfValid">
