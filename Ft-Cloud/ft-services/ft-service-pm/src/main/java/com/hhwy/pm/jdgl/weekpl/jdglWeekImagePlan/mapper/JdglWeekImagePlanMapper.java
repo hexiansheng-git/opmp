@@ -29,4 +29,6 @@ public interface JdglWeekImagePlanMapper {
     int deleteJdglWeekImagePlanByPks(@Param("jdglWeekImagePlanPkList") List<Long> jdglWeekImagePlanPkList);
 
     List<JdglWeekImagePlan> getWbsListByYearAndWeek(@Param("year") String year,@Param("week")  String week);
+
+    int deleteJdglWeekImagePlanByPlanId(@Param("planId") Long planId);
 }

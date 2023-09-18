@@ -91,7 +91,7 @@ public class JdglQuarterImagePlanController extends BaseController {
      * @return
      */
     @PostMapping("/syncFromTotalPlan")
-    public AjaxResult syncFromTotalPlan(JdglQuarterPlan jdglQuarterPlanParam) {
+    public AjaxResult syncFromTotalPlan(@RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         return AjaxResult.success(jdglQuarterImagePlanService.syncFromTotalPlan(jdglQuarterPlanParam));
     }
 

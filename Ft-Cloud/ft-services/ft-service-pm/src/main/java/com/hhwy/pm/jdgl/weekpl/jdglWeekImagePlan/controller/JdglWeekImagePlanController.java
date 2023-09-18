@@ -91,7 +91,7 @@ public class JdglWeekImagePlanController extends BaseController {
      * @return
      */
     @PostMapping("/syncFromTotalPlan")
-    public AjaxResult syncFromTotalPlan(JdglWeekPlan jdglWeekPlanParam) {
+    public AjaxResult syncFromTotalPlan(@RequestBody JdglWeekPlan jdglWeekPlanParam) {
         return AjaxResult.success(jdglWeekImagePlanService.syncFromTotalPlan(jdglWeekPlanParam));
     }
 

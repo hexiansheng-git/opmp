@@ -1,11 +1,18 @@
 package com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.mapper.JdglQuarterImagePlanMapper;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.IJdglQuarterImagePlanService;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.IJdglQuarterValuePlanService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chenjinhao
@@ -26,6 +35,15 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     @Autowired
     private JdglQuarterImagePlanMapper jdglQuarterImagePlanMapper;
+
+    @Autowired
+    private IJdglQuarterValuePlanService jdglQuarterValuePlanService;
+
+    @Autowired
+    private IJdglMainPlanService iJdglMainPlanService;
+
+    @Autowired
+    private IJdglMainPlanItemService jdglMainPlanItemService;
 
 
     public JdglQuarterImagePlan getJdglQuarterImagePlan(JdglQuarterImagePlan jdglQuarterImagePlan) {
@@ -58,11 +76,16 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     @Transactional
     public int insertJdglQuarterImagePlanList(List<JdglQuarterImagePlan> jdglQuarterImagePlanList) {
+        if(CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
+            return 0;
+        }
+        Long planId = jdglQuarterImagePlanList.get(0).getPlanId();
         for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlanList) {
-            jdglQuarterImagePlan.setId(IdWorker.createId());
+//            jdglQuarterImagePlan.setId(IdWorker.createId());
             jdglQuarterImagePlan.setCreateUser(SecurityUtils.getUserName());
             jdglQuarterImagePlan.setCreateTime(DateUtils.getNowDate());
         }
+        jdglQuarterValuePlanService.updateValuePlanData(planId, jdglQuarterImagePlanList);
         return jdglQuarterImagePlanMapper.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
     }
 
@@ -76,12 +99,15 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
     @Transactional
     public int updateJdglQuarterImagePlanList(List<JdglQuarterImagePlan> jdglQuarterImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
-            List<JdglQuarterImagePlan> jdglQuarterImagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
-            for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlans) {
+//            List<JdglQuarterImagePlan> jdglQuarterImagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
+            Long planId = jdglQuarterImagePlanList.get(0).getPlanId();
+            for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlanList) {
                 jdglQuarterImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglQuarterImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-            return jdglQuarterImagePlanMapper.updateJdglQuarterImagePlanList(jdglQuarterImagePlans);
+            deleteJdglQuarterImagePlanByPlanId(planId);
+            jdglQuarterValuePlanService.updateValuePlanData(planId, jdglQuarterImagePlanList);
+            return jdglQuarterImagePlanMapper.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
         }
         return 0;
     }
@@ -100,9 +126,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     @Override
     public int deleteJdglQuarterImagePlanByPlanId(Long planId) {
-        JdglQuarterImagePlan jdglQuarterImagePlan = new JdglQuarterImagePlan();
-        jdglQuarterImagePlan.setPlanId(planId);
-        return deleteJdglQuarterImagePlan(jdglQuarterImagePlan);
+        return jdglQuarterImagePlanMapper.deleteJdglQuarterImagePlanByPlanId(planId);
     }
 
     /**
@@ -113,19 +137,60 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
     @Override
     public JdglQuarterPlan syncFromTotalPlan(JdglQuarterPlan jdglQuarterPlanParam) {
 
+        String year = jdglQuarterPlanParam.getYear();
+        String quarter = jdglQuarterPlanParam.getQuarter();
+
+        if(StringUtils.isEmpty(year)||StringUtils.isEmpty(quarter)) {
+            throw new RuntimeException("传参异常!");
+        }
+
         List<JdglQuarterImagePlan> returnList = new ArrayList<JdglQuarterImagePlan>();
 
         // 最新获取总进度计划数据（根据年份日期区间获取总计划、形象计划及关联wbs数据）
+        JdglMainPlan usingJdglMainPlan = iJdglMainPlanService.getUsingJdglMainPlan();
+        Map<String, Date> dateRange4Quarter = StatisticsUtils.getDateRange4Quarter(year, quarter);
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange4Quarter.get("start"), dateRange4Quarter.get("end"));
 
-        // 获取当前版本形象计划数据
+        if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
+            return jdglQuarterPlanParam;
+        }
 
-        // 增修年进度计划数据
+        for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
+            JdglQuarterImagePlan jdglQuarterImagePlan = new JdglQuarterImagePlan();
+
+            jdglQuarterImagePlan.setId(IdWorker.createId());
+//            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
+            jdglQuarterImagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
+            jdglQuarterImagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            jdglQuarterImagePlan.setPlanId(jdglQuarterPlanParam.getId());
+            jdglQuarterImagePlan.setWorkId(jdglMainPlanItem.getId());
+            jdglQuarterImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
+            jdglQuarterImagePlan.setWorkName(jdglMainPlanItem.getItemName());
+            jdglQuarterImagePlan.setUnit(jdglMainPlanItem.getUnit());
+            jdglQuarterImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            jdglQuarterImagePlan.setTotalCompQuantity(null);
+            jdglQuarterImagePlan.setRemainQuantity(null);
+            jdglQuarterImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
+            jdglQuarterImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
+            jdglQuarterImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
+            jdglQuarterImagePlan.setWbsName(jdglMainPlanItem.getWbsName());
+            //                jdglYearImagePlan.setWbsId();
+            jdglQuarterImagePlan.setResponsePerson(jdglMainPlanItem.getExecuter());
+            jdglQuarterImagePlan.setResponsePersonId(jdglMainPlanItem.getExecuterId());
+            returnList.add(jdglQuarterImagePlan);
+        }
 
         // 维护returnList树结构
+        List<JdglQuarterImagePlan> build = TreeUtil.build(returnList, null);
+        jdglQuarterPlanParam.setJdglQuarterImagePlanList(build);
+
 
         // 修改年进度计划主表引用总体计划的版本号
+        if(usingJdglMainPlan != null) {
+            jdglQuarterPlanParam.setThisTotalVersion(usingJdglMainPlan.getVersion());
+        }
 
-        return null;
+        return jdglQuarterPlanParam;
     }
 
     @Override

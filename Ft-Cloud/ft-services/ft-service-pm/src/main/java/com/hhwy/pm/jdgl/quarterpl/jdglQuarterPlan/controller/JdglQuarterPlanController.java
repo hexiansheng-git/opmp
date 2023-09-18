@@ -75,8 +75,7 @@ public class JdglQuarterPlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
     @PostMapping("/adjust")
     public AjaxResult adjust(@RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
-        jdglQuarterPlanService.adjust(jdglQuarterPlanParam);
-        return AjaxResult.success(jdglQuarterPlanParam);
+        return AjaxResult.success(jdglQuarterPlanService.adjust(jdglQuarterPlanParam));
     }
 
     @PreAuthorize(hasPermi = "jdglQuarterPlan:update")

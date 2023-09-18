@@ -31,7 +31,7 @@ public interface IJdglMonthPlanService {
 
     JdglMonthPlan getInitJdglMonthPlan(JdglMonthPlan jdglMonthPlanParam);
 
-    int adjust(JdglMonthPlan jdglMonthPlanParam);
+    JdglMonthPlan adjust(JdglMonthPlan jdglMonthPlanParam);
 
     void updateTaskStatus(Long id);
 }

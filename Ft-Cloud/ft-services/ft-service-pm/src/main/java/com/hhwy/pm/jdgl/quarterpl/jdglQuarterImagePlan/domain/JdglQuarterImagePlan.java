@@ -132,6 +132,9 @@ public class JdglQuarterImagePlan extends TreeNode<JdglQuarterImagePlan> {
     @Excel(name = "责任人")
     private String responsePerson;
 
+    @JsonProperty
+    @Excel(name = "责任人Id")
+    private String responsePersonId;
     /**
      * 字段描述：wbsid
      */

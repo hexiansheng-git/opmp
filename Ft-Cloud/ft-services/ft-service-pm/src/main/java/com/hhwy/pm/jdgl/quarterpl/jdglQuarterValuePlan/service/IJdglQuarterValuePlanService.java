@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service;
 
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface IJdglQuarterValuePlanService {
     int deleteJdglQuarterValuePlanByPks(List<Long> jdglQuarterValuePlanPkList);
 
     List<JdglQuarterValuePlan> getBillListByYearAndQuarter(String year, String quarter);
+
+    List<JdglQuarterValuePlan> updateValuePlanData(Long planId, List<JdglQuarterImagePlan> jdglQuarterImagePlanList);
 }

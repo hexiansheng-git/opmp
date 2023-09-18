@@ -202,4 +202,23 @@ public class StatisticsUtils {
         return getDateRange4YearMonth(split[0], split[1]);
 
     }
+
+    public static Map<String, Date> getDateRange4Week(String year, String week) {
+
+        Map<String, Date> returnMap = new HashMap<>();
+
+        if(StringUtils.isEmpty(year)|| StringUtils.isEmpty(week)) {
+            return returnMap;
+        }
+
+        Calendar cl = Calendar.getInstance();
+
+        cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 1);
+        returnMap.put("start", cl.getTime());
+        cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 7);
+        returnMap.put("end", cl.getTime());
+
+        return returnMap;
+
+    }
 }
