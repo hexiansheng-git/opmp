@@ -55,34 +55,24 @@ public class JdglProgressCorrectionTrackServiceImpl implements IJdglProgressCorr
 
     @Autowired
     private JdglProgressCorrectionTrackMapper jdglProgressCorrectionTrackMapper;
-
     @Autowired
     private IJdglProgressCorrectionTrackDetailService jdglProgressCorrectionTrackDetailService;
-
     @Autowired
     private IJdglCorrectionMeasuresMakeService jdglCorrectionMeasuresMakeService;
-
     @Autowired
     private IJdglCorrectionMeasuresMakeDetailService jdglCorrectionMeasuresMakeDetailService;
-
     @Autowired
     private IJdglWeekPlanService jdglWeekPlanService;
-
     @Autowired
     private IJdglDayScheduleService jdglDayScheduleService;
-
     @Autowired
     private IJdglMonthPlanService jdglMonthPlanService;
-
     @Autowired
     private IJdglDiffAnalysisService jdglDiffAnalysisService;
-
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
-
     @Autowired
     private IJdglMainPlanItemService jdglMainPlanItemService;
-
     @Autowired
     private IPlanStatisticsService planStatisticsService;
 
