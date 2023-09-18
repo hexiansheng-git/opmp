@@ -173,6 +173,7 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         }
         WzchLocalPurchaseSupply lastVersionData = list.get(0);
         BeanUtils.copyProperties(lastVersionData, vo);
+        vo.setStageIdentity(qqchReviewService.getStage());
         WzchLocalPurchaseSupplyDetail detail = new WzchLocalPurchaseSupplyDetail();
         detail.setPurchaseSupplyId(vo.getId());
         detail.setDelFlag("0");

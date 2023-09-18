@@ -114,7 +114,7 @@ public class XmslWbsController extends BaseController {
         if(dto.getSubmitFlag() != null && dto.getSubmitFlag() == 1)
             ValidationUtil.getValidator().validate(dto,ValidationGroups.Save.class);
         xmslWbsService.save(dto);
-        return AjaxResult.success();
+        return AjaxResult.success(dto.getMainId());
     }
 
     /**

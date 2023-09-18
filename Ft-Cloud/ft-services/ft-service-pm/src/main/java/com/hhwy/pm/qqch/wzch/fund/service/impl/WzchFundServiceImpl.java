@@ -159,6 +159,7 @@ public class WzchFundServiceImpl implements IWzchFundService {
             return vo;
         }
         BeanUtils.copyProperties(list.get(0), vo);
+        vo.setStageIdentity(qqchReviewService.getStage());
         WzchFundDetail detail = new WzchFundDetail();
         detail.setFundId(vo.getId());
         detail.setDelFlag("0");

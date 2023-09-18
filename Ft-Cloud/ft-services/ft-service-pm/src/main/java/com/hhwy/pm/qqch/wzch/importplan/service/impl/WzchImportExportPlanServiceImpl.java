@@ -116,12 +116,12 @@ public class WzchImportExportPlanServiceImpl implements IWzchImportExportPlanSer
         BigDecimal version = VersionUtil.getVersion("wzch_import_export_plan", wzchImportExportPlan.getVersion());
         wzchImportExportPlan.setVersion(version);
         wzchImportExportPlan.setStageIdentity(qqchReviewService.getStage());
-        
         List<WzchImportExportPlan> list = wzchImportExportPlanMapper.selectWzchImportExportPlanList(wzchImportExportPlan);
         if(CollectionUtils.isEmpty(list)){
             wzchImportExportPlan.setWzchImportExportPlanDetailList(new ArrayList<>());
             return wzchImportExportPlan;
         }
+        wzchImportExportPlan.setId(list.get(0).getId());
         List<WzchImportExportPlanDetail> wzchImportExportPlanDetails = wzchImportExportPlanDetailService.selectWzchImportExportPlanDetailList(new WzchImportExportPlanDetail(wzchImportExportPlan.getId()));
         wzchImportExportPlan.setWzchImportExportPlanDetailList(wzchImportExportPlanDetails);
         return wzchImportExportPlan;

@@ -69,7 +69,7 @@ public class WzchSceneManage extends MyPrepareBaseEntity {
     /**
      * 项目名称
      */
-    private String projectName;
+//    private String projectName;
     /**
      * 部门id
      */
@@ -207,14 +207,6 @@ public class WzchSceneManage extends MyPrepareBaseEntity {
 
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
     }
 
     public Long getDeptId() {

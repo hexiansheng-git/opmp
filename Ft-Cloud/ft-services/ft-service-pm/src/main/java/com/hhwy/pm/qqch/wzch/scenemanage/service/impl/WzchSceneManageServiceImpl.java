@@ -3,6 +3,8 @@ package com.hhwy.pm.qqch.wzch.scenemanage.service.impl;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.qqch.wzch.common.service.WzchCommonService;
@@ -51,6 +53,8 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
     private WzchCommonService wzchCommonService;
     @Resource
     private IQqchReviewService qqchReviewService;
+    @Resource
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
     private final static String ONE = "1";
@@ -154,6 +158,12 @@ public class WzchSceneManageServiceImpl implements WzchSceneManageService {
         }
         // 新增详情
         this.detailService.insertOrUpdateBatch(detailList, dto.getId());
+        if (ButtonMark.CONFIRM.equals(dto.getButtonMark())) {
+            // 插入确认状态
+            String menuId = dto.getMenuId();
+            String stageIdentity = dto.getStageIdentity();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
+        }
         return dto.getId();
     }
 

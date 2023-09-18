@@ -130,7 +130,8 @@ public class WzchSpecialMaterialPlanServiceImpl implements IWzchSpecialMaterialP
             wzchSpecialMaterialPlan.setRequestDetailList(new ArrayList<>());
             return wzchSpecialMaterialPlan;
         }
-        wzchSpecialMaterialPlan = list.get(0);        
+        wzchSpecialMaterialPlan = list.get(0);
+        wzchSpecialMaterialPlan.setStageIdentity(qqchReviewService.getStage());
         List<WzchSpecialMaterialPlanDetail> wzchSpecialMaterialPlanDetails = wzchSpecialMaterialPlanDetailService.selectWzchSpecialMaterialPlanDetailList(new WzchSpecialMaterialPlanDetail(wzchSpecialMaterialPlan.getId()));
         HashMap<String, String> map = new HashMap<>(1);
         map.put("materialName", "materialName");

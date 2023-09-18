@@ -5,6 +5,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.utils.Constant;
@@ -61,7 +63,9 @@ public class XmslWbsMainController extends BaseController {
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
         if(wbsMain != null)
             wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
-        return AjaxResult.success(wbsMain==null?new HashMap<>(2):wbsMain);
+        XmslWbsMain temp = wbsMain==null?new XmslWbsMain():wbsMain;
+        FlowInfoSearchUtil.getFlowInfo(temp,FlowEnum.XMSL_WBS);
+        return AjaxResult.success(temp);
     }
 
     /**
@@ -82,6 +86,7 @@ public class XmslWbsMainController extends BaseController {
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
         if(wbsMain != null)
             wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
+        FlowInfoSearchUtil.getFlowInfo(wbsMain,FlowEnum.XMSL_WBS);
         return AjaxResult.success(wbsMain);
     }
 

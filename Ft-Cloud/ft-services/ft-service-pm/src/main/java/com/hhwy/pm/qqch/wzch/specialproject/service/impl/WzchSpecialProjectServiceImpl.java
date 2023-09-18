@@ -160,6 +160,7 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
             return vo;
         }
         BeanUtils.copyProperties(list.get(0), vo);
+        vo.setStageIdentity(qqchReviewService.getStage());
         WzchSpecialProjectDetail detail = new WzchSpecialProjectDetail();
         detail.setSpecialProjectId(vo.getId());
         detail.setDelFlag("0");

@@ -121,6 +121,7 @@ public class WzchLocalTransportPlanServiceImpl implements IWzchLocalTransportPla
             return wzchLocalTransportPlan;
         }
         wzchLocalTransportPlan = list.get(0);
+        wzchLocalTransportPlan.setStageIdentity(qqchReviewService.getStage());
         List<WzchLocalTransportPlanDetail> wzchLocalTransportPlanDetails = wzchLocalTransportPlanDetailService.selectWzchLocalTransportPlanDetailList(new WzchLocalTransportPlanDetail(wzchLocalTransportPlan.getId()));
         wzchLocalTransportPlanDetails = wzchLocalTransportPlanDetails.stream().sorted(Comparator.comparing(WzchLocalTransportPlanDetail::getId)).collect(Collectors.toList());
         wzchLocalTransportPlan.setWzchLocalTransportPlanDetailList(wzchLocalTransportPlanDetails);

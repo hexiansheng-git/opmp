@@ -491,7 +491,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         //2、明细数据
         List<XmslWbsHistory> list = dto.getList();
         if(CollectionUtils.isEmpty(list) && StringUtils.isBlank(dto.getDelIds()))
-            throw new CustomBusinessException("要保存的数据为空");
+            return ;
         List<XmslWbsHistory> addList = new ArrayList<>();
         List<XmslWbsHistory> updateList = new ArrayList<>();
         //前端新增数据的ID都为uid,需要替换为后端生成的id

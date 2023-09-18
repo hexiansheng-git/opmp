@@ -47,9 +47,15 @@ public enum FlowEnum {
     WLPS("wzch_local_purchase_supply", "wzch_local_purchase_supply_process"),
     /**********************前期策划结束************************/
 
-
+    /**********************项目设立开始************************/
     //项目设立，合同
     XMSL_CONTRACT("xmsl_contract_info", "process_test_contract"),
+    //项目设立，wbs
+    XMSL_WBS("xmsl_wbs_main", "xmsl_wbs_main_process"),
+    
+    /**********************项目设立结束************************/
+
+    
 
     /*********************进度管理****************************/
     // 进度管理-纠偏措施制定

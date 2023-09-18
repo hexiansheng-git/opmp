@@ -44,8 +44,8 @@ public class WzchSpecialMaterialPlan extends MyPrepareBaseEntity {
 
     /** 项目名称 */
 //    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Save.class})
-    @Excel(name = "项目名称")
-    private String projectName;
+//    @Excel(name = "项目名称")
+//    private String projectName;
 
     /** 所属区域id */
 //    @NotNull(message = "所属区域ID不能为空",groups = {ValidationGroups.Save.class})

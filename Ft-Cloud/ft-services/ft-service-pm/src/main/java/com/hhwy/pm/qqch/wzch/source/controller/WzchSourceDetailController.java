@@ -93,8 +93,8 @@ public class WzchSourceDetailController extends BaseController {
     @PostMapping("/save")
     public AjaxResult save(@RequestBody WzchSource wzchSource) {
         try{
-            boolean save = wzchSourceDetailService.save(wzchSource);
-            return new AjaxResult(200,"保存成功",save);
+            Long id = wzchSourceDetailService.save(wzchSource);
+            return new AjaxResult(200,"保存成功",id);
         }catch (BaseException b){
             b.printStackTrace();
             throw new BaseException(b.getDefaultMessage());

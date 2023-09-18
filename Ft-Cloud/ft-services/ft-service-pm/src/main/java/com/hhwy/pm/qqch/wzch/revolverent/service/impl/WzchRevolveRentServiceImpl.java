@@ -165,6 +165,7 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
             return vo;
         }
         BeanUtils.copyProperties(list.get(0),vo);
+        vo.setStageIdentity(qqchReviewService.getStage());
         WzchRevolveRentDetail detail = new WzchRevolveRentDetail();
         detail.setRevolveRentId(vo.getId());
         detail.setDelFlag("0");

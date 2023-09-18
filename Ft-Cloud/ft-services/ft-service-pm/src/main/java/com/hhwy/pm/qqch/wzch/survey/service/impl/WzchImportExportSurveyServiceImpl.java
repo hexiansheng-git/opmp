@@ -138,6 +138,7 @@ public class WzchImportExportSurveyServiceImpl implements IWzchImportExportSurve
             return vo;
         }
         BeanUtils.copyProperties(list.get(0),vo);
+        vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchImportExportSurveyCountry> wzchImportExportSurveyCountries = wzchImportExportSurveyCountryService.selectWzchImportExportSurveyCountryList(new WzchImportExportSurveyCountry(vo.getId()));
         List<WzchImportExportSurveyCustoms> wzchImportExportSurveyCustoms = wzchImportExportSurveyCustomsService.selectWzchImportExportSurveyCustomsList(new WzchImportExportSurveyCustoms(vo.getId()));
         vo.setWzchImportExportSurveyCountryList(wzchImportExportSurveyCountries);
