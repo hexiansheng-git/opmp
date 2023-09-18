@@ -84,6 +84,9 @@
              , `task_status`
         from jdgl_year_image_plan
     </sql>
+    <delete id="deleteJdglYearImagePlanByYearPlanId">
+        delete from jdgl_year_image_plan where year_plan_id = #{yearPlanId}
+    </delete>
     <select id="getJdglYearImagePlan" resultMap="JdglYearImagePlanResultMap">
         <include refid="selectJdglYearImagePlanVo"/>
         <where>

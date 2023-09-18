@@ -7,20 +7,14 @@ spring:
       #      一公局测试nacos
       namespace: cfhec-opmp-web
       server-addr: localhost:8848
-      username: nacos
-      password: naocs
       discovery:
         # 服务注册地址
         server-addr: ${spring.cloud.nacos.server-addr}
         namespace: ${spring.cloud.nacos.namespace}
-        username: ${spring.cloud.nacos.username}
-        password: ${spring.cloud.nacos.password}
       config:
         # 配置中心地址
         server-addr: ${spring.cloud.nacos.server-addr}
         namespace: ${spring.cloud.nacos.namespace}
-        username: ${spring.cloud.nacos.username}
-        password: ${spring.cloud.nacos.password}
         # 配置文件格式
         file-extension: yml
         # 共享配置

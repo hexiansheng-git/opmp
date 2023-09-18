@@ -5,6 +5,8 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
 import com.hhwy.pm.qqch.qqchPerformInspection.service.IQqchPerformInspectionService;
@@ -58,8 +60,7 @@ public class QqchPerformInspectionController extends BaseController {
     @PostMapping("/add")
     public AjaxResult insertQqchPerformInspection(@Validated(ValidationGroups.Save.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         try{
-            qqchPerformInspectionService.insertQqchPerformInspection(qqchPerformInspectionParam);
-            return AjaxResult.success();
+            return AjaxResult.success(qqchPerformInspectionService.insertQqchPerformInspection(qqchPerformInspectionParam));
         }catch (CustomBusinessException e){
             e.printStackTrace();
             return AjaxResult.error(e.getMsg());
@@ -132,6 +133,26 @@ public class QqchPerformInspectionController extends BaseController {
             return AjaxResult.error(e.getMessage());
         }
     }
+
+    /**
+     * 获取策划项信息
+     * @return
+     */
+    @GetMapping("/baseInfoAdd")
+    public AjaxResult baseInfoAdd(){
+        try{
+            List<QqchPerformInspectionDetail> list  = qqchPerformInspectionService.getChEditMenuList();
+            QqchPerformInspection qqchPerformInspection = new QqchPerformInspection();
+            qqchPerformInspection.setDetailList(list);
+            FlowInfoSearchUtil.getFlowInfo(qqchPerformInspection, FlowEnum.QQCH_ZXJC);
+            return AjaxResult.success(qqchPerformInspection);
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+
 
     /**
      * 获取检查好主导单位

@@ -5,4 +5,4 @@ spring:
     name: ft-service-system
   profiles:
     # 环境配置
-    active: dev
+    active: test

@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.scenemanage.mapper.WzchSceneManageDetailMapper">
+
+    <resultMap type="com.hhwy.pm.qqch.wzch.scenemanage.domain.WzchSceneManageDetail" id="WzchSceneManageDetailMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="sceneManageId" column="scene_manage_id" jdbcType="INTEGER"/>
+        <result property="manageContent" column="manage_content" jdbcType="VARCHAR"/>
+        <result property="manageTarget" column="manage_target" jdbcType="VARCHAR"/>
+        <result property="implMeasure" column="impl_measure" jdbcType="VARCHAR"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+        <result property="fileGroupId" column="file_group_id" jdbcType="VARCHAR"/>
+        <result property="projectId" column="project_id" jdbcType="INTEGER"/>
+        <result property="projectName" column="project_name" jdbcType="VARCHAR"/>
+        <result property="deptId" column="dept_id" jdbcType="INTEGER"/>
+        <result property="createUser" column="create_user" jdbcType="VARCHAR"/>
+        <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateUser" column="update_user" jdbcType="VARCHAR"/>
+        <result property="updateUserName" column="update_user_name" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="delUser" column="del_user" jdbcType="VARCHAR"/>
+        <result property="delTime" column="del_time" jdbcType="TIMESTAMP"/>
+        <result property="delFlag" column="del_flag" jdbcType="VARCHAR"/>
+        <result property="ptVar1" column="pt_var1" jdbcType="VARCHAR"/>
+        <result property="ptVar2" column="pt_var2" jdbcType="VARCHAR"/>
+        <result property="ptVar3" column="pt_var3" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="WzchSceneManageDetailMap">
+        select id,
+               scene_manage_id,
+               manage_content,
+               manage_target,
+               impl_measure,
+               remark,
+               file_group_id,
+               project_id,
+               project_name,
+               dept_id,
+               create_user,
+               create_user_name,
+               create_time,
+               update_user,
+               update_user_name,
+               update_time,
+               del_user,
+               del_time,
+               del_flag,
+               pt_var1,
+               pt_var2,
+               pt_var3
+        from wzch_scene_manage_detail
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="selectDetailList" resultMap="WzchSceneManageDetailMap">
+        select
+        id, scene_manage_id, manage_content, manage_target, impl_measure, remark, file_group_id, project_id,
+        project_name, dept_id, create_user, create_user_name, create_time, update_user, update_user_name, update_time,
+        del_user, del_time, del_flag, pt_var1, pt_var2, pt_var3
+        from wzch_scene_manage_detail
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="sceneManageId != null">
+                and scene_manage_id = #{sceneManageId}
+            </if>
+            <if test="manageContent != null and manageContent != ''">
+                and manage_content = #{manageContent}
+            </if>
+            <if test="manageTarget != null and manageTarget != ''">
+                and manage_target = #{manageTarget}
+            </if>
+            <if test="implMeasure != null and implMeasure != ''">
+                and impl_measure = #{implMeasure}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="fileGroupId != null and fileGroupId != ''">
+                and file_group_id = #{fileGroupId}
+            </if>
+            <if test="projectId != null">
+                and project_id = #{projectId}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and project_name = #{projectName}
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="createUser != null and createUser != ''">
+                and create_user = #{createUser}
+            </if>
+            <if test="createUserName != null and createUserName != ''">
+                and create_user_name = #{createUserName}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                and update_user = #{updateUser}
+            </if>
+            <if test="updateUserName != null and updateUserName != ''">
+                and update_user_name = #{updateUserName}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delUser != null and delUser != ''">
+                and del_user = #{delUser}
+            </if>
+            <if test="delTime != null">
+                and del_time = #{delTime}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="ptVar1 != null and ptVar1 != ''">
+                and pt_var1 = #{ptVar1}
+            </if>
+            <if test="ptVar2 != null and ptVar2 != ''">
+                and pt_var2 = #{ptVar2}
+            </if>
+            <if test="ptVar3 != null and ptVar3 != ''">
+                and pt_var3 = #{ptVar3}
+            </if>
+        </where>
+
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from wzch_scene_manage_detail
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="sceneManageId != null">
+                and scene_manage_id = #{sceneManageId}
+            </if>
+            <if test="manageContent != null and manageContent != ''">
+                and manage_content = #{manageContent}
+            </if>
+            <if test="manageTarget != null and manageTarget != ''">
+                and manage_target = #{manageTarget}
+            </if>
+            <if test="implMeasure != null and implMeasure != ''">
+                and impl_measure = #{implMeasure}
+            </if>
+            <if test="remark != null and remark != ''">
+                and remark = #{remark}
+            </if>
+            <if test="fileGroupId != null and fileGroupId != ''">
+                and file_group_id = #{fileGroupId}
+            </if>
+            <if test="projectId != null">
+                and project_id = #{projectId}
+            </if>
+            <if test="projectName != null and projectName != ''">
+                and project_name = #{projectName}
+            </if>
+            <if test="deptId != null">
+                and dept_id = #{deptId}
+            </if>
+            <if test="createUser != null and createUser != ''">
+                and create_user = #{createUser}
+            </if>
+            <if test="createUserName != null and createUserName != ''">
+                and create_user_name = #{createUserName}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                and update_user = #{updateUser}
+            </if>
+            <if test="updateUserName != null and updateUserName != ''">
+                and update_user_name = #{updateUserName}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="delUser != null and delUser != ''">
+                and del_user = #{delUser}
+            </if>
+            <if test="delTime != null">
+                and del_time = #{delTime}
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                and del_flag = #{delFlag}
+            </if>
+            <if test="ptVar1 != null and ptVar1 != ''">
+                and pt_var1 = #{ptVar1}
+            </if>
+            <if test="ptVar2 != null and ptVar2 != ''">
+                and pt_var2 = #{ptVar2}
+            </if>
+            <if test="ptVar3 != null and ptVar3 != ''">
+                and pt_var3 = #{ptVar3}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into wzch_scene_manage_detail(id, scene_manage_id, manage_content, manage_target, impl_measure, remark,
+                                             file_group_id, project_id, project_name, dept_id, create_user,
+                                             create_user_name, create_time, update_user, update_user_name, update_time,
+                                             del_user, del_time, del_flag, pt_var1, pt_var2, pt_var3)
+        values (#{id}, #{sceneManageId}, #{manageContent}, #{manageTarget}, #{implMeasure}, #{remark}, #{fileGroupId},
+                #{projectId}, #{projectName}, #{deptId}, #{createUser}, #{createUserName}, #{createTime}, #{updateUser},
+                #{updateUserName}, #{updateTime}, #{delUser}, #{delTime}, #{delFlag}, #{ptVar1}, #{ptVar2}, #{ptVar3})
+    </insert>
+
+    <insert id="insertBatch">
+        insert into wzch_scene_manage_detail(id,scene_manage_id, manage_content, manage_target, impl_measure, remark,
+        file_group_id, project_id, project_name, dept_id, create_user, create_user_name, create_time, update_user,
+        update_user_name, update_time, del_user, del_time, del_flag, pt_var1, pt_var2, pt_var3)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id},#{entity.sceneManageId}, #{entity.manageContent}, #{entity.manageTarget},
+            #{entity.implMeasure},
+            #{entity.remark}, #{entity.fileGroupId}, #{entity.projectId}, #{entity.projectName}, #{entity.deptId},
+            #{entity.createUser}, #{entity.createUserName}, #{entity.createTime}, #{entity.updateUser},
+            #{entity.updateUserName}, #{entity.updateTime}, #{entity.delUser}, #{entity.delTime}, #{entity.delFlag},
+            #{entity.ptVar1}, #{entity.ptVar2}, #{entity.ptVar3})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch">
+        insert into wzch_scene_manage_detail(id,scene_manage_id, manage_content, manage_target, impl_measure, remark,
+        file_group_id, project_id, project_name, dept_id, create_user, create_user_name, create_time, update_user,
+        update_user_name, update_time, del_user, del_time, del_flag, pt_var1, pt_var2, pt_var3)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.id}, #{entity.sceneManageId}, #{entity.manageContent}, #{entity.manageTarget},
+            #{entity.implMeasure},
+            #{entity.remark}, #{entity.fileGroupId}, #{entity.projectId}, #{entity.projectName}, #{entity.deptId},
+            #{entity.createUser}, #{entity.createUserName}, #{entity.createTime}, #{entity.updateUser},
+            #{entity.updateUserName}, #{entity.updateTime}, #{entity.delUser}, #{entity.delTime}, #{entity.delFlag},
+            #{entity.ptVar1}, #{entity.ptVar2}, #{entity.ptVar3})
+        </foreach>
+        on duplicate key update
+        scene_manage_id = values(scene_manage_id),
+        manage_content = values(manage_content),
+        manage_target = values(manage_target),
+        impl_measure = values(impl_measure),
+        remark = values(remark),
+        file_group_id = values(file_group_id),
+        project_id = values(project_id),
+        project_name = values(project_name),
+        dept_id = values(dept_id),
+        create_user = values(create_user),
+        create_user_name = values(create_user_name),
+        create_time = values(create_time),
+        update_user = values(update_user),
+        update_user_name = values(update_user_name),
+        update_time = values(update_time),
+        del_user = values(del_user),
+        del_time = values(del_time),
+        del_flag = values(del_flag),
+        pt_var1 = values(pt_var1),
+        pt_var2 = values(pt_var2),
+        pt_var3 = values(pt_var3)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update wzch_scene_manage_detail
+        <set>
+            <if test="sceneManageId != null">
+                scene_manage_id = #{sceneManageId},
+            </if>
+            <if test="manageContent != null and manageContent != ''">
+                manage_content = #{manageContent},
+            </if>
+            <if test="manageTarget != null and manageTarget != ''">
+                manage_target = #{manageTarget},
+            </if>
+            <if test="implMeasure != null and implMeasure != ''">
+                impl_measure = #{implMeasure},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="fileGroupId != null and fileGroupId != ''">
+                file_group_id = #{fileGroupId},
+            </if>
+            <if test="projectId != null">
+                project_id = #{projectId},
+            </if>
+            <if test="projectName != null and projectName != ''">
+                project_name = #{projectName},
+            </if>
+            <if test="deptId != null">
+                dept_id = #{deptId},
+            </if>
+            <if test="createUser != null and createUser != ''">
+                create_user = #{createUser},
+            </if>
+            <if test="createUserName != null and createUserName != ''">
+                create_user_name = #{createUserName},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser},
+            </if>
+            <if test="updateUserName != null and updateUserName != ''">
+                update_user_name = #{updateUserName},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="delUser != null and delUser != ''">
+                del_user = #{delUser},
+            </if>
+            <if test="delTime != null">
+                del_time = #{delTime},
+            </if>
+            <if test="delFlag != null and delFlag != ''">
+                del_flag = #{delFlag},
+            </if>
+            <if test="ptVar1 != null and ptVar1 != ''">
+                pt_var1 = #{ptVar1},
+            </if>
+            <if test="ptVar2 != null and ptVar2 != ''">
+                pt_var2 = #{ptVar2},
+            </if>
+            <if test="ptVar3 != null and ptVar3 != ''">
+                pt_var3 = #{ptVar3},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from wzch_scene_manage_detail
+        where id = #{id}
+    </delete>
+    <delete id="deleteBySceneId">
+
+        delete
+        from wzch_scene_manage_detail
+        where scene_manage_id = #{sceneId}
+
+    </delete>
+
+</mapper>
+

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -153,7 +154,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }else {
             xmslContractInfo.setIsShowRecord(0);
         }
-        FlowInfoSearchUtil.getFlowInfo(xmslContractInfo, FlowEnum.XMSL_CONTRACT);
+        List<XmslContractInfo> list = new ArrayList<>();
+        list.add(xmslContractInfo);
+        FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.XMSL_CONTRACT);
         return xmslContractInfo;
     }
 

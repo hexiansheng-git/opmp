@@ -16,6 +16,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.IJdglYearValuePlanService;
 import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
@@ -36,6 +37,9 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Autowired
     private JdglYearImagePlanMapper jdglYearImagePlanMapper;
+
+    @Autowired
+    private IJdglYearValuePlanService jdglYearValuePlanService;
 
     @Autowired
     private IJdglMainPlanItemService jdglMainPlanItemService;
@@ -74,12 +78,18 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Transactional
     public int insertJdglYearImagePlanList(List<JdglYearImagePlan> jdglYearImagePlanList) {
+        if(CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+            return 0;
+        }
+        Long yearPlanId = jdglYearImagePlanList.get(0).getYearPlanId();
         for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
 //            jdglYearImagePlan.setId(IdWorker.createId());
             jdglYearImagePlan.setCreateUser(SecurityUtils.getUserName());
             jdglYearImagePlan.setCreateTime(DateUtils.getNowDate());
         }
-        return jdglYearImagePlanMapper.insertJdglYearImagePlanList(jdglYearImagePlanList);
+        int i = jdglYearImagePlanMapper.insertJdglYearImagePlanList(jdglYearImagePlanList);
+        jdglYearValuePlanService.updateValuePlanData(yearPlanId, jdglYearImagePlanList);
+        return i;
     }
 
     @Transactional
@@ -98,16 +108,18 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
                 jdglYearImagePlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
                 jdglYearImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-//            deleteJdglYearImagePlanByYearPlanId(yearPlanId);
-            return jdglYearImagePlanMapper.updateJdglYearImagePlanList(jdglYearImagePlanList);
+            deleteJdglYearImagePlanByYearPlanId(yearPlanId);
+            int i = jdglYearImagePlanMapper.insertJdglYearImagePlanList(jdglYearImagePlanList);
+            jdglYearValuePlanService.updateValuePlanData(yearPlanId, jdglYearImagePlanList);
+            return i;
         }
         return 0;
     }
 
     @Transactional
     public int deleteJdglYearImagePlan(JdglYearImagePlan jdglYearImagePlan) {
-        jdglYearImagePlan.setUpdateUser(SecurityUtils.getUserName());
-        jdglYearImagePlan.setUpdateTime(DateUtils.getNowDate());
+//        jdglYearImagePlan.setUpdateUser(SecurityUtils.getUserName());
+//        jdglYearImagePlan.setUpdateTime(DateUtils.getNowDate());
         return jdglYearImagePlanMapper.deleteJdglYearImagePlan(jdglYearImagePlan);
     }
 
@@ -118,9 +130,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Override
     public int deleteJdglYearImagePlanByYearPlanId(Long yearPlanId) {
-        JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();
-        jdglYearImagePlan.setYearPlanId(yearPlanId);
-        return deleteJdglYearImagePlan(jdglYearImagePlan);
+        return jdglYearImagePlanMapper.deleteJdglYearImagePlanByYearPlanId(yearPlanId);
     }
 
     /**
@@ -149,32 +159,35 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             return jdglYearPlanParam;
         }
 
-        // 获取当前版本形象计划数据
-        if(jdglYearPlanParam.getId() != null) {
-            // 增修年进度计划数据
+        for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
+            JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();
 
-        } else {
-            for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
-                JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();
+            jdglYearImagePlan.setId(IdWorker.createId());
+//            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
+            jdglYearImagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
+            jdglYearImagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            jdglYearImagePlan.setYearPlanId(jdglYearPlanParam.getId());
+            jdglYearImagePlan.setWorkId(jdglMainPlanItem.getId());
+            jdglYearImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
+            jdglYearImagePlan.setWorkName(jdglMainPlanItem.getItemName());
+            jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
+            jdglYearImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            jdglYearImagePlan.setTotalCompQuantity(null);
+            jdglYearImagePlan.setRemainQuantity(null);
+            jdglYearImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
+            jdglYearImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
+            jdglYearImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
+            jdglYearImagePlan.setWbsName(jdglMainPlanItem.getWbsName());
+    //                jdglYearImagePlan.setWbsId();
+            jdglYearImagePlan.setResponsePerson(jdglMainPlanItem.getExecuter());
+            jdglYearImagePlan.setResponsePersonId(jdglMainPlanItem.getExecuterId());
+            returnList.add(jdglYearImagePlan);
+        }
 
-                jdglYearImagePlan.setId(jdglMainPlanItem.getId());
-                jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
-                jdglYearImagePlan.setYearPlanId(jdglYearPlanParam.getId());
-                jdglYearImagePlan.setWorkId(jdglMainPlanItem.getId());
-                jdglYearImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
-                jdglYearImagePlan.setWorkName(jdglMainPlanItem.getItemName());
-                jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
-                jdglYearImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
-                jdglYearImagePlan.setTotalCompQuantity(null);
-                jdglYearImagePlan.setRemainQuantity(null);
-                jdglYearImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
-                jdglYearImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
-                jdglYearImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
-                jdglYearImagePlan.setWbsName(jdglMainPlanItem.getWbsName());
-//                jdglYearImagePlan.setWbsId();
-                jdglYearImagePlan.setResponsePerson(jdglMainPlanItem.getExecuter());
-                jdglYearImagePlan.setResponsePersonId(jdglMainPlanItem.getExecuterId());
-                returnList.add(jdglYearImagePlan);
+        if(!CollectionUtils.isEmpty(returnList)) {
+            for (JdglYearImagePlan yearImagePlan : returnList) {
+                JdglYearImagePlan jdglYearImagePlan = returnList.stream().filter(vo -> yearImagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                if(jdglYearImagePlan != null) yearImagePlan.setPid(jdglYearImagePlan.getId());
             }
         }
 

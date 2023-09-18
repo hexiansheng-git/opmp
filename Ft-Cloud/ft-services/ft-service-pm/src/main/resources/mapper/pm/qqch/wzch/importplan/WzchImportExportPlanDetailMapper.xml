@@ -1,0 +1,589 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.wzch.importplan.mapper.WzchImportExportPlanDetailMapper">
+    <resultMap type="com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail" id="WzchImportExportPlanDetailResult">
+        <result property="id"    column="id"    />
+        <result property="planId"    column="plan_id"    />
+        <result property="importClassId"    column="import_class_id"    />
+        <result property="importClass"    column="import_class"    />
+        <result property="importMainPart"    column="import_main_part"    />
+        <result property="consignee"    column="consignee"    />
+        <result property="despatchHarbor"    column="despatch_harbor"    />
+        <result property="arrivalHarbor"    column="arrival_harbor"    />
+        <result property="transDistance"    column="trans_distance"    />
+        <result property="customsCost"    column="customs_cost"    />
+        <result property="customsMode"    column="customs_mode"    />
+        <result property="tariffPaymentMethod"    column="tariff_payment_method"    />
+        <result property="taxRate"    column="tax_rate"    />
+        <result property="useTimeLimit"    column="use_time_limit"    />
+        <result property="choiceTimeLimit"    column="choice_time_limit"    />
+        <result property="despatchTimeLimit"    column="despatch_time_limit"    />
+        <result property="customsTimeLimit"    column="customs__time_limit"    />
+        <result property="specialRemarks"    column="special_remarks"    />
+        <result property="remark"    column="remark"    />
+        <result property="projectId"    column="project_id"    />
+        <result property="projectName"    column="project_name"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="valid"    column="valid"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createUserName"    column="create_user_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateUser"    column="update_user"    />
+        <result property="updateUserName"    column="update_user_name"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delUser"    column="del_user"    />
+        <result property="delTime"    column="del_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="ptVar1"    column="pt_var1"    />
+        <result property="ptVar2"    column="pt_var2"    />
+        <result property="ptVar3"    column="pt_var3"    />
+        <result property="ptVar4"    column="pt_var4"    />
+        <result property="ptVar5"    column="pt_var5"    />
+    </resultMap>
+
+    <sql id="selectWzchImportExportPlanDetailVo">
+        select `id`, `plan_id`, `import_class_id`, `import_class`, `import_main_part`, `consignee`, `despatch_harbor`, `arrival_harbor`, `trans_distance`, `customs_cost`, `customs_mode`, `tariff_payment_method`, `tax_rate`, `use_time_limit`, `choice_time_limit`, `despatch_time_limit`, `customs__time_limit`, `special_remarks`, `remark`, `project_id`, `project_name`, `dept_id`, `valid`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `pt_var5` from `wzch_import_export_plan_detail`
+    </sql>
+
+    <select id="selectWzchImportExportPlanDetailList" parameterType="com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail" resultMap="WzchImportExportPlanDetailResult">
+        <include refid="selectWzchImportExportPlanDetailVo"/>
+        <where>
+            `del_flag` = 0
+            <if test="planId != null "> and `plan_id` = #{planId}</if>
+            <if test="importClassId != null "> and `import_class_id` = #{importClassId}</if>
+            <if test="importClass != null  and importClass != ''"> and `import_class` = #{importClass}</if>
+            <if test="importMainPart != null  and importMainPart != ''"> and `import_main_part` = #{importMainPart}</if>
+            <if test="consignee != null  and consignee != ''"> and `consignee` = #{consignee}</if>
+            <if test="despatchHarbor != null  and despatchHarbor != ''"> and `despatch_harbor` = #{despatchHarbor}</if>
+            <if test="arrivalHarbor != null  and arrivalHarbor != ''"> and `arrival_harbor` = #{arrivalHarbor}</if>
+            <if test="transDistance != null  and transDistance != ''"> and `trans_distance` = #{transDistance}</if>
+            <if test="customsCost != null  and customsCost != ''"> and `customs_cost` = #{customsCost}</if>
+            <if test="customsMode != null  and customsMode != ''"> and `customs_mode` = #{customsMode}</if>
+            <if test="tariffPaymentMethod != null  and tariffPaymentMethod != ''"> and `tariff_payment_method` = #{tariffPaymentMethod}</if>
+            <if test="taxRate != null  and taxRate != ''"> and `tax_rate` = #{taxRate}</if>
+            <if test="useTimeLimit != null  and useTimeLimit != ''"> and `use_time_limit` = #{useTimeLimit}</if>
+            <if test="choiceTimeLimit != null  and choiceTimeLimit != ''"> and `choice_time_limit` = #{choiceTimeLimit}</if>
+            <if test="despatchTimeLimit != null  and despatchTimeLimit != ''"> and `despatch_time_limit` = #{despatchTimeLimit}</if>
+            <if test="customsTimeLimit != null  and customsTimeLimit != ''"> and `customs__time_limit` = #{customsTimeLimit}</if>
+            <if test="specialRemarks != null  and specialRemarks != ''"> and `special_remarks` = #{specialRemarks}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
+            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
+            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="idList!=null and idList.size>0">
+                and id in
+                <foreach item="id" collection="idList" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
+        </where>
+        order by `id` desc
+    </select>
+    
+    <select id="selectWzchImportExportPlanDetailById" parameterType="Long" resultMap="WzchImportExportPlanDetailResult">
+        <include refid="selectWzchImportExportPlanDetailVo"/>
+        where `id` = #{id}
+    </select>
+    <insert id="insertWzchImportExportPlanDetail" parameterType="com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail">
+        insert into `wzch_import_export_plan_detail`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">`id`,</if>
+            <if test="planId != null">`plan_id`,</if>
+            <if test="importClassId != null">`import_class_id`,</if>
+            <if test="importClass != null">`import_class`,</if>
+            <if test="importMainPart != null">`import_main_part`,</if>
+            <if test="consignee != null">`consignee`,</if>
+            <if test="despatchHarbor != null">`despatch_harbor`,</if>
+            <if test="arrivalHarbor != null">`arrival_harbor`,</if>
+            <if test="transDistance != null">`trans_distance`,</if>
+            <if test="customsCost != null">`customs_cost`,</if>
+            <if test="customsMode != null">`customs_mode`,</if>
+            <if test="tariffPaymentMethod != null">`tariff_payment_method`,</if>
+            <if test="taxRate != null">`tax_rate`,</if>
+            <if test="useTimeLimit != null">`use_time_limit`,</if>
+            <if test="choiceTimeLimit != null">`choice_time_limit`,</if>
+            <if test="despatchTimeLimit != null">`despatch_time_limit`,</if>
+            <if test="customsTimeLimit != null">`customs__time_limit`,</if>
+            <if test="specialRemarks != null">`special_remarks`,</if>
+            <if test="remark != null">`remark`,</if>
+            <if test="projectId != null">`project_id`,</if>
+            <if test="projectName != null">`project_name`,</if>
+            <if test="deptId != null">`dept_id`,</if>
+            <if test="valid != null">`valid`,</if>
+            <if test="createUser != null">`create_user`,</if>
+            <if test="createUserName != null">`create_user_name`,</if>
+            <if test="createTime != null">`create_time`,</if>
+            <if test="updateUser != null">`update_user`,</if>
+            <if test="updateUserName != null">`update_user_name`,</if>
+            <if test="updateTime != null">`update_time`,</if>
+            <if test="delUser != null">`del_user`,</if>
+            <if test="delTime != null">`del_time`,</if>
+            <if test="delFlag != null">`del_flag`,</if>
+            <if test="ptVar1 != null">`pt_var1`,</if>
+            <if test="ptVar2 != null">`pt_var2`,</if>
+            <if test="ptVar3 != null">`pt_var3`,</if>
+            <if test="ptVar4 != null">`pt_var4`,</if>
+            <if test="ptVar5 != null">`pt_var5`,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="planId != null">#{planId},</if>
+            <if test="importClassId != null">#{importClassId},</if>
+            <if test="importClass != null">#{importClass},</if>
+            <if test="importMainPart != null">#{importMainPart},</if>
+            <if test="consignee != null">#{consignee},</if>
+            <if test="despatchHarbor != null">#{despatchHarbor},</if>
+            <if test="arrivalHarbor != null">#{arrivalHarbor},</if>
+            <if test="transDistance != null">#{transDistance},</if>
+            <if test="customsCost != null">#{customsCost},</if>
+            <if test="customsMode != null">#{customsMode},</if>
+            <if test="tariffPaymentMethod != null">#{tariffPaymentMethod},</if>
+            <if test="taxRate != null">#{taxRate},</if>
+            <if test="useTimeLimit != null">#{useTimeLimit},</if>
+            <if test="choiceTimeLimit != null">#{choiceTimeLimit},</if>
+            <if test="despatchTimeLimit != null">#{despatchTimeLimit},</if>
+            <if test="customsTimeLimit != null">#{customsTimeLimit},</if>
+            <if test="specialRemarks != null">#{specialRemarks},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="projectId != null">#{projectId},</if>
+            <if test="projectName != null">#{projectName},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="valid != null">#{valid},</if>
+            <if test="createUser != null">#{createUser},</if>
+            <if test="createUserName != null">#{createUserName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateUser != null">#{updateUser},</if>
+            <if test="updateUserName != null">#{updateUserName},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delUser != null">#{delUser},</if>
+            <if test="delTime != null">#{delTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="ptVar1 != null">#{ptVar1},</if>
+            <if test="ptVar2 != null">#{ptVar2},</if>
+            <if test="ptVar3 != null">#{ptVar3},</if>
+            <if test="ptVar4 != null">#{ptVar4},</if>
+            <if test="ptVar5 != null">#{ptVar5},</if>
+         </trim>
+    </insert>
+
+    <insert id="batchInsert" parameterType="list">
+        insert `wzch_import_export_plan_detail` (
+                                                `id`,
+                                                                `plan_id`,
+                                                                `import_class_id`,
+                                                                `import_class`,
+                                                                `import_main_part`,
+                                                                `consignee`,
+                                                                `despatch_harbor`,
+                                                                `arrival_harbor`,
+                                                                `trans_distance`,
+                                                                `customs_cost`,
+                                                                `customs_mode`,
+                                                                `tariff_payment_method`,
+                                                                `tax_rate`,
+                                                                `use_time_limit`,
+                                                                `choice_time_limit`,
+                                                                `despatch_time_limit`,
+                                                                `customs__time_limit`,
+                                                                `special_remarks`,
+                                                                `remark`,
+                                                                `project_id`,
+                                                                `project_name`,
+                                                                `dept_id`,
+                                                                `valid`,
+                                                                `create_user`,
+                                                                `create_user_name`,
+                                                                `create_time`,
+                                                                `update_user`,
+                                                                `update_user_name`,
+                                                                `update_time`,
+                                                                `del_user`,
+                                                                `del_time`,
+                                                                `del_flag`,
+                                                                `pt_var1`,
+                                                                `pt_var2`,
+                                                                `pt_var3`,
+                                                                `pt_var4`,
+                                                                `pt_var5`
+                                    )values
+        <foreach collection="list" separator="," item="item" index="index" >(
+        #{item.id },
+            #{item.planId},
+            #{item.importClassId},
+            #{item.importClass},
+            #{item.importMainPart},
+            #{item.consignee},
+            #{item.despatchHarbor},
+            #{item.arrivalHarbor},
+            #{item.transDistance},
+            #{item.customsCost},
+            #{item.customsMode},
+            #{item.tariffPaymentMethod},
+            #{item.taxRate},
+            #{item.useTimeLimit},
+            #{item.choiceTimeLimit},
+            #{item.despatchTimeLimit},
+            #{item.customsTimeLimit},
+            #{item.specialRemarks},
+            #{item.remark},
+            #{item.projectId},
+            #{item.projectName},
+            #{item.deptId},
+            #{item.valid},
+            #{item.createUser},
+            #{item.createUserName},
+            #{item.createTime},
+            #{item.updateUser},
+            #{item.updateUserName},
+            #{item.updateTime},
+            #{item.delUser},
+            #{item.delTime},
+            #{item.delFlag},
+            #{item.ptVar1},
+            #{item.ptVar2},
+            #{item.ptVar3},
+            #{item.ptVar4},
+            #{item.ptVar5}
+            )
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate" parameterType="list">
+        update `wzch_import_export_plan_detail`
+        <trim prefix="set" suffixOverrides=",">
+                                                                <trim prefix="plan_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.planId != null ">
+                                when `id` = #{item.id} then #{item.planId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="import_class_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.importClassId != null ">
+                                when `id` = #{item.id} then #{item.importClassId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="import_class =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.importClass != null ">
+                                when `id` = #{item.id} then #{item.importClass}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="import_main_part =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.importMainPart != null ">
+                                when `id` = #{item.id} then #{item.importMainPart}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="consignee =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.consignee != null ">
+                                when `id` = #{item.id} then #{item.consignee}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="despatch_harbor =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.despatchHarbor != null ">
+                                when `id` = #{item.id} then #{item.despatchHarbor}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="arrival_harbor =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.arrivalHarbor != null ">
+                                when `id` = #{item.id} then #{item.arrivalHarbor}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="trans_distance =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.transDistance != null ">
+                                when `id` = #{item.id} then #{item.transDistance}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_cost =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsCost != null ">
+                                when `id` = #{item.id} then #{item.customsCost}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs_mode =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsMode != null ">
+                                when `id` = #{item.id} then #{item.customsMode}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="tariff_payment_method =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.tariffPaymentMethod != null ">
+                                when `id` = #{item.id} then #{item.tariffPaymentMethod}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="tax_rate =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.taxRate != null ">
+                                when `id` = #{item.id} then #{item.taxRate}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="use_time_limit =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.useTimeLimit != null ">
+                                when `id` = #{item.id} then #{item.useTimeLimit}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="choice_time_limit =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.choiceTimeLimit != null ">
+                                when `id` = #{item.id} then #{item.choiceTimeLimit}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="despatch_time_limit =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.despatchTimeLimit != null ">
+                                when `id` = #{item.id} then #{item.despatchTimeLimit}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="customs__time_limit =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.customsTimeLimit != null ">
+                                when `id` = #{item.id} then #{item.customsTimeLimit}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="special_remarks =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.specialRemarks != null ">
+                                when `id` = #{item.id} then #{item.specialRemarks}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="remark =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.remark != null ">
+                                when `id` = #{item.id} then #{item.remark}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectId != null ">
+                                when `id` = #{item.id} then #{item.projectId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="project_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.projectName != null ">
+                                when `id` = #{item.id} then #{item.projectName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="dept_id =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.deptId != null ">
+                                when `id` = #{item.id} then #{item.deptId}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="valid =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.valid != null ">
+                                when `id` = #{item.id} then #{item.valid}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUser != null ">
+                                when `id` = #{item.id} then #{item.createUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createUserName != null ">
+                                when `id` = #{item.id} then #{item.createUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="create_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.createTime != null ">
+                                when `id` = #{item.id} then #{item.createTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUser != null ">
+                                when `id` = #{item.id} then #{item.updateUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_user_name =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateUserName != null ">
+                                when `id` = #{item.id} then #{item.updateUserName}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="update_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.updateTime != null ">
+                                when `id` = #{item.id} then #{item.updateTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_user =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delUser != null ">
+                                when `id` = #{item.id} then #{item.delUser}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_time =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delTime != null ">
+                                when `id` = #{item.id} then #{item.delTime}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="del_flag =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.delFlag != null ">
+                                when `id` = #{item.id} then #{item.delFlag}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var1 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar1 != null ">
+                                when `id` = #{item.id} then #{item.ptVar1}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var2 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar2 != null ">
+                                when `id` = #{item.id} then #{item.ptVar2}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var3 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar3 != null ">
+                                when `id` = #{item.id} then #{item.ptVar3}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var4 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar4 != null ">
+                                when `id` = #{item.id} then #{item.ptVar4}
+                            </if>
+                        </foreach>
+                    </trim>
+                                                    <trim prefix="pt_var5 =case" suffix="end,">
+                        <foreach collection="dataList" item="item" index="index">
+                            <if test="item.ptVar5 != null ">
+                                when `id` = #{item.id} then #{item.ptVar5}
+                            </if>
+                        </foreach>
+                    </trim>
+                                    </trim>
+        where
+        <foreach collection="dataList" separator="or" item="item" index="index" >
+            `id` = #{item.id}
+        </foreach>
+    </update>
+
+
+
+
+    <update id="updateWzchImportExportPlanDetail" parameterType="com.hhwy.pm.qqch.wzch.importplan.domain.WzchImportExportPlanDetail">
+        update `wzch_import_export_plan_detail`
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planId != null">`plan_id` = #{planId},</if>
+            <if test="importClassId != null">`import_class_id` = #{importClassId},</if>
+            <if test="importClass != null">`import_class` = #{importClass},</if>
+            <if test="importMainPart != null">`import_main_part` = #{importMainPart},</if>
+            <if test="consignee != null">`consignee` = #{consignee},</if>
+            <if test="despatchHarbor != null">`despatch_harbor` = #{despatchHarbor},</if>
+            <if test="arrivalHarbor != null">`arrival_harbor` = #{arrivalHarbor},</if>
+            <if test="transDistance != null">`trans_distance` = #{transDistance},</if>
+            <if test="customsCost != null">`customs_cost` = #{customsCost},</if>
+            <if test="customsMode != null">`customs_mode` = #{customsMode},</if>
+            <if test="tariffPaymentMethod != null">`tariff_payment_method` = #{tariffPaymentMethod},</if>
+            <if test="taxRate != null">`tax_rate` = #{taxRate},</if>
+            <if test="useTimeLimit != null">`use_time_limit` = #{useTimeLimit},</if>
+            <if test="choiceTimeLimit != null">`choice_time_limit` = #{choiceTimeLimit},</if>
+            <if test="despatchTimeLimit != null">`despatch_time_limit` = #{despatchTimeLimit},</if>
+            <if test="customsTimeLimit != null">`customs__time_limit` = #{customsTimeLimit},</if>
+            <if test="specialRemarks != null">`special_remarks` = #{specialRemarks},</if>
+            <if test="remark != null">`remark` = #{remark},</if>
+            <if test="projectId != null">`project_id` = #{projectId},</if>
+            <if test="projectName != null">`project_name` = #{projectName},</if>
+            <if test="deptId != null">`dept_id` = #{deptId},</if>
+            <if test="valid != null">`valid` = #{valid},</if>
+            <if test="createUser != null">`create_user` = #{createUser},</if>
+            <if test="createUserName != null">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null">`create_time` = #{createTime},</if>
+            <if test="updateUser != null">`update_user` = #{updateUser},</if>
+            <if test="updateUserName != null">`update_user_name` = #{updateUserName},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="delUser != null">`del_user` = #{delUser},</if>
+            <if test="delTime != null">`del_time` = #{delTime},</if>
+            <if test="delFlag != null">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null">`pt_var5` = #{ptVar5},</if>
+        </trim>
+        where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchImportExportPlanDetailById" parameterType="Long">
+        update `wzch_import_export_plan_detail` set del_flag = 1 where `id` = #{id}
+    </update>
+
+    <update id="deleteWzchImportExportPlanDetailByIds" parameterType="String">
+        update `wzch_import_export_plan_detail` set del_flag = 1 where `id` in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+    <update id="updateValidByPlanId">
+         update `wzch_import_export_plan_detail` set valid=#{valid} where del_flag = '0' and `plan_id` = #{planId}
+    </update>
+    <delete id="deleteByPlanId">
+        delete from  wzch_import_export_plan_detail where `plan_id` = #{planId}
+    </delete>
+
+</mapper>
