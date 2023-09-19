@@ -23,6 +23,7 @@
         <result property="sort" column="sort"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
+        <result property="relevancy" column="relevancy"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="projectId" column="project_id"/>
@@ -61,6 +62,7 @@
              , `sort`
              , `version`
              , `valid`
+             , `relevancy`
              , `region_id`
              , `region_name`
              , `project_id`
@@ -190,6 +192,7 @@
             <if test="sort != null ">`sort`,</if>
             <if test="version != null ">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="relevancy != null  and relevancy != ''">`relevancy`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="projectId != null ">`project_id`,</if>
@@ -228,6 +231,7 @@
             <if test="sort != null ">#{sort},</if>
             <if test="version != null ">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="relevancy != null  and relevancy != ''">#{relevancy},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="projectId != null ">#{projectId},</if>
@@ -271,6 +275,7 @@
             `sort`,
             `version`,
             `valid`,
+            `relevancy`,
             `region_id`,
             `region_name`,
             `project_id`,
@@ -310,6 +315,7 @@
                 #{item.sort},
                 #{item.version},
                 #{item.valid},
+                #{item.relevancy},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.projectId},

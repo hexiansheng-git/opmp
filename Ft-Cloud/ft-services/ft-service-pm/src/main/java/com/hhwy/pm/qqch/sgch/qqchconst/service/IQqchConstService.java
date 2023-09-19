@@ -37,6 +37,12 @@ public interface IQqchConstService {
     List<QqchConstStaffPlanResult> selectQqchConst(BigDecimal version);
 
     /**
+     * 获取最新版本数据
+     * @return
+     */
+    List<QqchConst> getMaxVersionValidConstList();
+
+    /**
      * 4.2弹窗
      * @return
      */

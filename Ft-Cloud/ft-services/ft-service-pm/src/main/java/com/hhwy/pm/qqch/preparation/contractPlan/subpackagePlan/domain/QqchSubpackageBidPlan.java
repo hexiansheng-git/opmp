@@ -112,6 +112,10 @@ public class QqchSubpackageBidPlan extends BaseEntity {
     @Excel(name = "是否有效 1-有效 0-失效")
     private String valid;
     /**
+     * 字段描述：关联id
+     */
+    private Long relevancy;
+    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
