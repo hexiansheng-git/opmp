@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.service.impl;
 import cn.hutool.core.date.DateException;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.EasyExcelFactory;
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.util.IoUtils;
 import com.hhwy.common.core.utils.DateUtils;
@@ -404,7 +405,12 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
                 for (Field field : fields) {
                     //判断当前字段注解是否ExcelProperty
                     boolean annotationPresent = field.isAnnotationPresent(ExcelProperty.class);
+                    boolean ignore = field.isAnnotationPresent(ExcelIgnore.class);
+                    if(ignore) {
+                        continue;
+                    }
                     if(!annotationPresent){
+//                        isColumn = true;
                         break;
                     }
                     ExcelProperty property = field.getAnnotation(ExcelProperty.class);

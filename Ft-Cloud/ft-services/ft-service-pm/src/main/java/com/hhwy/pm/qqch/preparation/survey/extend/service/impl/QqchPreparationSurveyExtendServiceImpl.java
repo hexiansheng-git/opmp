@@ -59,16 +59,21 @@ public class QqchPreparationSurveyExtendServiceImpl implements IQqchPreparationS
      */
     @Transactional
     public void preserveFile(String moduleIdentity, BigDecimal version, String fileGroupId){
-        //删除附件
+        if(StringUtils.isBlank(fileGroupId)){
+            return;
+        }
+        //查询当前是否已插入附件数据
         QqchPreparationSurveyExtend qqchPreparationSurveyExtend = new QqchPreparationSurveyExtend();
         qqchPreparationSurveyExtend.setModuleIdentity(moduleIdentity);
         qqchPreparationSurveyExtend.setVersion(version);
-        qqchPreparationSurveyExtendMapper.deleteQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
-
-        //插入附件
         qqchPreparationSurveyExtend.setFileGroupId(fileGroupId);
-        qqchPreparationSurveyExtend.setValid(Valid.YES);
-        this.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        QqchPreparationSurveyExtend extend = qqchPreparationSurveyExtendMapper.getQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+
+        if(extend == null){
+            qqchPreparationSurveyExtend.setValid(Valid.YES);
+            qqchPreparationSurveyExtend.setValid(Valid.YES);
+            this.insertQqchPreparationSurveyExtend(qqchPreparationSurveyExtend);
+        }
     }
 
     /**

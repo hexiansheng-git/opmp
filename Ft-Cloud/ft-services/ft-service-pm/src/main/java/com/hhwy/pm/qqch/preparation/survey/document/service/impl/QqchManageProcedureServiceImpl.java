@@ -11,6 +11,7 @@ import com.hhwy.pm.qqch.preparation.survey.document.mapper.QqchManageProcedureMa
 import com.hhwy.pm.qqch.preparation.survey.document.service.IQqchManageProcedureService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -103,6 +104,7 @@ public class QqchManageProcedureServiceImpl implements IQqchManageProcedureServi
             return;
         }
         for (QqchManageProcedure qqchManageProcedure : qqchManageProcedureList) {
+            qqchManageProcedure.setId(IdWorker.createId());
             qqchManageProcedure.setVersion(version);
             if(version.compareTo(BigDecimal.ONE) == 0){
                 qqchManageProcedure.setValid(Valid.YES);

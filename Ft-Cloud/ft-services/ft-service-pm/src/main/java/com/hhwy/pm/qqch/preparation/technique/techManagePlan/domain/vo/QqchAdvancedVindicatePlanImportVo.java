@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
+import com.alibaba.excel.annotation.ExcelIgnoreUnannotated;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.format.DateTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,6 +21,7 @@ import java.util.Map;
  * @remark 高新维护计划
  */
 @Data
+@ExcelIgnoreUnannotated
 @NoArgsConstructor
 @AllArgsConstructor
 public class QqchAdvancedVindicatePlanImportVo {
@@ -27,6 +30,7 @@ public class QqchAdvancedVindicatePlanImportVo {
      * 字段描述：单位名称
      */
     @JsonProperty
+    @ExcelIgnore
     private String unitName;
     /**
      * 字段描述：研发课题名称
