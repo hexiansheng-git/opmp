@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 @RestController
-@RequestMapping("/common2")
-public class CommonController2 {
+@RequestMapping("/pmcommon")
+public class PmCommonController {
 
     @Resource
     private CommonService commonService;
