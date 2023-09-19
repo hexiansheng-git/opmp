@@ -12,6 +12,7 @@ import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
@@ -26,6 +27,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -186,16 +188,16 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     /**
      * 调整版本&未完&
-     * @param jdglWeekPlanParam
+     * @param jdglWeekPlan
      * @return
      */
     @Override
-    public int adjust(JdglWeekPlan jdglWeekPlan) {
-        int i = 0;
+    public JdglWeekPlan adjust(JdglWeekPlan jdglWeekPlan) {
+//        int i = 0;
         JdglWeekPlan jdglWeekPlanParam = getJdglWeekPlan(jdglWeekPlan);
         if(jdglWeekPlanParam != null) {
-            Long id = IdWorker.createId();
-            jdglWeekPlanParam.setId(id);
+//            Long id = IdWorker.createId();
+//            jdglWeekPlanParam.setId(id);
             jdglWeekPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglWeekPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglWeekPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
@@ -209,18 +211,18 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             jdglWeekPlanParam.setTaskStatus("0");
             jdglWeekPlanParam.setIsUse("0");
 
-            i = jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlanParam);
-
-            List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlanParam.getJdglWeekImagePlanList();
-            if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
-                for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
-                    jdglWeekImagePlan.setPlanId(id);
-                }
-                iJdglWeekImagePlanService.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
-            }
+//            i = jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlanParam);
+//
+//            List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlanParam.getJdglWeekImagePlanList();
+//            if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
+//                for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
+//                    jdglWeekImagePlan.setPlanId(id);
+//                }
+//                iJdglWeekImagePlanService.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
+//            }
         }
 
-        return i;
+        return jdglWeekPlanParam;
     }
 
     @Override
@@ -274,7 +276,18 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
         jdglWeekPlan.setIsUse("0");
-        return jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlan);
+        int i = jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlan);
+
+        List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();
+        if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
+            List<JdglWeekImagePlan> imagePlans = TreeUtil.treeToList(jdglWeekImagePlanList);
+            imagePlans.forEach(vo -> {
+                vo.setPlanId(id);
+            });
+            iJdglWeekImagePlanService.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
+        }
+
+        return i;
     }
 
     @Transactional
@@ -308,11 +321,13 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 //        iJdglWeekValuePlanService.updateJdglWeekValuePlanList(jdglWeekPlan.getJdglWeekValuePlanList());
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
-            for (JdglWeekImagePlan jdglWeekImagePlan: jdglWeekImagePlanList) {
+            List<JdglWeekImagePlan> jdglWeekImagePlans = TreeUtil.treeToListWithoutId(jdglWeekImagePlanList);
+            for (JdglWeekImagePlan jdglWeekImagePlan: jdglWeekImagePlans) {
                 jdglWeekImagePlan.setPlanId(jdglWeekPlan.getId());
             }
+            iJdglWeekImagePlanService.updateJdglWeekImagePlanList(jdglWeekImagePlans);
         }
-        iJdglWeekImagePlanService.updateJdglWeekImagePlanList(jdglWeekImagePlanList);
+
 
         // 根据计划完成产值汇总更新年计划产值&未完&
 

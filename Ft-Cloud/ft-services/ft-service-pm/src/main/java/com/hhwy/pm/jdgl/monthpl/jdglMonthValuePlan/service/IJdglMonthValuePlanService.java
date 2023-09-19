@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service;
 
+import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.domain.JdglMonthValuePlan;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface IJdglMonthValuePlanService {
     int deleteJdglMonthValuePlanByPks(List<Long> jdglMonthValuePlanPkList);
 
     List<JdglMonthValuePlan> getBillListByYearAndMonth(String year, String month);
+
+    List<JdglMonthValuePlan> updateValuePlanData(Long planId, List<JdglMonthImagePlan> jdglMonthImagePlanList);
 }

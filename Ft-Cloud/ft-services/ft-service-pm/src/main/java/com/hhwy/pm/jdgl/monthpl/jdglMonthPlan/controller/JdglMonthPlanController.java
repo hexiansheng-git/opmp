@@ -75,8 +75,7 @@ public class JdglMonthPlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglMonthPlan:add")
     @PostMapping("/adjust")
     public AjaxResult adjust(@RequestBody JdglMonthPlan jdglMonthPlanParam) {
-        jdglMonthPlanService.adjust(jdglMonthPlanParam);
-        return AjaxResult.success(jdglMonthPlanParam);
+        return AjaxResult.success(jdglMonthPlanService.adjust(jdglMonthPlanParam));
     }
 
     @PreAuthorize(hasPermi = "jdglMonthPlan:update")

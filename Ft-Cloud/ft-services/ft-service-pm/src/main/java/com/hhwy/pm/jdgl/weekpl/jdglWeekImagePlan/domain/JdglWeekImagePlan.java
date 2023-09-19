@@ -132,6 +132,10 @@ public class JdglWeekImagePlan extends TreeNode<JdglWeekImagePlan> {
     @Excel(name = "责任人")
     private String responsePerson;
 
+    @JsonProperty
+    @Excel(name = "责任人id")
+    private String responsePersonId;
+
     /**
      * 字段描述：wbsid
      */

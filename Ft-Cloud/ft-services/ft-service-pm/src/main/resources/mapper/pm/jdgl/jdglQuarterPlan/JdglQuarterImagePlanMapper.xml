@@ -25,6 +25,7 @@
         <result property="wbsCode" column="wbs_code"/>
         <result property="wbsName" column="wbs_name"/>
         <result property="responsePerson" column="response_person"/>
+        <result property="responsePersonId" column="response_person_id"/>
         <result property="fileGroupId" column="file_group_id"/>
         <result property="remark" column="remark"/>
         <result property="sort" column="sort"/>
@@ -64,6 +65,7 @@
              , `wbs_code`
              , `wbs_name`
              , `response_person`
+             , `response_person_id`
              , `file_group_id`
              , `remark`
              , `sort`
@@ -84,6 +86,9 @@
              , `task_status`
         from jdgl_quarter_image_plan
     </sql>
+    <delete id="deleteJdglQuarterImagePlanByPlanId">
+        delete from jdgl_quarter_image_plan where plan_id = #{planId}
+    </delete>
     <select id="getJdglQuarterImagePlan" resultMap="JdglQuarterImagePlanResultMap">
         <include refid="selectJdglQuarterImagePlanVo"/>
         <where>
@@ -107,6 +112,7 @@
             <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
             <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
+            <if test="responsePersonId != null ">and `response_person_id` = #{responsePersonId}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="sort != null">and `sort` = #{sort}</if>
@@ -152,6 +158,7 @@
             <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
             <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
+            <if test="responsePersonId != null ">and `response_person_id` = #{responsePersonId}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="sort != null">and `sort` = #{sort}</if>
@@ -204,6 +211,7 @@
             <if test="wbsCode != null ">`wbs_code`,</if>
             <if test="wbsName != null ">`wbs_name`,</if>
             <if test="responsePerson != null ">`response_person`,</if>
+            <if test="responsePersonId != null ">`response_person_id`,</if>
             <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="sort != null">`sort`,</if>
@@ -243,6 +251,7 @@
             <if test="wbsCode != null ">#{wbsCode},</if>
             <if test="wbsName != null ">#{wbsName},</if>
             <if test="responsePerson != null ">#{responsePerson},</if>
+            <if test="responsePersonId != null ">#{responsePersonId},</if>
             <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="sort != null">#{sort},</if>
@@ -287,6 +296,7 @@
             `wbs_code`,
             `wbs_name`,
             `response_person`,
+            `response_person_id`,
             `file_group_id`,
             `remark`,
             `sort`,
@@ -327,6 +337,7 @@
                 #{item.wbsCode},
                 #{item.wbsName},
                 #{item.responsePerson},
+                #{item.responsePersonId},
                 #{item.fileGroupId},
                 #{item.remark},
                 #{item.sort},
@@ -370,6 +381,7 @@
             <if test="wbsCode != null ">`wbs_code` = #{wbsCode},</if>
             <if test="wbsName != null ">`wbs_name` = #{wbsName},</if>
             <if test="responsePerson != null ">`response_person` = #{responsePerson},</if>
+            <if test="responsePersonId != null ">`response_person_id` = #{responsePersonId},</if>
             <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
@@ -492,6 +504,11 @@
                     when `id`=#{item.id} then #{item.responsePerson}
                 </foreach>
             </trim>
+            <trim prefix="response_person_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.responsePersonId}
+                </foreach>
+            </trim>
             <trim prefix="file_group_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.fileGroupId}
@@ -610,6 +627,7 @@
             <if test="wbsCode != null ">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null ">and `wbs_name` = #{wbsName}</if>
             <if test="responsePerson != null ">and `response_person` = #{responsePerson}</if>
+            <if test="responsePersonId != null ">and `response_person_id` = #{responsePersonId}</if>
             <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="sort != null">and `sort` = #{sort}</if>

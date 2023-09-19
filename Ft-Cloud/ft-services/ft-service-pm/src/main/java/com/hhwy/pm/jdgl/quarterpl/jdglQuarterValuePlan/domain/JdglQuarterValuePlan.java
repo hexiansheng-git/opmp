@@ -42,6 +42,13 @@ public class JdglQuarterValuePlan extends TreeNode<JdglQuarterValuePlan> {
     @Excel(name = "清单id")
     private Long inventoryId;
     /**
+     * 字段描述：清单id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "清单父id")
+    private Long inventoryPid;
+    /**
      * 字段描述：清单编号
      */
     @JsonProperty
@@ -207,5 +214,6 @@ public class JdglQuarterValuePlan extends TreeNode<JdglQuarterValuePlan> {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+
 
 }

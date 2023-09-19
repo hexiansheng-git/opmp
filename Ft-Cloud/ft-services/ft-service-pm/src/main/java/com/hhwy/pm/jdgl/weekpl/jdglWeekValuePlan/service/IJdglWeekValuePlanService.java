@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service;
 
+import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan;
 
 import java.util.List;
@@ -32,4 +33,6 @@ public interface IJdglWeekValuePlanService {
     int deleteJdglWeekValuePlanByPks(List<Long> jdglWeekValuePlanPkList);
 
     List<JdglWeekValuePlan> getBillListByYearAndWeek(String year, String week);
+
+    List<JdglWeekValuePlan> updateValuePlanData(Long planId, List<JdglWeekImagePlan> jdglWeekImagePlanList);
 }

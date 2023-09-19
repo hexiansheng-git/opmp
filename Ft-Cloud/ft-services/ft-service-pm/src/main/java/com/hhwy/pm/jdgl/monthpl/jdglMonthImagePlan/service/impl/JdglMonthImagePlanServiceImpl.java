@@ -1,11 +1,18 @@
 package com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.mapper.JdglMonthImagePlanMapper;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.IJdglMonthImagePlanService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.IJdglMonthValuePlanService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author chenjinhao
@@ -26,6 +35,15 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
     @Autowired
     private JdglMonthImagePlanMapper jdglMonthImagePlanMapper;
+
+    @Autowired
+    private IJdglMonthValuePlanService jdglMonthValuePlanService;
+
+    @Autowired
+    private IJdglMainPlanService iJdglMainPlanService;
+
+    @Autowired
+    private IJdglMainPlanItemService jdglMainPlanItemService;
 
 
     public JdglMonthImagePlan getJdglMonthImagePlan(JdglMonthImagePlan jdglMonthImagePlan) {
@@ -58,11 +76,16 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
     @Transactional
     public int insertJdglMonthImagePlanList(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
+        if(CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
+            return 0;
+        }
+        Long planId = jdglMonthImagePlanList.get(0).getPlanId();
         for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
-            jdglMonthImagePlan.setId(IdWorker.createId());
+//            jdglMonthImagePlan.setId(IdWorker.createId());
             jdglMonthImagePlan.setCreateUser(SecurityUtils.getUserName());
             jdglMonthImagePlan.setCreateTime(DateUtils.getNowDate());
         }
+        jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
         return jdglMonthImagePlanMapper.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
     }
 
@@ -76,12 +99,15 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     @Transactional
     public int updateJdglMonthImagePlanList(List<JdglMonthImagePlan> jdglMonthImagePlanList) {
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
-            for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlans) {
+//            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
+            Long planId = jdglMonthImagePlanList.get(0).getPlanId();
+            for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
                 jdglMonthImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglMonthImagePlan.setUpdateTime(DateUtils.getNowDate());
             }
-            return jdglMonthImagePlanMapper.updateJdglMonthImagePlanList(jdglMonthImagePlans);
+            deleteJdglMonthImagePlanByPlanId(planId);
+            jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
+            return jdglMonthImagePlanMapper.updateJdglMonthImagePlanList(jdglMonthImagePlanList);
         }
 
         return 0;
@@ -101,9 +127,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
     @Override
     public int deleteJdglMonthImagePlanByPlanId(Long planId) {
-        JdglMonthImagePlan jdglMonthImagePlan = new JdglMonthImagePlan();
-        jdglMonthImagePlan.setPlanId(planId);
-        return deleteJdglMonthImagePlan(jdglMonthImagePlan);
+        return jdglMonthImagePlanMapper.deleteJdglMonthImagePlanByPlanId(planId);
     }
 
     /**
@@ -114,19 +138,59 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     @Override
     public JdglMonthPlan syncFromTotalPlan(JdglMonthPlan jdglMonthPlanParam) {
 
+        String year = jdglMonthPlanParam.getYear();
+        String month = jdglMonthPlanParam.getMonth();
+
+        if(StringUtils.isEmpty(year)||StringUtils.isEmpty(month)) {
+            throw new RuntimeException("传参异常!");
+        }
+
         List<JdglMonthImagePlan> returnList = new ArrayList<JdglMonthImagePlan>();
 
         // 最新获取总进度计划数据（根据年份日期区间获取总计划、形象计划及关联wbs数据）
+        JdglMainPlan usingJdglMainPlan = iJdglMainPlanService.getUsingJdglMainPlan();
+        Map<String, Date> dateRange4Quarter = StatisticsUtils.getDateRange4YearMonth(year, month);
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange4Quarter.get("start"), dateRange4Quarter.get("end"));
 
-        // 获取当前版本形象计划数据
+        if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
+            return jdglMonthPlanParam;
+        }
+        for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
+            JdglMonthImagePlan imagePlan = new JdglMonthImagePlan();
 
-        // 增修年进度计划数据
+            imagePlan.setId(IdWorker.createId());
+//            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
+            imagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
+            imagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            imagePlan.setPlanId(jdglMonthPlanParam.getId());
+            imagePlan.setWorkId(jdglMainPlanItem.getId());
+            imagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
+            imagePlan.setWorkName(jdglMainPlanItem.getItemName());
+            imagePlan.setUnit(jdglMainPlanItem.getUnit());
+            imagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            imagePlan.setTotalCompQuantity(null);
+            imagePlan.setRemainQuantity(null);
+            imagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
+            imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
+            imagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
+            imagePlan.setWbsName(jdglMainPlanItem.getWbsName());
+            //                jdglYearImagePlan.setWbsId();
+            imagePlan.setResponsePerson(jdglMainPlanItem.getExecuter());
+            imagePlan.setResponsePersonId(jdglMainPlanItem.getExecuterId());
+            returnList.add(imagePlan);
+        }
 
         // 维护returnList树结构
+        List<JdglMonthImagePlan> build = TreeUtil.build(returnList, null);
+        jdglMonthPlanParam.setJdglMonthImagePlanList(build);
+
 
         // 修改年进度计划主表引用总体计划的版本号
+        if(usingJdglMainPlan != null) {
+            jdglMonthPlanParam.setThisTotalVersion(usingJdglMainPlan.getVersion());
+        }
 
-        return null;
+        return jdglMonthPlanParam;
     }
 
     @Override
