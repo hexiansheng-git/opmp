@@ -9,8 +9,11 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemMapper;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
-import java.util.Date;
-import java.util.List;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -80,7 +83,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return 0;
         }
-        List<JdglMainPlanItem> jdglMainPlanItems = TreeUtil.treeToList(jdglMainPlanItemList);
+        List<JdglMainPlanItem> jdglMainPlanItems = TreeUtil.treeToListWithoutId(jdglMainPlanItemList);
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
             jdglMainPlanItem.setUpdateUser(SecurityUtils.getUserName());
             jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
@@ -143,5 +146,42 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             mainPlanId = usingJdglMainPlan.getId();
         }
         return jdglMainPlanItemMapper.getMaxActualStartDate(mainPlanId);
+    }
+
+    /**
+     * 获取关键线路数据
+     * @param jdglMainPlanItemParam
+     * @return
+     */
+    @Override
+    public List<JdglMainPlanItem> getKeyRoad(JdglMainPlanItem jdglMainPlanItemParam) {
+        List<JdglMainPlanItem> returnList = new ArrayList<>();
+        List<JdglMainPlanItem> jdglMainPlanItemListNoTree = getJdglMainPlanItemListNoTree(jdglMainPlanItemParam);
+        if(CollectionUtils.isEmpty(jdglMainPlanItemListNoTree)) {
+            return returnList;
+        }
+        List<JdglMainPlanItem> collect = jdglMainPlanItemListNoTree.stream().filter(vo -> "1".equals(vo.getIsCritical())).collect(Collectors.toList());
+        if(CollectionUtils.isEmpty(collect)) {
+            return returnList;
+        }
+        returnList.addAll(collect);
+        Set<Long> ids = new HashSet<>();
+        for (JdglMainPlanItem jdglMainPlanItem : collect) {
+            List<JdglMainPlanItem> collect1 = jdglMainPlanItemListNoTree.stream().filter(vo -> "wbs".equals(vo.getItemType()) && jdglMainPlanItem.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(collect1)) {
+                for (JdglMainPlanItem jdglMainPlanItem1 : collect1) {
+                    ids.add(jdglMainPlanItem1.getId());
+                }
+            }
+//            if(!CollectionUtils.isEmpty(collect1)) returnList.addAll(collect1);
+        }
+        if(!CollectionUtils.isEmpty(ids)) {
+            for (Long id : ids) {
+                JdglMainPlanItem jdglMainPlanItem = jdglMainPlanItemListNoTree.stream().filter(vo -> id.equals(vo.getId())).findFirst().orElse(null);
+                if(jdglMainPlanItem != null) returnList.add(jdglMainPlanItem);
+            }
+        }
+        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getWbsCode).thenComparing(JdglMainPlanItem::getLeaf).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
+        return collect1;
     }
 }

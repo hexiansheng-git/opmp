@@ -55,7 +55,7 @@ public class XmslWbsMainController extends BaseController {
     public AjaxResult detail(@RequestBody XmslWbsMain xmslWbsMainParam) {
         XmslWbsMain wbsMain = null;
         if(xmslWbsMainParam.getId() == null){
-            wbsMain =xmslWbsMainService.getLast();
+            wbsMain = xmslWbsMainService.getLast();
         }else{
             wbsMain = xmslWbsMainService.getById(xmslWbsMainParam.getId());
         }

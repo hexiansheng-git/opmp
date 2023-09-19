@@ -18,6 +18,7 @@ import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSub
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
+import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
@@ -35,6 +36,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -76,6 +79,9 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
 
     @Autowired
     private IXmslContractListService xmslContractListService;
+
+    @Autowired
+    private IQqchConstService qqchConstService;
 
 
     public QqchSubpackageBidPlan getQqchSubpackageBidPlan(QqchSubpackageBidPlan qqchSubpackageBidPlan) {
@@ -151,6 +157,8 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         //设置子表数据
 //        this.setSublist(qqchSubpackageBidPlanList,version);
 
+        this.setIncome(qqchSubpackageBidPlanList);
+
         //转树列表
         List<QqchSubpackageBidPlan> treeList = ListTreeUtil.formatTree(
                 qqchSubpackageBidPlanList,
@@ -163,6 +171,21 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         qqchSubpackageBidPlanVo.setStageIdentity(qqchReviewService.getStage());
         qqchSubpackageBidPlanVo.setList(treeList);
         return qqchSubpackageBidPlanVo;
+    }
+
+    public void setIncome(List<QqchSubpackageBidPlan> bidPlanList){
+        List<QqchConst> constList = qqchConstService.getMaxVersionValidConstList();
+
+        Map<Long,QqchConst> constMap = constList.stream().collect(Collectors.toMap(QqchConst::getRelevancy,i -> i));
+
+        for (QqchSubpackageBidPlan qqchSubpackageBidPlan : bidPlanList) {
+            Long relevancy = qqchSubpackageBidPlan.getRelevancy();
+            QqchConst qqchConst = constMap.get(relevancy);
+            if(qqchConst != null){
+                qqchSubpackageBidPlan.setSubpackageIncome(qqchConst.getSubpackageIncome());
+                qqchSubpackageBidPlan.setTotalOutputValueProportion(qqchConst.getTotalOutputValueProportion());
+            }
+        }
     }
 
     /**
@@ -272,9 +295,10 @@ public class QqchSubpackageBidPlanServiceImpl implements IQqchSubpackageBidPlanS
         /*获取最新生效版本的合同信息*/
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
         BigDecimal contractAmount = BigDecimal.ZERO;
-//        if(contractInfo != null){
-//            contractAmount = contractInfo.
-//        }
+        if(contractInfo != null){
+            //有效合同金额
+            contractAmount = contractInfo.getEffectiveAmout();
+        }
 
         /*获取最新生效版本的主合同清单*/
         List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();

@@ -370,4 +370,26 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
      */
     @JsonProperty
     private String wbsParentObjectId;
+
+
+    /**
+     * 字段描述：任务类型（project项目、task任务、milestone里程碑）
+     */
+    @JsonProperty
+    @Excel(name = "任务类型")
+    private String taskType;
+    /**
+     * 字段描述：基线项目开始
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "基线项目开始", dateFormat = "yyyy-MM-dd")
+    private Date baselineStartDate;
+    /**
+     * 字段描述：基线项目结束
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "基线项目结束", dateFormat = "yyyy-MM-dd")
+    private Date baselineFinishDate;
 }

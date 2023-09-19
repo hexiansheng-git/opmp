@@ -164,7 +164,6 @@
                batch.purchase_supply_id        as b_purchase_supply_id,
                batch.purchase_supply_detail_id as b_purchase_supply_detail_id,
                batch.project_id                as b_project_id,
-#                batch.material_code             as b_material_code,
                batch.batch                     as b_batch,
                batch.plan_purchase_num         as b_plan_purchase_num,
                batch.plan_purchase_date        as b_plan_purchase_date,
@@ -185,15 +184,14 @@
         FROM `wzch_purchase_supply_detail` AS psd
 
                  /* 关联物资总需*/
-                 LEFT JOIN wzch_total_demand_detail AS tdd ON tdd.project_id = psd.project_id
-            AND tdd.valid = 1
-            AND tdd.del_flag = 0
+                 LEFT JOIN wzch_total_demand_detail AS tdd on
+            tdd.del_flag = 0
             AND tdd.material_code = psd.material_code
             AND tdd.material_standard = psd.material_standard
 
             /* 关联优先采购物资台账*/
-                 LEFT JOIN wzch_prior_approach_detail AS pad ON pad.project_id = psd.project_id
-            AND pad.del_flag = 0
+                 LEFT JOIN wzch_prior_approach_detail AS pad ON 
+            pad.del_flag = 0
             AND pad.material_code = psd.material_code
 
             /* 关联采购供应策划批次信息 */

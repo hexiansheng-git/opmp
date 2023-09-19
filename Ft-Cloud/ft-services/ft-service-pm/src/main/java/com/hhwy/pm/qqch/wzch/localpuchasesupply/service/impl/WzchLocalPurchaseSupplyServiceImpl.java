@@ -178,10 +178,14 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
         detail.setPurchaseSupplyId(vo.getId());
         detail.setDelFlag("0");
         List<WzchLocalPurchaseSupplyDetailDTO> detailList = detailService.selectWzchPurchaseSupplyDetailList(detail);
+        if(CollectionUtils.isEmpty(detailList)){
+            vo.setDetailList(new ArrayList<>(2));
+            return vo;
+        }
 
         // 获取物资code
         List<String> materialCodeList = detailList.stream().map(WzchLocalPurchaseSupplyDetailDTO::getMaterialCode).distinct().collect(Collectors.toList());
-
+        
         // 查询来源策划 查询采购来源
         List<WzchLocalPurchaseSupplyDetailDTO> purchaseSourceList = localPurchaseSupplyDetailMapper.selectPurchaseSource(materialCodeList);
 

@@ -37,4 +37,6 @@ public interface IJdglMainPlanItemService {
     List<JdglMainPlanItem> getUsingJdglMainPlanItemListByDateRange(Date startDate, Date endDate);
 
     JdglMainPlanItem getMaxActualStartDate();
+
+    List<JdglMainPlanItem> getKeyRoad(JdglMainPlanItem jdglMainPlanItemParam);
 }

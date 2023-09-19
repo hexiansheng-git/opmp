@@ -9,6 +9,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
@@ -66,6 +67,8 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     
     @Resource
     private IQqchModuleConfirmCaseService moduleConfirmCaseService;
+    @Resource
+    private ISysSyncInfoService sysSyncInfoService;
 
     public Review getQqchReview(Review review) {
         return reviewMapper.getQqchReview(review);
@@ -229,7 +232,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     public int updateQqchReview(Review review) {
         review.setUpdateUser(SecurityUtils.getUserName());
         review.setUpdateTime(DateUtils.getNowDate());
-        return reviewMapper.updateQqchReview(review);
+        int result = reviewMapper.updateQqchReview(review);
+        //推送到总部版
+        sysSyncInfoService.pushQqchReview(review);
+        return result;
     }
 
     @Transactional(rollbackFor = Exception.class)
