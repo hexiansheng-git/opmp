@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.excel.FtExcel;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -89,7 +90,7 @@ public class XmslContractList extends BaseEntity {
      */
     @NotBlank(message = "清单类型不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     @JsonProperty
-    @Excel(name = "清单类型")
+    @FtExcel(name = "清单类型", dictType = "list_type")
     private String listType;
     /**
      * 字段描述：单位编码
