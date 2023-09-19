@@ -94,6 +94,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
      */
     private void recursionSubset(XmslContractGeneral xmslContractGeneral, List<XmslContractGeneral> insertList, List<XmslContractGeneral> updateList) {
         Long id = xmslContractGeneral.getId();
+        Long masterId = xmslContractGeneral.getMasterId();
         if (id == null) {
             id = IdWorker.createId();
             xmslContractGeneral.setId(id);
@@ -111,6 +112,7 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
         if (!CollectionUtils.isEmpty(children)) {
             for (XmslContractGeneral child : children) {
                 child.setPid(id);
+                child.setMasterId(masterId);
                 this.recursionSubset(child, insertList, updateList);
             }
         }
