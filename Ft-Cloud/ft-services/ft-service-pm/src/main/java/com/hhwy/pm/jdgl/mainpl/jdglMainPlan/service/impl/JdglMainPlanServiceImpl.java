@@ -47,9 +47,9 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         JdglMainPlanItemPre jdglMainPlanItemPre = new JdglMainPlanItemPre();
         jdglMainPlanItemPre.setMainPlanId(jdglMainPlan1.getId());
         List<JdglMainPlanItemPre> jdglMainPlanItemPreList = jdglMainPlanItemPreService.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
-        jdglMainPlan.setJdglMainPlanItemPreList(jdglMainPlanItemPreList);
+        jdglMainPlan1.setJdglMainPlanItemPreList(jdglMainPlanItemPreList);
         List<JdglMainPlanItem> keyRoad = iJdglMainPlanItemService.getKeyRoad(jdglMainPlanItem);
-        jdglMainPlan.setKeyLoadList(keyRoad);
+        jdglMainPlan1.setKeyLoadList(keyRoad);
 
         return jdglMainPlan1;
     }
