@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service;
 
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.ProjectInfo;
 
 import java.util.List;
 
@@ -12,5 +13,6 @@ public interface IJdglData4P6Service {
 
     List<JdglMainPlanItem> initAllJdglData4P6();
 
+    ProjectInfo getProjectInfo(String projectCode);
 
 }
