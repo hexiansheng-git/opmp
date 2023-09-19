@@ -170,6 +170,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
      */
     private void recursionSubset(XmslContractListVo xmslContractList, List<XmslContractListVo> insertList, List<XmslContractListVo> updateList) {
         String id =xmslContractList.getId() ;
+        Long masterId = xmslContractList.getMasterId();
         if (id == null) {
             id = IdWorker.createId()+"";
             xmslContractList.setId(id);
@@ -187,6 +188,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         if (!CollectionUtils.isEmpty(children)) {
             for (XmslContractListVo child : children) {
                 child.setPid(Long.valueOf(id));
+                child.setMasterId(masterId);
                 this.recursionSubset(child, insertList, updateList);
             }
         }
