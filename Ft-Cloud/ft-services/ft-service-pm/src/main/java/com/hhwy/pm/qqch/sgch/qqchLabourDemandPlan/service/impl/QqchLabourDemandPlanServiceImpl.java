@@ -94,8 +94,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
 
     @Transactional
     public int deleteQqchLabourDemandPlan(QqchLabourDemandPlan qqchLabourDemandPlan) {
-        qqchLabourDemandPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchLabourDemandPlan.setUpdateTime(DateUtils.getNowDate());
+//        qqchLabourDemandPlan.setUpdateUser(SecurityUtils.getUserName());
+//        qqchLabourDemandPlan.setUpdateTime(DateUtils.getNowDate());
         return qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlan(qqchLabourDemandPlan);
     }
 
