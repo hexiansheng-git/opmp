@@ -23,7 +23,7 @@ public interface JdglMainPlanItemMapper {
 
     int updateJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem);
 
-    int updateJdglMainPlanItemList(@Param("jdglMainPlanItemList") List<JdglMainPlanItem> jdglMainPlanItemList);
+    int updateJdglMainPlanItemList(@Param("list") List<JdglMainPlanItem> jdglMainPlanItemList);
 
     int deleteJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem);
 

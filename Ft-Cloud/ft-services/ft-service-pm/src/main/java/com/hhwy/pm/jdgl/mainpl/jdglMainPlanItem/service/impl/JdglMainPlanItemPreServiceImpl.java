@@ -1,0 +1,82 @@
+package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
+
+import java.util.List;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.text.Convert;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItemPre;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemPreMapper;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
+import org.springframework.stereotype.Service;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.utils.idworker.IdWorker;
+
+/**
+ * @author cjh
+ * @date 2023-09-19 11:49:57
+ * @remark
+ */
+@Service
+public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreService {
+
+    @Autowired
+    private JdglMainPlanItemPreMapper jdglMainPlanItemPreMapper;
+
+
+    public JdglMainPlanItemPre getJdglMainPlanItemPre(JdglMainPlanItemPre jdglMainPlanItemPre) {
+        return jdglMainPlanItemPreMapper.getJdglMainPlanItemPre(jdglMainPlanItemPre);
+    }
+
+    public List<JdglMainPlanItemPre> getJdglMainPlanItemPreList(JdglMainPlanItemPre jdglMainPlanItemPre) {
+        return jdglMainPlanItemPreMapper.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+    }
+
+    @Transactional
+    public int insertJdglMainPlanItemPre(JdglMainPlanItemPre jdglMainPlanItemPre) {
+        jdglMainPlanItemPre.setId(IdWorker.createId());
+        jdglMainPlanItemPre.setCreateUser(SecurityUtils.getUserName());
+        jdglMainPlanItemPre.setCreateTime(DateUtils.getNowDate());
+        return jdglMainPlanItemPreMapper.insertJdglMainPlanItemPre(jdglMainPlanItemPre);
+    }
+
+    @Transactional
+    public int insertJdglMainPlanItemPreList(List<JdglMainPlanItemPre> jdglMainPlanItemPreList) {
+        for (JdglMainPlanItemPre jdglMainPlanItemPre : jdglMainPlanItemPreList) {
+            jdglMainPlanItemPre.setId(IdWorker.createId());
+            jdglMainPlanItemPre.setCreateUser(SecurityUtils.getUserName());
+            jdglMainPlanItemPre.setCreateTime(DateUtils.getNowDate());
+        }
+        return jdglMainPlanItemPreMapper.insertJdglMainPlanItemPreList(jdglMainPlanItemPreList);
+    }
+
+    @Transactional
+    public int updateJdglMainPlanItemPre(JdglMainPlanItemPre jdglMainPlanItemPre) {
+        jdglMainPlanItemPre.setUpdateUser(SecurityUtils.getUserName());
+        jdglMainPlanItemPre.setUpdateTime(DateUtils.getNowDate());
+        return jdglMainPlanItemPreMapper.updateJdglMainPlanItemPre(jdglMainPlanItemPre);
+    }
+
+    @Transactional
+    public int updateJdglMainPlanItemPreList(List<JdglMainPlanItemPre> jdglMainPlanItemPreList) {
+        for (JdglMainPlanItemPre jdglMainPlanItemPre : jdglMainPlanItemPreList) {
+            jdglMainPlanItemPre.setUpdateUser(SecurityUtils.getUserName());
+            jdglMainPlanItemPre.setUpdateTime(DateUtils.getNowDate());
+        }
+        return jdglMainPlanItemPreMapper.updateJdglMainPlanItemPreList(jdglMainPlanItemPreList);
+    }
+
+    @Transactional
+    public int deleteJdglMainPlanItemPre(JdglMainPlanItemPre jdglMainPlanItemPre) {
+        jdglMainPlanItemPre.setUpdateUser(SecurityUtils.getUserName());
+        jdglMainPlanItemPre.setUpdateTime(DateUtils.getNowDate());
+        return jdglMainPlanItemPreMapper.deleteJdglMainPlanItemPre(jdglMainPlanItemPre);
+    }
+
+    @Transactional
+    public int deleteJdglMainPlanItemPreByPks(List<Long> jdglMainPlanItemPrePkList) {
+        return jdglMainPlanItemPreMapper.deleteJdglMainPlanItemPreByPks(jdglMainPlanItemPrePkList);
+    }
+}

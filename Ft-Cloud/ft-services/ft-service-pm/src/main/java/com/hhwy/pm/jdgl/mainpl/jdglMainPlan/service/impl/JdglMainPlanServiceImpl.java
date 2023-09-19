@@ -5,6 +5,8 @@ import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItemPre;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     @Autowired
     private IJdglMainPlanItemService iJdglMainPlanItemService;
 
+    @Autowired
+    private IJdglMainPlanItemPreService jdglMainPlanItemPreService;
+
 
     public JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan) {
         JdglMainPlan jdglMainPlan1 = jdglMainPlanMapper.getJdglMainPlan(jdglMainPlan);
@@ -39,6 +44,13 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
         List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemListNoTree(jdglMainPlanItem);
         jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList);
+        JdglMainPlanItemPre jdglMainPlanItemPre = new JdglMainPlanItemPre();
+        jdglMainPlanItemPre.setMainPlanId(jdglMainPlan1.getId());
+        List<JdglMainPlanItemPre> jdglMainPlanItemPreList = jdglMainPlanItemPreService.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+        jdglMainPlan.setJdglMainPlanItemPreList(jdglMainPlanItemPreList);
+        List<JdglMainPlanItem> keyRoad = iJdglMainPlanItemService.getKeyRoad(jdglMainPlanItem);
+        jdglMainPlan.setKeyLoadList(keyRoad);
+
         return jdglMainPlan1;
     }
 
@@ -64,7 +76,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
     @Transactional
     public int insertJdglMainPlan(JdglMainPlan jdglMainPlan) {
-        jdglMainPlan.setId(IdWorker.createId());
+//        jdglMainPlan.setId(IdWorker.createId());
         jdglMainPlan.setCreateUser(SecurityUtils.getUserName());
         jdglMainPlan.setCreateTime(DateUtils.getNowDate());
         return jdglMainPlanMapper.insertJdglMainPlan(jdglMainPlan);

@@ -57,6 +57,15 @@ public class JdglMainPlanItemController extends BaseController {
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }
 
+
+
+    @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    @GetMapping("/getKeyRoad")
+    public AjaxResult getKeyRoad(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getKeyRoad(jdglMainPlanItemParam);
+        return getDataTableAjaxResult(jdglMainPlanItemList);
+    }
+
     @PreAuthorize(hasPermi = "jdglMainPlanItem:add")
     @PostMapping("/add")
     public AjaxResult insertJdglMainPlanItem(@Validated(ValidationGroups.Save.class) @RequestBody JdglMainPlanItem jdglMainPlanItemParam) {

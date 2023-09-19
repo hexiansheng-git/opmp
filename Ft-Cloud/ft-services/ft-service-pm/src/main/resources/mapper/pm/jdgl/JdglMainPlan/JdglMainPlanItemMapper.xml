@@ -43,6 +43,8 @@
         <result property="remainingDuration" column="remaining_duration" />
         <result property="actualStartDate" column="actual_start_date" />
         <result property="actualFinishDate" column="actual_finish_date" />
+        <result property="baselineStartDate" column="baseline_start_date" />
+        <result property="baselineFinishDate" column="baseline_finish_date" />
         <result property="unit" column="unit" />
         <result property="leaf" column="leaf" />
         <result property="quantity" column="quantity" />
@@ -59,6 +61,7 @@
         <result property="wbsObjectId" column="wbs_object_id" />
         <result property="wbsParentObjectId" column="wbs_parent_object_id" />
         <result property="itemType" column="item_type" />
+        <result property="taskType" column="task_type" />
         <result property="ancestors" column="ancestors" />
     </resultMap>
     <sql id="selectJdglMainPlanItemVo">
@@ -101,6 +104,8 @@
              ,`remaining_duration`
              ,`actual_start_date`
              ,`actual_finish_date`
+             ,`baseline_start_date`
+             ,`baseline_finish_date`
              ,`unit`
              ,`leaf`
              ,`quantity`
@@ -117,6 +122,7 @@
              ,`wbs_object_id`
              ,`wbs_parent_object_id`
              ,`item_type`
+             ,`task_type`
              ,`ancestors`
         from jdgl_main_plan_item
     </sql>
@@ -162,6 +168,8 @@
             <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
             <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
             <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
+            <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
+            <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
             <if test="quantity != null "> and `quantity` = #{quantity}</if>
@@ -178,6 +186,7 @@
             <if test="wbsObjectId != null  and wbsObjectId != ''"> and `wbs_object_id` = #{wbsObjectId}</if>
             <if test="wbsParentObjectId != null  and wbsParentObjectId != ''"> and `wbs_parent_object_id` = #{wbsParentObjectId}</if>
             <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
+            <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
             <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
         </where>
         order by sort asc
@@ -225,6 +234,8 @@
             <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
             <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
             <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
+            <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
+            <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
             <if test="quantity != null "> and `quantity` = #{quantity}</if>
@@ -241,9 +252,10 @@
             <if test="wbsObjectId != null  and wbsObjectId != ''"> and `wbs_object_id` = #{wbsObjectId}</if>
             <if test="wbsParentObjectId != null  and wbsParentObjectId != ''"> and `wbs_parent_object_id` = #{wbsParentObjectId}</if>
             <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
+            <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
             <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
         </where>
-        order by wbs_code asc,item_code asc
+        order by wbs_code asc,leaf asc,item_code asc
     </select>
     <select id="getUsingJdglMainPlanItemListByDate" resultMap="JdglMainPlanItemResultMap">
         <include refid="selectJdglMainPlanItemVo" />
@@ -303,6 +315,8 @@
             <if test="remainingDuration != null ">`remaining_duration`,</if>
             <if test="actualStartDate != null ">`actual_start_date`,</if>
             <if test="actualFinishDate != null ">`actual_finish_date`,</if>
+            <if test="baselineStartDate != null ">`baseline_start_date`,</if>
+            <if test="baselineFinishDate != null ">`baseline_finish_date`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="quantity != null ">`quantity`,</if>
@@ -319,6 +333,7 @@
             <if test="wbsObjectId != null  and wbsObjectId != ''">`wbs_object_id`,</if>
             <if test="wbsParentObjectId != null  and wbsParentObjectId != ''">`wbs_parent_object_id`,</if>
             <if test="itemType != null  and itemType != ''">`item_type`,</if>
+            <if test="taskType != null  and taskType != ''">`task_type`,</if>
             <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -360,6 +375,8 @@
             <if test="remainingDuration != null ">#{remainingDuration},</if>
             <if test="actualStartDate != null ">#{actualStartDate},</if>
             <if test="actualFinishDate != null ">#{actualFinishDate},</if>
+            <if test="baselineStartDate != null ">#{baselineStartDate},</if>
+            <if test="baselineFinishDate != null ">#{baselineFinishDate},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="quantity != null ">#{quantity},</if>
@@ -376,6 +393,7 @@
             <if test="wbsObjectId != null  and wbsObjectId != ''">#{wbsObjectId},</if>
             <if test="wbsParentObjectId != null  and wbsParentObjectId != ''">#{wbsParentObjectId},</if>
             <if test="itemType != null  and itemType != ''">#{itemType},</if>
+            <if test="taskType != null  and taskType != ''">#{taskType},</if>
             <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
         </trim>
     </insert>
@@ -421,6 +439,8 @@
             `remaining_duration`,
             `actual_start_date`,
             `actual_finish_date`,
+            `baseline_start_date`,
+            `baseline_finish_date`,
             `unit`,
             `leaf`,
             `quantity`,
@@ -437,6 +457,7 @@
             `wbs_object_id`,
             `wbs_parent_object_id`,
             `item_type`,
+            `task_type`,
             `ancestors`,
         </trim>
         values
@@ -479,6 +500,8 @@
                 #{item.remainingDuration},
                 #{item.actualStartDate},
                 #{item.actualFinishDate},
+                #{item.baselineStartDate},
+                #{item.baselineFinishDate},
                 #{item.unit},
                 #{item.leaf},
                 #{item.quantity},
@@ -495,6 +518,7 @@
                 #{item.wbsObjectId},
                 #{item.wbsParentObjectId},
                 #{item.itemType},
+                #{item.taskType},
                 #{item.ancestors},
             </trim>
         </foreach>
@@ -541,6 +565,8 @@
             <if test="remainingDuration != null ">`remaining_duration` = #{remainingDuration},</if>
             <if test="actualStartDate != null ">`actual_start_date` = #{actualStartDate},</if>
             <if test="actualFinishDate != null ">`actual_finish_date` = #{actualFinishDate},</if>
+            <if test="baselineStartDate != null ">`baseline_start_date` = #{baselineStartDate},</if>
+            <if test="baselineFinishDate != null ">`baseline_finish_date` = #{baselineFinishDate},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
             <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="quantity != null ">`quantity` = #{quantity},</if>
@@ -557,6 +583,7 @@
             <if test="wbsObjectId != null  and  wbsObjectId != ''">`wbs_object_id` = #{wbsObjectId},</if>
             <if test="wbsParentObjectId != null  and  wbsParentObjectId != ''">`wbs_parent_object_id` = #{wbsParentObjectId},</if>
             <if test="itemType != null  and  itemType != ''">`item_type` = #{itemType},</if>
+            <if test="taskType != null  and  taskType != ''">`task_type` = #{taskType},</if>
             <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
         </trim>
         <where>
@@ -757,6 +784,16 @@
                     when `id`=#{item.id} then #{item.actualFinishDate}
                 </foreach>
             </trim>
+            <trim prefix="baseline_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.baselineStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="baseline_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.baselineFinishDate}
+                </foreach>
+            </trim>
             <trim prefix="unit  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.unit}
@@ -837,6 +874,11 @@
                     when `id`=#{item.id} then #{item.itemType}
                 </foreach>
             </trim>
+            <trim prefix="task_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskType}
+                </foreach>
+            </trim>
             <trim prefix="ancestors  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.ancestors}
@@ -844,7 +886,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>
@@ -890,6 +932,8 @@
             <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
             <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
             <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
+            <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
+            <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
             <if test="quantity != null "> and `quantity` = #{quantity}</if>
@@ -906,6 +950,7 @@
             <if test="wbsObjectId != null  and wbsObjectId != ''"> and `wbs_object_id` = #{wbsObjectId}</if>
             <if test="wbsParentObjectId != null  and wbsParentObjectId != ''"> and `wbs_parent_object_id` = #{wbsParentObjectId}</if>
             <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
+            <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
             <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
         </where>
     </update>

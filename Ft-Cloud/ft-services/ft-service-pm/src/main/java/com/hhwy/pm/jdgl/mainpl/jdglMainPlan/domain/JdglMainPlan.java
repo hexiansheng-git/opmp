@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItemPre;
 import lombok.Data;
 
 /**
@@ -163,4 +164,16 @@ public class JdglMainPlan extends BaseEntity {
     @JsonProperty
     private List<JdglMainPlanItem> jdglMainPlanItemList;
 
+    /**
+     * 字段描述：作业逻辑数据
+     */
+    @JsonProperty
+    private List<JdglMainPlanItemPre> jdglMainPlanItemPreList;
+
+
+    /**
+     * 字段描述：关键线路集合
+     */
+    @JsonProperty
+    private List<JdglMainPlanItem> keyLoadList;
 }
