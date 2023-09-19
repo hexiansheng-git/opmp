@@ -61,11 +61,11 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
         //保存界面已有数据
         BigDecimal version = param.getVersion();
         List<QqchMeasuringInstrument> paramList = param.getQqchMeasuringInstrumentList();
-        if (CollectionUtils.isEmpty(paramList)){
-            QqchMeasuringInstrument qqchMeasuringInstrument = new QqchMeasuringInstrument();
-            qqchMeasuringInstrument.setVersion(param.getVersion());
-            return this.getQqchMeasuringInstrumentList(qqchMeasuringInstrument);
-        }
+//        if (CollectionUtils.isEmpty(paramList)){
+//            QqchMeasuringInstrument qqchMeasuringInstrument = new QqchMeasuringInstrument();
+//            qqchMeasuringInstrument.setVersion(param.getVersion());
+//            return this.getQqchMeasuringInstrumentList(qqchMeasuringInstrument);
+//        }
         //按设备编号分组，用于判断是否已存在
         Map<String, List<QqchMeasuringInstrument>> collect = new HashMap<>();
         if (CollectionUtils.isNotEmpty(paramList)) {
