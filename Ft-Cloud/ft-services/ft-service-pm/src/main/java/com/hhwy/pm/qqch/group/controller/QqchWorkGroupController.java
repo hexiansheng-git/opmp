@@ -115,14 +115,4 @@ public class QqchWorkGroupController extends BaseController {
         return AjaxResult.success("成功");
     }
 
-    /**
-     * 查询指定租户下的工作小组
-     * @param qqchWorkGroupParam
-     * @return
-     */
-    @PostMapping("/gmList")
-    public AjaxResult gmList(@RequestBody @Validated(ValidationGroups.Select.class) QqchWorkGroup qqchWorkGroupParam) {
-        List<QqchWorkGroup> qqchWorkGroupList = qqchWorkGroupService.gmList(qqchWorkGroupParam);
-        return AjaxResult.success(qqchWorkGroupList);
-    }
 }

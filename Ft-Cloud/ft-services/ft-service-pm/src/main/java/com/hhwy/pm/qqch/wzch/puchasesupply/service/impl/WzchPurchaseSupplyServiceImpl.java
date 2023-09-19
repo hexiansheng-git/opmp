@@ -158,7 +158,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
      */
     @Override
     public WzchPurchaseSupplyDTO baseInfo(WzchPurchaseSupplyDTO vo) {
-        BigDecimal version = VersionUtil.getVersion("wzch_fund", vo.getVersion());
+        BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", vo.getVersion());
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         List<WzchPurchaseSupply> list = this.wzchPurchaseSupplyMapper.selectWzchPurchaseSupplyList(new WzchPurchaseSupply(version));

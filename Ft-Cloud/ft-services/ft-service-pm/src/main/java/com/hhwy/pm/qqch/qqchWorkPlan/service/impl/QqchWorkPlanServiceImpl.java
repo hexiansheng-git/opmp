@@ -11,6 +11,7 @@ import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
@@ -63,7 +64,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private IQqchReviewService qqchReviewService;
+    private ISysSyncInfoService sysSyncInfoService;
     @Autowired
     private IQqchWorkGroupService qqchWorkGroupService;
     @Autowired
@@ -318,7 +319,9 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             qqchWorkPlan.setId(this.insertQqchWorkPlanSubmit(qqchWorkPlan));
         } else {
             this.updateQqchWorkPlanSubmit(qqchWorkPlan);
-        }
+        }          
+        //推送到总部版
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return qqchWorkPlan.getId();
     }
 

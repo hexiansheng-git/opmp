@@ -412,11 +412,6 @@
     <update id="updateXmslWbsHistoryList">
         update xmsl_wbs_history
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.id}
-                </foreach>
-            </trim>
             <trim prefix="main_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.mainId}

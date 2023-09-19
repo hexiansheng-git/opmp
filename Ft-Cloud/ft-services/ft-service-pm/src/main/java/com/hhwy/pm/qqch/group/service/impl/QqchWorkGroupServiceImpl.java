@@ -8,6 +8,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
@@ -50,6 +51,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
     @Autowired
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+    @Autowired
+    ISysSyncInfoService sysSyncInfoService;
 
 
     /**
@@ -297,6 +300,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      * @return
      */
     @Override
+    @Transactional
     public void submit(QqchWorkGroup qqchWorkGroup) {
         Long id = qqchWorkGroup.getId();
         qqchWorkGroup.setTaskStatus("5");
@@ -308,8 +312,10 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             //修改数据
             this.updateQqchWorkGroup(qqchWorkGroup);
         }
-
+        
         //TODO 发起流程
+        //推送到总部
+        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
     }
 
     /**
