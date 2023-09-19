@@ -1,10 +1,8 @@
 package com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
-import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
@@ -19,8 +17,6 @@ import com.hhwy.pm.qqch.tax.qqchTaxInstallment.vo.InstallmentVO;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
-import com.hhwy.utils.tree.TreeUtil;
-import nonapi.io.github.classgraph.json.Id;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -51,7 +47,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
     private QqchTaxCostDetailMapper costDetailMapper;
 
     @Resource
-    private  IQqchModuleConfirmCaseService moduleConfirmCaseService;
+    private IQqchModuleConfirmCaseService moduleConfirmCaseService;
 
     @Resource
     private QqchTaxStageMapper qqchTaxStageMapper;
@@ -116,7 +112,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void confirm(QqchTaxInstallment dto) {
-        moduleConfirmCaseService.addConfirmRecord(dto.getModuleIdentity(),dto.getStageIdentity());
+        moduleConfirmCaseService.addConfirmRecord(dto.getModuleIdentity(), dto.getStageIdentity());
     }
 
     @Override
@@ -163,9 +159,15 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         InstallmentVO.ListVO otherListVO = this.getInList(inRecordId, year, "2");
         // 获取收入合计
         InstallmentVO.ListVO totalIn = this.getTotal("收入合计", Collections.singletonList(mainInListVO), Collections.singletonList(otherListVO));
+        totalIn.setId(1L);
         resList.add(totalIn);
-        resList.add(mainInListVO);
-        resList.add(otherListVO);
+        ArrayList<InstallmentVO.ListVO> objects = new ArrayList<>();
+        mainInListVO.setPid(1L);
+        objects.add(mainInListVO);
+        otherListVO.setPid(1L);
+        objects.add(otherListVO);
+        totalIn.setChildren(objects);
+
 
         //  成本
         List<InstallmentVO.ListVO> outList = this.getOutList(costRecordId, year, "1");
@@ -173,10 +175,31 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         // 总成本
         InstallmentVO.ListVO totalOut = this.getTotal("成本合计", outList, otherOutList);
 
+        totalOut.setId(1L);
         resList.add(totalOut);
-        resList.addAll(CollectionUtils.isEmpty(outList) ? new ArrayList<>() : outList);
-        resList.addAll(CollectionUtils.isEmpty(otherOutList) ? new ArrayList<>() : otherOutList);
+        List<InstallmentVO.ListVO> objects1 = new ArrayList<>();
+        
+        
+        if (CollectionUtils.isEmpty(outList) ){
+            objects1.addAll(new ArrayList<>());
+        }else {
+            for (InstallmentVO.ListVO listVO : outList) {
+                listVO.setPid(1L);
+            }
+            objects1.addAll(outList);
+        }
+        // objects1.addAll(CollectionUtils.isEmpty(outList) ? new ArrayList<>() : outList);
 
+        if (CollectionUtils.isEmpty(otherOutList)) {
+            objects1.addAll(new ArrayList<>());
+        }else {
+            for (InstallmentVO.ListVO listVO : otherOutList) {
+                listVO.setPid(1L);
+            }
+            objects1.addAll(otherOutList);
+        }
+        // objects1.addAll(CollectionUtils.isEmpty(otherOutList) ? new ArrayList<>() : otherOutList);
+        totalOut.setChildren(objects1);
         // 利息
         InstallmentVO.ListVO profitList = this.getProfitList(totalIn, totalOut);
         resList.add(profitList);
@@ -254,7 +277,10 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         listVO.setInnerAmt(inner);
         listVO.setReqAmt(req);
         listVO.setLocalAmt(local);
-        // listVO.setAmt(in);
+        if ("收入合计".equals(d)) {
+            listVO.setAmt(in);
+        }
+
 
         listVO.setDiffAmt(BigDecimalUtils.subtract(inner, req));
         listVO.setLocAmt(BigDecimalUtils.sum(local, req));
@@ -385,30 +411,6 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
             }
             getLeaf(listVO.getChildren());
         }
-    }
-
-
-    public static void main(String[] args) {
-        QqchTaxCostDetail objectTreeNode1 = new QqchTaxCostDetail();
-
-        QqchTaxCostDetail objectTreeNode2 = new QqchTaxCostDetail();
-
-        ArrayList<QqchTaxCostDetail> objects = new ArrayList<>();
-        QqchTaxCostDetail objectTreeNode3 = new QqchTaxCostDetail();
-        QqchTaxCostDetail objectTreeNode3_1 = new QqchTaxCostDetail();
-        QqchTaxCostDetail objectTreeNode3_2 = new QqchTaxCostDetail();
-
-        objects.add(objectTreeNode3);
-        objects.add(objectTreeNode3_1);
-        objects.add(objectTreeNode3_2);
-
-        objectTreeNode1.setChildren(Collections.singletonList(objectTreeNode2));
-        objectTreeNode2.setChildren(objects);
-
-        List<QqchTaxCostDetail> detailList = TreeUtil.treeToListWithLevel(Collections.singletonList(objectTreeNode1));
-        System.out.println(objectTreeNode1);
-
-
     }
 
 
