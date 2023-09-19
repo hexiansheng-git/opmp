@@ -158,7 +158,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class,BaseException.class})
-    public boolean save(WzchSource wzchSource) {
+    public Long save(WzchSource wzchSource) {
         checkWzchSource( wzchSource);
         fillWzchSource(wzchSource);
         fillWzchSourceDetail(wzchSource);
@@ -175,7 +175,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         detailList.forEach(r->{
             r.setVersion(wzchSource.getVersion());
             r.setSourceId(wzchSource.getId());
-            detailIds.add(wzchSource.getId());
+            detailIds.add(r.getId());
         });
         wzchSourceDetailMapper.batchInsert(detailList);
         wzchSourceApproachYearCountMapper.deleteWzchSourceApproachYearCountByDetailIds(detailIds);
@@ -195,7 +195,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             String stageIdentity = wzchSource.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
-        return true;
+        return wzchSource.getId();
     }
     
     private void fillWzchSourceDetail(WzchSource wzchSource) {

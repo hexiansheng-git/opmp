@@ -18,6 +18,7 @@ import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.IJdglQuarterPlanServic
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.IJdglQuarterValuePlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.service.IJdglYearPlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
@@ -26,6 +27,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -180,17 +182,17 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
     /**
      * 调整版本&未完&
-     * @param jdglQuarterPlanParam
+     * @param jdglQuarterPlan
      * @return
      */
     @Override
-    public int adjust(JdglQuarterPlan jdglQuarterPlan) {
-        int i = 0;
+    public JdglQuarterPlan adjust(JdglQuarterPlan jdglQuarterPlan) {
+//        int i = 0;
 
         JdglQuarterPlan jdglQuarterPlanParam = getJdglQuarterPlan(jdglQuarterPlan);
         if(jdglQuarterPlanParam != null) {
-            Long id = IdWorker.createId();
-            jdglQuarterPlanParam.setId(id);
+//            Long id = IdWorker.createId();
+//            jdglQuarterPlanParam.setId(id);
             jdglQuarterPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglQuarterPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglQuarterPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
@@ -204,18 +206,18 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             jdglQuarterPlanParam.setTaskStatus("0");
             jdglQuarterPlanParam.setIsUse("0");
 
-            i = jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlanParam);
+//            i = jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlanParam);
 
-            List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlanParam.getJdglQuarterImagePlanList();
-            if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
-                for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlanList) {
-                    jdglQuarterImagePlan.setPlanId(id);
-                }
-                iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
-            }
+//            List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlanParam.getJdglQuarterImagePlanList();
+//            if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
+//                for (JdglQuarterImagePlan jdglQuarterImagePlan : jdglQuarterImagePlanList) {
+//                    jdglQuarterImagePlan.setPlanId(id);
+//                }
+//                iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
+//            }
         }
 
-        return i;
+        return jdglQuarterPlanParam;
     }
 
     @Override
@@ -270,7 +272,18 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
         jdglQuarterPlan.setIsUse("0");
-        return jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
+        int i = jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
+
+        List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
+        if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
+            List<JdglQuarterImagePlan> imagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
+            imagePlans.forEach(vo -> {
+                vo.setPlanId(id);
+            });
+            iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
+        }
+
+        return i;
     }
 
     @Transactional
@@ -304,11 +317,12 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 //        iJdglQuarterValuePlanService.updateJdglQuarterValuePlanList(jdglQuarterPlan.getJdglQuarterValuePlanList());
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
-            for (JdglQuarterImagePlan jdglQuarterImagePlan: jdglQuarterImagePlanList) {
+            List<JdglQuarterImagePlan> jdglQuarterImagePlans = TreeUtil.treeToListWithoutId(jdglQuarterImagePlanList);
+            for (JdglQuarterImagePlan jdglQuarterImagePlan: jdglQuarterImagePlans) {
                 jdglQuarterImagePlan.setPlanId(jdglQuarterPlan.getId());
             }
+            iJdglQuarterImagePlanService.updateJdglQuarterImagePlanList(jdglQuarterImagePlans);
         }
-        iJdglQuarterImagePlanService.updateJdglQuarterImagePlanList(jdglQuarterImagePlanList);
 
         // 根据计划完成产值汇总更新年计划产值&未完&
 

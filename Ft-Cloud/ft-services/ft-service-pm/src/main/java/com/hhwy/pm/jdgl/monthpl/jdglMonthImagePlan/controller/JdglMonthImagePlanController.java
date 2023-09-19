@@ -91,7 +91,7 @@ public class JdglMonthImagePlanController extends BaseController {
      * @return
      */
     @PostMapping("/syncFromTotalPlan")
-    public AjaxResult syncFromTotalPlan(JdglMonthPlan jdglMonthPlanParam) {
+    public AjaxResult syncFromTotalPlan(@RequestBody JdglMonthPlan jdglMonthPlanParam) {
         return AjaxResult.success(jdglMonthImagePlanService.syncFromTotalPlan(jdglMonthPlanParam));
     }
 

@@ -141,7 +141,14 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
             wzchSource.setWzchSourceDetailList(new ArrayList<>(2));    
             return wzchSource;
         }
-            
+        List<WzchSource> list = wzchSourceMapper.selectWzchSourceList(wzchSource);
+        if(CollectionUtils.isEmpty(list)){
+            wzchSource.setWzchSourceDetailList(new ArrayList<>(2));
+            return wzchSource;
+        }
+        wzchSource = list.get(0);
+        wzchSource.setVersion(version);
+        wzchSource.setStageIdentity(qqchReviewService.getStage());
         List<WzchSourceDetail> wzchSourceDetails = queryWzchSourceDetailList(version);
         wzchSourceDetails = wzchSourceDetails.stream().sorted(Comparator.comparing(WzchSourceDetail::getMaterialCode)).collect(Collectors.toList());
         wzchSource.setWzchSourceDetailList(wzchSourceDetails);

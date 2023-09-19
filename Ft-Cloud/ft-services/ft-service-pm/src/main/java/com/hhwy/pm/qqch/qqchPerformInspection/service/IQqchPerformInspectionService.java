@@ -18,7 +18,7 @@ public interface IQqchPerformInspectionService {
 
     List<QqchPerformInspection> getQqchPerformInspectionList(QqchPerformInspection qqchPerformInspection);
 
-    int insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection);
+    Long insertQqchPerformInspection(QqchPerformInspection qqchPerformInspection);
 
     int insertQqchPerformInspectionList(List<QqchPerformInspection> qqchPerformInspectionList);
 

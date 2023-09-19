@@ -17,6 +17,7 @@ import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.mapper.JdglMonthPlanMapper;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.domain.JdglMonthValuePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.IJdglMonthValuePlanService;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.mapper.JdglQuarterPlanMapper;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
@@ -26,6 +27,7 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -188,12 +190,12 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
     /**
      * 调整版本&未完&
-     * @param jdglMonthPlanParam
+     * @param jdglMonthPlan
      * @return
      */
     @Override
-    public int adjust(JdglMonthPlan jdglMonthPlan) {
-        int i = 0;
+    public JdglMonthPlan adjust(JdglMonthPlan jdglMonthPlan) {
+//        int i = 0;
 
         JdglMonthPlan jdglMonthPlanParam = getJdglMonthPlan(jdglMonthPlan);
         if(jdglMonthPlanParam != null) {
@@ -212,18 +214,18 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             jdglMonthPlanParam.setTaskStatus("0");
             jdglMonthPlanParam.setIsUse("0");
 
-            i = jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlanParam);
-
-            List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlanParam.getJdglMonthImagePlanList();
-            if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-                for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
-                    jdglMonthImagePlan.setPlanId(id);
-                }
-                iJdglMonthImagePlanService.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
-            }
+//            i = jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlanParam);
+//
+//            List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlanParam.getJdglMonthImagePlanList();
+//            if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
+//                for (JdglMonthImagePlan jdglMonthImagePlan : jdglMonthImagePlanList) {
+//                    jdglMonthImagePlan.setPlanId(id);
+//                }
+//                iJdglMonthImagePlanService.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
+//            }
         }
 
-        return i;
+        return jdglMonthPlanParam;
     }
 
     @Override
@@ -278,7 +280,18 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
         jdglMonthPlan.setIsUse("0");
-        return jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
+        int i = jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
+
+        List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();
+        if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
+            List<JdglMonthImagePlan> imagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
+            imagePlans.forEach(vo -> {
+                vo.setPlanId(id);
+            });
+            iJdglMonthImagePlanService.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
+        }
+
+        return i;
     }
 
     @Transactional
@@ -313,11 +326,13 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 //        iJdglMonthValuePlanService.updateJdglMonthValuePlanList(jdglMonthPlan.getJdglMonthValuePlanList());
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-            for (JdglMonthImagePlan jdglMonthImagePlan: jdglMonthImagePlanList) {
+            List<JdglMonthImagePlan> jdglMonthImagePlans = TreeUtil.treeToListWithoutId(jdglMonthImagePlanList);
+            for (JdglMonthImagePlan jdglMonthImagePlan: jdglMonthImagePlans) {
                 jdglMonthImagePlan.setPlanId(jdglMonthPlan.getId());
             }
+            iJdglMonthImagePlanService.updateJdglMonthImagePlanList(jdglMonthImagePlans);
         }
-        iJdglMonthImagePlanService.updateJdglMonthImagePlanList(jdglMonthImagePlanList);
+
 
         // 根据计划完成产值汇总更新年计划产值&未完&
 

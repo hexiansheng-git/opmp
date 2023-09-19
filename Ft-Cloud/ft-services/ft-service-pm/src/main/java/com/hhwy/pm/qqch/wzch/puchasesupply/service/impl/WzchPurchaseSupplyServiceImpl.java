@@ -158,13 +158,9 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
      */
     @Override
     public WzchPurchaseSupplyDTO baseInfo(WzchPurchaseSupplyDTO vo) {
-        BigDecimal version = VersionUtil.getVersion("wzch_purchase_supply", vo.getVersion());
+        BigDecimal version = VersionUtil.getVersion("wzch_fund", vo.getVersion());
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-//        String id = map.get("id");
-        // 操作类型 1-新增; 2-编辑; 3-详情; 4-调整
-//        String type = map.get("type");
-//        Assert.notNull(type, "操作类型不能为空");
         List<WzchPurchaseSupply> list = this.wzchPurchaseSupplyMapper.selectWzchPurchaseSupplyList(new WzchPurchaseSupply(version));
         if(CollectionUtils.isEmpty(list)){
             vo.setDetailList(new ArrayList<>());

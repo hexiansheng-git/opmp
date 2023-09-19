@@ -171,6 +171,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
 //        WzchPriorApproach approach = wzchPriorApproachService.selectWzchPriorApproachById(wzchPriorApproach.getId());
         List<WzchPriorApproachYearCount> wzchPriorApproachYearCounts = new ArrayList<>();
         for (WzchPriorApproachDetail wzchPriorApproachDetail : wzchPriorApproach.getWzchPriorApproachDetailList()) {
+            wzchPriorApproachDetail.setVersion(wzchPriorApproach.getVersion());
             wzchPriorApproachYearCounts.addAll(wzchPriorApproachDetail.getWzchPriorApproachYearCountList());
         }
         List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());

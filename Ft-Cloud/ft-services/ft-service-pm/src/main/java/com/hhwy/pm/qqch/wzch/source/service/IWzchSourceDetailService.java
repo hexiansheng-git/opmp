@@ -65,7 +65,7 @@ public interface IWzchSourceDetailService {
      * @param wzchSource
      * @return
      */
-    boolean save(WzchSource wzchSource);
+    Long save(WzchSource wzchSource);
 
     /**
      * 同步物资总需用

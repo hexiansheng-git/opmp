@@ -169,13 +169,13 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
      * @return
      */
     @Override
-    public int adjust(JdglYearPlan jdglYearPlan) {
-        int i = 0;
+    public JdglYearPlan adjust(JdglYearPlan jdglYearPlan) {
+//        int i = 0;
 
         JdglYearPlan jdglYearPlanParam = getJdglYearPlan(jdglYearPlan);
         if(jdglYearPlanParam != null) {
-            Long id = IdWorker.createId();
-            jdglYearPlanParam.setId(id);
+//            Long id = IdWorker.createId();
+//            jdglYearPlanParam.setId(id);
             jdglYearPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglYearPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglYearPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
@@ -189,18 +189,18 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             jdglYearPlanParam.setTaskStatus("0");
             jdglYearPlanParam.setIsUse("0");
 
-            i = jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlanParam);
+//            i = jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlanParam);
 
-            List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlanParam.getJdglYearImagePlanList();
-            if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
-                for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
-                    jdglYearImagePlan.setYearPlanId(id);
-                }
-                iJdglYearImagePlanService.insertJdglYearImagePlanList(jdglYearImagePlanList);
-            }
+//            List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlanParam.getJdglYearImagePlanList();
+//            if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+//                for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
+//                    jdglYearImagePlan.setYearPlanId(id);
+//                }
+//                iJdglYearImagePlanService.insertJdglYearImagePlanList(jdglYearImagePlanList);
+//            }
         }
 
-        return i;
+        return jdglYearPlanParam;
     }
 
     @Override

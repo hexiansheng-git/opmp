@@ -75,8 +75,7 @@ public class JdglWeekPlanController extends BaseController {
     @PreAuthorize(hasPermi = "jdglWeekPlan:add")
     @PostMapping("/adjust")
     public AjaxResult adjust(@RequestBody JdglWeekPlan jdglWeekPlanParam) {
-        jdglWeekPlanService.adjust(jdglWeekPlanParam);
-        return AjaxResult.success(jdglWeekPlanParam);
+        return AjaxResult.success(jdglWeekPlanService.adjust(jdglWeekPlanParam));
     }
 
     @PreAuthorize(hasPermi = "jdglWeekPlan:update")

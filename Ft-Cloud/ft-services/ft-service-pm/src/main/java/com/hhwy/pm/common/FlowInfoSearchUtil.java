@@ -77,6 +77,7 @@ public class FlowInfoSearchUtil {
             t.setInstanceId(flowInfo.getInstanceId());
             t.setProcessTaskManId(flowInfo.getProcessTaskManId());
             t.setNextNodeId(flowInfo.getNextNodeId());
+            t.setCurrentTaskId(flowInfo.getCurrentTaskId());
             if(!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
                 userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
         }
@@ -95,10 +96,10 @@ public class FlowInfoSearchUtil {
     }
 
     /**
-     * 明细接口查询使用
+     * 明细接口查询使用(新增走这个)
      * @param t
      * @param flowEnum
-     * @param <T>
+     * @param <T>     
      * @return
      */
     public static <T extends CommonBaseEntity> T getFlowInfo(T t,FlowEnum flowEnum){

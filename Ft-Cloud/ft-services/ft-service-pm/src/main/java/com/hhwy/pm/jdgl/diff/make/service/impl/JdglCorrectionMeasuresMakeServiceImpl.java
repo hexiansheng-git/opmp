@@ -1,6 +1,7 @@
 package com.hhwy.pm.jdgl.diff.make.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
@@ -15,6 +16,8 @@ import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeDetailServi
 import com.hhwy.pm.jdgl.diff.make.service.IJdglCorrectionMeasuresMakeService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
@@ -52,6 +55,8 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
     private IJdglDiffAnalysisSvService jdglDiffAnalysisSvService;
     @Autowired
     private IJdglMainPlanItemService jdglMainPlanItemService;
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
 
     /**
      * 查询单条数据-详情
@@ -225,6 +230,9 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
         // 获取项目信息数据
         ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
 
+        // 合同信息
+        XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+
         // 获取总体计划, 获取当月数据
         List<JdglMainPlanItem> mainPlanItemListTree = jdglMainPlanItemService
             .getUsingJdglMainPlanItemListByDateRange(firstDay, lastDay);
@@ -296,11 +304,15 @@ public class JdglCorrectionMeasuresMakeServiceImpl implements IJdglCorrectionMea
                         days = new BigDecimal(FtDateUtils.getDays(item.getActualStartDate(), lastDay));
                     }
 
-                    // 总体计划时间
+                    // 总体计划时间 取合同工期
                     BigDecimal totalDays = BigDecimal.ZERO;
-                    if (item.getStartDate() != null && item.getFinishDate() != null) {
-                        totalDays = new BigDecimal(
-                            FtDateUtils.getDays(item.getStartDate(), item.getFinishDate()).longValue());
+//                    if (item.getStartDate() != null && item.getFinishDate() != null) {
+//                        totalDays = new BigDecimal(
+//                            FtDateUtils.getDays(item.getStartDate(), item.getFinishDate()).longValue());
+//                    }
+                    if (contractInfo != null && StringUtils.isNotBlank(contractInfo.getDuration())) {
+                        // 工期
+                        totalDays = new BigDecimal(contractInfo.getDuration());
                     }
                     // 完成工期百分比 = 总体计划：当前开始时间(当月底)—实际开始时间/总体计划时间
                     if (BigDecimal.ZERO.compareTo(totalDays) != 0) {
