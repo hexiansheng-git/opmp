@@ -181,6 +181,71 @@
         order by create_time desc
     </select>
 
+    <select id="getQqchTaxGlobalListGroup" resultMap="QqchTaxGlobalResultMap">
+
+        select `id`
+        , `year`
+        , `item_name`
+        , `budget_local_amt`
+        , `budget_usd_amt`
+        , `prj_local_amt`
+        , `prj_local_rate`
+        , `region_local_amt`
+        , `region_local_rate`
+        , `overseas_usd_amt`
+        , `overseas_cny_amt`
+        , `overseas_cny_rate`
+        , `sum_local_amt`
+        , `sum_local_rate`
+        , `sum_usd_amt`
+        , `sum_cny_rate`
+        from qqch_tax_global
+
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="pid != null ">and `pid` = #{pid}</if>
+            <if test="year != null ">and `year` = #{year}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
+            <if test="budgetLocalAmt != null ">and `budget_local_amt` = #{budgetLocalAmt}</if>
+            <if test="budgetUsdAmt != null ">and `budget_usd_amt` = #{budgetUsdAmt}</if>
+            <if test="prjLocalAmt != null ">and `prj_local_amt` = #{prjLocalAmt}</if>
+            <if test="prjLocalRate != null ">and `prj_local_rate` = #{prjLocalRate}</if>
+            <if test="regionLocalAmt != null ">and `region_local_amt` = #{regionLocalAmt}</if>
+            <if test="regionLocalRate != null ">and `region_local_rate` = #{regionLocalRate}</if>
+            <if test="overseasUsdAmt != null ">and `overseas_usd_amt` = #{overseasUsdAmt}</if>
+            <if test="overseasCnyAmt != null ">and `overseas_cny_amt` = #{overseasCnyAmt}</if>
+            <if test="overseasCnyRate != null ">and `overseas_cny_rate` = #{overseasCnyRate}</if>
+            <if test="sumLocalAmt != null ">and `sum_local_amt` = #{sumLocalAmt}</if>
+            <if test="sumLocalRate != null ">and `sum_local_rate` = #{sumLocalRate}</if>
+            <if test="sumUsdAmt != null ">and `sum_usd_amt` = #{sumUsdAmt}</if>
+            <if test="sumCnyRate != null ">and `sum_cny_rate` = #{sumCnyRate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="userId != null ">and `user_id` = #{userId}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="sort != null ">and `sort` = #{sort}</if>
+        </where>
+        order by create_time desc
+    </select>
+
     <insert id="insertQqchTaxGlobal" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_tax_global
         <trim prefix="(" suffix=")" suffixOverrides=",">

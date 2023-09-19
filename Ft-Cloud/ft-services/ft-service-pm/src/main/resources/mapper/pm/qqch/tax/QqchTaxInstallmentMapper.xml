@@ -106,7 +106,6 @@
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
             <if test="leaf != null  and leaf != ''">and `leaf` = #{leaf}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
-            <if test="version != null ">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="regionId != null ">and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>

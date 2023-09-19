@@ -1,10 +1,10 @@
 package com.hhwy.utils;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.utils.field.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
-import com.hhwy.common.security.util.SecurityUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -32,7 +32,7 @@ public class EntityUtils {
 
         try {
 
-            SysUser sysUser = SecurityUtils.getSysUser();
+            SysUser sysUser = getUserInfo();
             Long deptId = sysUser == null ? null : sysUser.getDeptId();
             String userId = String.valueOf(sysUser == null ? null : sysUser.getUserId());
             String userName = sysUser == null ? null : sysUser.getNickName();
@@ -62,7 +62,7 @@ public class EntityUtils {
     public static <T extends CommonBaseEntity> void setUpdateInfo(T t) {
 
         try {
-            SysUser sysUser = SecurityUtils.getSysUser();
+            SysUser sysUser = getUserInfo();
             String userId = String.valueOf(sysUser == null ? null : sysUser.getUserId());
             String userName = sysUser == null ? null : sysUser.getNickName();
             Date date = new Date();
@@ -88,7 +88,7 @@ public class EntityUtils {
     public static <T extends CommonBaseEntity> void setCreateUpdateInfo(T t) {
 
         try {
-            SysUser sysUser = SecurityUtils.getSysUser();
+            SysUser sysUser = getUserInfo();
             Long deptId = sysUser == null ? null : sysUser.getDeptId();
             String userId = String.valueOf(sysUser == null ? null : sysUser.getUserId());
             String userName = sysUser == null ? null : sysUser.getNickName();
@@ -123,7 +123,7 @@ public class EntityUtils {
     public static <T extends CommonBaseEntity> void setCreateUpdateInfo(List<T> list) {
 
         try {
-            SysUser sysUser = SecurityUtils.getSysUser();
+            SysUser sysUser = getUserInfo();
 
             Long deptId = sysUser == null ? null : sysUser.getDeptId();
             String userId = String.valueOf(sysUser == null ? null : sysUser.getUserId());
@@ -150,10 +150,26 @@ public class EntityUtils {
 
     }
 
-    public static  void   setCreateUpdateInfo(Object l) {
+
+    private static SysUser getUserInfo() {
+        try {
+            return SecurityUtils.getSysUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new SysUser();
+        }
+    }
+
+    public static void setCreateUpdateInfo(Object l) {
+        FieldUtils init = FieldUtils.init();
+        SysUser userInfo = getUserInfo();
 
         try {
-
+            init.setFieldVal("createUser", userInfo.getUserId(), l);
+            init.setFieldVal("updateUser", userInfo.getUserId(), l);
+            init.setFieldVal("createTime", new Date(), l);
+            init.setFieldVal("updateTime", new Date(), l);
+            init.setFieldVal("delFlag", "0", l);
         } catch (Exception e) {
             log.error("设置创建信息更新信息异常", e);
         }

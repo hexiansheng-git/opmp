@@ -30,6 +30,9 @@ public class QqchConstController extends BaseController {
 
     @Autowired
     private IQqchConstService qqchConstService;
+    
+    
+    // TODO 郑丽丽 要所有的施工部署的工种名称
 
 
     @PreAuthorize(hasPermi = "qqchConst:list")

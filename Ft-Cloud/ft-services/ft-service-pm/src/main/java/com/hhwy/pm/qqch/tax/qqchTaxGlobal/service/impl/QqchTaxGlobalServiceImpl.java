@@ -96,7 +96,7 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
     public CompileEntity<List<QqchTaxGlobal>> list(QqchTaxGlobal dto) throws IOException {
         CompileEntity<List<QqchTaxGlobal>> res = new CompileEntity<>();
 
-        List<QqchTaxGlobal> qqchTaxGlobalList = qqchTaxGlobalMapper.getQqchTaxGlobalList(dto);
+        List<QqchTaxGlobal> qqchTaxGlobalList = qqchTaxGlobalMapper.getQqchTaxGlobalListGroup(dto);
         if (CollectionUtils.isEmpty(qqchTaxGlobalList)) {
             InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/10_4.json");
             String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);

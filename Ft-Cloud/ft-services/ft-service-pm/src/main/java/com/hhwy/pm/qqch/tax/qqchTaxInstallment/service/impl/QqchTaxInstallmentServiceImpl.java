@@ -6,6 +6,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.mapper.QqchTaxCostDetailMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
@@ -41,12 +42,16 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
     private QqchTaxInstallmentMapper qqchTaxInstallmentMapper;
 
     @Resource
+    private IQqchReviewService reviewServicee;
+
+    @Resource
     private QqchTaxInDetailMapper inDetailMapper;
 
     @Resource
     private QqchTaxCostDetailMapper costDetailMapper;
 
-    private static IQqchModuleConfirmCaseService moduleConfirmCaseService;
+    @Resource
+    private  IQqchModuleConfirmCaseService moduleConfirmCaseService;
 
     @Resource
     private QqchTaxStageMapper qqchTaxStageMapper;
@@ -182,6 +187,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
     @Override
     public InstallmentVO list(QqchTaxInstallment params) {
         List<QqchTaxInstallment> qqchTaxInstallmentList = this.getQqchTaxInstallmentList(params);
+        qqchTaxInstallmentList = qqchTaxInstallmentList.stream().sorted(Comparator.comparing(QqchTaxInstallment::getCreateTime).reversed()).collect(Collectors.toList());
         InstallmentVO installmentVO = new InstallmentVO();
 
         if (!CollectionUtils.isEmpty(qqchTaxInstallmentList)) {
@@ -195,6 +201,9 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
             ArrayList<InstallmentVO.ListVO> list = this.getList(params);
             installmentVO.setList(list);
         }
+
+
+        installmentVO.setStageIdentity(reviewServicee.getStage());
 
         return installmentVO;
     }
@@ -421,7 +430,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         List<InstallmentVO.ListVO> children = qqchTaxInList.stream().map(item -> this.createListVO(item, id)).collect(Collectors.toList());
         CommonServiceUtil.setCurrentName(children, "digest", "digest");
         // 计算出收入详情 注意这里设置的是amt
-        children.stream().map(InstallmentVO.ListVO::getUsdAmt).reduce(BigDecimal::add).ifPresent(listVO::setAmt);
+        children.stream().filter(Objects::nonNull).map(InstallmentVO.ListVO::getUsdAmt).reduce(BigDecimal::add).ifPresent(listVO::setAmt);
         listVO.setChildren(children);
         return listVO;
     }
