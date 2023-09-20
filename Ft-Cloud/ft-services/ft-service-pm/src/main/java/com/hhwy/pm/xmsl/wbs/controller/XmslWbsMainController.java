@@ -47,6 +47,7 @@ public class XmslWbsMainController extends BaseController {
     public AjaxResult getXmslWbsMainList(@Validated(ValidationGroups.Select.class) XmslWbsMain xmslWbsMainParam) {
         startPage();
         List<XmslWbsMain> xmslWbsMainList = xmslWbsMainService.getXmslWbsMainList(xmslWbsMainParam);
+        FlowInfoSearchUtil.getFlowInfo(xmslWbsMainList,FlowEnum.XMSL_WBS);
         return getDataTableAjaxResult(xmslWbsMainList);
     }
 
@@ -78,8 +79,10 @@ public class XmslWbsMainController extends BaseController {
         XmslWbsMain wbsMain = this.xmslWbsMainService.getAdjustInfo();
         if(wbsMain == null){
             Long id = xmslWbsMainService.initAdjust();
-            if(id != null)
+            if(id != null){
                 wbsMain = this.xmslWbsMainService.getById(id);
+                FlowInfoSearchUtil.getFlowInfo(wbsMain,FlowEnum.XMSL_WBS);
+            }
             return AjaxResult.success("",wbsMain);
         }
         //是否有调整记录
@@ -106,15 +109,11 @@ public class XmslWbsMainController extends BaseController {
 
     /**
      * 审批监听器
-     * @param map
+     * @param businessId
      * @return
      */
-    @PostMapping("/finishFlow")
-    public AjaxResult finishFlow(@RequestBody Map map){
-        Long businessId = ObjectUtils.nvlLong(((Map)((Map)map.get("execution")).get("variables")).get("businessId")) ;
-//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
-//        Map varMap = delegateTask.getVariables();
-//        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
+    @PostMapping("/listener")
+    public AjaxResult listener(@RequestParam("id") Long businessId){
         xmslWbsMainService.finishFlow(businessId);
         return AjaxResult.success();
     }

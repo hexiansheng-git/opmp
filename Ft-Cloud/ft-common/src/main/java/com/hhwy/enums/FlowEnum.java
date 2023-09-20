@@ -52,7 +52,8 @@ public enum FlowEnum {
     XMSL_CONTRACT("xmsl_contract_info", "process_test_contract"),
     //项目设立，wbs
     XMSL_WBS("xmsl_wbs_main", "xmsl_wbs_main_process"),
-    
+    //图纸复核
+    XMSL_DRAW_REVIEW("xmsl_draw_review", "xmsl_draw_review_process"),
     /**********************项目设立结束************************/
 
     

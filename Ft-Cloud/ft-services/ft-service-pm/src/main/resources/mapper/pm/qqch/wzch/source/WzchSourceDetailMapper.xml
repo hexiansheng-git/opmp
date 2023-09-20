@@ -489,6 +489,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
 
+    <update id="deleteDirectSourceByVersion" parameterType="java.math.BigDecimal">
+        delete from `wzch_source` where `version` = #{version}
+    </update>
     <update id="deleteDirectByVersion" parameterType="java.math.BigDecimal">
         delete from `wzch_source_detail` where `version` = #{version}
     </update>

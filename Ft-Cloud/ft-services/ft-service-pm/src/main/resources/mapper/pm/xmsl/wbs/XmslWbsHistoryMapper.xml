@@ -44,11 +44,13 @@
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
+        <result property="listCode" column="list_code"/>
     </resultMap>
     <sql id="selectXmslWbsHistoryVo">
         select
                 `id`
              ,`main_id`
+             ,list_code
              ,`code`
              ,`parent_id`
              ,`have_children`
@@ -229,6 +231,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="sort != null  and sort != ''">`sort`,</if>
+            <if test="listCode != null and listCode != '' ">`list_code`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -270,6 +273,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="sort != null  and sort != ''">#{sort},</if>
+            <if test="listCode != null  and listCode != ''">#{listCode},</if>
         </trim>
     </insert>
 
@@ -315,6 +319,7 @@
             `pt_var4`,
             `pt_var5`,
             `sort`,
+            `list_code`
         </trim>
         values
         <foreach collection="xmslWbsHistoryList" item="item" separator=",">
@@ -357,6 +362,7 @@
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.sort},
+                #{item.listCode}
             </trim>
         </foreach>
     </insert>
@@ -403,6 +409,7 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="sort != null  and  sort != ''">`sort` = #{sort},</if>
+            <if test="listCode != null  and  listCode != ''">`list_code` = #{listCode},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -600,6 +607,11 @@
             <trim prefix="sort  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.sort}
+                </foreach>
+            </trim>
+            <trim prefix="list_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.listCode}
                 </foreach>
             </trim>
         </trim>
