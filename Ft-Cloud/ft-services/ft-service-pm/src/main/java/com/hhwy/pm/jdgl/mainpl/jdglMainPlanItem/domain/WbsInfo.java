@@ -12,9 +12,9 @@ public class WbsInfo {
 
     //unique ID
     private String id;
-    //项目代码
+    //WBS 分类码
     private String code;
-    //项目名称
+    //WBS 名称
     private String name;
     //WBS 父级编码
     private String parentObjectId;
@@ -44,6 +44,26 @@ public class WbsInfo {
     private Integer summaryTotalFloat;
     //最后更新日期
     private Date lastUpdateDate;
+    //尚需开始日期
+    private Date summaryRemainingStartDate;
+    //尚需完成日期
+    private Date summaryRemainingFinishDate;
+
+    public Date getSummaryRemainingStartDate() {
+        return summaryRemainingStartDate;
+    }
+
+    public void setSummaryRemainingStartDate(Date summaryRemainingStartDate) {
+        this.summaryRemainingStartDate = summaryRemainingStartDate;
+    }
+
+    public Date getSummaryRemainingFinishDate() {
+        return summaryRemainingFinishDate;
+    }
+
+    public void setSummaryRemainingFinishDate(Date summaryRemainingFinishDate) {
+        this.summaryRemainingFinishDate = summaryRemainingFinishDate;
+    }
 
     public String getId() {
         return id;

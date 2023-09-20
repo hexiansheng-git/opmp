@@ -180,6 +180,13 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             returnList.add(imagePlan);
         }
 
+        if(!CollectionUtils.isEmpty(returnList)) {
+            for (JdglWeekImagePlan imagePlan : returnList) {
+                JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
+            }
+        }
+
         // 维护returnList树结构
         List<JdglWeekImagePlan> build = TreeUtil.build(returnList, null);
         jdglWeekPlanParam.setJdglWeekImagePlanList(build);

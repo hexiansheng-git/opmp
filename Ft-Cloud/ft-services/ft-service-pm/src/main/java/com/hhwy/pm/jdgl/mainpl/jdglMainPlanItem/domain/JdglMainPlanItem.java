@@ -373,7 +373,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
 
 
     /**
-     * 字段描述：任务类型（project项目、task任务、milestone里程碑）
+     * 字段描述：任务类型（'Task Dependent', 'Resource Dependent', 'Level of Effort', 'Start Milestone', 'Finish Milestone', or 'WBS Summary'）
      */
     @JsonProperty
     @Excel(name = "任务类型")
@@ -392,6 +392,20 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonProperty
     @Excel(name = "基线项目结束", dateFormat = "yyyy-MM-dd")
     private Date baselineFinishDate;
+    /**
+     * 字段描述：尚需最早开始
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "尚需最早开始", dateFormat = "yyyy-MM-dd")
+    private Date remainingEarlyStartDate;
+    /**
+     * 字段描述：尚需最早结束
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "尚需最早结束", dateFormat = "yyyy-MM-dd")
+    private Date remainingEarlyFinishDate;
 
     /**
      * 字段描述：作业名称(适配甘特图字段)
