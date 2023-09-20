@@ -11,6 +11,9 @@ public class PermissionMark {
     /*前期策划评审是否已结束：0：未结束，1：已结束*/
     private String reviewEnd = "0";
 
+    /*是否存在工作计划：0：不存在，1：存在*/
+    private String havePlan = "1";
+
     /*是否有编辑权限：0：不可编辑，1：可编辑*/
     private String editable = "1";
 
