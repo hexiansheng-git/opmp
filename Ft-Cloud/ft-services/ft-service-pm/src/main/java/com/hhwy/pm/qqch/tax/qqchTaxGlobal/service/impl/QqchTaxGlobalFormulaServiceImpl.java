@@ -23,10 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author mls
@@ -223,6 +220,14 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
 
     private BigDecimal getRateByCurrency(String currency) {
+        // TODO 
+
+        return getRateByCurrency(currency,new Date());
+    }
+
+
+    private BigDecimal getRateByCurrency(String currency, Date date) {
+        // TODO 
 
         return BigDecimal.ONE;
     }

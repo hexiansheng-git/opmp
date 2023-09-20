@@ -6,6 +6,8 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.ProjectInfo;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -18,8 +20,11 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,10 +33,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +44,10 @@ import java.util.stream.Collectors;
 @Service
 public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
+    @Resource
+    private IXmslProjectBasicInfoService projectBasicInfoService;
+    @Resource
+    private IJdglData4P6Service jdglData4P6Service;
 
     private final static String TN = "qqch_tax_in";
 
@@ -240,7 +246,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             // 不为空才循环
             if (!CollectionUtils.isEmpty(detailList)) {
                 String currency = item.getCurrency();
-                currency = StringUtils.isEmpty(currency) ? PmConstant.USD: currency;
+                currency = StringUtils.isEmpty(currency) ? PmConstant.USD : currency;
                 item.setRate(currencyRateMap.get(currency));
                 for (QqchTaxInDetail detail : detailList) {
                     detail.setId(IdWorker.createId());
@@ -310,11 +316,23 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
      */
     public List<String> getYearList() {
 
-        // TODO 获取p6的计划开始时间和结束时间
+
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+
+        ProjectInfo projectInfo = jdglData4P6Service.getProjectInfo(projectBasicInfo.getProjectCode());
+
+        // 开始时间 
+        Date startDate = projectInfo.getStartDate();
+        //结束时间
+        Date finishDate = projectInfo.getFinishDate();
+
+        List<Date> dateList = FtDateUtils.getDateList(startDate, finishDate);
+
+        // 获取p6的计划开始时间和结束时间
         ArrayList<String> res = new ArrayList<>();
-        res.add("2023");
-        res.add("2024");
-        res.add("2025");
+        for (Date date : dateList) {
+            res.add(FtDateUtils.getYear(date) + "");
+        }
         return res;
     }
 
