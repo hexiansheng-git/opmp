@@ -21,6 +21,8 @@ import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import com.hhwy.utils.validation.JyDetailsUtil;
+import com.hhwy.utils.validation.ValidationGroups;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
 import org.apache.commons.io.IOUtils;
@@ -166,6 +168,11 @@ public class QqchCostControlPostDutyServiceImpl implements IQqchCostControlPostD
                 QqchCostControlPostDuty::setLeaf,
                 QqchCostControlPostDuty::getChildren,
                 QqchCostControlPostDuty::setChildren);
+
+        //确认必填校验
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            JyDetailsUtil.jyDetails(tileList,QqchCostControlPostDuty::getLeaf, ValidationGroups.Save.class);
+        }
 
         //处理数据
         this.disposeData(tileList,version);
