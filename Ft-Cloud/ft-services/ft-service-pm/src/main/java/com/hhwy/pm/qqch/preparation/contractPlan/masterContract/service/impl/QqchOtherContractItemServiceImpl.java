@@ -169,7 +169,7 @@ public class QqchOtherContractItemServiceImpl implements IQqchOtherContractItemS
         }
 
         //处理数据
-        this.insertQqchOtherContractItemList(qqchOtherContractItemList,version);
+        this.insertQqchOtherContractItemList(tileList,version);
 
         //处理确认状态是确认
         if(ButtonMark.CONFIRM.equals(buttonMark)){
