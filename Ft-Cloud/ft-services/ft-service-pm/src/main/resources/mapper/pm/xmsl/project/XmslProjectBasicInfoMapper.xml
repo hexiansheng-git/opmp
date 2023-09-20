@@ -960,7 +960,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="projectCode != null and projectCode != ''">and `project_code` = #{projectCode}</if>
         </where>
     </update>
 

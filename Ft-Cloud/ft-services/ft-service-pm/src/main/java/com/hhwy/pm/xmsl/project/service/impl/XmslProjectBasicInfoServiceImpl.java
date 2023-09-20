@@ -188,11 +188,14 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     /**
      * 修改项目基本信息
+     *
      * @param xmslProjectBasicInfo
-     * @return
      */
     @Transactional
-    public int updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
+    public void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
+        xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
+
+        xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
         projectBridgeStructureService.editProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
@@ -208,10 +211,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //主要材料数量
         List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList = xmslProjectBasicInfo.getXmslProjectMaterialsAmountList();
         projectMaterialsAmountService.editProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
-
-        xmslProjectBasicInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-        xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());
-        return xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
     }
     
     @Transactional
