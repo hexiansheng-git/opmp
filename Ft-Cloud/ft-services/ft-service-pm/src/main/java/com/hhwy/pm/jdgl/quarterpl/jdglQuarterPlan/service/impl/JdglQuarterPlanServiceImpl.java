@@ -260,6 +260,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         JdglQuarterPlan queryExist = new JdglQuarterPlan();
         queryExist.setYear(year);
         queryExist.setQuarter(quarter);
+        queryExist.setVersion(jdglQuarterPlan.getVersion());
         List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanMapper.getJdglQuarterPlanList(queryExist);
         if(!CollectionUtils.isEmpty(jdglQuarterPlanList)) {
             throw new RuntimeException("已存在"+year+"年第"+quarter+"季度数据!");

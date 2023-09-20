@@ -264,6 +264,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         JdglWeekPlan queryExist = new JdglWeekPlan();
         queryExist.setYear(year);
         queryExist.setWeek(week);
+        queryExist.setVersion(jdglWeekPlan.getVersion());
         List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(queryExist);
         if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {
             throw new RuntimeException("已存在"+year+"年第"+week+"周数据!");

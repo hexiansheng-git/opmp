@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.hhwy.common.core.utils.DateUtils;
@@ -43,13 +44,13 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
         JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
         jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
         List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemListNoTree(jdglMainPlanItem);
-        jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList);
+        jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList == null ? new ArrayList<>() : jdglMainPlanItemList);
         JdglMainPlanItemPre jdglMainPlanItemPre = new JdglMainPlanItemPre();
         jdglMainPlanItemPre.setMainPlanId(jdglMainPlan1.getId());
         List<JdglMainPlanItemPre> jdglMainPlanItemPreList = jdglMainPlanItemPreService.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
-        jdglMainPlan1.setJdglMainPlanItemPreList(jdglMainPlanItemPreList);
+        jdglMainPlan1.setJdglMainPlanItemPreList(jdglMainPlanItemPreList == null ? new ArrayList<>() : jdglMainPlanItemPreList);
         List<JdglMainPlanItem> keyRoad = iJdglMainPlanItemService.getKeyRoad(jdglMainPlanItem);
-        jdglMainPlan1.setKeyLoadList(keyRoad);
+        jdglMainPlan1.setKeyLoadList(keyRoad == null ? new ArrayList<>() : keyRoad);
 
         return jdglMainPlan1;
     }

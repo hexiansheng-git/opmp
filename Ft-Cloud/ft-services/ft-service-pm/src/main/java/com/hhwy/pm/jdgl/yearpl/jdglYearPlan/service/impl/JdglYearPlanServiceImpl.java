@@ -242,6 +242,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         String year = jdglYearPlan.getYear();
         JdglYearPlan queryExist = new JdglYearPlan();
         queryExist.setYear(year);
+        queryExist.setVersion(jdglYearPlan.getVersion());
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(queryExist);
         if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
             throw new RuntimeException("已存在"+year+"年数据!");

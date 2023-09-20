@@ -268,6 +268,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         JdglMonthPlan queryExist = new JdglMonthPlan();
         queryExist.setYear(year);
         queryExist.setMonth(month);
+        queryExist.setVersion(jdglMonthPlan.getVersion());
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(queryExist);
         if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
             throw new RuntimeException("已存在"+year+"年"+month+"月数据!");

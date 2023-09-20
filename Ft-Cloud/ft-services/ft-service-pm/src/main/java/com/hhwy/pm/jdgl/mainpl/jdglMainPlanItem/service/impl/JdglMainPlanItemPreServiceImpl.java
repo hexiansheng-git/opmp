@@ -31,7 +31,14 @@ public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreServi
     }
 
     public List<JdglMainPlanItemPre> getJdglMainPlanItemPreList(JdglMainPlanItemPre jdglMainPlanItemPre) {
-        return jdglMainPlanItemPreMapper.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+        List<JdglMainPlanItemPre> jdglMainPlanItemPreList = jdglMainPlanItemPreMapper.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+        if(!CollectionUtils.isEmpty(jdglMainPlanItemPreList)) {
+            for (JdglMainPlanItemPre jdglMainPlanItemPre1 : jdglMainPlanItemPreList) {
+                jdglMainPlanItemPre1.setTarget(jdglMainPlanItemPre1.getItemId());
+                jdglMainPlanItemPre1.setSource(jdglMainPlanItemPre1.getPredecessorItemId());
+            }
+        }
+        return jdglMainPlanItemPreList;
     }
 
     @Transactional
