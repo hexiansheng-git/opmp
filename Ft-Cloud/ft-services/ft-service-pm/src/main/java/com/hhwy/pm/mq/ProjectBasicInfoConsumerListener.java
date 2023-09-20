@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RocketMQMessageListener(
-        consumerGroup = "pm-project-g1",
+        consumerGroup = "pm-project-g3",
         topic = "gm",
         selectorExpression = "updatePrj",
         consumeMode = ConsumeMode.ORDERLY)
