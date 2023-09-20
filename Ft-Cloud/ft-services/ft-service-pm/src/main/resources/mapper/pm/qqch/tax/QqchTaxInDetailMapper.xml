@@ -164,22 +164,18 @@
         FROM
         qqch_tax_in AS ti
         LEFT JOIN qqch_tax_in_detail AS tid ON ti.id = tid.master_id
-        WHERE
-        ti.del_flag = '0'
-        <if test="dataType == 2">
-            and ti.pid  is not null 
-        </if>
-        AND ti.record_id = #{recordId}
-#         AND ti.valid = '0'
-        AND tid.del_flag = '0'
-#         AND tid.valid = '0'
-        AND tid.data_type = #{dataType}
-        and tid.amt is not null
-        <if test="year != null and year != ''">
-            AND tid.`year` = #{year}
-        </if>
+        <where>
+            <if test="dataType == 2">
+                and ti.pid is not null
+            </if>
+            AND ti.record_id = #{recordId}
+            AND tid.data_type = #{dataType}
+            and tid.amt is not null
+            <if test="year != null and year != ''">
+                AND tid.`year` = #{year}
+            </if>
 
-
+        </where>
 
         GROUP BY tid.master_id ,tid.currency ,tid.data_type
 

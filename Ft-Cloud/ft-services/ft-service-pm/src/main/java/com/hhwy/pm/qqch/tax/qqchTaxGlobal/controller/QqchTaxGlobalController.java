@@ -1,7 +1,5 @@
 package com.hhwy.pm.qqch.tax.qqchTaxGlobal.controller;
 
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -10,6 +8,8 @@ import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalFormulaService;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalService;
+import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.excel.FtExcelEnum;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -63,7 +63,14 @@ public class QqchTaxGlobalController extends BaseController {
     @PreAuthorize(hasPermi = "qqchTaxGlobal:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchTaxGlobal>> params) {
-        qqchTaxGlobalService.save(params.dealSaveDto());
+        String yearStr = params.getYearStr();
+        CommonAssert.notBlank(yearStr,"年份不能为空");
+        List<QqchTaxGlobal> qqchTaxGlobals = params.dealSaveDto();
+        for (QqchTaxGlobal qqchTaxGlobal : qqchTaxGlobals) {
+            qqchTaxGlobal.setYear(Integer.valueOf(params.getYearStr()));
+            EntityUtils.setCreateUpdateInfo(qqchTaxGlobal);
+        }
+        qqchTaxGlobalService.save(qqchTaxGlobals);
         return AjaxResult.success(params);
     }
 
@@ -122,10 +129,10 @@ public class QqchTaxGlobalController extends BaseController {
     }
 
 
-
     @PostMapping("/saveFormula")
     public AjaxResult saveFormula(@RequestBody QqchTaxGlobalFormula param) {
-        taxGlobalFormulaService.save(param.dealSaveDto());
+        CommonAssert.notNull(param.getYear(), "年份不能为空");
+        taxGlobalFormulaService.save(param.dealSaveDto(), param.getYear());
         return AjaxResult.success(param);
     }
 
@@ -134,6 +141,7 @@ public class QqchTaxGlobalController extends BaseController {
         CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormula = taxGlobalFormulaService.getFormula(param.dealListDto());
         return AjaxResult.success(qqchTaxGlobalFormula);
     }
+
     @GetMapping("/getGlobalByFormula")
     public AjaxResult getGlobalByFormula(QqchTaxGlobalFormula param) {
         List<QqchTaxGlobal> qqchTaxGlobalFormula = taxGlobalFormulaService.getGlobalByFormula(param.dealListDto());
@@ -143,10 +151,9 @@ public class QqchTaxGlobalController extends BaseController {
 
     @GetMapping("/getPrjInfo")
     public AjaxResult getPrjInfo(QqchTaxGlobalFormula param) {
-        Map<String,Object> res = taxGlobalFormulaService.getPrjInfo(param);
+        Map<String, Object> res = taxGlobalFormulaService.getPrjInfo(param);
         return AjaxResult.success(res);
     }
-    
 
 
 }

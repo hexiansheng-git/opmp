@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.exception.CustomBusinessException;
 import io.jsonwebtoken.lang.Assert;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +86,7 @@ public class CommonService {
      * @return
      */
     public PermissionMark checkIsEditable(String menuId) {
+        CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
 
         //获取当前阶段
@@ -105,7 +107,9 @@ public class CommonService {
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlan);
         // 查询到的数量不是0个的话 工作计划
         if (qqchWorkPlanList.size() != 1){
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Warning, "前期策划工作计划数据异常");
+            permissionMark.setHavePlan(CommonYesNo.NO);
+            permissionMark.setMsg("当前不存在工作计划，不可编辑！");
+            return permissionMark;
         }
 
         // 有效的工作计划

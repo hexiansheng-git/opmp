@@ -12,7 +12,6 @@ import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -98,8 +98,7 @@ public class QqchTaxCostController extends BaseController {
 
         if (PmConstant.ONE.equals(dto.getDataType())) {
             List<QqchTaxCost> costList = dto1.getCostList();
-            ExcelUtils<QqchTaxCost> util = new ExcelUtils<>(QqchTaxCost.class);
-            util.exportExcel(response, costList, "成本明细");
+            exportDetail(response, costList, yearList, "成本明细");
 
         }
 
@@ -137,123 +136,50 @@ public class QqchTaxCostController extends BaseController {
     }
 
 
-
-
     private List<List<String>> getData(List<String> headers, List<QqchTaxCost> resList) {
-        
-        return null;
+
+        return new ArrayList<>();
     }
 
     private List<List<String>> getHead(List<String> headers) {
+
+        // 拍个序
+        headers = headers.stream().sorted(Comparator.comparing(String::valueOf)).collect(Collectors.toList());
         List<List<String>> list = new ArrayList<>();
 
         List<String> hMaeCode = new ArrayList<>();
-        hMaeCode.add("物资编码");
+        hMaeCode.add("费用名称");
         list.add(hMaeCode);
 
-        List<String> hMaeName = new ArrayList<>();
-        hMaeName.add("物资名称");
-        list.add(hMaeName);
+        List<String> sum1 = new ArrayList<>();
+        sum1.add("合计");
+        sum1.add("内账成本");
+        list.add(sum1);
 
-        List<String> hMaeSpec = new ArrayList<>();
-        hMaeSpec.add("规格型号");
-        list.add(hMaeSpec);
 
-        List<String> hMaeUnit = new ArrayList<>();
-        hMaeUnit.add("单位");
-        list.add(hMaeUnit);
+        List<String> sum2 = new ArrayList<>();
+        sum2.add("合计");
+        sum2.add("符合属地账要求成本");
+        list.add(sum2);
+
+        List<String> sum3 = new ArrayList<>();
+        sum3.add("合计");
+        sum3.add("属地账策划成本");
+        list.add(sum3);
 
 
         for (String header : headers) {
             List<String> head0 = new ArrayList<>();
             head0.add(header);
-            head0.add("物资实际消耗(元)");
-            head0.add("实际消耗数量");
+            head0.add("内账成本");
+            head0.add("符合属地账要求成本");
+            head0.add("属地账策划成本");
             list.add(head0);
-
-            List<String> head1 = new ArrayList<>();
-            head1.add(header);
-            head1.add("物资实际消耗(元)");
-            head1.add("加权平均单价");
-            list.add(head1);
-
-            List<String> head2 = new ArrayList<>();
-            head2.add(header);
-            head2.add("物资实际消耗(元)");
-            head2.add("实际消耗金额");
-            list.add(head2);
-
-            List<String> head3 = new ArrayList<>();
-            head3.add(header);
-            head3.add("量差核算情况");
-            head3.add("设计用量");
-            list.add(head3);
-
-            List<String> head4 = new ArrayList<>();
-            head4.add(header);
-            head4.add("量差核算情况");
-            head4.add("局定额损耗率");
-            list.add(head4);
-
-            List<String> head5 = new ArrayList<>();
-            head5.add(header);
-            head5.add("量差核算情况");
-            head5.add("理论消耗量");
-            list.add(head5);
-
-            List<String> head6 = new ArrayList<>();
-            head6.add(header);
-            head6.add("量差核算情况");
-            head6.add("与设计用量对比(节+超-)");
-            head6.add("节超数量");
-            list.add(head6);
-
-            List<String> head7 = new ArrayList<>();
-            head7.add(header);
-            head7.add("量差核算情况");
-            head7.add("与设计用量对比(节+超-)");
-            head7.add("节超金额");
-            list.add(head7);
-
-            List<String> head8 = new ArrayList<>();
-            head8.add(header);
-            head8.add("量差核算情况");
-            head8.add("与设计用量对比(节+超-)");
-            head8.add("节超率");
-            list.add(head8);
-
-            List<String> head9 = new ArrayList<>();
-            head9.add(header);
-            head9.add("量差核算情况");
-            head9.add("与理论用量对比(节+超-)");
-            head9.add("节超数量");
-            list.add(head9);
-
-            List<String> head10 = new ArrayList<>();
-            head10.add(header);
-            head10.add("量差核算情况");
-            head10.add("与理论用量对比(节+超-)");
-            head10.add("节超金额");
-            list.add(head10);
-
-
-            List<String> head11 = new ArrayList<>();
-            head11.add(header);
-            head11.add("量差核算情况");
-            head11.add("与理论用量对比(节+超-)");
-            head11.add("节超率");
-            list.add(head11);
         }
 
 
         return list;
     }
-    
-    
-    
-    
-    
-    
 
 
     @PreAuthorize(hasPermi = "qqchTaxCost:list")

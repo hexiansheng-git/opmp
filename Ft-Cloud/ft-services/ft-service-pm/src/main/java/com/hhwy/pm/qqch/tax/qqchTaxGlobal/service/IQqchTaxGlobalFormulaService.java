@@ -32,7 +32,7 @@ public interface IQqchTaxGlobalFormulaService {
 
     CompileEntity<QqchTaxGlobalFormula> getFormula(QqchTaxGlobalFormula dealListDto);
 
-    int save(QqchTaxGlobalFormula dealSaveDto);
+    int save(QqchTaxGlobalFormula dealSaveDto, Integer year);
 
     /**
      * @param dealListDto 

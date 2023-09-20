@@ -185,6 +185,7 @@ public class ListTreeUtil {
         int sort = 1;
         for (T node : source) {
             setSort.accept(node,sort++);
+            setPid.accept(node,null);
             recur(node, resultList, setId, setPid, setSort, getChildren, setChildren);
         }
         return resultList;
@@ -225,6 +226,7 @@ public class ListTreeUtil {
         int sort = 1;
         for (T node : source) {
             setSort.accept(node,sort++);
+            setPid.accept(node,null);
             recur(node, resultList, setId, setPid, setSort,setLeaf, getChildren, setChildren);
         }
         return resultList;

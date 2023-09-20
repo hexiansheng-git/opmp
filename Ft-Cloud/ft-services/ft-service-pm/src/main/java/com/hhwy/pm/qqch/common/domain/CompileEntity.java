@@ -67,6 +67,10 @@ public class CompileEntity<T> extends TreeNode<T> {
      * 请求id
      */
     private String reqId;
+    /**
+     * 年份
+     */
+    private String yearStr;
 
     private T dto;
 

@@ -19,6 +19,9 @@ public class RedissonLockUtil {
     public static void main(String[] args) {
         try{
             if(RedissonLockUtil.lock("test")){
+                
+                // 代码运行了33秒
+                
                 //处理业务
 
             }

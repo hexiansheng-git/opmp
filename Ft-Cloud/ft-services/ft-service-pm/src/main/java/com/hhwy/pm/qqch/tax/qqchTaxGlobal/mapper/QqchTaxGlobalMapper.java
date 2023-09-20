@@ -15,6 +15,7 @@ public interface QqchTaxGlobalMapper {
     QqchTaxGlobal getQqchTaxGlobal(QqchTaxGlobal qqchTaxGlobal);
 
     List<QqchTaxGlobal> getQqchTaxGlobalList(QqchTaxGlobal qqchTaxGlobal);
+    List<QqchTaxGlobal> getQqchTaxGlobalListGroup(QqchTaxGlobal qqchTaxGlobal);
 
     int insertQqchTaxGlobal(QqchTaxGlobal qqchTaxGlobal);
 

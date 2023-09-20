@@ -373,14 +373,16 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<JdglMainPlanItem> childItem = new ArrayList<>();
         for (JdglMainPlanItem jdglMainPlanItem : thisItems) {
+            if(jdglMainPlanItem.getPid() == null) jdglMainPlanItem.setAncestors(jdglMainPlanItem.getWbsObjectId());
             for (JdglMainPlanItem jdglMainPlanItem1 : allItem) {
                 if(jdglMainPlanItem.getId() != null && jdglMainPlanItem.getId().equals(jdglMainPlanItem1.getPid())) {
-
                     if("wbs".equals(jdglMainPlanItem1.getItemType())) {
                         jdglMainPlanItem1.setItemCode(jdglMainPlanItem.getItemCode() + "-" + jdglMainPlanItem1.getItemCode());
                         jdglMainPlanItem1.setWbsCode(jdglMainPlanItem1.getItemCode());
+                        jdglMainPlanItem1.setAncestors(jdglMainPlanItem.getAncestors() + "," + jdglMainPlanItem1.getWbsObjectId());
                     } else {
                         jdglMainPlanItem1.setWbsCode(jdglMainPlanItem.getItemCode());
+                        jdglMainPlanItem1.setAncestors(jdglMainPlanItem.getAncestors() + "," + jdglMainPlanItem1.getItemCode());
                     }
 
                     childItem.add(jdglMainPlanItem1);

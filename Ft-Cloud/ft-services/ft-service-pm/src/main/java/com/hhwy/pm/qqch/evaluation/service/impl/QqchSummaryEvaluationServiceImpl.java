@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.evaluation.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.mapper.QqchSummaryEvaluationMapper;
 import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
@@ -21,6 +22,8 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
 
     @Autowired
     private QqchSummaryEvaluationMapper qqchSummaryEvaluationMapper;
+    @Autowired
+    private ISysSyncInfoService sysSyncInfoService;
 
     public QqchSummaryEvaluation getQqchSummaryEvaluation(QqchSummaryEvaluation qqchSummaryEvaluation) {
         return qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(qqchSummaryEvaluation);
@@ -59,6 +62,8 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         qqchSummaryEvaluation.setTaskStatus("5");
         // 保存数据
         this.save(qqchSummaryEvaluation);
+        // 推送数据到总部版
+        sysSyncInfoService.pushQqchSummaryEvaluation(qqchSummaryEvaluation);
     }
 
     /**

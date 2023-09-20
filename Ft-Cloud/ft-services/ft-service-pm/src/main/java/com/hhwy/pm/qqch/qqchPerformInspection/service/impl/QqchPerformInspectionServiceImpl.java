@@ -7,6 +7,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
+import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspectionDetail;
 import com.hhwy.pm.qqch.qqchPerformInspection.mapper.QqchPerformInspectionMapper;
@@ -47,7 +48,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     @Autowired
     private IQqchWorkPlanService workPlanService;
     @Autowired
-    private SystemServiceApi systemServiceApi;
+    private ISysSyncInfoService sysSyncInfoService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
 
@@ -82,6 +83,10 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         List<QqchPerformInspectionDetail> batchAddList = handleDetailList(qqchPerformInspection, detailList);
         qqchPerformInspectionMapper.insertQqchPerformInspection(qqchPerformInspection);
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
+        //若为发起，推送数据到总部
+        if(qqchPerformInspection.getPtVar5().equals("1")){
+            sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);    
+        }
         return qqchPerformInspection.getId();
     }
 
@@ -111,7 +116,12 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         //再添加新的
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
         //修改主表
-        return qqchPerformInspectionMapper.updateQqchPerformInspection(qqchPerformInspection);
+        int result = qqchPerformInspectionMapper.updateQqchPerformInspection(qqchPerformInspection);
+        //若为发起，推送数据到总部
+        if(qqchPerformInspection.getPtVar5().equals("1")) {
+            sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);
+        }
+        return result;
     }
 
     @Transactional

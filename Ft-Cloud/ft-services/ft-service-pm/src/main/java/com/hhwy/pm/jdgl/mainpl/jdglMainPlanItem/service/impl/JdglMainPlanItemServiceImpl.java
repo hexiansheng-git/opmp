@@ -167,7 +167,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         returnList.addAll(collect);
         Set<Long> ids = new HashSet<>();
         for (JdglMainPlanItem jdglMainPlanItem : collect) {
-            List<JdglMainPlanItem> collect1 = jdglMainPlanItemListNoTree.stream().filter(vo -> jdglMainPlanItem.getWbsCode().contains(vo.getItemCode())).collect(Collectors.toList());
+            List<JdglMainPlanItem> collect1 = jdglMainPlanItemListNoTree.stream().filter(vo -> "wbs".equals(vo.getItemType()) && jdglMainPlanItem.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
             if(!CollectionUtils.isEmpty(collect1)) {
                 for (JdglMainPlanItem jdglMainPlanItem1 : collect1) {
                     ids.add(jdglMainPlanItem1.getId());

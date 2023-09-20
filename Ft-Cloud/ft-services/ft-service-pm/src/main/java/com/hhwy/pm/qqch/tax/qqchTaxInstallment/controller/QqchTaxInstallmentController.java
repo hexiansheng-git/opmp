@@ -63,9 +63,9 @@ public class QqchTaxInstallmentController extends BaseController{
      */
     @PreAuthorize(hasPermi = "qqchTaxInstallment:confirm")
     @PostMapping("/save")
-    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<QqchTaxInstallment >dto){
+    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchTaxInstallment dto){
         // 20230915 改成只有确认按钮 确认按钮就是为了在评审功能已确认功能加1
-        qqchTaxInstallmentService.confirm(dto.dealSaveDto());
+        qqchTaxInstallmentService.confirm(dto);
         return AjaxResult.success(dto);
     }
 

@@ -8,10 +8,12 @@ import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiffDesc;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheDiffDescMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheDiffDescService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -95,6 +97,6 @@ public class QqchScheDiffDescServiceImpl implements IQqchScheDiffDescService {
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
     public QqchScheDiffDesc getDesc(QqchScheDiffDesc dealSaveDto) {
         List<QqchScheDiffDesc> qqchScheDiffDescList = this.qqchScheDiffDescMapper.getQqchScheDiffDescList(dealSaveDto);
-        return qqchScheDiffDescList.get(0);
+        return CollectionUtils.isEmpty(qqchScheDiffDescList) ? new QqchScheDiffDesc() : qqchScheDiffDescList.get(0);
     }
 }

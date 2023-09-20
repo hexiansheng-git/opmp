@@ -81,7 +81,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             jdglQuarterPlan1.setJdglQuarterValuePlanList(jdglQuarterValuePlanListByPlanId);
             List<JdglQuarterImagePlan> jdglQuarterImagePlanListByPlanId = iJdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(jdglQuarterPlan1.getId());
             jdglQuarterPlan1.setJdglQuarterImagePlanList(jdglQuarterImagePlanListByPlanId);
-            FlowInfoSearchUtil.getFlowInfo(jdglQuarterPlan1,FlowEnum.JDGL_WEEKPLAN);
+            FlowInfoSearchUtil.getFlowInfo(jdglQuarterPlan1,FlowEnum.JDGL_QUARTERPLAN);
         }
         return jdglQuarterPlan1;
     }

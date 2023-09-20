@@ -14,7 +14,6 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
-import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -24,10 +23,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author mls
@@ -134,7 +130,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
     }
 
     @Override
-    public int save(QqchTaxGlobalFormula dealSaveDto) {
+    public int save(QqchTaxGlobalFormula dealSaveDto, Integer year) {
         dealSaveDto.setId(IdWorker.createId());
         this.qqchTaxGlobalFormulaMapper.insertQqchTaxGlobalFormula(dealSaveDto);
         return 1;
@@ -224,6 +220,14 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
 
     private BigDecimal getRateByCurrency(String currency) {
+        // TODO 
+
+        return getRateByCurrency(currency,new Date());
+    }
+
+
+    private BigDecimal getRateByCurrency(String currency, Date date) {
+        // TODO 
 
         return BigDecimal.ONE;
     }

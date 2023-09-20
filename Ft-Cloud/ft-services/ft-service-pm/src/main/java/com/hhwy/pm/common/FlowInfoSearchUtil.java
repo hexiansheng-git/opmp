@@ -64,6 +64,8 @@ public class FlowInfoSearchUtil {
         Set<String> userNameSet = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
             T t = list.get(i);
+            t.setProcessKey(flowEnum.getProcessKey());
+            t.setBusinessTableName(flowEnum.getTableName());
             CommonBaseEntity flowInfo = flowMap.get(t.getId()+"");
             if(flowInfo == null){
                 t.setTaskStatus(FlowStatusEnum.FLOW_STATUS_INIT.getKey());
