@@ -15,7 +15,6 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
@@ -231,7 +230,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             qqchWorkGroup.setEffective(Valid.NO);//是否有效默认为否
         }
         qqchWorkGroup.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-        qqchWorkGroup.setCreateUserName(SecurityUtils.getUserName());
+        qqchWorkGroup.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setCreateTime(DateUtils.getNowDate());
 
@@ -249,32 +248,30 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      * @param qqchWorkGroup
      */
     public void setPlanUnit(QqchWorkGroup qqchWorkGroup){
-        //获取合同关联项目信息-项目分类
-        XmslContractInfo validMaxVersionContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-
-        if(validMaxVersionContractInfo == null){
+        //获取项目信息
+        ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+        if(projectInfo == null){
             qqchWorkGroup.setPlanDominantUnit("海外事业部");
             qqchWorkGroup.setPlanApprovalUnit("项目名称");
             return;
         }
-        //项目分类
-        String projectCategory = validMaxVersionContractInfo.getProjectCategory();
 
-        //策划主导单位：I、II类项目，显示组织机构海外事业部层级名称 ；III、IV类型项目，显示项目所属单位名称
+        //项目分类
+        String projectCategory = projectInfo.getProjectCategory();
+
+        //策划主导单位：I、II类项目，显示组织机构海外事业部层级名称 ；III、IV类型项目，显示项目所属区域中心
         if("1".equals(projectCategory) || "2".equals(projectCategory)){
             qqchWorkGroup.setPlanDominantUnit("海外事业部");
         }else {
-            qqchWorkGroup.setPlanDominantUnit("项目名称");
+            qqchWorkGroup.setPlanDominantUnit(projectInfo.getRegionName());
         }
 
-        //策划审批单位：I、II、III类项目，显示组织机构海外事业部层级名称 ；IV类型项目，显示项目所属单位名称
+        //策划审批单位：I、II、III类项目，显示组织机构海外事业部层级名称 ；IV类型项目，显示项目所属区域中心
         if("4".equals(projectCategory)){
-            qqchWorkGroup.setPlanApprovalUnit("项目名称");
+            qqchWorkGroup.setPlanApprovalUnit(projectInfo.getRegionName());
         }else {
             qqchWorkGroup.setPlanApprovalUnit("海外事业部");
         }
-
-
     }
 
     /**

@@ -89,7 +89,7 @@
 
     <select id="getNoValidMaxVersionQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
         <include refid="selectQqchWorkGroupVo" />
-        where del_flag = '0' and effective = '0'
+        where del_flag = '0' and effective = '0' and version &gt;= (select max(version) from qqch_work_group where del_flag = '0')
         order by version desc
         limit 1
     </select>
@@ -195,6 +195,10 @@
             </if>
         </where>
         order by version desc
+    </select>
+    <select id="getMaxVersion" resultType="java.math.BigDecimal">
+        select max(version) from qqch_work_group
+        wehre del_flag = '0'
     </select>
     <insert id="insertQqchWorkGroup" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_work_group

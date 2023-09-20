@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -13,6 +14,11 @@ import java.util.List;
  */
 @Repository
 public interface QqchWorkGroupMapper {
+    /**
+     * 获取当前最大版本
+     * @return
+     */
+    BigDecimal getMaxVersion();
     /**
      * 获取最大有效版本数据
      * @return
