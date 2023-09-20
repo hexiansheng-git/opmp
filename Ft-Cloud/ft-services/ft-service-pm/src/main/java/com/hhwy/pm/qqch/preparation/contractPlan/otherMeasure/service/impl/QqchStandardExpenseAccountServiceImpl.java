@@ -1,16 +1,21 @@
 package com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchStandardExpenseAccount;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.mapper.QqchStandardExpenseAccountMapper;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.IQqchStandardExpenseAccountService;
-import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -29,12 +34,20 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
         return qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccount(qqchStandardExpenseAccount);
     }
 
+    @Override
+    @Transactional
     public List<QqchStandardExpenseAccount> getQqchStandardExpenseAccountList(QqchStandardExpenseAccount qqchStandardExpenseAccount) {
-        List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+        List<QqchStandardExpenseAccount> list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+
+        if(CollectionUtils.isEmpty(list)){
+            //初始化数据
+            this.init();
+            list = qqchStandardExpenseAccountMapper.getQqchStandardExpenseAccountList(qqchStandardExpenseAccount);
+        }
 
         //转树列表
         List<QqchStandardExpenseAccount> treeList = ListTreeUtil.formatTree(
-                qqchStandardExpenseAccountList,
+                list,
                 o -> o.getPid() == null,
                 (r, n) -> r.getId().equals(n.getPid()),
                 QqchStandardExpenseAccount::getChildren,
@@ -42,10 +55,34 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
         return treeList;
     }
 
+    /**
+     * 初始化数据
+     */
+    @Transactional
+    public void init(){
+        try {
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/4_4.json");
+            String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            List<QqchStandardExpenseAccount> list = JSONObject.parseArray(json, QqchStandardExpenseAccount.class);
+            List<QqchStandardExpenseAccount> tileList = ListTreeUtil.formatList(
+                    list,
+                    QqchStandardExpenseAccount::setId,
+                    QqchStandardExpenseAccount::setPid,
+                    QqchStandardExpenseAccount::setSort,
+                    QqchStandardExpenseAccount::setLeaf,
+                    QqchStandardExpenseAccount::getChildren,
+                    QqchStandardExpenseAccount::setChildren);
+            this.insertQqchStandardExpenseAccountList(tileList);
+        }catch (IOException e){
+            throw new RuntimeException("初始化数据失败！");
+        }
+
+    }
+
     @Transactional
     public int insertQqchStandardExpenseAccount(QqchStandardExpenseAccount qqchStandardExpenseAccount) {
-        qqchStandardExpenseAccount.setId(IdWorker.createId());
-        qqchStandardExpenseAccount.setCreateUser(SecurityUtils.getUserName());
+        qqchStandardExpenseAccount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+        qqchStandardExpenseAccount.setCreateUserName(SecurityUtils.getUserName());
         qqchStandardExpenseAccount.setCreateTime(DateUtils.getNowDate());
         return qqchStandardExpenseAccountMapper.insertQqchStandardExpenseAccount(qqchStandardExpenseAccount);
     }
@@ -53,8 +90,8 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
     @Transactional
     public int insertQqchStandardExpenseAccountList(List<QqchStandardExpenseAccount> qqchStandardExpenseAccountList) {
         for (QqchStandardExpenseAccount qqchStandardExpenseAccount : qqchStandardExpenseAccountList) {
-            qqchStandardExpenseAccount.setId(IdWorker.createId());
-            qqchStandardExpenseAccount.setCreateUser(SecurityUtils.getUserName());
+            qqchStandardExpenseAccount.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchStandardExpenseAccount.setCreateUserName(SecurityUtils.getUserName());
             qqchStandardExpenseAccount.setCreateTime(DateUtils.getNowDate());
         }
         return qqchStandardExpenseAccountMapper.insertQqchStandardExpenseAccountList(qqchStandardExpenseAccountList);

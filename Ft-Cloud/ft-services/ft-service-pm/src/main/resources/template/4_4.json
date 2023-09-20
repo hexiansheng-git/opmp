@@ -1,0 +1,235 @@
+[
+  {
+    "code": "1",
+    "expenseName": "直接费",
+    "children": [
+      {
+        "code": "1.1",
+        "expenseName": "人工费",
+        "children": [
+          {
+            "code": "1.1.1",
+            "expenseName": "当地人工费",
+            "children": []
+          },
+          {
+            "code": "1.1.2",
+            "expenseName": "中方施工人工费",
+            "children": []
+          }
+        ]
+      },
+      {
+        "code": "1.2",
+        "expenseName": "材料费",
+        "children": []
+      },
+      {
+        "code": "1.3",
+        "expenseName": "机械使用费",
+        "children": [
+          {
+            "code": "1.3.1",
+            "expenseName": "燃润油、轮胎费",
+            "children": []
+          },
+          {
+            "code": "1.3.2",
+            "expenseName": "自有设备折旧",
+            "children": []
+          },
+          {
+            "code": "1.3.3",
+            "expenseName": "自有设备维修费",
+            "children": []
+          },
+          {
+            "code": "1.3.4",
+            "expenseName": "设备进场费",
+            "children": []
+          },
+          {
+            "code": "1.3.5",
+            "expenseName": "设备租赁费",
+            "children": []
+          }
+        ]
+      },
+      {
+        "code": "1.4",
+        "expenseName": "其他直接费",
+        "children": [
+          {
+            "code": "1.4.1",
+            "expenseName": "经理部办公/生活/测量/实验设施购置费",
+            "children": []
+          },
+          {
+            "code": "1.4.2",
+            "expenseName": "小型工具使用费",
+            "children": []
+          },
+          {
+            "code": "1.4.3",
+            "expenseName": "工程用电费",
+            "children": []
+          },
+          {
+            "code": "1.4.4",
+            "expenseName": "监理费用",
+            "children": [
+              {
+                "code": "1.4.4.1",
+                "expenseName": "监理办公/生活/测量/实验设施购置费",
+                "children": []
+              },
+              {
+                "code": "1.4.4.2",
+                "expenseName": "监理车辆购置费",
+                "children": []
+              },
+              {
+                "code": "1.4.4.3",
+                "expenseName": "监理营地提供费",
+                "children": []
+              },
+              {
+                "code": "1.4.4.4",
+                "expenseName": "监理其他费用",
+                "children": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "code": "1.5",
+        "expenseName": "分包成本",
+        "children": []
+      }
+    ]
+  },
+  {
+    "code": "2",
+    "expenseName": "间接费",
+    "children": [
+      {
+        "code": "2.1",
+        "expenseName": "标后预算四块费用",
+        "children": [
+          {
+            "code": "2.1.1",
+            "expenseName": "临时设施费",
+            "children": []
+          },
+          {
+            "code": "2.1.2",
+            "expenseName": "经理部管理费",
+            "children": [
+              {
+                "code": "2.1.2.1",
+                "expenseName": "中方管理人员费用",
+                "children": []
+              },
+              {
+                "code": "2.1.2.2",
+                "expenseName": "办公费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.3",
+                "expenseName": "业务招待费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.4",
+                "expenseName": "差旅费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.5",
+                "expenseName": "电话费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.6",
+                "expenseName": "生活用水电费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.7",
+                "expenseName": "后勤伙食费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.8",
+                "expenseName": "文化娱乐费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.9",
+                "expenseName": "代理费",
+                "children": []
+              },
+              {
+                "code": "2.1.2.10",
+                "expenseName": "自有或外租交通车辆费用",
+                "children": []
+              },
+              {
+                "code": "2.1.2.11",
+                "expenseName": "缺陷修复费",
+                "children": []
+              }
+            ]
+          },
+          {
+            "code": "2.1.3",
+            "expenseName": "现场安全生产费",
+            "children": []
+          },
+          {
+            "code": "2.1.4",
+            "expenseName": "文明施工费",
+            "children": []
+          }
+        ]
+      },
+      {
+        "code": "2.2",
+        "expenseName": "计日工",
+        "children": []
+      },
+      {
+        "code": "2.3",
+        "expenseName": "暂定金",
+        "children": []
+      },
+      {
+        "code": "2.4",
+        "expenseName": "不可预见费",
+        "children": []
+      }
+    ]
+  },
+  {
+    "code": "3",
+    "expenseName": "税金",
+    "children": []
+  },
+  {
+    "code": "4",
+    "expenseName": "财务费用",
+    "children": []
+  },
+  {
+    "code": "5",
+    "expenseName": "上级管理费",
+    "children": []
+  },
+  {
+    "code": "6",
+    "expenseName": "标后预算总成本",
+    "children": []
+  }
+]
