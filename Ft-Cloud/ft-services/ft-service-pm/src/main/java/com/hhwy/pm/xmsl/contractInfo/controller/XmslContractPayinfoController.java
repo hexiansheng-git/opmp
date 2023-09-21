@@ -128,13 +128,13 @@ public class XmslContractPayinfoController extends BaseController {
                 if (allCurrency.containsKey(currencyName)) {
                     xmslContractPayinfoVo.setCurrencyName(currencyName);
                 }else {
-                    sb.append("第"+(i+1)+"条数据币种名称："+ currencyName +"无法匹配，请重新填写\r\n");
+                    sb.append("第"+(i+1)+"条数据币种名称："+ currencyName +"无法匹配，请重新填写\n");
                 }
             }
             if (StringUtils.isEmpty(sb.toString())){
                 return AjaxResult.success(xmslContractPayinfoVos);
             }else {
-                return AjaxResult.error("400", sb);
+                return AjaxResult.error(sb.toString());
             }
         }catch (Exception e){
             throw new RuntimeException("导入失败！");
