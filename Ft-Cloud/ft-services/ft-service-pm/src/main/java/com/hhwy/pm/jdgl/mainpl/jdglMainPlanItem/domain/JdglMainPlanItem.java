@@ -373,7 +373,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
 
 
     /**
-     * 字段描述：任务类型（project项目、task任务、milestone里程碑）
+     * 字段描述：任务类型（'Task Dependent', 'Resource Dependent', 'Level of Effort', 'Start Milestone', 'Finish Milestone', or 'WBS Summary'）
      */
     @JsonProperty
     @Excel(name = "任务类型")
@@ -392,4 +392,76 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonProperty
     @Excel(name = "基线项目结束", dateFormat = "yyyy-MM-dd")
     private Date baselineFinishDate;
+    /**
+     * 字段描述：尚需最早开始
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "尚需最早开始", dateFormat = "yyyy-MM-dd")
+    private Date remainingEarlyStartDate;
+    /**
+     * 字段描述：尚需最早结束
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "尚需最早结束", dateFormat = "yyyy-MM-dd")
+    private Date remainingEarlyFinishDate;
+
+    /**
+     * 字段描述：作业名称(适配甘特图字段)
+     */
+    @JsonProperty
+    private String text;
+    /**
+     * 字段描述：开始时间(适配甘特图字段)
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @Excel(name = "开始时间", dateFormat = "yyyy-MM-dd")
+    private Date start_date;
+//    /**
+//     * 字段描述：结束时间(适配甘特图字段)
+//     */
+//    @JsonFormat(pattern = "yyyy-MM-dd")
+//    @JsonProperty
+//    @Excel(name = "结束时间", dateFormat = "yyyy-MM-dd")
+//    private Date end_date;
+    /**
+     * 字段描述：进度(适配甘特图字段)
+     */
+    @JsonProperty
+    private BigDecimal progress;
+    /**
+     * 字段描述：工期(适配甘特图字段)
+     */
+    @JsonProperty
+    private BigDecimal duration;
+
+    /**
+     * 字段描述：作业标识(适配甘特图字段)
+     */
+    @JsonProperty
+    private String type;
+
+    /**
+     * 字段描述：合并格式(适配甘特图字段):split，用于wbs层级
+     */
+    @JsonProperty
+    private String render;
+    /**
+     * 字段描述：是否展开(适配甘特图字段)
+     */
+    @JsonProperty
+    private boolean open;
+    /**
+     * 字段描述：是否汇总上级(适配甘特图字段)
+     */
+    @JsonProperty
+    private boolean rollup;
+    /**
+     * 字段描述：父id(适配甘特图字段)
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long parent;
 }

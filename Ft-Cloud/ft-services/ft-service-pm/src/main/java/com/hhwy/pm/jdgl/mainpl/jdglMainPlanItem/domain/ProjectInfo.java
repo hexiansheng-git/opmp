@@ -9,6 +9,8 @@ import java.util.Date;
  * 时间: 2023/09/11
  */
 public class ProjectInfo {
+    //与主数据中项目匹配编号
+    private String projectId;
 
     //unique ID
     private String id;
@@ -42,8 +44,34 @@ public class ProjectInfo {
     private Integer summaryTotalFloat;
     //最后更新日期
     private Date lastUpdateDate;
-    //项目实际编码
-    private String projectId;
+    //尚需开始日期
+    private Date summaryRemainingStartDate;
+    //尚需完成日期
+    private Date summaryRemainingFinishDate;
+
+    public Date getSummaryRemainingStartDate() {
+        return summaryRemainingStartDate;
+    }
+
+    public void setSummaryRemainingStartDate(Date summaryRemainingStartDate) {
+        this.summaryRemainingStartDate = summaryRemainingStartDate;
+    }
+
+    public Date getSummaryRemainingFinishDate() {
+        return summaryRemainingFinishDate;
+    }
+
+    public void setSummaryRemainingFinishDate(Date summaryRemainingFinishDate) {
+        this.summaryRemainingFinishDate = summaryRemainingFinishDate;
+    }
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(String projectId) {
+        this.projectId = projectId;
+    }
 
     public String getId() {
         return id;
@@ -171,13 +199,5 @@ public class ProjectInfo {
 
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
-    }
-
-    public String getProjectId() {
-        return projectId;
-    }
-
-    public void setProjectId(String projectId) {
-        this.projectId = projectId;
     }
 }

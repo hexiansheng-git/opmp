@@ -34,6 +34,7 @@
         <result property="qualityGuaranteeDepositRatio" column="quality_guarantee_deposit_ratio"/>
         <result property="winTheBiddingDate" column="win_the_bidding_date"/>
         <result property="businessAreasAndProducts" column="business_areas_and_products"/>
+        <result property="businessAreasAndProductsLabel" column="business_areas_and_products_label"/>
         <result property="contractingMethod" column="contracting_method"/>
         <result property="projectType" column="project_type"/>
         <result property="projectCategory" column="project_category"/>
@@ -108,6 +109,7 @@
             ,`quality_guarantee_deposit_ratio`
             ,`win_the_bidding_date`
             ,`business_areas_and_products`
+            ,`business_areas_and_products_label`
             ,`contracting_method`
             ,`project_type`
             ,`project_category`
@@ -171,6 +173,7 @@
         ,`quality_guarantee_deposit_ratio`
         ,`win_the_bidding_date`
         ,`business_areas_and_products`
+        ,`business_areas_and_products_label`
         ,`contracting_method`
         ,`project_type`
         ,`project_category`
@@ -358,6 +361,7 @@
         ,`quality_guarantee_deposit_ratio`
         ,`win_the_bidding_date`
         ,`business_areas_and_products`
+        ,`business_areas_and_products_label`
         ,`contracting_method`
         ,`project_type`
         ,`project_category`
@@ -550,6 +554,9 @@
             <if test="businessAreasAndProducts != null  and businessAreasAndProducts != ''">
                 `business_areas_and_products`,
             </if>
+            <if test="businessAreasAndProductsLabel != null  and businessAreasAndProductsLabel != ''">
+                `,`business_areas_and_products_label``,
+            </if>
             <if test="contractingMethod != null  and contractingMethod != ''">`contracting_method`,</if>
             <if test="projectType != null  and projectType != ''">`project_type`,</if>
             <if test="projectCategory != null  and projectCategory != ''">`project_category`,</if>
@@ -717,6 +724,7 @@
             `quality_guarantee_deposit_ratio`,
             `win_the_bidding_date`,
             `business_areas_and_products`,
+            `business_areas_and_products_label`,
             `contracting_method`,
             `project_type`,
             `project_category`,
@@ -791,6 +799,7 @@
                 #{item.qualityGuaranteeDepositRatio},
                 #{item.winTheBiddingDate},
                 #{item.businessAreasAndProducts},
+                #{item.businessAreasAndProductsLabel},
                 #{item.contractingMethod},
                 #{item.projectType},
                 #{item.projectCategory},
@@ -882,6 +891,9 @@
             <if test="businessAreasAndProducts != null  and  businessAreasAndProducts != ''">
                 `business_areas_and_products` = #{businessAreasAndProducts},
             </if>
+            <if test="businessAreasAndProductsLabel != null  and  businessAreasAndProductsLabel != ''">
+                `business_areas_and_products_label` = #{businessAreasAndProductsLabel},
+            </if>
             <if test="contractingMethod != null  and  contractingMethod != ''">`contracting_method` =
                 #{contractingMethod},
             </if>
@@ -948,7 +960,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
         </trim>
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
+            <if test="projectCode != null and projectCode != ''">and `project_code` = #{projectCode}</if>
         </where>
     </update>
 
@@ -1093,6 +1105,11 @@
             <trim prefix="business_areas_and_products  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.businessAreasAndProducts}
+                </foreach>
+            </trim>
+            <trim prefix="business_areas_and_products_label  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.businessAreasAndProductsLabel}
                 </foreach>
             </trim>
             <trim prefix="contracting_method  = case" suffix="end,">

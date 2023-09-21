@@ -51,13 +51,13 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     private String pre = "/p6";
 
-    private static Map<String,String> typeMap = new HashMap<>();
-    static {
-        typeMap.put("Start to Start", "1");
-        typeMap.put("Start to Finish", "2");
-        typeMap.put("Finish to Start", "3");
-        typeMap.put("Finish to Finish", "4");
-    }
+//    private static Map<String,String> typeMap = new HashMap<>();
+//    static {
+//        typeMap.put("Start to Start", "0");
+//        typeMap.put("Start to Finish", "1");
+//        typeMap.put("Finish to Start", "2");
+//        typeMap.put("Finish to Finish", "3");
+//    }
 
     @Override
     public List<JdglMainPlanItem> initJdglData4P6() {
@@ -168,6 +168,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setLeaf("0");
                 jdglMainPlanItem.setBaselineStartDate(wbsInfo.getSummaryBaselineStartDate());
                 jdglMainPlanItem.setBaselineFinishDate(wbsInfo.getSummaryBaselineFinishDate());
+//                jdglMainPlanItem.setTaskType();
+                jdglMainPlanItem.setRemainingEarlyStartDate(wbsInfo.getSummaryRemainingStartDate());
+                jdglMainPlanItem.setRemainingEarlyFinishDate(wbsInfo.getSummaryRemainingFinishDate());
                 returnList.add(jdglMainPlanItem);
             }
             for (ActivityConstField activityInfo : workInfos) {
@@ -226,6 +229,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 //                jdglMainPlanItem.setBaselineFinishDate();
                 jdglMainPlanItem.setLeaf("1");
 //                jdglMainPlanItem.setUpdateTime(activityInfo.getLastUpdateDate());
+                jdglMainPlanItem.setRemainingEarlyStartDate(activityInfo.getRemainingEarlyStartDate());
+                jdglMainPlanItem.setRemainingEarlyFinishDate(activityInfo.getRemainingEarlyFinishDate());
+                jdglMainPlanItem.setTaskType(activityInfo.getType());
                 returnList.add(jdglMainPlanItem);
             }
 
@@ -447,7 +453,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItemPre.setItemCode(predecessorRelationships.getSuccessorActivityId());
                 jdglMainPlanItemPre.setPredecessorItemCode(predecessorRelationships.getPredecessorActivityId());
                 jdglMainPlanItemPre.setPredecessorItemName(predecessorRelationships.getPredecessorActivityName());
-                jdglMainPlanItemPre.setType(typeMap.get(predecessorRelationships.getType()));
+                jdglMainPlanItemPre.setType(predecessorRelationships.getType());
                 returnList.add(jdglMainPlanItemPre);
             }
         }

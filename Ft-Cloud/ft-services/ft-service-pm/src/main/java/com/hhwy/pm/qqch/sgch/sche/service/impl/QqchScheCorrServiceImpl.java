@@ -89,7 +89,7 @@ public class QqchScheCorrServiceImpl implements IQqchScheCorrService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     @Override
     public void saveList(List<QqchScheCorr> dealSaveDto) {
-        if (CollectionUtils.isEmpty(dealSaveDto)) throw new CustomBusinessException("纠偏措施不能为空");
+        if (CollectionUtils.isEmpty(dealSaveDto)) return;
         this.checkData(dealSaveDto);
         this.qqchScheCorrMapper.insertQqchScheCorrList(dealSaveDto);
 

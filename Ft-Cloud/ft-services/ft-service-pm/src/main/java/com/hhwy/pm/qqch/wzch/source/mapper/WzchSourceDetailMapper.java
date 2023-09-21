@@ -95,6 +95,7 @@ public interface WzchSourceDetailMapper {
 
     List<WzchSourceDetail> selectByMaterialCodeAndMaterialStandard(List<WzchSourceDetail> removeWzchSourceDetail);
 
+    int deleteDirectSourceByVersion(BigDecimal version);
     /**
      * 直接删除来源策划
      * @param version

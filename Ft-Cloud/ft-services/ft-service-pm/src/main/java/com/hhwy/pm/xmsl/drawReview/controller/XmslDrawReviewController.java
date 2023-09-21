@@ -5,8 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.core.system.SystemApiService;
-import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewRelation;
@@ -14,12 +15,10 @@ import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewWbsService;
-import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
-import org.apache.tomcat.util.bcel.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
@@ -46,16 +45,6 @@ public class XmslDrawReviewController extends BaseController{
     Logger logger = LoggerFactory.getLogger(XmslDrawReviewController.class);
     @Autowired
     private IXmslDrawReviewService xmslDrawReviewService;
-    @Autowired
-    private SystemApiService systemApiService;
-    @Autowired
-    private IXmslDrawReviewWbsService drawReviewWbsService;
-    @Autowired
-    private IXmslDrawReviewListService drawReviewListService;
-    @Autowired
-    private IXmslWbsService wbsService;
-    @Autowired
-    private IXmslContractListService listService;
 
 
     @PreAuthorize(hasPermi = "xmslDrawReview:historyList")
@@ -63,6 +52,7 @@ public class XmslDrawReviewController extends BaseController{
     public AjaxResult getXmslDrawReviewList(@Validated(ValidationGroups.Select.class) XmslDrawReview xmslDrawReviewParam){
         startPage();
         List<XmslDrawReview> xmslDrawReviewList = xmslDrawReviewService.getXmslDrawReviewList(xmslDrawReviewParam);
+        FlowInfoSearchUtil.getFlowInfo(xmslDrawReviewList, FlowEnum.XMSL_DRAW_REVIEW);
         return getDataTableAjaxResult(xmslDrawReviewList);
     }
 
@@ -78,6 +68,7 @@ public class XmslDrawReviewController extends BaseController{
         Integer hasChange = xmslDrawReviewService.hasChange();
         if(drawReview != null)
             drawReview.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,hasChange));
+        FlowInfoSearchUtil.getFlowInfo(drawReview, FlowEnum.XMSL_DRAW_REVIEW);
         return AjaxResult.success(drawReview==null?new HashMap<>(2):drawReview);
     }
 
@@ -94,6 +85,7 @@ public class XmslDrawReviewController extends BaseController{
             last.setValid(Constant.NO_INT);
             new AddBaseInfoUtil<>().add(last);
         }
+        FlowInfoSearchUtil.getFlowInfo(last, FlowEnum.XMSL_DRAW_REVIEW);
         return AjaxResult.success(last);
     }
 
@@ -178,17 +170,8 @@ public class XmslDrawReviewController extends BaseController{
         return AjaxResult.success();
     }
 
-    /**
-     * 审批监听器
-     * @param map
-     * @return
-     */
-    @PostMapping("/finishFlow")
-    public AjaxResult finishFlow(@RequestBody Map map){
-        Long businessId = ObjectUtils.nvlLong(((Map)((Map)map.get("execution")).get("variables")).get("businessId")) ;
-//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);;
-//        Map varMap = delegateTask.getVariables();
-//        xmslWbsMainService.finishFlow(ObjectUtils.nvlLong(varMap.get("businessId")));
+    @PostMapping("/listener")
+    public AjaxResult listener(@RequestParam("id") Long businessId){
         xmslDrawReviewService.finishFlow(businessId);
         return AjaxResult.success();
     }

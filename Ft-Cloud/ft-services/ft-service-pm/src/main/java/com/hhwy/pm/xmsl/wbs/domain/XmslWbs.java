@@ -93,13 +93,13 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      * 字段描述：名称
      */
     @JsonProperty
-    @FtExcel(name = "名称")
+    @FtExcel(name = "标准WBS名称")
     private String name;
     /**
      * 字段描述：节点类型,字典:xmsl_wbs_type
      */
     @JsonProperty
-    @FtExcel(name = "类型",dictType = "xmsl_wbs_type")
+    @FtExcel(name = "节点类型",dictType = "xmsl_wbs_type")
     @NotBlank(message = "节点类型不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String nodeType;
 
@@ -107,7 +107,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      * 字段描述：状态,0:停用,1:启用
      */
     @JsonProperty
-    @FtExcel(name = "状态",combo = {"启用","停用"},readConverterExp = "0=停用,1=启用")
+    @FtExcel(name = "启用/禁用",combo = {"启用","停用"},readConverterExp = "0=停用,1=启用")
     private Integer status;
     
     /**
@@ -159,7 +159,6 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      * 字段描述：备注/描述
      */
     @JsonProperty
-    @FtExcel(name = "备注/描述")
     private String remark;
     /**
      * 字段描述：所属区域id

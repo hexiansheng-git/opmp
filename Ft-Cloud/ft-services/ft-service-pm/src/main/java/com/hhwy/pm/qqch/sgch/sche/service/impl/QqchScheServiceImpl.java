@@ -86,7 +86,7 @@ public class QqchScheServiceImpl implements IQqchScheService {
 
             factorsService.saveList(CompileEntity.dealSaveDto(dto,iFactorList));
         } else {
-            throw new CustomBusinessException("进度影响因素不能为空");
+            factorsService.saveList(CompileEntity.dealSaveDto(dto,iFactorList));
         }
         // 保存纠偏措施
         corrService.saveList(CompileEntity.dealSaveDto(dto,dto.getCorrList()));

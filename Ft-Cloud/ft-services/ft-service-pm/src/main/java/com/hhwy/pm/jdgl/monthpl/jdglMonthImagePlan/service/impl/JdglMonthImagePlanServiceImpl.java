@@ -180,6 +180,13 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             returnList.add(imagePlan);
         }
 
+        if(!CollectionUtils.isEmpty(returnList)) {
+            for (JdglMonthImagePlan imagePlan : returnList) {
+                JdglMonthImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
+            }
+        }
+
         // 维护returnList树结构
         List<JdglMonthImagePlan> build = TreeUtil.build(returnList, null);
         jdglMonthPlanParam.setJdglMonthImagePlanList(build);

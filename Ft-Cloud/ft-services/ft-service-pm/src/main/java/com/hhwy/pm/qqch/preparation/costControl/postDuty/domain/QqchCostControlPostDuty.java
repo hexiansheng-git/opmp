@@ -6,10 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,30 +47,35 @@ public class QqchCostControlPostDuty extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "工作小组")
+    @NotNull(message = "工作小组不能为空！",groups = ValidationGroups.Save.class)
     private String workGroup;
     /**
      * 字段描述：岗位
      */
     @JsonProperty
     @Excel(name = "岗位")
+    @NotNull(message = "岗位不能为空！",groups = ValidationGroups.Save.class)
     private String post;
     /**
      * 字段描述：姓名
      */
     @JsonProperty
     @Excel(name = "姓名")
+    @NotNull(message = "姓名不能为空！",groups = ValidationGroups.Save.class)
     private String name;
     /**
      * 字段描述：具体负责内容
      */
     @JsonProperty
     @Excel(name = "具体负责内容")
+    @NotNull(message = "具体负责内容不能为空！",groups = ValidationGroups.Save.class)
     private String specificChargeContent;
     /**
      * 字段描述：联系电话
      */
     @JsonProperty
     @Excel(name = "联系电话")
+    @NotNull(message = "联系电话不能为空！",groups = ValidationGroups.Save.class)
     private String contactNumber;
     /**
      * 字段描述：备注/描述

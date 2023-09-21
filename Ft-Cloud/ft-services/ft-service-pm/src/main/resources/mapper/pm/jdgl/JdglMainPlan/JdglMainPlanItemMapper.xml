@@ -45,6 +45,8 @@
         <result property="actualFinishDate" column="actual_finish_date" />
         <result property="baselineStartDate" column="baseline_start_date" />
         <result property="baselineFinishDate" column="baseline_finish_date" />
+        <result property="remainingEarlyStartDate" column="remaining_early_start_date" />
+        <result property="remainingEarlyFinishDate" column="remaining_early_finish_date" />
         <result property="unit" column="unit" />
         <result property="leaf" column="leaf" />
         <result property="quantity" column="quantity" />
@@ -106,6 +108,8 @@
              ,`actual_finish_date`
              ,`baseline_start_date`
              ,`baseline_finish_date`
+             ,`remaining_early_start_date`
+             ,`remaining_early_finish_date`
              ,`unit`
              ,`leaf`
              ,`quantity`
@@ -170,6 +174,8 @@
             <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
             <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
             <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
+            <if test="remainingEarlyStartDate != null "> and `remaining_early_start_date` = #{remainingEarlyStartDate}</if>
+            <if test="remainingEarlyFinishDate != null "> and `remaining_early_finish_date` = #{remainingEarlyFinishDate}</if>
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
             <if test="quantity != null "> and `quantity` = #{quantity}</if>
@@ -236,6 +242,8 @@
             <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
             <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
             <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
+            <if test="remainingEarlyStartDate != null "> and `remaining_early_start_date` = #{remainingEarlyStartDate}</if>
+            <if test="remainingEarlyFinishDate != null "> and `remaining_early_finish_date` = #{remainingEarlyFinishDate}</if>
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
             <if test="quantity != null "> and `quantity` = #{quantity}</if>
@@ -317,6 +325,8 @@
             <if test="actualFinishDate != null ">`actual_finish_date`,</if>
             <if test="baselineStartDate != null ">`baseline_start_date`,</if>
             <if test="baselineFinishDate != null ">`baseline_finish_date`,</if>
+            <if test="remainingEarlyStartDate != null ">`remaining_early_start_date`,</if>
+            <if test="remainingEarlyFinishDate != null ">`remaining_early_finish_date`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
             <if test="quantity != null ">`quantity`,</if>
@@ -377,6 +387,8 @@
             <if test="actualFinishDate != null ">#{actualFinishDate},</if>
             <if test="baselineStartDate != null ">#{baselineStartDate},</if>
             <if test="baselineFinishDate != null ">#{baselineFinishDate},</if>
+            <if test="remainingEarlyStartDate != null ">#{remainingEarlyStartDate},</if>
+            <if test="remainingEarlyFinishDate != null ">#{remainingEarlyFinishDate},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
             <if test="quantity != null ">#{quantity},</if>
@@ -441,6 +453,8 @@
             `actual_finish_date`,
             `baseline_start_date`,
             `baseline_finish_date`,
+            `remaining_early_start_date`,
+            `remaining_early_finish_date`,
             `unit`,
             `leaf`,
             `quantity`,
@@ -502,6 +516,8 @@
                 #{item.actualFinishDate},
                 #{item.baselineStartDate},
                 #{item.baselineFinishDate},
+                #{item.remainingEarlyStartDate},
+                #{item.remainingEarlyFinishDate},
                 #{item.unit},
                 #{item.leaf},
                 #{item.quantity},
@@ -567,6 +583,8 @@
             <if test="actualFinishDate != null ">`actual_finish_date` = #{actualFinishDate},</if>
             <if test="baselineStartDate != null ">`baseline_start_date` = #{baselineStartDate},</if>
             <if test="baselineFinishDate != null ">`baseline_finish_date` = #{baselineFinishDate},</if>
+            <if test="remainingEarlyStartDate != null ">`remaining_early_start_date` = #{remainingEarlyStartDate},</if>
+            <if test="remainingEarlyFinishDate != null ">`remaining_early_finish_date` = #{remainingEarlyFinishDate},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
             <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
             <if test="quantity != null ">`quantity` = #{quantity},</if>
@@ -794,6 +812,16 @@
                     when `id`=#{item.id} then #{item.baselineFinishDate}
                 </foreach>
             </trim>
+            <trim prefix="remaining_early_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingEarlyStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="remaining_early_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingEarlyFinishDate}
+                </foreach>
+            </trim>
             <trim prefix="unit  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.unit}
@@ -934,6 +962,8 @@
             <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
             <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
             <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
+            <if test="remainingEarlyStartDate != null "> and `remaining_early_start_date` = #{remainingEarlyStartDate}</if>
+            <if test="remainingEarlyFinishDate != null "> and `remaining_early_finish_date` = #{remainingEarlyFinishDate}</if>
             <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
             <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
             <if test="quantity != null "> and `quantity` = #{quantity}</if>

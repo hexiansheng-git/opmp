@@ -14,12 +14,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 /**
  * @author cjh
  * @date 2023-09-19 11:49:57
  * @remark jdgl_main_plan_item_pre
  */
+@Data
 public class JdglMainPlanItemPre extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
@@ -175,243 +177,21 @@ public class JdglMainPlanItemPre extends BaseEntity {
     @Excel(name = "紧前作业id")
     private Long predecessorItemId;
 
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
 
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
+    /**
+     * 字段描述：作业Id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "作业Id")
+    private Long source;
 
-    @JsonIgnore
-    public Long getMainPlanId() {
-        return mainPlanId;
-    }
+    /**
+     * 字段描述：目标作业Id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    @Excel(name = "目标作业Id")
+    private Long target;
 
-    @JsonIgnore
-    public void setMainPlanId(Long mainPlanId) {
-        this.mainPlanId = mainPlanId;
-    }
-
-    @JsonIgnore
-    public String getItemCode() {
-        return itemCode;
-    }
-
-    @JsonIgnore
-    public void setItemCode(String itemCode) {
-        this.itemCode = itemCode;
-    }
-
-    @JsonIgnore
-    public String getPredecessorItemCode() {
-        return predecessorItemCode;
-    }
-
-    @JsonIgnore
-    public void setPredecessorItemCode(String predecessorItemCode) {
-        this.predecessorItemCode = predecessorItemCode;
-    }
-
-    @JsonIgnore
-    public String getPredecessorItemName() {
-        return predecessorItemName;
-    }
-
-    @JsonIgnore
-    public void setPredecessorItemName(String predecessorItemName) {
-        this.predecessorItemName = predecessorItemName;
-    }
-
-    @JsonIgnore
-    public String getType() {
-        return type;
-    }
-
-    @JsonIgnore
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    @JsonIgnore
-    public String getFileGroupId() {
-        return fileGroupId;
-    }
-
-    @JsonIgnore
-    public void setFileGroupId(String fileGroupId) {
-        this.fileGroupId = fileGroupId;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    @JsonIgnore
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getDelUser() {
-        return delUser;
-    }
-
-    @JsonIgnore
-    public void setDelUser(String delUser) {
-        this.delUser = delUser;
-    }
-
-    @JsonIgnore
-    public Date getDelTime() {
-        return delTime;
-    }
-
-    @JsonIgnore
-    public void setDelTime(Date delTime) {
-        this.delTime = delTime;
-    }
-
-    @JsonIgnore
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    @JsonIgnore
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag;
-    }
-
-    @JsonIgnore
-    public String getPtVar1() {
-        return ptVar1;
-    }
-
-    @JsonIgnore
-    public void setPtVar1(String ptVar1) {
-        this.ptVar1 = ptVar1;
-    }
-
-    @JsonIgnore
-    public String getPtVar2() {
-        return ptVar2;
-    }
-
-    @JsonIgnore
-    public void setPtVar2(String ptVar2) {
-        this.ptVar2 = ptVar2;
-    }
-
-    @JsonIgnore
-    public String getPtVar3() {
-        return ptVar3;
-    }
-
-    @JsonIgnore
-    public void setPtVar3(String ptVar3) {
-        this.ptVar3 = ptVar3;
-    }
-
-    @JsonIgnore
-    public String getPtVar4() {
-        return ptVar4;
-    }
-
-    @JsonIgnore
-    public void setPtVar4(String ptVar4) {
-        this.ptVar4 = ptVar4;
-    }
-
-    @JsonIgnore
-    public String getPtVar5() {
-        return ptVar5;
-    }
-
-    @JsonIgnore
-    public void setPtVar5(String ptVar5) {
-        this.ptVar5 = ptVar5;
-    }
-
-    @JsonIgnore
-    public String getTaskStatus() {
-        return taskStatus;
-    }
-
-    @JsonIgnore
-    public void setTaskStatus(String taskStatus) {
-        this.taskStatus = taskStatus;
-    }
-
-    @JsonIgnore
-    public Long getItemId() {
-        return itemId;
-    }
-
-    @JsonIgnore
-    public void setItemId(Long itemId) {
-        this.itemId = itemId;
-    }
-
-    @JsonIgnore
-    public Long getPredecessorItemId() {
-        return predecessorItemId;
-    }
-
-    @JsonIgnore
-    public void setPredecessorItemId(Long predecessorItemId) {
-        this.predecessorItemId = predecessorItemId;
-    }
 }

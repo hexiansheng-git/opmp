@@ -55,6 +55,37 @@ public class ActivityInfo {
     //作业逻辑关系
     List<PredecessorRelationships> relationships;
 
+    //尚需开始日期
+    private Date remainingEarlyStartDate;
+    //尚需完成日期
+    private Date remainingEarlyFinishDate;
+    //作业类型
+    private String type;
+
+    public Date getRemainingEarlyStartDate() {
+        return remainingEarlyStartDate;
+    }
+
+    public void setRemainingEarlyStartDate(Date remainingEarlyStartDate) {
+        this.remainingEarlyStartDate = remainingEarlyStartDate;
+    }
+
+    public Date getRemainingEarlyFinishDate() {
+        return remainingEarlyFinishDate;
+    }
+
+    public void setRemainingEarlyFinishDate(Date remainingEarlyFinishDate) {
+        this.remainingEarlyFinishDate = remainingEarlyFinishDate;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public List<PredecessorRelationships> getRelationships() {
         return relationships;
     }

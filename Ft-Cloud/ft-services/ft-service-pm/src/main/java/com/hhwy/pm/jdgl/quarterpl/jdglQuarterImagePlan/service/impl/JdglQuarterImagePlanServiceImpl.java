@@ -180,6 +180,13 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             returnList.add(jdglQuarterImagePlan);
         }
 
+        if(!CollectionUtils.isEmpty(returnList)) {
+            for (JdglQuarterImagePlan imagePlan : returnList) {
+                JdglQuarterImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
+            }
+        }
+
         // 维护returnList树结构
         List<JdglQuarterImagePlan> build = TreeUtil.build(returnList, null);
         jdglQuarterPlanParam.setJdglQuarterImagePlanList(build);

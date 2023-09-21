@@ -245,6 +245,7 @@ public class ListTreeUtil {
             for (T child : children) {
                 setPid.accept(child,id);
                 setSort.accept(child,sort++);
+                setLeaf.accept(node,CommonYesNo.NO);
                 recur(child, resultList, setId, setPid, setSort,setLeaf, getChildren, setChildren);
             }
         }else {

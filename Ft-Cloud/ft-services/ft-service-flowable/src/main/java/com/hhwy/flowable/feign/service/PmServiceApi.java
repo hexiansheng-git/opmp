@@ -75,6 +75,18 @@ public interface PmServiceApi {
      * @param id
      * @return
      */
-    @PostMapping("/qqchSummaryEvaluation/listener")
+    @PostMapping("/R/listener")
     AjaxResult updateQqchSummaryEvaluationProcess(@RequestParam("id") Long id);
+
+    /**
+     * 修改合同流程状态
+     */
+    @RequestMapping(value = "/xmslWbsMain/listener", method = RequestMethod.POST)
+    AjaxResult wbsMainListener(@RequestParam("id") Long id);
+
+    /**
+     * 修改图纸复核流程状态
+     */
+    @RequestMapping(value = "/xmslDrawReview/listener", method = RequestMethod.POST)
+    AjaxResult drawReviewListener(@RequestParam("id") Long id);
 }

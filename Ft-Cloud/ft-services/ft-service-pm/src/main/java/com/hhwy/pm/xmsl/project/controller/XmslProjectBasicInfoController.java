@@ -107,8 +107,8 @@ public class XmslProjectBasicInfoController extends BaseController{
      */
     @PostMapping("/update")
     public AjaxResult updateProjectBasicInfo(@Validated(ValidationGroups.Update.class) @RequestBody XmslProjectBasicInfo xmslProjectBasicInfoParam){
-        int i = projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
-        return toAjax(i);
+        projectBasicInfoService.updateProjectBasicInfo(xmslProjectBasicInfoParam);
+        return AjaxResult.success("修改成功！");
     }
     
     @PostMapping("/remove")

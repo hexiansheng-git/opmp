@@ -11,6 +11,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,7 +49,36 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
     }
 
     public List<JdglMainPlanItem> getJdglMainPlanItemListNoTree(JdglMainPlanItem jdglMainPlanItem) {
-        return jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
+        if(!CollectionUtils.isEmpty(jdglMainPlanItemList)) {
+            for (JdglMainPlanItem jdglMainPlanItem1 : jdglMainPlanItemList) {
+                jdglMainPlanItem1.setText(jdglMainPlanItem1.getItemName());
+                jdglMainPlanItem1.setParent(jdglMainPlanItem1.getPid());
+                jdglMainPlanItem1.setStart_date(jdglMainPlanItem1.getStartDate());
+//                jdglMainPlanItem1.setEnd_date(jdglMainPlanItem1.getFinishDate());
+                Integer plannedDuration = jdglMainPlanItem1.getPlannedDuration();
+                jdglMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
+                jdglMainPlanItem1.setOpen(true);
+                jdglMainPlanItem1.setType(jdglMainPlanItem1.getTaskType());
+                Date actualStartDate = jdglMainPlanItem1.getActualStartDate();
+                Date actualFinishDate = jdglMainPlanItem1.getActualFinishDate();
+                if(actualStartDate != null) {
+                    long timeS = actualStartDate.getTime();
+                    long timeF = actualFinishDate == null ? DateUtils.getNowDate().getTime() : actualFinishDate.getTime();
+                    BigDecimal progress = new BigDecimal(plannedDuration == 0 ? 0 : (timeF-timeS)/24/60/60/1000/plannedDuration);
+                    progress = progress.setScale(2, RoundingMode.HALF_UP);
+                    jdglMainPlanItem1.setProgress(progress);
+                }
+
+//                if("wbs".equals(jdglMainPlanItem1.getItemType())) {
+//                    jdglMainPlanItem1.setRender("split");
+//                }
+                if("milestone".equals(jdglMainPlanItem1.getTaskType())) {
+                    jdglMainPlanItem1.setRollup(true);
+                }
+            }
+        }
+        return jdglMainPlanItemList;
     }
 
     @Transactional

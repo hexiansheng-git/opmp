@@ -1,6 +1,8 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
@@ -22,6 +24,14 @@ import com.hhwy.utils.idworker.IdWorker;
 @Service
 public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreService {
 
+    private static Map<String,String> typeMap = new HashMap<>();
+    static {
+        typeMap.put("Finish to Start", "0");
+        typeMap.put("Start to Start", "1");
+        typeMap.put("Finish to Finish", "2");
+        typeMap.put("Start to Finish", "3");
+    }
+
     @Autowired
     private JdglMainPlanItemPreMapper jdglMainPlanItemPreMapper;
 
@@ -31,7 +41,15 @@ public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreServi
     }
 
     public List<JdglMainPlanItemPre> getJdglMainPlanItemPreList(JdglMainPlanItemPre jdglMainPlanItemPre) {
-        return jdglMainPlanItemPreMapper.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+        List<JdglMainPlanItemPre> jdglMainPlanItemPreList = jdglMainPlanItemPreMapper.getJdglMainPlanItemPreList(jdglMainPlanItemPre);
+        if(!CollectionUtils.isEmpty(jdglMainPlanItemPreList)) {
+            for (JdglMainPlanItemPre jdglMainPlanItemPre1 : jdglMainPlanItemPreList) {
+                jdglMainPlanItemPre1.setTarget(jdglMainPlanItemPre1.getItemId());
+                jdglMainPlanItemPre1.setSource(jdglMainPlanItemPre1.getPredecessorItemId());
+                jdglMainPlanItemPre1.setType(typeMap.get(jdglMainPlanItemPre1.getType()));
+            }
+        }
+        return jdglMainPlanItemPreList;
     }
 
     @Transactional

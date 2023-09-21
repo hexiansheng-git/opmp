@@ -36,10 +36,10 @@ public interface IXmslProjectBasicInfoService {
 
     /**
      * 修改项目信息
+     *
      * @param xmslProjectBasicInfo
-     * @return
      */
-    int updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
+    void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
     int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 

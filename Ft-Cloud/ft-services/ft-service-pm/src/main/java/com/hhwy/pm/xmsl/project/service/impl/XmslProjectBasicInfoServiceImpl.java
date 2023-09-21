@@ -188,11 +188,15 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     /**
      * 修改项目基本信息
+     *
      * @param xmslProjectBasicInfo
-     * @return
      */
     @Transactional
-    public int updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
+    public void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
+        xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
+
+        XmslProjectBasicInfo basicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
+        xmslProjectBasicInfo.setId(basicInfo.getId());
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
         projectBridgeStructureService.editProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
@@ -208,10 +212,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //主要材料数量
         List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList = xmslProjectBasicInfo.getXmslProjectMaterialsAmountList();
         projectMaterialsAmountService.editProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
-
-        xmslProjectBasicInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-        xmslProjectBasicInfo.setUpdateTime(DateUtils.getNowDate());
-        return xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
     }
     
     @Transactional
@@ -267,6 +267,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
             projectInfoWithOther.setContractAmount(contractInfo.getEffectiveAmout());
             projectInfoWithOther.setContractTypeInContract(contractInfo.getContractType());
             projectInfoWithOther.setContractSignDate(contractInfo.getSignDate());
+            projectInfoWithOther.setBrandName(contractInfo.getBrandName());
         }
 
         //获取前期策划小组

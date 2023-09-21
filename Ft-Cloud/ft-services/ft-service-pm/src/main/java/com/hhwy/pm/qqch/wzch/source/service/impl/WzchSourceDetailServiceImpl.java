@@ -364,6 +364,12 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         List<WzchTotalDemandDetail> list = wzchTotalDemandDetailService.selectWzchTotalDemandDetailList(queryDetail);
         if(CollectionUtils.isEmpty(list))
             return;
+        WzchSource wzchSource = new WzchSource();
+        wzchSource.setId(IdWorker.createId());
+        new AddBaseInfoUtil<>().addBaseEntity(wzchSource);
+        wzchSource.setValid("0");
+        wzchSource.setVersion(version);
+        //
         WzchTotalDemandTimeCount queryTime = new WzchTotalDemandTimeCount();
         queryTime.setVersion(version);
         List<WzchTotalDemandTimeCount> timeList = wzchTotalDemandTimeCountMapper.selectWzchTotalDemandTimeCountList(queryTime);
@@ -376,6 +382,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             BeanUtils.copyProperties(temp, tempSource);
             new AddBaseInfoUtil<>().addBaseEntity(tempSource);
             tempSource.setValid(Constant.NO_INT+"");
+            tempSource.setSourceId(wzchSource.getId());
             detailList.add(tempSource);
         }
         for (int i = 0; i < timeList.size(); i++) {
@@ -389,9 +396,13 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             detailTimeList.add(tempSource);
         }
         //3、清理当前版本数据
+        wzchSourceDetailMapper.deleteDirectSourceByVersion(version);
         wzchSourceDetailMapper.deleteDirectByVersion(version);
         wzchSourceDetailMapper.deleteTimeDirectByVersion(version);
-        //3、插入来源策划、明细、年份明细                    
+
+
+        wzchSourceService.insertWzchSource(wzchSource);
+        //3、插入来源策划、明细、年份明细
         if(CollectionUtils.isNotEmpty(detailList))
             wzchSourceDetailMapper.batchInsert(detailList);
         if(CollectionUtils.isNotEmpty(detailTimeList))
