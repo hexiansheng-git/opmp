@@ -104,7 +104,7 @@ public class QqchEmergencyExerciseControl extends CommonBaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "演练队伍id")
-    private Long teamId;
+    private String teamId;
     /**
      * 字段描述：演练队伍
      */

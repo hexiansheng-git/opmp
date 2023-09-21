@@ -1,14 +1,18 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.excel.Util;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractPayinfoVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,8 +21,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -32,6 +40,9 @@ public class XmslContractPayinfoController extends BaseController {
 
     @Autowired
     private IXmslContractPayinfoService xmslContractPayinfoService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     private static final  String type="rate_type";
@@ -101,14 +112,30 @@ public class XmslContractPayinfoController extends BaseController {
         try {
             ExcelUtils<XmslContractPayinfoVo> util = new ExcelUtils<>(XmslContractPayinfoVo.class);
             List<XmslContractPayinfoVo> xmslContractPayinfoVos = util.importExcel(file.getInputStream());
+
             //字典项处理
-            for (XmslContractPayinfoVo xmslContractPayinfoVo : xmslContractPayinfoVos) {
+            StringBuilder sb = new StringBuilder();
+            Map<String, String> allCurrency = CommonServiceUtil.getAllCurrency();
+            for (int i = 0; i < xmslContractPayinfoVos.size(); i++) {
+                XmslContractPayinfoVo xmslContractPayinfoVo = xmslContractPayinfoVos.get(i);
+                //汇率类型
                 String rateType = xmslContractPayinfoVo.getRateType();
                 Util util1 = new Util();
                 String value = util1.reverseDict(type, rateType);
                 xmslContractPayinfoVo.setRateType(value);
+                //币种
+                String currencyName = xmslContractPayinfoVo.getCurrencyName();
+                if (allCurrency.containsKey(currencyName)) {
+                    xmslContractPayinfoVo.setCurrencyName(currencyName);
+                }else {
+                    sb.append("第"+(i+1)+"条数据币种名称："+ currencyName +"无法匹配，请重新填写\r\n");
+                }
             }
-            return AjaxResult.success(xmslContractPayinfoVos);
+            if (StringUtils.isEmpty(sb.toString())){
+                return AjaxResult.success(xmslContractPayinfoVos);
+            }else {
+                return AjaxResult.error("400", sb);
+            }
         }catch (Exception e){
             throw new RuntimeException("导入失败！");
         }
