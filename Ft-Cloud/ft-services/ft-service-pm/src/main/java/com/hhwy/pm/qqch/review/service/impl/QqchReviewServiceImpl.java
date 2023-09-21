@@ -1,12 +1,7 @@
 package com.hhwy.pm.qqch.review.service.impl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -23,21 +18,21 @@ import com.hhwy.pm.qqch.review.mapper.ReviewMapper;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.BusinessTaskResultUtil;
 import com.hhwy.utils.EntityUtils;
-import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -332,7 +327,9 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                         EntityUtils.setUpdateInfo(review);
                     }
                 }
-                this.reviewMapper.updateQqchReviewList(qqchReviewList);
+                if(!CollectionUtils.isEmpty(qqchReviewList)){
+                    this.reviewMapper.updateQqchReviewList(qqchReviewList);
+                }
             }
         } finally {
             RedissonLockUtil.unlock(stageIdentity);
