@@ -1,14 +1,15 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeService;
-import org.springframework.web.bind.annotation.*;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -34,6 +35,16 @@ public class QqchComparisonSchemeController extends BaseController {
     public AjaxResult getQqchComparisonSchemeVo(BigDecimal version) {
         QqchComparisonSchemeVo qqchComparisonSchemeVo = qqchComparisonSchemeService.getQqchComparisonSchemeVo(version);
         return AjaxResult.success(qqchComparisonSchemeVo);
+    }
+
+    /**
+     * 获取初始化表格
+     * @return
+     */
+    @GetMapping("init")
+    public AjaxResult initTable(){
+        QqchComparisonScheme init = qqchComparisonSchemeService.init();
+        return AjaxResult.success(init);
     }
 
     /**

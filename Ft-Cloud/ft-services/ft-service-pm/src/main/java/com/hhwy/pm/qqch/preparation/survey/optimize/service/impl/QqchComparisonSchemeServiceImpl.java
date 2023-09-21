@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -17,12 +18,16 @@ import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchem
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +67,7 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
      * @param version
      */
     @Override
+    @Transactional
     public QqchComparisonSchemeVo getQqchComparisonSchemeVo(BigDecimal version) {
         QqchComparisonSchemeVo qqchComparisonSchemeVo = new QqchComparisonSchemeVo();
 
@@ -77,68 +83,64 @@ public class QqchComparisonSchemeServiceImpl implements IQqchComparisonSchemeSer
         List<QqchComparisonSchemeContent> qqchComparisonSchemeContentList = qqchComparisonSchemeContentMapper.getQqchComparisonSchemeContentList(version);
 
 
-        for (QqchComparisonScheme scheme : qqchComparisonSchemeList) {
-            Long id = scheme.getId();
-            //行数
-            Integer rowCount = scheme.getRowCount();
+        if(CollectionUtils.isEmpty(qqchComparisonSchemeList)){
+            //当前没有方案，需要初始化
+            QqchComparisonScheme init = this.init();
+            qqchComparisonSchemeList.add(init);
+        }else {
+            for (QqchComparisonScheme scheme : qqchComparisonSchemeList) {
+                Long id = scheme.getId();
+                //行数
+                Integer rowCount = scheme.getRowCount();
 
-            //组装表头
-            List<QqchComparisonSchemeHeader> headerList = new ArrayList<>();
-            for (QqchComparisonSchemeHeader comparisonSchemeHeader : qqchComparisonSchemeHeaderList) {
-                Long schemeId = comparisonSchemeHeader.getSchemeId();
-                if(id.equals(schemeId)){
-                    headerList.add(comparisonSchemeHeader);
-                }
-            }
-            scheme.setHeaderList(headerList);
-
-            //组装每一行
-            List<List<QqchComparisonSchemeContent>> contentListList = new ArrayList<>();
-            for (int i = 1; i <= rowCount; i++) {
-                List<QqchComparisonSchemeContent> row = new ArrayList<>();
-                for (QqchComparisonSchemeContent content : qqchComparisonSchemeContentList) {
-                    Long schemeId = content.getSchemeId();
-                    /*行号*/
-                    int rownum = content.getRownum();
-                    if(schemeId.equals(id) && rownum == i){
-                        row.add(content);
+                //组装表头
+                List<QqchComparisonSchemeHeader> headerList = new ArrayList<>();
+                for (QqchComparisonSchemeHeader comparisonSchemeHeader : qqchComparisonSchemeHeaderList) {
+                    Long schemeId = comparisonSchemeHeader.getSchemeId();
+                    if(id.equals(schemeId)){
+                        headerList.add(comparisonSchemeHeader);
                     }
                 }
-                contentListList.add(row);
-            }
-            scheme.setContentListList(contentListList);
-        }
+                scheme.setHeaderList(headerList);
 
-//        //表头单元格组装
-//        for (QqchComparisonSchemeHeader comparisonSchemeHeader : qqchComparisonSchemeHeaderList) {
-//            Long id = comparisonSchemeHeader.getId();
-//            List<QqchComparisonSchemeContent> contentList = new ArrayList<>();
-//            for (QqchComparisonSchemeContent comparisonSchemeContent : qqchComparisonSchemeContentList) {
-//                Long headerId = comparisonSchemeContent.getHeaderId();
-//                if(headerId.equals(id)){
-//                    contentList.add(comparisonSchemeContent);
-//                }
-//            }
-//            comparisonSchemeHeader.setContentList(contentList);
-//        }
-//
-//        //方案组装表头
-//        for (QqchComparisonScheme qqchComparisonScheme : qqchComparisonSchemeList) {
-//            Long id = qqchComparisonScheme.getId();
-//            List<QqchComparisonSchemeHeader> headerList = new ArrayList<>();
-//            for (QqchComparisonSchemeHeader comparisonSchemeHeader : qqchComparisonSchemeHeaderList) {
-//                Long schemeId = comparisonSchemeHeader.getSchemeId();
-//                if(id.equals(schemeId)){
-//                    headerList.add(comparisonSchemeHeader);
-//                }
-//            }
-//            qqchComparisonScheme.setHeaderList(headerList);
-//        }
+                //组装每一行
+                List<List<QqchComparisonSchemeContent>> contentListList = new ArrayList<>();
+                for (int i = 1; i <= rowCount; i++) {
+                    List<QqchComparisonSchemeContent> row = new ArrayList<>();
+                    for (QqchComparisonSchemeContent content : qqchComparisonSchemeContentList) {
+                        Long schemeId = content.getSchemeId();
+                        /*行号*/
+                        int rownum = content.getRownum();
+                        if(schemeId.equals(id) && rownum == i){
+                            row.add(content);
+                        }
+                    }
+                    contentListList.add(row);
+                }
+                scheme.setContentListList(contentListList);
+            }
+        }
 
         qqchComparisonSchemeVo.setVersion(version);
         qqchComparisonSchemeVo.setStageIdentity(qqchReviewService.getStage());
         qqchComparisonSchemeVo.setQqchComparisonSchemeList(qqchComparisonSchemeList);
         return qqchComparisonSchemeVo;
+    }
+
+
+    /**
+     * 初始化数据
+     */
+    @Override
+    @Transactional
+    public QqchComparisonScheme init(){
+        try {
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/2_5_5_scheme.json");
+            String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            return JSONObject.parseObject(json, QqchComparisonScheme.class);
+        }catch (IOException e){
+            throw new RuntimeException("初始化数据失败！");
+        }
     }
 
     /**
