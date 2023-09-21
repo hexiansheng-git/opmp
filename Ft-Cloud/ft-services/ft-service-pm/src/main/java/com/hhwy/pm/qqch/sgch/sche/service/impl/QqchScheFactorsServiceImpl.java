@@ -13,6 +13,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -89,6 +90,7 @@ public class QqchScheFactorsServiceImpl implements IQqchScheFactorsService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     public void saveList(List<QqchScheFactors> dealSaveDto) {
+        if (CollectionUtils.isEmpty(dealSaveDto)) return;
         this.checkData(dealSaveDto);
         for (QqchScheFactors qqchScheFactors : dealSaveDto) {
             qqchScheFactors.setId(IdWorker.createId());
