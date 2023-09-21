@@ -12,7 +12,10 @@ import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.excel.FtExcelEnum;
 import com.hhwy.utils.excel.FtExcelUtil;
+import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -53,7 +57,7 @@ public class QqchTaxGlobalController extends BaseController {
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchTaxGlobal dto) {
         CompileEntity<List<QqchTaxGlobal>> qqchTaxGlobalList = null;
         try {
-            qqchTaxGlobalList = qqchTaxGlobalService.list(dto.dealListDto() == null ? new QqchTaxGlobal() : dto.dealListDto());
+            qqchTaxGlobalList = qqchTaxGlobalService.list(CompileEntity.dealListDto(dto.getVersion(),dto));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -66,12 +70,49 @@ public class QqchTaxGlobalController extends BaseController {
         String yearStr = params.getYearStr();
         CommonAssert.notBlank(yearStr,"年份不能为空");
         List<QqchTaxGlobal> qqchTaxGlobals = params.dealSaveDto();
+        qqchTaxGlobals = treeToListWithLevel(qqchTaxGlobals);
         for (QqchTaxGlobal qqchTaxGlobal : qqchTaxGlobals) {
-            qqchTaxGlobal.setYear(Integer.valueOf(params.getYearStr()));
+            qqchTaxGlobal.setYear(Integer.valueOf(yearStr));
             EntityUtils.setCreateUpdateInfo(qqchTaxGlobal);
         }
         qqchTaxGlobalService.save(qqchTaxGlobals);
         return AjaxResult.success(params);
+    }
+
+
+
+    public static  List<QqchTaxGlobal> treeToListWithLevel(List<QqchTaxGlobal> source) {
+        List<QqchTaxGlobal> result = new ArrayList<>();
+        if (CollectionUtils.isEmpty(source)) {
+            return result;
+        }
+
+        int sort = 1;
+        for (QqchTaxGlobal node : source) {
+            node.setSort(sort++);
+            node.setLevel(splitWithLevel(node, result, 0));
+        }
+        return result;
+    }
+
+
+
+    private static  int splitWithLevel(QqchTaxGlobal node, List<QqchTaxGlobal> resultList, int level) {
+        level++;
+        Long id = IdWorker.createId();
+        int sort = 1;
+        List<QqchTaxGlobal> children = node.getChildren();
+        node.setId(id);
+        node.setChildren(null);
+        resultList.add(node);
+        if (!CollectionUtils.isEmpty(children)) {
+            for (QqchTaxGlobal child : children) {
+                child.setPid(id);
+                child.setSort(sort++);
+                child.setLevel(splitWithLevel(child, resultList, level));
+            }
+        }
+        return level;
     }
 
     @PreAuthorize(hasPermi = "qqchTaxGlobal:add")
@@ -106,11 +147,10 @@ public class QqchTaxGlobalController extends BaseController {
         return toAjax(qqchTaxGlobalService.deleteQqchTaxGlobalByPks(qqchTaxGlobalPkList));
     }
 
-    @GetMapping("/export")
-    public void export(HttpServletResponse response, QqchTaxGlobal qqchTaxGlobalParam) throws IOException {
-        CompileEntity<List<QqchTaxGlobal>> list = qqchTaxGlobalService.list(qqchTaxGlobalParam);
+    @PostMapping("/export")
+    public void export(HttpServletResponse response,@RequestBody List<QqchTaxGlobal> qqchTaxGlobalParam) throws IOException {
         FtExcelUtil<QqchTaxGlobal> util = new FtExcelUtil<>(QqchTaxGlobal.class);
-        util.exportWithTemplate(response, list.getDto(), 3, FtExcelEnum.QQCH_TAX_GLOBAL.getTemplateName(), "sheet1");
+        util.exportWithTemplate(response, qqchTaxGlobalParam, 3, "exportTaxGlobal.xlsx", "sheet1");
     }
 
 

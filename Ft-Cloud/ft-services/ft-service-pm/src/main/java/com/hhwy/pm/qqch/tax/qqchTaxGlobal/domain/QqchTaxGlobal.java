@@ -224,15 +224,15 @@ public class QqchTaxGlobal extends CompileEntity<QqchTaxGlobal> {
     @JsonProperty
     private String valid;
     /**
-     * 字段描述：预留字段3
+     * 字段描述：树id
      */
     @JsonProperty
-    private String ptVar3;
+    private String treeId;
     /**
-     * 字段描述：预留字段4
+     * 字段描述：树父级id
      */
     @JsonProperty
-    private String ptVar4;
+    private String treePid;
     /**
      * 字段描述：预留字段5
      */

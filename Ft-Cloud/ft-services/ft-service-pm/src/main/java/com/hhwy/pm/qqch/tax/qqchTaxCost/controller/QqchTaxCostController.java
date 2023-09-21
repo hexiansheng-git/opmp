@@ -1,17 +1,18 @@
 package com.hhwy.pm.qqch.tax.qqchTaxCost.controller;
 
 import com.alibaba.excel.EasyExcel;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCost;
+import com.hhwy.pm.qqch.tax.qqchTaxCost.domain.QqchTaxCostDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.service.IQqchTaxCostService;
 import com.hhwy.pm.qqch.tax.qqchTaxCost.vo.TaxCostVO;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -90,11 +91,12 @@ public class QqchTaxCostController extends BaseController {
         return toAjax(qqchTaxCostService.deleteQqchTaxCostByPks(qqchTaxCostPkList));
     }
 
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response, @RequestBody CompileEntity<TaxCostVO> dto) throws IOException {
         TaxCostVO dto1 = dto.getDto();
         List<String> yearList = dto1.getYearList();
-
+        // 排个序
+        yearList = yearList.stream().sorted(Comparator.comparing(String::valueOf)).collect(Collectors.toList());
 
         if (PmConstant.ONE.equals(dto.getDataType())) {
             List<QqchTaxCost> costList = dto1.getCostList();
@@ -104,14 +106,13 @@ public class QqchTaxCostController extends BaseController {
 
         if (PmConstant.TWO.equals(dto.getDataType())) {
             List<QqchTaxCost> otherList = dto1.getOtherList();
-            ExcelUtils<QqchTaxCost> util = new ExcelUtils<>(QqchTaxCost.class);
-            util.exportExcel(response, otherList, "其他成本明细");
+            exportDetail(response, otherList, yearList, "其他成本明细");
         }
 
         if (PmConstant.THREE.equals(dto.getDataType())) {
             List<QqchTaxCost> taxList = dto1.getTaxList();
-            ExcelUtils<QqchTaxCost> util = new ExcelUtils<>(QqchTaxCost.class);
-            util.exportExcel(response, taxList, "所得税明细");
+            exportDetail(response, taxList, yearList, "所得税明细");
+
         }
 
 
@@ -124,11 +125,22 @@ public class QqchTaxCostController extends BaseController {
 
 
         try {
-            EasyExcel.write(response.getOutputStream())
-                    // 这里放入动态头
-                    .head(getHead(yearList)).sheet("模板")
-                    // 当然这里数据也可以用 List<List<String>> 去传入
-                    .doWrite(getData(yearList, taxCostList));
+
+            if ("所得税明细".equals(sheetName)) {
+                // 两个其实就差一个字段
+                EasyExcel.write(response.getOutputStream())
+                        // 这里放入动态头
+                        .head(getTaxHead(yearList)).sheet(sheetName)
+                        // 当然这里数据也可以用 List<List<String>> 去传入
+                        .doWrite(getTaxData(yearList, taxCostList));
+            } else {
+
+                EasyExcel.write(response.getOutputStream())
+                        // 这里放入动态头
+                        .head(getHead(yearList)).sheet(sheetName)
+                        // 当然这里数据也可以用 List<List<String>> 去传入
+                        .doWrite(getData(yearList, taxCostList));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -136,16 +148,122 @@ public class QqchTaxCostController extends BaseController {
     }
 
 
-    private List<List<String>> getData(List<String> headers, List<QqchTaxCost> resList) {
 
-        return new ArrayList<>();
+    private List<List<String>> getTaxData(List<String> yearList, List<QqchTaxCost> resList) {
+
+        List<List<String>> lists = new ArrayList<>();
+
+        for (QqchTaxCost qqchTaxCost : resList) {
+            List<String> row = new ArrayList<>();
+            row.add(qqchTaxCost.getSerNum());
+            row.add(qqchTaxCost.getFeeName());
+            row.add(qqchTaxCost.getInnerAmt() == null ? "" : qqchTaxCost.getInnerAmt() + "");
+            row.add(qqchTaxCost.getLocalAmt() == null ? "" : qqchTaxCost.getLocalAmt() + "");
+            List<QqchTaxCostDetail> detailList = qqchTaxCost.getDetailList();
+            for (String year : yearList) {
+
+
+                if (!CollectionUtils.isEmpty(detailList)) {
+                    detailList.stream().filter(item -> year.equals(item.getYear())).findFirst().ifPresent(i -> {
+                        row.add(i.getInnerAmt() == null ? "" : i.getInnerAmt() + "");
+                        row.add(i.getLocalAmt() == null ? "" : i.getLocalAmt() + "");
+                    });
+                }
+            }
+            lists.add(row);
+        }
+
+
+        return lists;
     }
 
-    private List<List<String>> getHead(List<String> headers) {
 
-        // 拍个序
-        headers = headers.stream().sorted(Comparator.comparing(String::valueOf)).collect(Collectors.toList());
+    private List<List<String>> getData(List<String> yearList, List<QqchTaxCost> resList) {
+
+        List<List<String>> lists = new ArrayList<>();
+
+        for (QqchTaxCost qqchTaxCost : resList) {
+            List<String> row = new ArrayList<>();
+            row.add(qqchTaxCost.getSerNum());
+            row.add(qqchTaxCost.getFeeName());
+            row.add(qqchTaxCost.getInnerAmt() == null ? "" : qqchTaxCost.getInnerAmt() + "");
+            row.add(qqchTaxCost.getReqAmt() == null ? "" : qqchTaxCost.getReqAmt() + "");
+            row.add(qqchTaxCost.getLocalAmt() == null ? "" : qqchTaxCost.getLocalAmt() + "");
+            List<QqchTaxCostDetail> detailList = qqchTaxCost.getDetailList();
+            for (String year : yearList) {
+
+
+                if (!CollectionUtils.isEmpty(detailList)) {
+                    detailList.stream().filter(item -> year.equals(item.getYear())).findFirst().ifPresent(i -> {
+                        row.add(i.getInnerAmt() == null ? "" : i.getInnerAmt() + "");
+                        row.add(i.getReqAmt() == null ? "" : i.getReqAmt() + "");
+                        row.add(i.getLocalAmt() == null ? "" : i.getLocalAmt() + "");
+                    });
+                }
+
+
+            }
+
+            lists.add(row);
+        }
+
+
+        return lists;
+    }
+
+
+
+    private List<List<String>> getTaxHead(List<String> yearList) {
+
         List<List<String>> list = new ArrayList<>();
+
+
+        List<String> ser = new ArrayList<>();
+        ser.add("序号");
+        list.add(ser);
+
+        List<String> hMaeCode = new ArrayList<>();
+        hMaeCode.add("费用名称");
+        list.add(hMaeCode);
+
+        List<String> sum1 = new ArrayList<>();
+        sum1.add("合计");
+        sum1.add("内账");
+        list.add(sum1);
+
+
+        List<String> sum3 = new ArrayList<>();
+        sum3.add("合计");
+        sum3.add("属地账策划");
+        list.add(sum3);
+
+
+        for (String year : yearList) {
+            List<String> head0 = new ArrayList<>();
+            head0.add(year);
+            head0.add("内账");
+            list.add(head0);
+
+
+            List<String> head02 = new ArrayList<>();
+            head02.add(year);
+            head02.add("属地账策划");
+            list.add(head02);
+        }
+
+
+        return list;
+    }
+    
+
+    private List<List<String>> getHead(List<String> yearList) {
+
+        List<List<String>> list = new ArrayList<>();
+
+
+        List<String> ser = new ArrayList<>();
+        ser.add("序号");
+        list.add(ser);
 
         List<String> hMaeCode = new ArrayList<>();
         hMaeCode.add("费用名称");
@@ -168,13 +286,21 @@ public class QqchTaxCostController extends BaseController {
         list.add(sum3);
 
 
-        for (String header : headers) {
+        for (String year : yearList) {
             List<String> head0 = new ArrayList<>();
-            head0.add(header);
+            head0.add(year);
             head0.add("内账成本");
-            head0.add("符合属地账要求成本");
-            head0.add("属地账策划成本");
             list.add(head0);
+
+            List<String> head01 = new ArrayList<>();
+            head01.add(year);
+            head01.add("符合属地账要求成本");
+            list.add(head01);
+
+            List<String> head02 = new ArrayList<>();
+            head02.add(year);
+            head02.add("属地账策划成本");
+            list.add(head02);
         }
 
 

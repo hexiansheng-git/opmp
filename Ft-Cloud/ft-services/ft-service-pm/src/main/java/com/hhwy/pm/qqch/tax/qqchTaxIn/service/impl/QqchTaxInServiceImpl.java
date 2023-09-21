@@ -26,6 +26,7 @@ import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -317,22 +318,36 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     public List<String> getYearList() {
 
 
-        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
-
-        ProjectInfo projectInfo = jdglData4P6Service.getProjectInfo(projectBasicInfo.getProjectCode());
-
-        // 开始时间 
-        Date startDate = projectInfo.getStartDate();
-        //结束时间
-        Date finishDate = projectInfo.getFinishDate();
-
-        List<Date> dateList = FtDateUtils.getDateList(startDate, finishDate);
-
-        // 获取p6的计划开始时间和结束时间
         ArrayList<String> res = new ArrayList<>();
-        for (Date date : dateList) {
-            res.add(FtDateUtils.getYear(date) + "");
-        }
+        
+        // TODO 目前掉不通 先注释
+//        try {
+//            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+//
+//            ProjectInfo projectInfo = jdglData4P6Service.getProjectInfo(projectBasicInfo.getProjectCode());
+//
+//            // 开始时间 
+//            Date startDate = projectInfo.getStartDate();
+//            //结束时间
+//            Date finishDate = projectInfo.getFinishDate();
+//
+//            List<Date> dateList = FtDateUtils.getDateList(startDate, finishDate);
+//
+//            // 获取p6的计划开始时间和结束时间
+//            res = new ArrayList<>();
+//            for (Date date : dateList) {
+//                res.add(FtDateUtils.getYear(date) + "");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            res.add("2023");
+//            res.add("2024");
+//            res.add("2025");
+//        }
+
+        res.add("2023");
+        res.add("2024");
+        res.add("2025");
         return res;
     }
 
