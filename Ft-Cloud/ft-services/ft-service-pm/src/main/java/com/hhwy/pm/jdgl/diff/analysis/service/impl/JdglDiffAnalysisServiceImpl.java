@@ -16,6 +16,7 @@ import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisPathService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisService;
 import com.hhwy.pm.jdgl.diff.analysis.service.IJdglDiffAnalysisSvService;
 import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
+import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheDiff;
 import com.hhwy.pm.qqch.sgch.sche.dto.QqchScheDTO;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
@@ -156,6 +157,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
                     if(sumMin.compareTo(sumMaxScore) < 0 && sumMin.compareTo(sumMinScore) >= 0) {
                         jdglDiffAnalysis.setValueGrade(score);
+                        countTotalGrade(jdglDiffAnalysis);
                     }
                 }
             }
@@ -164,6 +166,85 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         sysSyncInfoService.pushJdglDiffAnalysis(jdglDiffAnalysis);
 
         return jdglDiffAnalysisMapper.updateJdglDiffAnalysis(jdglDiffAnalysis);
+    }
+
+    /**
+     * 计算总得分及风险等级
+     * @param jdglDiffAnalysis
+     * @return
+     */
+    public JdglDiffAnalysis countTotalGrade(JdglDiffAnalysis jdglDiffAnalysis) {
+
+        if(jdglDiffAnalysis == null) {
+            return jdglDiffAnalysis;
+        }
+
+        if(jdglDiffAnalysis.getValueGrade() == null || jdglDiffAnalysis.getCorrectGrade() == null) {
+            return jdglDiffAnalysis;
+        }
+
+        // 总得分
+        BigDecimal thisTotalGrage = new BigDecimal(0);
+        // 修改前总得分
+        BigDecimal oldTotalGrage = jdglDiffAnalysis.getTotalGrade();
+
+        // 累计计量产值/累计施工产值得分
+        thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getValueGrade());
+
+        // 修正得分
+        thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getCorrectGrade());
+
+        // S曲线差异得分
+        if(jdglDiffAnalysis.getSDiffGrade() != null) {
+            thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getSDiffGrade());
+        }
+
+        // 关键线路形象进度得分
+        if(jdglDiffAnalysis.getKeyGrade() != null) {
+            thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getKeyGrade());
+        }
+
+        // 合同超期得分
+        if(jdglDiffAnalysis.getContractOverGrade() != null) {
+            thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getContractOverGrade());
+        }
+
+        // 重要性得分
+        if(jdglDiffAnalysis.getImportanceGrade() != null) {
+            thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getImportanceGrade());
+        }
+
+        // 重要性得分
+        if(jdglDiffAnalysis.getScaleGrade() != null) {
+            thisTotalGrage = thisTotalGrage.add(jdglDiffAnalysis.getScaleGrade());
+        }
+
+        jdglDiffAnalysis.setTotalGrade(thisTotalGrage);
+
+        if(oldTotalGrage == null || thisTotalGrage.compareTo(oldTotalGrage) != 0) {
+
+            jdglDiffAnalysis.setIsWarn(true);
+
+            QqchScheDTO dto = new QqchScheDTO();
+            // 调取获取进度差异化管控策划列表接口
+            QqchScheDTO list = qqchScheService.list(dto);
+
+            if(list == null || CollectionUtils.isEmpty(list.getDiffList())) {
+                return jdglDiffAnalysis;
+            }
+
+            List<QqchScheDiff> diffList = list.getDiffList();
+            for (QqchScheDiff qqchScheDiff : diffList) {
+                BigDecimal maxScore = qqchScheDiff.getMaxScore();
+                BigDecimal minScore = qqchScheDiff.getMinScore();
+                if(thisTotalGrage.compareTo(minScore) >= 0 && thisTotalGrage.compareTo(maxScore) <= 0) {
+                    jdglDiffAnalysis.setRiskLevel(qqchScheDiff.getRiskLevel());
+                }
+            }
+
+        }
+
+        return jdglDiffAnalysis;
     }
 
     @Transactional
@@ -354,6 +435,22 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             diffAnalysis.setJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectMapList);
         }
         return jdglDiffAnalysisList;
+    }
+
+    @Override
+    public void updateGrage(String field, Long id, BigDecimal grade) {
+
+        JdglDiffAnalysis query = new JdglDiffAnalysis();
+        query.setId(id);
+        JdglDiffAnalysis jdglDiffAnalysis = getJdglDiffAnalysis(query);
+        if(jdglDiffAnalysis  == null) {
+            return;
+        }
+        if("correctGrade".equals(field)) {
+            jdglDiffAnalysis.setCorrectGrade(grade);
+            countTotalGrade(jdglDiffAnalysis);
+        }
+
     }
 
 }

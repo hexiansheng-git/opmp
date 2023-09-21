@@ -59,7 +59,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 Integer plannedDuration = jdglMainPlanItem1.getPlannedDuration();
                 jdglMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
                 jdglMainPlanItem1.setOpen(true);
-                jdglMainPlanItem1.setType(jdglMainPlanItem1.getTaskType());
+//                jdglMainPlanItem1.setType("task");
                 Date actualStartDate = jdglMainPlanItem1.getActualStartDate();
                 Date actualFinishDate = jdglMainPlanItem1.getActualFinishDate();
                 if(actualStartDate != null) {
@@ -73,7 +73,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
 //                if("wbs".equals(jdglMainPlanItem1.getItemType())) {
 //                    jdglMainPlanItem1.setRender("split");
 //                }
-                if("milestone".equals(jdglMainPlanItem1.getTaskType())) {
+                if(jdglMainPlanItem1.getTaskType() != null && jdglMainPlanItem1.getTaskType().contains("Milestone")) {
+                    jdglMainPlanItem1.setType("milestone");
                     jdglMainPlanItem1.setRollup(true);
                 }
             }

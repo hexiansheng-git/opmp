@@ -13,6 +13,8 @@ public interface IJdglData4P6Service {
 
     List<JdglMainPlanItem> initAllJdglData4P6();
 
+    List<JdglMainPlanItem> initOneJdglData4P6ByTenent(String projectId);
+
     ProjectInfo getProjectInfo(String projectCode);
 
 }
