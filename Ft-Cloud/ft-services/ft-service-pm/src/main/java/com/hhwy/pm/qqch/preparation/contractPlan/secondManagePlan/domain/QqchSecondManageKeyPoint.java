@@ -80,6 +80,18 @@ public class QqchSecondManageKeyPoint extends BaseEntity {
     @Excel(name = "关联合同条款")
     private String relatedContractClause;
     /**
+     * 字段描述：专用合同条款
+     */
+    @JsonProperty
+    @Excel(name = "专用合同条款")
+    private String specialContractClause;
+    /**
+     * 字段描述：通用合同条款
+     */
+    @JsonProperty
+    @Excel(name = "通用合同条款")
+    private String generalContractClause;
+    /**
      * 字段描述：备注/描述
      */
     @JsonProperty
