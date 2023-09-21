@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Demo服务降级处理
@@ -76,6 +77,17 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             }
             @Override
             public AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo){
+                return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            /**
+             * 根据日期和币种查询汇率
+             *
+             * @param map
+             * @return
+             */
+            @Override
+            public AjaxResult selectListRatePeriodByCodeAndCurrent(Map<String, String> map) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
             }
         };

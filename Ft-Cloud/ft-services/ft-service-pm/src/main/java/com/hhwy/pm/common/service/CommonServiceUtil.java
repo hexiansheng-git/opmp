@@ -4,16 +4,18 @@ import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
-import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.utils.ParamUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.field.FieldUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +48,10 @@ public class CommonServiceUtil {
     }
 
 
-
     /**
      * 获取美元价格
      *
-     * @param names  当地币种价格
+     * @param names 当地币种价格
      * @return 美元价格
      */
     public static Map<String, CurrencyInfo> getCurrencyInfoByNames(List<String> names) {
@@ -63,7 +64,7 @@ public class CommonServiceUtil {
 
         HashMap<String, CurrencyInfo> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
-            res.put(currencyInfo.getCurrencyName(),currencyInfo);
+            res.put(currencyInfo.getCurrencyName(), currencyInfo);
         }
         return res;
     }
@@ -79,7 +80,7 @@ public class CommonServiceUtil {
 
         HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
-            res.put(currencyInfo.getCurrencyName(),currencyInfo.getCurrencyCode());
+            res.put(currencyInfo.getCurrencyName(), currencyInfo.getCurrencyCode());
         }
         return res;
     }
@@ -131,5 +132,35 @@ public class CommonServiceUtil {
         setCurrentName(tList, "currency", "currencyName");
     }
 
+    public static Map<String, BigDecimal> getUsdRate(String periodCode, List<String> currencyList) {
+        try {
+            Map<String, String> map = new HashMap<>(2);
+            map.put("currency", String.join(",", currencyList));
+            map.put("periodCode", periodCode);
+            AjaxResult ajaxResult = systemServiceApi.selectListRatePeriodByCodeAndCurrent(map);
+            List<PeriodCurrency> periodCurrencies = JSONObject.parseArray(JSONObject.toJSONString(ajaxResult.get(AjaxResult.DATA_TAG)), PeriodCurrency.class);
+            return periodCurrencies.stream().collect(Collectors.toMap(PeriodCurrency::getCurrencyCode, PeriodCurrency::getRate));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+
+    }
+   
     
+    public static Map<String, BigDecimal> getUsdRate(List<String> currencyList) {
+        
+        try {
+            Map<String, String> map = new HashMap<>(2);
+            map.put("currency", String.join(",", currencyList));
+            map.put("periodDate", FtDateUtils.formatDate(new Date()));
+            AjaxResult ajaxResult = systemServiceApi.selectListRatePeriodByCodeAndCurrent(map);
+            List<PeriodCurrency> periodCurrencies = JSONObject.parseArray(JSONObject.toJSONString(ajaxResult.get(AjaxResult.DATA_TAG)), PeriodCurrency.class);
+            return periodCurrencies.stream().collect(Collectors.toMap(PeriodCurrency::getCurrencyCode, PeriodCurrency::getRate));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new HashMap<>();
+        }
+
+    }
 }

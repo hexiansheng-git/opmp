@@ -15,6 +15,7 @@ public interface PmConstant {
     String THREE = "3";
     String MINUS_ONE = "-1";
     String USD = "USD";
+    String CNY = "CNY";
     BigDecimal MAX_LONG_DECIMAL = new BigDecimal(Long.MAX_VALUE);
     BigDecimal MIN_LONG_DECIMAL = new BigDecimal(Long.MIN_VALUE);
     

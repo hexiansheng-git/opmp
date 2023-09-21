@@ -3,6 +3,8 @@ package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.service.CommonServiceUtil;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -186,11 +188,28 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         HashMap<String, Object> res = new HashMap<>();
         res.put("yearList", taxInService.getYearList());
 
+        
+
         ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
 
         TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
         currencyVO.setCurrency(projectBasicInfo.getLocalCurrencyCode());
         currencyVO.setCurrencyName(projectBasicInfo.getLocalCurrency());
+
+        ArrayList<String> currencyList = new ArrayList<>();
+        String localCurrencyCode = projectBasicInfo.getLocalCurrencyCode();
+        currencyList.add(localCurrencyCode);
+        currencyVO.setCurrencyName(projectBasicInfo.getLocalCurrency());
+        
+        
+        currencyList.add(PmConstant.CNY);
+        Map<String, BigDecimal> usdRate = CommonServiceUtil.getUsdRate(currencyList);
+        BigDecimal currencyRate = usdRate.get(localCurrencyCode);
+        BigDecimal cnyRate = usdRate.get(PmConstant.CNY);
+
+        currencyVO.setRate(currencyRate);
+        currencyVO.setCnyRate(cnyRate);
+
         res.put("currencyInfo", currencyVO);
 
 
