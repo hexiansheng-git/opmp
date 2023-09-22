@@ -45,7 +45,12 @@
     </resultMap>
 
     <sql id="selectSbchTotalDemandPlanDetailVo">
-        select `id`, `plan_id`, `material_type`, `material_code`, `material_name`, `material_spec`, `material_power`, `brand_ids`, `brand_names`, `material_unit`, `total_num`, `allocate_num`, `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`, `plan_exit_time`, `is_special`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`,`project_name`, `region_id`, `region_name`, `dept_id` from `sbch_total_demand_plan_detail`
+        select `id`, `plan_id`, `material_type`, `material_code`, `material_name`, `material_spec`, `material_power`
+               , `brand_ids`, `brand_names`, `material_unit`, `total_num`, `allocate_num`, `country_buy_num`, `local_buy_num`
+               , `local_lease_num`, `company_self_num`, `plan_entry_time`, `plan_exit_time`, `is_special`, `create_user`, `create_user_name`
+               , `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`
+               , `pt_var2`, `pt_var3`, `project_id`,`project_name`, `region_id`, `region_name`, `dept_id`
+        from `sbch_total_demand_plan_detail` detail
     </sql>
 
     <select id="getAllDemandDevice" resultType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
@@ -85,14 +90,7 @@
     <select id="selectSbchTotalDemandPlanDetailList"
             parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
             resultMap="SbchTotalDemandPlanDetailResult">
-        select detail.`id`, `plan_id`, detail.`material_type`,detail.`material_code`,
-        detail.`material_power`, `brand_ids`, `brand_names`, detail.`material_unit`, `total_num`, `allocate_num`,
-        `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`,
-        `plan_exit_time`, `is_special`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`,
-        detail.`update_user`, detail.`update_user_name`, detail.`update_time`,
-        detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var2`, detail.`pt_var3`,
-        detail.`project_id`,detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`,detail.material_type
-        from `sbch_total_demand_plan_detail` detail
+        <include refid="selectSbchTotalDemandPlanDetailVo"/>
         <where>
             detail.`del_flag` = 0
             <if test="planId != null ">and `plan_id` = #{planId}</if>

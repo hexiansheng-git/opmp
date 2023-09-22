@@ -88,9 +88,9 @@ public class SbchTotalDemandPlan extends MyPrepareBaseEntity {
     @NotNull(message = "所属项目不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private Long projectId;
 
-    @Excel(name = "所属项目")
-    @NotBlank(message = "所属项目名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
-    private String projectName;
+//    @Excel(name = "所属项目")
+//    @NotBlank(message = "所属项目名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+//    private String projectName;
 
     /** 区域id */
     @JsonSerialize(using= ToStringSerializer.class)
