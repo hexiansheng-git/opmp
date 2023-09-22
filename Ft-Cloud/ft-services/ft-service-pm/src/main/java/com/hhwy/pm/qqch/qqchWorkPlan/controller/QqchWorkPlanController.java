@@ -1,28 +1,24 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-import java.util.Map;
-
-import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hwj
@@ -120,13 +116,8 @@ public class QqchWorkPlanController extends BaseController {
      * 监听器
      */
     @PostMapping("/listener")
-    @ResponseBody
-    public AjaxResult listener(@RequestBody Map<String, Object> map) {
-//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);
-//        Map varMap = delegateTask.getVariables();
-//        String businessId = (String)varMap.get("businessId");
-//        xcsbCheckEquInfoXzAndZlService.listener(Long.parseLong(businessId));
-        //xcsbCheckEquInfoXzAndZlService.listener(Long.parseLong((String)map.get("businessId")));
+    public AjaxResult updateWorkPlanProcess(@RequestParam("id") Long id) {
+        qqchWorkPlanService.updateWorkPlanProcess(id);
         return AjaxResult.success("成功");
     }
 

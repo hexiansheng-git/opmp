@@ -61,6 +61,14 @@ public interface PmServiceApi {
     AjaxResult updateWorkGroupProcess(@RequestParam("id") Long id);
 
     /**
+     * 修改前期策划工作计划流程状态
+     * @param id
+     * @return
+     */
+    @PostMapping("/qqchWorkPlan/listener")
+    AjaxResult updateWorkPlanProcess(@RequestParam("id") Long id);
+
+    /**
      * 修改前期策划总结评流程状态
      *
      * @param id

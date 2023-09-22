@@ -1,10 +1,10 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.service;
 
-import java.util.List;
-import java.util.Map;
-
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hwj
@@ -44,4 +44,6 @@ public interface IQqchWorkPlanService {
      * @return
      */
     List<QqchWorkPlan> planListByTenantKey(QqchWorkPlan plan);
+
+    void updateWorkPlanProcess(Long id);
 }

@@ -9,6 +9,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.constant.CommonYesNo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -32,7 +33,6 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,6 +69,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private IQqchWorkGroupService qqchWorkGroupService;
     @Autowired
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -439,5 +441,22 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
         return list;
+    }
+
+    @Override
+    public void updateWorkPlanProcess(Long id) {
+        //所有都置为无效
+        qqchWorkPlanMapper.updateAllToInvalid();
+
+        //当前数据修改为生效，流程状态修改为结束
+        QqchWorkPlan query = new QqchWorkPlan();
+        query.setId(id);
+        QqchWorkPlan qqchWorkPlan = qqchWorkPlanMapper.getQqchWorkPlan(query);
+        qqchWorkPlan.setValid(CommonYesNo.YES);
+        qqchWorkPlan.setTaskStatus("5");
+        qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
+
+        //调用前期策划评审
+        qqchReviewService.savePlan(id);
     }
 }
