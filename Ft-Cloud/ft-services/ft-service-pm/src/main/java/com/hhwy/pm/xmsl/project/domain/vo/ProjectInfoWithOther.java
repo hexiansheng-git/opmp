@@ -279,6 +279,10 @@ public class ProjectInfoWithOther {
      * 字段描述：合同类型(字典项 contract_type)
      */
     private String contractTypeInContract;
+    /**
+     * 字段描述：品牌名称
+     */
+    private String brandName;
 
     /**
      * 合同签订日期

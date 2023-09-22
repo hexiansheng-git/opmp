@@ -67,7 +67,8 @@ public class CompileAspectImpl {
                     beforeList(arg1, tableName);
                 }
                 if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
-                    this.addConfirm(arg1);
+                    this.addConfirmAndUpdateFinishNum(arg1);
+                    
                     commonMapper.deleteByVersion(tableName, (arg1).getVersion());
                 }
             }
@@ -78,7 +79,7 @@ public class CompileAspectImpl {
                     List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
                     CompileEntity compileEntity = compileEntityList.get(0);
                     if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
-                        this.addConfirm(compileEntity);
+                        this.addConfirmAndUpdateFinishNum(compileEntity);
                         commonMapper.deleteByVersion(tableName, compileEntity.getVersion());
                     }
                     if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntity.getSubmitFlag())) {
@@ -101,10 +102,12 @@ public class CompileAspectImpl {
      *
      * @param compileEntity
      */
-    private void addConfirm(CompileEntity compileEntity) {
+    private void addConfirmAndUpdateFinishNum(CompileEntity compileEntity) {
         String reqId = compileEntity.getReqId();
         if (!redisUtils.hasKey(reqId) && "1".equals(compileEntity.getSubmitFlag())) {
+            String stage = reviewService.getStage();
             moduleConfirmCaseService.addConfirmRecord(compileEntity.getModuleIdentity(), compileEntity.getStageIdentity());
+            reviewService.updateFinishNum(stage, compileEntity.getModuleIdentity());
             redisUtils.setEx(reqId, reqId, 60000);
         }
     }

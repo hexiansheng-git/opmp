@@ -6,7 +6,6 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.ProjectInfo;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
@@ -20,11 +19,9 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
-import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
-import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +30,10 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -292,7 +292,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
             currencyVO.setCurrency(item.getCurrencyCode());
             currencyVO.setCurrencyName(item.getCurrencyName());
-            currencyVO.setRate(StringUtils.isEmpty(item.getObversionRate()) ? BigDecimal.ONE : new BigDecimal(item.getObversionRate()));
+            currencyVO.setRate(getRate(item.getObversionRate()));
             return currencyVO;
 
         }).collect(Collectors.toList());
@@ -304,6 +304,17 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         }
         return res;
     }
+
+
+    public BigDecimal getRate(String s) {
+        try {
+            return new BigDecimal(s);
+        } catch (Exception e) {
+            e.getMessage();
+            return BigDecimal.ZERO;
+        }
+    }
+
 
     public List<TaxInVO.CurrencyVO> getCurrencyInfo() {
         return this.getCurrencyInfo(null);
@@ -317,22 +328,36 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     public List<String> getYearList() {
 
 
-        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
-
-        ProjectInfo projectInfo = jdglData4P6Service.getProjectInfo(projectBasicInfo.getProjectCode());
-
-        // 开始时间 
-        Date startDate = projectInfo.getStartDate();
-        //结束时间
-        Date finishDate = projectInfo.getFinishDate();
-
-        List<Date> dateList = FtDateUtils.getDateList(startDate, finishDate);
-
-        // 获取p6的计划开始时间和结束时间
         ArrayList<String> res = new ArrayList<>();
-        for (Date date : dateList) {
-            res.add(FtDateUtils.getYear(date) + "");
-        }
+
+        // TODO 目前掉不通 先注释
+//        try {
+//            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+//
+//            ProjectInfo projectInfo = jdglData4P6Service.getProjectInfo(projectBasicInfo.getProjectCode());
+//
+//            // 开始时间 
+//            Date startDate = projectInfo.getStartDate();
+//            //结束时间
+//            Date finishDate = projectInfo.getFinishDate();
+//
+//            List<Date> dateList = FtDateUtils.getDateList(startDate, finishDate);
+//
+//            // 获取p6的计划开始时间和结束时间
+//            res = new ArrayList<>();
+//            for (Date date : dateList) {
+//                res.add(FtDateUtils.getYear(date) + "");
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            res.add("2023");
+//            res.add("2024");
+//            res.add("2025");
+//        }
+
+        res.add("2023");
+        res.add("2024");
+        res.add("2025");
         return res;
     }
 

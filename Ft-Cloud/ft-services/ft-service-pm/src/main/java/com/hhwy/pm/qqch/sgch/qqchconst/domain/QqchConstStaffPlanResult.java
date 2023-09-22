@@ -37,7 +37,11 @@ public class QqchConstStaffPlanResult extends CompileEntity<QqchConstStaffPlanRe
      */
     @JsonProperty
     private String constDesc;
-
+    /**
+     * 字段描述：施工内容
+     */
+    @JsonProperty
+    private String constContent;
     /**
      * 字段描述：中方数量
      */

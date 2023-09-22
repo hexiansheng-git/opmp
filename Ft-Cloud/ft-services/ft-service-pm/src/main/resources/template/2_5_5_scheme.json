@@ -1,0 +1,112 @@
+{
+  "comparisonScheme": "XX比选方案",
+  "rowCount": 4,
+  "headerList": [
+    {
+      "header": "比选内容",
+      "sort": 1
+    },
+    {
+      "header": "投标方案",
+      "sort": 2
+    },
+    {
+      "header": "方案一",
+      "sort": 3
+    },
+    {
+      "header": "方案二",
+      "sort": 4
+    }
+  ],
+  "contentListList": [
+    [
+      {
+        "sort": 1,
+        "rownum": 1,
+        "checked": 0
+      },
+      {
+        "sort": 2,
+        "rownum": 1,
+        "checked": 0
+      },
+      {
+        "sort": 3,
+        "rownum": 1,
+        "checked": 0
+      },
+      {
+        "sort": 4,
+        "rownum": 1,
+        "checked": 0
+      }
+    ],
+    [
+      {
+        "sort": 1,
+        "rownum": 2,
+        "checked": 0
+      },
+      {
+        "sort": 2,
+        "rownum": 2,
+        "checked": 0
+      },
+      {
+        "sort": 3,
+        "rownum": 2,
+        "checked": 0
+      },
+      {
+        "sort": 4,
+        "rownum": 2,
+        "checked": 0
+      }
+    ],
+    [
+      {
+        "sort": 1,
+        "rownum": 3,
+        "checked": 0
+      },
+      {
+        "sort": 2,
+        "rownum": 3,
+        "checked": 0
+      },
+      {
+        "sort": 3,
+        "rownum": 3,
+        "checked": 0
+      },
+      {
+        "sort": 4,
+        "rownum": 3,
+        "checked": 0
+      }
+    ],
+    [
+      {
+        "sort": 1,
+        "rownum": 4,
+        "checked": 0
+      },
+      {
+        "sort": 2,
+        "rownum": 4,
+        "checked": 0
+      },
+      {
+        "sort": 3,
+        "rownum": 4,
+        "checked": 0
+      },
+      {
+        "sort": 4,
+        "rownum": 4,
+        "checked": 0
+      }
+    ]
+  ]
+}

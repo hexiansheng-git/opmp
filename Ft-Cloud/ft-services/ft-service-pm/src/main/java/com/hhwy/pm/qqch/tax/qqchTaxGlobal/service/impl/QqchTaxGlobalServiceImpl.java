@@ -3,13 +3,17 @@ package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper.QqchTaxGlobalMapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalService;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
@@ -20,7 +24,9 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -33,6 +39,12 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
     @Resource
     private QqchTaxGlobalMapper qqchTaxGlobalMapper;
 
+    @Resource
+    private  CommonMapper commonMapper;
+    
+    @Resource
+    private  IQqchModuleConfirmCaseService moduleConfirmCaseService;
+    
 
     private static final String TN = "qqch_tax_global";
 
@@ -102,16 +114,57 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
             String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
             qqchTaxGlobalList = JSONObject.parseArray(json, QqchTaxGlobal.class);
         }
-        qqchTaxGlobalList = TreeUtil.build(qqchTaxGlobalList, null);
+        qqchTaxGlobalList = build(qqchTaxGlobalList, null);
         res.setDto(qqchTaxGlobalList);
         return res;
     }
 
 
+
+
+    public static List<QqchTaxGlobal> build(List<QqchTaxGlobal> treeNodes, Long pid) {
+        if (org.apache.commons.collections4.CollectionUtils.isEmpty(treeNodes)) {
+            return new ArrayList<>();
+        }
+        treeNodes.forEach(treeVO -> {
+
+            List<QqchTaxGlobal> nChildren = treeNodes.stream().filter((item) -> treeVO.getTreeId().equals(item.getTreePid()))
+                    .collect(Collectors.toList());
+
+            List<QqchTaxGlobal> oChildren = treeVO.getChildren();
+            if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(oChildren)) {
+                nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
+                nChildren.addAll(oChildren);
+            }
+            treeVO.setChildren(nChildren);
+        });
+        List<QqchTaxGlobal> collect;
+        if (pid == null) {
+            collect = treeNodes.stream().filter((item) -> item.getTreePid() == null)
+                    .collect(Collectors.toList());
+        } else {
+            collect = treeNodes.stream().filter((item) -> pid.equals(item.getTreePid()))
+                    .collect(Collectors.toList());
+        }
+        return collect;
+    }
+
+
     @Override
-    @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     @Transactional(rollbackFor = Exception.class)
     public void save(List<QqchTaxGlobal> dto) {
+        
+        if (CollectionUtils.isEmpty(dto)) return;
+        QqchTaxGlobal qqchTaxGlobal = dto.get(0);
+        
+        if (PmConstant.ONE.equals(qqchTaxGlobal.getSubmitFlag())){
+      
+        moduleConfirmCaseService.addConfirmRecord(qqchTaxGlobal.getModuleIdentity(), qqchTaxGlobal.getStageIdentity());
+        }
+
+
+        qqchTaxGlobalMapper.deleteByVersionAndYear(qqchTaxGlobal.getYear()+"", qqchTaxGlobal.getVersion());
+        
         this.qqchTaxGlobalMapper.insertQqchTaxGlobalList(dto);
     }
 

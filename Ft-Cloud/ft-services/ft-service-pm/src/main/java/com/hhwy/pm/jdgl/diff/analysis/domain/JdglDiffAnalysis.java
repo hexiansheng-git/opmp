@@ -258,4 +258,9 @@ public class JdglDiffAnalysis extends BaseEntity {
     @JsonProperty
 //    @Excel(name = "修正得分数据")
     private Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectList;
+
+    /**
+     * 是否预警（用于给总部推送数据时判断是否根据风险等级进行预警）
+     */
+    private Boolean isWarn;
 }

@@ -11,6 +11,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 文件服务
@@ -67,4 +68,14 @@ public interface SystemServiceApi {
     
     @PostMapping("/period/info/selectPeriodByYear")
     AjaxResult selectPeriodByYear(@RequestBody PeriodInfo periodInfo);
+
+
+    /**
+     * 根据日期和币种查询汇率
+     *
+     * @param map
+     * @return
+     */
+    @PostMapping("/periodCurrency/periodCurrency/selectListRatePeriodByCodeAndCurrent")
+    AjaxResult selectListRatePeriodByCodeAndCurrent(@RequestBody Map<String,String> map);
 }

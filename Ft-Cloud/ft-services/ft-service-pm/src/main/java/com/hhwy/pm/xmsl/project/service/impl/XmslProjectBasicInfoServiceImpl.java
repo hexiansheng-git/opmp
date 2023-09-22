@@ -267,6 +267,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
             projectInfoWithOther.setContractAmount(contractInfo.getEffectiveAmout());
             projectInfoWithOther.setContractTypeInContract(contractInfo.getContractType());
             projectInfoWithOther.setContractSignDate(contractInfo.getSignDate());
+            projectInfoWithOther.setBrandName(contractInfo.getBrandName());
         }
 
         //获取前期策划小组

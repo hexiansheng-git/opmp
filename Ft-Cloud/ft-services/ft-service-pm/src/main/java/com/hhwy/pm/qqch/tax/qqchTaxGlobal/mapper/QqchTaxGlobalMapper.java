@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -28,4 +29,6 @@ public interface QqchTaxGlobalMapper {
     int deleteQqchTaxGlobal(QqchTaxGlobal qqchTaxGlobal);
 
     int deleteQqchTaxGlobalByPks(@Param("qqchTaxGlobalPkList") List<Long> qqchTaxGlobalPkList);
+
+    void deleteByVersionAndYear(@Param("year") String year,@Param("version") BigDecimal version);
 }

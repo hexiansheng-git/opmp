@@ -33,6 +33,13 @@ public class TaxInVO {
         private String currency;
         private String currencyName;
         private BigDecimal rate;
+        private BigDecimal cnyRate;
+
+        public CurrencyVO(String currency, String currencyName, BigDecimal rate) {
+            this.currency = currency;
+            this.currencyName = currencyName;
+            this.rate = rate;
+        }
     }
 
 

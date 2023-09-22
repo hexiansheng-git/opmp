@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.diff.analysis.service;
 import com.hhwy.pm.jdgl.diff.analysis.domain.JdglDiffAnalysis;
 import com.hhwy.pm.jdgl.diff.analysis.domain.vo.DiffAnalysisQueryVo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -34,4 +35,6 @@ public interface IJdglDiffAnalysisService {
     void initDiffAnalysis();
 
     List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo);
+
+    void updateGrage(String field, Long id, BigDecimal grade);
 }

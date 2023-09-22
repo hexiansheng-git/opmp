@@ -1,34 +1,34 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.service.impl;
 
-import java.math.BigDecimal;
-import java.util.List;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.domain.QqchSafeEnvriRiskManage;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.mapper.QqchSafeEnvriRiskManageMapper;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.service.IQqchSafeEnvriRiskManageService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.vo.QqchSafeEnvriRiskManageVo;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.mapper.QqchSafeEnvriRiskManageMapper;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.service.IQqchSafeEnvriRiskManageService;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvriRiskManage.domain.QqchSafeEnvriRiskManage;
-import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zq
  * @date 2023-08-14 14:04:07
- * @remark 
+ * @remark
  */
 @Service
-public class QqchSafeEnvriRiskManageServiceImpl implements IQqchSafeEnvriRiskManageService{
+public class QqchSafeEnvriRiskManageServiceImpl implements IQqchSafeEnvriRiskManageService {
 
     @Autowired
     private QqchSafeEnvriRiskManageMapper qqchSafeEnvriRiskManageMapper;
@@ -36,7 +36,7 @@ public class QqchSafeEnvriRiskManageServiceImpl implements IQqchSafeEnvriRiskMan
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
-                                                                                                                                                                                                                                                                                                    
+
     public QqchSafeEnvriRiskManage getQqchSafeEnvriRiskManage(QqchSafeEnvriRiskManage qqchSafeEnvriRiskManage) {
         return qqchSafeEnvriRiskManageMapper.getQqchSafeEnvriRiskManage(qqchSafeEnvriRiskManage);
     }
@@ -63,7 +63,7 @@ public class QqchSafeEnvriRiskManageServiceImpl implements IQqchSafeEnvriRiskMan
         if (!CollectionUtils.isEmpty(voParam.getList())) {
             List<QqchSafeEnvriRiskManage> list = voParam.getList();
             //校验数据必填
-            if("1".equals(voParam.getButtonMark())||"2".equals(voParam.getButtonMark())){//确认
+            if ("1".equals(voParam.getButtonMark()) || "2".equals(voParam.getButtonMark())) {//确认
                 JyDetailsUtil.jyDetails(list, ValidationGroups.Save.class);
             }
 
@@ -97,15 +97,15 @@ public class QqchSafeEnvriRiskManageServiceImpl implements IQqchSafeEnvriRiskMan
         return qqchSafeEnvriRiskManageMapper.updateQqchSafeEnvriRiskManage(qqchSafeEnvriRiskManage);
     }
 
-            @Transactional
-        public int updateQqchSafeEnvriRiskManageList(List<QqchSafeEnvriRiskManage> qqchSafeEnvriRiskManageList) {
-            for (QqchSafeEnvriRiskManage qqchSafeEnvriRiskManage : qqchSafeEnvriRiskManageList) {
-                qqchSafeEnvriRiskManage.setUpdateUser(SecurityUtils.getUserName());
-                qqchSafeEnvriRiskManage.setUpdateTime(DateUtils.getNowDate());
-            }
-            return qqchSafeEnvriRiskManageMapper.updateQqchSafeEnvriRiskManageList(qqchSafeEnvriRiskManageList);
+    @Transactional
+    public int updateQqchSafeEnvriRiskManageList(List<QqchSafeEnvriRiskManage> qqchSafeEnvriRiskManageList) {
+        for (QqchSafeEnvriRiskManage qqchSafeEnvriRiskManage : qqchSafeEnvriRiskManageList) {
+            qqchSafeEnvriRiskManage.setUpdateUser(SecurityUtils.getUserName());
+            qqchSafeEnvriRiskManage.setUpdateTime(DateUtils.getNowDate());
         }
-    
+        return qqchSafeEnvriRiskManageMapper.updateQqchSafeEnvriRiskManageList(qqchSafeEnvriRiskManageList);
+    }
+
     @Transactional
     public int deleteQqchSafeEnvriRiskManage(QqchSafeEnvriRiskManage qqchSafeEnvriRiskManage) {
         qqchSafeEnvriRiskManage.setUpdateUser(SecurityUtils.getUserName());
@@ -113,10 +113,10 @@ public class QqchSafeEnvriRiskManageServiceImpl implements IQqchSafeEnvriRiskMan
         return qqchSafeEnvriRiskManageMapper.deleteQqchSafeEnvriRiskManage(qqchSafeEnvriRiskManage);
     }
 
-            @Transactional
-        public int deleteQqchSafeEnvriRiskManageByPks(List<Long> qqchSafeEnvriRiskManageList) {
-            return qqchSafeEnvriRiskManageMapper.deleteQqchSafeEnvriRiskManageByPks(qqchSafeEnvriRiskManageList);
-        }
+    @Transactional
+    public int deleteQqchSafeEnvriRiskManageByPks(List<Long> qqchSafeEnvriRiskManageList) {
+        return qqchSafeEnvriRiskManageMapper.deleteQqchSafeEnvriRiskManageByPks(qqchSafeEnvriRiskManageList);
+    }
 
     @Override
     public QqchSafeEnvriRiskManageVo getList(BigDecimal version) {

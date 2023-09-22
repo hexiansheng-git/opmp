@@ -1,12 +1,7 @@
 package com.hhwy.pm.qqch.review.service.impl;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -23,23 +18,24 @@ import com.hhwy.pm.qqch.review.mapper.ReviewMapper;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.BusinessTaskResultUtil;
 import com.hhwy.utils.EntityUtils;
-import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * @author mls
@@ -163,6 +159,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             review.setReqSubmitDate(date);
             review.setTaskStatus("0");
             review.setFinishNum(0);
+            review.setExigencyStatus(qqchWorkPlan.getExigencyStatus());
             EntityUtils.setCreateUpdateInfo(review);
             iData.add(review);
         }
@@ -279,6 +276,13 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         return review;
     }
 
+
+    /**
+     * 确认更新阶段确认功能数量
+     *
+     * @param stageIdentity  阶段
+     * @param moduleIdentity 模块唯一Id
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFinishNum(String stageIdentity, String moduleIdentity) {
@@ -302,7 +306,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 // 查询工作计划的数据
                 List<QqchWorkPlanDetail> qqchWorkPlanDetailList = workPlanDetailService.getQqchWorkPlanDetailList(where);
                 // 模块Id
-                List<String> moduleIdentityList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getItemId).map(String::valueOf).filter(Objects::nonNull).distinct().collect(toList());
+                List<String> moduleIdentityList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getItemId).filter(Objects::nonNull).map(String::valueOf).distinct().collect(toList());
                 // 编制人
                 List<String> editFirstList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorFirst).filter(Objects::nonNull).distinct().collect(toList());
                 List<String> editSecondList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorSecond).filter(Objects::nonNull).distinct().collect(toList());
@@ -318,21 +322,22 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 moduleWhere.setConfirmUserList(allConfirmList);
                 // 根据阶段 模块Id 模块负责人去记录表中查询记录数量
                 List<QqchModuleConfirmCase> qqchModuleConfirmCaseList = moduleConfirmCaseService.getModuleConfirmInfo(moduleWhere);
-                // 查询到之后根据阶段分组 其中数组数量就是确认数量
-                Map<String, List<QqchModuleConfirmCase>> stageMap = qqchModuleConfirmCaseList.stream().filter(item->StringUtils.isNotEmpty(item.getStageIdentity())).collect(Collectors.groupingBy(QqchModuleConfirmCase::getStageIdentity));
-                
+                Map<String, Integer> numMap = qqchModuleConfirmCaseList.stream().collect(toMap(QqchModuleConfirmCase::getStageIdentity, QqchModuleConfirmCase::getConfirmNum, (r1, r2) -> r1));
+                numMap = numMap == null || numMap.size() == 0 ? new HashMap<>(0) : numMap;
                 List<Review> qqchReviewList = this.reviewMapper.getQqchReviewList(new Review());
                 Map<String, List<Review>> reviewStageMap = qqchReviewList.stream().collect(Collectors.groupingBy(Review::getPlanStage));
-                for (String stage : stageMap.keySet()) {
-                    List<QqchModuleConfirmCase> qqchModuleConfirmCases = stageMap.get(stage);
+                for (String stage : numMap.keySet()) {
+                    Integer confirmNum = numMap.get(stage);
                     List<Review> reviews = reviewStageMap.get(stage);
                     if (!CollectionUtils.isEmpty(reviews)){
                         Review review = reviews.get(0);
-                        review.setFinishNum(qqchModuleConfirmCases.size());
+                        review.setFinishNum(confirmNum);
                         EntityUtils.setUpdateInfo(review);
                     }
                 }
-                this.reviewMapper.updateQqchReviewList(qqchReviewList);
+                if(!CollectionUtils.isEmpty(qqchReviewList)){
+                    this.reviewMapper.updateQqchReviewList(qqchReviewList);
+                }
             }
         } finally {
             RedissonLockUtil.unlock(stageIdentity);
