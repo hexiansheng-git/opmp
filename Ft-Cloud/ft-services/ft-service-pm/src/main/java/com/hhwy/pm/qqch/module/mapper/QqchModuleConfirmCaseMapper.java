@@ -1,10 +1,10 @@
 package com.hhwy.pm.qqch.module.mapper;
 
-import java.util.List;
-
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author han
@@ -31,5 +31,12 @@ public interface QqchModuleConfirmCaseMapper {
     int deleteQqchModuleConfirmCaseByPks(@Param("qqchModuleConfirmCasePkList") List<Long> qqchModuleConfirmCasePkList);
 
     List<QqchModuleConfirmCase> getModuleConfirmInfo(QqchModuleConfirmCase qqchModuleConfirmCase);
-    
+
+    /**
+     * 根据阶段和菜单id集合获取该阶段已确认页面数量
+     * @param stage
+     * @param menuIdList
+     * @return
+     */
+    int getConfirmNumByStage(@Param("stage") String stage,@Param("menuIdList") List<String> menuIdList);
 }

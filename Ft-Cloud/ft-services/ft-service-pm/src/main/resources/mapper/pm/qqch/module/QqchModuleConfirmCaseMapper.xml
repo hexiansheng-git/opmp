@@ -131,6 +131,15 @@
         group by a.stage_identity
     </select>
 
+    <select id="getConfirmNumByStage" resultType="java.lang.Integer">
+        select count(*) from
+            (select module_identity  from qqch_module_confirm_case where stage_identity = #{stage} group by module_identity) t
+        where t.module_identity in
+        <foreach item="menuId" collection="menuIdList" open="(" separator="," close=")">
+            #{menuId}
+        </foreach>
+    </select>
+
 
     <insert id="insertQqchModuleConfirmCase" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_module_confirm_case

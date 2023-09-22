@@ -7,7 +7,6 @@ import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
-import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
@@ -32,10 +31,8 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 /**
  * @author mls
@@ -305,36 +302,53 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 }
                 // 查询工作计划的数据
                 List<QqchWorkPlanDetail> qqchWorkPlanDetailList = workPlanDetailService.getQqchWorkPlanDetailList(where);
-                // 模块Id
-                List<String> moduleIdentityList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getItemId).filter(Objects::nonNull).map(String::valueOf).distinct().collect(toList());
-                // 编制人
-                List<String> editFirstList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorFirst).filter(Objects::nonNull).distinct().collect(toList());
-                List<String> editSecondList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorSecond).filter(Objects::nonNull).distinct().collect(toList());
-                List<String> editThirdList = qqchWorkPlanDetailList.stream().map(QqchWorkPlanDetail::getEditorThird).filter(Objects::nonNull).distinct().collect(toList());
-                
-                ArrayList<String> allConfirmList = new ArrayList<>(editFirstList);
-                allConfirmList.addAll(editSecondList);
-                allConfirmList.addAll(editThirdList);
 
-                QqchModuleConfirmCase moduleWhere = new QqchModuleConfirmCase();
-                moduleWhere.setConfirmStatus("1");
-                moduleWhere.setModuleIdentityList(moduleIdentityList);
-                moduleWhere.setConfirmUserList(allConfirmList);
-                // 根据阶段 模块Id 模块负责人去记录表中查询记录数量
-                List<QqchModuleConfirmCase> qqchModuleConfirmCaseList = moduleConfirmCaseService.getModuleConfirmInfo(moduleWhere);
-                Map<String, Integer> numMap = qqchModuleConfirmCaseList.stream().collect(toMap(QqchModuleConfirmCase::getStageIdentity, QqchModuleConfirmCase::getConfirmNum, (r1, r2) -> r1));
-                numMap = numMap == null || numMap.size() == 0 ? new HashMap<>(0) : numMap;
+                // 第一阶段的菜单id
+                List<String> firstList = qqchWorkPlanDetailList.stream()
+                        .filter(i->"1".equals(i.getIsFirst()))
+                        .map(QqchWorkPlanDetail::getItemId)
+                        .filter(Objects::nonNull)
+                        .distinct().collect(toList());
+
+                // 第2阶段的菜单id
+                List<String> secondList = qqchWorkPlanDetailList.stream()
+                        .filter(i->"1".equals(i.getIsSecond()))
+                        .map(QqchWorkPlanDetail::getItemId)
+                        .filter(Objects::nonNull).distinct().collect(toList());
+
+                // 第3阶段的菜单id
+                List<String> thirdList = qqchWorkPlanDetailList.stream()
+                        .filter(i->"1".equals(i.getIsThird()))
+                        .map(QqchWorkPlanDetail::getItemId)
+                        .filter(Objects::nonNull)
+                        .distinct().collect(toList());
+
+                // 根据阶段, 模块Id集合 去记录表中查询记录数量
+                int firstNum = moduleConfirmCaseService.getConfirmNumByStage("1",firstList);
+                int secondNum = moduleConfirmCaseService.getConfirmNumByStage("2",secondList);
+                int thirdNum = moduleConfirmCaseService.getConfirmNumByStage("3",thirdList);
+
                 List<Review> qqchReviewList = this.reviewMapper.getQqchReviewList(new Review());
-                Map<String, List<Review>> reviewStageMap = qqchReviewList.stream().collect(Collectors.groupingBy(Review::getPlanStage));
-                for (String stage : numMap.keySet()) {
-                    Integer confirmNum = numMap.get(stage);
-                    List<Review> reviews = reviewStageMap.get(stage);
-                    if (!CollectionUtils.isEmpty(reviews)){
-                        Review review = reviews.get(0);
-                        review.setFinishNum(confirmNum);
-                        EntityUtils.setUpdateInfo(review);
+
+                for (Review review : qqchReviewList) {
+                    String planStage = review.getPlanStage();
+                    switch (planStage) {
+                        case "1":
+                            review.setPlanNum(firstList.size());
+                            review.setFinishNum(firstNum);
+                            break;
+                        case "2":
+                            review.setPlanNum(secondList.size());
+                            review.setFinishNum(secondNum);
+                            break;
+                        case "3":
+                            review.setPlanNum(thirdList.size());
+                            review.setFinishNum(thirdNum);
+                            break;
+                        default:
                     }
                 }
+
                 if(!CollectionUtils.isEmpty(qqchReviewList)){
                     this.reviewMapper.updateQqchReviewList(qqchReviewList);
                 }
