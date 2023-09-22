@@ -155,7 +155,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="codeOrName != null  and codeOrName != ''">
-                and (`occupation_code` = #{codeOrName} or `occupation_name` = #{codeOrName} )
+                and (`occupation_code` like concat('%', #{codeOrName},'%' ) or `occupation_name`  like concat('%', #{codeOrName},'%' ) )
             </if>
         </where>
         order by create_time desc
