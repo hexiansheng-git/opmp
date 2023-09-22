@@ -21,8 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author zq
@@ -51,7 +53,7 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
         qqchSafeThreeTypePerson.setVersion(version);
         List<QqchSafeThreeTypePerson> qqchSafeThreeTypePersonList = qqchSafeThreeTypePersonMapper.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePerson);
         if(!ObjectNullUtil.isEmpty(qqchSafeThreeTypePersonList)){
-            List<QqchSafeThreeTypePerson> build = TreeUtil.build(qqchSafeThreeTypePersonList,0l);
+            List<QqchSafeThreeTypePerson> build = TreeUtil.build(qqchSafeThreeTypePersonList,null);
             person.setList(build);
         }else{
             ArrayList<QqchSafeThreeTypePerson> returnList = new ArrayList<>();
@@ -60,7 +62,6 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
                 QqchSafeThreeTypePerson parent = new QqchSafeThreeTypePerson();
                 parent.setId(Long.parseLong(dutiesTypeMap.get(key)));
                 parent.setDuties(key);
-                parent.setPId(0l);
                 returnList.add(parent);
             }
             person.setList(returnList);
@@ -111,9 +112,6 @@ public class QqchSafeThreeTypePersonServiceImpl implements IQqchSafeThreeTypePer
             List<QqchSafeThreeTypePerson> list = TreeUtil.treeToList(lists);
 //            LinkedHashMap<String, String> dutiesTypeMap = DictUtil.getDictData("duties_type");
             for (QqchSafeThreeTypePerson person : list) {
-                if(person.getPid()==null){
-                    person.setPid(0l);
-                }
 //                person.setId(IdWorker.createId());
                 person.setVersion(qqchSafeThreeTypePersonVo.getVersion());
                 if (qqchSafeThreeTypePersonVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
