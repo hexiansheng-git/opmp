@@ -68,8 +68,9 @@ public class XmslDrawReviewController extends BaseController{
         Integer hasChange = xmslDrawReviewService.hasChange();
         if(drawReview != null)
             drawReview.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,hasChange));
+        drawReview = drawReview==null?new XmslDrawReview():drawReview;
         FlowInfoSearchUtil.getFlowInfo(drawReview, FlowEnum.XMSL_DRAW_REVIEW);
-        return AjaxResult.success(drawReview==null?new HashMap<>(2):drawReview);
+        return AjaxResult.success(drawReview);
     }
 
     /**
