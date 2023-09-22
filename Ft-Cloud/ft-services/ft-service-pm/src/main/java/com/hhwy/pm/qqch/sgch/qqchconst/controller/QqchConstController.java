@@ -68,6 +68,16 @@ public class QqchConstController extends BaseController {
         return AjaxResult.success(qqchConstList);
     }
 
+
+
+    @PreAuthorize(hasPermi = "qqchConst:list")
+    @GetMapping("/getList")
+    public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchConst dto) {
+        QqchConst qqchConst = CompileEntity.dealListDto(dto.getVersion(), dto);
+        CompileEntity qqchConstList = qqchConstService.list(qqchConst);
+        return AjaxResult.success(qqchConstList);
+    }
+
     @PreAuthorize(hasPermi = "qqchConst:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchConst>> dtoList) {
