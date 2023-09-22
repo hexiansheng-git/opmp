@@ -74,4 +74,7 @@ public interface IQqchWorkGroupService {
     List<QqchWorkGroup> gmList(QqchWorkGroup qqchWorkGroup);
 
     void updateWorkGroupProcess(Long id);
+
+    void workGroupSetUpWarn();
+
 }

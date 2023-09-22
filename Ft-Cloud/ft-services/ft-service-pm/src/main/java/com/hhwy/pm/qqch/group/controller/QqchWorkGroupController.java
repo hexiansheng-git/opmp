@@ -115,4 +115,13 @@ public class QqchWorkGroupController extends BaseController {
         return AjaxResult.success("成功");
     }
 
+    /**
+     * 发送预警消息
+     * @return
+     */
+    @GetMapping("workGroupSetUpWarn")
+    public AjaxResult workGroupSetUpWarn() {
+        qqchWorkGroupService.workGroupSetUpWarn();
+        return AjaxResult.success();
+    }
 }
