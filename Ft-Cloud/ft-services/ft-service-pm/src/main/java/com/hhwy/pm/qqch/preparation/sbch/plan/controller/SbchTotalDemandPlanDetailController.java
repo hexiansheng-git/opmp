@@ -4,6 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
+import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.ImportSbchTotalDemandPlanDetail;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -29,7 +32,23 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
 
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private ISbchTotalDemandPlanDetailService totalDemandPlanDetailService;
 
+
+    /***
+     * 功能描述: t
+     * @param version
+     * @return com.hhwy.common.core.web.domain.AjaxResult
+     * 作者: fushudong
+     * 时间: 2023/9/22
+     */
+    @GetMapping("/syncData")
+    @ResponseBody
+    public AjaxResult syncData(BigDecimal version){
+        SbchTotalDemandPlan sbchTotalDemandPlan = totalDemandPlanDetailService.syncData(version);
+        return AjaxResult.success(sbchTotalDemandPlan);
+    }
 
     /**
      * 导入总需用详情

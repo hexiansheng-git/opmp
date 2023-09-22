@@ -48,6 +48,40 @@
         select `id`, `plan_id`, `material_type`, `material_code`, `material_name`, `material_spec`, `material_power`, `brand_ids`, `brand_names`, `material_unit`, `total_num`, `allocate_num`, `country_buy_num`, `local_buy_num`, `local_lease_num`, `company_self_num`, `plan_entry_time`, `plan_exit_time`, `is_special`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`,`project_name`, `region_id`, `region_name`, `dept_id` from `sbch_total_demand_plan_detail`
     </sql>
 
+    <select id="getAllDemandDevice" resultType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail">
+        select
+            equ_type as materialType, equ_code as materialCode, equ_name as materialName, brand as brandNames
+               ,spec as materialSpec, rated_power as materialPower, unit as materialUnit, num as totalNum, equ_sourse
+               , entry_date as planEntryTime, exit_date as planExitTime,
+            IFNULL(sum(allocate_num), 0) as allocate_num,
+            IFNULL(sum(country_buy_num), 0) as country_buy_num,
+            IFNULL(sum(local_buy_num), 0) as local_buy_num,
+            IFNULL(sum(local_lease_num), 0) as local_lease_num,
+            IFNULL(sum(company_self_num), 0) as company_self_num
+        from
+            (select unionAllDevice.*,
+                 CASE equ_sourse WHEN '1' THEN 1 END as allocate_num,
+                 CASE equ_sourse WHEN '2' THEN 1 END as country_buy_num,
+                 CASE equ_sourse WHEN '3' THEN 1 END as local_buy_num,
+                 CASE equ_sourse WHEN '4' THEN 1 END as local_lease_num,
+                 CASE equ_sourse WHEN '5' THEN 1 END as company_self_num
+             from
+                 (select *
+                  from
+                      (select '' as equ_type, equ_code,equ_name,'' as brand, spec,rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_construction_equipment where del_flag = '0' and valid = '1') a
+                  UNION
+                  (select '' as equ_type, equ_code,equ_name,'' as brand, spec,rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_traffic_car where del_flag = '0' and valid = '1')
+                  UNION
+                  (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_measuring_instrument where del_flag = '0' and valid = '1')
+                  UNION
+                  (select equ_type,equ_code,equ_name,brand,spec,'' as rated_power, unit, num,equ_sourse, entry_date, exit_date, version from qqch_small_machinery where del_flag = '0' and valid = '1')
+                 )unionAllDevice
+             where version = #{version} and equ_code IS NOT NULL and equ_name IS NOT NULL and equ_type IS NOT NULL
+            )columnToRow
+        group by
+            equ_type, equ_code, equ_name
+    </select>
+
     <select id="selectSbchTotalDemandPlanDetailList"
             parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail"
             resultMap="SbchTotalDemandPlanDetailResult">

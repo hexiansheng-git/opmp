@@ -1,32 +1,31 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.domain.base.system.DeptInfo;
-import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.mapper.SbchTotalDemandPlanDetailMapper;
 import com.hhwy.pm.qqch.preparation.sbch.plan.mapper.SbchTotalDemandPlanMapper;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.SbchTotalDemandPlanService;
-import com.hhwy.utils.EntityUtils;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.ObjectUtils;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.selfEmpty.SelfEmpty;
-import com.hhwy.utils.validation.BeanValidationResult;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.utils.validation.ValidationUtil;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,6 +41,41 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
 
     @Autowired
     private SetMaterialNameUtils setMaterialNameUtils;
+    @Autowired
+    private SbchTotalDemandPlanMapper sbchTotalDemandPlanMapper;
+    @Autowired
+    private SbchTotalDemandPlanService totalDemandPlanService;
+
+    /***
+     * 功能描述:  同步施工策划设备总需数据
+     * @param version
+     * @return com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan
+     * 作者: fushudong
+     * 时间: 2023/9/22
+     */
+    @Transactional
+    @Override
+    public SbchTotalDemandPlan syncData(BigDecimal version) {
+        SbchTotalDemandPlan result = new SbchTotalDemandPlan();
+        version = VersionUtil.getVersion("sbch_total_demand_plan", version);
+        SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
+        sbchTotalDemandPlan.setVersion(version);
+        //查询主表
+        List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
+        //获取设备总需所有设备
+        List<SbchTotalDemandPlanDetail> list = sbchTotalDemandPlanDetailMapper.getAllDemandDevice(version);
+        if (CollectionUtils.isEmpty(sbchTotalDemandPlans) || CollectionUtils.isEmpty(list)){
+            return result;
+        }
+        SbchTotalDemandPlan totalDemandPlan = sbchTotalDemandPlans.get(0);
+        list.forEach(p -> {
+            p.setId(IdWorker.createId());
+            p.setPlanId(totalDemandPlan.getId());
+        });
+        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(totalDemandPlan.getId(), SecurityUtils.getUserId(), DateUtils.getNowDate());
+        sbchTotalDemandPlanDetailMapper.batchInsert(list);
+        return totalDemandPlanService.getList(version);
+    }
 
     @Override
     @SelfEmpty(clazz = SbchTotalDemandPlanDetail.class)

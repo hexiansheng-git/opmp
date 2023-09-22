@@ -74,10 +74,10 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                 Map<String, String> busAndMaterialMap = new HashMap<>();
                 busAndMaterialMap.put("materialName", "materialName");
                 busAndMaterialMap.put("materialSpec", "materialSpec");
-                sbchTotalDemandPlanDetails = setMaterialNameUtils.setMaterialInfo(sbchTotalDemandPlanDetails, "materialCode", busAndMaterialMap);
+//                sbchTotalDemandPlanDetails = setMaterialNameUtils.setMaterialInfo(sbchTotalDemandPlanDetails, "materialCode", busAndMaterialMap);
                 Map<String, String> busAndCategoryMap = new HashMap<>();
                 busAndCategoryMap.put("ptVar1", "categoryName");
-                sbchTotalDemandPlanDetails = setMaterialNameUtils.setCategoryInfo(sbchTotalDemandPlanDetails, "materialType", busAndCategoryMap);
+//                sbchTotalDemandPlanDetails = setMaterialNameUtils.setCategoryInfo(sbchTotalDemandPlanDetails, "materialType", busAndCategoryMap);
 
                 //根据设备编码分组  数量汇总展示
                 Map<String, List<SbchTotalDemandPlanDetail>> plamDetailMap = sbchTotalDemandPlanDetails.stream().collect(Collectors.groupingBy(t -> t.getMaterialCode()));

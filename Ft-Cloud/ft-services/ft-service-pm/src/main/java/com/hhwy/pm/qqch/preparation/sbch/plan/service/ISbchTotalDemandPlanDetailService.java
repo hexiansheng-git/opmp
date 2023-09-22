@@ -1,8 +1,10 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service;
 
 
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -15,4 +17,6 @@ import java.util.List;
 public interface ISbchTotalDemandPlanDetailService {
 
     List<SbchTotalDemandPlanDetail> selectSbchTotalDemandPlanDetailLeaderList(SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail);
+
+    SbchTotalDemandPlan syncData(BigDecimal version);
 }
