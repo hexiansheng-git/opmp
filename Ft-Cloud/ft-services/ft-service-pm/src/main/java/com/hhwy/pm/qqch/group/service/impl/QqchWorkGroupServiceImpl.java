@@ -200,7 +200,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
      */
     public void setHistoryMark(QqchWorkGroup qqchWorkGroup){
         int count = qqchWorkGroupMapper.getWorkGroupCount();
-        if(count > 0){
+        if(count > 1){
             qqchWorkGroup.setHistoryMark(CommonYesNo.YES);
         }
     }
@@ -300,8 +300,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Transactional
     public void submit(QqchWorkGroup qqchWorkGroup) {
         Long id = qqchWorkGroup.getId();
-        qqchWorkGroup.setTaskStatus("5");
-        qqchWorkGroup.setEffective("1");
+//        qqchWorkGroup.setTaskStatus("5");
+//        qqchWorkGroup.setEffective("1");
         if(id == null || id == 0){
             //插入数据
             this.insertQqchWorkGroup(qqchWorkGroup);
@@ -312,7 +312,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         
         //TODO 发起流程
         //推送到总部
-        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
+//        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
     }
 
     /**
@@ -400,5 +400,10 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setEffective(CommonYesNo.YES);
         qqchWorkGroup.setTaskStatus("5");//流程结束
         qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+    }
+
+    @Override
+    public void workGroupSetUpWarn() {
+        System.out.println("--------------工作小组设立超时！---------------");
     }
 }
