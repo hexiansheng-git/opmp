@@ -40,20 +40,20 @@ public class SbchEquipmentPurchase extends MyPrepareBaseEntity {
 
     /** 项目id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "项目id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "项目id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long projectId;
 
     /** 项目名称 */
-    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String projectName;
 
     /** 所属区域id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属区域id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "所属区域id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long regionId;
 
     /** 所属区域 */
-    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String region;
 
     /** 版本号 */
