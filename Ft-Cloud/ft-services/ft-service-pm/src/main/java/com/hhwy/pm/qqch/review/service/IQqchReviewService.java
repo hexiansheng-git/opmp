@@ -1,9 +1,9 @@
 package com.hhwy.pm.qqch.review.service;
 
+import com.hhwy.pm.qqch.review.domain.Review;
+
 import java.util.List;
 import java.util.Map;
-
-import com.hhwy.pm.qqch.review.domain.Review;
 
 /**
  * @author mls
@@ -22,7 +22,7 @@ public interface IQqchReviewService {
     /**
      * 保存信息
      *
-     * @param review
+     * @param workPlanId
      * @return
      */
     void savePlan(Long workPlanId);

@@ -90,6 +90,17 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
         return qqchModuleConfirmCaseMapper.getModuleConfirmInfo(qqchModuleConfirmCase);
     }
 
+    /**
+     * 根据阶段和菜单id集合获取该阶段已确认页面数量
+     * @param stage
+     * @param menuIdList
+     * @return
+     */
+    @Override
+    public int getConfirmNumByStage(String stage, List<String> menuIdList) {
+        return qqchModuleConfirmCaseMapper.getConfirmNumByStage(stage,menuIdList);
+    }
+
     @Transactional
     public int insertQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase) {
         qqchModuleConfirmCase.setId(IdWorker.createId());

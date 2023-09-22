@@ -19,6 +19,14 @@ public interface IQqchModuleConfirmCaseService {
 
     List<QqchModuleConfirmCase> getModuleConfirmInfo(QqchModuleConfirmCase qqchModuleConfirmCase);
 
+    /**
+     * 根据阶段和菜单id集合获取该阶段已确认页面数量
+     * @param stage
+     * @param menuIdList
+     * @return
+     */
+    int getConfirmNumByStage(String stage,List<String> menuIdList);
+
     int insertQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase);
 
     int insertQqchModuleConfirmCaseList(List<QqchModuleConfirmCase> qqchModuleConfirmCaseList);
