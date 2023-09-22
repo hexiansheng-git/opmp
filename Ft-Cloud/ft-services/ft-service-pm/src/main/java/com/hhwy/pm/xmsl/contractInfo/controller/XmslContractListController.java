@@ -5,6 +5,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.excel.Util;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ContractListQueryVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
@@ -132,6 +133,12 @@ public class XmslContractListController extends BaseController {
              InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream("template/exportXmslContractList.xlsx");
              Map<String, Object> map = new HashMap<>();
             List<XmslContractList> list = xmslContractListService.getXmslContractListList(xmslContractListParam);
+            Util util = new Util();
+            for (XmslContractList xmslContractList : list) {
+                String s = util.resolveDict("list_type", xmslContractList.getListType());
+                xmslContractList.setListType(s);
+            }
+
             ExcelUtilByTemplate.exportExcel(response, list, map, "xmslContractList", resourceAsStream);
         }catch (Exception e){
             e.printStackTrace();

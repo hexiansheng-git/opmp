@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -268,20 +270,58 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         }
 
         if(!CollectionUtils.isEmpty(tenantKeyList)) {
+
+            // 创建固定数量的线程池
+            int threadPoolSize = 10;
+            ExecutorService executorService = Executors.newFixedThreadPool(threadPoolSize);
+
+
             for (String tenantKey : tenantKeyList) {
-                //切换租户
-                String oldDataSource = DynamicDataSourceContextHolder.peek();
-                DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
-                try {
-                    initJdglData4P6ByOne(tenantKey);
-                }catch (Exception e){
-                    e.printStackTrace();
-                    throw new CustomBusinessException(e.getMessage());
-                }finally {
-                    DynamicDataSourceContextHolder.poll();
-                    DynamicDataSourceContextHolder.push(oldDataSource);
-                }
+                executorService.execute(() -> {
+                    //切换租户
+                    String oldDataSource = DynamicDataSourceContextHolder.peek();
+                    DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+                    try {
+                        initJdglData4P6ByOne(tenantKey);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        throw new CustomBusinessException(e.getMessage());
+                    }finally {
+                        DynamicDataSourceContextHolder.poll();
+                        DynamicDataSourceContextHolder.push(oldDataSource);
+                    }
+                });
             }
+
+            executorService.shutdown();
+
+            // 等待线程池执行结束
+            while (!executorService.isTerminated()) {
+                Thread.yield();
+            }
+
+        }
+
+        return null;
+    }
+
+    @Override
+    public List<JdglMainPlanItem> initOneJdglData4P6ByTenent(String projectId) {
+
+        if(StringUtils.isEmpty(projectId)) {
+            throw new RuntimeException("projectId参数异常");
+        }
+
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(projectId));
+        try {
+            initJdglData4P6ByOne(projectId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
         }
 
         return null;
@@ -415,6 +455,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         if(CollectionUtils.isEmpty(body)) {
             return  null;
         }
+        List<ProjectInfo> collect = body.stream().filter(vo -> StringUtils.isNotEmpty(vo.getProjectId())).collect(Collectors.toList());
         ProjectInfo projectInfo = body.stream().filter(vo -> projectCode.equals(vo.getProjectId())).findFirst().orElse(null);
         if(projectInfo == null) {
             projectInfo = body.stream().filter(vo -> projectCode.equals(vo.getProjectCode())).findFirst().orElse(null);

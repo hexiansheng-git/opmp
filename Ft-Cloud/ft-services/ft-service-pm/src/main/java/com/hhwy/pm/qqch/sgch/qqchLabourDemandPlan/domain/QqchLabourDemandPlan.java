@@ -56,6 +56,19 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     @JsonProperty
     @Excel(name = "作业班组")
     private String workTeam;
+
+    /**
+     * 字段描述：工作内容
+     */
+    @JsonProperty
+    private String workContent;
+
+    /**
+     * 字段描述：在场天数
+     */
+    @JsonProperty
+    private Integer siteDays;
+
     /**
      * 字段描述：中方人数
      */

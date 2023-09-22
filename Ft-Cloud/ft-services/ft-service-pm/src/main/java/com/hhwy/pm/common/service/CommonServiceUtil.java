@@ -85,6 +85,22 @@ public class CommonServiceUtil {
         return res;
     }
 
+    /***
+     * 功能描述: 获取所有的币种
+     * 作者: fushudong
+     * 时间: 2023/9/21
+     */
+    public static Map<String, String> getAllCurrency() {
+        CurrencyInfo where = new CurrencyInfo();
+        where.setDelFlag("0");
+        List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
+        HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
+        for (CurrencyInfo currencyInfo : currencyInfoList) {
+            res.put(currencyInfo.getCurrencyName(), currencyInfo.getCurrencyCode());
+        }
+        return res;
+    }
+
 
     /**
      * 设置币种名称

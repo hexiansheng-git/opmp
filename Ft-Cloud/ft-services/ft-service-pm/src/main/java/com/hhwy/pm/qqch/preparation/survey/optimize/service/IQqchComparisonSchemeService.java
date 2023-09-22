@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.survey.optimize.service;
 
+import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 
 import java.math.BigDecimal;
@@ -17,6 +18,12 @@ public interface IQqchComparisonSchemeService {
      * @param version
      */
     QqchComparisonSchemeVo getQqchComparisonSchemeVo(BigDecimal version);
+
+    /**
+     * 初始化表格
+     * @return
+     */
+    QqchComparisonScheme init();
 
     /**
      * 保存

@@ -467,7 +467,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
 
         List<WzchSource> wzchSources = wzchSourceService.selectWzchSourceList(new WzchSource(reminderOfChangeRequest.getSourceId(), reminderOfChangeRequest.getProjectId()));
         if (CollectionUtils.isEmpty(wzchSources)) {
-            throw new BaseException("数据查询失败");
+            return false;
         }
         WzchSource wzchSource = wzchSources.get(0);
         if (wzchSource.getDemandVersion().equals(wzchSource.getDemandNewVersion())) {
@@ -507,7 +507,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
         }
         List<WzchSource> wzchSources = wzchSourceService.selectWzchSourceList(new WzchSource(reminderOfChangeRequest.getSourceId(), reminderOfChangeRequest.getProjectId()));
         if (CollectionUtils.isEmpty(wzchSources)) {
-            throw new BaseException("数据查询失败");
+            return null;
         }
         WzchSource wzchSource = wzchSources.get(0);
         if(wzchSource.getDemandVersion().equals(wzchSource.getDemandNewVersion())){

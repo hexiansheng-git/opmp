@@ -1,8 +1,10 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.ProjectInfo;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +29,16 @@ public class JdglData4P6Controller {
     @PostMapping("/initJdglData4P6ByAll")
     public AjaxResult initAllJdglData4P6() {
         return AjaxResult.success(jdglData4P6Service.initAllJdglData4P6());
+    }
+
+    @PostMapping("/initOneJdglData4P6ByTenent")
+    public AjaxResult initOneJdglData4P6ByTenent(String projectId) {
+        return AjaxResult.success(jdglData4P6Service.initOneJdglData4P6ByTenent(projectId));
+    }
+
+    @GetMapping("/getProjectInfo")
+    public AjaxResult getProjectInfo(String projectCode) {
+        return AjaxResult.success(jdglData4P6Service.getProjectInfo(projectCode));
     }
 
 }

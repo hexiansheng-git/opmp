@@ -629,13 +629,19 @@
             p.id,
             p.occupation_code  occupationCode,
             p.occupation_name  occupationName,
-            p.chinese_side_count chineseSideCount,
-            p.local_count localCount,
-            p.total_count totalCount,
-            c.const_desc  constDesc
+            IFNULL(p.chinese_side_count, 0) chineseSideCount,
+            IFNULL(p.local_count, 0) localCount,
+            IFNULL(p.total_count, 0) totalCount,
+            IFNULL(p.site_days, 0) siteDays,
+            c.const_desc  constDesc,
+            c.const_content constContent
         FROM
             qqch_const as c
-                LEFT JOIN qqch_const_staff_plan as p on c.id  = p.master_id
-        WHERE c.valid  =1 and c.version = #{version}   and const_type = '4'
+                RIGHT JOIN qqch_const_staff_plan as p on c.id  = p.master_id
+        WHERE   c.valid  =1
+                AND c.version = #{version}
+                AND c.del_flag = '0'
+                AND p.del_flag = '0'
+                and const_type = '4'
     </select>
 </mapper>

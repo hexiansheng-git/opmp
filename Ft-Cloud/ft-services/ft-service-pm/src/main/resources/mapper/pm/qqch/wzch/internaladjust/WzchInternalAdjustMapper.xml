@@ -489,7 +489,7 @@
         where internal_adjust_id = #{id}
     </update>
 
-    <update id="deleteDirectByMasterId" parameterType="String">
+    <update id="deleteDirectByMasterId" parameterType="Long">
         delete from `wzch_internal_adjust_detail` where `internal_adjust_id` = #{id}
     </update>
 

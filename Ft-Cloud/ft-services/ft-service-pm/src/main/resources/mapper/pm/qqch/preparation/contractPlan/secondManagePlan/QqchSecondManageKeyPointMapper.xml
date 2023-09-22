@@ -14,6 +14,8 @@
         <result property="proposedMeasures" column="proposed_measures"/>
         <result property="keyPointType" column="key_point_type"/>
         <result property="relatedContractClause" column="related_contract_clause"/>
+        <result property="specialContractClause" column="special_contract_clause"/>
+        <result property="generalContractClause" column="general_contract_clause"/>
         <result property="remark" column="remark"/>
         <result property="level" column="level"/>
         <result property="leaf" column="leaf"/>
@@ -48,6 +50,8 @@
              , `proposed_measures`
              , `key_point_type`
              , `related_contract_clause`
+             , `special_contract_clause`
+             , `general_contract_clause`
              , `remark`
              , `level`
              , `leaf`
@@ -182,6 +186,8 @@
             <if test="proposedMeasures != null  and proposedMeasures != ''">`proposed_measures`,</if>
             <if test="keyPointType != null  and keyPointType != ''">`key_point_type`,</if>
             <if test="relatedContractClause != null  and relatedContractClause != ''">`related_contract_clause`,</if>
+            <if test="specialContractClause != null  and specialContractClause != ''">`special_contract_clause`,</if>
+            <if test="generalContractClause != null  and generalContractClause != ''">`general_contract_clause`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="level != null ">`level`,</if>
             <if test="leaf != null  and leaf != ''">`leaf`,</if>
@@ -216,6 +222,8 @@
             <if test="proposedMeasures != null  and proposedMeasures != ''">#{proposedMeasures},</if>
             <if test="keyPointType != null  and keyPointType != ''">#{keyPointType},</if>
             <if test="relatedContractClause != null  and relatedContractClause != ''">#{relatedContractClause},</if>
+            <if test="specialContractClause != null  and specialContractClause != ''">#{specialContractClause},</if>
+            <if test="generalContractClause != null  and generalContractClause != ''">#{generalContractClause},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="level != null ">#{level},</if>
             <if test="leaf != null  and leaf != ''">#{leaf},</if>
@@ -255,6 +263,8 @@
             `proposed_measures`,
             `key_point_type`,
             `related_contract_clause`,
+            `special_contract_clause`,
+            `general_contract_clause`,
             `remark`,
             `level`,
             `leaf`,
@@ -290,6 +300,8 @@
                 #{item.proposedMeasures},
                 #{item.keyPointType},
                 #{item.relatedContractClause},
+                #{item.specialContractClause},
+                #{item.generalContractClause},
                 #{item.remark},
                 #{item.level},
                 #{item.leaf},

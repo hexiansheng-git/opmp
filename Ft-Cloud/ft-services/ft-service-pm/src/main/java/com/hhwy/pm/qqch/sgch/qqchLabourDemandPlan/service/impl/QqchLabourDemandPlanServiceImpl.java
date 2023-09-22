@@ -94,8 +94,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
 
     @Transactional
     public int deleteQqchLabourDemandPlan(QqchLabourDemandPlan qqchLabourDemandPlan) {
-        qqchLabourDemandPlan.setUpdateUser(SecurityUtils.getUserName());
-        qqchLabourDemandPlan.setUpdateTime(DateUtils.getNowDate());
+//        qqchLabourDemandPlan.setUpdateUser(SecurityUtils.getUserName());
+//        qqchLabourDemandPlan.setUpdateTime(DateUtils.getNowDate());
         return qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlan(qqchLabourDemandPlan);
     }
 
@@ -120,15 +120,17 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         version = VersionUtil.getVersion("qqch_labour_demand_plan", version);
         qqchLabourDemandPlan.setVersion(version);
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
-        //查询开始时间
-        QqchLabourDemandPlan qqchLabourDemandPlan1 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan1(qqchLabourDemandPlan);
-        if (qqchLabourDemandPlan1 != null && qqchLabourDemandPlan1.getEntryDate() != null) {
-            labourDemandPlanVo.setStartTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan1.getEntryDate()));
-        }
-        //查询结束时间
-        QqchLabourDemandPlan qqchLabourDemandPlan2 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan2(qqchLabourDemandPlan);
-        if (qqchLabourDemandPlan2 != null && qqchLabourDemandPlan2.getExitDate() != null) {
-            labourDemandPlanVo.setEndTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan2.getExitDate()));
+        if (CollectionUtils.isNotEmpty(qqchLabourDemandPlanList)) {
+            //查询开始时间
+            QqchLabourDemandPlan qqchLabourDemandPlan1 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan1(qqchLabourDemandPlan);
+            if (qqchLabourDemandPlan1 != null && qqchLabourDemandPlan1.getEntryDate() != null) {
+                labourDemandPlanVo.setStartTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan1.getEntryDate()));
+            }
+            //查询结束时间
+            QqchLabourDemandPlan qqchLabourDemandPlan2 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan2(qqchLabourDemandPlan);
+            if (qqchLabourDemandPlan2 != null && qqchLabourDemandPlan2.getExitDate() != null) {
+                labourDemandPlanVo.setEndTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan2.getExitDate()));
+            }
         }
         List<QqchLabourDemandPlan> treeList = TreeUtil.build(qqchLabourDemandPlanList, 0l);
         labourDemandPlanVo.setVersion(version);
@@ -251,7 +253,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
         }
 
-        List<QqchLabourDemandPlan> saveList = new ArrayList<>();
+        List<QqchConstStaffPlanResult> saveList = new ArrayList<>();
         List<Long> delList = new ArrayList<>();
 
         //遍历1.5.2数据，删除1.3中不包含的数据，修改包含的数据
@@ -262,20 +264,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             Long outId = qqchLabourDemandPlan.getOutId();
             if (mapId13.containsKey(outId)){
                 //修改
-                List<QqchConstStaffPlanResult> qqchConstStaffPlanResults = mapId13.get(outId);
-                for (QqchConstStaffPlanResult result : qqchConstStaffPlanResults) {
-                    QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
-                    qqchLabourDemandPlan1.setOutId(result.getId());
-                    qqchLabourDemandPlan1.setOccupationCode(result.getOccupationCode());
-                    qqchLabourDemandPlan1.setJobName(result.getOccupationName());
-                    qqchLabourDemandPlan1.setWorkTeam(result.getConstDesc());
-                    qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(result.getChineseSideCount()));
-                    qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(result.getLocalCount()));
-                    qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(result.getTotalCount()));
-                    BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / result.getTotalCount());
-                    qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
-                    saveList.add(qqchLabourDemandPlan1);
-                }
+                saveList.addAll(mapId13.get(outId));
             }else {
                 //删除
                 delList.add(qqchLabourDemandPlan.getId());
@@ -292,40 +281,15 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             if (map152.containsKey(id)){
                 continue;
             }
-            QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
-            qqchLabourDemandPlan1.setOutId(result.getId());
-            qqchLabourDemandPlan1.setOccupationCode(StringUtils.isEmpty(result.getOccupationCode())?null:result.getOccupationCode());
-            qqchLabourDemandPlan1.setJobName(StringUtils.isEmpty(result.getOccupationName())?null:result.getOccupationName());
-            qqchLabourDemandPlan1.setWorkTeam(StringUtils.isEmpty(result.getConstDesc())?null:result.getConstDesc());
-            Integer chinaNum = result.getChineseSideCount()==null?0:result.getChineseSideCount();
-            qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(chinaNum));
-            Integer outNum = result.getLocalCount()==null?0:result.getLocalCount();
-            qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(outNum));
-            Integer total = result.getTotalCount()==null?0:result.getTotalCount();
-            qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(total));
-            if (total > 0){
-                BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / total);
-                qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
-            }
-            saveList.add(qqchLabourDemandPlan1);
+            saveList.add(result);
         }
         if (CollectionUtils.isNotEmpty(delList)) {
             qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlanByPks(delList);
         }
 
         if (CollectionUtils.isNotEmpty(saveList)) {
-            //1.3人员策划 按工种名称分组
-            Map<String, List<QqchLabourDemandPlan>> map13 = saveList.stream().collect(Collectors.groupingBy(QqchLabourDemandPlan::getJobName));
-            Set<Map.Entry<String, List<QqchLabourDemandPlan>>> entrySet = map13.entrySet();
-            //按工种名称遍历，封装1.5.2入库数据
-            List<QqchLabourDemandPlan> arrayList = new ArrayList<>();
-            for (Map.Entry<String, List<QqchLabourDemandPlan>> entry : entrySet) {
-                QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
-                qqchLabourDemandPlan.setJobName(entry.getKey());
-                List<QqchLabourDemandPlan> entryValue = entry.getValue();
-                qqchLabourDemandPlan.setChildren(entryValue);
-                arrayList.add(qqchLabourDemandPlan);
-            }
+            //列表结构转换
+            List<QqchLabourDemandPlan> arrayList = this.toTreeList(saveList);
             this.insertQqchLabourDemandPlanList(arrayList, labourVersion);
         }
         QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
@@ -377,14 +341,21 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             for (QqchConstStaffPlanResult result : entryValue) {
                 QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
                 qqchLabourDemandPlan1.setOutId(result.getId());
-                qqchLabourDemandPlan1.setOccupationCode(result.getOccupationCode());
-                qqchLabourDemandPlan1.setJobName(result.getOccupationName());
-                qqchLabourDemandPlan1.setWorkTeam(result.getConstDesc());
-                qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(result.getChineseSideCount()));
-                qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(result.getLocalCount()));
-                qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(result.getTotalCount()));
-                BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() / result.getTotalCount());
-                qqchLabourDemandPlan1.setOutProportion(rate.setScale(2, RoundingMode.HALF_UP));
+                qqchLabourDemandPlan1.setOccupationCode(StringUtils.isEmpty(result.getOccupationCode())?null:result.getOccupationCode());
+                qqchLabourDemandPlan1.setJobName(StringUtils.isEmpty(result.getOccupationName())?null:result.getOccupationName());
+                qqchLabourDemandPlan1.setWorkTeam(StringUtils.isEmpty(result.getConstDesc())?null:result.getConstDesc());
+                qqchLabourDemandPlan1.setWorkContent(StringUtils.isEmpty(result.getConstContent())?null:result.getConstContent());
+                qqchLabourDemandPlan1.setSiteDays(result.getSiteDays());
+                Integer chinaNum = result.getChineseSideCount()==null?0:result.getChineseSideCount();
+                qqchLabourDemandPlan1.setChinaNum(BigDecimal.valueOf(chinaNum));
+                Integer outNum = result.getLocalCount()==null?0:result.getLocalCount();
+                qqchLabourDemandPlan1.setOutNum(BigDecimal.valueOf(outNum));
+                Integer total = result.getTotalCount()==null?0:result.getTotalCount();
+                qqchLabourDemandPlan1.setTotal(BigDecimal.valueOf(total));
+                if (total > 0){
+                    BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() * 100 / total);
+                    qqchLabourDemandPlan1.setOutProportion(rate);
+                }
                 list.add(qqchLabourDemandPlan1);
             }
             qqchLabourDemandPlan.setChildren(list);

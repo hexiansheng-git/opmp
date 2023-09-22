@@ -24,7 +24,6 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -277,6 +276,13 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         return review;
     }
 
+
+    /**
+     * 确认更新阶段确认功能数量
+     *
+     * @param stageIdentity  阶段
+     * @param moduleIdentity 模块唯一Id
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void updateFinishNum(String stageIdentity, String moduleIdentity) {

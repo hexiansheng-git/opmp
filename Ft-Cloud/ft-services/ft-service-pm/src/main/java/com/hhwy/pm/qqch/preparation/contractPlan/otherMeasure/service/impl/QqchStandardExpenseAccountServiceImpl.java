@@ -76,7 +76,6 @@ public class QqchStandardExpenseAccountServiceImpl implements IQqchStandardExpen
         }catch (IOException e){
             throw new RuntimeException("初始化数据失败！");
         }
-
     }
 
     @Transactional

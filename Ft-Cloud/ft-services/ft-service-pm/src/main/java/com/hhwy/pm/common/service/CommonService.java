@@ -146,10 +146,10 @@ public class CommonService {
         }
 
         // 获取当前菜单 当前阶段 当前登录人有没有确认过
-        List<QqchModuleConfirmCase> confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, "" + userId);
+        List<QqchModuleConfirmCase> confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, null);
         // 确认记录不为空的话 则证明当前阶段已经被确认过 无需再进行确认
         if (!CollectionUtils.isEmpty(confirmStatus)){
-            permissionMark.setMsg("当前用户在当前页面的当前阶段已确认完成!");
+            permissionMark.setMsg("当前页面在当前阶段已确认完成!");
             permissionMark.setConfirmed(CommonYesNo.YES);
         }
 
