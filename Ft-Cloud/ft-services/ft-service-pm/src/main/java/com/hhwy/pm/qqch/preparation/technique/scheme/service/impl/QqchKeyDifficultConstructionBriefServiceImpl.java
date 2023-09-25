@@ -56,8 +56,7 @@ public class QqchKeyDifficultConstructionBriefServiceImpl implements IQqchKeyDif
         // 先批量删除当前版本所有数据
         QqchKeyDifficultConstructionBrief deleteParam = new QqchKeyDifficultConstructionBrief();
         deleteParam.setVersion(qqchKeyDifficultConstructionBriefVo.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchKeyDifficultConstructionBriefMapper.updateQqchKeyDifficultConstructionBrief(deleteParam);
+        qqchKeyDifficultConstructionBriefMapper.deleteQqchKeyDifficultConstructionBrief(deleteParam);
 
         if (!CollectionUtils.isEmpty(qqchKeyDifficultConstructionBriefVo.getList())) {
             for (QqchKeyDifficultConstructionBrief brief : qqchKeyDifficultConstructionBriefVo.getList()) {

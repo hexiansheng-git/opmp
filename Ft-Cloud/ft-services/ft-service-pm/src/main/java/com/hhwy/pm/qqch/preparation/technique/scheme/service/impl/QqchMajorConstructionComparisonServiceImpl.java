@@ -53,8 +53,7 @@ public class QqchMajorConstructionComparisonServiceImpl implements IQqchMajorCon
         // 先批量删除当前版本所有数据
         QqchMajorConstructionComparison deleteParam = new QqchMajorConstructionComparison();
         deleteParam.setVersion(qqchMajorConstructionComparisonVo.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchMajorConstructionComparisonMapper.updateQqchMajorConstructionComparison(deleteParam);
+        qqchMajorConstructionComparisonMapper.deleteQqchMajorConstructionComparison(deleteParam);
 
         if (!CollectionUtils.isEmpty(qqchMajorConstructionComparisonVo.getTreeList())) {
             // 树转list

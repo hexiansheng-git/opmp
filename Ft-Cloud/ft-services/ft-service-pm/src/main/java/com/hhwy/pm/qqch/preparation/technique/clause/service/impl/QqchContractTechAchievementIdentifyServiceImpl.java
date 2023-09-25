@@ -59,8 +59,7 @@ public class QqchContractTechAchievementIdentifyServiceImpl implements IQqchCont
         // 先批量删除当前版本所有数据
         QqchContractTechAchievementIdentify deleteParam = new QqchContractTechAchievementIdentify();
         deleteParam.setVersion(voParam.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchContractTechAchievementIdentifyMapper.updateQqchContractTechAchievementIdentify(deleteParam);
+        qqchContractTechAchievementIdentifyMapper.deleteQqchContractTechAchievementIdentify(deleteParam);
 
         if (!CollectionUtils.isEmpty(voParam.getTreeList())) {
             // 树转list

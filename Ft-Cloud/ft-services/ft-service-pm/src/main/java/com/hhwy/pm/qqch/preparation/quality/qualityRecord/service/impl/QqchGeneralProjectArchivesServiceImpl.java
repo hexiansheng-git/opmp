@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
@@ -118,30 +119,64 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
     public GeneralProjectArchivesWbsVo getGeneralProjectArchivesWbsVo(QqchGeneralProjectArchives qqchGeneralProjectArchives) {
         GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo = new GeneralProjectArchivesWbsVo();
 
+        //获取一般工程档案清单
+        BigDecimal version = qqchGeneralProjectArchives.getVersion();
+        version = VersionUtil.getVersion("qqch_general_project_archives",version);
+        this.setList(generalProjectArchivesWbsVo,version);
+
+        generalProjectArchivesWbsVo.setVersion(version);
+        generalProjectArchivesWbsVo.setStageIdentity(qqchReviewService.getStage());
+        return generalProjectArchivesWbsVo;
+    }
+
+    /**
+     * 设置三个list数据
+     * @param generalProjectArchivesWbsVo
+     * @param version
+     */
+    public void setList(GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo,BigDecimal version){
         //获取最顶级的wbs
         List<XmslWbs> wbsList = xmslWbsService.latestData(new XmslWbs());
 
         //获取一般工程档案清单
-        BigDecimal version = qqchGeneralProjectArchives.getVersion();
-        version = VersionUtil.getVersion("qqch_complete_design_handover",version);
-        List<GeneralProjectArchivesWbs> list = this.integrate(wbsList, version);
-
-        generalProjectArchivesWbsVo.setVersion(version);
-        generalProjectArchivesWbsVo.setStageIdentity(qqchReviewService.getStage());
-        generalProjectArchivesWbsVo.setList(list);
-        return generalProjectArchivesWbsVo;
-    }
-
-    public List<GeneralProjectArchivesWbs> integrate(List<XmslWbs> wbsList,BigDecimal version){
-        //获取一般工程档案清单
         QqchGeneralProjectArchives qqchGeneralProjectArchives = new QqchGeneralProjectArchives();
-//        version = VersionUtil.getVersion("qqch_complete_design_handover",version);
         qqchGeneralProjectArchives.setVersion(version);
         List<QqchGeneralProjectArchives> generalProjectArchivesList = qqchGeneralProjectArchivesMapper.getQqchGeneralProjectArchivesList(qqchGeneralProjectArchives);
 
         //获取最新版本的重难点工程档案数据
         List<QqchKeyDifficultProjectArchives> keyDifficultProjectArchivesList = qqchKeyDifficultProjectArchivesService.getValidMaxVersionData();
 
+        List<GeneralProjectArchivesWbs> list = this.integrate(wbsList, generalProjectArchivesList, keyDifficultProjectArchivesList);
+        generalProjectArchivesWbsVo.setList(list);
+        generalProjectArchivesWbsVo.setAllGeneralSublist(generalProjectArchivesList);
+        generalProjectArchivesWbsVo.setAllDifficultSublist(keyDifficultProjectArchivesList);
+    }
+
+    /**
+     * 合并数据
+     * @param wbsList
+     * @param version
+     * @return
+     */
+    private List<GeneralProjectArchivesWbs> integrateList(List<XmslWbs> wbsList, BigDecimal version) {
+        //获取一般工程档案清单
+        QqchGeneralProjectArchives qqchGeneralProjectArchives = new QqchGeneralProjectArchives();
+        qqchGeneralProjectArchives.setVersion(version);
+        List<QqchGeneralProjectArchives> generalProjectArchivesList = qqchGeneralProjectArchivesMapper.getQqchGeneralProjectArchivesList(qqchGeneralProjectArchives);
+
+        //获取最新版本的重难点工程档案数据
+        List<QqchKeyDifficultProjectArchives> keyDifficultProjectArchivesList = qqchKeyDifficultProjectArchivesService.getValidMaxVersionData();
+        return this.integrate(wbsList, generalProjectArchivesList, keyDifficultProjectArchivesList);
+    }
+
+    /**
+     * 组装数据
+     * @param wbsList
+     * @param generalProjectArchivesList
+     * @param keyDifficultProjectArchivesList
+     * @return
+     */
+    public List<GeneralProjectArchivesWbs> integrate(List<XmslWbs> wbsList,List<QqchGeneralProjectArchives> generalProjectArchivesList,List<QqchKeyDifficultProjectArchives> keyDifficultProjectArchivesList){
         //获取重难点工程清单对应的wbsId
         Set<Long> keyPointWbsIds = qqchWeightEngineeringListService.getCurrentAndLowerLevelWbsIds();
 
@@ -193,7 +228,7 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
         Long wbsId = qqchGeneralProjectArchives.getWbsId();
         BigDecimal version = qqchGeneralProjectArchives.getVersion();
         List<XmslWbs> wbsList = WbsRedisUtils.getDireChildWbs(String.valueOf(wbsId));
-        return this.integrate(wbsList, version);
+        return this.integrateList(wbsList, version);
     }
 
     /**
@@ -234,6 +269,10 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
 
         StringBuilder wbsCodes = new StringBuilder();
 
+        String valid = Valid.NO;
+        if(version.compareTo(BigDecimal.ONE) == 0){
+            valid = Valid.YES;
+        }
         for (GeneralProjectArchivesWbs generalProjectArchivesWbs : list) {
             Long wbsId = generalProjectArchivesWbs.getId();
             String wbsCode = generalProjectArchivesWbs.getWbsCode();
@@ -252,6 +291,8 @@ public class QqchGeneralProjectArchivesServiceImpl implements IQqchGeneralProjec
                 generalProjectArchives.setWbsId(wbsId);
                 generalProjectArchives.setWbsCode(wbsCode);
                 generalProjectArchives.setWbsName(wbsName);
+                generalProjectArchives.setVersion(version);
+                generalProjectArchives.setValid(valid);
                 generalProjectArchives.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 generalProjectArchives.setCreateUserName(SecurityUtils.getUserName());
                 generalProjectArchives.setCreateTime(DateUtils.getNowDate());

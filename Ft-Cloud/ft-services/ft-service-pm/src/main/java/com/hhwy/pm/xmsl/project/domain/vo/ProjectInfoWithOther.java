@@ -169,6 +169,12 @@ public class ProjectInfoWithOther {
     @JsonProperty
     private String businessAreasAndProducts;
     /**
+     * 字段描述：业务领域及产品描述
+     */
+    @JsonProperty
+    @Excel(name = "业务领域及产品")
+    private String businessAreasAndProductsLabel;
+    /**
      * 字段描述：承包方式
      */
     @JsonProperty

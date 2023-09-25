@@ -135,8 +135,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
         // 先批量删除表中数据
         QqchDangerConstructionList deleteParam = new QqchDangerConstructionList();
         deleteParam.setVersion(dbVo.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchDangerConstructionListMapper.updateQqchDangerConstructionList(deleteParam);
+        qqchDangerConstructionListMapper.deleteQqchDangerConstructionList(deleteParam);
 
         if (insertList.size() > 0) {
             qqchDangerConstructionListMapper.insertQqchDangerConstructionListList(insertList);

@@ -91,7 +91,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/submit")
-    public AjaxResult submit(@Validated({ValidationGroups.Update.class,ValidationGroups.Save.class}) @RequestBody QqchWorkGroup qqchWorkGroup) {
+    public AjaxResult submit(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.submit(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
     }
