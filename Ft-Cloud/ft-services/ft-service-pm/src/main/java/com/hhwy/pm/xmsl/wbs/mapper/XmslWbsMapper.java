@@ -35,6 +35,13 @@ public interface XmslWbsMapper {
     Long countByWbs(XmslWbs wbs);
 
     /**
+     * 获取wbs下部位编码或名称为空的数组条目（最多为1）
+     * @param mainId
+     * @return
+     */
+    String countWbsOnlyOne(Long mainId);
+
+    /**
      * 判断当前是否有生效的wbs
      * @return
      */

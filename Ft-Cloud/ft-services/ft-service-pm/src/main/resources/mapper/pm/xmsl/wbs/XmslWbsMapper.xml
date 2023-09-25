@@ -139,6 +139,10 @@
         order by id
     </select>
 
+    <select id="countWbsOnlyOne" resultType="String">
+        select group_concat(code) from xmsl_wbs_history where main_id = #{mainId} and ( part_code = '' or name = '') limit 100
+    </select>
+
     <select id="latestWbsList" resultMap="XmslWbsResultMap">
         select
         `id`

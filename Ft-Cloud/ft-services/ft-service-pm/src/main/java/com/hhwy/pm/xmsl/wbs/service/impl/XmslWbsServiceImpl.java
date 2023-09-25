@@ -518,6 +518,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
                 temp.setParentId(tempPid);
             new AddBaseInfoUtil<>().addBaseEntity(temp);
             temp.setPtVar1("0");
+            temp.setName(ObjectUtils.nvlString(temp.getName()));
+            temp.setPartCode(ObjectUtils.nvlString(temp.getPartCode()));
             addList.add(temp);
         }
         if(CollectionUtils.isNotEmpty(addList))
@@ -569,6 +571,12 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());
         Assert.notNull(wbsMain,"mainId有误，获取主数据失败");
         Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
+        //如果为提交，校验所有wbs必填项
+        if(Constant.YES_INT.equals(dto.getSubmitFlag())){
+            String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
+            Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
+        }
+
     }
 
     public String getSnowId(String id,Map<String,String> idRepalceMap){

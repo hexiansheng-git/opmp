@@ -74,13 +74,13 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      * 字段描述：祖级ID
      */
     @JsonProperty
-    @NotBlank(message = "祖级ID不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+//    @NotBlank(message = "祖级ID不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String ancestors;
     /**
      * 字段描述：祖级名称
      */
     @JsonProperty
-    @NotBlank(message = "祖级名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
+//    @NotBlank(message = "祖级名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String ancestorsName;
     /**
      * 字段描述：项目部位
@@ -94,6 +94,7 @@ public class XmslWbs extends TreeNodeBase<XmslWbs,String> {
      */
     @JsonProperty
     @FtExcel(name = "标准WBS名称")
+    @NotBlank(message = "标准WBS名称不能为空",groups = {ValidationGroups.Update.class,ValidationGroups.Save.class})
     private String name;
     /**
      * 字段描述：节点类型,字典:xmsl_wbs_type

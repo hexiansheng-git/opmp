@@ -1,10 +1,13 @@
 package com.hhwy.pm.xmsl.wbs.service.impl;
 
 import cn.hutool.core.lang.Assert;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsListRelation;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
@@ -17,6 +20,7 @@ import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import org.apache.commons.collections4.MapUtils;
@@ -120,13 +124,22 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 mainId = wbsMain.getId();
                 //2、先同步前三级到历史，其他层级交给线程处理
                 xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",wbsMain.getId(),"levels",new Integer[]{1,2,3}));
+                String tenantKeys = SecurityUtils.getTenantKey();
                 ThreadPoolUtil.execute(()->{
-                    try{
+                    //切换租户
+                    String oldDataSource = DynamicDataSourceContextHolder.peek();
+                    DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKeys));
+                    try {
                         for (int i = 4; i < 10; i++) {
                             xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",wbsMain.getId(),"levels",new Integer[]{i}));
                         }
-                    }catch(Exception e){
+                    }catch (Exception e){
                         log.info("异步处理wbs层级数据出错:{}",e.getMessage());
+                        e.printStackTrace();
+                        throw new CustomBusinessException(e.getMessage());
+                    }finally {
+                        DynamicDataSourceContextHolder.poll();
+                        DynamicDataSourceContextHolder.push(oldDataSource);
                     }
                 });
             }

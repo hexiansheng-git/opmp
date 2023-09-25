@@ -15,7 +15,7 @@ public class ValidationGroups {
 
     public interface Other{};
 
-    public interface Type1{};
+    public interface s{};
     public interface Type2{};
     public interface Type3{};
     public interface Type4{};
