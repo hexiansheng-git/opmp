@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,8 @@ public class TWbsMainConsumerListener implements RocketMQListener<String> , Rock
         DynamicDataSourceContextHolder.push("master");
         try {
             Map map = JSONObject.parseObject(s, Map.class);
+            map.put("createTime",new Date());
+            map.put("updateTime",new Date());
             wbsService.insertTWbsMain(map);
             if(ObjectUtils.isNotBlank(map.get("ptVar1")))
                 wbsService.deleteTWbsMain(ObjectUtils.nvlLong(map.get("ptVar1")));

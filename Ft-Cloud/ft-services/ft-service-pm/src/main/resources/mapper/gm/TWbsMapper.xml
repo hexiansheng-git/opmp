@@ -308,7 +308,7 @@
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertTWbs -->
     <insert id="insertTWbsList">
-        insert into t_wbs
+        replace into t_wbs
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `main_id`,
@@ -387,7 +387,7 @@
     </insert>
 
     <insert id="insertTWbsMain" useGeneratedKeys="true" keyProperty="id">
-        insert into t_wbs_main
+        replace into t_wbs_main
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="engineeringType != null  and engineeringType != ''">`engineering_type`,</if>
