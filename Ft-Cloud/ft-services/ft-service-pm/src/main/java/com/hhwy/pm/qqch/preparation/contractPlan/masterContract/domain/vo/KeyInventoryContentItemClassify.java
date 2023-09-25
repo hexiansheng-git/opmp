@@ -37,7 +37,7 @@ public class KeyInventoryContentItemClassify {
      * 字段描述：清单数量
      */
     @JsonProperty
-    private Integer inventoryCount;
+    private BigDecimal inventoryCount;
     /**
      * 字段描述：原合同单价 / 清单单价
      */
@@ -52,12 +52,12 @@ public class KeyInventoryContentItemClassify {
      * 字段描述：图纸复核数量 / 预估数量
      */
     @JsonProperty
-    private Integer blueprintReviewCount;
+    private BigDecimal blueprintReviewCount;
     /**
      * 字段描述：数量差值（复核数量-清单数量）
      */
     @JsonProperty
-    private Integer quantityDifference;
+    private BigDecimal quantityDifference;
     /**
      * 字段描述：预估单价 / 复核单价
      */
