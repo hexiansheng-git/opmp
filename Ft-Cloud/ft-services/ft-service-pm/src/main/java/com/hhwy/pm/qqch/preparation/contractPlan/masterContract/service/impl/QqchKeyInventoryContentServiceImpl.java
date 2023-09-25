@@ -91,16 +91,16 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
         if(ItemClassify.LARGE_QUANTITY_DIFFERENCE_INVENTORY.equals(itemClassify)){
             for (KeyInventoryContentItemClassify keyInventoryContentItemClassify : keyInventoryContentItemClassifyList) {
                 //复核数量
-                Integer blueprintReviewCount = keyInventoryContentItemClassify.getBlueprintReviewCount();
+                BigDecimal blueprintReviewCount = keyInventoryContentItemClassify.getBlueprintReviewCount();
                 if(blueprintReviewCount == null){
-                    blueprintReviewCount = 0;
+                    blueprintReviewCount = BigDecimal.ZERO;
                 }
                 //清单数量
-                Integer inventoryCount = keyInventoryContentItemClassify.getInventoryCount();
+                BigDecimal inventoryCount = keyInventoryContentItemClassify.getInventoryCount();
                 if(inventoryCount == null){
-                    inventoryCount = 0;
+                    inventoryCount = BigDecimal.ZERO;
                 }
-                int quantityDifference = blueprintReviewCount - inventoryCount;
+                BigDecimal quantityDifference = blueprintReviewCount.subtract(inventoryCount);
                 keyInventoryContentItemClassify.setQuantityDifference(quantityDifference);
             }
         }

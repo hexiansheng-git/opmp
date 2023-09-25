@@ -20,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author han
@@ -106,10 +104,34 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
      */
     @Override
     public List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(WorkGroupMemberQueryVo queryVo) {
-        List<QqchWorkGroupMember> allMember = new ArrayList<>();
-
         List<QqchWorkGroupMember> resultMember = new ArrayList<>();
 
+        List<QqchWorkGroupMember> pageMemberList = queryVo.getMemberList();
+
+        if(CollectionUtils.isEmpty(pageMemberList)){
+            return resultMember;
+        }
+
+        //查询项：姓名
+        String director = queryVo.getDirector();
+        //查询项：曾任小组职务
+        String temporaryGroupDuty = queryVo.getTemporaryGroupDuty();
+        //制作第一层级
+        for (QqchWorkGroupMember qqchWorkGroupMember : pageMemberList) {
+            if(StringUtils.isNotBlank(director)){
+                String name = qqchWorkGroupMember.getDirector();
+                if(!name.contains(director)){
+                    continue;
+                }
+            }
+            QqchWorkGroupMember member = new QqchWorkGroupMember();
+            member.setId(IdWorker.createId());
+            member.setDirector(qqchWorkGroupMember.getDirector());
+            member.setDirectorId(qqchWorkGroupMember.getDirectorId());
+            resultMember.add(member);
+        }
+
+        List<QqchWorkGroupMember> allMember = new ArrayList<>();
         //获取当前租户
         String currentTenantKey = SecurityUtils.getTenantKey();
 
@@ -120,45 +142,50 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
         List<SysTenant> tenantList = systemServiceApi.tenantList();
 
         try {
-            //TODO 不好使
-//            for (SysTenant tenant : tenantList) {
-//                if(!currentTenantKey.equals(tenant.getTenantKey())){
-//                    //切换租户
-//                    DynamicDataSourceContextHolder.push(tenant.getTenantKey());
-//                    //获取数据
-//                    List<QqchWorkGroupMember> validMaxVersionWorkGroupMemberList = this.getValidMaxVersionWorkGroupMemberList(queryVo);
-//                    allMember.addAll(validMaxVersionWorkGroupMemberList);
-//                }
-//            }
-
-            List<QqchWorkGroupMember> validMaxVersionWorkGroupMemberList = this.getValidMaxVersionWorkGroupMemberList(queryVo);
-            allMember.addAll(validMaxVersionWorkGroupMemberList);
-
-            //选出所有不同的数据
-            Map<Long,String> memberMap = new HashMap<>();
-            for (QqchWorkGroupMember qqchWorkGroupMember : allMember) {
-                if(qqchWorkGroupMember.getDirectorId() != null && StringUtils.isNotBlank(qqchWorkGroupMember.getDirector())){
-                    memberMap.put(qqchWorkGroupMember.getDirectorId(),qqchWorkGroupMember.getDirector());
+            for (SysTenant tenant : tenantList) {
+                if(!currentTenantKey.equals(tenant.getTenantKey())){
+                    //切换租户
+                    DynamicDataSourceContextHolder.push(tenant.getTenantKey());
+                    //获取数据
+                    List<QqchWorkGroupMember> validMaxVersionWorkGroupMemberList = this.getValidMaxVersionWorkGroupMemberList(queryVo);
+                    allMember.addAll(validMaxVersionWorkGroupMemberList);
                 }
             }
 
-            //制作数组
-            for (Map.Entry<Long, String> map : memberMap.entrySet()) {
-                Long key = map.getKey();
-                String value = map.getValue();
-                QqchWorkGroupMember member = new QqchWorkGroupMember();
-                member.setId(IdWorker.createId());
-                member.setDirector(value);
-                member.setDirectorId(key);
+//            //选出所有不同的数据
+//            Map<Long,String> memberMap = new HashMap<>();
+//            for (QqchWorkGroupMember qqchWorkGroupMember : allMember) {
+//                if(qqchWorkGroupMember.getDirectorId() != null && StringUtils.isNotBlank(qqchWorkGroupMember.getDirector())){
+//                    memberMap.put(qqchWorkGroupMember.getDirectorId(),qqchWorkGroupMember.getDirector());
+//                }
+//            }
 
+            //制作数组
+            for (QqchWorkGroupMember member : resultMember) {
+                Long directorId = member.getDirectorId();
                 List<QqchWorkGroupMember> children = new ArrayList<>();
                 for (QqchWorkGroupMember qqchWorkGroupMember : allMember) {
-                    if(key.equals(qqchWorkGroupMember.getDirectorId())){
+                    if(directorId.equals(qqchWorkGroupMember.getDirectorId())){
                         children.add(qqchWorkGroupMember);
                     }
                 }
                 member.setChildren(children);
-                resultMember.add(member);
+            }
+
+            if(StringUtils.isNotBlank(temporaryGroupDuty)){
+                for (int i = 0; i < resultMember.size(); i++) {
+                    QqchWorkGroupMember member = resultMember.get(i);
+                    List<QqchWorkGroupMember> children = member.getChildren();
+                    for (int j = 0; j < children.size(); j++) {
+                        QqchWorkGroupMember child = children.get(j);
+                        if(!temporaryGroupDuty.equals(child.getTemporaryGroupDuty())){
+                            children.remove(child);
+                        }
+                    }
+                    if(CollectionUtils.isEmpty(children)){
+                        resultMember.remove(member);
+                    }
+                }
             }
 
         }catch (Exception e){

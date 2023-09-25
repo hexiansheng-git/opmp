@@ -263,7 +263,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         //获取合同信息
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
         if(contractInfo != null){
-            projectInfoWithOther.setProjectCategory(contractInfo.getProjectCategory());
             projectInfoWithOther.setContractAmount(contractInfo.getEffectiveAmout());
             projectInfoWithOther.setContractTypeInContract(contractInfo.getContractType());
             projectInfoWithOther.setContractSignDate(contractInfo.getSignDate());

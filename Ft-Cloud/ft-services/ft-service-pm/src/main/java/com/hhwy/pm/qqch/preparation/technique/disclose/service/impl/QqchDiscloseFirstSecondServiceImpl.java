@@ -24,11 +24,11 @@ import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 /**
  * @author zhenglili
@@ -73,11 +73,11 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         deleteParam.setVersion(qqchDiscloseFirstSecondVo.getVersion());
         qqchDiscloseFirstSecondMapper.deleteQqchDiscloseFirstSecond(deleteParam);
 
-        if (!CollectionUtils.isEmpty(qqchDiscloseFirstSecondVo.getTreeList())) {
+        if (CollectionUtils.isNotEmpty(qqchDiscloseFirstSecondVo.getTreeList())) {
             // 树转list
             List<QqchDiscloseFirstSecond> insertList = TreeUtil.treeToList(qqchDiscloseFirstSecondVo.getTreeList());
 
-            if (!CollectionUtils.isEmpty(insertList)) {
+            if (CollectionUtils.isNotEmpty(insertList)) {
                 for (QqchDiscloseFirstSecond insert : insertList) {
                     insert.setVersion(qqchDiscloseFirstSecondVo.getVersion());
                     if (qqchDiscloseFirstSecondVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
@@ -119,6 +119,9 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         // wbs编号
         List<String> codeList = wbsList.stream().map(XmslWbs::getCode).collect(Collectors.toList());
         String[] codes = codeList.toArray(new String[codeList.size()]);
+        if (codes == null || codes.length == 0) {
+            return vo;
+        }
 
         // 根据wbs查询关联危大工程方案清单
         List<QqchDangerConstructionList> dangerList = qqchDangerConstructionListService.getByWbsCodes(codes);

@@ -43,6 +43,11 @@ public class SecondManageKeyPointPlan {
     @JsonProperty
     private String contentDescription;
     /**
+     * 字段描述：条款编码（取二次经营要点识别关联合同条款中的条款编码）
+     */
+    @JsonProperty
+    private String clauseCode;
+    /**
      * 字段描述：合同权利（取二次经营要点识别关联合同条款中的条款内容）
      */
     @JsonProperty
