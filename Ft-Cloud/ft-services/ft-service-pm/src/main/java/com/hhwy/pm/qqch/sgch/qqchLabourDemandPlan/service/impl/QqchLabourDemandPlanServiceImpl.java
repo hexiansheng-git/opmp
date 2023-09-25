@@ -360,6 +360,12 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                 list.add(qqchLabourDemandPlan1);
             }
             qqchLabourDemandPlan.setChildren(list);
+            qqchLabourDemandPlan.setChinaNum(list.stream().map(p -> p.getChinaNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setOutNum(list.stream().map(p -> p.getOutNum()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            qqchLabourDemandPlan.setTotal(list.stream().map(p -> p.getTotal()).reduce(BigDecimal.ZERO, BigDecimal::add));
+            if (qqchLabourDemandPlan.getTotal().compareTo(BigDecimal.ZERO) > 0) {
+                qqchLabourDemandPlan.setOutProportion(qqchLabourDemandPlan.getOutNum().multiply(new BigDecimal("100")).divide(qqchLabourDemandPlan.getTotal(), 2, RoundingMode.UP));
+            }
             arrayList.add(qqchLabourDemandPlan);
         }
         return arrayList;
