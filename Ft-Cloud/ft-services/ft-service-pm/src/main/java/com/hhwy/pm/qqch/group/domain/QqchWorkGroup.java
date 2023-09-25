@@ -128,7 +128,7 @@ public class QqchWorkGroup extends CommonBaseEntity {
     /**
      * 字段描述：流程状态（5已完成）
      */
-    private String taskStatus = "0";
+    private String taskStatus;
     /**
      * 字段描述：当前处理人
      */
