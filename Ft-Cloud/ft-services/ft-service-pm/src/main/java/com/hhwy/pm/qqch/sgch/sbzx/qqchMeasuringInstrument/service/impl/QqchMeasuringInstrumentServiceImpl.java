@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.sbzx.qqchMeasuringInstrument.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -89,7 +90,7 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
             measuringInstrument.setEquCode(constFacilityPlan.getFacilityCode());
             measuringInstrument.setEquName(constFacilityPlan.getFacilityName());
             measuringInstrument.setUnit(constFacilityPlan.getUnits());
-            measuringInstrument.setNum(BigDecimal.valueOf(constFacilityPlan.getCount()));
+            measuringInstrument.setNum(NumberUtil.toBigDecimal(constFacilityPlan.getCount()));
             measuringInstrument.setSpec(constFacilityPlan.getSpecificationModel());
             measuringInstrument.setId(IdWorker.createId());
             measuringInstrument.setValid(valid);
