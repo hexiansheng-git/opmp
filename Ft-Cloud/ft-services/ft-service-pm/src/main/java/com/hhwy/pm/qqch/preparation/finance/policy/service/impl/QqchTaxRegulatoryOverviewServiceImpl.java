@@ -52,6 +52,9 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
         qryOverviewParam.setVersion(version);
         QqchTaxRegulatoryOverview overview = qqchTaxRegulatoryOverviewMapper
             .getQqchTaxRegulatoryOverview(qryOverviewParam);
+        if (overview == null) {
+            overview = new QqchTaxRegulatoryOverview();
+        }
 
         // 查询合同信息，获取合同所在国家
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();

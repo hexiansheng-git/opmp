@@ -74,8 +74,7 @@ public class QqchTechManageModeComparisonServiceImpl implements IQqchTechManageM
         // 先批量删除当前版本所有数据
         QqchTechManageModeComparison deleteParam = new QqchTechManageModeComparison();
         deleteParam.setVersion(voParam.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchTechManageModeComparisonMapper.updateQqchTechManageModeComparison(deleteParam);
+        qqchTechManageModeComparisonMapper.deleteQqchTechManageModeComparison(deleteParam);
 
         int sort = 1;
         if (!CollectionUtils.isEmpty(voParam.getList())) {

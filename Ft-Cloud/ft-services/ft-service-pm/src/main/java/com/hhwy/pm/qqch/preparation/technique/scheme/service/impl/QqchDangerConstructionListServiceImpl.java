@@ -21,6 +21,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,12 +64,23 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
 
     @Transactional
     public void batchSave(QqchDangerConstructionListVo qqchDangerConstructionListVo) {
+        // 清空数据库表中数据
+        QqchDangerConstructionList deleteParam = new QqchDangerConstructionList();
+        deleteParam.setVersion(qqchDangerConstructionListVo.getVersion());
+        qqchDangerConstructionListMapper.deleteQqchDangerConstructionList(deleteParam);
+
         // 危大工程清单
         QqchDangerListVo qqchDangerListVo = new QqchDangerListVo();
         List<QqchDangerList> list = new ArrayList<>();
         for (QqchDangerConstructionList qqchDangerConstructionList : qqchDangerConstructionListVo.getList()) {
-            qqchDangerConstructionList.setUpdateUser(SecurityUtils.getUserName());
-            qqchDangerConstructionList.setUpdateTime(DateUtils.getNowDate());
+            qqchDangerConstructionList.setId(IdWorker.createId());
+            qqchDangerConstructionList.setVersion(qqchDangerConstructionListVo.getVersion());
+            if (qqchDangerConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                qqchDangerConstructionList.setValid(Valid.YES);
+            }
+            qqchDangerConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            qqchDangerConstructionList.setCreateUserName(SecurityUtils.getUserName());
+            qqchDangerConstructionList.setCreateTime(DateUtils.getNowDate());
 
             QqchDangerList qqchDangerList = new QqchDangerList();
             qqchDangerList.setSchemeCode(qqchDangerConstructionList.getSchemeCode());
@@ -81,7 +93,10 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             qqchDangerListVo.setVersion(qqchDangerConstructionListVo.getVersion());
         }
 
-        qqchDangerConstructionListMapper.updateQqchDangerConstructionListList(qqchDangerConstructionListVo.getList());
+        if (CollectionUtils.isNotEmpty(qqchDangerConstructionListVo.getList())) {
+            qqchDangerConstructionListMapper
+                .insertQqchDangerConstructionListList(qqchDangerConstructionListVo.getList());
+        }
 
         // 同步到8.3.1 危大工程清单
         qqchDangerListService.syncData(qqchDangerListVo);
