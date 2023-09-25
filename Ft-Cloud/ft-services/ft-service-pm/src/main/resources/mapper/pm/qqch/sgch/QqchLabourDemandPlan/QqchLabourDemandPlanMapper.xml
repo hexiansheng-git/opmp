@@ -138,7 +138,7 @@
                 WHEN SUM( total ) = 0 THEN
                     0
                 WHEN SUM( out_num ) = 0 THEN
-                    0 ELSE CONCAT( TRUNCATE ( ( SUM( out_num ) / SUM( total ) ), 0 ), '%' )
+                    0 ELSE CONCAT( TRUNCATE ( ( SUM( out_num ) / SUM( total ) ) * 100, 0 ), '%' )
                 END AS rateNum
         FROM
             qqch_labour_demand_plan

@@ -131,6 +131,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             if (qqchLabourDemandPlan2 != null && qqchLabourDemandPlan2.getExitDate() != null) {
                 labourDemandPlanVo.setEndTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan2.getExitDate()));
             }
+            qqchLabourDemandPlanList.stream().filter(p -> p.getPid()!=null && p.getPid() != 0).forEach(f -> f.setJobName(""));
         }
         List<QqchLabourDemandPlan> treeList = TreeUtil.build(qqchLabourDemandPlanList, 0l);
         labourDemandPlanVo.setVersion(version);
