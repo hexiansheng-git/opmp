@@ -1,11 +1,13 @@
 package com.hhwy.pm.qqch.group.domain.vo;
 
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 /**
  * @author han
@@ -35,5 +37,9 @@ public class WorkGroupMemberQueryVo {
      */
     @NotBlank(message = "负责人Id不能为空",groups = ValidationGroups.Select.class)
     private String directorIds;
+    /**
+     * 字段描述：页面所有负责人数据
+     */
+    private List<QqchWorkGroupMember> memberList;
 
 }

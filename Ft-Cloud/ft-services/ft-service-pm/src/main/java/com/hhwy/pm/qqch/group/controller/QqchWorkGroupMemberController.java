@@ -10,9 +10,7 @@ import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +36,8 @@ public class QqchWorkGroupMemberController extends BaseController {
      * @param queryVo
      * @return
      */
-    @GetMapping("history")
-    public AjaxResult getEstablishPreliminaryPlanHistory(@Validated(ValidationGroups.Select.class) WorkGroupMemberQueryVo queryVo){
-//        startPage();
+    @PostMapping("history")
+    public AjaxResult getEstablishPreliminaryPlanHistory(@Validated(ValidationGroups.Select.class) @RequestBody WorkGroupMemberQueryVo queryVo){
         List<QqchWorkGroupMember> workGroupMemberList = qqchWorkGroupMemberService.getEstablishPreliminaryPlanHistory(queryVo);
         return AjaxResult.success(workGroupMemberList);
     }
