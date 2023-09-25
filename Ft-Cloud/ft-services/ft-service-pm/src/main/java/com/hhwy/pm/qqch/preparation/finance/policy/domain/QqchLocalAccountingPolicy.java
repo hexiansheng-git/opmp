@@ -38,7 +38,7 @@ public class QqchLocalAccountingPolicy extends BaseEntity {
      * 字段描述：会计政策
      */
     @JsonProperty
-    @FtExcel(name = "会计政策" )
+    @FtExcel(name = "会计政策")
     @NotBlank(message = "会计政策不能为空", groups = {ValidationGroups.Save.class})
     private String accountingPolicy;
     /**
