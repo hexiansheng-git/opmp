@@ -177,6 +177,8 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
                 Assert.notNull(wbs,"WBS编号["+temp.getWbsCode()+"]不存在");
                 temp.setWbsName(wbs.getName());
                 map.put(ObjectUtils.nvlString(temp.getWbsCode()+"_"+temp.getSchemeName().trim()),temp);
+                //项目联系人默认当前登录用户
+                temp.setContactPerson(SecurityUtils.getSysUser().getNickName());
                 temp.setPtVar1(StringUtils.substring(temp.getSchemeCode(), temp.getSchemeCode().length()-3,temp.getSchemeCode().length())); //截取出流水号，方便统计最大流水
             }catch(Exception e){
                 e.printStackTrace();
