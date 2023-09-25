@@ -64,8 +64,7 @@ public class QqchContractTechStandardIdentifyServiceImpl implements IQqchContrac
         // 先批量删除当前版本所有数据
         QqchContractTechStandardIdentify deleteParam = new QqchContractTechStandardIdentify();
         deleteParam.setVersion(voParam.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchContractTechStandardIdentifyMapper.updateQqchContractTechStandardIdentify(deleteParam);
+        qqchContractTechStandardIdentifyMapper.deleteQqchContractTechStandardIdentify(deleteParam);
 
         if (!CollectionUtils.isEmpty(voParam.getTreeList())) {
             // 树转list

@@ -71,8 +71,7 @@ public class QqchTechKeyDifficultAnalysisServiceImpl implements IQqchTechKeyDiff
         // 先批量删除当前版本所有数据
         QqchTechKeyDifficultAnalysis deleteParam = new QqchTechKeyDifficultAnalysis();
         deleteParam.setVersion(voParam.getVersion());
-        deleteParam.setDelFlag("1");
-        qqchTechKeyDifficultAnalysisMapper.updateQqchTechKeyDifficultAnalysis(deleteParam);
+        qqchTechKeyDifficultAnalysisMapper.deleteQqchTechKeyDifficultAnalysis(deleteParam);
 
         List<QqchTechKeyDifficultAnalysis> insertList = new ArrayList<>();
 
