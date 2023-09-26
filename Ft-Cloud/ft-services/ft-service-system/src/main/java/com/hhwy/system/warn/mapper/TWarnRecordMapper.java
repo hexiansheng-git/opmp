@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @author han
- * @date 2023-09-26 10:33:21
+ * @date 2023-09-26 17:52:28
  * @remark
  */
 @Repository
@@ -24,7 +24,7 @@ public interface TWarnRecordMapper {
 
     int updateTWarnRecord(TWarnRecord tWarnRecord);
 
-    int updateTWarnRecordList(@Param("recordIdList") List<TWarnRecord> tWarnRecordList);
+    int updateTWarnRecordList(@Param("tWarnRecordList") List<TWarnRecord> tWarnRecordList);
 
     int deleteTWarnRecord(TWarnRecord tWarnRecord);
 

@@ -4,9 +4,10 @@ import com.hhwy.system.warn.domain.TWarnRecord;
 
 import java.util.List;
 
+
 /**
  * @author han
- * @date 2023-09-26 10:33:21
+ * @date 2023-09-26 17:52:28
  * @remark
  */
 public interface ITWarnRecordService {

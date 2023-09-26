@@ -2,159 +2,209 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hhwy.system.warn.mapper.TWarnRecordMapper">
+<mapper namespace="com.hhwy.system.warn.mapper.TWarnMapper">
 
-    <resultMap type="com.hhwy.system.warn.domain.TWarnRecord" id="TWarnRecordResultMap">
-        <result property="id" column="id"/>
+    <resultMap type="com.hhwy.system.warn.domain.TWarn" id="TWarnResultMap">
         <result property="warnId" column="warn_id"/>
+        <result property="warnItem" column="warn_item"/>
+        <result property="warnItemId" column="warn_item_id"/>
         <result property="warnUserId" column="warn_user_id"/>
         <result property="warnUserName" column="warn_user_name"/>
-        <result property="status" column="status"/>
+        <result property="warnContent" column="warn_content"/>
+        <result property="warnStatus" column="warn_status"/>
+        <result property="warnType" column="warn_type"/>
+        <result property="warnUrl" column="warn_url"/>
         <result property="createUser" column="create_user"/>
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
         <result property="remark" column="remark"/>
+        <result property="tenantKey" column="tenant_key"/>
     </resultMap>
-    <sql id="selectTWarnRecordVo">
-        select `id`
-             , `warn_id`
+    <sql id="selectTWarnVo">
+        select `warn_id`
+             , `warn_item`
+             , `warn_item_id`
              , `warn_user_id`
              , `warn_user_name`
-             , `status`
+             , `warn_content`
+             , `warn_status`
+             , `warn_type`
+             , `warn_url`
              , `create_user`
              , `create_time`
              , `update_user`
              , `update_time`
              , `remark`
-        from t_warn_record
+             , `tenant_key`
+        from t_warn
     </sql>
-    <select id="getTWarnRecord" resultMap="TWarnRecordResultMap">
-        <include refid="selectTWarnRecordVo"/>
+    <select id="getTWarn" resultMap="TWarnResultMap">
+        <include refid="selectTWarnVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
+            <if test="warnItem != null  and warnItem != ''">and `warn_item` = #{warnItem}</if>
+            <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
             <if test="warnUserId != null  and warnUserId != ''">and `warn_user_id` = #{warnUserId}</if>
             <if test="warnUserName != null  and warnUserName != ''">and `warn_user_name` = #{warnUserName}</if>
-            <if test="status != null  and status != ''">and `status` = #{status}</if>
+            <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
+            <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
+            <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
+            <if test="warnUrl != null  and warnUrl != ''">and `warn_url` = #{warnUrl}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="tenantKey != null  and tenantKey != ''">and `tenant_key` = #{tenantKey}</if>
         </where>
         order by create_time desc
     </select>
 
-    <select id="getTWarnRecordList" resultMap="TWarnRecordResultMap">
-        <include refid="selectTWarnRecordVo"/>
+    <select id="getTWarnList" resultMap="TWarnResultMap">
+        <include refid="selectTWarnVo"/>
         <where>
             del_flag = "0"
-            <if test="id != null ">and `id` = #{id}</if>
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
+            <if test="warnItem != null  and warnItem != ''">and `warn_item` = #{warnItem}</if>
+            <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
             <if test="warnUserId != null  and warnUserId != ''">and `warn_user_id` = #{warnUserId}</if>
             <if test="warnUserName != null  and warnUserName != ''">and `warn_user_name` = #{warnUserName}</if>
-            <if test="status != null  and status != ''">and `status` = #{status}</if>
+            <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
+            <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
+            <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
+            <if test="warnUrl != null  and warnUrl != ''">and `warn_url` = #{warnUrl}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="tenantKey != null  and tenantKey != ''">and `tenant_key` = #{tenantKey}</if>
         </where>
         order by create_time desc
     </select>
 
-    <insert id="insertTWarnRecord" useGeneratedKeys="true" keyProperty="warn_id">
-        insert into t_warn_record
+    <insert id="insertTWarn" useGeneratedKeys="true" keyProperty="warn_id">
+        insert into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null ">`id`,</if>
             <if test="warnId != null ">`warn_id`,</if>
+            <if test="warnItem != null  and warnItem != ''">`warn_item`,</if>
+            <if test="warnItemId != null  and warnItemId != ''">`warn_item_id`,</if>
             <if test="warnUserId != null  and warnUserId != ''">`warn_user_id`,</if>
             <if test="warnUserName != null  and warnUserName != ''">`warn_user_name`,</if>
-            <if test="status != null  and status != ''">`status`,</if>
+            <if test="warnContent != null  and warnContent != ''">`warn_content`,</if>
+            <if test="warnStatus != null  and warnStatus != ''">`warn_status`,</if>
+            <if test="warnType != null  and warnType != ''">`warn_type`,</if>
+            <if test="warnUrl != null  and warnUrl != ''">`warn_url`,</if>
             <if test="createUser != null  and createUser != ''">`create_user`,</if>
             <if test="createTime != null ">`create_time`,</if>
             <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
             <if test="updateTime != null ">`update_time`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="tenantKey != null  and tenantKey != ''">`tenant_key`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null ">#{id},</if>
             <if test="warnId != null ">#{warnId},</if>
+            <if test="warnItem != null  and warnItem != ''">#{warnItem},</if>
+            <if test="warnItemId != null  and warnItemId != ''">#{warnItemId},</if>
             <if test="warnUserId != null  and warnUserId != ''">#{warnUserId},</if>
             <if test="warnUserName != null  and warnUserName != ''">#{warnUserName},</if>
-            <if test="status != null  and status != ''">#{status},</if>
+            <if test="warnContent != null  and warnContent != ''">#{warnContent},</if>
+            <if test="warnStatus != null  and warnStatus != ''">#{warnStatus},</if>
+            <if test="warnType != null  and warnType != ''">#{warnType},</if>
+            <if test="warnUrl != null  and warnUrl != ''">#{warnUrl},</if>
             <if test="createUser != null  and createUser != ''">#{createUser},</if>
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
             <if test="updateTime != null ">#{updateTime},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="tenantKey != null  and tenantKey != ''">#{tenantKey},</if>
         </trim>
     </insert>
 
-    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertTWarnRecord -->
-    <insert id="insertTWarnRecordList">
-        insert into t_warn_record
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertTWarn -->
+    <insert id="insertTWarnList">
+        insert into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            `id`,
             `warn_id`,
+            `warn_item`,
+            `warn_item_id`,
             `warn_user_id`,
             `warn_user_name`,
-            `status`,
+            `warn_content`,
+            `warn_status`,
+            `warn_type`,
+            `warn_url`,
             `create_user`,
             `create_time`,
             `update_user`,
             `update_time`,
             `remark`,
+            `tenant_key`,
         </trim>
         values
-        <foreach collection="tWarnRecordList" item="item" separator=",">
+        <foreach collection="tWarnList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                #{item.id},
                 #{item.warnId},
+                #{item.warnItem},
+                #{item.warnItemId},
                 #{item.warnUserId},
                 #{item.warnUserName},
-                #{item.status},
+                #{item.warnContent},
+                #{item.warnStatus},
+                #{item.warnType},
+                #{item.warnUrl},
                 #{item.createUser},
                 #{item.createTime},
                 #{item.updateUser},
                 #{item.updateTime},
                 #{item.remark},
+                #{item.tenantKey},
             </trim>
         </foreach>
     </insert>
 
-    <update id="updateTWarnRecord">
-        update t_warn_record
+    <update id="updateTWarn">
+        update t_warn
         <trim prefix="SET" suffixOverrides=",">
-            <if test="id != null ">`id` = #{id},</if>
             <if test="warnId != null ">`warn_id` = #{warnId},</if>
+            <if test="warnItem != null  and  warnItem != ''">`warn_item` = #{warnItem},</if>
+            <if test="warnItemId != null  and  warnItemId != ''">`warn_item_id` = #{warnItemId},</if>
             <if test="warnUserId != null  and  warnUserId != ''">`warn_user_id` = #{warnUserId},</if>
             <if test="warnUserName != null  and  warnUserName != ''">`warn_user_name` = #{warnUserName},</if>
-            <if test="status != null  and  status != ''">`status` = #{status},</if>
+            <if test="warnContent != null  and  warnContent != ''">`warn_content` = #{warnContent},</if>
+            <if test="warnStatus != null  and  warnStatus != ''">`warn_status` = #{warnStatus},</if>
+            <if test="warnType != null  and  warnType != ''">`warn_type` = #{warnType},</if>
+            <if test="warnUrl != null  and  warnUrl != ''">`warn_url` = #{warnUrl},</if>
             <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
             <if test="createTime != null ">`create_time` = #{createTime},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="tenantKey != null  and  tenantKey != ''">`tenant_key` = #{tenantKey},</if>
         </trim>
         <where>
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
         </where>
     </update>
 
-    <update id="updateTWarnRecordList">
-        update t_warn_record
+    <update id="updateTWarnList">
+        update t_warn
         <trim prefix="set" suffixOverrides=",">
-            <trim prefix="id  = case" suffix="end,">
-                <foreach collection="list" item="item" index="index">
-                    when `warn_id`=#{item.warnId} then #{item.id}
-                </foreach>
-            </trim>
             <trim prefix="warn_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `warn_id`=#{item.warnId} then #{item.warnId}
+                </foreach>
+            </trim>
+            <trim prefix="warn_item  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.warnItem}
+                </foreach>
+            </trim>
+            <trim prefix="warn_item_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.warnItemId}
                 </foreach>
             </trim>
             <trim prefix="warn_user_id  = case" suffix="end,">
@@ -167,9 +217,24 @@
                     when `warn_id`=#{item.warnId} then #{item.warnUserName}
                 </foreach>
             </trim>
-            <trim prefix="status  = case" suffix="end,">
+            <trim prefix="warn_content  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `warn_id`=#{item.warnId} then #{item.status}
+                    when `warn_id`=#{item.warnId} then #{item.warnContent}
+                </foreach>
+            </trim>
+            <trim prefix="warn_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.warnStatus}
+                </foreach>
+            </trim>
+            <trim prefix="warn_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.warnType}
+                </foreach>
+            </trim>
+            <trim prefix="warn_url  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.warnUrl}
                 </foreach>
             </trim>
             <trim prefix="create_user  = case" suffix="end,">
@@ -197,6 +262,11 @@
                     when `warn_id`=#{item.warnId} then #{item.remark}
                 </foreach>
             </trim>
+            <trim prefix="tenant_key  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `warn_id`=#{item.warnId} then #{item.tenantKey}
+                </foreach>
+            </trim>
         </trim>
         where `warn_id` in
         <foreach collection="warnIdList" index="index" item="item" separator="," open="(" close=")">
@@ -204,27 +274,32 @@
         </foreach>
     </update>
 
-    <delete id="deleteTWarnRecord">
-        delete from `t_warn_record`
+    <delete id="deleteTWarn">
+        delete from `t_warn`
         <where>
-            <if test="id != null ">and `id` = #{id}</if>
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
+            <if test="warnItem != null  and warnItem != ''">and `warn_item` = #{warnItem}</if>
+            <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
             <if test="warnUserId != null  and warnUserId != ''">and `warn_user_id` = #{warnUserId}</if>
             <if test="warnUserName != null  and warnUserName != ''">and `warn_user_name` = #{warnUserName}</if>
-            <if test="status != null  and status != ''">and `status` = #{status}</if>
+            <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
+            <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
+            <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
+            <if test="warnUrl != null  and warnUrl != ''">and `warn_url` = #{warnUrl}</if>
             <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
             <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="tenantKey != null  and tenantKey != ''">and `tenant_key` = #{tenantKey}</if>
         </where>
     </delete>
 
-    <delete id="deleteTWarnRecordByPks">
-        delete from `t_warn_record`
+    <delete id="deleteTWarnByPks">
+        delete from `t_warn`
         <where>
             `warn_id` in
-            <foreach item="warnId" collection="tWarnRecordPkList" open="(" separator="," close=")">
+            <foreach item="warnId" collection="tWarnPkList" open="(" separator="," close=")">
                 #{warnId}
             </foreach>
         </where>

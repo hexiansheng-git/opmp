@@ -1,0 +1,94 @@
+package com.hhwy.system.warn.controller;
+
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.system.warn.domain.TWarn;
+import com.hhwy.system.warn.service.ITWarnService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * @author han
+ * @date 2023-09-26 17:52:25
+ * @remark
+ */
+@Validated
+@RestController
+@RequestMapping("/tWarn")
+public class TWarnController extends BaseController {
+
+    @Autowired
+    private ITWarnService tWarnService;
+
+
+    @PreAuthorize(hasPermi = "tWarn:list")
+    @GetMapping
+    public AjaxResult getTWarn(@Validated(ValidationGroups.Get.class) TWarn tWarnParam) {
+        TWarn tWarn = tWarnService.getTWarn(tWarnParam);
+        return AjaxResult.success(tWarn);
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:list")
+    @GetMapping("/list")
+    public AjaxResult getTWarnList(@Validated(ValidationGroups.Select.class) TWarn tWarnParam) {
+        startPage();
+        List<TWarn> tWarnList = tWarnService.getTWarnList(tWarnParam);
+        return getDataTableAjaxResult(tWarnList);
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:add")
+    @PostMapping("/add")
+    public AjaxResult insertTWarn(@Validated(ValidationGroups.Save.class) @RequestBody TWarn tWarnParam) {
+        tWarnService.insertTWarn(tWarnParam);
+        return AjaxResult.success(tWarnParam);
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:add")
+    @PostMapping("/batchAdd")
+    public AjaxResult insertTWarnList(@Validated(ValidationGroups.Save.class) @RequestBody List<TWarn> tWarnListParam) {
+        tWarnService.insertTWarnList(tWarnListParam);
+        return AjaxResult.success(tWarnListParam);
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:update")
+    @PostMapping("/update")
+    public AjaxResult updateTWarn(@Validated(ValidationGroups.Update.class) @RequestBody TWarn tWarnParam) {
+        return toAjax(tWarnService.updateTWarn(tWarnParam));
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateTWarnList(@Validated(ValidationGroups.Update.class) @RequestBody List<TWarn> tWarnListParam) {
+        return toAjax(tWarnService.updateTWarnList(tWarnListParam));
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:remove")
+    @PostMapping("/delete")
+    public AjaxResult deleteTWarn(@Validated(ValidationGroups.Delete.class) @RequestBody TWarn tWarnParam) {
+        return toAjax(tWarnService.deleteTWarn(tWarnParam));
+    }
+
+    @PreAuthorize(hasPermi = "tWarn:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteTWarnByPks(@PathVariable Long[] ids) {
+        List<Long> tWarnPkList = Arrays.asList(ids);
+        return toAjax(tWarnService.deleteTWarnByPks(tWarnPkList));
+    }
+
+    @GetMapping("/export")
+    public void export(HttpServletResponse response, TWarn tWarnParam) throws IOException {
+        List<TWarn> tWarnList = tWarnService.getTWarnList(tWarnParam);
+        ExcelUtils<TWarn> util = new ExcelUtils<>(TWarn.class);
+        util.exportExcel(response, tWarnList, DateUtils.getDate());
+    }
+}

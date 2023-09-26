@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @author han
- * @date 2023-09-26 10:33:21
+ * @date 2023-09-26 17:52:28
  * @remark
  */
 @Service
@@ -34,7 +34,7 @@ public class TWarnRecordServiceImpl implements ITWarnRecordService {
 
     @Transactional
     public int insertTWarnRecord(TWarnRecord tWarnRecord) {
-        tWarnRecord.setRecordId(IdWorker.createId());
+        tWarnRecord.setId(IdWorker.createId());
         tWarnRecord.setCreateUser(SecurityUtils.getUserName());
         tWarnRecord.setCreateTime(DateUtils.getNowDate());
         return tWarnRecordMapper.insertTWarnRecord(tWarnRecord);
@@ -43,7 +43,7 @@ public class TWarnRecordServiceImpl implements ITWarnRecordService {
     @Transactional
     public int insertTWarnRecordList(List<TWarnRecord> tWarnRecordList) {
         for (TWarnRecord tWarnRecord : tWarnRecordList) {
-            tWarnRecord.setRecordId(IdWorker.createId());
+            tWarnRecord.setId(IdWorker.createId());
             tWarnRecord.setCreateUser(SecurityUtils.getUserName());
             tWarnRecord.setCreateTime(DateUtils.getNowDate());
         }
