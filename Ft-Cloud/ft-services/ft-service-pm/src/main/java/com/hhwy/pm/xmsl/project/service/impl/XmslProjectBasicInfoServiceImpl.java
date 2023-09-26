@@ -242,7 +242,9 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public ProjectBasicInfo projectInfo() {
         XmslProjectBasicInfo xmslProjectBasicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
         ProjectBasicInfo projectInfo = new ProjectBasicInfo();
-        BeanUtils.copyProperties(xmslProjectBasicInfo,projectInfo);
+        if(xmslProjectBasicInfo != null){
+            BeanUtils.copyProperties(xmslProjectBasicInfo,projectInfo);
+        }
         return projectInfo;
     }
 
