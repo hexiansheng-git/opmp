@@ -1,11 +1,8 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
-import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
@@ -22,7 +19,6 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -152,8 +148,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     public List<QqchPerformInspectionDetail> getChEditMenuList() {
         HashMap<String, String> map = new HashMap<>();
         map.put("type","1");
-        BaseEntity baseEntity = workPlanService.baseInfo(map);
-        QqchWorkPlan qqchWorkPlan = JSON.parseObject(JSON.toJSONString(baseEntity), QqchWorkPlan.class);
+        QqchWorkPlan qqchWorkPlan = workPlanService.baseInfo(map);
         List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
 
         detailList = ListTreeUtil.formatList(
