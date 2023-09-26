@@ -85,7 +85,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         HashMap<String, String> param = new HashMap<>();
         param.put("id", workPlanId + "");
         param.put("type", "2");
-        QqchWorkPlan qqchWorkPlan = (QqchWorkPlan) workPlanService.baseInfo(param);
+        QqchWorkPlan qqchWorkPlan = workPlanService.baseInfo(param);
         List<QqchWorkPlanDetail> detailList = qqchWorkPlan.getDetailList();
         List<QqchWorkPlanDetail> qqchWorkPlanDetails = TreeUtil.treeToList(detailList);
         int firstNum = 0;

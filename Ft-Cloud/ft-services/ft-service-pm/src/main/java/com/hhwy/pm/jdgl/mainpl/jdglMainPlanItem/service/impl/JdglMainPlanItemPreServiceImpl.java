@@ -62,6 +62,9 @@ public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreServi
 
     @Transactional
     public int insertJdglMainPlanItemPreList(List<JdglMainPlanItemPre> jdglMainPlanItemPreList) {
+        if(CollectionUtils.isEmpty(jdglMainPlanItemPreList)) {
+            return 0;
+        }
         for (JdglMainPlanItemPre jdglMainPlanItemPre : jdglMainPlanItemPreList) {
             jdglMainPlanItemPre.setId(IdWorker.createId());
             jdglMainPlanItemPre.setCreateUser(SecurityUtils.getUserName());

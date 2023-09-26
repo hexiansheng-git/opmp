@@ -59,6 +59,10 @@ public class ActivityInfo {
     private Date remainingEarlyStartDate;
     //尚需完成日期
     private Date remainingEarlyFinishDate;
+    //基线开始日期
+    private Date BaselineStartDate;
+    //基线完成日期
+    private Date BaselineFinishDate;
     //作业类型
     private String type;
 
@@ -252,5 +256,21 @@ public class ActivityInfo {
 
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public Date getBaselineStartDate() {
+        return BaselineStartDate;
+    }
+
+    public void setBaselineStartDate(Date baselineStartDate) {
+        BaselineStartDate = baselineStartDate;
+    }
+
+    public Date getBaselineFinishDate() {
+        return BaselineFinishDate;
+    }
+
+    public void setBaselineFinishDate(Date baselineFinishDate) {
+        BaselineFinishDate = baselineFinishDate;
     }
 }

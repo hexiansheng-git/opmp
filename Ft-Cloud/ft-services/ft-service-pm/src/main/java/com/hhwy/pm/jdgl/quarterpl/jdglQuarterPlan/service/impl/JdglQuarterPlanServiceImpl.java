@@ -152,7 +152,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    jdglQuarterPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglQuarterPlanParam.setExchangeRate(new BigDecimal((double)periodMap.get("rate")));
                 }
             }
         }

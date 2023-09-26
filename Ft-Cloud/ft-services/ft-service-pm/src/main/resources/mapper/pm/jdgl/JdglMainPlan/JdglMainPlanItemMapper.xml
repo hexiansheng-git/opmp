@@ -263,7 +263,7 @@
             <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
             <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
         </where>
-        order by wbs_code asc,leaf asc,item_code asc
+        order by sort asc, item_code asc
     </select>
     <select id="getUsingJdglMainPlanItemListByDate" resultMap="JdglMainPlanItemResultMap">
         <include refid="selectJdglMainPlanItemVo" />
