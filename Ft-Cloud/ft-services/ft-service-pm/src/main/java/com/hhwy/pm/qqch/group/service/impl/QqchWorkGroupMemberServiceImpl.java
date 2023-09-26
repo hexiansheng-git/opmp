@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.group.service.impl;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
@@ -145,7 +146,9 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
             for (SysTenant tenant : tenantList) {
                 if(!currentTenantKey.equals(tenant.getTenantKey())){
                     //切换租户
-                    DynamicDataSourceContextHolder.push(tenant.getTenantKey());
+                    String tenantKey = tenant.getTenantKey();
+                    String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                    DynamicDataSourceContextHolder.push(dataSource);
                     //获取数据
                     List<QqchWorkGroupMember> validMaxVersionWorkGroupMemberList = this.getValidMaxVersionWorkGroupMemberList(queryVo);
                     allMember.addAll(validMaxVersionWorkGroupMemberList);
