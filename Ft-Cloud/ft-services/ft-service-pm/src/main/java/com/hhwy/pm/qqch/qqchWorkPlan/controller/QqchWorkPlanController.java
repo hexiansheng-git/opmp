@@ -46,7 +46,9 @@ public class QqchWorkPlanController extends BaseController {
      */
     @GetMapping("/baseInfo")
     public AjaxResult baseInfo(@RequestParam Map<String, String> map) {
-        return AjaxResult.success(qqchWorkPlanService.baseInfo(map));
+        QqchWorkPlan qqchWorkPlan = qqchWorkPlanService.baseInfo(map);
+        FlowInfoSearchUtil.getFlowInfo(qqchWorkPlan,FlowEnum.QQCH_WORK_PLAN);
+        return AjaxResult.success(qqchWorkPlan);
     }
 
     /**台账
