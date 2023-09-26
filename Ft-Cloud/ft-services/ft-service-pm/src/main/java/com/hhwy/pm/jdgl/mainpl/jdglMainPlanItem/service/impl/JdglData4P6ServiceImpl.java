@@ -90,7 +90,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         // 获取p6 作业数据
         ResponseEntity<List<ActivityConstField>> workResult = restTemplate.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
         // 获取转换后的p6逻辑关系数据
-        List<JdglMainPlanItemPre> relInfos = getPre(projectId);
+        List<JdglMainPlanItemPre> relInfos = new ArrayList<>();//getPre(projectId);
 
         // 获取当前启用的总体计划主表数据
         JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
@@ -227,8 +227,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 //                jdglMainPlanItem.setPredecessorActivityName();
 //                jdglMainPlanItem.setAncestors();
                 jdglMainPlanItem.setItemType("item");
-//                jdglMainPlanItem.setBaselineStartDate();
-//                jdglMainPlanItem.setBaselineFinishDate();
+                jdglMainPlanItem.setBaselineStartDate(activityInfo.getBaselineStartDate());
+                jdglMainPlanItem.setBaselineFinishDate(activityInfo.getBaselineFinishDate());
                 jdglMainPlanItem.setLeaf("1");
 //                jdglMainPlanItem.setUpdateTime(activityInfo.getLastUpdateDate());
                 jdglMainPlanItem.setRemainingEarlyStartDate(activityInfo.getRemainingEarlyStartDate());
@@ -246,8 +246,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                         jdglMainPlanItem.setPid(jdglMainPlanItem1.getId());
                     }
                 }
-                setWbsDate(returnList);
                 setWbsCode(returnList);
+                setWbsDate(returnList);
 //                System.out.println(returnList);
                 jdglMainPlanItemService.insertJdglMainPlanItemList(returnList);
                 iJdglMainPlanItemPreService.insertJdglMainPlanItemPreList(relInfos);
@@ -333,15 +333,42 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
      */
     private void setWbsDate(List<JdglMainPlanItem> jdglMainPlanItems){
         if(jdglMainPlanItems != null) {
-            List<JdglMainPlanItem> collect = jdglMainPlanItems.stream().filter(vo -> "item".equals(vo.getItemType())).collect(Collectors.toList());
-            if(!CollectionUtils.isEmpty(collect)) {
-                iteration4Date(jdglMainPlanItems, collect);
+            List<JdglMainPlanItem> workList = jdglMainPlanItems.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(workList)) {
+//                iteration4Date(jdglMainPlanItems, collect);
+                for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
+                    if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
+                        List<JdglMainPlanItem> workInWbs = workList.stream().filter(vo -> vo.getAncestors().contains(jdglMainPlanItem.getAncestors())).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(workInWbs)) {
+                            Date startDate = workInWbs.get(0).getStartDate();
+                            Date finishDate = workInWbs.get(0).getFinishDate();
+                            for (JdglMainPlanItem jdglMainPlanItem1 : workInWbs) {
+                                if(startDate == null) {
+                                    startDate = jdglMainPlanItem1.getStartDate();
+                                } else {
+                                    if(startDate.after(jdglMainPlanItem1.getStartDate())) {
+                                        startDate = jdglMainPlanItem1.getStartDate();
+                                    }
+                                }
+                                if(finishDate == null) {
+                                    finishDate = jdglMainPlanItem1.getFinishDate();
+                                } else {
+                                    if(finishDate.before(jdglMainPlanItem1.getFinishDate())) {
+                                        finishDate = jdglMainPlanItem1.getFinishDate();
+                                    }
+                                }
+                            }
+                            jdglMainPlanItem.setStartDate(startDate);
+                            jdglMainPlanItem.setFinishDate(finishDate);
+                        }
+                    }
+                }
             }
         }
     }
 
     /**
-     * 迭代开始结束时间赋值
+     * 迭代开始结束时间赋值(废弃，数据会错位)
      * @param AllItems
      * @param thisItems
      */
@@ -360,6 +387,9 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         for (Long parentId : parentIds) {
             for (JdglMainPlanItem jdglMainPlanItem : AllItems) {
                 if(parentId.equals(jdglMainPlanItem.getId())) {
+                    if("8".equals(jdglMainPlanItem.getItemCode())) {
+                        System.out.println("11111");
+                    }
                     List<JdglMainPlanItem> collect = thisItems.stream().filter(vo -> parentId.equals(vo.getPid())).collect(Collectors.toList());
                     if(!CollectionUtils.isEmpty(collect)) {
                         Date startDate = collect.get(0).getStartDate();

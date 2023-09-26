@@ -143,7 +143,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    jdglYearPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglYearPlanParam.setExchangeRate(new BigDecimal((double)periodMap.get("rate")));
                 }
             }
         }

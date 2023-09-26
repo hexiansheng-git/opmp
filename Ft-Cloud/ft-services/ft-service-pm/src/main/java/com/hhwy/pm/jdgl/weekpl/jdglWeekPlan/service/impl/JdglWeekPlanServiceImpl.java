@@ -151,7 +151,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
                 List<Map> data = (List<Map>) ajaxResult.get("data");
                 Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
                 if(periodMap != null && periodMap.get("rate") != null) {
-                    jdglWeekPlanParam.setExchangeRate((BigDecimal)periodMap.get("rate"));
+                    jdglWeekPlanParam.setExchangeRate(new BigDecimal((double)periodMap.get("rate")));
                 }
             }
         }
