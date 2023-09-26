@@ -314,16 +314,17 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Override
     public Long submitQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
         //TODO 提交立马生效
-        qqchWorkPlan.setTaskStatus("5");
-        qqchWorkPlan.setValid("1");
+//        qqchWorkPlan.setTaskStatus("5");
+//        qqchWorkPlan.setValid("1");
 
         if (ObjectNullUtil.isEmpty(qqchWorkPlan.getId())) {
             qqchWorkPlan.setId(this.insertQqchWorkPlanSubmit(qqchWorkPlan));
         } else {
             this.updateQqchWorkPlanSubmit(qqchWorkPlan);
-        }          
+        }
+
         //推送到总部版
-        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
+//        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return qqchWorkPlan.getId();
     }
 
