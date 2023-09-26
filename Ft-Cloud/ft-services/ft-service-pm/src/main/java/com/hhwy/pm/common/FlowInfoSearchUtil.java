@@ -86,7 +86,7 @@ public class FlowInfoSearchUtil {
             if(!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
                 userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
             //是否为第一节点发起&当前登录用户等于发起人
-            t.setIsFirstNode(isFirstNodeEdit(flowInfo.getProcessTaskManId()));
+            t.setIsFirstNode(isFirstNodeEdit(flowInfo.getInstanceId()));
         }
         //查询流程审批人名称
         if(CollectionUtils.isNotEmpty(userNameSet)){
