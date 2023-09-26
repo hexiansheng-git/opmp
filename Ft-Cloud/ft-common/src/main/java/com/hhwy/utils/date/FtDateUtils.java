@@ -255,8 +255,7 @@ public class FtDateUtils extends DateUtils {
     public static Long getDays(Date startDate, Date endDate) {
         long nd = 86400000L;
         long diff = endDate.getTime() - startDate.getTime();
-        long day = diff / nd;
-        return day;
+        return diff / nd;
     }
 
     public static void main(String[] args) {
