@@ -11,6 +11,7 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.*;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemPreService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -137,6 +138,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setItemName(wbsInfo.getName());
                 jdglMainPlanItem.setPlannedDuration(wbsInfo.getSummaryPlannedDuration());
                 jdglMainPlanItem.setTotalFloat(wbsInfo.getSummaryTotalFloat());
+                jdglMainPlanItem.setSort(StatisticsUtils.isNumeric2(wbsInfo.getCode()) ? Integer.valueOf(wbsInfo.getCode()) : 0);
 //                jdglMainPlanItem.setExecuterId();
 //                jdglMainPlanItem.setExecuter();
                 jdglMainPlanItem.setStartDate(wbsInfo.getStartDate());
