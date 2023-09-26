@@ -16,6 +16,8 @@ public interface IJdglMainPlanItemService {
 
     List<JdglMainPlanItem> getJdglMainPlanItemList(JdglMainPlanItem jdglMainPlanItem);
 
+    List<JdglMainPlanItem> getJdglMainPlanItemList4Lazy(JdglMainPlanItem jdglMainPlanItem);
+
     List<JdglMainPlanItem> getJdglMainPlanItemListNoTree(JdglMainPlanItem jdglMainPlanItem);
 
     int insertJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem);
@@ -39,4 +41,8 @@ public interface IJdglMainPlanItemService {
     JdglMainPlanItem getMaxActualStartDate();
 
     List<JdglMainPlanItem> getKeyRoad(JdglMainPlanItem jdglMainPlanItemParam);
+
+    JdglMainPlanItem getUsing4One(JdglMainPlanItem jdglMainPlanItemParam);
+
+    JdglMainPlanItem getProjStartAndFinish();
 }

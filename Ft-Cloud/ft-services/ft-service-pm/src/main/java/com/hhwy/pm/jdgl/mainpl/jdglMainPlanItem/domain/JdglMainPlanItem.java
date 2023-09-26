@@ -27,6 +27,19 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 数据类型为作业
+     */
+    public final static String ITEMTYPE_ITEM = "item";
+    /**
+     * 数据类型为项目
+     */
+    public final static String ITEMTYPE_PROJ = "proj";
+    /**
+     * 数据类型为wbs
+     */
+    public final static String ITEMTYPE_WBS = "wbs";
+
+    /**
      * 字段描述：主键id
      */
     @JsonSerialize(using = ToStringSerializer.class)
@@ -347,7 +360,7 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     private String wbsPcode;
 
     /**
-     * 数据类型
+     * 数据类型(proj、wbs、item)
      */
     @JsonProperty
     private String itemType;
@@ -464,4 +477,10 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long parent;
+
+    /**
+     * 是否有孩子节点
+     */
+    @JsonProperty
+    private int haveChildren;
 }

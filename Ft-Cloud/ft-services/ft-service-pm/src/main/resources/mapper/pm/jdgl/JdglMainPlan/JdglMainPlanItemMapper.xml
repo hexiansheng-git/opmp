@@ -1001,4 +1001,12 @@
         order by actual_start_date asc
         limit 1
     </select>
+    <select id="getProjStartAndFinish" resultMap="JdglMainPlanItemResultMap">
+        select min(start_date) start_date, max(finish_date) finish_date,
+               min(actual_start_date) actual_start_date,
+               min(baseline_start_date) baseline_start_date,
+               max(baseline_finish_date) baseline_finish_date
+        from jdgl_main_plan_item
+        where del_flag = "0" and main_plan_id = #{mainPlanId}
+    </select>
 </mapper>

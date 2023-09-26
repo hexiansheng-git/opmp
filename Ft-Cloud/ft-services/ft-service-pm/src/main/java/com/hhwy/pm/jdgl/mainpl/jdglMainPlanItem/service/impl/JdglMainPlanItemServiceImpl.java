@@ -1,12 +1,14 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.mapper.JdglMainPlanItemMapper;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 
@@ -48,31 +50,88 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         return build;
     }
 
+    /**
+     * 懒加载数据
+     * @param jdglMainPlanItem
+     * @return
+     */
+    public List<JdglMainPlanItem> getJdglMainPlanItemList4Lazy(JdglMainPlanItem jdglMainPlanItem) {
+        List<JdglMainPlanItem> returnList = new ArrayList<>();
+        if(jdglMainPlanItem == null) {
+            return returnList;
+        }
+        Long mainPlanId = jdglMainPlanItem.getMainPlanId();
+        if(mainPlanId == null) {
+            JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+            if(usingJdglMainPlan != null) {
+                jdglMainPlanItem.setMainPlanId(usingJdglMainPlan.getId());
+            }
+        }
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
+        if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
+            return jdglMainPlanItemList;
+        }
+
+        if(jdglMainPlanItem.getPid() == null) {
+            returnList = jdglMainPlanItemList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
+        } else {
+            returnList = jdglMainPlanItemList;
+        }
+
+        if (!CollectionUtils.isEmpty(returnList)) {
+            for (JdglMainPlanItem jdglMainPlanItem1 : returnList) {
+                if("1".equals(jdglMainPlanItem1.getLeaf())) jdglMainPlanItem1.setHaveChildren(0);
+                if(!"1".equals(jdglMainPlanItem1.getLeaf())) jdglMainPlanItem1.setHaveChildren(1);
+            }
+        }
+
+//        List<JdglMainPlanItem> build = TreeUtil.build(jdglMainPlanItemList, jdglMainPlanItem.getPid());
+        return returnList;
+    }
+
     public List<JdglMainPlanItem> getJdglMainPlanItemListNoTree(JdglMainPlanItem jdglMainPlanItem) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
         if(!CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             for (JdglMainPlanItem jdglMainPlanItem1 : jdglMainPlanItemList) {
                 jdglMainPlanItem1.setText(jdglMainPlanItem1.getItemName());
                 jdglMainPlanItem1.setParent(jdglMainPlanItem1.getPid());
-                jdglMainPlanItem1.setStart_date(jdglMainPlanItem1.getStartDate());
-//                jdglMainPlanItem1.setEnd_date(jdglMainPlanItem1.getFinishDate());
-                Integer plannedDuration = jdglMainPlanItem1.getPlannedDuration();
+
+                // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
+                Date start_date = jdglMainPlanItem1.getActualStartDate() != null
+                        ? jdglMainPlanItem1.getActualStartDate() : jdglMainPlanItem1.getRemainingEarlyStartDate();
+                jdglMainPlanItem1.setStart_date(start_date);
+
+                // 如果已经有实际完成时间，则取实际完成时间，否则取尚需最早完成;
+                Date end_date = jdglMainPlanItem1.getActualFinishDate() != null
+                        ? jdglMainPlanItem1.getActualFinishDate() : jdglMainPlanItem1.getRemainingEarlyFinishDate();
+
+                // 计算总工期（天。尚需与实际综合计算）
+                Integer plannedDuration = StatisticsUtils.getDaysByRangeDate(start_date, end_date);
                 jdglMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
+
                 jdglMainPlanItem1.setOpen(true);
 //                jdglMainPlanItem1.setType("task");
+
+                // 实际开始
                 Date actualStartDate = jdglMainPlanItem1.getActualStartDate();
-                Date actualFinishDate = jdglMainPlanItem1.getActualFinishDate();
+                // 实际结束（如没结束，则取当前时间）
+                Date actualFinishDate = jdglMainPlanItem1.getActualFinishDate() != null
+                        ? jdglMainPlanItem1.getActualFinishDate() : DateUtils.getNowDate();
                 if(actualStartDate != null) {
-                    long timeS = actualStartDate.getTime();
-                    long timeF = actualFinishDate == null ? DateUtils.getNowDate().getTime() : actualFinishDate.getTime();
-                    BigDecimal progress = new BigDecimal(plannedDuration == 0 ? 0 : (timeF-timeS)/24/60/60/1000/plannedDuration);
+                    // 计算进度
+                    Integer daysByRangeDate = StatisticsUtils.getDaysByRangeDate(actualStartDate, actualFinishDate);
+                    BigDecimal progress = new BigDecimal(plannedDuration == 0 ? 0 : daysByRangeDate/plannedDuration);
                     progress = progress.setScale(2, RoundingMode.HALF_UP);
                     jdglMainPlanItem1.setProgress(progress);
+                } else {
+                    jdglMainPlanItem1.setProgress(new BigDecimal(0));
                 }
 
-//                if("wbs".equals(jdglMainPlanItem1.getItemType())) {
-//                    jdglMainPlanItem1.setRender("split");
-//                }
+                // wbs层做子集块汇总拼接
+                if("wbs".equals(jdglMainPlanItem1.getItemType())) {
+                    jdglMainPlanItem1.setRender("split");
+                }
+                // 判断里程碑
                 if(jdglMainPlanItem1.getTaskType() != null && jdglMainPlanItem1.getTaskType().contains("Milestone")) {
                     jdglMainPlanItem1.setType("milestone");
                     jdglMainPlanItem1.setRollup(true);
@@ -214,5 +273,38 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         }
         List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getWbsCode).thenComparing(JdglMainPlanItem::getLeaf).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
         return collect1;
+    }
+
+    @Override
+    public JdglMainPlanItem getUsing4One(JdglMainPlanItem jdglMainPlanItemParam) {
+
+        if(jdglMainPlanItemParam == null || StringUtils.isEmpty(jdglMainPlanItemParam.getWbsCode())) {
+            throw new RuntimeException("参数异常!");
+        }
+
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+
+        if(usingJdglMainPlan != null) {
+            jdglMainPlanItemParam.setMainPlanId(usingJdglMainPlan.getId());
+            jdglMainPlanItemParam.setItemCode(jdglMainPlanItemParam.getWbsCode());
+            JdglMainPlanItem jdglMainPlanItem = getJdglMainPlanItem(jdglMainPlanItemParam);
+            return jdglMainPlanItem;
+        }
+
+        return null;
+    }
+
+    /**
+     * 获取项目开始与结束
+     * @return
+     */
+    @Override
+    public JdglMainPlanItem getProjStartAndFinish() {
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+        if(usingJdglMainPlan == null) {
+            return null;
+        }
+        return jdglMainPlanItemMapper.getProjStartAndFinish(usingJdglMainPlan.getId());
+
     }
 }

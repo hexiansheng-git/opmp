@@ -2,7 +2,10 @@ package com.hhwy.pm.jdgl.statistics.util;
 
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsQueryVO;
+import io.swagger.models.auth.In;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -221,4 +224,22 @@ public class StatisticsUtils {
         return returnMap;
 
     }
+
+    /**
+     * 获取日期区间天数(1位小数)
+     * @return
+     */
+    public static Integer getDaysByRangeDate(Date startDate, Date endDate) {
+
+        if(startDate == null || endDate == null) {
+            return 0;
+        }
+
+        long timeS = startDate.getTime();
+        long timeE = endDate.getTime();
+
+        return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000);
+
+    }
+
 }

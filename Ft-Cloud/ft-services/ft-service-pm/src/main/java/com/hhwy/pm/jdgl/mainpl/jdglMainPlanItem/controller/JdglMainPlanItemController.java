@@ -44,6 +44,13 @@ public class JdglMainPlanItemController extends BaseController {
     }
 
     @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    @GetMapping("/getUsing4One")
+    public AjaxResult getUsing4One(@Validated(ValidationGroups.Get.class) JdglMainPlanItem jdglMainPlanItemParam) {
+        JdglMainPlanItem jdglMainPlanItem = jdglMainPlanItemService.getUsing4One(jdglMainPlanItemParam);
+        return AjaxResult.success(jdglMainPlanItem);
+    }
+
+    @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanItemList(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getJdglMainPlanItemList(jdglMainPlanItemParam);
@@ -124,6 +131,15 @@ public class JdglMainPlanItemController extends BaseController {
     public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM-dd") Date startDate,@JsonFormat(pattern = "yyyy-MM-dd") Date endDate) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(startDate, endDate);
         return getDataTableAjaxResult(jdglMainPlanItemList);
+    }
+
+    /**
+     * 获取项目开始与结束
+     * @return
+     */
+    @GetMapping("/getProjStartAndFinish")
+    public AjaxResult getProjStartAndFinish() {
+        return AjaxResult.success(jdglMainPlanItemService.getProjStartAndFinish());
     }
 
 }
