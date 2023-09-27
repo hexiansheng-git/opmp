@@ -194,12 +194,13 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
 
         TaxInVO.CurrencyVO currencyVO = new TaxInVO.CurrencyVO();
         currencyVO.setCurrency(projectBasicInfo.getLocalCurrencyCode());
-        currencyVO.setCurrencyName(projectBasicInfo.getLocalCurrency());
+        Map<String, String> currencyNamesByCodes = CommonServiceUtil.getCurrencyNamesByCodes(Collections.singletonList(projectBasicInfo.getLocalCurrencyCode()));
+        currencyVO.setCurrencyName(currencyNamesByCodes.get(projectBasicInfo.getLocalCurrencyCode()));
 
         ArrayList<String> currencyList = new ArrayList<>();
         String localCurrencyCode = projectBasicInfo.getLocalCurrencyCode();
         currencyList.add(localCurrencyCode);
-        currencyVO.setCurrencyName(projectBasicInfo.getLocalCurrency());
+        
         
         
         currencyList.add(PmConstant.CNY);

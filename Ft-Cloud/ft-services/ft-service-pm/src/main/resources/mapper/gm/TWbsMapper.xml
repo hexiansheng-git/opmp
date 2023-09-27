@@ -224,7 +224,7 @@
     </select>
 
     <select id="getEffectMainIdByType" parameterType="String" resultType="Long">
-        select id from t_wbs_main where engineering_type = #{engineeringType}
+        select id from t_wbs_main where product_type like concat('%', #{engineeringType},'%')
         and valid = 1 order by version desc limit 1
     </select>
     

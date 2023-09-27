@@ -208,7 +208,7 @@
             <if test="year != null ">and `year` = #{year}</if>
         </where>
         group by item_name
-        order by create_time desc
+        order by id
     </select>
 
     <insert id="insertQqchTaxGlobal" useGeneratedKeys="true" keyProperty="id">

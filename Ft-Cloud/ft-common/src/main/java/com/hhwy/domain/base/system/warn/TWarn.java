@@ -1,4 +1,4 @@
-package com.hhwy.system.warn.domain;
+package com.hhwy.domain.base.system.warn;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -14,13 +14,13 @@ import java.util.Date;
 
 /**
  * @author han
- * @date 2023-09-26 10:33:21
- * @remark t_warn_record
+ * @date 2023-09-26 17:52:25
+ * @remark t_warn
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TWarnRecord extends BaseEntity {
+public class TWarn extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -29,7 +29,7 @@ public class TWarnRecord extends BaseEntity {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     @Excel(name = "记录id")
-    private Long recordId;
+    private Long warnId;
     /**
      * 字段描述：预警项
      */
@@ -43,17 +43,17 @@ public class TWarnRecord extends BaseEntity {
     @Excel(name = "预警项id")
     private String warnItemId;
     /**
-     * 字段描述：预警人id
+     * 字段描述：预警范围类型（1：全部，2：部门，3：用户）
      */
     @JsonProperty
-    @Excel(name = "预警人id")
-    private String warnUserId;
+    @Excel(name = "预警范围类型（1：全部，2：部门，3：用户）")
+    private String warnScopeType;
     /**
-     * 字段描述：预警人姓名
+     * 字段描述：部门或者用户id，多个之间用 ” ， “ 隔开
      */
     @JsonProperty
-    @Excel(name = "预警人姓名")
-    private String warnUserName;
+    @Excel(name = "部门或者用户id，多个之间用 ” ， “ 隔开")
+    private String warnScope;
     /**
      * 字段描述：预警内容
      */
@@ -116,4 +116,6 @@ public class TWarnRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "租户标识")
     private String tenantKey;
+
+    private String projectName;
 }

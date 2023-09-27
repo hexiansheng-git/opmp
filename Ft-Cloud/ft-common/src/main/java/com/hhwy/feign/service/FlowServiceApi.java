@@ -1,6 +1,7 @@
 package com.hhwy.feign.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.feign.factory.FlowServiceFallbackFactory;
 import com.hhwy.feign.factory.PmServiceFallbackFactory;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -15,7 +16,7 @@ import java.util.Map;
  *
  * @author hhwy
  */
-@FeignClient(name = "ft-service-flowable", fallbackFactory = PmServiceFallbackFactory.class)
+@FeignClient(name = "ft-service-flowable", fallbackFactory = FlowServiceFallbackFactory.class)
 public interface FlowServiceApi {
 
 

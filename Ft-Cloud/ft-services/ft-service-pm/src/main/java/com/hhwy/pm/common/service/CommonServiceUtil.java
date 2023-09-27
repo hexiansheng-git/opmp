@@ -85,6 +85,22 @@ public class CommonServiceUtil {
         return res;
     }
 
+
+
+    public static Map<String, String> getCurrencyNamesByCodes(List<String> names) {
+        CurrencyInfo where = new CurrencyInfo();
+        Map<String, Object> params = new HashMap<>();
+        params.put("currencyCodes", String.join(",", names));
+        where.setParams(params);
+        where.setDelFlag("0");
+        List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
+
+        HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
+        for (CurrencyInfo currencyInfo : currencyInfoList) {
+            res.put(currencyInfo.getCurrencyCode(), currencyInfo.getCurrencyName());
+        }
+        return res;
+    }
     /***
      * 功能描述: 获取所有的币种
      * 作者: fushudong

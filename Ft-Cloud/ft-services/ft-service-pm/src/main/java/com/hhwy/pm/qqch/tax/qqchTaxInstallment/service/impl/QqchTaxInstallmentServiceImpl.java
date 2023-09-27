@@ -175,7 +175,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         // 总成本
         InstallmentVO.ListVO totalOut = this.getTotal("成本合计", outList, otherOutList);
 
-        totalOut.setId(1L);
+        totalOut.setId(2L);
         resList.add(totalOut);
         List<InstallmentVO.ListVO> objects1 = new ArrayList<>();
         
@@ -184,7 +184,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
             objects1.addAll(new ArrayList<>());
         }else {
             for (InstallmentVO.ListVO listVO : outList) {
-                listVO.setPid(1L);
+                listVO.setPid(2L);
             }
             objects1.addAll(outList);
         }
@@ -194,7 +194,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
             objects1.addAll(new ArrayList<>());
         }else {
             for (InstallmentVO.ListVO listVO : otherOutList) {
-                listVO.setPid(1L);
+                listVO.setPid(2L);
             }
             objects1.addAll(otherOutList);
         }
@@ -432,7 +432,7 @@ public class QqchTaxInstallmentServiceImpl implements IQqchTaxInstallmentService
         List<InstallmentVO.ListVO> children = qqchTaxInList.stream().map(item -> this.createListVO(item, id)).collect(Collectors.toList());
         CommonServiceUtil.setCurrentName(children, "digest", "digest");
         // 计算出收入详情 注意这里设置的是amt
-        children.stream().filter(Objects::nonNull).map(InstallmentVO.ListVO::getUsdAmt).reduce(BigDecimal::add).ifPresent(listVO::setAmt);
+        children.stream().filter(Objects::nonNull).map(InstallmentVO.ListVO::getUsdAmt).filter(Objects::nonNull).reduce(BigDecimal::add).ifPresent(listVO::setAmt);
         listVO.setChildren(children);
         return listVO;
     }

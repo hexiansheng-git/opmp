@@ -1,12 +1,13 @@
 package com.hhwy.system.warn.service;
 
-import com.hhwy.system.warn.domain.TWarnRecord;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 
 import java.util.List;
 
+
 /**
  * @author han
- * @date 2023-09-26 10:33:21
+ * @date 2023-09-26 17:52:28
  * @remark
  */
 public interface ITWarnRecordService {

@@ -2,7 +2,7 @@ package com.hhwy.system.warn.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.system.warn.domain.TWarnRecord;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnRecordService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @author han
- * @date 2023-09-26 10:33:21
+ * @date 2023-09-26 17:52:28
  * @remark
  */
 @Service
@@ -34,7 +34,7 @@ public class TWarnRecordServiceImpl implements ITWarnRecordService {
 
     @Transactional
     public int insertTWarnRecord(TWarnRecord tWarnRecord) {
-        tWarnRecord.setRecordId(IdWorker.createId());
+        tWarnRecord.setId(IdWorker.createId());
         tWarnRecord.setCreateUser(SecurityUtils.getUserName());
         tWarnRecord.setCreateTime(DateUtils.getNowDate());
         return tWarnRecordMapper.insertTWarnRecord(tWarnRecord);
@@ -43,7 +43,7 @@ public class TWarnRecordServiceImpl implements ITWarnRecordService {
     @Transactional
     public int insertTWarnRecordList(List<TWarnRecord> tWarnRecordList) {
         for (TWarnRecord tWarnRecord : tWarnRecordList) {
-            tWarnRecord.setRecordId(IdWorker.createId());
+            tWarnRecord.setId(IdWorker.createId());
             tWarnRecord.setCreateUser(SecurityUtils.getUserName());
             tWarnRecord.setCreateTime(DateUtils.getNowDate());
         }

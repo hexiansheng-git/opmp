@@ -10,7 +10,9 @@ public class WorkGroupTask {
     @Autowired
     private PmServiceApi pmServiceApi;
 
-
+    /**
+     * 前期策划工作小组设立预警
+     */
     public void workGroupSetUpWarn(){
         System.out.println("----------发送预警------------");
         pmServiceApi.workGroupSetUpWarn();

@@ -80,7 +80,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         qqchPerformInspectionMapper.insertQqchPerformInspection(qqchPerformInspection);
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
         //若为发起，推送数据到总部
-        if(qqchPerformInspection.getPtVar5().equals("1")){
+        if("1".equals(qqchPerformInspection.getPtVar5())){
             sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);    
         }
         return qqchPerformInspection.getId();

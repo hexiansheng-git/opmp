@@ -10,6 +10,8 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.gm.wbs.domain.TWbs;
 import com.hhwy.pm.gm.wbs.mapper.TWbsMapper;
 import com.hhwy.pm.gm.wbs.service.ITWbsService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -35,6 +37,8 @@ public class TWbsServiceImpl implements ITWbsService {
     private TWbsMapper tWbsMapper;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private IXmslProjectBasicInfoService projectBasicInfoService;
 
 
     public TWbs getTWbs(TWbs tWbs) {
@@ -140,14 +144,16 @@ public class TWbsServiceImpl implements ITWbsService {
     }
     
     @Override
-    public List<TWbs> wbsListByType(String engineeringType, String name, String nodeType, Long parentId) {
-        if(StringUtils.isBlank(engineeringType))
+    public List<TWbs> wbsListByType(String name, String nodeType, Long parentId) {
+        //获取项目的产品类型
+        ProjectBasicInfo projectBasicInfo =  projectBasicInfoService.projectInfo();
+        if(projectBasicInfo == null || StringUtils.isBlank(projectBasicInfo.getBusinessAreasAndProducts()) )
             return new ArrayList<>(2);
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         try {
-            Long mainId = tWbsMapper.getEffectMainIdByType(engineeringType);
+            Long mainId = tWbsMapper.getEffectMainIdByType(projectBasicInfo.getBusinessAreasAndProducts());
             if(mainId == null)
                 return new ArrayList<>(2);
             TWbs query = new TWbs();

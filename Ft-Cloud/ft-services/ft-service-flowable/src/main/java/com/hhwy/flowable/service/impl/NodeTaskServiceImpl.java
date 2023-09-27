@@ -3,6 +3,7 @@ package com.hhwy.flowable.service.impl;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.flowable.service.INodeTaskService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.flowable.bpmn.model.Activity;
 import org.flowable.cmmn.engine.impl.process.ProcessInstanceService;
 import org.flowable.engine.HistoryService;
@@ -38,10 +39,10 @@ public class NodeTaskServiceImpl implements INodeTaskService {
     public String isNowfirstNode(String insId) {
         if(StringUtils.isBlank(insId))
             return null;
-//        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(insId).singleResult();
-//        String proDefId = processInstance.getProcessDefinitionId();
-//        Execution execution = runtimeService.createExecutionQuery().processInstanceId(insId).list().get(0);
-        Task task = taskService.createTaskQuery().processInstanceId(insId).list().get(0);
+        List<Task> taskList = taskService.createTaskQuery().processInstanceId(insId).list();
+        if(CollectionUtils.isEmpty(taskList))
+            return null;
+        Task task = taskList.get(0);
         String firstId = historyService.createHistoricActivityInstanceQuery().processInstanceId(insId).list().get(0).getActivityId();
         ActivityInstance activityInstance = runtimeService.createActivityInstanceQuery().processInstanceId(insId).executionId(task.getExecutionId()).list().get(0);
         if(firstId.equalsIgnoreCase(activityInstance.getActivityId())){

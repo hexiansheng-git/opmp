@@ -4,6 +4,7 @@ import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.period.PeriodInfo;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
@@ -11,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.ArrayList;
@@ -89,6 +89,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             @Override
             public AjaxResult selectListRatePeriodByCodeAndCurrent(Map<String, String> map) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
+            public AjaxResult addWarn(TWarn tWarn) {
+                return null;
             }
         };
     }

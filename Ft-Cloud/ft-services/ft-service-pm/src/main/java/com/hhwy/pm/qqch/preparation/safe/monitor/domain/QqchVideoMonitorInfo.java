@@ -79,6 +79,7 @@ public class QqchVideoMonitorInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "说明")
     private String remark;
+
     /**
      * 字段描述：所属区域id
      */

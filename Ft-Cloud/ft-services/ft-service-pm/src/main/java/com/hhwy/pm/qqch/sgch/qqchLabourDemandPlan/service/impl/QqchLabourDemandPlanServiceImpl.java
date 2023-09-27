@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -171,7 +172,9 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         //思路：
         // 根据工种名称拿到的id 即为子集的pid
         QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
-        qqchLabourDemandPlan1.setJobNames(jobNames);
+        if (!jobNames.contains("全部工种")){
+            qqchLabourDemandPlan1.setJobNames(jobNames);
+        }
         List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan1);
 
         List<QqchLabourDemandPlanDto> list = new ArrayList<>();
@@ -185,16 +188,21 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         for (Date date : dates) {
             QqchLabourDemandPlanDto qqchLabourDemandPlanDto = new QqchLabourDemandPlanDto();
             qqchLabourDemandPlanDto.setTime(date);
+            qqchLabourDemandPlanDto.setStartTime(DateUtil.beginOfMonth(date));
+            qqchLabourDemandPlanDto.setEndTime(DateUtil.endOfMonth(date));
             qqchLabourDemandPlanDto.setNum(new BigDecimal(0));
             list2.add(qqchLabourDemandPlanDto);
         }
 
         for (QqchLabourDemandPlanDto qqchLabourDemandPlanDto : list2) {
+            Date startTime = qqchLabourDemandPlanDto.getStartTime();
+            Date endTime = qqchLabourDemandPlanDto.getEndTime();
             for (QqchLabourDemandPlanDto labourDemandPlanDto : list) {
-                String s = new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlanDto.getTime());
-                String s1 = new SimpleDateFormat("yyyy-MM").format(labourDemandPlanDto.getStartTime());
-                String s2 = new SimpleDateFormat("yyyy-MM").format(labourDemandPlanDto.getEndTime());
-                if (s.equals(s1) & s.equals(s2)) {
+                Date startTime1 = labourDemandPlanDto.getStartTime();
+                Date endTime1 = labourDemandPlanDto.getEndTime();
+                boolean in = DateUtil.isIn(startTime1, startTime, endTime);
+                boolean in1 = DateUtil.isIn(endTime1, startTime, endTime);
+                if (in || in1) {
                     qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getNum().add(labourDemandPlanDto.getNum()));
                 }
             }

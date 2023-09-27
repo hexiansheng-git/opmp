@@ -5,8 +5,12 @@ import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.CommonYesNo;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
@@ -15,9 +19,11 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.module.contant.Valid;
-import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.warn.WarnService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,12 +53,16 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     private QqchWorkGroupMemberMapper qqchWorkGroupMemberMapper;
 
     @Autowired
-    private IXmslContractInfoService xmslContractInfoService;
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     @Autowired
-    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
-    @Autowired
     ISysSyncInfoService sysSyncInfoService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private WarnService warnService;
 
 
     /**
@@ -404,6 +415,44 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
     @Override
     public void workGroupSetUpWarn() {
-        System.out.println("--------------工作小组设立超时！---------------");
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                //获取项目数据
+                ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                if(projectInfo == null){
+                    continue;
+                }
+                /*中标日期*/
+                Date winTheBiddingDate = projectInfo.getWinTheBiddingDate();
+                if(winTheBiddingDate == null){
+                    continue;
+                }
+                Date nowDate = DateUtils.getNowDate();
+                Long diffDays = FtDateUtils.getDays(winTheBiddingDate, nowDate);
+                if(diffDays > 10){
+                    /*判断工作小组是否已成立并完成审批*/
+                    QqchWorkGroup workGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
+                    if(workGroup == null){
+                        /*发送预警*/
+                        warnService.addWarn(WarnItem.WORK_GROUP_SET_UP,WarnScopeType.USER,null,"admin",tenantKey);
+                    }
+                }
+            }
+        }catch (Exception e){
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }
