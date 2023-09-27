@@ -22,6 +22,6 @@ public class MyFlowController {
     @RequestMapping("/isNowfirstNode")
     public AjaxResult isNowfirstNode(@RequestParam("insId") String insId){
         String firstName = nodeTaskService.isNowfirstNode(insId);
-        return AjaxResult.success(firstName);
+        return AjaxResult.success("",firstName);
     }
 }
