@@ -10,6 +10,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.enums.FlowStatusEnum;
+import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.common.mapper.FlowInfoMapper;
@@ -37,6 +38,7 @@ public class FlowInfoSearchUtil {
     static FlowInfoMapper flowInfoMapper = SpringUtils.getBean(FlowInfoMapper.class);
     static SystemServiceApi systemServiceApi = SpringUtils.getBean(SystemServiceApi.class);
     static SystemApiService systemApiService= SpringUtils.getBean(SystemApiService.class);
+    static FlowServiceApi flowServiceApi= SpringUtils.getBean(FlowServiceApi.class);
     
     /***
      * 功能描述: 查询流程信息
@@ -69,6 +71,7 @@ public class FlowInfoSearchUtil {
             CommonBaseEntity flowInfo = flowMap.get(t.getId()+"");
             if(flowInfo == null){
                 t.setTaskStatus(FlowStatusEnum.FLOW_STATUS_INIT.getKey());
+                t.setIsFirstNode("0");
                 continue;
             }
             //ProcessTaskManId为空，表示流程已结束
@@ -82,6 +85,8 @@ public class FlowInfoSearchUtil {
             t.setCurrentTaskId(flowInfo.getCurrentTaskId());
             if(!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
                 userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
+            //是否为第一节点发起&当前登录用户等于发起人
+            t.setIsFirstNode(isFirstNodeEdit(flowInfo.getInstanceId()));
         }
         //查询流程审批人名称
         if(CollectionUtils.isNotEmpty(userNameSet)){
@@ -130,6 +135,16 @@ public class FlowInfoSearchUtil {
         return userList.get(0).getNickName();
     }
 
+    private static String isFirstNodeEdit(String insId){
+        if(StringUtils.isBlank(insId))
+            return "0";
+        AjaxResult result = flowServiceApi.isNowfirstNode(insId);
+        if(!AjaxResult.isSuccess(result)){
+            return "0";
+        }
+        boolean isFirst= ObjectUtils.nvlString(result.get(AjaxResult.DATA_TAG)).equalsIgnoreCase(SecurityUtils.getSysUser().getUserName());
+        return isFirst?"1":"0";
+    }
 
 
 }

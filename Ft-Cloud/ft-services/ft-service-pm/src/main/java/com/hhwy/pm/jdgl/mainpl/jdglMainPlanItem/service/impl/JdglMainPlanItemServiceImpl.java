@@ -271,7 +271,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 if(jdglMainPlanItem != null) returnList.add(jdglMainPlanItem);
             }
         }
-        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getWbsCode).thenComparing(JdglMainPlanItem::getLeaf).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
+//        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getWbsCode).thenComparing(JdglMainPlanItem::getLeaf).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
+        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getSort).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
         return collect1;
     }
 

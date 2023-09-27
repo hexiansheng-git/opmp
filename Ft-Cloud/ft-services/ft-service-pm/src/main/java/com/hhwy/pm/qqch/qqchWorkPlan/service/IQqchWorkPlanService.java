@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.service;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public interface IQqchWorkPlanService {
      * @param map 参数
      * @return
      */
-    BaseEntity baseInfo(Map<String, String> map);
+    QqchWorkPlan baseInfo(Map<String, String> map);
     QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);

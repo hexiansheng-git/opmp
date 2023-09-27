@@ -6,7 +6,6 @@ import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
@@ -76,7 +75,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private final static String TWO = "2";//详情和编辑
     private final static String THREE = "3";//调整
     @Override
-    public BaseEntity baseInfo(Map<String, String> map) {
+    public QqchWorkPlan baseInfo(Map<String, String> map) {
         /*菜单进入，version为1.0不显示历史记录*/
         /*详情/编辑/调整，显示历史记录*/
         // 主键
@@ -314,16 +313,17 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Override
     public Long submitQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
         //TODO 提交立马生效
-        qqchWorkPlan.setTaskStatus("5");
-        qqchWorkPlan.setValid("1");
+//        qqchWorkPlan.setTaskStatus("5");
+//        qqchWorkPlan.setValid("1");
 
         if (ObjectNullUtil.isEmpty(qqchWorkPlan.getId())) {
             qqchWorkPlan.setId(this.insertQqchWorkPlanSubmit(qqchWorkPlan));
         } else {
             this.updateQqchWorkPlanSubmit(qqchWorkPlan);
-        }          
+        }
+
         //推送到总部版
-        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
+//        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return qqchWorkPlan.getId();
     }
 

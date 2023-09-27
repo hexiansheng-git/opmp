@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class StatisticsUtils {
 
@@ -241,5 +242,11 @@ public class StatisticsUtils {
         return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000);
 
     }
+
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("-?\\d+(\\.\\d+)?");
+    public static boolean isNumeric2(String str) {
+        return str != null && NUMBER_PATTERN.matcher(str).matches();
+    }
+
 
 }
