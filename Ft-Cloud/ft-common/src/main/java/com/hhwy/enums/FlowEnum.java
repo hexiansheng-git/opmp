@@ -74,7 +74,7 @@ public enum FlowEnum {
     JDGL_DAYSCHEDULE("jdgl_day_schedule","process_jdgl_day_schedule"),
 
     //前期策划执行检查
-    QQCH_ZXJC("qqch_perform_inspection","process_qqch_perform_inspection");;
+    QQCH_ZXJC("qqch_perform_inspection","process_qqch_perform_inspection");
 
 
     public String getTableName() {
