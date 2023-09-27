@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -11,6 +12,7 @@ import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanDto;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanResult;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.vo.QqchLabourDemandPlanVo;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.mapper.QqchLabourDemandPlanMapper;
 import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.service.IQqchLabourDemandPlanService;
@@ -237,9 +239,10 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         List<QqchConstStaffPlanResult> qqchConstList = qqchConstMapper.selectQqchConst(constVersion);
         if (CollectionUtils.isEmpty(qqchConstList)) {
             //1.3人员策划为空，则清空1.5.2数据
-            QqchLabourDemandPlan param = new QqchLabourDemandPlan();
-            param.setVersion(constVersion);
-            this.deleteQqchLabourDemandPlan(param);
+            //1.3人员策划为空，则不做任何操作 20230927
+//            QqchLabourDemandPlan param = new QqchLabourDemandPlan();
+//            param.setVersion(constVersion);
+//            this.deleteQqchLabourDemandPlan(param);
             QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
             qqchLabourDemandPlan.setVersion(vo.getVersion());
             return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
@@ -255,25 +258,33 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         List<QqchLabourDemandPlan> orginList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(param);
         if (CollectionUtils.isEmpty(orginList)){
             //如果1.5.2数据为空，则直接入库新数据
-            List<QqchLabourDemandPlan> arrayList = this.toTreeList(qqchConstList);
+            List<QqchLabourDemandPlanResult> qqchLabourDemandPlanResults = BeanUtil.copyToList(qqchConstList, QqchLabourDemandPlanResult.class);
+            List<QqchLabourDemandPlan> arrayList = this.toTreeList(qqchLabourDemandPlanResults);
             this.insertQqchLabourDemandPlanList(arrayList, labourVersion);
             QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
             qqchLabourDemandPlan.setVersion(vo.getVersion());
             return this.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
         }
 
-        List<QqchConstStaffPlanResult> saveList = new ArrayList<>();
+        List<QqchLabourDemandPlanResult> saveList = new ArrayList<>();
         List<Long> delList = new ArrayList<>();
 
-        //遍历1.5.2数据，删除1.3中不包含的数据，修改包含的数据
+        //遍历1.5.2数据，判断在1.3中是否存在，存在则修改，不存在说明1.3已删除1.5.2也同步删除
         //1.3数据 按id分组
         Map<Long, List<QqchConstStaffPlanResult>> mapId13 = qqchConstList.stream()
                     .collect(Collectors.groupingBy(QqchConstStaffPlanResult::getId));
         for (QqchLabourDemandPlan qqchLabourDemandPlan : orginList) {
             Long outId = qqchLabourDemandPlan.getOutId();
             if (mapId13.containsKey(outId)){
-                //修改
-                saveList.addAll(mapId13.get(outId));
+                //已存在的数据，判断入场和离场时间是否已填写，未填下走添加逻辑，已填写需要把数据保留
+                List<QqchLabourDemandPlanResult> qqchLabourDemandPlanResults = BeanUtil.copyToList(mapId13.get(outId), QqchLabourDemandPlanResult.class);
+                if (qqchLabourDemandPlan.getEntryDate() != null || qqchLabourDemandPlan.getExitDate() != null){
+                    qqchLabourDemandPlanResults.forEach(p -> {
+                        p.setEntryDate(qqchLabourDemandPlan.getEntryDate());
+                        p.setExitDate(qqchLabourDemandPlan.getExitDate());
+                    });
+                }
+                saveList.addAll(qqchLabourDemandPlanResults);
             }else {
                 //删除
                 delList.add(qqchLabourDemandPlan.getId());
@@ -290,7 +301,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             if (map152.containsKey(id)){
                 continue;
             }
-            saveList.add(result);
+            saveList.add((QqchLabourDemandPlanResult) result);
         }
         if (CollectionUtils.isNotEmpty(delList)) {
             qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlanByPks(delList);
@@ -335,19 +346,19 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         qqchLabourDemandPlanMapper.insertQqchLabourDemandPlanList(configs);
     }
 
-    private List<QqchLabourDemandPlan> toTreeList(List<QqchConstStaffPlanResult> qqchConstList){
+    private List<QqchLabourDemandPlan> toTreeList(List<QqchLabourDemandPlanResult> qqchConstList){
         //按工种名称分组
-        Map<String, List<QqchConstStaffPlanResult>> listMap = qqchConstList.stream().collect(Collectors.groupingBy(QqchConstStaffPlanResult::getOccupationName));
+        Map<String, List<QqchLabourDemandPlanResult>> listMap = qqchConstList.stream().collect(Collectors.groupingBy(QqchConstStaffPlanResult::getOccupationName));
         //遍历封装好
         List<QqchLabourDemandPlan> arrayList = new ArrayList<>();
-        Set<Map.Entry<String, List<QqchConstStaffPlanResult>>> entrySet = listMap.entrySet();
+        Set<Map.Entry<String, List<QqchLabourDemandPlanResult>>> entrySet = listMap.entrySet();
         //按工种名称遍历
-        for (Map.Entry<String, List<QqchConstStaffPlanResult>> entry : entrySet) {
+        for (Map.Entry<String, List<QqchLabourDemandPlanResult>> entry : entrySet) {
             QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
             qqchLabourDemandPlan.setJobName(entry.getKey());
             List<QqchLabourDemandPlan> list = new ArrayList<>();
-            List<QqchConstStaffPlanResult> entryValue = entry.getValue();
-            for (QqchConstStaffPlanResult result : entryValue) {
+            List<QqchLabourDemandPlanResult> entryValue = entry.getValue();
+            for (QqchLabourDemandPlanResult result : entryValue) {
                 QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
                 qqchLabourDemandPlan1.setOutId(result.getId());
                 qqchLabourDemandPlan1.setOccupationCode(StringUtils.isEmpty(result.getOccupationCode())?null:result.getOccupationCode());
@@ -365,6 +376,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
                     BigDecimal rate = BigDecimal.valueOf(result.getLocalCount() * 100 / total);
                     qqchLabourDemandPlan1.setOutProportion(rate);
                 }
+                qqchLabourDemandPlan1.setEntryDate(result.getEntryDate());
+                qqchLabourDemandPlan1.setExitDate(result.getExitDate());
                 list.add(qqchLabourDemandPlan1);
             }
             qqchLabourDemandPlan.setChildren(list);
