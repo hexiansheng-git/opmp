@@ -92,6 +92,8 @@ public class QqchMeasuringInstrumentServiceImpl implements IQqchMeasuringInstrum
             measuringInstrument.setUnit(constFacilityPlan.getUnits());
             measuringInstrument.setNum(NumberUtil.toBigDecimal(constFacilityPlan.getCount()));
             measuringInstrument.setSpec(constFacilityPlan.getSpecificationModel());
+            measuringInstrument.setEquType(constFacilityPlan.getPtVar2());
+            measuringInstrument.setPtVar1(constFacilityPlan.getPtVar1());
             measuringInstrument.setId(IdWorker.createId());
             measuringInstrument.setValid(valid);
             measuringInstrument.setVersion(version);

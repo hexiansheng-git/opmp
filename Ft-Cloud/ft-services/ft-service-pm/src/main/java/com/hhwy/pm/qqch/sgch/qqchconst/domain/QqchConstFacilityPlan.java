@@ -191,13 +191,13 @@ public class QqchConstFacilityPlan extends CompileEntity<QqchConstFacilityPlan> 
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：设备分类编号
      */
     @JsonProperty
     @Excel(name = "预留字段1")
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：设备分类名称
      */
     @JsonProperty
     @Excel(name = "预留字段2")

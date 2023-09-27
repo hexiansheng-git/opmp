@@ -38,10 +38,10 @@ public class QqchMeasuringInstrument extends BaseEntity {
     @Excel(name = "所属单位")
     private String affiliationUnit;
     /**
-     * 字段描述：设备类型
+     * 字段描述：设备类型名称
      */
     @JsonProperty
-    @Excel(name = "设备类型")
+    @Excel(name = "设备类型名称")
     private String equType;
     /**
      * 字段描述：设备编码
@@ -202,7 +202,7 @@ public class QqchMeasuringInstrument extends BaseEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：设备类型编号
      */
     @JsonProperty
     @Excel(name = "预留字段1")
