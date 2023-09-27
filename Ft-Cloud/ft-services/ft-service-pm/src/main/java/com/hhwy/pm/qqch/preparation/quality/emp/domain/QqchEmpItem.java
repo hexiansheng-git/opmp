@@ -201,7 +201,7 @@ public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
      */
     @JsonProperty
     @Excel(name = "预留字段3")
-    private String ptVar3;
+    private Long pid;
     /**
      * 字段描述：预留字段4
      */

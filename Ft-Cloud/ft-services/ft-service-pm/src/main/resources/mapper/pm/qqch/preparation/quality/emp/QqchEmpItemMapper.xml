@@ -32,7 +32,7 @@
         <result property="delFlag" column="del_flag"/>
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
-        <result property="ptVar3" column="pt_var3"/>
+        <result property="pid" column="pid"/>
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
@@ -65,7 +65,7 @@
              , `del_flag`
              , `version`
              , `valid`
-             , `pt_var3`
+             , `pid`
              , `pt_var4`
              , `pt_var5`
              , `sort`
@@ -116,7 +116,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="pid != null  and pid != ''">and `pid` = #{pid}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -155,7 +155,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="pid != null  and pid != ''">and `pid` = #{pid}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
@@ -193,7 +193,7 @@
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
             <if test="version != null  and version != ''">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="pid != null  and pid != ''">`pid`,</if>
             <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="sort != null ">`sort`,</if>
@@ -226,7 +226,7 @@
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="version != null  and version != ''">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="pid != null  and pid != ''">#{pid},</if>
             <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="sort != null ">#{sort},</if>
@@ -263,7 +263,7 @@
             `del_time`,
             `version`,
             `valid`,
-            `pt_var3`,
+            `pid`,
             `pt_var4`,
             `pt_var5`,
             `sort`,
@@ -297,7 +297,7 @@
                 #{item.delTime},
                 #{item.version},
                 #{item.valid},
-                #{item.ptVar3},
+                #{item.pid},
                 #{item.ptVar4},
                 #{item.ptVar5},
                 #{item.sort},
@@ -335,7 +335,7 @@
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="version != null  and  version != ''">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
-            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="pid != null  and  pid != ''">`pid` = #{pid},</if>
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
@@ -483,9 +483,9 @@
                     when `id`=#{item.id} then #{item.valid}
                 </foreach>
             </trim>
-            <trim prefix="pt_var3  = case" suffix="end,">
+            <trim prefix="pid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar3}
+                    when `id`=#{item.id} then #{item.pid}
                 </foreach>
             </trim>
             <trim prefix="pt_var4  = case" suffix="end,">
@@ -540,7 +540,7 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="pid != null  and pid != ''">and `pid` = #{pid}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
