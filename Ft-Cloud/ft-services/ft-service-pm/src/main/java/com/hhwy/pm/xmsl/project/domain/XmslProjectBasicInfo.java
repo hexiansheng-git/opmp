@@ -125,14 +125,14 @@ public class XmslProjectBasicInfo extends BaseEntity {
     /**
      * 字段描述：开工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "开工日期")
     private Date startDate;
     /**
      * 字段描述：竣工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "竣工日期")
     private Date completionDate;
@@ -284,7 +284,7 @@ public class XmslProjectBasicInfo extends BaseEntity {
     /**
      * 字段描述：编制日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "编制日期")
     private Date establishDate;
