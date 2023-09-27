@@ -199,7 +199,7 @@ public class XmslProjectBasicInfo extends BaseEntity {
     /**
      * 字段描述：中标日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @JsonProperty
     @Excel(name = "中标日期")
     private Date winTheBiddingDate;
