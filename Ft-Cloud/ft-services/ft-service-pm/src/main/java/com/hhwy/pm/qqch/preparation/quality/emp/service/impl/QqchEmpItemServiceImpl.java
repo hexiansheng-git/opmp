@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.emp.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
@@ -16,6 +17,7 @@ import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +25,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -107,17 +110,25 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
 
         // 获取要保存的数据
         List<List<QqchEmpItem>> empItemListList = dto.getDto();
+
+        String itemIds = (String)dto.getParams().get("delItemIds");
+        if (StringUtils.isNotEmpty(itemIds)) {
+            List<Long> collect = Arrays.stream(itemIds.split(",")).map(Long::valueOf).collect(Collectors.toList());
+            this.qqchEmpItemMapper.deleteQqchEmpItemByPks(collect);
+        }
+        
         // 处理要保存的数据
         for (List<QqchEmpItem> qqchEmpItemList : empItemListList) {
-            for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
-                qqchEmpItem.setId(IdWorker.createId());
+            List<QqchEmpItem> qqchEmpItems = TreeUtil.treeToList(qqchEmpItemList);
+            for (QqchEmpItem qqchEmpItem : qqchEmpItems) {
                 qqchEmpItem.setStoreFlag((qqchEmpItem.getBstoreFlag() == null || !qqchEmpItem.getBstoreFlag()) ? PmConstant.ZERO : PmConstant.ONE);
                 wbsCodeList.add(qqchEmpItem.getWbsCode());
-                CompileEntity.dealSaveDto(dto, qqchEmpItem);
+                CompileEntity.dealSaveDto(dto, qqchEmpItem,false);
                 EntityUtils.setCreateUpdateInfo(qqchEmpItem);
                 iDatas.add(qqchEmpItem);
             }
         }
+
 
         // 将当前版本的做出变更的wbs进行删除
         this.qqchEmpItemMapper.deleteByWbsCodeAndVersion(wbsCodeList, version);
@@ -150,8 +161,9 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
             qqchEmpItem.setBstoreFlag(PmConstant.ONE.equals(qqchEmpItem.getStoreFlag()));
         }
+        List<QqchEmpItem> build = TreeUtil.build(qqchEmpItemList, null);
         entity.setVersion(dto.getVersion());
-        entity.setDto(qqchEmpItemList);
+        entity.setDto(build);
         return entity;
     }
 

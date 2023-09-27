@@ -101,6 +101,18 @@ public class CompileEntity<T> extends TreeNode<T> {
         return tCompileDTO.dealSaveDto();
     }
 
+    public static <T> T dealSaveDto(CompileEntity param, T dto,boolean treeFlag) {
+        CompileEntity<T> tCompileDTO = new CompileEntity<>();
+        tCompileDTO.setVersion(param.getVersion());
+        tCompileDTO.setSubmitFlag(param.getSubmitFlag());
+        tCompileDTO.setModuleIdentity(param.getModuleIdentity());
+        tCompileDTO.setReqId(param.getReqId());
+        tCompileDTO.setStageIdentity(param.getStageIdentity());
+        tCompileDTO.setDataType(param.getDataType());
+        tCompileDTO.setDto(dto);
+        return tCompileDTO.dealSaveDto(treeFlag);
+    }
+
     public static <T> T dealSaveDtoWithoutTree(CompileEntity param, T dto) {
         CompileEntity<T> tCompileDTO = new CompileEntity<>();
         tCompileDTO.setVersion(param.getVersion());
