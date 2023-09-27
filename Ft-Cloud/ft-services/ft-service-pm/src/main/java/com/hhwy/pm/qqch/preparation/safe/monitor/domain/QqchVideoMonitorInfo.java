@@ -79,19 +79,7 @@ public class QqchVideoMonitorInfo extends BaseEntity {
     @JsonProperty
     @Excel(name = "说明")
     private String remark;
-    /**
-     * 字段描述：附件组id
-     */
-    @JsonProperty
-    @Excel(name = "附件组id")
-    private String fileGroupId;
-    /**
-     * 字段描述：上传时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonProperty
-    @Excel(name = "上传时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date fileUploadDate;
+
     /**
      * 字段描述：所属区域id
      */

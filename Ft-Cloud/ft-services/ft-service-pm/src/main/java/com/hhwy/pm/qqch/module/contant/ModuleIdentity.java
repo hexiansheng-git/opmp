@@ -37,4 +37,10 @@ public class ModuleIdentity {
     成本管控岗位责任
      */
     public static final String QQCH_COST_CONTROL_POST_DUTY = "qqch_cost_control_post_duty";
+
+    /**
+     * 8.12.1 视频监控信息
+     */
+    public static final String QQCH_VIDEO_MONITOR_INFO = "qqch_video_monitor_info";
+
 }
