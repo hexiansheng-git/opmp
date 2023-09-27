@@ -1,4 +1,4 @@
-package com.hhwy.system.warn.domain;
+package com.hhwy.domain.base.system.warn;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -43,17 +43,17 @@ public class TWarn extends BaseEntity {
     @Excel(name = "预警项id")
     private String warnItemId;
     /**
-     * 字段描述：预警人id（逗号拼接）
+     * 字段描述：预警范围类型（1：全部，2：部门，3：用户）
      */
     @JsonProperty
-    @Excel(name = "预警人id（逗号拼接）")
-    private String warnUserId;
+    @Excel(name = "预警范围类型（1：全部，2：部门，3：用户）")
+    private String warnScopeType;
     /**
-     * 字段描述：预警人姓名（逗号拼接）
+     * 字段描述：部门或者用户id，多个之间用 ” ， “ 隔开
      */
     @JsonProperty
-    @Excel(name = "预警人姓名（逗号拼接）")
-    private String warnUserName;
+    @Excel(name = "部门或者用户id，多个之间用 ” ， “ 隔开")
+    private String warnScope;
     /**
      * 字段描述：预警内容
      */
@@ -116,4 +116,6 @@ public class TWarn extends BaseEntity {
     @JsonProperty
     @Excel(name = "租户标识")
     private String tenantKey;
+
+    private String projectName;
 }

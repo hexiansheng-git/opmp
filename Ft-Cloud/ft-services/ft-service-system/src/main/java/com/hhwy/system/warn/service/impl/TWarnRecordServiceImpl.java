@@ -2,7 +2,7 @@ package com.hhwy.system.warn.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.system.warn.domain.TWarnRecord;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnRecordService;
 import com.hhwy.utils.idworker.IdWorker;

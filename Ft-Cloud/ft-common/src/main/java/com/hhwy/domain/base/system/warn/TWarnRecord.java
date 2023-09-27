@@ -1,4 +1,4 @@
-package com.hhwy.system.warn.domain;
+package com.hhwy.domain.base.system.warn;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,10 +50,10 @@ public class TWarnRecord extends BaseEntity {
     @Excel(name = "预警人姓名")
     private String warnUserName;
     /**
-     * 字段描述：预警状态（0：未读，1：已读）
+     * 字段描述：读取状态（0：未读，1：已读）
      */
     @JsonProperty
-    @Excel(name = "预警状态（0：未读，1：已读）")
+    @Excel(name = "读取状态（0：未读，1：已读）")
     private String status;
     /**
      * 字段描述：创建者

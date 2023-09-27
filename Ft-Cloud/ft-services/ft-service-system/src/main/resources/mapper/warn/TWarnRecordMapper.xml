@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.system.warn.mapper.TWarnRecordMapper">
 
-    <resultMap type="com.hhwy.system.warn.domain.TWarnRecord" id="TWarnRecordResultMap">
+    <resultMap type="com.hhwy.domain.base.system.warn.TWarnRecord" id="TWarnRecordResultMap">
         <result property="id" column="id"/>
         <result property="warnId" column="warn_id"/>
         <result property="warnUserId" column="warn_user_id"/>

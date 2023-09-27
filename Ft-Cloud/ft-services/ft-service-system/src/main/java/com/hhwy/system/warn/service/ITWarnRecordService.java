@@ -1,6 +1,6 @@
 package com.hhwy.system.warn.service;
 
-import com.hhwy.system.warn.domain.TWarnRecord;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 
 import java.util.List;
 

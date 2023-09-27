@@ -1,6 +1,8 @@
 package com.hhwy.system.warn.service;
 
-import com.hhwy.system.warn.domain.TWarn;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
+import com.hhwy.domain.base.system.warn.TWarn;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ public interface ITWarnService {
 
     List<TWarn> getTWarnList(TWarn tWarn);
 
-    int insertTWarn(TWarn tWarn);
+    int addWarn(TWarn tWarn);
 
     int insertTWarnList(List<TWarn> tWarnList);
 
@@ -26,4 +28,6 @@ public interface ITWarnService {
     int deleteTWarn(TWarn tWarn);
 
     int deleteTWarnByPks(List<Long> tWarnPkList);
+
+    int addWarn(WarnItem warnItem, WarnScopeType warnScopeType, String warnScope,String warnUrl, String projectName, String tenantKey);
 }

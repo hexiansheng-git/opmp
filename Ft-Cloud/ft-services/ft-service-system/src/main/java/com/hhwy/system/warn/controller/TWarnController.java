@@ -5,7 +5,9 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.system.warn.domain.TWarn;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +48,19 @@ public class TWarnController extends BaseController {
         return getDataTableAjaxResult(tWarnList);
     }
 
-    @PreAuthorize(hasPermi = "tWarn:add")
-    @PostMapping("/add")
-    public AjaxResult insertTWarn(@Validated(ValidationGroups.Save.class) @RequestBody TWarn tWarnParam) {
-        tWarnService.insertTWarn(tWarnParam);
-        return AjaxResult.success(tWarnParam);
+    /**
+     * 发送预警
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/addWarn")
+    public AjaxResult addWarn(@Validated(ValidationGroups.Save.class) @RequestBody TWarn tWarn) {
+        return toAjax(tWarnService.addWarn(tWarn));
+    }
+
+    @PostMapping("/addWarn1")
+    public AjaxResult addWarn(WarnItem warnItem, WarnScopeType warnScopeType, String warnScope, String warnUrl, String projectName, String tenantKey){
+        return toAjax(tWarnService.addWarn(warnItem,warnScopeType,warnScope,warnUrl,projectName,tenantKey));
     }
 
     @PreAuthorize(hasPermi = "tWarn:add")

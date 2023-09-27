@@ -1,6 +1,6 @@
 package com.hhwy.system.warn.mapper;
 
-import com.hhwy.system.warn.domain.TWarnRecord;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

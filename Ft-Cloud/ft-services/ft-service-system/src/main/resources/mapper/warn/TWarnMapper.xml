@@ -4,12 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.system.warn.mapper.TWarnMapper">
 
-    <resultMap type="com.hhwy.system.warn.domain.TWarn" id="TWarnResultMap">
+    <resultMap type="com.hhwy.domain.base.system.warn.TWarn" id="TWarnResultMap">
         <result property="warnId" column="warn_id"/>
         <result property="warnItem" column="warn_item"/>
         <result property="warnItemId" column="warn_item_id"/>
-        <result property="warnUserId" column="warn_user_id"/>
-        <result property="warnUserName" column="warn_user_name"/>
+        <result property="warnScopeType" column="warn_scope_type"/>
+        <result property="warnScope" column="warn_scope"/>
         <result property="warnContent" column="warn_content"/>
         <result property="warnStatus" column="warn_status"/>
         <result property="warnType" column="warn_type"/>
@@ -25,8 +25,8 @@
         select `warn_id`
              , `warn_item`
              , `warn_item_id`
-             , `warn_user_id`
-             , `warn_user_name`
+             , `warn_scope_type`
+             , `warn_scope`
              , `warn_content`
              , `warn_status`
              , `warn_type`
@@ -46,8 +46,8 @@
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
             <if test="warnItem != null  and warnItem != ''">and `warn_item` = #{warnItem}</if>
             <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
-            <if test="warnUserId != null  and warnUserId != ''">and `warn_user_id` = #{warnUserId}</if>
-            <if test="warnUserName != null  and warnUserName != ''">and `warn_user_name` = #{warnUserName}</if>
+            <if test="warnScopeType != null  and warnScopeType != ''">and `warn_scope_type` = #{warnScopeType}</if>
+            <if test="warnScope != null  and warnScope != ''">and `warn_scope` = #{warnScope}</if>
             <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
             <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
             <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
@@ -69,8 +69,8 @@
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
             <if test="warnItem != null  and warnItem != ''">and `warn_item` = #{warnItem}</if>
             <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
-            <if test="warnUserId != null  and warnUserId != ''">and `warn_user_id` = #{warnUserId}</if>
-            <if test="warnUserName != null  and warnUserName != ''">and `warn_user_name` = #{warnUserName}</if>
+            <if test="warnScopeType != null  and warnScopeType != ''">and `warn_scope_type` = #{warnScopeType}</if>
+            <if test="warnScope != null  and warnScope != ''">and `warn_scope` = #{warnScope}</if>
             <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
             <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
             <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>
@@ -91,8 +91,8 @@
             <if test="warnId != null ">`warn_id`,</if>
             <if test="warnItem != null  and warnItem != ''">`warn_item`,</if>
             <if test="warnItemId != null  and warnItemId != ''">`warn_item_id`,</if>
-            <if test="warnUserId != null  and warnUserId != ''">`warn_user_id`,</if>
-            <if test="warnUserName != null  and warnUserName != ''">`warn_user_name`,</if>
+            <if test="warnScopeType != null  and warnScopeType != ''">`warn_scope_type`,</if>
+            <if test="warnScope != null  and warnScope != ''">`warn_scope`,</if>
             <if test="warnContent != null  and warnContent != ''">`warn_content`,</if>
             <if test="warnStatus != null  and warnStatus != ''">`warn_status`,</if>
             <if test="warnType != null  and warnType != ''">`warn_type`,</if>
@@ -108,8 +108,8 @@
             <if test="warnId != null ">#{warnId},</if>
             <if test="warnItem != null  and warnItem != ''">#{warnItem},</if>
             <if test="warnItemId != null  and warnItemId != ''">#{warnItemId},</if>
-            <if test="warnUserId != null  and warnUserId != ''">#{warnUserId},</if>
-            <if test="warnUserName != null  and warnUserName != ''">#{warnUserName},</if>
+            <if test="warnScopeType != null  and warnScopeType != ''">#{warnScopeType},</if>
+            <if test="warnScope != null  and warnScope != ''">#{warnScope},</if>
             <if test="warnContent != null  and warnContent != ''">#{warnContent},</if>
             <if test="warnStatus != null  and warnStatus != ''">#{warnStatus},</if>
             <if test="warnType != null  and warnType != ''">#{warnType},</if>
@@ -130,8 +130,8 @@
             `warn_id`,
             `warn_item`,
             `warn_item_id`,
-            `warn_user_id`,
-            `warn_user_name`,
+            `warn_scope_type`,
+            `warn_scope`,
             `warn_content`,
             `warn_status`,
             `warn_type`,
@@ -149,8 +149,8 @@
                 #{item.warnId},
                 #{item.warnItem},
                 #{item.warnItemId},
-                #{item.warnUserId},
-                #{item.warnUserName},
+                #{item.warnScopeType},
+                #{item.warnScope},
                 #{item.warnContent},
                 #{item.warnStatus},
                 #{item.warnType},
@@ -171,8 +171,8 @@
             <if test="warnId != null ">`warn_id` = #{warnId},</if>
             <if test="warnItem != null  and  warnItem != ''">`warn_item` = #{warnItem},</if>
             <if test="warnItemId != null  and  warnItemId != ''">`warn_item_id` = #{warnItemId},</if>
-            <if test="warnUserId != null  and  warnUserId != ''">`warn_user_id` = #{warnUserId},</if>
-            <if test="warnUserName != null  and  warnUserName != ''">`warn_user_name` = #{warnUserName},</if>
+            <if test="warnScopeType != null  and  warnScopeType != ''">`warn_scope_type` = #{warnScopeType},</if>
+            <if test="warnScope != null  and  warnScope != ''">`warn_scope` = #{warnScope},</if>
             <if test="warnContent != null  and  warnContent != ''">`warn_content` = #{warnContent},</if>
             <if test="warnStatus != null  and  warnStatus != ''">`warn_status` = #{warnStatus},</if>
             <if test="warnType != null  and  warnType != ''">`warn_type` = #{warnType},</if>
@@ -207,14 +207,14 @@
                     when `warn_id`=#{item.warnId} then #{item.warnItemId}
                 </foreach>
             </trim>
-            <trim prefix="warn_user_id  = case" suffix="end,">
+            <trim prefix="warn_scope_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `warn_id`=#{item.warnId} then #{item.warnUserId}
+                    when `warn_id`=#{item.warnId} then #{item.warnScopeType}
                 </foreach>
             </trim>
-            <trim prefix="warn_user_name  = case" suffix="end,">
+            <trim prefix="warn_scope  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `warn_id`=#{item.warnId} then #{item.warnUserName}
+                    when `warn_id`=#{item.warnId} then #{item.warnScope}
                 </foreach>
             </trim>
             <trim prefix="warn_content  = case" suffix="end,">
@@ -280,8 +280,8 @@
             <if test="warnId != null ">and `warn_id` = #{warnId}</if>
             <if test="warnItem != null  and warnItem != ''">and `warn_item` = #{warnItem}</if>
             <if test="warnItemId != null  and warnItemId != ''">and `warn_item_id` = #{warnItemId}</if>
-            <if test="warnUserId != null  and warnUserId != ''">and `warn_user_id` = #{warnUserId}</if>
-            <if test="warnUserName != null  and warnUserName != ''">and `warn_user_name` = #{warnUserName}</if>
+            <if test="warnScopeType != null  and warnScopeType != ''">and `warn_scope_type` = #{warnScopeType}</if>
+            <if test="warnScope != null  and warnScope != ''">and `warn_scope` = #{warnScope}</if>
             <if test="warnContent != null  and warnContent != ''">and `warn_content` = #{warnContent}</if>
             <if test="warnStatus != null  and warnStatus != ''">and `warn_status` = #{warnStatus}</if>
             <if test="warnType != null  and warnType != ''">and `warn_type` = #{warnType}</if>

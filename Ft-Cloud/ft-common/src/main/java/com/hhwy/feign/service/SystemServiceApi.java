@@ -4,6 +4,7 @@ import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.period.PeriodInfo;
+import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.feign.factory.SystemServiceFallbackFactory;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.api.domain.SysUser;
@@ -78,4 +79,12 @@ public interface SystemServiceApi {
      */
     @PostMapping("/periodCurrency/periodCurrency/selectListRatePeriodByCodeAndCurrent")
     AjaxResult selectListRatePeriodByCodeAndCurrent(@RequestBody Map<String,String> map);
+
+    /**
+     * 发送预警
+     * @param tWarn
+     * @return
+     */
+    @PostMapping("/tWarn/addWarn")
+    AjaxResult addWarn(@RequestBody TWarn tWarn);
 }
