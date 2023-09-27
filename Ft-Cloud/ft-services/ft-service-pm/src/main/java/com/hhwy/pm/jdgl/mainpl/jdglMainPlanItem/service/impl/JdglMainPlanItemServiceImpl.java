@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -272,8 +273,10 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             }
         }
 //        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getWbsCode).thenComparing(JdglMainPlanItem::getLeaf).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
-        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getSort).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
-        return collect1;
+//        Stream<JdglMainPlanItem> sorted = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getSort));
+//        Stream<JdglMainPlanItem> sorted1 = sorted.collect(Collectors.toList()).stream().sorted(Comparator.comparing(JdglMainPlanItem::getItemCode));
+//        List<JdglMainPlanItem> collect1 = returnList.stream().sorted(Comparator.comparing(JdglMainPlanItem::getSort).thenComparing(JdglMainPlanItem::getItemCode)).collect(Collectors.toList());
+        return returnList;
     }
 
     @Override
