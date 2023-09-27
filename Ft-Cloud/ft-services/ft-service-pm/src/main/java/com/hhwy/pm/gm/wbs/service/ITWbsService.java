@@ -21,13 +21,12 @@ public interface ITWbsService {
 
     /**
      * 获取工程类型、产品类型下的wbs列表
-     * @param engineeringType   工程类型
      * @param name              wbs名称
      * @param nodeType          节点类型
      * @param parentId          父级Id
      * @return
      */
-    List<TWbs> wbsListByType(String engineeringType,String name,String nodeType,Long parentId);
+    List<TWbs> wbsListByType(String name,String nodeType,Long parentId);
 
     /**
      * 懒加载树形
