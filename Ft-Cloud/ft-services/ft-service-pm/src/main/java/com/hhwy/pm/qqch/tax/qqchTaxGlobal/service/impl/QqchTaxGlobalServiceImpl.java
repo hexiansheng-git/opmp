@@ -157,9 +157,9 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
         if (CollectionUtils.isEmpty(dto)) return;
         QqchTaxGlobal qqchTaxGlobal = dto.get(0);
         
-        if (PmConstant.ONE.equals(qqchTaxGlobal.getSubmitFlag())){
-      
-        moduleConfirmCaseService.addConfirmRecord(qqchTaxGlobal.getModuleIdentity(), qqchTaxGlobal.getStageIdentity());
+        if (PmConstant.ONE.equals(qqchTaxGlobal.getSubmitFlag())) {
+
+            moduleConfirmCaseService.addConfirmRecord(qqchTaxGlobal.getModuleIdentity(), qqchTaxGlobal.getStageIdentity());
         }
 
 

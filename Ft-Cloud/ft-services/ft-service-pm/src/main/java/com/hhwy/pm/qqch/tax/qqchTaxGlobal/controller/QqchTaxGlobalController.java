@@ -159,7 +159,7 @@ public class QqchTaxGlobalController extends BaseController {
 
         try {
             FtExcelUtil<QqchTaxGlobal> excelUtil = new FtExcelUtil<>(QqchTaxGlobal.class);
-            List<QqchTaxGlobal> qqchTaxGlobals = excelUtil.importTreeExcel(file.getInputStream(), 3);
+            List<QqchTaxGlobal> qqchTaxGlobals = excelUtil.importTaxGlobal(file.getInputStream(), 3);
             return AjaxResult.success(qqchTaxGlobals);
         } catch (Exception e) {
             throw new RuntimeException(e);

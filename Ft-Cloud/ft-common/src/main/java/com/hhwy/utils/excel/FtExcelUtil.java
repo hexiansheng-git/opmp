@@ -924,14 +924,7 @@ public class FtExcelUtil<T> {
         // 树形结果
         List<T> res = new ArrayList<>();
         String finalSerFieldName = serFieldName;
-
-
-        // 根据序号拍个序先 不大好用
-//        ts.sort((o1, o2) -> {
-//            Integer length1 = String.valueOf(init.getFieldVal(finalSerFieldName, o1)).split("\\.").length;
-//            Integer length2 = String.valueOf(init.getFieldVal(finalSerFieldName, o2)).split("\\.").length;
-//            return length1.compareTo(length2) == 0 ? -1 : length1.compareTo(length2);
-//        });
+        
 
         HashMap<Integer, List<T>> lengthMap = new HashMap<>();
         for (T t : ts) {
@@ -966,6 +959,97 @@ public class FtExcelUtil<T> {
                         List children = treeNode.getChildren();
                         children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
                         init.setFieldVal("pid", ((TreeNode<?>) i).getId(), t);
+                        init.setFieldVal(finalChildrenFieldName, children, i);
+                        children.add(t);
+                    });
+                }
+            }
+        });
+        return res;
+    }
+
+
+    /**
+     * 定制化一下
+     * 
+     * @param inputStream 
+     * @param startRow
+     * @return
+     * @throws Exception
+     */
+    public List<T> importTaxGlobal(InputStream inputStream, Integer startRow) throws Exception {
+
+        List<T> ts;
+        if (startRow == null) {
+            ts = importExcel(inputStream);
+        } else {
+            ts = importExcel(inputStream, startRow);
+        }
+        List<T> collect = ts.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(collect)) throw new RuntimeException("请检查导入的数据是否正确或者模板是否正确");
+
+        this.init(list, sheetName, FtExcel.Type.IMPORT);
+        List<Object[]> fieldsAnno = this.fields;
+        String serFieldName = null;
+        String childrenFieldName = null;
+        String serStr = null;
+
+        for (Object[] objects : fieldsAnno) {
+            FtExcel ftExcel = (FtExcel) objects[1];
+            if (ftExcel.serialNumFlag()) {
+                // 如果当前的字段是序号列  就先存起来 等下用
+                serFieldName = ((Field) objects[0]).getName();
+                serStr = ftExcel.serialStr();
+                childrenFieldName = ftExcel.childrenFieldName();
+                break;
+            }
+        }
+        // 没有指定序号列 抛出异常
+        if (serFieldName == null) throw new RuntimeException("请指定序号列");
+        // 
+        FieldUtils init = FieldUtils.init();
+
+        // 树形结果
+        List<T> res = new ArrayList<>();
+        String finalSerFieldName = serFieldName;
+
+
+        HashMap<Integer, List<T>> lengthMap = new HashMap<>();
+        for (T t : ts) {
+            // 如果是属于TreeNode才继续进行
+            if (!(t instanceof TreeNode)) throw new RuntimeException("请继承TreeNode");
+            Long id = IdWorker.createId();
+            ((TreeNode<?>) t).setId(id);
+            init.setFieldVal("treeId",id+"",t);
+            // 序号
+            String serNum = init.getFieldVal(serFieldName, t) + "";
+            String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);
+            // 
+            List<T> lenList = lengthMap.get(split.length);
+            // 如果当前数据为空 就new一个  然后
+            lenList = CollectionUtils.isEmpty(lenList) ? new ArrayList<>() : lenList;
+            lenList.add(t);
+            // 放入map 等会儿用
+            lengthMap.put(split.length, lenList);
+        }
+
+        // 由大到小
+        String finalSerStr = serStr;
+        String finalChildrenFieldName = childrenFieldName;
+        lengthMap.keySet().stream().sorted(Comparator.comparing(Integer::intValue).reversed()).forEach(length -> {
+            List<T> lengthList = lengthMap.get(length);
+            if (length == 1) {
+                res.addAll(lengthList);
+            } else {
+                for (T t : lengthList) {
+                    String serNum = init.getFieldVal(finalSerFieldName, t) + "";
+                    String parentSerNum = getStrBefore(serNum, finalSerStr);
+                    ts.stream().filter(item -> parentSerNum.equals(init.getFieldVal(finalSerFieldName, item))).findFirst().ifPresent(i -> {
+                        TreeNode treeNode = (TreeNode) i;
+                        List children = treeNode.getChildren();
+                        children = CollectionUtils.isEmpty(children) ? new ArrayList<>() : children;
+                        init.setFieldVal("pid", ((TreeNode<?>) i).getId(), t);
+                        init.setFieldVal("treePid", init.getFieldVal("treeId", i), t);
                         init.setFieldVal(finalChildrenFieldName, children, i);
                         children.add(t);
                     });

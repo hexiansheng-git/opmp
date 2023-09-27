@@ -111,19 +111,21 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         // 获取要保存的数据
         List<List<QqchEmpItem>> empItemListList = dto.getDto();
 
-        String itemIds = (String)dto.getParams().get("delItemIds");
+        String itemIds = (String) dto.getParams().get("delItemIds");
         if (StringUtils.isNotEmpty(itemIds)) {
             List<Long> collect = Arrays.stream(itemIds.split(",")).map(Long::valueOf).collect(Collectors.toList());
-            this.qqchEmpItemMapper.deleteQqchEmpItemByPks(collect);
+            if (!CollectionUtils.isEmpty(collect)) {
+                this.qqchEmpItemMapper.deleteQqchEmpItemByPks(collect);
+            }
         }
-        
+
         // 处理要保存的数据
         for (List<QqchEmpItem> qqchEmpItemList : empItemListList) {
             List<QqchEmpItem> qqchEmpItems = TreeUtil.treeToList(qqchEmpItemList);
             for (QqchEmpItem qqchEmpItem : qqchEmpItems) {
                 qqchEmpItem.setStoreFlag((qqchEmpItem.getBstoreFlag() == null || !qqchEmpItem.getBstoreFlag()) ? PmConstant.ZERO : PmConstant.ONE);
                 wbsCodeList.add(qqchEmpItem.getWbsCode());
-                CompileEntity.dealSaveDto(dto, qqchEmpItem,false);
+                CompileEntity.dealSaveDto(dto, qqchEmpItem, false);
                 EntityUtils.setCreateUpdateInfo(qqchEmpItem);
                 iDatas.add(qqchEmpItem);
             }
@@ -131,8 +133,8 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
 
 
         // 将当前版本的做出变更的wbs进行删除
-        this.qqchEmpItemMapper.deleteByWbsCodeAndVersion(wbsCodeList, version);
-        this.qqchEmpItemMapper.insertQqchEmpItemList(iDatas);
+        if (!CollectionUtils.isEmpty(wbsCodeList)) this.qqchEmpItemMapper.deleteByWbsCodeAndVersion(wbsCodeList, version);
+        if (!CollectionUtils.isEmpty(iDatas)) this.qqchEmpItemMapper.insertQqchEmpItemList(iDatas);
 
     }
 
@@ -165,6 +167,22 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         entity.setVersion(dto.getVersion());
         entity.setDto(build);
         return entity;
+
+        //        List<XmslWbs> wbs = WbsRedisUtils.getWbs(wbsIdList);
+//
+//        StringBuilder sb = new StringBuilder();
+//        for (XmslWbs wb : wbs) {
+//            String ancestors = wb.getAncestors();
+//            if (StringUtils.isNotEmpty(ancestors)) {
+//                sb.append(ancestors).append(",");
+//            }
+//        }
+//        if (StringUtils.isNotEmpty(sb.toString())){
+//            String s = sb.toString();
+//            String[] split = s.split(",");
+////            List<XmslWbs> wbsp = WbsRedisUtils.getWbs(split);
+//
+//        }
     }
 
     private List<XmslWbs> getWbsList(List<String> wbsIdList) {

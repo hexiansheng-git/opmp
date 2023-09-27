@@ -605,16 +605,19 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                         qqchTaxCost.setFeeName(rowData.get(col));
                         break;
                     case 2:
-                        // 内账   
-                        qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        // 合计内账   (合计金额统一按照年份计算出来)
+                        // qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        qqchTaxCost.setInnerAmt(BigDecimal.ZERO);
                         break;
                     case 3:
-                        // 符合账
-                        qqchTaxCost.setReqAmt(getDecimalVal(rowData.get(col)));
+                        // 合计符合账  (合计金额统一按照年份计算出来)
+                        // qqchTaxCost.setReqAmt(getDecimalVal(rowData.get(col)));
+                        qqchTaxCost.setReqAmt(BigDecimal.ZERO);
                         break;
                     case 4:
-                        // 属地账
-                        qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
+                        // 合计属地账  (合计金额统一按照年份计算出来)
+                        // qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
+                        qqchTaxCost.setLocalAmt(BigDecimal.ZERO);
                         break;
                     default:
                 }
@@ -645,12 +648,14 @@ public class QqchTaxCostServiceImpl implements IQqchTaxCostService {
                         qqchTaxCost.setFeeName(rowData.get(col));
                         break;
                     case 2:
-                        // 内账   
-                        qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        // 合计内账    (合计金额统一按照年份计算出来)
+                        // qqchTaxCost.setInnerAmt(getDecimalVal(rowData.get(col)));
+                        qqchTaxCost.setInnerAmt(BigDecimal.ZERO);
                         break;
                     case 3:
-                        // 属地账
-                        qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
+                        // 合计属地账  (合计金额统一按照年份计算出来)
+                        // qqchTaxCost.setLocalAmt(getDecimalVal(rowData.get(col)));
+                        qqchTaxCost.setLocalAmt(BigDecimal.ZERO);
                         break;
                     default:
                 }
