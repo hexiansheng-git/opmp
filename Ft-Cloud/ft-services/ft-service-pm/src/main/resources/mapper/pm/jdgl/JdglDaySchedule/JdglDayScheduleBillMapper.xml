@@ -12,6 +12,8 @@
         <result property="billId" column="bill_id"/>
         <result property="wbsCode" column="wbs_code"/>
         <result property="wbsName" column="wbs_name"/>
+        <result property="itemCode" column="item_code"/>
+        <result property="itemName" column="item_name"/>
         <result property="billCode" column="bill_code"/>
         <result property="billName" column="bill_name"/>
         <result property="unit" column="unit"/>
@@ -46,6 +48,8 @@
              , `bill_id`
              , `wbs_code`
              , `wbs_name`
+             , `item_code`
+             , `item_name`
              , `bill_code`
              , `bill_name`
              , `unit`
@@ -84,6 +88,8 @@
             <if test="billId != null ">and `bill_id` = #{billId}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="billCode != null  and billCode != ''">and `bill_code` = #{billCode}</if>
             <if test="billName != null  and billName != ''">and `bill_name` = #{billName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
@@ -124,6 +130,8 @@
             <if test="billId != null ">and `bill_id` = #{billId}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="billCode != null  and billCode != ''">and `bill_code` = #{billCode}</if>
             <if test="billName != null  and billName != ''">and `bill_name` = #{billName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
@@ -190,6 +198,8 @@
             <if test="billId != null ">`bill_id`,</if>
             <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="itemCode != null  and itemCode != ''">`item_code`,</if>
+            <if test="itemName != null  and itemName != ''">`item_name`,</if>
             <if test="billCode != null  and billCode != ''">`bill_code`,</if>
             <if test="billName != null  and billName != ''">`bill_name`,</if>
             <if test="unit != null  and unit != ''">`unit`,</if>
@@ -224,6 +234,8 @@
             <if test="billId != null ">#{billId},</if>
             <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="itemCode != null  and itemCode != ''">#{itemCode},</if>
+            <if test="itemName != null  and itemName != ''">#{itemName},</if>
             <if test="billCode != null  and billCode != ''">#{billCode},</if>
             <if test="billName != null  and billName != ''">#{billName},</if>
             <if test="unit != null  and unit != ''">#{unit},</if>
@@ -263,6 +275,8 @@
             `bill_id`,
             `wbs_code`,
             `wbs_name`,
+            `item_code`,
+            `item_name`,
             `bill_code`,
             `bill_name`,
             `unit`,
@@ -298,6 +312,8 @@
                 #{item.billId},
                 #{item.wbsCode},
                 #{item.wbsName},
+                #{item.itemCode},
+                #{item.itemName},
                 #{item.billCode},
                 #{item.billName},
                 #{item.unit},
@@ -336,6 +352,8 @@
             <if test="billId != null ">`bill_id` = #{billId},</if>
             <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
             <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="itemCode != null  and  itemCode != ''">`item_code` = #{itemCode},</if>
+            <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
             <if test="billCode != null  and  billCode != ''">`bill_code` = #{billCode},</if>
             <if test="billName != null  and  billName != ''">`bill_name` = #{billName},</if>
             <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
@@ -399,6 +417,16 @@
             <trim prefix="wbs_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.wbsName}
+                </foreach>
+            </trim>
+            <trim prefix="item_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.itemCode}
+                </foreach>
+            </trim>
+            <trim prefix="item_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.itemName}
                 </foreach>
             </trim>
             <trim prefix="bill_code  = case" suffix="end,">
@@ -547,6 +575,8 @@
             <if test="billId != null ">and `bill_id` = #{billId}</if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
             <if test="billCode != null  and billCode != ''">and `bill_code` = #{billCode}</if>
             <if test="billName != null  and billName != ''">and `bill_name` = #{billName}</if>
             <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>

@@ -50,13 +50,14 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         Long wbsId = jdglDayScheduleBill.getWbsId();
         String wbsCode = jdglDayScheduleBill.getWbsCode();
         String wbsName = jdglDayScheduleBill.getWbsName();
+        String itemCode = jdglDayScheduleBill.getItemCode();
         Long dayScheduleId = jdglDayScheduleBill.getDayScheduleId();
         jdglDayScheduleBill.setWbsId(null);
         List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleBillMapper.getJdglDayScheduleBillList(jdglDayScheduleBill);
         if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
             jdglDayScheduleBillList = new ArrayList<>();
-            XmslDrawReview last = xmslDrawReviewService.getLast();
-            if(last == null) {
+                XmslDrawReview last = xmslDrawReviewService.getLast();
+                if(last == null) {
                 return jdglDayScheduleBillList;
             }
             Integer version = last.getVersion();
@@ -79,6 +80,7 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                 jdglDayScheduleBill1.setBillId(xmslDrawReviewList.getListId());
                 jdglDayScheduleBill1.setBillCode(xmslDrawReviewList.getListCode());
                 jdglDayScheduleBill1.setBillName(xmslDrawReviewList.getChineseName());
+                jdglDayScheduleBill1.setItemCode(itemCode);
                 if(!CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
                     for (XmslContractList xmslContractList : validMaxVersionContractInventoryList) {
                         if(listId != null && listId.equals(xmslContractList.getId())) {

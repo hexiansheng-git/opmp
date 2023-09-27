@@ -76,6 +76,18 @@ public class JdglDayScheduleBill extends BaseEntity {
     @Excel(name = "清单名称")
     private String billName;
     /**
+     * 字段描述：作业编码
+     */
+    @JsonProperty
+    @Excel(name = "作业编码")
+    private String itemCode;
+    /**
+     * 字段描述：作业名称
+     */
+    @JsonProperty
+    @Excel(name = "作业名称")
+    private String itemName;
+    /**
      * 字段描述：单位
      */
     @JsonProperty

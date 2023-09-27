@@ -47,8 +47,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglMainPlanItemList;
         }
-        List<JdglMainPlanItem> build = TreeUtil.build(jdglMainPlanItemList, jdglMainPlanItem.getPid());
-        return build;
+//        List<JdglMainPlanItem> build = TreeUtil.build(jdglMainPlanItemList, jdglMainPlanItem.getPid());
+        return jdglMainPlanItemList;
     }
 
     /**
@@ -121,7 +121,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 if(actualStartDate != null) {
                     // 计算进度
                     Integer daysByRangeDate = StatisticsUtils.getDaysByRangeDate(actualStartDate, actualFinishDate);
-                    BigDecimal progress = new BigDecimal(plannedDuration == 0 ? 0 : daysByRangeDate/plannedDuration);
+                    BigDecimal progress = new BigDecimal(plannedDuration == 0 ? 0 : (float)daysByRangeDate/(float)plannedDuration);
                     progress = progress.setScale(2, RoundingMode.HALF_UP);
                     jdglMainPlanItem1.setProgress(progress);
                 } else {
@@ -134,6 +134,9 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 }
                 // 判断里程碑
                 if(jdglMainPlanItem1.getTaskType() != null && jdglMainPlanItem1.getTaskType().contains("Milestone")) {
+                    if("Finish Milestone".equals(jdglMainPlanItem1.getTaskType())) {
+                        jdglMainPlanItem1.setStart_date(jdglMainPlanItem1.getFinishDate());
+                    }
                     jdglMainPlanItem1.setType("milestone");
                     jdglMainPlanItem1.setRollup(true);
                 }

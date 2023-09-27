@@ -67,10 +67,10 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
 
         if(CollectionUtils.isEmpty(jdglMainPlanList)) return jdglMainPlanList;
 
-        for (JdglMainPlan jdglMainPlan1: jdglMainPlanList) {
-            List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemList(new JdglMainPlanItem());
-            jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList);
-        }
+//        for (JdglMainPlan jdglMainPlan1: jdglMainPlanList) {
+//            List<JdglMainPlanItem> jdglMainPlanItemList = iJdglMainPlanItemService.getJdglMainPlanItemList(new JdglMainPlanItem());
+//            jdglMainPlan1.setJdglMainPlanItemList(jdglMainPlanItemList);
+//        }
 
         return jdglMainPlanList;
     }

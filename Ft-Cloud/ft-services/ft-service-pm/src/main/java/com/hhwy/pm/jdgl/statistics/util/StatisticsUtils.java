@@ -239,7 +239,7 @@ public class StatisticsUtils {
         long timeS = startDate.getTime();
         long timeE = endDate.getTime();
 
-        return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000);
+        return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000) + 1;
 
     }
 
