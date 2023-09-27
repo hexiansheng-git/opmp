@@ -683,8 +683,8 @@
             `task_status`,
             `version`,
             `valid`,
-            `occupation_code`
-            `work_content`
+            `occupation_code`,
+            `work_content`,
             `site_days`
         FROM qqch_labour_demand_plan
         WHERE del_flag = "0" AND pid = #{pid} and entry_date is not null and exit_date is not null
