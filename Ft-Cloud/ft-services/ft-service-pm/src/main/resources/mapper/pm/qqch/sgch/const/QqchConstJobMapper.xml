@@ -81,6 +81,9 @@
              , `pt_var5`
         from qqch_const_job
     </sql>
+    <update id="deleteByVersion">
+        update qqch_const_job set del_flag = '1' where  version = #{version}
+    </update>
     <select id="getQqchConstJob" resultMap="QqchConstJobResultMap">
         <include refid="selectQqchConstJobVo"/>
         <where>
@@ -561,7 +564,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>

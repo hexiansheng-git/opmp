@@ -23,4 +23,6 @@ public @interface CompileAspect {
      * @return
      */
     String tableName() default "";
+    
+    boolean delFlag() default  true;
 }

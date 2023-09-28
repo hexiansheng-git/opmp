@@ -66,9 +66,9 @@ public class CompileAspectImpl {
                 if (CompileOptEnum.LIST.equals(compileAspect.type()) || CompileOptEnum.TREE.equals(compileAspect.type())) {
                     beforeList(arg1, tableName);
                 }
-                if (CompileOptEnum.SAVE.equals(compileAspect.type())) {
+                if (CompileOptEnum.SAVE.equals(compileAspect.type()) && compileAspect.delFlag()) {
                     this.addConfirmAndUpdateFinishNum(arg1);
-                    
+
                     commonMapper.deleteByVersion(tableName, (arg1).getVersion());
                 }
             }
@@ -78,11 +78,11 @@ public class CompileAspectImpl {
                 if (list.get(0) instanceof CompileEntity) {
                     List<CompileEntity> compileEntityList = (List<CompileEntity>) arg;
                     CompileEntity compileEntity = compileEntityList.get(0);
-                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type())) {
+                    if (CompileOptEnum.SAVE_LIST.equals(compileAspect.type()) && compileAspect.delFlag()) {
                         this.addConfirmAndUpdateFinishNum(compileEntity);
                         commonMapper.deleteByVersion(tableName, compileEntity.getVersion());
                     }
-                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntity.getSubmitFlag())) {
+                    if (compileEntityList.size() == 1 && PmConstant.MINUS_ONE.equals(compileEntity.getSubmitFlag()) && compileAspect.delFlag()) {
                         args[i] = Collections.emptyList();
                     }
                 }
