@@ -33,8 +33,8 @@ public class QqchConstJobController {
      * @return
      */
     @GetMapping("/getWorkGroupByWBS")
-    public AjaxResult getWorkGroupByWBS(QqchConstJob qqchConstJob) {
-        List<QqchConst> list = constJobService.getWorkGroupByWBS(qqchConstJob);
+    public AjaxResult getWorkGroupByWBS(QqchConstJob constJob) {
+        List<QqchConst> list = constJobService.getWorkGroupByWBS(constJob);
         return AjaxResult.success(list);
     }
 }

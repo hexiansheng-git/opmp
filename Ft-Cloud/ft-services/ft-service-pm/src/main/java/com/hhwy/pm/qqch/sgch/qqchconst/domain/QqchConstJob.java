@@ -246,6 +246,33 @@ public class QqchConstJob extends CompileEntity<QqchConstJob> {
     @Excel(name = "预留字段5")
     private String ptVar5;
 
+    /**
+     * 字段描述：多选逗号分隔
+     */
+    @JsonProperty
+    private String belongWbss;
+    /**
+     * 字段描述：多选逗号分隔
+     */
+    @JsonProperty
+    private String belongWbsCodes;
+
+    public String getBelongWbss() {
+        return belongWbss;
+    }
+
+    public void setBelongWbss(String belongWbss) {
+        this.belongWbss = belongWbss;
+    }
+
+    public String getBelongWbsCodes() {
+        return belongWbsCodes;
+    }
+
+    public void setBelongWbsCodes(String belongWbsCodes) {
+        this.belongWbsCodes = belongWbsCodes;
+    }
+
     @JsonIgnore
     public Long getId() {
         return id;
