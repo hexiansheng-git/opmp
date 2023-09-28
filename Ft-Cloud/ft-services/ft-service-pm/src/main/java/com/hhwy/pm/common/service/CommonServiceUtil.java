@@ -3,6 +3,7 @@ package com.hhwy.pm.common.service;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
 import com.hhwy.feign.service.SystemServiceApi;
@@ -67,6 +68,13 @@ public class CommonServiceUtil {
             res.put(currencyInfo.getCurrencyName(), currencyInfo);
         }
         return res;
+    }
+
+    /***
+     * 功能描述: 通过编号获取国家名称, 多个编号以逗号分隔
+     */
+    public static List<CountryInfo>  getCountryInfoByCodes(String countryCodes) {
+        return systemServiceApi.selectCountryInfoByCodes(countryCodes);
     }
 
 

@@ -135,6 +135,11 @@ public class CountryInfoServiceImpl implements ICountryInfoService {
         return countryInfoMapper.selectCountryInfoByNames(name);
     }
 
+    @Override
+    public List<CountryInfo> selectCountryInfoByCodes(String code) {
+        return countryInfoMapper.selectCountryInfoByCodes(code);
+    }
+
     /* *//**
      * 国家下的项目（级联）
      *

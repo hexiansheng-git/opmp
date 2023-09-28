@@ -63,6 +63,8 @@ public interface ICountryInfoService {
 
     List<CountryInfo> selectCountryInfoByNames(String name);
 
+    List<CountryInfo> selectCountryInfoByCodes(String countryCodes);
+
 //    /**
 //     * 国家下的项目（级联）
 //     *

@@ -2,6 +2,7 @@ package com.hhwy.feign.service;
 
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.domain.base.system.warn.TWarn;
@@ -55,6 +56,11 @@ public interface SystemServiceApi {
 
     @GetMapping("/country/info/selectCountryInfoByNames")
     AjaxResult selectCountryInfoByNames(@RequestParam("name") String name);
+
+    @GetMapping("/country/info/selectCountryInfoByCodes")
+    List<CountryInfo> selectCountryInfoByCodes(@RequestParam("countryCodes") String countryCodes);
+
+
 
     @GetMapping("/selfSysUser/selectSysUserInfo")
     AjaxResult selectSysUserInfo(@RequestBody SysUser sysUser);

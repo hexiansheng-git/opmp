@@ -2,6 +2,7 @@ package com.hhwy.feign.factory;
 
 import com.hhwy.common.core.domain.R;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.domain.base.system.warn.TWarn;
@@ -64,6 +65,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             @Override
             public AjaxResult selectCountryInfoByNames(String name) {
                 return AjaxResult.error("请求失败:",throwable.getMessage());
+            }
+
+            @Override
+            public List<CountryInfo> selectCountryInfoByCodes(String countryCodes) {
+                return new ArrayList<>();
             }
 
             @Override

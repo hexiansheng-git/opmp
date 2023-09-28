@@ -2,14 +2,17 @@ package com.hhwy.pm.common.controller;
 
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.domain.base.system.country.CountryInfo;
 import com.hhwy.pm.common.constant.PermissionMark;
 import com.hhwy.pm.common.service.CommonService;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @RestController
 @RequestMapping("/pmcommon")
@@ -17,6 +20,12 @@ public class PmCommonController {
 
     @Resource
     private CommonService commonService;
+
+    @GetMapping("getCountryInfoByCodes")
+    public AjaxResult getCountryInfoByCodes(){
+        List<CountryInfo> countryInfoByCodes = CommonServiceUtil.getCountryInfoByCodes("AFG,BHR");
+        return AjaxResult.success(countryInfoByCodes);
+    }
 
 
     /**校验数据是否能进行调整

@@ -226,11 +226,17 @@ public class CountryInfoController extends BaseController {
     public AjaxResult getAllList(@Validated(ValidationGroups.Select.class) CountryInfo countryInfo) {
         List<CountryInfo> list = countryInfoService.selectCountryInfoList(countryInfo);
         return AjaxResult.success(list);
-    }
 
+    }
     @GetMapping("/selectCountryInfoByNames")
     public AjaxResult selectCountryInfoByNames(@RequestParam("name") String name){
         List<CountryInfo> countryInfo = countryInfoService.selectCountryInfoByNames(name);
         return AjaxResult.success(countryInfo);
+    }
+
+    @GetMapping("/selectCountryInfoByCodes")
+    public List<CountryInfo> selectCountryInfoByCodes(@RequestParam("countryCodes") String countryCodes){
+        List<CountryInfo> countryInfo = countryInfoService.selectCountryInfoByCodes(countryCodes);
+        return countryInfo;
     }
 }

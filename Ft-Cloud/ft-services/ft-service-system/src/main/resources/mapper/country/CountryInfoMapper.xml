@@ -79,6 +79,12 @@
         <include refid="selectCountryInfoVo"/>
         where find_in_set(`country_name`,#{countryName})
     </select>
+
+    <select id="selectCountryInfoByCodes" parameterType="String" resultMap="CountryInfoResult">
+        <include refid="selectCountryInfoVo"/>
+        where find_in_set(`country_code`,#{countryCodes})
+    </select>
+
     <insert id="insertCountryInfo" parameterType="com.hhwy.domain.base.system.country.CountryInfo">
         insert into `t_country_info`
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -68,4 +68,6 @@ public interface CountryInfoMapper {
     int deleteCountryInfoByIds(String[] ids);
 
     List<CountryInfo> selectCountryInfoByNames(String name);
+
+    List<CountryInfo> selectCountryInfoByCodes(String countryCodes);
 }
