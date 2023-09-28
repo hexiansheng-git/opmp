@@ -95,6 +95,9 @@ public class CommonServiceUtil {
 
 
 
+    /***
+     * 功能描述: 通过编号获取币种
+     */
     public static Map<String, String> getCurrencyNamesByCodes(List<String> names) {
         CurrencyInfo where = new CurrencyInfo();
         Map<String, Object> params = new HashMap<>();
