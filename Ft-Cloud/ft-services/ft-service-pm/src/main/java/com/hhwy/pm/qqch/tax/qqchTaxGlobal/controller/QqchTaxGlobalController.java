@@ -14,6 +14,7 @@ import com.hhwy.utils.excel.FtExcelEnum;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
@@ -149,6 +150,7 @@ public class QqchTaxGlobalController extends BaseController {
 
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody List<QqchTaxGlobal> qqchTaxGlobalParam) throws IOException {
+        qqchTaxGlobalParam = TreeUtil.treeToList(qqchTaxGlobalParam);
         FtExcelUtil<QqchTaxGlobal> util = new FtExcelUtil<>(QqchTaxGlobal.class);
         util.exportWithTemplate(response, qqchTaxGlobalParam, 3, "exportTaxGlobal.xlsx", "sheet1");
     }
