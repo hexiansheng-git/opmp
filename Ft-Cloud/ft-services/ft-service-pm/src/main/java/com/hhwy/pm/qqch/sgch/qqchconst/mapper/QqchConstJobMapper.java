@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.mapper;
 
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +28,6 @@ public interface QqchConstJobMapper {
     int deleteQqchConstJob(QqchConstJob qqchConstJob);
 
     int deleteQqchConstJobByPks(@Param("qqchConstJobPkList") List<Long> qqchConstJobPkList);
+
+    List<QqchConst> getWorkGroupByWBS(QqchConstJob qqchConstJob);
 }

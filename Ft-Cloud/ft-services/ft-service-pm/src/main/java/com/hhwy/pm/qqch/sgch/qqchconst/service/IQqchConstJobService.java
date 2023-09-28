@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.service;
 
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 
 import java.util.List;
@@ -30,4 +32,6 @@ public interface IQqchConstJobService {
     void saveList(List<QqchConstJob> iJobList);
 
     List<QqchConstJob> list(QqchConstJob dealListDto);
+
+    List<QqchConst> getWorkGroupByWBS(QqchConstJob qqchConstJob);
 }

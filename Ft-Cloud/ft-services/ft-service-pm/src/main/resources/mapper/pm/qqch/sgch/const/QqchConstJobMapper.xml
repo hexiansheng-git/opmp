@@ -617,4 +617,18 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getWorkGroupByWBS" resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst">
+        SELECT
+            const_name as constName,
+            const_desc as constDesc
+        FROM
+            ( SELECT master_id, belong_wbs_code, belong_wbs FROM qqch_const_job
+                WHERE del_flag = '0'
+                      <if test="belongWbsCode != null  and belongWbsCode != ''">and `belong_wbs_code` = #{belongWbsCode}</if>
+                      <if test="belongWbs != null  and belongWbs != ''">and `belong_wbs` = #{belongWbs}</if>
+                ) tj
+            LEFT JOIN ( SELECT id, const_name, const_desc FROM qqch_const WHERE del_flag = '0' AND const_type = '4' ) t
+            ON tj.master_id = t.id
+    </select>
 </mapper>

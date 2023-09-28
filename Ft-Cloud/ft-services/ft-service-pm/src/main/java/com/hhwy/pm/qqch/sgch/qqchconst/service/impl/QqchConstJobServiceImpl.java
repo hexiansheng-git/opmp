@@ -4,15 +4,19 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import com.hhwy.pm.qqch.sgch.qqchconst.mapper.QqchConstJobMapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstJobService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,6 +31,15 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
     @Autowired
     private QqchConstJobMapper qqchConstJobMapper;
 
+
+    @Override
+    public List<QqchConst> getWorkGroupByWBS(QqchConstJob qqchConstJob) {
+        if (qqchConstJob.getVersion() == null){
+            BigDecimal version = VersionUtil.getVersion(TN,null);
+            qqchConstJob.setVersion(version);
+        }
+        return qqchConstJobMapper.getWorkGroupByWBS(qqchConstJob);
+    }
 
     public QqchConstJob getQqchConstJob(QqchConstJob qqchConstJob) {
         return qqchConstJobMapper.getQqchConstJob(qqchConstJob);
