@@ -2,6 +2,7 @@ package com.hhwy.utils.field;
 
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.DateUtil;
 
 import java.lang.reflect.Field;
@@ -14,6 +15,7 @@ import java.util.*;
  *
  * @author m
  */
+@Slf4j
 public class FieldUtils {
     /**
      * 方法名和方法实例容器
@@ -79,7 +81,7 @@ public class FieldUtils {
             }
             method.invoke(t, v);
         } catch (Exception e) {
-            e.printStackTrace();
+          log.error("反射异常,设置指定字段{}的值失败,{}",fieldName,e.getMessage());  
         }
 
     }

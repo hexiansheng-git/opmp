@@ -195,12 +195,6 @@ public class QqchTaxIn extends CompileEntity<QqchTaxIn> {
     @Excel(name = "等级")
     private Integer level;
     /**
-     * 字段描述：预留字段3
-     */
-    @JsonProperty
-    @Excel(name = "预留字段3")
-    private String ptVar3;
-    /**
      * 字段描述：预留字段4
      */
     @JsonProperty

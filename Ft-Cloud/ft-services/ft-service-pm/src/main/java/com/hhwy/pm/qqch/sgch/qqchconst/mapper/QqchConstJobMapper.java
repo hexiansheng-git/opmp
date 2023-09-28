@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -23,11 +24,14 @@ public interface QqchConstJobMapper {
 
     int updateQqchConstJob(QqchConstJob qqchConstJob);
 
-    int updateQqchConstJobList(@Param("qqchConstJobList") List<QqchConstJob> qqchConstJobList);
+    int updateQqchConstJobList(@Param("list") List<QqchConstJob> list);
 
     int deleteQqchConstJob(QqchConstJob qqchConstJob);
 
     int deleteQqchConstJobByPks(@Param("qqchConstJobPkList") List<Long> qqchConstJobPkList);
 
     List<QqchConst> getWorkGroupByWBS(QqchConstJob qqchConstJob);
+
+    int deleteByVersion(@Param("version") BigDecimal version);
+
 }
