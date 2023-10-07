@@ -279,6 +279,12 @@ public class ProjectBasicInfo {
     @JsonProperty
     private String remark;
     /**
+     * 字段描述：项目状态
+     */
+    @JsonProperty
+    @Excel(name = "项目状态")
+    private String projectStatus;
+    /**
      * 字段描述：所属区域id
      */
     @JsonProperty
