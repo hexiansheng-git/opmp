@@ -8,7 +8,10 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.CommonYesNo;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -20,11 +23,14 @@ import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.warn.WarnService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysMenu;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -38,10 +44,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -70,6 +73,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private WarnService warnService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -316,6 +321,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 //        qqchWorkPlan.setTaskStatus("5");
 //        qqchWorkPlan.setValid("1");
 
+        qqchWorkPlan.setTaskCommitDate(DateUtils.getNowDate());
         if (ObjectNullUtil.isEmpty(qqchWorkPlan.getId())) {
             qqchWorkPlan.setId(this.insertQqchWorkPlanSubmit(qqchWorkPlan));
         } else {
@@ -458,5 +464,95 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
         //调用前期策划评审
         qqchReviewService.savePlan(id);
+    }
+
+    /**
+     * 工作计划提交预警
+     * @return
+     */
+    @Override
+    public void workPlanCommitWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                //获取最新生效版本的前期策划工作小组
+                QqchWorkGroup workGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+                if(workGroup == null){
+                    continue;
+                }
+
+                //发布日期，即审批通过日期
+                Date issueDate = workGroup.getIssueDate();
+                Date nowDate = DateUtils.getNowDate();
+                Long diffDays = FtDateUtils.getDays(issueDate, nowDate);
+                if(diffDays > 3){
+                    /*判断是否已提交前期策划工作计划报请审批*/
+                    QqchWorkPlan firstVersionQqchWorkPlan = qqchWorkPlanMapper.getFirstVersionQqchWorkPlan();
+                    if(firstVersionQqchWorkPlan == null || firstVersionQqchWorkPlan.getTaskStatus() == null || firstVersionQqchWorkPlan.getTaskStatus().equals("0")){
+                        warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,"admin",tenantKey);
+
+                    }
+                }
+            }
+        }catch (Exception e){
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    /**
+     * 工作计划审批预警
+     * @return
+     */
+    @Override
+    public void workPlanApprovalWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                //获取第一个版本的前期策划工作计划数据
+                QqchWorkPlan firstVersionQqchWorkPlan = qqchWorkPlanMapper.getFirstVersionQqchWorkPlan();
+                if(firstVersionQqchWorkPlan == null
+                        || firstVersionQqchWorkPlan.getTaskStatus().equals("0")
+                        || firstVersionQqchWorkPlan.getTaskStatus().equals("4")
+                        || firstVersionQqchWorkPlan.getTaskStatus().equals("5")){
+                    continue;
+                }
+
+                //流程提交时间
+                Date taskCommitDate = firstVersionQqchWorkPlan.getTaskCommitDate();
+                Date nowDate = DateUtils.getNowDate();
+                Long diffDays = FtDateUtils.getDays(taskCommitDate, nowDate);
+                if(diffDays > 3){
+                    warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,"admin",tenantKey);
+                }
+            }
+        }catch (Exception e){
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }

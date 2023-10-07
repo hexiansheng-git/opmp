@@ -6,7 +6,9 @@ package com.hhwy.constant;
 public enum WarnItem {
 
 
-    WORK_GROUP_SET_UP("前期策划工作小组设立","work_group_set_up","项目中标之后的10天内，成立前期策划临时工作小组并完成审批，未完成则进行预警");
+    WORK_GROUP_SET_UP("前期策划工作小组设立","work_group_set_up","项目中标之后的10天内，成立前期策划临时工作小组并完成审批，未完成则进行预警"),
+    WORK_PLAN_COMMIT("前期策划工作计划提交","work_plan_commit","应在前期策划临时工作小组审批之后的3天内，按时提交前期策划工作计划报请审批，未提交则进行预警"),
+    WORK_PLAN_APPROVAL("前期策划工作计划审批","work_plan_approval","前期策划工作计划提交后，三天内完成审批，未完成则进行预警");
 
     public String getWarnItem() {
         return warnItem;

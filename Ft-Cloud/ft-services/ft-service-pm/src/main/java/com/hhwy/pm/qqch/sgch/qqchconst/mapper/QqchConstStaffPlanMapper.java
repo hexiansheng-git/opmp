@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.sgch.qqchconst.mapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -22,9 +23,11 @@ public interface QqchConstStaffPlanMapper {
 
     int updateQqchConstStaffPlan(QqchConstStaffPlan qqchConstStaffPlan);
 
-    int updateQqchConstStaffPlanList(@Param("qqchConstStaffPlanList") List<QqchConstStaffPlan> qqchConstStaffPlanList);
+    int updateQqchConstStaffPlanList(@Param("list") List<QqchConstStaffPlan> list);
 
     int deleteQqchConstStaffPlan(QqchConstStaffPlan qqchConstStaffPlan);
 
     int deleteQqchConstStaffPlanByPks(@Param("qqchConstStaffPlanPkList") List<Long> qqchConstStaffPlanPkList);
+
+    void deleteByVersion(@Param("version") BigDecimal version);
 }

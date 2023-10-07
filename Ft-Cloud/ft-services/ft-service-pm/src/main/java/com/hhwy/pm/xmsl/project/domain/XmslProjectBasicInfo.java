@@ -373,6 +373,18 @@ public class XmslProjectBasicInfo extends BaseEntity {
     @Excel(name = "项目状态")
     private String projectStatus;
     /**
+     * 字段描述：项目完工时间（完工，初验，终验都算完工）
+     */
+    @JsonProperty
+    @Excel(name = "项目完工时间（完工，初验，终验都算完工）")
+    private Date projectCompleteDate;
+    /**
+     * 字段描述：项目初验时间
+     */
+    @JsonProperty
+    @Excel(name = "项目初验时间")
+    private Date projectInitialInspectionDate;
+    /**
      * 字段描述：所属区域id
      */
     @JsonProperty

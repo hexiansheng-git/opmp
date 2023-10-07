@@ -78,6 +78,11 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             }
 
             @Override
+            public List<SysUser> selectSysUserInfoList(SysUser sysUser) {
+                return new ArrayList<>();
+            }
+
+            @Override
             public R<List<SysUser>> selectUserListByUsernames(String usernames) {
                 return R.fail("请求失败:" + throwable.getMessage());
             }

@@ -80,6 +80,37 @@ public class TreeUtil {
             }
         }
     }
+    
+    public static <T extends TreeNode<T>> List<T> treeToListWithoutNewId(List<T> source) {
+        List<T> result = new ArrayList<>();
+        if (CollectionUtils.isEmpty(source)) {
+            return result;
+        }
+
+        int sort = 1;
+        for (T node : source) {
+            node.setSort(sort++);
+            splitWithoutNewId(node, result);
+        }
+        return result;
+    }
+
+
+    private static <T extends TreeNode<T>> void splitWithoutNewId(T node, List<T> resultList) {
+        Long id = node.getId() == null ? IdWorker.createId() : node.getId();
+        int sort = 1;
+        List<T> children = node.getChildren();
+        node.setId(id);
+        node.setChildren(null);
+        resultList.add(node);
+        if (!CollectionUtils.isEmpty(children)) {
+            for (T child : children) {
+                child.setPid(id);
+                child.setSort(sort++);
+                splitWithoutNewId(child, resultList);
+            }
+        }
+    }
 
     /**
      * 树形list转list

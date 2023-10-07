@@ -242,7 +242,6 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         }
         qqchWorkGroup.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setCreateUserName(SecurityUtils.getSysUser().getNickName());
-        qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setCreateTime(DateUtils.getNowDate());
 
         //获取项目信息
@@ -409,6 +408,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         query.setId(id);
         QqchWorkGroup qqchWorkGroup = qqchWorkGroupMapper.getQqchWorkGroup(query);
         qqchWorkGroup.setEffective(CommonYesNo.YES);
+        qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setTaskStatus("5");//流程结束
         qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
     }

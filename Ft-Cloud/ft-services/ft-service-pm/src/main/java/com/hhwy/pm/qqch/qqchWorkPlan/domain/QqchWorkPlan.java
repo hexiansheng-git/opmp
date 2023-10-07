@@ -1,20 +1,10 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
@@ -23,6 +13,10 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author hwj
@@ -251,6 +245,11 @@ public class QqchWorkPlan extends CommonBaseEntity {
     @JsonProperty
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
+    /**
+     * 字段描述：流程发起时间
+     */
+    @JsonProperty
+    private Date taskCommitDate;
 
     private String versionStr;
 

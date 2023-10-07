@@ -52,8 +52,17 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         String wbsName = jdglDayScheduleBill.getWbsName();
         String itemCode = jdglDayScheduleBill.getItemCode();
         Long dayScheduleId = jdglDayScheduleBill.getDayScheduleId();
+        String isLeaf = jdglDayScheduleBill.getIsLeaf();
         jdglDayScheduleBill.setWbsId(null);
-        List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleBillMapper.getJdglDayScheduleBillList(jdglDayScheduleBill);
+
+        List<JdglDayScheduleBill> jdglDayScheduleBillList = null;
+
+        if ("0".equals(isLeaf)) {
+            jdglDayScheduleBillList = jdglDayScheduleBillMapper.getJdglDayScheduleBillList4Group(jdglDayScheduleBill);
+        } else {
+            jdglDayScheduleBillList = jdglDayScheduleBillMapper.getJdglDayScheduleBillList(jdglDayScheduleBill);
+        }
+
         if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
             jdglDayScheduleBillList = new ArrayList<>();
                 XmslDrawReview last = xmslDrawReviewService.getLast();
