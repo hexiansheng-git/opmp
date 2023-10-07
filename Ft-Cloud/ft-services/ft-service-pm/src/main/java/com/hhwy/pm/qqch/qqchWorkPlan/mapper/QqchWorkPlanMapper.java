@@ -14,6 +14,8 @@ public interface QqchWorkPlanMapper {
 
     QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
+    QqchWorkPlan getFirstVersionQqchWorkPlan();
+
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);
     int getQqchWorkPlanListCount(QqchWorkPlan qqchWorkPlan);
 

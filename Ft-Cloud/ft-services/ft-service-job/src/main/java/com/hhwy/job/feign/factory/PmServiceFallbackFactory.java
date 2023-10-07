@@ -14,6 +14,16 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public AjaxResult workGroupSetUpWarn() {
                 return null;
             }
+
+            @Override
+            public AjaxResult workPlanCommitWarn() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult workPlanApprovalWarn() {
+                return null;
+            }
         };
     }
 }
