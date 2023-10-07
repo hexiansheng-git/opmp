@@ -17,6 +17,13 @@ public interface QqchDiscloseThirdMapper {
 
     List<QqchDiscloseThird> getQqchDiscloseThirdList(QqchDiscloseThird qqchDiscloseThird);
 
+    /**
+     * 获取子级id
+     * @param ids  父级Ids
+     * @return
+     */
+    List<Long> getChildIdsByPids(Long[] ids);
+    
     int insertQqchDiscloseThird(QqchDiscloseThird qqchDiscloseThird);
 
     int insertQqchDiscloseThirdList(@Param("qqchDiscloseThirdList") List<QqchDiscloseThird> qqchDiscloseThirdList);
