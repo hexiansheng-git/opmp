@@ -108,6 +108,12 @@ public class UserController extends BaseController {
         return AjaxResult.success(userList);
     }
 
+    @PostMapping("/selectSysUserInfoList")
+    public List<SysUser> selectSysUserInfoList(@RequestBody SysUser sysUser) {
+        List<SysUser> userList = iUserService.selectSysUserInfo(sysUser);
+        return userList;
+    }
+
     @PostMapping("/select4AByUserNames")
     public AjaxResult select4AByUserNames(@RequestBody Map<String,String> map){
         List<SysUser> userList= iUserService.select4AByUserNames(map);

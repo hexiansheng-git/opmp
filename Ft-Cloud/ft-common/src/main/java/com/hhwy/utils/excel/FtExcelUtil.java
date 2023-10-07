@@ -30,7 +30,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
@@ -186,10 +185,10 @@ public class FtExcelUtil<T> {
                                     val = Convert.toBigDecimal(val);
                                 } else if (Date.class == fieldType) {
                                     if (val instanceof String && ObjectUtils.isNotBlank(val)) {
-                                        try{
+                                        try {
                                             val = com.hhwy.utils.core.DateUtil.parseDate(val);
-                                        }catch(Exception e ){
-                                            throw new RuntimeException("第"+(i+1)+"行,解析日期失败，日期格式有误,原数据为："+val);
+                                        } catch (Exception e) {
+                                            throw new RuntimeException("第" + (i + 1) + "行,解析日期失败，日期格式有误,原数据为：" + val);
                                         }
                                     } else if (val instanceof Double) {
                                         val = DateUtil.getJavaDate((Double) val);
@@ -204,13 +203,13 @@ public class FtExcelUtil<T> {
                     } else {
                         val = Convert.toLong(val);
                     }
-                }else if(StringUtils.isNotEmpty(attr.readConverterExp())){ //int类型的字段使用了readConvertExp直接进入else BUG修复 
-                    
+                } else if (StringUtils.isNotEmpty(attr.readConverterExp())) { //int类型的字段使用了readConvertExp直接进入else BUG修复 
+
                 } else {
                     val = Convert.toInt(val);
                 }
 
-                
+
                 String propertyName = field.getName();
                 if (StringUtils.isNotEmpty(attr.targetAttr())) {
                     propertyName = field.getName() + "." + attr.targetAttr();
@@ -765,10 +764,10 @@ public class FtExcelUtil<T> {
 
     public void exportWithTemplate(HttpServletResponse response, List<T> list, int startRow, String templateName, String sheetName) {
         this.initWithTemp(list, sheetName, templateName, FtExcel.Type.EXPORT);
-        this.exportWithTemplate(response, startRow);
+        this.exportWithTemplate(response, startRow, templateName);
     }
 
-    private void exportWithTemplate(HttpServletResponse response, int startRow) {
+    private void exportWithTemplate(HttpServletResponse response, int startRow, String templateName) {
         // 减掉一行
         startRow--;
         // excel表格 和 导入的数据 其实都可以看成二维数组
@@ -792,6 +791,9 @@ public class FtExcelUtil<T> {
                     cell.setCellValue(fieldVal == null ? "" : fieldVal + "");
                 }
             }
+            response.setCharacterEncoding("utf-8");
+            response.setContentType("multipart/form-data");
+            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(templateName, "UTF-8"));
             this.wb.write(response.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
@@ -885,7 +887,7 @@ public class FtExcelUtil<T> {
     }
 
     public List<T> importTreeExcel(InputStream inputStream) throws Exception {
-        return importTreeExcel(inputStream,null);
+        return importTreeExcel(inputStream, null);
     }
 
 
@@ -924,7 +926,7 @@ public class FtExcelUtil<T> {
         // 树形结果
         List<T> res = new ArrayList<>();
         String finalSerFieldName = serFieldName;
-        
+
 
         HashMap<Integer, List<T>> lengthMap = new HashMap<>();
         for (T t : ts) {
@@ -971,8 +973,8 @@ public class FtExcelUtil<T> {
 
     /**
      * 定制化一下
-     * 
-     * @param inputStream 
+     *
+     * @param inputStream
      * @param startRow
      * @return
      * @throws Exception
@@ -1020,7 +1022,7 @@ public class FtExcelUtil<T> {
             if (!(t instanceof TreeNode)) throw new RuntimeException("请继承TreeNode");
             Long id = IdWorker.createId();
             ((TreeNode<?>) t).setId(id);
-            init.setFieldVal("treeId",id+"",t);
+            init.setFieldVal("treeId", id + "", t);
             // 序号
             String serNum = init.getFieldVal(serFieldName, t) + "";
             String[] split = serNum.split(".".equals(serStr) ? "\\." : serStr);

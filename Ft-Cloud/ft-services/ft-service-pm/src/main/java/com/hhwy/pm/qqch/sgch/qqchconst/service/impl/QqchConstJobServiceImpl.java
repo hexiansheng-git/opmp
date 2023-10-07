@@ -5,6 +5,7 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
+import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
@@ -100,7 +101,7 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
     @Override
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN, delFlag = false)
     public void saveList(List<QqchConstJob> paramJobList) {
-        QqchConstJob qqchConstJob = paramJobList.get(0);
+        CompileEntity qqchConstJob = paramJobList.get(0);
         if (paramJobList.size() == 1 && PmConstant.MINUS_ONE.equals(qqchConstJob.getSubmitFlag())) {
             // 如果前端将所有数据删除了 这边根据version删除数据
             this.qqchConstJobMapper.deleteByVersion(qqchConstJob.getVersion());
