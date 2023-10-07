@@ -108,7 +108,16 @@ public class WbsRedisUtils {
         }
         return existNum>=wbsCodes.size();
     }
-    
+
+    public static XmslWbs getWbs(Long wbsId){
+        if(wbsId == null)
+            return new XmslWbs();
+        String tenantKey = SecurityUtils.getTenantKey();
+        Object obj = redisUtils.hGet(WbsRedisUtils.getKey(tenantKey),wbsId+"");
+        if(obj == null)
+            return new XmslWbs();
+        return JSONObject.parseObject(obj.toString(), XmslWbs.class);
+    }
 
     public static List<XmslWbs> getWbs(Long[] wbsIds){
         if(ArrayUtils.isEmpty(wbsIds))

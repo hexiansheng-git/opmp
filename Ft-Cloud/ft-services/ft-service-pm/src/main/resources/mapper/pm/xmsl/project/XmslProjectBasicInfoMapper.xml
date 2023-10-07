@@ -61,6 +61,8 @@
         <result property="contractCurrencyCode" column="contract_currency_code"/>
         <result property="remark" column="remark"/>
         <result property="projectStatus" column="project_status"/>
+        <result property="projectCompleteDate" column="project_complete_date"/>
+        <result property="projectInitialInspectionDate" column="project_initial_inspection_date"/>
         <result property="regionId" column="region_id"/>
         <result property="regionName" column="region_name"/>
         <result property="deptId" column="dept_id"/>
@@ -131,6 +133,8 @@
             ,`contract_currency_code`
             ,`remark`
             ,`project_status`
+            ,`project_complete_date`
+            ,`project_initial_inspection_date`
             ,`region_id`
             ,`region_name`
             ,`dept_id`
@@ -200,6 +204,8 @@
         ,`contract_currency_code`
         ,`remark`
         ,`project_status`
+        ,`project_complete_date`
+        ,`project_initial_inspection_date`
         ,`region_id`
         ,`region_name`
         ,`dept_id`
@@ -388,6 +394,8 @@
         ,`contract_currency_code`
         ,`remark`
         ,`project_status`
+        ,`project_complete_date`
+        ,`project_initial_inspection_date`
         ,`region_id`
         ,`region_name`
         ,`dept_id`
@@ -589,6 +597,8 @@
             <if test="contractCurrencyCode != null  and contractCurrencyCode != ''">`contract_currency_code`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
             <if test="projectStatus != null  and projectStatus != ''">`project_status`,</if>
+            <if test="projectCompleteDate != null">`project_complete_date`,</if>
+            <if test="projectInitialInspectionDate != null">`project_initial_inspection_date`,</if>
             <if test="regionId != null ">`region_id`,</if>
             <if test="regionName != null  and regionName != ''">`region_name`,</if>
             <if test="deptId != null ">`dept_id`,</if>
@@ -672,6 +682,8 @@
             <if test="contractCurrencyCode != null  and contractCurrencyCode != ''">#{contractCurrencyCode},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
             <if test="projectStatus != null  and projectStatus != ''">#{projectStatus},</if>
+            <if test="projectCompleteDate != null">#{projectCompleteDate},</if>
+            <if test="projectInitialInspectionDate != null">#{projectInitialInspectionDate},</if>
             <if test="regionId != null ">#{regionId},</if>
             <if test="regionName != null  and regionName != ''">#{regionName},</if>
             <if test="deptId != null ">#{deptId},</if>
@@ -751,6 +763,8 @@
             `contract_currency_code`,
             `remark`,
             `project_status`,
+            `project_complete_date`,
+            `project_initial_inspection_date`,
             `region_id`,
             `region_name`,
             `dept_id`,
@@ -826,6 +840,8 @@
                 #{item.contractCurrencyCode},
                 #{item.remark},
                 #{item.projectStatus},
+                #{item.projectCompleteDate},
+                #{item.projectInitialInspectionDate},
                 #{item.regionId},
                 #{item.regionName},
                 #{item.deptId},
@@ -948,6 +964,8 @@
             </if>
             <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
             <if test="projectStatus != null  and  projectStatus != ''">`project_status` = #{projectStatus},</if>
+            <if test="projectCompleteDate != null">`project_complete_date` = #{projectCompleteDate},</if>
+            <if test="projectInitialInspectionDate != null">`project_initial_inspection_date` = #{projectInitialInspectionDate},</if>
             <if test="regionId != null ">`region_id` = #{regionId},</if>
             <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
             <if test="deptId != null ">`dept_id` = #{deptId},</if>

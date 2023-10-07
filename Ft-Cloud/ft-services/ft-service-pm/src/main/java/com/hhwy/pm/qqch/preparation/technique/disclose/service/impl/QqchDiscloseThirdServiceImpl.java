@@ -1,6 +1,9 @@
 package com.hhwy.pm.qqch.preparation.technique.disclose.service.impl;
 
+import com.alibaba.cloud.nacos.discovery.NacosWatch;
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -14,17 +17,16 @@ import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseThir
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.security.cert.CollectionCertStoreParameters;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.sun.javafx.util.TempState;
+import org.apache.commons.collections4.SetUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.metadata.TableMetaDataProvider;
 import org.springframework.stereotype.Service;
@@ -84,11 +86,47 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
     public List<QqchDiscloseThirdDetail> getDetailList(Long masterId) {
         if(masterId == null || masterId < 0L)
             return new ArrayList<>(2);
+        //获取子级交底人数据
+        QqchDiscloseThird thirdQuery = new QqchDiscloseThird();
+        thirdQuery.setPid(masterId);
+        List<QqchDiscloseThird> thirdList = this.qqchDiscloseThirdMapper.getQqchDiscloseThirdList(thirdQuery);
+        List<Long> idList = thirdList.stream().map(r->r.getId()).collect(Collectors.toList());
+        idList.add(masterId);
         QqchDiscloseThirdDetail query = new QqchDiscloseThirdDetail();
-        query.setMasterId(masterId);
+        query.setParams(ObjectUtils.toMap("masterIds", idList));
         List<QqchDiscloseThirdDetail> list = qqchDiscloseThirdDetailMapper.getQqchDiscloseThirdDetailList(query);
+        //根据wbs编号去重
+        List<QqchDiscloseThirdDetail> finalList = filtersRepeatWbs(list);
         //转树形
-        return TreeUtil.build(list,-1L);
+        return TreeUtil.build(finalList,-1L);
+    }
+    
+    private List<QqchDiscloseThirdDetail> filtersRepeatWbs(List<QqchDiscloseThirdDetail> list){
+        //根据wbs编号去重
+        list.sort((v1,v2)->v1.getId()>v2.getId()?-1:1);
+        //不同的班组可能会选择同一个wbs。需要去重,并处理ID
+        Map<String,List<Long>> wbsCodeParentMap = new HashMap<>();
+        List<QqchDiscloseThirdDetail> finalList = new ArrayList<>();
+        Set<Long> finalIdSet = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            QqchDiscloseThirdDetail temp = list.get(i);
+            boolean containWbs = wbsCodeParentMap.containsKey(temp.getWbsCode());
+            ObjectUtils.add2MapList(wbsCodeParentMap, temp.getWbsCode(), temp.getPid());
+            if(!containWbs){ //如果WBS编号不存在，放入结果list
+                finalList.add(temp);
+                finalIdSet.add(temp.getId());
+            }
+        }
+        //处理父级ID
+        for (int i = 0; i < finalList.size(); i++) {
+            QqchDiscloseThirdDetail temp = finalList.get(i);
+            List<Long> pidList = wbsCodeParentMap.get(temp.getWbsCode());
+            for (int j = 0; j < pidList.size(); j++) {
+                if(finalIdSet.contains(pidList.get(j)))
+                    temp.setPid(pidList.get(j));
+            }
+        }
+        return finalList;
     }
 
     @Transactional
@@ -170,7 +208,7 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         //修改交底集合
         List<QqchDiscloseThird> updateList = new ArrayList<>();
         Set<Long> delIdSet = new HashSet<>();
-        saveThird(vo.getTreeList(),-1L,detailAddList,addList,updateList,delIdSet);
+        saveThird(vo.getTreeList(),vo.getVersion(),-1L,detailAddList,addList,updateList,delIdSet);
         if(!CollectionUtils.isEmpty(addList))
             this.qqchDiscloseThirdMapper.insertQqchDiscloseThirdList(addList);
         if(!CollectionUtils.isEmpty(updateList))
@@ -178,25 +216,37 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         if(!CollectionUtils.isEmpty(delIdSet))
             qqchDiscloseThirdMapper.deleteDetailByMasterIds(delIdSet);
         if(!CollectionUtils.isEmpty(detailAddList))
-            qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(detailAddList);    
+            qqchDiscloseThirdDetailMapper.insertQqchDiscloseThirdDetailList(detailAddList);
+        //删除交底以及明细
+        if(StringUtils.isBlank(vo.getDelIds()))
+            return;
+        Long[] delIds = Convert.toLongArray(vo.getDelIds());
+        List<Long> discloseIdList = qqchDiscloseThirdMapper.getChildIdsByPids(delIds);
+        discloseIdList.addAll(Arrays.asList(delIds));
+        if(CollectionUtils.isEmpty(discloseIdList)){
+            this.qqchDiscloseThirdMapper.deleteQqchDiscloseThirdByPks(discloseIdList);
+            this.qqchDiscloseThirdMapper.deleteDetailByMasterIds(new HashSet<>(discloseIdList));    
+        }
     }
 
     /**
      * 保存交底人信息
      * 第一级的人员，不处理其明细
      * @param list          交底人信息
+     * @param version        版本
      * @param pid            父级ID
      * @param detailAddList   需要保存的交底明细数据
      * @param addList         需要新增的交底
      * @param updateList      需要修改的交底
      * @param delIdSet      需要修改的交底                       
      */
-    public void saveThird(List<QqchDiscloseThird> list,Long pid,List<QqchDiscloseThirdDetail> detailAddList,List<QqchDiscloseThird> addList,List<QqchDiscloseThird> updateList,Set<Long> delIdSet){
+    public void saveThird(List<QqchDiscloseThird> list,BigDecimal version,Long pid,List<QqchDiscloseThirdDetail> detailAddList,List<QqchDiscloseThird> addList,List<QqchDiscloseThird> updateList,Set<Long> delIdSet){
         if(CollectionUtils.isEmpty(list))
             return;
         for (int i = 0; i < list.size(); i++) {
             QqchDiscloseThird temp = list.get(i);
             temp.setPid(pid);
+            temp.setVersion(version);
             if(temp.getId()== null){
                 new AddBaseInfoUtil<>().addBaseEntity(temp);
                 temp.setId(IdWorker.createId());
@@ -206,7 +256,7 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
                 updateList.add(temp);
             }
             //递归子级
-            saveThird(temp.getChildren(),temp.getId(),detailAddList,addList,updateList,delIdSet);
+            saveThird(temp.getChildren(),version,temp.getId(),detailAddList,addList,updateList,delIdSet);
             //最上级节点为用户，用户不绑定wbs，跳过
             if(temp.getPid() == null || temp.getPid() < 0L)
                 continue;

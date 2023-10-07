@@ -25,4 +25,9 @@ public class QqchDiscloseThirdVo extends PreparationEntity {
      * 字段描述：全部三级交底详情集合
      */
     private List<QqchDiscloseThirdDetail> allDetailTreeList;
+
+    /**
+     * 要删除的交底ID
+     */
+    private String delIds;
 }

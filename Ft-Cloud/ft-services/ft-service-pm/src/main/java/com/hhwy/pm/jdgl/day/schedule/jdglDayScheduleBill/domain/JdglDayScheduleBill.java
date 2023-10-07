@@ -236,4 +236,9 @@ public class JdglDayScheduleBill extends BaseEntity {
     @Excel(name = "是否是关联形象清单")
     private String isMain;
 
+    /**
+     * 选择的wbs是否是叶子节点（叶子节点为作业）
+     */
+    private String isLeaf;
+
 }

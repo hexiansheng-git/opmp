@@ -1,7 +1,10 @@
 package com.hhwy.pm.qqch.preparation.finance.policy.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.country.CountryInfo;
+import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -59,7 +62,15 @@ public class QqchTaxRegulatoryOverviewServiceImpl implements IQqchTaxRegulatoryO
         // 查询合同信息，获取合同所在国家
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
         if (xmslContractInfo != null) {
-            overview.setCountryCode(xmslContractInfo.getProjectLocation());
+            String countryCode = xmslContractInfo.getProjectLocation();
+            if (StringUtils.isNotBlank(countryCode)) {
+                List<CountryInfo> countryNameList = CommonServiceUtil.getCountryInfoByCodes(countryCode);
+                if (!CollectionUtils.isEmpty(countryNameList)) {
+                    String countryName = countryNameList.get(0).getCountryName();
+                    overview.setCountryCode(countryCode);
+                    overview.setCountryName(countryName);
+                }
+            }
         }
 
         // 税法列表

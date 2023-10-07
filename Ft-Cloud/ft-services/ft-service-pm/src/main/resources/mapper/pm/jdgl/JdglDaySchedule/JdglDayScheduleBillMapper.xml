@@ -159,7 +159,7 @@
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="isMain != null  and isMain != ''">and `is_main` = #{isMain}</if>
         </where>
-        order by create_time desc
+        order by bill_code asc
     </select>
     <select id="getHistoryBill"
             resultMap="JdglDayScheduleBillResultMap">
@@ -187,6 +187,102 @@
                     and `date` &lt;= #{endDate} ) sc
         where sc.id = bill.day_schedule_id
         group by bill_id,bill_code,bill_name
+    </select>
+    <select id="getJdglDayScheduleBillList4Group" resultMap="JdglDayScheduleBillResultMap">
+        select `id`
+        , `day_schedule_id`
+        , `wbs_id`
+        , `bill_id`
+        , `wbs_code`
+        , `wbs_name`
+        , `item_code`
+        , `item_name`
+        , `bill_code`
+        , `bill_name`
+        , `unit`
+        , `design_quantity`
+        , `design_quantity` - sum(`this_quantity`) remain_quantity
+        , sum(`this_quantity`) this_quantity
+        , `bill_price`
+        , sum(`bill_value`) bill_value
+        , `file_group_id`
+        , `remark`
+        , `dept_id`
+        , `del_user`
+        , `del_time`
+        , `del_flag`
+        , `pt_var1`
+        , `pt_var2`
+        , `pt_var3`
+        , `pt_var4`
+        , `pt_var5`
+        , `task_status`
+        , `is_main`
+        from jdgl_day_schedule_bill
+        <where>
+            del_flag = "0"
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="dayScheduleId != null ">and `day_schedule_id` = #{dayScheduleId}</if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="billId != null ">and `bill_id` = #{billId}</if>
+            <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsName != null  and wbsName != ''">and `wbs_name` = #{wbsName}</if>
+            <if test="itemCode != null  and itemCode != ''">and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''">and `item_name` = #{itemName}</if>
+            <if test="billCode != null  and billCode != ''">and `bill_code` = #{billCode}</if>
+            <if test="billName != null  and billName != ''">and `bill_name` = #{billName}</if>
+            <if test="unit != null  and unit != ''">and `unit` = #{unit}</if>
+            <if test="designQuantity != null ">and `design_quantity` = #{designQuantity}</if>
+            <if test="remainQuantity != null ">and `remain_quantity` = #{remainQuantity}</if>
+            <if test="thisQuantity != null ">and `this_quantity` = #{thisQuantity}</if>
+            <if test="billPrice != null ">and `bill_price` = #{billPrice}</if>
+            <if test="billValue != null ">and `bill_value` = #{billValue}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+            <if test="isMain != null  and isMain != ''">and `is_main` = #{isMain}</if>
+        </where>
+        group by `id`
+        , `day_schedule_id`
+        , `wbs_id`
+        , `bill_id`
+        , `wbs_code`
+        , `wbs_name`
+        , `item_code`
+        , `item_name`
+        , `bill_code`
+        , `bill_name`
+        , `unit`
+        , `design_quantity`
+        , `bill_price`
+        , `file_group_id`
+        , `remark`
+        , `dept_id`
+        , `del_user`
+        , `del_time`
+        , `del_flag`
+        , `pt_var1`
+        , `pt_var2`
+        , `pt_var3`
+        , `pt_var4`
+        , `pt_var5`
+        , `task_status`
+        , `is_main`
+        order by bill_code asc
     </select>
 
     <insert id="insertJdglDayScheduleBill" useGeneratedKeys="true" keyProperty="id">

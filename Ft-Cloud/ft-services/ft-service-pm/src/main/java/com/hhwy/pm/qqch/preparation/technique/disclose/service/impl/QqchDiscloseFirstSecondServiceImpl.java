@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.technique.disclose.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -18,6 +20,7 @@ import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstruc
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchKeyDifficultConstructionBriefService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.tree.TreeUtil;
@@ -29,6 +32,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.sound.midi.VoiceStatus;
 
 /**
  * @author zhenglili
@@ -52,6 +57,8 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
     private IQqchConstructionListService qqchConstructionListService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IJdglMainPlanItemService jdglMainPlanItemService;
 
     public QqchDiscloseFirstSecondVo getQqchDiscloseFirstSecondList(BigDecimal version) {
         QqchDiscloseFirstSecondVo vo = new QqchDiscloseFirstSecondVo();
@@ -153,6 +160,17 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
         vo.setKeyDifficultProjectCode(StringUtils.join(keyDifficultWbsCodeList.toArray(), ","));
         vo.setKeyDifficultProject(StringUtils.join(keyDifficultWbsNameList.toArray(), ","));
         vo.setSchemeQuery(StringUtils.join(constructionNameList.toArray(), ","));
+        //获取wbs计划开始时间
+        XmslWbs wbs = WbsRedisUtils.getWbs(id);
+        if(StringUtils.isBlank(wbs.getCode()))
+            return vo;
+        JdglMainPlanItem jdglMainPlanItemParam = new JdglMainPlanItem();
+        jdglMainPlanItemParam.setWbsCode(wbs.getCode());
+        JdglMainPlanItem jdglMainPlan = jdglMainPlanItemService.getUsing4One(jdglMainPlanItemParam);
+        if(jdglMainPlan ==null)
+            return vo;
+        vo.setPlanImplementTime(jdglMainPlan.getStartDate());
         return vo;
     }
+    
 }

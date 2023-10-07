@@ -153,6 +153,13 @@
     order by sort
   </select>
 
+  <select id="getChildIdsByPids" resultType="Long">
+    select id from qqch_disclose_third where pid in
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
+      #{id}
+    </foreach> 
+  </select>
+
   <insert id="insertQqchDiscloseThird" useGeneratedKeys="true" keyProperty="id">
     insert into qqch_disclose_third
     <trim prefix="(" suffix=")" suffixOverrides=",">
