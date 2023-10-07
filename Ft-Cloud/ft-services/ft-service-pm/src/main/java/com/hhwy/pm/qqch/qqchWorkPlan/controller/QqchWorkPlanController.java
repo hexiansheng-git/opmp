@@ -159,4 +159,24 @@ public class QqchWorkPlanController extends BaseController {
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.planListByTenantKey(qqchWorkPlanParam);
         return getDataTableAjaxResult(qqchWorkPlanList);
     }
+
+    /**
+     * 工作计划提交预警
+     * @return
+     */
+    @GetMapping("/workPlanCommitWarn")
+    public AjaxResult workPlanCommitWarn(){
+        qqchWorkPlanService.workPlanCommitWarn();
+        return AjaxResult.success();
+    }
+
+    /**
+     * 工作计划审批预警
+     * @return
+     */
+    @GetMapping("workPlanApprovalWarn")
+    public AjaxResult workPlanApprovalWarn(){
+        qqchWorkPlanService.workPlanApprovalWarn();
+        return AjaxResult.success();
+    }
 }

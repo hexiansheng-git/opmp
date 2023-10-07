@@ -199,7 +199,7 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
     @Override
     @Transactional
     public void save(QqchDiscloseThirdVo vo) {
-        if(CollectionUtils.isEmpty(vo.getTreeList()))
+        if(CollectionUtils.isEmpty(vo.getTreeList()) && StringUtils.isBlank(vo.getDelIds()))
             return ;
         //新增交底明细
         List<QqchDiscloseThirdDetail> detailAddList = new ArrayList<>();
@@ -223,7 +223,7 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
         Long[] delIds = Convert.toLongArray(vo.getDelIds());
         List<Long> discloseIdList = qqchDiscloseThirdMapper.getChildIdsByPids(delIds);
         discloseIdList.addAll(Arrays.asList(delIds));
-        if(CollectionUtils.isEmpty(discloseIdList)){
+        if(!CollectionUtils.isEmpty(discloseIdList)){
             this.qqchDiscloseThirdMapper.deleteQqchDiscloseThirdByPks(discloseIdList);
             this.qqchDiscloseThirdMapper.deleteDetailByMasterIds(new HashSet<>(discloseIdList));    
         }

@@ -59,6 +59,12 @@ public class QqchKeyPointContractClause extends BaseEntity {
     @Excel(name = "要点类型（字典项：key_point_type）")
     private String keyPointType;
     /**
+     * 字段描述：要点类型文字
+     */
+    @JsonProperty
+    @Excel(name = "要点类型文字")
+    private String keyPointTypeContent;
+    /**
      * 字段描述：触发条件
      */
     @JsonProperty

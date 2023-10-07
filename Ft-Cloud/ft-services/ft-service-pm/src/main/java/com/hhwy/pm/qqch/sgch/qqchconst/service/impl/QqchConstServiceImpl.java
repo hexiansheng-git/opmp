@@ -129,7 +129,7 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
         for (QqchConst cons : qqchConsts) {
             Long id = cons.getId();
-            if(cons.getRelevancy() == null){
+            if (cons.getRelevancy() == null) {
                 cons.setRelevancy(IdWorker.createId());
             }
             // 工作内容
@@ -141,26 +141,26 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
             // 给子表数据赋值
             if (!CollectionUtils.isEmpty(jobList)) {
-                List<QqchConstJob> qqchConstJobList = TreeUtil.treeToList(jobList);
+                List<QqchConstJob> qqchConstJobList = TreeUtil.treeToListWithoutNewId(jobList);
                 for (QqchConstJob qqchConstJob : qqchConstJobList) {
-                    qqchConstJob = CompileEntity.dealSaveDto(cons, qqchConstJob);
+                    qqchConstJob = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstJob);
                     qqchConstJob.setMasterId(id);
                 }
                 iJobList.addAll(qqchConstJobList);
             }
             if (!CollectionUtils.isEmpty(staffList)) {
                 for (QqchConstStaffPlan qqchConstStaffPlan : staffList) {
-                    qqchConstStaffPlan = CompileEntity.dealSaveDto(cons, qqchConstStaffPlan);
+                    qqchConstStaffPlan = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstStaffPlan);
                     qqchConstStaffPlan.setMasterId(id);
-                    qqchConstStaffPlan.setId(IdWorker.createId());
+                    if (qqchConstStaffPlan.getId() == null) qqchConstStaffPlan.setId(IdWorker.createId());
                 }
                 iStaffList.addAll(staffList);
             }
             if (!CollectionUtils.isEmpty(facilityPlanList)) {
                 for (QqchConstFacilityPlan qqchConstFacilityPlan : facilityPlanList) {
-                    qqchConstFacilityPlan = CompileEntity.dealSaveDto(cons, qqchConstFacilityPlan);
+                    qqchConstFacilityPlan = CompileEntity.dealSaveDtoWithoutTree(cons, qqchConstFacilityPlan);
                     qqchConstFacilityPlan.setMasterId(id);
-                    qqchConstFacilityPlan.setId(IdWorker.createId());
+                    if (qqchConstFacilityPlan.getId() == null) qqchConstFacilityPlan.setId(IdWorker.createId());
                 }
                 iFacList.addAll(facilityPlanList);
             }
@@ -170,8 +170,8 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
         // 保存
         jobService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iJobList));
-        staffPlanService.saveList(CompileEntity.dealSaveDto(dtoList, iStaffList));
-        facilityPlanService.saveList(CompileEntity.dealSaveDto(dtoList, iFacList));
+        staffPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iStaffList));
+        facilityPlanService.saveList(CompileEntity.dealSaveDtoWithoutTree(dtoList, iFacList));
 
 
     }
@@ -217,27 +217,29 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
     /**
      * 获取最新版本数据
+     *
      * @return
      */
-    public List<QqchConst> getMaxVersionValidConstList(){
-        BigDecimal version = VersionUtil.getVersion(TN,null);
+    public List<QqchConst> getMaxVersionValidConstList() {
+        BigDecimal version = VersionUtil.getVersion(TN, null);
         QqchConst query = new QqchConst();
         query.setVersion(version);
         //版本全量数据
         List<QqchConst> allList = qqchConstMapper.getQqchConstList(query);
-        this.setIncome(allList,version);
+        this.setIncome(allList, version);
         return allList;
     }
 
     /**
      * 4.2弹窗
+     *
      * @return
      */
     @Override
     public List<QqchConst> popUpWindows(QqchConst qqchConst) {
         List<QqchConst> resultList;
 
-        BigDecimal version = VersionUtil.getVersion(TN,null);
+        BigDecimal version = VersionUtil.getVersion(TN, null);
         QqchConst query = new QqchConst();
         query.setVersion(version);
         //版本全量数据
@@ -245,18 +247,18 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
         String constName = qqchConst.getConstName();
         String constContent = qqchConst.getConstContent();
-        if(StringUtils.isNotBlank(constName) || StringUtils.isNotBlank(constContent)){
+        if (StringUtils.isNotBlank(constName) || StringUtils.isNotBlank(constContent)) {
             query.setConstName(constName);
             query.setConstContent(constContent);
 
             List<QqchConst> subList = qqchConstMapper.getQqchConstList(query);
 
-            resultList = ListTreeUtil.getUpListBySublist(subList,allList,QqchConst::getId,QqchConst::getPid);
-        }else {
+            resultList = ListTreeUtil.getUpListBySublist(subList, allList, QqchConst::getId, QqchConst::getPid);
+        } else {
             resultList = allList;
         }
 
-        this.setIncome(resultList,version);
+        this.setIncome(resultList, version);
         resultList = ListTreeUtil.formatTree(
                 resultList,
                 o -> o.getPid() == null,
@@ -267,20 +269,21 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
     /**
      * 设置分包收入和总产值占比
+     *
      * @param constList
      */
-    public void setIncome(List<QqchConst> constList,BigDecimal version){
+    public void setIncome(List<QqchConst> constList, BigDecimal version) {
         /*获取最新生效版本的合同信息*/
         XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
         BigDecimal contractAmount = BigDecimal.ZERO;
-        if(contractInfo != null){
+        if (contractInfo != null) {
             //有效合同金额
             contractAmount = contractInfo.getEffectiveAmout();
         }
 
         /*获取最新生效版本的主合同清单*/
         List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
-        Map<String,XmslContractList> inventoryMap = inventoryList.stream().collect(Collectors.toMap(XmslContractList::getCode,i->i,(key1 , key2)-> key2));
+        Map<String, XmslContractList> inventoryMap = inventoryList.stream().collect(Collectors.toMap(XmslContractList::getCode, i -> i, (key1, key2) -> key2));
 
         /*获取版本工作能容数据*/
         QqchConstJob constJob = new QqchConstJob();
@@ -297,23 +300,23 @@ public class QqchConstServiceImpl implements IQqchConstService {
 
             List<QqchConstJob> jobs = jobListMap.get(qqchConst.getId());
 
-            if(!CollectionUtils.isEmpty(jobs)){
+            if (!CollectionUtils.isEmpty(jobs)) {
                 for (QqchConstJob job : jobs) {
                     BigDecimal checkedNum = job.getCheckedNum();
                     XmslContractList contractList = inventoryMap.get(job.getItemCode());
                     BigDecimal winUnitPrice = BigDecimal.ZERO;
-                    if(contractList != null){
+                    if (contractList != null) {
                         winUnitPrice = contractList.getWinUnitPrice();
                     }
 
-                    if(checkedNum != null && winUnitPrice != null){
+                    if (checkedNum != null && winUnitPrice != null) {
                         subpackageIncome = subpackageIncome.add(checkedNum.multiply(winUnitPrice));
                     }
                 }
             }
 
-            if(contractAmount != null && contractAmount.compareTo(BigDecimal.ZERO) != 0){
-                totalOutputValueProportion = subpackageIncome.divide(contractAmount,2, RoundingMode.HALF_UP);
+            if (contractAmount != null && contractAmount.compareTo(BigDecimal.ZERO) != 0) {
+                totalOutputValueProportion = subpackageIncome.divide(contractAmount, 2, RoundingMode.HALF_UP);
             }
 
             qqchConst.setSubpackageIncome(subpackageIncome);

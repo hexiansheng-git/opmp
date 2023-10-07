@@ -45,4 +45,16 @@ public interface IQqchWorkPlanService {
     List<QqchWorkPlan> planListByTenantKey(QqchWorkPlan plan);
 
     void updateWorkPlanProcess(Long id);
+
+    /**
+     * 工作计划提交预警
+     * @return
+     */
+    void workPlanCommitWarn();
+
+    /**
+     * 工作计划审批预警
+     * @return
+     */
+    void workPlanApprovalWarn();
 }

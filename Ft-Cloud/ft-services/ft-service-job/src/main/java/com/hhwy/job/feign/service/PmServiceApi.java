@@ -35,4 +35,20 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchSummaryEvaluation/evaluationSetUpWarn")
     AjaxResult evaluationSetUpWarn();
+
+    /**
+     * 工作计划提交预警
+     *
+     * @return
+     */
+    @GetMapping("/qqchWorkPlan/workPlanCommitWarn")
+    AjaxResult workPlanCommitWarn();
+
+    /**
+     * 工作计划审批预警
+     *
+     * @return
+     */
+    @GetMapping("/qqchWorkPlan/workPlanApprovalWarn")
+    AjaxResult workPlanApprovalWarn();
 }

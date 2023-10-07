@@ -1,25 +1,28 @@
 package com.hhwy.pm.qqch.preparation.measureexp.range.service.impl;
 
-import java.util.*;
-
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
-import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
-import com.hhwy.utils.EntityUtils;
-import com.hhwy.utils.common.PmsConstant;
-import com.hhwy.utils.dict.DictUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
 import com.hhwy.pm.qqch.preparation.measureexp.range.mapper.QqchMeasureExpPersonMapper;
 import com.hhwy.pm.qqch.preparation.measureexp.range.service.IQqchMeasureExpPersonService;
-import com.hhwy.pm.qqch.preparation.measureexp.range.domain.QqchMeasureExpPerson;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.mapper.QqchLabourDemandPlanMapper;
+import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -33,6 +36,9 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
 
     @Resource
     private QqchMeasureExpPersonMapper qqchMeasureExpPersonMapper;
+
+    @Resource
+    private QqchLabourDemandPlanMapper labourDemandPlanMapper;
 
 
     public QqchMeasureExpPerson getQqchMeasureExpPerson(QqchMeasureExpPerson qqchMeasureExpPerson) {
@@ -100,7 +106,7 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
 
             LinkedHashMap<String, String> eamCode = DictUtil.getDictDataName(dictType);
             ArrayList<QqchMeasureExpPerson> objects = new ArrayList<>();
-            Set<String> teamNameSet = eamCode.keySet();
+            ArrayList<String> teamNameSet = new ArrayList<>(eamCode.values());
             Map<String, QqchLabourDemandPlan> teamMap = this.getTeamInfo(teamNameSet);
             eamCode.forEach((teamCode, teamName) -> {
                 QqchMeasureExpPerson person = new QqchMeasureExpPerson();
@@ -119,8 +125,29 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
         return qqchMeasureExpPersonList;
     }
 
-    private Map<String, QqchLabourDemandPlan> getTeamInfo(Set<String> teamNameSet) {
-        return new HashMap<>();
+    private Map<String, QqchLabourDemandPlan> getTeamInfo(List<String> teamNameSet) {
+        QqchLabourDemandPlan where = new QqchLabourDemandPlan();
+        where.setJobNames(teamNameSet);
+        where.setValid("1");
+        where.setVersion(VersionUtil.getVersion("qqch_labour_demand_plan", null));
+        List<QqchLabourDemandPlan> qqchLabourDemandPlanList = labourDemandPlanMapper.getQqchLabourDemandPlanList(where);
+        Map<String, List<QqchLabourDemandPlan>> map = qqchLabourDemandPlanList.stream().filter(i -> StringUtils.isNotEmpty(i.getJobName())).collect(Collectors.groupingBy(QqchLabourDemandPlan::getJobName));
+        HashMap<String, QqchLabourDemandPlan> res = new HashMap<>();
+        for (String k : map.keySet()) {
+            List<QqchLabourDemandPlan> dbList = map.get(k);
+
+            QqchLabourDemandPlan r = new QqchLabourDemandPlan();
+            for (QqchLabourDemandPlan db : dbList) {
+                r.setJobName(k);
+                r.setChinaNum(BigDecimalUtils.sum(db.getChinaNum(), r.getChinaNum()));
+                r.setOutNum(BigDecimalUtils.sum(db.getOutNum(), r.getOutNum()));
+                r.setEntryDate(db.getEntryDate());
+            }
+
+            res.put(k, r);
+        }
+
+        return res;
     }
 
     @Override
