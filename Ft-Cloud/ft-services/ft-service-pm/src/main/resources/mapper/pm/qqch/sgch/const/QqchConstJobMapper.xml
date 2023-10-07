@@ -628,8 +628,8 @@
         FROM
             ( SELECT master_id, belong_wbs_code, belong_wbs FROM qqch_const_job
                 WHERE del_flag = '0'
-                      <if test="belongWbsCodes != null  and belongWbsCodes != ''">and `belong_wbs_code` IN (#{belongWbsCodes})</if>
-                      <if test="belongWbss != null  and belongWbss != ''">and `belong_wbs` IN (#{belongWbss})</if>
+                      <if test="belongWbsCodes != null  and belongWbsCodes != ''">and  find_in_set(`belong_wbs_code`, #{belongWbsCodes})</if>
+                    <if test="belongWbss != null  and belongWbss != ''">and  find_in_set(`belong_wbs`, #{belongWbss})</if>
                 ) tj
             LEFT JOIN ( SELECT id, const_name, const_desc FROM qqch_const WHERE del_flag = '0' AND const_type = '4' ) t
             ON tj.master_id = t.id
