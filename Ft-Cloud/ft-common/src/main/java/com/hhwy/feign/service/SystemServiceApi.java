@@ -65,6 +65,12 @@ public interface SystemServiceApi {
     @GetMapping("/selfSysUser/selectSysUserInfo")
     AjaxResult selectSysUserInfo(@RequestBody SysUser sysUser);
 
+
+
+    @GetMapping("/selfSysUser/selectSysUserInfoList")
+    List<SysUser> selectSysUserInfoList(@RequestBody SysUser sysUser);
+
+
     /**
      * 根据用户名获取信息
      * @param usernames
