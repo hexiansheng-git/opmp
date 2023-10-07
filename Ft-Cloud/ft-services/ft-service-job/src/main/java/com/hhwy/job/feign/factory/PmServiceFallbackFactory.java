@@ -7,11 +7,22 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
+
     @Override
     public PmServiceApi create(Throwable cause) {
         return new PmServiceApi() {
             @Override
             public AjaxResult workGroupSetUpWarn() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult summarySetUpWarn() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult evaluationSetUpWarn() {
                 return null;
             }
         };

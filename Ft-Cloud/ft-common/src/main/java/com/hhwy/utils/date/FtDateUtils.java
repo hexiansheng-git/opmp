@@ -248,6 +248,22 @@ public class FtDateUtils extends DateUtils {
     }
 
     /**
+     * 格式化成yyyy-MM-dd
+     *
+     * @return
+     * @throws ParseException
+     */
+    public static Date getFormatDate(Date date) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            return simpleDateFormat.parse(simpleDateFormat.format(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
      * 日期天数差
      *
      * @return

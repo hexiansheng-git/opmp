@@ -1,13 +1,26 @@
 package com.hhwy.pm.qqch.evaluation.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.mapper.QqchSummaryEvaluationMapper;
 import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
+import com.hhwy.pm.warn.WarnService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.date.FtDateUtils;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +37,15 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
     private QqchSummaryEvaluationMapper qqchSummaryEvaluationMapper;
     @Autowired
     private ISysSyncInfoService sysSyncInfoService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private WarnService warnService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     public QqchSummaryEvaluation getQqchSummaryEvaluation(QqchSummaryEvaluation qqchSummaryEvaluation) {
         return qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(qqchSummaryEvaluation);
@@ -77,5 +99,81 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         qqchSummaryEvaluation.setId(id);
         qqchSummaryEvaluation.setTaskStatus("5");
         qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(qqchSummaryEvaluation);
+    }
+
+    @Override
+    public void summaryEvaluationSetUpWarn(String type) {
+        // 切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        // 获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                // 切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                QqchSummaryEvaluation qqchSummaryEvaluation = this
+                    .getQqchSummaryEvaluation(new QqchSummaryEvaluation());
+
+                Date nowDate = FtDateUtils.getYearMonthDayDate();
+                Long diffDays;
+
+                // type为1时，总结预警
+                if ("1".equals(type)) {
+                    // 获取项目数据
+                    ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                    if (projectInfo == null) {
+                        continue;
+                    }
+
+                    // 项目初验时间
+                    Date projectInitialInspectionDate = projectInfo.getProjectInitialInspectionDate();
+                    if (projectInitialInspectionDate == null) {
+                        continue;
+                    }
+                    diffDays = FtDateUtils.getDays(projectInitialInspectionDate, nowDate);
+
+                    // 项目初验时间超过10天，预警
+                    if (diffDays > 10) {
+                        if (qqchSummaryEvaluation == null) {
+                            // 发送预警
+                            warnService.addWarn(WarnItem.SUMMARY_SET_UP, WarnScopeType.USER, null, "admin", tenantKey);
+                        }
+                    }
+                }
+
+                // type为2时，评价预警
+                if ("2".equals(type)) {
+                    if (qqchSummaryEvaluation == null) {
+                        continue;
+                    }
+                    // 总结评价创建时间
+                    Date createTime = FtDateUtils.getFormatDate(qqchSummaryEvaluation.getCreateTime());
+                    if (createTime == null) {
+                        continue;
+                    }
+                    diffDays = FtDateUtils.getDays(createTime, nowDate);
+
+                    // 在项目报送前期策划总结后7天内进行评价，未完成进行预警
+                    if (diffDays > 7) {
+                        if ("".equals(qqchSummaryEvaluation.getTaskStatus()) || "0"
+                            .equals(qqchSummaryEvaluation.getTaskStatus())) {
+                            // 发送预警
+                            warnService
+                                .addWarn(WarnItem.EVALUATION_SET_UP, WarnScopeType.USER, null, "admin", tenantKey);
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new CustomBusinessException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 }

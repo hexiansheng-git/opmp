@@ -70,4 +70,26 @@ public class QqchSummaryEvaluationController extends BaseController {
         qqchSummaryEvaluationService.updateQqchSummaryEvaluationProcess(id);
         return AjaxResult.success("成功");
     }
+
+    /**
+     * 总结发送预警消息
+     *
+     * @return
+     */
+    @GetMapping("summarySetUpWarn")
+    public AjaxResult summarySetUpWarn() {
+        qqchSummaryEvaluationService.summaryEvaluationSetUpWarn("1");
+        return AjaxResult.success();
+    }
+
+    /**
+     * 评价发送预警消息
+     *
+     * @return
+     */
+    @GetMapping("evaluationSetUpWarn")
+    public AjaxResult evaluationSetUpWarn() {
+        qqchSummaryEvaluationService.summaryEvaluationSetUpWarn("2");
+        return AjaxResult.success();
+    }
 }

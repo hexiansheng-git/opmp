@@ -16,4 +16,6 @@ public interface IQqchSummaryEvaluationService {
     void submit(QqchSummaryEvaluation qqchSummaryEvaluation);
 
     void updateQqchSummaryEvaluationProcess(Long id);
+
+    void summaryEvaluationSetUpWarn(String type);
 }
