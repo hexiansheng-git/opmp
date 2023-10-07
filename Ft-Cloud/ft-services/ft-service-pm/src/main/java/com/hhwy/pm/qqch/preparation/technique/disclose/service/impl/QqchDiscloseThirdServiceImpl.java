@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.disclose.service.impl;
 
+import com.alibaba.cloud.nacos.discovery.NacosWatch;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -14,14 +15,12 @@ import com.hhwy.pm.qqch.preparation.technique.disclose.service.IQqchDiscloseThir
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
 import java.security.cert.CollectionCertStoreParameters;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.sun.javafx.util.TempState;
@@ -84,11 +83,47 @@ public class QqchDiscloseThirdServiceImpl implements IQqchDiscloseThirdService {
     public List<QqchDiscloseThirdDetail> getDetailList(Long masterId) {
         if(masterId == null || masterId < 0L)
             return new ArrayList<>(2);
+        //获取子级交底人数据
+        QqchDiscloseThird thirdQuery = new QqchDiscloseThird();
+        thirdQuery.setPid(masterId);
+        List<QqchDiscloseThird> thirdList = this.qqchDiscloseThirdMapper.getQqchDiscloseThirdList(thirdQuery);
+        List<Long> idList = thirdList.stream().map(r->r.getId()).collect(Collectors.toList());
+        idList.add(masterId);
         QqchDiscloseThirdDetail query = new QqchDiscloseThirdDetail();
-        query.setMasterId(masterId);
+        query.setParams(ObjectUtils.toMap("masterIds", idList));
         List<QqchDiscloseThirdDetail> list = qqchDiscloseThirdDetailMapper.getQqchDiscloseThirdDetailList(query);
+        //根据wbs编号去重
+        List<QqchDiscloseThirdDetail> finalList = filtersRepeatWbs(list);
         //转树形
-        return TreeUtil.build(list,-1L);
+        return TreeUtil.build(finalList,-1L);
+    }
+    
+    private List<QqchDiscloseThirdDetail> filtersRepeatWbs(List<QqchDiscloseThirdDetail> list){
+        //根据wbs编号去重
+        list.sort((v1,v2)->v1.getId()>v2.getId()?-1:1);
+        //不同的班组可能会选择同一个wbs。需要去重,并处理ID
+        Map<String,List<Long>> wbsCodeParentMap = new HashMap<>();
+        List<QqchDiscloseThirdDetail> finalList = new ArrayList<>();
+        Set<Long> finalIdSet = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            QqchDiscloseThirdDetail temp = list.get(i);
+            boolean containWbs = wbsCodeParentMap.containsKey(temp.getWbsCode());
+            ObjectUtils.add2MapList(wbsCodeParentMap, temp.getWbsCode(), temp.getPid());
+            if(!containWbs){ //如果WBS编号不存在，放入结果list
+                finalList.add(temp);
+                finalIdSet.add(temp.getId());
+            }
+        }
+        //处理父级ID
+        for (int i = 0; i < finalList.size(); i++) {
+            QqchDiscloseThirdDetail temp = finalList.get(i);
+            List<Long> pidList = wbsCodeParentMap.get(temp.getWbsCode());
+            for (int j = 0; j < pidList.size(); j++) {
+                if(finalIdSet.contains(pidList.get(j)))
+                    temp.setPid(pidList.get(j));
+            }
+        }
+        return finalList;
     }
 
     @Transactional

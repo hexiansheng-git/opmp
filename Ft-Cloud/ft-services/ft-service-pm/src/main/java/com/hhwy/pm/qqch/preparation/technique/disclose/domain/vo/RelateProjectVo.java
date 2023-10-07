@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author zhenglili
  * @date 2023-07-27 15:07:49
@@ -32,4 +34,7 @@ public class RelateProjectVo {
      * 字段描述：施工方案查询
      */
     private String schemeQuery;
+
+    //计划实施日期
+    private Date planImplementTime;
 }
