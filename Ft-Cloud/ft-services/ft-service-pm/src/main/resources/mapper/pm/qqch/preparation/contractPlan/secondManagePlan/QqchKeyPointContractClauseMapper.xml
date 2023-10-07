@@ -11,6 +11,7 @@
         <result property="clauseCode" column="clause_code"/>
         <result property="clauseContent" column="clause_content"/>
         <result property="keyPointType" column="key_point_type"/>
+        <result property="keyPointTypeContent" column="key_point_type_content"/>
         <result property="triggerCondition" column="trigger_condition"/>
         <result property="occurProb" column="occur_prob"/>
         <result property="remark" column="remark"/>
@@ -42,6 +43,7 @@
              , `clause_code`
              , `clause_content`
              , `key_point_type`
+             , `key_point_type_content`
              , `trigger_condition`
              , `occur_prob`
              , `remark`
@@ -77,6 +79,7 @@
             <if test="clauseCode != null  and clauseCode != ''">and `clause_code` = #{clauseCode}</if>
             <if test="clauseContent != null  and clauseContent != ''">and `clause_content` = #{clauseContent}</if>
             <if test="keyPointType != null  and keyPointType != ''">and `key_point_type` = #{keyPointType}</if>
+            <if test="keyPointTypeContent != null  and keyPointTypeContent != ''">and `key_point_type_content` = #{keyPointTypeContent}</if>
             <if test="triggerCondition != null  and triggerCondition != ''">and `trigger_condition` =
                 #{triggerCondition}
             </if>
@@ -117,6 +120,7 @@
             <if test="clauseCode != null  and clauseCode != ''">and `clause_code` = #{clauseCode}</if>
             <if test="clauseContent != null  and clauseContent != ''">and `clause_content` = #{clauseContent}</if>
             <if test="keyPointType != null  and keyPointType != ''">and `key_point_type` = #{keyPointType}</if>
+            <if test="keyPointTypeContent != null  and keyPointTypeContent != ''">and `key_point_type_content` = #{keyPointTypeContent}</if>
             <if test="triggerCondition != null  and triggerCondition != ''">and `trigger_condition` =
                 #{triggerCondition}
             </if>
@@ -155,6 +159,7 @@
             <if test="clauseCode != null  and clauseCode != ''">`clause_code`,</if>
             <if test="clauseContent != null  and clauseContent != ''">`clause_content`,</if>
             <if test="keyPointType != null  and keyPointType != ''">`key_point_type`,</if>
+            <if test="keyPointTypeContent != null  and keyPointTypeContent != ''">`key_point_type_content`,</if>
             <if test="triggerCondition != null  and triggerCondition != ''">`trigger_condition`,</if>
             <if test="occurProb != null  and occurProb != ''">`occur_prob`,</if>
             <if test="remark != null  and remark != ''">`remark`,</if>
@@ -186,6 +191,7 @@
             <if test="clauseCode != null  and clauseCode != ''">#{clauseCode},</if>
             <if test="clauseContent != null  and clauseContent != ''">#{clauseContent},</if>
             <if test="keyPointType != null  and keyPointType != ''">#{keyPointType},</if>
+            <if test="keyPointTypeContent != null  and keyPointTypeContent != ''">#{keyPointTypeContent},</if>
             <if test="triggerCondition != null  and triggerCondition != ''">#{triggerCondition},</if>
             <if test="occurProb != null  and occurProb != ''">#{occurProb},</if>
             <if test="remark != null  and remark != ''">#{remark},</if>
@@ -222,6 +228,7 @@
             `clause_code`,
             `clause_content`,
             `key_point_type`,
+            `key_point_type_content`,
             `trigger_condition`,
             `occur_prob`,
             `remark`,
@@ -254,6 +261,7 @@
                 #{item.clauseCode},
                 #{item.clauseContent},
                 #{item.keyPointType},
+                #{item.keyPointTypeContent},
                 #{item.triggerCondition},
                 #{item.occurProb},
                 #{item.remark},
@@ -288,6 +296,7 @@
             <if test="clauseCode != null  and  clauseCode != ''">`clause_code` = #{clauseCode},</if>
             <if test="clauseContent != null  and  clauseContent != ''">`clause_content` = #{clauseContent},</if>
             <if test="keyPointType != null  and  keyPointType != ''">`key_point_type` = #{keyPointType},</if>
+            <if test="keyPointTypeContent != null  and  keyPointTypeContent != ''">`key_point_type_content` = #{keyPointTypeContent},</if>
             <if test="triggerCondition != null  and  triggerCondition != ''">`trigger_condition` =
                 #{triggerCondition},
             </if>
@@ -335,6 +344,11 @@
             <trim prefix="key_point_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.keyPointType}
+                </foreach>
+            </trim>
+            <trim prefix="key_point_type_content  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.keyPointTypeContent}
                 </foreach>
             </trim>
             <trim prefix="trigger_condition  = case" suffix="end,">
