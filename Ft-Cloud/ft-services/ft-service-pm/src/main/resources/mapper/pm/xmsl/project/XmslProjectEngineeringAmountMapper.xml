@@ -454,9 +454,7 @@
 
     <update id="deleteProjectEngineeringAmount">
         update `xmsl_project_engineering_amount` set del_flag = '1'
-        <where>
-            and `id` = #{id}
-        </where>
+        where `project_basic_info_id` = #{projectBasicInfoId}
     </update>
 
     <update id="deleteProjectEngineeringAmountByPks">

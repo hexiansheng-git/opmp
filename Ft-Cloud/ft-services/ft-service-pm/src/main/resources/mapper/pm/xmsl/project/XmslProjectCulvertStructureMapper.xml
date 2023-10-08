@@ -439,9 +439,7 @@
 
     <update id="deleteProjectCulvertStructure">
         update `xmsl_project_culvert_structure` set del_flag = 1
-        <where>
-            and `id` = #{id}
-        </where>
+        where `project_basic_info_id` = #{projectBasicInfoId}
     </update>
 
     <update id="deleteProjectCulvertStructureByPks">

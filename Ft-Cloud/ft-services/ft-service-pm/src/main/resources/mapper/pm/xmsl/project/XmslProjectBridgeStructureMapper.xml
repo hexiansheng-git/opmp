@@ -427,9 +427,7 @@
 
     <update id="deleteProjectBridgeStructure">
         update `xmsl_project_bridge_structure` set del_flag = '1'
-        <where>
-            and `id` = #{id}
-        </where>
+        where `project_basic_info_id` = #{projectBasicInfoId}
     </update>
 
     <update id="deleteProjectBridgeStructureByPks">
