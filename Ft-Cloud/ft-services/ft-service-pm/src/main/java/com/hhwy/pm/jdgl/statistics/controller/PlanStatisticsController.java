@@ -48,6 +48,7 @@ public class PlanStatisticsController  {
         return AjaxResult.success(iPlanStatisticsService.getYearValueCompareList(iPlanStatisticsQueryVO));
     };
 
+//    @ResponseBody
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws IOException {
 
