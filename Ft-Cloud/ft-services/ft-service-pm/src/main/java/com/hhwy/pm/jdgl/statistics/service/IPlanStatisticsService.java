@@ -12,6 +12,8 @@ public interface IPlanStatisticsService {
 
     Map<String, Map<String, BigDecimal>> getValueCompData(PlanStatisticsQueryVO iPlanStatisticsQueryVO) ;
 
+    List<PlanStatisticsValueCompVO> getValueCompData4VO(PlanStatisticsQueryVO iPlanStatisticsQueryVO) ;
+
     List<PlanStatisticsWbsValueVO> getWbsValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) ;
 
     List<PlanStatisticsBillValueVO> getBillValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
