@@ -177,6 +177,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public List<XmslDrawReviewList> relationWbsList(Integer version, Long mainId,String wbsCode,Long wbsId) {
         if(StringUtils.isBlank(wbsCode))
             return new ArrayList<>(2);
+        if(wbsId == null)  //若图纸复核id为空，尝试加载项目wbs对应的清单   11-1
+            return getByListCodes(wbsCode);
         List<XmslDrawReviewRelation> relationList = null;
         if(version==null){ //未保存版本的话，取最新
             version = this.xmslDrawReviewMapper.selectMaxEffectVersion();
@@ -184,8 +186,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslWbs wbs = wbsService.getByCode(wbsCode);
             if(wbs == null)
                 return new ArrayList<>();
-//            String listCodeStr = wbs.getListCode();
-//            Set<String> listCodeSet = SetUtils.hashSet(listCodeStr.split(","));
             relationList = relationService.relationList(version,wbsCode);
         }else{
             relationList = relationService.relationList(version,wbsCode);
@@ -221,9 +221,23 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return list;
     }
 
-//    private List<XmslDrawReviewWbs> getByListCodes(){
-//        
-//    }
+    private List<XmslDrawReviewList> getByListCodes(String wbsCode){
+        String[] listCodes = WbsRedisUtils.getListCodeByWbsCode(wbsCode);
+        if(ArrayUtils.isEmpty(listCodes))
+            return new ArrayList<>();
+        List<XmslContractList> list = contractListService.getByCodes(SetUtils.hashSet(listCodes));
+        List<XmslDrawReviewList> resuList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            XmslContractList temp = list.get(i);
+            XmslDrawReviewList drawReviewList = new XmslDrawReviewList();
+            BeanUtils.copyProperties(temp, drawReviewList);
+            drawReviewList.setListId(temp.getId());
+            drawReviewList.setListCode(temp.getCode());
+            new AddBaseInfoUtil<>().addBaseEntity(drawReviewList);
+            resuList.add(drawReviewList);
+        }
+        return resuList;
+    }
     
     @Override
     public List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId) {
