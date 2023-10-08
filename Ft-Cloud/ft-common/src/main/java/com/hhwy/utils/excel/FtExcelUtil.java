@@ -791,11 +791,27 @@ public class FtExcelUtil<T> {
                     cell.setCellValue(fieldVal == null ? "" : fieldVal + "");
                 }
             }
-            response.setCharacterEncoding("utf-8");
-            response.setContentType("multipart/form-data");
-            response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(templateName, "UTF-8"));
-            this.wb.write(response.getOutputStream());
-        } catch (IOException e) {
+
+            OutputStream outputStream = null;
+            try {
+                outputStream = response.getOutputStream();
+                response.setCharacterEncoding("utf-8");
+                response.setContentType("multipart/form-data");
+                response.setHeader("Content-Disposition", "attachment;fileName=" + URLEncoder.encode(templateName, "UTF-8"));
+                this.wb.write(outputStream);
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            } finally {
+                try {
+                    if (outputStream != null)
+                        outputStream.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException(e);
         }

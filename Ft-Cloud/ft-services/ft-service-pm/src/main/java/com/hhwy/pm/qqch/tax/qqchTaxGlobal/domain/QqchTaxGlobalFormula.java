@@ -192,7 +192,7 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
      */
     @JsonProperty
     @Excel(name = "数据删除者")
-    private String delUser;
+    private BigDecimal cycle;
     /**
      * 字段描述：数据删除系统时间
      */
@@ -214,7 +214,7 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
     private BigDecimal version;
     /**
      * 字段描述：预留字段2
-     */
+     */ 
     @JsonProperty
     @Excel(name = "币种")
     private String currency;
