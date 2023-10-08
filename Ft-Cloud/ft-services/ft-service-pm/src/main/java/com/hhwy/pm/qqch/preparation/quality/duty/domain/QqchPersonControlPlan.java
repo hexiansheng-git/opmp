@@ -70,9 +70,9 @@ public class QqchPersonControlPlan extends BaseEntity {
     /**
      * 字段描述：签发日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "签发日期", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "签发日期", dateFormat = "yyyy-MM-dd")
     private Date issueDate;
     /**
      * 字段描述：有限期限(年）

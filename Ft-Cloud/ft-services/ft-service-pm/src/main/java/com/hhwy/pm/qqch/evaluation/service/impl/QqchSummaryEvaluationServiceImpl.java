@@ -37,13 +37,10 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
     private QqchSummaryEvaluationMapper qqchSummaryEvaluationMapper;
     @Autowired
     private ISysSyncInfoService sysSyncInfoService;
-
     @Autowired
     private SystemServiceApi systemServiceApi;
-
     @Autowired
     private WarnService warnService;
-
     @Autowired
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
@@ -102,7 +99,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
     }
 
     @Override
-    public void summaryEvaluationSetUpWarn(String type) {
+    public void summaryEvaluationWarn(String type) {
         // 切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
@@ -141,7 +138,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                     if (diffDays > 10) {
                         if (qqchSummaryEvaluation == null) {
                             // 发送预警
-                            warnService.addWarn(WarnItem.SUMMARY_SET_UP, WarnScopeType.USER, null, "admin", tenantKey);
+                            warnService.addWarn(WarnItem.SUMMARY, WarnScopeType.USER, null, "admin", tenantKey);
                         }
                     }
                 }
@@ -164,7 +161,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                             .equals(qqchSummaryEvaluation.getTaskStatus())) {
                             // 发送预警
                             warnService
-                                .addWarn(WarnItem.EVALUATION_SET_UP, WarnScopeType.USER, null, "admin", tenantKey);
+                                .addWarn(WarnItem.EVALUATION, WarnScopeType.USER, null, "admin", tenantKey);
                         }
                     }
                 }

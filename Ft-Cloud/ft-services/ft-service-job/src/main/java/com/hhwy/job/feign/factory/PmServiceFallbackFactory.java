@@ -17,12 +17,12 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
-            public AjaxResult summarySetUpWarn() {
+            public AjaxResult summaryWarn() {
                 return null;
             }
 
             @Override
-            public AjaxResult evaluationSetUpWarn() {
+            public AjaxResult evaluationWarn() {
                 return null;
             }
 
@@ -33,6 +33,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
 
             @Override
             public AjaxResult workPlanApprovalWarn() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult personControlPlanWarn() {
                 return null;
             }
         };

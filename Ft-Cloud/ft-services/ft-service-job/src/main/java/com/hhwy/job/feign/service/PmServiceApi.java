@@ -25,16 +25,16 @@ public interface PmServiceApi {
      *
      * @return
      */
-    @GetMapping("/qqchSummaryEvaluation/summarySetUpWarn")
-    AjaxResult summarySetUpWarn();
+    @GetMapping("/qqchSummaryEvaluation/summaryWarn")
+    AjaxResult summaryWarn();
 
     /**
      * 前期策划总结评价-评价预警消息
      *
      * @return
      */
-    @GetMapping("/qqchSummaryEvaluation/evaluationSetUpWarn")
-    AjaxResult evaluationSetUpWarn();
+    @GetMapping("/qqchSummaryEvaluation/evaluationWarn")
+    AjaxResult evaluationWarn();
 
     /**
      * 工作计划提交预警
@@ -51,4 +51,12 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchWorkPlan/workPlanApprovalWarn")
     AjaxResult workPlanApprovalWarn();
+
+    /**
+     * 人员管控策划预警
+     *
+     * @return
+     */
+    @GetMapping("/qqchPersonControlPlan/personControlPlanWarn")
+    AjaxResult personControlPlanWarn();
 }

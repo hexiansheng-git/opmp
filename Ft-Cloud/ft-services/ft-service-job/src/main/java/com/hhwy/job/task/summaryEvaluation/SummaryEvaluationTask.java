@@ -4,8 +4,8 @@ import com.hhwy.job.feign.service.PmServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("SummaryTask")
-public class SummaryTask {
+@Component("SummaryEvaluationTask")
+public class SummaryEvaluationTask {
 
     @Autowired
     private PmServiceApi pmServiceApi;
@@ -13,8 +13,16 @@ public class SummaryTask {
     /**
      * 前期策划总结评价-总结预警
      */
-    public void summarySetUpWarn() {
+    public void summaryWarn() {
         System.out.println("----------发送预警------------");
-        pmServiceApi.summarySetUpWarn();
+        pmServiceApi.summaryWarn();
+    }
+
+    /**
+     * 前期策划总结评价-总结预警
+     */
+    public void evaluationWarn() {
+        System.out.println("----------发送预警------------");
+        pmServiceApi.evaluationWarn();
     }
 }
