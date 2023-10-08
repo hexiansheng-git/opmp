@@ -498,9 +498,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
         list.sort((r, r1) -> {return r.getLevel() > r1.getLevel() ? 1 : -1;});
         for (int i = 0; i < list.size(); i++) {
-            //前端会把生效数据也扔过来，过滤掉
-
             XmslWbsHistory temp = list.get(i);
+            temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
             temp.setMainId(dto.getMainId());
             //若wbs有子级，清除清单编号。20230804 玉涛需求
             if(temp.getHaveChildren() == Constant.YES_INT){

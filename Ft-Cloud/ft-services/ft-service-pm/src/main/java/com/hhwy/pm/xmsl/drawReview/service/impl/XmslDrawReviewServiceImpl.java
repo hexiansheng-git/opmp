@@ -184,9 +184,9 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslWbs wbs = wbsService.getByCode(wbsCode);
             if(wbs == null)
                 return new ArrayList<>();
-            String listCodeStr = wbs.getListCode();
-            Set<String> listCodeSet = SetUtils.hashSet(listCodeStr.split(","));
-            relationList = relationService.relationList(version,wbsCode,listCodeSet);
+//            String listCodeStr = wbs.getListCode();
+//            Set<String> listCodeSet = SetUtils.hashSet(listCodeStr.split(","));
+            relationList = relationService.relationList(version,wbsCode);
         }else{
             relationList = relationService.relationList(version,wbsCode);
             if(CollectionUtils.isEmpty(relationList))
@@ -221,6 +221,10 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         return list;
     }
 
+//    private List<XmslDrawReviewWbs> getByListCodes(){
+//        
+//    }
+    
     @Override
     public List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId) {
         if(StringUtils.isBlank(listCode))

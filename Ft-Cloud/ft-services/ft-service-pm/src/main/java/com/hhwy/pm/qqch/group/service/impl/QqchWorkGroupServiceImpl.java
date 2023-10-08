@@ -250,7 +250,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             qqchWorkGroup.setProjectId(projectInfo.getProjectId());
             qqchWorkGroup.setProjectName(projectInfo.getProjectName());
         }
-        return qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
+        int result = qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
+        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
+        return result;
     }
 
     /**
@@ -298,7 +300,10 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
-        return qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+        
+        int result = qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
+        return result;
     }
 
     /**
