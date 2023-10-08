@@ -16,6 +16,35 @@ import java.util.function.Predicate;
 public class ListTreeUtil {
 
     /**
+     * 设置树结构的id和pid
+     * @param source
+     * @param setId
+     * @param setPid
+     * @param getChildren
+     * @param <T>
+     */
+    public static <T> void preserveIdPid(List<T> source,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid,Function<T, List<T>> getChildren){
+        for (T t : source) {
+            preserve(t,setId,setPid,getChildren);
+        }
+    }
+
+    private static <T> void preserve(T node,BiConsumer<T,Long> setId,BiConsumer<T,Long> setPid,Function<T, List<T>> getChildren){
+        Long id = IdWorker.createId();
+        setId.accept(node,id);
+
+        List<T> children = getChildren.apply(node);
+        if(!CollectionUtils.isEmpty(children)){
+            for (T child : children) {
+                setPid.accept(child,id);
+                preserve(child,setId, setPid, getChildren);
+            }
+        }
+    }
+
+
+
+    /**
      * 导出维护序号（普通列表）
      * @param source
      * @param setSerialNumber
