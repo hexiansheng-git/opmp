@@ -53,6 +53,24 @@ public interface PmServiceApi {
     AjaxResult workPlanApprovalWarn();
 
     /**
+     * 前期策划编制第一阶段预警
+     */
+    @GetMapping("/qqchReview/preparationFirstStageWarn")
+    AjaxResult preparationFirstStageWarn();
+
+    /**
+     * 前期策划编制第二阶段预警
+     */
+    @GetMapping("/qqchReview/preparationSecondStageWarn")
+    AjaxResult preparationSecondStageWarn();
+
+    /**
+     * 前期策划编制第三阶段预警
+     */
+    @GetMapping("/qqchReview/preparationThirdStageWarn")
+    AjaxResult preparationThirdStageWarn();
+
+    /**
      * 人员管控策划预警
      *
      * @return

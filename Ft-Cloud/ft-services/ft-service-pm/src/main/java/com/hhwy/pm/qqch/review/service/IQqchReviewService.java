@@ -64,4 +64,18 @@ public interface IQqchReviewService {
     String getStage();
 
 
+    /**
+     * 前期策划编制第一阶段预警
+     */
+    void preparationFirstStageWarn();
+
+    /**
+     * 前期策划编制第二阶段预警
+     */
+    void preparationSecondStageWarn();
+
+    /**
+     * 前期策划编制第三阶段预警
+     */
+    void preparationThirdStageWarn();
 }

@@ -391,5 +391,29 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         return PmConstant.END_STAGE;
     }
 
-    
+    /**
+     * 前期策划编制第一阶段预警
+     */
+    @Override
+    public void preparationFirstStageWarn() {
+
+    }
+
+    /**
+     * 前期策划编制第二阶段预警
+     */
+    @Override
+    public void preparationSecondStageWarn() {
+
+    }
+
+    /**
+     * 前期策划编制第三阶段预警
+     */
+    @Override
+    public void preparationThirdStageWarn() {
+
+    }
+
+
 }

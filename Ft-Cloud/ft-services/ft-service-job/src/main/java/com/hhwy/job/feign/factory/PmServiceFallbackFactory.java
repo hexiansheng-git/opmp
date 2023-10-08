@@ -40,6 +40,21 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public AjaxResult personControlPlanWarn() {
                 return null;
             }
+
+            @Override
+            public AjaxResult preparationFirstStageWarn() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult preparationSecondStageWarn() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult preparationThirdStageWarn() {
+                return null;
+            }
         };
     }
 }
