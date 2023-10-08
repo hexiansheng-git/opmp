@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -38,6 +39,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +77,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private WarnService warnService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -284,6 +288,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
         // 明细
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast, qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return qqchWorkPlan.getId();
     }
 
@@ -357,6 +362,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return 1;
     }
 
@@ -374,6 +380,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return 1;
     }
 
@@ -405,6 +412,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return id;
     }
 
@@ -420,7 +428,10 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Transactional
     public int deleteQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
         qqchWorkPlan.setDelUser(SecurityUtils.getSysUser().getUserId()+"");
-        return qqchWorkPlanMapper.deleteQqchWorkPlan(qqchWorkPlan);
+        int result =qqchWorkPlanMapper.deleteQqchWorkPlan(qqchWorkPlan);
+        //推送到总部
+        rocketMQTemplate.convertAndSend("qqch_work_plan:delete", qqchWorkPlan.getId()+"");
+        return result;
     }
 
     @Transactional

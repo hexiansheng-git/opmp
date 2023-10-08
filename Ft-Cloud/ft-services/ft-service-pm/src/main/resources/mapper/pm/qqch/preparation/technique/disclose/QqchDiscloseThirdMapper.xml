@@ -155,7 +155,7 @@
 
   <select id="getChildIdsByPids" resultType="Long">
     select id from qqch_disclose_third where pid in
-    <foreach item="id" collection="array" open="(" separator="," close=")">
+    <foreach item="id" collection="ids" open="(" separator="," close=")">
       #{id}
     </foreach> 
   </select>
