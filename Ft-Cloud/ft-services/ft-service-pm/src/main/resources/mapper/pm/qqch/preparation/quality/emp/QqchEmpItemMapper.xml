@@ -129,7 +129,9 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsId != null ">
+                and find_in_set(#{wbsId},ancestors_wbs_id)
+            </if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="checkCode != null  and checkCode != ''">and `check_code` = #{checkCode}</if>
             <if test="checkName != null  and checkName != ''">and `check_name` = #{checkName}</if>

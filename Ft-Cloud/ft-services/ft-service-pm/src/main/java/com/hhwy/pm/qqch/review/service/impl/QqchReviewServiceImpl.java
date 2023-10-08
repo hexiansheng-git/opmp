@@ -24,6 +24,7 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -168,7 +169,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         if (!CollectionUtils.isEmpty(qqchReviewList)) {
             this.checkData(qqchReviewList, iData);
             this.updateQqchReviewList(qqchReviewList);
-            this.updateFinishNum(null,null);
+            this.updateFinishNum();
         }
         this.reviewMapper.insertQqchReviewList(iData);
         
@@ -273,21 +274,26 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         return review;
     }
 
+    @Override
+    @Deprecated
+    public void updateFinishNum(String stageIdentity, String moduleIdentity){
+        // 获取代理对象
+        IQqchReviewService o = (IQqchReviewService)AopContext.currentProxy();
+        o.updateFinishNum();
+    }
 
     /**
-     * 确认更新阶段确认功能数量
-     *
-     * @param stageIdentity  阶段
-     * @param moduleIdentity 模块唯一Id
+     * 确认更新阶段确认功能数量 全量更新一下
      */
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void updateFinishNum(String stageIdentity, String moduleIdentity) {
+    public void updateFinishNum() {
 
         try {
-            if (RedissonLockUtil.lock(stageIdentity)) {
+            if (RedissonLockUtil.lock("stageIdentity")) {
                 QqchWorkPlanDetail where = new QqchWorkPlanDetail();
-                where.setItemId(moduleIdentity);
+                where.setDelFlag("0");
+            /*    where.setItemId(moduleIdentity);
                 switch (stageIdentity) {
                     case "1":
                         where.setIsFirst("1");
@@ -299,7 +305,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                         where.setIsThird("1");
                         break;
                     default:
-                }
+                }*/
                 // 查询工作计划的数据
                 List<QqchWorkPlanDetail> qqchWorkPlanDetailList = workPlanDetailService.getQqchWorkPlanDetailList(where);
 
@@ -354,7 +360,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 }
             }
         } finally {
-            RedissonLockUtil.unlock(stageIdentity);
+            RedissonLockUtil.unlock("stageIdentity");
         }
 
     }
@@ -391,5 +397,29 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         return PmConstant.END_STAGE;
     }
 
-    
+    /**
+     * 前期策划编制第一阶段预警
+     */
+    @Override
+    public void preparationFirstStageWarn() {
+
+    }
+
+    /**
+     * 前期策划编制第二阶段预警
+     */
+    @Override
+    public void preparationSecondStageWarn() {
+
+    }
+
+    /**
+     * 前期策划编制第三阶段预警
+     */
+    @Override
+    public void preparationThirdStageWarn() {
+
+    }
+
+
 }

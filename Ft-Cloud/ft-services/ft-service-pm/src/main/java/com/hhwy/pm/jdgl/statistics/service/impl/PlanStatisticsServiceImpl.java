@@ -222,6 +222,38 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return return2Map;
     }
 
+    @Override
+    public List<PlanStatisticsValueCompVO> getValueCompData4VO(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+
+        List<PlanStatisticsValueCompVO> returnList = new ArrayList<>();
+
+        Map<String, Map<String, BigDecimal>> valueCompData = getValueCompData(iPlanStatisticsQueryVO);
+
+        Set<String> keys = valueCompData.keySet();
+
+        for (String key : keys) {
+            PlanStatisticsValueCompVO vo1 = new PlanStatisticsValueCompVO();
+            PlanStatisticsValueCompVO vo2 = new PlanStatisticsValueCompVO();
+            PlanStatisticsValueCompVO vo3 = new PlanStatisticsValueCompVO();
+            switch (key) {
+                case "week":
+                    vo1.setType("");
+                    break;
+                case "month":
+                    break;
+                case "quarter":
+                    break;
+                case "year":
+                    break;
+                case "total":
+                    break;
+            }
+        }
+
+
+        return returnList;
+    }
+
     /**
      * 获取wbs汇总数据
      * @param iPlanStatisticsQueryVO

@@ -20,5 +20,8 @@ public class PermissionMark {
     /*是否已确认：0：未确认，1：已确认*/
     private String confirmed = "0";
 
+    /*按钮状态：1：显示，2：消失，3：置灰*/
+    private String buttonStatus = ButtonStatus.DISPLAY;
+
     private String msg;
 }

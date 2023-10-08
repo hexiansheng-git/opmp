@@ -8,6 +8,7 @@ import com.hhwy.pm.qqch.module.mapper.QqchModuleConfirmCaseMapper;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,6 +99,8 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
      */
     @Override
     public int getConfirmNumByStage(String stage, List<String> menuIdList) {
+        // 为空的话 证明当前阶段没有任何需要编制以及确认的数据 
+        if (CollectionUtils.isEmpty(menuIdList)) return 0;
         return qqchModuleConfirmCaseMapper.getConfirmNumByStage(stage,menuIdList);
     }
 

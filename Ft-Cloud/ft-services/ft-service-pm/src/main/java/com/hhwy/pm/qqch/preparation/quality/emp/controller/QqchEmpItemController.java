@@ -8,6 +8,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,8 @@ public class QqchEmpItemController extends BaseController {
 
     @PreAuthorize(hasPermi = "qqchEmpItem:add")
     @PostMapping("/save")
-    public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<List<QqchEmpItem>>> dto) {
+    public AjaxResult save(@RequestBody CompileEntity<List<List<QqchEmpItem>>> dto) {
+      
         qqchEmpItemService.save(dto);
         return AjaxResult.success(dto);
     }

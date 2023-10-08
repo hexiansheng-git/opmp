@@ -13,6 +13,10 @@ import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.mapper.JdglWeekImagePlanMapper;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.IJdglWeekValuePlanService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
+import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,10 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author chenjinhao
@@ -44,6 +50,12 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
     @Autowired
     private IJdglMainPlanItemService jdglMainPlanItemService;
+
+    @Autowired
+    private IXmslContractListService xmslContractListService;
+
+    @Autowired
+    private IXmslDrawReviewListService drawReviewListService;
 
 
     public JdglWeekImagePlan getJdglWeekImagePlan(JdglWeekImagePlan jdglWeekImagePlan) {
@@ -101,9 +113,46 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
             Long planId = jdglWeekImagePlanList.get(0).getPlanId();
 //            List<JdglWeekImagePlan> jdglWeekImagePlans = TreeUtil.treeToList(jdglWeekImagePlanList);
+
+            // 主合同清单
+            List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
+
+            // 获取图纸复核的清单
+            List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
+
             for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
                 jdglWeekImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglWeekImagePlan.setUpdateTime(DateUtils.getNowDate());
+                String wbsCode = jdglWeekImagePlan.getWbsCode();
+                if(!CollectionUtils.isEmpty(list)) {
+                    BigDecimal compValue = new BigDecimal(0);
+                    BigDecimal designQuantity = jdglWeekImagePlan.getDesignQuantity();
+                    BigDecimal planCompQuantity = jdglWeekImagePlan.getPlanCompQuantity();
+                    BigDecimal rate = new BigDecimal(0);
+                    if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
+                        rate = planCompQuantity.divide(designQuantity);
+                    }
+                    List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
+                    if(!CollectionUtils.isEmpty(collect)) {
+                        for (XmslDrawReviewList xmslDrawReviewList : collect) {
+                            String listCode = xmslDrawReviewList.getListCode();
+                            BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                            if(!CollectionUtils.isEmpty(inventoryList)) {
+                                XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
+                                if(xmslContractList != null) {
+                                    BigDecimal price = xmslContractList.getChangeUnitPrice() == null
+                                            ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
+                                    BigDecimal quantity = checkNum == null
+                                            ? new BigDecimal(0) : checkNum.multiply(rate);
+                                    if (quantity != null && price != null) {
+                                        compValue = compValue.add(quantity.multiply(price));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    jdglWeekImagePlan.setPlanCompValue(compValue);
+                }
             }
             deleteJdglWeekImagePlanByPlanId(planId);
             jdglWeekValuePlanService.updateValuePlanData(planId, jdglWeekImagePlanList);

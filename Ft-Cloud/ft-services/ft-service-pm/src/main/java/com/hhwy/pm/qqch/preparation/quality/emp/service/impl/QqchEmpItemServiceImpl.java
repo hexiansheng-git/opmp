@@ -4,15 +4,15 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.constant.PmConstant;
-import com.hhwy.pm.qqch.common.aspect.CompileAspect;
-import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.quality.emp.domain.QqchEmpItem;
 import com.hhwy.pm.qqch.preparation.quality.emp.mapper.QqchEmpItemMapper;
 import com.hhwy.pm.qqch.preparation.quality.emp.service.IQqchEmpItemService;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.utils.EntityUtils;
@@ -20,7 +20,6 @@ import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
-import org.bouncycastle.math.ec.WNafL2RMultiplier;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +36,13 @@ import java.util.stream.Collectors;
  */
 @Service
 public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
+
+    @Autowired
+    private IQqchModuleConfirmCaseService moduleConfirmCaseService;
+
+
+    @Autowired
+    private IQqchReviewService reviewService;
 
     @Autowired
     private IQqchWeightEngineeringListService weightEngineeringListService;
@@ -148,6 +154,11 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
         }
 
 
+        if (PmConstant.ONE.equals(dto.getSubmitFlag())) {
+            String stage = reviewService.getStage();
+            moduleConfirmCaseService.addConfirmRecord(dto.getModuleIdentity(), stage);
+            reviewService.updateFinishNum();
+        }
         // 将当前版本的做出变更的wbs进行删除
         if (!CollectionUtils.isEmpty(wbsCodeList))
             this.qqchEmpItemMapper.deleteByWbsCodeAndVersion(wbsCodeList, version);
@@ -173,10 +184,11 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     }
 
     @Override
-    @CompileAspect(type = CompileOptEnum.TREE, tableName = "qqch_emp_item")
     public CompileEntity<List<QqchEmpItem>> itemList(QqchEmpItem dto) {
         CompileEntity entity = new CompileEntity();
-        WbsRedisUtils.getWbsByCodes(Collections.singletonList(dto.getWbsCode()));
+        XmslWbs wbsByCodes = WbsRedisUtils.getWbsByCode(dto.getWbsCode());
+        dto.setWbsId(Long.valueOf(wbsByCodes.getId()));
+        dto.setWbsCode(null);
         List<QqchEmpItem> qqchEmpItemList = this.qqchEmpItemMapper.getQqchEmpItemList(dto);
         for (QqchEmpItem qqchEmpItem : qqchEmpItemList) {
             qqchEmpItem.setBstoreFlag(PmConstant.ONE.equals(qqchEmpItem.getStoreFlag()));
@@ -213,7 +225,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
                 return xmslWbs;
             }).collect(Collectors.toList());
             return ListTreeUtil.formatTree(collect, i -> PmConstant.MINUS_ONE.equals(i.getParentId()), (r, n) -> r.getId().equals(n.getParentId()), XmslWbs::getChildren, XmslWbs::setChildren);
-        } 
+        }
         return new ArrayList<>();
 
     }
