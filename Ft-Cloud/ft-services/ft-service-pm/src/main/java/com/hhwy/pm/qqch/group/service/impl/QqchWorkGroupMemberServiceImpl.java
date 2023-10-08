@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.group.constant.TemporaryGroupDuty;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.domain.vo.WorkGroupMemberQueryVo;
@@ -219,5 +220,24 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
     @Override
     public List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember) {
         return qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+    }
+
+    /**
+     * 获取最新版本工作小组中的组长
+     * @return
+     */
+    @Override
+    public List<QqchWorkGroupMember> getGroupLeader() {
+        List<QqchWorkGroupMember> groupLeaderList = new ArrayList<>();
+
+        //获取当前最新生效版本的工作小组
+        QqchWorkGroup validMaxVersionQqchWorkGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+        if(validMaxVersionQqchWorkGroup != null){
+            QqchWorkGroupMember query = new QqchWorkGroupMember();
+            query.setWorkGroupId(validMaxVersionQqchWorkGroup.getId());
+            query.setTemporaryGroupDuty(TemporaryGroupDuty.GROUP_LEADER);
+            groupLeaderList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(query);
+        }
+        return groupLeaderList;
     }
 }

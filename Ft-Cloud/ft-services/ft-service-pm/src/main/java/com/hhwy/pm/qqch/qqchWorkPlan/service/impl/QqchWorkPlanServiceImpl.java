@@ -12,10 +12,13 @@ import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
+import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
+import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
@@ -75,6 +78,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private WarnService warnService;
+    @Autowired
+    private IQqchWorkGroupMemberService qqchWorkGroupMemberService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -531,20 +536,19 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
 
-                //获取第一个版本的前期策划工作计划数据
-                QqchWorkPlan firstVersionQqchWorkPlan = qqchWorkPlanMapper.getFirstVersionQqchWorkPlan();
-                if(firstVersionQqchWorkPlan == null
-                        || firstVersionQqchWorkPlan.getTaskStatus().equals("0")
-                        || firstVersionQqchWorkPlan.getTaskStatus().equals("4")
-                        || firstVersionQqchWorkPlan.getTaskStatus().equals("5")){
+                //获取流程状态为 “审批中” 的工作计划数据
+                QqchWorkPlan workPlan = qqchWorkPlanMapper.getWorkPlanListByFlowStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
+                if(workPlan == null){
                     continue;
                 }
 
                 //流程提交时间
-                Date taskCommitDate = firstVersionQqchWorkPlan.getTaskCommitDate();
+                Date taskCommitDate = workPlan.getTaskCommitDate();
                 Date nowDate = DateUtils.getNowDate();
                 Long diffDays = FtDateUtils.getDays(taskCommitDate, nowDate);
                 if(diffDays > 3){
+                    //获取工作小组组长
+                    List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
                     warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,"admin",tenantKey);
                 }
             }

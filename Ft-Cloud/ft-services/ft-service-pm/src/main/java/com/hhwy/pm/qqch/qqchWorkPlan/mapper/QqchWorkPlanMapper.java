@@ -14,7 +14,18 @@ public interface QqchWorkPlanMapper {
 
     QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
+    /**
+     * 获取第一个版本的工作计划数据
+     * @return
+     */
     QqchWorkPlan getFirstVersionQqchWorkPlan();
+
+    /**
+     * 根据流程状态获取工作计划数据
+     * @param flowStatus
+     * @return
+     */
+    QqchWorkPlan getWorkPlanListByFlowStatus(@Param("flowStatus") String flowStatus);
 
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);
     int getQqchWorkPlanListCount(QqchWorkPlan qqchWorkPlan);
