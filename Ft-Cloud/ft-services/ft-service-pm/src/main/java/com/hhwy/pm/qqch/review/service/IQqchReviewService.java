@@ -45,10 +45,16 @@ public interface IQqchReviewService {
 
     /**
      * 确认更新阶段确认功能数量
-     *
-     * @param stageIdentity  阶段
-     * @param moduleIdentity 模块唯一Id
      */
+    void updateFinishNum();
+
+    /**
+     * 没啥用了 废掉吧 用无参的
+     * 
+     * @param stageIdentity 
+     * @param moduleIdentity
+     */
+    @Deprecated
     void updateFinishNum(String stageIdentity, String moduleIdentity);
 
     public void canAdjust();
