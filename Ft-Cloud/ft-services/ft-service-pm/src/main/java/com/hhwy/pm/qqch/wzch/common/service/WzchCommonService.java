@@ -9,6 +9,7 @@ import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.qqch.wzch.common.mapper.WzchCommonMapper;
 import com.hhwy.system.api.domain.SysDictData;
+import com.hhwy.utils.AjaxResultUtil;
 import com.hhwy.utils.ParamUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.common.PmsConstant;
@@ -1010,7 +1011,7 @@ public class WzchCommonService {
             CurrencyInfo currencyInfo = new CurrencyInfo();
             currencyInfo.setParams(ParamUtils.init().add("currencyNames", codes.toString()).get());
 
-            List<CurrencyInfo> currencyInfos = systemServiceApi.selectCurrencyList(currencyInfo);
+            List<CurrencyInfo> currencyInfos = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(currencyInfo),CurrencyInfo.class);
             for (T t : tList) {
                 // 获取字段值
                 String finalName = String.valueOf(fieldUtils.getFieldVal(currencyNameFiledName, t));
@@ -1060,7 +1061,7 @@ public class WzchCommonService {
             CurrencyInfo currencyInfo = new CurrencyInfo();
             currencyInfo.setParams(ParamUtils.init().add("currencyCodes", codes.toString()).get());
 
-            List<CurrencyInfo> currencyInfos = systemServiceApi.selectCurrencyList(currencyInfo);
+            List<CurrencyInfo> currencyInfos = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(currencyInfo), CurrencyInfo.class);
             for (T t : tList) {
                 // 获取字段值
                 String finalCode = String.valueOf(fieldUtils.getFieldVal(currencyFiledName, t));

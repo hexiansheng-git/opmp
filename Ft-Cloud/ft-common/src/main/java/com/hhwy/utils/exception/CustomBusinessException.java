@@ -1,9 +1,13 @@
 package com.hhwy.utils.exception;
 
+import com.hhwy.common.core.exception.CustomException;
+
 /**
  * 自定义业务异常类
+ * 不要用这个, 用平台的吧
  */
-public class CustomBusinessException extends RuntimeException{
+@Deprecated
+public class CustomBusinessException extends CustomException {
 
     private ErrorCodes errorCode;
     private String msg;
@@ -59,10 +63,17 @@ public class CustomBusinessException extends RuntimeException{
     }
 
     public enum ErrorCodes{
-        Success,
-        Warning,
-        Error,
+        Warning(204), 
+        Error(500);
+        private Integer code;
 
+        ErrorCodes(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
     }
 
 

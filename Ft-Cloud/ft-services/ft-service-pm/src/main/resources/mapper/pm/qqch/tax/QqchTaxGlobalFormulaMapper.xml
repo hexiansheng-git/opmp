@@ -32,7 +32,7 @@
         <result property="createTime" column="create_time"/>
         <result property="updateUser" column="update_user"/>
         <result property="updateTime" column="update_time"/>
-        <result property="cycle" column="cycle"/>
+        <result property="circle" column="circle"/>
         <result property="delTime" column="del_time"/>
         <result property="delFlag" column="del_flag"/>
         <result property="version" column="version"/>
@@ -69,7 +69,7 @@
              , `create_time`
              , `update_user`
              , `update_time`
-             , `cycle`
+             , `circle`
              , `del_time`
              , `del_flag`
              , `version`
@@ -110,7 +110,7 @@
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="cycle != null  and cycle != ''">and `cycle` = #{cycle}</if>
+            <if test="circle != null  and circle != ''">and `circle` = #{circle}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
@@ -153,7 +153,7 @@
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="cycle != null  and cycle != ''">and `cycle` = #{cycle}</if>
+            <if test="circle != null  and circle != ''">and `circle` = #{circle}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>
@@ -195,7 +195,7 @@
             <if test="createTime != null ">`create_time`,</if>
             <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
             <if test="updateTime != null ">`update_time`,</if>
-            <if test="cycle != null  and cycle != ''">`cycle`,</if>
+            <if test="circle != null  and circle != ''">`circle`,</if>
             <if test="delTime != null ">`del_time`,</if>
             <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
             <if test="version != null ">`version`,</if>
@@ -232,7 +232,7 @@
             <if test="createTime != null ">#{createTime},</if>
             <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
             <if test="updateTime != null ">#{updateTime},</if>
-            <if test="cycle != null  and cycle != ''">#{cycle},</if>
+            <if test="circle != null  and circle != ''">#{circle},</if>
             <if test="delTime != null ">#{delTime},</if>
             <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
             <if test="version != null ">#{version},</if>
@@ -274,7 +274,7 @@
             `create_time`,
             `update_user`,
             `update_time`,
-            `cycle`,
+            `circle`,
             `del_time`,
             `version`,
             `currency`,
@@ -312,7 +312,7 @@
                 #{item.createTime},
                 #{item.updateUser},
                 #{item.updateTime},
-                #{item.cycle},
+                #{item.circle},
                 #{item.delTime},
                 #{item.version},
                 #{item.currency},
@@ -353,7 +353,7 @@
             <if test="createTime != null ">`create_time` = #{createTime},</if>
             <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
             <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-            <if test="cycle != null  and  cycle != ''">`cycle` = #{cycle},</if>
+            <if test="circle != null  and  circle != ''">`circle` = #{circle},</if>
             <if test="delTime != null ">`del_time` = #{delTime},</if>
             <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
             <if test="version != null ">`version` = #{version},</if>
@@ -501,9 +501,9 @@
                     when `id`=#{item.id} then #{item.updateTime}
                 </foreach>
             </trim>
-            <trim prefix="cycle  = case" suffix="end,">
+            <trim prefix="circle  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.cycle}
+                    when `id`=#{item.id} then #{item.circle}
                 </foreach>
             </trim>
             <trim prefix="del_time  = case" suffix="end,">
@@ -582,7 +582,7 @@
             <if test="createTime != null ">and `create_time` = #{createTime}</if>
             <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
             <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
-            <if test="cycle != null  and cycle != ''">and `cycle` = #{cycle}</if>
+            <if test="circle != null  and circle != ''">and `circle` = #{circle}</if>
             <if test="delTime != null ">and `del_time` = #{delTime}</if>
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="version != null ">and `version` = #{version}</if>

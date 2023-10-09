@@ -58,8 +58,9 @@ public class SystemServiceFallbackFactory implements FallbackFactory<SystemServi
             }
 
             @Override
-            public List<CurrencyInfo> selectCurrencyList(CurrencyInfo where) {
-                return new ArrayList<>();
+            public AjaxResult selectCurrencyList(CurrencyInfo where) {
+                // 这里的降级没啥用, 异常会被全局异常捕捉器捕捉并处理
+                return AjaxResult.error("失败");
             }
 
             @Override

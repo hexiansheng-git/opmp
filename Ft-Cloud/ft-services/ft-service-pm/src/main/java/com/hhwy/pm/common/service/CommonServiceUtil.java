@@ -8,6 +8,7 @@ import com.hhwy.domain.base.system.currency.CurrencyInfo;
 import com.hhwy.domain.base.system.periodCurrency.PeriodCurrency;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.utils.AjaxResultUtil;
 import com.hhwy.utils.ParamUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.date.FtDateUtils;
@@ -61,7 +62,7 @@ public class CommonServiceUtil {
         params.put("currencyNames", String.join(",", names));
         where.setParams(params);
         where.setDelFlag("0");
-        List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
+        List<CurrencyInfo> currencyInfoList = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(where), CurrencyInfo.class);
 
         HashMap<String, CurrencyInfo> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
@@ -73,7 +74,7 @@ public class CommonServiceUtil {
     /***
      * 功能描述: 通过编号获取国家名称, 多个编号以逗号分隔
      */
-    public static List<CountryInfo>  getCountryInfoByCodes(String countryCodes) {
+    public static List<CountryInfo> getCountryInfoByCodes(String countryCodes) {
         return systemServiceApi.selectCountryInfoByCodes(countryCodes);
     }
 
@@ -84,7 +85,7 @@ public class CommonServiceUtil {
         params.put("currencyNames", String.join(",", names));
         where.setParams(params);
         where.setDelFlag("0");
-        List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
+        List<CurrencyInfo> currencyInfoList = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(where), CurrencyInfo.class);
 
         HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
@@ -92,7 +93,6 @@ public class CommonServiceUtil {
         }
         return res;
     }
-
 
 
     /***
@@ -104,7 +104,7 @@ public class CommonServiceUtil {
         params.put("currencyCodes", String.join(",", names));
         where.setParams(params);
         where.setDelFlag("0");
-        List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
+        List<CurrencyInfo> currencyInfoList = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(where), CurrencyInfo.class);
 
         HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
@@ -112,6 +112,7 @@ public class CommonServiceUtil {
         }
         return res;
     }
+
     /***
      * 功能描述: 获取所有的币种
      * 作者: fushudong
@@ -120,7 +121,7 @@ public class CommonServiceUtil {
     public static Map<String, String> getAllCurrency() {
         CurrencyInfo where = new CurrencyInfo();
         where.setDelFlag("0");
-        List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
+        List<CurrencyInfo> currencyInfoList = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(where),CurrencyInfo.class);
         HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
             res.put(currencyInfo.getCurrencyName(), currencyInfo.getCurrencyCode());
@@ -154,7 +155,7 @@ public class CommonServiceUtil {
             CurrencyInfo currencyInfo = new CurrencyInfo();
             currencyInfo.setParams(ParamUtils.init().add("currencyCodes", codes.toString()).get());
 
-            List<CurrencyInfo> currencyInfos = systemServiceApi.selectCurrencyList(currencyInfo);
+            List<CurrencyInfo> currencyInfos = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(currencyInfo),CurrencyInfo.class);
             for (T t : tList) {
                 // 获取字段值
                 String finalCode = String.valueOf(fieldUtils.getFieldVal(currencyFiledName, t));
@@ -189,10 +190,10 @@ public class CommonServiceUtil {
         }
 
     }
-   
-    
+
+
     public static Map<String, BigDecimal> getUsdRate(List<String> currencyList) {
-        
+
         try {
             Map<String, String> map = new HashMap<>(2);
             map.put("currency", String.join(",", currencyList));

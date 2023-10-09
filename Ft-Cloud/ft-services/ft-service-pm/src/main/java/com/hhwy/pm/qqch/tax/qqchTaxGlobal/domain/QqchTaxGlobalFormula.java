@@ -187,12 +187,9 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
     @JsonProperty
     @Excel(name = "数据修改系统时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-    /**
-     * 字段描述：数据删除者
-     */
+   
     @JsonProperty
-    @Excel(name = "数据删除者")
-    private BigDecimal cycle;
+    private BigDecimal circle;
     /**
      * 字段描述：数据删除系统时间
      */
@@ -210,7 +207,7 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
      * 字段描述：版本号
      */
     @JsonProperty
-    @Excel(name = "版本号")
+    @Excel(name = "版本号(废弃)不用做版本控制")
     private BigDecimal version;
     /**
      * 字段描述：预留字段2
@@ -240,7 +237,7 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
      * 字段描述：序号
      */
     @JsonProperty
-    @Excel(name = "是否有效")
+    @Excel(name = "是否有效(废弃)不用做版本控制")
     private String valid;
 
     private BigDecimal recAmt;
@@ -257,67 +254,5 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
     private BigDecimal usdPayAmt;
     private BigDecimal cnyPayAmt;
     private BigDecimal localPayAmt;
-
-
-    public BigDecimal getRecAmt() {
-        BigDecimal a = BigDecimalUtils.sum(quantities, adjustInAmt, interestInAmt);
-        BigDecimal b = BigDecimalUtils.subtract(BigDecimalUtils.subtract(a, prePayAmt), guaAmt);
-        return recAmt = BigDecimalUtils.sum(b, aloneInterestInAmt, claimInAmt);
-    }
-
-    public BigDecimal getBackAmt() {
-        return backAmt = BigDecimalUtils.multiply(guaAmt, nodeRecoveryRate);
-    }
-
-    public BigDecimal getPayAmt() {
-        return payAmt = BigDecimalUtils.multiply(this.excContAmt, this.prePayRate);
-    }
-
-
-    public BigDecimal getUsdRecAmt() {
-        return usdRecAmt = CommonServiceUtil.getUsdAmt(this.getRecAmt(), this.rate);
-    }
-
-    public BigDecimal getUsdBackAmt() {
-        return usdBackAmt = CommonServiceUtil.getUsdAmt(this.getBackAmt(), this.rate);
-    }
-
-
-    public BigDecimal getUsdPayAmt() {
-        return usdPayAmt = CommonServiceUtil.getUsdAmt(this.getPayAmt(), this.rate);
-    }
-
-//    public BigDecimal getCnyRecAmt() {
-//        return cnyRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getCnyRate());
-//    }
-//
-//
-//    public BigDecimal getLocalRecAmt() {
-//        return localRecAmt = BigDecimalUtils.multiply(this.getUsdRecAmt(), this.getLocalRate());
-//    }
-//
-//
-//
-
-//
-//    public BigDecimal getCnyBackAmt() {
-//        return cnyBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getCnyRate());
-//    }
-//
-//    public BigDecimal getLocalBackAmt() {
-//        return localBackAmt = BigDecimalUtils.multiply(this.getUsdBackAmt(), this.getLocalRate());
-//    }
-//
-//    
-//
-
-//
-//    public BigDecimal getCnyPayAmt() {
-//        return cnyPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getCnyRate());
-//    }
-//
-//    public BigDecimal getLocalPayAmt() {
-//        return localPayAmt = BigDecimalUtils.multiply(this.getUsdPayAmt(), this.getLocalRate());
-//    }
-
+    
 }

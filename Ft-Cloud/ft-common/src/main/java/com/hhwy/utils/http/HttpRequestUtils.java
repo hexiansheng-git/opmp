@@ -70,7 +70,7 @@ public class HttpRequestUtils {
                 //请求成功
                 return result;
             }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "请求异常！", result);
+                throw new CustomBusinessException("请求异常");
             }
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -139,7 +139,7 @@ public class HttpRequestUtils {
                 //请求成功
                 return result;
             }else{
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "请求异常！", result);
+                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "请求异常！");
             }
         } catch (Exception exception) {
             exception.printStackTrace();
