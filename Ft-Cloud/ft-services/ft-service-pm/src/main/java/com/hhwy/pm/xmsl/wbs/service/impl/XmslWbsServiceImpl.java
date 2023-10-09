@@ -543,6 +543,10 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         if(dto.getMainId() != null){
             XmslWbsMain main = wbsMainService.getById(dto.getMainId());
             new AddBaseInfoUtil<>().update(main);
+            if(main.getPublishUserId() == null){
+                main.setPublishUserId(SecurityUtils.getUserId());
+                main.setPublishUserName(SecurityUtils.getSysUser().getNickName());
+            }
             this.wbsMainService.updateXmslWbsMain(main);
             return;
         }
@@ -554,6 +558,10 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             main.setVersion(1);
             new AddBaseInfoUtil<>(main);
             dto.setMainId(main.getId());
+            if(main.getPublishUserId() == null){
+                main.setPublishUserId(SecurityUtils.getUserId());
+                main.setPublishUserName(SecurityUtils.getSysUser().getNickName());
+            }
             wbsMainService.insertXmslWbsMain(main);
         }
 //        else{

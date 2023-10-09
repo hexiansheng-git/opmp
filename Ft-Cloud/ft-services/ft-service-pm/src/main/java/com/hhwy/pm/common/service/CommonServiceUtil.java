@@ -124,7 +124,7 @@ public class CommonServiceUtil {
         List<CurrencyInfo> currencyInfoList = AjaxResultUtil.getDataList(systemServiceApi.selectCurrencyList(where),CurrencyInfo.class);
         HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
-            res.put(currencyInfo.getCurrencyName(), currencyInfo.getCurrencyCode());
+            res.put(currencyInfo.getCurrencyName().trim(), currencyInfo.getCurrencyCode());
         }
         return res;
     }

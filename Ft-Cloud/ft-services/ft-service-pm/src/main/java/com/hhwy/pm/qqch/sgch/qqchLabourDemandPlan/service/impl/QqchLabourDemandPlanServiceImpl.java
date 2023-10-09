@@ -296,12 +296,13 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         Map<Long, QqchLabourDemandPlan> map152 = orginList.stream()
                 .filter(p -> p.getPid()!=0)
                 .collect(Collectors.toMap(QqchLabourDemandPlan::getOutId, Function.identity()));
-        for (QqchConstStaffPlanResult result : qqchConstList) {
+        List<QqchLabourDemandPlanResult> qqchLabourDemandPlanResults = BeanUtil.copyToList(qqchConstList, QqchLabourDemandPlanResult.class);
+        for (QqchLabourDemandPlanResult result : qqchLabourDemandPlanResults) {
             Long id = result.getId();
             if (map152.containsKey(id)){
                 continue;
             }
-            saveList.add((QqchLabourDemandPlanResult) result);
+            saveList.add(result);
         }
         if (CollectionUtils.isNotEmpty(delList)) {
             qqchLabourDemandPlanMapper.deleteQqchLabourDemandPlanByPks(delList);
