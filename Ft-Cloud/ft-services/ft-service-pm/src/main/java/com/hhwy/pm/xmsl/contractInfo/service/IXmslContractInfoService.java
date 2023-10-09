@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.system.api.domain.SysDictData;
 
 import java.util.List;
@@ -50,5 +51,5 @@ public interface IXmslContractInfoService {
 
     List<SysDictData> selectDict();
 
-    public void updateProjectInfo(XmslContractInfo xmslContractInfo);
+    void updateProjectInfo(ProjectBasicInfo projectInfo);
 }
