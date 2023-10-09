@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -25,7 +26,6 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -379,7 +379,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             }
         }catch (Exception e){
             e.printStackTrace();
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
@@ -458,7 +458,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                 }
             }
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
