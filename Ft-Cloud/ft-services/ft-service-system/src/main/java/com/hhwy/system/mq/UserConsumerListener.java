@@ -116,6 +116,7 @@ public class UserConsumerListener implements RocketMQListener<String> , RocketMQ
                             roleIds[0] = sysRole1.getRoleId();
                             sysUser4Add.setRoleIds(roleIds);
                             sysUser4Add.setTenantKey(tenantKey);
+                            sysUser4Add.setStatus("0");
 
                             // 角色用户关系维护
                             SysUserRole sysUserRole = new SysUserRole();

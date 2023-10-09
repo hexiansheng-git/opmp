@@ -210,7 +210,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             imagePlan.setId(IdWorker.createId());
 //            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
             imagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
-            imagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            imagePlan.setPtVar2(jdglMainPlanItem.getPid() == null ? null : jdglMainPlanItem.getPid() + "");
             imagePlan.setPlanId(jdglWeekPlanParam.getId());
             imagePlan.setWorkId(jdglMainPlanItem.getId());
             imagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
@@ -231,7 +231,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
         if(!CollectionUtils.isEmpty(returnList)) {
             for (JdglWeekImagePlan imagePlan : returnList) {
-                JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
         }

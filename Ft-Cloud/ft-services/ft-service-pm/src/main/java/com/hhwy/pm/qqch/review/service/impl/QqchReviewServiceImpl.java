@@ -1,8 +1,15 @@
 package com.hhwy.pm.qqch.review.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.constant.WarnItem;
+import com.hhwy.constant.WarnScopeType;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
@@ -15,9 +22,16 @@ import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.mapper.ReviewMapper;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.warn.WarnService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.BusinessTaskResultUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -63,6 +77,18 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     private IQqchModuleConfirmCaseService moduleConfirmCaseService;
     @Resource
     private ISysSyncInfoService sysSyncInfoService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
+
+    @Autowired
+    private WarnService warnService;
+
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+
+    @Autowired
+    private IXmslContractInfoService xmslContractInfoService;
 
     public Review getQqchReview(Review review) {
         return reviewMapper.getQqchReview(review);
@@ -398,11 +424,62 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     /**
+     * 根据阶段获取该阶段是否已编制完成
+     * @param planStage
+     * @return
+     */
+    private boolean getWhetherCompleteByStage(String planStage){
+        int count = reviewMapper.getFinishedReviewCountByStage(planStage);
+        return count > 0;
+    }
+
+    /**
      * 前期策划编制第一阶段预警
      */
     @Override
     public void preparationFirstStageWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
 
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                /*判断第一阶段编制是否已完成*/
+                boolean whetherCompleteByStage = this.getWhetherCompleteByStage("1");
+                if(whetherCompleteByStage){
+                    continue;
+                }
+
+                //获取项目数据
+                ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                if(projectInfo == null){
+                    continue;
+                }
+                /*中标日期*/
+                Date winTheBiddingDate = projectInfo.getWinTheBiddingDate();
+                if(winTheBiddingDate == null){
+                    continue;
+                }
+                Date nowDate = DateUtils.getNowDate();
+                Long diffDays = FtDateUtils.getDays(winTheBiddingDate, nowDate);
+                if(diffDays > 30){
+                    /*发送预警*/
+                    warnService.addWarn(WarnItem.PREPARATION_FIRST_STAGE, WarnScopeType.USER,null,"admin",tenantKey);
+                }
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
     /**
@@ -410,7 +487,69 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
      */
     @Override
     public void preparationSecondStageWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
 
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                /*判断第二阶段编制是否已完成*/
+                boolean whetherCompleteByStage = this.getWhetherCompleteByStage("2");
+                if(whetherCompleteByStage){
+                    continue;
+                }
+
+                //获取项目数据
+                ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                //获取合同数据
+                XmslContractInfo contractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+                /*开工日期*/
+                Date startDate = null;
+                /*合同签订日期*/
+                Date signDate = null;
+                if(projectInfo != null){
+                    startDate = projectInfo.getStartDate();
+                }
+                if(contractInfo != null){
+                    signDate = contractInfo.getSignDate();
+                }
+                if(startDate == null && signDate == null){
+                    continue;
+                }
+
+                Date signDateCutOffTime = null;
+                if(signDate != null){
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(signDate);
+                    calendar.add(Calendar.MONTH,1);
+                    signDateCutOffTime = calendar.getTime();
+                }
+
+                Date smallDate = startDate;
+                if(smallDate == null){
+                    smallDate = signDate;
+                }else if(signDateCutOffTime != null && signDateCutOffTime.compareTo(startDate) < 0){
+                    smallDate = signDateCutOffTime;
+                }
+
+                Date nowDate = DateUtils.getNowDate();
+                if(nowDate.compareTo(smallDate) > 0){
+                    warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
+                }
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
     /**
@@ -418,8 +557,112 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
      */
     @Override
     public void preparationThirdStageWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
 
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                /*判断第三阶段编制是否已完成*/
+                boolean whetherCompleteByStage = this.getWhetherCompleteByStage("3");
+                if(whetherCompleteByStage){
+                    continue;
+                }
+
+                //获取项目数据
+                ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                if(projectInfo == null){
+                    continue;
+                }
+                /*开工日期*/
+                Date startDate = projectInfo.getStartDate();
+                if(startDate == null){
+                    continue;
+                }
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(startDate);
+                calendar.add(Calendar.MONTH,3);
+                /*截止时间*/
+                Date cutOffTime = calendar.getTime();
+                Date nowDate = DateUtils.getNowDate();
+
+                if(nowDate.compareTo(cutOffTime) > 0){
+                    /*发送预警*/
+                    warnService.addWarn(WarnItem.PREPARATION_THIRD_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
+                }
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
     }
 
+    /**
+     * 前期策划评审预警
+     */
+    @Override
+    public void reviewWarn() {
+        //切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        //获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
 
+        try {
+            for (SysTenant tenant : tenantList) {
+                //切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                Review approvedDate = this.getApprovedDate();
+                if(approvedDate == null){
+                    continue;
+                }
+                Date initDate = approvedDate.getInitDate();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(initDate);
+                calendar.add(Calendar.DATE,7);
+                Date cutOffTime = calendar.getTime();
+                Date nowDate = DateUtils.getNowDate();
+
+                if(nowDate.compareTo(cutOffTime) > 0){
+                    /*发送预警*/
+                    warnService.addWarn(WarnItem.QQCH_REVIEW,WarnScopeType.USER,null,"admin",tenantKey);
+                }
+            }
+        }catch (Exception e){
+            throw new CustomException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+    /**
+     * 获取当前正在审批中的评审数据
+     * @return
+     */
+    private Review getApprovedDate(){
+        Review review = reviewMapper.getApprovedDate();
+        if(review != null){
+            String planStage = review.getPlanStage();
+            if("3".equals(planStage)){
+                FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW2);
+            }else {
+                FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW);
+            }
+        }
+        return review;
+    }
 }

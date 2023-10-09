@@ -51,8 +51,16 @@ public interface SystemServiceApi {
     @PostMapping("/syspm/tenantList")
     List<SysTenant> tenantList();
 
-    @PostMapping("/currency/info/selectList")
-    List<CurrencyInfo> selectCurrencyList(CurrencyInfo where);
+    /**
+     * 不要这样返回 一定要返回AjaxResult. 因为发生异常的时候,会被全局异常处理器拦截并返回AjaxResult.error();
+     * @param where
+     * @return
+     */
+//    @PostMapping("/currency/info/selectList")
+//    List<CurrencyInfo> selectCurrencyList(CurrencyInfo where);
+
+    @PostMapping("/currency/info/getList")
+    AjaxResult selectCurrencyList(CurrencyInfo where);
 
     @GetMapping("/country/info/selectCountryInfoByNames")
     AjaxResult selectCountryInfoByNames(@RequestParam("name") String name);

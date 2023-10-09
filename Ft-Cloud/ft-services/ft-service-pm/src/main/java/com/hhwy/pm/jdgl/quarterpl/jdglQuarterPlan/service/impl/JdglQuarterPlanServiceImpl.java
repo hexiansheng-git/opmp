@@ -281,7 +281,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });
-            iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
+            iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(imagePlans);
         }
 
         return i;

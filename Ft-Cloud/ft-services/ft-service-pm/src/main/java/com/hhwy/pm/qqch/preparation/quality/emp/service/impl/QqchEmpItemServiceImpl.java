@@ -187,6 +187,7 @@ public class QqchEmpItemServiceImpl implements IQqchEmpItemService {
     public CompileEntity<List<QqchEmpItem>> itemList(QqchEmpItem dto) {
         CompileEntity entity = new CompileEntity();
         XmslWbs wbsByCodes = WbsRedisUtils.getWbsByCode(dto.getWbsCode());
+        System.out.println(wbsByCodes.getId()+"wbsidwbsidwbsidwbsidwbsidwbsidwbsidwbsidwbsidwbsid");
         dto.setWbsId(Long.valueOf(wbsByCodes.getId()));
         dto.setWbsCode(null);
         List<QqchEmpItem> qqchEmpItemList = this.qqchEmpItemMapper.getQqchEmpItemList(dto);

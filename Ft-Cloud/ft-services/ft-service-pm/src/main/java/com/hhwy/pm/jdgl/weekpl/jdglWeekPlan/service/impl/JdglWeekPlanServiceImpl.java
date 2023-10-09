@@ -285,7 +285,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });
-            iJdglWeekImagePlanService.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
+            iJdglWeekImagePlanService.insertJdglWeekImagePlanList(imagePlans);
         }
 
         return i;

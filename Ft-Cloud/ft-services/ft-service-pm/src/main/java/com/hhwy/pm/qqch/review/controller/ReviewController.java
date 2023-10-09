@@ -186,4 +186,13 @@ public class ReviewController extends BaseController {
         qqchReviewService.preparationThirdStageWarn();
         return AjaxResult.success();
     }
+
+    /**
+     * 前期策划评审预警
+     */
+    @GetMapping("/reviewWarn")
+    AjaxResult reviewWarn(){
+        qqchReviewService.reviewWarn();
+        return AjaxResult.success();
+    }
 }

@@ -172,15 +172,15 @@ public class QqchTaxGlobalController extends BaseController {
 
 
     @PostMapping("/saveFormula")
-    public AjaxResult saveFormula(@RequestBody QqchTaxGlobalFormula param) {
-        CommonAssert.notNull(param.getYear(), "年份不能为空");
-        taxGlobalFormulaService.save(param.dealSaveDto(), param.getYear());
+    public AjaxResult saveFormula(@RequestBody CompileEntity<QqchTaxGlobalFormula> param) {
+        taxGlobalFormulaService.save(param.dealSaveDto());
         return AjaxResult.success(param);
     }
 
     @GetMapping("/getFormula")
     public AjaxResult getFormula(QqchTaxGlobalFormula param) {
-        CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormula = taxGlobalFormulaService.getFormula(param.dealListDto());
+        QqchTaxGlobalFormula qqchTaxGlobalFormula1 = CompileEntity.dealListDto(param.getVersion(),param);
+        CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormula = taxGlobalFormulaService.getFormula(qqchTaxGlobalFormula1);
         return AjaxResult.success(qqchTaxGlobalFormula);
     }
 

@@ -18,6 +18,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -132,8 +134,19 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
     }
 
     @Override
-    public int save(QqchTaxGlobalFormula dealSaveDto, Integer year) {
+    @Transactional(rollbackFor = Exception.class)
+    public int save(QqchTaxGlobalFormula dealSaveDto) {
         dealSaveDto.setId(IdWorker.createId());
+        Integer year = dealSaveDto.getYear();
+        CommonAssert.notNull(year, "年份不能为空");
+        QqchTaxGlobalFormula where = new QqchTaxGlobalFormula();
+        where.setYear(year);
+        List<QqchTaxGlobalFormula> qqchTaxGlobalFormulaList = qqchTaxGlobalFormulaMapper.getQqchTaxGlobalFormulaList(where);
+        if (!CollectionUtils.isEmpty(qqchTaxGlobalFormulaList)){
+            // 根据年份把数据删掉 这里跟玉涛确认多了 不用做版本控制
+            List<Long> ids = qqchTaxGlobalFormulaList.stream().map(QqchTaxGlobalFormula::getId).collect(Collectors.toList());
+            this.qqchTaxGlobalFormulaMapper.deleteQqchTaxGlobalFormulaByPks(ids);
+        }
         this.qqchTaxGlobalFormulaMapper.insertQqchTaxGlobalFormula(dealSaveDto);
         return 1;
     }
@@ -144,11 +157,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         CompileEntity<QqchTaxGlobalFormula> formula1 = bean.getFormula(dealListDto);
         QqchTaxGlobalFormula formula = formula1.getDto();
         ArrayList<QqchTaxGlobal> qqchTaxGlobals = new ArrayList<>();
-        
-        
-        
-        
-        
+
 
         QqchTaxGlobal rec = new QqchTaxGlobal();
         rec.setItemName("本期预计实收工程款");
@@ -188,7 +197,6 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         HashMap<String, Object> res = new HashMap<>();
         res.put("yearList", taxInService.getYearList());
 
-        
 
         ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
 
@@ -200,9 +208,8 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
         ArrayList<String> currencyList = new ArrayList<>();
         String localCurrencyCode = projectBasicInfo.getLocalCurrencyCode();
         currencyList.add(localCurrencyCode);
-        
-        
-        
+
+
         currencyList.add(PmConstant.CNY);
         Map<String, BigDecimal> usdRate = CommonServiceUtil.getUsdRate(currencyList);
         BigDecimal currencyRate = usdRate.get(localCurrencyCode);
@@ -242,7 +249,7 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
     private BigDecimal getRateByCurrency(String currency) {
         // TODO 
 
-        return getRateByCurrency(currency,new Date());
+        return getRateByCurrency(currency, new Date());
     }
 
 

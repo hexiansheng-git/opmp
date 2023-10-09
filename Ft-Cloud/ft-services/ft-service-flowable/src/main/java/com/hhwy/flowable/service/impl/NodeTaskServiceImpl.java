@@ -46,7 +46,7 @@ public class NodeTaskServiceImpl implements INodeTaskService {
         String firstId = historyService.createHistoricActivityInstanceQuery()
                 .processInstanceId(insId)
                 .activityType("userTask")
-                .orderByHistoricActivityInstanceStartTime()
+                .orderByHistoricActivityInstanceStartTime().asc()
                 .list().get(0).getActivityId();
         ActivityInstance activityInstance = runtimeService.createActivityInstanceQuery().processInstanceId(insId).executionId(task.getExecutionId()).list().get(0);
         if(firstId.equalsIgnoreCase(activityInstance.getActivityId())){

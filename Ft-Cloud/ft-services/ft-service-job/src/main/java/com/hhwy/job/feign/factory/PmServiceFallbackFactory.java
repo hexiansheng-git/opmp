@@ -55,6 +55,11 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             public AjaxResult preparationThirdStageWarn() {
                 return null;
             }
+
+            @Override
+            public AjaxResult reviewWarn() {
+                return null;
+            }
         };
     }
 }

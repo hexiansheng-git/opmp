@@ -301,10 +301,11 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             jdglDayScheduleWbs.setEditer(jdglMainPlanItem.getExecuter());
             jdglDayScheduleWbs.setIsAdd("1");
             // 从redis中获取wbs数据
-            XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
+//            XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
+            XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
             if(wbsByCode != null) {
-                jdglDayScheduleWbs.setWbsId(Long.valueOf(wbsByCode.getId()));
-                jdglDayScheduleWbs.setWbsPid(Long.valueOf(wbsByCode.getParentId()));
+                jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+                jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
                 jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
                 if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
                     jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
@@ -468,10 +469,11 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     jdglDayScheduleWbs.setEditer(jdglMainPlanItem.getExecuter());
                     jdglDayScheduleWbs.setIsAdd("1");
                     // 从redis中获取wbs数据
-                    XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
+//                    XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
+                    XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
                     if(wbsByCode != null) {
-                        jdglDayScheduleWbs.setWbsId(Long.valueOf(wbsByCode.getId()));
-                        jdglDayScheduleWbs.setWbsPid(Long.valueOf(wbsByCode.getParentId()));
+                        jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+                        jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
                         jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
                         if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
                             jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
@@ -562,95 +564,6 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         }
 
         return deleteJdglDayScheduleBillByDayWbsIds(ids, dayScheduleId);
-    }
-
-
-    public int addWbsList1(List<JdglDayScheduleWbs> jdglDayScheduleWbsList) {
-        if(CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
-            return 0;
-        }
-
-        // 获取当前进度填报中wbs数据
-        Long dayScheduleId = jdglDayScheduleWbsList.get(0).getDayScheduleId();
-        JdglDayScheduleWbs query = new JdglDayScheduleWbs();
-        query.setDayScheduleId(dayScheduleId);
-        List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = getJdglDayScheduleWbsList(query);
-
-        ArrayList<JdglDayScheduleWbs> jdglDayScheduleWbsAncestrals = new ArrayList<>();
-
-        for (JdglDayScheduleWbs jdglDayScheduleWbs : jdglDayScheduleWbsList) {
-
-//            jdglDayScheduleWbs.setId(IdWorker.createId());
-            jdglDayScheduleWbs.setCreateUser(SecurityUtils.getUserName());
-            jdglDayScheduleWbs.setCreateTime(DateUtils.getNowDate());
-
-            // 获取祖籍图纸复核wbs数据
-            String ancestrals = jdglDayScheduleWbs.getAncestrals();
-            if(StringUtils.isEmpty(ancestrals)) {
-                continue;
-            }
-            String[] split = ancestrals.split(",");
-
-            Set<Long> ids = new HashSet<>();
-
-            for (String s : split) {
-                ids.add(Long.valueOf(s));
-            }
-
-            List<XmslWbs> wbs = WbsRedisUtils.getWbs(ids);
-
-            if(!CollectionUtils.isEmpty(wbs)) {
-                for (XmslWbs xmslWbs : wbs) {
-                    JdglDayScheduleWbs jdglDayScheduleWbs1 = new JdglDayScheduleWbs();
-                    jdglDayScheduleWbs1.setId(IdWorker.createId());
-                    jdglDayScheduleWbs1.setPid(Long.valueOf(xmslWbs.getParentId()));
-                    jdglDayScheduleWbs1.setDayScheduleId(dayScheduleId);
-                    jdglDayScheduleWbs1.setWbsId(Long.valueOf(xmslWbs.getId()));
-                    jdglDayScheduleWbs1.setWbsPid(Long.valueOf(xmslWbs.getParentId()));
-                    jdglDayScheduleWbs1.setWbsCode(xmslWbs.getCode());
-                    jdglDayScheduleWbs1.setWbsName(xmslWbs.getName());
-                    jdglDayScheduleWbs1.setAncestrals(xmslWbs.getAncestors());
-                    jdglDayScheduleWbs1.setSort(xmslWbs.getSort());
-                    jdglDayScheduleWbs1.setIsLeaf(xmslWbs.getHaveChildren() == 0 ? "1" : "0");
-                    jdglDayScheduleWbs1.setDesignQuantity(xmslWbs.getDesignQuanlity());
-                    jdglDayScheduleWbsAncestrals.add(jdglDayScheduleWbs1);
-                }
-
-                for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsAncestrals) {
-                    JdglDayScheduleWbs jdglDayScheduleWbs11 = jdglDayScheduleWbsAncestrals.stream().filter(vo -> vo.getWbsId().equals(jdglDayScheduleWbs1.getWbsPid())).findFirst().get();
-
-                    if(jdglDayScheduleWbs11 != null) {
-                        jdglDayScheduleWbs1.setPid(jdglDayScheduleWbs11.getId());
-                    }
-
-                    if(CollectionUtils.isEmpty(jdglDayScheduleWbsList1)){
-                        continue;
-                    }
-                    JdglDayScheduleWbs jdglDayScheduleWbs12 = jdglDayScheduleWbsList1.stream().filter(vo -> vo.getWbsId().equals(jdglDayScheduleWbs1.getWbsId())).findFirst().get();
-                    if(jdglDayScheduleWbs12 != null) {
-                        jdglDayScheduleWbs1.setId(jdglDayScheduleWbs12.getId());
-                    }
-                }
-
-                for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsAncestrals) {
-                    JdglDayScheduleWbs jdglDayScheduleWbs11 = jdglDayScheduleWbsAncestrals.stream().filter(vo -> vo.getWbsId().equals(jdglDayScheduleWbs1.getWbsPid())).findFirst().get();
-
-                    if(jdglDayScheduleWbs11 != null) {
-                        jdglDayScheduleWbs1.setPid(jdglDayScheduleWbs11.getId());
-                    }
-                }
-            }
-
-            List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleWbs.getJdglDayScheduleBillList();
-            if(!CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
-                for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
-                    jdglDayScheduleBill.setDayScheduleId(jdglDayScheduleWbs.getDayScheduleId());
-                    jdglDayScheduleBill.setWbsCode(jdglDayScheduleWbs.getWbsCode());
-                }
-                iJdglDayScheduleBillService.insertJdglDayScheduleBillList(jdglDayScheduleBillList);
-            }
-        }
-        return jdglDayScheduleWbsMapper.insertJdglDayScheduleWbsList(jdglDayScheduleWbsList);
     }
 
     @Transactional

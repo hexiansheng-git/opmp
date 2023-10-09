@@ -15,6 +15,9 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import org.springframework.stereotype.Service;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +44,9 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
     @Autowired
     private IXmslContractListService xmslContractListService;
 
+    @Autowired
+    private IXmslWbsService wbsService;
+
 
     public JdglDayScheduleBill getJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill) {
         return jdglDayScheduleBillMapper.getJdglDayScheduleBill(jdglDayScheduleBill);
@@ -52,6 +58,9 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         String wbsName = jdglDayScheduleBill.getWbsName();
         String itemCode = jdglDayScheduleBill.getItemCode();
         Long dayScheduleId = jdglDayScheduleBill.getDayScheduleId();
+        if(dayScheduleId == null) {
+            jdglDayScheduleBill.setDayScheduleId(-1l);
+        }
         String isLeaf = jdglDayScheduleBill.getIsLeaf();
         jdglDayScheduleBill.setWbsId(null);
 
@@ -65,12 +74,16 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
 
         if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
             jdglDayScheduleBillList = new ArrayList<>();
-                XmslDrawReview last = xmslDrawReviewService.getLast();
-                if(last == null) {
+            XmslDrawReview last = xmslDrawReviewService.getLast();
+            if(last == null) {
                 return jdglDayScheduleBillList;
             }
             Integer version = last.getVersion();
             Long id = last.getId();
+            if(wbsId == null) {
+                XmslWbs wbsByCode = wbsService.getByCode(wbsCode);
+                if(wbsByCode != null) wbsId = Long.parseLong(wbsByCode.getId());
+            }
             List<XmslDrawReviewList> xmslDrawReviewLists = xmslDrawReviewService.relationWbsList(version, id, wbsCode, wbsId);
             if(CollectionUtils.isEmpty(xmslDrawReviewLists)) {
                 return jdglDayScheduleBillList;

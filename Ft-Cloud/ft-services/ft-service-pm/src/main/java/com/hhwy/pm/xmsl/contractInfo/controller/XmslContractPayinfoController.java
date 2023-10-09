@@ -126,7 +126,7 @@ public class XmslContractPayinfoController extends BaseController {
                 //币种
                 String currencyName = xmslContractPayinfoVo.getCurrencyName();
                 if (allCurrency.containsKey(currencyName)) {
-                    xmslContractPayinfoVo.setCurrencyName(currencyName);
+                    xmslContractPayinfoVo.setCurrencyName(currencyName.trim());
                 }else {
                     sb.append("第"+(i+1)+"条数据币种名称："+ currencyName +"无法匹配，请重新填写\n");
                 }

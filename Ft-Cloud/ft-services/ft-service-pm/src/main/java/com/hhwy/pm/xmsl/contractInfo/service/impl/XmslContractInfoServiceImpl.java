@@ -4,15 +4,18 @@ import cn.hutool.core.bean.BeanUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.excel.Util;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
-import com.hhwy.pm.common.domain.FtActBusiness;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.common.service.CommonServiceUtil;
+import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.*;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +27,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -52,6 +56,8 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     private IXmslContractSpecialService xmslContractSpecialService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
+    @Autowired
+    private SystemApiService systemApiService;
 
 
     /***
@@ -66,6 +72,17 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             return xmslContractInfo;
         }
         XmslContractInfo contractInfo = new XmslContractInfo();
+        projectBeanToContract(projectInfo, contractInfo);
+
+        contractInfo.setVersion(BigDecimal.valueOf(1.0));
+        contractInfo.setId(IdWorker.createId());
+        contractInfo.setCreateUser(SecurityUtils.getUserName());
+        contractInfo.setCreateTime(DateUtils.getNowDate());
+        xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
+        return xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
+    }
+    //项目信息写入合同实体
+    private void projectBeanToContract (ProjectBasicInfo projectInfo, XmslContractInfo contractInfo) {
         contractInfo.setProjectCode(projectInfo.getProjectCode());
         contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
         contractInfo.setProjectName(projectInfo.getProjectName());
@@ -101,13 +118,6 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //编制人
         contractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
         contractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
-
-        contractInfo.setVersion(BigDecimal.valueOf(1.0));
-        contractInfo.setId(IdWorker.createId());
-        contractInfo.setCreateUser(SecurityUtils.getUserName());
-        contractInfo.setCreateTime(DateUtils.getNowDate());
-        xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
-        return xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
     }
 
 
@@ -123,7 +133,6 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     /**
      *  回显接口
      *
-     * @param xmslContractInfo
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
@@ -157,7 +166,40 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         List<XmslContractInfo> list = new ArrayList<>();
         list.add(xmslContractInfo);
         FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.XMSL_CONTRACT);
+        this.getDict(xmslContractInfo);
         return xmslContractInfo;
+    }
+
+    private void getDict(XmslContractInfo xmslContractInfo){
+        Util util = new Util();
+        //不可选，只需返回label
+//        String projectLocation = xmslContractInfo.getProjectLocation();
+//        String projectType = xmslContractInfo.getProjectType();
+//        String projectCategory = xmslContractInfo.getProjectCategory();
+//        String contractingMethod = xmslContractInfo.getContractingMethod();
+        String businessAreasAndProducts = xmslContractInfo.getBusinessAreasAndProducts();
+//        String capitalSource = xmslContractInfo.getCapitalSource();
+//        String listCurrencyCode = xmslContractInfo.getListCurrencyCode();
+//
+//        String project_type = util.resolveDict("project_type", projectType);
+//        xmslContractInfo.setProjectType(project_type);
+//        String project_category = util.resolveDict("project_category", projectCategory);
+//        xmslContractInfo.setProjectCategory(project_category);
+//        String constract_form = util.resolveDict("constract_form", contractingMethod);
+//        xmslContractInfo.setContractingMethod(constract_form);
+        String[] split = businessAreasAndProducts.split(",");
+        StringBuilder sb = new StringBuilder();
+        for (String s : split) {
+            String business_areas_and_products = util.resolveDict("business_areas_and_products", s);
+            sb.append(",").append(business_areas_and_products);
+        }
+        xmslContractInfo.setBusinessAreasAndProducts(sb.toString().substring(1));
+//        String capital_source = util.resolveDict("capital_source", capitalSource);
+//        xmslContractInfo.setCapitalSource(capital_source);
+//        ArrayList<String> strings = new ArrayList<>();
+//        strings.add(listCurrencyCode);
+//        Map<String, String> currencyNamesByCodes = CommonServiceUtil.getCurrencyNamesByCodes(strings);
+//        xmslContractInfo.setListCurrencyName(currencyNamesByCodes.get(listCurrencyCode));
     }
 
 
@@ -306,6 +348,35 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 
+    /***
+     * 功能描述:  项目信息修改同步
+     * @param projectInfo
+     * @return int
+     * 作者: fushudong
+     * 时间: 2023/10/9
+     */
+    public void updateProjectInfo(ProjectBasicInfo projectInfo) {
+        //获取最新有效版本的合同信息
+        XmslContractInfo latestContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        if (latestContractInfo == null) return;
+        BigDecimal version = latestContractInfo.getVersion();
+        //查询当前版本是否是数据库中最大版本
+        XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
+        xmslContractInfo1.setVersion(version);
+        XmslContractInfo contractInfo1 = xmslContractInfoMapper.getMaxVersionRecordByVersion(xmslContractInfo1);
+        ArrayList<XmslContractInfo> objects = new ArrayList<>();
+        if (contractInfo1 != null){
+            objects.add(contractInfo1);
+        }
+        objects.add(latestContractInfo);
+        objects.forEach(contractInfo -> {
+            this.projectBeanToContract(projectInfo, contractInfo);
+            contractInfo.setUpdateUser(SecurityUtils.getUserName());
+            contractInfo.setUpdateTime(DateUtils.getNowDate());
+            xmslContractInfoMapper.updateXmslContractInfo(contractInfo);
+        });
+    }
+
     @Transactional
     public int updateXmslContractInfoList(List<XmslContractInfo> xmslContractInfoList) {
         for (XmslContractInfo xmslContractInfo : xmslContractInfoList) {
@@ -434,5 +505,18 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         xmslContractInfo.setIssuePersonName(SecurityUtils.getSysUser().getNickName());
         xmslContractInfo.setIssuePersonId(String.valueOf(SecurityUtils.getUserId()));
         xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
+    }
+
+    @Override
+    public List<SysDictData> selectDict() {
+        //下拉框，可选
+        List<SysDictData> contract_attribute = systemApiService.selectDictDataByType("contract_attribute");
+        List<SysDictData> brand_name = systemApiService.selectDictDataByType("brand_name");
+        List<SysDictData> contract_type = systemApiService.selectDictDataByType("contract_type");
+        List<SysDictData> time_zone = systemApiService.selectDictDataByType("time_zone");
+        time_zone.addAll(contract_attribute);
+        time_zone.addAll(brand_name);
+        time_zone.addAll(contract_type);
+        return time_zone;
     }
 }

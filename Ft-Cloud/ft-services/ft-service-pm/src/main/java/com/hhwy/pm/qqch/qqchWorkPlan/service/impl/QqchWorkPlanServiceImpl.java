@@ -2,8 +2,8 @@ package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -327,10 +327,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Transactional
     @Override
     public Long submitQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
-        //TODO 提交立马生效
-//        qqchWorkPlan.setTaskStatus("5");
-//        qqchWorkPlan.setValid("1");
-
+        qqchWorkPlan.setTaskStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
         qqchWorkPlan.setTaskCommitDate(DateUtils.getNowDate());
         if (ObjectNullUtil.isEmpty(qqchWorkPlan.getId())) {
             qqchWorkPlan.setId(this.insertQqchWorkPlanSubmit(qqchWorkPlan));
@@ -339,7 +336,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }
 
         //推送到总部版
-//        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return qqchWorkPlan.getId();
     }
 
@@ -457,7 +454,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             list = qqchWorkPlanMapper.getQqchWorkPlanList(plan);
         }catch (Exception e){
             e.printStackTrace();
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
@@ -521,7 +518,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 }
             }
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
