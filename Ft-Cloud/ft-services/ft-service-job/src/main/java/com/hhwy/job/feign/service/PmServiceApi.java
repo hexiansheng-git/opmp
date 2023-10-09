@@ -71,6 +71,12 @@ public interface PmServiceApi {
     AjaxResult preparationThirdStageWarn();
 
     /**
+     * 前期策划评审预警
+     */
+    @GetMapping("/qqchReview/reviewWarn")
+    AjaxResult reviewWarn();
+
+    /**
      * 人员管控策划预警
      *
      * @return

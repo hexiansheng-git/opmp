@@ -211,7 +211,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             imagePlan.setId(IdWorker.createId());
 //            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
             imagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
-            imagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            imagePlan.setPtVar2(jdglMainPlanItem.getPid() == null ? null : jdglMainPlanItem.getPid() + "");
             imagePlan.setPlanId(jdglMonthPlanParam.getId());
             imagePlan.setWorkId(jdglMainPlanItem.getId());
             imagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
@@ -232,7 +232,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
 
         if(!CollectionUtils.isEmpty(returnList)) {
             for (JdglMonthImagePlan imagePlan : returnList) {
-                JdglMonthImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                JdglMonthImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
         }

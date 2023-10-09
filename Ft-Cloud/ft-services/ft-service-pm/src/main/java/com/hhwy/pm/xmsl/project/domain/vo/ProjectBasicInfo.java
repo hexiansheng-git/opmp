@@ -22,6 +22,13 @@ import java.util.Date;
 @AllArgsConstructor
 public class ProjectBasicInfo {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 字段描述：主键id
+     */
+    @JsonProperty
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Long id;
     /**
      * 字段描述：项目id
      */

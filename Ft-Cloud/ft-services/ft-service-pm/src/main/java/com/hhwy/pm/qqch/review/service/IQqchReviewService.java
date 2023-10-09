@@ -84,4 +84,9 @@ public interface IQqchReviewService {
      * 前期策划编制第三阶段预警
      */
     void preparationThirdStageWarn();
+
+    /**
+     * 前期策划评审预警
+     */
+    void reviewWarn();
 }

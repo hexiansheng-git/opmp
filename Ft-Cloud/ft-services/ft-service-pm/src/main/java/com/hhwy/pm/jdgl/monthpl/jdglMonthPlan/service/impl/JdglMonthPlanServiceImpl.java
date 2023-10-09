@@ -89,8 +89,8 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
     @Override
     public JdglMonthPlan getUsingMonthPlanByYearAndMonth(String year, String month) {
         JdglMonthPlan jdglMonthPlan = new JdglMonthPlan();
-        jdglMonthPlan.setYear("year");
-        jdglMonthPlan.setMonth("month");
+        jdglMonthPlan.setYear(year);
+        jdglMonthPlan.setMonth(month);
         jdglMonthPlan.setTaskStatus("5");
         jdglMonthPlan.setIsUse("1");
         return getJdglMonthPlan(jdglMonthPlan);
@@ -289,7 +289,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });
-            iJdglMonthImagePlanService.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
+            iJdglMonthImagePlanService.insertJdglMonthImagePlanList(imagePlans);
         }
 
         return i;

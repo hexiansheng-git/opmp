@@ -209,7 +209,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             jdglQuarterImagePlan.setId(IdWorker.createId());
 //            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
             jdglQuarterImagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
-            jdglQuarterImagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            jdglQuarterImagePlan.setPtVar2(jdglMainPlanItem.getPid() == null ? null : jdglMainPlanItem.getPid() + "");
             jdglQuarterImagePlan.setPlanId(jdglQuarterPlanParam.getId());
             jdglQuarterImagePlan.setWorkId(jdglMainPlanItem.getId());
             jdglQuarterImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
@@ -230,7 +230,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
         if(!CollectionUtils.isEmpty(returnList)) {
             for (JdglQuarterImagePlan imagePlan : returnList) {
-                JdglQuarterImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                JdglQuarterImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
         }

@@ -33,4 +33,12 @@ public class ReviewTask {
         System.out.println("----------前期策划编制第三阶段预警------------");
         pmServiceApi.preparationThirdStageWarn();
     }
+
+    /**
+     * 前期策划评审预警
+     */
+    public void reviewWarn(){
+        System.out.println("----------前期策划评审预警------------");
+        pmServiceApi.reviewWarn();
+    }
 }
