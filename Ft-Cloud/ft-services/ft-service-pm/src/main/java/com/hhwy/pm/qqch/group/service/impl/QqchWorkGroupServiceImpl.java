@@ -1,6 +1,5 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
@@ -11,6 +10,7 @@ import com.hhwy.constant.CommonYesNo;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.enums.FlowEnum;
+import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
@@ -319,8 +319,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Transactional
     public void submit(QqchWorkGroup qqchWorkGroup) {
         Long id = qqchWorkGroup.getId();
-//        qqchWorkGroup.setTaskStatus("5");
-//        qqchWorkGroup.setEffective("1");
+        qqchWorkGroup.setTaskStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
         if(id == null || id == 0){
             //插入数据
             this.insertQqchWorkGroup(qqchWorkGroup);
@@ -328,10 +327,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             //修改数据
             this.updateQqchWorkGroup(qqchWorkGroup);
         }
-        
-        //TODO 发起流程
+
         //推送到总部
-//        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
+        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
     }
 
     /**
