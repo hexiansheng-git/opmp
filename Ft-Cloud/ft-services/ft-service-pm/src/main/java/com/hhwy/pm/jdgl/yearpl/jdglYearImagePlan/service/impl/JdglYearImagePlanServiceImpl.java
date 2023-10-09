@@ -211,7 +211,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             jdglYearImagePlan.setId(IdWorker.createId());
 //            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
             jdglYearImagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
-            jdglYearImagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            jdglYearImagePlan.setPtVar2(jdglMainPlanItem.getPid() == null ? null : jdglMainPlanItem.getPid() + "");
             jdglYearImagePlan.setYearPlanId(jdglYearPlanParam.getId());
             jdglYearImagePlan.setWorkId(jdglMainPlanItem.getId());
             jdglYearImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
@@ -232,7 +232,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
         if(!CollectionUtils.isEmpty(returnList)) {
             for (JdglYearImagePlan yearImagePlan : returnList) {
-                JdglYearImagePlan jdglYearImagePlan = returnList.stream().filter(vo -> yearImagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                JdglYearImagePlan jdglYearImagePlan = returnList.stream().filter(vo -> vo.getPtVar1().equals(yearImagePlan.getPtVar2())).findFirst().orElse(null);
                 if(jdglYearImagePlan != null) yearImagePlan.setPid(jdglYearImagePlan.getId());
             }
         }
