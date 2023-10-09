@@ -195,8 +195,10 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     public void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
         xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
 
-        XmslProjectBasicInfo basicInfo = xmslProjectBasicInfoMapper.getProjectBasicInfo(new XmslProjectBasicInfo());
-        xmslProjectBasicInfo.setId(basicInfo.getId());
+        ProjectBasicInfo projectInfo = this.projectInfo();
+        xmslContractInfoService.updateProjectInfo(projectInfo);
+
+        xmslProjectBasicInfo.setId(projectInfo.getId());
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
         projectBridgeStructureService.editProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
