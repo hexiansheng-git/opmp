@@ -49,4 +49,6 @@ public interface IXmslContractInfoService {
     void updateIssueNameAndDate(Long id);
 
     List<SysDictData> selectDict();
+
+    public void updateProjectInfo(XmslContractInfo xmslContractInfo);
 }

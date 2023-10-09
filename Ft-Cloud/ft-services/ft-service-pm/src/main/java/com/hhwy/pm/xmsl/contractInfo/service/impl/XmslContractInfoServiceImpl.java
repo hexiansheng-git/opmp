@@ -345,6 +345,32 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         return xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo);
     }
 
+    /***
+     * 功能描述:  项目信息修改同步
+     * @param xmslContractInfo
+     * @return int
+     * 作者: fushudong
+     * 时间: 2023/10/9
+     */
+    public void updateProjectInfo(XmslContractInfo xmslContractInfo) {
+        xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
+        xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
+        //获取最新有效版本的合同信息
+        XmslContractInfo contractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        if (contractInfo == null) return;
+        BigDecimal version = contractInfo.getVersion();
+        //查询当前版本是否是数据库中最大版本
+        XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
+        xmslContractInfo1.setVersion(version);
+        XmslContractInfo contractInfo1 = xmslContractInfoMapper.getMaxVersionRecordByVersion(xmslContractInfo1);
+        ArrayList<XmslContractInfo> objects = new ArrayList<>();
+        if (contractInfo1 != null){
+            objects.add(contractInfo1);
+        }
+        objects.add(contractInfo);
+        objects.forEach(p -> xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo));
+    }
+
     @Transactional
     public int updateXmslContractInfoList(List<XmslContractInfo> xmslContractInfoList) {
         for (XmslContractInfo xmslContractInfo : xmslContractInfoList) {
