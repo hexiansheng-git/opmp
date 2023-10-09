@@ -58,6 +58,9 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         String wbsName = jdglDayScheduleBill.getWbsName();
         String itemCode = jdglDayScheduleBill.getItemCode();
         Long dayScheduleId = jdglDayScheduleBill.getDayScheduleId();
+        if(dayScheduleId == null) {
+            jdglDayScheduleBill.setDayScheduleId(-1l);
+        }
         String isLeaf = jdglDayScheduleBill.getIsLeaf();
         jdglDayScheduleBill.setWbsId(null);
 
