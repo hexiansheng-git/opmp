@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
@@ -12,10 +13,13 @@ import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
+import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
+import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
@@ -38,6 +42,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +80,10 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private WarnService warnService;
+    @Autowired
+    private RocketMQTemplate rocketMQTemplate;
+
+    private IQqchWorkGroupMemberService qqchWorkGroupMemberService;
 
     private final static String ONE = "1";//菜单进入
     private final static String TWO = "2";//详情和编辑
@@ -284,6 +293,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlanMapper.insertQqchWorkPlan(qqchWorkPlan);
         // 明细
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast, qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return qqchWorkPlan.getId();
     }
 
@@ -357,6 +367,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return 1;
     }
 
@@ -374,6 +385,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return 1;
     }
 
@@ -405,6 +417,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         // 修改
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
+        sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return id;
     }
 
@@ -420,7 +433,10 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Transactional
     public int deleteQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
         qqchWorkPlan.setDelUser(SecurityUtils.getSysUser().getUserId()+"");
-        return qqchWorkPlanMapper.deleteQqchWorkPlan(qqchWorkPlan);
+        int result =qqchWorkPlanMapper.deleteQqchWorkPlan(qqchWorkPlan);
+        //推送到总部
+        rocketMQTemplate.convertAndSend("qqch_work_plan:delete", qqchWorkPlan.getId()+"");
+        return result;
     }
 
     @Transactional
@@ -531,20 +547,19 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
 
-                //获取第一个版本的前期策划工作计划数据
-                QqchWorkPlan firstVersionQqchWorkPlan = qqchWorkPlanMapper.getFirstVersionQqchWorkPlan();
-                if(firstVersionQqchWorkPlan == null
-                        || firstVersionQqchWorkPlan.getTaskStatus().equals("0")
-                        || firstVersionQqchWorkPlan.getTaskStatus().equals("4")
-                        || firstVersionQqchWorkPlan.getTaskStatus().equals("5")){
+                //获取流程状态为 “审批中” 的工作计划数据
+                QqchWorkPlan workPlan = qqchWorkPlanMapper.getWorkPlanListByFlowStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
+                if(workPlan == null){
                     continue;
                 }
 
                 //流程提交时间
-                Date taskCommitDate = firstVersionQqchWorkPlan.getTaskCommitDate();
+                Date taskCommitDate = workPlan.getTaskCommitDate();
                 Date nowDate = DateUtils.getNowDate();
                 Long diffDays = FtDateUtils.getDays(taskCommitDate, nowDate);
                 if(diffDays > 3){
+                    //获取工作小组组长
+                    List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
                     warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,"admin",tenantKey);
                 }
             }

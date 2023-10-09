@@ -33,7 +33,7 @@
         <result property="version" column="version"/>
         <result property="valid" column="valid"/>
         <result property="pid" column="pid"/>
-        <result property="ptVar4" column="pt_var4"/>
+        <result property="ancestorsWbsId" column="ancestors_wbs_id"/>
         <result property="ptVar5" column="pt_var5"/>
         <result property="sort" column="sort"/>
     </resultMap>
@@ -66,7 +66,7 @@
              , `version`
              , `valid`
              , `pid`
-             , `pt_var4`
+             , `ancestors_wbs_id`
              , `pt_var5`
              , `sort`
         from qqch_emp_item
@@ -117,7 +117,7 @@
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="pid != null  and pid != ''">and `pid` = #{pid}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ancestorsWbsId != null  and ancestorsWbsId != ''">and `ancestors_wbs_id` = #{ancestorsWbsId}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
         </where>
@@ -129,7 +129,9 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsId != null ">
+                and find_in_set(#{wbsId},ancestors_wbs_id)
+            </if>
             <if test="wbsCode != null  and wbsCode != ''">and `wbs_code` = #{wbsCode}</if>
             <if test="checkCode != null  and checkCode != ''">and `check_code` = #{checkCode}</if>
             <if test="checkName != null  and checkName != ''">and `check_name` = #{checkName}</if>
@@ -156,7 +158,7 @@
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="pid != null  and pid != ''">and `pid` = #{pid}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ancestorsWbsId != null  and ancestorsWbsId != ''">and `ancestors_wbs_id` = #{ancestorsWbsId}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
         </where>
@@ -194,7 +196,7 @@
             <if test="version != null  and version != ''">`version`,</if>
             <if test="valid != null  and valid != ''">`valid`,</if>
             <if test="pid != null  and pid != ''">`pid`,</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ancestorsWbsId != null  and ancestorsWbsId != ''">`ancestors_wbs_id`,</if>
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="sort != null ">`sort`,</if>
         </trim>
@@ -227,7 +229,7 @@
             <if test="version != null  and version != ''">#{version},</if>
             <if test="valid != null  and valid != ''">#{valid},</if>
             <if test="pid != null  and pid != ''">#{pid},</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ancestorsWbsId != null  and ancestorsWbsId != ''">#{ancestorsWbsId},</if>
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="sort != null ">#{sort},</if>
         </trim>
@@ -264,7 +266,7 @@
             `version`,
             `valid`,
             `pid`,
-            `pt_var4`,
+            `ancestors_wbs_id`,
             `pt_var5`,
             `sort`,
         </trim>
@@ -298,7 +300,7 @@
                 #{item.version},
                 #{item.valid},
                 #{item.pid},
-                #{item.ptVar4},
+                #{item.ancestorsWbsId},
                 #{item.ptVar5},
                 #{item.sort},
             </trim>
@@ -336,7 +338,7 @@
             <if test="version != null  and  version != ''">`version` = #{version},</if>
             <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
             <if test="pid != null  and  pid != ''">`pid` = #{pid},</if>
-            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ancestorsWbsId != null  and  ancestorsWbsId != ''">`ancestors_wbs_id` = #{ancestorsWbsId},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="sort != null ">`sort` = #{sort},</if>
         </trim>
@@ -488,9 +490,9 @@
                     when `id`=#{item.id} then #{item.pid}
                 </foreach>
             </trim>
-            <trim prefix="pt_var4  = case" suffix="end,">
+            <trim prefix="ancestors_wbs_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `id`=#{item.id} then #{item.ptVar4}
+                    when `id`=#{item.id} then #{item.ancestorsWbsId}
                 </foreach>
             </trim>
             <trim prefix="pt_var5  = case" suffix="end,">
@@ -541,7 +543,7 @@
             <if test="version != null  and version != ''">and `version` = #{version}</if>
             <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
             <if test="pid != null  and pid != ''">and `pid` = #{pid}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ancestorsWbsId != null  and ancestorsWbsId != ''">and `ancestors_wbs_id` = #{ancestorsWbsId}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="sort != null ">and `sort` = #{sort}</if>
         </where>

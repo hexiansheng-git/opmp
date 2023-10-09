@@ -217,6 +217,11 @@
         where del_flag = '0' and version = 1
         limit 1
     </select>
+    <select id="getWorkPlanListByFlowStatus" resultType="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan">
+        <include refid="selectQqchWorkPlanVo"/>
+        where del_flag = '0' and task_status = #{flowStatus}
+        limit 1
+    </select>
 
     <insert id="insertQqchWorkPlan" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_work_plan

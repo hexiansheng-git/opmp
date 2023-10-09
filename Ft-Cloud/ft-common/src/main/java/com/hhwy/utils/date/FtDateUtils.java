@@ -274,8 +274,22 @@ public class FtDateUtils extends DateUtils {
         return diff / nd;
     }
 
+    /**
+     * 指定日期 加 *年
+     *
+     * @return
+     */
+    public static Date getDateAddDays(Date date, int days) {
+        // 获取当前日期
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        // 将日期加一年
+        calendar.add(Calendar.DAY_OF_YEAR, days);
+        return calendar.getTime();
+    }
+
     public static void main(String[] args) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
     }
 }

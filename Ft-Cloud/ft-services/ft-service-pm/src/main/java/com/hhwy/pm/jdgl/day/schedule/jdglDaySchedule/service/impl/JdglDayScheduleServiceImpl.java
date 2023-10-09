@@ -57,6 +57,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             // 获取wbs列表中的wbs数据
             List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
             jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
+            FlowInfoSearchUtil.getFlowInfo(jdglDaySchedule1, FlowEnum.JDGL_DAYSCHEDULE);
         }
         return jdglDaySchedule1;
     }
@@ -73,6 +74,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             // 获取wbs列表中的wbs数据
             List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsListByPerson(jdglDayScheduleWbs);
             jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
+            FlowInfoSearchUtil.getFlowInfo(jdglDaySchedule1, FlowEnum.JDGL_DAYSCHEDULE);
         }
         return jdglDaySchedule1;
     }
@@ -193,6 +195,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             jdglDayScheduleParam.setTotalValueCu(jdglDaySchedule.getTotalValueCu());
             jdglDayScheduleParam.setTotalValueDl(jdglDaySchedule.getTotalValueDl());
         }
+        FlowInfoSearchUtil.getFlowInfo(jdglDayScheduleParam, FlowEnum.JDGL_DAYSCHEDULE);
 
         return jdglDayScheduleParam;
     }

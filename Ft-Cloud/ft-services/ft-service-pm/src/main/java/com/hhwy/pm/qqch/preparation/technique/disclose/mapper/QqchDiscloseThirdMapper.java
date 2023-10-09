@@ -22,7 +22,7 @@ public interface QqchDiscloseThirdMapper {
      * @param ids  父级Ids
      * @return
      */
-    List<Long> getChildIdsByPids(Long[] ids);
+    List<Long> getChildIdsByPids(@Param("ids") Long[] ids);
     
     int insertQqchDiscloseThird(QqchDiscloseThird qqchDiscloseThird);
 

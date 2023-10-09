@@ -1,20 +1,20 @@
-package com.hhwy.job.task.summaryEvaluation;
+package com.hhwy.job.task.personControlPlan;
 
 import com.hhwy.job.feign.service.PmServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("EvaluationTask")
-public class EvaluationTask {
+@Component("PersonControlPlanTask")
+public class PersonControlPlanTask {
 
     @Autowired
     private PmServiceApi pmServiceApi;
 
     /**
-     * 前期策划总结评价-总结预警
+     * 人员管控策划预警
      */
-    public void summarySetUpWarn() {
+    public void personControlPlanWarn() {
         System.out.println("----------发送预警------------");
-        pmServiceApi.summarySetUpWarn();
+        pmServiceApi.personControlPlanWarn();
     }
 }

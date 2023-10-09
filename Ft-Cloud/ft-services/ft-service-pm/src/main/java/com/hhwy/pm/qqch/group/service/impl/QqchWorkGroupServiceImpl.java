@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
@@ -26,6 +27,7 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +59,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
     @Autowired
     ISysSyncInfoService sysSyncInfoService;
+    @Autowired
+    RocketMQTemplate rocketMQTemplate;
 
     @Autowired
     private SystemServiceApi systemServiceApi;
@@ -250,7 +254,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
             qqchWorkGroup.setProjectId(projectInfo.getProjectId());
             qqchWorkGroup.setProjectName(projectInfo.getProjectName());
         }
-        return qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
+        int result = qqchWorkGroupMapper.insertQqchWorkGroup(qqchWorkGroup);
+        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
+        return result;
     }
 
     /**
@@ -298,7 +304,10 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
-        return qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+        
+        int result = qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+        sysSyncInfoService.pushQqchWorkGroup(qqchWorkGroup);
+        return result;
     }
 
     /**
@@ -340,7 +349,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
 
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
-        return qqchWorkGroupMapper.deleteQqchWorkGroup(qqchWorkGroup);
+        int result =qqchWorkGroupMapper.deleteQqchWorkGroup(qqchWorkGroup);
+        rocketMQTemplate.convertAndSend("qqch_work_group:delete", qqchWorkGroup.getId());
+        return result;
     }
 
     /**

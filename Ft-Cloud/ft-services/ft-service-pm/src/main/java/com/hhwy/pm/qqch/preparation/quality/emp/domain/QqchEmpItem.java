@@ -206,8 +206,8 @@ public class QqchEmpItem extends CompileEntity<QqchEmpItem> {
      * 字段描述：预留字段4
      */
     @JsonProperty
-    @Excel(name = "预留字段4")
-    private String ptVar4;
+    @Excel(name = "祖级wbsId")
+    private String ancestorsWbsId;
     /**
      * 字段描述：预留字段5
      */

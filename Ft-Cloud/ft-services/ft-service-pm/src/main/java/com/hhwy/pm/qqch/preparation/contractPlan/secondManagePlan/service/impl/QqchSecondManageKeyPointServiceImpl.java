@@ -266,8 +266,14 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
 
             for (QqchKeyPointContractClause keyPointContractClause : qqchKeyPointContractClauseList) {
                 if(masterId.equals(keyPointContractClause.getMasterId())){
-                    contractRight.append(keyPointContractClause.getClauseContent());
-                    triggerCondition.append(keyPointContractClause.getTriggerCondition());
+                    String clauseContent = keyPointContractClause.getClauseContent();
+                    if(StringUtils.isNotBlank(clauseContent)){
+                        contractRight.append(clauseContent);
+                    }
+                    String trigger = keyPointContractClause.getTriggerCondition();
+                    if(StringUtils.isNotBlank(trigger)){
+                        triggerCondition.append(trigger);
+                    }
                 }
             }
             secondManageKeyPointPlan.setContractRight(contractRight.toString());

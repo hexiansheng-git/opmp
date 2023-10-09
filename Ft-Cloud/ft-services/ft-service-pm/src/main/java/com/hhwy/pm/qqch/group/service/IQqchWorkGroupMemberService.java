@@ -21,4 +21,10 @@ public interface IQqchWorkGroupMemberService {
     List<QqchWorkGroupMember> getEstablishPreliminaryPlanHistory(WorkGroupMemberQueryVo queryVo);
 
     List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember);
+
+    /**
+     * 获取最新版本工作小组中的组长
+     * @return
+     */
+    List<QqchWorkGroupMember> getGroupLeader();
 }

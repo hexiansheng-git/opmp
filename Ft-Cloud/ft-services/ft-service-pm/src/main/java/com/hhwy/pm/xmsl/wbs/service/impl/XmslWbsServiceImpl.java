@@ -498,9 +498,8 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
         list.sort((r, r1) -> {return r.getLevel() > r1.getLevel() ? 1 : -1;});
         for (int i = 0; i < list.size(); i++) {
-            //前端会把生效数据也扔过来，过滤掉
-
             XmslWbsHistory temp = list.get(i);
+            temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值
             temp.setMainId(dto.getMainId());
             //若wbs有子级，清除清单编号。20230804 玉涛需求
             if(temp.getHaveChildren() == Constant.YES_INT){
@@ -531,6 +530,11 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         //删除
         if(StringUtils.isNotBlank(dto.getDelIds())){
             wbsHistoryService.deleteXmslWbsHistoryByPks(Arrays.asList(Convert.toLongArray(dto.getDelIds())));
+        }
+        //如果为提交，校验所有wbs必填项
+        if(Constant.YES_INT.equals(dto.getSubmitFlag())){
+            String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
+            Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
         }
     }
     
@@ -573,12 +577,6 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         XmslWbsMain wbsMain = this.wbsMainService.getById(dto.getMainId());
         Assert.notNull(wbsMain,"mainId有误，获取主数据失败");
         Assert.isTrue(wbsMain.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
-        //如果为提交，校验所有wbs必填项
-        if(Constant.YES_INT.equals(dto.getSubmitFlag())){
-            String wrongCodes = this.xmslWbsMapper.countWbsOnlyOne(dto.getMainId());
-            Assert.isTrue(StringUtils.isBlank(wrongCodes),"wbs编号为:["+wrongCodes+"]的数据未填写项目部位（桩号）或标准WBS名称");
-        }
-
     }
 
     public String getSnowId(String id,Map<String,String> idRepalceMap){

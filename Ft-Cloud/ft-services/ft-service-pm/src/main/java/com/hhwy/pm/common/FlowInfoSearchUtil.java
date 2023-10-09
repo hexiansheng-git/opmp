@@ -96,7 +96,7 @@ public class FlowInfoSearchUtil {
             for (int i = 0; i < list.size(); i++) {
                 T t = list.get(i);
                 String processTaskManName = ObjectUtils.replaceWithMap(t.getProcessTaskManId(),nickNameMap);
-                t.setProcessTaskName(processTaskManName);
+                t.setProcessTaskMan(processTaskManName);
             }
         }
         return list;

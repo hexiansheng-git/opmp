@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.qqch.group.constant.TemporaryGroupDuty;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.domain.vo.WorkGroupMemberQueryVo;
@@ -150,7 +151,7 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
                     String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                     DynamicDataSourceContextHolder.push(dataSource);
                     //获取数据
-                    List<QqchWorkGroupMember> validMaxVersionWorkGroupMemberList = this.getValidMaxVersionWorkGroupMemberList(queryVo);
+                    List<QqchWorkGroupMember> validMaxVersionWorkGroupMemberList = this.getValidMaxVersionWorkGroupMemberList();
                     allMember.addAll(validMaxVersionWorkGroupMemberList);
                 }
             }
@@ -205,19 +206,39 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
      * 获取最新生效版本的工作小组成员
      * @return
      */
-    public List<QqchWorkGroupMember> getValidMaxVersionWorkGroupMemberList(WorkGroupMemberQueryVo queryVo) {
+    public List<QqchWorkGroupMember> getValidMaxVersionWorkGroupMemberList() {
         List<QqchWorkGroupMember> workGroupMemberList = new ArrayList<>();
 
         //获取当前最新生效版本的工作小组
         QqchWorkGroup validMaxVersionQqchWorkGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
         if(validMaxVersionQqchWorkGroup != null){
-            queryVo.setMasterId(validMaxVersionQqchWorkGroup.getId());
-            workGroupMemberList = qqchWorkGroupMemberMapper.getWorkGroupMemberHistory(queryVo);
+            QqchWorkGroupMember query = new QqchWorkGroupMember();
+            query.setWorkGroupId(validMaxVersionQqchWorkGroup.getId());
+            workGroupMemberList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(query);
         }
         return workGroupMemberList;
     }
     @Override
     public List<QqchWorkGroupMember> getQqchWorkGroupMemberList(QqchWorkGroupMember qqchWorkGroupMember) {
         return qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(qqchWorkGroupMember);
+    }
+
+    /**
+     * 获取最新版本工作小组中的组长
+     * @return
+     */
+    @Override
+    public List<QqchWorkGroupMember> getGroupLeader() {
+        List<QqchWorkGroupMember> groupLeaderList = new ArrayList<>();
+
+        //获取当前最新生效版本的工作小组
+        QqchWorkGroup validMaxVersionQqchWorkGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+        if(validMaxVersionQqchWorkGroup != null){
+            QqchWorkGroupMember query = new QqchWorkGroupMember();
+            query.setWorkGroupId(validMaxVersionQqchWorkGroup.getId());
+            query.setTemporaryGroupDuty(TemporaryGroupDuty.GROUP_LEADER);
+            groupLeaderList = qqchWorkGroupMemberMapper.getQqchWorkGroupMemberList(query);
+        }
+        return groupLeaderList;
     }
 }

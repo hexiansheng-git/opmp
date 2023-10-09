@@ -13,4 +13,6 @@ public interface IQqchPersonControlPlanService {
     QqchPersonControlPlanVo getQqchPersonControlPlanList(BigDecimal version);
 
     void insertQqchPersonControlPlanList(QqchPersonControlPlanVo qqchPersonControlPlanVo);
+
+    void personControlPlanWarn();
 }

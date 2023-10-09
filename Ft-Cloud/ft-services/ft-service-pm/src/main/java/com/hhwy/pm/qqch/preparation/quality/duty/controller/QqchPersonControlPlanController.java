@@ -55,4 +55,15 @@ public class QqchPersonControlPlanController extends BaseController {
         qqchPersonControlPlanService.insertQqchPersonControlPlanList(qqchPersonControlPlanVo);
         return AjaxResult.success();
     }
+
+    /**
+     * 人员管控策划发送预警消息
+     *
+     * @return
+     */
+    @GetMapping("personControlPlanWarn")
+    public AjaxResult personControlPlanWarn() {
+        qqchPersonControlPlanService.personControlPlanWarn();
+        return AjaxResult.success();
+    }
 }

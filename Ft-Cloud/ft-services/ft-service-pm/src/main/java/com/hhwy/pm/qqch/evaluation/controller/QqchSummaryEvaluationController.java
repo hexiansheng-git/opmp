@@ -76,9 +76,9 @@ public class QqchSummaryEvaluationController extends BaseController {
      *
      * @return
      */
-    @GetMapping("summarySetUpWarn")
-    public AjaxResult summarySetUpWarn() {
-        qqchSummaryEvaluationService.summaryEvaluationSetUpWarn("1");
+    @GetMapping("summaryWarn")
+    public AjaxResult summaryWarn() {
+        qqchSummaryEvaluationService.summaryEvaluationWarn("1");
         return AjaxResult.success();
     }
 
@@ -87,9 +87,9 @@ public class QqchSummaryEvaluationController extends BaseController {
      *
      * @return
      */
-    @GetMapping("evaluationSetUpWarn")
-    public AjaxResult evaluationSetUpWarn() {
-        qqchSummaryEvaluationService.summaryEvaluationSetUpWarn("2");
+    @GetMapping("evaluationWarn")
+    public AjaxResult evaluationWarn() {
+        qqchSummaryEvaluationService.summaryEvaluationWarn("2");
         return AjaxResult.success();
     }
 }

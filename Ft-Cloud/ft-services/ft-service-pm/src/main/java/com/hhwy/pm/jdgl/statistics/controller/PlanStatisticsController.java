@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -48,18 +49,21 @@ public class PlanStatisticsController  {
         return AjaxResult.success(iPlanStatisticsService.getYearValueCompareList(iPlanStatisticsQueryVO));
     };
 
+//    @ResponseBody
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws IOException {
 
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setCharacterEncoding("utf-8");
 
+        List<PlanStatisticsValueCompVO> valueCompList = iPlanStatisticsService.getValueCompData4VO(iPlanStatisticsQueryVO);
         List<PlanStatisticsWbsValueVO> wbsValueList = iPlanStatisticsService.getWbsValueList(iPlanStatisticsQueryVO);
         List<PlanStatisticsBillValueVO> billValueList = iPlanStatisticsService.getBillValueList(iPlanStatisticsQueryVO);
         List<PlanStatisticsWbsImageVO> imageWbsList = iPlanStatisticsService.getImageWbsList(iPlanStatisticsQueryVO);
 
         List<SheetInfoBean> sheetInfoList = new LinkedList<>();
 
+        sheetInfoList.add(new SheetInfoBean("基本信息", PlanStatisticsValueCompVO.class, valueCompList));
         sheetInfoList.add(new SheetInfoBean("WBS汇总", PlanStatisticsWbsValueVO.class, wbsValueList));
         sheetInfoList.add(new SheetInfoBean("清单汇总", PlanStatisticsBillValueVO.class, billValueList));
         sheetInfoList.add(new SheetInfoBean("形象汇总", PlanStatisticsWbsImageVO.class, imageWbsList));
