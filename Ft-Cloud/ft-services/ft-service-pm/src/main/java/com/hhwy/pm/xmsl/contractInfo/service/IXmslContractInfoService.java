@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.system.api.domain.SysDictData;
 
 import java.util.List;
 
@@ -46,4 +47,6 @@ public interface IXmslContractInfoService {
     void updateAllToInvalid();
 
     void updateIssueNameAndDate(Long id);
+
+    List<SysDictData> selectDict();
 }

@@ -123,7 +123,7 @@ public class CommonServiceUtil {
         List<CurrencyInfo> currencyInfoList = systemServiceApi.selectCurrencyList(where);
         HashMap<String, String> res = new HashMap<>(currencyInfoList.size());
         for (CurrencyInfo currencyInfo : currencyInfoList) {
-            res.put(currencyInfo.getCurrencyName(), currencyInfo.getCurrencyCode());
+            res.put(currencyInfo.getCurrencyName().trim(), currencyInfo.getCurrencyCode());
         }
         return res;
     }
