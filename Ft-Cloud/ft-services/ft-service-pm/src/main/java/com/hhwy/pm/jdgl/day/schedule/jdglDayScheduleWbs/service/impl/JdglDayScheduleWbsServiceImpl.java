@@ -304,8 +304,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //            XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
             XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
             if(wbsByCode != null) {
-                jdglDayScheduleWbs.setWbsId(Long.valueOf(wbsByCode.getId()));
-                jdglDayScheduleWbs.setWbsPid(Long.valueOf(wbsByCode.getParentId()));
+                jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+                jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
                 jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
                 if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
                     jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
@@ -472,8 +472,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //                    XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
                     XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
                     if(wbsByCode != null) {
-                        jdglDayScheduleWbs.setWbsId(Long.valueOf(wbsByCode.getId()));
-                        jdglDayScheduleWbs.setWbsPid(Long.valueOf(wbsByCode.getParentId()));
+                        jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+                        jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
                         jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
                         if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
                             jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());

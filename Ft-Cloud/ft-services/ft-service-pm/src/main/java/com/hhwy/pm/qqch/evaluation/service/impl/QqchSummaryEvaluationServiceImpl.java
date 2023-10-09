@@ -64,6 +64,8 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
             qqchSummaryEvaluation.setUpdateTime(DateUtils.getNowDate());
             qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(qqchSummaryEvaluation);
         }
+        // 推送数据到总部版
+        sysSyncInfoService.pushQqchSummaryEvaluation(qqchSummaryEvaluation);
     }
 
     @Transactional
@@ -81,8 +83,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         qqchSummaryEvaluation.setTaskStatus("5");
         // 保存数据
         this.save(qqchSummaryEvaluation);
-        // 推送数据到总部版
-        sysSyncInfoService.pushQqchSummaryEvaluation(qqchSummaryEvaluation);
+
     }
 
     /**

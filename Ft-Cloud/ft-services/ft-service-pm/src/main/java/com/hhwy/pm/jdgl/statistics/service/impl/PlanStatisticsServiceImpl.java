@@ -391,7 +391,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         for (JdglDayScheduleBill jdglDayScheduleBill : billValueListByRangeDate) {
             Long billId = jdglDayScheduleBill.getBillId();
             for (XmslContractList xmslContractList : xmslContractListVos) {
-                if(xmslContractList.getAncestors() != null && xmslContractList.getAncestors().contains(billId+"")) {
+                if(xmslContractList.getAncestors() != null && (xmslContractList.getAncestors() + "," + xmslContractList.getId()).contains(billId+"")) {
                     Long listId = xmslContractList.getId();
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
@@ -407,9 +407,11 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         planStatisticsBillValueVO.setRemainDesignNum(xmslContractList.getChangeNum().subtract(planStatisticsBillValueVO.getLastTotalDesignNum()));
                     }
                     if(billId.equals(listId)) {
+                        BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getThisCompDesignNum();
                         planStatisticsBillValueVO.setThisCompDesignNum(jdglDayScheduleBill.getThisQuantity());
-                        planStatisticsBillValueVO.setThisCompValue(price.multiply(planStatisticsBillValueVO.getThisCompDesignNum()));
-                        planStatisticsBillValueVO.setThisTotalDesignNum(planStatisticsBillValueVO.getThisCompDesignNum().add(planStatisticsBillValueVO.getLastTotalDesignNum()));
+                        planStatisticsBillValueVO.setThisCompValue(price.multiply(thisCompDesignNum));
+                        planStatisticsBillValueVO.setThisTotalDesignNum(thisCompDesignNum.add(planStatisticsBillValueVO.getLastTotalDesignNum()));
+
                     }
                     returnList.add(planStatisticsBillValueVO);
                 }
