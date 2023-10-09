@@ -7,6 +7,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,17 @@ public class XmslContractInfoController extends BaseController {
     public AjaxResult getXmslContractInfo(@Validated(ValidationGroups.Get.class)  XmslContractInfo xmslContractInfoParam) {
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(xmslContractInfoParam);
         return AjaxResult.success(xmslContractInfo);
+    }
+
+    /***
+     * 功能描述: 获取界面所有下拉数据
+     * 作者: fushudong
+     * 时间: 2023/10/9
+     */
+    @GetMapping("/selectDict")
+    public AjaxResult selectDict() {
+        List<SysDictData> result = xmslContractInfoService.selectDict();
+        return AjaxResult.success(result);
     }
 
     @PreAuthorize(hasPermi = "xmslContractInfo:list")
