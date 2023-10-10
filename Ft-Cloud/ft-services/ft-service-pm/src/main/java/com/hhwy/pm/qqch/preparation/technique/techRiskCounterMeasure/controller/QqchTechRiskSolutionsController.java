@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.QqchTechRiskSolutions;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.domain.vo.QqchTechRiskSolutionsVo;
 import com.hhwy.pm.qqch.preparation.technique.techRiskCounterMeasure.service.IQqchTechRiskSolutionsService;
@@ -32,14 +32,14 @@ public class QqchTechRiskSolutionsController extends BaseController {
     private IQqchTechRiskSolutionsService qqchTechRiskSolutionsService;
 
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:list")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:list")
     @GetMapping
     public AjaxResult getQqchTechRiskSolutions(@Validated(ValidationGroups.Get.class) QqchTechRiskSolutions qqchTechRiskSolutionsParam) {
         QqchTechRiskSolutions qqchTechRiskSolutions = qqchTechRiskSolutionsService.getQqchTechRiskSolutions(qqchTechRiskSolutionsParam);
         return AjaxResult.success(qqchTechRiskSolutions);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:list")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:list")
     @GetMapping("/list")
     public AjaxResult getQqchTechRiskSolutionsList(@Validated(ValidationGroups.Select.class) QqchTechRiskSolutions qqchTechRiskSolutionsParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchTechRiskSolutionsController extends BaseController {
         return getDataTableAjaxResult(qqchTechRiskSolutionsList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:add")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTechRiskSolutions(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechRiskSolutions qqchTechRiskSolutionsParam) {
         qqchTechRiskSolutionsService.insertQqchTechRiskSolutions(qqchTechRiskSolutionsParam);
         return AjaxResult.success(qqchTechRiskSolutionsParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:update")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTechRiskSolutions(@Validated(ValidationGroups.Update.class) @RequestBody QqchTechRiskSolutions qqchTechRiskSolutionsParam) {
         return toAjax(qqchTechRiskSolutionsService.updateQqchTechRiskSolutions(qqchTechRiskSolutionsParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:update")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTechRiskSolutionsList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTechRiskSolutions> qqchTechRiskSolutionsListParam) {
         return toAjax(qqchTechRiskSolutionsService.updateQqchTechRiskSolutionsList(qqchTechRiskSolutionsListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:remove")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTechRiskSolutions(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTechRiskSolutions qqchTechRiskSolutionsParam) {
         return toAjax(qqchTechRiskSolutionsService.deleteQqchTechRiskSolutions(qqchTechRiskSolutionsParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:remove")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTechRiskSolutionsByPks(@PathVariable Long[] ids) {
         List<Long> qqchTechRiskSolutionsPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchTechRiskSolutionsController extends BaseController {
      * @param qqchTechRiskSolutionsVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:save")
+//    @PreAuthorize(hasPermi = "qqchTechRiskSolutions:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechRiskSolutionsVo qqchTechRiskSolutionsVo) {
         qqchTechRiskSolutionsService.save(qqchTechRiskSolutionsVo);

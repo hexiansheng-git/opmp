@@ -105,7 +105,6 @@ public class CommonService {
         QqchWorkPlan qqchWorkPlan = new QqchWorkPlan();
         qqchWorkPlan.setValid("1");
         qqchWorkPlan.setTaskStatus("5");
-        qqchWorkPlan.setDelFlag("0");
         List<QqchWorkPlan> qqchWorkPlanList = qqchWorkPlanService.getQqchWorkPlanList(qqchWorkPlan);
         // 查询到的数量不是0个的话 工作计划
         if (qqchWorkPlanList.size() != 1){
@@ -119,7 +118,6 @@ public class CommonService {
         QqchWorkPlan workPlan = qqchWorkPlanList.get(0);
         Long id = workPlan.getId();
         QqchWorkPlanDetail planDetail = new QqchWorkPlanDetail();
-        planDetail.setDelFlag("0");
         planDetail.setItemId(menuId);
         planDetail.setMainId(id);
 

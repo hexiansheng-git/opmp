@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-
-import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
@@ -64,6 +62,13 @@ public class Review extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "要求完成评审日期", dateFormat = "yyyy-MM-dd")
     private Date finishDate;
+    /**
+     * 字段描述：评审完成日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @FtExcel(name = "评审完成日期", dateFormat = "yyyy-MM-dd")
+    private Date reviewCompleteDate;
     /**
      * 字段描述：评审要求
      */
@@ -190,7 +195,7 @@ public class Review extends CommonBaseEntity {
     @FtExcel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 编制状态 0-未编制;1-编制完成;2-审批完成
+     * 编制状态 0：未编制，1：正在编制，2：编制完成，3：正在审批，4：审批完成
      */
     @JsonProperty
     private String reviewStatus;

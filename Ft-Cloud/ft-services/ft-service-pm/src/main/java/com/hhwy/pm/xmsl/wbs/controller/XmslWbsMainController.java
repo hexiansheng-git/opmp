@@ -54,7 +54,7 @@ public class XmslWbsMainController extends BaseController {
         return getDataTableAjaxResult(xmslWbsMainList);
     }
 
-    @PreAuthorize(hasAnyPermi = {"xmslWbsMain:detail","xmslWbsMain:edit"})
+    @PreAuthorize(hasPermi = "xmslWbsMain:detail")
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody XmslWbsMain xmslWbsMainParam) {
         flowServiceApi.isNowfirstNode("f1a873f8-5466-11ee-9954-ba7f02a27bc2");
@@ -77,7 +77,7 @@ public class XmslWbsMainController extends BaseController {
      * 获取当前调整数据
      * @return
      */
-    @PreAuthorize(hasAnyPermi = {"xmslWbsMain:adjust"})
+    @PreAuthorize(hasPermi = "xmslWbsMain:adjust")
     @GetMapping("/adjustInfo")
     public AjaxResult adjustInfo() {
         XmslWbsMain wbsMain = this.xmslWbsMainService.getAdjustInfo();

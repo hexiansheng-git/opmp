@@ -195,7 +195,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         }
 
         Map<String, BigDecimal> totalMap = new HashMap<>();
-        totalMap.put("planAmt", contractAmt);
+        totalMap.put("planAmt", contractAmt == null ? new BigDecimal(0) : contractAmt);
         totalMap.put("actAmt", totalActAmt);
         return2Map.put("total", totalMap);
 
@@ -315,45 +315,34 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 switch (queryDateType) {
                     case "z":
                         if(!CollectionUtils.isEmpty(jdglWeekImagePlans)) {
-                            Stream<JdglWeekImagePlan> jdglWeekImagePlanStream = jdglWeekImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
-                            if(jdglWeekImagePlanStream != null) {
-                                JdglWeekImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
-                                planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
-                            }
+                            JdglWeekImagePlan imagePlan = jdglWeekImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            if(imagePlan != null) planStatisticsWbsValueVO.setThisPlanValue(imagePlan.getPlanCompValue());
                         }
                         break;
                     case "y":
                         if(!CollectionUtils.isEmpty(jdglMonthImagePlans)) {
-                            Stream<JdglMonthImagePlan> jdglWeekImagePlanStream = jdglMonthImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
-                            if(jdglWeekImagePlanStream != null) {
-                                JdglMonthImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
-                                planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
-                            }
+                            JdglMonthImagePlan jdglMonthImagePlan = jdglMonthImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            if(jdglMonthImagePlan != null) planStatisticsWbsValueVO.setThisPlanValue(jdglMonthImagePlan.getPlanCompValue());
+
                         }
                         break;
                     case "j":
                         if(!CollectionUtils.isEmpty(jdglQuarterImagePlans)) {
-                            Stream<JdglQuarterImagePlan> jdglWeekImagePlanStream = jdglQuarterImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
-                            if(jdglWeekImagePlanStream != null) {
-                                JdglQuarterImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
-                                planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
-                            }
+                            JdglQuarterImagePlan jdglQuarterImagePlan = jdglQuarterImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            if(jdglQuarterImagePlan != null) planStatisticsWbsValueVO.setThisPlanValue(jdglQuarterImagePlan.getPlanCompValue());
                         }
                         break;
                     case "n":
                         if(!CollectionUtils.isEmpty(jdglYearImagePlans)) {
-                            Stream<JdglYearImagePlan> jdglWeekImagePlanStream = jdglYearImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode()));
-                            if(jdglWeekImagePlanStream != null) {
-                                JdglYearImagePlan jdglWeekImagePlan = jdglWeekImagePlanStream.findFirst().get();
-                                planStatisticsWbsValueVO.setThisPlanValue(jdglWeekImagePlan.getPlanCompValue());
-                            }
+                            JdglYearImagePlan jdglYearImagePlan = jdglYearImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            if(jdglYearImagePlan != null)  planStatisticsWbsValueVO.setThisPlanValue(jdglYearImagePlan.getPlanCompValue());
                         }
                         break;
                 }
             }
         }
 
-        List<PlanStatisticsWbsValueVO> build = TreeUtil.build(returnList, null);
+        List<PlanStatisticsWbsValueVO> build = TreeUtil.build(returnList, -1l);
 
         return CollectionUtils.isEmpty(build)?new ArrayList<>():build;
     }
@@ -401,8 +390,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         // 填充实际产值数据
         for (JdglDayScheduleBill jdglDayScheduleBill : billValueListByRangeDate) {
             Long billId = jdglDayScheduleBill.getBillId();
+            XmslContractList xmslContractList1 = xmslContractListVos.stream().filter(vo -> billId.equals(vo.getId())).findFirst().orElse(null);
             for (XmslContractList xmslContractList : xmslContractListVos) {
-                if(xmslContractList.getAncestors() != null && xmslContractList.getAncestors().contains(billId+"")) {
+                if(xmslContractList1 != null && xmslContractList1.getAncestors() !=
+                        null && (xmslContractList1.getAncestors() + "," + xmslContractList1.getId()).contains(xmslContractList.getId()+"")) {
                     Long listId = xmslContractList.getId();
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
@@ -418,9 +409,12 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         planStatisticsBillValueVO.setRemainDesignNum(xmslContractList.getChangeNum().subtract(planStatisticsBillValueVO.getLastTotalDesignNum()));
                     }
                     if(billId.equals(listId)) {
+                        BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getThisCompDesignNum();
+                        BigDecimal lastTotalDesignNum = planStatisticsBillValueVO.getLastTotalDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getLastTotalDesignNum();
                         planStatisticsBillValueVO.setThisCompDesignNum(jdglDayScheduleBill.getThisQuantity());
-                        planStatisticsBillValueVO.setThisCompValue(price.multiply(planStatisticsBillValueVO.getThisCompDesignNum()));
-                        planStatisticsBillValueVO.setThisTotalDesignNum(planStatisticsBillValueVO.getThisCompDesignNum().add(planStatisticsBillValueVO.getLastTotalDesignNum()));
+                        planStatisticsBillValueVO.setThisCompValue(price.multiply(thisCompDesignNum));
+                        planStatisticsBillValueVO.setThisTotalDesignNum(thisCompDesignNum.add(lastTotalDesignNum));
+
                     }
                     returnList.add(planStatisticsBillValueVO);
                 }

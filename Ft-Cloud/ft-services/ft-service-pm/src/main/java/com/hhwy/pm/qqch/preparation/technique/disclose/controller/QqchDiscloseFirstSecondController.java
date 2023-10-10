@@ -29,7 +29,7 @@ public class QqchDiscloseFirstSecondController extends BaseController {
     @Autowired
     private IQqchDiscloseFirstSecondService qqchDiscloseFirstSecondService;
 
-    @PreAuthorize(hasPermi = "qqchDiscloseFirstSecond:list")
+//    @PreAuthorize(hasPermi = "qqchDiscloseFirstSecond:list")
     @GetMapping("/getTreeList")
     public AjaxResult getTreeList(BigDecimal version) {
         QqchDiscloseFirstSecondVo qqchDiscloseFirstSecondVo = qqchDiscloseFirstSecondService
@@ -37,7 +37,7 @@ public class QqchDiscloseFirstSecondController extends BaseController {
         return AjaxResult.success(qqchDiscloseFirstSecondVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchDiscloseFirstSecond:add")
+//    @PreAuthorize(hasPermi = "qqchDiscloseFirstSecond:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDiscloseFirstSecondVo qqchDiscloseFirstSecondVo) {

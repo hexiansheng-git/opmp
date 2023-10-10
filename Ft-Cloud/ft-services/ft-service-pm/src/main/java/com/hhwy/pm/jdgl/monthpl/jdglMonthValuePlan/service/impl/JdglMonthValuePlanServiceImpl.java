@@ -127,9 +127,7 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
 
     @Override
     public int deleteJdglMonthValuePlanByPlanId(Long planId) {
-        JdglMonthValuePlan jdglMonthValuePlan = new JdglMonthValuePlan();
-        jdglMonthValuePlan.setPlanId(planId);
-        return deleteJdglMonthValuePlan(jdglMonthValuePlan);
+        return jdglMonthValuePlanMapper.deleteJdglMonthValuePlanByPlanId(planId);
     }
 
     @Transactional

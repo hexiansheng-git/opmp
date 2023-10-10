@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -30,9 +31,11 @@ public interface IJdglMonthImagePlanService {
 
     int deleteJdglMonthImagePlanByPks(List<Long> jdglMonthImagePlanPkList);
 
-    int deleteJdglMonthImagePlanByPlanId(Long yearPlanId);
+    int deleteJdglMonthImagePlanByPlanId(Long planId);
 
     JdglMonthPlan syncFromTotalPlan(JdglMonthPlan jdglMonthPlanParam);
 
     List<JdglMonthImagePlan> getWbsListByYearAndMonth(String year, String month);
+
+    BigDecimal getThisPlanAmt(Long planId);
 }

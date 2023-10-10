@@ -1,7 +1,9 @@
 package com.hhwy.system.mq;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.feign.service.PmServiceApi;
+import com.hhwy.flowable.api.RemoteBpmnSyncService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.system.core.processor.ITenantProcessor;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -19,6 +21,9 @@ public class ITenantProcessorImpl implements ITenantProcessor {
     @Autowired
     PmServiceApi pmServiceApi;
 
+    @Autowired
+    RemoteBpmnSyncService remoteBpmnSyncService;
+
     @Override
     public void doPostForInsert(SysTenant sysTenant) {
 //        System.out.println("租户创建成功回调方法开始********************************************************************************");
@@ -30,6 +35,15 @@ public class ITenantProcessorImpl implements ITenantProcessor {
 //        if(!res.get("code").toString().equals("200")){
 //            throw  new CustomBusinessException("同步项目信息到租户数据库失败！！");
 //        };
+
+        masterToTenant(sysTenant);
+    }
+
+    //给租户下发流程信息
+    public void masterToTenant(SysTenant sysTenant) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("tenantKey",sysTenant.getTenantKey());
+        remoteBpmnSyncService.masterToTenant(jsonObject);
     }
 
     @Override

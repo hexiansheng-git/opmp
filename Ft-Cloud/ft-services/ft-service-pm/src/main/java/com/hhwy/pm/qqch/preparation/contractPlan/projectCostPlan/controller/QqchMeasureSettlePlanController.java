@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.projectCostPlan.domain.QqchMeasureSettlePlan;
 import com.hhwy.pm.qqch.preparation.contractPlan.projectCostPlan.domain.vo.QqchMeasureSettlePlanVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.projectCostPlan.service.IQqchMeasureSettlePlanService;
@@ -32,14 +32,14 @@ public class QqchMeasureSettlePlanController extends BaseController {
     private IQqchMeasureSettlePlanService qqchMeasureSettlePlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:list")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:list")
     @GetMapping
     public AjaxResult getQqchMeasureSettlePlan(@Validated(ValidationGroups.Get.class) QqchMeasureSettlePlan qqchMeasureSettlePlanParam) {
         QqchMeasureSettlePlan qqchMeasureSettlePlan = qqchMeasureSettlePlanService.getQqchMeasureSettlePlan(qqchMeasureSettlePlanParam);
         return AjaxResult.success(qqchMeasureSettlePlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:list")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchMeasureSettlePlanList(@Validated(ValidationGroups.Select.class) QqchMeasureSettlePlan qqchMeasureSettlePlanParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchMeasureSettlePlanController extends BaseController {
         return getDataTableAjaxResult(qqchMeasureSettlePlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchMeasureSettlePlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureSettlePlan qqchMeasureSettlePlanParam) {
         qqchMeasureSettlePlanService.insertQqchMeasureSettlePlan(qqchMeasureSettlePlanParam);
         return AjaxResult.success(qqchMeasureSettlePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:update")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchMeasureSettlePlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchMeasureSettlePlan qqchMeasureSettlePlanParam) {
         return toAjax(qqchMeasureSettlePlanService.updateQqchMeasureSettlePlan(qqchMeasureSettlePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:update")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchMeasureSettlePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMeasureSettlePlan> qqchMeasureSettlePlanListParam) {
         return toAjax(qqchMeasureSettlePlanService.updateQqchMeasureSettlePlanList(qqchMeasureSettlePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchMeasureSettlePlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureSettlePlan qqchMeasureSettlePlanParam) {
         return toAjax(qqchMeasureSettlePlanService.deleteQqchMeasureSettlePlan(qqchMeasureSettlePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchMeasureSettlePlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchMeasureSettlePlanPkList = Arrays.asList(ids);
@@ -91,7 +91,7 @@ public class QqchMeasureSettlePlanController extends BaseController {
      * @param qqchMeasureSettlePlan
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:list")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:list")
     @GetMapping("getQqchMeasureSettlePlanVo")
     public AjaxResult getQqchMeasureSettlePlanVo(@Validated(ValidationGroups.Get.class) QqchMeasureSettlePlan qqchMeasureSettlePlan) {
         QqchMeasureSettlePlanVo qqchMeasureSettlePlanVo = qqchMeasureSettlePlanService.getQqchMeasureSettlePlanVo(qqchMeasureSettlePlan);
@@ -103,7 +103,7 @@ public class QqchMeasureSettlePlanController extends BaseController {
      * @param qqchMeasureSettlePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureSettlePlan:add")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchMeasureSettlePlanVo qqchMeasureSettlePlanVo) {
         qqchMeasureSettlePlanService.save(qqchMeasureSettlePlanVo);

@@ -281,7 +281,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });
-            iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(jdglQuarterImagePlanList);
+            iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(imagePlans);
         }
 
         return i;
@@ -325,7 +325,11 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             iJdglQuarterImagePlanService.updateJdglQuarterImagePlanList(jdglQuarterImagePlans);
         }
 
-        // 根据计划完成产值汇总更新年计划产值&未完&
+        BigDecimal thisPlanAmt = iJdglQuarterImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglQuarterPlan.getExchangeRate();
+        jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
+
 
         return jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);
     }

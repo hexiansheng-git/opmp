@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -35,4 +36,6 @@ public interface IJdglWeekImagePlanService {
     JdglWeekPlan syncFromTotalPlan(JdglWeekPlan jdglWeekPlanParam);
 
     List<JdglWeekImagePlan> getWbsListByYearAndWeek(String year, String week);
+
+    BigDecimal getThisPlanAmt(Long id);
 }

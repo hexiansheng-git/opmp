@@ -3,7 +3,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchTopicResearchPlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanImportVo;
@@ -40,14 +40,14 @@ public class QqchTopicResearchPlanController extends BaseController {
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:list")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:list")
     @GetMapping
     public AjaxResult getQqchTopicResearchPlan(@Validated(ValidationGroups.Get.class) QqchTopicResearchPlan qqchTopicResearchPlanParam) {
         QqchTopicResearchPlan qqchTopicResearchPlan = qqchTopicResearchPlanService.getQqchTopicResearchPlan(qqchTopicResearchPlanParam);
         return AjaxResult.success(qqchTopicResearchPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:list")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchTopicResearchPlanList(@Validated(ValidationGroups.Select.class) QqchTopicResearchPlan qqchTopicResearchPlanParam) {
         startPage();
@@ -55,32 +55,32 @@ public class QqchTopicResearchPlanController extends BaseController {
         return getDataTableAjaxResult(qqchTopicResearchPlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:add")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTopicResearchPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchTopicResearchPlan qqchTopicResearchPlanParam) {
         qqchTopicResearchPlanService.insertQqchTopicResearchPlan(qqchTopicResearchPlanParam);
         return AjaxResult.success(qqchTopicResearchPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTopicResearchPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchTopicResearchPlan qqchTopicResearchPlanParam) {
         return toAjax(qqchTopicResearchPlanService.updateQqchTopicResearchPlan(qqchTopicResearchPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTopicResearchPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTopicResearchPlan> qqchTopicResearchPlanListParam) {
         return toAjax(qqchTopicResearchPlanService.updateQqchTopicResearchPlanList(qqchTopicResearchPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTopicResearchPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTopicResearchPlan qqchTopicResearchPlanParam) {
         return toAjax(qqchTopicResearchPlanService.deleteQqchTopicResearchPlan(qqchTopicResearchPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTopicResearchPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchTopicResearchPlanPkList = Arrays.asList(ids);
@@ -145,7 +145,7 @@ public class QqchTopicResearchPlanController extends BaseController {
      * @param qqchTopicResearchPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:save")
+//    @PreAuthorize(hasPermi = "qqchTopicResearchPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTopicResearchPlanVo qqchTopicResearchPlanVo) {
         qqchTopicResearchPlanService.save(qqchTopicResearchPlanVo);

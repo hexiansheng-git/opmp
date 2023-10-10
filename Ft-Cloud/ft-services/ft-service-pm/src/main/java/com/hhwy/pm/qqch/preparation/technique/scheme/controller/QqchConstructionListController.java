@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * 施工方案清单
  * @author zhenglili
  * @date 2023-07-13 14:27:14
  * @remark 3.4.2施工方案清单
@@ -38,7 +39,7 @@ public class QqchConstructionListController extends BaseController {
     @Autowired
     private IQqchConstructionListService qqchConstructionListService;
 
-    @PreAuthorize(hasPermi = "qqchConstructionList:list")
+//    @PreAuthorize(hasPermi = "qqchConstructionList:list")
     @GetMapping("/getList")
     public AjaxResult getList(
         @Validated(ValidationGroups.Select.class) QqchConstructionListVo qqchConstructionListParamVo) {
@@ -48,7 +49,7 @@ public class QqchConstructionListController extends BaseController {
         return AjaxResult.success(qqchConstructionListVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchConstructionList:add")
+//    @PreAuthorize(hasPermi = "qqchConstructionList:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionListVo qqchConstructionListVo) {

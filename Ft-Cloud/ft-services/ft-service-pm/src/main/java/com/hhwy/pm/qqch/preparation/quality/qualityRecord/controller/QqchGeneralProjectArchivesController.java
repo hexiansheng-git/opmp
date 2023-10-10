@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchGeneralProjectArchives;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbs;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.GeneralProjectArchivesWbsVo;
@@ -33,14 +33,14 @@ public class QqchGeneralProjectArchivesController extends BaseController {
     private IQqchGeneralProjectArchivesService qqchGeneralProjectArchivesService;
 
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:list")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:list")
     @GetMapping
     public AjaxResult getQqchGeneralProjectArchives(@Validated(ValidationGroups.Get.class) QqchGeneralProjectArchives qqchGeneralProjectArchivesParam) {
         QqchGeneralProjectArchives qqchGeneralProjectArchives = qqchGeneralProjectArchivesService.getQqchGeneralProjectArchives(qqchGeneralProjectArchivesParam);
         return AjaxResult.success(qqchGeneralProjectArchives);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:list")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:list")
     @GetMapping("/list")
     public AjaxResult getQqchGeneralProjectArchivesList(@Validated(ValidationGroups.Select.class) QqchGeneralProjectArchives qqchGeneralProjectArchivesParam) {
         startPage();
@@ -48,39 +48,39 @@ public class QqchGeneralProjectArchivesController extends BaseController {
         return getDataTableAjaxResult(qqchGeneralProjectArchivesList);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
     @PostMapping("/add")
     public AjaxResult insertQqchGeneralProjectArchives(@Validated(ValidationGroups.Save.class) @RequestBody QqchGeneralProjectArchives qqchGeneralProjectArchivesParam) {
         qqchGeneralProjectArchivesService.insertQqchGeneralProjectArchives(qqchGeneralProjectArchivesParam);
         return AjaxResult.success(qqchGeneralProjectArchivesParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchGeneralProjectArchivesList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchGeneralProjectArchives> qqchGeneralProjectArchivesListParam) {
         qqchGeneralProjectArchivesService.insertQqchGeneralProjectArchivesList(qqchGeneralProjectArchivesListParam);
         return AjaxResult.success(qqchGeneralProjectArchivesListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:update")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:update")
     @PostMapping("/update")
     public AjaxResult updateQqchGeneralProjectArchives(@Validated(ValidationGroups.Update.class) @RequestBody QqchGeneralProjectArchives qqchGeneralProjectArchivesParam) {
         return toAjax(qqchGeneralProjectArchivesService.updateQqchGeneralProjectArchives(qqchGeneralProjectArchivesParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:update")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchGeneralProjectArchivesList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchGeneralProjectArchives> qqchGeneralProjectArchivesListParam) {
         return toAjax(qqchGeneralProjectArchivesService.updateQqchGeneralProjectArchivesList(qqchGeneralProjectArchivesListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:remove")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchGeneralProjectArchives(@Validated(ValidationGroups.Delete.class) @RequestBody QqchGeneralProjectArchives qqchGeneralProjectArchivesParam) {
         return toAjax(qqchGeneralProjectArchivesService.deleteQqchGeneralProjectArchives(qqchGeneralProjectArchivesParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:remove")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchGeneralProjectArchivesByPks(@PathVariable Long[] ids) {
         List<Long> qqchGeneralProjectArchivesPkList = Arrays.asList(ids);
@@ -121,7 +121,7 @@ public class QqchGeneralProjectArchivesController extends BaseController {
      * @param generalProjectArchivesWbsVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
+//    @PreAuthorize(hasPermi = "qqchGeneralProjectArchives:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody GeneralProjectArchivesWbsVo generalProjectArchivesWbsVo) {
         qqchGeneralProjectArchivesService.save(generalProjectArchivesWbsVo);

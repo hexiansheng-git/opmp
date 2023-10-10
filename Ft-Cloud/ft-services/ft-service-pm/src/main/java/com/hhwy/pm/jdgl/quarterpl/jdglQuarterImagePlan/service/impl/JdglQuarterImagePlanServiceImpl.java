@@ -123,13 +123,16 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                 jdglQuarterImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglQuarterImagePlan.setUpdateTime(DateUtils.getNowDate());
                 String wbsCode = jdglQuarterImagePlan.getWbsCode();
+                Long pid = jdglQuarterImagePlan.getPid();
                 if(!CollectionUtils.isEmpty(list)) {
+                    JdglQuarterImagePlan jdglQuarterImagePlan1 = jdglQuarterImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
                     BigDecimal compValue = new BigDecimal(0);
                     BigDecimal designQuantity = jdglQuarterImagePlan.getDesignQuantity();
                     BigDecimal planCompQuantity = jdglQuarterImagePlan.getPlanCompQuantity();
+                    if(jdglQuarterImagePlan1 != null) designQuantity = jdglQuarterImagePlan1.getDesignQuantity();
                     BigDecimal rate = new BigDecimal(0);
                     if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                        rate = planCompQuantity.divide(designQuantity);
+                        rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
                     }
                     List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                     if(!CollectionUtils.isEmpty(collect)) {
@@ -209,7 +212,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             jdglQuarterImagePlan.setId(IdWorker.createId());
 //            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
             jdglQuarterImagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
-            jdglQuarterImagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            jdglQuarterImagePlan.setPtVar2(jdglMainPlanItem.getPid() == null ? null : jdglMainPlanItem.getPid() + "");
             jdglQuarterImagePlan.setPlanId(jdglQuarterPlanParam.getId());
             jdglQuarterImagePlan.setWorkId(jdglMainPlanItem.getId());
             jdglQuarterImagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
@@ -230,7 +233,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
         if(!CollectionUtils.isEmpty(returnList)) {
             for (JdglQuarterImagePlan imagePlan : returnList) {
-                JdglQuarterImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                JdglQuarterImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
         }
@@ -251,5 +254,10 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
     @Override
     public List<JdglQuarterImagePlan> getWbsListByYearAndQuarter(String year, String quarter) {
         return jdglQuarterImagePlanMapper.getWbsListByYearAndQuarter(year, quarter);
+    }
+
+    @Override
+    public BigDecimal getThisPlanAmt(Long planId) {
+        return jdglQuarterImagePlanMapper.getThisPlanAmt(planId);
     }
 }

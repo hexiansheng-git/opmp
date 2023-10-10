@@ -35,7 +35,7 @@ public class XmslEngineeringReportController extends BaseController {
     private IXmslEngineeringReportService xmslEngineeringReportService;
 
 
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
+//    @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
     @PostMapping("/list")
     public AjaxResult getXmslEngineeringReportList(@RequestBody @Validated(ValidationGroups.Select.class) XmslEngineeringReport xmslEngineeringReportParam) {
         List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportService.getXmslEngineeringReportList(xmslEngineeringReportParam);
@@ -43,7 +43,7 @@ public class XmslEngineeringReportController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
+//    @PreAuthorize(hasPermi = "xmslEngineeringReport:list")
     @PostMapping("/getTreeListByPid")
     public AjaxResult getTreeListByPid(@RequestBody @Validated(ValidationGroups.Select.class) XmslEngineeringReport xmslEngineeringReportParam) {
         List<XmslEngineeringReport> xmslEngineeringReportList = xmslEngineeringReportService.getTreeListByPid(xmslEngineeringReportParam);

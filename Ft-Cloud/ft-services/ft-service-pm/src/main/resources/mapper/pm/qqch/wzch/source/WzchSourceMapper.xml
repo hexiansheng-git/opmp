@@ -47,7 +47,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="regionName != null  and regionName != ''"> and `region_name` like concat('%',#{regionName},'%')</if>
             <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-            <if test="projectId != null "> and `project_id` = #{projectId}</if>
             <if test="demandValidDate != null "> and `demand_valid_date` = #{demandValidDate}</if>
             <if test="projectName != null  and projectName != ''"> and `project_name` like concat('%', #{projectName}, '%')</if>
             <if test="deptId != null "> and `dept_id` = #{deptId}</if>

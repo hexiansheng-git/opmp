@@ -70,6 +70,9 @@
              , `task_status`
         from jdgl_month_value_plan
     </sql>
+    <delete id="deleteJdglMonthValuePlanByPlanId">
+        delete from jdgl_month_value_plan where plan_id = #{planId}
+    </delete>
     <select id="getJdglMonthValuePlan" resultMap="JdglMonthValuePlanResultMap">
         <include refid="selectJdglMonthValuePlanVo"/>
         <where>

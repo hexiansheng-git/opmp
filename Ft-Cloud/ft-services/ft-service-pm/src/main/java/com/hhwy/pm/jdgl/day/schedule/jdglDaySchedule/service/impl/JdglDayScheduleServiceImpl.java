@@ -265,6 +265,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
                 }
 
                 iJdglDayScheduleWbsService.updateJdglDayScheduleWbsList(jdglDayScheduleWbsListNeedUpdate, id);
+
+                // wbs清单更新后，更新主表每日产值
+                jdglDayScheduleMapper.updateJdglDayScheduleValue(id, jdglDaySchedule.getDate());
             }
             return i;
         }
@@ -287,10 +290,11 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             return 0;
         }
 
-        int i = jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
         Long id = jdglDaySchedule.getId();
         jdglDaySchedule.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglDaySchedule.setUpdateTime(DateUtils.getNowDate());
+
+        int i = jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
 
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = jdglDaySchedule.getJdglDayScheduleWbsList();
         List<JdglDayScheduleWbs> jdglDayScheduleWbsListAdd = new ArrayList<>();

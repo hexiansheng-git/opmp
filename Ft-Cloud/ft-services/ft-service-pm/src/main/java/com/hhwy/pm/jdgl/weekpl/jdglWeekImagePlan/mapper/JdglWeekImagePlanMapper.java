@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.mapper;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -31,4 +32,6 @@ public interface JdglWeekImagePlanMapper {
     List<JdglWeekImagePlan> getWbsListByYearAndWeek(@Param("year") String year,@Param("week")  String week);
 
     int deleteJdglWeekImagePlanByPlanId(@Param("planId") Long planId);
+
+    BigDecimal getThisPlanAmt(@Param("planId") Long planId);
 }

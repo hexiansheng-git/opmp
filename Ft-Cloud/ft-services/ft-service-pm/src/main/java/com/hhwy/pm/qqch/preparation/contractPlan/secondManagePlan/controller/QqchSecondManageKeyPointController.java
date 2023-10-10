@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.QqchSecondManageKeyPoint;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.vo.QqchSecondManageKeyPointVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.secondManagePlan.domain.vo.SecondManageKeyPointPlanVo;
@@ -30,7 +30,7 @@ public class QqchSecondManageKeyPointController extends BaseController {
     private IQqchSecondManageKeyPointService qqchSecondManageKeyPointService;
 
 
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:list")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:list")
     @GetMapping
     public AjaxResult getQqchSecondManageKeyPoint(@Validated(ValidationGroups.Get.class) QqchSecondManageKeyPoint qqchSecondManageKeyPointParam) {
         QqchSecondManageKeyPoint qqchSecondManageKeyPoint = qqchSecondManageKeyPointService.getQqchSecondManageKeyPoint(qqchSecondManageKeyPointParam);
@@ -48,32 +48,32 @@ public class QqchSecondManageKeyPointController extends BaseController {
         return AjaxResult.success(qqchSecondManageKeyPointList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:add")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSecondManageKeyPoint(@Validated(ValidationGroups.Save.class) @RequestBody QqchSecondManageKeyPoint qqchSecondManageKeyPointParam) {
         qqchSecondManageKeyPointService.insertQqchSecondManageKeyPoint(qqchSecondManageKeyPointParam);
         return AjaxResult.success(qqchSecondManageKeyPointParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:update")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSecondManageKeyPoint(@Validated(ValidationGroups.Update.class) @RequestBody QqchSecondManageKeyPoint qqchSecondManageKeyPointParam) {
         return toAjax(qqchSecondManageKeyPointService.updateQqchSecondManageKeyPoint(qqchSecondManageKeyPointParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:update")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSecondManageKeyPointList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSecondManageKeyPoint> qqchSecondManageKeyPointListParam) {
         return toAjax(qqchSecondManageKeyPointService.updateQqchSecondManageKeyPointList(qqchSecondManageKeyPointListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:remove")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSecondManageKeyPoint(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSecondManageKeyPoint qqchSecondManageKeyPointParam) {
         return toAjax(qqchSecondManageKeyPointService.deleteQqchSecondManageKeyPoint(qqchSecondManageKeyPointParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:remove")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSecondManageKeyPointByPks(@PathVariable Long[] ids) {
         List<Long> qqchSecondManageKeyPointPkList = Arrays.asList(ids);
@@ -97,7 +97,7 @@ public class QqchSecondManageKeyPointController extends BaseController {
      * @param secondManageKeyPointPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:save")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:save")
     @PostMapping("/saveSecondManageKeyPointPlanVo")
     public AjaxResult saveSecondManageKeyPointPlanVo(@RequestBody SecondManageKeyPointPlanVo secondManageKeyPointPlanVo) {
         qqchSecondManageKeyPointService.saveSecondManageKeyPointPlanVo(secondManageKeyPointPlanVo);
@@ -120,7 +120,7 @@ public class QqchSecondManageKeyPointController extends BaseController {
      * @param qqchSecondManageKeyPointVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:save")
+//    @PreAuthorize(hasPermi = "qqchSecondManageKeyPoint:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchSecondManageKeyPointVo qqchSecondManageKeyPointVo) {
         qqchSecondManageKeyPointService.save(qqchSecondManageKeyPointVo);

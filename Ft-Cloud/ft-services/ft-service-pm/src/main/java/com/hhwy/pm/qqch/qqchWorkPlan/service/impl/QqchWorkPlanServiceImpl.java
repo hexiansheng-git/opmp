@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -453,7 +454,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             list = qqchWorkPlanMapper.getQqchWorkPlanList(plan);
         }catch (Exception e){
             e.printStackTrace();
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
@@ -517,7 +518,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 }
             }
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);

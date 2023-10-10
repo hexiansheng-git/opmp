@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchGeneralCondition;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchGeneralConditionVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchGeneralConditionService;
@@ -32,14 +32,14 @@ public class QqchGeneralConditionController extends BaseController {
     private IQqchGeneralConditionService qqchGeneralConditionService;
 
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:list")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:list")
     @GetMapping
     public AjaxResult getQqchGeneralCondition(@Validated(ValidationGroups.Get.class) QqchGeneralCondition qqchGeneralConditionParam) {
         QqchGeneralCondition qqchGeneralCondition = qqchGeneralConditionService.getQqchGeneralCondition(qqchGeneralConditionParam);
         return AjaxResult.success(qqchGeneralCondition);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:list")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:list")
     @GetMapping("/list")
     public AjaxResult getQqchGeneralConditionList(@Validated(ValidationGroups.Select.class) QqchGeneralCondition qqchGeneralConditionParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchGeneralConditionController extends BaseController {
         return getDataTableAjaxResult(qqchGeneralConditionList);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:add")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:add")
     @PostMapping("/add")
     public AjaxResult insertQqchGeneralCondition(@Validated(ValidationGroups.Save.class) @RequestBody QqchGeneralCondition qqchGeneralConditionParam) {
         qqchGeneralConditionService.insertQqchGeneralCondition(qqchGeneralConditionParam);
         return AjaxResult.success(qqchGeneralConditionParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:update")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:update")
     @PostMapping("/update")
     public AjaxResult updateQqchGeneralCondition(@Validated(ValidationGroups.Update.class) @RequestBody QqchGeneralCondition qqchGeneralConditionParam) {
         return toAjax(qqchGeneralConditionService.updateQqchGeneralCondition(qqchGeneralConditionParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:update")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchGeneralConditionList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchGeneralCondition> qqchGeneralConditionListParam) {
         return toAjax(qqchGeneralConditionService.updateQqchGeneralConditionList(qqchGeneralConditionListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:remove")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchGeneralCondition(@Validated(ValidationGroups.Delete.class) @RequestBody QqchGeneralCondition qqchGeneralConditionParam) {
         return toAjax(qqchGeneralConditionService.deleteQqchGeneralCondition(qqchGeneralConditionParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:remove")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchGeneralConditionByPks(@PathVariable Long[] ids) {
         List<Long> qqchGeneralConditionPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchGeneralConditionController extends BaseController {
      * @param qqchGeneralConditionVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchGeneralCondition:save")
+//    @PreAuthorize(hasPermi = "qqchGeneralCondition:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchGeneralConditionVo qqchGeneralConditionVo) {
         qqchGeneralConditionService.save(qqchGeneralConditionVo);

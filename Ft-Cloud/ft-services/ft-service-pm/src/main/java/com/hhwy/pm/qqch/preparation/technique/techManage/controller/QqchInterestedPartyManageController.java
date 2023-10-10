@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchInterestedPartyManage;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchInterestedPartyManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techManage.service.IQqchInterestedPartyManageService;
@@ -32,14 +32,14 @@ public class QqchInterestedPartyManageController extends BaseController {
     private IQqchInterestedPartyManageService qqchInterestedPartyManageService;
 
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:list")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:list")
     @GetMapping
     public AjaxResult getQqchInterestedPartyManage(@Validated(ValidationGroups.Get.class) QqchInterestedPartyManage qqchInterestedPartyManageParam) {
         QqchInterestedPartyManage qqchInterestedPartyManage = qqchInterestedPartyManageService.getQqchInterestedPartyManage(qqchInterestedPartyManageParam);
         return AjaxResult.success(qqchInterestedPartyManage);
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:list")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:list")
     @GetMapping("/list")
     public AjaxResult getQqchInterestedPartyManageList(@Validated(ValidationGroups.Select.class) QqchInterestedPartyManage qqchInterestedPartyManageParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchInterestedPartyManageController extends BaseController {
         return getDataTableAjaxResult(qqchInterestedPartyManageList);
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:add")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:add")
     @PostMapping("/add")
     public AjaxResult insertQqchInterestedPartyManage(@Validated(ValidationGroups.Save.class) @RequestBody QqchInterestedPartyManage qqchInterestedPartyManageParam) {
         qqchInterestedPartyManageService.insertQqchInterestedPartyManage(qqchInterestedPartyManageParam);
         return AjaxResult.success(qqchInterestedPartyManageParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:update")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:update")
     @PostMapping("/update")
     public AjaxResult updateQqchInterestedPartyManage(@Validated(ValidationGroups.Update.class) @RequestBody QqchInterestedPartyManage qqchInterestedPartyManageParam) {
         return toAjax(qqchInterestedPartyManageService.updateQqchInterestedPartyManage(qqchInterestedPartyManageParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:update")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchInterestedPartyManageList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchInterestedPartyManage> qqchInterestedPartyManageListParam) {
         return toAjax(qqchInterestedPartyManageService.updateQqchInterestedPartyManageList(qqchInterestedPartyManageListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:remove")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchInterestedPartyManage(@Validated(ValidationGroups.Delete.class) @RequestBody QqchInterestedPartyManage qqchInterestedPartyManageParam) {
         return toAjax(qqchInterestedPartyManageService.deleteQqchInterestedPartyManage(qqchInterestedPartyManageParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:remove")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchInterestedPartyManageByPks(@PathVariable Long[] ids) {
         List<Long> qqchInterestedPartyManagePkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchInterestedPartyManageController extends BaseController {
      * @param qqchInterestedPartyManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:save")
+//    @PreAuthorize(hasPermi = "qqchInterestedPartyManage:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchInterestedPartyManageVo qqchInterestedPartyManageVo) {
         qqchInterestedPartyManageService.save(qqchInterestedPartyManageVo);

@@ -72,6 +72,17 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             return xmslContractInfo;
         }
         XmslContractInfo contractInfo = new XmslContractInfo();
+        projectBeanToContract(projectInfo, contractInfo);
+
+        contractInfo.setVersion(BigDecimal.valueOf(1.0));
+        contractInfo.setId(IdWorker.createId());
+        contractInfo.setCreateUser(SecurityUtils.getUserName());
+        contractInfo.setCreateTime(DateUtils.getNowDate());
+        xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
+        return xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
+    }
+    //项目信息写入合同实体
+    private void projectBeanToContract (ProjectBasicInfo projectInfo, XmslContractInfo contractInfo) {
         contractInfo.setProjectCode(projectInfo.getProjectCode());
         contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
         contractInfo.setProjectName(projectInfo.getProjectName());
@@ -107,13 +118,6 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //编制人
         contractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
         contractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
-
-        contractInfo.setVersion(BigDecimal.valueOf(1.0));
-        contractInfo.setId(IdWorker.createId());
-        contractInfo.setCreateUser(SecurityUtils.getUserName());
-        contractInfo.setCreateTime(DateUtils.getNowDate());
-        xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
-        return xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
     }
 
 
@@ -129,7 +133,6 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     /**
      *  回显接口
      *
-     * @param xmslContractInfo
      * @return
      */
     public XmslContractInfo getXmslContractInfo(XmslContractInfo xmslContractInfoParam) {
@@ -347,18 +350,16 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
 
     /***
      * 功能描述:  项目信息修改同步
-     * @param xmslContractInfo
+     * @param projectInfo
      * @return int
      * 作者: fushudong
      * 时间: 2023/10/9
      */
-    public void updateProjectInfo(XmslContractInfo xmslContractInfo) {
-        xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
-        xmslContractInfo.setUpdateTime(DateUtils.getNowDate());
+    public void updateProjectInfo(ProjectBasicInfo projectInfo) {
         //获取最新有效版本的合同信息
-        XmslContractInfo contractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
-        if (contractInfo == null) return;
-        BigDecimal version = contractInfo.getVersion();
+        XmslContractInfo latestContractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        if (latestContractInfo == null) return;
+        BigDecimal version = latestContractInfo.getVersion();
         //查询当前版本是否是数据库中最大版本
         XmslContractInfo xmslContractInfo1 = new XmslContractInfo();
         xmslContractInfo1.setVersion(version);
@@ -367,8 +368,13 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if (contractInfo1 != null){
             objects.add(contractInfo1);
         }
-        objects.add(contractInfo);
-        objects.forEach(p -> xmslContractInfoMapper.updateXmslContractInfo(xmslContractInfo));
+        objects.add(latestContractInfo);
+        objects.forEach(contractInfo -> {
+            this.projectBeanToContract(projectInfo, contractInfo);
+            contractInfo.setUpdateUser(SecurityUtils.getUserName());
+            contractInfo.setUpdateTime(DateUtils.getNowDate());
+            xmslContractInfoMapper.updateXmslContractInfo(contractInfo);
+        });
     }
 
     @Transactional

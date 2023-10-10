@@ -124,13 +124,16 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                 jdglWeekImagePlan.setUpdateUser(SecurityUtils.getUserName());
                 jdglWeekImagePlan.setUpdateTime(DateUtils.getNowDate());
                 String wbsCode = jdglWeekImagePlan.getWbsCode();
+                Long pid = jdglWeekImagePlan.getPid();
                 if(!CollectionUtils.isEmpty(list)) {
+                    JdglWeekImagePlan imagePlan = jdglWeekImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
                     BigDecimal compValue = new BigDecimal(0);
                     BigDecimal designQuantity = jdglWeekImagePlan.getDesignQuantity();
                     BigDecimal planCompQuantity = jdglWeekImagePlan.getPlanCompQuantity();
+                    if(imagePlan != null) designQuantity = imagePlan.getDesignQuantity();
                     BigDecimal rate = new BigDecimal(0);
                     if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                        rate = planCompQuantity.divide(designQuantity);
+                        rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
                     }
                     List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                     if(!CollectionUtils.isEmpty(collect)) {
@@ -210,7 +213,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             imagePlan.setId(IdWorker.createId());
 //            jdglYearImagePlan.setPid(jdglMainPlanItem.getPid());
             imagePlan.setPtVar1(jdglMainPlanItem.getId() + "");
-            imagePlan.setPtVar2(jdglMainPlanItem.getPid() + "");
+            imagePlan.setPtVar2(jdglMainPlanItem.getPid() == null ? null : jdglMainPlanItem.getPid() + "");
             imagePlan.setPlanId(jdglWeekPlanParam.getId());
             imagePlan.setWorkId(jdglMainPlanItem.getId());
             imagePlan.setWorkCode(jdglMainPlanItem.getItemCode());
@@ -231,7 +234,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
 
         if(!CollectionUtils.isEmpty(returnList)) {
             for (JdglWeekImagePlan imagePlan : returnList) {
-                JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> imagePlan.getPtVar2().equals(vo.getPtVar1())).findFirst().orElse(null);
+                JdglWeekImagePlan imagePlan1 = returnList.stream().filter(vo -> vo.getPtVar1().equals(imagePlan.getPtVar2())).findFirst().orElse(null);
                 if(imagePlan1 != null) imagePlan.setPid(imagePlan1.getId());
             }
         }
@@ -252,5 +255,10 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
     @Override
     public List<JdglWeekImagePlan> getWbsListByYearAndWeek(String year, String week) {
         return jdglWeekImagePlanMapper.getWbsListByYearAndWeek(year, week);
+    }
+
+    @Override
+    public BigDecimal getThisPlanAmt(Long id) {
+        return jdglWeekImagePlanMapper.getThisPlanAmt(id);
     }
 }

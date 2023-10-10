@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
@@ -19,6 +20,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,8 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     private ISysSyncInfoService sysSyncInfoService;
     @Autowired
     private IXmslProjectBasicInfoService projectBasicInfoService;
+    @Autowired
+    RocketMQTemplate rocketMQTemplate;
 
     public QqchPerformInspection getQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         QqchPerformInspection inspection = qqchPerformInspectionMapper.getQqchPerformInspection(qqchPerformInspection);
@@ -79,10 +83,10 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         List<QqchPerformInspectionDetail> batchAddList = handleDetailList(qqchPerformInspection, detailList);
         qqchPerformInspectionMapper.insertQqchPerformInspection(qqchPerformInspection);
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
-        //若为发起，推送数据到总部
-        if("1".equals(qqchPerformInspection.getPtVar5())){
+//        //若为发起，推送数据到总部
+//        if("1".equals(qqchPerformInspection.getPtVar5())){
             sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);    
-        }
+//        }
         return qqchPerformInspection.getId();
     }
 
@@ -114,7 +118,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         //修改主表
         int result = qqchPerformInspectionMapper.updateQqchPerformInspection(qqchPerformInspection);
         //若为发起，推送数据到总部
-        if(qqchPerformInspection.getPtVar5().equals("1")) {
+        if("1".equals(qqchPerformInspection.getPtVar5())) {
             sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);
         }
         return result;
@@ -133,10 +137,12 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     public int deleteQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         //流程已完成的不可删除
         //暂时未加流程
-
         qqchPerformInspection.setDelUser(SecurityUtils.getUserName());
         qqchPerformInspection.setDelTime(DateUtils.getNowDate());
-        return qqchPerformInspectionMapper.deleteQqchPerformInspection(qqchPerformInspection);
+        int result = qqchPerformInspectionMapper.deleteQqchPerformInspection(qqchPerformInspection);
+        //推送总部
+        rocketMQTemplate.convertAndSend("qqch_performInspection:delete", qqchPerformInspection.getId()+"");
+        return result;
     }
 
     @Transactional

@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.QqchSubpackageBidPlan;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.domain.vo.QqchSubpackageBidPlanVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.subpackagePlan.service.IQqchSubpackageBidPlanService;
@@ -33,14 +33,14 @@ public class QqchSubpackageBidPlanController extends BaseController {
     private IQqchSubpackageBidPlanService qqchSubpackageBidPlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:list")
     @GetMapping
     public AjaxResult getQqchSubpackageBidPlan(@Validated(ValidationGroups.Get.class) QqchSubpackageBidPlan qqchSubpackageBidPlanParam) {
         QqchSubpackageBidPlan qqchSubpackageBidPlan = qqchSubpackageBidPlanService.getQqchSubpackageBidPlan(qqchSubpackageBidPlanParam);
         return AjaxResult.success(qqchSubpackageBidPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchSubpackageBidPlanList(@Validated(ValidationGroups.Select.class) QqchSubpackageBidPlan qqchSubpackageBidPlanParam) {
         startPage();
@@ -48,32 +48,32 @@ public class QqchSubpackageBidPlanController extends BaseController {
         return getDataTableAjaxResult(qqchSubpackageBidPlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:add")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSubpackageBidPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchSubpackageBidPlan qqchSubpackageBidPlanParam) {
         qqchSubpackageBidPlanService.insertQqchSubpackageBidPlan(qqchSubpackageBidPlanParam);
         return AjaxResult.success(qqchSubpackageBidPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:update")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSubpackageBidPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchSubpackageBidPlan qqchSubpackageBidPlanParam) {
         return toAjax(qqchSubpackageBidPlanService.updateQqchSubpackageBidPlan(qqchSubpackageBidPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:update")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSubpackageBidPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSubpackageBidPlan> qqchSubpackageBidPlanListParam) {
         return toAjax(qqchSubpackageBidPlanService.updateQqchSubpackageBidPlanList(qqchSubpackageBidPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSubpackageBidPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSubpackageBidPlan qqchSubpackageBidPlanParam) {
         return toAjax(qqchSubpackageBidPlanService.deleteQqchSubpackageBidPlan(qqchSubpackageBidPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSubpackageBidPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchSubpackageBidPlanPkList = Arrays.asList(ids);
@@ -103,7 +103,7 @@ public class QqchSubpackageBidPlanController extends BaseController {
      * @param qqchSubpackageBidPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:save")
+//    @PreAuthorize(hasPermi = "qqchSubpackageBidPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchSubpackageBidPlanVo qqchSubpackageBidPlanVo) {
         qqchSubpackageBidPlanService.save(qqchSubpackageBidPlanVo);

@@ -35,14 +35,13 @@ public class XmslMaterialReportController extends BaseController {
     @Autowired
     private IXmslMaterialReportService xmslMaterialReportService;
 
-    @PreAuthorize(hasPermi = "xmslMaterialReport:list")
+//    @PreAuthorize(hasPermi = "xmslMaterialReport:list")
     @GetMapping("/list")
     public AjaxResult getXmslMaterialReportList(@Validated(ValidationGroups.Select.class) XmslMaterialReport xmslMaterialReportParam) {
         startPage();
         List<XmslMaterialReport> xmslMaterialReportList = xmslMaterialReportService.getXmslMaterialReportList(xmslMaterialReportParam);
         return getDataTableAjaxResult(xmslMaterialReportList);
     }
-
 
     @GetMapping("/exportData")
     public void export(HttpServletResponse response) throws IOException {

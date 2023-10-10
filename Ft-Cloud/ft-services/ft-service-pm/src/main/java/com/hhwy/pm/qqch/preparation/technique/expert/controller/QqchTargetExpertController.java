@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.QqchTargetExpert;
 import com.hhwy.pm.qqch.preparation.technique.expert.domain.vo.QqchTargetExpertVo;
 import com.hhwy.pm.qqch.preparation.technique.expert.service.IQqchTargetExpertService;
@@ -32,14 +32,14 @@ public class QqchTargetExpertController extends BaseController {
     private IQqchTargetExpertService qqchTargetExpertService;
 
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
     @GetMapping
     public AjaxResult getQqchTargetExpert(@Validated(ValidationGroups.Get.class) QqchTargetExpert qqchTargetExpertParam) {
         QqchTargetExpert qqchTargetExpert = qqchTargetExpertService.getQqchTargetExpert(qqchTargetExpertParam);
         return AjaxResult.success(qqchTargetExpert);
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:list")
     @GetMapping("/list")
     public AjaxResult getQqchTargetExpertList(@Validated(ValidationGroups.Select.class) QqchTargetExpert qqchTargetExpertParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchTargetExpertController extends BaseController {
         return getDataTableAjaxResult(qqchTargetExpertList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTargetExpert(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
         qqchTargetExpertService.insertQqchTargetExpert(qqchTargetExpertParam);
         return AjaxResult.success(qqchTargetExpertParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTargetExpert(@Validated(ValidationGroups.Update.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
         return toAjax(qqchTargetExpertService.updateQqchTargetExpert(qqchTargetExpertParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTargetExpertList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTargetExpert> qqchTargetExpertListParam) {
         return toAjax(qqchTargetExpertService.updateQqchTargetExpertList(qqchTargetExpertListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTargetExpert(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTargetExpert qqchTargetExpertParam) {
         return toAjax(qqchTargetExpertService.deleteQqchTargetExpert(qqchTargetExpertParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTargetExpertByPks(@PathVariable Long[] ids) {
         List<Long> qqchTargetExpertPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchTargetExpertController extends BaseController {
      * @param qqchTargetExpertVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTargetExpert:save")
+//    @PreAuthorize(hasPermi = "qqchTargetExpert:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTargetExpertVo qqchTargetExpertVo) {
         qqchTargetExpertService.save(qqchTargetExpertVo);

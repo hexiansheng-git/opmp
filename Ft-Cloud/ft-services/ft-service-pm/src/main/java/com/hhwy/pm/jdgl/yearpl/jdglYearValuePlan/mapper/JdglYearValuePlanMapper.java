@@ -29,4 +29,6 @@ public interface JdglYearValuePlanMapper {
     int deleteJdglYearValuePlanByPks(@Param("jdglYearValuePlanPkList") List<Long> jdglYearValuePlanPkList);
 
     List<JdglYearValuePlan> getBillListByYear(@Param("year") String year);
+
+    int deleteJdglYearValuePlanByYearPlanId(@Param("yearPlanId") Long yearPlanId);
 }

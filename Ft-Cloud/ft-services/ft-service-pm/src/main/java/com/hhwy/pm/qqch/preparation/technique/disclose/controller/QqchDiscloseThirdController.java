@@ -31,7 +31,7 @@ public class QqchDiscloseThirdController extends BaseController {
     @Autowired
     private IQqchDiscloseThirdService qqchDiscloseThirdService;
 
-    @PreAuthorize(hasPermi = "qqchDiscloseThird:list")
+//    @PreAuthorize(hasPermi = "qqchDiscloseThird:list")
     @GetMapping("/getTreeList")
     public AjaxResult getTreeList(BigDecimal version) {
         QqchDiscloseThirdVo qqchDiscloseThirdVo = qqchDiscloseThirdService.getQqchDiscloseThirdList(version);
@@ -43,14 +43,14 @@ public class QqchDiscloseThirdController extends BaseController {
      * @param masterId
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDiscloseThird:list")
+//    @PreAuthorize(hasPermi = "qqchDiscloseThird:list")
     @GetMapping("/getDetailList")
     public AjaxResult getDetailList(Long masterId) {
         List<QqchDiscloseThirdDetail> list = qqchDiscloseThirdService.getDetailList(masterId);
         return AjaxResult.success(list);
     }
 
-    @PreAuthorize(hasPermi = "qqchDiscloseThird:add")
+//    @PreAuthorize(hasPermi = "qqchDiscloseThird:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchDiscloseThirdVo qqchDiscloseThirdVo) {

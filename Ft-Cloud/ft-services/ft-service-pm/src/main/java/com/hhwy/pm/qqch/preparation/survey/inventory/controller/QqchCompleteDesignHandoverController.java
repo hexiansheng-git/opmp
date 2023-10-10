@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchCompleteDesignHandoverVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchCompleteDesignHandoverService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -41,7 +41,7 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      * @param qqchCompleteDesignHandoverVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:save")
+//    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         qqchCompleteDesignHandoverService.save(qqchCompleteDesignHandoverVo);
@@ -53,7 +53,7 @@ public class QqchCompleteDesignHandoverController extends BaseController {
      * @param qqchCompleteDesignHandoverVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:save")
+//    @PreAuthorize(hasPermi = "qqchCompleteDesignHandover:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchCompleteDesignHandoverVo qqchCompleteDesignHandoverVo) {
         qqchCompleteDesignHandoverService.confirm(qqchCompleteDesignHandoverVo);

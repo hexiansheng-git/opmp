@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.domain.QqchProjectBreakEvenPoint;
 import com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.domain.vo.QqchProjectBreakEvenPointVo;
 import com.hhwy.pm.qqch.preparation.costControl.breakEvenPoint.service.IQqchProjectBreakEvenPointService;
@@ -32,14 +32,14 @@ public class QqchProjectBreakEvenPointController extends BaseController {
     private IQqchProjectBreakEvenPointService qqchProjectBreakEvenPointService;
 
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:list")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:list")
     @GetMapping
     public AjaxResult getQqchProjectBreakEvenPoint(@Validated(ValidationGroups.Get.class) QqchProjectBreakEvenPoint qqchProjectBreakEvenPointParam) {
         QqchProjectBreakEvenPoint qqchProjectBreakEvenPoint = qqchProjectBreakEvenPointService.getQqchProjectBreakEvenPoint(qqchProjectBreakEvenPointParam);
         return AjaxResult.success(qqchProjectBreakEvenPoint);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:list")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:list")
     @GetMapping("/list")
     public AjaxResult getQqchProjectBreakEvenPointList(@Validated(ValidationGroups.Select.class) QqchProjectBreakEvenPoint qqchProjectBreakEvenPointParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchProjectBreakEvenPointController extends BaseController {
         return getDataTableAjaxResult(qqchProjectBreakEvenPointList);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:add")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:add")
     @PostMapping("/add")
     public AjaxResult insertQqchProjectBreakEvenPoint(@Validated(ValidationGroups.Save.class) @RequestBody QqchProjectBreakEvenPoint qqchProjectBreakEvenPointParam) {
         qqchProjectBreakEvenPointService.insertQqchProjectBreakEvenPoint(qqchProjectBreakEvenPointParam);
         return AjaxResult.success(qqchProjectBreakEvenPointParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:update")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:update")
     @PostMapping("/update")
     public AjaxResult updateQqchProjectBreakEvenPoint(@Validated(ValidationGroups.Update.class) @RequestBody QqchProjectBreakEvenPoint qqchProjectBreakEvenPointParam) {
         return toAjax(qqchProjectBreakEvenPointService.updateQqchProjectBreakEvenPoint(qqchProjectBreakEvenPointParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:update")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchProjectBreakEvenPointList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchProjectBreakEvenPoint> qqchProjectBreakEvenPointListParam) {
         return toAjax(qqchProjectBreakEvenPointService.updateQqchProjectBreakEvenPointList(qqchProjectBreakEvenPointListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:remove")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchProjectBreakEvenPoint(@Validated(ValidationGroups.Delete.class) @RequestBody QqchProjectBreakEvenPoint qqchProjectBreakEvenPointParam) {
         return toAjax(qqchProjectBreakEvenPointService.deleteQqchProjectBreakEvenPoint(qqchProjectBreakEvenPointParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:remove")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchProjectBreakEvenPointByPks(@PathVariable Long[] ids) {
         List<Long> qqchProjectBreakEvenPointPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchProjectBreakEvenPointController extends BaseController {
      * @param qqchProjectBreakEvenPointVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:save")
+//    @PreAuthorize(hasPermi = "qqchProjectBreakEvenPoint:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchProjectBreakEvenPointVo qqchProjectBreakEvenPointVo) {
         qqchProjectBreakEvenPointService.save(qqchProjectBreakEvenPointVo);

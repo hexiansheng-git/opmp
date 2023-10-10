@@ -140,12 +140,8 @@ public class ReviewController extends BaseController {
      */
     @PostMapping("/listener")
     @ResponseBody
-    public AjaxResult listener(@RequestBody Map<String, Object> map) {
-//        DelegateTask delegateTask = JSONObject.parseObject(JSONObject.toJSONString(map.get("execution")),DelegateTask.class);
-//        Map varMap = delegateTask.getVariables();
-//        String businessId = (String)varMap.get("businessId");
-//        xcsbCheckEquInfoXzAndZlService.listener(Long.parseLong(businessId));
-        qqchReviewService.listener(1681595729291907072L);
+    public AjaxResult listener(Long id) {
+        qqchReviewService.listener(id);
         return AjaxResult.success("成功");
     }
 
@@ -184,6 +180,15 @@ public class ReviewController extends BaseController {
     @GetMapping("/preparationThirdStageWarn")
     AjaxResult preparationThirdStageWarn(){
         qqchReviewService.preparationThirdStageWarn();
+        return AjaxResult.success();
+    }
+
+    /**
+     * 前期策划评审预警
+     */
+    @GetMapping("/reviewWarn")
+    AjaxResult reviewWarn(){
+        qqchReviewService.reviewWarn();
         return AjaxResult.success();
     }
 }

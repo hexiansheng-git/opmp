@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.QqchKeyDifficultProjectArchives;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.domain.vo.KeyDifficultWbsVo;
 import com.hhwy.pm.qqch.preparation.quality.qualityRecord.service.IQqchKeyDifficultProjectArchivesService;
@@ -32,14 +32,14 @@ public class QqchKeyDifficultProjectArchivesController extends BaseController {
     private IQqchKeyDifficultProjectArchivesService qqchKeyDifficultProjectArchivesService;
 
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:list")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:list")
     @GetMapping
     public AjaxResult getQqchKeyDifficultProjectArchives(@Validated(ValidationGroups.Get.class) QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchivesParam) {
         QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchives = qqchKeyDifficultProjectArchivesService.getQqchKeyDifficultProjectArchives(qqchKeyDifficultProjectArchivesParam);
         return AjaxResult.success(qqchKeyDifficultProjectArchives);
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:list")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:list")
     @GetMapping("/list")
     public AjaxResult getQqchKeyDifficultProjectArchivesList(@Validated(ValidationGroups.Select.class) QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchivesParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchKeyDifficultProjectArchivesController extends BaseController {
         return getDataTableAjaxResult(qqchKeyDifficultProjectArchivesList);
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:add")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:add")
     @PostMapping("/add")
     public AjaxResult insertQqchKeyDifficultProjectArchives(@Validated(ValidationGroups.Save.class) @RequestBody QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchivesParam) {
         qqchKeyDifficultProjectArchivesService.insertQqchKeyDifficultProjectArchives(qqchKeyDifficultProjectArchivesParam);
         return AjaxResult.success(qqchKeyDifficultProjectArchivesParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:update")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:update")
     @PostMapping("/update")
     public AjaxResult updateQqchKeyDifficultProjectArchives(@Validated(ValidationGroups.Update.class) @RequestBody QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchivesParam) {
         return toAjax(qqchKeyDifficultProjectArchivesService.updateQqchKeyDifficultProjectArchives(qqchKeyDifficultProjectArchivesParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:update")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchKeyDifficultProjectArchivesList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchKeyDifficultProjectArchives> qqchKeyDifficultProjectArchivesListParam) {
         return toAjax(qqchKeyDifficultProjectArchivesService.updateQqchKeyDifficultProjectArchivesList(qqchKeyDifficultProjectArchivesListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:remove")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchKeyDifficultProjectArchives(@Validated(ValidationGroups.Delete.class) @RequestBody QqchKeyDifficultProjectArchives qqchKeyDifficultProjectArchivesParam) {
         return toAjax(qqchKeyDifficultProjectArchivesService.deleteQqchKeyDifficultProjectArchives(qqchKeyDifficultProjectArchivesParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:remove")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchKeyDifficultProjectArchivesByPks(@PathVariable Long[] ids) {
         List<Long> qqchKeyDifficultProjectArchivesPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchKeyDifficultProjectArchivesController extends BaseController {
      * @param keyDifficultWbsVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:save")
+//    @PreAuthorize(hasPermi = "qqchKeyDifficultProjectArchives:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody KeyDifficultWbsVo keyDifficultWbsVo) {
         qqchKeyDifficultProjectArchivesService.save(keyDifficultWbsVo);

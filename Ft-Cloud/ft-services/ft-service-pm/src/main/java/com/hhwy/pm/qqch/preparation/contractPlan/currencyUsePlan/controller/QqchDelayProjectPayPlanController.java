@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.currencyUsePlan.domain.QqchDelayProjectPayPlan;
 import com.hhwy.pm.qqch.preparation.contractPlan.currencyUsePlan.domain.vo.QqchDelayProjectPayPlanVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.currencyUsePlan.service.IQqchDelayProjectPayPlanService;
@@ -32,7 +32,7 @@ public class QqchDelayProjectPayPlanController extends BaseController {
     private IQqchDelayProjectPayPlanService qqchDelayProjectPayPlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:list")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:list")
     @GetMapping
     public AjaxResult getQqchDelayProjectPayPlan(@Validated(ValidationGroups.Get.class) QqchDelayProjectPayPlan qqchDelayProjectPayPlanParam) {
         QqchDelayProjectPayPlan qqchDelayProjectPayPlan = qqchDelayProjectPayPlanService.getQqchDelayProjectPayPlan(qqchDelayProjectPayPlanParam);
@@ -46,32 +46,32 @@ public class QqchDelayProjectPayPlanController extends BaseController {
         return getDataTableAjaxResult(qqchDelayProjectPayPlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:add")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchDelayProjectPayPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchDelayProjectPayPlan qqchDelayProjectPayPlanParam) {
         qqchDelayProjectPayPlanService.insertQqchDelayProjectPayPlan(qqchDelayProjectPayPlanParam);
         return AjaxResult.success(qqchDelayProjectPayPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:update")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchDelayProjectPayPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchDelayProjectPayPlan qqchDelayProjectPayPlanParam) {
         return toAjax(qqchDelayProjectPayPlanService.updateQqchDelayProjectPayPlan(qqchDelayProjectPayPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:update")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchDelayProjectPayPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchDelayProjectPayPlan> qqchDelayProjectPayPlanListParam) {
         return toAjax(qqchDelayProjectPayPlanService.updateQqchDelayProjectPayPlanList(qqchDelayProjectPayPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchDelayProjectPayPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchDelayProjectPayPlan qqchDelayProjectPayPlanParam) {
         return toAjax(qqchDelayProjectPayPlanService.deleteQqchDelayProjectPayPlan(qqchDelayProjectPayPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchDelayProjectPayPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchDelayProjectPayPlanPkList = Arrays.asList(ids);
@@ -101,7 +101,7 @@ public class QqchDelayProjectPayPlanController extends BaseController {
      * @param qqchDelayProjectPayPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:save")
+//    @PreAuthorize(hasPermi = "qqchDelayProjectPayPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDelayProjectPayPlanVo qqchDelayProjectPayPlanVo) {
         qqchDelayProjectPayPlanService.save(qqchDelayProjectPayPlanVo);
