@@ -32,7 +32,7 @@ public interface XmslContractListMapper {
 
     int deleteXmslContractList(XmslContractList xmslContractList);
 
-    int deleteXmslContractListByPks(@Param("xmslContractListPkList") List<Long> xmslContractListPkList);
+    int deleteXmslContractListByPks(@Param("xmslContractListPkList") List<Long> xmslContractListPkList, @Param("masterId") Long masterId);
 
     void deleteByIds(@Param("list") Collection<Long> list);
 
