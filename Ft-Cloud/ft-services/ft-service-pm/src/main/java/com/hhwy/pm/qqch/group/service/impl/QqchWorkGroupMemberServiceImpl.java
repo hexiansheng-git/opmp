@@ -130,6 +130,7 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
             member.setId(IdWorker.createId());
             member.setDirector(qqchWorkGroupMember.getDirector());
             member.setDirectorId(qqchWorkGroupMember.getDirectorId());
+            member.setDirectorUserName(qqchWorkGroupMember.getDirectorUserName());
             resultMember.add(member);
         }
 
@@ -166,10 +167,10 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
 
             //制作数组
             for (QqchWorkGroupMember member : resultMember) {
-                Long directorId = member.getDirectorId();
+                String directorUserName = member.getDirectorUserName();
                 List<QqchWorkGroupMember> children = new ArrayList<>();
                 for (QqchWorkGroupMember qqchWorkGroupMember : allMember) {
-                    if(directorId.equals(qqchWorkGroupMember.getDirectorId())){
+                    if(directorUserName.equals(qqchWorkGroupMember.getDirectorUserName())){
                         children.add(qqchWorkGroupMember);
                     }
                 }

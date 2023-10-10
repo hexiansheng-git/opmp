@@ -56,6 +56,12 @@ public class QqchWorkGroupMember extends BaseEntity {
     @NotBlank(message = "请选择负责人！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String director;
     /**
+     * 字段描述：负责人用户名
+     */
+    @JsonProperty
+    @Excel(name = "负责人用户名")
+    private String directorUserName;
+    /**
      * 字段描述：负责人id
      */
     @JsonSerialize(using = ToStringSerializer.class)
