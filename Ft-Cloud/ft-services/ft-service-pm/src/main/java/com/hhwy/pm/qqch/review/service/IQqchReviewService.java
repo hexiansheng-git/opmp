@@ -57,7 +57,7 @@ public interface IQqchReviewService {
     @Deprecated
     void updateFinishNum(String stageIdentity, String moduleIdentity);
 
-    public void canAdjust();
+    void canAdjust();
 
     void listener(Long id);
 
