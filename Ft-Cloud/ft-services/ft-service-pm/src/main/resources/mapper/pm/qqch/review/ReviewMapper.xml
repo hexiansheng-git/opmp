@@ -169,6 +169,11 @@
         </where>
         order by create_time desc
     </select>
+
+    <select id="getReviewByPlanStage" resultMap="QqchReviewResultMap">
+        <include refid="selectQqchReviewVo"/>
+        where del_flag = '0' and plan_stage = #{planStage}
+    </select>
     <select id="getFinishedReviewCountByStage" resultType="java.lang.Integer">
         select count(*) from qqch_review
         where del_flag = '0' and plan_stage = #{planStage} and review_status in ('2','3','4')

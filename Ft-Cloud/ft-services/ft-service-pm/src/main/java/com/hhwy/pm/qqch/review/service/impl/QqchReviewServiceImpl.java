@@ -425,6 +425,16 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     /**
+     * 通过阶段获取前期策划评审数据
+     * @param planStage
+     * @return
+     */
+    @Override
+    public Review getReviewByPlanStage(String planStage){
+        return reviewMapper.getReviewByPlanStage(planStage);
+    }
+
+    /**
      * 根据阶段获取该阶段是否已编制完成
      * @param planStage
      * @return

@@ -61,6 +61,12 @@ public interface IQqchReviewService {
 
     void listener(Long id);
 
+    /**
+     * 通过阶段获取前期策划评审数据
+     * @param planStage
+     * @return
+     */
+    Review getReviewByPlanStage(String planStage);
 
     /**
      * 获取到了那个阶段

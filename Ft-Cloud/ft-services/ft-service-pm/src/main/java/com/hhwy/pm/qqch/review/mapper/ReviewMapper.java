@@ -29,6 +29,13 @@ public interface ReviewMapper {
     int deleteQqchReviewByPks(@Param("reviewPkList") List<Long> reviewPkList);
 
     /**
+     * 通过阶段获取前期策划评审数据
+     * @param planStage
+     * @return
+     */
+    Review getReviewByPlanStage(@Param("planStage") String planStage);
+
+    /**
      * 根据阶段获取该阶段是否已编制完成
      * @param planStage
      * @return

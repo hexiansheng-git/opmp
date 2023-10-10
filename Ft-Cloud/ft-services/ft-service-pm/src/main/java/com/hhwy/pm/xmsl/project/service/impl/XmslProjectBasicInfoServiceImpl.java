@@ -4,6 +4,8 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
+import com.hhwy.pm.qqch.review.domain.Review;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.*;
@@ -62,6 +64,9 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
 
     @Autowired
     private IQqchWorkGroupService qqchWorkGroupService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
     /**
      * 根据id获取项目基本信息
@@ -281,6 +286,12 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
             projectInfoWithOther.setPlanEstablishDirector(workGroup.getPlanEstablishDirector());
             projectInfoWithOther.setContactWay(workGroup.getContactWay());
             projectInfoWithOther.setProjectOverview(workGroup.getProjectOverview());
+        }
+
+        //获取前期策划评审第三阶段数据
+        Review review = qqchReviewService.getReviewByPlanStage("3");
+        if(review != null){
+            projectInfoWithOther.setPlanApprovalCompleteDate(review.getReviewCompleteDate());
         }
 
         return projectInfoWithOther;
