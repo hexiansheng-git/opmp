@@ -188,6 +188,9 @@
         where jyp.id = jyip.plan_id
         group by jyip.wbs_code,jyip.wbs_name
     </select>
+    <select id="getThisPlanAmt" resultType="java.math.BigDecimal">
+        select sum(ifnull(plan_comp_value,0)) from jdgl_week_image_plan where plan_id = #{planId}
+    </select>
 
     <insert id="insertJdglWeekImagePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_week_image_plan

@@ -333,9 +333,10 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             }
             iJdglMonthImagePlanService.updateJdglMonthImagePlanList(jdglMonthImagePlans);
         }
-
-
-        // 根据计划完成产值汇总更新年计划产值&未完&
+        BigDecimal thisPlanAmt = iJdglMonthImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglMonthPlan.getExchangeRate();
+        jdglMonthPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglMonthPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
         return jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
     }

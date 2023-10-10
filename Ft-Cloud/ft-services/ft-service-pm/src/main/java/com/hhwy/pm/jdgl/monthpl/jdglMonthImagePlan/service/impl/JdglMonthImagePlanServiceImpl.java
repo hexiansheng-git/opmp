@@ -125,13 +125,16 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                 jdglMonthImagePlan.setUpdateTime(DateUtils.getNowDate());
 
                 String wbsCode = jdglMonthImagePlan.getWbsCode();
+                Long pid = jdglMonthImagePlan.getPid();
                 if(!CollectionUtils.isEmpty(list)) {
+                    JdglMonthImagePlan jdglMonthImagePlan1 = jdglMonthImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
                     BigDecimal compValue = new BigDecimal(0);
                     BigDecimal designQuantity = jdglMonthImagePlan.getDesignQuantity();
                     BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
+                    if(jdglMonthImagePlan1 != null) designQuantity = jdglMonthImagePlan1.getDesignQuantity();
                     BigDecimal rate = new BigDecimal(0);
                     if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
-                        rate = planCompQuantity.divide(designQuantity);
+                        rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
                     }
                     List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                     if(!CollectionUtils.isEmpty(collect)) {
@@ -253,5 +256,10 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
     @Override
     public List<JdglMonthImagePlan> getWbsListByYearAndMonth(String year, String month) {
         return jdglMonthImagePlanMapper.getWbsListByYearAndMonth(year, month);
+    }
+
+    @Override
+    public BigDecimal getThisPlanAmt(Long planId) {
+        return jdglMonthImagePlanMapper.getThisPlanAmt(planId);
     }
 }

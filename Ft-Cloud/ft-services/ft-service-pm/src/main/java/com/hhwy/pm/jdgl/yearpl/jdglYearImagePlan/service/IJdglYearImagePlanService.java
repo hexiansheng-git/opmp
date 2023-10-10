@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
@@ -35,4 +36,6 @@ public interface IJdglYearImagePlanService {
     JdglYearPlan syncFromTotalPlan(JdglYearPlan jdglYearPlanParam);
 
     List<JdglYearImagePlan> getWbsListByYear(String year);
+
+    BigDecimal getThisPlanAmt(Long yearPlanId);
 }

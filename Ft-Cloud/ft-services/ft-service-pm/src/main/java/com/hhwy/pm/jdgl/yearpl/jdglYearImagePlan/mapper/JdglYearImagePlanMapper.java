@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,6 @@ public interface JdglYearImagePlanMapper {
     List<JdglYearImagePlan> getWbsListByYear(String year);
 
     int deleteJdglYearImagePlanByYearPlanId(@Param("yearPlanId") Long yearPlanId);
+
+    BigDecimal getThisPlanAmt(Long yearPlanId);
 }

@@ -390,8 +390,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         // 填充实际产值数据
         for (JdglDayScheduleBill jdglDayScheduleBill : billValueListByRangeDate) {
             Long billId = jdglDayScheduleBill.getBillId();
+            XmslContractList xmslContractList1 = xmslContractListVos.stream().filter(vo -> billId.equals(vo.getId())).findFirst().orElse(null);
             for (XmslContractList xmslContractList : xmslContractListVos) {
-                if(xmslContractList.getAncestors() != null && (xmslContractList.getAncestors() + "," + xmslContractList.getId()).contains(billId+"")) {
+                if(xmslContractList1 != null && xmslContractList1.getAncestors() !=
+                        null && (xmslContractList1.getAncestors() + "," + xmslContractList1.getId()).contains(xmslContractList.getId()+"")) {
                     Long listId = xmslContractList.getId();
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
@@ -408,9 +410,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     }
                     if(billId.equals(listId)) {
                         BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getThisCompDesignNum();
+                        BigDecimal lastTotalDesignNum = planStatisticsBillValueVO.getLastTotalDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getLastTotalDesignNum();
                         planStatisticsBillValueVO.setThisCompDesignNum(jdglDayScheduleBill.getThisQuantity());
                         planStatisticsBillValueVO.setThisCompValue(price.multiply(thisCompDesignNum));
-                        planStatisticsBillValueVO.setThisTotalDesignNum(thisCompDesignNum.add(planStatisticsBillValueVO.getLastTotalDesignNum()));
+                        planStatisticsBillValueVO.setThisTotalDesignNum(thisCompDesignNum.add(lastTotalDesignNum));
 
                     }
                     returnList.add(planStatisticsBillValueVO);
