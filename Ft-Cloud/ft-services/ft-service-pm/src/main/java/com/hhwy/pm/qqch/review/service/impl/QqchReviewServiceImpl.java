@@ -196,11 +196,9 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             this.checkData(qqchReviewList, iData);
             this.updateQqchReviewList(qqchReviewList);
             this.updateFinishNum();
+        }else {
+            this.reviewMapper.insertQqchReviewList(iData);
         }
-        this.reviewMapper.insertQqchReviewList(iData);
-        
-
-        return ;
     }
 
     private void checkData(List<Review> qqchReviewList, List<Review> iData) {
