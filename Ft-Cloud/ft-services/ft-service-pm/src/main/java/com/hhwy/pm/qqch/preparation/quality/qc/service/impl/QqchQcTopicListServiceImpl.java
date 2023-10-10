@@ -1,8 +1,11 @@
 package com.hhwy.pm.qqch.preparation.quality.qc.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -12,10 +15,15 @@ import com.hhwy.pm.qqch.preparation.quality.qc.mapper.QqchQcTopicListMapper;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcTopicListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +45,10 @@ public class QqchQcTopicListServiceImpl implements IQqchQcTopicListService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     public QqchQcTopicListVo getQqchQcTopicListList(BigDecimal version) {
         QqchQcTopicListVo vo = new QqchQcTopicListVo();
@@ -90,5 +102,68 @@ public class QqchQcTopicListServiceImpl implements IQqchQcTopicListService {
             String stageIdentity = voParam.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    public List<QqchQcTopicList> getHistoryList(QqchQcTopicList param) {
+        List<QqchQcTopicList> allList = new ArrayList<>();
+
+        // 获取当前租户
+        String currentTenantKey = SecurityUtils.getTenantKey();
+        // 获取当前租户的项目
+        ProjectBasicInfo currentProjectInfo = xmslProjectBasicInfoService.projectInfo();
+        if (currentProjectInfo == null || StringUtils.isBlank(currentProjectInfo.getBusinessAreasAndProducts())) {
+            return allList;
+        }
+
+        // 切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+
+        DynamicDataSourceContextHolder.push("master");
+        // 获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+
+        try {
+            for (SysTenant tenant : tenantList) {
+                if (!currentTenantKey.equals(tenant.getTenantKey())) {
+                    // 切换租户
+                    String tenantKey = tenant.getTenantKey();
+                    String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                    DynamicDataSourceContextHolder.push(dataSource);
+
+                    // 获取项目数据
+                    ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                    if (projectInfo == null || !currentProjectInfo.getBusinessAreasAndProducts()
+                        .equals(projectInfo.getBusinessAreasAndProducts())) {
+                        continue;
+                    }
+
+                    if (StringUtils.isNotBlank(param.getProjectName()) && !projectInfo.getProjectName()
+                        .contains(param.getProjectName())) {
+                        continue;
+                    }
+
+                    BigDecimal version = VersionUtil.getVersion("qqch_qc_topic_list", null);
+                    QqchQcTopicList qryParam = new QqchQcTopicList();
+                    qryParam.setVersion(version);
+                    qryParam.setTopicName(param.getTopicName());
+                    qryParam.setProfessionalCategory(param.getProfessionalCategory());
+                    List<QqchQcTopicList> qcTopicList = qqchQcTopicListMapper.getQqchQcTopicListList(qryParam);
+
+                    if (!CollectionUtils.isEmpty(qcTopicList)) {
+                        QqchQcTopicList qqchQcTopicList = new QqchQcTopicList();
+                        qqchQcTopicList.setProjectId(projectInfo.getProjectId());
+                        qqchQcTopicList.setProjectName(projectInfo.getProjectName());
+                        qqchQcTopicList.setChildren(qcTopicList);
+                        allList.add(qqchQcTopicList);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            throw new CustomBusinessException(e.getMessage());
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+        return allList;
     }
 }

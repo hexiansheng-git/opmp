@@ -9,6 +9,7 @@ import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -207,4 +208,6 @@ public class QqchQcTopicList extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<QqchQcTopicList> children;
 }
