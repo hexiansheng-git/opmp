@@ -2,7 +2,6 @@ package com.hhwy.pm.common.service;
 
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
-import com.hhwy.pm.common.constant.ButtonStatus;
 import com.hhwy.pm.common.constant.PermissionMark;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
@@ -94,7 +93,7 @@ public class CommonService {
         String currentStage = qqchReviewService.getStage();
         if (PmConstant.END_STAGE.equals(currentStage)) {
             permissionMark.setReviewEnd(CommonYesNo.YES);
-            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
+//            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             permissionMark.setMsg("前期策划评审已结束");
             return permissionMark;
         }
@@ -110,7 +109,7 @@ public class CommonService {
         // 查询到的数量不是0个的话 工作计划
         if (qqchWorkPlanList.size() != 1){
             permissionMark.setHavePlan(CommonYesNo.NO);
-            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
+//            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             permissionMark.setMsg("当前不存在工作计划，不可编辑！");
             return permissionMark;
         }
@@ -144,7 +143,7 @@ public class CommonService {
         // 如果没有查询到数据
         if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)){
             permissionMark.setMsg("当前用户在当前阶段没有当前页面的编辑权限!");
-            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
+//            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             permissionMark.setEditable(CommonYesNo.NO);
             return permissionMark;
         }
@@ -154,7 +153,7 @@ public class CommonService {
         // 确认记录不为空的话 则证明当前阶段已经被确认过 无需再进行确认
         if (!CollectionUtils.isEmpty(confirmStatus)){
             permissionMark.setMsg("当前页面在当前阶段已确认完成!");
-            permissionMark.setButtonStatus(ButtonStatus.GREY);
+//            permissionMark.setButtonStatus(ButtonStatus.GREY);
             permissionMark.setConfirmed(CommonYesNo.YES);
         }
 
