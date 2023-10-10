@@ -56,7 +56,7 @@ public class XmslDrawReviewController extends BaseController{
         return getDataTableAjaxResult(xmslDrawReviewList);
     }
 
-    @PreAuthorize(hasAnyPermi = {"xmslDrawReview:list"})
+    @PreAuthorize(hasPermi = "xmslDrawReview:list")
     @PostMapping("/detail")
     public AjaxResult detali(@RequestBody XmslDrawReview drawReview) {
         if(drawReview.getId() == null){
@@ -77,6 +77,7 @@ public class XmslDrawReviewController extends BaseController{
      * 获取调整明细
      * @return
      */
+    @PreAuthorize(hasPermi = "xmslDrawReview:adjust")
     @PostMapping("/adjustDetail")
     public AjaxResult adjustDetail() {
         XmslDrawReview last =xmslDrawReviewService.getLast();
@@ -152,7 +153,7 @@ public class XmslDrawReviewController extends BaseController{
     }
 
 
-    @PreAuthorize(hasAnyPermi = {"xmslDrawReview:save"})
+    @PreAuthorize(hasPermi = "xmslDrawReview:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody XmslDrawReviewDto dto){
         try{
@@ -164,7 +165,7 @@ public class XmslDrawReviewController extends BaseController{
         }
     }
 
-    @PreAuthorize(hasAnyPermi = {"xmslDrawReview:delete"})
+    @PreAuthorize(hasPermi = "xmslDrawReview:delete")
     @PostMapping("/delete")
     public AjaxResult delete(@Validated(ValidationGroups.Delete.class) @RequestBody XmslDrawReview drawReview){
         xmslDrawReviewService.deleteXmslDrawReview(drawReview);

@@ -134,7 +134,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             return resuList;
         }
         XmslContractList queryList = new XmslContractList();
-        queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
+//        queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
         List<XmslContractList> list = contractListService.getEffectList(queryList);
         if(CollectionUtils.isEmpty(list))
             return new ArrayList(2);

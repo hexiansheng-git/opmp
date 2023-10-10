@@ -46,14 +46,12 @@ public class XmslWbsController extends BaseController {
     @Autowired
     private IXmslWbsMainService xmslWbsMainService;
 
-    @PreAuthorize(hasPermi = "xmslWbs:list")
     @PostMapping
     public AjaxResult getXmslWbs(@Validated(ValidationGroups.Get.class) @RequestBody XmslWbs xmslWbsParam) {
         XmslWbs xmslWbs = xmslWbsService.getXmslWbs(xmslWbsParam);
         return AjaxResult.success(xmslWbs);
     }
 
-    @PreAuthorize(hasPermi = "xmslWbs:list")
     @PostMapping("/list")
     public AjaxResult getXmslWbsList(@Validated(ValidationGroups.Select.class) @RequestBody XmslWbs wbs) {
         Map map = xmslWbsService.listData(wbs);
@@ -105,7 +103,6 @@ public class XmslWbsController extends BaseController {
         return AjaxResult.success(list);
     }
 
-    @PreAuthorize(hasPermi = "xmslWbs:add")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody XmslWbsDto dto) {
         if(dto.getSubmitFlag() != null && dto.getSubmitFlag() == 1)
