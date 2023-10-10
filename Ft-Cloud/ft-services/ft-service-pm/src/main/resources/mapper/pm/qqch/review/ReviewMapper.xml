@@ -173,6 +173,8 @@
     <select id="getReviewByPlanStage" resultMap="QqchReviewResultMap">
         <include refid="selectQqchReviewVo"/>
         where del_flag = '0' and plan_stage = #{planStage}
+        order by create_time desc
+        limit 1
     </select>
     <select id="getFinishedReviewCountByStage" resultType="java.lang.Integer">
         select count(*) from qqch_review
