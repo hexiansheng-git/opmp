@@ -39,7 +39,7 @@ public class QqchConstructionListController extends BaseController {
     @Autowired
     private IQqchConstructionListService qqchConstructionListService;
 
-    @PreAuthorize(hasPermi = "qqchConstructionList:list")
+//    @PreAuthorize(hasPermi = "qqchConstructionList:list")
     @GetMapping("/getList")
     public AjaxResult getList(
         @Validated(ValidationGroups.Select.class) QqchConstructionListVo qqchConstructionListParamVo) {
@@ -49,7 +49,7 @@ public class QqchConstructionListController extends BaseController {
         return AjaxResult.success(qqchConstructionListVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchConstructionList:add")
+//    @PreAuthorize(hasPermi = "qqchConstructionList:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionListVo qqchConstructionListVo) {
