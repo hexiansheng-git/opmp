@@ -109,6 +109,11 @@ public interface IXmslWbsService {
      */
     public void initWbs2Redis();
 
+    /**
+     * 初始化wbs到redis（异步）
+     */
+    public void initWbs2Redis(String tenantKey);
+
     Long countByWbs(XmslWbs wbs);
 
     /**
