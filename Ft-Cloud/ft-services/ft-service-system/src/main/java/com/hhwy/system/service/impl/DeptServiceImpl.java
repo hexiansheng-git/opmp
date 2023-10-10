@@ -1,6 +1,7 @@
 package com.hhwy.system.service.impl;
 
 import com.hhwy.common.security.service.TokenService;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.system.api.domain.SysDept;
 import com.hhwy.system.utils.TreeObject;
 import com.hhwy.domain.base.system.SysTreeUtil;
@@ -35,7 +36,8 @@ public class DeptServiceImpl implements IDeptService {
 
     @Override
     public List<SysTreeUtil> getDeptByTree() {
-        List<SysTreeUtil> list = deptMapper.getDeptByTree();
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<SysTreeUtil> list = deptMapper.getDeptByTree(tenantKey);
         List<SysTreeUtil> deptTree = TreeObject.getDeptTree(list);
         return deptTree;
     }
