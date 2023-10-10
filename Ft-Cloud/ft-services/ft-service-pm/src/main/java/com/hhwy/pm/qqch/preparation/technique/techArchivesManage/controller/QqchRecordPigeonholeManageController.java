@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.QqchRecordPigeonholeManage;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.domain.vo.QqchRecordPigeonholeManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techArchivesManage.service.IQqchRecordPigeonholeManageService;
@@ -32,14 +32,14 @@ public class QqchRecordPigeonholeManageController extends BaseController {
     private IQqchRecordPigeonholeManageService qqchRecordPigeonholeManageService;
 
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:list")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:list")
     @GetMapping
     public AjaxResult getQqchRecordPigeonholeManage(@Validated(ValidationGroups.Get.class) QqchRecordPigeonholeManage qqchRecordPigeonholeManageParam) {
         QqchRecordPigeonholeManage qqchRecordPigeonholeManage = qqchRecordPigeonholeManageService.getQqchRecordPigeonholeManage(qqchRecordPigeonholeManageParam);
         return AjaxResult.success(qqchRecordPigeonholeManage);
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:list")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:list")
     @GetMapping("/list")
     public AjaxResult getQqchRecordPigeonholeManageList(@Validated(ValidationGroups.Select.class) QqchRecordPigeonholeManage qqchRecordPigeonholeManageParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchRecordPigeonholeManageController extends BaseController {
         return getDataTableAjaxResult(qqchRecordPigeonholeManageList);
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:add")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:add")
     @PostMapping("/add")
     public AjaxResult insertQqchRecordPigeonholeManage(@Validated(ValidationGroups.Save.class) @RequestBody QqchRecordPigeonholeManage qqchRecordPigeonholeManageParam) {
         qqchRecordPigeonholeManageService.insertQqchRecordPigeonholeManage(qqchRecordPigeonholeManageParam);
         return AjaxResult.success(qqchRecordPigeonholeManageParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:update")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:update")
     @PostMapping("/update")
     public AjaxResult updateQqchRecordPigeonholeManage(@Validated(ValidationGroups.Update.class) @RequestBody QqchRecordPigeonholeManage qqchRecordPigeonholeManageParam) {
         return toAjax(qqchRecordPigeonholeManageService.updateQqchRecordPigeonholeManage(qqchRecordPigeonholeManageParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:update")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchRecordPigeonholeManageList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchRecordPigeonholeManage> qqchRecordPigeonholeManageListParam) {
         return toAjax(qqchRecordPigeonholeManageService.updateQqchRecordPigeonholeManageList(qqchRecordPigeonholeManageListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:remove")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchRecordPigeonholeManage(@Validated(ValidationGroups.Delete.class) @RequestBody QqchRecordPigeonholeManage qqchRecordPigeonholeManageParam) {
         return toAjax(qqchRecordPigeonholeManageService.deleteQqchRecordPigeonholeManage(qqchRecordPigeonholeManageParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:remove")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchRecordPigeonholeManageByPks(@PathVariable Long[] ids) {
         List<Long> qqchRecordPigeonholeManagePkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchRecordPigeonholeManageController extends BaseController {
      * @param qqchRecordPigeonholeManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:save")
+//    @PreAuthorize(hasPermi = "qqchRecordPigeonholeManage:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchRecordPigeonholeManageVo qqchRecordPigeonholeManageVo) {
         qqchRecordPigeonholeManageService.save(qqchRecordPigeonholeManageVo);

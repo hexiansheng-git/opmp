@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.QqchBimTechPlan;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.domain.vo.QqchBimTechPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.bimTechPlan.service.IQqchBimTechPlanService;
@@ -32,14 +32,14 @@ public class QqchBimTechPlanController extends BaseController {
     private IQqchBimTechPlanService qqchBimTechPlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:list")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:list")
     @GetMapping
     public AjaxResult getQqchBimTechPlan(@Validated(ValidationGroups.Get.class) QqchBimTechPlan qqchBimTechPlanParam) {
         QqchBimTechPlan qqchBimTechPlan = qqchBimTechPlanService.getQqchBimTechPlan(qqchBimTechPlanParam);
         return AjaxResult.success(qqchBimTechPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:list")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchBimTechPlanList(@Validated(ValidationGroups.Select.class) QqchBimTechPlan qqchBimTechPlanParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchBimTechPlanController extends BaseController {
         return getDataTableAjaxResult(qqchBimTechPlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:add")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchBimTechPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchBimTechPlan qqchBimTechPlanParam) {
         qqchBimTechPlanService.insertQqchBimTechPlan(qqchBimTechPlanParam);
         return AjaxResult.success(qqchBimTechPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:update")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchBimTechPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchBimTechPlan qqchBimTechPlanParam) {
         return toAjax(qqchBimTechPlanService.updateQqchBimTechPlan(qqchBimTechPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:update")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchBimTechPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchBimTechPlan> qqchBimTechPlanListParam) {
         return toAjax(qqchBimTechPlanService.updateQqchBimTechPlanList(qqchBimTechPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchBimTechPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchBimTechPlan qqchBimTechPlanParam) {
         return toAjax(qqchBimTechPlanService.deleteQqchBimTechPlan(qqchBimTechPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchBimTechPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchBimTechPlanPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchBimTechPlanController extends BaseController {
      * @param qqchBimTechPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBimTechPlan:save")
+//    @PreAuthorize(hasPermi = "qqchBimTechPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchBimTechPlanVo qqchBimTechPlanVo) {
         qqchBimTechPlanService.save(qqchBimTechPlanVo);

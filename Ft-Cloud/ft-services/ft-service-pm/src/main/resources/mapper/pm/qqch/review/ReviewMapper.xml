@@ -11,6 +11,7 @@
         <result property="reviewDeptId" column="review_dept_id"/>
         <result property="reviewDeptName" column="review_dept_name"/>
         <result property="finishDate" column="finish_date"/>
+        <result property="reviewCompleteDate" column="review_complete_date"/>
         <result property="reviewReq" column="review_req"/>
         <result property="planStage" column="plan_stage"/>
         <result property="planEstablishDirector" column="plan_establish_director"/>
@@ -47,6 +48,7 @@
              , `review_dept_id`
              , `review_dept_name`
              , `finish_date`
+             , `review_complete_date`
              , `review_req`
              , `plan_stage`
              , `plan_establish_director`
@@ -167,6 +169,13 @@
         </where>
         order by create_time desc
     </select>
+
+    <select id="getReviewByPlanStage" resultMap="QqchReviewResultMap">
+        <include refid="selectQqchReviewVo"/>
+        where del_flag = '0' and plan_stage = #{planStage}
+        order by create_time desc
+        limit 1
+    </select>
     <select id="getFinishedReviewCountByStage" resultType="java.lang.Integer">
         select count(*) from qqch_review
         where del_flag = '0' and plan_stage = #{planStage} and review_status in ('2','3','4')
@@ -185,6 +194,7 @@
             <if test="reviewDeptId != null  and reviewDeptId != ''">`review_dept_id`,</if>
             <if test="reviewDeptName != null  and reviewDeptName != ''">`review_dept_name`,</if>
             <if test="finishDate != null ">`finish_date`,</if>
+            <if test="reviewCompleteDate != null ">`review_complete_date`,</if>
             <if test="reviewReq != null  and reviewReq != ''">`review_req`,</if>
             <if test="planStage != null  and planStage != ''">`plan_stage`,</if>
             <if test="planEstablishDirector != null  and planEstablishDirector != ''">`plan_establish_director`,</if>
@@ -221,6 +231,7 @@
             <if test="reviewDeptId != null  and reviewDeptId != ''">#{reviewDeptId},</if>
             <if test="reviewDeptName != null  and reviewDeptName != ''">#{reviewDeptName},</if>
             <if test="finishDate != null ">#{finishDate},</if>
+            <if test="reviewCompleteDate != null ">#{reviewCompleteDate},</if>
             <if test="reviewReq != null  and reviewReq != ''">#{reviewReq},</if>
             <if test="planStage != null  and planStage != ''">#{planStage},</if>
             <if test="planEstablishDirector != null  and planEstablishDirector != ''">#{planEstablishDirector},</if>
@@ -262,6 +273,7 @@
             `review_dept_id`,
             `review_dept_name`,
             `finish_date`,
+            `review_complete_date`,
             `review_req`,
             `plan_stage`,
             `plan_establish_director`,
@@ -299,6 +311,7 @@
                 #{item.reviewDeptId},
                 #{item.reviewDeptName},
                 #{item.finishDate},
+                #{item.reviewCompleteDate},
                 #{item.reviewReq},
                 #{item.planStage},
                 #{item.planEstablishDirector},
@@ -338,7 +351,8 @@
             <if test="stage != null  and  stage != ''">`stage` = #{stage},</if>
             <if test="reviewDeptId != null  and  reviewDeptId != ''">`review_dept_id` = #{reviewDeptId},</if>
             <if test="reviewDeptName != null  and  reviewDeptName != ''">`review_dept_name` = #{reviewDeptName},</if>
-            <if test="finishDate != null ">`finish_date` = #{finishDate},</if>
+            <if test="finishDate != null ">`review_complete_date` = #{finishDate},</if>
+            <if test="reviewCompleteDate != null ">`finish_date` = #{reviewCompleteDate},</if>
             <if test="reviewReq != null  and  reviewReq != ''">`review_req` = #{reviewReq},</if>
             <if test="planStage != null  and  planStage != ''">`plan_stage` = #{planStage},</if>
             <if test="planEstablishDirector != null  and  planEstablishDirector != ''">`plan_establish_director` =
@@ -406,6 +420,11 @@
             <trim prefix="finish_date  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.finishDate}
+                </foreach>
+            </trim>
+            <trim prefix="review_complete_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.reviewCompleteDate}
                 </foreach>
             </trim>
             <trim prefix="review_req  = case" suffix="end,">

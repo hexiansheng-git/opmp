@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.QqchCostControlPostDuty;
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.domain.vo.QqchCostControlPostDutyVo;
 import com.hhwy.pm.qqch.preparation.costControl.postDuty.service.IQqchCostControlPostDutyService;
@@ -32,14 +32,14 @@ public class QqchCostControlPostDutyController extends BaseController {
     private IQqchCostControlPostDutyService qqchCostControlPostDutyService;
 
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:list")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:list")
     @GetMapping
     public AjaxResult getQqchCostControlPostDuty(@Validated(ValidationGroups.Get.class) QqchCostControlPostDuty qqchCostControlPostDutyParam) {
         QqchCostControlPostDuty qqchCostControlPostDuty = qqchCostControlPostDutyService.getQqchCostControlPostDuty(qqchCostControlPostDutyParam);
         return AjaxResult.success(qqchCostControlPostDuty);
     }
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:list")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:list")
     @GetMapping("/list")
     public AjaxResult getQqchCostControlPostDutyList(@Validated(ValidationGroups.Select.class) QqchCostControlPostDuty qqchCostControlPostDutyParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchCostControlPostDutyController extends BaseController {
         return getDataTableAjaxResult(qqchCostControlPostDutyList);
     }
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:add")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:add")
     @PostMapping("/add")
     public AjaxResult insertQqchCostControlPostDuty(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
         qqchCostControlPostDutyService.insertQqchCostControlPostDuty(qqchCostControlPostDutyParam);
         return AjaxResult.success(qqchCostControlPostDutyParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:update")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:update")
     @PostMapping("/update")
     public AjaxResult updateQqchCostControlPostDuty(@Validated(ValidationGroups.Update.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
         return toAjax(qqchCostControlPostDutyService.updateQqchCostControlPostDuty(qqchCostControlPostDutyParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:update")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchCostControlPostDutyList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchCostControlPostDuty> qqchCostControlPostDutyListParam) {
         return toAjax(qqchCostControlPostDutyService.updateQqchCostControlPostDutyList(qqchCostControlPostDutyListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:remove")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchCostControlPostDuty(@Validated(ValidationGroups.Delete.class) @RequestBody QqchCostControlPostDuty qqchCostControlPostDutyParam) {
         return toAjax(qqchCostControlPostDutyService.deleteQqchCostControlPostDuty(qqchCostControlPostDutyParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:remove")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchCostControlPostDutyByPks(@PathVariable Long[] ids) {
         List<Long> qqchCostControlPostDutyPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDutyVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
+//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo) {
         qqchCostControlPostDutyService.save(qqchCostControlPostDutyVo);
@@ -114,7 +114,7 @@ public class QqchCostControlPostDutyController extends BaseController {
      * @param qqchCostControlPostDutyVo
      * @return
      */
-//    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
+////    @PreAuthorize(hasPermi = "qqchCostControlPostDuty:save")
 //    @PostMapping("/synchronization")
 //    public AjaxResult synchronization(@Validated(ValidationGroups.Save.class) @RequestBody QqchCostControlPostDutyVo qqchCostControlPostDutyVo){
 //        qqchCostControlPostDutyService.synchronization(qqchCostControlPostDutyVo, );

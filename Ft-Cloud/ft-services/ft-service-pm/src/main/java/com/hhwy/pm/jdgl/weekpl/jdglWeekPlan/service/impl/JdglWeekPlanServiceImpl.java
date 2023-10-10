@@ -328,9 +328,10 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             }
             iJdglWeekImagePlanService.updateJdglWeekImagePlanList(jdglWeekImagePlans);
         }
-
-
-        // 根据计划完成产值汇总更新年计划产值&未完&
+        BigDecimal thisPlanAmt = iJdglWeekImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglWeekPlan.getExchangeRate();
+        jdglWeekPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglWeekPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
         return jdglWeekPlanMapper.updateJdglWeekPlan(jdglWeekPlan);
     }

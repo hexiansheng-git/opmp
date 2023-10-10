@@ -310,6 +310,11 @@ public class ProjectInfoWithOther {
     private String planEstablishDirector;
 
     /**
+     * 字段描述：策划审批完成日期
+     */
+    private Date planApprovalCompleteDate;
+
+    /**
      * 字段描述：联系方式
      */
     private String contactWay;

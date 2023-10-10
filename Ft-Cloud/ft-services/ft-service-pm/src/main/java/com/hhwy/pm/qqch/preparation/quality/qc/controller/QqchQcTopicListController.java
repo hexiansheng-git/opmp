@@ -3,9 +3,11 @@ package com.hhwy.pm.qqch.preparation.quality.qc.controller;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.quality.qc.domain.QqchQcTopicList;
 import com.hhwy.pm.qqch.preparation.quality.qc.domain.vo.QqchQcTopicListVo;
 import com.hhwy.pm.qqch.preparation.quality.qc.service.IQqchQcTopicListService;
 import java.math.BigDecimal;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -51,5 +53,17 @@ public class QqchQcTopicListController extends BaseController {
     public AjaxResult batchSave(@RequestBody QqchQcTopicListVo qqchQcTopicListVo) {
         qqchQcTopicListService.batchSave(qqchQcTopicListVo);
         return AjaxResult.success();
+    }
+
+    /**
+     * 查询历史同领域产品项目QC清单
+     *
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchQcTopicList:list")
+    @GetMapping("/getHistoryList")
+    public AjaxResult getHistoryList(QqchQcTopicList qqchQcTopicList) {
+        List<QqchQcTopicList> list = qqchQcTopicListService.getHistoryList(qqchQcTopicList);
+        return AjaxResult.success(list);
     }
 }

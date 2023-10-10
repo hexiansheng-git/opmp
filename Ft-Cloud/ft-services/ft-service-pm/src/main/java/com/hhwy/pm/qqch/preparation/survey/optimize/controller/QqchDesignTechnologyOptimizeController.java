@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -41,7 +41,7 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
      * @param qqchDesignTechnologyOptimizeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:save")
+//    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.save(qqchDesignTechnologyOptimizeVo);
@@ -53,7 +53,7 @@ public class QqchDesignTechnologyOptimizeController extends BaseController {
      * @param qqchDesignTechnologyOptimizeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:save")
+//    @PreAuthorize(hasPermi = "qqchDesignTechnologyOptimize:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignTechnologyOptimizeVo qqchDesignTechnologyOptimizeVo) {
         qqchDesignTechnologyOptimizeService.confirm(qqchDesignTechnologyOptimizeVo);

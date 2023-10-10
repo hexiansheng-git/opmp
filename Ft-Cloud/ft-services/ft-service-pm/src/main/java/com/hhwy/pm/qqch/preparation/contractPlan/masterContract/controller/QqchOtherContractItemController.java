@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchOtherContractItem;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchOtherContractItemVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchOtherContractItemService;
@@ -32,14 +32,14 @@ public class QqchOtherContractItemController extends BaseController {
     private IQqchOtherContractItemService qqchOtherContractItemService;
 
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:list")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:list")
     @GetMapping
     public AjaxResult getQqchOtherContractItem(@Validated(ValidationGroups.Get.class) QqchOtherContractItem qqchOtherContractItemParam) {
         QqchOtherContractItem qqchOtherContractItem = qqchOtherContractItemService.getQqchOtherContractItem(qqchOtherContractItemParam);
         return AjaxResult.success(qqchOtherContractItem);
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:list")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:list")
     @GetMapping("/list")
     public AjaxResult getQqchOtherContractItemList(@Validated(ValidationGroups.Select.class) QqchOtherContractItem qqchOtherContractItemParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchOtherContractItemController extends BaseController {
         return getDataTableAjaxResult(qqchOtherContractItemList);
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:add")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:add")
     @PostMapping("/add")
     public AjaxResult insertQqchOtherContractItem(@Validated(ValidationGroups.Save.class) @RequestBody QqchOtherContractItem qqchOtherContractItemParam) {
         qqchOtherContractItemService.insertQqchOtherContractItem(qqchOtherContractItemParam);
         return AjaxResult.success(qqchOtherContractItemParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:update")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:update")
     @PostMapping("/update")
     public AjaxResult updateQqchOtherContractItem(@Validated(ValidationGroups.Update.class) @RequestBody QqchOtherContractItem qqchOtherContractItemParam) {
         return toAjax(qqchOtherContractItemService.updateQqchOtherContractItem(qqchOtherContractItemParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:update")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchOtherContractItemList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchOtherContractItem> qqchOtherContractItemListParam) {
         return toAjax(qqchOtherContractItemService.updateQqchOtherContractItemList(qqchOtherContractItemListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:remove")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchOtherContractItem(@Validated(ValidationGroups.Delete.class) @RequestBody QqchOtherContractItem qqchOtherContractItemParam) {
         return toAjax(qqchOtherContractItemService.deleteQqchOtherContractItem(qqchOtherContractItemParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:remove")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchOtherContractItemByPks(@PathVariable Long[] ids) {
         List<Long> qqchOtherContractItemPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchOtherContractItemController extends BaseController {
      * @param qqchOtherContractItemVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOtherContractItem:save")
+//    @PreAuthorize(hasPermi = "qqchOtherContractItem:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOtherContractItemVo qqchOtherContractItemVo) {
         qqchOtherContractItemService.save(qqchOtherContractItemVo);

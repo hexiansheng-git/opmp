@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -42,7 +42,7 @@ public class QqchChangeProcedurePlanController extends BaseController {
      * @param qqchChangeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:save")
+//    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:save")
     @PostMapping("/save")
     public AjaxResult editQqchChangeProcedurePlanList(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.save(qqchChangeProcedurePlanVo);
@@ -54,7 +54,7 @@ public class QqchChangeProcedurePlanController extends BaseController {
      * @param qqchChangeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:save")
+//    @PreAuthorize(hasPermi = "qqchChangeProcedurePlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchChangeProcedurePlanVo qqchChangeProcedurePlanVo) {
         qqchChangeProcedurePlanService.confirm(qqchChangeProcedurePlanVo);

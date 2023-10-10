@@ -3,7 +3,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAppInnovatePlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAppInnovatePlanImportVo;
@@ -36,14 +36,14 @@ public class QqchAppInnovatePlanController extends BaseController {
     private IQqchAppInnovatePlanService qqchAppInnovatePlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:list")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:list")
     @GetMapping
     public AjaxResult getQqchAppInnovatePlan(@Validated(ValidationGroups.Get.class) QqchAppInnovatePlan qqchAppInnovatePlanParam) {
         QqchAppInnovatePlan qqchAppInnovatePlan = qqchAppInnovatePlanService.getQqchAppInnovatePlan(qqchAppInnovatePlanParam);
         return AjaxResult.success(qqchAppInnovatePlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:list")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchAppInnovatePlanList(@Validated(ValidationGroups.Select.class) QqchAppInnovatePlan qqchAppInnovatePlanParam) {
         startPage();
@@ -51,32 +51,32 @@ public class QqchAppInnovatePlanController extends BaseController {
         return getDataTableAjaxResult(qqchAppInnovatePlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:add")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchAppInnovatePlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchAppInnovatePlan qqchAppInnovatePlanParam) {
         qqchAppInnovatePlanService.insertQqchAppInnovatePlan(qqchAppInnovatePlanParam);
         return AjaxResult.success(qqchAppInnovatePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:update")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchAppInnovatePlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchAppInnovatePlan qqchAppInnovatePlanParam) {
         return toAjax(qqchAppInnovatePlanService.updateQqchAppInnovatePlan(qqchAppInnovatePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:update")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchAppInnovatePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchAppInnovatePlan> qqchAppInnovatePlanListParam) {
         return toAjax(qqchAppInnovatePlanService.updateQqchAppInnovatePlanList(qqchAppInnovatePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchAppInnovatePlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchAppInnovatePlan qqchAppInnovatePlanParam) {
         return toAjax(qqchAppInnovatePlanService.deleteQqchAppInnovatePlan(qqchAppInnovatePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchAppInnovatePlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchAppInnovatePlanPkList = Arrays.asList(ids);
@@ -129,7 +129,7 @@ public class QqchAppInnovatePlanController extends BaseController {
      * @param qqchAppInnovatePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:save")
+//    @PreAuthorize(hasPermi = "qqchAppInnovatePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchAppInnovatePlanVo qqchAppInnovatePlanVo) {
         qqchAppInnovatePlanService.save(qqchAppInnovatePlanVo);

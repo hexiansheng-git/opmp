@@ -10,6 +10,7 @@
         <result property="workGroupId" column="work_group_id"/>
         <result property="temporaryGroupDuty" column="temporary_group_duty"/>
         <result property="director" column="director"/>
+        <result property="directorUserName" column="director_user_name"/>
         <result property="directorId" column="director_id"/>
         <result property="affiliatedUnit" column="affiliated_unit"/>
         <result property="postDuty" column="post_duty"/>
@@ -45,6 +46,7 @@
         ,`work_group_id`
         ,`temporary_group_duty`
         ,`director`
+        ,`director_user_name`
         ,`director_id`
         ,`affiliated_unit`
         ,`post_duty`
@@ -122,6 +124,7 @@
         ,`work_group_id`
         ,`temporary_group_duty`
         ,`director`
+        ,`director_user_name`
         ,`director_id`
         ,`affiliated_unit`
         ,`post_duty`
@@ -198,6 +201,7 @@
              ,`work_group_id`
              ,`temporary_group_duty`
              ,`director`
+             ,`director_user_name`
              ,`director_id`
              ,`affiliated_unit`
              ,`post_duty`
@@ -242,6 +246,7 @@
             <if test="workGroupId != null ">`work_group_id`,</if>
             <if test="temporaryGroupDuty != null  and temporaryGroupDuty != ''">`temporary_group_duty`,</if>
             <if test="director != null  and director != ''">`director`,</if>
+            <if test="directorUserName != null  and directorUserName != ''">`director_user_name`,</if>
             <if test="directorId != null ">`director_id`,</if>
             <if test="affiliatedUnit != null  and affiliatedUnit != ''">`affiliated_unit`,</if>
             <if test="postDuty != null  and postDuty != ''">`post_duty`,</if>
@@ -276,6 +281,7 @@
             <if test="workGroupId != null ">#{workGroupId},</if>
             <if test="temporaryGroupDuty != null  and temporaryGroupDuty != ''">#{temporaryGroupDuty},</if>
             <if test="director != null  and director != ''">#{director},</if>
+            <if test="directorUserName != null  and directorUserName != ''">#{directorUserName},</if>
             <if test="directorId != null ">#{directorId},</if>
             <if test="affiliatedUnit != null  and affiliatedUnit != ''">#{affiliatedUnit},</if>
             <if test="postDuty != null  and postDuty != ''">#{postDuty},</if>
@@ -315,6 +321,7 @@
             `work_group_id`,
             `temporary_group_duty`,
             `director`,
+            `director_user_name`,
             `director_id`,
             `affiliated_unit`,
             `post_duty`,
@@ -349,6 +356,7 @@
                 #{item.workGroupId},
                 #{item.temporaryGroupDuty},
                 #{item.director},
+                #{item.directorUserName},
                 #{item.directorId},
                 #{item.affiliatedUnit},
                 #{item.postDuty},
@@ -386,6 +394,7 @@
                 #{temporaryGroupDuty},
             </if>
             <if test="director != null  and  director != ''">`director` = #{director},</if>
+            <if test="directorUserName != null  and  directorUserName != ''">`director_user_name` = #{directorUserName},</if>
             <if test="directorId != null ">`director_id` = #{directorId},</if>
             <if test="affiliatedUnit != null  and  affiliatedUnit != ''">`affiliated_unit` = #{affiliatedUnit},</if>
             <if test="postDuty != null  and  postDuty != ''">`post_duty` = #{postDuty},</if>
@@ -428,6 +437,11 @@
             <trim prefix="director  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.director}
+                </foreach>
+            </trim>
+            <trim prefix="director_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.directorUserName}
                 </foreach>
             </trim>
             <trim prefix="director_id  = case" suffix="end,">

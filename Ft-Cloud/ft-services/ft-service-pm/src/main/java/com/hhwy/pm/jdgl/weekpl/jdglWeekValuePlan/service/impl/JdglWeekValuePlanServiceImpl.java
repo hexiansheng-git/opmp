@@ -126,9 +126,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
 
     @Override
     public int deleteJdglWeekValuePlanByPlanId(Long planId) {
-        JdglWeekValuePlan jdglWeekValuePlan = new JdglWeekValuePlan();
-        jdglWeekValuePlan.setPlanId(planId);
-        return deleteJdglWeekValuePlan(jdglWeekValuePlan);
+        return jdglWeekValuePlanMapper.deleteJdglWeekValuePlanByPlanId(planId);
     }
 
     @Transactional

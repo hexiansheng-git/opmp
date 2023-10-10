@@ -589,6 +589,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                 continue;
             }
             for (JdglDayScheduleBill jdglDayScheduleBill : jdglDayScheduleBillList) {
+                BigDecimal thisQuantity = jdglDayScheduleBill.getThisQuantity();
+                BigDecimal billPrice = jdglDayScheduleBill.getBillPrice();
+                BigDecimal billValue = thisQuantity == null || billPrice == null ? new BigDecimal(0) : thisQuantity.multiply(billPrice);
+                jdglDayScheduleBill.setBillValue(billValue);
                 jdglDayScheduleBill.setDayScheduleId(dayScheduleId);
                 if(jdglDayScheduleBill.getId() == null) {
                     jdglDayScheduleBillListAdd.add(jdglDayScheduleBill);

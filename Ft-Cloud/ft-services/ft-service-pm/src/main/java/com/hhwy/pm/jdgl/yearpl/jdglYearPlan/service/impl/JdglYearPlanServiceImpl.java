@@ -305,6 +305,10 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             }
             iJdglYearImagePlanService.updateJdglYearImagePlanList(jdglYearImagePlans);
         }
+        BigDecimal thisPlanAmt = iJdglYearImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglYearPlan.getExchangeRate();
+        jdglYearPlan.setYearPlanValueCu(thisPlanAmt);
+        jdglYearPlan.setYearPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
         return jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
     }

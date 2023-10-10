@@ -3,7 +3,7 @@ package com.hhwy.pm.qqch.preparation.technique.techManagePlan.controller;
 import cn.hutool.core.date.DateException;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchAdvancedVindicatePlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanImportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchAdvancedVindicatePlanVo;
@@ -34,14 +34,14 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
     private IQqchAdvancedVindicatePlanService qqchAdvancedVindicatePlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:list")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:list")
     @GetMapping
     public AjaxResult getQqchAdvancedVindicatePlan(@Validated(ValidationGroups.Get.class) QqchAdvancedVindicatePlan qqchAdvancedVindicatePlanParam) {
         QqchAdvancedVindicatePlan qqchAdvancedVindicatePlan = qqchAdvancedVindicatePlanService.getQqchAdvancedVindicatePlan(qqchAdvancedVindicatePlanParam);
         return AjaxResult.success(qqchAdvancedVindicatePlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:list")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchAdvancedVindicatePlanList(@Validated(ValidationGroups.Select.class) QqchAdvancedVindicatePlan qqchAdvancedVindicatePlanParam) {
         startPage();
@@ -49,32 +49,32 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
         return getDataTableAjaxResult(qqchAdvancedVindicatePlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:add")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchAdvancedVindicatePlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchAdvancedVindicatePlan qqchAdvancedVindicatePlanParam) {
         qqchAdvancedVindicatePlanService.insertQqchAdvancedVindicatePlan(qqchAdvancedVindicatePlanParam);
         return AjaxResult.success(qqchAdvancedVindicatePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:update")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchAdvancedVindicatePlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchAdvancedVindicatePlan qqchAdvancedVindicatePlanParam) {
         return toAjax(qqchAdvancedVindicatePlanService.updateQqchAdvancedVindicatePlan(qqchAdvancedVindicatePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:update")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchAdvancedVindicatePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanListParam) {
         return toAjax(qqchAdvancedVindicatePlanService.updateQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchAdvancedVindicatePlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchAdvancedVindicatePlan qqchAdvancedVindicatePlanParam) {
         return toAjax(qqchAdvancedVindicatePlanService.deleteQqchAdvancedVindicatePlan(qqchAdvancedVindicatePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchAdvancedVindicatePlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchAdvancedVindicatePlanPkList = Arrays.asList(ids);
@@ -128,7 +128,7 @@ public class QqchAdvancedVindicatePlanController extends BaseController {
      * @param qqchAdvancedVindicatePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:save")
+//    @PreAuthorize(hasPermi = "qqchAdvancedVindicatePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchAdvancedVindicatePlanVo qqchAdvancedVindicatePlanVo) {
         qqchAdvancedVindicatePlanService.save(qqchAdvancedVindicatePlanVo);

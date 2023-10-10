@@ -196,11 +196,9 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             this.checkData(qqchReviewList, iData);
             this.updateQqchReviewList(qqchReviewList);
             this.updateFinishNum();
+        }else {
+            this.reviewMapper.insertQqchReviewList(iData);
         }
-        this.reviewMapper.insertQqchReviewList(iData);
-        
-
-        return ;
     }
 
     private void checkData(List<Review> qqchReviewList, List<Review> iData) {
@@ -402,9 +400,12 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     @Override
+    @Transactional
     public void listener(Long id) {
         Review qqchReview = this.getQqchReview(new Review(id));
         qqchReview.setTaskStatus("5");
+        qqchReview.setReviewStatus("4");
+        qqchReview.setReviewCompleteDate(DateUtils.getNowDate());
         this.updateQqchReview(qqchReview);
     }
 
@@ -421,6 +422,16 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         }
         // 已经结束 不用查询阶段
         return PmConstant.END_STAGE;
+    }
+
+    /**
+     * 通过阶段获取前期策划评审数据
+     * @param planStage
+     * @return
+     */
+    @Override
+    public Review getReviewByPlanStage(String planStage){
+        return reviewMapper.getReviewByPlanStage(planStage);
     }
 
     /**

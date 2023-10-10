@@ -126,9 +126,7 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
 
     @Override
     public int deleteJdglYearValuePlanByYearPlanId(Long yearPlanId) {
-        JdglYearValuePlan jdglYearValuePlan = new JdglYearValuePlan();
-        jdglYearValuePlan.setYearPlanId(yearPlanId);
-        return deleteJdglYearValuePlan(jdglYearValuePlan);
+        return jdglYearValuePlanMapper.deleteJdglYearValuePlanByYearPlanId(yearPlanId);
     }
 
     @Transactional
@@ -225,7 +223,7 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                 }
                 if(!CollectionUtils.isEmpty(returnList)) {
                     for (JdglYearValuePlan jdglYearValuePlan : returnList) {
-                        JdglYearValuePlan jdglYearValuePlan1 = returnList.stream().filter(vo -> jdglYearValuePlan.getInventoryPid().equals(vo.getInventoryId())).findFirst().orElse(null);
+                        JdglYearValuePlan jdglYearValuePlan1 = returnList.stream().filter(vo -> vo.getInventoryId().equals(jdglYearValuePlan.getInventoryPid())).findFirst().orElse(null);
                         if(jdglYearValuePlan1 != null) jdglYearValuePlan.setPid(jdglYearValuePlan1.getId());
                     }
                     deleteJdglYearValuePlanByYearPlanId(yearplanId);

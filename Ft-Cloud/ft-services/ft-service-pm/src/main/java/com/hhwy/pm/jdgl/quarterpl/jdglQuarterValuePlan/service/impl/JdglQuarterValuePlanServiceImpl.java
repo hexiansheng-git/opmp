@@ -126,9 +126,7 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
 
     @Override
     public int deleteJdglQuarterValuePlanByPlanId(Long planId) {
-        JdglQuarterValuePlan jdglQuarterValuePlan = new JdglQuarterValuePlan();
-        jdglQuarterValuePlan.setPlanId(planId);
-        return deleteJdglQuarterValuePlan(jdglQuarterValuePlan);
+        return jdglQuarterValuePlanMapper.deleteJdglQuarterValuePlanByPlanId(planId);
     }
 
     @Transactional

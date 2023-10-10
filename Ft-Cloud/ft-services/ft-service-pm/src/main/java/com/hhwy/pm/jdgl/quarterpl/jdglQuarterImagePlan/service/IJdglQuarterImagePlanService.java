@@ -3,6 +3,7 @@ package com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -35,4 +36,6 @@ public interface IJdglQuarterImagePlanService {
     JdglQuarterPlan syncFromTotalPlan(JdglQuarterPlan jdglQuarterPlanParam);
 
     List<JdglQuarterImagePlan> getWbsListByYearAndQuarter(String quarter, String year);
+
+    BigDecimal getThisPlanAmt(Long planId);
 }
