@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.QqchProjectOperationObjective;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.domain.vo.QqchProjectOperationObjectiveVo;
 import com.hhwy.pm.qqch.preparation.costControl.operateTarget.service.IQqchProjectOperationObjectiveService;
@@ -32,14 +32,14 @@ public class QqchProjectOperationObjectiveController extends BaseController {
     private IQqchProjectOperationObjectiveService qqchProjectOperationObjectiveService;
 
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:list")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:list")
     @GetMapping
     public AjaxResult getQqchProjectOperationObjective(@Validated(ValidationGroups.Get.class) QqchProjectOperationObjective qqchProjectOperationObjectiveParam) {
         QqchProjectOperationObjective qqchProjectOperationObjective = qqchProjectOperationObjectiveService.getQqchProjectOperationObjective(qqchProjectOperationObjectiveParam);
         return AjaxResult.success(qqchProjectOperationObjective);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:list")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:list")
     @GetMapping("/list")
     public AjaxResult getQqchProjectOperationObjectiveList(@Validated(ValidationGroups.Select.class) QqchProjectOperationObjective qqchProjectOperationObjectiveParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchProjectOperationObjectiveController extends BaseController {
         return getDataTableAjaxResult(qqchProjectOperationObjectiveList);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:add")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:add")
     @PostMapping("/add")
     public AjaxResult insertQqchProjectOperationObjective(@Validated(ValidationGroups.Save.class) @RequestBody QqchProjectOperationObjective qqchProjectOperationObjectiveParam) {
         qqchProjectOperationObjectiveService.insertQqchProjectOperationObjective(qqchProjectOperationObjectiveParam);
         return AjaxResult.success(qqchProjectOperationObjectiveParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:update")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:update")
     @PostMapping("/update")
     public AjaxResult updateQqchProjectOperationObjective(@Validated(ValidationGroups.Update.class) @RequestBody QqchProjectOperationObjective qqchProjectOperationObjectiveParam) {
         return toAjax(qqchProjectOperationObjectiveService.updateQqchProjectOperationObjective(qqchProjectOperationObjectiveParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:update")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchProjectOperationObjectiveList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchProjectOperationObjective> qqchProjectOperationObjectiveListParam) {
         return toAjax(qqchProjectOperationObjectiveService.updateQqchProjectOperationObjectiveList(qqchProjectOperationObjectiveListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:remove")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchProjectOperationObjective(@Validated(ValidationGroups.Delete.class) @RequestBody QqchProjectOperationObjective qqchProjectOperationObjectiveParam) {
         return toAjax(qqchProjectOperationObjectiveService.deleteQqchProjectOperationObjective(qqchProjectOperationObjectiveParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:remove")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchProjectOperationObjectiveByPks(@PathVariable Long[] ids) {
         List<Long> qqchProjectOperationObjectivePkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchProjectOperationObjectiveController extends BaseController {
      * @param qqchProjectOperationObjectiveVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:save")
+//    @PreAuthorize(hasPermi = "qqchProjectOperationObjective:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchProjectOperationObjectiveVo qqchProjectOperationObjectiveVo) {
         qqchProjectOperationObjectiveService.save(qqchProjectOperationObjectiveVo);

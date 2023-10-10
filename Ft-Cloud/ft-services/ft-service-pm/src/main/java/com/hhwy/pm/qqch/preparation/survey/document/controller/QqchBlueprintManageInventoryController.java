@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -40,7 +40,7 @@ public class QqchBlueprintManageInventoryController extends BaseController {
      * @param qqchBlueprintManageInventoryVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:save")
+//    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
         qqchBlueprintManageInventoryService.save(qqchBlueprintManageInventoryVo);
@@ -52,7 +52,7 @@ public class QqchBlueprintManageInventoryController extends BaseController {
      * @param qqchBlueprintManageInventoryVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:save")
+//    @PreAuthorize(hasPermi = "qqchBlueprintManageInventory:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchBlueprintManageInventoryVo qqchBlueprintManageInventoryVo) {
         qqchBlueprintManageInventoryService.confirm(qqchBlueprintManageInventoryVo);

@@ -7,7 +7,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -41,7 +41,7 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      * @param qqchOptimizeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
+//    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.save(qqchOptimizeProcedurePlanVo);
@@ -53,7 +53,7 @@ public class QqchOptimizeProcedurePlanController extends BaseController {
      * @param qqchOptimizeProcedurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
+//    @PreAuthorize(hasPermi = "qqchOptimizeProcedurePlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchOptimizeProcedurePlanVo qqchOptimizeProcedurePlanVo) {
         qqchOptimizeProcedurePlanService.confirm(qqchOptimizeProcedurePlanVo);

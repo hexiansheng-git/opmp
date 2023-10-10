@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.projectCostPlan.domain.QqchAdjustAnalyse;
 import com.hhwy.pm.qqch.preparation.contractPlan.projectCostPlan.domain.vo.QqchAdjustAnalyseVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.projectCostPlan.service.IQqchAdjustAnalyseService;
@@ -32,14 +32,14 @@ public class QqchAdjustAnalyseController extends BaseController {
     private IQqchAdjustAnalyseService qqchAdjustAnalyseService;
 
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:list")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:list")
     @GetMapping
     public AjaxResult getQqchAdjustAnalyse(@Validated(ValidationGroups.Get.class) QqchAdjustAnalyse qqchAdjustAnalyseParam) {
         QqchAdjustAnalyse qqchAdjustAnalyse = qqchAdjustAnalyseService.getQqchAdjustAnalyse(qqchAdjustAnalyseParam);
         return AjaxResult.success(qqchAdjustAnalyse);
     }
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:list")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:list")
     @GetMapping("/list")
     public AjaxResult getQqchAdjustAnalyseList(@Validated(ValidationGroups.Select.class) QqchAdjustAnalyse qqchAdjustAnalyseParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchAdjustAnalyseController extends BaseController {
         return getDataTableAjaxResult(qqchAdjustAnalyseList);
     }
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:add")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:add")
     @PostMapping("/add")
     public AjaxResult insertQqchAdjustAnalyse(@Validated(ValidationGroups.Save.class) @RequestBody QqchAdjustAnalyse qqchAdjustAnalyseParam) {
         qqchAdjustAnalyseService.insertQqchAdjustAnalyse(qqchAdjustAnalyseParam);
         return AjaxResult.success(qqchAdjustAnalyseParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:update")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:update")
     @PostMapping("/update")
     public AjaxResult updateQqchAdjustAnalyse(@Validated(ValidationGroups.Update.class) @RequestBody QqchAdjustAnalyse qqchAdjustAnalyseParam) {
         return toAjax(qqchAdjustAnalyseService.updateQqchAdjustAnalyse(qqchAdjustAnalyseParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:update")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchAdjustAnalyseList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchAdjustAnalyse> qqchAdjustAnalyseListParam) {
         return toAjax(qqchAdjustAnalyseService.updateQqchAdjustAnalyseList(qqchAdjustAnalyseListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:remove")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchAdjustAnalyse(@Validated(ValidationGroups.Delete.class) @RequestBody QqchAdjustAnalyse qqchAdjustAnalyseParam) {
         return toAjax(qqchAdjustAnalyseService.deleteQqchAdjustAnalyse(qqchAdjustAnalyseParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:remove")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchAdjustAnalyseByPks(@PathVariable Long[] ids) {
         List<Long> qqchAdjustAnalysePkList = Arrays.asList(ids);
@@ -91,7 +91,7 @@ public class QqchAdjustAnalyseController extends BaseController {
      * @param qqchAdjustAnalyse
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:list")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:list")
     @GetMapping("getQqchAdjustAnalyseVo")
     public AjaxResult getQqchAdjustAnalyseVo(@Validated(ValidationGroups.Get.class) QqchAdjustAnalyse qqchAdjustAnalyse) {
         QqchAdjustAnalyseVo qqchAdjustAnalyseVo = qqchAdjustAnalyseService.getQqchAdjustAnalyseVo(qqchAdjustAnalyse);
@@ -103,7 +103,7 @@ public class QqchAdjustAnalyseController extends BaseController {
      * @param qqchAdjustAnalyseVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:add")
+//    @PreAuthorize(hasPermi = "qqchAdjustAnalyse:add")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchAdjustAnalyseVo qqchAdjustAnalyseVo) {
         qqchAdjustAnalyseService.save(qqchAdjustAnalyseVo);

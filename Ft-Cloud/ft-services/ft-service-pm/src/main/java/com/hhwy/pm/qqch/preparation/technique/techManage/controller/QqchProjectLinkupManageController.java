@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.QqchProjectLinkupManage;
 import com.hhwy.pm.qqch.preparation.technique.techManage.domain.vo.QqchProjectLinkupManageVo;
 import com.hhwy.pm.qqch.preparation.technique.techManage.service.IQqchProjectLinkupManageService;
@@ -32,14 +32,14 @@ public class QqchProjectLinkupManageController extends BaseController {
     private IQqchProjectLinkupManageService qqchProjectLinkupManageService;
 
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:list")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:list")
     @GetMapping
     public AjaxResult getQqchProjectLinkupManage(@Validated(ValidationGroups.Get.class) QqchProjectLinkupManage qqchProjectLinkupManageParam) {
         QqchProjectLinkupManage qqchProjectLinkupManage = qqchProjectLinkupManageService.getQqchProjectLinkupManage(qqchProjectLinkupManageParam);
         return AjaxResult.success(qqchProjectLinkupManage);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:list")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:list")
     @GetMapping("/list")
     public AjaxResult getQqchProjectLinkupManageList(@Validated(ValidationGroups.Select.class) QqchProjectLinkupManage qqchProjectLinkupManageParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchProjectLinkupManageController extends BaseController {
         return getDataTableAjaxResult(qqchProjectLinkupManageList);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:add")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:add")
     @PostMapping("/add")
     public AjaxResult insertQqchProjectLinkupManage(@Validated(ValidationGroups.Save.class) @RequestBody QqchProjectLinkupManage qqchProjectLinkupManageParam) {
         qqchProjectLinkupManageService.insertQqchProjectLinkupManage(qqchProjectLinkupManageParam);
         return AjaxResult.success(qqchProjectLinkupManageParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:update")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:update")
     @PostMapping("/update")
     public AjaxResult updateQqchProjectLinkupManage(@Validated(ValidationGroups.Update.class) @RequestBody QqchProjectLinkupManage qqchProjectLinkupManageParam) {
         return toAjax(qqchProjectLinkupManageService.updateQqchProjectLinkupManage(qqchProjectLinkupManageParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:update")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchProjectLinkupManageList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchProjectLinkupManage> qqchProjectLinkupManageListParam) {
         return toAjax(qqchProjectLinkupManageService.updateQqchProjectLinkupManageList(qqchProjectLinkupManageListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:remove")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchProjectLinkupManage(@Validated(ValidationGroups.Delete.class) @RequestBody QqchProjectLinkupManage qqchProjectLinkupManageParam) {
         return toAjax(qqchProjectLinkupManageService.deleteQqchProjectLinkupManage(qqchProjectLinkupManageParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:remove")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchProjectLinkupManageByPks(@PathVariable Long[] ids) {
         List<Long> qqchProjectLinkupManagePkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchProjectLinkupManageController extends BaseController {
      * @param qqchProjectLinkupManageVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:save")
+//    @PreAuthorize(hasPermi = "qqchProjectLinkupManage:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchProjectLinkupManageVo qqchProjectLinkupManageVo) {
         qqchProjectLinkupManageService.save(qqchProjectLinkupManageVo);

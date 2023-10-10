@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -40,7 +40,7 @@ public class QqchManageProcedureController extends BaseController {
      * @param qqchManageProcedureVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
+//    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchManageProcedureVo qqchManageProcedureVo) {
         qqchManageProcedureService.save(qqchManageProcedureVo);
@@ -52,7 +52,7 @@ public class QqchManageProcedureController extends BaseController {
      * @param qqchManageProcedureVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
+//    @PreAuthorize(hasPermi = "qqchManageProcedure:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchManageProcedureVo qqchManageProcedureVo) {
         qqchManageProcedureService.confirm(qqchManageProcedureVo);

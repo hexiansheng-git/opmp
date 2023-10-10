@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.survey.inventory.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.inventory.domain.vo.QqchDesignConstructionSituationVo;
 import com.hhwy.pm.qqch.preparation.survey.inventory.service.IQqchDesignConstructionSituationService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -41,7 +41,7 @@ public class QqchDesignConstructionSituationController extends BaseController {
      * @param qqchDesignConstructionSituationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:save")
+//    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         qqchDesignConstructionSituationService.save(qqchDesignConstructionSituationVo);
@@ -53,7 +53,7 @@ public class QqchDesignConstructionSituationController extends BaseController {
      * @param qqchDesignConstructionSituationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:save")
+//    @PreAuthorize(hasPermi = "qqchDesignConstructionSituation:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDesignConstructionSituationVo qqchDesignConstructionSituationVo) {
         qqchDesignConstructionSituationService.confirm(qqchDesignConstructionSituationVo);

@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.contractPlan.masterContract.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchKeyInventoryContent;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyQueryVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.KeyInventoryContentItemClassifyVo;
@@ -30,39 +30,39 @@ public class QqchKeyInventoryContentController extends BaseController {
     private IQqchKeyInventoryContentService qqchKeyInventoryContentService;
 
 
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:list")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:list")
     @GetMapping
     public AjaxResult getQqchKeyInventoryContent(@Validated(ValidationGroups.Get.class) QqchKeyInventoryContent qqchKeyInventoryContentParam) {
         QqchKeyInventoryContent qqchKeyInventoryContent = qqchKeyInventoryContentService.getQqchKeyInventoryContent(qqchKeyInventoryContentParam);
         return AjaxResult.success(qqchKeyInventoryContent);
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:add")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:add")
     @PostMapping("/add")
     public AjaxResult insertQqchKeyInventoryContent(@Validated(ValidationGroups.Save.class) @RequestBody QqchKeyInventoryContent qqchKeyInventoryContentParam) {
         qqchKeyInventoryContentService.insertQqchKeyInventoryContent(qqchKeyInventoryContentParam);
         return AjaxResult.success(qqchKeyInventoryContentParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:update")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:update")
     @PostMapping("/update")
     public AjaxResult updateQqchKeyInventoryContent(@Validated(ValidationGroups.Update.class) @RequestBody QqchKeyInventoryContent qqchKeyInventoryContentParam) {
         return toAjax(qqchKeyInventoryContentService.updateQqchKeyInventoryContent(qqchKeyInventoryContentParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:update")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchKeyInventoryContentList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchKeyInventoryContent> qqchKeyInventoryContentListParam) {
         return toAjax(qqchKeyInventoryContentService.updateQqchKeyInventoryContentList(qqchKeyInventoryContentListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:remove")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchKeyInventoryContent(@Validated(ValidationGroups.Delete.class) @RequestBody QqchKeyInventoryContent qqchKeyInventoryContentParam) {
         return toAjax(qqchKeyInventoryContentService.deleteQqchKeyInventoryContent(qqchKeyInventoryContentParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:remove")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchKeyInventoryContentByPks(@PathVariable Long[] ids) {
         List<Long> qqchKeyInventoryContentPkList = Arrays.asList(ids);
@@ -96,7 +96,7 @@ public class QqchKeyInventoryContentController extends BaseController {
      * @param qqchKeyInventoryContentVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:save")
+//    @PreAuthorize(hasPermi = "qqchKeyInventoryContent:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchKeyInventoryContentVo qqchKeyInventoryContentVo) {
         qqchKeyInventoryContentService.save(qqchKeyInventoryContentVo);

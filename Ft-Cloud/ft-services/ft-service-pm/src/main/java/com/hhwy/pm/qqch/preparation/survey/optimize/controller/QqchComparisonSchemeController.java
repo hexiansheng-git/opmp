@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.survey.optimize.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.QqchComparisonScheme;
 import com.hhwy.pm.qqch.preparation.survey.optimize.domain.vo.QqchComparisonSchemeVo;
 import com.hhwy.pm.qqch.preparation.survey.optimize.service.IQqchComparisonSchemeService;
@@ -52,7 +52,7 @@ public class QqchComparisonSchemeController extends BaseController {
      * @param qqchComparisonSchemeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
+//    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.save(qqchComparisonSchemeVo);
@@ -64,7 +64,7 @@ public class QqchComparisonSchemeController extends BaseController {
      * @param qqchComparisonSchemeVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
+//    @PreAuthorize(hasPermi = "qqchComparisonScheme:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchComparisonSchemeVo qqchComparisonSchemeVo) {
         qqchComparisonSchemeService.confirm(qqchComparisonSchemeVo);

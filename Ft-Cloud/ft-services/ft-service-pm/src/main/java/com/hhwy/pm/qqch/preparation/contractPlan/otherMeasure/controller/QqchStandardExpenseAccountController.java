@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchStandardExpenseAccount;
 import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.service.IQqchStandardExpenseAccountService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -31,7 +31,7 @@ public class QqchStandardExpenseAccountController extends BaseController {
     private IQqchStandardExpenseAccountService qqchStandardExpenseAccountService;
 
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:list")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:list")
     @GetMapping
     public AjaxResult getQqchStandardExpenseAccount(@Validated(ValidationGroups.Get.class) QqchStandardExpenseAccount qqchStandardExpenseAccountParam) {
         QqchStandardExpenseAccount qqchStandardExpenseAccount = qqchStandardExpenseAccountService.getQqchStandardExpenseAccount(qqchStandardExpenseAccountParam);
@@ -49,39 +49,39 @@ public class QqchStandardExpenseAccountController extends BaseController {
         return AjaxResult.success(qqchStandardExpenseAccountList);
     }
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:add")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:add")
     @PostMapping("/add")
     public AjaxResult insertQqchStandardExpenseAccount(@Validated(ValidationGroups.Save.class) @RequestBody QqchStandardExpenseAccount qqchStandardExpenseAccountParam) {
         qqchStandardExpenseAccountService.insertQqchStandardExpenseAccount(qqchStandardExpenseAccountParam);
         return AjaxResult.success(qqchStandardExpenseAccountParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:add")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchStandardExpenseAccountList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchStandardExpenseAccount> qqchStandardExpenseAccountListParam) {
         qqchStandardExpenseAccountService.insertQqchStandardExpenseAccountList(qqchStandardExpenseAccountListParam);
         return AjaxResult.success(qqchStandardExpenseAccountListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:update")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:update")
     @PostMapping("/update")
     public AjaxResult updateQqchStandardExpenseAccount(@Validated(ValidationGroups.Update.class) @RequestBody QqchStandardExpenseAccount qqchStandardExpenseAccountParam) {
         return toAjax(qqchStandardExpenseAccountService.updateQqchStandardExpenseAccount(qqchStandardExpenseAccountParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:update")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchStandardExpenseAccountList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchStandardExpenseAccount> qqchStandardExpenseAccountListParam) {
         return toAjax(qqchStandardExpenseAccountService.updateQqchStandardExpenseAccountList(qqchStandardExpenseAccountListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:remove")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchStandardExpenseAccount(@Validated(ValidationGroups.Delete.class) @RequestBody QqchStandardExpenseAccount qqchStandardExpenseAccountParam) {
         return toAjax(qqchStandardExpenseAccountService.deleteQqchStandardExpenseAccount(qqchStandardExpenseAccountParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:remove")
+//    @PreAuthorize(hasPermi = "qqchStandardExpenseAccount:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchStandardExpenseAccountByPks(@PathVariable Long[] ids) {
         List<Long> qqchStandardExpenseAccountPkList = Arrays.asList(ids);

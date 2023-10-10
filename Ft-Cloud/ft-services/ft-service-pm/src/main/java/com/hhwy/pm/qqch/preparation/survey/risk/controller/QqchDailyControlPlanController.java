@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -40,7 +40,7 @@ public class QqchDailyControlPlanController extends BaseController {
      * @param qqchDailyControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDailyControlPlan:save")
+//    @PreAuthorize(hasPermi = "qqchDailyControlPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         qqchDailyControlPlanService.save(qqchDailyControlPlanVo);
@@ -52,7 +52,7 @@ public class QqchDailyControlPlanController extends BaseController {
      * @param qqchDailyControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDailyControlPlan:save")
+//    @PreAuthorize(hasPermi = "qqchDailyControlPlan:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchDailyControlPlanVo qqchDailyControlPlanVo) {
         qqchDailyControlPlanService.confirm(qqchDailyControlPlanVo);

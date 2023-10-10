@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 import java.math.BigDecimal;
 
@@ -41,7 +41,7 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
      * @param qqchOptimizeChangeOrganizationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:save")
+//    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo) {
         qqchOptimizeChangeOrganizationService.save(qqchOptimizeChangeOrganizationVo);
@@ -53,7 +53,7 @@ public class QqchOptimizeChangeOrganizationController extends BaseController {
      * @param qqchOptimizeChangeOrganizationVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:save")
+//    @PreAuthorize(hasPermi = "qqchOptimizeChangeOrganization:save")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Update.class) @RequestBody QqchOptimizeChangeOrganizationVo qqchOptimizeChangeOrganizationVo){
         qqchOptimizeChangeOrganizationService.confirm(qqchOptimizeChangeOrganizationVo);

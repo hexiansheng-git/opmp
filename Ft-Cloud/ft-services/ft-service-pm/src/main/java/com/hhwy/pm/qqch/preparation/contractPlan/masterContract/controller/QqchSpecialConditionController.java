@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.QqchSpecialCondition;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.domain.vo.QqchSpecialConditionVo;
 import com.hhwy.pm.qqch.preparation.contractPlan.masterContract.service.IQqchSpecialConditionService;
@@ -32,14 +32,14 @@ public class QqchSpecialConditionController extends BaseController {
     private IQqchSpecialConditionService qqchSpecialConditionService;
 
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:list")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:list")
     @GetMapping
     public AjaxResult getQqchSpecialCondition(@Validated(ValidationGroups.Get.class) QqchSpecialCondition qqchSpecialConditionParam) {
         QqchSpecialCondition qqchSpecialCondition = qqchSpecialConditionService.getQqchSpecialCondition(qqchSpecialConditionParam);
         return AjaxResult.success(qqchSpecialCondition);
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:list")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:list")
     @GetMapping("/list")
     public AjaxResult getQqchSpecialConditionList(@Validated(ValidationGroups.Select.class) QqchSpecialCondition qqchSpecialConditionParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchSpecialConditionController extends BaseController {
         return getDataTableAjaxResult(qqchSpecialConditionList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:add")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSpecialCondition(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialCondition qqchSpecialConditionParam) {
         qqchSpecialConditionService.insertQqchSpecialCondition(qqchSpecialConditionParam);
         return AjaxResult.success(qqchSpecialConditionParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSpecialCondition(@Validated(ValidationGroups.Update.class) @RequestBody QqchSpecialCondition qqchSpecialConditionParam) {
         return toAjax(qqchSpecialConditionService.updateQqchSpecialCondition(qqchSpecialConditionParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSpecialConditionList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSpecialCondition> qqchSpecialConditionListParam) {
         return toAjax(qqchSpecialConditionService.updateQqchSpecialConditionList(qqchSpecialConditionListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:remove")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSpecialCondition(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSpecialCondition qqchSpecialConditionParam) {
         return toAjax(qqchSpecialConditionService.deleteQqchSpecialCondition(qqchSpecialConditionParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:remove")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSpecialConditionByPks(@PathVariable Long[] ids) {
         List<Long> qqchSpecialConditionPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchSpecialConditionController extends BaseController {
      * @param qqchSpecialConditionVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSpecialCondition:save")
+//    @PreAuthorize(hasPermi = "qqchSpecialCondition:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialConditionVo qqchSpecialConditionVo) {
         qqchSpecialConditionService.save(qqchSpecialConditionVo);

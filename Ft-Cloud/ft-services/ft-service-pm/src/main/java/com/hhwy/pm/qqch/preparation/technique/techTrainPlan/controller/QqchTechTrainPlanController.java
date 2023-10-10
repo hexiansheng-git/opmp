@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.QqchTechTrainPlan;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.domain.vo.QqchTechTrainPlanVo;
 import com.hhwy.pm.qqch.preparation.technique.techTrainPlan.service.IQqchTechTrainPlanService;
@@ -32,14 +32,14 @@ public class QqchTechTrainPlanController extends BaseController {
     private IQqchTechTrainPlanService qqchTechTrainPlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
     @GetMapping
     public AjaxResult getQqchTechTrainPlan(@Validated(ValidationGroups.Get.class) QqchTechTrainPlan qqchTechTrainPlanParam) {
         QqchTechTrainPlan qqchTechTrainPlan = qqchTechTrainPlanService.getQqchTechTrainPlan(qqchTechTrainPlanParam);
         return AjaxResult.success(qqchTechTrainPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchTechTrainPlanList(@Validated(ValidationGroups.Select.class) QqchTechTrainPlan qqchTechTrainPlanParam) {
         startPage();
@@ -47,32 +47,32 @@ public class QqchTechTrainPlanController extends BaseController {
         return getDataTableAjaxResult(qqchTechTrainPlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTechTrainPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
         qqchTechTrainPlanService.insertQqchTechTrainPlan(qqchTechTrainPlanParam);
         return AjaxResult.success(qqchTechTrainPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTechTrainPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
         return toAjax(qqchTechTrainPlanService.updateQqchTechTrainPlan(qqchTechTrainPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTechTrainPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTechTrainPlan> qqchTechTrainPlanListParam) {
         return toAjax(qqchTechTrainPlanService.updateQqchTechTrainPlanList(qqchTechTrainPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTechTrainPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTechTrainPlan qqchTechTrainPlanParam) {
         return toAjax(qqchTechTrainPlanService.deleteQqchTechTrainPlan(qqchTechTrainPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTechTrainPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchTechTrainPlanPkList = Arrays.asList(ids);
@@ -102,7 +102,7 @@ public class QqchTechTrainPlanController extends BaseController {
      * @param qqchTechTrainPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTechTrainPlan:save")
+//    @PreAuthorize(hasPermi = "qqchTechTrainPlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTechTrainPlanVo qqchTechTrainPlanVo) {
         qqchTechTrainPlanService.save(qqchTechTrainPlanVo);

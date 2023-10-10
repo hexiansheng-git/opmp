@@ -4,7 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchPatentDeclarePlan;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanExportVo;
 import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchPatentDeclarePlanImportVo;
@@ -37,14 +37,14 @@ public class QqchPatentDeclarePlanController extends BaseController {
     private IQqchPatentDeclarePlanService qqchPatentDeclarePlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:list")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:list")
     @GetMapping
     public AjaxResult getQqchPatentDeclarePlan(@Validated(ValidationGroups.Get.class) QqchPatentDeclarePlan qqchPatentDeclarePlanParam) {
         QqchPatentDeclarePlan qqchPatentDeclarePlan = qqchPatentDeclarePlanService.getQqchPatentDeclarePlan(qqchPatentDeclarePlanParam);
         return AjaxResult.success(qqchPatentDeclarePlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:list")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchPatentDeclarePlanList(@Validated(ValidationGroups.Select.class) QqchPatentDeclarePlan qqchPatentDeclarePlanParam) {
         startPage();
@@ -52,32 +52,32 @@ public class QqchPatentDeclarePlanController extends BaseController {
         return getDataTableAjaxResult(qqchPatentDeclarePlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:add")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchPatentDeclarePlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchPatentDeclarePlan qqchPatentDeclarePlanParam) {
         qqchPatentDeclarePlanService.insertQqchPatentDeclarePlan(qqchPatentDeclarePlanParam);
         return AjaxResult.success(qqchPatentDeclarePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:update")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchPatentDeclarePlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchPatentDeclarePlan qqchPatentDeclarePlanParam) {
         return toAjax(qqchPatentDeclarePlanService.updateQqchPatentDeclarePlan(qqchPatentDeclarePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:update")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchPatentDeclarePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchPatentDeclarePlan> qqchPatentDeclarePlanListParam) {
         return toAjax(qqchPatentDeclarePlanService.updateQqchPatentDeclarePlanList(qqchPatentDeclarePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchPatentDeclarePlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchPatentDeclarePlan qqchPatentDeclarePlanParam) {
         return toAjax(qqchPatentDeclarePlanService.deleteQqchPatentDeclarePlan(qqchPatentDeclarePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:remove")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchPatentDeclarePlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchPatentDeclarePlanPkList = Arrays.asList(ids);
@@ -130,7 +130,7 @@ public class QqchPatentDeclarePlanController extends BaseController {
      * @param qqchPatentDeclarePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:save")
+//    @PreAuthorize(hasPermi = "qqchPatentDeclarePlan:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchPatentDeclarePlanVo qqchPatentDeclarePlanVo) {
         qqchPatentDeclarePlanService.save(qqchPatentDeclarePlanVo);
