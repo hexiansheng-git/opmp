@@ -589,6 +589,7 @@
             <foreach item="id" collection="xmslContractSpecialPkList" open="(" separator="," close=")">
                 #{id}
             </foreach>
+            <if test="masterId != null ">and `master_id` = #{masterId}</if>
         </where>
     </update>
 </mapper>

@@ -25,7 +25,7 @@ public interface IXmslContractGeneralService {
 
     int deleteXmslContractGeneral(XmslContractGeneral xmslContractGeneral);
 
-    int deleteXmslContractGeneralByPks(List<Long> xmslContractGeneralPkList);
+    int deleteXmslContractGeneralByPks(List<Long> xmslContractGeneralPkList, Long masterId);
 
     List<XmslContractGeneral> provideList(XmslContractGeneral xmslContractGeneralParam);
 }

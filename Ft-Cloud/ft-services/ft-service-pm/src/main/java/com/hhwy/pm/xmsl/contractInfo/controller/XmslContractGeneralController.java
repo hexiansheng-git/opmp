@@ -86,8 +86,9 @@ public class XmslContractGeneralController extends BaseController {
     @PostMapping("/remove")
     public AjaxResult deleteXmslContractGeneralByPks(@RequestBody XmslContractGeneral xmslContractGeneralParam) {
         Long [] ids = xmslContractGeneralParam.getIds();
+        Long masterId = xmslContractGeneralParam.getMasterId();
         List<Long> xmslContractGeneralPkList = Arrays.asList(ids);
-        return toAjax(xmslContractGeneralService.deleteXmslContractGeneralByPks(xmslContractGeneralPkList));
+        return toAjax(xmslContractGeneralService.deleteXmslContractGeneralByPks(xmslContractGeneralPkList, masterId));
     }
 
     /**

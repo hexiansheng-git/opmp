@@ -142,8 +142,8 @@ public class XmslContractGeneralServiceImpl implements IXmslContractGeneralServi
     }
 
     @Transactional
-    public int deleteXmslContractGeneralByPks(List<Long> xmslContractGeneralPkList) {
-        return xmslContractGeneralMapper.deleteXmslContractGeneralByPks(xmslContractGeneralPkList);
+    public int deleteXmslContractGeneralByPks(List<Long> xmslContractGeneralPkList, Long masterId) {
+        return xmslContractGeneralMapper.deleteXmslContractGeneralByPks(xmslContractGeneralPkList, masterId);
     }
 
 
