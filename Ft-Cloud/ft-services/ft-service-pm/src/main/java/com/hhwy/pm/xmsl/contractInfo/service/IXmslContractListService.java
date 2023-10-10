@@ -40,7 +40,7 @@ public interface IXmslContractListService {
 
     int deleteXmslContractList(XmslContractList xmslContractList);
 
-    int deleteXmslContractListByPks(List<Long> xmslContractListPkList);
+    int deleteXmslContractListByPks(List<Long> xmslContractListPkList, Long masterId);
 
 
     List<XmslContractList> getEffectList(XmslContractList xmslContractListParam);
