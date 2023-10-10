@@ -110,28 +110,33 @@ public class SpringbootReadyEvent {
             redisUtils.hPutAll(PmsConstant.CATEGORYREDISKEY_16,category16DataMap);
     }
 
+    private void initWbs(){
+
+    }
+
     /**
      * 获取物资16大类map
      * @return {物资分类编码 : 物资分类编码}
      */
     private Map<String,String> getCategory16Map(){
-        List<SysDictData> dictList = sysDictTypeService.selectDictDataByType("xcwz_buy_summary");
-        if(CollectionUtils.isEmpty(dictList)){
-            log.debug("购进消费库存统计表,字典项xcwz_buy_summary未配置，无法初始化数据");
-            return null;
-        }
-        Map<String,String> dictMap = new HashMap<>();
-        //格式化 > 分类编码 : 汇总码（多个以逗号隔开）
-        for (int i = 0; i < dictList.size(); i++) {
-            SysDictData temp = dictList.get(i);
-//            if(temp.getDictValue().equals("SP")) //特殊编码则默认为配件分类编码库
-//                temp.setDictValue("1301");
-            Set<String> set = new HashSet(Arrays.asList(temp.getRemark().split(",")));
-            for(String k : set){
-                ObjectUtils.add2StrMap(dictMap,k,temp.getDictValue());
-            }
-        }
-        return dictMap;
+//        List<SysDictData> dictList = sysDictTypeService.selectDictDataByType("xcwz_buy_summary");
+//        if(CollectionUtils.isEmpty(dictList)){
+//            log.debug("购进消费库存统计表,字典项xcwz_buy_summary未配置，无法初始化数据");
+//            return null;
+//        }
+//        Map<String,String> dictMap = new HashMap<>();
+//        //格式化 > 分类编码 : 汇总码（多个以逗号隔开）
+//        for (int i = 0; i < dictList.size(); i++) {
+//            SysDictData temp = dictList.get(i);
+////            if(temp.getDictValue().equals("SP")) //特殊编码则默认为配件分类编码库
+////                temp.setDictValue("1301");
+//            Set<String> set = new HashSet(Arrays.asList(temp.getRemark().split(",")));
+//            for(String k : set){
+//                ObjectUtils.add2StrMap(dictMap,k,temp.getDictValue());
+//            }
+//        }
+//        return dictMap;
+        return new HashMap<>();
     }
     
 }

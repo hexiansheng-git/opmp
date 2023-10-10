@@ -31,6 +31,7 @@ public interface UserMapper {
             "from sys_user u " +
             "left join sys_dept d on d.dept_id=u.dept_id " +
             "where u.`status`=0 and u.del_flag=0 " +
+            "and  u.`tenant_key`= #{tenantKey}" +
             "<if test=\"userInfo.deptId != null\"> AND (u.dept_id = #{userInfo.deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{userInfo.deptId}, ancestors) )) </if>" +
             "<if test=\"userInfo.userIds != null\"> " +
             "    and u.user_id in " +
@@ -39,7 +40,7 @@ public interface UserMapper {
             "    </foreach> " +
             "</if> " +
             "</script>"})
-    List<SelfUserInfo> getUserInfoBy(@Param("userInfo") SelfUserInfo selfUserInfo);
+    List<SelfUserInfo> getUserInfoBy(@Param("userInfo") SelfUserInfo selfUserInfo, @Param("tenantKey") String tenantKey);
 
     @Select({"<script>" +
             "select  " +
