@@ -400,9 +400,12 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     @Override
+    @Transactional
     public void listener(Long id) {
         Review qqchReview = this.getQqchReview(new Review(id));
         qqchReview.setTaskStatus("5");
+        qqchReview.setReviewStatus("4");
+        qqchReview.setReviewCompleteDate(DateUtils.getNowDate());
         this.updateQqchReview(qqchReview);
     }
 

@@ -63,6 +63,13 @@ public class Review extends CommonBaseEntity {
     @FtExcel(name = "要求完成评审日期", dateFormat = "yyyy-MM-dd")
     private Date finishDate;
     /**
+     * 字段描述：评审完成日期
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    @FtExcel(name = "评审完成日期", dateFormat = "yyyy-MM-dd")
+    private Date reviewCompleteDate;
+    /**
      * 字段描述：评审要求
      */
     @JsonProperty
