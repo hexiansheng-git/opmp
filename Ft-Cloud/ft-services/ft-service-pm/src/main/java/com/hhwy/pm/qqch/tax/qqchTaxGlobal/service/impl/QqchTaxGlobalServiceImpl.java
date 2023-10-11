@@ -121,7 +121,6 @@ public class QqchTaxGlobalServiceImpl implements IQqchTaxGlobalService {
 
 
 
-
     public static List<QqchTaxGlobal> build(List<QqchTaxGlobal> treeNodes, Long pid) {
         if (org.apache.commons.collections4.CollectionUtils.isEmpty(treeNodes)) {
             return new ArrayList<>();
