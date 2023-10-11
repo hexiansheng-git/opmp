@@ -112,6 +112,55 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         return qqchLabourDemandPlanMapper.personNumCalc(qqchLabourDemandPlanParam);
     }
 
+    @Override
+    public QqchLabourDemandPlanVo getQqchLabourDemandPlanListWithSearch(QqchLabourDemandPlan qqchLabourDemandPlan) {
+        QqchLabourDemandPlanVo labourDemandPlanVo = new QqchLabourDemandPlanVo();
+        BigDecimal version = qqchLabourDemandPlan.getVersion();
+        version = VersionUtil.getVersion("qqch_labour_demand_plan", version);
+        qqchLabourDemandPlan.setVersion(version);
+        List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
+        //找爸爸
+        qqchLabourDemandPlanList = getParent(qqchLabourDemandPlanList);
+        if (CollectionUtils.isNotEmpty(qqchLabourDemandPlanList)) {
+            //查询开始时间
+            QqchLabourDemandPlan qqchLabourDemandPlan1 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan1(qqchLabourDemandPlan);
+            if (qqchLabourDemandPlan1 != null && qqchLabourDemandPlan1.getEntryDate() != null) {
+                labourDemandPlanVo.setStartTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan1.getEntryDate()));
+            }
+            //查询结束时间
+            QqchLabourDemandPlan qqchLabourDemandPlan2 = qqchLabourDemandPlanMapper.getQqchLabourDemandPlan2(qqchLabourDemandPlan);
+            if (qqchLabourDemandPlan2 != null && qqchLabourDemandPlan2.getExitDate() != null) {
+                labourDemandPlanVo.setEndTime(new SimpleDateFormat("yyyy-MM").format(qqchLabourDemandPlan2.getExitDate()));
+            }
+            qqchLabourDemandPlanList.stream().filter(p -> p.getPid()!=null && p.getPid() != 0).forEach(f -> f.setJobName(""));
+        }
+        List<QqchLabourDemandPlan> treeList = TreeUtil.build(qqchLabourDemandPlanList, 0l);
+        labourDemandPlanVo.setVersion(version);
+        labourDemandPlanVo.setStageIdentity(qqchReviewService.getStage());
+        labourDemandPlanVo.setQqchLabourDemandPlanList(treeList);
+        return labourDemandPlanVo;
+    }
+
+    List<QqchLabourDemandPlan> getParent(List<QqchLabourDemandPlan> list) {
+        if (CollectionUtils.isEmpty(list)) return list;
+        
+        List<Long> pids = list.stream().map(QqchLabourDemandPlan::getPid).collect(Collectors.toList());
+        List<Long> ids = list.stream().map(QqchLabourDemandPlan::getId).collect(Collectors.toList());
+        QqchLabourDemandPlan qqchLabourDemandPlan = new QqchLabourDemandPlan();
+        qqchLabourDemandPlan.setIdList(pids);
+        List<QqchLabourDemandPlan> qqchLabourDemandPlanList = qqchLabourDemandPlanMapper.getQqchLabourDemandPlanList(qqchLabourDemandPlan);
+
+        if (!CollectionUtils.isEmpty(qqchLabourDemandPlanList)) {
+            for (QqchLabourDemandPlan labourDemandPlan : qqchLabourDemandPlanList) {
+              if (!ids.contains(labourDemandPlan.getId())){
+                  list.add(labourDemandPlan);
+              }
+            }
+        }
+        return list;
+    }
+    
+    
     /**
      * 列表接口
      * @param qqchLabourDemandPlan

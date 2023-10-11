@@ -156,10 +156,20 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
+            <if test="idList != null and idList.size() > 0">
+                and `id` in
+                <foreach item="id" collection="idList" open="(" separator="," close=")">
+                    #{id}
+                </foreach>
+            </if>
             <if test="pid != null ">and `pid` = #{pid}</if>
             <if test="outId != null  and outId != ''">and `out_id` = #{outId}</if>
-            <if test="jobName != null  and jobName != ''">and `job_name` = #{jobName}</if>
-            <if test="workTeam != null  and workTeam != ''">and `work_team` = #{workTeam}</if>
+            <if test="jobName != null  and jobName != ''">
+                and `job_name` like concat('%', #{jobName},'%')
+            </if>
+            <if test="workTeam != null  and workTeam != ''">
+                and `work_team` like concat('%', #{workTeam},'%')
+            </if>
             <if test="chinaNum != null ">and `china_num` = #{chinaNum}</if>
             <if test="outNum != null ">and `out_num` = #{outNum}</if>
             <if test="total != null ">and `total` = #{total}</if>
