@@ -104,7 +104,7 @@ public class QqchWorkGroupMember extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "手机号")
-    @NotBlank(message = "请填写手机号！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+//    @NotBlank(message = "请填写手机号！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String mobile;
     /**
      * 字段描述：微信号
