@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddressList;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.apache.poi.xssf.usermodel.XSSFDataValidation;
+import org.apache.poi.xssf.usermodel.XSSFDataValidationConstraint;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,8 @@ public class FtExcelUtil<T> {
     public Class<?> clazz;
     public Map<String, Map<String, String>> dictsMap = new HashedMap<>();
     public Map<String, List> dicTypeAndLabelMap = new HashedMap<>();
+    public int startRowIndex = 0; //下载模板起始行
+    public List<List<String>> custRowList = new ArrayList<>();  //自定义行
 
     public FtExcelUtil(Class<T> clazz) {
         this.clazz = clazz;
@@ -252,6 +255,15 @@ public class FtExcelUtil<T> {
         this.exportExcel(response);
     }
 
+    public void exportExcelWithCust(HttpServletResponse response, List<T> list, String sheetName,String fileName,List<List<String>> custRowList) {
+        this.templateName = fileName;
+        this.init(list, sheetName, FtExcel.Type.EXPORT);
+        this.custRowList = custRowList;
+        this.startRowIndex = custRowList.size();
+        this.exportExcel(response);
+
+    }
+
 
     public void exportExcel(HttpServletResponse response) {
 
@@ -260,7 +272,17 @@ public class FtExcelUtil<T> {
 
             for (int index = 0; (double) index <= sheetNo; ++index) {
                 this.createSheet(sheetNo, index);
-                Row row = this.sheet.createRow(0);
+                //处理自定义行
+                for (int i = 0; i < this.custRowList.size(); i++) {
+                    List<String> tempList =  this.custRowList.get(i);
+                    Row warnRow = this.sheet.createRow(i);
+                    for (int j = 0; j < tempList.size(); j++) {
+                        Cell cell = warnRow.createCell(j);
+                        cell.setCellValue(tempList.get(j));
+                    }
+                }
+                //构建表头
+                Row row = this.sheet.createRow(startRowIndex);
                 int column = 0;
 
                 for (Object[] os : this.fields) {
@@ -297,7 +319,7 @@ public class FtExcelUtil<T> {
         int endNo = Math.min(startNo + 65536, this.list.size());
 
         for (int i = startNo; i < endNo; ++i) {
-            row = this.sheet.createRow(i + 1 - startNo);
+            row = this.sheet.createRow(i + startRowIndex+1 - startNo);
             T vo = this.list.get(i);
             int column = 0;
 
@@ -452,6 +474,12 @@ public class FtExcelUtil<T> {
     }
 
     public void setXSSFValidation(Sheet sheet, String[] textlist, int firstRow, int endRow, int firstCol, int endCol) {
+        String str = StringUtils.join(textlist,",");
+        //如果超过255字符，会导致下拉框失效
+        if(str.length() >= 255){
+            setXSSFValidationHugeData(sheet,textlist,firstRow,endRow,firstCol,endCol);
+            return ;
+        }
         DataValidationHelper helper = sheet.getDataValidationHelper();
         DataValidationConstraint constraint = helper.createExplicitListConstraint(textlist);
         CellRangeAddressList regions = new CellRangeAddressList(firstRow, endRow, firstCol, endCol);
@@ -464,6 +492,34 @@ public class FtExcelUtil<T> {
         }
 
         sheet.addValidationData(dataValidation);
+    }
+
+    /**
+     * 处理超大下拉框
+     */
+    public void setXSSFValidationHugeData(Sheet sheet, String[] textlist, int firstRow, int endRow, int firstCol, int endCol) {
+        //获取所有sheet页个数
+        int sheetTotal = wb.getNumberOfSheets();
+        String hiddenSheetName = "hiddenSheet" + sheetTotal;
+        Sheet hiddenSheet = wb.createSheet(hiddenSheetName);
+        //写入下拉数据到新的sheet页中
+        Row row;
+        for (int i = 0; i < textlist.length; i++) {
+            row = hiddenSheet.createRow(i);
+            Cell cell = row.createCell(0);
+            cell.setCellValue(textlist[i]);
+        }
+        //获取新sheet页内容
+        String strFormula = hiddenSheetName + "!$A$1:$A$65535";   //hiddenSheetName + ! 定位到用来加载列的新的sheet页，后面则是A列的1-65535为有效性List条件
+        XSSFDataValidationConstraint constraint = new XSSFDataValidationConstraint(DataValidationConstraint.ValidationType.LIST,strFormula);
+        // 设置数据有效性加载在哪个单元格上,四个参数分别是：起始行、终止行、起始列、终止列
+        CellRangeAddressList regions = new CellRangeAddressList(0,65535, firstCol, endCol);
+        // 数据有效性对象
+        DataValidationHelper help = sheet.getDataValidationHelper();
+        DataValidation validation = help.createValidation(constraint, regions);
+        sheet.addValidationData(validation);
+        //将新建的sheet页隐藏掉
+        wb.setSheetHidden(sheetTotal, true);
     }
 
     public static String convertByExp(String propertyValue, String converterExp) throws Exception {
