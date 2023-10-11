@@ -32,6 +32,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -142,6 +143,11 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
             return 0;
         }
 
+
+        Map<String, List<XmslContractListVo>> collect = xmslContractListList.stream().collect(Collectors.groupingBy(XmslContractListVo::getCode));
+        if (xmslContractListList.size() != collect.size()) {
+            return 500;
+        }
         List<XmslContractListVo> insertList = new ArrayList<>();
         List<XmslContractListVo> updateList = new ArrayList<>();
         for (XmslContractListVo xmslContractList : xmslContractListList) {

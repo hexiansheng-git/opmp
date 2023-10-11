@@ -94,7 +94,8 @@ public class XmslContractListController extends BaseController {
     @PreAuthorize(hasPermi = "xmslContractList:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertXmslContractListList(@Validated(ValidationGroups.Save.class) @RequestBody List<XmslContractListVo> xmslContractListListParam) {
-        xmslContractListService.insertXmslContractListList(xmslContractListListParam);
+        int i = xmslContractListService.insertXmslContractListList(xmslContractListListParam);
+        if (i == 500) return AjaxResult.error("保存异常，主合同清单编号重复");
         return AjaxResult.success(xmslContractListListParam);
     }
 
