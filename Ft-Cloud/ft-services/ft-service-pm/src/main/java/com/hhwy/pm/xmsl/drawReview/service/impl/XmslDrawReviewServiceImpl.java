@@ -533,8 +533,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         XmslDrawReview dbDrawReview = this.getById(xmslDrawReview.getId());
         Assert.notNull(dbDrawReview,"未找到要删除的数据，可能该数据已被删除");
         Assert.isTrue(dbDrawReview.getValid()!=Constant.YES_INT,"已生效数据无法删除");
-        xmslDrawReview.setUpdateUser(SecurityUtils.getUserName());
-        xmslDrawReview.setUpdateTime(DateUtils.getNowDate());
+//        xmslDrawReview.setUpdateUser(SecurityUtils.getUserName());
+//        xmslDrawReview.setUpdateTime(DateUtils.getNowDate());
         xmslDrawReviewMapper.deleteXmslDrawReview(xmslDrawReview);
         //删除子表
         Map map= ObjectUtils.toMap("mainId",xmslDrawReview.getId());
