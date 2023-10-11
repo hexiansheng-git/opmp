@@ -137,8 +137,9 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         if(ObjectUtils.nvlLong(map.get("parentId"),0L).equals(0L) ){ //合同清单的根级节点pid为null
             queryList.setPid(null);
             queryList.setPtVar1("1");
+        }else{
+            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
         }
-//        queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
         List<XmslContractList> list = contractListService.getEffectList(queryList);
         if(CollectionUtils.isEmpty(list))
             return new ArrayList(2);

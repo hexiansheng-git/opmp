@@ -4,11 +4,14 @@ import cn.hutool.core.collection.ConcurrentHashSet;
 import cn.hutool.core.collection.ListUtil;
 import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.github.pagehelper.PageHelper;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
@@ -19,6 +22,7 @@ import com.hhwy.pm.xmsl.wbs.mapper.XmslWbsMapper;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.Constant;
 import com.hhwy.utils.ObjectUtils;
@@ -398,72 +402,90 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
     @Override
     public void initWbs2Redis(){
         String tenantKey = tokenService.getTenantKey();
+        initWbs2Redis(tenantKey);
+    }
+
+    @Override
+    public void initWbs2Redis(String tenantKey){
         ThreadPoolUtil.execute(()->{
-            String key = WbsRedisUtils.getKey(tenantKey);
-            String codeKey = WbsRedisUtils.getCodeKey(tenantKey);
-            String childKey = WbsRedisUtils.getChildKey(tenantKey);
-            String direChildKey = WbsRedisUtils.getDireChildKey(tenantKey);
-            String wbsListKey = WbsRedisUtils.getWbsListKey(tenantKey);
-            String listWbsKey = WbsRedisUtils.getListWbsKey(tenantKey);
-            try{
-                if(RedissonLockUtil.lock(key)){
-                    Long count = xmslWbsMapper.countByWbs(new XmslWbs());
-                    int limitSize = 3;
-                    Long pages = count/limitSize+(count%limitSize>0?1:0);
-                    Map<String,String> codeIdMap = new ConcurrentHashMap<>(limitSize); //wbsCode : wbsId
-                    Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
-                    Map<String,String> childRedisMap = new ConcurrentHashMap<>(limitSize); //wbs对应的全部子级（孙级）
-                    Map<String,String> direChildRedisMap = new ConcurrentHashMap<>(limitSize);//wbs对应的直属子级
-                    Map<String,String> wbsListMap = new ConcurrentHashMap<>(); //wbs编号对应清单编号
-                    Map<String,String> listWbsMap = new ConcurrentHashMap<>(); //清单编号对应wbs编号
-                    redisUtils.delete(key);
-                    for (int i = 0; i < pages.intValue(); i++) {
-                        PageHelper.startPage(i+1,limitSize,false);
-                        List<XmslWbs> allList = this.latestWbsListSortLevel();
-                        //遍历塞入map
-                        allList.parallelStream().forEach(r->{
-                            String[] listCodes = Convert.toStrArray(r.getListCode());
-                            ObjectUtils.addStr2MapList(wbsListMap,r.getCode(),r.getListCode());
-                            if(ArrayUtils.isNotEmpty(listCodes)){
-                                for (int j = 0; j < listCodes.length; j++) {
-                                    ObjectUtils.addStr2MapList(listWbsMap,listCodes[j],r.getCode());
-                                }    
-                            }
-                            codeIdMap.put(r.getCode(),r.getId()+"" );
-                            redisMap.put(r.getId(), JSONObject.toJSONString(r));
-                            //直属子级
-                            if(StringUtils.isNotBlank(r.getParentId()))
-                                ObjectUtils.addStr2MapList(direChildRedisMap,r.getParentId(),r.getId());
-                            String ancestor = r.getAncestors();
-                            if(com.hhwy.common.core.utils.StringUtils.isBlank(ancestor))
-                                return;
-                            String[] pids = ancestor.split(",");
-                            for (int j = 0; j < pids.length; j++) {
-                                if(com.hhwy.common.core.utils.StringUtils.equals(pids[j],r.getId()))
-                                    continue;
-                                ObjectUtils.addStr2MapList(childRedisMap,pids[j],r.getId());
-                            }
-                        });
-                        redisUtils.hPutAll(key,redisMap);
-                        redisMap.clear();
-                        redisUtils.hPutAll(codeKey,codeIdMap);
-                        codeIdMap.clear();
-                    }
-                    redisUtils.delete(childKey);
-                    redisUtils.hPutAll(childKey,childRedisMap);
-                    redisUtils.delete(direChildKey);
-                    redisUtils.hPutAll(direChildKey,direChildRedisMap);
-                    redisUtils.delete(wbsListKey);
-                    redisUtils.hPutAll(wbsListKey,wbsListMap);
-                    redisUtils.delete(listWbsKey);
-                    redisUtils.hPutAll(listWbsKey,listWbsMap);
+            //切换到master
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            try {
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+
+                String key = WbsRedisUtils.getKey(tenantKey);
+                String codeKey = WbsRedisUtils.getCodeKey(tenantKey);
+                String childKey = WbsRedisUtils.getChildKey(tenantKey);
+                String direChildKey = WbsRedisUtils.getDireChildKey(tenantKey);
+                String wbsListKey = WbsRedisUtils.getWbsListKey(tenantKey);
+                String listWbsKey = WbsRedisUtils.getListWbsKey(tenantKey);
+                try{
+                    if(RedissonLockUtil.lock(key)){
+                        Long count = xmslWbsMapper.countByWbs(new XmslWbs());
+                        int limitSize = 3;
+                        Long pages = count/limitSize+(count%limitSize>0?1:0);
+                        Map<String,String> codeIdMap = new ConcurrentHashMap<>(limitSize); //wbsCode : wbsId
+                        Map<String,String> redisMap = new ConcurrentHashMap<>(limitSize);
+                        Map<String,String> childRedisMap = new ConcurrentHashMap<>(limitSize); //wbs对应的全部子级（孙级）
+                        Map<String,String> direChildRedisMap = new ConcurrentHashMap<>(limitSize);//wbs对应的直属子级
+                        Map<String,String> wbsListMap = new ConcurrentHashMap<>(); //wbs编号对应清单编号
+                        Map<String,String> listWbsMap = new ConcurrentHashMap<>(); //清单编号对应wbs编号
+                        redisUtils.delete(key);
+                        for (int i = 0; i < pages.intValue(); i++) {
+                            PageHelper.startPage(i+1,limitSize,false);
+                            List<XmslWbs> allList = this.latestWbsListSortLevel();
+                            //遍历塞入map
+                            allList.parallelStream().forEach(r->{
+                                String[] listCodes = Convert.toStrArray(r.getListCode());
+                                ObjectUtils.addStr2MapList(wbsListMap,r.getCode(),r.getListCode());
+                                if(ArrayUtils.isNotEmpty(listCodes)){
+                                    for (int j = 0; j < listCodes.length; j++) {
+                                        ObjectUtils.addStr2MapList(listWbsMap,listCodes[j],r.getCode());
+                                    }
+                                }
+                                codeIdMap.put(r.getCode(),r.getId()+"" );
+                                redisMap.put(r.getId(), JSONObject.toJSONString(r));
+                                //直属子级
+                                if(StringUtils.isNotBlank(r.getParentId()))
+                                    ObjectUtils.addStr2MapList(direChildRedisMap,r.getParentId(),r.getId());
+                                String ancestor = r.getAncestors();
+                                if(com.hhwy.common.core.utils.StringUtils.isBlank(ancestor))
+                                    return;
+                                String[] pids = ancestor.split(",");
+                                for (int j = 0; j < pids.length; j++) {
+                                    if(com.hhwy.common.core.utils.StringUtils.equals(pids[j],r.getId()))
+                                        continue;
+                                    ObjectUtils.addStr2MapList(childRedisMap,pids[j],r.getId());
+                                }
+                            });
+                            redisUtils.hPutAll(key,redisMap);
+                            redisMap.clear();
+                            redisUtils.hPutAll(codeKey,codeIdMap);
+                            codeIdMap.clear();
+                        }
+                        redisUtils.delete(childKey);
+                        redisUtils.hPutAll(childKey,childRedisMap);
+                        redisUtils.delete(direChildKey);
+                        redisUtils.hPutAll(direChildKey,direChildRedisMap);
+                        redisUtils.delete(wbsListKey);
+                        redisUtils.hPutAll(wbsListKey,wbsListMap);
+                        redisUtils.delete(listWbsKey);
+                        redisUtils.hPutAll(listWbsKey,listWbsMap);
 //                    redisUtils.hput
+                    }
+                }catch(Exception e){
+                    e.printStackTrace();
+                    logger.info("塞wbs到缓存失败,msg:{}",e.getMessage());
+                }finally {
+                    RedissonLockUtil.unlock(key);
                 }
-            }catch(Exception e){
+            }catch (Exception e){
                 e.printStackTrace();
-                logger.info("塞wbs到缓存失败,msg:{}",e.getMessage());
+                throw new CustomException(e.getMessage());
             }finally {
-                RedissonLockUtil.unlock(key);
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
             }
         });
     }

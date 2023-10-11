@@ -129,8 +129,8 @@ public class XmslContractSpecialServiceImpl implements IXmslContractSpecialServi
     }
 
     @Transactional
-    public int deleteXmslContractSpecialByPks(List<Long> xmslContractSpecialPkList) {
-        return xmslContractSpecialMapper.deleteXmslContractSpecialByPks(xmslContractSpecialPkList);
+    public int deleteXmslContractSpecialByPks(List<Long> xmslContractSpecialPkList, Long masterId) {
+        return xmslContractSpecialMapper.deleteXmslContractSpecialByPks(xmslContractSpecialPkList, masterId);
     }
 
     @Override

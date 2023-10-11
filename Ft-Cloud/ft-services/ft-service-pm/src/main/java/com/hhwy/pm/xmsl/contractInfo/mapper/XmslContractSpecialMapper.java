@@ -27,5 +27,5 @@ public interface XmslContractSpecialMapper {
 
     int deleteXmslContractSpecial(XmslContractSpecial xmslContractSpecial);
 
-    int deleteXmslContractSpecialByPks(@Param("xmslContractSpecialPkList") List<Long> xmslContractSpecialPkList);
+    int deleteXmslContractSpecialByPks(@Param("xmslContractSpecialPkList") List<Long> xmslContractSpecialPkList, @Param("masterId") Long masterId);
 }

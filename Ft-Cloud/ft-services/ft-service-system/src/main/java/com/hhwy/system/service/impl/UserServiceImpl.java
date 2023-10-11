@@ -2,6 +2,7 @@ package com.hhwy.system.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.service.TokenService;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.domain.base.system.SelfUserInfo;
 import com.hhwy.domain.base.system.UserPostInfo;
 import com.hhwy.system.api.domain.SysDept;
@@ -41,7 +42,8 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public List<SelfUserInfo> getUserInfoBy(SelfUserInfo selfUserInfo) {
-        List<SelfUserInfo> list = userMapper.getUserInfoBy(selfUserInfo);
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<SelfUserInfo> list = userMapper.getUserInfoBy(selfUserInfo,tenantKey);
         if(CollectionUtils.isEmpty(list)){
             return new ArrayList<>();
         }
