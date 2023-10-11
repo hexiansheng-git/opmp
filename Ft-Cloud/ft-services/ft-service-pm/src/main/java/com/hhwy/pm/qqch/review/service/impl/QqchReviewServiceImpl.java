@@ -13,7 +13,9 @@ import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
+import com.hhwy.pm.qqch.group.domain.QqchWorkGroupMember;
 import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMapper;
+import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
@@ -89,6 +91,12 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
     @Autowired
     private IXmslContractInfoService xmslContractInfoService;
+
+    @Autowired
+    private IQqchWorkPlanDetailService qqchWorkPlanDetailService;
+
+    @Autowired
+    private IQqchWorkGroupMemberService qqchWorkGroupMemberService;
 
     public Review getQqchReview(Review review) {
         return reviewMapper.getQqchReview(review);
@@ -482,6 +490,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 Long diffDays = FtDateUtils.getDays(winTheBiddingDate, nowDate);
                 if(diffDays > 30){
                     /*发送预警*/
+                    //获取填报人员
+                    List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage("1");
+                    //获取工作小组组长
+                    List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
                     warnService.addWarn(WarnItem.PREPARATION_FIRST_STAGE, WarnScopeType.USER,null,"admin",tenantKey);
                 }
             }
@@ -552,6 +564,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 Date nowDate = DateUtils.getNowDate();
                 if(nowDate.compareTo(smallDate) > 0){
+                    List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage("1");
                     warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
                 }
             }
@@ -607,6 +620,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 if(nowDate.compareTo(cutOffTime) > 0){
                     /*发送预警*/
+                    List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage("1");
                     warnService.addWarn(WarnItem.PREPARATION_THIRD_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
                 }
             }

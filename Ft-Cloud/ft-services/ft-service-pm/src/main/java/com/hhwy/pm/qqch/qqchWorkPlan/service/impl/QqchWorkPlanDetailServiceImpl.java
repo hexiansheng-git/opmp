@@ -1,19 +1,22 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.service.impl;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonService;
+import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanDetailMapper;
+import com.hhwy.pm.qqch.qqchWorkPlan.mapper.QqchWorkPlanMapper;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanDetailService;
 import com.hhwy.utils.EntityUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author hwj
@@ -27,6 +30,8 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
     private QqchWorkPlanDetailMapper qqchWorkPlanDetailMapper;
     @Autowired
     private CommonService wzchCommonService;
+    @Autowired
+    private QqchWorkPlanMapper qqchWorkPlanMapper;
 
 
     public QqchWorkPlanDetail getQqchWorkPlanDetail(QqchWorkPlanDetail qqchWorkPlanDetail) {
@@ -82,6 +87,43 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
     public int deleteQqchWorkPlanDetailByPks(List<Long> qqchWorkPlanDetailPkList) {
         return qqchWorkPlanDetailMapper.deleteQqchWorkPlanDetailByPks(qqchWorkPlanDetailPkList);
     }
+
+    /**
+     * 根据阶段获取当前阶段所有的编制人
+     * @param planStage
+     * @return
+     */
+    @Override
+    public List<Long> getEditorListByPlanStage(String planStage){
+        List<Long> editorList = new ArrayList<>();
+        //查询最新的工作计划
+        QqchWorkPlan workPlan = qqchWorkPlanMapper.getValidMaxVersionWorkPlan();
+        if(workPlan == null){
+            return editorList;
+        }
+
+        Long mainId = workPlan.getId();
+
+        String var1 = null;
+        String var2 = null;
+        switch (planStage) {
+            case "1":
+                var1 = "is_first";
+                var2 = "editor_first";
+                break;
+            case "2":
+                var1 = "is_second";
+                var2 = "editor_second";
+                break;
+            case "3":
+                var1 = "is_third";
+                var2 = "editor_third";
+                break;
+            default:return editorList;
+        }
+        return qqchWorkPlanDetailMapper.getEditorListByPlanStage(mainId,var1,var2);
+    }
+
     /**
      * 更新详情信息
      *

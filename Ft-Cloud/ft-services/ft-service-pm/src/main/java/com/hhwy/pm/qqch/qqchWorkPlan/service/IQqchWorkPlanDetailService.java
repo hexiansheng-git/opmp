@@ -33,4 +33,6 @@ public interface IQqchWorkPlanDetailService {
      */
     int insertOrEditBatchByMainId(List<QqchWorkPlanDetail> list, Long mainId);
 
+    List<Long> getEditorListByPlanStage(String planStage);
+
 }

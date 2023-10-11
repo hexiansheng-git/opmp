@@ -21,6 +21,8 @@ public interface IQqchWorkPlanService {
     QqchWorkPlan baseInfo(Map<String, String> map);
     QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
 
+    QqchWorkPlan getValidMaxVersionWorkPlan();
+
     List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan);
 
     Long insertQqchWorkPlan(QqchWorkPlan qqchWorkPlan);

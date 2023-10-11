@@ -6,11 +6,8 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.pm.qqch.common.domain.PreparationEntity;
-import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -34,12 +31,6 @@ public class QqchWorkPlanningPrjImg extends PreparationEntity {
     @JsonProperty
     @Excel(name = "附件id")
     private String fileId;
-//    /**
-//     * 字段描述：版本
-//     */
-//    @JsonProperty
-//    @Excel(name = "版本")
-//    private BigDecimal version;
     /**
      * 字段描述：数据创建者id
      */
@@ -92,17 +83,13 @@ public class QqchWorkPlanningPrjImg extends PreparationEntity {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：附件id
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "附件id")
     private String ptVar1;
     //0失效  1有效
     @JsonProperty
     @Excel(name = "保存标识")
     private String valid;
-
-//    @NotBlank(message = "保存/确认标识不能为空！",groups = ValidationGroups.Save.class)
-//    private String submitFlag;
-
 }

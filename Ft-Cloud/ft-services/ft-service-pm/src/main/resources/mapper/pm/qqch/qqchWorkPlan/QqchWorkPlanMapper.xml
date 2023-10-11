@@ -212,14 +212,20 @@
             <if test="taskCommitDate != null">and `task_commit_date` = #{taskCommitDate}</if>
         </where>
     </select>
-    <select id="getFirstVersionQqchWorkPlan" resultType="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan">
+    <select id="getFirstVersionQqchWorkPlan" resultMap="QqchWorkPlanResultMap">
         <include refid="selectQqchWorkPlanVo"/>
         where del_flag = '0' and version = 1
         limit 1
     </select>
-    <select id="getWorkPlanListByFlowStatus" resultType="com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan">
+    <select id="getWorkPlanListByFlowStatus" resultMap="QqchWorkPlanResultMap">
         <include refid="selectQqchWorkPlanVo"/>
         where del_flag = '0' and task_status = #{flowStatus}
+        limit 1
+    </select>
+    <select id="getValidMaxVersionWorkPlan" resultMap="QqchWorkPlanResultMap">
+        <include refid="selectQqchWorkPlanVo"/>
+        where del_flag = '0' and valid = '1' and task_status = '5'
+        order by version desc
         limit 1
     </select>
 

@@ -13,8 +13,11 @@ import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.flowable.api.RemoteBpmnService;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
@@ -42,6 +45,7 @@ import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.apache.ibatis.annotations.Param;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +86,10 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     private WarnService warnService;
     @Autowired
     private RocketMQTemplate rocketMQTemplate;
+    @Autowired
+    private RemoteBpmnService remoteBpmnService;
 
+    @Autowired
     private IQqchWorkGroupMemberService qqchWorkGroupMemberService;
 
     private final static String ONE = "1";//菜单进入
@@ -263,6 +270,11 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
     public QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan) {
         return qqchWorkPlanMapper.getQqchWorkPlan(qqchWorkPlan);
+    }
+
+    @Override
+    public QqchWorkPlan getValidMaxVersionWorkPlan() {
+        return qqchWorkPlanMapper.getValidMaxVersionWorkPlan();
     }
 
     public List<QqchWorkPlan> getQqchWorkPlanList(QqchWorkPlan qqchWorkPlan) {
@@ -512,8 +524,15 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                     /*判断是否已提交前期策划工作计划报请审批*/
                     QqchWorkPlan firstVersionQqchWorkPlan = qqchWorkPlanMapper.getFirstVersionQqchWorkPlan();
                     if(firstVersionQqchWorkPlan == null || firstVersionQqchWorkPlan.getTaskStatus() == null || firstVersionQqchWorkPlan.getTaskStatus().equals("0")){
-                        warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,"admin",tenantKey);
-
+                        //获取工作小组组长
+                        List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
+                        StringBuilder warnScope = new StringBuilder();
+                        for (QqchWorkGroupMember qqchWorkGroupMember : groupLeader) {
+                            warnScope.append(qqchWorkGroupMember.getDirectorUserName()).append(",");
+                        }
+                        if(StringUtils.isNotBlank(warnScope)){
+                            warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                        }
                     }
                 }
             }
@@ -523,6 +542,15 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
+    }
+
+    private QqchWorkPlan getWorkPlanListByFlowStatus(@Param("flowStatus") String flowStatus){
+        QqchWorkPlan workPlan = qqchWorkPlanMapper.getWorkPlanListByFlowStatus(flowStatus);
+        if(workPlan == null){
+            return null;
+        }
+        FlowInfoSearchUtil.getFlowInfo(workPlan, FlowEnum.QQCH_WORK_PLAN);
+        return workPlan;
     }
 
     /**
@@ -545,7 +573,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 DynamicDataSourceContextHolder.push(dataSource);
 
                 //获取流程状态为 “审批中” 的工作计划数据
-                QqchWorkPlan workPlan = qqchWorkPlanMapper.getWorkPlanListByFlowStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
+                QqchWorkPlan workPlan = this.getWorkPlanListByFlowStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
                 if(workPlan == null){
                     continue;
                 }
@@ -554,14 +582,23 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 Date taskCommitDate = workPlan.getTaskCommitDate();
                 Date nowDate = DateUtils.getNowDate();
                 Long diffDays = FtDateUtils.getDays(taskCommitDate, nowDate);
-                if(diffDays > 3){
+                if(true){
                     //获取工作小组组长
                     List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
-                    warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,"admin",tenantKey);
+                    StringBuilder warnScope = new StringBuilder();
+                    for (QqchWorkGroupMember qqchWorkGroupMember : groupLeader) {
+                        warnScope.append(qqchWorkGroupMember.getDirectorUserName()).append(",");
+                    }
+                    /*流程实例id*/
+                    String instanceId = workPlan.getInstanceId();
+                    Map<String, Object> map = remoteBpmnService.handleList(instanceId, "qqch_work_plan", workPlan.getId().toString()).getData();
+                    Map itemsMap = (Map) map.get("items");
+
+                    warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
                 }
             }
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);

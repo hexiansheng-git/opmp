@@ -1,9 +1,9 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.mapper;
 
-import java.util.List;
-
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @author hwj
@@ -27,4 +27,7 @@ public interface QqchWorkPlanDetailMapper {
     int deleteQqchWorkPlanDetail(QqchWorkPlanDetail qqchWorkPlanDetail);
 
     int deleteQqchWorkPlanDetailByPks(@Param("qqchWorkPlanDetailPkList") List<Long> qqchWorkPlanDetailPkList);
+
+    List<Long> getEditorListByPlanStage(@Param("mainId") Long mainId,@Param("var1") String var1,@Param("var2") String var2);
+
 }

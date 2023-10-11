@@ -20,6 +20,8 @@ public interface QqchWorkPlanMapper {
      */
     QqchWorkPlan getFirstVersionQqchWorkPlan();
 
+    QqchWorkPlan getValidMaxVersionWorkPlan();
+
     /**
      * 根据流程状态获取工作计划数据
      * @param flowStatus
@@ -43,5 +45,4 @@ public interface QqchWorkPlanMapper {
     int deleteQqchWorkPlanByPks(@Param("qqchWorkPlanPkList") List<Long> qqchWorkPlanPkList);
 
     void updateAllToInvalid();
-
 }
