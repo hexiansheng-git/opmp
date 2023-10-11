@@ -9,6 +9,7 @@ import com.hhwy.pm.qqch.sgch.sche.domain.QqchScheAnalyse;
 import com.hhwy.pm.qqch.sgch.sche.mapper.QqchScheAnalyseMapper;
 import com.hhwy.pm.qqch.sgch.sche.service.IQqchScheAnalyseService;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,7 +109,7 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
         if (CollectionUtils.isEmpty(dealSaveDto)) return;
         QqchScheAnalyse qqchScheAnalyse = dealSaveDto.get(0);
         // 保存不做校验
-        if (PmConstant.ZERO.equals(qqchScheAnalyse.getSubmitFlag())) return;
+        // if (PmConstant.ZERO.equals(qqchScheAnalyse.getSubmitFlag())) return;
 
         StringBuilder errorMsg = new StringBuilder();
 
@@ -121,7 +122,7 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
         if (collect1.size() != dealSaveDto.size()) throw new RuntimeException("得分不能重复");
 
         // 按照得分排序
-        List<QqchScheAnalyse> collect = dealSaveDto.stream().sorted(Comparator.comparing(QqchScheAnalyse::getScore)).collect(Collectors.toList());
+        List<QqchScheAnalyse> collect = dealSaveDto.stream().sorted(Comparator.comparing(QqchScheAnalyse::getScore).reversed()).collect(Collectors.toList());
 
         // 按照顺序放在队列里面
         // 差异性   越小得分越高
@@ -135,28 +136,152 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
         // 机场产值 越大得分越高
         LinkedList<BigDecimal> buildList = new LinkedList<>();
 
-        for (QqchScheAnalyse scheAnalyse : collect) {
-            BigDecimal diffMaxScore = null2Max(scheAnalyse.getDiffMaxScore());
-            BigDecimal diffMinScore = null2Min(scheAnalyse.getDiffMinScore());
+        for (int i = 0; i < collect.size(); i++) {
 
-            BigDecimal lineMax = null2Max(scheAnalyse.getLineMaxScore());
-            BigDecimal lineMin = null2Min(scheAnalyse.getLineMinScore());
+            QqchScheAnalyse scheAnalyse = collect.get(i);
+            String score = scheAnalyse.getScore() + "";
 
-            BigDecimal sumMaxScore = null2Max(scheAnalyse.getSumMaxScore());
-            BigDecimal sumMinScore = null2Min(scheAnalyse.getSumMinScore());
+            // 校验差异性(%)[S曲线差异值]
+            checkMin(scheAnalyse.getDiffMaxScore(),
+                    scheAnalyse.getDiffMinScore(),
+                    diffList,
+                    errorMsg,
+                    score,
+                    "差异性(%)[S曲线差异值]",
+                    i,
+                    collect.size());
 
-            BigDecimal roadMaxScore = null2Max(scheAnalyse.getRoadMaxScore());
-            BigDecimal roadMinScore = null2Min(scheAnalyse.getRoadMinScore());
+            // 校验关键形象进度线路(%)
+            checkMin(scheAnalyse.getLineMaxScore(),
+                    scheAnalyse.getLineMinScore(),
+                    lineList,
+                    errorMsg,
+                    score,
+                    "关键形象进度线路(%)",
+                    i,
+                    collect.size());
 
-            BigDecimal buildMaxScore = null2Max(scheAnalyse.getBuildMaxScore());
-            BigDecimal buildMinScore = null2Min(scheAnalyse.getBuildMinScore());
-            
+            // 校验累计计量产值/累计施工产值(%)
+            checkMin(scheAnalyse.getSumMaxScore(),
+                    scheAnalyse.getSumMinScore(),
+                    sumProdList,
+                    errorMsg,
+                    score,
+                    "累计计量产值/累计施工产值(%)",
+                    i,
+                    collect.size());
+
+
+            // 校验累计计量产值/累计施工产值(%)
+            checkMax(scheAnalyse.getRoadMaxScore(),
+                    scheAnalyse.getRoadMinScore(),
+                    roadList,
+                    errorMsg,
+                    score,
+                    "(公路/铁路)万美元年平均产值",
+                    i,
+                    collect.size());
+
+
+            // 校验 (机场/房建)万美元年平均产值
+            checkMax(scheAnalyse.getBuildMaxScore(),
+                    scheAnalyse.getBuildMinScore(),
+                    buildList,
+                    errorMsg,
+                    score,
+                    "(机场/房建)万美元年平均产值",
+                    i,
+                    collect.size());
 
 
         }
 
+        if (StringUtils.isNotEmpty(errorMsg.toString())) {
+            throw new RuntimeException(errorMsg.toString());
+        }
+
 
     }
+
+
+    /**
+     * 由小到大校验
+     *
+     * @param max      大值
+     * @param min      小值
+     * @param list     用于存放数据方便校验
+     * @param errorMsg 错误信息
+     * @param score    分数
+     * @param msg      功能
+     * @param idx      下标
+     */
+    private void checkMin(BigDecimal max,
+                          BigDecimal min,
+                          LinkedList<BigDecimal> list,
+                          StringBuilder errorMsg,
+                          String score,
+                          String msg,
+                          int idx,
+                          int size) {
+
+        if (size - 1 == idx) {
+            max = null2Max(max);
+        }
+
+        if (idx != 0 && !checkScoreMin(list, min)) {
+            errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最小值不能小于上一等级的最大值; ");
+        } else {
+            min = null2Min(min);
+        }
+        if (max.compareTo(min) < 0) {
+            errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能小于最低值; ");
+        }
+
+        list.add(min);
+        list.add(max);
+
+    }
+
+    /**
+     * 由大到小校验
+     *
+     * @param max      大值
+     * @param min      小值
+     * @param list     用于存放数据方便校验
+     * @param errorMsg 错误信息
+     * @param score    分数
+     * @param msg      功能
+     * @param idx      下标
+     */
+    private void checkMax(BigDecimal max,
+                          BigDecimal min,
+                          LinkedList<BigDecimal> list,
+                          StringBuilder errorMsg,
+                          String score,
+                          String msg,
+                          int idx,
+                          int size) {
+
+        if (size - 1 == idx) {
+            max = null2Max(max);
+        }
+
+        if (idx != 0 && !checkScoreMax(list, max)) {
+            errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能大于上一等级的最小值; ");
+        } else {
+            min = null2Min(min);
+        }
+
+        if (max.compareTo(min) < 0) {
+            errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能小于最低值; ");
+        }
+
+        // 依次放在集合
+        list.add(max);
+        list.add(min);
+
+    }
+
 
     BigDecimal null2Max(BigDecimal decimal) {
         return decimal == null ? PmConstant.MAX_LONG_DECIMAL : decimal;
@@ -167,4 +292,13 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
     }
 
 
+    boolean checkScoreMax(LinkedList<BigDecimal> scoreList, BigDecimal min) {
+        BigDecimal last = scoreList.getLast();
+        return last.compareTo(min) >= 0;
+    }
+
+    boolean checkScoreMin(LinkedList<BigDecimal> scoreList, BigDecimal min) {
+        BigDecimal last = scoreList.getLast();
+        return last.compareTo(min) <= 0;
+    }
 }

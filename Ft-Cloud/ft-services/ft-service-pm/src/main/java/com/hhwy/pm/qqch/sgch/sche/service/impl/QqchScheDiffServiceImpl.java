@@ -122,7 +122,7 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
         if (CollectionUtils.isEmpty(dealSaveDto)) return;
         QqchScheDiff param1 = dealSaveDto.get(0);
         // 如果当前的提交状态是报错的话  就不做校验
-        if ("0".equals(param1.getSubmitFlag())) return;
+       //  if ("0".equals(param1.getSubmitFlag())) return;
         StringBuilder errorMsg = new StringBuilder();
 
         // 不能为空
@@ -132,7 +132,10 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
 
         // 不能重复
         List<String> collect1 = dealSaveDto.stream().map(QqchScheDiff::getWarnLevel).distinct().collect(Collectors.toList());
+        List<String> risk = dealSaveDto.stream().map(QqchScheDiff::getRiskLevel).distinct().collect(Collectors.toList());
         if (collect1.size() != dealSaveDto.size()) throw new RuntimeException("进度差异化预警等级不能重复");
+        if (dealSaveDto.size() != risk.size()) throw new RuntimeException("风险等级不能重复");
+        
         // 按照差异化风险等级排序
         List<QqchScheDiff> collect = dealSaveDto.stream().sorted(Comparator.comparing(QqchScheDiff::getWarnLevel)).collect(Collectors.toList());
         // 按照顺序放在队列里面
@@ -147,23 +150,24 @@ public class QqchScheDiffServiceImpl implements IQqchScheDiffService {
             BigDecimal maxScore = qqchScheDiff.getMaxScore();
             BigDecimal minScore = qqchScheDiff.getMinScore();
             if (maxScore == null || minScore == null) {
-                errorMsg.append("进度差异化预警等级为【").append(label).append("】的最高分或最低分不能为空;");
+                errorMsg.append("进度差异化预警等级为【").append(label).append("】的最高分或最低分不能为空; ");
                 // 打破本次循环
                 continue;
             }
             if (i != 0) {
                 if (!checkScore(scoreList, maxScore))
-                    errorMsg.append("进度差异化预警等级为【").append(label).append("】的最高分不能大于上一等级的最低值");
+                    errorMsg.append("进度差异化预警等级为【").append(label).append("】的最高分不能大于上一等级的最低值; ");
                 if (!checkScore(scoreList, minScore))
-                    errorMsg.append("进度差异化预警等级为【").append(label).append("】的最低分不能大于最高分");
+                    errorMsg.append("进度差异化预警等级为【").append(label).append("】的最低分不能大于最高分; ");
             }
-            scoreList.push(maxScore);
-            scoreList.push(minScore);
-
-            if (!StringUtils.isEmpty(errorMsg.toString())) {
-                throw new RuntimeException(errorMsg.toString());
-            }
+            scoreList.add(maxScore);
+            scoreList.add(minScore);
+         
         }
+        if (!StringUtils.isEmpty(errorMsg.toString())) {
+            throw new RuntimeException(errorMsg.toString());
+        }
+    
     }
 
     boolean checkScore(LinkedList<BigDecimal> scoreList, BigDecimal score) {

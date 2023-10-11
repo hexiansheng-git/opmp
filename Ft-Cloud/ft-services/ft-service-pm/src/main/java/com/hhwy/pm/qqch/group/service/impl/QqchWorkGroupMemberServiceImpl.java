@@ -157,14 +157,6 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
                 }
             }
 
-//            //选出所有不同的数据
-//            Map<Long,String> memberMap = new HashMap<>();
-//            for (QqchWorkGroupMember qqchWorkGroupMember : allMember) {
-//                if(qqchWorkGroupMember.getDirectorId() != null && StringUtils.isNotBlank(qqchWorkGroupMember.getDirector())){
-//                    memberMap.put(qqchWorkGroupMember.getDirectorId(),qqchWorkGroupMember.getDirector());
-//                }
-//            }
-
             //制作数组
             for (QqchWorkGroupMember member : resultMember) {
                 String directorUserName = member.getDirectorUserName();
@@ -178,19 +170,11 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
             }
 
             if(StringUtils.isNotBlank(temporaryGroupDuty)){
-                for (int i = 0; i < resultMember.size(); i++) {
-                    QqchWorkGroupMember member = resultMember.get(i);
+                for (QqchWorkGroupMember member : resultMember) {
                     List<QqchWorkGroupMember> children = member.getChildren();
-                    for (int j = 0; j < children.size(); j++) {
-                        QqchWorkGroupMember child = children.get(j);
-                        if(!temporaryGroupDuty.equals(child.getTemporaryGroupDuty())){
-                            children.remove(child);
-                        }
-                    }
-                    if(CollectionUtils.isEmpty(children)){
-                        resultMember.remove(member);
-                    }
+                    children.removeIf(o -> !temporaryGroupDuty.equals(o.getTemporaryGroupDuty()));
                 }
+                resultMember.removeIf(o -> CollectionUtils.isEmpty(o.getChildren()));
             }
 
         }catch (Exception e){
