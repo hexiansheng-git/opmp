@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -40,6 +41,8 @@ public class XmslDrawReviewMaterialServiceImpl implements IXmslDrawReviewMateria
         queryMater.setMainId(mainId);
         queryMater.setWbsId(wbsId);
         queryMater.setListIds(listIdSet);
+        if(CollectionUtils.isEmpty(listIdSet))
+            return new ArrayList<>();
         List<XmslDrawReviewMaterial> materialList = xmslDrawReviewMaterialMapper.getXmslDrawReviewMaterialList(queryMater);
         return materialList;
     }

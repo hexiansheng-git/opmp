@@ -90,6 +90,10 @@ public class CommonService {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
 
+        if (true){
+            return permissionMark;
+        }
+
         //获取当前阶段
         String currentStage = qqchReviewService.getStage();
         if (PmConstant.END_STAGE.equals(currentStage)) {
