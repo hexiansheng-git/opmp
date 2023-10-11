@@ -41,4 +41,10 @@ public interface IQqchLabourDemandPlanService {
     QqchLabourDemandPlanVo sychData(QqchLabourDemandPlanVo vo);
 
     Map<String, Integer> personNumCalc(QqchLabourDemandPlan qqchLabourDemandPlanParam);
+
+    /**
+     * @param qqchLabourDemandPlanParam 
+     * @return
+     */
+    QqchLabourDemandPlanVo getQqchLabourDemandPlanListWithSearch(QqchLabourDemandPlan qqchLabourDemandPlanParam);
 }

@@ -99,6 +99,20 @@ public class QqchLabourDemandPlanController extends BaseController {
 
 
     /**
+     * 列表
+     *
+     * @param qqchLabourDemandPlanParam
+     * @return
+     */
+    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
+    @GetMapping("/listTreeWithSearch")
+    public AjaxResult listTreeWithSearch(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
+        QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.getQqchLabourDemandPlanListWithSearch(qqchLabourDemandPlanParam);
+        return AjaxResult.success(vo);
+    }
+
+
+    /**
      * 保存/确认
      *
      * @param qqchLabourDemandPlanVo

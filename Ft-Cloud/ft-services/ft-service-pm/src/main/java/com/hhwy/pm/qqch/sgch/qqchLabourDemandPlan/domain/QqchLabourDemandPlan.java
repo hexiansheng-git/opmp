@@ -32,6 +32,7 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     @JsonProperty
     @Excel(name = "主键")
     private Long id;
+    private List<Long> idList;
 
     private Long pid;
 
