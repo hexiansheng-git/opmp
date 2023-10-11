@@ -10,6 +10,7 @@
     <result property="topicCode" column="topic_code"/>
     <result property="topicName" column="topic_name"/>
     <result property="businessArea" column="business_area"/>
+    <result property="businessAreaName" column="business_area_name"/>
     <result property="professionalCategory" column="professional_category"/>
     <result property="topicAnalysis" column="topic_analysis"/>
     <result property="topicType" column="topic_type"/>
@@ -42,6 +43,7 @@
       ,`topic_code`
       ,`topic_name`
       ,`business_area`
+      ,`business_area_name`
       ,`professional_category`
       ,`topic_analysis`
       ,`topic_type`
@@ -77,6 +79,8 @@
       <if test="topicCode != null  and topicCode != ''">and `topic_code` = #{topicCode}</if>
       <if test="topicName != null  and topicName != ''">and `topic_name` = #{topicName}</if>
       <if test="businessArea != null  and businessArea != ''">and `business_area` = #{businessArea}</if>
+      <if test="businessAreaName != null  and businessAreaName != ''">and `business_area_name` = #{businessAreaName}
+      </if>
       <if test="professionalCategory != null  and professionalCategory != ''">and `professional_category` =
         #{professionalCategory}
       </if>
@@ -117,7 +121,8 @@
       <if test="id != null ">and `id` = #{id}</if>
       <if test="topicCode != null  and topicCode != ''">and `topic_code` = #{topicCode}</if>
       <if test="topicName != null  and topicName != ''">and `topic_name` = #{topicName}</if>
-      <if test="businessArea != null  and businessArea != ''">and `business_area` = #{businessArea}</if>
+      <if test="businessArea != null  and businessArea != ''">and `business_area_name` = #{businessArea}</if>
+      <if test="businessAreaName != null  and businessAreaName != ''">and `business_area` = #{businessAreaName}</if>
       <if test="professionalCategory != null  and professionalCategory != ''">and `professional_category` =
         #{professionalCategory}
       </if>
@@ -157,6 +162,7 @@
       <if test="topicCode != null  and topicCode != ''">`topic_code`,</if>
       <if test="topicName != null  and topicName != ''">`topic_name`,</if>
       <if test="businessArea != null  and businessArea != ''">`business_area`,</if>
+      <if test="businessAreaName != null  and businessAreaName != ''">`business_area_name`,</if>
       <if test="professionalCategory != null  and professionalCategory != ''">`professional_category`,</if>
       <if test="topicAnalysis != null  and topicAnalysis != ''">`topic_analysis`,</if>
       <if test="topicType != null  and topicType != ''">`topic_type`,</if>
@@ -188,6 +194,7 @@
       <if test="topicCode != null  and topicCode != ''">#{topicCode},</if>
       <if test="topicName != null  and topicName != ''">#{topicName},</if>
       <if test="businessArea != null  and businessArea != ''">#{businessArea},</if>
+      <if test="businessAreaName != null  and businessAreaName != ''">#{businessAreaName},</if>
       <if test="professionalCategory != null  and professionalCategory != ''">#{professionalCategory},</if>
       <if test="topicAnalysis != null  and topicAnalysis != ''">#{topicAnalysis},</if>
       <if test="topicType != null  and topicType != ''">#{topicType},</if>
@@ -224,6 +231,7 @@
       `topic_code`,
       `topic_name`,
       `business_area`,
+      `business_area_name`,
       `professional_category`,
       `topic_analysis`,
       `topic_type`,
@@ -256,6 +264,7 @@
         #{item.topicCode},
         #{item.topicName},
         #{item.businessArea},
+        #{item.businessAreaName},
         #{item.professionalCategory},
         #{item.topicAnalysis},
         #{item.topicType},
@@ -291,6 +300,7 @@
       <if test="topicCode != null  and  topicCode != ''">`topic_code` = #{topicCode},</if>
       <if test="topicName != null  and  topicName != ''">`topic_name` = #{topicName},</if>
       <if test="businessArea != null  and  businessArea != ''">`business_area` = #{businessArea},</if>
+      <if test="businessAreaName != null  and  businessAreaName != ''">`business_area_name` = #{businessAreaName},</if>
       <if test="professionalCategory != null  and  professionalCategory != ''">`professional_category` =
         #{professionalCategory},
       </if>
@@ -346,6 +356,11 @@
       <trim prefix="business_area  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.businessArea}
+        </foreach>
+      </trim>
+      <trim prefix="business_area_name  = case" suffix="end,">
+        <foreach collection="list" item="item" index="index">
+          when `id`=#{item.id} then #{item.businessAreaName}
         </foreach>
       </trim>
       <trim prefix="professional_category  = case" suffix="end,">
@@ -487,6 +502,8 @@
       <if test="topicCode != null  and topicCode != ''">and `topic_code` = #{topicCode}</if>
       <if test="topicName != null  and topicName != ''">and `topic_name` = #{topicName}</if>
       <if test="businessArea != null  and businessArea != ''">and `business_area` = #{businessArea}</if>
+      <if test="businessAreaName != null  and businessAreaName != ''">and `business_area_name` = #{businessAreaName}
+      </if>
       <if test="professionalCategory != null  and professionalCategory != ''">and `professional_category` =
         #{professionalCategory}
       </if>

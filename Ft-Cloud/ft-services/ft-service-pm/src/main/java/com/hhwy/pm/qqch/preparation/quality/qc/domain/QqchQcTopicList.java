@@ -51,6 +51,12 @@ public class QqchQcTopicList extends BaseEntity {
     @NotBlank(message = "业务领域及产品不能为空", groups = {ValidationGroups.Save.class})
     private String businessArea;
     /**
+     * 字段描述：业务领域及产品名称（字典类型business area）
+     */
+    @JsonProperty
+    @Excel(name = "业务领域及产品名称（字典类型business area）")
+    private String businessAreaName;
+    /**
      * 字段描述：专业类别（字典类型professional_category）
      */
     @JsonProperty
