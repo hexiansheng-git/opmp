@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
@@ -13,7 +14,6 @@ import com.hhwy.pm.qqch.group.mapper.QqchWorkGroupMemberMapper;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupMemberService;
 import com.hhwy.pm.qqch.group.service.IQqchWorkGroupService;
 import com.hhwy.system.api.domain.SysTenant;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
@@ -194,7 +194,7 @@ public class QqchWorkGroupMemberServiceImpl implements IQqchWorkGroupMemberServi
             }
 
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);

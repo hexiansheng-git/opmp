@@ -73,7 +73,7 @@ public class QqchWorkGroupMember extends BaseEntity {
      */
     @JsonProperty
     @Excel(name = "所属单位")
-    @NotBlank(message = "请填写所属单位！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
+//    @NotBlank(message = "请填写所属单位！",groups = {ValidationGroups.Save.class,ValidationGroups.Update.class})
     private String affiliatedUnit;
     /**
      * 字段描述：岗位职务
