@@ -315,26 +315,26 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 switch (queryDateType) {
                     case "z":
                         if(!CollectionUtils.isEmpty(jdglWeekImagePlans)) {
-                            JdglWeekImagePlan imagePlan = jdglWeekImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            JdglWeekImagePlan imagePlan = jdglWeekImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWorkCode())).findFirst().orElse(null);
                             if(imagePlan != null) planStatisticsWbsValueVO.setThisPlanValue(imagePlan.getPlanCompValue());
                         }
                         break;
                     case "y":
                         if(!CollectionUtils.isEmpty(jdglMonthImagePlans)) {
-                            JdglMonthImagePlan jdglMonthImagePlan = jdglMonthImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            JdglMonthImagePlan jdglMonthImagePlan = jdglMonthImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWorkCode())).findFirst().orElse(null);
                             if(jdglMonthImagePlan != null) planStatisticsWbsValueVO.setThisPlanValue(jdglMonthImagePlan.getPlanCompValue());
 
                         }
                         break;
                     case "j":
                         if(!CollectionUtils.isEmpty(jdglQuarterImagePlans)) {
-                            JdglQuarterImagePlan jdglQuarterImagePlan = jdglQuarterImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            JdglQuarterImagePlan jdglQuarterImagePlan = jdglQuarterImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWorkCode())).findFirst().orElse(null);
                             if(jdglQuarterImagePlan != null) planStatisticsWbsValueVO.setThisPlanValue(jdglQuarterImagePlan.getPlanCompValue());
                         }
                         break;
                     case "n":
                         if(!CollectionUtils.isEmpty(jdglYearImagePlans)) {
-                            JdglYearImagePlan jdglYearImagePlan = jdglYearImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).findFirst().orElse(null);
+                            JdglYearImagePlan jdglYearImagePlan = jdglYearImagePlans.stream().filter(vo -> wbsCode.equals(vo.getWorkCode())).findFirst().orElse(null);
                             if(jdglYearImagePlan != null)  planStatisticsWbsValueVO.setThisPlanValue(jdglYearImagePlan.getPlanCompValue());
                         }
                         break;
