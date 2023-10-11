@@ -62,13 +62,18 @@ public class XmslContractListController extends BaseController {
     }
 
     /**
-     *   获取生效的清单列表
+     *   获取生效的清单列表（懒加载）
      *
      * @param xmslContractListParam
      * @return
      */
     @GetMapping("/getEffectList")
     public AjaxResult getEffectList(@Validated(ValidationGroups.Get.class)  XmslContractList xmslContractListParam) {
+        //默认第一层级
+        if(xmslContractListParam.getPid() == null || xmslContractListParam.getPid() <= 0L){
+            xmslContractListParam.setPtVar1("1");
+            xmslContractListParam.setPid(null);
+        }
         List<XmslContractList> list  = xmslContractListService.getEffectList(xmslContractListParam);
         return AjaxResult.success(list);
     }
