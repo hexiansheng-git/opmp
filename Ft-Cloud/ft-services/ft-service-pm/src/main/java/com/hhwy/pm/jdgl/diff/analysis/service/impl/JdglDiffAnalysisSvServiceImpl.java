@@ -198,7 +198,9 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             }
         }
 
-        jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
+        if(!CollectionUtils.isEmpty(insertList)) {
+            jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(insertList);
+        }
 
         jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
 

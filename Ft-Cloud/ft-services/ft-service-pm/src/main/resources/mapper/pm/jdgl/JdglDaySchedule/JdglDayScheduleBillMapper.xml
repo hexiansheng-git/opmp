@@ -189,14 +189,11 @@
         group by bill_id,bill_code,bill_name
     </select>
     <select id="getJdglDayScheduleBillList4Group" resultMap="JdglDayScheduleBillResultMap">
-        select `id`
-        , `day_schedule_id`
+        select `day_schedule_id`
         , `wbs_id`
         , `bill_id`
         , `wbs_code`
         , `wbs_name`
-        , `item_code`
-        , `item_name`
         , `bill_code`
         , `bill_name`
         , `unit`
@@ -256,14 +253,11 @@
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
             <if test="isMain != null  and isMain != ''">and `is_main` = #{isMain}</if>
         </where>
-        group by `id`
-        , `day_schedule_id`
+        group by `day_schedule_id`
         , `wbs_id`
         , `bill_id`
         , `wbs_code`
         , `wbs_name`
-        , `item_code`
-        , `item_name`
         , `bill_code`
         , `bill_name`
         , `unit`

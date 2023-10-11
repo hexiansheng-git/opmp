@@ -32,6 +32,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -304,7 +306,14 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     public void initDiffData() {
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
-        Date nowDate = new Date();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date nowDate = null;
+        try {
+            nowDate = simpleDateFormat.parse("2023-10-20");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        Date nowDate = new Date();
         jdglDiffAnalysis.setId(IdWorker.createId());
         jdglDiffAnalysis.setPeriod(nowDate);
         jdglDiffAnalysis.setCreateTime(nowDate);
@@ -349,7 +358,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         ProjectBasicInfo projectInfo = projectBasicInfoService.projectInfo();
         // 项目规模
-        String type1 = "1-1,1-2";
+        String type11 = "1-1";
+        String type12 = "1-2";
         String type2 = "";
         BigDecimal scaleGradeValue = new BigDecimal(0);
 
@@ -403,7 +413,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 if(StringUtils.isNotEmpty(weightedGrade) && weightedGrade.equals(importance)) {
                     jdglDiffAnalysis.setImportanceGrade(score);
                 }
-                if(type1.contains(projectInfo.getBusinessAreasAndProducts())
+                if(projectInfo.getBusinessAreasAndProducts() != null && (
+                        projectInfo.getBusinessAreasAndProducts().contains(type11) || projectInfo.getBusinessAreasAndProducts().contains(type12))
                         && scaleGradeValue.compareTo(roadMaxScore) < 0 && scaleGradeValue.compareTo(roadMinScore) >= 0) {
                     jdglDiffAnalysis.setScaleGrade(score);
                 }

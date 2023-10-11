@@ -34,6 +34,8 @@ public interface IJdglDiffAnalysisService {
      */
     void initDiffAnalysis();
 
+    void initDiffData();
+
     List<JdglDiffAnalysis> gmList(DiffAnalysisQueryVo queryVo);
 
     void updateGrage(String field, Long id, BigDecimal grade);

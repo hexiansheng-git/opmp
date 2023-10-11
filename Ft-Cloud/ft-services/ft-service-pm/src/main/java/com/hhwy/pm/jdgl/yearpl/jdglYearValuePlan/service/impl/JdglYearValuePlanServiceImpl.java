@@ -202,13 +202,28 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                         }
                         if(xmslContractList.getCode() != null) {
                             BigDecimal yearplanCompQuantity = new BigDecimal(0);
+
+                            // 根据清单获取图纸复核wbs清单数据
                             List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getId().equals(vo.getListId())).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    List<JdglYearImagePlan> collect1 = imagePlans.stream().filter(vo -> xmslDrawReviewList.getWbsCode().equals(vo.getWbsCode())).collect(Collectors.toList());
+                                    String wbsCode = xmslDrawReviewList.getWbsCode();
+                                    // 根据wbs获取年形象计划对应wbs
+                                    List<JdglYearImagePlan> collect1 = imagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                                     if(!CollectionUtils.isEmpty(collect1)) {
+                                        BigDecimal wbsDesignNum = new BigDecimal(0);
+                                        BigDecimal wbsPlanNum = new BigDecimal(0);
                                         for (JdglYearImagePlan jdglYearImagePlan : collect1) {
-                                            if(jdglYearImagePlan.getPlanCompQuantity() != null) yearplanCompQuantity = yearplanCompQuantity.add(jdglYearImagePlan.getPlanCompQuantity());
+                                            if(wbsCode.equals(jdglYearImagePlan.getWorkCode())) {
+                                                if(jdglYearImagePlan.getDesignQuantity() != null) wbsDesignNum = jdglYearImagePlan.getDesignQuantity();
+                                            } else {
+                                                wbsPlanNum = wbsPlanNum.add(jdglYearImagePlan.getPlanCompQuantity() == null ? new BigDecimal(0) : jdglYearImagePlan.getPlanCompQuantity());
+                                            }
+//                                            if(jdglYearImagePlan.getPlanCompQuantity() != null) yearplanCompQuantity = yearplanCompQuantity.add(jdglYearImagePlan.getPlanCompQuantity());
+                                        }
+                                        if(wbsDesignNum.compareTo(new BigDecimal(0)) != 0) {
+                                            yearplanCompQuantity = yearplanCompQuantity.add(xmslDrawReviewList.getCheckNum() == null
+                                                    ? new BigDecimal(0) : xmslDrawReviewList.getCheckNum().multiply(wbsPlanNum.divide(wbsDesignNum, 4, BigDecimal.ROUND_HALF_UP)));
                                         }
                                     }
                                 }

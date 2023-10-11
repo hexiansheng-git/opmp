@@ -640,8 +640,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 List<BigDecimal> planValueListY = new ArrayList<>();
                 List<BigDecimal> compValueListY = new ArrayList<>();
                 List<PlanStatisticsPeriodValueVO> yearList = new ArrayList<>();
+                JdglYearPlan jdglYearPlan1 = new JdglYearPlan();
+                jdglYearPlan1.setIsUse("1");
                 // 获取年计划产值数据
-                List<JdglYearPlan> jdglYearPlanList = jdglYearPlanService.getJdglYearPlanList(new JdglYearPlan());
+                List<JdglYearPlan> jdglYearPlanList = jdglYearPlanService.getJdglYearPlanList(jdglYearPlan1);
 
                 if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
                     List<JdglYearPlan> collect1 = jdglYearPlanList.stream().sorted(Comparator.comparing(JdglYearPlan::getYear)).collect(Collectors.toList());
