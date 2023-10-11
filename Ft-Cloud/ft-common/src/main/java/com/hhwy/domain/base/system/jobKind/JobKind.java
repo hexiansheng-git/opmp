@@ -76,4 +76,7 @@ public class JobKind extends CommonBaseEntity {
     @Excel(name = "备注")
     private String remark;
 
+
+    private String nameOrCode;
+
 }
