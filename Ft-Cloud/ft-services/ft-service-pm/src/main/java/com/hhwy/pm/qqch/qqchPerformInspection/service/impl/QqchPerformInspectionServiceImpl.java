@@ -1,6 +1,6 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
@@ -16,7 +16,6 @@ import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlanDetail;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
@@ -75,18 +74,18 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         qqchPerformInspection.setCreateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         qqchPerformInspection.setCreateTime(DateUtils.getNowDate());
+        qqchPerformInspection.setPtVar2(SecurityUtils.getSysUser().getNickName());
         qqchPerformInspection.setDeptId(SecurityUtils.getSysUser().getDeptId());
         List<QqchPerformInspectionDetail> detailList = qqchPerformInspection.getDetailList();
         if(ObjectNullUtil.isEmpty(detailList)){
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"策划项信息不可为空");
+            throw new CustomException("策划项信息不可为空");
         }
         List<QqchPerformInspectionDetail> batchAddList = handleDetailList(qqchPerformInspection, detailList);
         qqchPerformInspectionMapper.insertQqchPerformInspection(qqchPerformInspection);
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
-//        //若为发起，推送数据到总部
-//        if("1".equals(qqchPerformInspection.getPtVar5())){
-            sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);    
-//        }
+
+        //推送数据到总部
+        sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);
         return qqchPerformInspection.getId();
     }
 
@@ -104,9 +103,10 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     public int updateQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         qqchPerformInspection.setUpdateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setUpdateTime(DateUtils.getNowDate());
+        qqchPerformInspection.setPtVar2(SecurityUtils.getSysUser().getNickName());
         List<QqchPerformInspectionDetail> detailList = qqchPerformInspection.getDetailList();
         if(ObjectNullUtil.isEmpty(detailList)){
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,"策划项信息不可为空");
+            throw new CustomException("策划项信息不可为空");
         }
         List<QqchPerformInspectionDetail> batchAddList = handleDetailList(qqchPerformInspection, detailList);
         //先删除旧的

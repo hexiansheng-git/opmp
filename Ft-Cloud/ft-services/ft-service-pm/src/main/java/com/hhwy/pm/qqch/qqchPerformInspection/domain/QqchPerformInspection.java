@@ -1,24 +1,18 @@
 package com.hhwy.pm.qqch.qqchPerformInspection.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.common.CommonBaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zqq 前期策划执行检查
@@ -138,10 +132,10 @@ public class QqchPerformInspection extends CommonBaseEntity {
     @Excel(name = "预留字段1")
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：流程发起人
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "流程发起人")
     private String ptVar2;
     /**
      * 字段描述：预留字段3

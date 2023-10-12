@@ -4,7 +4,7 @@ import com.hhwy.common.core.exception.CustomException;
 
 /**
  * 自定义业务异常类
- * 不要用这个, 用平台的吧
+ * 不要用这个, 用平台的吧   CustomException
  */
 @Deprecated
 public class CustomBusinessException extends CustomException {
