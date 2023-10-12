@@ -172,24 +172,24 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
                     collect.size());
 
 
-            // 校验累计计量产值/累计施工产值(%)
+            //  (公路/市政/铁路)万美元年平均产值 
             checkMax(scheAnalyse.getRoadMaxScore(),
                     scheAnalyse.getRoadMinScore(),
                     roadList,
                     errorMsg,
                     score,
-                    "(公路/铁路)万美元年平均产值",
+                    " (公路/市政/铁路)万美元年平均产值 ",
                     i,
                     collect.size());
 
 
-            // 校验 (机场/房建)万美元年平均产值
+            // 校验  (其他项目)万美元年平均产值 
             checkMax(scheAnalyse.getBuildMaxScore(),
                     scheAnalyse.getBuildMinScore(),
                     buildList,
                     errorMsg,
                     score,
-                    "(机场/房建)万美元年平均产值",
+                    " (其他项目)万美元年平均产值 ",
                     i,
                     collect.size());
 
@@ -224,18 +224,21 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
                           int idx,
                           int size) {
 
-        if (size - 1 == idx) {
+        // 最大值和最小值都为空的时候 啥也不干
+        if (max == null && min == null) return;
+        // 有一个为null的时候
+        if (max == null || min == null) {
             max = null2Max(max);
+            min = null2Min(min);
         }
 
         if (idx != 0 && !checkScoreMin(list, min)) {
             errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最小值不能小于上一等级的最大值; ");
-        } else {
-            min = null2Min(min);
         }
         if (max.compareTo(min) < 0) {
             errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能小于最低值; ");
         }
+
 
         list.add(min);
         list.add(max);
@@ -262,23 +265,23 @@ public class QqchScheAnalyseServiceImpl implements IQqchScheAnalyseService {
                           int idx,
                           int size) {
 
-        if (size - 1 == idx) {
+        // 最大值和最小值都为空的时候 啥也不干
+        if (max == null && min == null) return;
+        // 有一个为null的时候
+        if (max == null || min == null) {
             max = null2Max(max);
-        }
-
-        if (idx != 0 && !checkScoreMax(list, max)) {
-            errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能大于上一等级的最小值; ");
-        } else {
             min = null2Min(min);
         }
-
+        if (idx != 0 && !checkScoreMax(list, max)) {
+            errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能大于上一等级的最小值; ");
+        }
         if (max.compareTo(min) < 0) {
             errorMsg.append("得分为【").append(score).append("】的").append(msg).append("最大值不能小于最低值; ");
         }
-
         // 依次放在集合
         list.add(max);
         list.add(min);
+         
 
     }
 
