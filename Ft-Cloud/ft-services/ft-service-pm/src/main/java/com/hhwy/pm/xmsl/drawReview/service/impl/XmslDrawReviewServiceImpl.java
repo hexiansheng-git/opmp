@@ -19,6 +19,7 @@ import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportServ
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.*;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
@@ -30,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -355,6 +357,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             //为空则判断是否已经有未完成的数据
             XmslDrawReview query = new XmslDrawReview();
             query.setValid(Constant.NO_INT);
+            query.setParams(ObjectUtils.toMap("exceptId",dto.getId()));
             Integer count = this.xmslDrawReviewMapper.getXmslDrawReviewCount(query);
             Assert.isTrue(count!= null && count < 1,"已存在未生效的数据，无法再新增新数据");
             return;
@@ -368,7 +371,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewWbs> wbsList = dto.getWbsList();
         //处理wbs
         List<XmslDrawReviewWbs> addWbsList = new ArrayList<>();
-//        List<XmslDrawReviewWbs> updateWbsList = new ArrayList<>();
+        List<XmslDrawReviewWbs> updateWbsList = new ArrayList<>();
         List<XmslDrawReviewRelation> addRelationList = new ArrayList<>();
         List<XmslDrawReviewList> addList = new ArrayList<>();
         List<XmslDrawReviewMaterial> addMaterList = new ArrayList<>();
@@ -385,15 +388,19 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 temp.initAdd();
                 addWbsList.add(temp);
             }else{
-//                new AddBaseInfoUtil().updateBaseEntity(temp);
-//                updateWbsList.add(temp);
+                new AddBaseInfoUtil().updateBaseEntity(temp);
+                updateWbsList.add(temp);
             }
             if(CollectionUtils.isEmpty(temp.getList()))
                 continue;
+            Set<String> listCodeSet = new HashSet<>();
+            BigDecimal sumCheck = BigDecimal.ZERO;
             //清单&挂接清单
             List<XmslDrawReviewList> list = temp.getList();
             for (int j = 0; j < list.size(); j++) {
                 XmslDrawReviewList tempList = list.get(j);
+                sumCheck = BigDecimalUtils.sum(sumCheck,tempList.getCheckNum());
+                Assert.isTrue(!listCodeSet.contains(tempList.getListCode()),"WBS编号["+temp.getCode()+"]下包含了同名清单编号["+tempList.getListCode()+"]");
                 tempList.setWbsCode(temp.getCode());
                 tempList.setVersion(version);
                 tempList.setVersionFlag(Constant.YES_INT);
@@ -435,6 +442,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                     }
                 }
             }
+            temp.setCheckQuanlity(sumCheck);
         }
         if(!isNew && CollectionUtils.isNotEmpty(wbsIdSet)){
             //删除wbs、挂接、清单、细目、配合比
@@ -445,6 +453,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             xmslDrawReviewMapper.deleteSourceMaterial(delMap);
         }
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
+        drawReviewWbsService.updateXmslDrawReviewWbsList(updateWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
         drawReviewListService.insertXmslDrawReviewListList(addList);
         materialService.insertXmslDrawReviewMaterialList(addMaterList);
