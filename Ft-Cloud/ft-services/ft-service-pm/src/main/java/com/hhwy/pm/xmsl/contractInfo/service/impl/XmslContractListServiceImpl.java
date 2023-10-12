@@ -323,10 +323,10 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     @Override
     public XmslContractList getContractPriceByListtype(XmslContractList xmslContractList) {
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
-        XmslContractInfo xmslContractInfo = new XmslContractInfo();
-        xmslContractInfo.setValid("1");
-        xmslContractInfo.setVersion(maxVersion);
+//        BigDecimal maxVersion = commonMapper.selectMaxVersion("xmsl_contract_info");
+//        XmslContractInfo xmslContractInfo = new XmslContractInfo();
+//        xmslContractInfo.setValid("1");
+//        xmslContractInfo.setVersion(maxVersion);
         //查询有效的合同信息
 //        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
         //查询结果

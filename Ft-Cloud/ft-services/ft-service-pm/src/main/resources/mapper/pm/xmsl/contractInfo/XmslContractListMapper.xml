@@ -1111,10 +1111,16 @@
     </update>
 
     <select id="getContractPriceByListtype" resultType="com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList">
-        SELECT IFNULL(sum(win_num), 0) AS winNum,
-            IFNULL(sum(win_amount), 0) AS winAmount
-        FROM xmsl_contract_list
-        WHERE del_flag = "0" AND have_children = 0 AND list_type = #{listType}
+        SELECT
+            IFNULL( sum( win_num ), 0 ) AS winNum,
+            IFNULL( sum( win_amount ), 0 ) AS winAmount
+        FROM
+            xmsl_contract_list
+        WHERE
+            del_flag = "0"
+                AND master_id = ( SELECT id FROM xmsl_contract_info WHERE del_flag = "0" AND valid = 1 )
+                AND have_children = 0
+                AND list_type = #{listType}
     </select>
     <select id="getByAncestors" resultMap="XmslContractListResultMap">
         <include refid="selectXmslContractListVo"/>
