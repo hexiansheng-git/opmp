@@ -205,10 +205,22 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
                             List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getId().equals(vo.getListId())).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    List<JdglMonthImagePlan> collect1 = imagePlans.stream().filter(vo -> xmslDrawReviewList.getWbsCode().equals(vo.getWbsCode())).collect(Collectors.toList());
+                                    String wbsCode = xmslDrawReviewList.getWbsCode();
+                                    // 根据wbs获取年形象计划对应wbs
+                                    List<JdglMonthImagePlan> collect1 = imagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                                     if(!CollectionUtils.isEmpty(collect1)) {
+                                        BigDecimal wbsDesignNum = new BigDecimal(0);
+                                        BigDecimal wbsPlanNum = new BigDecimal(0);
                                         for (JdglMonthImagePlan jdglMonthImagePlan : collect1) {
-                                            if(jdglMonthImagePlan.getPlanCompQuantity() != null) monthplanCompQuantity = monthplanCompQuantity.add(jdglMonthImagePlan.getPlanCompQuantity());
+                                            if(wbsCode.equals(jdglMonthImagePlan.getWorkCode())) {
+                                                if(jdglMonthImagePlan.getDesignQuantity() != null) wbsDesignNum = jdglMonthImagePlan.getDesignQuantity();
+                                            } else {
+                                                wbsPlanNum = wbsPlanNum.add(jdglMonthImagePlan.getPlanCompQuantity() == null ? new BigDecimal(0) : jdglMonthImagePlan.getPlanCompQuantity());
+                                            }
+                                        }
+                                        if(wbsDesignNum.compareTo(new BigDecimal(0)) != 0) {
+                                            monthplanCompQuantity = monthplanCompQuantity.add(xmslDrawReviewList.getCheckNum() == null
+                                                    ? new BigDecimal(0) : xmslDrawReviewList.getCheckNum().multiply(wbsPlanNum.divide(wbsDesignNum, 4, BigDecimal.ROUND_HALF_UP)));
                                         }
                                     }
                                 }
@@ -223,7 +235,7 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
                 }
                 if(!CollectionUtils.isEmpty(returnList)) {
                     for (JdglMonthValuePlan valuePlan : returnList) {
-                        JdglMonthValuePlan valuePlan1 = returnList.stream().filter(vo -> valuePlan.getInventoryPid().equals(vo.getInventoryId())).findFirst().orElse(null);
+                        JdglMonthValuePlan valuePlan1 = returnList.stream().filter(vo -> vo.getInventoryId().equals(valuePlan.getInventoryPid())).findFirst().orElse(null);
                         if(valuePlan1 != null) valuePlan.setPid(valuePlan1.getId());
                     }
                     deleteJdglMonthValuePlanByPlanId(planId);

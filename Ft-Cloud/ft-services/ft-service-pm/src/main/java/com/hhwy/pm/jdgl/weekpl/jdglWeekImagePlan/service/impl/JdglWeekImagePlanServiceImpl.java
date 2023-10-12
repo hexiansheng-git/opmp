@@ -159,7 +159,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             }
             deleteJdglWeekImagePlanByPlanId(planId);
             jdglWeekValuePlanService.updateValuePlanData(planId, jdglWeekImagePlanList);
-            return jdglWeekImagePlanMapper.updateJdglWeekImagePlanList(jdglWeekImagePlanList);
+            return jdglWeekImagePlanMapper.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
         }
         return 0;
     }

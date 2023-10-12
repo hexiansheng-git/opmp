@@ -182,11 +182,11 @@
     </select>
     <select id="getWbsListByYear"
             resultMap="JdglYearImagePlanResultMap">
-        select jyip.wbs_code,jyip.wbs_name,sum(plan_comp_value) plan_comp_value
+        select jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code,sum(plan_comp_value) plan_comp_value
         from (select * from jdgl_year_plan where task_status = '5' and year = #{year} ) jyp ,
              jdgl_year_image_plan jyip
         where jyp.id = jyip.year_plan_id
-        group by jyip.wbs_code,jyip.wbs_name
+        group by jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code
     </select>
     <select id="getThisPlanAmt" resultType="java.math.BigDecimal">
         select sum(ifnull(plan_comp_value,0)) from jdgl_year_image_plan where year_plan_id = #{year_plan_id}

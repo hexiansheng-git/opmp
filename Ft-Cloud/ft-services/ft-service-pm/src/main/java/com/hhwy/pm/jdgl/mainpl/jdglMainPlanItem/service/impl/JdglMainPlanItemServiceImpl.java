@@ -313,4 +313,37 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         return jdglMainPlanItemMapper.getProjStartAndFinish(usingJdglMainPlan.getId());
 
     }
+
+    @Override
+    public List<JdglMainPlanItem> getUsingKeyRoad() {
+        List<JdglMainPlanItem> returnList = new ArrayList<>();
+        List<JdglMainPlanItem> usingJdglMainPlanItemList = getUsingJdglMainPlanItemList(new JdglMainPlanItem());
+        if (CollectionUtils.isEmpty(usingJdglMainPlanItemList)) return returnList;
+
+        List<JdglMainPlanItem> collect = usingJdglMainPlanItemList.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
+                && "1".equals(vo.getIsCritical())).collect(Collectors.toList());
+        returnList.addAll(collect);
+        for (JdglMainPlanItem jdglMainPlanItem : collect) {
+            List<JdglMainPlanItem> collect1 = usingJdglMainPlanItemList.stream().filter(vo -> jdglMainPlanItem.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(collect1)) returnList.addAll(collect1);
+        }
+        returnList = returnList.stream().distinct().collect(Collectors.toList());
+        return returnList;
+    }
+
+    @Override
+    public List<JdglMainPlanItem> getUsingNoKeyRoad() {
+        List<JdglMainPlanItem> returnList = new ArrayList<>();
+        List<JdglMainPlanItem> usingJdglMainPlanItemList = getUsingJdglMainPlanItemList(new JdglMainPlanItem());
+        if(CollectionUtils.isEmpty(usingJdglMainPlanItemList)) return returnList;
+        List<JdglMainPlanItem> collect = usingJdglMainPlanItemList.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
+                && "0".equals(vo.getIsCritical())).collect(Collectors.toList());
+        returnList.addAll(collect);
+        for (JdglMainPlanItem jdglMainPlanItem : collect) {
+            List<JdglMainPlanItem> collect1 = usingJdglMainPlanItemList.stream().filter(vo -> jdglMainPlanItem.getAncestors().contains(vo.getAncestors())).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(collect1)) returnList.addAll(collect1);
+        }
+        returnList = returnList.stream().distinct().collect(Collectors.toList());
+        return returnList;
+    }
 }

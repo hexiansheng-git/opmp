@@ -23,7 +23,7 @@ public interface JdglMonthImagePlanMapper {
 
     int updateJdglMonthImagePlan(JdglMonthImagePlan jdglMonthImagePlan);
 
-    int updateJdglMonthImagePlanList(@Param("jdglMonthImagePlanList") List<JdglMonthImagePlan> jdglMonthImagePlanList);
+    int updateJdglMonthImagePlanList(@Param("list") List<JdglMonthImagePlan> jdglMonthImagePlanList);
 
     int deleteJdglMonthImagePlan(JdglMonthImagePlan jdglMonthImagePlan);
 

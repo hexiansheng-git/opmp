@@ -91,7 +91,7 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
     @Transactional
     public int insertJdglQuarterValuePlanList(List<JdglQuarterValuePlan> jdglQuarterValuePlanList) {
         for (JdglQuarterValuePlan jdglQuarterValuePlan : jdglQuarterValuePlanList) {
-            jdglQuarterValuePlan.setId(IdWorker.createId());
+//            jdglQuarterValuePlan.setId(IdWorker.createId());
             jdglQuarterValuePlan.setCreateUser(SecurityUtils.getUserName());
             jdglQuarterValuePlan.setCreateTime(DateUtils.getNowDate());
         }
@@ -204,10 +204,22 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
                             List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getId().equals(vo.getListId())).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    List<JdglQuarterImagePlan> collect1 = imagePlans.stream().filter(vo -> xmslDrawReviewList.getWbsCode().equals(vo.getWbsCode())).collect(Collectors.toList());
+                                    String wbsCode = xmslDrawReviewList.getWbsCode();
+                                    // 根据wbs获取年形象计划对应wbs
+                                    List<JdglQuarterImagePlan> collect1 = imagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                                     if(!CollectionUtils.isEmpty(collect1)) {
+                                        BigDecimal wbsDesignNum = new BigDecimal(0);
+                                        BigDecimal wbsPlanNum = new BigDecimal(0);
                                         for (JdglQuarterImagePlan jdglQuarterImagePlan : collect1) {
-                                            if(jdglQuarterImagePlan.getPlanCompQuantity() != null) quarterplanCompQuantity = quarterplanCompQuantity.add(jdglQuarterImagePlan.getPlanCompQuantity());
+                                            if(wbsCode.equals(jdglQuarterImagePlan.getWorkCode())) {
+                                                if(jdglQuarterImagePlan.getDesignQuantity() != null) wbsDesignNum = jdglQuarterImagePlan.getDesignQuantity();
+                                            } else {
+                                                wbsPlanNum = wbsPlanNum.add(jdglQuarterImagePlan.getPlanCompQuantity() == null ? new BigDecimal(0) : jdglQuarterImagePlan.getPlanCompQuantity());
+                                            }
+                                        }
+                                        if(wbsDesignNum.compareTo(new BigDecimal(0)) != 0) {
+                                            quarterplanCompQuantity = quarterplanCompQuantity.add(xmslDrawReviewList.getCheckNum() == null
+                                                    ? new BigDecimal(0) : xmslDrawReviewList.getCheckNum().multiply(wbsPlanNum.divide(wbsDesignNum, 4, BigDecimal.ROUND_HALF_UP)));
                                         }
                                     }
                                 }
@@ -222,7 +234,7 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
                 }
                 if(!CollectionUtils.isEmpty(returnList)) {
                     for (JdglQuarterValuePlan valuePlan : returnList) {
-                        JdglQuarterValuePlan valuePlan1 = returnList.stream().filter(vo -> valuePlan.getInventoryPid().equals(vo.getInventoryId())).findFirst().orElse(null);
+                        JdglQuarterValuePlan valuePlan1 = returnList.stream().filter(vo -> vo.getInventoryId().equals(valuePlan.getInventoryPid())).findFirst().orElse(null);
                         if(valuePlan1 != null) valuePlan.setPid(valuePlan1.getId());
                     }
                     deleteJdglQuarterValuePlanByPlanId(planId);

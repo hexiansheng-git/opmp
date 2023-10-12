@@ -186,11 +186,11 @@
     </select>
     <select id="getWbsListByYearAndMonth"
             resultMap="JdglMonthImagePlanResultMap">
-        select jyip.wbs_code,jyip.wbs_name,sum(plan_comp_value) plan_comp_value
+        select jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code,sum(plan_comp_value) plan_comp_value
         from (select * from jdgl_month_plan where task_status = '5' and year = #{year} and month = #{month}) jyp ,
              jdgl_month_image_plan jyip
         where jyp.id = jyip.plan_id
-        group by jyip.wbs_code,jyip.wbs_name
+        group by jyip.wbs_code,jyip.wbs_name,jyip.work_name,jyip.work_code
     </select>
     <select id="getThisPlanAmt" resultType="java.math.BigDecimal">
         select sum(ifnull(plan_comp_value,0)) from jdgl_month_image_plan where plan_id = #{planId}
@@ -618,7 +618,7 @@
             </trim>
         </trim>
         where `id` in
-        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
             #{item.id}
         </foreach>
     </update>

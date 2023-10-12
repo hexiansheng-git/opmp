@@ -91,7 +91,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
     @Transactional
     public int insertJdglWeekValuePlanList(List<JdglWeekValuePlan> jdglWeekValuePlanList) {
         for (JdglWeekValuePlan jdglWeekValuePlan : jdglWeekValuePlanList) {
-            jdglWeekValuePlan.setId(IdWorker.createId());
+//            jdglWeekValuePlan.setId(IdWorker.createId());
             jdglWeekValuePlan.setCreateUser(SecurityUtils.getUserName());
             jdglWeekValuePlan.setCreateTime(DateUtils.getNowDate());
         }
@@ -204,10 +204,22 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                             List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getId().equals(vo.getListId())).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (XmslDrawReviewList xmslDrawReviewList :  collect) {
-                                    List<JdglWeekImagePlan> collect1 = imagePlans.stream().filter(vo -> xmslDrawReviewList.getWbsCode().equals(vo.getWbsCode())).collect(Collectors.toList());
+                                    String wbsCode = xmslDrawReviewList.getWbsCode();
+                                    // 根据wbs获取年形象计划对应wbs
+                                    List<JdglWeekImagePlan> collect1 = imagePlans.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
                                     if(!CollectionUtils.isEmpty(collect1)) {
+                                        BigDecimal wbsDesignNum = new BigDecimal(0);
+                                        BigDecimal wbsPlanNum = new BigDecimal(0);
                                         for (JdglWeekImagePlan jdglWeekImagePlan : collect1) {
-                                            if(jdglWeekImagePlan.getPlanCompQuantity() != null) weekplanCompQuantity = weekplanCompQuantity.add(jdglWeekImagePlan.getPlanCompQuantity());
+                                            if(wbsCode.equals(jdglWeekImagePlan.getWorkCode())) {
+                                                if(jdglWeekImagePlan.getDesignQuantity() != null) wbsDesignNum = jdglWeekImagePlan.getDesignQuantity();
+                                            } else {
+                                                wbsPlanNum = wbsPlanNum.add(jdglWeekImagePlan.getPlanCompQuantity() == null ? new BigDecimal(0) : jdglWeekImagePlan.getPlanCompQuantity());
+                                            }
+                                        }
+                                        if(wbsDesignNum.compareTo(new BigDecimal(0)) != 0) {
+                                            weekplanCompQuantity = weekplanCompQuantity.add(xmslDrawReviewList.getCheckNum() == null
+                                                    ? new BigDecimal(0) : xmslDrawReviewList.getCheckNum().multiply(wbsPlanNum.divide(wbsDesignNum, 4, BigDecimal.ROUND_HALF_UP)));
                                         }
                                     }
                                 }
@@ -222,7 +234,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                 }
                 if(!CollectionUtils.isEmpty(returnList)) {
                     for (JdglWeekValuePlan valuePlan : returnList) {
-                        JdglWeekValuePlan valuePlan1 = returnList.stream().filter(vo -> valuePlan.getInventoryPid().equals(vo.getInventoryId())).findFirst().orElse(null);
+                        JdglWeekValuePlan valuePlan1 = returnList.stream().filter(vo -> vo.getInventoryId().equals(valuePlan.getInventoryPid())).findFirst().orElse(null);
                         if(valuePlan1 != null) valuePlan.setPid(valuePlan1.getId());
                     }
                     deleteJdglWeekValuePlanByPlanId(planId);

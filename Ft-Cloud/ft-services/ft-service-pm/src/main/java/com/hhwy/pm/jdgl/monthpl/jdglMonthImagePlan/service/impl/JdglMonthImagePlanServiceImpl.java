@@ -160,7 +160,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             }
             deleteJdglMonthImagePlanByPlanId(planId);
             jdglMonthValuePlanService.updateValuePlanData(planId, jdglMonthImagePlanList);
-            return jdglMonthImagePlanMapper.updateJdglMonthImagePlanList(jdglMonthImagePlanList);
+            return jdglMonthImagePlanMapper.insertJdglMonthImagePlanList(jdglMonthImagePlanList);
         }
 
         return 0;

@@ -395,6 +395,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 if(xmslContractList1 != null && xmslContractList1.getAncestors() !=
                         null && (xmslContractList1.getAncestors() + "," + xmslContractList1.getId()).contains(xmslContractList.getId()+"")) {
                     Long listId = xmslContractList.getId();
+                    PlanStatisticsBillValueVO planStatisticsBillValueVO1 = returnList.stream().filter(vo -> listId.equals(vo.getId())).findFirst().orElse(null);
+                    if(planStatisticsBillValueVO1 != null) continue;
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
                     planStatisticsBillValueVO.setId(listId);
                     planStatisticsBillValueVO.setPid(xmslContractList.getPid());
@@ -411,7 +413,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     if(billId.equals(listId)) {
                         BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getThisCompDesignNum();
                         BigDecimal lastTotalDesignNum = planStatisticsBillValueVO.getLastTotalDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getLastTotalDesignNum();
-                        planStatisticsBillValueVO.setThisCompDesignNum(jdglDayScheduleBill.getThisQuantity());
+                        thisCompDesignNum = thisCompDesignNum.add(jdglDayScheduleBill.getThisQuantity());
+                        planStatisticsBillValueVO.setThisCompDesignNum(thisCompDesignNum);
                         planStatisticsBillValueVO.setThisCompValue(price.multiply(thisCompDesignNum));
                         planStatisticsBillValueVO.setThisTotalDesignNum(thisCompDesignNum.add(lastTotalDesignNum));
 

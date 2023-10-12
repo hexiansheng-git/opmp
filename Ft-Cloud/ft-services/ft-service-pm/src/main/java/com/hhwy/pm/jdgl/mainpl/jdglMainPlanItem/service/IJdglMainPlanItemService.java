@@ -45,4 +45,8 @@ public interface IJdglMainPlanItemService {
     JdglMainPlanItem getUsing4One(JdglMainPlanItem jdglMainPlanItemParam);
 
     JdglMainPlanItem getProjStartAndFinish();
+
+    List<JdglMainPlanItem> getUsingKeyRoad();
+
+    List<JdglMainPlanItem> getUsingNoKeyRoad();
 }

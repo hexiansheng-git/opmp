@@ -134,7 +134,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         cl.setTime(period);
 
         String year = cl.get(Calendar.YEAR) + "";
-        String month = (cl.get(Calendar.MONTH + 1))+"";
+        String month = (cl.get(Calendar.MONTH)  + 1)+"";
 
         // 月计划数据
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year, month);
@@ -164,16 +164,22 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                 jdglDiffAnalysisSv.setIsCriticalPath(jdglMonthImagePlan.getIsCriticalPath());
                 jdglDiffAnalysisSv.setUnit(jdglMonthImagePlan.getUnit());
                 jdglDiffAnalysisSv.setDesignNum(jdglMonthImagePlan.getPlanCompQuantity());
-                jdglDiffAnalysisSv.setActStartDate(jdglMonthImagePlan.getCreateTime());
+//                jdglDiffAnalysisSv.setActStartDate(jdglMonthImagePlan.getCreateTime());
                 jdglDiffAnalysisSv.setActEndDate(jdglMonthImagePlan.getPlanEndDate());
 
                 if(!CollectionUtils.isEmpty(wbsListByDateRange)) {
-                    JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWbsCode())).findFirst().orElse(null);
+                    JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = wbsListByDateRange.stream().filter(vo -> StringUtils.isNotEmpty(vo.getWbsCode()) && vo.getWbsCode().equals(jdglMonthImagePlan.getWorkCode())).findFirst().orElse(null);
                     if(jdglDayScheduleWbs4Value != null) {
+                        jdglDiffAnalysisSv.setActStartDate(jdglDayScheduleWbs4Value.getEditerDate());
                         BigDecimal planCompValue = jdglMonthImagePlan.getPlanCompValue();
                         BigDecimal thisValue = jdglDayScheduleWbs4Value.getThisValue();
                         if(thisValue != null && planCompValue!= null) {
-                            jdglDiffAnalysisSv.setThisDeviationNum(thisValue.subtract(planCompValue));
+                            jdglDiffAnalysisSv.setSvNum(thisValue.subtract(planCompValue));
+                        }
+                        BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
+                        BigDecimal planCompQuantity = jdglMonthImagePlan.getPlanCompQuantity();
+                        if(thisQuantity != null &&  planCompQuantity != null){
+                            jdglDiffAnalysisSv.setThisDeviationNum(thisQuantity.subtract(planCompQuantity));
                         }
                         if(planCompValue != null) {
                             thisTotalPlanAmt = thisTotalPlanAmt.add(planCompValue);
@@ -181,12 +187,8 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                         if(thisValue != null) {
                             thisTotalActAmt = thisTotalActAmt.add(thisValue);
                         }
-                        if(jdglDayScheduleWbs4Value.getThisQuantity() != null &&  jdglMonthImagePlan.getPlanCompQuantity() != null){
-                            jdglDiffAnalysisSv.setSvNum(jdglDayScheduleWbs4Value.getThisQuantity().subtract(jdglMonthImagePlan.getPlanCompQuantity()));
-                        }
                     }
                 }
-
                 insertList.add(jdglDiffAnalysisSv);
             }
 
@@ -208,7 +210,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
             return new BigDecimal(0);
         }
 
-        return thisTotalActAmt.subtract(thisTotalPlanAmt).divide(thisTotalPlanAmt);
+        return thisTotalActAmt.subtract(thisTotalPlanAmt).divide(thisTotalPlanAmt, 4, BigDecimal.ROUND_HALF_UP);
     }
 
     @Override
