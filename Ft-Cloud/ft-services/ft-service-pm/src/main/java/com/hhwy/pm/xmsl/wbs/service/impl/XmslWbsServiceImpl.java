@@ -518,7 +518,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
         List<XmslWbsHistory> updateList = new ArrayList<>();
         //前端新增数据的ID都为uid,需要替换为后端生成的id
         Map<String,String> idRepalceMap = new ConcurrentHashMap<>(list.size()/2);
-        list.sort((r, r1) -> {return r.getLevel() > r1.getLevel() ? 1 : -1;});
+        list.sort((r, r1) -> {return r.getLevel()==r1.getLevel()?0:(r.getLevel() > r1.getLevel() ? 1 : -1);});
         for (int i = 0; i < list.size(); i++) {
             XmslWbsHistory temp = list.get(i);
             temp.setPtVar2(StringUtils.isBlank(temp.getPtVar2())?"-1":temp.getPtVar2()); //ptVar2 变更状态添加默认值

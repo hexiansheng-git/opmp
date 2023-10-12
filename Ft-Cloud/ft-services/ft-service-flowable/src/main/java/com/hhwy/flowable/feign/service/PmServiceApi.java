@@ -83,7 +83,7 @@ public interface PmServiceApi {
      * @param id
      * @return
      */
-    @PostMapping("/R/listener")
+    @PostMapping("/qqchSummaryEvaluation/listener")
     AjaxResult updateQqchSummaryEvaluationProcess(@RequestParam("id") Long id);
 
     /**
