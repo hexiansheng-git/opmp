@@ -94,6 +94,13 @@
         limit 1
     </select>
 
+    <select id="getMaxVersionQqchWorkGroup" resultType="com.hhwy.pm.qqch.group.domain.QqchWorkGroup">
+        <include refid="selectQqchWorkGroupVo" />
+        where del_flag = '0'
+        order by version desc
+        limit 1
+    </select>
+
     <select id="getWorkGroupCount" resultType="java.lang.Integer">
         select count(*) from qqch_work_group
         where del_flag = '0'

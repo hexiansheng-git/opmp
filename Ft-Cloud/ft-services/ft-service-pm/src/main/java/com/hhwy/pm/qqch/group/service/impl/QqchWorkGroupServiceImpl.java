@@ -362,6 +362,15 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         return qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
     }
 
+    /**
+     * 获取最新数据
+     * @return
+     */
+    @Override
+    public QqchWorkGroup getMaxVersionQqchWorkGroup(){
+        return qqchWorkGroupMapper.getMaxVersionQqchWorkGroup();
+    }
+
     @Override
     public List<QqchWorkGroup> gmList(QqchWorkGroup qqchWorkGroup) {
         if(StringUtils.isBlank(qqchWorkGroup.getPtVar5()))

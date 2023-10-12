@@ -32,6 +32,12 @@ public interface QqchWorkGroupMapper {
     QqchWorkGroup getNoValidMaxVersionQqchWorkGroup();
 
     /**
+     * 获取最新数据
+     * @return
+     */
+    QqchWorkGroup getMaxVersionQqchWorkGroup();
+
+    /**
      * 获取前期策划小组数据数量
      * @return
      */

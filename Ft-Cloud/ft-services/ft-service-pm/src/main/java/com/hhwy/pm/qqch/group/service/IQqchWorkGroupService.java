@@ -67,6 +67,12 @@ public interface IQqchWorkGroupService {
     QqchWorkGroup getValidMaxVersionQqchWorkGroup();
 
     /**
+     * 获取最新数据
+     * @return
+     */
+    QqchWorkGroup getMaxVersionQqchWorkGroup();
+
+    /**
      * 获取某租户下的工作小组
      * @param qqchWorkGroup {ptVar5:租户标识}
      * @return

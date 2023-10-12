@@ -38,7 +38,6 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.date.FtDateUtils;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
@@ -144,7 +143,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         } else {
             if (THREE.equals(type)) {//代表调整数据
                 if (idMax == null) {//代表没有数据
-                    throw new CustomBusinessException("调整之前必须有生效数据");
+                    throw new CustomException("调整之前必须有生效数据");
                 }
                 //判断评审数据是否有审批中，若有就报异常
 //                qqchReviewService.canAdjust();
@@ -197,8 +196,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         if (listCount > 1) {
             busData.setIsShowRecord(1);
         }
-        //查询最新生效版本前期策划工作小组
-        QqchWorkGroup workGroup = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+        //查询最新（不论是否生效）版本前期策划工作小组
+        QqchWorkGroup workGroup = qqchWorkGroupService.getMaxVersionQqchWorkGroup();
         if(workGroup != null){
             busData.setPlanApprovalUnit(workGroup.getPlanApprovalUnit());
         }
@@ -217,7 +216,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }
         AjaxResult ajaxResult = systemServiceApi.getQqchMenu("前期策划编制");
         if(!ajaxResult.get("code").toString().equals("200")){
-            throw new CustomBusinessException("根据菜单名【前期策划编制】查询菜单信息异常");
+            throw new CustomException("根据菜单名【前期策划编制】查询菜单信息异常");
         }
         List<QqchWorkPlanDetail> list = new ArrayList<>();
         List<SysMenu> menuList = JSONArray.parseArray(JSON.toJSONString(ajaxResult.get("data")), SysMenu.class);

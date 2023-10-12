@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.qqchWorkPlan.mapper;
 
 import com.hhwy.pm.qqch.qqchWorkPlan.domain.QqchWorkPlan;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
  * @date 2023-07-12 15:30:52
  * @remark
  */
+@Repository
 public interface QqchWorkPlanMapper {
 
     QqchWorkPlan getQqchWorkPlan(QqchWorkPlan qqchWorkPlan);
