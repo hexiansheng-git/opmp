@@ -118,6 +118,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         this.setHistoryMark(qqchWorkGroup);
         //设置工作小组成员数据
         this.setWorkGroupMember(qqchWorkGroup);
+        //设置策划审批单位和策划主导单位
+        this.setPlanUnit(qqchWorkGroup);
         qqchWorkGroup.setId(null);
         qqchWorkGroup.setTaskStatus("0");
         qqchWorkGroup.setEffective(Valid.NO);
@@ -125,7 +127,6 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         version = version.add(BigDecimal.ONE);
         qqchWorkGroup.setVersionStr("v" + version);
         qqchWorkGroup.setVersion(version);
-
 
         return qqchWorkGroup;
     }
