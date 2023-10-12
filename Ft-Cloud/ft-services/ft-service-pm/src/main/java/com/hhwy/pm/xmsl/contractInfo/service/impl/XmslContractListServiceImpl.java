@@ -142,16 +142,14 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         if(CollectionUtils.isEmpty(xmslContractListList)){
             return 0;
         }
-
-
         Map<String, List<XmslContractListVo>> collect = xmslContractListList.stream().collect(Collectors.groupingBy(XmslContractListVo::getCode));
         if (xmslContractListList.size() != collect.size()) {
             return 500;
         }
         List<XmslContractListVo> insertList = new ArrayList<>();
         List<XmslContractListVo> updateList = new ArrayList<>();
-        for (XmslContractListVo xmslContractList : xmslContractListList) {
-            this.recursionSubset(xmslContractList, insertList, updateList);
+        for (XmslContractListVo xmslContract : xmslContractListList) {
+            this.recursionSubset(xmslContract, insertList, updateList);
         }
 
         if (insertList.size() > 0) {
@@ -174,23 +172,27 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
      * @param insertList
      * @param updateList
      */
-    private void recursionSubset(XmslContractListVo xmslContractList, List<XmslContractListVo> insertList, List<XmslContractListVo> updateList) {
-        String id =xmslContractList.getId() ;
-        Long masterId = xmslContractList.getMasterId();
+    private void recursionSubset(XmslContractListVo xmslContract, List<XmslContractListVo> insertList, List<XmslContractListVo> updateList) {
+        String id =xmslContract.getId() ;
+        Long masterId = xmslContract.getMasterId();
+        List<XmslContractListVo> children = xmslContract.getChildren();
+        if (CollectionUtils.isEmpty(children)) {
+            xmslContract.setHaveChildren(0);
+        }else {
+            xmslContract.setHaveChildren(1);
+        }
         if (id == null) {
             id = IdWorker.createId()+"";
-            xmslContractList.setId(id);
-            xmslContractList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractList.setCreateUserName(SecurityUtils.getUserName());
-            xmslContractList.setCreateTime(DateUtils.getNowDate());
-            insertList.add(xmslContractList);
+            xmslContract.setId(id);
+            xmslContract.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslContract.setCreateUserName(SecurityUtils.getUserName());
+            xmslContract.setCreateTime(DateUtils.getNowDate());
+            insertList.add(xmslContract);
         } else {
-            xmslContractList.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
-            xmslContractList.setUpdateTime(DateUtils.getNowDate());
-            updateList.add(xmslContractList);
+            xmslContract.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            xmslContract.setUpdateTime(DateUtils.getNowDate());
+            updateList.add(xmslContract);
         }
-
-        List<XmslContractListVo> children = xmslContractList.getChildren();
         if (!CollectionUtils.isEmpty(children)) {
             for (XmslContractListVo child : children) {
                 child.setPid(Long.valueOf(id));
