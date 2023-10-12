@@ -115,6 +115,9 @@ public class WzchTotalDemandTimeCountServiceImpl implements IWzchTotalDemandTime
 
     @Override
     public int batchInsert(List<WzchTotalDemandTimeCount> list) {
+        if(CollectionUtils.isEmpty(list)){
+            return 0;
+        }
         return wzchTotalDemandTimeCountMapper.batchInsert(list);
     }
 

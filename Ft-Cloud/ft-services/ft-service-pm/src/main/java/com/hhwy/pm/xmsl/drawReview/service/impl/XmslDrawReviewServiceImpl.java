@@ -12,6 +12,8 @@ import com.hhwy.pm.xmsl.drawReview.mapper.XmslDrawReviewMapper;
 import com.hhwy.pm.xmsl.drawReview.service.*;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbsMain;
+import com.hhwy.pm.xmsl.wbs.dto.XmslWbsDto;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
@@ -328,6 +330,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     @Override
     @Transactional
     public void save(XmslDrawReviewDto dto) {
+        saveCheck(dto);
         Integer version = dto.getVersion()==null?1:dto.getVersion();
         boolean isNew = dto.getId()==null;
         if(isNew){
@@ -345,6 +348,20 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             handlerWbsList(dto,version,isNew);
         else if(CollectionUtils.isNotEmpty(dto.getList()))
             handlerList(dto,version,isNew);
+    }
+
+    private void saveCheck(XmslDrawReviewDto dto){
+        if(dto.getMainId() == null){
+            //为空则判断是否已经有未完成的数据
+            XmslDrawReview query = new XmslDrawReview();
+            query.setValid(Constant.NO_INT);
+            Integer count = this.xmslDrawReviewMapper.getXmslDrawReviewCount(query);
+            Assert.isTrue(count!= null && count < 1,"已存在未生效的数据，无法再新增新数据");
+            return;
+        }
+        XmslDrawReview drawReview = getById(dto.getMainId());
+        Assert.notNull(drawReview,"mainId有误，获取主数据失败");
+        Assert.isTrue(drawReview.getValid()==Constant.NO_INT,"已生效的数据无法编辑");
     }
 
     private void handlerWbsList(XmslDrawReviewDto dto,Integer version,boolean isNew){
