@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.sbzx.qqchSmallMachinery.service.impl;
 
+import cn.hutool.core.util.NumberUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -85,10 +86,12 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
             }
             //小型机具 实体
             QqchSmallMachinery smallMachinery = new QqchSmallMachinery();
+            smallMachinery.setEquType(constFacilityPlan.getPtVar2());
+            smallMachinery.setPtVar1(constFacilityPlan.getPtVar1());
             smallMachinery.setEquCode(constFacilityPlan.getFacilityCode());
             smallMachinery.setEquName(constFacilityPlan.getFacilityName());
             smallMachinery.setUnit(constFacilityPlan.getUnits());
-            smallMachinery.setNum(BigDecimal.valueOf(constFacilityPlan.getCount()));
+            smallMachinery.setNum(NumberUtil.toBigDecimal(constFacilityPlan.getCount()));
             smallMachinery.setSpec(constFacilityPlan.getSpecificationModel());
             smallMachinery.setId(IdWorker.createId());
             smallMachinery.setValid(valid);

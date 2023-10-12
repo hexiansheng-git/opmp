@@ -197,9 +197,11 @@ public class QqchSmallMachinery extends BaseEntity {
     private String delFlag;
     /**
      * 字段描述：预留字段1
+     *
+     * 设备类型编号
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "设备类型编号")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

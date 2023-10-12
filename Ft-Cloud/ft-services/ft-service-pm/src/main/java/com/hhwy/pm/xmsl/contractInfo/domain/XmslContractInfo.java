@@ -426,12 +426,16 @@ public class XmslContractInfo extends CommonBaseEntity {
     private String delFlag;
     /**
      * 字段描述：预留字段1
+     *
+     * 调整时返回生效版本id
      */
     @JsonProperty
     @Excel(name = "预留字段1")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
+     *
+     * 业务领域及产品 编号
      */
     @JsonProperty
     @Excel(name = "预留字段2")

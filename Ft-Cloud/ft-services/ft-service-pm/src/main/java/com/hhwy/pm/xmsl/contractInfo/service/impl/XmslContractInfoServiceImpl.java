@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.excel.Util;
@@ -91,8 +92,21 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setProjectCategory(projectInfo.getProjectType());
         //承包方式字段
         contractInfo.setContractingMethod(projectInfo.getContractingMethod());
+        ////业务领域及产品 编号
+        String businessAreasAndProducts = projectInfo.getBusinessAreasAndProducts();
+        contractInfo.setPtVar2(businessAreasAndProducts);
         //业务领域及产品
-        contractInfo.setBusinessAreasAndProducts(projectInfo.getBusinessAreasAndProducts());
+        if (StringUtils.isNotEmpty(businessAreasAndProducts)){
+            Util util = new Util();
+            String[] split = businessAreasAndProducts.split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String s : split) {
+                String business_areas_and_products = util.resolveDict("business_areas_and_products", s);
+                sb.append(",").append(business_areas_and_products);
+            }
+            contractInfo.setBusinessAreasAndProducts(sb.toString().substring(1));
+        }
+
         //资金来源
         contractInfo.setCapitalSource(projectInfo.getCapitalSource());
         //项目所在地
@@ -166,7 +180,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         List<XmslContractInfo> list = new ArrayList<>();
         list.add(xmslContractInfo);
         FlowInfoSearchUtil.getFlowInfo(list, FlowEnum.XMSL_CONTRACT);
-        this.getDict(xmslContractInfo);
+//        this.getDict(xmslContractInfo);
         return xmslContractInfo;
     }
 
@@ -226,9 +240,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             result.setValid("0");
             result.setTaskStatus("");
             getSonTable(result, result.getVersion());
+            //旧数据ID，用于子表获取数据
             result.setPtVar1(String.valueOf(result.getId()));
             result.setId(null);
-            //旧数据ID，用于子表获取数据
             return result;
         }else {
             //当前版本不是最大版本，将大于当前版本的最小版本记录返回前端

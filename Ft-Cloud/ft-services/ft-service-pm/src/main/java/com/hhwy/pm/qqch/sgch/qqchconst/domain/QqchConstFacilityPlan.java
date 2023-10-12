@@ -194,13 +194,13 @@ public class QqchConstFacilityPlan extends CompileEntity<QqchConstFacilityPlan> 
      * 字段描述：设备分类编号
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "设备分类编号")
     private String ptVar1;
     /**
      * 字段描述：设备分类名称
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "设备分类名称")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
