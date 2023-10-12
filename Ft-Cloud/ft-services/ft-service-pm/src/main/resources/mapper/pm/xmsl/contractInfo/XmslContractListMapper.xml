@@ -45,52 +45,51 @@
         <result property="ptVar3" column="pt_var3"/>
         <result property="ptVar4" column="pt_var4"/>
         <result property="ptVar5" column="pt_var5"/>
-        <result property="sort" column="sort" />
+        <result property="sort" column="sort"/>
     </resultMap>
     <sql id="selectXmslContractListVo">
-        select
-                                                            `id`
-                                                         ,`master_id`
-                                                         ,`pid`
-                                                         ,`ancestors`
-                                                         ,`have_children`
-                                                         ,`code`
-                                                         ,`chinese_name`
-                                                         ,`foreign_name`
-                                                         ,`list_type`
-                                                         ,`unit_code`
-                                                         ,`unit`
-                                                         ,`win_num`
-                                                         ,`win_unit_price`
-                                                         ,`win_amount`
-                                                         ,`change_num`
-                                                         ,`change_unit_price`
-                                                         ,`change_amount`
-                                                         ,`after_num`
-                                                         ,`after_unit_price`
-                                                         ,`after_amount`
-                                                         ,`file_group_id`
-                                                         ,`remark`
-                                                         ,`region_id`
-                                                         ,`region_name`
-                                                         ,`project_id`
-                                                         ,`project_name`
-                                                         ,`dept_id`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                                         ,`pt_var3`
-                                                         ,`pt_var4`
-                                                         ,`pt_var5`
-                ,`sort`
-                                    from xmsl_contract_list
+        SELECT `id`
+                , `master_id`
+                , `pid`
+                , `ancestors`
+                , `have_children`
+                , `code`
+                , `chinese_name`
+                , `foreign_name`
+                , `list_type`
+                , `unit_code`
+                , `unit`
+                , `win_num`
+                , `win_unit_price`
+                , `win_amount`
+                , `change_num`
+                , `change_unit_price`
+                , `change_amount`
+                , `after_num`
+                , `after_unit_price`
+                , `after_amount`
+                , `file_group_id`
+                , `remark`
+                , `region_id`
+                , `region_name`
+                , `project_id`
+                , `project_name`
+                , `dept_id`
+                , `create_user`
+                , `create_user_name`
+                , `create_time`
+                , `update_user`
+                , `update_time`
+                , `del_user`
+                , `del_time`
+                , `del_flag`
+                , `pt_var1`
+                , `pt_var2`
+                , `pt_var3`
+                , `pt_var4`
+                , `pt_var5`
+                , `sort`
+        FROM xmsl_contract_list
     </sql>
     <select id="getXmslContractList" resultMap="XmslContractListResultMap">
         <include refid="selectXmslContractListVo"/>
@@ -102,7 +101,9 @@
             <if test="ancestors != null  and ancestors != ''">and `ancestors` = #{ancestors}</if>
             <if test="haveChildren != null  and haveChildren != ''">and `have_children` = #{haveChildren}</if>
             <if test="code != null  and code != ''">and `code` like concat('%' , #{code} , '%')</if>
-            <if test="chineseName != null  and chineseName != ''">and `chinese_name` like concat('%' , #{chineseName} , '%')</if>
+            <if test="chineseName != null  and chineseName != ''">and `chinese_name` like concat('%' , #{chineseName} ,
+                '%')
+            </if>
             <if test="foreignName != null  and foreignName != ''">and `foreign_name` = #{foreignName}</if>
             <if test="listType != null  and listType != ''">and `list_type` = #{listType}</if>
             <if test="unitCode != null  and unitCode != ''">and `unit_code` = #{unitCode}</if>
@@ -136,9 +137,9 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <choose>
-                <when test="ptVar1 != null and ptVar1 != '' ">and `pid` is null </when>
+                <when test="ptVar1 != null and ptVar1 != '' ">and `pid` is null</when>
             </choose>
-            <if test="sort != null  and sort != ''"> and `sort` = #{sort}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
         </where>
         order by sort
     </select>
@@ -187,7 +188,7 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="sort != null  and sort != ''"> and `sort` = #{sort}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
             <if test="ids != null and ids.length>0">
                 and id in
                 <foreach collection="ids" item="id" open="(" separator="," close=")">
@@ -213,7 +214,7 @@
             #{item}
         </foreach>
     </select>
-    
+
     <insert id="insertXmslContractList" useGeneratedKeys="true" keyProperty="id">
         insert into xmsl_contract_list
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -463,7 +464,6 @@
                     </if>
                 </foreach>
             </trim>
-
 
 
             <trim prefix="pid  = case" suffix="end,">
@@ -790,7 +790,7 @@
             <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
-            <if test="sort != null  and sort != ''"> and `sort` = #{sort}</if>
+            <if test="sort != null  and sort != ''">and `sort` = #{sort}</if>
         </where>
     </update>
 
@@ -833,7 +833,6 @@
                     </if>
                 </foreach>
             </trim>
-
 
 
             <trim prefix="pid  = case" suffix="end,">
@@ -1111,15 +1110,11 @@
         </foreach>
     </update>
 
-    <select id="getContractPriceByListtype" resultMap="XmslContractListResultMap">
-        <include refid="selectXmslContractListVo"/>
-            <where>
-                    del_flag = "0"
-                    and pid not in (select id from xmsl_contract_list)
-                    and win_num IS NOT NULL
-                    and win_unit_price is not null
-                    and list_type = #{listType} limit 1
-            </where>
+    <select id="getContractPriceByListtype" resultType="com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList">
+        SELECT IFNULL(sum(win_num), 0) AS winNum,
+            IFNULL(sum(win_amount), 0) AS winAmount
+        FROM xmsl_contract_list
+        WHERE del_flag = "0" AND have_children = 0 AND list_type = #{listType}
     </select>
     <select id="getByAncestors" resultMap="XmslContractListResultMap">
         <include refid="selectXmslContractListVo"/>

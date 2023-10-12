@@ -328,7 +328,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         xmslContractInfo.setValid("1");
         xmslContractInfo.setVersion(maxVersion);
         //查询有效的合同信息
-        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
+//        XmslContractInfo xmslContractInfo1 = xmslContractInfoMapper.getXmslContractInfo(xmslContractInfo);
         //查询结果
         return xmslContractListMapper.getContractPriceByListtype(xmslContractList);
     }
