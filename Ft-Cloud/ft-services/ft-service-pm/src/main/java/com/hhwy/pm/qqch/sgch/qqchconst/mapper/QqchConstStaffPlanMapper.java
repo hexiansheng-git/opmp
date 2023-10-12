@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.mapper;
 
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
 import org.apache.ibatis.annotations.Param;
 
@@ -30,4 +31,7 @@ public interface QqchConstStaffPlanMapper {
     int deleteQqchConstStaffPlanByPks(@Param("qqchConstStaffPlanPkList") List<Long> qqchConstStaffPlanPkList);
 
     void deleteByVersion(@Param("version") BigDecimal version);
+
+    List<QqchConstStaffPlan> getStaffPlanByConstDesc(QqchConst qqchConst);
+
 }

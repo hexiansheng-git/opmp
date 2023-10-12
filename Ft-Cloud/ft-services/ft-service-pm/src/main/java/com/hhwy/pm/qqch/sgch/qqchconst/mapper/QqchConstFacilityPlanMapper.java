@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.mapper;
 
+import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import org.apache.ibatis.annotations.Param;
 
@@ -27,4 +28,7 @@ public interface QqchConstFacilityPlanMapper {
     int deleteQqchConstFacilityPlan(QqchConstFacilityPlan qqchConstFacilityPlan);
 
     int deleteQqchConstFacilityPlanByPks(@Param("qqchConstFacilityPlanPkList") List<Long> qqchConstFacilityPlanPkList);
+
+    List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(QqchConst qqchConst);
+
 }

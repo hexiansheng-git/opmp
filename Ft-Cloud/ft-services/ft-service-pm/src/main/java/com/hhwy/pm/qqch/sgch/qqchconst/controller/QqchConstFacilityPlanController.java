@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 功能：施工部署 - 设备策划
@@ -41,4 +42,21 @@ public class QqchConstFacilityPlanController {
         List<QqchConstFacilityPlan> list = constFacilityPlanService.list(CompileEntity.dealListDto(qqchConst.getVersion(), new QqchConstFacilityPlan()));
         return AjaxResult.success(list);
     }
+
+    /**
+     * 获取设备策划和人员策划 2.1.3使用 根据主表明细字段获取id，根据id到设备策划表获取列表
+     * @return
+     */
+    @GetMapping("/queryDevicePlanListByConstDesc")
+    public AjaxResult queryDevicePlanListByConstDesc(QqchConst qqchConst) {
+        if (qqchConst.getVersion() == null){
+            BigDecimal version = VersionUtil.getVersion("qqch_const",null);
+            qqchConst.setVersion(version);
+        }
+        Map list = constFacilityPlanService.queryDevicePlanListByConstDesc(qqchConst);
+        return AjaxResult.success(list);
+    }
+
+
+
 }
