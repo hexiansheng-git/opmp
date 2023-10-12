@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -112,18 +113,18 @@ public class QqchConstFacilityPlanServiceImpl implements IQqchConstFacilityPlanS
      * 时间: 2023/10/11
      */
     @Override
-    public Map queryDevicePlanListByConstDesc(QqchConst qqchConst) {
+    public Map queryDevicePlanListByConstDesc(List<String> constDescs, BigDecimal version) {
         Map result = new HashMap<>();
-        List<QqchConstStaffPlan> staffPlanByConstDesc = this.getStaffPlanByConstDesc(qqchConst);
-        List<QqchConstFacilityPlan> facilityPlanByConstDesc = this.getFacilityPlanByConstDesc(qqchConst);
+        List<QqchConstStaffPlan> staffPlanByConstDesc = this.getStaffPlanByConstDesc(constDescs, version);
+        List<QqchConstFacilityPlan> facilityPlanByConstDesc = this.getFacilityPlanByConstDesc(constDescs, version);
         result.put("facilityPlanList", facilityPlanByConstDesc);
         result.put("staffList", staffPlanByConstDesc);
         return result;
     }
-    private List<QqchConstStaffPlan> getStaffPlanByConstDesc(QqchConst qqchConst) {
-        return constStaffPlanMapper.getStaffPlanByConstDesc(qqchConst);
+    private List<QqchConstStaffPlan> getStaffPlanByConstDesc(List<String> constDescs, BigDecimal version) {
+        return constStaffPlanMapper.getStaffPlanByConstDesc(constDescs, version);
     }
-    private List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(QqchConst qqchConst) {
-        return qqchConstFacilityPlanMapper.getFacilityPlanByConstDesc(qqchConst);
+    private List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(List<String> constDescs, BigDecimal version) {
+        return qqchConstFacilityPlanMapper.getFacilityPlanByConstDesc(constDescs, version);
     }
 }

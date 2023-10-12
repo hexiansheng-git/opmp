@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -29,6 +30,6 @@ public interface QqchConstFacilityPlanMapper {
 
     int deleteQqchConstFacilityPlanByPks(@Param("qqchConstFacilityPlanPkList") List<Long> qqchConstFacilityPlanPkList);
 
-    List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(QqchConst qqchConst);
+    List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(@Param("list") List<String> constDescs, @Param("version") BigDecimal version);
 
 }

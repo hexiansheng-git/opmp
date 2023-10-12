@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +38,5 @@ public interface IQqchConstFacilityPlanService {
      */
     List<QqchConstFacilityPlan> list(QqchConstFacilityPlan dto);
 
-    Map queryDevicePlanListByConstDesc(QqchConst qqchConst);
+    Map queryDevicePlanListByConstDesc(List<String> constDescs, BigDecimal version);
 }

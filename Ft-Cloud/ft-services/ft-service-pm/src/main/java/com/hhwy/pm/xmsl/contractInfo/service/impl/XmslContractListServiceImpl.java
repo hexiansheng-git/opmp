@@ -77,6 +77,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
     public List<XmslContractList> getXmslContractList(XmslContractList xmslContractList) {
         List<XmslContractList> xmslContractList1 = xmslContractListMapper.getXmslContractList(xmslContractList);
         List<XmslContractList> treeList = ListTreeUtil.formatTree(xmslContractList1, o -> o.getPid() == null, (r, n) -> r.getId().equals(n.getPid()), XmslContractList::getChildren, XmslContractList::setChildren);
+        treeList.forEach(p -> p.setHaveChildren(null));
         return treeList;
     }
 

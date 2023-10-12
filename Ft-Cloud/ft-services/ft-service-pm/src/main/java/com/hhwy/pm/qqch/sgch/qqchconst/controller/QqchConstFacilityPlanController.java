@@ -48,15 +48,10 @@ public class QqchConstFacilityPlanController {
      * @return
      */
     @GetMapping("/queryDevicePlanListByConstDesc")
-    public AjaxResult queryDevicePlanListByConstDesc(QqchConst qqchConst) {
-        if (qqchConst.getVersion() == null){
-            BigDecimal version = VersionUtil.getVersion("qqch_const",null);
-            qqchConst.setVersion(version);
-        }
-        Map list = constFacilityPlanService.queryDevicePlanListByConstDesc(qqchConst);
+    public AjaxResult queryDevicePlanListByConstDesc(List<String> constDescs) {
+        BigDecimal version = VersionUtil.getVersion("qqch_const",null);
+        Map list = constFacilityPlanService.queryDevicePlanListByConstDesc(constDescs, version);
         return AjaxResult.success(list);
     }
-
-
 
 }

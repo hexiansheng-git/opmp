@@ -582,6 +582,16 @@
 
     <select id="getStaffPlanByConstDesc" resultMap="QqchConstStaffPlanResultMap">
         <include refid="selectQqchConstStaffPlanVo"/>
+        <where>
+            del_flag = '0'
+            AND version = #{version}
+            AND master_id IN
+                ( SELECT id FROM qqch_const WHERE del_flag = '0' AND const_desc IN
+                    <foreach item="constDesc" collection="list" open="(" separator="," close=")">
+                        #{constDesc}
+                    </foreach>
+                )
+        </where>
         WHERE
             del_flag = '0'
                 AND master_id IN ( SELECT id FROM qqch_const WHERE del_flag = '0' AND const_desc = #{constDesc} )

@@ -32,6 +32,6 @@ public interface QqchConstStaffPlanMapper {
 
     void deleteByVersion(@Param("version") BigDecimal version);
 
-    List<QqchConstStaffPlan> getStaffPlanByConstDesc(QqchConst qqchConst);
+    List<QqchConstStaffPlan> getStaffPlanByConstDesc(@Param("list") List<String> constDescs, @Param("version") BigDecimal version);
 
 }
