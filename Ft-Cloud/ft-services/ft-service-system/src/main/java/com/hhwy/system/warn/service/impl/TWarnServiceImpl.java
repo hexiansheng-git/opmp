@@ -10,6 +10,7 @@ import com.hhwy.domain.base.system.warn.TWarn;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.config.SseEmitterServer;
 import com.hhwy.system.core.mapper.SysUserMapper;
+import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.warn.mapper.TWarnMapper;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.idworker.IdWorker;
@@ -33,6 +34,9 @@ public class TWarnServiceImpl implements ITWarnService {
 
     @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private UserMapper myUserMapper;
 
 
     public TWarn getTWarn(TWarn tWarn) {
@@ -85,6 +89,15 @@ public class TWarnServiceImpl implements ITWarnService {
 
             for (String tWarnUser : userList) {
                 SseEmitterServer.sendMessage(tWarnUser, "system", HtmlToText.filterHtmlStr(warnContent));
+            }
+        }
+
+        if(StringUtils.isNotBlank(warnScopeType) && WarnScopeType.ROLE.getWarnScopeType().equals(warnScopeType)){
+            String warnScope = tWarn.getWarnScope();
+            String[] roleKeyList = warnScope.split(",");
+            List<SysUser> userList = myUserMapper.selectByRoleKeyList(roleKeyList, "master");
+            for (SysUser user : userList) {
+                SseEmitterServer.sendMessage(user.getUserName(), "system", HtmlToText.filterHtmlStr(warnContent));
             }
         }
     }

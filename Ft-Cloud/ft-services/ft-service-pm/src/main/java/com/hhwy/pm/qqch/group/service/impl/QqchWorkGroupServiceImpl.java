@@ -461,9 +461,17 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                 if(diffDays > 10){
                     /*判断工作小组是否已成立并完成审批*/
                     QqchWorkGroup workGroup = qqchWorkGroupMapper.getValidMaxVersionQqchWorkGroup();
-                    if(workGroup == null){
+                    String projectCategory = projectInfo.getProjectCategory();
+                    if(workGroup == null && StringUtils.isNotBlank(projectCategory)){
                         /*发送预警*/
-                        warnService.addWarn(WarnItem.WORK_GROUP_SET_UP,WarnScopeType.USER,null,"admin",tenantKey);
+                        String warnScope = "";
+                        //TODO 根据项目分类给不同的角色发送预警
+                        if("1".equals(projectCategory) || "2".equals(projectCategory)){
+                            warnScope = "cons_plan_supervisor";
+                        }else {
+                            warnScope = "cons_assistant_manager";
+                        }
+                        warnService.addWarn(WarnItem.WORK_GROUP_SET_UP,WarnScopeType.ROLE,null,warnScope,tenantKey);
                     }
                 }
             }

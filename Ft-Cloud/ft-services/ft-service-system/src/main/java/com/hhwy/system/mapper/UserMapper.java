@@ -122,4 +122,6 @@ public interface UserMapper {
     List<SysUser> selectAllUser(@Param("deptList") List<SysDept> deptList);
 
     int insertSysUserList(@Param(value = "sysUserList") List<SysUser> sysUserList);
+
+    List<SysUser> selectByRoleKeyList(@Param("roleKeyList") String[] roleKeyList,@Param("tenantKey") String tenantKey);
 }

@@ -89,7 +89,7 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
     }
 
     /**
-     * 根据阶段获取当前阶段所有的编制人
+     * 根据阶段获取当前阶段所有的编制人（用户名）
      * @param planStage
      * @return
      */
@@ -109,15 +109,15 @@ public class QqchWorkPlanDetailServiceImpl implements IQqchWorkPlanDetailService
         switch (planStage) {
             case "1":
                 var1 = "is_first";
-                var2 = "editor_first";
+                var2 = "editor_first_user_name";
                 break;
             case "2":
                 var1 = "is_second";
-                var2 = "editor_second";
+                var2 = "editor_second_user_name";
                 break;
             case "3":
                 var1 = "is_third";
-                var2 = "editor_third";
+                var2 = "editor_third_user_name";
                 break;
             default:return editorList;
         }

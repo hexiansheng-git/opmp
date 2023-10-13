@@ -33,6 +33,11 @@ public interface IQqchWorkPlanDetailService {
      */
     int insertOrEditBatchByMainId(List<QqchWorkPlanDetail> list, Long mainId);
 
+    /**
+     * 根据阶段获取当前阶段所有的编制人（用户名）
+     * @param planStage
+     * @return
+     */
     List<Long> getEditorListByPlanStage(String planStage);
 
 }

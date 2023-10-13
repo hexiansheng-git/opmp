@@ -543,12 +543,12 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }
     }
 
-    private QqchWorkPlan getWorkPlanListByFlowStatus(@Param("flowStatus") String flowStatus){
+    private QqchWorkPlan getWorkPlanListByFlowStatus(@Param("flowStatus") String flowStatus,String tenantKey){
         QqchWorkPlan workPlan = qqchWorkPlanMapper.getWorkPlanListByFlowStatus(flowStatus);
         if(workPlan == null){
             return null;
         }
-        FlowInfoSearchUtil.getFlowInfo(workPlan, FlowEnum.QQCH_WORK_PLAN);
+        FlowInfoSearchUtil.setInstanceId(workPlan, FlowEnum.QQCH_WORK_PLAN, tenantKey);
         return workPlan;
     }
 
@@ -572,7 +572,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 DynamicDataSourceContextHolder.push(dataSource);
 
                 //获取流程状态为 “审批中” 的工作计划数据
-                QqchWorkPlan workPlan = this.getWorkPlanListByFlowStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
+                QqchWorkPlan workPlan = this.getWorkPlanListByFlowStatus(FlowStatusEnum.FLOW_STATUS_AUDITING.getKey(),tenantKey);
                 if(workPlan == null){
                     continue;
                 }
@@ -581,19 +581,21 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 Date taskCommitDate = workPlan.getTaskCommitDate();
                 Date nowDate = DateUtils.getNowDate();
                 Long diffDays = FtDateUtils.getDays(taskCommitDate, nowDate);
-                if(true){
+                if(diffDays >3 ){
                     //获取工作小组组长
                     List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
                     StringBuilder warnScope = new StringBuilder();
                     for (QqchWorkGroupMember qqchWorkGroupMember : groupLeader) {
                         warnScope.append(qqchWorkGroupMember.getDirectorUserName()).append(",");
                     }
+                    //获取审批人员
                     /*流程实例id*/
                     String instanceId = workPlan.getInstanceId();
-                    Map<String, Object> map = remoteBpmnService.handleList(instanceId, "qqch_work_plan", workPlan.getId().toString()).getData();
-                    Map itemsMap = (Map) map.get("items");
-
-                    warnService.addWarn(WarnItem.WORK_PLAN_COMMIT, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
+                    String approve = FlowInfoSearchUtil.getApprove(instanceId);
+                    if(StringUtils.isNotBlank(approve)){
+                        warnScope.append(approve);
+                    }
+                    warnService.addWarn(WarnItem.WORK_PLAN_APPROVAL, WarnScopeType.USER,null,warnScope.toString(),tenantKey);
                 }
             }
         }catch (Exception e){

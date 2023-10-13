@@ -46,5 +46,5 @@ public interface ReviewMapper {
      * 获取当前正在审批的数据
      * @return
      */
-    Review getApprovedDate();
+    Review getApprovedData();
 }

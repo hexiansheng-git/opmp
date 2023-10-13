@@ -3,7 +3,6 @@ package com.hhwy.pm.common;
 import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -12,7 +11,7 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.enums.FlowStatusEnum;
 import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.feign.service.SystemServiceApi;
-import com.hhwy.pm.common.domain.FtActBusiness;
+import com.hhwy.flowable.api.RemoteBpmnService;
 import com.hhwy.pm.common.mapper.FlowInfoMapper;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.system.api.domain.SysUser;
@@ -22,7 +21,6 @@ import jodd.util.StringUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
-import org.apache.poi.ss.formula.functions.T;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,6 +37,7 @@ public class FlowInfoSearchUtil {
     static SystemServiceApi systemServiceApi = SpringUtils.getBean(SystemServiceApi.class);
     static SystemApiService systemApiService= SpringUtils.getBean(SystemApiService.class);
     static FlowServiceApi flowServiceApi= SpringUtils.getBean(FlowServiceApi.class);
+    static RemoteBpmnService remoteBpmnService = SpringUtils.getBean(RemoteBpmnService.class);
     
     /***
      * 功能描述: 查询流程信息
@@ -56,34 +55,37 @@ public class FlowInfoSearchUtil {
         //           2、ft_act_business有数据，根据process_instance_id联查act_ru_task（PROC_INST_ID_），查到的记录即为当前流程待审核节点，
         //          如若没有数据，表明流程已结束，NAME_：当前审批节点名称，ASSIGNEE_：审批人
         List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, SecurityUtils.getTenantKey());
+        setProcessInfo(list,flowEnum,flowList);
+        return list;
+    }
+
+    private static <T extends CommonBaseEntity> void setProcessInfo(List<T> list, FlowEnum flowEnum, List<CommonBaseEntity> flowList){
         //业务ID : 流程信息
         Map<String,CommonBaseEntity> flowMap = new HashMap<>();
-        for (int i = 0; i < flowList.size(); i++) {
-            CommonBaseEntity temp = flowList.get(i);
+        for (CommonBaseEntity temp : flowList) {
             flowMap.put(temp.getBusinessId(), temp);
         }
         //填充流程信息到list
         Set<String> userNameSet = new HashSet<>();
-        for (int i = 0; i < list.size(); i++) {
-            T t = list.get(i);
+        for (T t : list) {
             t.setProcessKey(flowEnum.getProcessKey());
             t.setBusinessTableName(flowEnum.getTableName());
-            CommonBaseEntity flowInfo = flowMap.get(t.getId()+"");
-            if(flowInfo == null){
+            CommonBaseEntity flowInfo = flowMap.get(t.getId() + "");
+            if (flowInfo == null) {
                 t.setTaskStatus(FlowStatusEnum.FLOW_STATUS_INIT.getKey());
                 t.setIsFirstNode("0");
                 continue;
             }
             //ProcessTaskManId为空，表示流程已结束
             t.setTaskStatus(StringUtils.isBlank(flowInfo.getProcessTaskManId())
-                    ?FlowStatusEnum.FLOW_STATUS_END.getKey():FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
+                    ? FlowStatusEnum.FLOW_STATUS_END.getKey() : FlowStatusEnum.FLOW_STATUS_AUDITING.getKey());
             t.setTaskId(flowInfo.getTaskId());
             t.setProcessTaskName(flowInfo.getProcessTaskName());
             t.setInstanceId(flowInfo.getInstanceId());
             t.setProcessTaskManId(flowInfo.getProcessTaskManId());
             t.setNextNodeId(flowInfo.getNextNodeId());
             t.setCurrentTaskId(flowInfo.getCurrentTaskId());
-            if(!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
+            if (!t.getTaskStatus().equals(FlowStatusEnum.FLOW_STATUS_END.getKey()))
                 userNameSet.addAll(SetUtils.hashSet(flowInfo.getProcessTaskManId().split(",")));
             //是否为第一节点发起&当前登录用户等于发起人
             t.setIsFirstNode(isFirstNodeEdit(flowInfo.getInstanceId()));
@@ -92,14 +94,12 @@ public class FlowInfoSearchUtil {
         if(CollectionUtils.isNotEmpty(userNameSet)){
             List<SysUser> userList = systemApiService.selectUserListByUsernames(StringUtils.join(userNameSet,","));
             //用户登陆名 ： 用户nickName
-            Map<String,String> nickNameMap = userList.stream().collect(Collectors.toMap(r->r.getUserName(),r->r.getNickName()));
-            for (int i = 0; i < list.size(); i++) {
-                T t = list.get(i);
-                String processTaskManName = ObjectUtils.replaceWithMap(t.getProcessTaskManId(),nickNameMap);
+            Map<String,String> nickNameMap = userList.stream().collect(Collectors.toMap(SysUser::getUserName, SysUser::getNickName));
+            for (T t : list) {
+                String processTaskManName = ObjectUtils.replaceWithMap(t.getProcessTaskManId(), nickNameMap);
                 t.setProcessTaskMan(processTaskManName);
             }
         }
-        return list;
     }
 
     /**
@@ -114,6 +114,55 @@ public class FlowInfoSearchUtil {
         t.setProcessKey(flowEnum.getProcessKey());
         t.setBusinessTableName(flowEnum.getTableName());
         return t;
+    }
+
+    public static <T extends CommonBaseEntity> void setInstanceId(T t, FlowEnum flowEnum, String tenantKey){
+        setInstanceId(Arrays.asList(t),flowEnum,tenantKey);
+    }
+
+    public static <T extends CommonBaseEntity> void setInstanceId(List<T> list, FlowEnum flowEnum, String tenantKey){
+        if(CollectionUtils.isEmpty(list) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
+            return;
+        String[] businessIds =list.stream().map(r-> String.valueOf(r.getId())).toArray(String[]::new);
+        List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, tenantKey);
+
+        //业务ID : 流程信息
+        Map<String,CommonBaseEntity> flowMap = new HashMap<>();
+        for (CommonBaseEntity temp : flowList) {
+            flowMap.put(temp.getBusinessId(), temp);
+        }
+        for (T t : list) {
+            CommonBaseEntity flowInfo = flowMap.get(String.valueOf(t.getId()));
+            if (flowInfo == null) {
+                t.setTaskStatus(FlowStatusEnum.FLOW_STATUS_INIT.getKey());
+                t.setIsFirstNode("0");
+                continue;
+            }
+            t.setInstanceId(flowInfo.getInstanceId());
+        }
+    }
+
+    /**
+     * 根据流程id，获取当前节点审批人员用户名
+     * @param instanceId
+     * @return
+     */
+    public static String getApprove(String instanceId){
+        StringBuilder approve = new StringBuilder();
+        if(StringUtils.isBlank(instanceId)){
+            return approve.toString();
+        }
+        Map<String, Object> map = remoteBpmnService.handleList(instanceId, null,null).getData();
+        List<LinkedHashMap<String,Object>> items = (List<LinkedHashMap<String, Object>>) map.get("items");
+        for (LinkedHashMap<String, Object> item : items) {
+            String endTime = (String) item.get("endTime");
+            String assignee = (String) item.get("assignee");
+            if(StringUtils.isBlank(endTime)){
+                approve.append(assignee).append(",");
+            }
+        }
+
+        return approve.toString();
     }
     
     /***

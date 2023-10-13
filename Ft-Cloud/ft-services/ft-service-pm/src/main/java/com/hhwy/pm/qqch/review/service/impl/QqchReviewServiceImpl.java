@@ -453,6 +453,27 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     /**
+     * 获取阶段预警人
+     * @param planStage
+     * @return
+     */
+    private String getStageWarnScope(String planStage){
+        StringBuilder warnScope = new StringBuilder();
+        //获取填报人员
+        List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage(planStage);
+        //获取工作小组组长
+        List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
+
+        for (Long editor : editorList) {
+            warnScope.append(editor).append(",");
+        }
+        for (QqchWorkGroupMember member : groupLeader) {
+            warnScope.append(member.getDirectorUserName()).append(",");
+        }
+        return warnScope.toString();
+    }
+
+    /**
      * 前期策划编制第一阶段预警
      */
     @Override
@@ -490,11 +511,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 Long diffDays = FtDateUtils.getDays(winTheBiddingDate, nowDate);
                 if(diffDays > 30){
                     /*发送预警*/
-                    //获取填报人员
-                    List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage("1");
-                    //获取工作小组组长
-                    List<QqchWorkGroupMember> groupLeader = qqchWorkGroupMemberService.getGroupLeader();
-                    warnService.addWarn(WarnItem.PREPARATION_FIRST_STAGE, WarnScopeType.USER,null,"admin",tenantKey);
+                    String warnScope = getStageWarnScope("1");
+                    if(StringUtils.isNotBlank(warnScope)){
+                        warnService.addWarn(WarnItem.PREPARATION_FIRST_STAGE, WarnScopeType.USER,null,warnScope,tenantKey);
+                    }
                 }
             }
         }catch (Exception e){
@@ -564,8 +584,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 Date nowDate = DateUtils.getNowDate();
                 if(nowDate.compareTo(smallDate) > 0){
-                    List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage("1");
-                    warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
+                    String warnScope = getStageWarnScope("1");
+                    if(StringUtils.isNotBlank(warnScope)){
+                        warnService.addWarn(WarnItem.PREPARATION_SECOND_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
+                    }
                 }
             }
         }catch (Exception e){
@@ -620,8 +642,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 if(nowDate.compareTo(cutOffTime) > 0){
                     /*发送预警*/
-                    List<Long> editorList = qqchWorkPlanDetailService.getEditorListByPlanStage("1");
-                    warnService.addWarn(WarnItem.PREPARATION_THIRD_STAGE,WarnScopeType.USER,null,"admin",tenantKey);
+                    String warnScope = getStageWarnScope("1");
+                    if(StringUtils.isNotBlank(warnScope)) {
+                        warnService.addWarn(WarnItem.PREPARATION_THIRD_STAGE, WarnScopeType.USER, null, "admin", tenantKey);
+                    }
                 }
             }
         }catch (Exception e){
@@ -650,7 +674,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
 
-                Review approvedDate = this.getApprovedDate();
+                Review approvedDate = this.getApprovedDate(tenantKey);
                 if(approvedDate == null){
                     continue;
                 }
@@ -663,7 +687,11 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
                 if(nowDate.compareTo(cutOffTime) > 0){
                     /*发送预警*/
-                    warnService.addWarn(WarnItem.QQCH_REVIEW,WarnScopeType.USER,null,"admin",tenantKey);
+                    String instanceId = approvedDate.getInstanceId();
+                    StringBuilder warnScope = new StringBuilder();
+                    String approve = FlowInfoSearchUtil.getApprove(instanceId);
+                    warnScope.append(approve).append("yinqingbo");
+                    warnService.addWarn(WarnItem.QQCH_REVIEW,WarnScopeType.USER,null,warnScope.toString(),tenantKey);
                 }
             }
         }catch (Exception e){
@@ -678,14 +706,14 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
      * 获取当前正在审批中的评审数据
      * @return
      */
-    private Review getApprovedDate(){
-        Review review = reviewMapper.getApprovedDate();
+    private Review getApprovedDate(String tenantKey){
+        Review review = reviewMapper.getApprovedData();
         if(review != null){
             String planStage = review.getPlanStage();
             if("3".equals(planStage)){
-                FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW2);
+                FlowInfoSearchUtil.setInstanceId(review,FlowEnum.QQCH_REVIEW2,tenantKey);
             }else {
-                FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW);
+                FlowInfoSearchUtil.setInstanceId(review,FlowEnum.QQCH_REVIEW,tenantKey);
             }
         }
         return review;
