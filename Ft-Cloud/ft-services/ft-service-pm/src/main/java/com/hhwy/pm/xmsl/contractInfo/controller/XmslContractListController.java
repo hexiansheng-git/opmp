@@ -163,7 +163,7 @@ public class XmslContractListController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
-            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(importXmslContractListVos, o -> o.getParentInnerCode()==0, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractListVo::getChildren, ImportXmslContractListVo::setChildren);
+            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(importXmslContractListVos, o -> o.getParentInnerCode()==null, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractListVo::getChildren, ImportXmslContractListVo::setChildren);
             return AjaxResult.success(dateList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");

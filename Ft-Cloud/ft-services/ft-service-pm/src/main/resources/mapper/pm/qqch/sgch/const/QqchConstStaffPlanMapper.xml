@@ -41,43 +41,45 @@
         <result property="ptVar5" column="pt_var5"/>
     </resultMap>
     <sql id="selectQqchConstStaffPlanVo">
-        select `id`
-             , `pid`
-             , `master_id`
-             , `occupation_code`
-             , `occupation_name`
-             , `chinese_side_count`
-             , `local_count`
-             , `total_count`
-             , `site_days`
-             , `remark`
-             , `source`
-             , `leaf`
-             , `sort`
-             , `version`
-             , `valid`
-             , `region_id`
-             , `region_name`
-             , `project_id`
-             , `project_name`
-             , `dept_id`
-             , `create_user`
-             , `create_user_name`
-             , `create_time`
-             , `update_user`
-             , `update_time`
-             , `del_user`
-             , `del_time`
-             , `del_flag`
-             , `pt_var1`
-             , `pt_var2`
-             , `pt_var3`
-             , `pt_var4`
-             , `pt_var5`
-        from qqch_const_staff_plan
+        SELECT `id`
+                , `pid`
+                , `master_id`
+                , `occupation_code`
+                , `occupation_name`
+                , `chinese_side_count`
+                , `local_count`
+                , `total_count`
+                , `site_days`
+                , `remark`
+                , `source`
+                , `leaf`
+                , `sort`
+                , `version`
+                , `valid`
+                , `region_id`
+                , `region_name`
+                , `project_id`
+                , `project_name`
+                , `dept_id`
+                , `create_user`
+                , `create_user_name`
+                , `create_time`
+                , `update_user`
+                , `update_time`
+                , `del_user`
+                , `del_time`
+                , `del_flag`
+                , `pt_var1`
+                , `pt_var2`
+                , `pt_var3`
+                , `pt_var4`
+                , `pt_var5`
+        FROM qqch_const_staff_plan
     </sql>
     <delete id="deleteByVersion">
-        update qqch_const_staff_plan set del_flag = '1' where  version = #{version}
+        UPDATE qqch_const_staff_plan
+        SET del_flag = '1'
+        WHERE version = #{version}
     </delete>
     <select id="getQqchConstStaffPlan" resultMap="QqchConstStaffPlanResultMap">
         <include refid="selectQqchConstStaffPlanVo"/>
@@ -158,7 +160,8 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="codeOrName != null  and codeOrName != ''">
-                and (`occupation_code` like concat('%', #{codeOrName},'%' ) or `occupation_name`  like concat('%', #{codeOrName},'%' ) )
+                and (`occupation_code` like concat('%', #{codeOrName},'%' ) or `occupation_name` like concat('%',
+                #{codeOrName},'%' ) )
             </if>
         </where>
         order by create_time desc
@@ -580,20 +583,28 @@
         </where>
     </update>
 
-    <select id="getStaffPlanByConstDesc" resultMap="QqchConstStaffPlanResultMap">
-        <include refid="selectQqchConstStaffPlanVo"/>
-        <where>
-            del_flag = '0'
-            AND version = #{version}
-            AND master_id IN
-                ( SELECT id FROM qqch_const WHERE del_flag = '0' AND const_desc IN
-                    <foreach item="constDesc" collection="list" open="(" separator="," close=")">
-                        #{constDesc}
-                    </foreach>
-                )
-        </where>
-        WHERE
-            del_flag = '0'
-                AND master_id IN ( SELECT id FROM qqch_const WHERE del_flag = '0' AND const_desc = #{constDesc} )
+    <select id="getStaffPlanByConstDesc" resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan">
+        SELECT
+            constStaff13.*,
+            -- 岗位职责
+            surveyPersion213.job_duty AS ptVar3
+        FROM
+            (
+                SELECT
+                    staff13.*,
+                    -- 1.3明细、2.1.3班组
+                    const13.const_desc AS ptVar4
+                FROM
+                    ( SELECT * FROM qqch_const_staff_plan WHERE del_flag = '0' AND master_id = #{masterId13} ) staff13
+                        LEFT JOIN ( SELECT id, const_desc FROM qqch_const WHERE del_flag = '0' AND valid = '1') const13 ON staff13.master_id = const13.id
+            ) constStaff13
+                LEFT JOIN (
+                SELECT
+                    person213.*,
+                    team213.team_name AS ptVar4
+                FROM
+                    ( SELECT * FROM qqch_survey_person_plan WHERE del_flag = '0' AND master_id = #{masterId213} ) person213
+                        LEFT JOIN ( SELECT * FROM qqch_survey_design_teams WHERE id = del_flag = '0' AND valid = '1' ) team213 ON person213.master_id = team213.id
+            ) surveyPersion213 ON constStaff13.ptVar4 = surveyPersion213.ptVar4
     </select>
 </mapper>

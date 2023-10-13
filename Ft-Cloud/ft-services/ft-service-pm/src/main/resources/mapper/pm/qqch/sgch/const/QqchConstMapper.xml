@@ -627,6 +627,7 @@
     <select id="selectQqchConst"  resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlanResult">
         SELECT
             p.id,
+            p.master_id masterId,
             p.occupation_code  occupationCode,
             p.occupation_name  occupationName,
             IFNULL(p.chinese_side_count, 0) chineseSideCount,

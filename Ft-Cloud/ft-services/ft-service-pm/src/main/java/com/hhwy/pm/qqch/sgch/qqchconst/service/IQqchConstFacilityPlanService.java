@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.sgch.qqchconst.service;
 
+import com.hhwy.pm.qqch.preparation.survey.qqchSurveyDesignTeams.domain.QqchSurveyParam;
+import com.hhwy.pm.qqch.sgch.qqchLabourDemandPlan.domain.QqchLabourDemandPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstFacilityPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
@@ -38,5 +40,5 @@ public interface IQqchConstFacilityPlanService {
      */
     List<QqchConstFacilityPlan> list(QqchConstFacilityPlan dto);
 
-    Map queryDevicePlanListByConstDesc(List<String> constDescs, BigDecimal version);
+    Map queryDevicePlanListByConstDesc(List<QqchSurveyParam> param, BigDecimal version);
 }
