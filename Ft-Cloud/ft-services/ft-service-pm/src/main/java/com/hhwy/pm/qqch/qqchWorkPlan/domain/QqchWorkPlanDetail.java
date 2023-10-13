@@ -1,20 +1,10 @@
 package com.hhwy.pm.qqch.qqchWorkPlan.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.hhwy.utils.common.CommonBaseEntity;
+import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
 import com.hhwy.utils.validation.ValidationGroups;
 import lombok.AllArgsConstructor;
@@ -22,7 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author hwj
@@ -263,15 +253,33 @@ public class QqchWorkPlanDetail extends TreeNode<QqchWorkPlanDetail> {
     @Excel(name = "第一阶段编制人姓名")
     private String editorFirstName;
     /**
+     * 字段描述：第一阶段编制人用户名
+     */
+    @JsonProperty
+    @Excel(name = "第一阶段编制人用户名")
+    private String editorFirstUserName;
+    /**
      * 字段描述：第二阶段编制人姓名
      */
     @JsonProperty
     @Excel(name = "第二阶段编制人姓名")
     private String editorSecondName;
     /**
+     * 字段描述：第二阶段编制人用户名
+     */
+    @JsonProperty
+    @Excel(name = "第二阶段编制人用户名")
+    private String editorSecondUserName;
+    /**
      * 字段描述：第三阶段编制人姓名
      */
     @JsonProperty
     @Excel(name = "第三阶段编制人姓名")
     private String editorThirdName;
+    /**
+     * 字段描述：第三阶段编制人用户名
+     */
+    @JsonProperty
+    @Excel(name = "第三阶段编制人用户名")
+    private String editorThirdUserName;
 }
