@@ -295,7 +295,7 @@
     </update>
 
     <update id="deleteWbs" parameterType="Map">
-        delete from xmsl_draw_review_list where main_id = #{mainId}
+        delete from xmsl_draw_review_wbs where main_id = #{mainId}
     </update>
 
     <update id="deleteList" parameterType="Map">

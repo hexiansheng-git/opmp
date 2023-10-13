@@ -18,6 +18,7 @@ import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.stereotype.Service;
@@ -123,12 +124,14 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
             res = qqchTaxGlobalFormulaList.get(0);
         }
 
-        res.setCurrency(currency);
-        res.setExcContAmt(excContAmt);
-        res.setRate(rate);
-        res.setCnyRate(cnyRate);
-        res.setLocalRate(localRate);
-        res.setPrePayRate(prePayRate);
+        res.setCurrency(currency);      //币种
+        res.setExcContAmt(excContAmt);  //不含税合同金额
+        res.setRate(rate);              //汇率
+        res.setCnyRate(cnyRate);        //美元对人民币汇率
+        res.setLocalRate(localRate);    //项目当地币汇率
+        res.setPrePayRate(prePayRate);  //预付款比例
+        //质保金（保留金）扣除比例（%） 从项目中拿  qualityGuaranteeDepositRatio
+        res.setGuaDeductRate(ObjectUtils.nvlBigDecimal(prj.getQualityGuaranteeDepositRatio()));
         qqchTaxGlobalFormulaCompileEntity.setDto(res);
         return qqchTaxGlobalFormulaCompileEntity;
     }

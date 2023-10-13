@@ -177,6 +177,11 @@ public class QqchTaxGlobalController extends BaseController {
         return AjaxResult.success(param);
     }
 
+    /**
+     * 获取明细填表数据
+     * @param param {year}
+     * @return
+     */
     @GetMapping("/getFormula")
     public AjaxResult getFormula(QqchTaxGlobalFormula param) {
         QqchTaxGlobalFormula qqchTaxGlobalFormula1 = CompileEntity.dealListDto(param.getVersion(),param);
