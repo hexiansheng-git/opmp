@@ -43,8 +43,11 @@
         <result property="ptVar5" column="pt_var5"/>
         <result property="taskStatus" column="task_status"/>
         <result property="editorFirstName" column="editor_first_name"/>
+        <result property="editorFirstUserName" column="editor_first_user_name"/>
         <result property="editorSecondName" column="editor_second_name"/>
+        <result property="editorSecondUserName" column="editor_second_user_name"/>
         <result property="editorThirdName" column="editor_third_name"/>
+        <result property="editorThirdUserName" column="editor_third_user_name"/>
     </resultMap>
     <sql id="selectQqchWorkPlanDetailVo">
         select `id`
@@ -85,8 +88,11 @@
              , `pt_var5`
              , `task_status`
              , `editor_first_name`
+             , `editor_first_user_name`
              , `editor_second_name`
+             , `editor_second_user_name`
              , `editor_third_name`
+             , `editor_third_user_name`
         from qqch_work_plan_detail
     </sql>
     <select id="getQqchWorkPlanDetail" resultMap="QqchWorkPlanDetailResultMap">
@@ -239,8 +245,11 @@
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="editorFirstName != null  and editorFirstName != ''">`editor_first_name`,</if>
+            <if test="editorFirstUserName != null  and editorFirstUserName != ''">`editor_first_user_name`,</if>
             <if test="editorSecondName != null  and editorSecondName != ''">`editor_second_name`,</if>
+            <if test="editorSecondUserName != null  and editorSecondUserName != ''">`editor_second_user_name`,</if>
             <if test="editorThirdName != null  and editorThirdName != ''">`editor_third_name`,</if>
+            <if test="editorThirdUserName != null  and editorThirdUserName != ''">`editor_third_user_name`,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
@@ -281,8 +290,11 @@
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="editorFirstName != null  and editorFirstName != ''">#{editorFirstName},</if>
+            <if test="editorFirstUserName != null  and editorFirstUserName != ''">#{editorFirstUserName},</if>
             <if test="editorSecondName != null  and editorSecondName != ''">#{editorSecondName},</if>
+            <if test="editorSecondUserName != null  and editorSecondUserName != ''">#{editorSecondUserName},</if>
             <if test="editorThirdName != null  and editorThirdName != ''">#{editorThirdName},</if>
+            <if test="editorThirdUserName != null  and editorThirdUserName != ''">#{editorThirdUserName},</if>
         </trim>
     </insert>
 
@@ -327,8 +339,11 @@
             `pt_var5`,
             `task_status`,
             `editor_first_name`,
+            `editor_first_user_name`,
             `editor_second_name`,
+            `editor_second_user_name`,
             `editor_third_name`,
+            `editor_third_user_name`,
         </trim>
         values
         <foreach collection="qqchWorkPlanDetailList" item="item" separator=",">
@@ -370,8 +385,11 @@
                 #{item.ptVar5},
                 #{item.taskStatus},
                 #{item.editorFirstName},
+                #{item.editorFirstUserName},
                 #{item.editorSecondName},
+                #{item.editorSecondUserName},
                 #{item.editorThirdName},
+                #{item.editorThirdUserName},
             </trim>
         </foreach>
     </insert>
@@ -416,13 +434,16 @@
             <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
-            <if test="editorFirstName != null  and  editorFirstName != ''">`editor_first_name` = #{editorFirstName},
-            </if>
+            <if test="editorFirstName != null  and  editorFirstName != ''">`editor_first_name` = #{editorFirstName},</if>
+            <if test="editorFirstUserName != null  and  editorFirstUserName != ''">`editor_first_user_name` = #{editorFirstUserName},</if>
             <if test="editorSecondName != null  and  editorSecondName != ''">`editor_second_name` =
                 #{editorSecondName},
             </if>
-            <if test="editorThirdName != null  and  editorThirdName != ''">`editor_third_name` = #{editorThirdName},
+            <if test="editorSecondUserName != null  and  editorSecondUserName != ''">`editor_second_user_name` =
+                #{editorSecondUserName},
             </if>
+            <if test="editorThirdName != null  and  editorThirdName != ''">`editor_third_name` = #{editorThirdName},</if>
+            <if test="editorThirdUserName != null  and  editorThirdUserName != ''">`editor_third_user_name` = #{editorThirdUserName},</if>
         </trim>
         <where>
             <if test="id != null ">and `id` = #{id}</if>
@@ -622,14 +643,29 @@
                     when `id`=#{item.id} then #{item.editorFirstName}
                 </foreach>
             </trim>
+            <trim prefix="editor_first_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.editorFirstUserName}
+                </foreach>
+            </trim>
             <trim prefix="editor_second_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.editorSecondName}
                 </foreach>
             </trim>
+            <trim prefix="editor_second_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.editorSecondUserName}
+                </foreach>
+            </trim>
             <trim prefix="editor_third_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.editorThirdName}
+                </foreach>
+            </trim>
+            <trim prefix="editor_third_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.editorThirdUserName}
                 </foreach>
             </trim>
         </trim>
