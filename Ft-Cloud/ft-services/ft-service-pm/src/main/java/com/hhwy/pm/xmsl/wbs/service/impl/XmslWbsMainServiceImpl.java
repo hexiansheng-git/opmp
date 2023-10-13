@@ -214,9 +214,13 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
         //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
+        String tenantKey = SecurityUtils.getTenantKey();
         //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
         ThreadPoolUtil.getThreadPool().execute(()->{
             long beginMills = System.currentTimeMillis();
+            //切换租户
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try{
                 Map<String,XmslWbs> lastWbsMap = new HashMap<>(10000);
                 //加载上一版本的wbs
@@ -253,13 +257,15 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
             }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
                 log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
             }
         });
-        //4、工程量报表生成
-        ThreadPoolUtil.getThreadPool().execute(()->{
-            engineeringReportService.sync();
-        });
+//        //4、工程量报表生成
+//        ThreadPoolUtil.getThreadPool().execute(()->{
+//            engineeringReportService.sync();
+//        });
     }
 
     /**
