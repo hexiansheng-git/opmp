@@ -97,7 +97,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public List wbsList(Map map) {
         if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
             XmslDrawReviewWbs query = new XmslDrawReviewWbs();
-            query.setParentId(ObjectUtils.nvlLong(map.get("parentId")));
+            query.setParentId(ObjectUtils.nvlLong(map.get("parentId"),-1L));
             query.setVersion(ObjectUtils.nvl(map.get("version")));
             query.setVersionFlag(Constant.YES_INT);
             List<XmslDrawReviewWbs> list = drawReviewWbsService.getXmslDrawReviewWbsList(query);
@@ -136,7 +136,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslDrawReviewList queryList = new XmslDrawReviewList();
             queryList.setVersion(ObjectUtils.nvl(map.get("version")));
             queryList.setVersionFlag(Constant.YES_INT);
-            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),0L));
+            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),-1L));
             List<XmslDrawReviewList> resuList = drawReviewListService.getXmslDrawReviewListList(queryList);
             return resuList;
         }

@@ -252,7 +252,6 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             }catch(Exception e){
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());
-                
             }finally {
                 log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
             }
