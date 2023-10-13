@@ -22,6 +22,14 @@ public class QqchConstStaffPlanResult extends CompileEntity<QqchConstStaffPlanRe
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long id;
+
+    /**
+     * 字段描述：主表id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long masterId;
+
     /**
      * 字段描述：工种编号
      */

@@ -205,10 +205,10 @@ public class QqchLabourDemandPlan extends TreeNode<QqchLabourDemandPlan> {
     @Excel(name = "删除标识：0未删除；1已删除")
     private String delFlag;
     /**
-     * 字段描述：预留字段1
+     * 字段描述：masterId 1.3主表id
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "masterId 1.3主表id")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

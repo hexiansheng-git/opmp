@@ -30,6 +30,6 @@ public interface QqchConstFacilityPlanMapper {
 
     int deleteQqchConstFacilityPlanByPks(@Param("qqchConstFacilityPlanPkList") List<Long> qqchConstFacilityPlanPkList);
 
-    List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(@Param("list") List<String> constDescs, @Param("version") BigDecimal version);
+    List<QqchConstFacilityPlan> getFacilityPlanByConstDesc(@Param("masterId13") Long masterId13, @Param("masterId213") Long masterId213, @Param("version") BigDecimal version);
 
 }

@@ -325,7 +325,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
         for (QqchLabourDemandPlan qqchLabourDemandPlan : orginList) {
             Long outId = qqchLabourDemandPlan.getOutId();
             if (mapId13.containsKey(outId)){
-                //已存在的数据，判断入场和离场时间是否已填写，未填下走添加逻辑，已填写需要把数据保留
+                //已存在的数据，判断入场和离场时间是否已填写，未填写走添加逻辑，已填写需要把数据保留
                 List<QqchLabourDemandPlanResult> qqchLabourDemandPlanResults = BeanUtil.copyToList(mapId13.get(outId), QqchLabourDemandPlanResult.class);
                 if (qqchLabourDemandPlan.getEntryDate() != null || qqchLabourDemandPlan.getExitDate() != null){
                     qqchLabourDemandPlanResults.forEach(p -> {
@@ -411,6 +411,7 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             for (QqchLabourDemandPlanResult result : entryValue) {
                 QqchLabourDemandPlan qqchLabourDemandPlan1 = new QqchLabourDemandPlan();
                 qqchLabourDemandPlan1.setOutId(result.getId());
+                qqchLabourDemandPlan1.setPtVar1(String.valueOf(result.getMasterId()));
                 qqchLabourDemandPlan1.setOccupationCode(StringUtils.isEmpty(result.getOccupationCode())?null:result.getOccupationCode());
                 qqchLabourDemandPlan1.setJobName(StringUtils.isEmpty(result.getOccupationName())?null:result.getOccupationName());
                 qqchLabourDemandPlan1.setWorkTeam(StringUtils.isEmpty(result.getConstDesc())?null:result.getConstDesc());
