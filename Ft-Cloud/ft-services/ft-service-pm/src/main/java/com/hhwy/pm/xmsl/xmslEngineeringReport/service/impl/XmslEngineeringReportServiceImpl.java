@@ -103,7 +103,13 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             listReport.setParentId(report.getId());
             listReport.setReportType(2);
             addReportFunc.apply(listReport);
+
+            report.setHaveChildren(1);
             //WBS-清单
+            XmslEngineeringReport parentReport =  addMap.get(temp.getWbsId());
+            if(parentReport != null){
+                parentReport.setHaveChildren(1);
+            }
             XmslEngineeringReport wbsReport = instanceList(temp);
             wbsReport.setId(temp.getId());
             wbsReport.setParentId(temp.getWbsId());
