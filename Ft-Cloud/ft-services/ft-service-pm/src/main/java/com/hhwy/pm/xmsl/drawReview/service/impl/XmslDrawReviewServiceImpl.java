@@ -480,6 +480,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             tempList.setVersionFlag(Constant.YES_INT);
             tempList.setMainId(dto.getId());
             //清单&挂接清单
+            if(CollectionUtils.isEmpty(tempList.getWbsList()))
+                continue;
             List<XmslDrawReviewWbs> wbsList = tempList.getWbsList();
             for (int j = 0; j < wbsList.size(); j++) {
                 XmslDrawReviewWbs temp = wbsList.get(j);
