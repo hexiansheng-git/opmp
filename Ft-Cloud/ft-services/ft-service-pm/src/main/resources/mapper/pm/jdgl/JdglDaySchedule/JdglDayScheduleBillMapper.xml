@@ -165,7 +165,7 @@
             resultMap="JdglDayScheduleBillResultMap">
         select wbs_id,wbs_code,wbs_name,bill_id,bill_code,bill_name,sum(this_quantity) this_quantity
         from jdgl_day_schedule_bill bill,jdgl_day_schedule sc
-        where sc.id = bill.day_schedule_id and sc.date &lt; #{date} and sc.task_status = '5'
+        where sc.id = bill.day_schedule_id and sc.date &lt; #{date} and sc.task_status != '0'
         group by wbs_id,wbs_code,wbs_name,bill_id,bill_code,bill_name
     </select>
     <select id="getBillValueListByRangeDate"
@@ -173,7 +173,7 @@
         select bill_id,bill_code,bill_name,sum(this_quantity) this_quantity
         from jdgl_day_schedule_bill bill,(
             select * from jdgl_day_schedule
-                where task_status = '5'
+                where task_status != '0'
                  and `date` &gt;= #{startDate} and `date` &lt;= #{endDate} ) sc
         where sc.id = bill.day_schedule_id
         group by bill_id,bill_code,bill_name
@@ -183,7 +183,7 @@
         select bill_id,bill_code,bill_name,sum(this_quantity) this_quantity
         from jdgl_day_schedule_bill bill,(
             select * from jdgl_day_schedule
-                where task_status = '5'
+                where task_status != '0'
                     and `date` &lt;= #{endDate} ) sc
         where sc.id = bill.day_schedule_id
         group by bill_id,bill_code,bill_name

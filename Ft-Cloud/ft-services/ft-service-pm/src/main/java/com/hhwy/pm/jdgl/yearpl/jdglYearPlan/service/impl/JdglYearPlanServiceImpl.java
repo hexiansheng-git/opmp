@@ -211,7 +211,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         if(jdglYearPlan != null) {
             JdglYearPlan usingYearPlanByYear = getUsingYearPlanByYear(jdglYearPlan.getYear());
             if(usingYearPlanByYear != null) {
-                usingYearPlanByYear.setIsUse("-1");
+                usingYearPlanByYear.setIsUse("0");
                 jdglYearPlanMapper.updateJdglYearPlan(usingYearPlanByYear);
             }
             jdglYearPlan.setTaskStatus("5");

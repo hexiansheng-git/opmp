@@ -165,9 +165,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
                 log.info("项目信息表无数据");
                 return new XmslContractInfo();
             }
+            //将项目信息写入合同表
+            xmslContractInfo = getProjectInfo(projectInfo, xmslContractInfoParam);
         }
-        //将项目信息写入合同表
-        xmslContractInfo = getProjectInfo(projectInfo, xmslContractInfoParam);
         //查询子表数据
         this.getSonTable(xmslContractInfo, maxVersion);
         //查询历史记录，根据记录数给showRecord字段赋值
@@ -478,7 +478,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         if (resultPrice != null) {
             //合同不含税金额   “主合同清单”页签变更后清单_不含税金额，末级合计
             // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
-            xmslContractInfo.setExcludingAmout(resultPrice.getWinNum());
+//            xmslContractInfo.setExcludingAmout(resultPrice.getWinNum());
             //有效合同金额  主合同清单，清单类型是普通清单的所有末级节点的含税金额的合计
             // todo 合同变更功能未做，暂时用“中标合同清单”中的金额
             xmslContractInfo.setEffectiveAmout(resultPrice.getWinAmount());

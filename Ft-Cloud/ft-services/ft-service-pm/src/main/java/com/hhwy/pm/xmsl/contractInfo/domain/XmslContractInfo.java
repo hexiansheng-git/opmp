@@ -430,7 +430,7 @@ public class XmslContractInfo extends CommonBaseEntity {
      * 调整时返回生效版本id
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "调整时返回生效版本id")
     private String ptVar1;
     /**
      * 字段描述：预留字段2
@@ -438,7 +438,7 @@ public class XmslContractInfo extends CommonBaseEntity {
      * 业务领域及产品 编号
      */
     @JsonProperty
-    @Excel(name = "预留字段2")
+    @Excel(name = "业务领域及产品 编号")
     private String ptVar2;
     /**
      * 字段描述：预留字段3
