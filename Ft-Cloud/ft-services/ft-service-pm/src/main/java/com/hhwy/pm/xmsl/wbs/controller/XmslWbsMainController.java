@@ -67,7 +67,7 @@ public class XmslWbsMainController extends BaseController {
         //是否有调整记录
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
         if(wbsMain != null)
-            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
+            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
         XmslWbsMain temp = wbsMain==null?new XmslWbsMain():wbsMain;
         FlowInfoSearchUtil.getFlowInfo(temp,FlowEnum.XMSL_WBS);
         return AjaxResult.success(temp);
@@ -92,7 +92,7 @@ public class XmslWbsMainController extends BaseController {
         //是否有调整记录
         Long count = xmslWbsMainService.getXmslWbsMainCount(new XmslWbsMain());
         if(wbsMain != null)
-            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>1?1:0));
+            wbsMain.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,count>0?1:0));
         FlowInfoSearchUtil.getFlowInfo(wbsMain,FlowEnum.XMSL_WBS);
         return AjaxResult.success(wbsMain);
     }

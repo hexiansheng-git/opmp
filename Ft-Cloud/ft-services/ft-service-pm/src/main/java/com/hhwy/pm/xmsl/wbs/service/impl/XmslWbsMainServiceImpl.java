@@ -252,7 +252,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 //4、修改版本变更标志
                 wbsService.updatePtVar2List(updateFlagList);
                 //5、wbs塞入redis
-                wbsService.initWbs2Redis();
+                wbsService.initWbs2Redis(tenantKey);
             }catch(Exception e){
                 e.printStackTrace();
                 log.error("wbs加载祖级名称&塞redis失败，mainid:{},消息：{}",main.getId(),e.getMessage());

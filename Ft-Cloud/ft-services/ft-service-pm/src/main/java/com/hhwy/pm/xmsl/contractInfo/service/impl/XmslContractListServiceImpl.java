@@ -125,9 +125,10 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     @Override
     public List<XmslContractList> getByCodes(Set<String> codeSet) {
-        if(CollectionUtils.isEmpty(codeSet))
+        XmslContractInfo effectCon = this.xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        if(CollectionUtils.isEmpty(codeSet) || effectCon == null)
             return new ArrayList<>(2);
-        return xmslContractListMapper.getByCodes(codeSet);
+        return xmslContractListMapper.getByCodes(effectCon.getId(),codeSet);
     }
 
     @Transactional

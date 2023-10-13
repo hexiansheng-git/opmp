@@ -207,9 +207,9 @@
         </foreach>
     </select>
 
-    <select id="getByCodes" parameterType="String" resultMap="XmslContractListResultMap">
+    <select id="getByCodes" resultMap="XmslContractListResultMap">
         <include refid="selectXmslContractListVo"/>
-        where code in
+        where master_id = #{id} and code in
         <foreach collection="codes" index="index" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>

@@ -20,7 +20,7 @@ public interface XmslContractListMapper {
     List<XmslContractList> getXmslContractListList(XmslContractList xmslContractList);
 
     List<XmslContractList> getByIds(@Param("ids") Long[] ids);
-    List<XmslContractList> getByCodes(@Param("codes") Set<String> codes);
+    List<XmslContractList> getByCodes(@Param("id") Long masterId,@Param("codes") Set<String> codes);
     
     int insertXmslContractList(XmslContractList xmslContractList);
 
