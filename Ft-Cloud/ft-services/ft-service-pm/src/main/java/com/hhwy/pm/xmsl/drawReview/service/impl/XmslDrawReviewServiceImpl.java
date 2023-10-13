@@ -337,6 +337,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         boolean isNew = dto.getId()==null;
         if(isNew){
             new AddBaseInfoUtil<>(dto);
+            dto.setCreateUserName(SecurityUtils.getSysUser().getNickName());
             dto.setVersion(version);
             dto.setValid(Constant.NO_INT);
             xmslDrawReviewMapper.insertXmslDrawReview(dto);
