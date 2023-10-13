@@ -1,7 +1,9 @@
 package com.hhwy.pm.xmsl.drawReview.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
@@ -20,6 +22,7 @@ import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
 import com.hhwy.system.api.domain.SysDictData;
 import com.hhwy.utils.*;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
@@ -573,6 +576,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     }
 
     @Override
+    @Transactional
     public void finishFlow(Long id) {
         //1、修改valid > 1
         XmslDrawReview drawReview = this.getById(id);
@@ -581,12 +585,22 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         this.xmslDrawReviewMapper.updateXmslDrawReview(drawReview);
         //2、存储wbs以及清单的父级
         loadParentWbsList(id);
+        String tenantKey = SecurityUtils.getTenantKey();
         //3、生成工程量报表 & 主材报表
         ThreadPoolUtil.execute(()->{
-            engineeringReportService.sync();
-        });
-        ThreadPoolUtil.execute(()->{
-            materialReportService.sync(id);
+            //切换租户
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+            try {
+                engineeringReportService.sync();
+                materialReportService.sync(id);
+            }catch (Exception e){
+                e.printStackTrace();
+                throw new CustomBusinessException(e.getMessage());
+            }finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
+            }
         });
     }
 

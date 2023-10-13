@@ -70,7 +70,7 @@ public class XmslDrawReviewListServiceImpl implements IXmslDrawReviewListService
             e.printStackTrace();
             logger.info("获取全量图纸复核清单失败,msg:{}",e.getMessage());
         }finally {
-            logger.debug("获取全量图纸复核清单,共{}条,耗时:",sum,System.currentTimeMillis()-beginMills);
+            logger.debug("获取全量图纸复核清单,共{}条,耗时:{}",sum,System.currentTimeMillis()-beginMills);
         }
         return resuList;
     }

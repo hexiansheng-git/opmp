@@ -85,7 +85,7 @@ public class XmslDrawReviewWbsServiceImpl implements IXmslDrawReviewWbsService {
             e.printStackTrace();
             logger.info("获取全量wbs失败,msg:{}",e.getMessage());
         }finally {
-            logger.debug("获取全量wbs,共{}条,耗时:",sum,System.currentTimeMillis()-beginMills);
+            logger.debug("获取全量wbs,共{}条,耗时:{}",sum,System.currentTimeMillis()-beginMills);
         }
         return resuList;
     }
