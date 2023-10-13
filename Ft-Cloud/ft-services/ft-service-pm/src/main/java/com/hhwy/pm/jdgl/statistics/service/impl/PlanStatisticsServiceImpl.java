@@ -699,5 +699,23 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
     }
 
+    @Override
+    public List<JdglDaySchedule> getDayScheduleCalendarList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+
+        Map<String, PlanStatisticsPeriodValueVO> returnMapList = new HashMap<>();
+
+        StatisticsUtils.initDateParams(iPlanStatisticsQueryVO);
+
+        String queryDateType = iPlanStatisticsQueryVO.getQueryDateType();
+        String year = iPlanStatisticsQueryVO.getYear();
+        String quarter = iPlanStatisticsQueryVO.getQuarter();
+        String month = iPlanStatisticsQueryVO.getMonth();
+        String week = iPlanStatisticsQueryVO.getWeek();
+        Date startDate = iPlanStatisticsQueryVO.getStartDate();
+        Date endDate = iPlanStatisticsQueryVO.getEndDate();
+
+        return iJdglDayScheduleService.getListByDateRange(null, endDate);
+    }
+
 
 }

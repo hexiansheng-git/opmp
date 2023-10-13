@@ -236,7 +236,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         if(jdglMonthPlan != null) {
             JdglMonthPlan usingMonthPlanByYearAndMonth = getUsingMonthPlanByYearAndMonth(jdglMonthPlan.getYear(), jdglMonthPlan.getMonth());
             if(usingMonthPlanByYearAndMonth != null) {
-                usingMonthPlanByYearAndMonth.setIsUse("-1");
+                usingMonthPlanByYearAndMonth.setIsUse("0");
                 jdglMonthPlanMapper.updateJdglMonthPlan(usingMonthPlanByYearAndMonth);
             }
             jdglMonthPlan.setIsUse("1");

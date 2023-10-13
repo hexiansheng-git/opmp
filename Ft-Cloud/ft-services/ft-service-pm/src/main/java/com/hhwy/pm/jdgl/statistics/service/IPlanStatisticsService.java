@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.statistics.service;
 
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.statistics.domain.*;
 
 import java.math.BigDecimal;
@@ -22,6 +23,5 @@ public interface IPlanStatisticsService {
 
     Map<String, PlanStatisticsPeriodValueVO> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 
-
-
+    List<JdglDaySchedule> getDayScheduleCalendarList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 }

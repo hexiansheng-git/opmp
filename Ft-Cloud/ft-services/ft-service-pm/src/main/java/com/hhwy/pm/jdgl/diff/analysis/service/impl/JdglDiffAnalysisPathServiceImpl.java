@@ -151,7 +151,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
                 totalCompDays =  Math.round((actualFinishDate.getTime() - actualStartDate.getTime())/24/60/60/1000);
             }
 
-            BigDecimal totalDayCompRate = new BigDecimal(totalCompDays /totalPlanDays);
+            BigDecimal totalDayCompRate = new BigDecimal(totalPlanDays == 0 ? 0 : totalCompDays /totalPlanDays);
             jdglDiffAnalysisPath.setTotalDayCompRate(totalDayCompRate);
 
             // 计算总体进度完成百分比
@@ -159,7 +159,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             BigDecimal totalActQty = new BigDecimal(0);
             if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo -> vo.getWbsCode().equals(jdglMainPlanItem.getItemCode())).findFirst().orElse(null);
-                if(jdglDayScheduleWbs4Value != null) totalActQty = jdglDayScheduleWbs4Value.getThisQuantity();
+                if(jdglDayScheduleWbs4Value != null) totalActQty = jdglDayScheduleWbs4Value.getThisQuantity() == null ? totalActQty : jdglDayScheduleWbs4Value.getThisQuantity();
             }
             BigDecimal totalProgressCompRate = totalPlanQty == null || totalPlanQty.compareTo(new BigDecimal(0)) == 0
                     ? new BigDecimal(0) : totalActQty.divide(totalPlanQty,4,BigDecimal.ROUND_HALF_UP);
@@ -177,7 +177,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
 
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisPathList)) {
             for (JdglDiffAnalysisPath jdglDiffAnalysisPath : jdglDiffAnalysisPathList) {
-                JdglDiffAnalysisPath jdglDiffAnalysisPath1 = jdglDiffAnalysisPathList.stream().filter(vo -> vo.getId().equals(jdglDiffAnalysisPath.getPid())).findFirst().orElse(null);
+                JdglDiffAnalysisPath jdglDiffAnalysisPath1 = jdglDiffAnalysisPathList.stream().filter(vo -> vo.getPtVar1().equals(jdglDiffAnalysisPath.getPtVar2())).findFirst().orElse(null);
                 if(jdglDiffAnalysisPath1 != null) jdglDiffAnalysisPath.setPid(jdglDiffAnalysisPath1.getId());
             }
             insertJdglDiffAnalysisPathList(jdglDiffAnalysisPathList);
@@ -244,7 +244,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             if(actualStartDate != null) {
                 totalCompDays =  Math.round((actualFinishDate.getTime() - actualStartDate.getTime())/24/60/60/1000);
             }
-            BigDecimal totalDayCompRate = new BigDecimal(totalCompDays /totalPlanDays);
+            BigDecimal totalDayCompRate = new BigDecimal(totalPlanDays == 0 ? 0 : totalCompDays /totalPlanDays);
             jdglDiffAnalysisPath.setTotalDayCompRate(totalDayCompRate);
 
             // 计算总体进度完成百分比
@@ -252,7 +252,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             BigDecimal totalActQty = new BigDecimal(0);
             if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo -> vo.getWbsCode().equals(jdglMainPlanItem.getItemCode())).findFirst().orElse(null);
-                if(jdglDayScheduleWbs4Value != null) totalActQty = jdglDayScheduleWbs4Value.getThisQuantity();
+                if(jdglDayScheduleWbs4Value != null) totalActQty = jdglDayScheduleWbs4Value.getThisQuantity() == null ? totalActQty : jdglDayScheduleWbs4Value.getThisQuantity();
             }
             BigDecimal totalProgressCompRate = totalPlanQty == null || totalPlanQty.compareTo(new BigDecimal(0)) == 0
                     ? new BigDecimal(0) : totalActQty.divide(totalPlanQty,4,BigDecimal.ROUND_HALF_UP);
@@ -270,7 +270,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
 
         if(!CollectionUtils.isEmpty(jdglDiffAnalysisPathList)) {
             for (JdglDiffAnalysisPath jdglDiffAnalysisPath : jdglDiffAnalysisPathList) {
-                JdglDiffAnalysisPath jdglDiffAnalysisPath1 = jdglDiffAnalysisPathList.stream().filter(vo -> vo.getId().equals(jdglDiffAnalysisPath.getPid())).findFirst().orElse(null);
+                JdglDiffAnalysisPath jdglDiffAnalysisPath1 = jdglDiffAnalysisPathList.stream().filter(vo -> vo.getPtVar1().equals(jdglDiffAnalysisPath.getPtVar2())).findFirst().orElse(null);
                 if(jdglDiffAnalysisPath1 != null) jdglDiffAnalysisPath.setPid(jdglDiffAnalysisPath1.getId());
             }
             insertJdglDiffAnalysisPathList(jdglDiffAnalysisPathList);

@@ -228,7 +228,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         if (jdglQuarterPlan != null) {
             JdglQuarterPlan usingQuarterPlanByYearAndQuarter = getUsingQuarterPlanByYearAndQuarter(jdglQuarterPlan.getYear(), jdglQuarterPlan.getQuarter());
             if(usingQuarterPlanByYearAndQuarter != null) {
-                usingQuarterPlanByYearAndQuarter.setIsUse("-1");
+                usingQuarterPlanByYearAndQuarter.setIsUse("0");
                 jdglQuarterPlanMapper.updateJdglQuarterPlan(usingQuarterPlanByYearAndQuarter);
             }
             jdglQuarterPlan.setTaskStatus("5");

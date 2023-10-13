@@ -140,19 +140,19 @@
     <select id="getHistoryValue"
             resultMap="JdglDayScheduleResultMap">
         select sum(day_value_cu) total_value_cu,sum(day_value_dl) total_value_dl
-        from jdgl_day_schedule where date &lt; #{date} and task_status = "5" and del_flag != "1"
+        from jdgl_day_schedule where date &lt; #{date} and task_status != "0" and del_flag != "1"
     </select>
     <select id="getCountValue" resultType="java.math.BigDecimal">
         select sum(day_value_dl)
         from jdgl_day_schedule
-        where task_status = "5" and del_flag != "1"
+        where task_status != "0" and del_flag != "1"
         <if test="startDate != null "> and date &gt;= #{startDate}</if>
         <if test="endDate != null "> and date &lt;= #{endDate}</if>
     </select>
 
     <select id="getListByDateRange" resultMap="JdglDayScheduleResultMap">
         <include refid="selectJdglDayScheduleVo"/>
-        where task_status = "5" and del_flag != "1"
+        where task_status != "0" and del_flag != "1"
             <if test="startDate != null "> and date &gt;= #{startDate}</if>
             <if test="endDate != null "> and date &lt;= #{endDate}</if>
          order by date asc
@@ -520,7 +520,7 @@
     </update>
     <update id="updateJdglDayScheduleValue">
 
-        update jdgl_day_schedule jds left join  (select * from jdgl_day_schedule where date = DATE_SUB(#{date},INTERVAL 1 DAY) and task_status = '5') queryjds
+        update jdgl_day_schedule jds left join  (select * from jdgl_day_schedule where date = DATE_SUB(#{date},INTERVAL 1 DAY) and task_status != "0") queryjds
         on jds.id != queryjds.id
         set
             jds.day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),

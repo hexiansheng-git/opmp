@@ -233,7 +233,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         if(jdglWeekPlan != null) {
             JdglWeekPlan usingWeekPlanByYearAndWeek = getUsingWeekPlanByYearAndWeek(jdglWeekPlan.getYear(), jdglWeekPlan.getWeek());
             if(usingWeekPlanByYearAndWeek != null) {
-                usingWeekPlanByYearAndWeek.setIsUse("-1");
+                usingWeekPlanByYearAndWeek.setIsUse("0");
                 jdglWeekPlanMapper.updateJdglWeekPlan(usingWeekPlanByYearAndWeek);
             }
             jdglWeekPlan.setTaskStatus("5");

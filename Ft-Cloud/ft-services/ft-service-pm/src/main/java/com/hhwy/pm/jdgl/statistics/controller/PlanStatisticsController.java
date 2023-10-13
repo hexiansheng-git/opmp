@@ -49,6 +49,11 @@ public class PlanStatisticsController  {
         return AjaxResult.success(iPlanStatisticsService.getYearValueCompareList(iPlanStatisticsQueryVO));
     };
 
+    @PostMapping("/getDayScheduleCalendarList")
+    public AjaxResult getDayScheduleCalendarList(@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO){
+        return AjaxResult.success(iPlanStatisticsService.getDayScheduleCalendarList(iPlanStatisticsQueryVO));
+    };
+
 //    @ResponseBody
     @PostMapping("/export")
     public void export(HttpServletResponse response,@RequestBody PlanStatisticsQueryVO iPlanStatisticsQueryVO) throws IOException {

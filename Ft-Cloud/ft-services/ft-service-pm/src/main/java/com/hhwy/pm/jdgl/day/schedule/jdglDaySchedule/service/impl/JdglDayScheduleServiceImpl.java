@@ -135,9 +135,12 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
         JdglDaySchedule jdglDaySchedule = new JdglDaySchedule();
         jdglDaySchedule.setId(id);
-        jdglDaySchedule.setTaskStatus("5");
-        jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
-
+        JdglDaySchedule jdglDaySchedule1 = getJdglDaySchedule(jdglDaySchedule);
+        if (jdglDaySchedule1 != null) {
+            String taskStatus = jdglDaySchedule1.getTaskStatus();
+            jdglDaySchedule.setTaskStatus("0".equals(taskStatus)? "1" : "5");
+            jdglDayScheduleMapper.updateJdglDaySchedule(jdglDaySchedule);
+        }
     }
 
     public List<JdglDaySchedule> getJdglDayScheduleList(JdglDaySchedule jdglDaySchedule) {
