@@ -8,7 +8,6 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.excel.Util;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.mapper.CommonMapper;
-import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
@@ -28,7 +27,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author ldd
@@ -73,7 +71,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
             return xmslContractInfo;
         }
         XmslContractInfo contractInfo = new XmslContractInfo();
-        projectBeanToContract(projectInfo, contractInfo);
+        projectBeanToContract(projectInfo, contractInfo, "1");
 
         contractInfo.setVersion(BigDecimal.valueOf(1.0));
         contractInfo.setId(IdWorker.createId());
@@ -82,8 +80,15 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         xmslContractInfoMapper.insertXmslContractInfo(contractInfo);
         return xmslContractInfoMapper.getXmslContractInfo(xmslContractInfoParam);
     }
+
+    /**
+     *
+     * @param projectInfo
+     * @param contractInfo
+     * @param type  : 1,拉取   2：总部版同步
+     */
     //项目信息写入合同实体
-    private void projectBeanToContract (ProjectBasicInfo projectInfo, XmslContractInfo contractInfo) {
+    private void projectBeanToContract(ProjectBasicInfo projectInfo, XmslContractInfo contractInfo, String type) {
         contractInfo.setProjectCode(projectInfo.getProjectCode());
         contractInfo.setProjectNameYw(projectInfo.getProjectNameForeignLang());
         contractInfo.setProjectName(projectInfo.getProjectName());
@@ -130,8 +135,10 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         //编制日期
         contractInfo.setOperateTime(DateUtils.getNowDate());
         //编制人
-        contractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
-        contractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
+        if("1".equals(type)){
+            contractInfo.setOperateUserId(String.valueOf(SecurityUtils.getUserId()));
+            contractInfo.setOperateUserName(SecurityUtils.getSysUser().getNickName());
+        }
     }
 
 
@@ -384,8 +391,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }
         objects.add(latestContractInfo);
         objects.forEach(contractInfo -> {
-            this.projectBeanToContract(projectInfo, contractInfo);
-            contractInfo.setUpdateUser(SecurityUtils.getUserName());
+            this.projectBeanToContract(projectInfo, contractInfo, "2");
             contractInfo.setUpdateTime(DateUtils.getNowDate());
             xmslContractInfoMapper.updateXmslContractInfo(contractInfo);
         });
