@@ -396,167 +396,167 @@
         <trim prefix="set" suffixOverrides=",">
             <trim prefix="wbs_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.wbsId}
+                    when `id`=#{item.id} then #{item.wbsId}
                 </foreach>
             </trim>
             <trim prefix="main_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.mainId}
+                    when `id`=#{item.id} then #{item.mainId}
                 </foreach>
             </trim>
             <trim prefix="code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.code}
+                    when `id`=#{item.id} then #{item.code}
                 </foreach>
             </trim>
             <trim prefix="parent_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.parentId}
+                    when `id`=#{item.id} then #{item.parentId}
                 </foreach>
             </trim>
             <trim prefix="have_children  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.haveChildren}
+                    when `id`=#{item.id} then #{item.haveChildren}
                 </foreach>
             </trim>
             <trim prefix="ancestors  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ancestors}
+                    when `id`=#{item.id} then #{item.ancestors}
                 </foreach>
             </trim>
             <trim prefix="ancestors_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ancestorsName}
+                    when `id`=#{item.id} then #{item.ancestorsName}
                 </foreach>
             </trim>
             <trim prefix="part_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.partCode}
+                    when `id`=#{item.id} then #{item.partCode}
                 </foreach>
             </trim>
             <trim prefix="name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.name}
+                    when `id`=#{item.id} then #{item.name}
                 </foreach>
             </trim>
             <trim prefix="list_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.listCode}
+                    when `id`=#{item.id} then #{item.listCode}
                 </foreach>
             </trim>
             <trim prefix="standard_id  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.standardId}
+                    when `id`=#{item.id} then #{item.standardId}
                 </foreach>
             </trim>
             <trim prefix="standard_code  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.standardCode}
+                    when `id`=#{item.id} then #{item.standardCode}
                 </foreach>
             </trim>
             <trim prefix="standard_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.standardName}
+                    when `id`=#{item.id} then #{item.standardName}
                 </foreach>
             </trim>
             <trim prefix="node_type  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.nodeType}
+                    when `id`=#{item.id} then #{item.nodeType}
                 </foreach>
             </trim>
             <trim prefix="unit  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.unit}
+                    when `id`=#{item.id} then #{item.unit}
                 </foreach>
             </trim>
             <trim prefix="level  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.level}
+                    when `id`=#{item.id} then #{item.level}
                 </foreach>
             </trim>
             <trim prefix="status  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.status}
+                    when `id`=#{item.id} then #{item.status}
                 </foreach>
             </trim>
             <trim prefix="design_quanlity  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.designQuanlity}
+                    when `id`=#{item.id} then #{item.designQuanlity}
                 </foreach>
             </trim>
             <trim prefix="check_quanlity  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.checkQuanlity}
+                    when `id`=#{item.id} then #{item.checkQuanlity}
                 </foreach>
             </trim>
             <trim prefix="remark  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.remark}
+                    when `id`=#{item.id} then #{item.remark}
                 </foreach>
             </trim>
             <trim prefix="create_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.createUser}
+                    when `id`=#{item.id} then #{item.createUser}
                 </foreach>
             </trim>
             <trim prefix="create_user_name  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.createUserName}
+                    when `id`=#{item.id} then #{item.createUserName}
                 </foreach>
             </trim>
             <trim prefix="create_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.createTime}
+                    when `id`=#{item.id} then #{item.createTime}
                 </foreach>
             </trim>
             <trim prefix="update_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.updateUser}
+                    when `id`=#{item.id} then #{item.updateUser}
                 </foreach>
             </trim>
             <trim prefix="update_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.updateTime}
+                    when `id`=#{item.id} then #{item.updateTime}
                 </foreach>
             </trim>
             <trim prefix="del_user  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.delUser}
+                    when `id`=#{item.id} then #{item.delUser}
                 </foreach>
             </trim>
             <trim prefix="del_time  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.delTime}
+                    when `id`=#{item.id} then #{item.delTime}
                 </foreach>
             </trim>
             <trim prefix="del_flag  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.delFlag}
+                    when `id`=#{item.id} then #{item.delFlag}
                 </foreach>
             </trim>
             <trim prefix="pt_var1  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ptVar1}
+                    when `id`=#{item.id} then #{item.ptVar1}
                 </foreach>
             </trim>
             <trim prefix="pt_var2  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ptVar2}
+                    when `id`=#{item.id} then #{item.ptVar2}
                 </foreach>
             </trim>
             <trim prefix="pt_var3  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ptVar3}
+                    when `id`=#{item.id} then #{item.ptVar3}
                 </foreach>
             </trim>
             <trim prefix="pt_var4  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ptVar4}
+                    when `id`=#{item.id} then #{item.ptVar4}
                 </foreach>
             </trim>
             <trim prefix="pt_var5  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
-                    when `main_id`=#{item.mainId} then #{item.ptVar5}
+                    when `id`=#{item.id} then #{item.ptVar5}
                 </foreach>
             </trim>
             <trim prefix="version  = case" suffix="end,">
