@@ -83,7 +83,7 @@ public class XmslMaterialReportServiceImpl implements IXmslMaterialReportService
         List<XmslDrawReviewMaterial> materialList = drawReviewMaterialService.getXmslDrawReviewMaterialList(queryMater);
         if(CollectionUtils.isEmpty(materialList))
             return ;
-        //2、汇总细目数据
+        //2、汇总细目数据  物资编码 : 物资信息
         Map<String,XmslDrawReviewMaterial> materialMap = new HashMap<>(materialList.size());
         for (int i = 0; i < materialList.size(); i++) {
             XmslDrawReviewMaterial tempMater = materialList.get(i);

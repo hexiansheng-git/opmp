@@ -32,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -63,13 +64,14 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         xmslEngineeringReportMapper.deleteAll();
         //1、获取图纸复核WBS。以及清单
         List<XmslEngineeringReport> addList = new ArrayList<>();
-        Map<Long,XmslEngineeringReport> addMap = new HashMap<>();
-        Function<XmslEngineeringReport,Boolean> addReportFunc = (r)->{
+        Map<String,XmslEngineeringReport> addMap = new HashMap<>();
+        BiFunction<XmslEngineeringReport,Integer,Boolean> addReportFunc = (r,type)->{
+            String prefix = r.getId()+(type+"");
             addList.add(r);
-            addMap.put(r.getId(),r);
+            addMap.put(prefix,r);
             //修改父级的haveChild
-            if(r.getParentId() != null && addMap.get(r.getParentId()) != null){
-                XmslEngineeringReport parent = addMap.get(r.getParentId());
+            if(r.getParentId() != null && addMap.get(prefix) != null){
+                XmslEngineeringReport parent = addMap.get(prefix);
                 parent.setHaveChildren(1);
             }
             return true;
@@ -81,7 +83,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             XmslDrawReviewWbs temp = wbsList.get(i);
             XmslEngineeringReport report = instanceWbs(temp);
             wbsMap.put(temp.getId(),temp);
-            addReportFunc.apply(report);
+            addReportFunc.apply(report,null);
         }
         Map<String,XmslEngineeringReport> listReportMap = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
@@ -91,7 +93,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
                 report = listReportMap.get(temp.getListCode());
             }else{
                 report = instanceList(temp);
-                addReportFunc.apply(report);
+                addReportFunc.apply(report,null);
                 listReportMap.put(temp.getListCode(),report);
             }
             if(temp.getWbsId() == null)
@@ -102,19 +104,13 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             listReport.setId(wbs.getId());
             listReport.setParentId(report.getId());
             listReport.setReportType(2);
-            addReportFunc.apply(listReport);
-
-            report.setHaveChildren(1);
+            addReportFunc.apply(listReport,2);
             //WBS-清单
-            XmslEngineeringReport parentReport =  addMap.get(temp.getWbsId());
-            if(parentReport != null){
-                parentReport.setHaveChildren(1);
-            }
             XmslEngineeringReport wbsReport = instanceList(temp);
             wbsReport.setId(temp.getId());
             wbsReport.setParentId(temp.getWbsId());
             wbsReport.setReportType(1);
-            addReportFunc.apply(wbsReport);
+            addReportFunc.apply(wbsReport,1);
         }
         //
         this.xmslEngineeringReportMapper.insertXmslEngineeringReportList(addList);

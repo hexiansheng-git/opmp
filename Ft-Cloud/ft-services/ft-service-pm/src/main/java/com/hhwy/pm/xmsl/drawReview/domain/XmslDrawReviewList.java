@@ -30,6 +30,9 @@ public class XmslDrawReviewList extends WarpBaseEntity {
     @JsonProperty
     @Excel(name = "清单编码,xmsl_contract_list.code")
     private String listCode;
+    
+    //同  listCode 
+    private String code ;
     /**
      * 字段描述：主表ID,xmsl_draw_review.id
      */
@@ -210,4 +213,14 @@ public class XmslDrawReviewList extends WarpBaseEntity {
     List<XmslDrawReviewMaterial> materialList;
     List<XmslDrawReviewWbs> wbsList;
 
+    
+
+    public void setCode(String code) {
+        this.code = code;
+        this.listCode = code;
+    }
+    public void setListCode(String listCode) {
+        this.listCode = listCode;
+        this.code = listCode;
+    }
 }
