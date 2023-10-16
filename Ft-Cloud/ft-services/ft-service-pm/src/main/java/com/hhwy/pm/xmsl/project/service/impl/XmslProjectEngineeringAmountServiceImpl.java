@@ -41,7 +41,7 @@ public class XmslProjectEngineeringAmountServiceImpl implements IXmslProjectEngi
         //删除旧数据
         XmslProjectEngineeringAmount xmslProjectEngineeringAmount = new XmslProjectEngineeringAmount();
         xmslProjectEngineeringAmount.setProjectBasicInfoId(xmslProjectBasicInfo.getId());
-        xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmount(new XmslProjectEngineeringAmount());
+        xmslProjectEngineeringAmountMapper.deleteProjectEngineeringAmount(xmslProjectEngineeringAmount);
 
         //插入新数据
         List<XmslProjectEngineeringAmount> insertList = ListTreeUtil.formatList(

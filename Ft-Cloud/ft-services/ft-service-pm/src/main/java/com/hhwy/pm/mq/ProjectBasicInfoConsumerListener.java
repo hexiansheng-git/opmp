@@ -22,7 +22,7 @@ import org.springframework.stereotype.Service;
 @RocketMQMessageListener(
         consumerGroup = "pm-project-editInvoke",
         topic = "editInvoke",
-        selectorExpression = "updatePrj",
+        selectorExpression = "updatePrj1",
         consumeMode = ConsumeMode.ORDERLY)
 public class ProjectBasicInfoConsumerListener implements RocketMQListener<String> , RocketMQPushConsumerLifecycleListener {
 

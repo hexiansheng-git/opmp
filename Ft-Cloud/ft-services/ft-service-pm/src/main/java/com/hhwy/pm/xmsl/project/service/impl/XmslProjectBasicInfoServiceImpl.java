@@ -150,9 +150,6 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
      */
     @Transactional
     public int insertProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
-        Long id = IdWorker.createId();
-        xmslProjectBasicInfo.setId(id);
-
         this.setSublist(xmslProjectBasicInfo);
 
         xmslProjectBasicInfo.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
