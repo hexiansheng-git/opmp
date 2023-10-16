@@ -94,7 +94,7 @@
         limit 1
     </select>
 
-    <select id="getMaxVersionQqchWorkGroup" resultType="com.hhwy.pm.qqch.group.domain.QqchWorkGroup">
+    <select id="getMaxVersionQqchWorkGroup" resultMap="QqchWorkGroupResultMap">
         <include refid="selectQqchWorkGroupVo" />
         where del_flag = '0'
         order by version desc
