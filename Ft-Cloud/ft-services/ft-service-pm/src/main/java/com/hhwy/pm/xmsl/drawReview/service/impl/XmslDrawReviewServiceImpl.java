@@ -250,11 +250,31 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
         return resuList;
     }
+
+    private List<XmslDrawReviewWbs> getDefaultWbs(String listCode){
+        String[] wbsCodes = WbsRedisUtils.getWbsCodeByListCode(listCode);
+        if(ArrayUtils.isEmpty(wbsCodes))
+            return new ArrayList<>();
+        List<XmslWbs> list = WbsRedisUtils.getWbsByCodes(Arrays.asList(wbsCodes));
+        List<XmslDrawReviewWbs> resuList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            XmslWbs temp = list.get(i);
+            XmslDrawReviewWbs wbs = new XmslDrawReviewWbs();
+            BeanUtils.copyProperties(temp, wbs);
+            wbs.setWbsId(Long.valueOf(temp.getWbsId()));
+            wbs.setCode(temp.getCode());
+            new AddBaseInfoUtil<>().addBaseEntity(wbs);
+            resuList.add(wbs);
+        }
+        return resuList;
+    }
     
     @Override
     public List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId) {
         if(StringUtils.isBlank(listCode))
             return new ArrayList<>(2);
+        if(listId == null)  //若图纸复核清单id为空，尝试加载清单对应的项目wbs   
+            return getDefaultWbs(listCode);
         List<XmslDrawReviewRelation> relationList = null;
         if(version==null){ //未保存版本的话，取最新
             version = this.xmslDrawReviewMapper.selectMaxEffectVersion();
