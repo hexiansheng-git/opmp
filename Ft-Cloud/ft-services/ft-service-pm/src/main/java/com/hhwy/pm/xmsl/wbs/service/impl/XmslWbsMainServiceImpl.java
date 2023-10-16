@@ -24,6 +24,7 @@ import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,9 +242,12 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                         return r;
                     Long[] listIds = Convert.toLongArray(r.getListIds());
                     String[] listCodes = Convert.toStrArray(r.getListCode());
-                    for (int i = 0; i < listCodes.length; i++) {
-                        XmslWbsListRelation temp = new XmslWbsListRelation(id,Long.valueOf(r.getId()),listCodes[i],ArrayUtils.get(listIds,i));
+                    Set<String> listCodeSet = SetUtils.hashSet(listCodes);
+                    int i=0;
+                    for (String code : listCodeSet) {
+                        XmslWbsListRelation temp = new XmslWbsListRelation(id,Long.valueOf(r.getId()),code,ArrayUtils.get(listIds,i));
                         relationList.add(temp);
+                        i++;
                     }
                     return r;
                 };

@@ -494,6 +494,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         Set<Long> listIdSet = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewList tempList = list.get(i);
+            if(tempList == null) //
+                continue;
             if(tempList.getId() != null)
                 listIdSet.add(tempList.getId());
             tempList.setVersion(version);
