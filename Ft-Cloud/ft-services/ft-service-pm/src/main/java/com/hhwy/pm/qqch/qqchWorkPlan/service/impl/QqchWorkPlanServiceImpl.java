@@ -198,7 +198,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         }
         //查询最新（不论是否生效）版本前期策划工作小组
         QqchWorkGroup workGroup = qqchWorkGroupService.getMaxVersionQqchWorkGroup();
-        if(workGroup != null){
+        if("3".equals(type) && workGroup != null){
             busData.setPlanApprovalUnit(workGroup.getPlanApprovalUnit());
         }
         return busData;
