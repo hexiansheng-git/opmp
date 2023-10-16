@@ -261,32 +261,6 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }
     }
 
-    //调整时，新增字表数据
-    private void adjustSonTable(XmslContractInfo xmslContractInfo, Long id) {
-        XmslContractList xmslContractList = new XmslContractList();
-        xmslContractList.setMasterId(xmslContractInfo.getId());
-        List<XmslContractList> xmslContractListList = xmslContractListService.getXmslContractListList(xmslContractList);
-        if (CollectionUtils.isNotEmpty(xmslContractListList)){
-            xmslContractListList.forEach(p -> p.setMasterId(id));
-            List<XmslContractListVo> xmslContractListVos = BeanUtil.copyToList(xmslContractListList, XmslContractListVo.class);
-            xmslContractListService.insertXmslContractListList(xmslContractListVos);
-        }
-        XmslContractGeneral xmslContractGeneral = new XmslContractGeneral();
-        xmslContractGeneral.setMasterId(xmslContractInfo.getId());
-        List<XmslContractGeneral> xmslContractGeneralList = xmslContractGeneralService.getXmslContractGeneralList(xmslContractGeneral);
-        if (CollectionUtils.isNotEmpty(xmslContractGeneralList)){
-            xmslContractGeneralList.forEach(p -> p.setMasterId(id));
-            xmslContractGeneralService.insertXmslContractGeneralList(xmslContractGeneralList);
-        }
-        XmslContractSpecial xmslContractSpecial = new XmslContractSpecial();
-        xmslContractSpecial.setMasterId(xmslContractInfo.getId());
-        List<XmslContractSpecial> xmslContractSpecialList = xmslContractSpecialService.getXmslContractSpecialList(xmslContractSpecial);
-        if (CollectionUtils.isNotEmpty(xmslContractSpecialList)){
-            xmslContractSpecialList.forEach(p -> p.setMasterId(id));
-            xmslContractSpecialService.insertXmslContractSpecialList(xmslContractSpecialList);
-        }
-    }
-
     public List<XmslContractInfo> getXmslContractInfoList(XmslContractInfo xmslContractInfo) {
         List<XmslContractInfo> historyList =xmslContractInfoMapper.getXmslContractInfoList(xmslContractInfo);
         FlowInfoSearchUtil.getFlowInfo(historyList,FlowEnum.XMSL_CONTRACT);

@@ -30,6 +30,11 @@ public class ImportXmslContractListVo extends BaseEntity {
     private String parentInnerCode;
 
     /**
+     *
+     */
+    private String dataFrom;
+
+    /**
      * 字段描述：主键
      */
     @JsonSerialize(using = ToStringSerializer.class)
