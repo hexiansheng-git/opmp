@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -175,5 +174,6 @@ public class XmslProjectEngineeringAmount extends BaseEntity {
     /**
      * 字段描述：子集合
      */
-    private List<XmslProjectEngineeringAmount> children = new ArrayList<>();
+    @JsonProperty
+    private List<XmslProjectEngineeringAmount> children;
 }

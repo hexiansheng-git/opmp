@@ -131,6 +131,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 // wbs层做子集块汇总拼接
                 if("wbs".equals(jdglMainPlanItem1.getItemType())) {
                     jdglMainPlanItem1.setRender("split");
+                    jdglMainPlanItem1.setType("wbs");
                 }
                 // 判断里程碑
                 if(jdglMainPlanItem1.getTaskType() != null && jdglMainPlanItem1.getTaskType().contains("Milestone")) {

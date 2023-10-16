@@ -25,9 +25,14 @@ public class ImportXmslContractListVo extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     @Excel(name = "层级码")
-    private Long innerCode;
+    private String innerCode;
     @Excel(name = "父层级码")
-    private Long parentInnerCode;
+    private String parentInnerCode;
+
+    /**
+     *
+     */
+    private String dataFrom;
 
     /**
      * 字段描述：主键

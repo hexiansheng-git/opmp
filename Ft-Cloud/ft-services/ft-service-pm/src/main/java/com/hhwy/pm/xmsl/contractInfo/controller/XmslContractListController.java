@@ -1,5 +1,11 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.utils.UUIDUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
@@ -12,7 +18,10 @@ import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
+import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.excelUtil.ExcelUtilByTemplate;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,10 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -163,11 +170,51 @@ public class XmslContractListController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
-            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(importXmslContractListVos, o -> o.getParentInnerCode()==null, (r, n) -> r.getInnerCode().equals(n.getParentInnerCode()), ImportXmslContractListVo::getChildren, ImportXmslContractListVo::setChildren);
+            importXmslContractListVos.forEach(p -> p.setDataFrom("new"));
+            List<ImportXmslContractListVo> dateList1 = this.toTreeList(importXmslContractListVos);
+            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(dateList1, o -> o.getPid()==null, (r, n) -> r.getId().equals(n.getPid()), ImportXmslContractListVo::getChildren, ImportXmslContractListVo::setChildren);
+//            clearId(dateList);
             return AjaxResult.success(dateList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
+    }
+
+    private void clearId(List<ImportXmslContractListVo> dateList){
+        dateList.forEach(p -> {
+            p.setId(null);
+            if (p.getChildren() != null){
+                clearId(p.getChildren());
+            }
+        });
+    }
+
+    private static List<ImportXmslContractListVo> toTreeList(List<ImportXmslContractListVo> importXmslContractListVos){
+        Map<String, ImportXmslContractListVo> collect = importXmslContractListVos.stream()
+                .filter(p -> StringUtils.isNotEmpty(p.getInnerCode()))
+                .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
+        for (int i = 0;  i< importXmslContractListVos.size(); i++) {
+            ImportXmslContractListVo importXmslContractListVo = importXmslContractListVos.get(i);
+            importXmslContractListVo.setId(IdUtil.getSnowflakeNextId());
+            String innerCode = importXmslContractListVo.getInnerCode();
+            if (!innerCode.contains("-")) {
+                //第一层级
+                continue;
+            }
+            String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
+            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
+            //获取当前数据的父层级
+            ImportXmslContractListVo parent = collect.get(parentCode);
+            Assert.notNull(parent, "第{}数据未找到父层级，请确认编号按层级顺序排列", i);
+            //获取父层级的children，将当前记录add进去
+            List<ImportXmslContractListVo> children = parent.getChildren();
+            if (CollectionUtil.isEmpty(children)) {
+                children = new ArrayList<>();
+            }
+            importXmslContractListVo.setPid(parent.getId());
+            children.add(importXmslContractListVo);
+        }
+        return new ArrayList<>(collect.values());
     }
 
     /**

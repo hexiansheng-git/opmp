@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
 import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
@@ -165,6 +166,7 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
         if (updateList.size() > 0) {
             xmslContractListMapper.updateXmslContractListList(updateList);
         }
+        this.handlerAncestors(null, null);
         return 1;
     }
 
@@ -263,20 +265,20 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
 
     @Override
     public void handlerAncestors() {
-        handlerAncestors(null);
+        handlerAncestors(null, null);
     }
     /**'
      * 填充祖籍id name
      * @param func
      */
-    public void handlerAncestors(Function<XmslContractList,XmslContractList> func) {
+    public void handlerAncestors(Function<XmslContractList,XmslContractList> func, String masterId) {
         long begin = System.currentTimeMillis();
         try{
             List<XmslContractList> list = this.xmslContractListMapper.getXmslContractList(new XmslContractList());
             //祖级id、名称map
             Map<Long,List<Long>> parentIdMap = new HashMap<>(list.size());
-            Map<Long,List<String>> parentNameMap = new HashMap<>(list.size());
-            Map<Long,String> idNameMap = new HashMap<>(list.size());
+//            Map<Long,List<String>> parentNameMap = new HashMap<>(list.size());
+//            Map<Long,String> idNameMap = new HashMap<>(list.size());
             //是否为父级
             Function<String,Boolean> isParentFunc = (s)->{return StringUtils.isBlank(s) || StringUtils.equalsAny(s,"-1","0");};
             //遍历，获取祖级id、名称
@@ -284,31 +286,31 @@ public class XmslContractListServiceImpl implements IXmslContractListService {
                 if (func != null) {
                     func.apply(temp);
                 }
-                idNameMap.put(temp.getId(), temp.getChineseName().trim());
+//                idNameMap.put(temp.getId(), temp.getChineseName().trim());
                 //若有父级，则放入parentIdMap、parentNameMap
                 if (isParentFunc.apply(String.valueOf(temp.getPid()))) {
                     parentIdMap.put(temp.getId(), ListUtil.toList(temp.getId()));
-                    parentNameMap.put(temp.getId(), ListUtil.toList(temp.getChineseName()));
+//                    parentNameMap.put(temp.getId(), ListUtil.toList(temp.getChineseName()));
                     continue;
                 }
                 Long pid = temp.getPid();
-                String pname = idNameMap.get(pid);
-                if (StringUtils.isBlank(pname))
-                    logger.warn("合同清单同步祖级名称ID时，未找到父级名称,子级ID:{},父级ID:{}", temp.getId(), pid);
+//                String pname = idNameMap.get(pid);
+//                if (StringUtils.isBlank(pname))
+//                    logger.warn("合同清单同步祖级名称ID时，未找到父级名称,子级ID:{},父级ID:{}", temp.getId(), pid);
                 List<Long> pidList = ListUtils.defaultIfNull(parentIdMap.get(pid), new ArrayList<>());
-                List<String> pnameList = ListUtils.defaultIfNull(parentNameMap.get(pid), new ArrayList<>());
+//                List<String> pnameList = ListUtils.defaultIfNull(parentNameMap.get(pid), new ArrayList<>());
                 parentIdMap.put(temp.getId(), copyAndAdd(pidList, temp.getId()));
-                parentNameMap.put(temp.getId(), copyAndAdd(pnameList, temp.getChineseName()));
+//                parentNameMap.put(temp.getId(), copyAndAdd(pnameList, temp.getChineseName()));
             }
             //填充祖级id、名称
             for (XmslContractList temp : list) {
-                if (isParentFunc.apply(String.valueOf(temp.getPid()))) {
-                    temp.setAncestors(String.valueOf(temp.getId()));
-                    temp.setAncestorsName(temp.getChineseName());
+                if (isParentFunc.apply(StrUtil.utf8Str(temp.getPid()))) {
+//                    temp.setAncestors(String.valueOf(temp.getId()));
+//                    temp.setAncestorsName(temp.getChineseName());
                     continue;
                 }
                 temp.setAncestors(StringUtils.join(parentIdMap.get(temp.getId()), ","));
-                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()), ","));
+//                temp.setAncestorsName(StringUtils.join(parentNameMap.get(temp.getId()), ","));
             }
             xmslContractListMapper.updateXmslContractListList1(list);
         }finally{

@@ -465,7 +465,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
                     if(workGroup == null && StringUtils.isNotBlank(projectCategory)){
                         /*发送预警*/
                         String warnScope = "";
-                        //TODO 根据项目分类给不同的角色发送预警
+                        //根据项目分类给不同的角色发送预警
                         if("1".equals(projectCategory) || "2".equals(projectCategory)){
                             warnScope = "cons_plan_supervisor";
                         }else {

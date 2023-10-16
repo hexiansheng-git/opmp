@@ -249,12 +249,12 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(jdglMonthPlan);
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
-            for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
-                List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = iJdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(jdglMonthPlan1.getId());
-                jdglMonthPlan1.setJdglMonthImagePlanList(jdglMonthImagePlanListByPlanId);
-                List<JdglMonthValuePlan> jdglMonthValuePlanListByPlanId = iJdglMonthValuePlanService.getJdglMonthValuePlanListByPlanId(jdglMonthPlan1.getId());
-                jdglMonthPlan1.setJdglMonthValuePlanList(jdglMonthValuePlanListByPlanId);
-            }
+//            for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
+//                List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = iJdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(jdglMonthPlan1.getId());
+//                jdglMonthPlan1.setJdglMonthImagePlanList(jdglMonthImagePlanListByPlanId);
+//                List<JdglMonthValuePlan> jdglMonthValuePlanListByPlanId = iJdglMonthValuePlanService.getJdglMonthValuePlanListByPlanId(jdglMonthPlan1.getId());
+//                jdglMonthPlan1.setJdglMonthValuePlanList(jdglMonthValuePlanListByPlanId);
+//            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglMonthPlanList,FlowEnum.JDGL_MONTHPLAN);
         return jdglMonthPlanList;

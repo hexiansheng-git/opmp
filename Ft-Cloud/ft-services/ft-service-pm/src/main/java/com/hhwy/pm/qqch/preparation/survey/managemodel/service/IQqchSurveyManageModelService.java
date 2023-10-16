@@ -2,6 +2,9 @@ package com.hhwy.pm.qqch.preparation.survey.managemodel.service;
 
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModel;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModelVo;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+
+import java.util.List;
 
 /**
  * @author ldd
@@ -18,4 +21,6 @@ public interface IQqchSurveyManageModelService {
 
 
     int save(QqchSurveyManageModelVo qqchSurveyManageModelVo);
+
+    List<ProjectBasicInfo> getSameTypeProject(QqchSurveyManageModel qqchSurveyManageModelParam);
 }

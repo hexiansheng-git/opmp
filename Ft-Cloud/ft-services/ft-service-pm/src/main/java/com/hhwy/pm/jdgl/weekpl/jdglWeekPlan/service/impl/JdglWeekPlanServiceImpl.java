@@ -245,12 +245,12 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
     public List<JdglWeekPlan> getJdglWeekPlanList(JdglWeekPlan jdglWeekPlan) {
         List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(jdglWeekPlan);
         if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {
-            for (JdglWeekPlan jdglWeekPlan1 : jdglWeekPlanList) {
-                List<JdglWeekImagePlan> jdglWeekImagePlanListByPlanId = iJdglWeekImagePlanService.getJdglWeekImagePlanListByPlanId(jdglWeekPlan1.getId());
-                jdglWeekPlan1.setJdglWeekImagePlanList(jdglWeekImagePlanListByPlanId);
-                List<JdglWeekValuePlan> jdglWeekValuePlanListByPlanId = iJdglWeekValuePlanService.getJdglWeekValuePlanListByPlanId(jdglWeekPlan1.getId());
-                jdglWeekPlan1.setJdglWeekValuePlanList(jdglWeekValuePlanListByPlanId);
-            }
+//            for (JdglWeekPlan jdglWeekPlan1 : jdglWeekPlanList) {
+//                List<JdglWeekImagePlan> jdglWeekImagePlanListByPlanId = iJdglWeekImagePlanService.getJdglWeekImagePlanListByPlanId(jdglWeekPlan1.getId());
+//                jdglWeekPlan1.setJdglWeekImagePlanList(jdglWeekImagePlanListByPlanId);
+//                List<JdglWeekValuePlan> jdglWeekValuePlanListByPlanId = iJdglWeekValuePlanService.getJdglWeekValuePlanListByPlanId(jdglWeekPlan1.getId());
+//                jdglWeekPlan1.setJdglWeekValuePlanList(jdglWeekValuePlanListByPlanId);
+//            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglWeekPlanList,FlowEnum.JDGL_WEEKPLAN);
         return jdglWeekPlanList;

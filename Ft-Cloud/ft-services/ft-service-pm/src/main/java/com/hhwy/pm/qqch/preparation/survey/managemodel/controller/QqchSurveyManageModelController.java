@@ -6,10 +6,13 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModel;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModelVo;
 import com.hhwy.pm.qqch.preparation.survey.managemodel.service.IQqchSurveyManageModelService;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author ldd
@@ -61,6 +64,15 @@ public class QqchSurveyManageModelController extends BaseController{
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyManageModelVo qqchSurveyManageModelVo){
      QqchSurveyManageModelVo   qqchSurveyManageModelVo1= qqchSurveyManageModelService.confirm(qqchSurveyManageModelVo);
         return AjaxResult.success(qqchSurveyManageModelVo1);
+    }
+
+    /**
+     *  查询同类项目
+     */
+    @PostMapping("/querySameProject")
+    public AjaxResult querySameTypeProject(@Validated(ValidationGroups.Select.class) QqchSurveyManageModel qqchSurveyManageModelParam){
+        List<ProjectBasicInfo> result = qqchSurveyManageModelService.getSameTypeProject(qqchSurveyManageModelParam);
+        return AjaxResult.success(result);
     }
 
 
