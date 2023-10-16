@@ -225,12 +225,12 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(jdglYearPlan);
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
-            for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
-                List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
-                jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
-                List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());
-                jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
-            }
+//            for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
+//                List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
+//                jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
+//                List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());
+//                jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
+//            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglYearPlanList,FlowEnum.JDGL_YEARPLAN);
         return jdglYearPlanList;

@@ -26,12 +26,12 @@ public class PlanStatisticsWbsValueVO extends TreeNode<PlanStatisticsWbsValueVO>
     private String wbsUnit;
     @JsonProperty
     @ExcelProperty(value = "本阶段计划数量")
-    private BigDecimal ThisPlanValue;
+    private BigDecimal ThisPlanValue = new BigDecimal(0);
     @JsonProperty
     @ExcelProperty(value = "本阶段完成数量")
-    private BigDecimal ThisActValue;
+    private BigDecimal ThisActValue = new BigDecimal(0);
     @JsonProperty
     @ExcelProperty(value = "开累完成数量")
-    private BigDecimal TotalActValue;
+    private BigDecimal TotalActValue = new BigDecimal(0);
 
 }

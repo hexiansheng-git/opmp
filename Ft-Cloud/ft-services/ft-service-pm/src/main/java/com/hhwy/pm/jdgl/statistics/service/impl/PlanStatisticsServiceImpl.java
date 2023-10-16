@@ -128,12 +128,12 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 if(endDate.before(date)) {
                     continue;
                 }
-                totalActAmt = totalActAmt.add(dayValueDl);
+                totalActAmt = totalActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
                 int yearI = cl.get(Calendar.YEAR);
                 if(!year.equals(yearI + "")) {
                     continue;
                 }
-                yearActAmt = yearActAmt.add(dayValueDl);
+                yearActAmt = yearActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
                 int dateMonth = cl.get(Calendar.MONTH) + 1;
 
                 if(quarter == null) {
@@ -144,15 +144,15 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 if(i*3 < dateMonth || i*3-2 > dateMonth) {
                     continue;
                 }
-                quarterActAmt = quarterActAmt.add(dayValueDl);
+                quarterActAmt = quarterActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
 
                 if(month == null || Integer.parseInt(month) != dateMonth){
                     continue;
                 }
-                monthActAmt = monthActAmt.add(dayValueDl);
+                monthActAmt = monthActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
 
                 if((startDate.before(date) || startDate.equals(date)) && (endDate.after(date)||endDate.equals(date))) {
-                    weekActAmt = weekActAmt.add(dayValueDl);
+                    weekActAmt = weekActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
                 }
             }
         }
