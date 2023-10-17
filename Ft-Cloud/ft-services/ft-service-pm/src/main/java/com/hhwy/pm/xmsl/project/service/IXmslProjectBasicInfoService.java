@@ -41,6 +41,8 @@ public interface IXmslProjectBasicInfoService {
      */
     void updateProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
+    void syncData(XmslProjectBasicInfo xmslProjectBasicInfo);
+
     int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
     int deleteProjectBasicInfoByPks(List<Long> projectBasicInfoPkList);
