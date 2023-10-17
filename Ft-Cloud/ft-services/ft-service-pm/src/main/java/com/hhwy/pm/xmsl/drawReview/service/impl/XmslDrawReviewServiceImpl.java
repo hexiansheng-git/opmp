@@ -95,14 +95,14 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 
     @Override
     public List wbsList(Map map) {
-        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
-            XmslDrawReviewWbs query = new XmslDrawReviewWbs();
-            query.setParentId(ObjectUtils.nvlLong(map.get("parentId"),-1L));
-            query.setVersion(ObjectUtils.nvl(map.get("version")));
-            query.setVersionFlag(Constant.YES_INT);
-            List<XmslDrawReviewWbs> list = drawReviewWbsService.getXmslDrawReviewWbsList(query);
-            return list;
-        }
+//        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
+//            XmslDrawReviewWbs query = new XmslDrawReviewWbs();
+//            query.setParentId(ObjectUtils.nvlLong(map.get("parentId"),-1L));
+//            query.setVersion(ObjectUtils.nvl(map.get("version")));
+//            query.setVersionFlag(Constant.YES_INT);
+//            List<XmslDrawReviewWbs> list = drawReviewWbsService.getXmslDrawReviewWbsList(query);
+//            return list;
+//        }
         XmslWbs query = new XmslWbs();
         query.setParentId(ObjectUtils.nvlString(map.get("parentId")));
         List<XmslWbs> list = wbsService.latestData(query);
@@ -125,21 +125,21 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getXmslDrawReviewWbsList(queryWbs);
         for (int i = 0; i < wbsList.size(); i++) {
             XmslWbs tempWbs = wbsMap.get(wbsList.get(i).getCode());
-            tempWbs.setId(wbsList.get(i).getId()+"");
+//            tempWbs.setId(wbsList.get(i).getId()+"");
         }
         return list;
     }
 
     @Override
     public List engineeringList(Map map) {
-        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
-            XmslDrawReviewList queryList = new XmslDrawReviewList();
-            queryList.setVersion(ObjectUtils.nvl(map.get("version")));
-            queryList.setVersionFlag(Constant.YES_INT);
-            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),-1L));
-            List<XmslDrawReviewList> resuList = drawReviewListService.getXmslDrawReviewListList(queryList);
-            return resuList;
-        }
+//        if(ObjectUtils.nvlString(map.get("valid")).equals("1")){
+//            XmslDrawReviewList queryList = new XmslDrawReviewList();
+//            queryList.setVersion(ObjectUtils.nvl(map.get("version")));
+//            queryList.setVersionFlag(Constant.YES_INT);
+//            queryList.setPid(ObjectUtils.nvlLong(map.get("parentId"),-1L));
+//            List<XmslDrawReviewList> resuList = drawReviewListService.getXmslDrawReviewListList(queryList);
+//            return resuList;
+//        }
         XmslContractList queryList = new XmslContractList();
         if(ObjectUtils.nvlLong(map.get("parentId"),0L).equals(0L) ){ //合同清单的根级节点pid为null
             queryList.setPid(null);
@@ -169,7 +169,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         List<XmslDrawReviewList> drawList = drawReviewListService.getXmslDrawReviewListList(queryDrawList);
         for (int i = 0; i < drawList.size(); i++) {
             XmslContractList tempList = listMap.get(drawList.get(i).getListCode());
-            tempList.setId(drawList.get(i).getId());
+//            tempList.setId(drawList.get(i).getId());
         }
         return list;
     }
@@ -276,8 +276,6 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public List<XmslDrawReviewWbs> relationList(Integer version, Long mainId, String listCode, Long listId) {
         if(StringUtils.isBlank(listCode))
             return new ArrayList<>(2);
-        if(listId == null)  //若图纸复核清单id为空，尝试加载清单对应的项目wbs   
-            return getDefaultWbs(listCode);
         List<XmslDrawReviewRelation> relationList = null;
         if(version==null){ //未保存版本的话，取最新
             version = this.xmslDrawReviewMapper.selectMaxEffectVersion();
@@ -295,11 +293,9 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             query.setVersion(version);
             query.setListCode(listCode);
             relationList = relationService.getXmslDrawReviewRelationList(query);
-            if(CollectionUtils.isEmpty(relationList))
-                return new ArrayList<>(2);
         }
-        if(CollectionUtils.isEmpty(relationList))
-            return new ArrayList<>(2);
+        if(CollectionUtils.isEmpty(relationList))  //   尝试加载清单对应的项目wbs
+            return getDefaultWbs(listCode);
         Set<String> listCodeSet = relationList.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         //查询清单
         List<XmslDrawReviewList> drawList = drawReviewListService.getByCodes(listCodeSet);
@@ -743,7 +739,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             if(StringUtils.isBlank(temp))
                 continue;
             String[] ances = temp.split(",");
-            for (int j = 0; j < ances.length-1; j++) {
+            for (int j = 0; j < ances.length; j++) {
                 idSet.add(isLong?Long.valueOf(ances[j]):ances[j]);
             }
         }
