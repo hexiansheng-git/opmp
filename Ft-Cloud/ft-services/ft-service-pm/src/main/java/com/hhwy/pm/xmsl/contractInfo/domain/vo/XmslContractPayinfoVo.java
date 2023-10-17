@@ -8,11 +8,18 @@ import lombok.Data;
 public class XmslContractPayinfoVo {
 
     /**
+     * 字段描述：支付货币币种编号
+     */
+    @JsonProperty
+    private String currencyCode;
+
+    /**
      * 字段描述：支付货币币种(名称)
      */
     @JsonProperty
     @Excel(name = "支付货币币种")
     private String currencyName;
+
     /**
      * 字段描述：比例
      */
