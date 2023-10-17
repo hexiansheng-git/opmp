@@ -193,7 +193,6 @@ public class ProjectBasicInfo {
      * 字段描述：项目分类
      */
     @JsonProperty
-    @Excel(name = "项目分类")
     private String projectCategory;
     /**
      * 字段描述：项目所在地（国）
