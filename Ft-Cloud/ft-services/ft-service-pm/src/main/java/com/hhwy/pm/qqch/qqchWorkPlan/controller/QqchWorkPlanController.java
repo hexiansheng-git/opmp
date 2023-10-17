@@ -68,7 +68,7 @@ public class QqchWorkPlanController extends BaseController {
      * @param qqchWorkPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchWorkPlan:add")
+    @PreAuthorize(hasPermi = "qqchWorkPlan:save")
     @PostMapping("/add")
     public AjaxResult insertQqchWorkPlan(@RequestBody QqchWorkPlan qqchWorkPlanParam) {
         return AjaxResult.success(qqchWorkPlanService.insertQqchWorkPlan(qqchWorkPlanParam));
@@ -88,7 +88,7 @@ public class QqchWorkPlanController extends BaseController {
      * @param qqchWorkPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchWorkPlan:update")
+    @PreAuthorize(hasPermi = "qqchWorkPlan:save")
     @PostMapping("/update")
     public AjaxResult updateQqchWorkPlan(@RequestBody QqchWorkPlan qqchWorkPlanParam) {
         return toAjax(qqchWorkPlanService.updateQqchWorkPlan(qqchWorkPlanParam));

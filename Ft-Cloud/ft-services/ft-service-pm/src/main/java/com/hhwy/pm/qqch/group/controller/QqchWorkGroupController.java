@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.group.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.group.domain.QqchWorkGroup;
@@ -57,6 +58,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @GetMapping("/adjust")
+    @PreAuthorize(hasPermi = "qqchWorkGroup:adjust")
     public AjaxResult adjustQqchWorkGroup(Long id){
         QqchWorkGroup qqchWorkGroup = qqchWorkGroupService.adjustQqchWorkGroup(id);
         FlowInfoSearchUtil.getFlowInfo(qqchWorkGroup, FlowEnum.QQCH_WORK_GROUP);
@@ -69,6 +71,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/add")
+    @PreAuthorize(hasPermi = "qqchWorkGroup:save")
     public AjaxResult insertQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.insertQqchWorkGroup(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
@@ -80,6 +83,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/update")
+    @PreAuthorize(hasPermi = "qqchWorkGroup:save")
     public AjaxResult updateQqchWorkGroup(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.updateQqchWorkGroup(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
@@ -91,6 +95,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/submit")
+    @PreAuthorize(hasPermi = "qqchWorkGroup:submit")
     public AjaxResult submit(@RequestBody QqchWorkGroup qqchWorkGroup) {
         qqchWorkGroupService.submit(qqchWorkGroup);
         return AjaxResult.success(qqchWorkGroup.getId());
@@ -102,6 +107,7 @@ public class QqchWorkGroupController extends BaseController {
      * @return
      */
     @PostMapping("/remove")
+    @PreAuthorize(hasPermi = "qqchWorkGroup:remove")
     public AjaxResult deleteQqchWorkGroup(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWorkGroup qqchWorkGroupParam) {
         return toAjax(qqchWorkGroupService.deleteQqchWorkGroup(qqchWorkGroupParam));
     }
