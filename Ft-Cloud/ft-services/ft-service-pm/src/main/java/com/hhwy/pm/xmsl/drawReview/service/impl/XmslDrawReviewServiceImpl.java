@@ -639,8 +639,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             String oldDataSource = DynamicDataSourceContextHolder.peek();
             DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
             try {
-                engineeringReportService.sync();
-                materialReportService.sync(id);
+                engineeringReportService.sync(tenantKey);
+                materialReportService.sync(id,tenantKey);
             }catch (Exception e){
                 e.printStackTrace();
                 throw new CustomBusinessException(e.getMessage());

@@ -26,6 +26,6 @@ public interface IXmslMaterialReportService {
 
     int deleteXmslMaterialReport(XmslMaterialReport xmslMaterialReport);
     
-    void sync(Long drawReviewId);
+    void sync(Long drawReviewId,String tenangKey);
 
 }

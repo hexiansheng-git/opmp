@@ -1,11 +1,13 @@
 package com.hhwy.pm.xmsl.xmslEngineeringReport.service.impl;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.github.pagehelper.PageHelper;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
@@ -20,6 +22,7 @@ import com.hhwy.pm.xmsl.xmslEngineeringReport.mapper.XmslEngineeringReportMapper
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.tree.TreeUtil;
@@ -54,9 +57,23 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     @Autowired
     private RedisUtils redisUtils;
 
-
-    @Override
     @Transactional
+    public void sync(String tenantKey) {
+        //切换租户 真
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+        try {
+            sync();
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+    }
+
+
     public void sync() {
         XmslDrawReview drawReview = drawReviewService.getLast();
         if(drawReview == null || drawReview.getId()==null)

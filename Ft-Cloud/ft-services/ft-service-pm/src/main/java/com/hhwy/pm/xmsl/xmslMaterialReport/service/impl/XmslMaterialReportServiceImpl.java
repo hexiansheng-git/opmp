@@ -1,7 +1,9 @@
 package com.hhwy.pm.xmsl.xmslMaterialReport.service.impl;
 
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewMaterial;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewMaterialService;
@@ -9,6 +11,7 @@ import com.hhwy.pm.xmsl.xmslMaterialReport.domain.XmslMaterialReport;
 import com.hhwy.pm.xmsl.xmslMaterialReport.mapper.XmslMaterialReportMapper;
 import com.hhwy.pm.xmsl.xmslMaterialReport.service.IXmslMaterialReportService;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
+import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,8 +77,24 @@ public class XmslMaterialReportServiceImpl implements IXmslMaterialReportService
         return xmslMaterialReportMapper.deleteXmslMaterialReport(xmslMaterialReport);
     }
 
-    @Override
     @Transactional
+    public void sync(Long drawReviewId,String tenantKey) {
+        //切换租户 真
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+        try {
+            sync(drawReviewId);
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new CustomBusinessException(e.getMessage());
+        }finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+
+
+    }
+
     public void sync(Long drawReviewId) {
         //1、获取所有图纸复核细目
         XmslDrawReviewMaterial queryMater = new XmslDrawReviewMaterial();

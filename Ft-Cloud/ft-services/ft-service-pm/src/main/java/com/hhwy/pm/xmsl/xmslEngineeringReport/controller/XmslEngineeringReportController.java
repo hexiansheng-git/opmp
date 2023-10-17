@@ -75,7 +75,7 @@ public class XmslEngineeringReportController extends BaseController {
     public AjaxResult sync() {
         if(!SecurityUtils.getSysUser().isAdmin())
             return AjaxResult.error("ERROR");
-        xmslEngineeringReportService.sync();
+        xmslEngineeringReportService.sync("");
         return AjaxResult.success();
     }
 }

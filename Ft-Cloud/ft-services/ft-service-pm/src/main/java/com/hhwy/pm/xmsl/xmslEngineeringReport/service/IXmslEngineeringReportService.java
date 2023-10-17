@@ -16,7 +16,7 @@ public interface IXmslEngineeringReportService {
     /**
      * 同步图纸复核数据到工程量报表
      */
-    void sync();
+    void sync(String tenantKey);
     
     XmslEngineeringReport getXmslEngineeringReport(XmslEngineeringReport xmslEngineeringReport);
 
