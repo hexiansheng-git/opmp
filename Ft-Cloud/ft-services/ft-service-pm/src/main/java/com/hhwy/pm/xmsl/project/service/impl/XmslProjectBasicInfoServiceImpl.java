@@ -203,14 +203,17 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     @Transactional
     public void syncData(XmslProjectBasicInfo xmslProjectBasicInfo) {
         //查询数据库中是否存在项目数据
-        if(this.ifExistProject()){
+        boolean exist = this.ifExistProject();
+        if(exist){
             xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
         }else {
             xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
         }
 
         ProjectBasicInfo projectInfo = this.projectInfo();
-        xmslContractInfoService.updateProjectInfo(projectInfo);
+        if(exist){
+            xmslContractInfoService.updateProjectInfo(projectInfo);
+        }
         xmslProjectBasicInfo.setId(projectInfo.getId());
         this.editSublist(xmslProjectBasicInfo);
     }
