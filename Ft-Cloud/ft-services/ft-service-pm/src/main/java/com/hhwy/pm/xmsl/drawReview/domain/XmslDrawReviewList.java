@@ -204,11 +204,14 @@ public class XmslDrawReviewList extends WarpBaseEntity {
     @Excel(name = "预留字段4")
     private String ptVar4;
     /**
-     * 字段描述：预留字段5
+     * 字段描述：预留字段5 wbs名称 和name保持一致
      */
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    //wbs名称，不存在于数据库
+    private String name;
 
     List<XmslDrawReviewMaterial> materialList;
     List<XmslDrawReviewWbs> wbsList;
@@ -222,5 +225,13 @@ public class XmslDrawReviewList extends WarpBaseEntity {
     public void setListCode(String listCode) {
         this.listCode = listCode;
         this.code = listCode;
+    }
+    public void setPtVar3(String ptVar3) {
+        this.ptVar3 = ptVar3;
+        this.name = ptVar3;
+    }
+    public void setName(String name) {
+        this.ptVar3 = name;
+        this.name = name;
     }
 }

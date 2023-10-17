@@ -48,11 +48,11 @@ public class XmslDrawReviewMaterialServiceImpl implements IXmslDrawReviewMateria
     }
 
     @Override
-    public List<XmslDrawReviewMaterial> getByWbsId(Long mainId, Long listId, Set<Long> wbsIdSet) {
+    public List<XmslDrawReviewMaterial> getByWbsId(Long mainId, Long listId, Set<String> wbsIdSet) {
         XmslDrawReviewMaterial queryMater = new XmslDrawReviewMaterial();
         queryMater.setMainId(mainId);
         queryMater.setListId(listId);
-        queryMater.setWbsIds(wbsIdSet);
+        queryMater.setWbsCodes(wbsIdSet);
         List<XmslDrawReviewMaterial> materialList = xmslDrawReviewMaterialMapper.getXmslDrawReviewMaterialList(queryMater);
         return materialList;
     }

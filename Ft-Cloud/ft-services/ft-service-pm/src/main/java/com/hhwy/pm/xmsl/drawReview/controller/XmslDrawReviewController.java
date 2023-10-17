@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.hhwy.common.core.utils.bean.BeanUtils;
+import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewRelation;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
+import com.hhwy.pm.xmsl.drawReview.domain.*;
 import com.hhwy.pm.xmsl.drawReview.dto.XmslDrawReviewDto;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewWbsService;
@@ -26,7 +26,6 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
-import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -196,4 +195,29 @@ public class XmslDrawReviewController extends BaseController{
         List list = xmslDrawReviewService.sourceMaterList();
         return AjaxResult.success(list);
     }
+
+    //转换物资信息为图纸复核细目
+    @PostMapping("/getMaterInfo")
+    public AjaxResult getMaterInfo(@RequestBody MaterialInfo mater){
+        //沥青混凝土、改性沥青混凝土、混凝土
+        //030501、030502、020402
+        String[] mixCategoryCodes = new String[]{"030501","030502","020402"};
+        boolean isMix = false;
+        for (int i = 0; i < mixCategoryCodes.length; i++) {
+            if(mater.getCategoryCode().startsWith(mixCategoryCodes[i])){
+                isMix = true;
+                break;
+            }
+        }
+        XmslDrawReviewMaterial review = new XmslDrawReviewMaterial();
+        BeanUtils.copyBeanProp(mater,review);
+        review.setMixFlag(isMix?1:0);
+        review.setCode(mater.getMaterialCode());
+        review.setName(mater.getMaterialName());
+        review.setSpec(mater.getMaterialSpec());
+        review.setType(mater.getCategoryName());
+        review.setPtVar1(mater.getCategoryCode());
+        return AjaxResult.success(review);
+    }
+
 }

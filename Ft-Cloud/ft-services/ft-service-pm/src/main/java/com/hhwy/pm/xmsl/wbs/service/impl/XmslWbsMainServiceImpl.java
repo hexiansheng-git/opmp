@@ -152,9 +152,9 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
 
     @Transactional
     public int insertXmslWbsMain(XmslWbsMain xmslWbsMain) {
-        xmslWbsMain.setId(IdWorker.createId());
-        xmslWbsMain.setCreateUser(SecurityUtils.getUserName());
-        xmslWbsMain.setCreateTime(DateUtils.getNowDate());
+//        xmslWbsMain.setId(IdWorker.createId());
+//        xmslWbsMain.setCreateUser(SecurityUtils.getUserName());
+//        xmslWbsMain.setCreateTime(DateUtils.getNowDate());
         return xmslWbsMainMapper.insertXmslWbsMain(xmslWbsMain);
     }
 
@@ -215,6 +215,16 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
         this.xmslWbsMainMapper.deleteWbsHitoryByMainId(id);
         //2、修改main表状态
         this.xmslWbsMainMapper.updateValid(id);
+        //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
+        asyncHandler(main,effect);
+//        //4、工程量报表生成
+//        ThreadPoolUtil.getThreadPool().execute(()->{
+//            engineeringReportService.sync();
+//        });
+    }
+    //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
+    @Override
+    public void asyncHandler(XmslWbsMain main,XmslWbsMain effect){
         String tenantKey = SecurityUtils.getTenantKey();
         //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
         ThreadPoolUtil.getThreadPool().execute(()->{
@@ -229,7 +239,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                     List<XmslWbs> lastList = wbsService.getByMainId(effect.getId());
                     for (int i = 0; i < lastList.size(); i++) {
                         XmslWbs temp = lastList.get(i);
-                        lastWbsMap.put(temp.getCode(), temp); 
+                        lastWbsMap.put(temp.getCode(), temp);
                     }
                 }
                 List<XmslWbsListRelation> relationList = new ArrayList<>();
@@ -245,7 +255,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                     Set<String> listCodeSet = SetUtils.hashSet(listCodes);
                     int i=0;
                     for (String code : listCodeSet) {
-                        XmslWbsListRelation temp = new XmslWbsListRelation(id,Long.valueOf(r.getId()),code,ArrayUtils.get(listIds,i));
+                        XmslWbsListRelation temp = new XmslWbsListRelation(main.getId(),Long.valueOf(r.getId()),code,ArrayUtils.get(listIds,i));
                         relationList.add(temp);
                         i++;
                     }
@@ -266,10 +276,6 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 log.debug("wbs加载祖级名称&塞redis完成,耗时：{}",System.currentTimeMillis()-beginMills);
             }
         });
-//        //4、工程量报表生成
-//        ThreadPoolUtil.getThreadPool().execute(()->{
-//            engineeringReportService.sync();
-//        });
     }
 
     /**

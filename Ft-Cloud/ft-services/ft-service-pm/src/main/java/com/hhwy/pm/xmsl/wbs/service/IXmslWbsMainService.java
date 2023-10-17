@@ -55,4 +55,11 @@ public interface IXmslWbsMainService {
      */
     void finishFlow(Long id);
 
+    /**
+     * 流程结束后部分逻辑异步处理
+     * @param main
+     * @param effect
+     */
+    public void asyncHandler(XmslWbsMain main,XmslWbsMain effect);
+
 }

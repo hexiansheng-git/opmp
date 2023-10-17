@@ -176,6 +176,7 @@ public class XmslDrawReviewMaterial extends WarpBaseEntity {
 
     private Set<Long> listIds;
     private Set<Long> wbsIds;
+    private Set<String> wbsCodes;
     private List<XmslDrawReviewSourceMaterial> sourceMaterialList;
 
 }

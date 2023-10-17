@@ -292,7 +292,7 @@
             </foreach>
         </if>
         <if test="listIds != null and listIds.size > 0">
-            and list_id in
+            and id in
             <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>

@@ -306,4 +306,7 @@ public class XmslContractList extends BaseEntity {
     private BigDecimal  listCheckNum;
 
     private List<XmslContractList> children;
+
+    //备用字段，不存在于数据库
+    private Long listId;
 }

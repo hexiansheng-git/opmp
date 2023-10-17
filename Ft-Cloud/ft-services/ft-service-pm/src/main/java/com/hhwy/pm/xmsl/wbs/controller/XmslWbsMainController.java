@@ -1,10 +1,12 @@
 package com.hhwy.pm.xmsl.wbs.controller;
 
+import cn.hutool.core.lang.Assert;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.FlowServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
@@ -119,6 +121,19 @@ public class XmslWbsMainController extends BaseController {
     @PostMapping("/listener")
     public AjaxResult listener(@RequestParam("id") Long businessId){
         xmslWbsMainService.finishFlow(businessId);
+        return AjaxResult.success();
+    }
+
+    @PostMapping("/asyncHandler")
+    public AjaxResult asyncHandler(Long id) {
+        if(!SecurityUtils.getSysUser().isAdmin())
+            return AjaxResult.error("ERROR");
+        XmslWbsMain main = xmslWbsMainService.getById(id);
+        Assert.notNull(main,"获取数据失败");
+        if(main.getValid() == Constant.YES_INT)
+            return AjaxResult.error("数据已生效");
+        XmslWbsMain effect = xmslWbsMainService.getEffect();
+        xmslWbsMainService.asyncHandler(main,effect);
         return AjaxResult.success();
     }
 }

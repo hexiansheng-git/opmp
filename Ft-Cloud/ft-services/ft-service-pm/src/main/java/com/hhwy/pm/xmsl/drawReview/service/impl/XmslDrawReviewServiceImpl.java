@@ -155,6 +155,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslContractList temp = list.get(i);
             temp.setPtVar2(temp.getCode());
             temp.setPtVar1(String.valueOf(temp.getId()));
+            temp.setListId(temp.getId());
             temp.setId(null);
             listMap.put(temp.getCode(),temp);
         }
@@ -261,7 +262,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslWbs temp = list.get(i);
             XmslDrawReviewWbs wbs = new XmslDrawReviewWbs();
             BeanUtils.copyProperties(temp, wbs);
-            wbs.setWbsId(Long.valueOf(temp.getWbsId()));
+            wbs.setWbsId(Long.valueOf(temp.getId()));
             wbs.setCode(temp.getCode());
             new AddBaseInfoUtil<>().addBaseEntity(wbs);
             resuList.add(wbs);
@@ -297,18 +298,19 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
         if(CollectionUtils.isEmpty(relationList))
             return new ArrayList<>(2);
-
-        Set<Long> wbsIdSet = relationList.stream().map(r->r.getWbsId()).collect(Collectors.toSet());
+        Set<Long> listIdSet = relationList.stream().map(r->r.getListId()).collect(Collectors.toSet());
         //查询清单
-        List<XmslDrawReviewWbs> list = this.drawReviewWbsService.getByIds(wbsIdSet);
+        List<XmslDrawReviewList> drawList = drawReviewListService.getByIds(listIdSet);
+        List<XmslDrawReviewWbs> list = trans2Wbs(drawList);
         //获取清单对应的细目、配合比
+        Set<String> wbsCodeSet = drawList.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
         Map<Long,XmslDrawReviewWbs> listMap = new HashMap<>(list.size());
         for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewWbs temp = list.get(i);
             listMap.put(temp.getId(),temp);
         }
         //细目&配合比
-        List<XmslDrawReviewMaterial> materialList = materialService.getByWbsId(mainId,listId,wbsIdSet);
+        List<XmslDrawReviewMaterial> materialList = materialService.getByWbsId(mainId,listId,wbsCodeSet);
         Map<Long,XmslDrawReviewMaterial> materMap = new HashMap<>(materialList.size());
         for (int i = 0; i < materialList.size(); i++) {
             XmslDrawReviewMaterial temp = materialList.get(i);
@@ -325,6 +327,20 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             material.setSourceMaterialList(ObjectUtils.add2List(material.getSourceMaterialList(),temp));
         }
         return list;
+    }
+
+    //清单转换为wbs
+    public List<XmslDrawReviewWbs> trans2Wbs(List<XmslDrawReviewList> list){
+        List<XmslDrawReviewWbs> resuList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            XmslDrawReviewList temp = list.get(i);
+            XmslDrawReviewWbs tempWbs = new XmslDrawReviewWbs();
+            BeanUtils.copyProperties(temp,tempWbs);
+            tempWbs.setId(null);
+            tempWbs.setCode(temp.getWbsCode());
+            resuList.add(tempWbs);
+        }
+        return resuList;
     }
 
     /**
@@ -498,6 +514,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 continue;
             if(tempList.getId() != null)
                 listIdSet.add(tempList.getId());
+            tempList.setId(IdWorker.createId());
             tempList.setVersion(version);
             tempList.setVersionFlag(Constant.YES_INT);
             tempList.setMainId(dto.getId());
@@ -518,6 +535,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                         tempList.getListCode(),tempList.getId(),version));
                 //图纸材料细目
                 List<XmslDrawReviewMaterial> materialList = temp.getMaterialList();
+                if(CollectionUtils.isEmpty(materialList))
+                    continue;
                 for (int k = 0; k < materialList.size(); k++) {
                     XmslDrawReviewMaterial tempMater = materialList.get(k);
                     tempMater.initAdd();
@@ -529,6 +548,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                     addMaterList.add(tempMater);
                     //原材料
                     List<XmslDrawReviewSourceMaterial> sourceMaterialList = tempMater.getSourceMaterialList();
+                    if(CollectionUtils.isEmpty(sourceMaterialList))
+                        continue;
                     for (int l = 0; l < sourceMaterialList.size(); l++) {
                         XmslDrawReviewSourceMaterial tempSource = sourceMaterialList.get(l);
                         tempSource.initAdd();
