@@ -16,15 +16,16 @@ import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerSafeMeasuresS
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -74,6 +75,7 @@ public class QqchDangerSafeMeasuresServiceImpl implements IQqchDangerSafeMeasure
             qqchDangerSafeMeasures.setSchemeCode(qqchDangerList.getSchemeCode());
             qqchDangerSafeMeasures.setSchemeName(qqchDangerList.getSchemeName());
             qqchDangerSafeMeasures.setDangerLevel(qqchDangerList.getDangerLevel());
+            qqchDangerSafeMeasures.setDangerLevelLabel(qqchDangerList.getDangerLevelLabel());
             qqchDangerSafeMeasures.setWbsCode(qqchDangerList.getWbsCode());
             qqchDangerSafeMeasures.setWbsName(qqchDangerList.getWbsName());
             newList.add(qqchDangerSafeMeasures);

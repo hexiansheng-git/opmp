@@ -11,13 +11,16 @@ import com.hhwy.pm.qqch.preparation.safe.danger.mapper.QqchDangerListMapper;
 import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -48,10 +51,21 @@ public class QqchDangerListServiceImpl implements IQqchDangerListService {
         qryParam.setVersion(version);
         List<QqchDangerList> list = qqchDangerListMapper.getQqchDangerListList(qryParam);
 
+        this.setDictData(list);
+
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         vo.setList(list);
         return vo;
+    }
+
+    public void setDictData(List<QqchDangerList> list){
+        LinkedHashMap<String, String> dangerLevelMap = DictUtil.getDictDataName("danger_level");
+        for (QqchDangerList qqchDangerList : list) {
+            String dangerLevel = qqchDangerList.getDangerLevel();
+            String dangerLevelLabel = dangerLevelMap.get(dangerLevel);
+            qqchDangerList.setDangerLevelLabel(dangerLevelLabel);
+        }
     }
 
     /**
