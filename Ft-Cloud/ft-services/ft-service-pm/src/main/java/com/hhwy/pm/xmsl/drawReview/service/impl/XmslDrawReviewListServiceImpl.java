@@ -99,6 +99,13 @@ public class XmslDrawReviewListServiceImpl implements IXmslDrawReviewListService
         return xmslDrawReviewListMapper.getByIds(collection);
     }
 
+    @Override
+    public List<XmslDrawReviewList> getByCodes(Collection collection) {
+        if(CollectionUtils.isEmpty(collection))
+            return new ArrayList<>(2);
+        return xmslDrawReviewListMapper.getByCodes(collection);
+    }
+
     @Transactional
     public int insertXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList) {
         xmslDrawReviewList.setCreateUser(SecurityUtils.getUserName());

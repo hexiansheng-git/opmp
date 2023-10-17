@@ -192,7 +192,7 @@ public class XmslDrawReviewList extends WarpBaseEntity {
     @Excel(name = "预留字段2")
     private String ptVar2;
     /**
-     * 字段描述：预留字段3
+     * 字段描述：预留字段3 wbs名称
      */
     @JsonProperty
     @Excel(name = "预留字段3")

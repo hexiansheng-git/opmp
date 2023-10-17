@@ -266,13 +266,13 @@
     <update id="deleteRelation" parameterType="Map">
         delete from xmsl_draw_review_relation where main_id = #{mainId}
         <if test="wbsIds != null and wbsIds.size > 0">
-            and wbs_id in
+            and wbs_code in
             <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
         </if>
         <if test="listIds != null and listIds.size > 0">
-            and list_id in
+            and list_code in
             <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
@@ -286,13 +286,13 @@
     <update id="deleteList" parameterType="Map">
         delete from xmsl_draw_review_list where main_id = #{mainId}
         <if test="wbsIds != null and wbsIds.size > 0">
-            and wbs_id in
+            and wbs_code in
             <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
         </if>
         <if test="listIds != null and listIds.size > 0">
-            and id in
+            and list_code in
             <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
@@ -301,13 +301,13 @@
     <update id="deleteMaterial" parameterType="Map">
         delete from xmsl_draw_review_material where main_id = #{mainId}
         <if test="wbsIds != null and wbsIds.size > 0">
-            and wbs_id in
+            and wbs_code in
             <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
         </if>
         <if test="listIds != null and listIds.size > 0">
-            and list_id in
+            and list_code in
             <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
@@ -316,13 +316,13 @@
     <update id="deleteSourceMaterial" parameterType="Map">
         delete from xmsl_draw_review_source_material where main_id = #{mainId}
         <if test="wbsIds != null and wbsIds.size > 0">
-            and wbs_id in
+            and wbs_code in
             <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>
         </if>
         <if test="listIds != null and listIds.size > 0">
-            and list_id in
+            and list_code in
             <foreach collection="listIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>

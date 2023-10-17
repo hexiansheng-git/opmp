@@ -36,11 +36,11 @@ public class XmslDrawReviewMaterialServiceImpl implements IXmslDrawReviewMateria
     }
 
     @Override
-    public List<XmslDrawReviewMaterial> getByListId(Long mainId, Long wbsId, Set<Long> listIdSet) {
+    public List<XmslDrawReviewMaterial> getByListId(Long mainId, String wbsCode, Set<String> listIdSet) {
         XmslDrawReviewMaterial queryMater = new XmslDrawReviewMaterial();
         queryMater.setMainId(mainId);
-        queryMater.setWbsId(wbsId);
-        queryMater.setListIds(listIdSet);
+        queryMater.setWbsCode(wbsCode);
+        queryMater.setListCodes(listIdSet);
         if(CollectionUtils.isEmpty(listIdSet))
             return new ArrayList<>();
         List<XmslDrawReviewMaterial> materialList = xmslDrawReviewMaterialMapper.getXmslDrawReviewMaterialList(queryMater);
@@ -48,10 +48,10 @@ public class XmslDrawReviewMaterialServiceImpl implements IXmslDrawReviewMateria
     }
 
     @Override
-    public List<XmslDrawReviewMaterial> getByWbsId(Long mainId, Long listId, Set<String> wbsIdSet) {
+    public List<XmslDrawReviewMaterial> getByWbsId(Long mainId, String listCode, Set<String> wbsIdSet) {
         XmslDrawReviewMaterial queryMater = new XmslDrawReviewMaterial();
         queryMater.setMainId(mainId);
-        queryMater.setListId(listId);
+        queryMater.setListCode(listCode);
         queryMater.setWbsCodes(wbsIdSet);
         List<XmslDrawReviewMaterial> materialList = xmslDrawReviewMaterialMapper.getXmslDrawReviewMaterialList(queryMater);
         return materialList;

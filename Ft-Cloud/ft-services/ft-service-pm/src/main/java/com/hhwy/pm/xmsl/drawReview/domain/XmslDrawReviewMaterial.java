@@ -175,6 +175,7 @@ public class XmslDrawReviewMaterial extends WarpBaseEntity {
     private Date updateTime;
 
     private Set<Long> listIds;
+    private Set<String> listCodes;
     private Set<Long> wbsIds;
     private Set<String> wbsCodes;
     private List<XmslDrawReviewSourceMaterial> sourceMaterialList;

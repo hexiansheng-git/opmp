@@ -17,9 +17,9 @@ public interface IXmslDrawReviewMaterialService {
 
     List<XmslDrawReviewMaterial> getXmslDrawReviewMaterialList(XmslDrawReviewMaterial xmslDrawReviewMaterial);
 
-    List<XmslDrawReviewMaterial> getByListId(Long mainId, Long wbsId, Set<Long> listIdSet);
+    List<XmslDrawReviewMaterial> getByListId(Long mainId, String wbsId, Set<String> listIdSet);
 
-    List<XmslDrawReviewMaterial> getByWbsId(Long mainId, Long listId, Set<String> wbsIdSet);
+    List<XmslDrawReviewMaterial> getByWbsId(Long mainId, String listCode, Set<String> wbsIdSet);
 
     int insertXmslDrawReviewMaterial(XmslDrawReviewMaterial xmslDrawReviewMaterial);
 

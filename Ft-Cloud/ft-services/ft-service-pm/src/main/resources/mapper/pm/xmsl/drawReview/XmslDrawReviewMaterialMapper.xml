@@ -114,6 +114,11 @@
                     #{item}
                 </foreach>
             </if>
+            <if test="listCodes != null ">and `list_code` in
+                <foreach collection="listCodes" index="index" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
             <if test="code != null  and code != ''">and `code` = #{code}</if>
             <if test="name != null  and name != ''">and `name` = #{name}</if>
             <if test="spec != null  and spec != ''">and `spec` = #{spec}</if>
