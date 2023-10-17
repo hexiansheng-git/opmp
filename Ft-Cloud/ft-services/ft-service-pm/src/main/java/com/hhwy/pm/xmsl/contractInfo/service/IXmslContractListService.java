@@ -2,6 +2,7 @@ package com.hhwy.pm.xmsl.contractInfo.service;
 
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.ContractListQueryVo;
+import com.hhwy.pm.xmsl.contractInfo.domain.vo.ImportXmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListDto;
 import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 
@@ -57,4 +58,6 @@ public interface IXmslContractListService {
      * @return
      */
     List<XmslContractList> popUpWindows(ContractListQueryVo queryVo);
+
+    List<ImportXmslContractListVo> parseLevelStruct(List<ImportXmslContractListVo> importXmslContractListVos);
 }

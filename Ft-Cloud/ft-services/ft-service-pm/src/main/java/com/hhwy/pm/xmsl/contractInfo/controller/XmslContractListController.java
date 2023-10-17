@@ -1,6 +1,7 @@
 package com.hhwy.pm.xmsl.contractInfo.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -152,7 +153,7 @@ public class XmslContractListController extends BaseController {
                 String s = util.resolveDict("list_type", xmslContractList.getListType());
                 xmslContractList.setListType(s);
             }
-
+            list.sort((k1, k2) -> k1.getCode().compareToIgnoreCase(k2.getCode()));
             ExcelUtilByTemplate.exportExcel(response, list, map, "xmslContractList", resourceAsStream);
         }catch (Exception e){
             e.printStackTrace();
@@ -170,51 +171,17 @@ public class XmslContractListController extends BaseController {
         try {
             InputStream inputStream = file.getInputStream();
             List<ImportXmslContractListVo> importXmslContractListVos = util.importExcel(inputStream);
-            importXmslContractListVos.forEach(p -> p.setDataFrom("new"));
-            List<ImportXmslContractListVo> dateList1 = this.toTreeList(importXmslContractListVos);
-            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(dateList1, o -> o.getPid()==null, (r, n) -> r.getId().equals(n.getPid()), ImportXmslContractListVo::getChildren, ImportXmslContractListVo::setChildren);
-//            clearId(dateList);
+            //找到层级关系
+            List<ImportXmslContractListVo> treeList = xmslContractListService.parseLevelStruct(importXmslContractListVos);
+            //格式化为前端可用的树形机构
+            List<ImportXmslContractListVo> dateList = ListTreeUtil.formatTree(treeList, o -> o.getPid()==null
+                    , (r, n) -> r.getId().equals(n.getPid())
+                    , ImportXmslContractListVo::getChildren
+                    , ImportXmslContractListVo::setChildren);
             return AjaxResult.success(dateList);
         } catch (Exception e) {
             throw new RuntimeException("导入失败！");
         }
-    }
-
-    private void clearId(List<ImportXmslContractListVo> dateList){
-        dateList.forEach(p -> {
-            p.setId(null);
-            if (p.getChildren() != null){
-                clearId(p.getChildren());
-            }
-        });
-    }
-
-    private static List<ImportXmslContractListVo> toTreeList(List<ImportXmslContractListVo> importXmslContractListVos){
-        Map<String, ImportXmslContractListVo> collect = importXmslContractListVos.stream()
-                .filter(p -> StringUtils.isNotEmpty(p.getInnerCode()))
-                .collect(Collectors.toMap(key -> key.getInnerCode(), value -> value, (v1, v2) -> v1));
-        for (int i = 0;  i< importXmslContractListVos.size(); i++) {
-            ImportXmslContractListVo importXmslContractListVo = importXmslContractListVos.get(i);
-            importXmslContractListVo.setId(IdUtil.getSnowflakeNextId());
-            String innerCode = importXmslContractListVo.getInnerCode();
-            if (!innerCode.contains("-")) {
-                //第一层级
-                continue;
-            }
-            String parentCode = innerCode.substring(0, innerCode.lastIndexOf("-"));
-            String curentCode = innerCode.substring(innerCode.lastIndexOf("-") +1);
-            //获取当前数据的父层级
-            ImportXmslContractListVo parent = collect.get(parentCode);
-            Assert.notNull(parent, "第{}数据未找到父层级，请确认编号按层级顺序排列", i);
-            //获取父层级的children，将当前记录add进去
-            List<ImportXmslContractListVo> children = parent.getChildren();
-            if (CollectionUtil.isEmpty(children)) {
-                children = new ArrayList<>();
-            }
-            importXmslContractListVo.setPid(parent.getId());
-            children.add(importXmslContractListVo);
-        }
-        return new ArrayList<>(collect.values());
     }
 
     /**

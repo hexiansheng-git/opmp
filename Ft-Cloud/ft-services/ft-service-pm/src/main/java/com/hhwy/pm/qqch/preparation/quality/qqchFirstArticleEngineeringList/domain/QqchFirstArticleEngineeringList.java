@@ -194,6 +194,8 @@ public class QqchFirstArticleEngineeringList extends CommonBaseEntity {
     private String delFlag;
     /**
      * 字段描述：预留字段1
+     *
+     * wbs编号
      */
     @JsonProperty
     @Excel(name = "预留字段1")
