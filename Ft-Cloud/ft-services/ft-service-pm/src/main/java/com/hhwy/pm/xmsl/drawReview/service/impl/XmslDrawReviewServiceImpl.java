@@ -490,6 +490,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             //删除wbs、挂接、清单、细目、配合比
             Map delMap = ObjectUtils.toMap("mainId",dto.getId(),"wbsIds",wbsIdSet);
             xmslDrawReviewMapper.deleteRelation(delMap);
+            xmslDrawReviewMapper.deleteWbsByCode(delMap);
             xmslDrawReviewMapper.deleteList(delMap);
             xmslDrawReviewMapper.deleteMaterial(delMap);
             xmslDrawReviewMapper.deleteSourceMaterial(delMap);

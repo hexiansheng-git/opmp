@@ -283,6 +283,16 @@
         delete from xmsl_draw_review_wbs where main_id = #{mainId}
     </update>
 
+    <update id="deleteWbsByCode" parameterType="Map">
+        delete from xmsl_draw_review_wbs where main_id = #{mainId}
+        <if test="wbsIds != null and wbsIds.size > 0">
+            and wbs_code in
+            <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </if>
+    </update>
+
     <update id="deleteList" parameterType="Map">
         delete from xmsl_draw_review_list where main_id = #{mainId}
         <if test="wbsIds != null and wbsIds.size > 0">

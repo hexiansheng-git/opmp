@@ -55,6 +55,7 @@ public interface XmslDrawReviewMapper {
      */
     int deleteRelation(Map map);
     int deleteWbs(Map map);
+    int deleteWbsByCode(Map map);
     int deleteList(Map map);
     int deleteMaterial(Map map);
     int deleteSourceMaterial(Map map);
