@@ -94,7 +94,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         contractInfo.setProjectName(projectInfo.getProjectName());
         contractInfo.setWinDate(projectInfo.getWinTheBiddingDate());
         contractInfo.setProjectType(projectInfo.getProjectType());
-        contractInfo.setProjectCategory(projectInfo.getProjectType());
+        contractInfo.setProjectCategory(projectInfo.getProjectCategory());
         //承包方式字段
         contractInfo.setContractingMethod(projectInfo.getContractingMethod());
         ////业务领域及产品 编号
