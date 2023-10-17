@@ -6,9 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -45,6 +46,12 @@ public class QqchDangerList extends BaseEntity {
     @JsonProperty
     @Excel(name = "危大/超危大（字典类型danger_level）")
     private String dangerLevel;
+    /**
+     * 字段描述：危大/超危大
+     */
+    @JsonProperty
+    @Excel(name = "危大/超危大")
+    private String dangerLevelLabel;
     /**
      * 字段描述：项目WBS编码
      */

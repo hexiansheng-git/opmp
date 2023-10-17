@@ -2,11 +2,11 @@ package com.hhwy.pm.mq;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.pm.xmsl.project.domain.XmslProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
-import com.hhwy.utils.exception.CustomBusinessException;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.spring.annotation.ConsumeMode;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
@@ -39,10 +39,10 @@ public class ProjectBasicInfoConsumerListener implements RocketMQListener<String
             oldDataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey("master");
             if(StringUtils.isNotBlank(dataSource) && !dataSource.equals(oldDataSource)){
                 DynamicDataSourceContextHolder.push(dataSource);
-                projectBasicInfoService.updateProjectBasicInfo(projectBasicInfo);
+                projectBasicInfoService.syncData(projectBasicInfo);
             }
         }catch (Exception e){
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         }finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);

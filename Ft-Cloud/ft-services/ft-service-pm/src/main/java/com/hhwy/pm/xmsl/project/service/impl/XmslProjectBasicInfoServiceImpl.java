@@ -13,7 +13,6 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectInfoWithOther;
 import com.hhwy.pm.xmsl.project.mapper.*;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
-import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,12 +133,9 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
     }
 
     @Override
+    @Transactional
     public void insertProjectInvokeProject(XmslProjectBasicInfo projectBasicInfo) {
-        Long id = IdWorker.createId();
-        projectBasicInfo.setId(id);
-
         this.setSublist(projectBasicInfo);
-
         xmslProjectBasicInfoMapper.insertProjectBasicInfo(projectBasicInfo);
     }
 
@@ -162,6 +158,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
      * 处理子表
      * @param xmslProjectBasicInfo
      */
+    @Transactional
     public void setSublist(XmslProjectBasicInfo xmslProjectBasicInfo){
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
@@ -198,9 +195,33 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
 
         ProjectBasicInfo projectInfo = this.projectInfo();
-        xmslContractInfoService.updateProjectInfo(projectInfo);
-
         xmslProjectBasicInfo.setId(projectInfo.getId());
+        this.editSublist(xmslProjectBasicInfo);
+    }
+
+    @Override
+    @Transactional
+    public void syncData(XmslProjectBasicInfo xmslProjectBasicInfo) {
+        //查询数据库中是否存在项目数据
+        if(this.ifExistProject()){
+            xmslProjectBasicInfoMapper.updateProjectBasicInfo(xmslProjectBasicInfo);
+        }else {
+            xmslProjectBasicInfoMapper.insertProjectBasicInfo(xmslProjectBasicInfo);
+        }
+
+        ProjectBasicInfo projectInfo = this.projectInfo();
+        xmslContractInfoService.updateProjectInfo(projectInfo);
+        xmslProjectBasicInfo.setId(projectInfo.getId());
+        this.editSublist(xmslProjectBasicInfo);
+    }
+
+    private boolean ifExistProject(){
+        int count = xmslProjectBasicInfoMapper.getCount();
+        return count > 0;
+    }
+
+    @Transactional
+    public void editSublist(XmslProjectBasicInfo xmslProjectBasicInfo){
         //主要桥梁结构形式
         List<XmslProjectBridgeStructure> xmslProjectBridgeStructureList = xmslProjectBasicInfo.getXmslProjectBridgeStructureList();
         projectBridgeStructureService.editProjectBridgeStructureList(xmslProjectBridgeStructureList, xmslProjectBasicInfo);
@@ -217,7 +238,7 @@ public class XmslProjectBasicInfoServiceImpl implements IXmslProjectBasicInfoSer
         List<XmslProjectMaterialsAmount> xmslProjectMaterialsAmountList = xmslProjectBasicInfo.getXmslProjectMaterialsAmountList();
         projectMaterialsAmountService.editProjectMaterialsAmountList(xmslProjectMaterialsAmountList, xmslProjectBasicInfo);
     }
-    
+
     @Transactional
     public int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo) {
         xmslProjectBasicInfo.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));

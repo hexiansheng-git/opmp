@@ -33,4 +33,6 @@ public interface XmslProjectBasicInfoMapper {
     int deleteProjectBasicInfo(XmslProjectBasicInfo xmslProjectBasicInfo);
 
     int deleteProjectBasicInfoByPks(@Param("projectBasicInfoPkList") List<Long> projectBasicInfoPkList);
+
+    int getCount();
 }
