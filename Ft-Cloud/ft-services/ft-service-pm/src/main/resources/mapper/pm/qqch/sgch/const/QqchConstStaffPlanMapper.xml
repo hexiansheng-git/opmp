@@ -583,7 +583,7 @@
         </where>
     </update>
 
-    <select id="getStaffPlanByConstDesc" resultType="com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan">
+    <select id="getStaffPlanByConstDesc" resultMap="QqchConstStaffPlanResultMap">
         SELECT
             constStaff13.*,
             -- 岗位职责
@@ -605,6 +605,6 @@
                 FROM
                     ( SELECT * FROM qqch_survey_person_plan WHERE del_flag = '0' AND master_id = #{masterId213} ) person213
                         LEFT JOIN ( SELECT * FROM qqch_survey_design_teams WHERE id = del_flag = '0' AND valid = '1' ) team213 ON person213.master_id = team213.id
-            ) surveyPersion213 ON constStaff13.ptVar4 = surveyPersion213.ptVar4
+            ) surveyPersion213 ON constStaff13.occupation_code = surveyPersion213.job_number
     </select>
 </mapper>
