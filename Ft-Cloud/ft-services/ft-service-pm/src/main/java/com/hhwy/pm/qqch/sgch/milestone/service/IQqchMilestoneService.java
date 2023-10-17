@@ -31,4 +31,6 @@ public interface IQqchMilestoneService {
     CompileEntity list(QqchMilestone qqchMilestoneParam);
 
     void save(List<QqchMilestone> list);
+
+    List<QqchMilestone> saveDataFromMainP6(QqchMilestone qqchMilestoneParam);
 }

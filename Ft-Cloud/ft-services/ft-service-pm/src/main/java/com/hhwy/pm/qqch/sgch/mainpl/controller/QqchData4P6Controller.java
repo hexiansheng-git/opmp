@@ -1,0 +1,27 @@
+package com.hhwy.pm.qqch.sgch.mainpl.controller;
+
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchData4P6Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.math.BigDecimal;
+
+@RestController
+@RequestMapping("/qqchData4P6")
+public class QqchData4P6Controller {
+
+    @Autowired
+    private IQqchData4P6Service qqchData4P6Service;
+
+    @PostMapping("/initQqchData4P6")
+    public AjaxResult initQqchData4P6(BigDecimal version) {
+        String tenantKey = SecurityUtils.getTenantKey();
+        return AjaxResult.success(qqchData4P6Service.initQqchData4P6(tenantKey, version));
+    }
+
+}

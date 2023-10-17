@@ -65,6 +65,9 @@
              , `sort`
         from qqch_prod_plan
     </sql>
+    <delete id="deleteQqchProdPlanByVersion">
+        delete from qqch_prod_plan where version = #{version}
+    </delete>
     <select id="getQqchProdPlan" resultMap="QqchProdPlanResultMap">
         <include refid="selectQqchProdPlanVo"/>
         <where>

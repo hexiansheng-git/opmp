@@ -8,13 +8,16 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.milestone.domain.QqchMilestone;
 import com.hhwy.pm.qqch.sgch.milestone.service.IQqchMilestoneService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import jdk.nashorn.internal.runtime.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -42,8 +45,14 @@ public class QqchMilestoneController extends BaseController {
     @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
-        CompileEntity qqchMilestoneList = qqchMilestoneService.list(qqchMilestoneParam);
-        return AjaxResult.success(qqchMilestoneList);
+        BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
+        qqchMilestoneParam.setVersion(version);
+        startPage();
+        List<QqchMilestone> qqchMilestoneList = qqchMilestoneService.getQqchMilestoneList(qqchMilestoneParam);
+
+        CompileEntity returnVo = qqchMilestoneService.list(qqchMilestoneParam);
+        returnVo.setDto(qqchMilestoneList);
+        return AjaxResult.success(returnVo);
     }
 
     @PreAuthorize(hasPermi = "qqchMilestone:add")
@@ -51,6 +60,13 @@ public class QqchMilestoneController extends BaseController {
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMilestone>> dtoList) {
         List<QqchMilestone> dto = dtoList.dealSaveDto();
         qqchMilestoneService.save(dto);
+        return AjaxResult.success(dto);
+    }
+
+    @PreAuthorize(hasPermi = "qqchMilestone:add")
+    @PostMapping("/saveDataFromMainP6")
+    public AjaxResult saveDataFromMainP6(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
+        List<QqchMilestone> dto = qqchMilestoneService.saveDataFromMainP6(qqchMilestoneParam);
         return AjaxResult.success(dto);
     }
 

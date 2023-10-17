@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.sgch.prodplan.service;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,4 +35,7 @@ public interface IQqchProdPlanService {
     public void save(List<QqchProdPlan> dto);
 
     CompileEntity<HashMap<String, Object>>  selectList(QqchProdPlan qqchProdPlanParam);
+
+    int putProdPlanData(BigDecimal version);
+
 }

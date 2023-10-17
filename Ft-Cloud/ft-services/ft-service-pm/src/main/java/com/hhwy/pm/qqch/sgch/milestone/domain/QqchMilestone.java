@@ -23,6 +23,8 @@ import java.util.Date;
 public class QqchMilestone extends CompileEntity<QqchMilestone> {
     private static final long serialVersionUID = 1L;
 
+    public static final String TABLE_NAME = "qqch_milestone";
+
     /**
      * 字段描述：主键id
      */
@@ -30,6 +32,13 @@ public class QqchMilestone extends CompileEntity<QqchMilestone> {
     @JsonProperty
     @FtExcel(name = "主键id")
     private Long id;
+
+    /**
+     * 字段描述：作业
+     */
+    @JsonProperty
+    @FtExcel(name = "作业编码")
+    private String jobCode;
     /**
      * 字段描述：作业
      */

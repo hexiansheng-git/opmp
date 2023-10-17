@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.sgch.prodplan.mapper;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -27,4 +28,6 @@ public interface QqchProdPlanMapper {
     int deleteQqchProdPlan(QqchProdPlan qqchProdPlan);
 
     int deleteQqchProdPlanByPks(@Param("qqchProdPlanPkList") List<Long> qqchProdPlanPkList);
+
+    int deleteQqchProdPlanByVersion(@Param("version") BigDecimal version);
 }

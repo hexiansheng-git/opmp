@@ -1,0 +1,1027 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hhwy.pm.qqch.sgch.mainpl.mapper.QqchMainPlanItemMapper">
+
+    <resultMap type="com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem" id="QqchMainPlanItemResultMap">
+        <result property="id" column="id" />
+        <result property="version" column="version" />
+        <result property="valid" column="valid" />
+        <result property="pid" column="pid" />
+        <result property="sort" column="sort" />
+        <result property="itemCode" column="item_code" />
+        <result property="itemName" column="item_name" />
+        <result property="plannedDuration" column="planned_duration" />
+        <result property="totalFloat" column="total_float" />
+        <result property="executerId" column="executer_id" />
+        <result property="executer" column="executer" />
+        <result property="startDate" column="start_date" />
+        <result property="finishDate" column="finish_date" />
+        <result property="fileGroupId" column="file_group_id" />
+        <result property="remark" column="remark" />
+        <result property="createUser" column="create_user" />
+        <result property="createUserName" column="create_user_name" />
+        <result property="createTime" column="create_time" />
+        <result property="updateUser" column="update_user" />
+        <result property="updateTime" column="update_time" />
+        <result property="delUser" column="del_user" />
+        <result property="delTime" column="del_time" />
+        <result property="delFlag" column="del_flag" />
+        <result property="ptVar1" column="pt_var1" />
+        <result property="ptVar2" column="pt_var2" />
+        <result property="ptVar3" column="pt_var3" />
+        <result property="ptVar4" column="pt_var4" />
+        <result property="ptVar5" column="pt_var5" />
+        <result property="taskStatus" column="task_status" />
+        <result property="isCritical" column="is_critical" />
+        <result property="wbsCode" column="wbs_code" />
+        <result property="wbsPcode" column="wbs_pcode" />
+        <result property="wbsName" column="wbs_name" />
+        <result property="projectId" column="project_id" />
+        <result property="projectName" column="project_name" />
+        <result property="freeFloat" column="free_float" />
+        <result property="remainingDuration" column="remaining_duration" />
+        <result property="actualStartDate" column="actual_start_date" />
+        <result property="actualFinishDate" column="actual_finish_date" />
+        <result property="baselineStartDate" column="baseline_start_date" />
+        <result property="baselineFinishDate" column="baseline_finish_date" />
+        <result property="remainingEarlyStartDate" column="remaining_early_start_date" />
+        <result property="remainingEarlyFinishDate" column="remaining_early_finish_date" />
+        <result property="unit" column="unit" />
+        <result property="leaf" column="leaf" />
+        <result property="quantity" column="quantity" />
+        <result property="projectCode" column="project_code" />
+        <result property="schedulePercentComplete" column="schedule_percent_complete" />
+        <result property="expectedFinishDate" column="expected_finish_date" />
+        <result property="finishDateVariance" column="finish_date_variance" />
+        <result property="lagReason" column="lag_reason" />
+        <result property="correctionTarget" column="correction_target" />
+        <result property="concreteMeasure" column="concrete_measure" />
+        <result property="correctionCompDate" column="correction_comp_date" />
+        <result property="predecessorActivityCode" column="predecessor_activity_code" />
+        <result property="predecessorActivityName" column="predecessor_activity_name" />
+        <result property="wbsObjectId" column="wbs_object_id" />
+        <result property="wbsParentObjectId" column="wbs_parent_object_id" />
+        <result property="itemType" column="item_type" />
+        <result property="taskType" column="task_type" />
+        <result property="ancestors" column="ancestors" />
+    </resultMap>
+    <sql id="selectQqchMainPlanItemVo">
+        select
+            `id`
+             ,`version`
+             ,`valid`
+             ,`pid`
+             ,`sort`
+             ,`item_code`
+             ,`item_name`
+             ,`planned_duration`
+             ,`total_float`
+             ,`executer_id`
+             ,`executer`
+             ,`start_date`
+             ,`finish_date`
+             ,`file_group_id`
+             ,`remark`
+             ,`create_user`
+             ,`create_user_name`
+             ,`create_time`
+             ,`update_user`
+             ,`update_time`
+             ,`del_user`
+             ,`del_time`
+             ,`del_flag`
+             ,`pt_var1`
+             ,`pt_var2`
+             ,`pt_var3`
+             ,`pt_var4`
+             ,`pt_var5`
+             ,`task_status`
+             ,`is_critical`
+             ,`wbs_code`
+             ,`wbs_pcode`
+             ,`wbs_name`
+             ,`project_id`
+             ,`project_name`
+             ,`free_float`
+             ,`remaining_duration`
+             ,`actual_start_date`
+             ,`actual_finish_date`
+             ,`baseline_start_date`
+             ,`baseline_finish_date`
+             ,`remaining_early_start_date`
+             ,`remaining_early_finish_date`
+             ,`unit`
+             ,`leaf`
+             ,`quantity`
+             ,`project_code`
+             ,`schedule_percent_complete`
+             ,`expected_finish_date`
+             ,`finish_date_variance`
+             ,`lag_reason`
+             ,`correction_target`
+             ,`concrete_measure`
+             ,`correction_comp_date`
+             ,`predecessor_activity_code`
+             ,`predecessor_activity_name`
+             ,`wbs_object_id`
+             ,`wbs_parent_object_id`
+             ,`item_type`
+             ,`task_type`
+             ,`ancestors`
+        from qqch_main_plan_item
+    </sql>
+    <select id="getQqchMainPlanItem" resultMap="QqchMainPlanItemResultMap">
+        <include refid="selectQqchMainPlanItemVo" />
+        <where>
+            del_flag = "0"
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="valid != null "> and `valid` = #{valid}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
+            <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
+            <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
+            <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
+            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+            <if test="finishDate != null "> and `finish_date` = #{finishDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsPcode != null  and wbsPcode != ''"> and `wbs_pcode` = #{wbsPcode}</if>
+            <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="freeFloat != null "> and `free_float` = #{freeFloat}</if>
+            <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
+            <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
+            <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
+            <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
+            <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
+            <if test="remainingEarlyStartDate != null "> and `remaining_early_start_date` = #{remainingEarlyStartDate}</if>
+            <if test="remainingEarlyFinishDate != null "> and `remaining_early_finish_date` = #{remainingEarlyFinishDate}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
+            <if test="quantity != null "> and `quantity` = #{quantity}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="schedulePercentComplete != null "> and `schedule_percent_complete` = #{schedulePercentComplete}</if>
+            <if test="expectedFinishDate != null "> and `expected_finish_date` = #{expectedFinishDate}</if>
+            <if test="finishDateVariance != null "> and `finish_date_variance` = #{finishDateVariance}</if>
+            <if test="lagReason != null  and lagReason != ''"> and `lag_reason` = #{lagReason}</if>
+            <if test="correctionTarget != null  and correctionTarget != ''"> and `correction_target` = #{correctionTarget}</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''"> and `concrete_measure` = #{concreteMeasure}</if>
+            <if test="correctionCompDate != null "> and `correction_comp_date` = #{correctionCompDate}</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''"> and `predecessor_activity_code` = #{predecessorActivityCode}</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''"> and `predecessor_activity_name` = #{predecessorActivityName}</if>
+            <if test="wbsObjectId != null  and wbsObjectId != ''"> and `wbs_object_id` = #{wbsObjectId}</if>
+            <if test="wbsParentObjectId != null  and wbsParentObjectId != ''"> and `wbs_parent_object_id` = #{wbsParentObjectId}</if>
+            <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
+            <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
+            <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
+        </where>
+        order by sort asc
+    </select>
+
+    <select id="getQqchMainPlanItemList" resultMap="QqchMainPlanItemResultMap">
+        <include refid="selectQqchMainPlanItemVo" />
+        <where>
+            del_flag = "0"
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="valid != null "> and `valid` = #{valid}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
+            <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
+            <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
+            <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
+            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+            <if test="finishDate != null "> and `finish_date` = #{finishDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsPcode != null  and wbsPcode != ''"> and `wbs_pcode` = #{wbsPcode}</if>
+            <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="freeFloat != null "> and `free_float` = #{freeFloat}</if>
+            <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
+            <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
+            <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
+            <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
+            <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
+            <if test="remainingEarlyStartDate != null "> and `remaining_early_start_date` = #{remainingEarlyStartDate}</if>
+            <if test="remainingEarlyFinishDate != null "> and `remaining_early_finish_date` = #{remainingEarlyFinishDate}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
+            <if test="quantity != null "> and `quantity` = #{quantity}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="schedulePercentComplete != null "> and `schedule_percent_complete` = #{schedulePercentComplete}</if>
+            <if test="expectedFinishDate != null "> and `expected_finish_date` = #{expectedFinishDate}</if>
+            <if test="finishDateVariance != null "> and `finish_date_variance` = #{finishDateVariance}</if>
+            <if test="lagReason != null  and lagReason != ''"> and `lag_reason` = #{lagReason}</if>
+            <if test="correctionTarget != null  and correctionTarget != ''"> and `correction_target` = #{correctionTarget}</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''"> and `concrete_measure` = #{concreteMeasure}</if>
+            <if test="correctionCompDate != null "> and `correction_comp_date` = #{correctionCompDate}</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''"> and `predecessor_activity_code` = #{predecessorActivityCode}</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''"> and `predecessor_activity_name` = #{predecessorActivityName}</if>
+            <if test="wbsObjectId != null  and wbsObjectId != ''"> and `wbs_object_id` = #{wbsObjectId}</if>
+            <if test="wbsParentObjectId != null  and wbsParentObjectId != ''"> and `wbs_parent_object_id` = #{wbsParentObjectId}</if>
+            <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
+            <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
+            <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
+        </where>
+        order by sort asc, item_code asc
+    </select>
+    <select id="getUsingQqchMainPlanItemListByDate" resultMap="QqchMainPlanItemResultMap">
+        <include refid="selectQqchMainPlanItemVo" />
+        <where>
+        del_flag = "0" and version = #{version} and valid = #{valid}
+        and start_date &lt;= #{date} and finish_date &gt;= #{date}
+        </where>
+    </select>
+    <select id="getUsingQqchMainPlanItemListByDateRange" resultMap="QqchMainPlanItemResultMap">
+        <include refid="selectQqchMainPlanItemVo" />
+        <where>
+        del_flag = "0" and version = #{version} and valid = #{valid}
+        and ((start_date &lt;= #{startDate} and finish_date &gt;= #{startDate})
+        or (start_date &lt;= #{finishDate} and finish_date &gt;= #{finishDate})
+        or (start_date &gt;= #{startDate} and finish_date &lt;= #{finishDate}))
+        </where>
+    </select>
+
+    <insert id="insertQqchMainPlanItem"  useGeneratedKeys="true" keyProperty="id"  >
+        insert into qqch_main_plan_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null ">`id`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null ">`valid`,</if>
+            <if test="pid != null ">`pid`,</if>
+            <if test="sort != null ">`sort`,</if>
+            <if test="itemCode != null  and itemCode != ''">`item_code`,</if>
+            <if test="itemName != null  and itemName != ''">`item_name`,</if>
+            <if test="plannedDuration != null ">`planned_duration`,</if>
+            <if test="totalFloat != null ">`total_float`,</if>
+            <if test="executerId != null  and executerId != ''">`executer_id`,</if>
+            <if test="executer != null  and executer != ''">`executer`,</if>
+            <if test="startDate != null ">`start_date`,</if>
+            <if test="finishDate != null ">`finish_date`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+            <if test="isCritical != null  and isCritical != ''">`is_critical`,</if>
+            <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
+            <if test="wbsPcode != null  and wbsPcode != ''">`wbs_pcode`,</if>
+            <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="freeFloat != null ">`free_float`,</if>
+            <if test="remainingDuration != null ">`remaining_duration`,</if>
+            <if test="actualStartDate != null ">`actual_start_date`,</if>
+            <if test="actualFinishDate != null ">`actual_finish_date`,</if>
+            <if test="baselineStartDate != null ">`baseline_start_date`,</if>
+            <if test="baselineFinishDate != null ">`baseline_finish_date`,</if>
+            <if test="remainingEarlyStartDate != null ">`remaining_early_start_date`,</if>
+            <if test="remainingEarlyFinishDate != null ">`remaining_early_finish_date`,</if>
+            <if test="unit != null  and unit != ''">`unit`,</if>
+            <if test="leaf != null  and leaf != ''">`leaf`,</if>
+            <if test="quantity != null ">`quantity`,</if>
+            <if test="projectCode != null  and projectCode != ''">`project_code`,</if>
+            <if test="schedulePercentComplete != null ">`schedule_percent_complete`,</if>
+            <if test="expectedFinishDate != null ">`expected_finish_date`,</if>
+            <if test="finishDateVariance != null ">`finish_date_variance`,</if>
+            <if test="lagReason != null  and lagReason != ''">`lag_reason`,</if>
+            <if test="correctionTarget != null  and correctionTarget != ''">`correction_target`,</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''">`concrete_measure`,</if>
+            <if test="correctionCompDate != null ">`correction_comp_date`,</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''">`predecessor_activity_code`,</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''">`predecessor_activity_name`,</if>
+            <if test="wbsObjectId != null  and wbsObjectId != ''">`wbs_object_id`,</if>
+            <if test="wbsParentObjectId != null  and wbsParentObjectId != ''">`wbs_parent_object_id`,</if>
+            <if test="itemType != null  and itemType != ''">`item_type`,</if>
+            <if test="taskType != null  and taskType != ''">`task_type`,</if>
+            <if test="ancestors != null  and ancestors != ''">`ancestors`,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null ">#{id},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null ">#{valid},</if>
+            <if test="pid != null ">#{pid},</if>
+            <if test="sort != null ">#{sort},</if>
+            <if test="itemCode != null  and itemCode != ''">#{itemCode},</if>
+            <if test="itemName != null  and itemName != ''">#{itemName},</if>
+            <if test="plannedDuration != null ">#{plannedDuration},</if>
+            <if test="totalFloat != null ">#{totalFloat},</if>
+            <if test="executerId != null  and executerId != ''">#{executerId},</if>
+            <if test="executer != null  and executer != ''">#{executer},</if>
+            <if test="startDate != null ">#{startDate},</if>
+            <if test="finishDate != null ">#{finishDate},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+            <if test="isCritical != null  and isCritical != ''">#{isCritical},</if>
+            <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
+            <if test="wbsPcode != null  and wbsPcode != ''">#{wbsPcode},</if>
+            <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="freeFloat != null ">#{freeFloat},</if>
+            <if test="remainingDuration != null ">#{remainingDuration},</if>
+            <if test="actualStartDate != null ">#{actualStartDate},</if>
+            <if test="actualFinishDate != null ">#{actualFinishDate},</if>
+            <if test="baselineStartDate != null ">#{baselineStartDate},</if>
+            <if test="baselineFinishDate != null ">#{baselineFinishDate},</if>
+            <if test="remainingEarlyStartDate != null ">#{remainingEarlyStartDate},</if>
+            <if test="remainingEarlyFinishDate != null ">#{remainingEarlyFinishDate},</if>
+            <if test="unit != null  and unit != ''">#{unit},</if>
+            <if test="leaf != null  and leaf != ''">#{leaf},</if>
+            <if test="quantity != null ">#{quantity},</if>
+            <if test="projectCode != null  and projectCode != ''">#{projectCode},</if>
+            <if test="schedulePercentComplete != null ">#{schedulePercentComplete},</if>
+            <if test="expectedFinishDate != null ">#{expectedFinishDate},</if>
+            <if test="finishDateVariance != null ">#{finishDateVariance},</if>
+            <if test="lagReason != null  and lagReason != ''">#{lagReason},</if>
+            <if test="correctionTarget != null  and correctionTarget != ''">#{correctionTarget},</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''">#{concreteMeasure},</if>
+            <if test="correctionCompDate != null ">#{correctionCompDate},</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''">#{predecessorActivityCode},</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''">#{predecessorActivityName},</if>
+            <if test="wbsObjectId != null  and wbsObjectId != ''">#{wbsObjectId},</if>
+            <if test="wbsParentObjectId != null  and wbsParentObjectId != ''">#{wbsParentObjectId},</if>
+            <if test="itemType != null  and itemType != ''">#{itemType},</if>
+            <if test="taskType != null  and taskType != ''">#{taskType},</if>
+            <if test="ancestors != null  and ancestors != ''">#{ancestors},</if>
+        </trim>
+    </insert>
+
+    <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchMainPlanItem -->
+    <insert id="insertQqchMainPlanItemList">
+        insert into qqch_main_plan_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            `id`,
+            `version`,
+            `valid`,
+            `pid`,
+            `sort`,
+            `item_code`,
+            `item_name`,
+            `planned_duration`,
+            `total_float`,
+            `executer_id`,
+            `executer`,
+            `start_date`,
+            `finish_date`,
+            `file_group_id`,
+            `remark`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+            `is_critical`,
+            `wbs_code`,
+            `wbs_pcode`,
+            `wbs_name`,
+            `project_id`,
+            `project_name`,
+            `free_float`,
+            `remaining_duration`,
+            `actual_start_date`,
+            `actual_finish_date`,
+            `baseline_start_date`,
+            `baseline_finish_date`,
+            `remaining_early_start_date`,
+            `remaining_early_finish_date`,
+            `unit`,
+            `leaf`,
+            `quantity`,
+            `project_code`,
+            `schedule_percent_complete`,
+            `expected_finish_date`,
+            `finish_date_variance`,
+            `lag_reason`,
+            `correction_target`,
+            `concrete_measure`,
+            `correction_comp_date`,
+            `predecessor_activity_code`,
+            `predecessor_activity_name`,
+            `wbs_object_id`,
+            `wbs_parent_object_id`,
+            `item_type`,
+            `task_type`,
+            `ancestors`,
+        </trim>
+        values
+        <foreach collection="qqchMainPlanItemList" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id},
+                #{item.version},
+                #{item.valid},
+                #{item.pid},
+                #{item.sort},
+                #{item.itemCode},
+                #{item.itemName},
+                #{item.plannedDuration},
+                #{item.totalFloat},
+                #{item.executerId},
+                #{item.executer},
+                #{item.startDate},
+                #{item.finishDate},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+                #{item.isCritical},
+                #{item.wbsCode},
+                #{item.wbsPcode},
+                #{item.wbsName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.freeFloat},
+                #{item.remainingDuration},
+                #{item.actualStartDate},
+                #{item.actualFinishDate},
+                #{item.baselineStartDate},
+                #{item.baselineFinishDate},
+                #{item.remainingEarlyStartDate},
+                #{item.remainingEarlyFinishDate},
+                #{item.unit},
+                #{item.leaf},
+                #{item.quantity},
+                #{item.projectCode},
+                #{item.schedulePercentComplete},
+                #{item.expectedFinishDate},
+                #{item.finishDateVariance},
+                #{item.lagReason},
+                #{item.correctionTarget},
+                #{item.concreteMeasure},
+                #{item.correctionCompDate},
+                #{item.predecessorActivityCode},
+                #{item.predecessorActivityName},
+                #{item.wbsObjectId},
+                #{item.wbsParentObjectId},
+                #{item.itemType},
+                #{item.taskType},
+                #{item.ancestors},
+            </trim>
+        </foreach>
+    </insert>
+
+    <update id="updateQqchMainPlanItem">
+        update qqch_main_plan_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="valid != null ">`valid` = #{valid},</if>
+            <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
+            <if test="itemCode != null  and  itemCode != ''">`item_code` = #{itemCode},</if>
+            <if test="itemName != null  and  itemName != ''">`item_name` = #{itemName},</if>
+            <if test="plannedDuration != null ">`planned_duration` = #{plannedDuration},</if>
+            <if test="totalFloat != null ">`total_float` = #{totalFloat},</if>
+            <if test="executerId != null  and  executerId != ''">`executer_id` = #{executerId},</if>
+            <if test="executer != null  and  executer != ''">`executer` = #{executer},</if>
+            <if test="startDate != null ">`start_date` = #{startDate},</if>
+            <if test="finishDate != null ">`finish_date` = #{finishDate},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+            <if test="isCritical != null  and  isCritical != ''">`is_critical` = #{isCritical},</if>
+            <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
+            <if test="wbsPcode != null  and  wbsPcode != ''">`wbs_pcode` = #{wbsPcode},</if>
+            <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="freeFloat != null ">`free_float` = #{freeFloat},</if>
+            <if test="remainingDuration != null ">`remaining_duration` = #{remainingDuration},</if>
+            <if test="actualStartDate != null ">`actual_start_date` = #{actualStartDate},</if>
+            <if test="actualFinishDate != null ">`actual_finish_date` = #{actualFinishDate},</if>
+            <if test="baselineStartDate != null ">`baseline_start_date` = #{baselineStartDate},</if>
+            <if test="baselineFinishDate != null ">`baseline_finish_date` = #{baselineFinishDate},</if>
+            <if test="remainingEarlyStartDate != null ">`remaining_early_start_date` = #{remainingEarlyStartDate},</if>
+            <if test="remainingEarlyFinishDate != null ">`remaining_early_finish_date` = #{remainingEarlyFinishDate},</if>
+            <if test="unit != null  and  unit != ''">`unit` = #{unit},</if>
+            <if test="leaf != null  and  leaf != ''">`leaf` = #{leaf},</if>
+            <if test="quantity != null ">`quantity` = #{quantity},</if>
+            <if test="projectCode != null  and  projectCode != ''">`project_code` = #{projectCode},</if>
+            <if test="schedulePercentComplete != null ">`schedule_percent_complete` = #{schedulePercentComplete},</if>
+            <if test="expectedFinishDate != null ">`expected_finish_date` = #{expectedFinishDate},</if>
+            <if test="finishDateVariance != null ">`finish_date_variance` = #{finishDateVariance},</if>
+            <if test="lagReason != null  and  lagReason != ''">`lag_reason` = #{lagReason},</if>
+            <if test="correctionTarget != null  and  correctionTarget != ''">`correction_target` = #{correctionTarget},</if>
+            <if test="concreteMeasure != null  and  concreteMeasure != ''">`concrete_measure` = #{concreteMeasure},</if>
+            <if test="correctionCompDate != null ">`correction_comp_date` = #{correctionCompDate},</if>
+            <if test="predecessorActivityCode != null  and  predecessorActivityCode != ''">`predecessor_activity_code` = #{predecessorActivityCode},</if>
+            <if test="predecessorActivityName != null  and  predecessorActivityName != ''">`predecessor_activity_name` = #{predecessorActivityName},</if>
+            <if test="wbsObjectId != null  and  wbsObjectId != ''">`wbs_object_id` = #{wbsObjectId},</if>
+            <if test="wbsParentObjectId != null  and  wbsParentObjectId != ''">`wbs_parent_object_id` = #{wbsParentObjectId},</if>
+            <if test="itemType != null  and  itemType != ''">`item_type` = #{itemType},</if>
+            <if test="taskType != null  and  taskType != ''">`task_type` = #{taskType},</if>
+            <if test="ancestors != null  and  ancestors != ''">`ancestors` = #{ancestors},</if>
+        </trim>
+        <where>
+            <if test="id != null "> and `id` = #{id}</if>
+        </where>
+    </update>
+
+    <update id="updateQqchMainPlanItemList">
+        update qqch_main_plan_item
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.id}
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.version}
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.valid}
+                </foreach>
+            </trim>
+            <trim prefix="pid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
+                </foreach>
+            </trim>
+            <trim prefix="item_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.itemCode}
+                </foreach>
+            </trim>
+            <trim prefix="item_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.itemName}
+                </foreach>
+            </trim>
+            <trim prefix="planned_duration  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.plannedDuration}
+                </foreach>
+            </trim>
+            <trim prefix="total_float  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.totalFloat}
+                </foreach>
+            </trim>
+            <trim prefix="executer_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.executerId}
+                </foreach>
+            </trim>
+            <trim prefix="executer  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.executer}
+                </foreach>
+            </trim>
+            <trim prefix="start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.startDate}
+                </foreach>
+            </trim>
+            <trim prefix="finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.finishDate}
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.fileGroupId}
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remark}
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUser}
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createUserName}
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.createTime}
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateUser}
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.updateTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delUser}
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delTime}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.delFlag}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar1}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar2}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar3}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar4}
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ptVar5}
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskStatus}
+                </foreach>
+            </trim>
+            <trim prefix="is_critical  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isCritical}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsCode}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_pcode  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsPcode}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsName}
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectId}
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectName}
+                </foreach>
+            </trim>
+            <trim prefix="free_float  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.freeFloat}
+                </foreach>
+            </trim>
+            <trim prefix="remaining_duration  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingDuration}
+                </foreach>
+            </trim>
+            <trim prefix="actual_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="actual_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.actualFinishDate}
+                </foreach>
+            </trim>
+            <trim prefix="baseline_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.baselineStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="baseline_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.baselineFinishDate}
+                </foreach>
+            </trim>
+            <trim prefix="remaining_early_start_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingEarlyStartDate}
+                </foreach>
+            </trim>
+            <trim prefix="remaining_early_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.remainingEarlyFinishDate}
+                </foreach>
+            </trim>
+            <trim prefix="unit  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.unit}
+                </foreach>
+            </trim>
+            <trim prefix="leaf  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.leaf}
+                </foreach>
+            </trim>
+            <trim prefix="quantity  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.quantity}
+                </foreach>
+            </trim>
+            <trim prefix="project_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.projectCode}
+                </foreach>
+            </trim>
+            <trim prefix="schedule_percent_complete  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.schedulePercentComplete}
+                </foreach>
+            </trim>
+            <trim prefix="expected_finish_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.expectedFinishDate}
+                </foreach>
+            </trim>
+            <trim prefix="finish_date_variance  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.finishDateVariance}
+                </foreach>
+            </trim>
+            <trim prefix="lag_reason  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.lagReason}
+                </foreach>
+            </trim>
+            <trim prefix="correction_target  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.correctionTarget}
+                </foreach>
+            </trim>
+            <trim prefix="concrete_measure  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.concreteMeasure}
+                </foreach>
+            </trim>
+            <trim prefix="correction_comp_date  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.correctionCompDate}
+                </foreach>
+            </trim>
+            <trim prefix="predecessor_activity_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.predecessorActivityCode}
+                </foreach>
+            </trim>
+            <trim prefix="predecessor_activity_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.predecessorActivityName}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_object_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsObjectId}
+                </foreach>
+            </trim>
+            <trim prefix="wbs_parent_object_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.wbsParentObjectId}
+                </foreach>
+            </trim>
+            <trim prefix="item_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.itemType}
+                </foreach>
+            </trim>
+            <trim prefix="task_type  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.taskType}
+                </foreach>
+            </trim>
+            <trim prefix="ancestors  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.ancestors}
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <update id="deleteQqchMainPlanItem">
+        update `qqch_main_plan_item` set del_flag = 1
+        <where>
+            <if test="id != null "> and `id` = #{id}</if>
+            <if test="version != null "> and `version` = #{version}</if>
+            <if test="valid != null "> and `valid` = #{valid}</if>
+            <if test="pid != null "> and `pid` = #{pid}</if>
+            <if test="sort != null "> and `sort` = #{sort}</if>
+            <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
+            <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
+            <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>
+            <if test="executer != null  and executer != ''"> and `executer` = #{executer}</if>
+            <if test="startDate != null "> and `start_date` = #{startDate}</if>
+            <if test="finishDate != null "> and `finish_date` = #{finishDate}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
+            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null "> and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
+            <if test="delTime != null "> and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
+            <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
+            <if test="wbsPcode != null  and wbsPcode != ''"> and `wbs_pcode` = #{wbsPcode}</if>
+            <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
+            <if test="projectId != null "> and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
+            <if test="freeFloat != null "> and `free_float` = #{freeFloat}</if>
+            <if test="remainingDuration != null "> and `remaining_duration` = #{remainingDuration}</if>
+            <if test="actualStartDate != null "> and `actual_start_date` = #{actualStartDate}</if>
+            <if test="actualFinishDate != null "> and `actual_finish_date` = #{actualFinishDate}</if>
+            <if test="baselineStartDate != null "> and `baseline_start_date` = #{baselineStartDate}</if>
+            <if test="baselineFinishDate != null "> and `baseline_finish_date` = #{baselineFinishDate}</if>
+            <if test="remainingEarlyStartDate != null "> and `remaining_early_start_date` = #{remainingEarlyStartDate}</if>
+            <if test="remainingEarlyFinishDate != null "> and `remaining_early_finish_date` = #{remainingEarlyFinishDate}</if>
+            <if test="unit != null  and unit != ''"> and `unit` = #{unit}</if>
+            <if test="leaf != null  and leaf != ''"> and `leaf` = #{leaf}</if>
+            <if test="quantity != null "> and `quantity` = #{quantity}</if>
+            <if test="projectCode != null  and projectCode != ''"> and `project_code` = #{projectCode}</if>
+            <if test="schedulePercentComplete != null "> and `schedule_percent_complete` = #{schedulePercentComplete}</if>
+            <if test="expectedFinishDate != null "> and `expected_finish_date` = #{expectedFinishDate}</if>
+            <if test="finishDateVariance != null "> and `finish_date_variance` = #{finishDateVariance}</if>
+            <if test="lagReason != null  and lagReason != ''"> and `lag_reason` = #{lagReason}</if>
+            <if test="correctionTarget != null  and correctionTarget != ''"> and `correction_target` = #{correctionTarget}</if>
+            <if test="concreteMeasure != null  and concreteMeasure != ''"> and `concrete_measure` = #{concreteMeasure}</if>
+            <if test="correctionCompDate != null "> and `correction_comp_date` = #{correctionCompDate}</if>
+            <if test="predecessorActivityCode != null  and predecessorActivityCode != ''"> and `predecessor_activity_code` = #{predecessorActivityCode}</if>
+            <if test="predecessorActivityName != null  and predecessorActivityName != ''"> and `predecessor_activity_name` = #{predecessorActivityName}</if>
+            <if test="wbsObjectId != null  and wbsObjectId != ''"> and `wbs_object_id` = #{wbsObjectId}</if>
+            <if test="wbsParentObjectId != null  and wbsParentObjectId != ''"> and `wbs_parent_object_id` = #{wbsParentObjectId}</if>
+            <if test="itemType != null  and itemType != ''"> and `item_type` = #{itemType}</if>
+            <if test="taskType != null  and taskType != ''"> and `task_type` = #{taskType}</if>
+            <if test="ancestors != null  and ancestors != ''"> and `ancestors` = #{ancestors}</if>
+        </where>
+    </update>
+
+    <update id="deleteQqchMainPlanItemByPks">
+        update `qqch_main_plan_item` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="qqchMainPlanItemPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <select id="getMaxActualStartDate" resultMap="QqchMainPlanItemResultMap">
+        <include refid="selectQqchMainPlanItemVo"/>
+        where del_flag = "0" and version = #{version} and valid = #{valid}
+        order by actual_start_date asc
+        limit 1
+    </select>
+    <select id="getProjStartAndFinish" resultMap="QqchMainPlanItemResultMap">
+        select min(start_date) start_date, max(finish_date) finish_date,
+               min(actual_start_date) actual_start_date,
+               min(baseline_start_date) baseline_start_date,
+               max(baseline_finish_date) baseline_finish_date
+        from qqch_main_plan_item
+        where del_flag = "0" and version = #{version} and valid = #{valid}
+    </select>
+</mapper>
