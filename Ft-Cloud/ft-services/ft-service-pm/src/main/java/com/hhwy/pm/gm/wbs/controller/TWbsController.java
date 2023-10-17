@@ -1,5 +1,6 @@
 package com.hhwy.pm.gm.wbs.controller;
 
+import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
@@ -52,4 +53,17 @@ public class TWbsController extends BaseController{
         TWbs result = tWbsService.getTWbs(query);
         return AjaxResult.success(result==null?new TWbs():result);
     }
+
+
+
+    @PostMapping("/getChildList")
+    public AjaxResult copyChildList(@RequestBody Map map) {
+        String ids = ObjectUtils.nvlString(map.get("ids"));
+        if(org.apache.commons.lang3.StringUtils.isBlank(ids))
+            return AjaxResult.error("参数缺失");
+        Map<String, List<TWbs>> resuMap = tWbsService.copyChildList(Convert.toLongArray(ids));
+        return AjaxResult.success(resuMap);
+    }
+
+
 }
