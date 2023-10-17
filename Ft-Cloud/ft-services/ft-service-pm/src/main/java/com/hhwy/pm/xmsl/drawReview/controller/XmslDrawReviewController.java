@@ -81,10 +81,10 @@ public class XmslDrawReviewController extends BaseController{
     public AjaxResult adjustDetail() {
         XmslDrawReview last =xmslDrawReviewService.getLast();
         if(last.getValid() == Constant.YES_INT){
-            last.setId(null);
             last.setVersion(last.getVersion()+1);
             last.setValid(Constant.NO_INT);
             new AddBaseInfoUtil<>().add(last);
+            last.setId(null);
         }
         FlowInfoSearchUtil.getFlowInfo(last, FlowEnum.XMSL_DRAW_REVIEW);
         return AjaxResult.success(last);

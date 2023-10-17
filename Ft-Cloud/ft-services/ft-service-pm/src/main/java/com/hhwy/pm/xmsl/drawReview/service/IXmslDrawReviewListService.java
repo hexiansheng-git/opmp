@@ -30,7 +30,7 @@ public interface IXmslDrawReviewListService {
 
     List<XmslDrawReviewList> getByIds(Collection collection);
 
-    List<XmslDrawReviewList> getByCodes(Collection collection);
+    List<XmslDrawReviewList> getByCodes(Long mainId,Collection collection);
 
     int insertXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 

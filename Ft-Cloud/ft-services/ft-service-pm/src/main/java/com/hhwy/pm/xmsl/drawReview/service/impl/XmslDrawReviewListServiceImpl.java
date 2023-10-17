@@ -100,10 +100,10 @@ public class XmslDrawReviewListServiceImpl implements IXmslDrawReviewListService
     }
 
     @Override
-    public List<XmslDrawReviewList> getByCodes(Collection collection) {
+    public List<XmslDrawReviewList> getByCodes(Long mainId,Collection collection) {
         if(CollectionUtils.isEmpty(collection))
             return new ArrayList<>(2);
-        return xmslDrawReviewListMapper.getByCodes(collection);
+        return xmslDrawReviewListMapper.getByCodes(mainId,collection);
     }
 
     @Transactional

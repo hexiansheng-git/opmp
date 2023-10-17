@@ -21,7 +21,7 @@ public interface XmslDrawReviewListMapper {
 
     List<XmslDrawReviewList> getByIds(@Param("ids") Collection collection);
 
-    List<XmslDrawReviewList> getByCodes(@Param("listCodes") Collection collection);
+    List<XmslDrawReviewList> getByCodes(@Param("mainId") Long mainId,@Param("listCodes") Collection collection);
 
     int insertXmslDrawReviewList(XmslDrawReviewList xmslDrawReviewList);
 

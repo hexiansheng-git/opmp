@@ -168,9 +168,9 @@
         </foreach>
     </select>
 
-    <select id="getByCodes" resultMap="XmslDrawReviewListResultMap" parameterType="String">
+    <select id="getByCodes" resultMap="XmslDrawReviewListResultMap" >
         <include refid="selectXmslDrawReviewListVo"/>
-        where list_code in
+        where main_id = #{mainId} and list_code in
         <foreach collection="listCodes" index="index" item="item" separator="," open="(" close=")">
             #{item}
         </foreach>

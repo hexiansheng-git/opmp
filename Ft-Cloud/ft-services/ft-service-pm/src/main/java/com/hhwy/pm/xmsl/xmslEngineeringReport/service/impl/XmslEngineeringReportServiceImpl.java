@@ -95,11 +95,11 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         };
         List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getFullEffectList();
         List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-        Map<Long,XmslDrawReviewWbs> wbsMap = new HashMap<>(wbsList.size());
+        Map<String,XmslDrawReviewWbs> wbsMap = new HashMap<>(wbsList.size());
         for (int i = 0; i < wbsList.size(); i++) {
             XmslDrawReviewWbs temp = wbsList.get(i);
             XmslEngineeringReport report = instanceWbs(temp);
-            wbsMap.put(temp.getId(),temp);
+            wbsMap.put(temp.getCode(),temp);
             addReportFunc.apply(report,null);
         }
         Map<String,XmslEngineeringReport> listReportMap = new HashMap<>();
@@ -116,7 +116,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             if(temp.getWbsId() == null)
                 continue;
             //清单-WBS
-            XmslDrawReviewWbs wbs = wbsMap.get(temp.getWbsId());
+            XmslDrawReviewWbs wbs = wbsMap.get(temp.getWbsCode());
             XmslEngineeringReport listReport = instanceWbs(wbs);
             listReport.setId(wbs.getId());
             listReport.setParentId(report.getId());

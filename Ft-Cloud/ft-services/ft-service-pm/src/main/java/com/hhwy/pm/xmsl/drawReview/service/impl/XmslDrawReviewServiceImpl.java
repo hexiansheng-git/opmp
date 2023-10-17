@@ -207,6 +207,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         Set<String> listCodeSet = relationList.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         //查询清单
         XmslDrawReviewList query = new XmslDrawReviewList();
+        query.setMainId(mainId);
         query.setWbsCode(wbsCode);
         query.setParams(ObjectUtils.toMap("listCodes",listCodeSet));
         List<XmslDrawReviewList> list = this.drawReviewListService.getXmslDrawReviewListList(query);
@@ -298,7 +299,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             return getDefaultWbs(listCode);
         Set<String> listCodeSet = relationList.stream().map(r->r.getListCode()).collect(Collectors.toSet());
         //查询清单
-        List<XmslDrawReviewList> drawList = drawReviewListService.getByCodes(listCodeSet);
+        List<XmslDrawReviewList> drawList = drawReviewListService.getByCodes(mainId,listCodeSet);
         List<XmslDrawReviewWbs> list = trans2Wbs(drawList);
         //获取清单对应的细目、配合比
         Set<String> wbsCodeSet = drawList.stream().map(r->r.getWbsCode()).collect(Collectors.toSet());
