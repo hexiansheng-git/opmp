@@ -58,7 +58,7 @@ public class XmslMaterialReportController extends BaseController {
     public AjaxResult sync(@RequestBody Map map) {
         if(!SecurityUtils.getSysUser().isAdmin())
             return AjaxResult.error("ERROR");
-        xmslMaterialReportService.sync(ObjectUtils.nvlLong(map.get("id")));
+        xmslMaterialReportService.sync(ObjectUtils.nvlLong(map.get("id")),SecurityUtils.getTenantKey());
         return AjaxResult.success();
     }
 }
