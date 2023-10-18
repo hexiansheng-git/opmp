@@ -71,9 +71,8 @@ public class QqchSurveyManageModelController extends BaseController{
      */
     @PostMapping("/querySameProject")
     public AjaxResult querySameTypeProject(@Validated(ValidationGroups.Select.class) QqchSurveyManageModel qqchSurveyManageModelParam){
-        List<ProjectBasicInfo> result = qqchSurveyManageModelService.getSameTypeProject(qqchSurveyManageModelParam);
+        List<QqchSurveyManageModel> result = qqchSurveyManageModelService.getSameTypeProject(qqchSurveyManageModelParam);
         return AjaxResult.success(result);
     }
-
 
 }

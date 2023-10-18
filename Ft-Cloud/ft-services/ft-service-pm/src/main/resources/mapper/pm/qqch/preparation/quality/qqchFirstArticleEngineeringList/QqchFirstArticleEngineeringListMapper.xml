@@ -598,6 +598,32 @@
         </where>
     </update>
 
+    <select id="getHistoryManageModelList" resultMap="historyFirstArticleEngineeringListMap">
+        SELECT
+            a.*,
+            b.mmediate_work
+        FROM
+                ( SELECT * FROM qqch_first_article_engineering_list WHERE del_flag = '0'
+                    <if test="name != null  and name != ''">and `name` = #{name}</if>
+                    <if test="grade != null  and grade != ''">and `grade` = #{grade}</if>
+                ) a
+                    LEFT JOIN ( SELECT * FROM qqch_first_article_engineering_control WHERE del_flag = '0' ) b ON a.id = b.list_id
+    </select>
+
+    <resultMap
+            type="com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.vo.QqchFirstArticleEngineeringListHistory"
+            id="historyFirstArticleEngineeringListMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="grade" column="grade"/>
+        <result property="wbsId" column="wbs_id"/>
+        <result property="wbsName" column="wbs_name"/>
+        <result property="lightEngineer" column="light_engineer"/>
+        <result property="difficultyEngineer" column="difficulty_engineer"/>
+        <result property="remark" column="remark"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+    </resultMap>
 
 
 </mapper>

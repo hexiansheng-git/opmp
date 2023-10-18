@@ -586,4 +586,41 @@
             </foreach>
         </where>
     </update>
+
+    <select id="getHistoryManageModelList" resultMap="historyManageModelListMap">
+        SELECT
+            a.*,
+            b.control_key_point,
+            b.detections_number,
+            b.key_inspection_items
+        FROM
+                ( SELECT * FROM qqch_weight_engineering_list WHERE del_flag = '0'
+                    <if test="name != null  and name != ''">AND `name` = #{name}</if>
+                ) a
+                LEFT JOIN ( SELECT * FROM qqch_weight_engineering_control WHERE del_flag = '0'
+                            ) b
+                ON a.id = b.list_id
+                <if test="keyInspectionItems != null  and keyInspectionItems != ''">
+                       WHERE `key_inspection_items` = #{keyInspectionItems}
+                </if>
+    </select>
+
+    <resultMap type="com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory"
+               id="historyManageModelListMap">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="analysis" column="analysis"/>
+        <result property="wbsId" column="wbs_id"/>
+        <result property="wbsCode" column="wbs_code"/>
+        <result property="wbsName" column="wbs_name"/>
+        <result property="wbsAncestors" column="wbs_ancestors"/>
+        <result property="keySubItems" column="key_sub_items"/>
+        <result property="keyProcesses" column="key_processes"/>
+        <result property="remark" column="remark"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="controlKeyPoint" column="control_key_point"/>
+        <result property="detectionsNumber" column="detections_number"/>
+        <result property="keyInspectionItems" column="key_inspection_items"/>
+    </resultMap>
 </mapper>

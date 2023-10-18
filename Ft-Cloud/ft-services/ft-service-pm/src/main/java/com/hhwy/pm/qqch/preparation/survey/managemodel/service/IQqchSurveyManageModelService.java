@@ -22,5 +22,5 @@ public interface IQqchSurveyManageModelService {
 
     int save(QqchSurveyManageModelVo qqchSurveyManageModelVo);
 
-    List<ProjectBasicInfo> getSameTypeProject(QqchSurveyManageModel qqchSurveyManageModelParam);
+    List<QqchSurveyManageModel> getSameTypeProject(QqchSurveyManageModel qqchSurveyManageModelParam);
 }

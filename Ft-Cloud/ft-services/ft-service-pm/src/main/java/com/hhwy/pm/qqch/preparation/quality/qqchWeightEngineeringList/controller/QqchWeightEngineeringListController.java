@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -82,6 +84,15 @@ public class QqchWeightEngineeringListController extends BaseController {
     public AjaxResult deleteQqchWeightEngineeringListByPks(@PathVariable Long[] ids) {
         List<Long> qqchWeightEngineeringListPkList = Arrays.asList(ids);
         return toAjax(qqchWeightEngineeringListService.deleteQqchWeightEngineeringListByPks(qqchWeightEngineeringListPkList));
+    }
+
+    /**
+     *  历史方案查询
+     */
+    @PostMapping("/querySameProject")
+    public AjaxResult querySameProject(@Validated(ValidationGroups.Select.class) QqchWeightEngineeringListHistory param) {
+        Map<String, List<QqchWeightEngineeringListHistory>> result = qqchWeightEngineeringListService.querySameProject(param);
+        return AjaxResult.success(result);
     }
 
 

@@ -1,10 +1,12 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service;
 
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -42,4 +44,6 @@ public interface IQqchWeightEngineeringListService {
     int deleteQqchWeightEngineeringListByPks(List<Long> qqchWeightEngineeringListPkList);
 
     void save(QqchWeightEngineeringListVo vo);
+
+    Map<String, List<QqchWeightEngineeringListHistory>> querySameProject(QqchWeightEngineeringListHistory param);
 }

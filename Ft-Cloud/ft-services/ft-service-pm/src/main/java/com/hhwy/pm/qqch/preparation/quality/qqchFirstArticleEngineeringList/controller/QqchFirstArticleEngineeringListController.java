@@ -4,8 +4,10 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.QqchFirstArticleEngineeringList;
+import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.vo.QqchFirstArticleEngineeringListHistory;
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.vo.QqchFirstArticleEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.service.IQqchFirstArticleEngineeringListService;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -96,6 +99,15 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
     public AjaxResult deleteQqchFirstArticleEngineeringListByPks(@PathVariable Long[] ids) {
         List<Long> qqchFirstArticleEngineeringListPkList = Arrays.asList(ids);
         return toAjax(qqchFirstArticleEngineeringListService.deleteQqchFirstArticleEngineeringListByPks(qqchFirstArticleEngineeringListPkList));
+    }
+
+    /**
+     *  历史方案查询
+     */
+    @PostMapping("/querySameProject")
+    public AjaxResult querySameProject(@Validated(ValidationGroups.Select.class) QqchFirstArticleEngineeringListHistory param) {
+        Map<String, List<QqchFirstArticleEngineeringListHistory>> result = qqchFirstArticleEngineeringListService.querySameProject(param);
+        return AjaxResult.success(result);
     }
 
 }

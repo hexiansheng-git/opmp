@@ -22,6 +22,7 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author ldd
@@ -116,13 +118,16 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
     }
 
     @Override
-    public List<ProjectBasicInfo> getSameTypeProject(QqchSurveyManageModel param) {
-        List<ProjectBasicInfo> result = new ArrayList<>();
+    public List<QqchSurveyManageModel> getSameTypeProject(QqchSurveyManageModel param) {
+        String projectName = param.getProjectName();
+        List<QqchSurveyManageModel> result = new ArrayList<>();
         // 获取当前租户
         String currentTenantKey = SecurityUtils.getTenantKey();
         // 获取当前租户的项目
         ProjectBasicInfo currentProjectInfo = xmslProjectBasicInfoService.projectInfo();
-        if (currentProjectInfo == null || StringUtils.isBlank(currentProjectInfo.getBusinessAreasAndProducts())) {
+        //根据 业务领域及产品 字段判断是否为同类项目
+        String currentBusiness = currentProjectInfo.getBusinessAreasAndProducts();
+        if (ObjectUtil.isEmpty(currentProjectInfo) || StringUtils.isBlank(currentBusiness)) {
             return null;
         }
         // 切换到master
@@ -139,17 +144,24 @@ public class QqchSurveyManageModelServiceImpl implements IQqchSurveyManageModelS
                 String tenantKey = tenant.getTenantKey();
                 String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
                 DynamicDataSourceContextHolder.push(dataSource);
-
-                // 获取项目数据
+                //获取该租户项目信息
                 ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
-//                if (projectInfo == null || !currentProjectInfo.getBusinessAreasAndProducts()
-//                        .equals(projectInfo.getBusinessAreasAndProducts())) {
-//                    continue;
-//                }
-                if (ObjectUtil.isEmpty(projectInfo) || StrUtil.isBlank(projectInfo.getProjectName())) {
+                //项目为空或者不是同类项目则跳过
+                if (ObjectUtil.isEmpty(projectInfo)
+                        || StrUtil.hasBlank(projectInfo.getProjectName(), projectInfo.getBusinessAreasAndProducts())
+//                        || !StrUtil.equalsIgnoreCase(currentBusiness, projectInfo.getBusinessAreasAndProducts())
+                        ) {
                     continue;
                 }
-                result.add(projectInfo);
+                // 获取该租户项目已选择经营模式
+                param.setResults(true);
+                param.setProjectName(null);
+                List<QqchSurveyManageModel> modelList = qqchSurveyManageModelMapper.getQqchSurveyManageModelList(param);
+                modelList.forEach(p -> p.setProjectName(projectInfo.getProjectName()));
+                result.addAll(modelList);
+            }
+            if (StrUtil.isNotBlank(projectName)) {
+                result = result.stream().filter(p -> p.getProjectName().contains(projectName)).collect(Collectors.toList());
             }
         } catch (Exception e) {
             e.getMessage();

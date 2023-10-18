@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.mapper;
 
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -27,4 +28,6 @@ public interface QqchWeightEngineeringListMapper {
     int deleteQqchWeightEngineeringList(QqchWeightEngineeringList qqchWeightEngineeringList);
 
     int deleteQqchWeightEngineeringListByPks(@Param("qqchWeightEngineeringListPkList") List<Long> qqchWeightEngineeringListPkList);
-    }
+
+    List<QqchWeightEngineeringListHistory> getHistoryManageModelList(QqchWeightEngineeringListHistory param);
+}

@@ -1,7 +1,13 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.impl.QqchModuleConfirmCaseServiceImpl;
@@ -9,14 +15,19 @@ import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.domain.vo.QqchWeightEngineeringControlVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringControl.service.IQqchWeightEngineeringControlService;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.QqchWeightEngineeringList;
+import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListHistory;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.domain.vo.QqchWeightEngineeringListVo;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.mapper.QqchWeightEngineeringListMapper;
 import com.hhwy.pm.qqch.preparation.quality.qqchWeightEngineeringList.service.IQqchWeightEngineeringListService;
+import com.hhwy.pm.qqch.preparation.survey.managemodel.domain.QqchSurveyManageModel;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.idworker.IdWorker;
 import io.seata.common.util.CollectionUtils;
 import io.seata.common.util.StringUtils;
@@ -45,7 +56,10 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchWeightEngineeringControlService weightEngineControlService;
-
+    @Autowired
+    private SystemServiceApi systemServiceApi;
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     public QqchWeightEngineeringList getQqchWeightEngineeringList(QqchWeightEngineeringList qqchWeightEngineeringList) {
         return qqchWeightEngineeringListMapper.getQqchWeightEngineeringList(qqchWeightEngineeringList);
@@ -333,4 +347,55 @@ public class QqchWeightEngineeringListServiceImpl implements IQqchWeightEngineer
         }
     }
 
+    @Override
+    public Map<String, List<QqchWeightEngineeringListHistory>> querySameProject(QqchWeightEngineeringListHistory param) {
+        Map<String, List<QqchWeightEngineeringListHistory>> result = new HashMap<>();
+        // 获取当前租户
+        String currentTenantKey = SecurityUtils.getTenantKey();
+        // 获取当前租户的项目
+        ProjectBasicInfo currentProjectInfo = xmslProjectBasicInfoService.projectInfo();
+        //根据 业务领域及产品 字段判断是否为同类项目
+        String currentBusiness = currentProjectInfo.getBusinessAreasAndProducts();
+        if (ObjectUtil.isEmpty(currentProjectInfo) || com.hhwy.common.core.utils.StringUtils.isBlank(currentBusiness)) {
+            return null;
+        }
+        // 切换到master
+        String oldDataSource = DynamicDataSourceContextHolder.peek();
+        DynamicDataSourceContextHolder.push("master");
+        // 获取所有租户
+        List<SysTenant> tenantList = systemServiceApi.tenantList();
+        try {
+            for (SysTenant tenant : tenantList) {
+                if (currentTenantKey.equals(tenant.getTenantKey())) {
+                    continue;
+                }
+                // 切换租户
+                String tenantKey = tenant.getTenantKey();
+                String dataSource = TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey);
+                DynamicDataSourceContextHolder.push(dataSource);
+                //获取该租户项目信息
+                ProjectBasicInfo projectInfo = xmslProjectBasicInfoService.projectInfo();
+                //项目为空或者不是同类项目则跳过
+                if (ObjectUtil.isEmpty(projectInfo)
+                        || StrUtil.hasBlank(projectInfo.getProjectName(), projectInfo.getBusinessAreasAndProducts())
+//                        || !StrUtil.equalsIgnoreCase(currentBusiness, projectInfo.getBusinessAreasAndProducts())
+                ) {
+                    continue;
+                }
+                // 获取该租户项目已选择经营模式
+                List<QqchWeightEngineeringListHistory> modelList = qqchWeightEngineeringListMapper.getHistoryManageModelList(param);
+                if (CollectionUtil.isEmpty(modelList)) continue;
+                if (StrUtil.isBlank(param.getProjectName())) {
+                    modelList = modelList.stream().filter(p -> p.getProjectName().contains(param.getProjectName())).collect(Collectors.toList());
+                }
+                result.put(projectInfo.getProjectName(), modelList);
+            }
+        } catch (Exception e) {
+            e.getMessage();
+        } finally {
+            DynamicDataSourceContextHolder.poll();
+            DynamicDataSourceContextHolder.push(oldDataSource);
+        }
+        return result;
+    }
 }

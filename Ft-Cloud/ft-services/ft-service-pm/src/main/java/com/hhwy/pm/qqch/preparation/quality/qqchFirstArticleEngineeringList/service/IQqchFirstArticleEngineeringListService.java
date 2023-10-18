@@ -1,9 +1,11 @@
 package com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.service;
 
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.QqchFirstArticleEngineeringList;
+import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.vo.QqchFirstArticleEngineeringListHistory;
 import com.hhwy.pm.qqch.preparation.quality.qqchFirstArticleEngineeringList.domain.vo.QqchFirstArticleEngineeringListVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author ldd
@@ -28,4 +30,6 @@ public interface IQqchFirstArticleEngineeringListService {
      int deleteQqchFirstArticleEngineeringListByPks(List<Long> qqchFirstArticleEngineeringListPkList);
 
     void save(QqchFirstArticleEngineeringListVo vo);
+
+    Map<String, List<QqchFirstArticleEngineeringListHistory>> querySameProject(QqchFirstArticleEngineeringListHistory param);
 }
