@@ -20,9 +20,9 @@ public enum FtExcelEnum {
     QQCH_TEC_MAE("importTecMae.xlsx", "技术材料清单.xlsx", "com.hhwy.pm.qqch.preparation.doc.techmae.domain.QqchDocTechMae"),
     QQCH_EXP_BETON("importExpBeton.xls", "混凝土配合比.xls", "com.hhwy.pm.qqch.preparation.measureexp.beton.domain.vo.QqchExpBetonImportVo"),
 
-
-    QQCH_CONTRACT_INSURE("importContractInsure.xlsx", "主合同信息-投保险种.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure"),
+    QQCH_CONTRACT_LIST("importXmslContractList.xlsx", "主合同清单.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList"),
     QQCH_CONTRACT_SIGN("importContractSign.xlsx", "主合同信息-签订信息.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractSign"),
+    QQCH_CONTRACT_INSURE("importContractInsure.xlsx", "主合同信息-投保险种.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInsure"),
     QQCH_CONTRACT_PAYINFO("importContractPayinfo.xlsx", "主合同信息-项目支付信息.xlsx", "com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo"),
     WZCH_TOTAL_DEMAND_DETIAL("importEquPlanDemand.xlsx", "总需详情.xlsx", "com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail");
 

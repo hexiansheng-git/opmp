@@ -14,6 +14,7 @@ import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewListService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewService;
 import com.hhwy.pm.xmsl.drawReview.service.IXmslDrawReviewWbsService;
+import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
@@ -113,12 +114,13 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
                 addReportFunc.apply(report,null);
                 listReportMap.put(temp.getListCode(),report);
             }
+            report.setCheckQuanlity(temp.getWinNum());
             if(StringUtils.isBlank(temp.getWbsCode()))
                 continue;
             //清单-WBS
-            XmslDrawReviewWbs wbs = wbsMap.get(temp.getWbsCode());
+            XmslWbs wbs = WbsRedisUtils.getWbsByCode(temp.getWbsCode());
             XmslEngineeringReport listReport = instanceWbs(wbs);
-            listReport.setId(wbs.getId());
+            listReport.setId(Long.valueOf(wbs.getId()));
             listReport.setParentId(report.getId());
             listReport.setReportType(2);
             addReportFunc.apply(listReport,2);
@@ -153,6 +155,25 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         report.setDesignQuanlity(wbs.getDesignQuanlity()); 
 //        new AddBaseInfoUtil<>().addBaseEntity(report);
         report.setId(wbs.getId());
+        report.setReportType(1);
+        return report;
+    }
+    private XmslEngineeringReport instanceWbs(XmslWbs wbs){
+        XmslEngineeringReport report = new XmslEngineeringReport();
+        report.setParentId(ObjectUtils.nvlLong(wbs.getParentId(),-1L));
+        report.setWbsId(Long.valueOf(wbs.getId()));
+        report.setWbsCode(wbs.getCode());
+        report.setWbsName(wbs.getName());
+        report.setNodeType(wbs.getNodeType());
+        report.setHaveChildren(wbs.getHaveChildren());
+        report.setAncestors(wbs.getAncestors());
+        report.setAncestorsName(wbs.getAncestorsName());
+        report.setPartCode(wbs.getPartCode());
+        report.setWbsUnit(wbs.getUnit());
+        report.setLevel(wbs.getLevel());
+        report.setDesignQuanlity(wbs.getDesignQuanlity());
+//        new AddBaseInfoUtil<>().addBaseEntity(report);
+        report.setId(Long.valueOf(wbs.getId()));
         report.setReportType(1);
         return report;
     }

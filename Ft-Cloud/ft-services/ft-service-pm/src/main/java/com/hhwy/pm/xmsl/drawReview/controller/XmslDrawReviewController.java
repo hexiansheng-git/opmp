@@ -59,15 +59,15 @@ public class XmslDrawReviewController extends BaseController{
     @PostMapping("/detail")
     public AjaxResult detali(@RequestBody XmslDrawReview drawReview) {
         if(drawReview.getId() == null){
-            drawReview =xmslDrawReviewService.getEffectLast();
+            drawReview =xmslDrawReviewService.getLast();
         }else{
             drawReview = xmslDrawReviewService.getById(drawReview.getId());
         }
+        drawReview = drawReview==null?new XmslDrawReview():drawReview;
         //是否有调整记录
         Integer hasChange = xmslDrawReviewService.hasChange();
         if(drawReview != null)
             drawReview.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,hasChange));
-        drawReview = drawReview==null?new XmslDrawReview():drawReview;
         FlowInfoSearchUtil.getFlowInfo(drawReview, FlowEnum.XMSL_DRAW_REVIEW);
         return AjaxResult.success(drawReview);
     }

@@ -1118,9 +1118,9 @@
             xmsl_contract_list
         WHERE
             del_flag = "0"
-                AND master_id = ( SELECT id FROM xmsl_contract_info WHERE del_flag = "0" order by version desc limit 1 )
+                AND master_id = #{masterId}
                 AND have_children = 0
-                AND list_type = #{listType}
+                AND list_type = 1
     </select>
     <select id="getByAncestors" resultMap="XmslContractListResultMap">
         <include refid="selectXmslContractListVo"/>
