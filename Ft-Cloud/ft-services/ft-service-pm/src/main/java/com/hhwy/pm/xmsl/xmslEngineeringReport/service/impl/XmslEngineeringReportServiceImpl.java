@@ -145,6 +145,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
                 tempReport.setReportType(1);
                 tempReport.setHaveChildren(0);
                 tempReport.setParentId(parentReport.getId());
+                tempReport.setImageProgress(temp.getImageProgress());
                 addReportFunc.apply(tempReport,1);
             }
         }
