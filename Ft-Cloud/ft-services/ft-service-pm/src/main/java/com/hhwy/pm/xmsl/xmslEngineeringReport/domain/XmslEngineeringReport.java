@@ -233,7 +233,7 @@ public class XmslEngineeringReport extends TreeNode<XmslEngineeringReport> {
     @JsonProperty
     private String ptVar1;
     /**
-     * 字段描述：预留字段2
+     * 字段描述：预留字段2 wbs或清单编号
      */
     @JsonProperty
     private String ptVar2;

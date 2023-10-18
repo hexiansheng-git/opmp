@@ -8,6 +8,9 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.TreeUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
+import com.hhwy.pm.gm.wbs.domain.TWbs;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
@@ -29,6 +32,8 @@ import com.hhwy.utils.redisUtil.RedisUtils;
 import com.hhwy.utils.tree.TreeUtil;
 import io.lettuce.core.protocol.RedisProtocolException;
 import io.netty.handler.codec.http.QueryStringDecoder;
+import jodd.util.StringUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,6 +61,8 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     @Autowired
     private IXmslDrawReviewService drawReviewService;
     @Autowired
+    private IXmslContractListService contractListService;
+    @Autowired
     private RedisUtils redisUtils;
 
     @Transactional
@@ -64,7 +71,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
         try {
-            sync();
+            syncInner(tenantKey);
         }catch (Exception e){
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());
@@ -75,7 +82,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
     }
 
 
-    public void sync() {
+    public void syncInner(String tenantKey) {
         XmslDrawReview drawReview = drawReviewService.getLast();
         if(drawReview == null || drawReview.getId()==null)
             return;
@@ -84,82 +91,65 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         List<XmslEngineeringReport> addList = new ArrayList<>();
         Map<String,XmslEngineeringReport> addMap = new HashMap<>();
         BiFunction<XmslEngineeringReport,Integer,Boolean> addReportFunc = (r,type)->{
-            String prefix = r.getId()+(type+"");
+            String prefix = r.getPtVar2()+(type+"");
             addList.add(r);
             addMap.put(prefix,r);
-            //修改父级的haveChild
-            if(r.getParentId() != null && addMap.get(prefix) != null){
-                XmslEngineeringReport parent = addMap.get(prefix);
-                parent.setHaveChildren(1);
-            }
             return true;
         };
-        List<XmslDrawReviewWbs> wbsList = drawReviewWbsService.getFullEffectList();
+        //改为加载全量的wbs和清单
+        List<XmslWbs> wbsList = WbsRedisUtils.allWbs(tenantKey);
+        List<XmslContractList> contractLists = contractListService.getEffectList(new XmslContractList());
         List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
-        Map<String,XmslDrawReviewWbs> wbsMap = new HashMap<>(wbsList.size());
+        Map<String,XmslContractList> contractListMap = new HashMap<>(contractLists.size());
+        //1、加载wbs
         for (int i = 0; i < wbsList.size(); i++) {
-            XmslDrawReviewWbs temp = wbsList.get(i);
-            XmslEngineeringReport report = instanceWbs(temp);
-            wbsMap.put(temp.getCode(),temp);
-            addReportFunc.apply(report,null);
+            XmslWbs temp = wbsList.get(i);
+            XmslEngineeringReport report = instanceWbs(temp,drawReview.getId());
+            addReportFunc.apply(report,1);
         }
-        Map<String,XmslEngineeringReport> listReportMap = new HashMap<>();
+        //2、清单
+        for (int i = 0; i < contractLists.size(); i++) {
+            XmslContractList temp = contractLists.get(i);
+            contractListMap.put(temp.getCode(),temp);
+            XmslEngineeringReport report = instanceList(temp);
+            addReportFunc.apply(report,2);
+        }
+        //3、wbs挂接清单 <> 清单下wbs
         for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewList temp = list.get(i);
-            XmslEngineeringReport report = null;
-            if(listReportMap.containsKey(temp.getListCode())){
-                report = listReportMap.get(temp.getListCode());
-            }else{
-                report = instanceList(temp);
-                addReportFunc.apply(report,null);
-                listReportMap.put(temp.getListCode(),report);
-            }
-            report.setCheckQuanlity(temp.getWinNum());
-            if(StringUtils.isBlank(temp.getWbsCode()))
+            if(StringUtils.isBlank(temp.getWbsCode()) || StringUtils.isBlank(temp.getListCode()))
                 continue;
             //清单-WBS
             XmslWbs wbs = WbsRedisUtils.getWbsByCode(temp.getWbsCode());
-            XmslEngineeringReport listReport = instanceWbs(wbs);
+            XmslEngineeringReport listReport = instanceWbs(wbs,drawReview.getId());
             listReport.setId(Long.valueOf(wbs.getId()));
-            listReport.setParentId(report.getId());
-            listReport.setReportType(2);
-            addReportFunc.apply(listReport,2);
-            listReport.setHaveChildren(0);
-            //WBS-清单
-            XmslEngineeringReport wbsReport = instanceList(temp);
-            wbsReport.setId(temp.getId());
-            XmslDrawReviewWbs drawReviewWbs = wbsMap.get(temp.getWbsCode());
-            if(drawReviewWbs != null)
-                wbsReport.setParentId(drawReviewWbs.getId());
-            wbsReport.setReportType(1);
-            addReportFunc.apply(wbsReport,1);
-            wbsReport.setHaveChildren(0);
-            wbsReport.setDesignQuanlity(temp.getWinNum());
+            XmslEngineeringReport parentListReport = addMap.get(temp.getListCode()+2);
+            if(parentListReport != null){
+                parentListReport.setHaveChildren(1);
+                listReport.setReportType(2);
+                listReport.setHaveChildren(0);
+                listReport.setParentId(parentListReport.getId());
+                addReportFunc.apply(listReport,2);
+            }
+            //wbs-清单
+            XmslContractList contractList = contractListMap.get(temp.getListCode());
+            XmslEngineeringReport tempReport = instanceList(contractList);
+            XmslEngineeringReport parentReport = addMap.get(temp.getWbsCode()+1);
+            if(parentReport != null){
+                parentReport.setHaveChildren(1);
+                tempReport.setReportType(1);
+                tempReport.setHaveChildren(0);
+                tempReport.setParentId(parentReport.getId());
+                addReportFunc.apply(tempReport,1);
+            }
         }
-        //
-        this.xmslEngineeringReportMapper.insertXmslEngineeringReportList(addList);
+        if(CollectionUtils.isNotEmpty(addList))
+            this.xmslEngineeringReportMapper.insertXmslEngineeringReportList(addList);
     }
-    private XmslEngineeringReport instanceWbs(XmslDrawReviewWbs wbs){
+    private XmslEngineeringReport instanceWbs(XmslWbs wbs,Long mainId){
         XmslEngineeringReport report = new XmslEngineeringReport();
-        report.setParentId(ObjectUtils.nvlLong(wbs.getParentId(),-1L));
-        report.setWbsId(Long.valueOf(wbs.getId()));
-        report.setWbsCode(wbs.getCode());
-        report.setWbsName(wbs.getName());
-        report.setNodeType(wbs.getNodeType());
-        report.setHaveChildren(wbs.getHaveChildren());
-        report.setAncestors(wbs.getAncestors());
-        report.setAncestorsName(wbs.getAncestorsName());
-        report.setPartCode(wbs.getPartCode());
-        report.setWbsUnit(wbs.getUnit());
-        report.setLevel(wbs.getLevel());
-        report.setDesignQuanlity(wbs.getDesignQuanlity()); 
-//        new AddBaseInfoUtil<>().addBaseEntity(report);
-        report.setId(wbs.getId());
         report.setReportType(1);
-        return report;
-    }
-    private XmslEngineeringReport instanceWbs(XmslWbs wbs){
-        XmslEngineeringReport report = new XmslEngineeringReport();
+        report.setMainId(mainId);
         report.setParentId(ObjectUtils.nvlLong(wbs.getParentId(),-1L));
         report.setWbsId(Long.valueOf(wbs.getId()));
         report.setWbsCode(wbs.getCode());
@@ -172,25 +162,26 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         report.setWbsUnit(wbs.getUnit());
         report.setLevel(wbs.getLevel());
         report.setDesignQuanlity(wbs.getDesignQuanlity());
+        report.setSort(wbs.getSort());
+        report.setId(report.getWbsId());
+        report.setPtVar2(wbs.getCode());
 //        new AddBaseInfoUtil<>().addBaseEntity(report);
-        report.setId(Long.valueOf(wbs.getId()));
-        report.setReportType(1);
+//        report.setId(wbs.getId());
         return report;
     }
-    private XmslEngineeringReport instanceList(XmslDrawReviewList list){
+    private XmslEngineeringReport instanceList(XmslContractList list){
         XmslEngineeringReport report = new XmslEngineeringReport();
         report.setParentId(ObjectUtils.nvlLong(list.getPid()));
-        report.setListCode(list.getListCode());
+        report.setListCode(list.getCode());
         report.setListName(list.getChineseName());
         report.setListId(list.getId());
         report.setUnit(list.getUnit());
         report.setUnitCode(list.getUnitCode());
-        report.setCheckQuanlity(list.getCheckNum());
-        report.setImageProgress(list.getImageProgress());
-//        new AddBaseInfoUtil<>().addBaseEntity(report);
+        report.setCheckQuanlity(list.getWinNum());
         report.setId(list.getId());
         report.setReportType(2);
-        report.setPtVar1(list.getPtVar1()); //是否直接挂接了wbs  
+        report.setPtVar1(list.getPtVar1()); //是否直接挂接了wbs
+        report.setPtVar2(list.getCode());
         return report;
     }
 

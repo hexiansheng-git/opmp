@@ -678,7 +678,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         drawReview.setValid(Constant.YES_INT);
         this.xmslDrawReviewMapper.updateXmslDrawReview(drawReview);
         //2、存储wbs以及清单的父级
-        loadParentWbsList(id);
+//        loadParentWbsList(id);
         String tenantKey = SecurityUtils.getTenantKey();
         //3、生成工程量报表 & 主材报表
         ThreadPoolUtil.execute(()->{
