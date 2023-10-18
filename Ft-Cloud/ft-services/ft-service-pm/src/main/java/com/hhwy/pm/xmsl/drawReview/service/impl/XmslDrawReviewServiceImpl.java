@@ -676,7 +676,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             listAncesList.add(tempList.getAncestors());
             listIdMap.put(tempList.getListId(), tempList.getId());
         }
-        Set<Long> wbsIdSet = new HashSet<>();
+        Set<String> wbsIdSet = new HashSet<>();
         Set<Long> listIdSet = new HashSet<>();
         //去重祖级id
         ancestorToList(wbsAncesList, wbsIdSet,false);
@@ -741,7 +741,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             if(StringUtils.isBlank(temp))
                 continue;
             String[] ances = temp.split(",");
-            for (int j = 0; j < ances.length; j++) {
+            for (int j = 0; j < ances.length-1; j++) {
                 idSet.add(isLong?Long.valueOf(ances[j]):ances[j]);
             }
         }

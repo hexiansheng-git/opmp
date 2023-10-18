@@ -10,10 +10,10 @@ import org.flowable.engine.delegate.TaskListener;
 import org.flowable.task.service.delegate.DelegateTask;
 import org.springframework.util.Assert;
 
-public class DrawReviewListener extends BaseTaskListener{
+public class DrawReviewListener extends BaseExecutionListener{
 
     @Override
-    public void notify(DelegateTask delegateTask) {
+    public void notify(DelegateExecution delegateTask) {
         Long id = init(delegateTask);
 
         PmServiceApi bean = SpringUtils.getBean(PmServiceApi.class);
