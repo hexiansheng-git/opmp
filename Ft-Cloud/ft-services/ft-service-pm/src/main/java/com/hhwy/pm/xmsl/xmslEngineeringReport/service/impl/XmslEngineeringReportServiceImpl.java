@@ -110,6 +110,8 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         //2、清单
         for (int i = 0; i < contractLists.size(); i++) {
             XmslContractList temp = contractLists.get(i);
+            if(temp.getPid() ==null || temp.getPid().equals(0L))
+                temp.setPid(-1L);
             contractListMap.put(temp.getCode(),temp);
             XmslEngineeringReport report = instanceList(temp);
             addReportFunc.apply(report,2);
@@ -129,11 +131,14 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
                 listReport.setReportType(2);
                 listReport.setHaveChildren(0);
                 listReport.setParentId(parentListReport.getId());
+                listReport.setCheckQuanlity(temp.getCheckNum());
+                listReport.setImageProgress(temp.getImageProgress());
                 addReportFunc.apply(listReport,2);
             }
             //wbs-清单
             XmslContractList contractList = contractListMap.get(temp.getListCode());
             XmslEngineeringReport tempReport = instanceList(contractList);
+            tempReport.setCheckQuanlity(temp.getCheckNum());
             XmslEngineeringReport parentReport = addMap.get(temp.getWbsCode()+1);
             if(parentReport != null){
                 parentReport.setHaveChildren(1);
@@ -177,11 +182,12 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
         report.setListId(list.getId());
         report.setUnit(list.getUnit());
         report.setUnitCode(list.getUnitCode());
-        report.setCheckQuanlity(list.getWinNum());
+        report.setDesignQuanlity(list.getWinNum());
         report.setId(list.getId());
         report.setReportType(2);
         report.setPtVar1(list.getPtVar1()); //是否直接挂接了wbs
         report.setPtVar2(list.getCode());
+        report.setHaveChildren(list.getHaveChildren());
         return report;
     }
 
