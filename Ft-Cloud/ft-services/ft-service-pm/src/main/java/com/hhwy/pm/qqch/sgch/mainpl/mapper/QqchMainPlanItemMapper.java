@@ -36,7 +36,9 @@ public interface QqchMainPlanItemMapper {
 
     QqchMainPlanItem getMaxActualStartDate(@Param("mainPlanId") Long mainPlanId);
 
-    QqchMainPlanItem getProjStartAndFinish(@Param("version") BigDecimal version,@Param("valid") String valid);
+    QqchMainPlanItem getProjStartAndFinish(@Param("version") BigDecimal version);
 
     int deleteQqchMainPlanByVersion(@Param("version") BigDecimal version);
+
+    int updateValid(@Param("version") BigDecimal version,@Param("valid") String valid);
 }

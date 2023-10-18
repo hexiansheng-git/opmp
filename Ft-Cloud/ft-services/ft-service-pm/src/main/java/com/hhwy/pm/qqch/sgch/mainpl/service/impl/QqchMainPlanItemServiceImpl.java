@@ -251,7 +251,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
     @Override
     public QqchMainPlanItem getProjStartAndFinish(BigDecimal version) {
         version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
-        return qqchMainPlanItemMapper.getProjStartAndFinish(version, "1");
+        return qqchMainPlanItemMapper.getProjStartAndFinish(version);
 
     }
 
@@ -276,6 +276,9 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
 
     @Override
     public void confirm(QqchMainPlanItemVo qqchMainPlanItemVoParam) {
+        BigDecimal version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, qqchMainPlanItemVoParam.getVersion());
+        qqchMainPlanItemMapper.updateValid(null, "0");
+        qqchMainPlanItemMapper.updateValid(version, "1");
         String buttonMark = qqchMainPlanItemVoParam.getButtonMark();
         if(ButtonMark.CONFIRM.equals(buttonMark)){
             String menuId = qqchMainPlanItemVoParam.getMenuId();

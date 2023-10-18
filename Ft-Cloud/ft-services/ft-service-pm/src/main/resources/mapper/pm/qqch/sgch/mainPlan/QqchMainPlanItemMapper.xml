@@ -1012,6 +1012,10 @@
             </foreach>
         </where>
     </update>
+    <update id="updateValid">
+        update qqch_main_plan_item set valid = #{valid} where 1=1
+        <if test="version != null "> and `version` = #{version}</if>
+    </update>
 
     <select id="getMaxActualStartDate" resultMap="QqchMainPlanItemResultMap">
         <include refid="selectQqchMainPlanItemVo"/>
@@ -1025,6 +1029,6 @@
                min(baseline_start_date) baseline_start_date,
                max(baseline_finish_date) baseline_finish_date
         from qqch_main_plan_item
-        where del_flag = "0" and version = #{version} and valid = #{valid}
+        where del_flag = "0" and version = #{version}
     </select>
 </mapper>
