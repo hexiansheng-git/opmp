@@ -221,20 +221,58 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
                 continue;
             }
 
-
             for (QqchMainPlanItem qqchMainPlanItem : thisMonthWorkList) {
                 // 当前作业设计量
                 BigDecimal quantity = qqchMainPlanItem.getQuantity();
                 if(quantity == null) continue;;
+
+                // 当前作业开始结束日期
                 Date startDate1 = qqchMainPlanItem.getStartDate();
                 Date finishDate1 = qqchMainPlanItem.getFinishDate();
                 Integer totalDays = StatisticsUtils.getDaysByRangeDate(startDate1, finishDate1);
                 if(startDate1 != null && startDate1.compareTo(start) <= 0 ) startDate1 = start;
                 if(finishDate1 != null && finishDate1.compareTo(end) >= 0) finishDate1 = end;
                 Integer thisMonthDays = StatisticsUtils.getDaysByRangeDate(startDate1, finishDate1);
-                BigDecimal rate = BigDecimal.ZERO;
-                if (totalDays != 0) new BigDecimal(thisMonthDays).divide(new BigDecimal(totalDays), 4, BigDecimal.ROUND_HALF_UP);
 
+                // 计算本月日期在当前作业开始结束日期当中占比
+                BigDecimal rate = BigDecimal.ZERO;
+                if (totalDays != 0) rate = new BigDecimal(thisMonthDays).divide(new BigDecimal(totalDays), 4, BigDecimal.ROUND_HALF_UP);
+                // 计算本月作业计划完成量
+                BigDecimal thisMonthCompQty = quantity.multiply(rate);
+                // 获取作业对应wbs
+                QqchMainPlanItem wbs = qqchMainPlanItemList.stream().filter(vo -> vo.getId().equals(qqchMainPlanItem.getPid())).findFirst().orElse(null);
+                if(wbs != null && wbs.getQuantity() != null && wbs.getQuantity().compareTo(BigDecimal.ZERO) != 0) {
+                    // 计算当前作业完成量与wbs设计量占比
+                    rate = thisMonthCompQty.divide(wbs.getQuantity(), 4, BigDecimal.ROUND_HALF_UP);
+                    String wbsCode = wbs.getItemCode();
+                    if(!CollectionUtils.isEmpty(fullEffectList)) {
+
+                        // 获取图纸复核中wbs对应的数据
+                        List<XmslDrawReviewList> drawReviewLists = fullEffectList.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(drawReviewLists)) {
+                            for (XmslDrawReviewList xmslDrawReviewList : drawReviewLists) {
+                                String listCode = xmslDrawReviewList.getListCode();
+
+                                // 图纸复核中wbs清单复核量
+                                BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                                BigDecimal price = BigDecimal.ZERO;
+
+                                // 合同中对应清单的单价
+                                if(!CollectionUtils.isEmpty(contractInventoryList)) {
+                                    XmslContractList xmslContractList = contractInventoryList.stream().filter(vo -> listCode != null && listCode.equals(vo.getCode())).findFirst().orElse(null);
+                                    if(xmslContractList != null) price = xmslContractList.getChangeUnitPrice() != null ? xmslContractList.getChangeUnitPrice() : xmslContractList.getWinUnitPrice();
+                                }
+
+                                // 根据完成占比*清单复核量*清单单价计算当前作业本月完成产值
+                                if(rate != null && checkNum != null && price != null) {
+                                    monthProdValue = monthProdValue.add(
+                                            rate.multiply(checkNum).multiply(price)
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
             }
 
             qqchProdPlan.setMonthProdValue(monthProdValue);
@@ -247,9 +285,14 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
                 qqchProdPlan.setFinishRatio(sumProdValue.divide(contractInfo.getEffectiveAmout(), 2, BigDecimal.ROUND_HALF_UP));
             }
 
+            qqchProdPlanList.add(qqchProdPlan);
         }
 
-        return 0;
+        if(CollectionUtils.isEmpty(qqchProdPlanList)) {
+            return 0;
+        }
+
+        return insertQqchProdPlanList(qqchProdPlanList);
 
     }
 

@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.statistics.util;
 
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.pm.jdgl.statistics.domain.PlanStatisticsQueryVO;
 import io.swagger.models.auth.In;
@@ -8,10 +9,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class StatisticsUtils {
@@ -248,5 +246,80 @@ public class StatisticsUtils {
         return str != null && NUMBER_PATTERN.matcher(str).matches();
     }
 
+    public static void getDayList(List<Date> dateList, Date startDate, Date finishDate) {
 
+        dateList.add(startDate);
+
+        Date nowDate = DateUtils.getNowDate();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String s = simpleDateFormat.format(nowDate);
+        try {
+            nowDate = simpleDateFormat.parse(s);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        if(startDate.compareTo(finishDate) >= 0 || startDate.compareTo(nowDate) >= 0) {
+            return;
+        }
+
+        Calendar cl = Calendar.getInstance();
+
+        cl.setTime(startDate);
+        cl.add(Calendar.DATE, 1);
+
+        startDate = cl.getTime();
+
+        getDayList(dateList, startDate, finishDate);
+    }
+
+    // TODO 获取p6计划的开始月份和结束月份
+    public static void getTime(List<Date> dateList, Date startDate, Date finishDate) {
+
+        Date s = getRealMonth(startDate);
+        Date f = getRealMonth(finishDate);
+
+        if(s != null) {
+            dateList.add(s);
+        }
+
+        if(s.compareTo(f) == 0) {
+            return;
+        }
+
+        Calendar cl = Calendar.getInstance();
+
+        cl.setTime(startDate);
+        cl.add(Calendar.MONTH, 1);
+
+        startDate = cl.getTime();
+
+        getTime(dateList, startDate, finishDate);
+    }
+
+    public static Date getRealMonth(Date date) {
+        Date returnDate = null;
+        if(date == null) {
+            return returnDate;
+        }
+        Calendar cl = Calendar.getInstance();
+        cl.setTime(date);
+        int day = cl.get(Calendar.DAY_OF_MONTH);
+        if(day >= 21) {
+            cl.add(Calendar.MONTH, 1);
+            returnDate = cl.getTime();
+        } else {
+            returnDate = date;
+        }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String format = sdf.format(returnDate);
+        try {
+            returnDate = sdf.parse(format);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return returnDate;
+    }
 }

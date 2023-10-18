@@ -714,7 +714,43 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         Date startDate = iPlanStatisticsQueryVO.getStartDate();
         Date endDate = iPlanStatisticsQueryVO.getEndDate();
 
-        return iJdglDayScheduleService.getListByDateRange(null, endDate);
+        if(year == null || month == null) {
+            throw new RuntimeException("参数异常");
+        }
+
+        String period = year + "-" + month + "-01";
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            startDate = sdf.parse(period);
+            Calendar cl = Calendar.getInstance();
+            cl.setTime(startDate);
+            cl.set(Calendar.DAY_OF_MONTH, cl.getActualMaximum(Calendar.DAY_OF_MONTH));
+            endDate = cl.getTime();
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        List<JdglDaySchedule> listByDateRange = iJdglDayScheduleService.getListByDateRange(startDate, endDate);
+
+        List<Date> dateList = new ArrayList<>();
+        StatisticsUtils.getDayList(dateList, startDate, endDate);
+
+        for (Date date : dateList) {
+            JdglDaySchedule jdglDaySchedule = listByDateRange.stream().filter(vo -> date.compareTo(vo.getDate()) == 0).findFirst().orElse(null);
+            if(jdglDaySchedule == null) {
+                jdglDaySchedule = new JdglDaySchedule();
+                jdglDaySchedule.setDate(date);
+                jdglDaySchedule.setPtVar5("0");
+                listByDateRange.add(jdglDaySchedule);
+            } else {
+                jdglDaySchedule.setPtVar5("1");
+            }
+        }
+
+        return listByDateRange;
     }
 
 

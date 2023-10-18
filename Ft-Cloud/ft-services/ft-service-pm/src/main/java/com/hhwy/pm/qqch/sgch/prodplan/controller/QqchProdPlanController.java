@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,12 @@ public class QqchProdPlanController extends BaseController {
     public AjaxResult insertQqchProdPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchProdPlan> qqchProdPlanListParam) {
         qqchProdPlanService.insertQqchProdPlanList(qqchProdPlanListParam);
         return AjaxResult.success(qqchProdPlanListParam);
+    }
+
+    @PreAuthorize(hasPermi = "qqchProdPlan:add")
+    @PostMapping("/putProdPlanData")
+    public AjaxResult putProdPlanData(BigDecimal version) {
+        return toAjax(qqchProdPlanService.putProdPlanData(version));
     }
 
     @PreAuthorize(hasPermi = "qqchProdPlan:update")
