@@ -681,21 +681,21 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 //        loadParentWbsList(id);
         String tenantKey = SecurityUtils.getTenantKey();
         //3、生成工程量报表 & 主材报表
-        ThreadPoolUtil.execute(()->{
-            //切换租户
-            String oldDataSource = DynamicDataSourceContextHolder.peek();
-            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
-            try {
+//        ThreadPoolUtil.execute(()->{
+//            //切换租户
+//            String oldDataSource = DynamicDataSourceContextHolder.peek();
+//            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+//            try {
                 engineeringReportService.sync(tenantKey);
                 materialReportService.sync(id,tenantKey);
-            }catch (Exception e){
-                e.printStackTrace();
-                throw new CustomBusinessException(e.getMessage());
-            }finally {
-                DynamicDataSourceContextHolder.poll();
-                DynamicDataSourceContextHolder.push(oldDataSource);
-            }
-        });
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                throw new CustomBusinessException(e.getMessage());
+//            }finally {
+//                DynamicDataSourceContextHolder.poll();
+//                DynamicDataSourceContextHolder.push(oldDataSource);
+//            }
+//        });
     }
 
     //加载图纸复核、
