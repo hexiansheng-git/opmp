@@ -8,13 +8,7 @@ import com.hhwy.pm.qqch.evaluation.service.IQqchSummaryEvaluationService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zhenglili
@@ -65,7 +59,7 @@ public class QqchSummaryEvaluationController extends BaseController {
      * @param id 主键
      * @return 监听器
      */
-    @RequestMapping(value = "/listener", method = RequestMethod.POST)
+    @PostMapping(value = "/listener")
     public AjaxResult updateQqchSummaryEvaluationProcess(@RequestParam("id") Long id) {
         qqchSummaryEvaluationService.updateQqchSummaryEvaluationProcess(id);
         return AjaxResult.success("成功");

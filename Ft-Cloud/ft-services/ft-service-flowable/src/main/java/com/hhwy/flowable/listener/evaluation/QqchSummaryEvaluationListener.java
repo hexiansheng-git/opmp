@@ -1,13 +1,16 @@
 package com.hhwy.flowable.listener.evaluation;
 
+import cn.hutool.core.lang.Assert;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.flowable.feign.service.PmServiceApi;
-import java.util.Map;
 import org.flowable.engine.RuntimeService;
 import org.flowable.engine.delegate.TaskListener;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.task.service.delegate.DelegateTask;
+
+import java.util.Map;
 
 /**
  * @author zhenglili
@@ -26,6 +29,7 @@ public class QqchSummaryEvaluationListener implements TaskListener {
         Map<String, Object> variables = delegateTask.getVariables();
         String s = JSONObject.toJSONString(variables);
         PmServiceApi bean = SpringUtils.getBean(PmServiceApi.class);
-        bean.updateQqchSummaryEvaluationProcess(Long.valueOf(businessKey));
+        AjaxResult result = bean.updateQqchSummaryEvaluationProcess(Long.valueOf(businessKey));
+        Assert.isTrue(AjaxResult.isSuccess(result),result.get(AjaxResult.MSG_TAG)==null?"":result.get(AjaxResult.MSG_TAG).toString());
     }
 }

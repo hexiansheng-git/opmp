@@ -69,7 +69,7 @@ public interface PmServiceApi {
     AjaxResult updateWorkPlanProcess(@RequestParam("id") Long id);
 
     /**
-     * 修改前期策划总结评流程状态
+     * 修改纠偏措施制定流程状态
      *
      * @param id
      * @return
@@ -78,8 +78,8 @@ public interface PmServiceApi {
     AjaxResult updateJdglCorrectionMeasuresMakeProcess(@RequestParam("id") Long id);
 
     /**
-     * 修改纠偏措施制定流程状态
      *
+     * 修改前期策划总结评流程状态
      * @param id
      * @return
      */

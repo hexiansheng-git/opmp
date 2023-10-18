@@ -5,9 +5,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
-import java.util.Date;
+import com.hhwy.utils.common.CommonBaseEntity;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author zhenglili
@@ -15,7 +16,7 @@ import lombok.Data;
  * @remark qqch_summary_evaluation
  */
 @Data
-public class QqchSummaryEvaluation extends BaseEntity {
+public class QqchSummaryEvaluation extends CommonBaseEntity {
 
     private static final long serialVersionUID = 1L;
 

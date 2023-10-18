@@ -1,12 +1,15 @@
 package com.hhwy.pm.qqch.evaluation.service.impl;
 
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
+import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.common.tenant.utils.TenantDataSourceUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
+import com.hhwy.enums.FlowEnum;
 import com.hhwy.feign.service.SystemServiceApi;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.core.sync.service.ISysSyncInfoService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.evaluation.mapper.QqchSummaryEvaluationMapper;
@@ -17,13 +20,13 @@ import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.date.FtDateUtils;
-import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -45,7 +48,9 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
     private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     public QqchSummaryEvaluation getQqchSummaryEvaluation(QqchSummaryEvaluation qqchSummaryEvaluation) {
-        return qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(qqchSummaryEvaluation);
+        QqchSummaryEvaluation summaryEvaluation = qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(qqchSummaryEvaluation);
+        FlowInfoSearchUtil.getFlowInfo(summaryEvaluation, FlowEnum.QQCH_SUMMARY_EVALUATION);
+        return summaryEvaluation;
     }
 
     @Transactional
@@ -80,7 +85,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         CommonAssert.isEmpty(qqchSummaryEvaluation.getFinalDate(), "评价时间不能为空");
         CommonAssert.isEmpty(qqchSummaryEvaluation.getFinalFileGroupId(), "策划评价报告不能为空");
 
-        qqchSummaryEvaluation.setTaskStatus("5");
+        qqchSummaryEvaluation.setTaskStatus("1");
         // 保存数据
         this.save(qqchSummaryEvaluation);
 
@@ -93,10 +98,11 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
      */
     @Transactional
     public void updateQqchSummaryEvaluationProcess(Long id) {
-        QqchSummaryEvaluation qqchSummaryEvaluation = new QqchSummaryEvaluation();
-        qqchSummaryEvaluation.setId(id);
-        qqchSummaryEvaluation.setTaskStatus("5");
-        qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(qqchSummaryEvaluation);
+        QqchSummaryEvaluation query = new QqchSummaryEvaluation();
+        query.setId(id);
+        QqchSummaryEvaluation summaryEvaluation = qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(query);
+        summaryEvaluation.setTaskStatus("5");
+        qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(summaryEvaluation);
     }
 
     @Override
@@ -118,7 +124,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                     .getQqchSummaryEvaluation(new QqchSummaryEvaluation());
 
                 Date nowDate = FtDateUtils.getYearMonthDayDate();
-                Long diffDays;
+                long diffDays;
 
                 // type为1时，总结预警
                 if ("1".equals(type)) {
@@ -168,7 +174,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
                 }
             }
         } catch (Exception e) {
-            throw new CustomBusinessException(e.getMessage());
+            throw new CustomException(e.getMessage());
         } finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
