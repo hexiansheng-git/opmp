@@ -87,6 +87,10 @@ public class XmslDrawReviewController extends BaseController{
             last.setId(null);
         }
         FlowInfoSearchUtil.getFlowInfo(last, FlowEnum.XMSL_DRAW_REVIEW);
+        //是否有调整记录
+        Integer hasChange = xmslDrawReviewService.hasChange();
+        if(last != null)
+            last.setParams(ObjectUtils.toMap(Constant.HISTORY_NOTE_FIELD_NAME,hasChange));
         return AjaxResult.success(last);
     }
 
