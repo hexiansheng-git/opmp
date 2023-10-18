@@ -7,6 +7,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.vo.QqchMainPlanItemVo;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -97,11 +98,20 @@ public class QqchMainPlanItemController extends BaseController {
         return getDataTableAjaxResult(qqchMainPlanItemList);
     }
 
+
+
     @PreAuthorize(hasPermi = "qqchMainPlanItem:add")
     @PostMapping("/add")
     public AjaxResult insertQqchMainPlanItem(@Validated(ValidationGroups.Save.class) @RequestBody QqchMainPlanItem qqchMainPlanItemParam) {
         qqchMainPlanItemService.insertQqchMainPlanItem(qqchMainPlanItemParam);
         return AjaxResult.success(qqchMainPlanItemParam);
+    }
+
+    @PreAuthorize(hasPermi = "qqchMainPlanItem:confirm")
+    @PostMapping("/confirm")
+    public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchMainPlanItemVo qqchMainPlanItemVoParam) {
+        qqchMainPlanItemService.confirm(qqchMainPlanItemVoParam);
+        return AjaxResult.success(qqchMainPlanItemVoParam);
     }
 
     @PreAuthorize(hasPermi = "qqchMainPlanItem:add")

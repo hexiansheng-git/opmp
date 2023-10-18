@@ -132,6 +132,9 @@
              ,`ancestors`
         from qqch_main_plan_item
     </sql>
+    <delete id="deleteQqchMainPlanByVersion">
+        delete from qqch_main_plan_item where version = #{version}
+    </delete>
     <select id="getQqchMainPlanItem" resultMap="QqchMainPlanItemResultMap">
         <include refid="selectQqchMainPlanItemVo" />
         <where>

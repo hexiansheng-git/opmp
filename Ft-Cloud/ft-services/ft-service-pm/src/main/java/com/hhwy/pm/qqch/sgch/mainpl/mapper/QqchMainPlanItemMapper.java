@@ -14,21 +14,21 @@ import java.util.List;
  */
 public interface QqchMainPlanItemMapper {
 
-    QqchMainPlanItem getQqchMainPlanItem(QqchMainPlanItem jdglMainPlanItem);
+    QqchMainPlanItem getQqchMainPlanItem(QqchMainPlanItem qqchMainPlanItem);
 
-    List<QqchMainPlanItem> getQqchMainPlanItemList(QqchMainPlanItem jdglMainPlanItem);
+    List<QqchMainPlanItem> getQqchMainPlanItemList(QqchMainPlanItem qqchMainPlanItem);
 
-    int insertQqchMainPlanItem(QqchMainPlanItem jdglMainPlanItem);
+    int insertQqchMainPlanItem(QqchMainPlanItem qqchMainPlanItem);
 
-    int insertQqchMainPlanItemList(@Param("jdglMainPlanItemList") List<QqchMainPlanItem> jdglMainPlanItemList);
+    int insertQqchMainPlanItemList(@Param("qqchMainPlanItemList") List<QqchMainPlanItem> qqchMainPlanItemList);
 
-    int updateQqchMainPlanItem(QqchMainPlanItem jdglMainPlanItem);
+    int updateQqchMainPlanItem(QqchMainPlanItem qqchMainPlanItem);
 
-    int updateQqchMainPlanItemList(@Param("list") List<QqchMainPlanItem> jdglMainPlanItemList);
+    int updateQqchMainPlanItemList(@Param("list") List<QqchMainPlanItem> qqchMainPlanItemList);
 
-    int deleteQqchMainPlanItem(QqchMainPlanItem jdglMainPlanItem);
+    int deleteQqchMainPlanItem(QqchMainPlanItem qqchMainPlanItem);
 
-    int deleteQqchMainPlanItemByPks(@Param("jdglMainPlanItemPkList") List<Long> jdglMainPlanItemPkList);
+    int deleteQqchMainPlanItemByPks(@Param("qqchMainPlanItemPkList") List<Long> qqchMainPlanItemPkList);
 
     List<QqchMainPlanItem> getUsingQqchMainPlanItemListByDate(@Param("date") Date date, @Param("mainPlanId") Long mainPlanId);
 
@@ -36,5 +36,7 @@ public interface QqchMainPlanItemMapper {
 
     QqchMainPlanItem getMaxActualStartDate(@Param("mainPlanId") Long mainPlanId);
 
-    QqchMainPlanItem getProjStartAndFinish(@Param("version") BigDecimal version,@Param("volid") String volid);
+    QqchMainPlanItem getProjStartAndFinish(@Param("version") BigDecimal version,@Param("valid") String valid);
+
+    int deleteQqchMainPlanByVersion(@Param("version") BigDecimal version);
 }

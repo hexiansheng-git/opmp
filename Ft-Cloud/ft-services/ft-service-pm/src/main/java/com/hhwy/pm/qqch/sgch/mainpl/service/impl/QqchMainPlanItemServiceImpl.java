@@ -5,7 +5,11 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.vo.QqchMainPlanItemVo;
 import com.hhwy.pm.qqch.sgch.mainpl.mapper.QqchMainPlanItemMapper;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
@@ -34,6 +38,12 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
 
     @Autowired
     private CommonMapper commonMapper;
+
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchMainPlanItem getQqchMainPlanItem(QqchMainPlanItem qqchMainPlanItem) {
@@ -257,5 +267,21 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         qqchMainPlanItem.setVersion(version);
         List<QqchMainPlanItem> qqchMainPlanItemList = getQqchMainPlanItemList(qqchMainPlanItem);
         return qqchMainPlanItemList.stream().filter(vo -> vo.getTaskType() != null && vo.getTaskType().contains("Milestone")).collect(Collectors.toList());
+    }
+
+    @Override
+    public int deleteQqchMainPlanByVersion(BigDecimal version) {
+        return qqchMainPlanItemMapper.deleteQqchMainPlanByVersion(version);
+    }
+
+    @Override
+    public void confirm(QqchMainPlanItemVo qqchMainPlanItemVoParam) {
+        String buttonMark = qqchMainPlanItemVoParam.getButtonMark();
+        if(ButtonMark.CONFIRM.equals(buttonMark)){
+            String menuId = qqchMainPlanItemVoParam.getMenuId();
+            String stageIdentity = qqchMainPlanItemVoParam.getStageIdentity();
+            if(stageIdentity == null) stageIdentity = qqchReviewService.getStage();
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+        }
     }
 }

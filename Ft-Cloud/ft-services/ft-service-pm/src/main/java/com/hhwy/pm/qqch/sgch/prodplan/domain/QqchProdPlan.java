@@ -48,28 +48,25 @@ public class QqchProdPlan extends CompileEntity<QqchProdPlan> {
      */
     @JsonFormat(pattern = "yyyy年MM月")
     @JsonProperty
-    @Excel(name = "月份", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "月份", dateFormat = "yyyy-MM")
     private Date planDate;
     /**
      * 字段描述：计划月度产值
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划月度产值", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划月度产值")
     private BigDecimal monthProdValue;
     /**
      * 字段描述：累计计划产值
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "累计计划产值", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "累计计划产值")
     private BigDecimal sumProdValue;
     /**
      * 字段描述：计划完成比例
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
-    @Excel(name = "计划完成比例", dateFormat = "yyyy-MM-dd")
+    @Excel(name = "计划完成比例")
     private BigDecimal finishRatio;
     /**
      * 字段描述：备注/描述

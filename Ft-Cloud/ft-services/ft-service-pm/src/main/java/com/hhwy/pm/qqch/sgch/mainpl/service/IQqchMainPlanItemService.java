@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.sgch.mainpl.service;
 
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.vo.QqchMainPlanItemVo;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -44,4 +45,7 @@ public interface IQqchMainPlanItemService {
      */
     List<QqchMainPlanItem> getMilestoneList(BigDecimal version);
 
+    int deleteQqchMainPlanByVersion(BigDecimal version);
+
+    void confirm(QqchMainPlanItemVo qqchMainPlanItemVoParam);
 }

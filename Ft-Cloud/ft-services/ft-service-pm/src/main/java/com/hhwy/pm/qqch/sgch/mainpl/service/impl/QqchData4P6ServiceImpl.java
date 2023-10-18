@@ -14,6 +14,8 @@ import com.hhwy.pm.qqch.sgch.mainpl.domain.*;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchData4P6Service;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemPreService;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
+import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -49,6 +51,9 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
     @Autowired
     private IQqchMainPlanItemPreService iQqchMainPlanItemPreService;
 
+    @Autowired
+    private IQqchProdPlanService qqchProdPlanService;
+
     @Value("${p6.ip_port}")
     private String p6IpPort;
 
@@ -57,6 +62,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
     @Override
     public List<QqchMainPlanItem> initQqchData4P6(String tenantKey, BigDecimal version) {
 
+        version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
 
         List<QqchMainPlanItem> returnList = new ArrayList<>();
 
@@ -152,6 +158,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                 }
 //                qqchMainPlanItem.setPid();
 //                qqchMainPlanItem.setMainPlanId(mainPlanId);
+                qqchMainPlanItem.setVersion(version);
                 qqchMainPlanItem.setItemCode(p6Id);
                 qqchMainPlanItem.setItemName(activityInfo.getName());
                 qqchMainPlanItem.setPlannedDuration(activityInfo.getPlannedDuration());
@@ -208,7 +215,9 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                 setWbsCode(returnList);
                 setWbsDate(returnList);
 //                System.out.println(returnList);
+                qqchMainPlanItemService.deleteQqchMainPlanByVersion(version);
                 qqchMainPlanItemService.insertQqchMainPlanItemList(returnList);
+                qqchProdPlanService.putProdPlanData(version);
 //                iQqchMainPlanItemPreService.insertQqchMainPlanItemPreList(relInfos);
             }
         }
@@ -320,9 +329,9 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
             return  null;
         }
         List<ProjectInfo> collect = body.stream().filter(vo -> StringUtils.isNotEmpty(vo.getProjectId())).collect(Collectors.toList());
-        ProjectInfo projectInfo = body.stream().filter(vo -> projectCode.equals(vo.getProjectId())).findFirst().orElse(null);
+        ProjectInfo projectInfo = body.stream().filter(vo -> projectCode.equalsIgnoreCase(vo.getProjectId())).findFirst().orElse(null);
         if(projectInfo == null) {
-            projectInfo = body.stream().filter(vo -> projectCode.equals(vo.getProjectCode())).findFirst().orElse(null);
+            projectInfo = body.stream().filter(vo -> projectCode.equalsIgnoreCase(vo.getProjectCode())).findFirst().orElse(null);
         }
         return projectInfo;
     }

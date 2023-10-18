@@ -12,6 +12,7 @@ import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import com.hhwy.pm.qqch.sgch.prodplan.mapper.QqchProdPlanMapper;
 import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
@@ -129,6 +130,8 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
     @Override
     @CompileAspect(type = CompileOptEnum.LIST,tableName = TN)
     public  CompileEntity<HashMap<String, Object>>  selectList(QqchProdPlan qqchProdPlanParam) {
+        BigDecimal version = VersionUtil.getVersion(this.TN, qqchProdPlanParam.getVersion());
+        qqchProdPlanParam.setVersion(version);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
         CompileEntity<HashMap<String, Object>> objectCompileEntity = new CompileEntity<>();
         HashMap<String, Object> res = new HashMap<>();
@@ -196,6 +199,7 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
             Date end = dateRange4YearMonth.get("end");
 
             qqchProdPlan.setPlanDate(date);
+            qqchProdPlan.setVersion(version);
 
             // 计算月计划产值
             BigDecimal monthProdValue = BigDecimal.ZERO;
