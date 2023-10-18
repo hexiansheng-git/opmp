@@ -87,7 +87,7 @@
             <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
         </where>
-        order by create_time desc
+        order by version desc
     </select>
 
     <select id="getXmslDrawReviewCount" resultType="Integer">
@@ -118,7 +118,9 @@
 
     <select id="getLast" resultMap="XmslDrawReviewResultMap" parameterType="Long">
         <include refid="selectXmslDrawReviewVo"/>
-        where del_flag = '0' order by version desc limit 1
+        where del_flag = '0'
+        <if test="valid != null"> and valid = #{valid}</if>
+        order by version desc limit 1
     </select>
 
     <select id="selectMaxEffectVersion" resultType="Integer">
@@ -286,7 +288,7 @@
     <update id="deleteWbsByCode" parameterType="Map">
         delete from xmsl_draw_review_wbs where main_id = #{mainId}
         <if test="wbsIds != null and wbsIds.size > 0">
-            and wbs_code in
+            and code in
             <foreach collection="wbsIds" index="index" item="item" separator="," open="(" close=")">
                 #{item}
             </foreach>

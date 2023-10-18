@@ -37,7 +37,7 @@ public interface XmslDrawReviewMapper {
 
     Integer getXmslDrawReviewCount(XmslDrawReview xmslDrawReview);
 
-    XmslDrawReview getLast();
+    XmslDrawReview getLast(@Param("valid") Integer valid);
 
     int insertXmslDrawReview(XmslDrawReview xmslDrawReview);
 

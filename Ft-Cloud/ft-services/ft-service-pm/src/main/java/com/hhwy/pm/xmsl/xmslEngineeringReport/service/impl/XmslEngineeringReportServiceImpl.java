@@ -113,7 +113,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
                 addReportFunc.apply(report,null);
                 listReportMap.put(temp.getListCode(),report);
             }
-            if(temp.getWbsId() == null)
+            if(StringUtils.isBlank(temp.getWbsCode()))
                 continue;
             //清单-WBS
             XmslDrawReviewWbs wbs = wbsMap.get(temp.getWbsCode());
@@ -122,12 +122,17 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             listReport.setParentId(report.getId());
             listReport.setReportType(2);
             addReportFunc.apply(listReport,2);
+            listReport.setHaveChildren(0);
             //WBS-清单
             XmslEngineeringReport wbsReport = instanceList(temp);
             wbsReport.setId(temp.getId());
-            wbsReport.setParentId(temp.getWbsId());
+            XmslDrawReviewWbs drawReviewWbs = wbsMap.get(temp.getWbsCode());
+            if(drawReviewWbs != null)
+                wbsReport.setParentId(drawReviewWbs.getId());
             wbsReport.setReportType(1);
             addReportFunc.apply(wbsReport,1);
+            wbsReport.setHaveChildren(0);
+            wbsReport.setDesignQuanlity(temp.getWinNum());
         }
         //
         this.xmslEngineeringReportMapper.insertXmslEngineeringReportList(addList);

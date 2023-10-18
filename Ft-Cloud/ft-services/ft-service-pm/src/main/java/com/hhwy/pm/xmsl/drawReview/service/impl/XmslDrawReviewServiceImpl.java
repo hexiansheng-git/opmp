@@ -183,8 +183,14 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
 
     @Override
     public XmslDrawReview getLast() {
-        return this.xmslDrawReviewMapper.getLast();
+        return this.xmslDrawReviewMapper.getLast(null);
     }
+
+    @Override
+    public XmslDrawReview getEffectLast() {
+        return this.xmslDrawReviewMapper.getLast(Constant.YES_INT);
+    }
+
 
     @Override
     public List<XmslDrawReviewList> relationWbsList(Integer version, Long mainId,String wbsCode,Long wbsId) {

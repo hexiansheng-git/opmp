@@ -30,6 +30,8 @@ public interface IXmslDrawReviewService {
 
     XmslDrawReview getLast();
 
+    XmslDrawReview getEffectLast();
+
     Integer hasChange();
 
     /**
