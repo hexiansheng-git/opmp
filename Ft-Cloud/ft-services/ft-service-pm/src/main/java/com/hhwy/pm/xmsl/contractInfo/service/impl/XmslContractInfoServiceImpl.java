@@ -334,7 +334,7 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
         xmslContractPayinfo.setMasterId(xmslContractInfo.getId());
         xmslContractPayinfoService.deleteXmslContractPayinfo(xmslContractPayinfo);
-        //第二步 从新添加子表
+        //第二步 重新添加子表
         this.addSonTable(xmslContractInfo);
         //第三步 修改主表
         xmslContractInfo.setUpdateUser(SecurityUtils.getUserName());
@@ -450,10 +450,9 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
         }else {
             xmslContractInfo.setIsShowRecord(1);
         }
-
         //查询主合同清单 金额
         XmslContractList xmslContractList = new XmslContractList();
-        xmslContractList.setListType("1");
+        xmslContractList.setMasterId(xmslContractInfo.getId());
         XmslContractList resultPrice = xmslContractListService.getContractPriceByListtype(xmslContractList);
         if (resultPrice != null) {
             //合同不含税金额   “主合同清单”页签变更后清单_不含税金额，末级合计

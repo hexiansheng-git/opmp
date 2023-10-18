@@ -49,6 +49,9 @@ public interface IXmslContractListService {
     void handlerAncestors();
 
 
+    /**
+     * 查询有效合同金额：（主合同清单，清单类型是普通清单的所有末级节点的含税金额的合计）
+     */
     XmslContractList getContractPriceByListtype(XmslContractList xmslContractList);
 
 
