@@ -43,8 +43,11 @@
     </sql>
 
     <select id="selectSbchEquipmentPurchaseDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchaseDetails" resultMap="SbchEquipmentPurchaseDetailsResult">
-        select detail.`id`, `main_id`, detail.`category_code`,category.category_name categoryName, detail.`material_code`, detail.`material_name`, detail.`material_spec`, `sb_advice_brand_id`, `sb_advice_brand`, `sb_power`, `unit_code`, `unit`, `sb_num`, `sb_forecast_price`, `sb_forecast_total_price`, `sb_plan_enter_date`, detail.`remark`, detail.`create_user`, detail.`create_user_name`, detail.`create_time`, detail.`update_user`, detail.`update_user_name`, detail.`update_time`, detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`pt_var1`, detail.`pt_var2`, detail.`pt_var3`,detail.`pt_var4`, detail.`dept_id`, detail.`project_id` from `sbch_equipment_purchase_details` detail
-            left join t_material_category category on category.category_code = detail.category_code
+        select detail.`id`, `main_id`, detail.`category_code`, detail.`material_code`, detail.`material_name`
+               , detail.`material_spec`, `sb_advice_brand_id`, `sb_advice_brand`, `sb_power`, `unit_code`, `unit`, `sb_num`, `sb_forecast_price`
+               , `sb_forecast_total_price`, `sb_plan_enter_date`, detail.`remark`, detail.`create_user`, detail.`create_user_name`, detail.`create_time`
+               , detail.`update_user`, detail.`update_user_name`, detail.`update_time`, detail.`del_user`, detail.`del_time`, detail.`del_flag`
+               , detail.`pt_var1`, detail.`pt_var2`, detail.`pt_var3`,detail.`pt_var4`, detail.`dept_id`, detail.`project_id` from `sbch_equipment_purchase_details` detail
         <where>
             detail.`del_flag` = 0
             <if test="mainId != null "> and `main_id` = #{mainId}</if>

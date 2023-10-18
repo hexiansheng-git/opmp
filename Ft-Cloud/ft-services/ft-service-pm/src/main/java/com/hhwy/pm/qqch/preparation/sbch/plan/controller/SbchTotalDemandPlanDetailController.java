@@ -1,14 +1,20 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.alibaba.fastjson.JSON;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.ImportSbchTotalDemandPlanDetail;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchTopicResearchPlan;
+import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanExportVo;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -27,7 +35,7 @@ import java.util.Map;
  * @date 2022-11-23
  */
 @Controller
-@RequestMapping("/plan/detail")
+    @RequestMapping("/plan/detail")
 public class SbchTotalDemandPlanDetailController extends BaseController {
 
     @Autowired
@@ -104,5 +112,16 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
+    }
+
+    /**
+     * 导出
+     */
+    @GetMapping("/export")
+    public void export(HttpServletResponse response) throws IOException {
+        SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail = new SbchTotalDemandPlanDetail();
+        List<SbchTotalDemandPlanDetail> list = totalDemandPlanDetailService.selectSbchTotalDemandPlanDetailLeaderList(sbchTotalDemandPlanDetail);
+        FtExcelUtil<SbchTotalDemandPlanDetail> util = new FtExcelUtil<>(SbchTotalDemandPlanDetail.class);
+        util.exportExcel(response, list, DateUtils.getDate());
     }
 }
