@@ -239,8 +239,10 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             for (QqchScheDiff qqchScheDiff : diffList) {
                 BigDecimal maxScore = qqchScheDiff.getMaxScore();
                 BigDecimal minScore = qqchScheDiff.getMinScore();
-                if(thisTotalGrage.compareTo(minScore) >= 0 && thisTotalGrage.compareTo(maxScore) <= 0) {
-                    jdglDiffAnalysis.setRiskLevel(qqchScheDiff.getRiskLevel());
+                if(minScore != null && maxScore != null) {
+                    if(thisTotalGrage.compareTo(minScore) >= 0 && thisTotalGrage.compareTo(maxScore) <= 0) {
+                        jdglDiffAnalysis.setRiskLevel(qqchScheDiff.getRiskLevel());
+                    }
                 }
             }
 
