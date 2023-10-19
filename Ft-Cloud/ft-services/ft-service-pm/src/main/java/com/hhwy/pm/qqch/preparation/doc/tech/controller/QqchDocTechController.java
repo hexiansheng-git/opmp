@@ -36,7 +36,7 @@ public class QqchDocTechController extends BaseController {
     @Autowired
     private IQqchDocTechService qqchDocTechService;
 
-    @PreAuthorize(hasPermi = "qqchDocTech:list")
+//    @PreAuthorize(hasPermi = "qqchDocTech:list")
     @GetMapping("/list")
     public AjaxResult getQqchDocTechList(BigDecimal version) {
         QqchDocTechVo qqchDocTechVo = qqchDocTechService.getQqchDocTechListVo(version);

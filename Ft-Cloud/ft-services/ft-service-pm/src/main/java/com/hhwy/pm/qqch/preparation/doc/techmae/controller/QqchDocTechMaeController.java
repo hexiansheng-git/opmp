@@ -30,7 +30,7 @@ public class QqchDocTechMaeController extends BaseController {
     @Autowired
     private IQqchDocTechMaeService qqchDocTechMaeService;
 
-    @PreAuthorize(hasPermi = "qqchDocTechMae:list")
+//    @PreAuthorize(hasPermi = "qqchDocTechMae:list")
     @GetMapping("/list")
     public AjaxResult getQqchDocTechMaeList(BigDecimal version) {
         QqchDocTechMaeV0 qqchDocTechVo = qqchDocTechMaeService.geteQqchDocTechMaeVo(version);

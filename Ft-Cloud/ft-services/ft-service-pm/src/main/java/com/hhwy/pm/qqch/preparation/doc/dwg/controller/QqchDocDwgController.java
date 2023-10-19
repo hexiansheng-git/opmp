@@ -38,7 +38,7 @@ public class QqchDocDwgController extends BaseController {
     private IQqchDocDwgService qqchDocDwgService;
 
 
-    @PreAuthorize(hasPermi = "qqchDocDwg:list")
+//    @PreAuthorize(hasPermi = "qqchDocDwg:list")
     @GetMapping("/list")
     public AjaxResult getQqchDocDwgList(BigDecimal version) {
         QqchDocDwgVo qqchDocDwg = qqchDocDwgService.getQqchDocDwgVo(version);
