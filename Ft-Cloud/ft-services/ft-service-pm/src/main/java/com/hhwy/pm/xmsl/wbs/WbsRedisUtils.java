@@ -4,8 +4,8 @@ package com.hhwy.pm.xmsl.wbs;
 import cn.hutool.core.convert.Convert;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.SpringUtils;
-import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
+import com.hhwy.utils.MySecurityUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class WbsRedisUtils {
     private static RedisUtils redisUtils;
     static{
-        redisUtils = SpringUtils.getBean(RedisUtils.class);
+//        redisUtils = SpringUtils.getBean(RedisUtils.class);
     }
     //hashMap  wbs::租户标志  wbsId  wbsjson
     public static final String KEY = "WBS::";
@@ -58,12 +58,12 @@ public class WbsRedisUtils {
         return wbsList;
     }
     public static List<XmslWbs> allWbs(){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         return WbsRedisUtils.allWbs(tenantKey);
     }
 
     public static List<XmslWbs> getWbs(Collection wbsIds){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         List<Object> wbsObjList = redisUtils.hMultiGet(WbsRedisUtils.getKey(tenantKey),wbsIds);
         List<XmslWbs> list = new ArrayList<>(wbsObjList.size());
         for (int i = 0; i < wbsObjList.size(); i++) {
@@ -87,7 +87,7 @@ public class WbsRedisUtils {
      * @return
      */
     public static List<XmslWbs> getWbsByCodes(Collection wbsCodes){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         List<Object> wbsIdList = redisUtils.hMultiGet(WbsRedisUtils.getCodeKey(tenantKey),wbsCodes);
         wbsIdList = wbsIdList.stream().filter(r->r!=null).collect(Collectors.toList());
         return getWbs(wbsIdList);
@@ -100,7 +100,7 @@ public class WbsRedisUtils {
     public static boolean hasWbsCode(Collection wbsCodes){
         if(CollectionUtils.isEmpty(wbsCodes))
             return true;
-        List<Object> list = redisUtils.hMultiGet(WbsRedisUtils.getCodeKey(SecurityUtils.getTenantKey()),wbsCodes);
+        List<Object> list = redisUtils.hMultiGet(WbsRedisUtils.getCodeKey(MySecurityUtils.getTenantKey()),wbsCodes);
         int existNum = 0;
         for (int i = 0; i < list.size(); i++) {
             Object o = list.get(i);
@@ -112,7 +112,7 @@ public class WbsRedisUtils {
     public static XmslWbs getWbs(Long wbsId){
         if(wbsId == null)
             return new XmslWbs();
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         Object obj = redisUtils.hGet(WbsRedisUtils.getKey(tenantKey),wbsId+"");
         if(obj == null)
             return new XmslWbs();
@@ -140,7 +140,7 @@ public class WbsRedisUtils {
         return Convert.toLongArray(childIdObj);
     }
     public static Long[] getChildWbsId(String wbsId){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         return WbsRedisUtils.getChildWbsId(tenantKey,wbsId);
     }
 
@@ -154,7 +154,7 @@ public class WbsRedisUtils {
      * @return
      */
     public static Long[] getDireChildWbsId(String wbsId){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         String key = getDireChildKey(tenantKey);
         Object childIdObj = redisUtils.hGet(key,wbsId);
         if(ObjectUtils.isEmpty(childIdObj))
@@ -175,7 +175,7 @@ public class WbsRedisUtils {
      * @return
      */
     public static String[] getWbsCodeByListCode(String listCode){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         String key = getListWbsKey(tenantKey);
         Object childIdObj = redisUtils.hGet(key,listCode);
         if(ObjectUtils.isEmpty(childIdObj))
@@ -188,7 +188,7 @@ public class WbsRedisUtils {
      * @return
      */
     public static String[] getListCodeByWbsCode(String wbsCode){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         String key = getWbsListKey(tenantKey);
         Object childIdObj = redisUtils.hGet(key,wbsCode);
         if(ObjectUtils.isEmpty(childIdObj))

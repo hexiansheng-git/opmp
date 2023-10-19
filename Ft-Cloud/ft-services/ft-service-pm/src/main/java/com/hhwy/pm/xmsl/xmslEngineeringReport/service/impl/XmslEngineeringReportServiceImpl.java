@@ -25,6 +25,7 @@ import com.hhwy.pm.xmsl.xmslEngineeringReport.domain.XmslEngineeringReport;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.mapper.XmslEngineeringReportMapper;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
 import com.hhwy.utils.AddBaseInfoUtil;
+import com.hhwy.utils.MySecurityUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -212,7 +213,7 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
             return xmslEngineeringReportMapper.getXmslEngineeringReportList(report);
         }
         //如果是懒加载,找出满足条件的id，扔redis
-        String key = "engineeringReport::lazySearch_"+SecurityUtils.getTenantKey()+StringUtils.join(new String[]{
+        String key = "engineeringReport::lazySearch_"+ MySecurityUtils.getTenantKey()+StringUtils.join(new String[]{
                 report.getWbsCode(),report.getWbsName(),report.getListCode(),report.getListName()  
         }, ",");
         //获取ids

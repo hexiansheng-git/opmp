@@ -23,10 +23,7 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsHistoryService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.system.api.domain.SysTenant;
-import com.hhwy.utils.AddBaseInfoUtil;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.ObjectUtils;
-import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.*;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
@@ -146,7 +143,7 @@ public class XmslWbsServiceImpl implements IXmslWbsService {
             return list;
         }
         //如果是懒加载,找出满足条件的id，扔redis
-        String key = "wbs::lazySearch_"+SecurityUtils.getTenantKey()+"::"+StringUtils.join(",",wbs.getCode(),wbs.getName());
+        String key = "wbs::lazySearch_"+ MySecurityUtils.getTenantKey()+"::"+StringUtils.join(",",wbs.getCode(),wbs.getName());
         //获取ids
         Set<String> idSet = null;
         if(!redisUtils.hasKey(key) ){

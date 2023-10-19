@@ -16,10 +16,7 @@ import com.hhwy.pm.xmsl.wbs.service.IXmslWbsListRelationService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsMainService;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.pm.xmsl.xmslEngineeringReport.service.IXmslEngineeringReportService;
-import com.hhwy.utils.AddBaseInfoUtil;
-import com.hhwy.utils.Constant;
-import com.hhwy.utils.ObjectUtils;
-import com.hhwy.utils.ThreadPoolUtil;
+import com.hhwy.utils.*;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.redissonLock.RedissonLockUtil;
@@ -111,7 +108,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
             return null;
         Long mainId = null;
         try{
-            if(RedissonLockUtil.lock(SecurityUtils.getTenantKey()+"wbsAdjust")){
+            if(RedissonLockUtil.lock(MySecurityUtils.getTenantKey()+"wbsAdjust")){
                 Integer maxVersion = this.xmslWbsMainMapper.getMaxVersion()+1;
                 //1、插入历史汇总信息
                 XmslWbsMain wbsMain = new XmslWbsMain();
@@ -125,7 +122,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 mainId = wbsMain.getId();
                 //2、先同步前三级到历史，其他层级交给线程处理
                 xmslWbsMainMapper.insertWbsToHistory(ObjectUtils.toMap("mainId",wbsMain.getId(),"levels",new Integer[]{1,2,3}));
-                String tenantKeys = SecurityUtils.getTenantKey();
+                String tenantKeys = MySecurityUtils.getTenantKey();
                 ThreadPoolUtil.execute(()->{
                     //切换租户
                     String oldDataSource = DynamicDataSourceContextHolder.peek();
@@ -145,7 +142,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
                 });
             }
         }finally {
-            RedissonLockUtil.unlock(SecurityUtils.getTenantKey()+"wbsAdjust");
+            RedissonLockUtil.unlock(MySecurityUtils.getTenantKey()+"wbsAdjust");
         }
         return mainId;
     }
@@ -225,7 +222,7 @@ public class XmslWbsMainServiceImpl implements IXmslWbsMainService {
     //异步处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
     @Override
     public void asyncHandler(XmslWbsMain main,XmslWbsMain effect){
-        String tenantKey = SecurityUtils.getTenantKey();
+        String tenantKey = MySecurityUtils.getTenantKey();
         //3、处理祖级ID、祖级名称(wbs清单关联关系) &  挂接清单数据 & 加载版本变更内容
         ThreadPoolUtil.getThreadPool().execute(()->{
             long beginMills = System.currentTimeMillis();
