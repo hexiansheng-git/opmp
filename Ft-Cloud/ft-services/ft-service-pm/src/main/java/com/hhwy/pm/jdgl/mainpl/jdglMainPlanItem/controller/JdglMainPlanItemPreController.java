@@ -34,14 +34,14 @@ public class JdglMainPlanItemPreController extends BaseController {
     private IJdglMainPlanItemPreService jdglMainPlanItemPreService;
 
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItemPre:list")
+    //  @PreAuthorize(hasPermi = "jdglMainPlanItemPre:list")
     @GetMapping
     public AjaxResult getJdglMainPlanItemPre(@Validated(ValidationGroups.Get.class) JdglMainPlanItemPre jdglMainPlanItemPreParam) {
         JdglMainPlanItemPre jdglMainPlanItemPre = jdglMainPlanItemPreService.getJdglMainPlanItemPre(jdglMainPlanItemPreParam);
         return AjaxResult.success(jdglMainPlanItemPre);
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItemPre:list")
+    //  @PreAuthorize(hasPermi = "jdglMainPlanItemPre:list")
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanItemPreList(@Validated(ValidationGroups.Select.class) JdglMainPlanItemPre jdglMainPlanItemPreParam) {
         startPage();

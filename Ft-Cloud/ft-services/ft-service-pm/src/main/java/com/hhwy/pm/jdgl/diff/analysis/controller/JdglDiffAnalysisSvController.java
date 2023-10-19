@@ -31,14 +31,14 @@ public class JdglDiffAnalysisSvController extends BaseController {
     private IJdglDiffAnalysisSvService jdglDiffAnalysisSvService;
 
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysisSv(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         JdglDiffAnalysisSv jdglDiffAnalysisSv = jdglDiffAnalysisSvService.getJdglDiffAnalysisSv(jdglDiffAnalysisSvParam);
         return AjaxResult.success(jdglDiffAnalysisSv);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisSvList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList = jdglDiffAnalysisSvService.getJdglDiffAnalysisSvList(jdglDiffAnalysisSvParam);
@@ -91,7 +91,7 @@ public class JdglDiffAnalysisSvController extends BaseController {
         util.exportExcel(response, jdglDiffAnalysisSvList, DateUtils.getDate());
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping("/getPlanAndComp")
     public AjaxResult getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         return AjaxResult.success(jdglDiffAnalysisSvService.getPlanAndComp(jdglDiffAnalysisSvParam));

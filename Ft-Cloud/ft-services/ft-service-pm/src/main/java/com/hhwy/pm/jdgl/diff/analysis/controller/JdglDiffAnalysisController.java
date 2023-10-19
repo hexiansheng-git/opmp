@@ -32,14 +32,14 @@ public class JdglDiffAnalysisController extends BaseController {
     private IJdglDiffAnalysisService jdglDiffAnalysisService;
 
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysis(@Validated(ValidationGroups.Get.class) JdglDiffAnalysis jdglDiffAnalysisParam) {
         JdglDiffAnalysis jdglDiffAnalysis = jdglDiffAnalysisService.getJdglDiffAnalysis(jdglDiffAnalysisParam);
         return AjaxResult.success(jdglDiffAnalysis);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysis jdglDiffAnalysisParam) {
         startPage();

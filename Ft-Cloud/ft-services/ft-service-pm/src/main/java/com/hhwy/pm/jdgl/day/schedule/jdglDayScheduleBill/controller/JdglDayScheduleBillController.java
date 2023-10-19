@@ -38,14 +38,14 @@ public class JdglDayScheduleBillController extends BaseController {
     private IJdglDayScheduleBillService jdglDayScheduleBillService;
 
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
     @GetMapping
     public AjaxResult getJdglDayScheduleBill(@Validated(ValidationGroups.Get.class) JdglDayScheduleBill jdglDayScheduleBillParam) {
         JdglDayScheduleBill jdglDayScheduleBill = jdglDayScheduleBillService.getJdglDayScheduleBill(jdglDayScheduleBillParam);
         return AjaxResult.success(jdglDayScheduleBill);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
     @GetMapping("/list")
     public AjaxResult getJdglDayScheduleBillList(@Validated(ValidationGroups.Select.class) JdglDayScheduleBill jdglDayScheduleBillParam) {
         startPage();

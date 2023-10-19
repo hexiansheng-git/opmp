@@ -389,19 +389,18 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         // 填充实际产值数据
         for (JdglDayScheduleBill jdglDayScheduleBill : billValueListByRangeDate) {
-            Long billId = jdglDayScheduleBill.getBillId();
-            XmslContractList xmslContractList1 = xmslContractListVos.stream().filter(vo -> billId.equals(vo.getId())).findFirst().orElse(null);
+            String billCode = jdglDayScheduleBill.getBillCode();
+            XmslContractList xmslContractList1 = xmslContractListVos.stream().filter(vo -> billCode.equals(vo.getCode())).findFirst().orElse(null);
             for (XmslContractList xmslContractList : xmslContractListVos) {
                 if(xmslContractList1 != null && xmslContractList1.getAncestors() !=
                         null && (xmslContractList1.getAncestors() + "," + xmslContractList1.getId()).contains(xmslContractList.getId()+"")) {
-                    Long listId = xmslContractList.getId();
-                    PlanStatisticsBillValueVO planStatisticsBillValueVO1 = returnList.stream().filter(vo -> listId.equals(vo.getId())).findFirst().orElse(null);
+                    String listCode = xmslContractList.getCode();
+                    PlanStatisticsBillValueVO planStatisticsBillValueVO1 = returnList.stream().filter(vo -> listCode.equals(vo.getBillCode())).findFirst().orElse(null);
                     if(planStatisticsBillValueVO1 != null) continue;
                     PlanStatisticsBillValueVO planStatisticsBillValueVO = new PlanStatisticsBillValueVO();
-                    planStatisticsBillValueVO.setId(listId);
+                    planStatisticsBillValueVO.setId(xmslContractList.getId());
                     planStatisticsBillValueVO.setPid(xmslContractList.getPid());
-                    planStatisticsBillValueVO.setBillId(listId);
-                    planStatisticsBillValueVO.setBillCode(xmslContractList.getCode());
+                    planStatisticsBillValueVO.setBillCode(listCode);
                     planStatisticsBillValueVO.setBillName(xmslContractList.getChineseName());
                     planStatisticsBillValueVO.setBillUnit(xmslContractList.getUnit());
                     BigDecimal price = xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
@@ -410,7 +409,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     if(xmslContractList.getChangeNum() != null) {
                         planStatisticsBillValueVO.setRemainDesignNum(xmslContractList.getChangeNum().subtract(planStatisticsBillValueVO.getLastTotalDesignNum()));
                     }
-                    if(billId.equals(listId)) {
+                    if(billCode.equals(listCode)) {
                         BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getThisCompDesignNum();
                         BigDecimal lastTotalDesignNum = planStatisticsBillValueVO.getLastTotalDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getLastTotalDesignNum();
                         thisCompDesignNum = thisCompDesignNum.add(jdglDayScheduleBill.getThisQuantity());
@@ -434,15 +433,15 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         List<JdglYearValuePlan> jdglYearValuePlans = "n".equals(queryDateType) ? jdglYearValuePlanService.getBillListByYear(year) : null;
 
         for (PlanStatisticsBillValueVO planStatisticsBillValueVO : returnList) {
-            Long billId = planStatisticsBillValueVO.getBillId();
-            if(billId == null) {
+            String billCode = planStatisticsBillValueVO.getBillCode();
+            if(billCode == null) {
                 continue;
             }
             // 填充计划产值数据
             switch (queryDateType) {
                 case "z":
                     if(!CollectionUtils.isEmpty(jdglWeekValuePlans)){
-                        Stream<JdglWeekValuePlan> jdglWeekValuePlanStream = jdglWeekValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
+                        Stream<JdglWeekValuePlan> jdglWeekValuePlanStream = jdglWeekValuePlans.stream().filter(vo -> billCode.equals(vo.getInventoryCode()));
                         if(jdglWeekValuePlanStream == null) {
                            continue;
                         }
@@ -455,7 +454,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     break;
                 case "y":
                     if(!CollectionUtils.isEmpty(jdglMonthValuePlans)){
-                        Stream<JdglMonthValuePlan> jdglMonthValuePlanStream = jdglMonthValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
+                        Stream<JdglMonthValuePlan> jdglMonthValuePlanStream = jdglMonthValuePlans.stream().filter(vo -> billCode.equals(vo.getInventoryCode()));
                         if(jdglMonthValuePlanStream == null) {
                             continue;
                         }
@@ -468,7 +467,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     break;
                 case "j":
                     if(!CollectionUtils.isEmpty(jdglQuarterValuePlans)){
-                        Stream<JdglQuarterValuePlan> jdglQuarterValuePlanStream = jdglQuarterValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
+                        Stream<JdglQuarterValuePlan> jdglQuarterValuePlanStream = jdglQuarterValuePlans.stream().filter(vo -> billCode.equals(vo.getInventoryCode()));
                         if(jdglQuarterValuePlanStream == null) {
                             continue;
                         }
@@ -481,7 +480,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                     break;
                 case "n":
                     if(!CollectionUtils.isEmpty(jdglYearValuePlans)){
-                        Stream<JdglYearValuePlan> jdglYearValuePlanStream = jdglYearValuePlans.stream().filter(vo -> billId.equals(vo.getInventoryId()));
+                        Stream<JdglYearValuePlan> jdglYearValuePlanStream = jdglYearValuePlans.stream().filter(vo -> billCode.equals(vo.getInventoryCode()));
                         if(jdglYearValuePlanStream == null) {
                             continue;
                         }

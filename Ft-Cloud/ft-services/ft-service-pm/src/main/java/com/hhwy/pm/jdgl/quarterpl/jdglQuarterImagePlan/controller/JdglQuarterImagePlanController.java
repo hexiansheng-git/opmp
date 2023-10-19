@@ -32,14 +32,14 @@ public class JdglQuarterImagePlanController extends BaseController {
     private IJdglQuarterImagePlanService jdglQuarterImagePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
     @GetMapping
     public AjaxResult getJdglQuarterImagePlan(@Validated(ValidationGroups.Get.class) JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         JdglQuarterImagePlan jdglQuarterImagePlan = jdglQuarterImagePlanService.getJdglQuarterImagePlan(jdglQuarterImagePlanParam);
         return AjaxResult.success(jdglQuarterImagePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterImagePlanList(@Validated(ValidationGroups.Select.class) JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterImagePlanService.getJdglQuarterImagePlanList(jdglQuarterImagePlanParam);
