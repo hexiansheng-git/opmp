@@ -43,14 +43,14 @@ public class ReviewController extends BaseController {
         JsonUtils.soutJsonStr(Review.class);
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:list")
+//    @PreAuthorize(hasPermi = "qqchReview:list")
     @GetMapping
     public AjaxResult getQqchReview(@Validated(ValidationGroups.Get.class) Review reviewParam) {
         Review review = qqchReviewService.getQqchReview(reviewParam);
         return AjaxResult.success(review);
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:list")
+//    @PreAuthorize(hasPermi = "qqchReview:list")
     @GetMapping("/list")
     public AjaxResult getQqchReviewList(@Validated(ValidationGroups.Select.class) Review reviewParam) {
         startPage();

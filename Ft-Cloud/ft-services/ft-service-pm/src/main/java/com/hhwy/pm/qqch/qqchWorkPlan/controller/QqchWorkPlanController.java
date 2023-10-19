@@ -55,7 +55,7 @@ public class QqchWorkPlanController extends BaseController {
      * @param qqchWorkPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchWorkPlan:list")
+//    @PreAuthorize(hasPermi = "qqchWorkPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchWorkPlanList(@Validated(ValidationGroups.Select.class) QqchWorkPlan qqchWorkPlanParam) {
         startPage();
