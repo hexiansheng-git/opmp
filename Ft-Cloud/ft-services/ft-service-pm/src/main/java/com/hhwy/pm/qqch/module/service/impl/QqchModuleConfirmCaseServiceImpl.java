@@ -6,6 +6,7 @@ import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
 import com.hhwy.pm.qqch.module.mapper.QqchModuleConfirmCaseMapper;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
@@ -25,6 +26,9 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
 
     @Autowired
     private QqchModuleConfirmCaseMapper qqchModuleConfirmCaseMapper;
+
+    @Autowired
+    private IQqchReviewService qqchReviewService;
 
 
     public QqchModuleConfirmCase getQqchModuleConfirmCase(QqchModuleConfirmCase qqchModuleConfirmCase) {
@@ -84,6 +88,9 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
         qqchModuleConfirmCase.setCreateUserName(SecurityUtils.getUserName());
         qqchModuleConfirmCase.setCreateTime(DateUtils.getNowDate());
         qqchModuleConfirmCaseMapper.insertQqchModuleConfirmCase(qqchModuleConfirmCase);
+
+        //更新评审数据
+        qqchReviewService.updateFinishNum();
     }
 
     @Override

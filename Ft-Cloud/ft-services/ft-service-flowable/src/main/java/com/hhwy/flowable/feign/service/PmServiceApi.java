@@ -97,4 +97,10 @@ public interface PmServiceApi {
      */
     @RequestMapping(value = "/xmslDrawReview/listener", method = RequestMethod.POST)
     AjaxResult drawReviewListener(@RequestParam("id") Long id);
+
+    /**
+     * 前期策划评审监听器
+     */
+    @PostMapping("/qqchReview/listener")
+    AjaxResult reviewListener(@RequestParam("id") Long id);
 }

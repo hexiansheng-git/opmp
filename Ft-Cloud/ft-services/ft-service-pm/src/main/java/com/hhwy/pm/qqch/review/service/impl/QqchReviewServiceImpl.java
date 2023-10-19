@@ -325,19 +325,6 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             if (RedissonLockUtil.lock("stageIdentity")) {
                 QqchWorkPlanDetail where = new QqchWorkPlanDetail();
                 where.setDelFlag("0");
-            /*    where.setItemId(moduleIdentity);
-                switch (stageIdentity) {
-                    case "1":
-                        where.setIsFirst("1");
-                        break;
-                    case "2":
-                        where.setIsSecond("1");
-                        break;
-                    case "3":
-                        where.setIsThird("1");
-                        break;
-                    default:
-                }*/
                 // 查询工作计划的数据
                 List<QqchWorkPlanDetail> qqchWorkPlanDetailList = workPlanDetailService.getQqchWorkPlanDetailList(where);
 

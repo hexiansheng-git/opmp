@@ -117,7 +117,6 @@ public class ReviewController extends BaseController {
         return AjaxResult.success(qqchReviewService.reviewInfo(map));
     }
 
-
     @PostMapping("/save")
     @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
     public AjaxResult save(@RequestBody Review review) {
@@ -125,34 +124,21 @@ public class ReviewController extends BaseController {
         return AjaxResult.success("操作成功", review.getId() + "");
     }
 
-
     @PostMapping("/submit")
     @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
     public AjaxResult submit(@RequestBody Review review) {
         review.setTaskStatus("1");
+        review.setReviewStatus("3");
         qqchReviewService.updateQqchReview(review);
         return AjaxResult.success("", review.getId() + "");
     }
-
 
     /**
      * 监听器
      */
     @PostMapping("/listener")
-    @ResponseBody
-    public AjaxResult listener(Long id) {
+    public AjaxResult reviewListener(Long id) {
         qqchReviewService.listener(id);
-        return AjaxResult.success("成功");
-    }
-
-
-    /**
-     * 监听器
-     */
-    @PostMapping("/incr")
-    @ResponseBody
-    public AjaxResult incr(@RequestBody Map<String, Object> map) {
-        String stage = this.qqchReviewService.getStage();
         return AjaxResult.success("成功");
     }
 
