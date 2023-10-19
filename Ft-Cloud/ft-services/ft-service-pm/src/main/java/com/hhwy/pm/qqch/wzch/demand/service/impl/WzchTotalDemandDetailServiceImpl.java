@@ -187,22 +187,24 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
 //        }
         wzchTotalDemandDetailMapper.deleteByVersion(wzchTotalDemand.getVersion());
         List<WzchTotalDemandDetail> wzchTotalDemandDetailList = wzchTotalDemand.getWzchTotalDemandDetailList();
-        wzchTotalDemandDetailList = wzchCommonService.setTotalDemadCategoryCode(wzchTotalDemandDetailList);
-        List<WzchTotalDemandTimeCount> totalDemandTimeCounts = new ArrayList<>();
-        //设置version
-        for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemandDetailList) {
-            totalDemandTimeCounts.addAll(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList());
-            List<WzchTotalDemandTimeCount> timeCountList = wzchTotalDemandDetail.getWzchTotalDemandTimeCountList();
-            for (int i = 0; i < timeCountList.size(); i++) {
-                WzchTotalDemandTimeCount time = timeCountList.get(i);
-                time.setVersion(wzchTotalDemand.getVersion());
+        if(CollectionUtils.isNotEmpty(wzchTotalDemandDetailList)){
+            wzchTotalDemandDetailList = wzchCommonService.setTotalDemadCategoryCode(wzchTotalDemandDetailList);
+            List<WzchTotalDemandTimeCount> totalDemandTimeCounts = new ArrayList<>();
+            //设置version
+            for (WzchTotalDemandDetail wzchTotalDemandDetail : wzchTotalDemandDetailList) {
+                totalDemandTimeCounts.addAll(wzchTotalDemandDetail.getWzchTotalDemandTimeCountList());
+                List<WzchTotalDemandTimeCount> timeCountList = wzchTotalDemandDetail.getWzchTotalDemandTimeCountList();
+                for (int i = 0; i < timeCountList.size(); i++) {
+                    WzchTotalDemandTimeCount time = timeCountList.get(i);
+                    time.setVersion(wzchTotalDemand.getVersion());
+                }
+                wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
             }
-            wzchTotalDemandDetail.setVersion(wzchTotalDemand.getVersion());
+            wzchTotalDemandDetailMapper.batchInsert(wzchTotalDemandDetailList);
+            List<Long> detailIds = wzchTotalDemandDetailList.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
+            wzchTotalDemandTimeCountService.deleteByTotalDemandDetailIds(detailIds);
+            wzchTotalDemandTimeCountService.batchInsert(totalDemandTimeCounts);
         }
-        wzchTotalDemandDetailMapper.batchInsert(wzchTotalDemandDetailList);
-        List<Long> detailIds = wzchTotalDemandDetailList.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
-        wzchTotalDemandTimeCountService.deleteByTotalDemandDetailIds(detailIds);
-        wzchTotalDemandTimeCountService.batchInsert(totalDemandTimeCounts);
         //确认处理
         String buttonMark = wzchTotalDemand.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
@@ -283,7 +285,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
      * @param wzchTotalDemand
      */
     private void checkWzchTotalDemand(WzchTotalDemand wzchTotalDemand) {
-        if (wzchTotalDemand == null || CollectionUtils.isEmpty(wzchTotalDemand.getWzchTotalDemandDetailList())) {
+        if (wzchTotalDemand == null ) {
             throw new BaseException("保存数据失败，请确认数据是否完整！");
         }
         StringBuilder errorMessage = new StringBuilder("提示：序号");

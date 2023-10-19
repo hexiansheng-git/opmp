@@ -224,6 +224,7 @@ public class XmslDrawReviewController extends BaseController{
             review.setName(mater.getMaterialName());
             review.setSpec(mater.getMaterialSpec());
             review.setType(mater.getCategoryName());
+            review.setUnit(mater.getUnit());
             review.setPtVar1(mater.getCategoryCode());
             list.add(review);
         }

@@ -36,7 +36,7 @@ public class ExcelUtilController {
     public void newDownloadTemplate(@RequestParam String templateName, @RequestParam String name,
                                     HttpServletRequest request,
                                     HttpServletResponse response) throws Exception {
-        downTemplate.downloadExcel(request,response,templateName + ".xlsx",name+".xlsx");
+        downTemplate.downloadExcel(request,response,templateName + ".xls",name+".xls");
     }
 
     /**
