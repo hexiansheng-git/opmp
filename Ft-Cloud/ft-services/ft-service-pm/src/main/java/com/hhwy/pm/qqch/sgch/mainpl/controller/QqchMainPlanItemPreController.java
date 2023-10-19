@@ -31,14 +31,14 @@ public class QqchMainPlanItemPreController extends BaseController {
     private IQqchMainPlanItemPreService qqchMainPlanItemPreService;
 
 
-    @PreAuthorize(hasPermi = "qqchMainPlanItemPre:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItemPre:list")
     @GetMapping
     public AjaxResult getQqchMainPlanItemPre(@Validated(ValidationGroups.Get.class) QqchMainPlanItemPre qqchMainPlanItemPreParam) {
         QqchMainPlanItemPre qqchMainPlanItemPre = qqchMainPlanItemPreService.getQqchMainPlanItemPre(qqchMainPlanItemPreParam);
         return AjaxResult.success(qqchMainPlanItemPre);
     }
 
-    @PreAuthorize(hasPermi = "qqchMainPlanItemPre:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItemPre:list")
     @GetMapping("/list")
     public AjaxResult getQqchMainPlanItemPreList(@Validated(ValidationGroups.Select.class) QqchMainPlanItemPre qqchMainPlanItemPreParam) {
         startPage();

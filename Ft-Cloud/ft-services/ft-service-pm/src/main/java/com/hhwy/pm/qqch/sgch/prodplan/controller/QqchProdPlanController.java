@@ -41,14 +41,14 @@ public class QqchProdPlanController extends BaseController {
     @Autowired
     private IQqchReviewService reviewService;
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:list")
+    //  @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping
     public AjaxResult getQqchProdPlan(@Validated(ValidationGroups.Get.class) QqchProdPlan qqchProdPlanParam) {
         QqchProdPlan qqchProdPlan = qqchProdPlanService.getQqchProdPlan(qqchProdPlanParam);
         return AjaxResult.success(qqchProdPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:list")
+    //  @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchProdPlanList(@Validated(ValidationGroups.Select.class) QqchProdPlan qqchProdPlanParam) {
         CompileEntity<HashMap<String, Object>> qqchProdPlanList = qqchProdPlanService.selectList(qqchProdPlanParam);
@@ -112,7 +112,7 @@ public class QqchProdPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:list")
+    //  @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchProdPlan dto) {
         CompileEntity<List<QqchProdPlan>> qqchProdPlanList = qqchProdPlanService.getList(dto);

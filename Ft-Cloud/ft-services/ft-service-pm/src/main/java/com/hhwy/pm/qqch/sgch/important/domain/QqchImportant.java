@@ -29,6 +29,13 @@ public class QqchImportant extends CompileEntity<QqchImportant> {
     @JsonSerialize(using = ToStringSerializer.class)
     @JsonProperty
     private Long id;
+
+    /**
+     * 字段描述：重要工作事项编码
+     */
+    @JsonProperty
+    @FtExcel(name = "重要工作事项编码")
+    private String importantJobCode;
     /**
      * 字段描述：重要工作事项
      */

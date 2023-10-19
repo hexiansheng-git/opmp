@@ -36,14 +36,14 @@ public class QqchMainPlanItemController extends BaseController {
     private IQqchMainPlanItemService qqchMainPlanItemService;
 
 
-    @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
     @GetMapping
     public AjaxResult getQqchMainPlanItem(@Validated(ValidationGroups.Get.class) QqchMainPlanItem qqchMainPlanItemParam) {
         QqchMainPlanItem qqchMainPlanItem = qqchMainPlanItemService.getQqchMainPlanItem(qqchMainPlanItemParam);
         return AjaxResult.success(qqchMainPlanItem);
     }
 
-//    @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+//    //  @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
 //    @GetMapping("/getUsing4One")
 //    public AjaxResult getUsing4One(@Validated(ValidationGroups.Get.class) QqchMainPlanItem qqchMainPlanItemParam) {
 //        QqchMainPlanItem qqchMainPlanItem = qqchMainPlanItemService.getUsing4One(qqchMainPlanItemParam);
@@ -55,7 +55,7 @@ public class QqchMainPlanItemController extends BaseController {
      * @param qqchMainPlanItemParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
     @GetMapping("/list")
     public AjaxResult getQqchMainPlanItemList(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getQqchMainPlanItemListNoTree(qqchMainPlanItemParam);
@@ -67,7 +67,7 @@ public class QqchMainPlanItemController extends BaseController {
      * @param qqchMainPlanItemParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
     @GetMapping("/list4page")
     public AjaxResult getQqchMainPlanItemList4page(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         BigDecimal version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, qqchMainPlanItemParam.getVersion());
@@ -82,7 +82,7 @@ public class QqchMainPlanItemController extends BaseController {
      * @param qqchMainPlanItemParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
     @GetMapping("/treelist")
     public AjaxResult getQqchMainPlanItemTreelist(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getQqchMainPlanItemList4Lazy(qqchMainPlanItemParam);
@@ -91,7 +91,7 @@ public class QqchMainPlanItemController extends BaseController {
 
 
 
-    @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
+    //  @PreAuthorize(hasPermi = "qqchMainPlanItem:list")
     @GetMapping("/getKeyRoad")
     public AjaxResult getKeyRoad(@Validated(ValidationGroups.Select.class) QqchMainPlanItem qqchMainPlanItemParam) {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemService.getKeyRoad(qqchMainPlanItemParam);

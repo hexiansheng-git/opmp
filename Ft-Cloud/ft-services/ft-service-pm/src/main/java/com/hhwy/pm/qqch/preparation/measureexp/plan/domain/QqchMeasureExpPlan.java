@@ -16,6 +16,7 @@ import lombok.Data;
 import lombok.ToString;
 
 /**
+ * 工作计划
  * @author mls
  * @date 2023-07-25 18:01:32
  * @remark qqch_measure_exp_plan

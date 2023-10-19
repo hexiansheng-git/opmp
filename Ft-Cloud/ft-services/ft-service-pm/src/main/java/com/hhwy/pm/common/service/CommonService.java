@@ -48,6 +48,9 @@ public class CommonService {
     @Autowired
     private IQqchWorkPlanDetailService qqchWorkPlanDetailService;
 
+//    @Value("${editableFlag}")
+//    private String editableFlag;
+
     /**
      * 校验单据能否被调整 (单条数据只能调整一次)
      *
@@ -89,10 +92,6 @@ public class CommonService {
     public PermissionMark checkIsEditable(String menuId) {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
-
-        if (true){
-            return permissionMark;
-        }
 
         //获取当前阶段
         String currentStage = qqchReviewService.getStage();

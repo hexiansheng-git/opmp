@@ -31,14 +31,14 @@ public class JdglMonthValuePlanController extends BaseController {
     private IJdglMonthValuePlanService jdglMonthValuePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglMonthValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthValuePlan:list")
     @GetMapping
     public AjaxResult getJdglMonthValuePlan(@Validated(ValidationGroups.Get.class) JdglMonthValuePlan jdglMonthValuePlanParam) {
         JdglMonthValuePlan jdglMonthValuePlan = jdglMonthValuePlanService.getJdglMonthValuePlan(jdglMonthValuePlanParam);
         return AjaxResult.success(jdglMonthValuePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMonthValuePlanList(@Validated(ValidationGroups.Select.class) JdglMonthValuePlan jdglMonthValuePlanParam) {
         List<JdglMonthValuePlan> jdglMonthValuePlanList = jdglMonthValuePlanService.getJdglMonthValuePlanList(jdglMonthValuePlanParam);

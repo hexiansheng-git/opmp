@@ -37,28 +37,28 @@ public class JdglDayScheduleController extends BaseController {
     private IJdglDayScheduleService jdglDayScheduleService;
 
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping
     public AjaxResult getJdglDaySchedule(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getJdglDaySchedule(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("jdglDayScheduleByPerson")
     public AjaxResult getJdglDayScheduleByPerson(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getJdglDayScheduleByPerson(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("/getInit")
     public AjaxResult getInit(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getInit(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("/list")
     public AjaxResult getJdglDayScheduleList(@Validated(ValidationGroups.Select.class) JdglDaySchedule jdglDayScheduleParam) {
         startPage();
@@ -72,7 +72,7 @@ public class JdglDayScheduleController extends BaseController {
      * @param endDate
      * @return
      */
-    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @PostMapping("/getListByDateRange")
     public AjaxResult getListByDateRange(@JsonFormat(pattern = "yyyy-MM-dd") Date startDate,@JsonFormat(pattern = "yyyy-MM-dd") Date endDate) {
         List<JdglDaySchedule> listByDateRange = jdglDayScheduleService.getListByDateRange(startDate, endDate);

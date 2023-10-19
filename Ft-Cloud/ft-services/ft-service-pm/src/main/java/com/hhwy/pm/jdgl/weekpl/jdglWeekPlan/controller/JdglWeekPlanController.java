@@ -32,7 +32,7 @@ public class JdglWeekPlanController extends BaseController {
     private IJdglWeekPlanService jdglWeekPlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglWeekPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekPlan:list")
     @GetMapping
     public AjaxResult getJdglWeekPlan(@Validated(ValidationGroups.Get.class) JdglWeekPlan jdglWeekPlanParam) {
         JdglWeekPlan jdglWeekPlan = jdglWeekPlanService.getJdglWeekPlan(jdglWeekPlanParam);
@@ -44,13 +44,13 @@ public class JdglWeekPlanController extends BaseController {
      * @param jdglWeekPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "jdglWeekPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekPlan:list")
     @GetMapping("/getInitJdglWeekPlan")
     public AjaxResult getInitJdglWeekPlan(@Validated(ValidationGroups.Get.class) JdglWeekPlan jdglWeekPlanParam) {
         return AjaxResult.success(jdglWeekPlanService.getInitJdglWeekPlan(jdglWeekPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglWeekPlanList(@Validated(ValidationGroups.Select.class) JdglWeekPlan jdglWeekPlanParam) {
         startPage();

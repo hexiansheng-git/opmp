@@ -217,7 +217,7 @@ public class XmslDrawReviewController extends BaseController{
                 }
             }
             XmslDrawReviewMaterial review = new XmslDrawReviewMaterial();
-            BeanUtils.copyBeanProp(mater,review);
+            BeanUtils.copyProperties(mater,review);
             review.setMixFlag(isMix?1:0);
             review.setSourceMaterialList(new ArrayList<>(2));
             review.setCode(mater.getMaterialCode());

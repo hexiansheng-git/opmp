@@ -7,6 +7,7 @@
     <resultMap type="com.hhwy.pm.qqch.sgch.important.domain.QqchImportant" id="QqchImportantResultMap">
         <result property="id" column="id"/>
         <result property="importantJob" column="important_job"/>
+        <result property="importantJobCode" column="important_job_code"/>
         <result property="risk" column="risk"/>
         <result property="safeguard" column="safeguard"/>
         <result property="dutyDeptId" column="duty_dept_id"/>
@@ -36,6 +37,7 @@
     <sql id="selectQqchImportantVo">
         select `id`
              , `important_job`
+             , `important_job_code`
              , `risk`
              , `safeguard`
              , `duty_dept_id`
@@ -69,6 +71,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="importantJob != null  and importantJob != ''">and `important_job` = #{importantJob}</if>
+            <if test="importantJobCode != null  and importantJobCode != ''">and `important_job_code` = #{importantJobCode}</if>
             <if test="risk != null  and risk != ''">and `risk` = #{risk}</if>
             <if test="safeguard != null  and safeguard != ''">and `safeguard` = #{safeguard}</if>
             <if test="dutyDeptId != null ">and `duty_dept_id` = #{dutyDeptId}</if>
@@ -104,6 +107,7 @@
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
             <if test="importantJob != null  and importantJob != ''">and `important_job` = #{importantJob}</if>
+            <if test="importantJobCode != null  and importantJobCode != ''">and `important_job_code` = #{importantJobCode}</if>
             <if test="risk != null  and risk != ''">and `risk` = #{risk}</if>
             <if test="safeguard != null  and safeguard != ''">and `safeguard` = #{safeguard}</if>
             <if test="dutyDeptId != null ">and `duty_dept_id` = #{dutyDeptId}</if>
@@ -138,6 +142,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="importantJob != null  and importantJob != ''">`important_job`,</if>
+            <if test="importantJobCode != null  and importantJobCode != ''">`important_job_code`,</if>
             <if test="risk != null  and risk != ''">`risk`,</if>
             <if test="safeguard != null  and safeguard != ''">`safeguard`,</if>
             <if test="dutyDeptId != null ">`duty_dept_id`,</if>
@@ -167,6 +172,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="importantJob != null  and importantJob != ''">#{importantJob},</if>
+            <if test="importantJobCode != null  and importantJobCode != ''">#{importantJobCode},</if>
             <if test="risk != null  and risk != ''">#{risk},</if>
             <if test="safeguard != null  and safeguard != ''">#{safeguard},</if>
             <if test="dutyDeptId != null ">#{dutyDeptId},</if>
@@ -201,6 +207,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `important_job`,
+            `important_job_code`,
             `risk`,
             `safeguard`,
             `duty_dept_id`,
@@ -231,6 +238,7 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.importantJob},
+                #{item.importantJobCode},
                 #{item.risk},
                 #{item.safeguard},
                 #{item.dutyDeptId},
@@ -264,6 +272,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="importantJob != null  and  importantJob != ''">`important_job` = #{importantJob},</if>
+            <if test="importantJobCode != null  and  importantJobCode != ''">`important_job_code` = #{importantJobCode},</if>
             <if test="risk != null  and  risk != ''">`risk` = #{risk},</if>
             <if test="safeguard != null  and  safeguard != ''">`safeguard` = #{safeguard},</if>
             <if test="dutyDeptId != null ">`duty_dept_id` = #{dutyDeptId},</if>
@@ -306,6 +315,11 @@
             <trim prefix="important_job  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.importantJob}
+                </foreach>
+            </trim>
+            <trim prefix="important_job_code  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.importantJobCode}
                 </foreach>
             </trim>
             <trim prefix="risk  = case" suffix="end,">
@@ -445,6 +459,7 @@
         <where>
             <if test="id != null ">and `id` = #{id}</if>
             <if test="importantJob != null  and importantJob != ''">and `important_job` = #{importantJob}</if>
+            <if test="importantJobCode != null  and importantJobCode != ''">and `important_job_code` = #{importantJobCode}</if>
             <if test="risk != null  and risk != ''">and `risk` = #{risk}</if>
             <if test="safeguard != null  and safeguard != ''">and `safeguard` = #{safeguard}</if>
             <if test="dutyDeptId != null ">and `duty_dept_id` = #{dutyDeptId}</if>

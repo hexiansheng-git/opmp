@@ -32,14 +32,14 @@ public class JdglWeekImagePlanController extends BaseController {
     private IJdglWeekImagePlanService jdglWeekImagePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglWeekImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekImagePlan:list")
     @GetMapping
     public AjaxResult getJdglWeekImagePlan(@Validated(ValidationGroups.Get.class) JdglWeekImagePlan jdglWeekImagePlanParam) {
         JdglWeekImagePlan jdglWeekImagePlan = jdglWeekImagePlanService.getJdglWeekImagePlan(jdglWeekImagePlanParam);
         return AjaxResult.success(jdglWeekImagePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglWeekImagePlanList(@Validated(ValidationGroups.Select.class) JdglWeekImagePlan jdglWeekImagePlanParam) {
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekImagePlanService.getJdglWeekImagePlanList(jdglWeekImagePlanParam);

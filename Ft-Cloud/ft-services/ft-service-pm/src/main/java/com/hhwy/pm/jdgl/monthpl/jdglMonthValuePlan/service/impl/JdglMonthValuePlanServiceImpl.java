@@ -159,32 +159,33 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
             if(CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
                 return returnList;
             }
-            Set<Long> listids = new HashSet<>();
+            Set<String> listCodes = new HashSet<>();
             for (JdglMonthImagePlan jdglMonthImagePlan : imagePlans) {
                 for (XmslDrawReviewList xmslDrawReviewList: list) {
                     if(jdglMonthImagePlan.getWbsCode() != null && jdglMonthImagePlan.getWbsCode().equals(xmslDrawReviewList.getWbsCode())) {
-                        listids.add(xmslDrawReviewList.getListId());
+                        listCodes.add(xmslDrawReviewList.getListCode());
                     }
                 }
             }
-            if(!CollectionUtils.isEmpty(listids)) {
-                Set<Long> allListId = new HashSet<>();
-                allListId.addAll(listids);
-                for (Long listid : listids) {
-                    XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listid.equals(vo.getId())).findFirst().orElse(null);
+            if(!CollectionUtils.isEmpty(listCodes)) {
+                Set<String> allListCode = new HashSet<>();
+                allListCode.addAll(listCodes);
+                for (String listCode : listCodes) {
+                    XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
                     if(xmslContractList != null) {
                         String ancestors = xmslContractList.getAncestors();
                         if(StringUtils.isNotEmpty(ancestors)) {
                             String[] split = ancestors.split(",");
                             for (String id : split) {
-                                allListId.add(Long.valueOf(id));
+                                XmslContractList xmslContractList1 = validMaxVersionContractInventoryList.stream().filter(vo -> id.equals(vo.getId()+"")).findFirst().orElse(null);
+                                if(xmslContractList1 != null) allListCode.add(xmslContractList1.getCode());
                             }
                         }
                     }
                 }
-                for (Long listId : allListId) {
+                for (String listCode : allListCode) {
                     JdglMonthValuePlan valuePlan = new JdglMonthValuePlan();
-                    XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listId.equals(vo.getId())).findFirst().orElse(null);
+                    XmslContractList xmslContractList = validMaxVersionContractInventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
                     if(xmslContractList != null) {
                         valuePlan.setId(IdWorker.createId());
 //                            jdglYearValuePlan.setPid();
@@ -202,7 +203,7 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
                         }
                         if(xmslContractList.getCode() != null) {
                             BigDecimal monthplanCompQuantity = new BigDecimal(0);
-                            List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getId().equals(vo.getListId())).collect(Collectors.toList());
+                            List<XmslDrawReviewList> collect = list.stream().filter(vo -> xmslContractList.getCode().equals(vo.getListCode())).collect(Collectors.toList());
                             if(!CollectionUtils.isEmpty(collect)) {
                                 for (XmslDrawReviewList xmslDrawReviewList :  collect) {
                                     String wbsCode = xmslDrawReviewList.getWbsCode();
