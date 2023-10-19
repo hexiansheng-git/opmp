@@ -529,12 +529,31 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             xmslDrawReviewMapper.deleteMaterial(delMap);
             xmslDrawReviewMapper.deleteSourceMaterial(delMap);
         }
+        //处理versionFlag
+        handlerVersionFlag(addRelationList);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         drawReviewWbsService.updateXmslDrawReviewWbsList(updateWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
         drawReviewListService.insertXmslDrawReviewListList(addList);
         materialService.insertXmslDrawReviewMaterialList(addMaterList);
         sourceMaterialService.insertXmslDrawReviewSourceMaterialList(addSourceMaterList);
+    }
+
+    //修改指定wbs编号、清单编号的versionFlag 为0
+    public void handlerVersionFlag(List<XmslDrawReviewRelation> list){
+        Set<String> wbsCodes = new HashSet<>();
+        Set<String> listCodes = new HashSet<>();
+        for (int i = 0; i < list.size(); i++) {
+            XmslDrawReviewRelation temp = list.get(i);
+            if(StringUtils.isNotBlank(temp.getWbsCode()))
+                wbsCodes.add(temp.getWbsCode());
+            if(StringUtils.isNotBlank(temp.getListCode()))
+                listCodes.add(temp.getListCode());
+        }
+        if(CollectionUtils.isNotEmpty(wbsCodes))
+            xmslDrawReviewMapper.updateVersionFlag(ObjectUtils.toMap("wbsCodes",wbsCodes));
+        if(CollectionUtils.isNotEmpty(listCodes))
+            xmslDrawReviewMapper.updateVersionFlag(ObjectUtils.toMap("listCodes",listCodes));
     }
 
     private void handlerList(XmslDrawReviewDto dto,Integer version,boolean isNew){
@@ -619,6 +638,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                 xmslDrawReviewMapper.deleteWbsByCode(ObjectUtils.toMap("mainId",dto.getId(),"wbsIds",wbsCodeSet));
             }
         }
+        //处理versionFlag
+        handlerVersionFlag(addRelationList);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
         drawReviewListService.insertXmslDrawReviewListList(addList);

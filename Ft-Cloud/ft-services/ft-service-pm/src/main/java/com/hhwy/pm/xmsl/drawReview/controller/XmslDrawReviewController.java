@@ -202,26 +202,32 @@ public class XmslDrawReviewController extends BaseController{
 
     //转换物资信息为图纸复核细目
     @PostMapping("/getMaterInfo")
-    public AjaxResult getMaterInfo(@RequestBody MaterialInfo mater){
-        //沥青混凝土、改性沥青混凝土、混凝土
-        //030501、030502、020402
-        String[] mixCategoryCodes = new String[]{"030501","030502","020402"};
-        boolean isMix = false;
-        for (int i = 0; i < mixCategoryCodes.length; i++) {
-            if(mater.getCategoryCode().startsWith(mixCategoryCodes[i])){
-                isMix = true;
-                break;
+    public AjaxResult getMaterInfo(@RequestBody List<MaterialInfo> materList){
+        List<XmslDrawReviewMaterial> list = new ArrayList<>();
+        for (int i = 0; i < materList.size(); i++) {
+            MaterialInfo mater = materList.get(i);
+            //沥青混凝土、改性沥青混凝土、混凝土
+            //TODO 挪字典项里去  030501、030502、020402
+            String[] mixCategoryCodes = new String[]{"030501","030502","020402"};
+            boolean isMix = false;
+            for (int j = 0; j < mixCategoryCodes.length; j++) {
+                if(mater.getCategoryCode().startsWith(mixCategoryCodes[j])){
+                    isMix = true;
+                    break;
+                }
             }
+            XmslDrawReviewMaterial review = new XmslDrawReviewMaterial();
+            BeanUtils.copyBeanProp(mater,review);
+            review.setMixFlag(isMix?1:0);
+            review.setSourceMaterialList(new ArrayList<>(2));
+            review.setCode(mater.getMaterialCode());
+            review.setName(mater.getMaterialName());
+            review.setSpec(mater.getMaterialSpec());
+            review.setType(mater.getCategoryName());
+            review.setPtVar1(mater.getCategoryCode());
+            list.add(review);
         }
-        XmslDrawReviewMaterial review = new XmslDrawReviewMaterial();
-        BeanUtils.copyBeanProp(mater,review);
-        review.setMixFlag(isMix?1:0);
-        review.setCode(mater.getMaterialCode());
-        review.setName(mater.getMaterialName());
-        review.setSpec(mater.getMaterialSpec());
-        review.setType(mater.getCategoryName());
-        review.setPtVar1(mater.getCategoryCode());
-        return AjaxResult.success(review);
+        return AjaxResult.success(list);
     }
 
 }

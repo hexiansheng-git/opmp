@@ -45,6 +45,7 @@ public interface XmslDrawReviewMapper {
 
     int updateXmslDrawReview(XmslDrawReview xmslDrawReview);
 
+    int updateVersionFlag(Map map);
     
     int deleteXmslDrawReview(XmslDrawReview xmslDrawReview);
 

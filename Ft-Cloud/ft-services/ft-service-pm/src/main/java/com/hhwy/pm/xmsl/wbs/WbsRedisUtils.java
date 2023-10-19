@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class WbsRedisUtils {
     private static RedisUtils redisUtils;
     static{
-//        redisUtils = SpringUtils.getBean(RedisUtils.class);
+        redisUtils = SpringUtils.getBean(RedisUtils.class);
     }
     //hashMap  wbs::租户标志  wbsId  wbsjson
     public static final String KEY = "WBS::";
