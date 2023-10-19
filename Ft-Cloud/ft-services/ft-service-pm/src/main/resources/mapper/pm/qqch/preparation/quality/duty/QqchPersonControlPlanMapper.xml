@@ -7,6 +7,7 @@
   <resultMap type="com.hhwy.pm.qqch.preparation.quality.duty.domain.QqchPersonControlPlan"
     id="QqchPersonControlPlanResultMap">
     <result property="id" column="id"/>
+    <result property="pid" column="pid"/>
     <result property="personId" column="person_id"/>
     <result property="personName" column="person_name"/>
     <result property="dutiesId" column="duties_id"/>
@@ -47,6 +48,7 @@
   <sql id="selectQqchPersonControlPlanVo">
     select
       `id`
+      ,`pid`
       ,`person_id`
       ,`person_name`
       ,`duties_id`
@@ -179,6 +181,7 @@
     insert into qqch_person_control_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null ">`id`,</if>
+      <if test="pid != null ">`pid`,</if>
       <if test="personId != null  and personId != ''">`person_id`,</if>
       <if test="personName != null  and personName != ''">`person_name`,</if>
       <if test="dutiesId != null  and dutiesId != ''">`duties_id`,</if>
@@ -218,6 +221,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null ">#{id},</if>
+      <if test="pid != null ">#{pid},</if>
       <if test="personId != null  and personId != ''">#{personId},</if>
       <if test="personName != null  and personName != ''">#{personName},</if>
       <if test="dutiesId != null  and dutiesId != ''">#{dutiesId},</if>
@@ -262,6 +266,7 @@
     insert into qqch_person_control_plan
     <trim prefix="(" suffix=")" suffixOverrides=",">
       `id`,
+      `pid`,
       `person_id`,
       `person_name`,
       `duties_id`,
@@ -302,6 +307,7 @@
     <foreach collection="qqchPersonControlPlanList" item="item" separator=",">
       <trim prefix="(" suffix=")" suffixOverrides=",">
         #{item.id},
+        #{item.pid},
         #{item.personId},
         #{item.personName},
         #{item.dutiesId},
@@ -344,7 +350,6 @@
   <update id="updateQqchPersonControlPlan">
     update qqch_person_control_plan
     <trim prefix="SET" suffixOverrides=",">
-      <if test="id != null ">`id` = #{id},</if>
       <if test="personId != null  and  personId != ''">`person_id` = #{personId},</if>
       <if test="personName != null  and  personName != ''">`person_name` = #{personName},</if>
       <if test="dutiesId != null  and  dutiesId != ''">`duties_id` = #{dutiesId},</if>
@@ -390,11 +395,6 @@
   <update id="updateQqchPersonControlPlanList">
     update qqch_person_control_plan
     <trim prefix="set" suffixOverrides=",">
-      <trim prefix="id  = case" suffix="end,">
-        <foreach collection="list" item="item" index="index">
-          when `id`=#{item.id} then #{item.id}
-        </foreach>
-      </trim>
       <trim prefix="person_id  = case" suffix="end,">
         <foreach collection="list" item="item" index="index">
           when `id`=#{item.id} then #{item.personId}

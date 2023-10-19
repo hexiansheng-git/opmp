@@ -7,10 +7,11 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.validation.ValidationGroups;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.validation.constraints.NotBlank;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -29,6 +30,12 @@ public class QqchPersonControlPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "主键")
     private Long id;
+    /**
+     * 字段描述：父id
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long pid;
     /**
      * 字段描述：人员id
      */
