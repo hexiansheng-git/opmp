@@ -32,14 +32,14 @@ public class JdglMonthImagePlanController extends BaseController {
     private IJdglMonthImagePlanService jdglMonthImagePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
     @GetMapping
     public AjaxResult getJdglMonthImagePlan(@Validated(ValidationGroups.Get.class) JdglMonthImagePlan jdglMonthImagePlanParam) {
         JdglMonthImagePlan jdglMonthImagePlan = jdglMonthImagePlanService.getJdglMonthImagePlan(jdglMonthImagePlanParam);
         return AjaxResult.success(jdglMonthImagePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMonthImagePlanList(@Validated(ValidationGroups.Select.class) JdglMonthImagePlan jdglMonthImagePlanParam) {
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthImagePlanService.getJdglMonthImagePlanList(jdglMonthImagePlanParam);

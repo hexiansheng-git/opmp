@@ -32,20 +32,20 @@ public class JdglDiffAnalysisCorrectController extends BaseController {
     private IJdglDiffAnalysisCorrectService jdglDiffAnalysisCorrectService;
 
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysisCorrect(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = jdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam);
         return AjaxResult.success(jdglDiffAnalysisCorrect);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/getInit")
     public AjaxResult getInitDiffAnalysisCorrect(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         return AjaxResult.success(jdglDiffAnalysisCorrectService.getInitDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisCorrectList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         startPage();
@@ -53,7 +53,7 @@ public class JdglDiffAnalysisCorrectController extends BaseController {
         return getDataTableAjaxResult(jdglDiffAnalysisCorrectList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/maplist")
     public AjaxResult getJdglDiffAnalysisCorrectMapList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectList = jdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrectParam);

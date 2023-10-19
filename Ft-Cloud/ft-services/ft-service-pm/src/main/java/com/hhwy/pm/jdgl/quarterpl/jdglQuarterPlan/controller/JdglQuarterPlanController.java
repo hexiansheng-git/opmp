@@ -32,7 +32,7 @@ public class JdglQuarterPlanController extends BaseController {
     private IJdglQuarterPlanService jdglQuarterPlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping
     public AjaxResult getJdglQuarterPlan(@Validated(ValidationGroups.Get.class) JdglQuarterPlan jdglQuarterPlanParam) {
         JdglQuarterPlan jdglQuarterPlan = jdglQuarterPlanService.getJdglQuarterPlan(jdglQuarterPlanParam);
@@ -44,13 +44,13 @@ public class JdglQuarterPlanController extends BaseController {
      * @param jdglQuarterPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping("/getInitJdglQuarterPlan")
     public AjaxResult getInitJdglQuarterPlan(@Validated(ValidationGroups.Get.class) JdglQuarterPlan jdglQuarterPlanParam) {
         return AjaxResult.success(jdglQuarterPlanService.getInitJdglQuarterPlan(jdglQuarterPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterPlanList(@Validated(ValidationGroups.Select.class) JdglQuarterPlan jdglQuarterPlanParam) {
         startPage();

@@ -32,14 +32,14 @@ public class JdglDiffAnalysisPathController extends BaseController{
 
                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysisPath(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         JdglDiffAnalysisPath jdglDiffAnalysisPath =  jdglDiffAnalysisPathService.getJdglDiffAnalysisPath(jdglDiffAnalysisPathParam);
         return AjaxResult.success(jdglDiffAnalysisPath);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
+    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisPathList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getJdglDiffAnalysisPathList(jdglDiffAnalysisPathParam);

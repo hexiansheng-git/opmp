@@ -35,14 +35,14 @@ public class JdglYearImagePlanController extends BaseController {
     private IJdglYearImagePlanService jdglYearImagePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglYearImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearImagePlan:list")
     @GetMapping
     public AjaxResult getJdglYearImagePlan(@Validated(ValidationGroups.Get.class) JdglYearImagePlan jdglYearImagePlanParam) {
         JdglYearImagePlan jdglYearImagePlan = jdglYearImagePlanService.getJdglYearImagePlan(jdglYearImagePlanParam);
         return AjaxResult.success(jdglYearImagePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglYearImagePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglYearImagePlanList(@Validated(ValidationGroups.Select.class) JdglYearImagePlan jdglYearImagePlanParam) {
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearImagePlanService.getJdglYearImagePlanList(jdglYearImagePlanParam);

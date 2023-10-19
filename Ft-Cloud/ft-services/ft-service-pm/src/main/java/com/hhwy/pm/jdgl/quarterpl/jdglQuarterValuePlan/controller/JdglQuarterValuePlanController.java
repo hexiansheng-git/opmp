@@ -31,14 +31,14 @@ public class JdglQuarterValuePlanController extends BaseController {
     private IJdglQuarterValuePlanService jdglQuarterValuePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
     @GetMapping
     public AjaxResult getJdglQuarterValuePlan(@Validated(ValidationGroups.Get.class) JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         JdglQuarterValuePlan jdglQuarterValuePlan = jdglQuarterValuePlanService.getJdglQuarterValuePlan(jdglQuarterValuePlanParam);
         return AjaxResult.success(jdglQuarterValuePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterValuePlanList(@Validated(ValidationGroups.Select.class) JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         List<JdglQuarterValuePlan> jdglQuarterValuePlanList = jdglQuarterValuePlanService.getJdglQuarterValuePlanList(jdglQuarterValuePlanParam);

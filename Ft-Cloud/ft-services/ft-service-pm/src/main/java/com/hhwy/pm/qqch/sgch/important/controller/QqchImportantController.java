@@ -46,14 +46,14 @@ public class QqchImportantController extends BaseController {
     private SystemServiceApi systemServiceApi;
 
 
-    @PreAuthorize(hasPermi = "qqchImportant:list")
+    //  @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping
     public AjaxResult getQqchImportant(@Validated(ValidationGroups.Get.class) CompileEntity<QqchImportant> qqchImportantParam) {
         QqchImportant qqchImportant = qqchImportantService.getQqchImportant(qqchImportantParam.dealListDto());
         return AjaxResult.success(qqchImportant);
     }
 
-    @PreAuthorize(hasPermi = "qqchImportant:list")
+    //  @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchImportant qqchImportantParam) {
         CompileEntity qqchImportantList = qqchImportantService.list(qqchImportantParam);

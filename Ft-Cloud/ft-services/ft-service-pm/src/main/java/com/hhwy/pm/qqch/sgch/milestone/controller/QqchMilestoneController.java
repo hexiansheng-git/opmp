@@ -35,14 +35,14 @@ public class QqchMilestoneController extends BaseController {
     private IQqchMilestoneService qqchMilestoneService;
 
 
-    @PreAuthorize(hasPermi = "qqchMilestone:list")
+    //  @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping
     public AjaxResult getQqchMilestone(@Validated(ValidationGroups.Get.class) CompileEntity<QqchMilestone> qqchMilestoneParam) {
         QqchMilestone qqchMilestone = qqchMilestoneService.getQqchMilestone(qqchMilestoneParam.dealListDto());
         return AjaxResult.success(qqchMilestone);
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:list")
+    //  @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());

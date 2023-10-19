@@ -31,14 +31,14 @@ public class JdglWeekValuePlanController extends BaseController {
     private IJdglWeekValuePlanService jdglWeekValuePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
     @GetMapping
     public AjaxResult getJdglWeekValuePlan(@Validated(ValidationGroups.Get.class) JdglWeekValuePlan jdglWeekValuePlanParam) {
         JdglWeekValuePlan jdglWeekValuePlan = jdglWeekValuePlanService.getJdglWeekValuePlan(jdglWeekValuePlanParam);
         return AjaxResult.success(jdglWeekValuePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglWeekValuePlanList(@Validated(ValidationGroups.Select.class) JdglWeekValuePlan jdglWeekValuePlanParam) {
         List<JdglWeekValuePlan> jdglWeekValuePlanList = jdglWeekValuePlanService.getJdglWeekValuePlanList(jdglWeekValuePlanParam);

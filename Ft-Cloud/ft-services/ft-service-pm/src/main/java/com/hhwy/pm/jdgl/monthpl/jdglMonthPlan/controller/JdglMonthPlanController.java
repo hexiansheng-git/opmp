@@ -32,7 +32,7 @@ public class JdglMonthPlanController extends BaseController {
     private IJdglMonthPlanService jdglMonthPlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglMonthPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthPlan:list")
     @GetMapping
     public AjaxResult getJdglMonthPlan(@Validated(ValidationGroups.Get.class) JdglMonthPlan jdglMonthPlanParam) {
         JdglMonthPlan jdglMonthPlan = jdglMonthPlanService.getJdglMonthPlan(jdglMonthPlanParam);
@@ -44,13 +44,13 @@ public class JdglMonthPlanController extends BaseController {
      * @param jdglMonthPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "jdglMonthPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthPlan:list")
     @GetMapping("/getInitJdglMonthPlan")
     public AjaxResult getInitJdglMonthPlan(@Validated(ValidationGroups.Get.class) JdglMonthPlan jdglMonthPlanParam) {
         return AjaxResult.success(jdglMonthPlanService.getInitJdglMonthPlan(jdglMonthPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglMonthPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMonthPlanList(@Validated(ValidationGroups.Select.class) JdglMonthPlan jdglMonthPlanParam) {
         startPage();

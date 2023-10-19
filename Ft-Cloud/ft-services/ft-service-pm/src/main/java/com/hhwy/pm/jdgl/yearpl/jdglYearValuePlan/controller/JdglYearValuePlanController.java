@@ -34,14 +34,14 @@ public class JdglYearValuePlanController extends BaseController {
     private IJdglYearValuePlanService jdglYearValuePlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglYearValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearValuePlan:list")
     @GetMapping
     public AjaxResult getJdglYearValuePlan(@Validated(ValidationGroups.Get.class) JdglYearValuePlan jdglYearValuePlanParam) {
         JdglYearValuePlan jdglYearValuePlan = jdglYearValuePlanService.getJdglYearValuePlan(jdglYearValuePlanParam);
         return AjaxResult.success(jdglYearValuePlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglYearValuePlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglYearValuePlanList(@Validated(ValidationGroups.Select.class) JdglYearValuePlan jdglYearValuePlanParam) {
         List<JdglYearValuePlan> jdglYearValuePlanList = jdglYearValuePlanService.getJdglYearValuePlanList(jdglYearValuePlanParam);

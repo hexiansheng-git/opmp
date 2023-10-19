@@ -35,7 +35,7 @@ public class JdglYearPlanController extends BaseController {
     private IJdglYearPlanService jdglYearPlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping
     public AjaxResult getJdglYearPlan(@Validated(ValidationGroups.Get.class) JdglYearPlan jdglYearPlanParam) {
         JdglYearPlan jdglYearPlan = jdglYearPlanService.getJdglYearPlan(jdglYearPlanParam);
@@ -47,13 +47,13 @@ public class JdglYearPlanController extends BaseController {
      * @param jdglYearPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "jdglYearPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping("/getInitJdglYearPlan")
     public AjaxResult getInitJdglYearPlan(@Validated(ValidationGroups.Get.class) JdglYearPlan jdglYearPlanParam) {
         return AjaxResult.success(jdglYearPlanService.getInitJdglYearPlan(jdglYearPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:list")
+    //  @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglYearPlanList(@Validated(ValidationGroups.Select.class) JdglYearPlan jdglYearPlanParam) {
         startPage();

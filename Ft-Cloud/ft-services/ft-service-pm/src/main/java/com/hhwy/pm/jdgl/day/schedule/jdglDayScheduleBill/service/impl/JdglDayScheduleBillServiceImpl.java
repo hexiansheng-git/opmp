@@ -93,19 +93,18 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
 
             for (XmslDrawReviewList xmslDrawReviewList : xmslDrawReviewLists) {
-                Long listId = xmslDrawReviewList.getListId();
+                String listCode = xmslDrawReviewList.getListCode();
                 JdglDayScheduleBill jdglDayScheduleBill1 = new JdglDayScheduleBill();
                 jdglDayScheduleBill1.setDayScheduleId(dayScheduleId);
                 jdglDayScheduleBill1.setWbsId(xmslDrawReviewList.getWbsId());
                 jdglDayScheduleBill1.setWbsCode(wbsCode);
                 jdglDayScheduleBill1.setWbsName(wbsName);
-                jdglDayScheduleBill1.setBillId(xmslDrawReviewList.getListId());
                 jdglDayScheduleBill1.setBillCode(xmslDrawReviewList.getListCode());
                 jdglDayScheduleBill1.setBillName(xmslDrawReviewList.getChineseName());
                 jdglDayScheduleBill1.setItemCode(itemCode);
                 if(!CollectionUtils.isEmpty(validMaxVersionContractInventoryList)) {
                     for (XmslContractList xmslContractList : validMaxVersionContractInventoryList) {
-                        if(listId != null && listId.equals(xmslContractList.getId())) {
+                        if(listCode != null && listCode.equals(xmslContractList.getCode())) {
                             jdglDayScheduleBill1.setBillPrice(
                                     xmslContractList.getChangeAmount() == null || Long.valueOf("0").equals(xmslContractList.getChangeAmount())
                                     ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeAmount()
@@ -267,12 +266,10 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                 List<JdglDayScheduleBill> jdglDayScheduleBillList = new ArrayList<JdglDayScheduleBill>();
                 for (XmslDrawReviewList xmslDrawReviewList: xmslDrawReviewLists) {
 
-                    Long listId = xmslDrawReviewList.getListId();
                     String listCode = xmslDrawReviewList.getListCode();
 
                     JdglDayScheduleBill jdglDayScheduleBill = new JdglDayScheduleBill();
 
-                    jdglDayScheduleBill.setBillId(listId);
                     jdglDayScheduleBill.setBillCode(listCode);
                     jdglDayScheduleBill.setWbsId(wbsId);
                     jdglDayScheduleBill.setWbsCode(jdglDayScheduleWbs.getWbsCode());

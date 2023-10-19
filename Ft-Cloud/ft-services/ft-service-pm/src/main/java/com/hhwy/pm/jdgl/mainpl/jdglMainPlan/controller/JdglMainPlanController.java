@@ -34,21 +34,21 @@ public class JdglMainPlanController extends BaseController {
     private IJdglMainPlanService jdglMainPlanService;
 
 
-    @PreAuthorize(hasPermi = "jdglMainPlan:list")
+    // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping
     public AjaxResult getJdglMainPlan(@Validated(ValidationGroups.Get.class) JdglMainPlan jdglMainPlanParam) {
         JdglMainPlan jdglMainPlan = jdglMainPlanService.getJdglMainPlan(jdglMainPlanParam);
         return AjaxResult.success(jdglMainPlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlan:list")
+    // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping("/getUsingMainPlan")
     public AjaxResult getUsingMainPlan() {
         JdglMainPlan jdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
         return AjaxResult.success(jdglMainPlan);
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlan:list")
+    // @PreAuthorize(hasPermi = "jdglMainPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanList(@Validated(ValidationGroups.Select.class) JdglMainPlan jdglMainPlanParam) {
         startPage();
