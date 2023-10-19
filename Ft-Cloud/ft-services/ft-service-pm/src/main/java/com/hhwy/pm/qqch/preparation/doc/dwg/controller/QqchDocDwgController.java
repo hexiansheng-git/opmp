@@ -49,7 +49,7 @@ public class QqchDocDwgController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDocTech:add")
+//    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/save")
     public AjaxResult insertQqchDocTech(@Validated(ValidationGroups.Update.class) @RequestBody QqchDocDwgVo qqchDocDwgVo) {
         try{

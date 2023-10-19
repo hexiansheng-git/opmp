@@ -47,7 +47,7 @@ public class QqchDocTechController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDocTech:add")
+//    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/save")
     public AjaxResult insertQqchDocTech(@Validated(ValidationGroups.Update.class) @RequestBody QqchDocTechVo qqchDocTechParam) {
         try{

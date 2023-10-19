@@ -43,7 +43,7 @@ public class QqchDocTechMaeController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDocTech:add")
+//    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/save")
     public AjaxResult insertQqchDocTech(@Validated(ValidationGroups.Update.class) @RequestBody QqchDocTechMaeV0 qqchDocTechParam) {
         try {
@@ -64,7 +64,7 @@ public class QqchDocTechMaeController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDocTech:add")
+//    @PreAuthorize(hasPermi = "qqchDocTech:add")
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file) {
 
