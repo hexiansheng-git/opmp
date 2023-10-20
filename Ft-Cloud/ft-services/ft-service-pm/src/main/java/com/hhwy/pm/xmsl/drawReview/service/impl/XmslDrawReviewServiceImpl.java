@@ -82,14 +82,27 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     public List<XmslDrawReviewSourceMaterial> sourceMaterList() {
         List<SysDictData> list = systemApiService.selectDictDataByType("xmsl_source_material");
         List<MaterialInfo> materialInfoList = MaterialUtils.getMaterialInfoByCodes(list.stream().map(r->r.getDictValue()).collect(Collectors.toSet()));
+        Set<String> existCodeSet = new HashSet<>();
         List<XmslDrawReviewSourceMaterial> resuList = materialInfoList.stream().map(r->{
             XmslDrawReviewSourceMaterial temp = new XmslDrawReviewSourceMaterial();
             temp.setCode(r.getMaterialCode());
             temp.setName(r.getMaterialName());
             temp.setSpec(r.getMaterialSpec());
             temp.setUnit(r.getUnit());
+            existCodeSet.add(r.getMaterialCode());
             return temp;
         }).collect(Collectors.toList());
+        //有的奇葩物资，在物资信息表中没有，需要直接回显
+        for (int i = 0; i < list.size(); i++) {
+            SysDictData temp = list.get(i);
+            String code = StringUtils.trim(temp.getDictValue());
+            if(existCodeSet.contains(code))
+                continue;
+            XmslDrawReviewSourceMaterial mater = new XmslDrawReviewSourceMaterial();
+            mater.setCode(code);
+            mater.setName(temp.getDictLabel());
+            resuList.add(mater);
+        }
         return resuList;
     }
 
