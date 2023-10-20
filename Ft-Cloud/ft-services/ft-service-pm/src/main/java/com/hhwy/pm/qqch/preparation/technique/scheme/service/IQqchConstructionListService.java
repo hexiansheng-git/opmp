@@ -17,6 +17,12 @@ public interface IQqchConstructionListService {
     
     List<QqchConstructionList> list(QqchConstructionList list);
 
+    /**
+     * 获取最新的施工方案清单数据
+     * @return
+     */
+    List<QqchConstructionList> getLatest();
+
     void batchSave(QqchConstructionListVo qqchConstructionListVo);
 
     List<QqchConstructionList> getByWbsCodes(String[] wbsCodes);

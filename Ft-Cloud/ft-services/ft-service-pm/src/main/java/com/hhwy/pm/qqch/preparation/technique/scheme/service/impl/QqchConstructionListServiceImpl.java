@@ -79,6 +79,20 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         return qqchConstructionListMapper.getQqchConstructionListList(list);
     }
 
+    /**
+     * 获取最新的施工方案清单数据
+     * @return
+     */
+    @Override
+    public List<QqchConstructionList> getLatest(){
+        // 获取方案清单最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        QqchConstructionList qryParam = new QqchConstructionList();
+        qryParam.setVersion(maxVersion);
+        // 获取方案清单数据
+        return qqchConstructionListMapper.getQqchConstructionListList(qryParam);
+    }
+
     @Transactional
     public void batchSave(QqchConstructionListVo qqchConstructionListVo) {
         // 先批量删除当前版本所有数据
