@@ -7,9 +7,10 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * 施工方案清单
@@ -215,4 +216,9 @@ public class QqchConstructionList extends BaseEntity {
      */
     @JsonProperty
     private String ptVar5;
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    private Integer sort;
 }

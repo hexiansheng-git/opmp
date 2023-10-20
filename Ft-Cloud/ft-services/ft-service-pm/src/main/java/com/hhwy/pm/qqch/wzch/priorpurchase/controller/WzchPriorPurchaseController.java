@@ -53,7 +53,7 @@ public class WzchPriorPurchaseController extends BaseController {
     /**
      * 查询优先进场物资设备采购策划列表
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:list")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询优先进场物资设备采购策划列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchPriorPurchase wzchPriorPurchase) {
@@ -84,7 +84,7 @@ public class WzchPriorPurchaseController extends BaseController {
     /**
      * 新增保存优先进场物资设备采购策划
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:add")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存优先进场物资设备采购策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
@@ -95,7 +95,7 @@ public class WzchPriorPurchaseController extends BaseController {
     /**
      * 修改保存优先进场物资设备采购策划
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:edit")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
@@ -103,14 +103,14 @@ public class WzchPriorPurchaseController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:adjust")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:adjust")
     @PostMapping("/adjust")
 //    @CustomLogger(title = "调整优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
         return AjaxResult.success("操作成功", String.valueOf(wzchPriorPurchaseService.adjust(wzchPriorPurchaseDTO)));
     }
 
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:save")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "调整优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchPriorPurchaseDTO wzchPriorPurchaseDTO) {
@@ -120,7 +120,7 @@ public class WzchPriorPurchaseController extends BaseController {
     /**
      * 删除优先进场物资设备采购策划
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:remove")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:remove")
     @PostMapping("/remove")
 //    @CustomLogger(title = "删除优先进场物资设备采购策划", businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@Validated(ValidationGroups.Delete.class) @RequestBody Map map) {

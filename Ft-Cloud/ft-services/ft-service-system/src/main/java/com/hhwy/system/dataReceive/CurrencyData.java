@@ -41,7 +41,7 @@ public class CurrencyData {
      *
      * @return
      */
-    @GetMapping("/test3")
+    @GetMapping("/pullCurrency")
     public AjaxResult getCuntry() {
         List<CurrencyInfo> saveList = new ArrayList<>();
         int sort = 0;

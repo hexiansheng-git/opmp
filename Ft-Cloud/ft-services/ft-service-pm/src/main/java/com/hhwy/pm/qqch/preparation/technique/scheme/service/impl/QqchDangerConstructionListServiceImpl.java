@@ -12,20 +12,23 @@ import com.hhwy.pm.qqch.preparation.safe.danger.service.IQqchDangerListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
-import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchDangerConstructionListMapper;
+import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -40,7 +43,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
     @Autowired
     private CommonMapper commonMapper;
     @Autowired
-    private QqchConstructionListMapper qqchConstructionListMapper;
+    private IQqchConstructionListService qqchConstructionListService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
@@ -72,7 +75,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
         // 危大工程清单
         QqchDangerListVo qqchDangerListVo = new QqchDangerListVo();
         List<QqchDangerList> list = new ArrayList<>();
-        for (QqchDangerConstructionList qqchDangerConstructionList : qqchDangerConstructionListVo.getList()) {
+        int sort = 1;
+        List<QqchDangerConstructionList> dangerConstructionListVoList = qqchDangerConstructionListVo.getList();
+        for (QqchDangerConstructionList qqchDangerConstructionList : dangerConstructionListVoList) {
             qqchDangerConstructionList.setId(IdWorker.createId());
             qqchDangerConstructionList.setVersion(qqchDangerConstructionListVo.getVersion());
             if (qqchDangerConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
@@ -81,6 +86,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             qqchDangerConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchDangerConstructionList.setCreateUserName(SecurityUtils.getUserName());
             qqchDangerConstructionList.setCreateTime(DateUtils.getNowDate());
+            qqchDangerConstructionList.setSort(sort++);
 
             QqchDangerList qqchDangerList = new QqchDangerList();
             qqchDangerList.setSchemeCode(qqchDangerConstructionList.getSchemeCode());
@@ -93,9 +99,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             qqchDangerListVo.setVersion(qqchDangerConstructionListVo.getVersion());
         }
 
-        if (CollectionUtils.isNotEmpty(qqchDangerConstructionListVo.getList())) {
+        if (CollectionUtils.isNotEmpty(dangerConstructionListVoList)) {
             qqchDangerConstructionListMapper
-                .insertQqchDangerConstructionListList(qqchDangerConstructionListVo.getList());
+                .insertQqchDangerConstructionListList(dangerConstructionListVoList);
         }
 
         // 同步到8.3.1 危大工程清单
@@ -112,49 +118,35 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
 
     @Transactional
     public void syncData(QqchDangerConstructionListVo qqchDangerConstructionListVo) {
-        // 先保存数据
-        this.batchSave(qqchDangerConstructionListVo);
-
-        // 获取当前数据库表数据
-        QqchDangerConstructionListVo dbVo = this.getQqchDangerConstructionListList(null);
-        List<QqchDangerConstructionList> dbList = dbVo.getList();
-
-        // 获取方案清单最大版本号
-        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
-        QqchConstructionList qryParam = new QqchConstructionList();
-        qryParam.setVersion(maxVersion);
+        BigDecimal version = qqchDangerConstructionListVo.getVersion();
         // 获取施工方案清单中危大等级为危大、超危大的方案数据
-        List<QqchConstructionList> constructionList = qqchConstructionListMapper
-            .getBigDangerLevelConstructionList(qryParam);
+        List<QqchConstructionList> constructionList = qqchConstructionListService.getBigDangerLevelConstructionList();
+
+        List<QqchDangerConstructionList> dangerList = qqchDangerConstructionListVo.getList();
+        Map<String, QqchDangerConstructionList> map = dangerList.stream().collect(Collectors.toMap(QqchDangerConstructionList::getSchemeCode,o -> o));
 
         // 构造新的list
         List<QqchDangerConstructionList> insertList = new ArrayList<>();
-        for (QqchConstructionList construction : constructionList) {
+        constructionList.stream().forEach(construction -> {
             QqchDangerConstructionList insert = new QqchDangerConstructionList();
             BeanUtils.copyProperties(construction, insert);
             insert.setId(IdWorker.createId());
             insert.setCreateUser(SecurityUtils.getUserName());
             insert.setCreateTime(DateUtils.getNowDate());
-            insert.setVersion(dbVo.getVersion());
+            insert.setVersion(version);
             insert.setValid(Valid.YES);
-            for (QqchDangerConstructionList db : dbList) {
-                if (insert.getSchemeCode().equals(db.getSchemeCode())) {
-                    insert.setKeySpecialProcesses(db.getKeySpecialProcesses());
-                    insert.setBriefDescription(db.getBriefDescription());
-                    insert.setMainMeasure(db.getMainMeasure());
-                }
+            String schemeCode = construction.getSchemeCode();
+            QqchDangerConstructionList qqchDangerConstructionList = map.get(schemeCode);
+            if(qqchDangerConstructionList != null){
+                insert.setKeySpecialProcesses(qqchDangerConstructionList.getKeySpecialProcesses());
+                insert.setBriefDescription(qqchDangerConstructionList.getBriefDescription());
+                insert.setMainMeasure(qqchDangerConstructionList.getMainMeasure());
             }
             insertList.add(insert);
-        }
+        });
 
-        // 先批量删除表中数据
-        QqchDangerConstructionList deleteParam = new QqchDangerConstructionList();
-        deleteParam.setVersion(dbVo.getVersion());
-        qqchDangerConstructionListMapper.deleteQqchDangerConstructionList(deleteParam);
-
-        if (insertList.size() > 0) {
-            qqchDangerConstructionListMapper.insertQqchDangerConstructionListList(insertList);
-        }
+        qqchDangerConstructionListVo.setList(insertList);
+        this.batchSave(qqchDangerConstructionListVo);
     }
 
     @Override

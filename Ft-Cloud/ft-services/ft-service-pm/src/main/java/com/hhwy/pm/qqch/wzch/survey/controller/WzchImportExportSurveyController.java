@@ -36,7 +36,7 @@ public class WzchImportExportSurveyController extends BaseController {
     /**
      * 查询进出口调查列表
      */
-    @PreAuthorize(hasPermi ="wzch:survey:list")
+//    @PreAuthorize(hasPermi ="wzch:survey:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "口调查列表-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
@@ -50,7 +50,7 @@ public class WzchImportExportSurveyController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi ="wzch:survey:add")
+//    @PreAuthorize(hasPermi ="wzch:survey:add")
     @GetMapping("/add")
 //    @CustomLogger(title = "口调查列表-新增",businessType = CustomBusinessType.SELECT)
     public AjaxResult add() {
@@ -81,7 +81,7 @@ public class WzchImportExportSurveyController extends BaseController {
     /**
      * 编辑保存进出口调查
      */
-    @PreAuthorize(hasPermi ="wzch:survey:edit")
+//    @PreAuthorize(hasPermi ="wzch:survey:edit")
 //    @CustomLogger(title = "进出口调查-编辑",businessType = CustomBusinessType.SELECT)
     @PostMapping("/edit")
     public AjaxResult edit(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
@@ -100,7 +100,7 @@ public class WzchImportExportSurveyController extends BaseController {
     /**
      * 进出口调查详情
      */
-    @PreAuthorize(hasPermi ="wzch:survey:detail")
+//    @PreAuthorize(hasPermi ="wzch:survey:detail")
 //    @CustomLogger(title = "进出口调查-详情",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody WzchImportExportSurvey wzchImportExportSurvey) {
@@ -120,7 +120,7 @@ public class WzchImportExportSurveyController extends BaseController {
     /**
      * 删除进出口调查
      */
-    @PreAuthorize(hasPermi ="wzch:survey:remove")
+//    @PreAuthorize(hasPermi ="wzch:survey:remove")
 //    @CustomLogger(title = "进出口调查-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

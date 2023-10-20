@@ -43,14 +43,14 @@ public class QqchConstController extends BaseController {
         return getDataTableAjaxResult(qqchConstJobList);
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:list")
+//    @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping
     public AjaxResult getQqchConst(@Validated(ValidationGroups.Get.class) QqchConst qqchConstParam) {
         QqchConst qqchConst = qqchConstService.getQqchConst(qqchConstParam);
         return AjaxResult.success(qqchConst);
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:list")
+//    @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping("/list")
     public AjaxResult getQqchConstList(@Validated(ValidationGroups.Select.class) CompileEntity<QqchConst> dto) {
         QqchConst qqchConst = CompileEntity.dealListDto(dto.getVersion(), new QqchConst());
@@ -60,7 +60,7 @@ public class QqchConstController extends BaseController {
 
 
 
-    @PreAuthorize(hasPermi = "qqchConst:list")
+//    @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchConst dto) {
         QqchConst qqchConst = CompileEntity.dealListDto(dto.getVersion(), dto);
@@ -68,7 +68,7 @@ public class QqchConstController extends BaseController {
         return AjaxResult.success(qqchConstList);
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:add")
+//    @PreAuthorize(hasPermi = "qqchConst:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchConst>> dtoList) {
         List<QqchConst> qqchConsts = dtoList.dealSaveDto();
@@ -76,32 +76,32 @@ public class QqchConstController extends BaseController {
         return AjaxResult.success(qqchConsts);
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:add")
+//    @PreAuthorize(hasPermi = "qqchConst:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchConstList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchConst> qqchConstListParam) {
         qqchConstService.insertQqchConstList(qqchConstListParam);
         return AjaxResult.success(qqchConstListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:update")
+//    @PreAuthorize(hasPermi = "qqchConst:update")
     @PostMapping("/update")
     public AjaxResult updateQqchConst(@Validated(ValidationGroups.Update.class) @RequestBody QqchConst qqchConstParam) {
         return toAjax(qqchConstService.updateQqchConst(qqchConstParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:update")
+//    @PreAuthorize(hasPermi = "qqchConst:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchConstList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchConst> qqchConstListParam) {
         return toAjax(qqchConstService.updateQqchConstList(qqchConstListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:remove")
+//    @PreAuthorize(hasPermi = "qqchConst:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchConst(@Validated(ValidationGroups.Delete.class) @RequestBody QqchConst qqchConstParam) {
         return toAjax(qqchConstService.deleteQqchConst(qqchConstParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchConst:remove")
+//    @PreAuthorize(hasPermi = "qqchConst:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchConstByPks(@PathVariable Long[] ids) {
         List<Long> qqchConstPkList = Arrays.asList(ids);

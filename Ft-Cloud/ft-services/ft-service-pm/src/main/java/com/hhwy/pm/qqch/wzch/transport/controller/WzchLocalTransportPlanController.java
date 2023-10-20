@@ -39,7 +39,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 查询当地运输方案策划列表
      */
-    @PreAuthorize(hasPermi ="wzch:transport:list")
+//    @PreAuthorize(hasPermi ="wzch:transport:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "当地运输方案策划-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
@@ -72,7 +72,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 当地运输方案策划调整
      */
-    @PreAuthorize(hasPermi ="wzch:transport:edit")
+//    @PreAuthorize(hasPermi ="wzch:transport:edit")
 //    @CustomLogger(title = "当地运输方案策划-调整",businessType = CustomBusinessType.SELECT)
     @PostMapping("/modify")
     public AjaxResult modify(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
@@ -93,7 +93,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 新增当地运输方案策划
      */
-    @PreAuthorize(hasPermi ="wzch:transport:add")
+//    @PreAuthorize(hasPermi ="wzch:transport:add")
     @GetMapping("/add")
     public AjaxResult add() {
         WzchLocalTransportPlanAddResponse wzchLocalTransportPlanAddResponse = new WzchLocalTransportPlanAddResponse();
@@ -107,7 +107,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 当地运输方案策划详情
      */
-    @PreAuthorize(hasPermi ="wzch:transport:detail")
+//    @PreAuthorize(hasPermi ="wzch:transport:detail")
 //    @CustomLogger(title = "当地运输方案策划-详情",businessType = CustomBusinessType.SELECT)
     @PostMapping("/detail")
     public AjaxResult detail(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
@@ -126,7 +126,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 修改保存当地运输方案策划
      */
-    @PreAuthorize(hasPermi ="wzch:transport:edit")
+//    @PreAuthorize(hasPermi ="wzch:transport:edit")
 //    @CustomLogger(title = "当地运输方案策划-编辑",businessType = CustomBusinessType.SELECT)
     @PostMapping("/edit")
     public AjaxResult editSave(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {
@@ -147,7 +147,7 @@ public class WzchLocalTransportPlanController extends BaseController {
     /**
      * 删除当地运输方案策划
      */
-    @PreAuthorize(hasPermi ="wzch:transport:remove")
+//    @PreAuthorize(hasPermi ="wzch:transport:remove")
 //    @CustomLogger(title = "当地运输方案策划-导出",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     public AjaxResult remove(@RequestBody WzchLocalTransportPlan wzchLocalTransportPlan) {

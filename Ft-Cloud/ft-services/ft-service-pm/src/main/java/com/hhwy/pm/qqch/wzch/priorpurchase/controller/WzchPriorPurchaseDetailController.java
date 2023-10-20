@@ -46,7 +46,7 @@ public class WzchPriorPurchaseDetailController extends BaseController {
     /**
      * 查询优先进场物资设备采购策划物资详情列表
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:list")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询优先进场物资设备采购策划列表", businessType = CustomBusinessType.SELECT)
     public TableDataInfo list(WzchPriorPurchaseDetail wzchPriorPurchaseDetail) {
@@ -125,7 +125,7 @@ public class WzchPriorPurchaseDetailController extends BaseController {
     /**
      * 新增保存优先进场物资设备采购策划物资详情
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:add")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:add")
     @PostMapping("/add")
     public AjaxResult addSave(WzchPriorPurchaseDetail wzchPriorPurchaseDetail) {
         return toAjax(wzchPriorPurchaseDetailService.insertWzchPriorPurchaseDetail(wzchPriorPurchaseDetail));
@@ -135,7 +135,7 @@ public class WzchPriorPurchaseDetailController extends BaseController {
     /**
      * 修改保存优先进场物资设备采购策划物资详情
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:edit")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:edit")
     @PostMapping("/edit")
     public AjaxResult editSave(WzchPriorPurchaseDetail wzchPriorPurchaseDetail) {
         return toAjax(wzchPriorPurchaseDetailService.updateWzchPriorPurchaseDetail(wzchPriorPurchaseDetail));
@@ -144,7 +144,7 @@ public class WzchPriorPurchaseDetailController extends BaseController {
     /**
      * 删除优先进场物资设备采购策划物资详情
      */
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:remove")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:remove")
     @PostMapping("/remove")
     public AjaxResult remove(String ids) {
         return toAjax(wzchPriorPurchaseDetailService.deleteWzchPriorPurchaseDetailByIds(ids));

@@ -39,7 +39,7 @@ public class WzchPriorApproachController extends BaseController {
     private IWzchPriorApproachService wzchPriorApproachService;
 
 
-    @PreAuthorize(hasPermi ="wzch:approach:list")
+//    @PreAuthorize(hasPermi ="wzch:approach:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "优先进场物资-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchPriorApproach wzchPriorApproach) {
@@ -73,7 +73,7 @@ public class WzchPriorApproachController extends BaseController {
     /**
      * 新增保存优先进场物资
      */
-    @PreAuthorize(hasPermi ="wzch:approach:add")
+//    @PreAuthorize(hasPermi ="wzch:approach:add")
     @GetMapping("/add")
     public AjaxResult addSave() {
         WzchPriorApproachAddResponse response = new WzchPriorApproachAddResponse();
@@ -86,7 +86,7 @@ public class WzchPriorApproachController extends BaseController {
     /**
      * 修改优先进场物资
      */
-    @PreAuthorize(hasPermi ="wzch:approach:edit")
+//    @PreAuthorize(hasPermi ="wzch:approach:edit")
 //    @CustomLogger(title = "优先进场物资-编辑",businessType = CustomBusinessType.SELECT)
     @GetMapping("/edit")
     public AjaxResult edit(Long id) {
@@ -106,7 +106,7 @@ public class WzchPriorApproachController extends BaseController {
     /**
      * 删除优先进场物资
      */
-    @PreAuthorize(hasPermi ="wzch:approach:remove")
+//    @PreAuthorize(hasPermi ="wzch:approach:remove")
 //    @CustomLogger(title = "优先进场物资-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     public AjaxResult remove(@RequestBody WzchPriorApproach wzchPriorApproach) {

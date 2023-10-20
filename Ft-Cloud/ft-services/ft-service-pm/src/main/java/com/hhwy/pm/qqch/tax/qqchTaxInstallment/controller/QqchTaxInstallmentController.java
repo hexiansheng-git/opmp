@@ -40,14 +40,14 @@ public class QqchTaxInstallmentController extends BaseController{
     private static final String TN = "qqch_tax_installment";
                                                                                                                                                                                                                                                                                                                                         
 
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
     @GetMapping
     public AjaxResult getQqchTaxInstallment(@Validated(ValidationGroups.Get.class)  QqchTaxInstallment qqchTaxInstallmentParam){
         QqchTaxInstallment qqchTaxInstallment =  qqchTaxInstallmentService.getQqchTaxInstallment(qqchTaxInstallmentParam);
         return AjaxResult.success(qqchTaxInstallment);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:list")
     @GetMapping("/list")
     public AjaxResult getQqchTaxInstallmentList(@Validated(ValidationGroups.Select.class) QqchTaxInstallment dto){
         QqchTaxInstallment qqchTaxInstallment = CompileEntity.dealListDto(VersionUtil.getVersion(TN, dto.getVersion()), dto);
@@ -61,7 +61,7 @@ public class QqchTaxInstallmentController extends BaseController{
      * @param dto 
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:confirm")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:confirm")
     @PostMapping("/save")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchTaxInstallment dto){
         // 20230915 改成只有确认按钮 确认按钮就是为了在评审功能已确认功能加1
@@ -70,7 +70,7 @@ public class QqchTaxInstallmentController extends BaseController{
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
     @GetMapping("/refresh")
     public AjaxResult refresh(QqchTaxInstallment dto){
         return AjaxResult.success(qqchTaxInstallmentService.refresh(dto));
@@ -78,7 +78,7 @@ public class QqchTaxInstallmentController extends BaseController{
 
 
 
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:refresh")
     @GetMapping("/timeList")
     public AjaxResult refresh(){
         List<String> yearList = qqchTaxInService.getYearList();
@@ -89,32 +89,32 @@ public class QqchTaxInstallmentController extends BaseController{
     
     
     
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:add")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchTaxInstallmentList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxInstallment> qqchTaxInstallmentListParam){
         qqchTaxInstallmentService.insertQqchTaxInstallmentList(qqchTaxInstallmentListParam);
         return AjaxResult.success(qqchTaxInstallmentListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:update")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTaxInstallment(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxInstallment qqchTaxInstallmentParam){
         return toAjax(qqchTaxInstallmentService.updateQqchTaxInstallment(qqchTaxInstallmentParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTaxInstallment:update")
+//  @PreAuthorize(hasPermi = "qqchTaxInstallment:update")
         @PostMapping("/batchUpdate")
         public AjaxResult updateQqchTaxInstallmentList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxInstallment> qqchTaxInstallmentListParam){
             return toAjax(qqchTaxInstallmentService.updateQqchTaxInstallmentList(qqchTaxInstallmentListParam));
         }
     
-    @PreAuthorize(hasPermi = "qqchTaxInstallment:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxInstallment:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTaxInstallment(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxInstallment qqchTaxInstallmentParam){
         return toAjax(qqchTaxInstallmentService.deleteQqchTaxInstallment(qqchTaxInstallmentParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTaxInstallment:remove")
+//            @PreAuthorize(hasPermi = "qqchTaxInstallment:remove")
         @PostMapping("/{ids}")
         public AjaxResult deleteQqchTaxInstallmentByPks(@PathVariable Long[] ids){
             List<Long> qqchTaxInstallmentPkList = Arrays.asList(ids);

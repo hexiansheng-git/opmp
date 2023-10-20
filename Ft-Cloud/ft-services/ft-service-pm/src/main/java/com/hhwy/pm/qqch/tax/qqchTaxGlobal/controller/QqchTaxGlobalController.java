@@ -46,14 +46,14 @@ public class QqchTaxGlobalController extends BaseController {
     private IQqchTaxGlobalFormulaService taxGlobalFormulaService;
 
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:list")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:list")
     @GetMapping
     public AjaxResult getQqchTaxGlobal(@Validated(ValidationGroups.Get.class) QqchTaxGlobal qqchTaxGlobalParam) {
         QqchTaxGlobal qqchTaxGlobal = qqchTaxGlobalService.getQqchTaxGlobal(qqchTaxGlobalParam);
         return AjaxResult.success(qqchTaxGlobal);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:list")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchTaxGlobal dto) {
         CompileEntity<List<QqchTaxGlobal>> qqchTaxGlobalList = null;
@@ -65,7 +65,7 @@ public class QqchTaxGlobalController extends BaseController {
         return AjaxResult.success(qqchTaxGlobalList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:save")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchTaxGlobal>> params) {
         String yearStr = params.getYearStr();
@@ -116,32 +116,32 @@ public class QqchTaxGlobalController extends BaseController {
         return level;
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:add")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchTaxGlobalList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxGlobal> qqchTaxGlobalListParam) {
         qqchTaxGlobalService.insertQqchTaxGlobalList(qqchTaxGlobalListParam);
         return AjaxResult.success(qqchTaxGlobalListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:update")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTaxGlobal(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxGlobal qqchTaxGlobalParam) {
         return toAjax(qqchTaxGlobalService.updateQqchTaxGlobal(qqchTaxGlobalParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:update")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTaxGlobalList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxGlobal> qqchTaxGlobalListParam) {
         return toAjax(qqchTaxGlobalService.updateQqchTaxGlobalList(qqchTaxGlobalListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTaxGlobal(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxGlobal qqchTaxGlobalParam) {
         return toAjax(qqchTaxGlobalService.deleteQqchTaxGlobal(qqchTaxGlobalParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGlobal:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxGlobal:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTaxGlobalByPks(@PathVariable Long[] ids) {
         List<Long> qqchTaxGlobalPkList = Arrays.asList(ids);

@@ -26,7 +26,7 @@ public interface ITWbsService {
      * @param parentId          父级Id
      * @return
      */
-    List<TWbs> wbsListByType(String name,String nodeType,Long parentId);
+    List<TWbs> wbsListByType(String type,String name,String nodeType,Long parentId);
 
     /**
      * 懒加载树形
@@ -41,6 +41,12 @@ public interface ITWbsService {
      * @return
      */
     public Map<String,List<TWbs>> copyChildList(Long[] ids);
+
+    /**
+     * 获取默认的工程类型
+     * @return
+     */
+    public String getDefaultEngineeringType();
 
     int insertTWbs(TWbs tWbs);
 

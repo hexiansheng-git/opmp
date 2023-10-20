@@ -53,7 +53,7 @@ public class QqchMeasureExpRangeController extends BaseController {
     private IQqchMeasureExpPersonService personService;
 
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:list")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:list")
     @GetMapping
     public AjaxResult getQqchMeasureExpRange(@Validated(ValidationGroups.Get.class) QqchMeasureExpRange qqchMeasureExpRangeParam) {
         QqchMeasureExpRange qqchMeasureExpRange = qqchMeasureExpRangeService.getQqchMeasureExpRange(qqchMeasureExpRangeParam);
@@ -83,7 +83,7 @@ public class QqchMeasureExpRangeController extends BaseController {
         return AjaxResult.success(compileEntity);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpDTO expVO) {
         measureService.saveAll(expVO);
@@ -91,39 +91,39 @@ public class QqchMeasureExpRangeController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/add")
     public AjaxResult insertQqchMeasureExpRange(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam) {
         qqchMeasureExpRangeService.insertQqchMeasureExpRange(qqchMeasureExpRangeParam);
         return AjaxResult.success(qqchMeasureExpRangeParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchMeasureExpRangeList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchMeasureExpRange> qqchMeasureExpRangeListParam) {
         qqchMeasureExpRangeService.insertQqchMeasureExpRangeList(qqchMeasureExpRangeListParam);
         return AjaxResult.success(qqchMeasureExpRangeListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
     @PostMapping("/update")
     public AjaxResult updateQqchMeasureExpRange(@Validated(ValidationGroups.Update.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam) {
         return toAjax(qqchMeasureExpRangeService.updateQqchMeasureExpRange(qqchMeasureExpRangeParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchMeasureExpRangeList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMeasureExpRange> qqchMeasureExpRangeListParam) {
         return toAjax(qqchMeasureExpRangeService.updateQqchMeasureExpRangeList(qqchMeasureExpRangeListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchMeasureExpRange(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureExpRange qqchMeasureExpRangeParam) {
         return toAjax(qqchMeasureExpRangeService.deleteQqchMeasureExpRange(qqchMeasureExpRangeParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpRange:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchMeasureExpRangeByPks(@PathVariable Long[] ids) {
         List<Long> qqchMeasureExpRangePkList = Arrays.asList(ids);

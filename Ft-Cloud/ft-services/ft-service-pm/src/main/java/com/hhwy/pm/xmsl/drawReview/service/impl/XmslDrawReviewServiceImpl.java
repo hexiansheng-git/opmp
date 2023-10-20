@@ -264,6 +264,13 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslDrawReviewMaterial material = materMap.get(temp.getMaterialId());
             material.setSourceMaterialList(ObjectUtils.add2List(material.getSourceMaterialList(),temp));
         }
+        //填充默认数据到物资信息
+        List<XmslDrawReviewSourceMaterial> sourceMaterialList = this.sourceMaterList();
+        for (int i = 0; i < materialList.size(); i++) {
+            XmslDrawReviewMaterial temp = materialList.get(i);
+            if(CollectionUtils.isEmpty(temp.getSourceMaterialList()))
+                temp.setSourceMaterialList(sourceMaterialList);
+        }
         return list;
     }
 
@@ -524,6 +531,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                         tempSource.initAdd();
                         tempSource.setMainId(dto.getId());
                         tempSource.setWbsId(temp.getId());
+                        tempSource.setWbsCode(temp.getCode());
                         tempSource.setListId(tempList.getId());
                         tempSource.setListCode(tempList.getListCode());
                         tempSource.setMaterialId(tempMater.getId());
@@ -543,7 +551,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             xmslDrawReviewMapper.deleteSourceMaterial(delMap);
         }
         //处理versionFlag
-        handlerVersionFlag(addRelationList);
+        handlerVersionFlag(addRelationList,1);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         drawReviewWbsService.updateXmslDrawReviewWbsList(updateWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
@@ -553,14 +561,14 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     }
 
     //修改指定wbs编号、清单编号的versionFlag 为0
-    public void handlerVersionFlag(List<XmslDrawReviewRelation> list){
+    public void handlerVersionFlag(List<XmslDrawReviewRelation> list,Integer type){
         Set<String> wbsCodes = new HashSet<>();
         Set<String> listCodes = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewRelation temp = list.get(i);
-            if(StringUtils.isNotBlank(temp.getWbsCode()))
+            if(type == 1 && StringUtils.isNotBlank(temp.getWbsCode()))
                 wbsCodes.add(temp.getWbsCode());
-            if(StringUtils.isNotBlank(temp.getListCode()))
+            if(type ==2 && StringUtils.isNotBlank(temp.getListCode()))
                 listCodes.add(temp.getListCode());
         }
         if(CollectionUtils.isNotEmpty(wbsCodes))
@@ -652,7 +660,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             }
         }
         //处理versionFlag
-        handlerVersionFlag(addRelationList);
+        handlerVersionFlag(addRelationList,2);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
         drawReviewListService.insertXmslDrawReviewListList(addList);

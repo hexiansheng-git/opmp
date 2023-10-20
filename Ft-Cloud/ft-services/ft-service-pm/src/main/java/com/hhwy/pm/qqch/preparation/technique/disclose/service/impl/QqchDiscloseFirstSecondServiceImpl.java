@@ -24,16 +24,15 @@ import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
 import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.tree.TreeUtil;
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sound.midi.VoiceStatus;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -140,20 +139,20 @@ public class QqchDiscloseFirstSecondServiceImpl implements IQqchDiscloseFirstSec
 
         // 危大工程关联wbs编号
         List<String> dangerWbsCodeList =
-            dangerList.stream().map(QqchDangerConstructionList::getWbsCode).collect(Collectors.toList());
+            dangerList.stream().map(QqchDangerConstructionList::getWbsCode).distinct().collect(Collectors.toList());
         // 危大工程关联wbs名称
         List<String> dangerWbsNameList =
-            dangerList.stream().map(QqchDangerConstructionList::getWbsName).collect(Collectors.toList());
+            dangerList.stream().map(QqchDangerConstructionList::getWbsName).distinct().collect(Collectors.toList());
         // 重难点施工方案简述关联wbs编号
         List<String> keyDifficultWbsCodeList =
-            keyDifficultList.stream().map(QqchKeyDifficultConstructionBrief::getWbsCode)
+            keyDifficultList.stream().map(QqchKeyDifficultConstructionBrief::getWbsCode).distinct()
                 .collect(Collectors.toList());
         // 重难点施工方案简述关联wbs名称
         List<String> keyDifficultWbsNameList =
-            keyDifficultList.stream().map(QqchKeyDifficultConstructionBrief::getWbsName).collect(Collectors.toList());
+            keyDifficultList.stream().map(QqchKeyDifficultConstructionBrief::getWbsName).distinct().collect(Collectors.toList());
         // 施工方案名称
-        List<String> constructionNameList = constructionList.stream().map(QqchConstructionList::getSchemeName)
-            .collect(Collectors.toList());
+        List<String> constructionNameList = constructionList.stream().map(QqchConstructionList::getSchemeName).
+            distinct().collect(Collectors.toList());
 
         vo.setDangerProjectCode(StringUtils.join(dangerWbsCodeList.toArray(), ","));
         vo.setDangerProject(StringUtils.join(dangerWbsNameList.toArray(), ","));

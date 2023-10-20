@@ -33,7 +33,7 @@ public class WzchImportExportPlanController extends BaseController {
     /**
      * 查询进出口策划列表
      */
-    @PreAuthorize(hasPermi ="wzch:importPlan:list")
+//    @PreAuthorize(hasPermi ="wzch:importPlan:list")
 //    @CustomLogger(title = "进出口策划-列表查询",businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
     public AjaxResult list(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
@@ -70,7 +70,7 @@ public class WzchImportExportPlanController extends BaseController {
     /**
      * 修改保存进出口策划
      */
-    @PreAuthorize(hasPermi ="wzch:importPlan:modify")
+//    @PreAuthorize(hasPermi ="wzch:importPlan:modify")
 //    @CustomLogger(title = "进出口策划-导出",businessType = CustomBusinessType.SELECT)
     @PostMapping("/modify")
     public AjaxResult modify(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
@@ -93,7 +93,7 @@ public class WzchImportExportPlanController extends BaseController {
     /**
      * 修改保存进出口策划
      */
-    @PreAuthorize(hasPermi ="wzch:importPlan:edit")
+//    @PreAuthorize(hasPermi ="wzch:importPlan:edit")
 //    @CustomLogger(title = "进出口策划-导出",businessType = CustomBusinessType.SELECT)
     @PostMapping("/edit")
     public AjaxResult edit(@RequestBody WzchImportExportPlan wzchImportExportPlan) {
@@ -130,7 +130,7 @@ public class WzchImportExportPlanController extends BaseController {
     /**
      * 删除进出口策划
      */
-    @PreAuthorize(hasPermi ="wzch:importPlan:remove")
+//    @PreAuthorize(hasPermi ="wzch:importPlan:remove")
 //    @CustomLogger(title = "进出口策划-删除",businessType = CustomBusinessType.SELECT)
     @PostMapping( "/remove")
     public AjaxResult remove(@RequestBody WzchImportExportPlan wzchImportExportPlan) {

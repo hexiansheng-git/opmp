@@ -122,6 +122,7 @@ public class QqchConstStaffPlanServiceImpl implements IQqchConstStaffPlanService
 
         // 前端有 数据库中没有 新增
         List<QqchConstStaffPlan> insertDataList = iStaffList.stream().filter(item -> item.getId() == null || !dbIdList.contains(item.getId())).collect(Collectors.toList());
+        insertDataList.stream().forEach(r->r.setId(IdWorker.createId()));
         if (org.apache.commons.collections4.CollectionUtils.isNotEmpty(insertDataList))  this.qqchConstStaffPlanMapper.insertQqchConstStaffPlanList(insertDataList);
 
         // 前端和后台都有的数据 更新

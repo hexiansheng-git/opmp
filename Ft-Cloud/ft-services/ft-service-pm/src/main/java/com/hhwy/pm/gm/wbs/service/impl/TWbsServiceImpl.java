@@ -144,16 +144,16 @@ public class TWbsServiceImpl implements ITWbsService {
     }
     
     @Override
-    public List<TWbs> wbsListByType(String name, String nodeType, Long parentId) {
+    public List<TWbs> wbsListByType(String type,String name, String nodeType, Long parentId) {
         //获取项目的产品类型
-        ProjectBasicInfo projectBasicInfo =  projectBasicInfoService.projectInfo();
-        if(projectBasicInfo == null || StringUtils.isBlank(projectBasicInfo.getBusinessAreasAndProducts()) )
+//        ProjectBasicInfo projectBasicInfo =  projectBasicInfoService.projectInfo();
+        if(StringUtils.isBlank(type) )
             return new ArrayList<>(2);
         //切换到master
         String oldDataSource = DynamicDataSourceContextHolder.peek();
         DynamicDataSourceContextHolder.push("master");
         try {
-            Long mainId = tWbsMapper.getEffectMainIdByType(projectBasicInfo.getBusinessAreasAndProducts());
+            Long mainId = tWbsMapper.getEffectMainIdByType(type);
             if(mainId == null)
                 return new ArrayList<>(2);
             TWbs query = new TWbs();
@@ -167,6 +167,16 @@ public class TWbsServiceImpl implements ITWbsService {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
+    }
+
+    @Override
+    public String getDefaultEngineeringType() {
+        ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
+        String type = projectBasicInfo.getBusinessAreasAndProducts();
+        if(StringUtils.isBlank(type))
+            return "";
+        String enType = tWbsMapper.getEffectEngineeringTypeByProType(type);
+        return ObjectUtils.nvlString(enType);
     }
 
     @Transactional

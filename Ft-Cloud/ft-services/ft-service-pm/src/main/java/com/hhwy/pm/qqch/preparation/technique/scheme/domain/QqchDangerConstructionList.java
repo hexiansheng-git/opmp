@@ -6,9 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.excel.FtExcel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * @author zhenglili
@@ -16,6 +19,8 @@ import lombok.Data;
  * @remark qqch_danger_construction_list
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class QqchDangerConstructionList extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -229,4 +234,10 @@ public class QqchDangerConstructionList extends BaseEntity {
      */
     @JsonProperty
     private String ptVar5;
+
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    private Integer sort;
 }
