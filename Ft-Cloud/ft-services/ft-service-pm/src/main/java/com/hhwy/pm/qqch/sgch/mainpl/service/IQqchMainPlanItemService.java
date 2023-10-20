@@ -48,4 +48,11 @@ public interface IQqchMainPlanItemService {
     int deleteQqchMainPlanByVersion(BigDecimal version);
 
     void confirm(QqchMainPlanItemVo qqchMainPlanItemVoParam);
+
+    /**
+     * 根据id获取所有有关联的数据
+     * @param ids
+     * @return
+     */
+    List<QqchMainPlanItem> getAllLinkList(List<Long> ids);
 }

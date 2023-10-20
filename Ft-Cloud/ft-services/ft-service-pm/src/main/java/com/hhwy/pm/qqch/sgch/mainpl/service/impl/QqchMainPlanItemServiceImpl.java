@@ -287,4 +287,54 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
         }
     }
+
+    /**
+     * 获取所有有关系的的父级子集数据
+     * @param ids
+     * @return
+     */
+    @Override
+    public List<QqchMainPlanItem> getAllLinkList(List<Long> ids) {
+
+        List<QqchMainPlanItem> returnList = new ArrayList<>();
+
+        if (CollectionUtils.isEmpty(ids)) {
+            return returnList;
+        }
+
+        // 获取总体计划生效数据
+        List<QqchMainPlanItem> qqchMainPlanItemListNoTree = getQqchMainPlanItemListNoTree(new QqchMainPlanItem());
+        if(CollectionUtils.isEmpty(qqchMainPlanItemListNoTree)) return returnList;
+
+        for (Long id : ids) {
+            // 查询传入id对应的数据
+            QqchMainPlanItem qqchMainPlanItem = qqchMainPlanItemListNoTree.stream().filter(vo -> id.compareTo(vo.getId()) == 0).findFirst().orElse(null);
+            if(qqchMainPlanItem == null) return returnList;
+
+            String ancestors = qqchMainPlanItem.getAncestors();
+            if(StringUtils.isEmpty(ancestors)) return returnList;
+
+            // 查询传入id对应的数据的子集作业节点
+            List<QqchMainPlanItem> collect = qqchMainPlanItemListNoTree.stream().filter(vo ->
+                    StringUtils.isNotEmpty(vo.getAncestors()) && vo.getAncestors().contains(ancestors)
+                            && QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())).collect(Collectors.toList());
+
+            if(CollectionUtils.isEmpty(collect)) return returnList;
+
+            // 根据子集作业节点获取相关所有父级数据
+            for (QqchMainPlanItem qqchMainPlanItem1 : collect) {
+                String ancestors1 = qqchMainPlanItem1.getAncestors();
+
+                if(StringUtils.isEmpty(ancestors1)) return returnList;
+
+                List<QqchMainPlanItem> collect1 = qqchMainPlanItemListNoTree.stream().filter(vo ->
+                        StringUtils.isNotEmpty(vo.getAncestors()) && ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
+
+                if(!CollectionUtils.isEmpty(collect1)) returnList.addAll(collect1);
+            }
+        }
+
+        // 去重后返回
+        return returnList.stream().distinct().collect(Collectors.toList());
+    }
 }
