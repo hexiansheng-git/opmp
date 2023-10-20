@@ -2,14 +2,12 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionReviewPlan;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionReviewPlanVo;
-import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionReviewPlanMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionReviewPlanService;
@@ -40,11 +38,7 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
     @Autowired
     private QqchConstructionReviewPlanMapper qqchConstructionReviewPlanMapper;
     @Autowired
-    private QqchConstructionListMapper qqchConstructionListMapper;
-    @Autowired
     private IQqchConstructionListService qqchConstructionListService;
-    @Autowired
-    private CommonMapper commonMapper;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
