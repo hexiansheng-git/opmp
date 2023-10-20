@@ -3,6 +3,7 @@ package com.hhwy.job.feign.service;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 文件服务
@@ -94,6 +95,6 @@ public interface PmServiceApi {
     /**
      * 总体进度计划凌晨更新P6数据
      */
-    @GetMapping("/jdglData4P6/initJdglData4P6ByAll")
+    @PostMapping("/jdglData4P6/initJdglData4P6ByAll")
     AjaxResult initJdglData4P6ByAll();
 }
