@@ -224,10 +224,15 @@
     </select>
 
     <select id="getEffectMainIdByType" parameterType="String" resultType="Long">
-        select id from t_wbs_main where product_type like concat('%', #{engineeringType},'%')
+        select id from t_wbs_main where find_in_set#{engineeringType},engineering_type)
         and valid = 1 order by version desc limit 1
     </select>
-    
+
+    <select id="getEffectEngineeringTypeByProType" parameterType="String" resultType="String">
+        select engineering_type from t_wbs_main where product_type like concat('%', #{type},'%')
+        and valid = 1 order by version desc limit 1
+    </select>
+
     <insert id="insertTWbs" useGeneratedKeys="true" keyProperty="id">
         insert into t_wbs
         <trim prefix="(" suffix=")" suffixOverrides=",">

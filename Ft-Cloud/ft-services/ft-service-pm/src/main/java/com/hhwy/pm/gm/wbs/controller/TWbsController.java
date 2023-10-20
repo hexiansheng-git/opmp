@@ -40,9 +40,9 @@ public class TWbsController extends BaseController{
      */
     @PostMapping("/effectLazyList")
     public AjaxResult effectLazyList(@RequestBody Map map) {
-//        String engineeringType = ObjectUtils.nvlString(map.get("engineeringType"));
+        String engineeringType = ObjectUtils.nvlString(map.get("engineeringType"));
         Long parentId = ObjectUtils.nvlLong(map.get("parentId"),-1L);
-        List<TWbs> list = tWbsService.wbsListByType(ObjectUtils.nvlString(map.get("name")),ObjectUtils.nvlString(map.get("nodeType")),parentId);
+        List<TWbs> list = tWbsService.wbsListByType(engineeringType,ObjectUtils.nvlString(map.get("name")),ObjectUtils.nvlString(map.get("nodeType")),parentId);
         return AjaxResult.success(list);
     }
 
@@ -64,6 +64,13 @@ public class TWbsController extends BaseController{
         Map<String, List<TWbs>> resuMap = tWbsService.copyChildList(Convert.toLongArray(ids));
         return AjaxResult.success(resuMap);
     }
+
+    @PostMapping("/getDefaultEngineeringType")
+    public AjaxResult getDefaultEngineeringType() {
+        String enType = tWbsService.getDefaultEngineeringType();
+        return AjaxResult.success("",enType);
+    }
+
 
 
 }

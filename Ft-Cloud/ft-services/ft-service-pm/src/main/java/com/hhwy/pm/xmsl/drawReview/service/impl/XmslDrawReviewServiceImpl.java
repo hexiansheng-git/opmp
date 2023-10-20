@@ -264,6 +264,13 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             XmslDrawReviewMaterial material = materMap.get(temp.getMaterialId());
             material.setSourceMaterialList(ObjectUtils.add2List(material.getSourceMaterialList(),temp));
         }
+        //填充默认数据到物资信息
+        List<XmslDrawReviewSourceMaterial> sourceMaterialList = this.sourceMaterList();
+        for (int i = 0; i < materialList.size(); i++) {
+            XmslDrawReviewMaterial temp = materialList.get(i);
+            if(CollectionUtils.isEmpty(temp.getSourceMaterialList()))
+                temp.setSourceMaterialList(sourceMaterialList);
+        }
         return list;
     }
 
