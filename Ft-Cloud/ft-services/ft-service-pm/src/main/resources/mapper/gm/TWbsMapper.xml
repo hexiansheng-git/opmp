@@ -224,7 +224,7 @@
     </select>
 
     <select id="getEffectMainIdByType" parameterType="String" resultType="Long">
-        select id from t_wbs_main where find_in_set#{engineeringType},engineering_type)
+        select id from t_wbs_main where find_in_set(#{engineeringType},engineering_type)
         and valid = 1 order by version desc limit 1
     </select>
 
