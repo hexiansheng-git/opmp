@@ -7,9 +7,7 @@ import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConst;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
-import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstJobService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstService;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -39,19 +37,11 @@ public class QqchConstController extends BaseController {
     private IQqchConstStaffPlanService staffPlanService;
     
     // 郑丽丽 要所有的施工部署的工种名称
-    @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping("jobList")
-    public AjaxResult jobList(QqchConstStaffPlan param) {
-        param.setValid("1");
-        param.setDelFlag("0");
-        startPage();
-        List<QqchConstStaffPlan> qqchConstJobList = staffPlanService.getQqchConstStaffPlanList(param);
+    public AjaxResult jobList(String codeOrName) {
+        List<QqchConstStaffPlan> qqchConstJobList = staffPlanService.jobList(codeOrName);
         return getDataTableAjaxResult(qqchConstJobList);
     }
-    
-    
-    
-
 
     @PreAuthorize(hasPermi = "qqchConst:list")
     @GetMapping
