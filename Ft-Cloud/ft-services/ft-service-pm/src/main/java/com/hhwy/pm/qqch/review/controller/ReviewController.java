@@ -58,39 +58,39 @@ public class ReviewController extends BaseController {
         return getDataTableAjaxResult(reviewList);
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:add")
+//    @PreAuthorize(hasPermi = "qqchReview:add")
     @PostMapping("/add")
     public AjaxResult insertQqchReview(@Validated(ValidationGroups.Save.class) @RequestBody Map<String, Object> params) {
         qqchReviewService.savePlan(Long.valueOf(params.get("id") + ""));
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:add")
+//    @PreAuthorize(hasPermi = "qqchReview:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchReviewList(@Validated(ValidationGroups.Save.class) @RequestBody List<Review> reviewListParam) {
         qqchReviewService.insertQqchReviewList(reviewListParam);
         return AjaxResult.success(reviewListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:update")
+//    @PreAuthorize(hasPermi = "qqchReview:update")
     @PostMapping("/update")
     public AjaxResult updateQqchReview(@Validated(ValidationGroups.Update.class) @RequestBody Review reviewParam) {
         return toAjax(qqchReviewService.updateQqchReview(reviewParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:update")
+//    @PreAuthorize(hasPermi = "qqchReview:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchReviewList(@Validated(ValidationGroups.Update.class) @RequestBody List<Review> reviewListParam) {
         return toAjax(qqchReviewService.updateQqchReviewList(reviewListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:remove")
+//    @PreAuthorize(hasPermi = "qqchReview:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchReview(@Validated(ValidationGroups.Delete.class) @RequestBody Review reviewParam) {
         return toAjax(qqchReviewService.deleteQqchReview(reviewParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchReview:remove")
+//    @PreAuthorize(hasPermi = "qqchReview:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchReviewByPks(@PathVariable Long[] ids) {
         List<Long> qqchReviewPkList = Arrays.asList(ids);
@@ -112,20 +112,20 @@ public class ReviewController extends BaseController {
      * @return
      */
     @PostMapping("/reviewInfo")
-    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
+//    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
     public AjaxResult reviewInfo(@RequestBody Map<String, String> map) {
         return AjaxResult.success(qqchReviewService.reviewInfo(map));
     }
 
     @PostMapping("/save")
-    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
+//    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
     public AjaxResult save(@RequestBody Review review) {
         qqchReviewService.updateQqchReview(review);
         return AjaxResult.success("操作成功", review.getId() + "");
     }
 
     @PostMapping("/submit")
-    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
+//    @PreAuthorize(hasPermi = "qqchReview:reviewInfo")
     public AjaxResult submit(@RequestBody Review review) {
         review.setTaskStatus("1");
         review.setReviewStatus("3");

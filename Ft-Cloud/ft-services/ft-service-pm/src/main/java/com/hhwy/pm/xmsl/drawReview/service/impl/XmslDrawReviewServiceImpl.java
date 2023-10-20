@@ -524,6 +524,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
                         tempSource.initAdd();
                         tempSource.setMainId(dto.getId());
                         tempSource.setWbsId(temp.getId());
+                        tempSource.setWbsCode(temp.getCode());
                         tempSource.setListId(tempList.getId());
                         tempSource.setListCode(tempList.getListCode());
                         tempSource.setMaterialId(tempMater.getId());

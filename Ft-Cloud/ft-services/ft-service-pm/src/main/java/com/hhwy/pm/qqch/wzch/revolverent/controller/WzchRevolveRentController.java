@@ -72,7 +72,7 @@ public class WzchRevolveRentController extends BaseController {
     /**
      * 查询周转材租赁策划列表
      */
-    @PreAuthorize(hasPermi = "wzch:revolverent:list")
+//    @PreAuthorize(hasPermi = "wzch:revolverent:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询周转材租赁策划列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchRevolveRent wzchRevolveRent) {
@@ -101,7 +101,7 @@ public class WzchRevolveRentController extends BaseController {
     /**
      * 新增保存周转材租赁策划
      */
-    @PreAuthorize(hasPermi = "wzch:revolverent:add")
+//    @PreAuthorize(hasPermi = "wzch:revolverent:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存周转材租赁策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchRevolveRentDTO dto) {
@@ -112,7 +112,7 @@ public class WzchRevolveRentController extends BaseController {
     /**
      * 修改保存周转材租赁策划
      */
-    @PreAuthorize(hasPermi = "wzch:revolverent:edit")
+//    @PreAuthorize(hasPermi = "wzch:revolverent:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存周转材租赁策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchRevolveRentDTO dto) {
@@ -123,14 +123,14 @@ public class WzchRevolveRentController extends BaseController {
     /**
      * 修改保存周转材租赁策划
      */
-    @PreAuthorize(hasPermi = "wzch:revolverent:adjust")
+//    @PreAuthorize(hasPermi = "wzch:revolverent:adjust")
     @PostMapping("/adjust")
 //    @CustomLogger(title = "修改保存周转材租赁策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchRevolveRentDTO dto) {
         return AjaxResult.success("操作成功", String.valueOf(wzchRevolveRentService.adjust(dto)));
     }
 
-    @PreAuthorize(hasPermi = "wzch:revolverent:save")
+//    @PreAuthorize(hasPermi = "wzch:revolverent:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "修改保存周转材租赁策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchRevolveRentDTO dto) {
@@ -140,7 +140,7 @@ public class WzchRevolveRentController extends BaseController {
     /**
      * 删除周转材租赁策划
      */
-    @PreAuthorize(hasPermi = "wzch:revolverent:remove")
+//    @PreAuthorize(hasPermi = "wzch:revolverent:remove")
     @PostMapping("/remove")
 //    @CustomLogger(title = "删除周转材租赁策划", businessType = CustomBusinessType.DELETE)
     public AjaxResult remove(@Validated(ValidationGroups.Delete.class) @RequestBody Map map) {

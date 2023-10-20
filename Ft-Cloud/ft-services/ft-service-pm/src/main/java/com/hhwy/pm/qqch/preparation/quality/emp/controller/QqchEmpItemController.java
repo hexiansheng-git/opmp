@@ -37,7 +37,7 @@ public class QqchEmpItemController extends BaseController {
 
     
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:list")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:list")
     @GetMapping("/list")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchEmpItem qqchEmpItemParam) {
         startPage();
@@ -45,7 +45,7 @@ public class QqchEmpItemController extends BaseController {
         return getDataTableAjaxResult(qqchEmpItemList);
     }
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:add")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:add")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody CompileEntity<List<List<QqchEmpItem>>> dto) {
       
@@ -69,32 +69,32 @@ public class QqchEmpItemController extends BaseController {
         return AjaxResult.success(xmslWbs);
     }
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:add")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchEmpItemList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchEmpItem> qqchEmpItemListParam) {
         qqchEmpItemService.insertQqchEmpItemList(qqchEmpItemListParam);
         return AjaxResult.success(qqchEmpItemListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:update")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:update")
     @PostMapping("/update")
     public AjaxResult updateQqchEmpItem(@Validated(ValidationGroups.Update.class) @RequestBody QqchEmpItem qqchEmpItemParam) {
         return toAjax(qqchEmpItemService.updateQqchEmpItem(qqchEmpItemParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:update")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchEmpItemList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchEmpItem> qqchEmpItemListParam) {
         return toAjax(qqchEmpItemService.updateQqchEmpItemList(qqchEmpItemListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:remove")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchEmpItem(@Validated(ValidationGroups.Delete.class) @RequestBody QqchEmpItem qqchEmpItemParam) {
         return toAjax(qqchEmpItemService.deleteQqchEmpItem(qqchEmpItemParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmpItem:remove")
+//    @PreAuthorize(hasPermi = "qqchEmpItem:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchEmpItemByPks(@PathVariable Long[] ids) {
         List<Long> qqchEmpItemPkList = Arrays.asList(ids);

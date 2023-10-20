@@ -41,14 +41,14 @@ public class QqchMeasureExpPlanController extends BaseController {
 
 
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
     @GetMapping
     public AjaxResult getQqchMeasureExpPlan(@Validated(ValidationGroups.Get.class) QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         QqchMeasureExpPlan qqchMeasureExpPlan = qqchMeasureExpPlanService.getQqchMeasureExpPlan(qqchMeasureExpPlanParam);
         return AjaxResult.success(qqchMeasureExpPlan);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchMeasureExpPlanList(@Validated(ValidationGroups.Select.class) QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         CompileEntity res = new CompileEntity<>();
@@ -59,7 +59,7 @@ public class QqchMeasureExpPlanController extends BaseController {
         return AjaxResult.success(res);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMeasureExpPlan>> map) {
 
@@ -69,39 +69,39 @@ public class QqchMeasureExpPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchMeasureExpPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         qqchMeasureExpPlanService.insertQqchMeasureExpPlan(qqchMeasureExpPlanParam);
         return AjaxResult.success(qqchMeasureExpPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchMeasureExpPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchMeasureExpPlan> qqchMeasureExpPlanListParam) {
         qqchMeasureExpPlanService.insertQqchMeasureExpPlanList(qqchMeasureExpPlanListParam);
         return AjaxResult.success(qqchMeasureExpPlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:update")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchMeasureExpPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         return toAjax(qqchMeasureExpPlanService.updateQqchMeasureExpPlan(qqchMeasureExpPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:update")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchMeasureExpPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMeasureExpPlan> qqchMeasureExpPlanListParam) {
         return toAjax(qqchMeasureExpPlanService.updateQqchMeasureExpPlanList(qqchMeasureExpPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchMeasureExpPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMeasureExpPlan qqchMeasureExpPlanParam) {
         return toAjax(qqchMeasureExpPlanService.deleteQqchMeasureExpPlan(qqchMeasureExpPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchMeasureExpPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchMeasureExpPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchMeasureExpPlanPkList = Arrays.asList(ids);

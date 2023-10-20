@@ -64,7 +64,7 @@ public class WzchAllotMaterialController extends BaseController {
     /**
      * 查询可调拨材料列表
      */
-    @PreAuthorize(hasPermi = "wzch:internalajust:list")
+//    @PreAuthorize(hasPermi = "wzch:internalajust:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询可调拨材料列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchAllotMaterial wzchAllotMaterial) {
@@ -108,7 +108,7 @@ public class WzchAllotMaterialController extends BaseController {
     /**
      * 新增保存可调拨材料
      */
-    @PreAuthorize(hasPermi = "wzch:internalajust:add")
+//    @PreAuthorize(hasPermi = "wzch:internalajust:add")
     @Log(title = "可调拨材料", businessType = BusinessType.INSERT)
     @PostMapping("/save")
     public AjaxResult save(@RequestBody WzchAllotMaterial wzchAllotMaterial) {
@@ -119,7 +119,7 @@ public class WzchAllotMaterialController extends BaseController {
     /**
      * 删除可调拨材料
      */
-    @PreAuthorize(hasPermi = "wzch:internalajust:remove")
+//    @PreAuthorize(hasPermi = "wzch:internalajust:remove")
     @PostMapping("/remove")
     public AjaxResult remove(@RequestBody Map<String, String> map) {
         String ids = map.get("ids");
@@ -169,7 +169,7 @@ public class WzchAllotMaterialController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "wzch:internalajust:add")
+//    @PreAuthorize(hasPermi = "wzch:internalajust:add")
     @Log(title = "可调拨材料", businessType = BusinessType.INSERT)
     @PostMapping("/saveList")
     public AjaxResult saveList(@RequestBody AllotMaterialDTO dto) {

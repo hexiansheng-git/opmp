@@ -84,7 +84,7 @@ public class WzchSpecialMaterialPlanController extends BaseController {
     /**
      * 当地运输方案策划调整
      */
-    @PreAuthorize(hasPermi ="wzch:special:modify")
+//    @PreAuthorize(hasPermi ="wzch:special:modify")
 //    @CustomLogger(title = "专项物资发运策划-调整",businessType = CustomBusinessType.SELECT)
     @PostMapping("/modify")
     public AjaxResult modify(@RequestBody WzchSpecialMaterialPlan wzchSpecialMaterialPlan) {
@@ -147,7 +147,7 @@ public class WzchSpecialMaterialPlanController extends BaseController {
     /**
      * 删除专项物资发运策划
      */
-    @PreAuthorize(hasPermi ="wzch:special:remove")
+//    @PreAuthorize(hasPermi ="wzch:special:remove")
 //    @CustomLogger(title = "专项物资发运策划-详情",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

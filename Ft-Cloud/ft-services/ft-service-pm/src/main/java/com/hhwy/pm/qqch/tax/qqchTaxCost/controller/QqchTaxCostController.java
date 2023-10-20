@@ -37,14 +37,14 @@ public class QqchTaxCostController extends BaseController {
     private IQqchTaxCostService qqchTaxCostService;
 
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:list")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:list")
     @GetMapping
     public AjaxResult getQqchTaxCost(@Validated(ValidationGroups.Get.class) QqchTaxCost qqchTaxCostParam) {
         QqchTaxCost qqchTaxCost = qqchTaxCostService.getQqchTaxCost(qqchTaxCostParam);
         return AjaxResult.success(qqchTaxCost);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:list")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:list")
     @GetMapping("/list")
     public AjaxResult getQqchTaxCostList(@Validated(ValidationGroups.Select.class) QqchTaxCost qqchTaxCostParam) {
         startPage();
@@ -52,39 +52,39 @@ public class QqchTaxCostController extends BaseController {
         return getDataTableAjaxResult(qqchTaxCostList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:add")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTaxCost(@Validated(ValidationGroups.Save.class) @RequestBody QqchTaxCost qqchTaxCostParam) {
         qqchTaxCostService.insertQqchTaxCost(qqchTaxCostParam);
         return AjaxResult.success(qqchTaxCostParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:add")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchTaxCostList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxCost> qqchTaxCostListParam) {
         qqchTaxCostService.insertQqchTaxCostList(qqchTaxCostListParam);
         return AjaxResult.success(qqchTaxCostListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:update")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTaxCost(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxCost qqchTaxCostParam) {
         return toAjax(qqchTaxCostService.updateQqchTaxCost(qqchTaxCostParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:update")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTaxCostList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxCost> qqchTaxCostListParam) {
         return toAjax(qqchTaxCostService.updateQqchTaxCostList(qqchTaxCostListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTaxCost(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxCost qqchTaxCostParam) {
         return toAjax(qqchTaxCostService.deleteQqchTaxCost(qqchTaxCostParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTaxCostByPks(@PathVariable Long[] ids) {
         List<Long> qqchTaxCostPkList = Arrays.asList(ids);
@@ -308,7 +308,7 @@ public class QqchTaxCostController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:list")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:list")
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchTaxCost taxCost) {
         QqchTaxCost qqchTaxCost = CompileEntity.dealListDto(taxCost.getVersion(), new QqchTaxCost());
@@ -317,7 +317,7 @@ public class QqchTaxCostController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:taxList")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:taxList")
     @GetMapping("/taxList")
     public AjaxResult taxList(@Validated(ValidationGroups.Select.class) QqchTaxCost taxCost) {
         QqchTaxCost qqchTaxCost = CompileEntity.dealListDto(taxCost.getVersion(), new QqchTaxCost());
@@ -326,7 +326,7 @@ public class QqchTaxCostController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTaxCost:add")
+//    @PreAuthorize(hasPermi = "qqchTaxCost:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<TaxCostVO> dto) {
         qqchTaxCostService.save(dto);

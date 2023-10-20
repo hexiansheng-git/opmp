@@ -58,7 +58,7 @@ public class WzchPriorApproachDetailController extends BaseController {
     /**
      * 导出优先进场物资详情列表
      */
-    @PreAuthorize(hasPermi = "wzch:approachDetail:export")
+//    @PreAuthorize(hasPermi = "wzch:approachDetail:export")
 //    @CustomLogger(title = "优先进场物资详情-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     public void export(@RequestBody List<WzchPriorApproachDetail> wzchPriorApproachDetailList, HttpServletResponse response) throws IOException {
@@ -68,7 +68,7 @@ public class WzchPriorApproachDetailController extends BaseController {
     /**
      * 导入优先进场物资详情列表
      */
-    @PreAuthorize(hasPermi ="wzch:approachDetail:import")
+//    @PreAuthorize(hasPermi ="wzch:approachDetail:import")
 //    @CustomLogger(title = "优先进场物资详情列表-导入",businessType = CustomBusinessType.IMPORT)
     @PostMapping("/import")
     public AjaxResult importData(MultipartFile file) {

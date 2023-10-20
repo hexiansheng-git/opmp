@@ -66,7 +66,7 @@ public class WzchSpecialProjectController extends BaseController {
     /**
      * 查询专项物资策划列表
      */
-    @PreAuthorize(hasPermi = "wzch:specialproject:list")
+//    @PreAuthorize(hasPermi = "wzch:specialproject:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询专项物资策划列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchSpecialProject wzchSpecialProject) {
@@ -94,7 +94,7 @@ public class WzchSpecialProjectController extends BaseController {
     /**
      * 新增保存专项物资策划
      */
-    @PreAuthorize(hasPermi = "wzch:specialproject:add")
+//    @PreAuthorize(hasPermi = "wzch:specialproject:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存专项物资策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody WzchSpecialProjectDTO dto) {
@@ -105,7 +105,7 @@ public class WzchSpecialProjectController extends BaseController {
     /**
      * 修改保存专项物资策划
      */
-    @PreAuthorize(hasPermi = "wzch:specialproject:edit")
+//    @PreAuthorize(hasPermi = "wzch:specialproject:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存专项物资策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchSpecialProjectDTO wzchSpecialProject) {
@@ -113,7 +113,7 @@ public class WzchSpecialProjectController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "wzch:priorpurchase:adjust")
+//    @PreAuthorize(hasPermi = "wzch:priorpurchase:adjust")
     @PostMapping("/adjust")
 //    @CustomLogger(title = "调整优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchSpecialProjectDTO wzchPriorPurchaseDTO) {
@@ -122,7 +122,7 @@ public class WzchSpecialProjectController extends BaseController {
     /**
      * 新增保存专项物资策划
      */
-    @PreAuthorize(hasPermi = "wzch:specialproject:save")
+//    @PreAuthorize(hasPermi = "wzch:specialproject:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "新增保存专项物资策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody WzchSpecialProjectDTO dto) {
@@ -132,7 +132,7 @@ public class WzchSpecialProjectController extends BaseController {
     /**
      * 删除专项物资策划
      */
-    @PreAuthorize(hasPermi = "wzch:specialproject:remove")
+//    @PreAuthorize(hasPermi = "wzch:specialproject:remove")
     @PostMapping("/remove")
     public AjaxResult remove(String ids) {
         return toAjax(wzchSpecialProjectService.deleteWzchSpecialProjectByIds(ids));

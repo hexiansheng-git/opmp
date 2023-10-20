@@ -47,7 +47,7 @@ public class WzchTotalDemandController extends BaseController {
     /**
      * 新增保存物资总需
      */
-    @PreAuthorize(hasPermi = "wzch:demand:add")
+//    @PreAuthorize(hasPermi = "wzch:demand:add")
     @GetMapping("/add")
     public AjaxResult addSave() {
         WzchTotalDemandAddVO wzchTotalDemandAddVO = wzchTotalDemandService.add();
@@ -67,7 +67,7 @@ public class WzchTotalDemandController extends BaseController {
     /**
      * 调整物资总需
      */
-    @PreAuthorize(hasPermi ="wzch:demand:adjust")
+//    @PreAuthorize(hasPermi ="wzch:demand:adjust")
     @GetMapping("/modify")
 //    @CustomLogger(title = "物资总需-调整",businessType = CustomBusinessType.UPDATE)
     public AjaxResult modify(Long id) {

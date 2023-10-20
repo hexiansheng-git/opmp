@@ -78,7 +78,7 @@ public class WzchFundController extends BaseController {
     /**
      * 新增保存资金策划
      */
-    @PreAuthorize(hasPermi = "wzch:fund:add")
+//    @PreAuthorize(hasPermi = "wzch:fund:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存资金策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchFundDTO dto) {
@@ -89,7 +89,7 @@ public class WzchFundController extends BaseController {
     /**
      * 修改保存资金策划
      */
-    @PreAuthorize(hasPermi = "wzch:fund:edit")
+//    @PreAuthorize(hasPermi = "wzch:fund:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存资金策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchFundDTO dto) {
@@ -105,7 +105,7 @@ public class WzchFundController extends BaseController {
         return toAjax(wzchFundService.deleteWzchFundByIds(ids));
     }
 
-    @PreAuthorize(hasPermi = "wzch:fund:save")
+//    @PreAuthorize(hasPermi = "wzch:fund:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "修改保存资金策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchFundDTO dto) {

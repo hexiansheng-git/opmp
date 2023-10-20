@@ -69,7 +69,7 @@ public class WzchInternalAdjustController extends BaseController {
     /**
      * 查询内部调剂材料策划列表
      */
-    @PreAuthorize(hasPermi = "wzch:internaladjust:list")
+//    @PreAuthorize(hasPermi = "wzch:internaladjust:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询内部调剂材料策划列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchInternalAdjust wzchInternalAdjust) {
@@ -98,7 +98,7 @@ public class WzchInternalAdjustController extends BaseController {
     /**
      * 新增保存内部调剂材料策划
      */
-    @PreAuthorize(hasPermi = "wzch:internaladjust:add")
+//    @PreAuthorize(hasPermi = "wzch:internaladjust:add")
     @PostMapping("/add")
     public AjaxResult addSave(@RequestBody WzchInternalAdjustDTO dto) {
         long id = wzchInternalAdjustService.insert(dto);
@@ -108,14 +108,14 @@ public class WzchInternalAdjustController extends BaseController {
     /**
      * 修改保存内部调剂材料策划
      */
-    @PreAuthorize(hasPermi = "wzch:internaladjust:edit")
+//    @PreAuthorize(hasPermi = "wzch:internaladjust:edit")
     @PostMapping("/edit")
     public AjaxResult editSave(@RequestBody WzchInternalAdjustDTO dto) {
         long id = wzchInternalAdjustService.edit(dto);
         return AjaxResult.success("操作成功", String.valueOf(id));
     }
 
-    @PreAuthorize(hasPermi = "wzch:internaladjust:save")
+//    @PreAuthorize(hasPermi = "wzch:internaladjust:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody WzchInternalAdjustDTO dto) {
         long id = wzchInternalAdjustService.save(dto);
@@ -125,7 +125,7 @@ public class WzchInternalAdjustController extends BaseController {
     /**
      * 调整数据
      */
-    @PreAuthorize(hasPermi = "wzch:internaladjust:adjust")
+//    @PreAuthorize(hasPermi = "wzch:internaladjust:adjust")
     @PostMapping("/adjust")
     public AjaxResult adjust(@RequestBody WzchInternalAdjustDTO dto) {
         long id = wzchInternalAdjustService.adjust(dto);
@@ -136,7 +136,7 @@ public class WzchInternalAdjustController extends BaseController {
     /**
      * 删除内部调剂材料策划
      */
-    @PreAuthorize(hasPermi = "wzch:internaladjust:remove")
+//    @PreAuthorize(hasPermi = "wzch:internaladjust:remove")
     @PostMapping("/remove")
     public AjaxResult remove(@RequestBody Map<String, String> params) {
         String ids = params.get("ids");

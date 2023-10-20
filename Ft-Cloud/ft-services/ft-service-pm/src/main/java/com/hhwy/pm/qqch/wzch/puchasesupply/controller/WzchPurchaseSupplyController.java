@@ -70,7 +70,7 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 新增保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:add")
+//    @PreAuthorize(hasPermi = "wzch:puchasesupply:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存采购供应策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchPurchaseSupplyDTO dto) {
@@ -82,7 +82,7 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:edit")
+//    @PreAuthorize(hasPermi = "wzch:puchasesupply:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchPurchaseSupplyDTO dto) {
@@ -93,7 +93,7 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:save")
+//    @PreAuthorize(hasPermi = "wzch:puchasesupply:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchPurchaseSupplyDTO dto) {
@@ -105,7 +105,7 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:adjust")
+//    @PreAuthorize(hasPermi = "wzch:puchasesupply:adjust")
     @PostMapping("/adjust")
 //    @CustomLogger(title = "调整保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchPurchaseSupplyDTO dto) {
@@ -116,7 +116,7 @@ public class WzchPurchaseSupplyController extends BaseController {
     /**
      * 删除采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:puchasesupply:remove")
+//    @PreAuthorize(hasPermi = "wzch:puchasesupply:remove")
     @PostMapping("/remove")
     public AjaxResult remove(@RequestBody Map<String, String> params) {
         String ids = params.get("ids");

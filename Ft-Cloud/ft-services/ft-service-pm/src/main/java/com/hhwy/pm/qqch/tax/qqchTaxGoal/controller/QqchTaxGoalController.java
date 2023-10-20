@@ -35,53 +35,53 @@ public class QqchTaxGoalController extends BaseController {
     private IQqchTaxGoalService qqchTaxGoalService;
 
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:list")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:list")
     @GetMapping
     public AjaxResult getQqchTaxGoal(@Validated(ValidationGroups.Get.class) QqchTaxGoal qqchTaxGoalParam) {
         QqchTaxGoal qqchTaxGoal = qqchTaxGoalService.getQqchTaxGoal(qqchTaxGoalParam);
         return AjaxResult.success(qqchTaxGoal);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:list")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:list")
     @GetMapping("/list")
     public AjaxResult getQqchTaxGoalList(@Validated(ValidationGroups.Select.class) QqchTaxGoal qqchTaxGoalParam) {
         CompileEntity<List<QqchTaxGoal>> qqchTaxGoalList = qqchTaxGoalService.list(qqchTaxGoalParam);
         return AjaxResult.success(qqchTaxGoalList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:add")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchTaxGoal>> list) {
         qqchTaxGoalService.save(list.dealSaveDto());
         return AjaxResult.success(list);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:add")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchTaxGoalList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxGoal> qqchTaxGoalListParam) {
         qqchTaxGoalService.insertQqchTaxGoalList(qqchTaxGoalListParam);
         return AjaxResult.success(qqchTaxGoalListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:update")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTaxGoal(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxGoal qqchTaxGoalParam) {
         return toAjax(qqchTaxGoalService.updateQqchTaxGoal(qqchTaxGoalParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:update")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTaxGoalList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxGoal> qqchTaxGoalListParam) {
         return toAjax(qqchTaxGoalService.updateQqchTaxGoalList(qqchTaxGoalListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTaxGoal(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxGoal qqchTaxGoalParam) {
         return toAjax(qqchTaxGoalService.deleteQqchTaxGoal(qqchTaxGoalParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxGoal:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxGoal:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTaxGoalByPks(@PathVariable Long[] ids) {
         List<Long> qqchTaxGoalPkList = Arrays.asList(ids);

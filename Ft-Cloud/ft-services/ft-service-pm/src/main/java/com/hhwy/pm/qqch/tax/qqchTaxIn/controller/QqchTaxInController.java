@@ -33,7 +33,7 @@ public class QqchTaxInController extends BaseController {
     private IQqchTaxInService qqchTaxInService;
 
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:list")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:list")
     @GetMapping
     public AjaxResult getQqchTaxIn(@Validated(ValidationGroups.Get.class) QqchTaxIn qqchTaxInParam) {
         QqchTaxIn qqchTaxIn = qqchTaxInService.getQqchTaxIn(qqchTaxInParam);
@@ -41,32 +41,32 @@ public class QqchTaxInController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:add")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchTaxInList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTaxIn> qqchTaxInListParam) {
         qqchTaxInService.insertQqchTaxInList(qqchTaxInListParam);
         return AjaxResult.success(qqchTaxInListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:update")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTaxIn(@Validated(ValidationGroups.Update.class) @RequestBody QqchTaxIn qqchTaxInParam) {
         return toAjax(qqchTaxInService.updateQqchTaxIn(qqchTaxInParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:update")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchTaxInList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTaxIn> qqchTaxInListParam) {
         return toAjax(qqchTaxInService.updateQqchTaxInList(qqchTaxInListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTaxIn(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTaxIn qqchTaxInParam) {
         return toAjax(qqchTaxInService.deleteQqchTaxIn(qqchTaxInParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:remove")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchTaxInByPks(@PathVariable Long[] ids) {
         List<Long> qqchTaxInPkList = Arrays.asList(ids);
@@ -81,14 +81,14 @@ public class QqchTaxInController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:list")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchTaxIn qqchTaxInParam) {
         CompileEntity<TaxInVO> qqchTaxInList = qqchTaxInService.list(qqchTaxInParam);
         return AjaxResult.success(qqchTaxInList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTaxIn:add")
+//    @PreAuthorize(hasPermi = "qqchTaxIn:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<TaxInVO> qqchTaxInParam) {
         qqchTaxInService.save(qqchTaxInParam);

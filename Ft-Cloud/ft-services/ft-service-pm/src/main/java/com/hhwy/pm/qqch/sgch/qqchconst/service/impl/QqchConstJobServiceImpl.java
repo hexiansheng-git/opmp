@@ -127,6 +127,7 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
 
         // 前端有 数据库中没有 新增
         List<QqchConstJob> insertDataList = paramJobList.stream().filter(item -> item.getId() == null || !dbIdList.contains(item.getId())).collect(Collectors.toList());
+        insertDataList.stream().forEach(r->r.setId(IdWorker.createId()));
         if (CollectionUtils.isNotEmpty(insertDataList))  this.qqchConstJobMapper.insertQqchConstJobList(insertDataList);
 
         // 前端和后台都有的数据 更新

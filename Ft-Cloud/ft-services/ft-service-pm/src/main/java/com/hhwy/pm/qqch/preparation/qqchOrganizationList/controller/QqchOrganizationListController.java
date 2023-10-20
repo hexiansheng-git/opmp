@@ -38,7 +38,7 @@ public class QqchOrganizationListController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOrganizationList:list")
+//    @PreAuthorize(hasPermi = "qqchOrganizationList:list")
     @GetMapping("/list")
     public AjaxResult getQqchChangeProcedurePlanVo(BigDecimal version) {
         QqchOrganizationListVo organizationListVo = qqchOrganizationListService.getQqchOrganizationListVo(version);
@@ -51,7 +51,7 @@ public class QqchOrganizationListController extends BaseController {
      * @param qqchOrganizationListVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchOrganizationList:add")
+//    @PreAuthorize(hasPermi = "qqchOrganizationList:add")
     @PostMapping("/save")
     public AjaxResult insertQqchWorkPlanningPrjImg(@Validated(ValidationGroups.Update.class) @RequestBody QqchOrganizationListVo qqchOrganizationListVo) {
         try {

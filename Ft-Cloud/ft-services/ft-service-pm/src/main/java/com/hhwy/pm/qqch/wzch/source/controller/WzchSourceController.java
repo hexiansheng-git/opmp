@@ -46,7 +46,7 @@ public class WzchSourceController extends BaseController {
     /**
      * 查询来源策划列表
      */
-    @PreAuthorize(hasPermi ="wzch:source:list")
+//    @PreAuthorize(hasPermi ="wzch:source:list")
 //    @CustomLogger(title = "来源策划-列表查询",businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
     public AjaxResult list(@RequestBody WzchSource wzchSource){
@@ -90,7 +90,7 @@ public class WzchSourceController extends BaseController {
     /**
      * 删除来源策划
      */
-    @PreAuthorize(hasPermi ="wzch:source:remove")
+//    @PreAuthorize(hasPermi ="wzch:source:remove")
 //    @CustomLogger(title = "来源策划-删除",businessType = CustomBusinessType.DELETE)
     @GetMapping( "/remove")
     public AjaxResult remove(String id) {
@@ -143,7 +143,7 @@ public class WzchSourceController extends BaseController {
     /**
      * 变更清情况提醒
      */
-    @PreAuthorize(hasPermi ="wzch:source:add")
+//    @PreAuthorize(hasPermi ="wzch:source:add")
 //    @CustomLogger(title = "来源策划-新增按钮",businessType = CustomBusinessType.SELECT)
     @GetMapping( "/add")
     public AjaxResult add(){

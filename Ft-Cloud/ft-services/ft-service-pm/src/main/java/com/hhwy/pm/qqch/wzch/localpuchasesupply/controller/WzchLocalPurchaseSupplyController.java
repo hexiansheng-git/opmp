@@ -80,7 +80,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     /**
      * 查询采购供应策划列表
      */
-    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:list")
+//    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:list")
     @PostMapping("/list")
 //    @CustomLogger(title = "查询采购供应策划列表", businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody WzchLocalPurchaseSupply wzchPurchaseSupply) {
@@ -109,7 +109,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     /**
      * 新增保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:add")
+//    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:add")
     @PostMapping("/add")
 //    @CustomLogger(title = "新增保存采购供应策划", businessType = CustomBusinessType.SAVE)
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
@@ -121,7 +121,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:edit")
+//    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:edit")
     @PostMapping("/edit")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult editSave(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
@@ -132,7 +132,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     /**
      * 保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:save")
+//    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:save")
     @PostMapping("/save")
 //    @CustomLogger(title = "修改保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult save(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
@@ -144,7 +144,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     /**
      * 修改保存采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:adjust")
+//    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:adjust")
     @PostMapping("/adjust")
 //    @CustomLogger(title = "调整保存优先进场物资设备采购策划", businessType = CustomBusinessType.UPDATE)
     public AjaxResult adjust(@Validated(ValidationGroups.Update.class) @RequestBody WzchLocalPurchaseSupplyDTO dto) {
@@ -155,7 +155,7 @@ public class WzchLocalPurchaseSupplyController extends BaseController {
     /**
      * 删除采购供应策划
      */
-    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:remove")
+//    @PreAuthorize(hasPermi = "wzch:localpuchasesupply:remove")
     @PostMapping("/remove")
     public AjaxResult remove(@RequestBody Map<String, String> params) {
         String ids = params.get("ids");

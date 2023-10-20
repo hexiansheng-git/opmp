@@ -31,13 +31,13 @@ public class QqchScheController extends BaseController {
     private IQqchScheService qqchScheService;
 
 
-    @PreAuthorize(hasPermi = "qqchScheDiff:list")
+//    @PreAuthorize(hasPermi = "qqchScheDiff:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchScheDTO dto) {
         return AjaxResult.success(qqchScheService.list(dto));
     }
 
-    @PreAuthorize(hasPermi = "qqchScheDiff:save")
+//    @PreAuthorize(hasPermi = "qqchScheDiff:save")
     @PostMapping("/save")
     public AjaxResult save(@RequestBody QqchScheDTO dto) {
         qqchScheService.save(dto);
