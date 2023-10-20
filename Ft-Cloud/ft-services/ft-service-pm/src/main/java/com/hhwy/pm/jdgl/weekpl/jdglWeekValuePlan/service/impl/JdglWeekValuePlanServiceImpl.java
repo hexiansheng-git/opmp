@@ -3,8 +3,13 @@ package com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.service.IJdglWeekImagePlanService;
+import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
+import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.IJdglWeekPlanService;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.domain.JdglWeekValuePlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.mapper.JdglWeekValuePlanMapper;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekValuePlan.service.IJdglWeekValuePlanService;
@@ -20,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +43,16 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
     private IJdglWeekImagePlanService jdglWeekImagePlanService;
 
     @Autowired
+    private IJdglWeekPlanService jdglWeekPlanService;
+
+    @Autowired
     private IXmslDrawReviewListService drawReviewListService;
 
     @Autowired
     private IXmslContractListService xmslContractListService;
+
+    @Autowired
+    private IJdglDayScheduleBillService jdglDayScheduleBillService;
 
 
     public JdglWeekValuePlan getJdglWeekValuePlan(JdglWeekValuePlan jdglWeekValuePlan) {
@@ -60,7 +68,7 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
 
     /**
      * 查询产值进度&未完&
-     * @param yearPlanId
+     * @param
      * @return
      */
     public List<JdglWeekValuePlan> getJdglWeekValuePlanListByPlanId(Long planId) {
@@ -150,6 +158,18 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
             imagePlans = jdglWeekImagePlanService.getJdglWeekImagePlanListByPlanId(planId);
         }
 
+        JdglWeekPlan jdglWeekPlan = jdglWeekPlanService.getJdglWeekPlanById(planId);
+        
+        if(jdglWeekPlan == null) {
+            return returnList;
+        }
+
+        String year = jdglWeekPlan.getYear();
+        String week = jdglWeekPlan.getWeek();
+        Map<String, Date> dateRange = StatisticsUtils.getDateRange4Week(year, week);
+        List<JdglDayScheduleBill> dayScheduleBillList = jdglDayScheduleBillService.getBillValueListByEndDate(dateRange.get("start"));
+
+
         if(!CollectionUtils.isEmpty(imagePlans)) {
             // 获取图纸复核的清单
             List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
@@ -196,7 +216,10 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
                         valuePlan.setUnit(xmslContractList.getUnit());
                         valuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
                         valuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
-//                            valuePlan.setTotalCompDesignQuantity();
+                        if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
+                            JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
+                            if(jdglDayScheduleBill != null) valuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
+                        }
                         if(valuePlan.getDesignQuantity() != null && valuePlan.getTotalCompDesignQuantity() != null) {
                             valuePlan.setRemainDesignQuantity(valuePlan.getDesignQuantity().subtract(valuePlan.getTotalCompDesignQuantity()));
                         }
@@ -245,5 +268,9 @@ public class JdglWeekValuePlanServiceImpl implements IJdglWeekValuePlanService {
         }
 
         return returnList;
+    }
+
+    private List<JdglWeekValuePlan> getBillListByNext(String year, String week) {
+        return jdglWeekValuePlanMapper.getBillListByNext(year, week);
     }
 }

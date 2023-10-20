@@ -221,6 +221,13 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     }
 
+    @Override
+    public JdglYearPlan getJdglYearPlanById(Long yearplanId) {
+        JdglYearPlan jdglYearPlan = new JdglYearPlan();
+        jdglYearPlan.setId(yearplanId);
+        return getJdglYearPlan(jdglYearPlan);
+    }
+
     public List<JdglYearPlan> getJdglYearPlanList(JdglYearPlan jdglYearPlan) {
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(jdglYearPlan);
         String tenantKey = SecurityUtils.getTenantKey();

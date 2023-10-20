@@ -8,6 +8,9 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
@@ -55,6 +58,9 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
     @Autowired
     private IXmslDrawReviewListService drawReviewListService;
+
+    @Autowired
+    private IJdglDayScheduleWbsService jdglDayScheduleWbsService;
 
 
     public JdglYearImagePlan getJdglYearImagePlan(JdglYearImagePlan jdglYearImagePlan) {
@@ -201,12 +207,15 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
 
         // 最新获取总进度计划数据（根据年份日期区间获取总计划、形象计划及关联wbs数据）
         JdglMainPlan usingJdglMainPlan = iJdglMainPlanService.getUsingJdglMainPlan();
-        Map<String, Date> dateRange4Year = StatisticsUtils.getDateRange4Year(year);
-        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange4Year.get("start"), dateRange4Year.get("end"));
+        Map<String, Date> dateRange = StatisticsUtils.getDateRange4Year(year);
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
+
 
         if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglYearPlanParam;
         }
+
+        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(dateRange.get("start"));
 
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
             JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();
@@ -221,8 +230,16 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             jdglYearImagePlan.setWorkName(jdglMainPlanItem.getItemName());
             jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
             jdglYearImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
-            jdglYearImagePlan.setTotalCompQuantity(null);
-            jdglYearImagePlan.setRemainQuantity(null);
+            if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
+                JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
+                if(jdglDayScheduleWbs4Value != null) {
+                    BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
+                    jdglYearImagePlan.setTotalCompQuantity(thisQuantity);
+                    if(thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
+                        jdglYearImagePlan.setRemainQuantity(jdglMainPlanItem.getQuantity().subtract(thisQuantity));
+                    }
+                }
+            }
             jdglYearImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             jdglYearImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             jdglYearImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());

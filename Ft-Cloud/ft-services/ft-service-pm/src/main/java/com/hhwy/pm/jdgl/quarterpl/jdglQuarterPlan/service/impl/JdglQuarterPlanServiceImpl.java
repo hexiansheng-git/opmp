@@ -237,6 +237,13 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         }
     }
 
+    @Override
+    public JdglQuarterPlan getJdglQuarterPlanById(Long planId) {
+        JdglQuarterPlan jdglQuarterPlan = new JdglQuarterPlan();
+        jdglQuarterPlan.setId(planId);
+        return getJdglQuarterPlan(jdglQuarterPlan);
+    }
+
     public List<JdglQuarterPlan> getJdglQuarterPlanList(JdglQuarterPlan jdglQuarterPlan) {
         List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanMapper.getJdglQuarterPlanList(jdglQuarterPlan);
         String tenantKey = SecurityUtils.getTenantKey();

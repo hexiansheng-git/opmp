@@ -34,4 +34,6 @@ public interface IJdglMonthPlanService {
     JdglMonthPlan adjust(JdglMonthPlan jdglMonthPlanParam);
 
     void updateTaskStatus(Long id);
+
+    JdglMonthPlan getJdglMonthPlanListById(Long planId);
 }

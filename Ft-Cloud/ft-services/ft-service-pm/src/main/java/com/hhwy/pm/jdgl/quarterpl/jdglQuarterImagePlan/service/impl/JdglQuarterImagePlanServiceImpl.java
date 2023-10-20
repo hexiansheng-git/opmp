@@ -3,6 +3,8 @@ package com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.domain.JdglMainPlan;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlan.service.IJdglMainPlanService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
@@ -56,6 +58,9 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
     @Autowired
     private IXmslDrawReviewListService drawReviewListService;
+
+    @Autowired
+    private IJdglDayScheduleWbsService jdglDayScheduleWbsService;
 
 
     public JdglQuarterImagePlan getJdglQuarterImagePlan(JdglQuarterImagePlan jdglQuarterImagePlan) {
@@ -199,12 +204,14 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
 
         // 最新获取总进度计划数据（根据年份日期区间获取总计划、形象计划及关联wbs数据）
         JdglMainPlan usingJdglMainPlan = iJdglMainPlanService.getUsingJdglMainPlan();
-        Map<String, Date> dateRange4Quarter = StatisticsUtils.getDateRange4Quarter(year, quarter);
-        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange4Quarter.get("start"), dateRange4Quarter.get("end"));
+        Map<String, Date> dateRange = StatisticsUtils.getDateRange4Quarter(year, quarter);
+        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
 
         if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             return jdglQuarterPlanParam;
         }
+
+        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(dateRange.get("start"));
 
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
             JdglQuarterImagePlan jdglQuarterImagePlan = new JdglQuarterImagePlan();
@@ -219,8 +226,16 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             jdglQuarterImagePlan.setWorkName(jdglMainPlanItem.getItemName());
             jdglQuarterImagePlan.setUnit(jdglMainPlanItem.getUnit());
             jdglQuarterImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
-            jdglQuarterImagePlan.setTotalCompQuantity(null);
-            jdglQuarterImagePlan.setRemainQuantity(null);
+            if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
+                JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
+                if(jdglDayScheduleWbs4Value != null) {
+                    BigDecimal thisQuantity = jdglDayScheduleWbs4Value.getThisQuantity();
+                    jdglQuarterImagePlan.setTotalCompQuantity(thisQuantity);
+                    if(thisQuantity != null && jdglMainPlanItem.getQuantity() != null) {
+                        jdglQuarterImagePlan.setRemainQuantity(jdglMainPlanItem.getQuantity().subtract(thisQuantity));
+                    }
+                }
+            }
             jdglQuarterImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             jdglQuarterImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             jdglQuarterImagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());

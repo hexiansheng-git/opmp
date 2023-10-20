@@ -242,6 +242,13 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         }
     }
 
+    @Override
+    public JdglWeekPlan getJdglWeekPlanById(Long planId) {
+        JdglWeekPlan jdglWeekPlan = new JdglWeekPlan();
+        jdglWeekPlan.setId(planId);
+        return getJdglWeekPlan(jdglWeekPlan);
+    }
+
     public List<JdglWeekPlan> getJdglWeekPlanList(JdglWeekPlan jdglWeekPlan) {
         List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(jdglWeekPlan);
         if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {

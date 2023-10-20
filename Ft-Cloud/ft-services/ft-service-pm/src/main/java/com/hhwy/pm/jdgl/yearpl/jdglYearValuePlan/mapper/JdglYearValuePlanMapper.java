@@ -31,4 +31,6 @@ public interface JdglYearValuePlanMapper {
     List<JdglYearValuePlan> getBillListByYear(@Param("year") String year);
 
     int deleteJdglYearValuePlanByYearPlanId(@Param("yearPlanId") Long yearPlanId);
+
+    List<JdglYearValuePlan> getBillListByNextYear(@Param("year") String year);
 }

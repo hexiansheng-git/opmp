@@ -160,6 +160,13 @@
                            (select * from jdgl_quarter_plan where year = #{year} and quarter = #{quarter}) jwp
         where jwp.id = jwvp.plan_id
     </select>
+    <select id="getBillListByNext"
+            resultMap="JdglQuarterValuePlanResultMap">
+        select jwvp.inventory_code,sum(jwvp.quarter_plan_comp_design_quantity) total_comp_design_quantity from jdgl_quarter_value_plan jwvp,
+        (select * from jdgl_quarter_plan where (year &lt; #{year}) or (year = #{year} and quarter &lt; #{quarter})  and is_use = '1') jwp
+        where jwp.id = jwvp.plan_id
+        group by jwvp.inventory_code
+    </select>
 
     <insert id="insertJdglQuarterValuePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_quarter_value_plan

@@ -9,8 +9,13 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.domain.JdglYearImagePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearImagePlan.service.IJdglYearImagePlanService;
+import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.domain.JdglYearPlan;
+import com.hhwy.pm.jdgl.yearpl.jdglYearPlan.service.IJdglYearPlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReview;
@@ -42,10 +47,16 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
     private IJdglYearImagePlanService jdglYearImagePlanService;
 
     @Autowired
+    private IJdglYearPlanService jdglYearPlanService;
+
+    @Autowired
     private IXmslDrawReviewListService drawReviewListService;
     
     @Autowired
     private IXmslContractListService xmslContractListService;
+
+    @Autowired
+    private IJdglDayScheduleBillService jdglDayScheduleBillService;
 
     public JdglYearValuePlan getJdglYearValuePlan(JdglYearValuePlan jdglYearValuePlan) {
         return jdglYearValuePlanMapper.getJdglYearValuePlan(jdglYearValuePlan);
@@ -147,9 +158,20 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
             return returnList;
         }
 
+        JdglYearPlan jdglYearPlan = jdglYearPlanService.getJdglYearPlanById(yearplanId);
+
         if(CollectionUtils.isEmpty(imagePlans)) {
             imagePlans = jdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(yearplanId);
         }
+
+        if(jdglYearPlan == null) {
+            return returnList;
+        }
+
+        String year = jdglYearPlan.getYear();
+        Map<String, Date> dateRange = StatisticsUtils.getDateRange4Year(year);
+        List<JdglDayScheduleBill> dayScheduleBillList = jdglDayScheduleBillService.getBillValueListByEndDate(dateRange.get("start"));
+
 
         if(!CollectionUtils.isEmpty(imagePlans)) {
             // 获取图纸复核的清单
@@ -197,7 +219,10 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                         jdglYearValuePlan.setUnit(xmslContractList.getUnit());
                         jdglYearValuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
                         jdglYearValuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
-//                            jdglYearValuePlan.setTotalCompDesignQuantity();
+                        if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
+                            JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
+                            if(jdglDayScheduleBill != null) jdglYearValuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
+                        }
                         if(jdglYearValuePlan.getDesignQuantity() != null && jdglYearValuePlan.getTotalCompDesignQuantity() != null) {
                             jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity().subtract(jdglYearValuePlan.getTotalCompDesignQuantity()));
                         }
@@ -249,5 +274,9 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
         }
 
         return returnList;
+    }
+
+    public List<JdglYearValuePlan> getBillListByNextYear(String year) {
+        return jdglYearValuePlanMapper.getBillListByNextYear(year);
     }
 }

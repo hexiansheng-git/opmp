@@ -3,12 +3,16 @@ package com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.domain.JdglMonthImagePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthImagePlan.service.IJdglMonthImagePlanService;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
+import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.domain.JdglMonthValuePlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.mapper.JdglMonthValuePlanMapper;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthValuePlan.service.IJdglMonthValuePlanService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -21,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -40,6 +41,12 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
 
     @Autowired
     private IJdglMonthImagePlanService jdglMonthImagePlanService;
+
+    @Autowired
+    private IJdglMonthPlanService jdglMonthPlanService;
+
+    @Autowired
+    private IJdglDayScheduleBillService jdglDayScheduleBillService;
 
     @Autowired
     private IXmslDrawReviewListService drawReviewListService;
@@ -151,6 +158,17 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
             imagePlans = jdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(planId);
         }
 
+        JdglMonthPlan jdglMonthPlan = jdglMonthPlanService.getJdglMonthPlanListById(planId);
+
+        if(jdglMonthPlan == null) {
+            return returnList;
+        }
+
+        String year = jdglMonthPlan.getYear();
+        String month = jdglMonthPlan.getMonth();
+        Map<String, Date> dateRange = StatisticsUtils.getDateRange4YearMonth(year, month);
+        List<JdglDayScheduleBill> dayScheduleBillList = jdglDayScheduleBillService.getBillValueListByEndDate(dateRange.get("start"));
+
         if(!CollectionUtils.isEmpty(imagePlans)) {
             // 获取图纸复核的清单
             List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
@@ -197,7 +215,10 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
                         valuePlan.setUnit(xmslContractList.getUnit());
                         valuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
                         valuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
-//                            valuePlan.setTotalCompDesignQuantity();
+                        if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
+                            JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
+                            if(jdglDayScheduleBill != null) valuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
+                        }
                         if(valuePlan.getDesignQuantity() != null && valuePlan.getTotalCompDesignQuantity() != null) {
                             valuePlan.setRemainDesignQuantity(valuePlan.getDesignQuantity().subtract(valuePlan.getTotalCompDesignQuantity()));
                         }
@@ -246,5 +267,9 @@ public class JdglMonthValuePlanServiceImpl implements IJdglMonthValuePlanService
         }
 
         return returnList;
+    }
+
+    private List<JdglMonthValuePlan> getBillListByNext(String year, String month) {
+        return jdglMonthValuePlanMapper.getBillListByNext(year, month);
     }
 }

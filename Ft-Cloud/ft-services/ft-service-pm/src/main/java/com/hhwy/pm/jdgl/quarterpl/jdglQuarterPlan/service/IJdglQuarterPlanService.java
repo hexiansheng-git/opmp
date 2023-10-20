@@ -34,4 +34,6 @@ public interface IJdglQuarterPlanService {
     JdglQuarterPlan adjust(JdglQuarterPlan jdglQuarterPlanParam);
 
     void updateTaskStatus(Long id);
+
+    JdglQuarterPlan getJdglQuarterPlanById(Long planId);
 }

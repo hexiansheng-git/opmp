@@ -3,11 +3,16 @@ package com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
+import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.service.IJdglDayScheduleBillService;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.domain.JdglQuarterImagePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterImagePlan.service.IJdglQuarterImagePlanService;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.domain.JdglQuarterPlan;
+import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.IJdglQuarterPlanService;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.mapper.JdglQuarterValuePlanMapper;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.IJdglQuarterValuePlanService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
@@ -20,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,10 +43,16 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
     private IJdglQuarterImagePlanService jdglQuarterImagePlanService;
 
     @Autowired
+    private IJdglQuarterPlanService jdglQuarterPlanService;
+
+    @Autowired
     private IXmslDrawReviewListService drawReviewListService;
 
     @Autowired
     private IXmslContractListService xmslContractListService;
+
+    @Autowired
+    private IJdglDayScheduleBillService jdglDayScheduleBillService;
 
 
     public JdglQuarterValuePlan getJdglQuarterValuePlan(JdglQuarterValuePlan jdglQuarterValuePlan) {
@@ -150,6 +158,18 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
             imagePlans = jdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(planId);
         }
 
+        JdglQuarterPlan jdglQuarterPlan = jdglQuarterPlanService.getJdglQuarterPlanById(planId);
+
+        if(jdglQuarterPlan == null) {
+            return returnList;
+        }
+
+        String year = jdglQuarterPlan.getYear();
+        String quarter = jdglQuarterPlan.getQuarter();
+
+        Map<String, Date> dateRange = StatisticsUtils.getDateRange4Quarter(year, quarter);
+        List<JdglDayScheduleBill> dayScheduleBillList = jdglDayScheduleBillService.getBillValueListByEndDate(dateRange.get("start"));
+
         if(!CollectionUtils.isEmpty(imagePlans)) {
             // 获取图纸复核的清单
             List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
@@ -196,7 +216,10 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
                         valuePlan.setUnit(xmslContractList.getUnit());
                         valuePlan.setDesignQuantity(xmslContractList.getChangeNum() == null ? xmslContractList.getWinNum() : xmslContractList.getChangeNum());
                         valuePlan.setPriceCu(xmslContractList.getChangeUnitPrice() == null ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice());
-//                            valuePlan.setTotalCompDesignQuantity();
+                        if(!CollectionUtils.isEmpty(dayScheduleBillList)) {
+                            JdglDayScheduleBill jdglDayScheduleBill = dayScheduleBillList.stream().filter(vo -> xmslContractList.getCode().equals(vo.getBillCode())).findFirst().orElse(null);
+                            if(jdglDayScheduleBill != null) valuePlan.setTotalCompDesignQuantity(jdglDayScheduleBill.getThisQuantity());
+                        }
                         if(valuePlan.getDesignQuantity() != null && valuePlan.getTotalCompDesignQuantity() != null) {
                             valuePlan.setRemainDesignQuantity(valuePlan.getDesignQuantity().subtract(valuePlan.getTotalCompDesignQuantity()));
                         }
@@ -245,5 +268,9 @@ public class JdglQuarterValuePlanServiceImpl implements IJdglQuarterValuePlanSer
         }
 
         return returnList;
+    }
+
+    private List<JdglQuarterValuePlan> getBillListByNext(String year, String quarter) {
+        return jdglQuarterValuePlanMapper.getBillListByNext(year, quarter);
     }
 }

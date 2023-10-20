@@ -136,6 +136,13 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
         CompileEntity<HashMap<String, Object>> objectCompileEntity = new CompileEntity<>();
         HashMap<String, Object> res = new HashMap<>();
         List<QqchProdPlan> qqchProdPlanList = this.qqchProdPlanMapper.getQqchProdPlanList(qqchProdPlanParam);
+        if(!CollectionUtils.isEmpty(qqchProdPlanList)) {
+            qqchProdPlanList.stream().forEach(vo -> {
+                if(vo.getFinishRatio() != null) {
+                    vo.setFinishRatio(vo.getFinishRatio().multiply(new BigDecimal(100)));
+                }
+            });
+        }
         res.put("list",qqchProdPlanList);
         res.put("xData",qqchProdPlanList.stream().map(QqchProdPlan::getPlanDate).map(sdf::format).collect(Collectors.toList()));
         res.put("yData",qqchProdPlanList.stream().map(QqchProdPlan::getFinishRatio).collect(Collectors.toList()));

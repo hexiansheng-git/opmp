@@ -245,6 +245,13 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         }
     }
 
+    @Override
+    public JdglMonthPlan getJdglMonthPlanListById(Long planId) {
+        JdglMonthPlan jdglMonthPlan = new JdglMonthPlan();
+        jdglMonthPlan.setId(planId);
+        return getJdglMonthPlan(jdglMonthPlan);
+    }
+
     public List<JdglMonthPlan> getJdglMonthPlanList(JdglMonthPlan jdglMonthPlan) {
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(jdglMonthPlan);
         String tenantKey = SecurityUtils.getTenantKey();

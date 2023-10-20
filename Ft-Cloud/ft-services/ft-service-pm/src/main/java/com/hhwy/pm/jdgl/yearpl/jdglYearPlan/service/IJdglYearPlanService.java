@@ -34,4 +34,6 @@ public interface IJdglYearPlanService {
     JdglYearPlan adjust(JdglYearPlan jdglYearPlanParam);
 
     void updateTaskStatus(Long id);
+
+    JdglYearPlan getJdglYearPlanById(Long yearplanId);
 }

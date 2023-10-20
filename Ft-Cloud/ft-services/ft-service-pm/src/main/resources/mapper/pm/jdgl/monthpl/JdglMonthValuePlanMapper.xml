@@ -160,6 +160,13 @@
                            (select * from jdgl_month_plan where year = #{year} and month = #{month}) jwp
         where jwp.id = jwvp.plan_id
     </select>
+    <select id="getBillListByNext"
+            resultMap="JdglMonthValuePlanResultMap">
+        select jwvp.inventory_code,sum(jwvp.month_plan_comp_design_quantity) total_comp_design_quantity from jdgl_month_value_plan jwvp,
+        (select * from jdgl_month_plan where (year &lt; #{year}) or (year = #{year} and month &lt; #{month})  and is_use = '1') jwp
+        where jwp.id = jwvp.plan_id
+        group by jwvp.inventory_code
+    </select>
 
     <insert id="insertJdglMonthValuePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_month_value_plan

@@ -160,6 +160,13 @@
                       (select * from jdgl_week_plan where year = #{year} and week = #{week}) jwp
             where jwp.id = jwvp.plan_id
     </select>
+    <select id="getBillListByNext"
+            resultMap="JdglWeekValuePlanResultMap">
+        select jwvp.inventory_code,sum(jwvp.week_plan_comp_design_quantity) total_comp_design_quantity from jdgl_week_value_plan jwvp,
+        (select * from jdgl_week_plan where (year &lt; #{year}) or (year = #{year} and week &lt; #{week})  and is_use = '1') jwp
+        where jwp.id = jwvp.plan_id
+        group by jwvp.inventory_code
+    </select>
 
     <insert id="insertJdglWeekValuePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_week_value_plan

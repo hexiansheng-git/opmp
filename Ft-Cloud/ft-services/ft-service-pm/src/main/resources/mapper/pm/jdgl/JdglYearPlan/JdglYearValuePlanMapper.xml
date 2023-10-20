@@ -160,6 +160,13 @@
                            (select * from jdgl_year_plan where year = #{year}) jwp
         where jwp.id = jwvp.year_plan_id
     </select>
+    <select id="getBillListByNextYear"
+            resultMap="JdglYearValuePlanResultMap">
+        select jwvp.inventory_code,sum(year_plan_comp_design_quantity) total_comp_design_quantity from jdgl_year_value_plan jwvp,
+        (select * from jdgl_year_plan where year &lt; #{year} and is_use = '1') jwp
+        where jwp.id = jwvp.year_plan_id
+        group by jwvp.inventory_code
+    </select>
 
     <insert id="insertJdglYearValuePlan" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_year_value_plan
