@@ -6,10 +6,11 @@ import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstJob;
 import com.hhwy.pm.qqch.sgch.qqchconst.domain.QqchConstStaffPlan;
 import com.hhwy.pm.qqch.sgch.qqchconst.mapper.QqchConstStaffPlanMapper;
 import com.hhwy.pm.qqch.sgch.qqchconst.service.IQqchConstStaffPlanService;
+import com.hhwy.pm.qqch.utils.DistinctUtil;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -133,4 +135,18 @@ public class QqchConstStaffPlanServiceImpl implements IQqchConstStaffPlanService
     public List<QqchConstStaffPlan> list(QqchConstStaffPlan dto) {
         return this.getQqchConstStaffPlanList(dto);
     }
+
+    @Override
+    public List<QqchConstStaffPlan> jobList(String codeOrName) {
+        QqchConstStaffPlan query = new QqchConstStaffPlan();
+        query.setCodeOrName(codeOrName);
+        BigDecimal version = VersionUtil.getVersion("qqch_const",null);
+        query.setVersion(version);
+        List<QqchConstStaffPlan> qqchConstJobList = qqchConstStaffPlanMapper.getQqchConstStaffPlanList(query);
+        List<QqchConstStaffPlan> list = qqchConstJobList.stream().filter(DistinctUtil.distinctByKey(QqchConstStaffPlan::getOccupationCode)).collect(Collectors.toList());
+        Map<String, List<QqchConstStaffPlan>> mapList = qqchConstJobList.stream().collect(Collectors.groupingBy(QqchConstStaffPlan::getOccupationCode));
+        list.stream().forEach(o -> o.setTotalCount(mapList.get(o.getOccupationCode()).stream().map(j -> j.getTotalCount() == null ? 0:j.getTotalCount()).reduce(Integer::sum).get()));
+        return list;
+    }
+
 }
