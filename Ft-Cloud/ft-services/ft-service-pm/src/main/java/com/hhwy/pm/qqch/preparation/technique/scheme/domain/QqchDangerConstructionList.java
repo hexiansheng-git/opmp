@@ -234,4 +234,10 @@ public class QqchDangerConstructionList extends BaseEntity {
      */
     @JsonProperty
     private String ptVar5;
+
+    /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    private Integer sort;
 }

@@ -121,7 +121,7 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
                 qqchConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                 qqchConstructionList.setCreateUserName(SecurityUtils.getUserName());
                 qqchConstructionList.setCreateTime(DateUtils.getNowDate());
-
+                qqchConstructionList.setSort(i + 1);
                 qqchConstructionList.setVersion(qqchConstructionListVo.getVersion());
                 if (qqchConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     qqchConstructionList.setValid(Valid.YES);

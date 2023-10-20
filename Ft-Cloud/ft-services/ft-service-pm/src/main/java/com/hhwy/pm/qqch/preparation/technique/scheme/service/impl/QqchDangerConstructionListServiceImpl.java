@@ -75,7 +75,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
         // 危大工程清单
         QqchDangerListVo qqchDangerListVo = new QqchDangerListVo();
         List<QqchDangerList> list = new ArrayList<>();
-        for (QqchDangerConstructionList qqchDangerConstructionList : qqchDangerConstructionListVo.getList()) {
+        int sort = 1;
+        List<QqchDangerConstructionList> dangerConstructionListVoList = qqchDangerConstructionListVo.getList();
+        for (QqchDangerConstructionList qqchDangerConstructionList : dangerConstructionListVoList) {
             qqchDangerConstructionList.setId(IdWorker.createId());
             qqchDangerConstructionList.setVersion(qqchDangerConstructionListVo.getVersion());
             if (qqchDangerConstructionListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
@@ -84,6 +86,7 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             qqchDangerConstructionList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
             qqchDangerConstructionList.setCreateUserName(SecurityUtils.getUserName());
             qqchDangerConstructionList.setCreateTime(DateUtils.getNowDate());
+            qqchDangerConstructionList.setSort(sort++);
 
             QqchDangerList qqchDangerList = new QqchDangerList();
             qqchDangerList.setSchemeCode(qqchDangerConstructionList.getSchemeCode());
@@ -96,9 +99,9 @@ public class QqchDangerConstructionListServiceImpl implements IQqchDangerConstru
             qqchDangerListVo.setVersion(qqchDangerConstructionListVo.getVersion());
         }
 
-        if (CollectionUtils.isNotEmpty(qqchDangerConstructionListVo.getList())) {
+        if (CollectionUtils.isNotEmpty(dangerConstructionListVoList)) {
             qqchDangerConstructionListMapper
-                .insertQqchDangerConstructionListList(qqchDangerConstructionListVo.getList());
+                .insertQqchDangerConstructionListList(dangerConstructionListVoList);
         }
 
         // 同步到8.3.1 危大工程清单
