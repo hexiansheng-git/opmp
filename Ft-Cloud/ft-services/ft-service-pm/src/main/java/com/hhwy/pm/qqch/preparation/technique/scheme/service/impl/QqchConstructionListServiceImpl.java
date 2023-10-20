@@ -7,12 +7,10 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
-import com.hhwy.pm.gm.wbs.service.ITWbsService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchConstructionList;
-import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListImportVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.mapper.QqchConstructionListMapper;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchConstructionListService;
@@ -20,19 +18,18 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.WbsRedisUtils;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
-import com.hhwy.pm.xmsl.wbs.service.IXmslWbsService;
 import com.hhwy.utils.AddBaseInfoUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
-import java.math.BigDecimal;
-import java.util.*;
-
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * @author zhenglili
@@ -216,5 +213,16 @@ public class QqchConstructionListServiceImpl implements IQqchConstructionListSer
         //更新清单通过时间
         if(passTime != null)
             qqchConstructionListMapper.updatePassTime(passTime,version);
+    }
+
+    /**
+     * 获取施工方案清单中危大等级为危大、超危大的方案数据
+     * @return
+     */
+    @Override
+    public List<QqchConstructionList> getBigDangerLevelConstructionList() {
+        // 获取方案清单最大版本号
+        BigDecimal maxVersion = commonMapper.selectMaxVersion("qqch_construction_list");
+        return qqchConstructionListMapper.getBigDangerLevelConstructionList(maxVersion);
     }
 }
