@@ -97,9 +97,15 @@ public class JdglDiffAnalysisController extends BaseController {
         return toAjax(jdglDiffAnalysisService.deleteJdglDiffAnalysisByPks(jdglDiffAnalysisPkList));
     }
 
-    @GetMapping("/initDiffData")
-    public AjaxResult initDiffData() {
-        jdglDiffAnalysisService.initDiffData();
+//    @GetMapping("/initDiffData")
+//    public AjaxResult initDiffData() {
+//        jdglDiffAnalysisService.initDiffData();
+//        return AjaxResult.success();
+//    }
+
+    @GetMapping("/initDiffAnalysis")
+    public AjaxResult initDiffAnalysis() {
+        jdglDiffAnalysisService.initDiffAnalysis();
         return AjaxResult.success();
     }
 

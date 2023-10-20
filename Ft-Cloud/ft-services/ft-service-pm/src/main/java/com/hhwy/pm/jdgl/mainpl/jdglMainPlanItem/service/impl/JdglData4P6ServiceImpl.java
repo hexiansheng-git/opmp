@@ -91,7 +91,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         // 获取p6 作业数据
         ResponseEntity<List<ActivityConstField>> workResult = restTemplate.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
         // 获取转换后的p6逻辑关系数据
-        List<JdglMainPlanItemPre> relInfos = new ArrayList<>();//getPre(projectId);
+        List<JdglMainPlanItemPre> relInfos = getPre(projectId);
 
         // 获取当前启用的总体计划主表数据
         JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();

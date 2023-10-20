@@ -83,4 +83,17 @@ public interface PmServiceApi {
      */
     @GetMapping("/qqchPersonControlPlan/personControlPlanWarn")
     AjaxResult personControlPlanWarn();
+
+
+    /**
+     * 进度计划差异化分析20号生成数据
+     */
+    @GetMapping("/jdglDiffAnalysis/initDiffAnalysis")
+    AjaxResult initDiffAnalysis();
+
+    /**
+     * 总体进度计划凌晨更新P6数据
+     */
+    @GetMapping("/jdglData4P6/initJdglData4P6ByAll")
+    AjaxResult initJdglData4P6ByAll();
 }

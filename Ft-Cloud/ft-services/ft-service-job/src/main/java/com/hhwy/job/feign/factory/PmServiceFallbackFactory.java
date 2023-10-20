@@ -42,6 +42,16 @@ public class PmServiceFallbackFactory implements FallbackFactory<PmServiceApi> {
             }
 
             @Override
+            public AjaxResult initDiffAnalysis() {
+                return null;
+            }
+
+            @Override
+            public AjaxResult initJdglData4P6ByAll() {
+                return null;
+            }
+
+            @Override
             public AjaxResult preparationFirstStageWarn() {
                 return null;
             }

@@ -27,7 +27,7 @@ public class JdglData4P6Controller {
     }
 
     @PostMapping("/initJdglData4P6ByAll")
-    public AjaxResult initAllJdglData4P6() {
+    public AjaxResult initJdglData4P6ByAll() {
         return AjaxResult.success(jdglData4P6Service.initAllJdglData4P6());
     }
 

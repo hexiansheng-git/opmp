@@ -309,13 +309,13 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     public void initDiffData() {
         JdglDiffAnalysis jdglDiffAnalysis = new JdglDiffAnalysis();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date nowDate = null;
-        try {
-            nowDate = simpleDateFormat.parse("2023-10-20");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-//        Date nowDate = new Date();
+//        Date nowDate = null;
+//        try {
+//            nowDate = simpleDateFormat.parse("2023-10-20");
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        Date nowDate = new Date();
         jdglDiffAnalysis.setId(IdWorker.createId());
         jdglDiffAnalysis.setPeriod(nowDate);
         jdglDiffAnalysis.setCreateTime(nowDate);
