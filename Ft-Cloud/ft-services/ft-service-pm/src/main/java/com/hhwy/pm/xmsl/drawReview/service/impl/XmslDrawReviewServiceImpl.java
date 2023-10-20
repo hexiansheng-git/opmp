@@ -551,7 +551,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             xmslDrawReviewMapper.deleteSourceMaterial(delMap);
         }
         //处理versionFlag
-        handlerVersionFlag(addRelationList);
+        handlerVersionFlag(addRelationList,1);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         drawReviewWbsService.updateXmslDrawReviewWbsList(updateWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
@@ -561,14 +561,14 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
     }
 
     //修改指定wbs编号、清单编号的versionFlag 为0
-    public void handlerVersionFlag(List<XmslDrawReviewRelation> list){
+    public void handlerVersionFlag(List<XmslDrawReviewRelation> list,Integer type){
         Set<String> wbsCodes = new HashSet<>();
         Set<String> listCodes = new HashSet<>();
         for (int i = 0; i < list.size(); i++) {
             XmslDrawReviewRelation temp = list.get(i);
-            if(StringUtils.isNotBlank(temp.getWbsCode()))
+            if(type == 1 && StringUtils.isNotBlank(temp.getWbsCode()))
                 wbsCodes.add(temp.getWbsCode());
-            if(StringUtils.isNotBlank(temp.getListCode()))
+            if(type ==2 && StringUtils.isNotBlank(temp.getListCode()))
                 listCodes.add(temp.getListCode());
         }
         if(CollectionUtils.isNotEmpty(wbsCodes))
@@ -660,7 +660,7 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
             }
         }
         //处理versionFlag
-        handlerVersionFlag(addRelationList);
+        handlerVersionFlag(addRelationList,2);
         drawReviewWbsService.insertXmslDrawReviewWbsList(addWbsList);
         relationService.insertXmslDrawReviewRelationList(addRelationList);
         drawReviewListService.insertXmslDrawReviewListList(addList);
