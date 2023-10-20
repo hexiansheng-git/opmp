@@ -27,8 +27,8 @@ public class CountryData {
     private static final String reqUrl = "https://esb.cfhec.net/env-101/por-902/mdm/route/esbmule/services/query/MDM_Q_SJFC_GJDQ";
     private static final String apikey = "rPFLbaT5mWodSwjulaYENn8kMigDvyzj";
 
-    @GetMapping("/test2")
-    public AjaxResult getCountryInfo(){
+    @GetMapping("/pullContry")
+    public AjaxResult pullContry(){
         Map<String, String> reqHeader = new HashMap<>();
         reqHeader.put("apikey", apikey);
         String respStr = HttpUtils.sendPost(reqUrl, reqParam, reqHeader);

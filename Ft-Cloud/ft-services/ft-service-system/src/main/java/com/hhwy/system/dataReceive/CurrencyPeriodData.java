@@ -46,8 +46,8 @@ public class CurrencyPeriodData {
     private String caiwuyun_url = "http://esb.cfhec.net/env-101/por-1002/esb/haiwai_ju_caiwuyun/caiwuyun_url";
     private String caiwuyun_apiKey = "duZXF5cW654rhAOeSJrfVSXrePw4d5gl";
 
-    @GetMapping("test1")
-    public void handleCurrencyPeriodData() {
+    @GetMapping("pullPeriodCurrency")
+    public AjaxResult pullPeriodCurrency() {
         String year = String.valueOf(DateUtil.thisYear());
         int pageNum = 1;
         Map<String, String> headerMap = new HashMap<>();
@@ -68,7 +68,7 @@ public class CurrencyPeriodData {
                 List<JSONObject> data = (List<JSONObject>) jsonObject.get("data");
                 //"RATEVALUETYPE": "1"  区间汇率
                 if(CollectionUtils.isEmpty(data)){
-                    return ;
+                    return null;
                 }
                 BigDecimal zero = new BigDecimal(0);
                 for(JSONObject temp : data){
@@ -161,6 +161,7 @@ public class CurrencyPeriodData {
         System.out.println("执行结束------------------------------"+pageNum);
         System.out.println("结果数据--->"+JSONObject.toJSONString(qicihuilv));
         handleData(qicihuilv);
+        return AjaxResult.success();
     }
 
 
