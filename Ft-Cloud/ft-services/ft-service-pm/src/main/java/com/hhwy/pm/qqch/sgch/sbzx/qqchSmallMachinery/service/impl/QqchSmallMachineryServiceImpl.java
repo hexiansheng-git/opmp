@@ -61,11 +61,11 @@ public class QqchSmallMachineryServiceImpl implements IQqchSmallMachineryService
     public QqchSmallMachineryVo syncData(QqchSmallMachineryVo param) {
         BigDecimal version = param.getVersion();
         List<QqchSmallMachinery> paramList = param.getQqchSmallMachineryList();
-        if (CollectionUtils.isEmpty(paramList)){
-            QqchSmallMachinery qqchSmallMachinery = new QqchSmallMachinery();
-            qqchSmallMachinery.setVersion(param.getVersion());
-            return this.getQqchSmallMachineryList(qqchSmallMachinery);
-        }
+//        if (CollectionUtils.isEmpty(paramList)){
+//            QqchSmallMachinery qqchSmallMachinery = new QqchSmallMachinery();
+//            qqchSmallMachinery.setVersion(param.getVersion());
+//            return this.getQqchSmallMachineryList(qqchSmallMachinery);
+//        }
         //按设备编号分组，用于判断是否已存在
         Map<String, List<QqchSmallMachinery>> collect = new HashMap<>();
         if (CollectionUtils.isNotEmpty(paramList)) {
