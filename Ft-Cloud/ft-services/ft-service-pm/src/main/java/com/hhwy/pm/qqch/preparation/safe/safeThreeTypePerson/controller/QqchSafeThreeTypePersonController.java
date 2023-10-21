@@ -16,7 +16,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
  * @author zq
@@ -32,21 +32,21 @@ public class QqchSafeThreeTypePersonController extends BaseController {
     private IQqchSafeThreeTypePersonService qqchSafeThreeTypePersonService;
 
 
-    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:list")
+//    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:list")
     @GetMapping
     public AjaxResult getQqchSafeThreeTypePerson(@Validated(ValidationGroups.Get.class) QqchSafeThreeTypePerson qqchSafeThreeTypePersonParam) {
         QqchSafeThreeTypePerson qqchSafeThreeTypePerson = qqchSafeThreeTypePersonService.getQqchSafeThreeTypePerson(qqchSafeThreeTypePersonParam);
         return AjaxResult.success(qqchSafeThreeTypePerson);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:list")
+//    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:list")
     @GetMapping("/list")
     public AjaxResult getQqchSafeThreeTypePersonList(@Validated(ValidationGroups.Select.class) QqchSafeThreeTypePerson qqchSafeThreeTypePersonParam) {
         QqchSafeThreeTypePersonVo personList = qqchSafeThreeTypePersonService.getQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonParam);
         return AjaxResult.success(personList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:add")
+//    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSafeThreeTypePersonList(@RequestBody QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
         qqchSafeThreeTypePersonService.insertQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonVo);
