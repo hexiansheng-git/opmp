@@ -1,19 +1,16 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 
 import com.hhwy.common.security.util.SecurityUtils;
-import com.hhwy.domain.base.system.material.MaterialInfo;
 import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
-import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.mapper.SbchTotalDemandPlanDetailMapper;
 import com.hhwy.pm.qqch.preparation.sbch.plan.mapper.SbchTotalDemandPlanMapper;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.SbchTotalDemandPlanService;
-import com.hhwy.pm.qqch.preparation.sbch.plan.vo.SbchTotalDemandPlanDetailVo;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.EntityUtils;
@@ -22,9 +19,9 @@ import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.myUtilPrepare.MyUtilPrepareUtil;
 import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.selfEmpty.SelfEmpty;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +51,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
     @Autowired
     private SetMaterialNameUtils setMaterialNameUtils;
 
+
     @Override
     public SbchTotalDemandPlan getList(BigDecimal version) {
         SbchTotalDemandPlan sbchTotalDemandPlanDetailVo = new SbchTotalDemandPlan();
@@ -62,7 +60,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
         SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
         sbchTotalDemandPlan.setVersion(version);
         List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
-        if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)){
+        if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)) {
             SbchTotalDemandPlan sbchTotalDemandPlan1 = sbchTotalDemandPlans.get(0);
             sbchTotalDemandPlanDetailVo = sbchTotalDemandPlan1;
             SbchTotalDemandPlanDetail detailVo = new SbchTotalDemandPlanDetail();
@@ -70,7 +68,7 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
             List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(detailVo);
 
             ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
-            if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)){
+            if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)) {
                 Map<String, String> busAndMaterialMap = new HashMap<>();
                 busAndMaterialMap.put("materialName", "materialName");
                 busAndMaterialMap.put("materialSpec", "materialSpec");
@@ -92,13 +90,13 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                     int companySelfNum = detailList.stream().mapToInt(item -> ObjectUtils.isEmpty(item.getCompanySelfNum()) ? 0 : item.getCompanySelfNum().intValue()).sum();
 
                     SbchTotalDemandPlanDetail detail = new SbchTotalDemandPlanDetail();
-                    BeanUtils.copyProperties(detailList.get(0),detail);
-                    detail.setTotalNum(Long.parseLong(totalNum+""));
-                    detail.setAllocateNum(Long.parseLong(allocateNum+""));
-                    detail.setLocalBuyNum(Long.parseLong(localBuyNum+""));
-                    detail.setCountryBuyNum(Long.parseLong(countryBuyNum+""));
-                    detail.setLocalLeaseNum(Long.parseLong(localLeaseNum+""));
-                    detail.setCompanySelfNum(Long.parseLong(companySelfNum+""));
+                    BeanUtils.copyProperties(detailList.get(0), detail);
+                    detail.setTotalNum(Long.parseLong(totalNum + ""));
+                    detail.setAllocateNum(Long.parseLong(allocateNum + ""));
+                    detail.setLocalBuyNum(Long.parseLong(localBuyNum + ""));
+                    detail.setCountryBuyNum(Long.parseLong(countryBuyNum + ""));
+                    detail.setLocalLeaseNum(Long.parseLong(localLeaseNum + ""));
+                    detail.setCompanySelfNum(Long.parseLong(companySelfNum + ""));
                     returnList.add(detail);
                 }
             }
@@ -115,11 +113,11 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
         SbchTotalDemandPlan temp = new SbchTotalDemandPlan();
         temp.setVersion(vo.getVersion());
         List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(temp);
-        if(!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)){
+        if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)) {
             vo.setId(sbchTotalDemandPlans.get(0).getId());
             MyUtilPrepareUtil.setUpdateInfoBase(vo);
             sbchTotalDemandPlanMapper.updateSbchTotalDemandPlan(vo);
-        }else{
+        } else {
             vo.setId(IdWorker.createId());
             String setCode = genCodeService.getSetCode(CodeEnum.EQU_TOTAL_PLAN);
             vo.setUnicode(setCode);
@@ -128,9 +126,9 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
             sbchTotalDemandPlanMapper.insertSbchTotalDemandPlan(vo);
         }
 
-        if(!ObjectNullUtil.isEmpty(list)){
+        if (!ObjectNullUtil.isEmpty(list)) {
             //校验数据必填
-            if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
+            if ("1".equals(vo.getButtonMark()) || "2".equals(vo.getButtonMark())) {//确认
                 JyDetailsUtil.jyDetails(list, ValidationGroups.Save.class);
             }
             for (SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail : list) {
@@ -142,16 +140,29 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
         // 清空数据库表中数据
         SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
         sbchTotalDemandPlan.setVersion(vo.getVersion());
-        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(vo.getId(), SecurityUtils.getSysUser().getUserId(),new Date());
-        if(!ObjectNullUtil.isEmpty(list)){
+        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(vo.getId(), SecurityUtils.getSysUser().getUserId(), new Date());
+        if (!ObjectNullUtil.isEmpty(list)) {
             sbchTotalDemandPlanDetailMapper.batchInsert(list);
         }
         //判断是否是确认
-        if(ButtonMark.CONFIRM.equals(vo.getButtonMark())){
+        if (ButtonMark.CONFIRM.equals(vo.getButtonMark())) {
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();
-            qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);
+            qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+    }
+
+    @Override
+    @SelfEmpty(clazz = SbchTotalDemandPlanDetail.class)
+    public List<SbchTotalDemandPlanDetail> selectSbchTotalDemandPlanDetailLeaderList(SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
+        ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
+
+        return returnList;
+    }
+
+    @Override
+    public SbchTotalDemandPlan getLeaderList(SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
+        return null;
     }
 }
