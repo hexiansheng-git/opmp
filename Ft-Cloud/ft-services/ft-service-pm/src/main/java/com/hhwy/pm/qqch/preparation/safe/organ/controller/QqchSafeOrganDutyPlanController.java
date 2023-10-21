@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.organ.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.QqchSafeOrganDutyPlan;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchSafeOrganDutyPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchSafeOrganDutyPlanService;
@@ -36,7 +36,7 @@ public class QqchSafeOrganDutyPlanController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchSafeOrganDutyPlanVo qqchSafeOrganDutyPlanVo = qqchSafeOrganDutyPlanService
@@ -50,7 +50,7 @@ public class QqchSafeOrganDutyPlanController extends BaseController {
      * @param qqchSafeOrganDutyPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:add")
+//    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody QqchSafeOrganDutyPlanVo qqchSafeOrganDutyPlanVo) {
         qqchSafeOrganDutyPlanService.batchSave(qqchSafeOrganDutyPlanVo);
@@ -62,7 +62,7 @@ public class QqchSafeOrganDutyPlanController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSafeOrganDutyPlan:list")
     @GetMapping("/getPageList")
     public AjaxResult getPageList() {
         // 获取最新版本

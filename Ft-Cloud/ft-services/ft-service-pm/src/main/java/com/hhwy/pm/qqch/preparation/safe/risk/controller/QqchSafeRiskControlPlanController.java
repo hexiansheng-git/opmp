@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.risk.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskControlPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskControlPlanService;
 import java.math.BigDecimal;
@@ -33,7 +33,7 @@ public class QqchSafeRiskControlPlanController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafeRiskControlPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskControlPlan:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchSafeRiskControlPlanVo qqchSafeRiskControlPlanVo = qqchSafeRiskControlPlanService
@@ -47,7 +47,7 @@ public class QqchSafeRiskControlPlanController extends BaseController {
      * @param qqchSafeRiskControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafeRiskControlPlan:add")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskControlPlan:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody QqchSafeRiskControlPlanVo qqchSafeRiskControlPlanVo) {
         qqchSafeRiskControlPlanService.batchSave(qqchSafeRiskControlPlanVo);

@@ -20,7 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
  * @author zq8.8.1环境风险管控
@@ -36,14 +36,14 @@ public class QqchSafeEnvirRiskListController extends BaseController {
     private IQqchSafeEnvirRiskListService qqchSafeEnvirRiskListService;
 
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:list")
     @GetMapping
     public AjaxResult getQqchSafeEnvirRiskList(@Validated(ValidationGroups.Get.class) QqchSafeEnvirRiskList qqchSafeEnvirRiskListParam) {
         QqchSafeEnvirRiskList qqchSafeEnvirRiskList = qqchSafeEnvirRiskListService.getQqchSafeEnvirRiskList(qqchSafeEnvirRiskListParam);
         return AjaxResult.success(qqchSafeEnvirRiskList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:list")
     @GetMapping("/list")
     public AjaxResult getQqchSafeEnvirRiskListList(@Validated(ValidationGroups.Select.class) QqchSafeEnvirRiskList qqchSafeEnvirRiskListParam) {
         startPage();
@@ -51,39 +51,39 @@ public class QqchSafeEnvirRiskListController extends BaseController {
         return getDataTableAjaxResult(qqchSafeEnvirRiskListList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:add")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSafeEnvirRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeEnvirRiskList qqchSafeEnvirRiskListParam) {
         qqchSafeEnvirRiskListService.insertQqchSafeEnvirRiskList(qqchSafeEnvirRiskListParam);
         return AjaxResult.success(qqchSafeEnvirRiskListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:add")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSafeEnvirRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo) {
         qqchSafeEnvirRiskListService.insertQqchSafeEnvirRiskListList(qqchSafeEnvirRiskListVo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:update")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSafeEnvirRiskList(@Validated(ValidationGroups.Update.class) @RequestBody QqchSafeEnvirRiskList qqchSafeEnvirRiskListParam) {
         return toAjax(qqchSafeEnvirRiskListService.updateQqchSafeEnvirRiskList(qqchSafeEnvirRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:update")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSafeEnvirRiskListList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSafeEnvirRiskList> qqchSafeEnvirRiskListListParam) {
         return toAjax(qqchSafeEnvirRiskListService.updateQqchSafeEnvirRiskListList(qqchSafeEnvirRiskListListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:remove")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSafeEnvirRiskList(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSafeEnvirRiskList qqchSafeEnvirRiskListParam) {
         return toAjax(qqchSafeEnvirRiskListService.deleteQqchSafeEnvirRiskList(qqchSafeEnvirRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:remove")
+//    @PreAuthorize(hasPermi = "qqchSafeEnvirRiskList:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSafeEnvirRiskListByPks(@PathVariable Long[] ids) {
         List<Long> qqchSafeEnvirRiskListPkList = Arrays.asList(ids);
@@ -97,7 +97,7 @@ public class QqchSafeEnvirRiskListController extends BaseController {
         util.exportExcel(response, qqchSafeEnvirRiskListList, DateUtils.getDate());
     }
 
-    @PreAuthorize(hasAnyPermi = "qqchSafeEnvirRiskList:list")
+//    @PreAuthorize(hasAnyPermi = "qqchSafeEnvirRiskList:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version){
         QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo = qqchSafeEnvirRiskListService.getList(version);

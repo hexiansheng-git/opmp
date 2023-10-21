@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.validation.annotation.Validated;
 import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
  * @author zq
@@ -37,14 +37,14 @@ public class QqchSafeRiskListController extends BaseController {
     private IQqchSafeRiskListService qqchSafeRiskListService;
 
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
     @GetMapping
     public AjaxResult getQqchSafeRiskList(@Validated(ValidationGroups.Get.class) QqchSafeRiskList qqchSafeRiskListParam) {
         QqchSafeRiskList qqchSafeRiskList = qqchSafeRiskListService.getQqchSafeRiskList(qqchSafeRiskListParam);
         return AjaxResult.success(qqchSafeRiskList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
     @GetMapping("/list")
     public AjaxResult getQqchSafeRiskListList(@Validated(ValidationGroups.Select.class) QqchSafeRiskList qqchSafeRiskListParam) {
         startPage();
@@ -52,39 +52,39 @@ public class QqchSafeRiskListController extends BaseController {
         return getDataTableAjaxResult(qqchSafeRiskListList);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:add")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSafeRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeRiskList qqchSafeRiskListParam) {
         qqchSafeRiskListService.insertQqchSafeRiskList(qqchSafeRiskListParam);
         return AjaxResult.success(qqchSafeRiskListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:add")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSafeRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeRiskListVo qqchSafeRiskListVo) {
         qqchSafeRiskListService.insertQqchSafeRiskListList(qqchSafeRiskListVo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:update")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSafeRiskList(@Validated(ValidationGroups.Update.class) @RequestBody QqchSafeRiskList qqchSafeRiskListParam) {
         return toAjax(qqchSafeRiskListService.updateQqchSafeRiskList(qqchSafeRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:update")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSafeRiskListList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSafeRiskList> qqchSafeRiskListListParam) {
         return toAjax(qqchSafeRiskListService.updateQqchSafeRiskListList(qqchSafeRiskListListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:remove")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSafeRiskList(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSafeRiskList qqchSafeRiskListParam) {
         return toAjax(qqchSafeRiskListService.deleteQqchSafeRiskList(qqchSafeRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:remove")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSafeRiskListByPks(@PathVariable Long[] ids) {
         List<Long> qqchSafeRiskListPkList = Arrays.asList(ids);
@@ -104,7 +104,7 @@ public class QqchSafeRiskListController extends BaseController {
      * @param qqchSafeRiskListVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchSafeRiskListVo qqchSafeRiskListVo) {
          return AjaxResult.success(qqchSafeRiskListService.getList(qqchSafeRiskListVo));

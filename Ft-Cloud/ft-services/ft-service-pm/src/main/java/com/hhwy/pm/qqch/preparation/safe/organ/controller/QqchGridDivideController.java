@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.organ.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchGridDivideVo;
 import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchGridDivideService;
 import java.math.BigDecimal;
@@ -33,7 +33,7 @@ public class QqchGridDivideController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchGridDivide:list")
+//    @PreAuthorize(hasPermi = "qqchGridDivide:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchGridDivideVo qqchGridDivideVo = qqchGridDivideService.getQqchGridDivideList(version);
@@ -46,7 +46,7 @@ public class QqchGridDivideController extends BaseController {
      * @param qqchGridDivideVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchGridDivide:add")
+//    @PreAuthorize(hasPermi = "qqchGridDivide:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody QqchGridDivideVo qqchGridDivideVo) {
         qqchGridDivideService.batchSave(qqchGridDivideVo);

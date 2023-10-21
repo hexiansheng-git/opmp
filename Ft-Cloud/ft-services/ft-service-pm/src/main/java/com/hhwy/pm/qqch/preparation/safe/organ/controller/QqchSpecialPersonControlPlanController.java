@@ -2,7 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.organ.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
+//import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.safe.organ.domain.vo.QqchSpecialPersonControlPlanVo;
 import com.hhwy.pm.qqch.preparation.safe.organ.service.IQqchSpecialPersonControlPlanService;
 import java.math.BigDecimal;
@@ -33,7 +33,7 @@ public class QqchSpecialPersonControlPlanController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSpecialPersonControlPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSpecialPersonControlPlan:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchSpecialPersonControlPlanVo qqchSpecialPersonControlPlanVo = qqchSpecialPersonControlPlanService
@@ -47,7 +47,7 @@ public class QqchSpecialPersonControlPlanController extends BaseController {
      * @param qqchSpecialPersonControlPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSpecialPersonControlPlan:add")
+//    @PreAuthorize(hasPermi = "qqchSpecialPersonControlPlan:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(@RequestBody QqchSpecialPersonControlPlanVo qqchSpecialPersonControlPlanVo) {
         qqchSpecialPersonControlPlanService.batchSave(qqchSpecialPersonControlPlanVo);
