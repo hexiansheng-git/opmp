@@ -41,8 +41,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectSbchEquipmentTeamDetailsDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sbchequipmentteam.domain.SbchEquipmentTeamDetailsDetails" resultMap="SbchEquipmentTeamDetailsDetailsResult">
-        select detail.`id`, `main_id`, detail.`category_code`,category.category_name categoryName, detail.`material_code`, detail.`material_name`, detail.`material_spec`, `production_factory`, `need_num`, `sb_request`, `sb_plan_enter_date`, `sb_plan_out_date`, detail.`is_special`, detail.`remark`, detail.`create_user`,detail.`create_user_name`, detail.`create_time`, detail.`update_user`, detail.`update_user_name`, detail.`update_time`, detail.`del_user`, detail.`del_time`, detail.`del_flag`, detail.`pt_var1`, detail.`pt_var2`, detail.`pt_var3`, detail.`pt_var4`, detail.`dept_id`, detail.`project_id`, detail.`region_id`, detail.`region` from `sbch_equipment_team_details_details` detail
-            left join t_material_category category on category.category_code = detail.category_code
+        select detail.`id`, `main_id`, detail.`category_code`, detail.`material_code`, detail.`material_name`, detail.`material_spec`
+               , `production_factory`, `need_num`, `sb_request`, `sb_plan_enter_date`, `sb_plan_out_date`, detail.`is_special`, detail.`remark`, detail.`create_user`
+               ,detail.`create_user_name`, detail.`create_time`, detail.`update_user`, detail.`update_user_name`, detail.`update_time`, detail.`del_user`
+               , detail.`del_time`, detail.`del_flag`, detail.`pt_var1`, detail.`pt_var2`, detail.`pt_var3`, detail.`pt_var4`, detail.`dept_id`, detail.`project_id`
+               , detail.`region_id`, detail.`region` from `sbch_equipment_team_details_details` detail
         <where>
             detail.`del_flag` = 0
             <if test="mainId != null "> and detail.`main_id` = #{mainId}</if>

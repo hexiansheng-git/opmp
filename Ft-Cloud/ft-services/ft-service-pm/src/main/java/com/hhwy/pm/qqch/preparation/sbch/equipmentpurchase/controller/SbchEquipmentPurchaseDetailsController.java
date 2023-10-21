@@ -1,9 +1,13 @@
-package com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.controller;//package com.hhwy.sbch.equipmentpurchase.controller;
+//package com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.controller;
 //
 //import java.util.List;
 //
+//import cn.hutool.poi.excel.ExcelUtil;
 //import com.hhwy.common.core.web.controller.BaseController;
-//import com.hhwy.sbch.equipmentpurchase.service.ISbchEquipmentPurchaseDetailsService;
+//import com.hhwy.common.core.web.domain.AjaxResult;
+//import com.hhwy.common.core.web.page.TableDataInfo;
+//import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchaseDetails;
+//import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.service.ISbchEquipmentPurchaseDetailsService;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.stereotype.Controller;
 //import org.springframework.ui.ModelMap;
@@ -52,7 +56,7 @@ package com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.controller;//package
 //    @ResponseBody
 //    public AjaxResult export(SbchEquipmentPurchaseDetails sbchEquipmentPurchaseDetails) {
 //        List<SbchEquipmentPurchaseDetails> list = sbchEquipmentPurchaseDetailsService.selectSbchEquipmentPurchaseDetailsList(sbchEquipmentPurchaseDetails);
-//        ExcelUtil<SbchEquipmentPurchaseDetails> util = new ExcelUtil<SbchEquipmentPurchaseDetails>(SbchEquipmentPurchaseDetails.class);
+//        ExcelUtil util = new ExcelUtil<SbchEquipmentPurchaseDetails>(SbchEquipmentPurchaseDetails.class);
 //        return util.exportExcel(list, "details");
 //    }
 //
@@ -101,7 +105,7 @@ package com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.controller;//package
 //     */
 //    @RequiresPermissions("gen:details:remove")
 //    @Log(title = "设备申购管理详情", businessType = BusinessType.DELETE)
-//    @PostMapping( "/remove")
+//    @PostMapping("/remove")
 //    @ResponseBody
 //    public AjaxResult remove(String ids) {
 //        return toAjax(sbchEquipmentPurchaseDetailsService.deleteSbchEquipmentPurchaseDetailsByIds(ids));

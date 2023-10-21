@@ -47,18 +47,16 @@ public class SbchEquipmentSpecialPlan extends MyPrepareBaseEntity {
     private Long projectId;
 
 //    /** 项目名称 */
-//    @Excel(name = "所属项目")
-//    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
-//    private String projectName;
+    @Excel(name = "所属项目")
+    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+    private String projectName;
 
     /** 所属区域id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属区域id能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long regionId;
 
     /** 所属区域 */
     @Excel(name = "所属区域")
-    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String region;
 
     /** 备注/描述 */

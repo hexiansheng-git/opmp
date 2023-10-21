@@ -48,23 +48,17 @@ public class SbchEquipmentLocalPurchase extends MyPrepareBaseEntity {
     private Long projectId;
 
 //    /** 项目名称 */
-//    //@PmsExcel(name = "所属项目")
-//    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
-//    private String projectName;
+    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+    private String projectName;
 
     /** 所属区域id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属区域id能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long regionId;
 
     /** 所属区域 */
-    //@PmsExcel(name = "所属区域")
-    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String region;
 
     /** 版本号 */
-    //@PmsExcel(name = "版本号")
-//    @NotNull(message = "版本号",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private BigDecimal versionCode;
 
     /** 是否有效 1-有效 0-失效 */

@@ -206,4 +206,9 @@ public class SbchTotalDemandPlanDetail extends CommonBaseEntity {
 
     //现场设备用 累计购置数量
     private Integer equBuyNum;
+
+
+    private Integer pageNum;
+
+    private Integer pageSize;
 }

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * @create 2023-08-26 16:46
  */
 public interface ISbchEquipmentService {
-    LeaseVo getList(BigDecimal version);
+    LeaseVo getList(BigDecimal version, Long[] ids);
 
     void batchAdd(LeaseVo leaseVo);
 }

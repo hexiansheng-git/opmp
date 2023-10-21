@@ -52,12 +52,12 @@ public class SbchEquipmentTeam extends MyPrepareBaseEntity {
 
     /** 所属区域id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属区域id为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "所属区域id为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long regionId;
 
     /** 所属区域 */
    // @PmsExcel(name = "所属区域")
-    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String region;
 
     /** 版本号 */

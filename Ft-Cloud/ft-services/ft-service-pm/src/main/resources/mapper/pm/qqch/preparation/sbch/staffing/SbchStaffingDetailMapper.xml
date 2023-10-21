@@ -41,14 +41,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 
     <select id="selectSbchStaffingDetailList" parameterType="com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingDetail" resultMap="SbchStaffingDetailResult">
-        select detail.`id`, detail.`staffing_id`, detail.`plan_id`, detail.`plan_detail_id`, info.`material_name`,
+        select detail.`id`, detail.`staffing_id`, detail.`plan_id`, detail.`plan_detail_id`,
         detail.`material_code`, detail.`post_name`, detail.`work_type`, detail.`staff_name`, detail.`qualification`,
         detail.`quali_group_id`, detail.`work_group_id`, detail.`is_satisfy`, detail.`plan_coming_date`,
         detail.`create_user`, detail.`create_time`, detail.`update_user`, detail.`update_time`, detail.`del_user`,
         detail.`del_time`, detail.`del_flag`, detail.`remark`, detail.`pt_var1`, detail.`pt_var2`, detail.`pt_var3`,
         detail.`project_id`, detail.`project_name`, detail.`region_id`, detail.`region_name`, detail.`dept_id`
         from `sbch_staffing_detail` detail
-        LEFT JOIN t_material_info info ON detail.material_code = info.material_code
         <where>
             detail.`del_flag` = 0
             <if test="staffingId != null "> and `staffing_id` = #{staffingId}</if>

@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.SbchTotalDemandPlanService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.SbchTotalDemandPlanDetailVo;
 import com.hhwy.utils.exception.CustomBusinessException;
@@ -15,12 +16,15 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 设备总部计划Controller
  * 
  * @author zq
  * @date 2022-11-23
+ *
+ * 7.1
  */
 @Controller
 @RequestMapping("/plan/info")
@@ -57,6 +61,19 @@ public class SbchTotalDemandPlanController extends BaseController {
             return AjaxResult.error(e.getMessage());
         }
     }
+
+    /**
+     * 查询设备总部计划总需用详情列表--领导视角 其他功能调用
+     */
+    @PostMapping("/leaderList")
+    @ResponseBody
+    public AjaxResult leaderList(@RequestBody SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
+        startPage(sbchTotalDemandPlanDetail.getPageNum(),sbchTotalDemandPlanDetail.getPageSize());
+        SbchTotalDemandPlan sbchTotalDemandPlan = sbchTotalDemandPlanService.getLeaderList(sbchTotalDemandPlanDetail);
+        return AjaxResult.success(getDataTable(sbchTotalDemandPlan.getPlanDetailList()));
+    }
+
+
 
 
 }

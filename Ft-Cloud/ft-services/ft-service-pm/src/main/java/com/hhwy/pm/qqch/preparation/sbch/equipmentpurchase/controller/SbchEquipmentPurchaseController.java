@@ -1,39 +1,33 @@
 package com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.controller;
 
-import com.alibaba.cloud.commons.lang.StringUtils;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.common.security.annotation.PreAuthorize;
-
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchase;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.domain.SbchEquipmentPurchaseDetails;
-import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.dto.SbchEquipmentPurchaseDTO;
-import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.service.ISbchEquipmentPurchaseDetailsService;
 import com.hhwy.pm.qqch.preparation.sbch.equipmentpurchase.service.ISbchEquipmentPurchaseService;
-import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
-import com.hhwy.utils.common.PmsConstant;
+import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.NotBlank;
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 设备申购管理Controller
  * 
  * @author hwj   https://39i26157b3.yicp.fun/pms/equipmentpurchase/purchase/cshInfo
  * @date 2022-11-22
+ *
+ *  7.2.1
  */
 //@Validated
 @RestController
@@ -69,6 +63,33 @@ public class SbchEquipmentPurchaseController extends BaseController {
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
+    }
+
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file){
+        FtExcelUtil ftExcelUtil = new FtExcelUtil(SbchEquipmentPurchaseDetails.class);
+        List<SbchEquipmentPurchaseDetails> detailsList = null;
+        InputStream inputStream = null;
+        try {
+            inputStream = file.getInputStream();
+            detailsList = ftExcelUtil.importTreeExcel(inputStream);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return AjaxResult.success(detailsList);
+    }
+
+    /**
+     * 导出
+     */
+    @PostMapping("/export")
+    public void export(HttpServletResponse response) throws IOException {
+        SbchEquipmentPurchase list = sbchEquipmentPurchaseService.selectSbchEquipmentPurchaseList(null);
+        List<SbchEquipmentPurchaseDetails> detailsList = list.getDetailsList();
+        FtExcelUtil<SbchEquipmentPurchaseDetails> util = new FtExcelUtil<>(SbchEquipmentPurchaseDetails.class);
+        util.exportExcel(response, detailsList, DateUtils.getDate());
     }
 
 

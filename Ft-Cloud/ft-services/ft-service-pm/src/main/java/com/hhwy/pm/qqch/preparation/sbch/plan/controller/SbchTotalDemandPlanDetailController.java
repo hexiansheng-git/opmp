@@ -30,12 +30,12 @@ import java.util.Map;
 
 /**
  * 设备总部计划总需用详情Controller
- * 
+ *
  * @author zq
  * @date 2022-11-23
  */
 @Controller
-    @RequestMapping("/plan/detail")
+@RequestMapping("/plan/detail")
 public class SbchTotalDemandPlanDetailController extends BaseController {
 
     @Autowired
@@ -53,33 +53,34 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
      */
     @GetMapping("/syncData")
     @ResponseBody
-    public AjaxResult syncData(BigDecimal version){
+    public AjaxResult syncData(BigDecimal version) {
         SbchTotalDemandPlan sbchTotalDemandPlan = totalDemandPlanDetailService.syncData(version);
         return AjaxResult.success(sbchTotalDemandPlan);
     }
 
     /**
      * 导入总需用详情
-     * @author zq
-     * @date 2022/11/25 14:06
+     *
      * @param file
      * @return com.hhwy.common.core.web.domain.AjaxResult
+     * @author zq
+     * @date 2022/11/25 14:06
      */
     @PostMapping("/importData")
     @ResponseBody
-    public AjaxResult importData(MultipartFile file){
-        try{
+    public AjaxResult importData(MultipartFile file) {
+        try {
             ExcelUtils<ImportSbchTotalDemandPlanDetail> util = new ExcelUtils(ImportSbchTotalDemandPlanDetail.class);
             List<ImportSbchTotalDemandPlanDetail> list = util.importExcel(file.getInputStream());
             Map<String, String> isSpecialMap = DictUtil.getDictData("is_special");
             //根据设备编号查询设备分类
 
-            if(!ObjectNullUtil.isEmpty(list)){
+            if (!ObjectNullUtil.isEmpty(list)) {
                 for (ImportSbchTotalDemandPlanDetail detail : list) {
                     String materialCode = detail.getMaterialCode();
                     detail.setIsSpecial(isSpecialMap.get(detail.getIsSpecial()));
                     Object materialInfo = redisUtils.hGet("materialInfoRedis", materialCode);
-                    if(materialInfo!=null){
+                    if (materialInfo != null) {
                         Map<String, Object> materialMap = JSON.parseObject(materialInfo.toString(), Map.class);
                         detail.setMaterialName(ObjectUtils.toString(materialMap.get("materialName")));
                         detail.setMaterialSpec(ObjectUtils.toString(materialMap.get("materialSpec")));
@@ -108,7 +109,7 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
 //                return AjaxResult.error(str+"设备分类编码不存在");
 //            }
             return AjaxResult.success(list);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return AjaxResult.error(e.getMessage());
         }
@@ -117,7 +118,7 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
     /**
      * 导出
      */
-    @GetMapping("/export")
+    @PostMapping("/export")
     public void export(HttpServletResponse response) throws IOException {
         SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail = new SbchTotalDemandPlanDetail();
         List<SbchTotalDemandPlanDetail> list = totalDemandPlanDetailService.selectSbchTotalDemandPlanDetailLeaderList(sbchTotalDemandPlanDetail);

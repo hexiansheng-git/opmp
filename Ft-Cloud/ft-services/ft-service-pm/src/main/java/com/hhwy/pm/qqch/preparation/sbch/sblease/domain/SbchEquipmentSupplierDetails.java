@@ -27,6 +27,8 @@ public class SbchEquipmentSupplierDetails extends CommonBaseEntity {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
+    private Long[] ids;
+
     /** 同国别设备主表 sbch_equipment_allot */
     @JsonSerialize(using= ToStringSerializer.class)
     private Long mainId;
@@ -112,5 +114,4 @@ public class SbchEquipmentSupplierDetails extends CommonBaseEntity {
     /** 所属区域 */
     private String region;
 
-    private List<String> ids;
 }

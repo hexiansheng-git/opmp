@@ -81,22 +81,19 @@ public class SbchMaterialManager extends MyPrepareBaseEntity {
     private Long projectId;
 
 //    /** 项目名称 */
-//    @Excel(name = "项目名称")
-//    @NotBlank(message = "所属项目名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
-//    private String projectName;
+    @Excel(name = "项目名称")
+    @NotBlank(message = "所属项目名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
+    private String projectName;
 
     /** 区域id */
-    @NotNull(message = "所属区域不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @JsonSerialize(using= ToStringSerializer.class)
     private Long regionId;
 
     /** 区域名称 */
     @Excel(name = "区域名称")
-    @NotBlank(message = "所属区域名称不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     private String regionName;
 
     /** 部门id */
-//    @NotNull(message = "所属部门不能为空",groups = {ValidationGroups.Save.class, ValidationGroups.Update.class})
     @JsonSerialize(using= ToStringSerializer.class)
     private Long deptId;
 

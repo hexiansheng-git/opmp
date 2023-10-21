@@ -33,6 +33,8 @@ import java.util.Map;
  * 
  * @author hwj
  * @date 2022-11-30
+ *
+ * 7.2.4
  */
 @Controller
 @RequestMapping("/equipmentteam/team")

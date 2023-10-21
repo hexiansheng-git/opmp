@@ -53,7 +53,7 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Override
-    public LeaseVo getList(BigDecimal version) {
+    public LeaseVo getList(BigDecimal version, Long[] ids) {
         LeaseVo returnVo = new LeaseVo();
         LeaseVo leaseVo = new LeaseVo();
         version = VersionUtil.getVersion("sbch_equipment_supplier", version);//因为设备租赁供应商调查表和租赁设备信息调查现在是一个接口 所以两个主表的version一定是同步的
@@ -65,6 +65,7 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
             BeanUtils.copyProperties(sbchEquipmentLease1,returnVo);
             SbchEquipmentLeaseDetails sbchEquipmentLeaseDetails = new SbchEquipmentLeaseDetails();
             sbchEquipmentLeaseDetails.setMainId(sbchEquipmentLease1.getId());
+            sbchEquipmentLeaseDetails.setIds(ids);
             List<SbchEquipmentLeaseDetails> sbchEquipmentLeaseDetails1 = sbchEquipmentLeaseDetailsMapper.selectSbchEquipmentLeaseDetailsList(sbchEquipmentLeaseDetails);
             returnVo.setLeaseDetailsList(sbchEquipmentLeaseDetails1);
         }
@@ -77,6 +78,7 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
 
             SbchEquipmentSupplierDetails sbchEquipmentSupplierDetails = new SbchEquipmentSupplierDetails();
             sbchEquipmentSupplierDetails.setMainId(sbchEquipmentSupplier1.getId());
+            sbchEquipmentSupplierDetails.setIds(ids);
             List<SbchEquipmentSupplierDetails> sbchEquipmentSupplierDetails1 = sbchEquipmentSupplierDetailsMapper.selectSbchEquipmentSupplierDetailsList(sbchEquipmentSupplierDetails);
             if(!ObjectNullUtil.isEmpty(sbchEquipmentSupplierDetails1)){
                 //set country信息

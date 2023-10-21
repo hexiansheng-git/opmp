@@ -20,6 +20,8 @@ import java.math.BigDecimal;
  * 
  * @author zq
  * @date 2022-11-30
+ *
+ * 7.3.2
  */
 @Controller
 @RequestMapping("/staffingSpecial/info")
@@ -44,7 +46,7 @@ public class SbchStaffingSpecialInfoController extends BaseController {
     /**
      * 新增保存设备人员配置-特种设备爱人员
      */
-    @PreAuthorize(hasPermi="specialStaffing:info:add")
+    @PreAuthorize(hasPermi="specialStaffing:info:save")
     //@CustomLogger(title = "特种设备人员列表-添加保存", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
