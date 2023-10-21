@@ -54,18 +54,35 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
 
     @Override
     public SbchTotalDemandPlan getList(BigDecimal version) {
-        SbchTotalDemandPlan sbchTotalDemandPlanDetailVo = new SbchTotalDemandPlan();
+        SbchTotalDemandPlan result = this.getSbchTotalDemandPlan(version, null);
+        return result;
+    }
 
+    @Override
+    public SbchTotalDemandPlan getLeaderList(SbchTotalDemandPlanDetail param) {
+        SbchTotalDemandPlan result = this.getSbchTotalDemandPlan(null, param);
+        return result;
+    }
+
+    private SbchTotalDemandPlan getSbchTotalDemandPlan(BigDecimal version, SbchTotalDemandPlanDetail param) {
+        SbchTotalDemandPlan result = new SbchTotalDemandPlan();
         version = VersionUtil.getVersion("sbch_total_demand_plan", version);
         SbchTotalDemandPlan sbchTotalDemandPlan = new SbchTotalDemandPlan();
         sbchTotalDemandPlan.setVersion(version);
         List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
         if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlans)) {
             SbchTotalDemandPlan sbchTotalDemandPlan1 = sbchTotalDemandPlans.get(0);
-            sbchTotalDemandPlanDetailVo = sbchTotalDemandPlan1;
-            SbchTotalDemandPlanDetail detailVo = new SbchTotalDemandPlanDetail();
-            detailVo.setPlanId(sbchTotalDemandPlan1.getId());
-            List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(detailVo);
+            result = sbchTotalDemandPlan1;
+            List<SbchTotalDemandPlanDetail> sbchTotalDemandPlanDetails = null;
+            if (ObjectUtils.isEmpty(param)) {
+                param = new SbchTotalDemandPlanDetail();
+                param.setPlanId(sbchTotalDemandPlan1.getId());
+                sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailList(param);
+            }else {
+                param.setPlanId(sbchTotalDemandPlan1.getId());
+                sbchTotalDemandPlanDetails = sbchTotalDemandPlanDetailMapper.selectSbchTotalDemandPlanDetailLeaderList(param);
+            }
+
 
             ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
             if (!ObjectNullUtil.isEmpty(sbchTotalDemandPlanDetails)) {
@@ -100,11 +117,11 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
                     returnList.add(detail);
                 }
             }
-            sbchTotalDemandPlanDetailVo.setPlanDetailList(returnList);
+            result.setPlanDetailList(returnList);
         }
-        sbchTotalDemandPlanDetailVo.setVersion(version);
-        sbchTotalDemandPlanDetailVo.setStageIdentity(qqchReviewService.getStage());
-        return sbchTotalDemandPlanDetailVo;
+        result.setVersion(version);
+        result.setStageIdentity(qqchReviewService.getStage());
+        return result;
     }
 
     @Override
@@ -159,10 +176,5 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
         ArrayList<SbchTotalDemandPlanDetail> returnList = new ArrayList<>();
 
         return returnList;
-    }
-
-    @Override
-    public SbchTotalDemandPlan getLeaderList(SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail) {
-        return null;
     }
 }
