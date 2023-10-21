@@ -122,6 +122,11 @@ public class QqchConstructionReviewPlan extends BaseEntity {
     @Excel(name = "备注")
     private String remark;
     /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    private Integer sort;
+    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)

@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.preparation.technique.scheme.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
@@ -91,9 +92,11 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         List<QqchConstructionReviewPlan> list = qqchConstructionReviewPlanVo.getList();
         list.stream().forEach(plan -> {
             List<QqchConstructionReviewPlan> children = plan.getChildren();
-            children.stream().forEach(o -> {
-                map.put(o.getSchemeCode(),o);
-            });
+            if(!CollectionUtils.isEmpty(children)){
+                children.stream().forEach(o -> {
+                    map.put(o.getSchemeCode(),o);
+                });
+            }
         });
         BigDecimal version = qqchConstructionReviewPlanVo.getVersion();
 
@@ -169,6 +172,6 @@ public class QqchConstructionReviewPlanServiceImpl implements IQqchConstructionR
         QqchConstructionReviewPlan qryParam = new QqchConstructionReviewPlan();
         qryParam.setVersion(version);
         List<QqchConstructionReviewPlan> planList = qqchConstructionReviewPlanMapper.getQqchConstructionReviewPlanList(qryParam);
-        return planList.stream().collect(Collectors.groupingBy(QqchConstructionReviewPlan::getSchemeLevel));
+        return planList.stream().filter(o -> StringUtils.isNotBlank(o.getSchemeLevel())).collect(Collectors.groupingBy(QqchConstructionReviewPlan::getSchemeLevel));
     }
 }
