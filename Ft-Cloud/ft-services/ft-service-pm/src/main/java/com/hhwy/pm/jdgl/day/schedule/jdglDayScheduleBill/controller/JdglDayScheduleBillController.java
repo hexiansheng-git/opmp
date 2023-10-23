@@ -38,14 +38,14 @@ public class JdglDayScheduleBillController extends BaseController {
     private IJdglDayScheduleBillService jdglDayScheduleBillService;
 
 
-    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
+    // // @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
     @GetMapping
     public AjaxResult getJdglDayScheduleBill(@Validated(ValidationGroups.Get.class) JdglDayScheduleBill jdglDayScheduleBillParam) {
         JdglDayScheduleBill jdglDayScheduleBill = jdglDayScheduleBillService.getJdglDayScheduleBill(jdglDayScheduleBillParam);
         return AjaxResult.success(jdglDayScheduleBill);
     }
 
-    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
+    // // @PreAuthorize(hasPermi = "jdglDayScheduleBill:list")
     @GetMapping("/list")
     public AjaxResult getJdglDayScheduleBillList(@Validated(ValidationGroups.Select.class) JdglDayScheduleBill jdglDayScheduleBillParam) {
         startPage();
@@ -53,39 +53,39 @@ public class JdglDayScheduleBillController extends BaseController {
         return getDataTableAjaxResult(jdglDayScheduleBillList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:add")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDayScheduleBill(@Validated(ValidationGroups.Save.class) @RequestBody JdglDayScheduleBill jdglDayScheduleBillParam) {
         jdglDayScheduleBillService.insertJdglDayScheduleBill(jdglDayScheduleBillParam);
         return AjaxResult.success(jdglDayScheduleBillParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:add")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDayScheduleBillList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDayScheduleBill> jdglDayScheduleBillListParam) {
         jdglDayScheduleBillService.insertJdglDayScheduleBillList(jdglDayScheduleBillListParam);
         return AjaxResult.success(jdglDayScheduleBillListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:update")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDayScheduleBill(@Validated(ValidationGroups.Update.class) @RequestBody JdglDayScheduleBill jdglDayScheduleBillParam) {
         return toAjax(jdglDayScheduleBillService.updateJdglDayScheduleBill(jdglDayScheduleBillParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:update")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglDayScheduleBillList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDayScheduleBill> jdglDayScheduleBillListParam) {
         return toAjax(jdglDayScheduleBillService.updateJdglDayScheduleBillList(jdglDayScheduleBillListParam, null, null));
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:remove")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDayScheduleBill(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDayScheduleBill jdglDayScheduleBillParam) {
         return toAjax(jdglDayScheduleBillService.deleteJdglDayScheduleBill(jdglDayScheduleBillParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleBill:remove")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleBill:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglDayScheduleBillByPks(@PathVariable Long[] ids) {
         List<Long> jdglDayScheduleBillPkList = Arrays.asList(ids);

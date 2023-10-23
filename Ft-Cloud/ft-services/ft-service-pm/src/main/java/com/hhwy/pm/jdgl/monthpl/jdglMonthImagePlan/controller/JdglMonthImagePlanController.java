@@ -32,53 +32,53 @@ public class JdglMonthImagePlanController extends BaseController {
     private IJdglMonthImagePlanService jdglMonthImagePlanService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
     @GetMapping
     public AjaxResult getJdglMonthImagePlan(@Validated(ValidationGroups.Get.class) JdglMonthImagePlan jdglMonthImagePlanParam) {
         JdglMonthImagePlan jdglMonthImagePlan = jdglMonthImagePlanService.getJdglMonthImagePlan(jdglMonthImagePlanParam);
         return AjaxResult.success(jdglMonthImagePlan);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglMonthImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglMonthImagePlanList(@Validated(ValidationGroups.Select.class) JdglMonthImagePlan jdglMonthImagePlanParam) {
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthImagePlanService.getJdglMonthImagePlanList(jdglMonthImagePlanParam);
         return getDataTableAjaxResult(jdglMonthImagePlanList);
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:add")
+    // @PreAuthorize(hasPermi = "jdglMonthImagePlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglMonthImagePlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglMonthImagePlan jdglMonthImagePlanParam) {
         jdglMonthImagePlanService.insertJdglMonthImagePlan(jdglMonthImagePlanParam);
         return AjaxResult.success(jdglMonthImagePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:add")
+    // @PreAuthorize(hasPermi = "jdglMonthImagePlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglMonthImagePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglMonthImagePlan> jdglMonthImagePlanListParam) {
         jdglMonthImagePlanService.insertJdglMonthImagePlanList(jdglMonthImagePlanListParam);
         return AjaxResult.success(jdglMonthImagePlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:update")
+    // @PreAuthorize(hasPermi = "jdglMonthImagePlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglMonthImagePlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglMonthImagePlan jdglMonthImagePlanParam) {
         return toAjax(jdglMonthImagePlanService.updateJdglMonthImagePlan(jdglMonthImagePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:update")
+    // @PreAuthorize(hasPermi = "jdglMonthImagePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglMonthImagePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglMonthImagePlan> jdglMonthImagePlanListParam) {
         return toAjax(jdglMonthImagePlanService.updateJdglMonthImagePlanList(jdglMonthImagePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglMonthImagePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglMonthImagePlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglMonthImagePlan jdglMonthImagePlanParam) {
         return toAjax(jdglMonthImagePlanService.deleteJdglMonthImagePlan(jdglMonthImagePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMonthImagePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglMonthImagePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglMonthImagePlanByPks(@PathVariable Long[] ids) {
         List<Long> jdglMonthImagePlanPkList = Arrays.asList(ids);

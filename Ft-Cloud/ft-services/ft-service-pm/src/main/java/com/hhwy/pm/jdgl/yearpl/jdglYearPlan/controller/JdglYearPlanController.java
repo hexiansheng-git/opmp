@@ -35,7 +35,7 @@ public class JdglYearPlanController extends BaseController {
     private IJdglYearPlanService jdglYearPlanService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglYearPlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping
     public AjaxResult getJdglYearPlan(@Validated(ValidationGroups.Get.class) JdglYearPlan jdglYearPlanParam) {
         JdglYearPlan jdglYearPlan = jdglYearPlanService.getJdglYearPlan(jdglYearPlanParam);
@@ -47,13 +47,13 @@ public class JdglYearPlanController extends BaseController {
      * @param jdglYearPlanParam
      * @return
      */
-    //  @PreAuthorize(hasPermi = "jdglYearPlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping("/getInitJdglYearPlan")
     public AjaxResult getInitJdglYearPlan(@Validated(ValidationGroups.Get.class) JdglYearPlan jdglYearPlanParam) {
         return AjaxResult.success(jdglYearPlanService.getInitJdglYearPlan(jdglYearPlanParam));
     }
 
-    //  @PreAuthorize(hasPermi = "jdglYearPlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglYearPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglYearPlanList(@Validated(ValidationGroups.Select.class) JdglYearPlan jdglYearPlanParam) {
         startPage();
@@ -61,45 +61,45 @@ public class JdglYearPlanController extends BaseController {
         return getDataTableAjaxResult(jdglYearPlanList);
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:add")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglYearPlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglYearPlan jdglYearPlanParam) {
         jdglYearPlanService.insertJdglYearPlan(jdglYearPlanParam);
         return AjaxResult.success(jdglYearPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:add")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglYearPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglYearPlan> jdglYearPlanListParam) {
         jdglYearPlanService.insertJdglYearPlanList(jdglYearPlanListParam);
         return AjaxResult.success(jdglYearPlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:add")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:add")
     @PostMapping("/adjust")
     public AjaxResult adjust(@RequestBody JdglYearPlan jdglYearPlanParam) {
         return AjaxResult.success(jdglYearPlanService.adjust(jdglYearPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:update")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglYearPlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglYearPlan jdglYearPlanParam) {
         return toAjax(jdglYearPlanService.updateJdglYearPlan(jdglYearPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:update")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglYearPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglYearPlan> jdglYearPlanListParam) {
         return toAjax(jdglYearPlanService.updateJdglYearPlanList(jdglYearPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:remove")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglYearPlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglYearPlan jdglYearPlanParam) {
         return toAjax(jdglYearPlanService.deleteJdglYearPlan(jdglYearPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglYearPlan:remove")
+    // @PreAuthorize(hasPermi = "jdglYearPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglYearPlanByPks(@PathVariable Long[] ids) {
         List<Long> jdglYearPlanPkList = Arrays.asList(ids);

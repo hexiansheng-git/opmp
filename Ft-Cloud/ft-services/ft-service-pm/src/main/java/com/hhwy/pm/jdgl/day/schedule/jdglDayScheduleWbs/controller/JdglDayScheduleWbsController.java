@@ -42,14 +42,14 @@ public class JdglDayScheduleWbsController extends BaseController {
     private IJdglDayScheduleBillService iJdglDayScheduleBillService;
 
 
-    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
+    // // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
     @GetMapping
     public AjaxResult getJdglDayScheduleWbs(@Validated(ValidationGroups.Get.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
         JdglDayScheduleWbs jdglDayScheduleWbs = jdglDayScheduleWbsService.getJdglDayScheduleWbs(jdglDayScheduleWbsParam);
         return AjaxResult.success(jdglDayScheduleWbs);
     }
 
-    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
+    // // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
     @GetMapping("/list")
     public AjaxResult getJdglDayScheduleWbsList(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
 //        startPage();
@@ -57,7 +57,7 @@ public class JdglDayScheduleWbsController extends BaseController {
         return getDataTableAjaxResult(jdglDayScheduleWbsList);
     }
 
-    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
+    // // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
     @GetMapping("/list4Person")
     public AjaxResult getJdglDayScheduleWbsList4Person(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
 //        startPage();
@@ -65,7 +65,7 @@ public class JdglDayScheduleWbsController extends BaseController {
         return getDataTableAjaxResult(jdglDayScheduleWbsList);
     }
 
-    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
+    // // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:list")
     @GetMapping("/lazyList")
     public AjaxResult getJdglDayScheduleWbsLazyList(@Validated(ValidationGroups.Select.class) JdglDayScheduleWbs jdglDayScheduleWbsParam) {
 //        startPage();
@@ -73,39 +73,39 @@ public class JdglDayScheduleWbsController extends BaseController {
         return getDataTableAjaxResult(jdglDayScheduleWbsList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDayScheduleWbs(@Validated(ValidationGroups.Save.class) @RequestBody JdglDayScheduleWbs jdglDayScheduleWbsParam) {
         jdglDayScheduleWbsService.insertJdglDayScheduleWbs(jdglDayScheduleWbsParam);
         return AjaxResult.success(jdglDayScheduleWbsParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDayScheduleWbsList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDayScheduleWbs> jdglDayScheduleWbsListParam) {
         jdglDayScheduleWbsService.insertJdglDayScheduleWbsList(jdglDayScheduleWbsListParam);
         return AjaxResult.success(jdglDayScheduleWbsListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:update")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDayScheduleWbs(@Validated(ValidationGroups.Update.class) @RequestBody JdglDayScheduleWbs jdglDayScheduleWbsParam) {
         return toAjax(jdglDayScheduleWbsService.updateJdglDayScheduleWbs(jdglDayScheduleWbsParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:update")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglDayScheduleWbsList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDayScheduleWbs> jdglDayScheduleWbsListParam) {
         return toAjax(jdglDayScheduleWbsService.updateJdglDayScheduleWbsList(jdglDayScheduleWbsListParam, null));
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:remove")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDayScheduleWbs(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDayScheduleWbs jdglDayScheduleWbsParam) {
         return toAjax(jdglDayScheduleWbsService.deleteJdglDayScheduleWbs(jdglDayScheduleWbsParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:remove")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglDayScheduleWbsByPks(@PathVariable Long[] ids) {
         List<Long> jdglDayScheduleWbsPkList = Arrays.asList(ids);
@@ -155,7 +155,7 @@ public class JdglDayScheduleWbsController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
+    // @PreAuthorize(hasPermi = "jdglDayScheduleWbs:add")
     @PostMapping("/addWbsList")
     public AjaxResult addWbsList(@Validated(ValidationGroups.Save.class) @RequestBody JdglDayScheduleWbs4Add jdglDayScheduleWbsListParam) {
         return AjaxResult.success(jdglDayScheduleWbsService.addWbsList(jdglDayScheduleWbsListParam));

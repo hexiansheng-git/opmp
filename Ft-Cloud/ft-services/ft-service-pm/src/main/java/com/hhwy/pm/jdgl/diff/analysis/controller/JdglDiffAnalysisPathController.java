@@ -32,53 +32,53 @@ public class JdglDiffAnalysisPathController extends BaseController{
 
                                                                                                                                                                                                                                                                                                                                                                                                                                         
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysisPath(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         JdglDiffAnalysisPath jdglDiffAnalysisPath =  jdglDiffAnalysisPathService.getJdglDiffAnalysisPath(jdglDiffAnalysisPathParam);
         return AjaxResult.success(jdglDiffAnalysisPath);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisPathList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getJdglDiffAnalysisPathList(jdglDiffAnalysisPathParam);
         return getDataTableAjaxResult(jdglDiffAnalysisPathList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDiffAnalysisPath(@Validated(ValidationGroups.Save.class) @RequestBody JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         jdglDiffAnalysisPathService.insertJdglDiffAnalysisPath(jdglDiffAnalysisPathParam);
         return AjaxResult.success(jdglDiffAnalysisPathParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDiffAnalysisPathList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDiffAnalysisPath> jdglDiffAnalysisPathListParam){
         jdglDiffAnalysisPathService.insertJdglDiffAnalysisPathList(jdglDiffAnalysisPathListParam);
         return AjaxResult.success(jdglDiffAnalysisPathListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDiffAnalysisPath(@Validated(ValidationGroups.Update.class) @RequestBody JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         return toAjax(jdglDiffAnalysisPathService.updateJdglDiffAnalysisPath(jdglDiffAnalysisPathParam));
     }
 
-            @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:update")
+            // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:update")
         @PostMapping("/batchUpdate")
         public AjaxResult updateJdglDiffAnalysisPathList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDiffAnalysisPath> jdglDiffAnalysisPathListParam){
             return toAjax(jdglDiffAnalysisPathService.updateJdglDiffAnalysisPathList(jdglDiffAnalysisPathListParam));
         }
     
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDiffAnalysisPath(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
         return toAjax(jdglDiffAnalysisPathService.deleteJdglDiffAnalysisPath(jdglDiffAnalysisPathParam));
     }
 
-            @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:remove")
+            // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:remove")
         @PostMapping("/{ids}")
         public AjaxResult deleteJdglDiffAnalysisPathByPks(@PathVariable Long[] ids){
             List<Long> jdglDiffAnalysisPathPkList = Arrays.asList(ids);

@@ -41,21 +41,21 @@ public class QqchProdPlanController extends BaseController {
     @Autowired
     private IQqchReviewService reviewService;
 
-    //  @PreAuthorize(hasPermi = "qqchProdPlan:list")
+    //  // @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping
     public AjaxResult getQqchProdPlan(@Validated(ValidationGroups.Get.class) QqchProdPlan qqchProdPlanParam) {
         QqchProdPlan qqchProdPlan = qqchProdPlanService.getQqchProdPlan(qqchProdPlanParam);
         return AjaxResult.success(qqchProdPlan);
     }
 
-    //  @PreAuthorize(hasPermi = "qqchProdPlan:list")
+    //  // @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchProdPlanList(@Validated(ValidationGroups.Select.class) QqchProdPlan qqchProdPlanParam) {
         CompileEntity<HashMap<String, Object>> qqchProdPlanList = qqchProdPlanService.selectList(qqchProdPlanParam);
         return AjaxResult.success(qqchProdPlanList);
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:add")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchProdPlan>> dto) {
         qqchProdPlanService.save(dto.dealSaveDto());
@@ -66,38 +66,38 @@ public class QqchProdPlanController extends BaseController {
         return AjaxResult.success(dto);
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:add")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchProdPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchProdPlan> qqchProdPlanListParam) {
         qqchProdPlanService.insertQqchProdPlanList(qqchProdPlanListParam);
         return AjaxResult.success(qqchProdPlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:add")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:add")
     @PostMapping("/putProdPlanData")
     public AjaxResult putProdPlanData(BigDecimal version) {
         return toAjax(qqchProdPlanService.putProdPlanData(version));
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:update")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchProdPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchProdPlan qqchProdPlanParam) {
         return toAjax(qqchProdPlanService.updateQqchProdPlan(qqchProdPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:update")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchProdPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchProdPlan> qqchProdPlanListParam) {
         return toAjax(qqchProdPlanService.updateQqchProdPlanList(qqchProdPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:remove")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchProdPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchProdPlan qqchProdPlanParam) {
         return toAjax(qqchProdPlanService.deleteQqchProdPlan(qqchProdPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchProdPlan:remove")
+    // @PreAuthorize(hasPermi = "qqchProdPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchProdPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchProdPlanPkList = Arrays.asList(ids);
@@ -112,7 +112,7 @@ public class QqchProdPlanController extends BaseController {
     }
 
 
-    //  @PreAuthorize(hasPermi = "qqchProdPlan:list")
+    //  // @PreAuthorize(hasPermi = "qqchProdPlan:list")
     @GetMapping("/getList")
     public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchProdPlan dto) {
         CompileEntity<List<QqchProdPlan>> qqchProdPlanList = qqchProdPlanService.getList(dto);

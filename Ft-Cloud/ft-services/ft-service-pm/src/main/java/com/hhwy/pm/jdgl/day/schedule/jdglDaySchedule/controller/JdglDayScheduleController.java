@@ -37,28 +37,28 @@ public class JdglDayScheduleController extends BaseController {
     private IJdglDayScheduleService jdglDayScheduleService;
 
 
-//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    // @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping
     public AjaxResult getJdglDaySchedule(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getJdglDaySchedule(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
     }
 
-//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    // @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("jdglDayScheduleByPerson")
     public AjaxResult getJdglDayScheduleByPerson(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getJdglDayScheduleByPerson(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
     }
 
-//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    // @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("/getInit")
     public AjaxResult getInit(@Validated(ValidationGroups.Get.class) JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule = jdglDayScheduleService.getInit(jdglDayScheduleParam);
         return AjaxResult.success(jdglDaySchedule);
     }
 
-//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    // @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @GetMapping("/list")
     public AjaxResult getJdglDayScheduleList(@Validated(ValidationGroups.Select.class) JdglDaySchedule jdglDayScheduleParam) {
         startPage();
@@ -72,14 +72,14 @@ public class JdglDayScheduleController extends BaseController {
      * @param endDate
      * @return
      */
-//    @PreAuthorize(hasPermi = "jdglDaySchedule:list")
+//    // @PreAuthorize(hasPermi = "jdglDaySchedule:list")
     @PostMapping("/getListByDateRange")
     public AjaxResult getListByDateRange(@JsonFormat(pattern = "yyyy-MM-dd") Date startDate,@JsonFormat(pattern = "yyyy-MM-dd") Date endDate) {
         List<JdglDaySchedule> listByDateRange = jdglDayScheduleService.getListByDateRange(startDate, endDate);
         return AjaxResult.success(listByDateRange);
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:add")
+    // @PreAuthorize(hasPermi = "jdglDaySchedule:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDaySchedule(@Validated(ValidationGroups.Save.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
         jdglDayScheduleService.insertJdglDaySchedule(jdglDayScheduleParam);
@@ -89,14 +89,14 @@ public class JdglDayScheduleController extends BaseController {
         return AjaxResult.success(jdglDayScheduleService.getJdglDaySchedule(jdglDaySchedule));
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:add")
+    // @PreAuthorize(hasPermi = "jdglDaySchedule:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDayScheduleList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDaySchedule> jdglDayScheduleListParam) {
         jdglDayScheduleService.insertJdglDayScheduleList(jdglDayScheduleListParam);
         return AjaxResult.success(jdglDayScheduleListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:update")
+    // @PreAuthorize(hasPermi = "jdglDaySchedule:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDaySchedule(@Validated(ValidationGroups.Update.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
         jdglDayScheduleService.updateJdglDaySchedule(jdglDayScheduleParam);
@@ -106,19 +106,19 @@ public class JdglDayScheduleController extends BaseController {
         return AjaxResult.success(jdglDayScheduleService.getJdglDaySchedule(jdglDaySchedule));
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:update")
+    // @PreAuthorize(hasPermi = "jdglDaySchedule:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglDayScheduleList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDaySchedule> jdglDayScheduleListParam) {
         return toAjax(jdglDayScheduleService.updateJdglDayScheduleList(jdglDayScheduleListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:remove")
+    // @PreAuthorize(hasPermi = "jdglDaySchedule:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDaySchedule(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDaySchedule jdglDayScheduleParam) {
         return toAjax(jdglDayScheduleService.deleteJdglDaySchedule(jdglDayScheduleParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDaySchedule:remove")
+    // @PreAuthorize(hasPermi = "jdglDaySchedule:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglDayScheduleByPks(@PathVariable Long[] ids) {
         List<Long> jdglDaySchedulePkList = Arrays.asList(ids);

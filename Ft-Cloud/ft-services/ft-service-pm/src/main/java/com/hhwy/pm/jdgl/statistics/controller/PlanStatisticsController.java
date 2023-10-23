@@ -5,6 +5,9 @@ import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.jdgl.statistics.domain.*;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsBillValueVO4Export;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsImageVO4Export;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsValueVO4Export;
 import com.hhwy.pm.jdgl.statistics.service.IPlanStatisticsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -62,16 +65,16 @@ public class PlanStatisticsController  {
         response.setCharacterEncoding("utf-8");
 
         List<PlanStatisticsValueCompVO> valueCompList = iPlanStatisticsService.getValueCompData4VO(iPlanStatisticsQueryVO);
-        List<PlanStatisticsWbsValueVO> wbsValueList = iPlanStatisticsService.getWbsValueList(iPlanStatisticsQueryVO);
-        List<PlanStatisticsBillValueVO> billValueList = iPlanStatisticsService.getBillValueList(iPlanStatisticsQueryVO);
-        List<PlanStatisticsWbsImageVO> imageWbsList = iPlanStatisticsService.getImageWbsList(iPlanStatisticsQueryVO);
+        List<PlanStatisticsWbsValueVO4Export> wbsValueList = iPlanStatisticsService.getWbsValueList4Export(iPlanStatisticsQueryVO);
+        List<PlanStatisticsBillValueVO4Export> billValueList = iPlanStatisticsService.getBillValueList4Export(iPlanStatisticsQueryVO);
+        List<PlanStatisticsWbsImageVO4Export> imageWbsList = iPlanStatisticsService.getImageWbsList4Export(iPlanStatisticsQueryVO);
 
         List<SheetInfoBean> sheetInfoList = new LinkedList<>();
 
         sheetInfoList.add(new SheetInfoBean("基本信息", PlanStatisticsValueCompVO.class, valueCompList));
-        sheetInfoList.add(new SheetInfoBean("WBS汇总", PlanStatisticsWbsValueVO.class, wbsValueList));
-        sheetInfoList.add(new SheetInfoBean("清单汇总", PlanStatisticsBillValueVO.class, billValueList));
-        sheetInfoList.add(new SheetInfoBean("形象汇总", PlanStatisticsWbsImageVO.class, imageWbsList));
+        sheetInfoList.add(new SheetInfoBean("WBS汇总", PlanStatisticsWbsValueVO4Export.class, wbsValueList));
+        sheetInfoList.add(new SheetInfoBean("清单汇总", PlanStatisticsBillValueVO4Export.class, billValueList));
+        sheetInfoList.add(new SheetInfoBean("形象汇总", PlanStatisticsWbsImageVO4Export.class, imageWbsList));
 
         ExcelWriter excelWriter = EasyExcel.write(response.getOutputStream()).build();
 

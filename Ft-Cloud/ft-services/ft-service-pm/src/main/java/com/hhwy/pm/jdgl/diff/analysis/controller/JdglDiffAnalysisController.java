@@ -32,14 +32,14 @@ public class JdglDiffAnalysisController extends BaseController {
     private IJdglDiffAnalysisService jdglDiffAnalysisService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysis(@Validated(ValidationGroups.Get.class) JdglDiffAnalysis jdglDiffAnalysisParam) {
         JdglDiffAnalysis jdglDiffAnalysis = jdglDiffAnalysisService.getJdglDiffAnalysis(jdglDiffAnalysisParam);
         return AjaxResult.success(jdglDiffAnalysis);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysis:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysis jdglDiffAnalysisParam) {
         startPage();
@@ -58,39 +58,39 @@ public class JdglDiffAnalysisController extends BaseController {
         return AjaxResult.success(jdglDiffAnalysisList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysis:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDiffAnalysis(@Validated(ValidationGroups.Save.class) @RequestBody JdglDiffAnalysis jdglDiffAnalysisParam) {
         jdglDiffAnalysisService.insertJdglDiffAnalysis(jdglDiffAnalysisParam);
         return AjaxResult.success(jdglDiffAnalysisParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysis:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDiffAnalysisList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDiffAnalysis> jdglDiffAnalysisListParam) {
         jdglDiffAnalysisService.insertJdglDiffAnalysisList(jdglDiffAnalysisListParam);
         return AjaxResult.success(jdglDiffAnalysisListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDiffAnalysis(@Validated(ValidationGroups.Update.class) @RequestBody JdglDiffAnalysis jdglDiffAnalysisParam) {
         return toAjax(jdglDiffAnalysisService.updateJdglDiffAnalysis(jdglDiffAnalysisParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglDiffAnalysisList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDiffAnalysis> jdglDiffAnalysisListParam) {
         return toAjax(jdglDiffAnalysisService.updateJdglDiffAnalysisList(jdglDiffAnalysisListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysis:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDiffAnalysis(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDiffAnalysis jdglDiffAnalysisParam) {
         return toAjax(jdglDiffAnalysisService.deleteJdglDiffAnalysis(jdglDiffAnalysisParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysis:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysis:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglDiffAnalysisByPks(@PathVariable Long[] ids) {
         List<Long> jdglDiffAnalysisPkList = Arrays.asList(ids);

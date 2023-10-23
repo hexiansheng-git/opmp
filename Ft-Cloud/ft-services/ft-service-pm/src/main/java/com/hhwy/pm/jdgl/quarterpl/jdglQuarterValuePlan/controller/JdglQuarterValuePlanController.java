@@ -31,53 +31,53 @@ public class JdglQuarterValuePlanController extends BaseController {
     private IJdglQuarterValuePlanService jdglQuarterValuePlanService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
     @GetMapping
     public AjaxResult getJdglQuarterValuePlan(@Validated(ValidationGroups.Get.class) JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         JdglQuarterValuePlan jdglQuarterValuePlan = jdglQuarterValuePlanService.getJdglQuarterValuePlan(jdglQuarterValuePlanParam);
         return AjaxResult.success(jdglQuarterValuePlan);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterValuePlanList(@Validated(ValidationGroups.Select.class) JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         List<JdglQuarterValuePlan> jdglQuarterValuePlanList = jdglQuarterValuePlanService.getJdglQuarterValuePlanList(jdglQuarterValuePlanParam);
         return getDataTableAjaxResult(jdglQuarterValuePlanList);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglQuarterValuePlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         jdglQuarterValuePlanService.insertJdglQuarterValuePlan(jdglQuarterValuePlanParam);
         return AjaxResult.success(jdglQuarterValuePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglQuarterValuePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglQuarterValuePlan> jdglQuarterValuePlanListParam) {
         jdglQuarterValuePlanService.insertJdglQuarterValuePlanList(jdglQuarterValuePlanListParam);
         return AjaxResult.success(jdglQuarterValuePlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:update")
+    // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglQuarterValuePlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         return toAjax(jdglQuarterValuePlanService.updateJdglQuarterValuePlan(jdglQuarterValuePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:update")
+    // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglQuarterValuePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglQuarterValuePlan> jdglQuarterValuePlanListParam) {
         return toAjax(jdglQuarterValuePlanService.updateJdglQuarterValuePlanList(jdglQuarterValuePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglQuarterValuePlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglQuarterValuePlan jdglQuarterValuePlanParam) {
         return toAjax(jdglQuarterValuePlanService.deleteJdglQuarterValuePlan(jdglQuarterValuePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterValuePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglQuarterValuePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglQuarterValuePlanByPks(@PathVariable Long[] ids) {
         List<Long> jdglQuarterValuePlanPkList = Arrays.asList(ids);

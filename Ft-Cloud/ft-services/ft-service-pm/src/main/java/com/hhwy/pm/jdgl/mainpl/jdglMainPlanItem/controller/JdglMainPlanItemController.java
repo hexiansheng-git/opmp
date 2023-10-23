@@ -36,28 +36,28 @@ public class JdglMainPlanItemController extends BaseController {
     private IJdglMainPlanItemService jdglMainPlanItemService;
 
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping
     public AjaxResult getJdglMainPlanItem(@Validated(ValidationGroups.Get.class) JdglMainPlanItem jdglMainPlanItemParam) {
         JdglMainPlanItem jdglMainPlanItem = jdglMainPlanItemService.getJdglMainPlanItem(jdglMainPlanItemParam);
         return AjaxResult.success(jdglMainPlanItem);
     }
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping("/getUsing4One")
     public AjaxResult getUsing4One(@Validated(ValidationGroups.Get.class) JdglMainPlanItem jdglMainPlanItemParam) {
         JdglMainPlanItem jdglMainPlanItem = jdglMainPlanItemService.getUsing4One(jdglMainPlanItemParam);
         return AjaxResult.success(jdglMainPlanItem);
     }
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping("/list")
     public AjaxResult getJdglMainPlanItemList(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getJdglMainPlanItemList(jdglMainPlanItemParam);
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping("/getUsinglist")
     public AjaxResult getUsingJdglMainPlanItemList(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemList(jdglMainPlanItemParam);
@@ -66,46 +66,46 @@ public class JdglMainPlanItemController extends BaseController {
 
 
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @GetMapping("/getKeyRoad")
     public AjaxResult getKeyRoad(@Validated(ValidationGroups.Select.class) JdglMainPlanItem jdglMainPlanItemParam) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getKeyRoad(jdglMainPlanItemParam);
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItem:add")
+    // @PreAuthorize(hasPermi = "jdglMainPlanItem:add")
     @PostMapping("/add")
     public AjaxResult insertJdglMainPlanItem(@Validated(ValidationGroups.Save.class) @RequestBody JdglMainPlanItem jdglMainPlanItemParam) {
         jdglMainPlanItemService.insertJdglMainPlanItem(jdglMainPlanItemParam);
         return AjaxResult.success(jdglMainPlanItemParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItem:add")
+    // @PreAuthorize(hasPermi = "jdglMainPlanItem:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglMainPlanItemList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglMainPlanItem> jdglMainPlanItemListParam) {
         jdglMainPlanItemService.insertJdglMainPlanItemList(jdglMainPlanItemListParam);
         return AjaxResult.success(jdglMainPlanItemListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItem:update")
+    // @PreAuthorize(hasPermi = "jdglMainPlanItem:update")
     @PostMapping("/update")
     public AjaxResult updateJdglMainPlanItem(@Validated(ValidationGroups.Update.class) @RequestBody JdglMainPlanItem jdglMainPlanItemParam) {
         return toAjax(jdglMainPlanItemService.updateJdglMainPlanItem(jdglMainPlanItemParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItem:update")
+    // @PreAuthorize(hasPermi = "jdglMainPlanItem:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglMainPlanItemList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglMainPlanItem> jdglMainPlanItemListParam) {
         return toAjax(jdglMainPlanItemService.updateJdglMainPlanItemList(jdglMainPlanItemListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItem:remove")
+    // @PreAuthorize(hasPermi = "jdglMainPlanItem:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglMainPlanItem(@Validated(ValidationGroups.Delete.class) @RequestBody JdglMainPlanItem jdglMainPlanItemParam) {
         return toAjax(jdglMainPlanItemService.deleteJdglMainPlanItem(jdglMainPlanItemParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglMainPlanItem:remove")
+    // @PreAuthorize(hasPermi = "jdglMainPlanItem:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglMainPlanItemByPks(@PathVariable Long[] ids) {
         List<Long> jdglMainPlanItemPkList = Arrays.asList(ids);
@@ -119,14 +119,14 @@ public class JdglMainPlanItemController extends BaseController {
         util.exportExcel(response, jdglMainPlanItemList, DateUtils.getDate());
     }
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @PostMapping("/getUsingListByDate")
     public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM-dd") Date date) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDate(date);
         return getDataTableAjaxResult(jdglMainPlanItemList);
     }
 
-    // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
+    // // @PreAuthorize(hasPermi = "jdglMainPlanItem:list")
     @PostMapping("/getUsingListByDateRange")
     public AjaxResult getUsingJdglMainPlanItemListByDate(@JsonFormat(pattern = "yyyy-MM-dd") Date startDate,@JsonFormat(pattern = "yyyy-MM-dd") Date endDate) {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(startDate, endDate);

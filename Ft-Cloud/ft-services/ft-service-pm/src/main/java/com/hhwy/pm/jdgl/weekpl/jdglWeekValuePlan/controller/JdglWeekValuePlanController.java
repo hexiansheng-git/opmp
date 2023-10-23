@@ -31,53 +31,53 @@ public class JdglWeekValuePlanController extends BaseController {
     private IJdglWeekValuePlanService jdglWeekValuePlanService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
     @GetMapping
     public AjaxResult getJdglWeekValuePlan(@Validated(ValidationGroups.Get.class) JdglWeekValuePlan jdglWeekValuePlanParam) {
         JdglWeekValuePlan jdglWeekValuePlan = jdglWeekValuePlanService.getJdglWeekValuePlan(jdglWeekValuePlanParam);
         return AjaxResult.success(jdglWeekValuePlan);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglWeekValuePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglWeekValuePlanList(@Validated(ValidationGroups.Select.class) JdglWeekValuePlan jdglWeekValuePlanParam) {
         List<JdglWeekValuePlan> jdglWeekValuePlanList = jdglWeekValuePlanService.getJdglWeekValuePlanList(jdglWeekValuePlanParam);
         return getDataTableAjaxResult(jdglWeekValuePlanList);
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:add")
+    // @PreAuthorize(hasPermi = "jdglWeekValuePlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglWeekValuePlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglWeekValuePlan jdglWeekValuePlanParam) {
         jdglWeekValuePlanService.insertJdglWeekValuePlan(jdglWeekValuePlanParam);
         return AjaxResult.success(jdglWeekValuePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:add")
+    // @PreAuthorize(hasPermi = "jdglWeekValuePlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglWeekValuePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglWeekValuePlan> jdglWeekValuePlanListParam) {
         jdglWeekValuePlanService.insertJdglWeekValuePlanList(jdglWeekValuePlanListParam);
         return AjaxResult.success(jdglWeekValuePlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:update")
+    // @PreAuthorize(hasPermi = "jdglWeekValuePlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglWeekValuePlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglWeekValuePlan jdglWeekValuePlanParam) {
         return toAjax(jdglWeekValuePlanService.updateJdglWeekValuePlan(jdglWeekValuePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:update")
+    // @PreAuthorize(hasPermi = "jdglWeekValuePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglWeekValuePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglWeekValuePlan> jdglWeekValuePlanListParam) {
         return toAjax(jdglWeekValuePlanService.updateJdglWeekValuePlanList(jdglWeekValuePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglWeekValuePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglWeekValuePlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglWeekValuePlan jdglWeekValuePlanParam) {
         return toAjax(jdglWeekValuePlanService.deleteJdglWeekValuePlan(jdglWeekValuePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglWeekValuePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglWeekValuePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglWeekValuePlanByPks(@PathVariable Long[] ids) {
         List<Long> jdglWeekValuePlanPkList = Arrays.asList(ids);

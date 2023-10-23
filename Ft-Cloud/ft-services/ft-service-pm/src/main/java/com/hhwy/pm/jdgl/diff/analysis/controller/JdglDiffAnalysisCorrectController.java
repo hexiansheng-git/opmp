@@ -32,20 +32,20 @@ public class JdglDiffAnalysisCorrectController extends BaseController {
     private IJdglDiffAnalysisCorrectService jdglDiffAnalysisCorrectService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysisCorrect(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = jdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam);
         return AjaxResult.success(jdglDiffAnalysisCorrect);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/getInit")
     public AjaxResult getInitDiffAnalysisCorrect(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         return AjaxResult.success(jdglDiffAnalysisCorrectService.getInitDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam));
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisCorrectList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         startPage();
@@ -53,46 +53,46 @@ public class JdglDiffAnalysisCorrectController extends BaseController {
         return getDataTableAjaxResult(jdglDiffAnalysisCorrectList);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:list")
     @GetMapping("/maplist")
     public AjaxResult getJdglDiffAnalysisCorrectMapList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         Map<String, List<JdglDiffAnalysisCorrect>> jdglDiffAnalysisCorrectList = jdglDiffAnalysisCorrectService.getJdglDiffAnalysisCorrectMapList(jdglDiffAnalysisCorrectParam);
         return AjaxResult.success(jdglDiffAnalysisCorrectList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDiffAnalysisCorrect(@Validated(ValidationGroups.Save.class) @RequestBody JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         jdglDiffAnalysisCorrectService.insertJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam);
         return AjaxResult.success(jdglDiffAnalysisCorrectParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDiffAnalysisCorrectList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectListParam) {
         jdglDiffAnalysisCorrectService.insertJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectListParam);
         return AjaxResult.success(jdglDiffAnalysisCorrectListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDiffAnalysisCorrect(@Validated(ValidationGroups.Update.class) @RequestBody JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         return toAjax(jdglDiffAnalysisCorrectService.updateJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglDiffAnalysisCorrectList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDiffAnalysisCorrect> jdglDiffAnalysisCorrectListParam) {
         return toAjax(jdglDiffAnalysisCorrectService.updateJdglDiffAnalysisCorrectList(jdglDiffAnalysisCorrectListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDiffAnalysisCorrect(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDiffAnalysisCorrect jdglDiffAnalysisCorrectParam) {
         return toAjax(jdglDiffAnalysisCorrectService.deleteJdglDiffAnalysisCorrect(jdglDiffAnalysisCorrectParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisCorrect:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglDiffAnalysisCorrectByPks(@PathVariable Long[] ids) {
         List<Long> jdglDiffAnalysisCorrectPkList = Arrays.asList(ids);

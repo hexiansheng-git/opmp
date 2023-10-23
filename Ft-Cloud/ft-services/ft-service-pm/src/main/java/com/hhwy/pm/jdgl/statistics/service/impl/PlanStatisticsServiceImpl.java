@@ -1,5 +1,6 @@
 package com.hhwy.pm.jdgl.statistics.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.service.IJdglDayScheduleService;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleBill.domain.JdglDayScheduleBill;
@@ -20,6 +21,9 @@ import com.hhwy.pm.jdgl.quarterpl.jdglQuarterPlan.service.IJdglQuarterPlanServic
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.domain.JdglQuarterValuePlan;
 import com.hhwy.pm.jdgl.quarterpl.jdglQuarterValuePlan.service.IJdglQuarterValuePlanService;
 import com.hhwy.pm.jdgl.statistics.domain.*;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsBillValueVO4Export;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsImageVO4Export;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsValueVO4Export;
 import com.hhwy.pm.jdgl.statistics.service.IPlanStatisticsService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekImagePlan.domain.JdglWeekImagePlan;
@@ -197,26 +201,51 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         Map<String, BigDecimal> totalMap = new HashMap<>();
         totalMap.put("planAmt", contractAmt == null ? new BigDecimal(0) : contractAmt);
         totalMap.put("actAmt", totalActAmt);
+        if(contractAmt != null && BigDecimal.ZERO.compareTo(contractAmt) != 0 && totalActAmt != null) {
+            totalMap.put("ratio", totalActAmt.divide(contractAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+        } else {
+            totalMap.put("ratio", BigDecimal.ZERO);
+        }
         return2Map.put("total", totalMap);
 
         Map<String, BigDecimal> yearMap = new HashMap<>();
         yearMap.put("planAmt", yearPlanAmt);
         yearMap.put("actAmt", yearActAmt);
+        if(yearPlanAmt != null && BigDecimal.ZERO.compareTo(yearPlanAmt) != 0 && yearActAmt != null) {
+            yearMap.put("ratio", yearActAmt.divide(yearPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+        } else {
+            yearMap.put("ratio", BigDecimal.ZERO);
+        }
         return2Map.put("year", yearMap);
 
         Map<String, BigDecimal> quarterMap = new HashMap<>();
         quarterMap.put("planAmt", quarterPlanAmt);
         quarterMap.put("actAmt", quarterActAmt);
+        if(quarterPlanAmt != null && BigDecimal.ZERO.compareTo(quarterPlanAmt) != 0 && quarterActAmt != null) {
+            quarterMap.put("ratio", quarterActAmt.divide(quarterPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+        } else {
+            quarterMap.put("ratio", BigDecimal.ZERO);
+        }
         return2Map.put("quarter", quarterMap);
 
         Map<String, BigDecimal> monthMap = new HashMap<>();
         monthMap.put("planAmt", monthPlanAmt);
         monthMap.put("actAmt", monthActAmt);
+        if(monthPlanAmt != null && BigDecimal.ZERO.compareTo(monthPlanAmt) != 0 && monthActAmt != null) {
+            monthMap.put("ratio", monthActAmt.divide(monthPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+        } else {
+            monthMap.put("ratio", BigDecimal.ZERO);
+        }
         return2Map.put("month", monthMap);
 
         Map<String, BigDecimal> weekMap = new HashMap<>();
         weekMap.put("planAmt", weekPlanAmt);
         weekMap.put("actAmt", weekActAmt);
+        if(weekPlanAmt != null && BigDecimal.ZERO.compareTo(weekPlanAmt) != 0 && weekActAmt != null) {
+            weekMap.put("ratio", weekActAmt.divide(weekPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
+        } else {
+            weekMap.put("ratio", BigDecimal.ZERO);
+        }
         return2Map.put("week", weekMap);
 
         return return2Map;
@@ -231,26 +260,49 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         Set<String> keys = valueCompData.keySet();
 
+        PlanStatisticsValueCompVO vo1 = new PlanStatisticsValueCompVO();
+        PlanStatisticsValueCompVO vo2 = new PlanStatisticsValueCompVO();
+        PlanStatisticsValueCompVO vo3 = new PlanStatisticsValueCompVO();
+        vo1.setType("计划完成产值(万美元)");
+        vo2.setType("实际完成产值(万美元)");
+        vo3.setType("完成比例(%)");
         for (String key : keys) {
-            PlanStatisticsValueCompVO vo1 = new PlanStatisticsValueCompVO();
-            PlanStatisticsValueCompVO vo2 = new PlanStatisticsValueCompVO();
-            PlanStatisticsValueCompVO vo3 = new PlanStatisticsValueCompVO();
             switch (key) {
                 case "week":
-                    vo1.setType("");
+                    Map<String, BigDecimal> week = valueCompData.get("week");
+                    vo1.setWeekValue(week.get("planAmt"));
+                    vo2.setWeekValue(week.get("actAmt"));
+                    vo3.setWeekValue(week.get("ratio"));
                     break;
                 case "month":
+                    Map<String, BigDecimal> month = valueCompData.get("month");
+                    vo1.setMonthValue(month.get("planAmt"));
+                    vo2.setMonthValue(month.get("actAmt"));
+                    vo3.setMonthValue(month.get("ratio"));
                     break;
                 case "quarter":
+                    Map<String, BigDecimal> quarter = valueCompData.get("quarter");
+                    vo1.setQuarterValue(quarter.get("planAmt"));
+                    vo2.setQuarterValue(quarter.get("actAmt"));
+                    vo3.setQuarterValue(quarter.get("ratio"));
                     break;
                 case "year":
+                    Map<String, BigDecimal> year = valueCompData.get("year");
+                    vo1.setYearValue(year.get("planAmt"));
+                    vo2.setYearValue(year.get("actAmt"));
+                    vo3.setYearValue(year.get("ratio"));
                     break;
                 case "total":
+                    Map<String, BigDecimal> total = valueCompData.get("total");
+                    vo1.setTotalValue(total.get("planAmt"));
+                    vo2.setTotalValue(total.get("actAmt"));
+                    vo3.setTotalValue(total.get("ratio"));
                     break;
             }
         }
-
-
+        returnList.add(vo1);
+        returnList.add(vo2);
+        returnList.add(vo3);
         return returnList;
     }
 
@@ -347,6 +399,19 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return CollectionUtils.isEmpty(build)?new ArrayList<>():build;
     }
 
+
+    public List<PlanStatisticsWbsValueVO4Export> getWbsValueList4Export(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+        List<PlanStatisticsWbsValueVO> wbsValueList = getWbsValueList(iPlanStatisticsQueryVO);
+        if (CollectionUtils.isEmpty(wbsValueList)) return null;
+        List<PlanStatisticsWbsValueVO> planStatisticsWbsValueVOS = TreeUtil.treeToList(wbsValueList);
+        List<PlanStatisticsWbsValueVO4Export> returnList = new ArrayList<>();
+        for (PlanStatisticsWbsValueVO planStatisticsWbsValueVO : planStatisticsWbsValueVOS) {
+            String s = JSONObject.toJSONString(planStatisticsWbsValueVO);
+            PlanStatisticsWbsValueVO4Export planStatisticsWbsValueVO4Export = JSONObject.parseObject(s, PlanStatisticsWbsValueVO4Export.class);
+            returnList.add(planStatisticsWbsValueVO4Export);
+        }
+        return returnList;
+    }
 
     /**
      * 获取清单汇总数据
@@ -500,6 +565,20 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
     }
 
+    @Override
+    public List<PlanStatisticsBillValueVO4Export> getBillValueList4Export(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+        List<PlanStatisticsBillValueVO> billValueList = getBillValueList(iPlanStatisticsQueryVO);
+        if(CollectionUtils.isEmpty(billValueList)) return null;
+        List<PlanStatisticsBillValueVO> planStatisticsBillValueVOList = TreeUtil.treeToList(billValueList);
+        List<PlanStatisticsBillValueVO4Export> returnList = new ArrayList<>();
+        for (PlanStatisticsBillValueVO planStatisticsBillValueVO : planStatisticsBillValueVOList) {
+            String s = JSONObject.toJSONString(planStatisticsBillValueVO);
+            PlanStatisticsBillValueVO4Export planStatisticsBillValueVO4Export = JSONObject.parseObject(s, PlanStatisticsBillValueVO4Export.class);
+            returnList.add(planStatisticsBillValueVO4Export);
+        }
+        return returnList;
+    }
+
     /**
      * 从形象汇总
      * @param iPlanStatisticsQueryVO
@@ -545,6 +624,20 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         return CollectionUtils.isEmpty(build) ? new ArrayList<>() : build;
 
+    }
+
+    @Override
+    public List<PlanStatisticsWbsImageVO4Export> getImageWbsList4Export(PlanStatisticsQueryVO iPlanStatisticsQueryVO) {
+        List<PlanStatisticsWbsImageVO> imageWbsList = getImageWbsList(iPlanStatisticsQueryVO);
+        if(CollectionUtils.isEmpty(imageWbsList)) return null;
+        List<PlanStatisticsWbsImageVO> planStatisticsWbsImageVOS = TreeUtil.treeToList(imageWbsList);
+        List<PlanStatisticsWbsImageVO4Export> returnList = new ArrayList<>();
+        for(PlanStatisticsWbsImageVO planStatisticsWbsImageVO:planStatisticsWbsImageVOS) {
+            String s = JSONObject.toJSONString(planStatisticsWbsImageVO);
+            PlanStatisticsWbsImageVO4Export planStatisticsWbsImageVO4Export = JSONObject.parseObject(s, PlanStatisticsWbsImageVO4Export.class);
+            returnList.add(planStatisticsWbsImageVO4Export);
+        }
+        return returnList;
     }
 
     /**

@@ -32,53 +32,53 @@ public class JdglQuarterImagePlanController extends BaseController {
     private IJdglQuarterImagePlanService jdglQuarterImagePlanService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
     @GetMapping
     public AjaxResult getJdglQuarterImagePlan(@Validated(ValidationGroups.Get.class) JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         JdglQuarterImagePlan jdglQuarterImagePlan = jdglQuarterImagePlanService.getJdglQuarterImagePlan(jdglQuarterImagePlanParam);
         return AjaxResult.success(jdglQuarterImagePlan);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterImagePlanList(@Validated(ValidationGroups.Select.class) JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterImagePlanService.getJdglQuarterImagePlanList(jdglQuarterImagePlanParam);
         return getDataTableAjaxResult(jdglQuarterImagePlanList);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglQuarterImagePlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         jdglQuarterImagePlanService.insertJdglQuarterImagePlan(jdglQuarterImagePlanParam);
         return AjaxResult.success(jdglQuarterImagePlanParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglQuarterImagePlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglQuarterImagePlan> jdglQuarterImagePlanListParam) {
         jdglQuarterImagePlanService.insertJdglQuarterImagePlanList(jdglQuarterImagePlanListParam);
         return AjaxResult.success(jdglQuarterImagePlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:update")
+    // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglQuarterImagePlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         return toAjax(jdglQuarterImagePlanService.updateJdglQuarterImagePlan(jdglQuarterImagePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:update")
+    // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglQuarterImagePlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglQuarterImagePlan> jdglQuarterImagePlanListParam) {
         return toAjax(jdglQuarterImagePlanService.updateJdglQuarterImagePlanList(jdglQuarterImagePlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglQuarterImagePlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglQuarterImagePlan jdglQuarterImagePlanParam) {
         return toAjax(jdglQuarterImagePlanService.deleteJdglQuarterImagePlan(jdglQuarterImagePlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterImagePlan:remove")
+    // @PreAuthorize(hasPermi = "jdglQuarterImagePlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglQuarterImagePlanByPks(@PathVariable Long[] ids) {
         List<Long> jdglQuarterImagePlanPkList = Arrays.asList(ids);

@@ -31,53 +31,53 @@ public class JdglDiffAnalysisSvController extends BaseController {
     private IJdglDiffAnalysisSvService jdglDiffAnalysisSvService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping
     public AjaxResult getJdglDiffAnalysisSv(@Validated(ValidationGroups.Get.class) JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         JdglDiffAnalysisSv jdglDiffAnalysisSv = jdglDiffAnalysisSvService.getJdglDiffAnalysisSv(jdglDiffAnalysisSvParam);
         return AjaxResult.success(jdglDiffAnalysisSv);
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping("/list")
     public AjaxResult getJdglDiffAnalysisSvList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList = jdglDiffAnalysisSvService.getJdglDiffAnalysisSvList(jdglDiffAnalysisSvParam);
         return getDataTableAjaxResult(jdglDiffAnalysisSvList);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDiffAnalysisSv(@Validated(ValidationGroups.Save.class) @RequestBody JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         jdglDiffAnalysisSvService.insertJdglDiffAnalysisSv(jdglDiffAnalysisSvParam);
         return AjaxResult.success(jdglDiffAnalysisSvParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:add")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglDiffAnalysisSvList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglDiffAnalysisSv> jdglDiffAnalysisSvListParam) {
         jdglDiffAnalysisSvService.insertJdglDiffAnalysisSvList(jdglDiffAnalysisSvListParam);
         return AjaxResult.success(jdglDiffAnalysisSvListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:update")
     @PostMapping("/update")
     public AjaxResult updateJdglDiffAnalysisSv(@Validated(ValidationGroups.Update.class) @RequestBody JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         return toAjax(jdglDiffAnalysisSvService.updateJdglDiffAnalysisSv(jdglDiffAnalysisSvParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:update")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglDiffAnalysisSvList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglDiffAnalysisSv> jdglDiffAnalysisSvListParam) {
         return toAjax(jdglDiffAnalysisSvService.updateJdglDiffAnalysisSvList(jdglDiffAnalysisSvListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglDiffAnalysisSv(@Validated(ValidationGroups.Delete.class) @RequestBody JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         return toAjax(jdglDiffAnalysisSvService.deleteJdglDiffAnalysisSv(jdglDiffAnalysisSvParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:remove")
+    // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglDiffAnalysisSvByPks(@PathVariable Long[] ids) {
         List<Long> jdglDiffAnalysisSvPkList = Arrays.asList(ids);
@@ -91,7 +91,7 @@ public class JdglDiffAnalysisSvController extends BaseController {
         util.exportExcel(response, jdglDiffAnalysisSvList, DateUtils.getDate());
     }
 
-    //  @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
     @GetMapping("/getPlanAndComp")
     public AjaxResult getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
         return AjaxResult.success(jdglDiffAnalysisSvService.getPlanAndComp(jdglDiffAnalysisSvParam));

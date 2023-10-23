@@ -46,21 +46,21 @@ public class QqchImportantController extends BaseController {
     private SystemServiceApi systemServiceApi;
 
 
-    //  @PreAuthorize(hasPermi = "qqchImportant:list")
+    //  // @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping
     public AjaxResult getQqchImportant(@Validated(ValidationGroups.Get.class) CompileEntity<QqchImportant> qqchImportantParam) {
         QqchImportant qqchImportant = qqchImportantService.getQqchImportant(qqchImportantParam.dealListDto());
         return AjaxResult.success(qqchImportant);
     }
 
-    //  @PreAuthorize(hasPermi = "qqchImportant:list")
+    //  // @PreAuthorize(hasPermi = "qqchImportant:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchImportant qqchImportantParam) {
         CompileEntity qqchImportantList = qqchImportantService.list(qqchImportantParam);
         return AjaxResult.success(qqchImportantList);
     }
 
-    @PreAuthorize(hasPermi = "qqchImportant:add")
+    // @PreAuthorize(hasPermi = "qqchImportant:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchImportant>> dto) {
         List<QqchImportant> qqchImportants = dto.dealSaveDto();
@@ -69,7 +69,7 @@ public class QqchImportantController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchImportant:importData")
+    // @PreAuthorize(hasPermi = "qqchImportant:importData")
     @PostMapping("/importData")
     public AjaxResult importData(@RequestParam("file") MultipartFile file) {
         FtExcelUtil<QqchImportant> excelUtil = new FtExcelUtil<>(QqchImportant.class);
@@ -119,32 +119,32 @@ public class QqchImportantController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchImportant:add")
+    // @PreAuthorize(hasPermi = "qqchImportant:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchImportantList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchImportant> qqchImportantListParam) {
         qqchImportantService.insertQqchImportantList(qqchImportantListParam);
         return AjaxResult.success(qqchImportantListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchImportant:update")
+    // @PreAuthorize(hasPermi = "qqchImportant:update")
     @PostMapping("/update")
     public AjaxResult updateQqchImportant(@Validated(ValidationGroups.Update.class) @RequestBody QqchImportant qqchImportantParam) {
         return toAjax(qqchImportantService.updateQqchImportant(qqchImportantParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchImportant:update")
+    // @PreAuthorize(hasPermi = "qqchImportant:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchImportantList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchImportant> qqchImportantListParam) {
         return toAjax(qqchImportantService.updateQqchImportantList(qqchImportantListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchImportant:remove")
+    // @PreAuthorize(hasPermi = "qqchImportant:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchImportant(@Validated(ValidationGroups.Delete.class) @RequestBody QqchImportant qqchImportantParam) {
         return toAjax(qqchImportantService.deleteQqchImportant(qqchImportantParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchImportant:remove")
+    // @PreAuthorize(hasPermi = "qqchImportant:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchImportantByPks(@PathVariable Long[] ids) {
         List<Long> qqchImportantPkList = Arrays.asList(ids);

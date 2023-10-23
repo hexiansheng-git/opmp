@@ -2,6 +2,9 @@ package com.hhwy.pm.jdgl.statistics.service;
 
 import com.hhwy.pm.jdgl.day.schedule.jdglDaySchedule.domain.JdglDaySchedule;
 import com.hhwy.pm.jdgl.statistics.domain.*;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsBillValueVO4Export;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsImageVO4Export;
+import com.hhwy.pm.jdgl.statistics.domain.export.PlanStatisticsWbsValueVO4Export;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -17,9 +20,15 @@ public interface IPlanStatisticsService {
 
     List<PlanStatisticsWbsValueVO> getWbsValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO) ;
 
+    List<PlanStatisticsWbsValueVO4Export> getWbsValueList4Export(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+
     List<PlanStatisticsBillValueVO> getBillValueList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 
+    List<PlanStatisticsBillValueVO4Export> getBillValueList4Export(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+
     List<PlanStatisticsWbsImageVO> getImageWbsList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
+
+    List<PlanStatisticsWbsImageVO4Export> getImageWbsList4Export(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 
     Map<String, PlanStatisticsPeriodValueVO> getYearValueCompareList(PlanStatisticsQueryVO iPlanStatisticsQueryVO);
 

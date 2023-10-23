@@ -226,6 +226,10 @@ public class JdglYearValuePlanServiceImpl implements IJdglYearValuePlanService {
                         if(jdglYearValuePlan.getDesignQuantity() != null && jdglYearValuePlan.getTotalCompDesignQuantity() != null) {
                             jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity().subtract(jdglYearValuePlan.getTotalCompDesignQuantity()));
                         }
+                        if(jdglYearValuePlan.getTotalCompDesignQuantity() == null) {
+                            jdglYearValuePlan.setTotalCompDesignQuantity(BigDecimal.ZERO);
+                            jdglYearValuePlan.setRemainDesignQuantity(jdglYearValuePlan.getDesignQuantity());
+                        }
                         if(xmslContractList.getCode() != null) {
                             BigDecimal yearplanCompQuantity = new BigDecimal(0);
 

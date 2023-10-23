@@ -35,14 +35,14 @@ public class QqchMilestoneController extends BaseController {
     private IQqchMilestoneService qqchMilestoneService;
 
 
-    //  @PreAuthorize(hasPermi = "qqchMilestone:list")
+    //  // @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping
     public AjaxResult getQqchMilestone(@Validated(ValidationGroups.Get.class) CompileEntity<QqchMilestone> qqchMilestoneParam) {
         QqchMilestone qqchMilestone = qqchMilestoneService.getQqchMilestone(qqchMilestoneParam.dealListDto());
         return AjaxResult.success(qqchMilestone);
     }
 
-    //  @PreAuthorize(hasPermi = "qqchMilestone:list")
+    //  // @PreAuthorize(hasPermi = "qqchMilestone:list")
     @GetMapping("/list")
     public AjaxResult list(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         BigDecimal version = VersionUtil.getVersion(QqchMilestone.TABLE_NAME, qqchMilestoneParam.getVersion());
@@ -55,7 +55,7 @@ public class QqchMilestoneController extends BaseController {
         return AjaxResult.success(returnVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:add")
+    // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody CompileEntity<List<QqchMilestone>> dtoList) {
         List<QqchMilestone> dto = dtoList.dealSaveDto();
@@ -63,39 +63,39 @@ public class QqchMilestoneController extends BaseController {
         return AjaxResult.success(dto);
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:add")
+    // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/saveDataFromMainP6")
     public AjaxResult saveDataFromMainP6(@Validated(ValidationGroups.Select.class) QqchMilestone qqchMilestoneParam) {
         List<QqchMilestone> dto = qqchMilestoneService.saveDataFromMainP6(qqchMilestoneParam);
         return AjaxResult.success(dto);
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:add")
+    // @PreAuthorize(hasPermi = "qqchMilestone:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchMilestoneList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchMilestone> qqchMilestoneListParam) {
         qqchMilestoneService.insertQqchMilestoneList(qqchMilestoneListParam);
         return AjaxResult.success(qqchMilestoneListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:update")
+    // @PreAuthorize(hasPermi = "qqchMilestone:update")
     @PostMapping("/update")
     public AjaxResult updateQqchMilestone(@Validated(ValidationGroups.Update.class) @RequestBody QqchMilestone qqchMilestoneParam) {
         return toAjax(qqchMilestoneService.updateQqchMilestone(qqchMilestoneParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:update")
+    // @PreAuthorize(hasPermi = "qqchMilestone:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchMilestoneList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchMilestone> qqchMilestoneListParam) {
         return toAjax(qqchMilestoneService.updateQqchMilestoneList(qqchMilestoneListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:remove")
+    // @PreAuthorize(hasPermi = "qqchMilestone:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchMilestone(@Validated(ValidationGroups.Delete.class) @RequestBody QqchMilestone qqchMilestoneParam) {
         return toAjax(qqchMilestoneService.deleteQqchMilestone(qqchMilestoneParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchMilestone:remove")
+    // @PreAuthorize(hasPermi = "qqchMilestone:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchMilestoneByPks(@PathVariable Long[] ids) {
         List<Long> qqchMilestonePkList = Arrays.asList(ids);

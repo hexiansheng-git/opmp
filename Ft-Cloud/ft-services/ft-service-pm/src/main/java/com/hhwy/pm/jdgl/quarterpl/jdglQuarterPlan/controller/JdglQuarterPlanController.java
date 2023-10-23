@@ -32,7 +32,7 @@ public class JdglQuarterPlanController extends BaseController {
     private IJdglQuarterPlanService jdglQuarterPlanService;
 
 
-    //  @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping
     public AjaxResult getJdglQuarterPlan(@Validated(ValidationGroups.Get.class) JdglQuarterPlan jdglQuarterPlanParam) {
         JdglQuarterPlan jdglQuarterPlan = jdglQuarterPlanService.getJdglQuarterPlan(jdglQuarterPlanParam);
@@ -44,13 +44,13 @@ public class JdglQuarterPlanController extends BaseController {
      * @param jdglQuarterPlanParam
      * @return
      */
-    //  @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping("/getInitJdglQuarterPlan")
     public AjaxResult getInitJdglQuarterPlan(@Validated(ValidationGroups.Get.class) JdglQuarterPlan jdglQuarterPlanParam) {
         return AjaxResult.success(jdglQuarterPlanService.getInitJdglQuarterPlan(jdglQuarterPlanParam));
     }
 
-    //  @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
+    //  // @PreAuthorize(hasPermi = "jdglQuarterPlan:list")
     @GetMapping("/list")
     public AjaxResult getJdglQuarterPlanList(@Validated(ValidationGroups.Select.class) JdglQuarterPlan jdglQuarterPlanParam) {
         startPage();
@@ -58,45 +58,45 @@ public class JdglQuarterPlanController extends BaseController {
         return getDataTableAjaxResult(jdglQuarterPlanList);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglQuarterPlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         jdglQuarterPlanService.insertJdglQuarterPlan(jdglQuarterPlanParam);
         return AjaxResult.success(jdglQuarterPlanParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertJdglQuarterPlanList(@Validated(ValidationGroups.Save.class) @RequestBody List<JdglQuarterPlan> jdglQuarterPlanListParam) {
         jdglQuarterPlanService.insertJdglQuarterPlanList(jdglQuarterPlanListParam);
         return AjaxResult.success(jdglQuarterPlanListParam);
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:add")
     @PostMapping("/adjust")
     public AjaxResult adjust(@RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         return AjaxResult.success(jdglQuarterPlanService.adjust(jdglQuarterPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:update")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:update")
     @PostMapping("/update")
     public AjaxResult updateJdglQuarterPlan(@Validated(ValidationGroups.Update.class) @RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         return toAjax(jdglQuarterPlanService.updateJdglQuarterPlan(jdglQuarterPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:update")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateJdglQuarterPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<JdglQuarterPlan> jdglQuarterPlanListParam) {
         return toAjax(jdglQuarterPlanService.updateJdglQuarterPlanList(jdglQuarterPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:remove")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteJdglQuarterPlan(@Validated(ValidationGroups.Delete.class) @RequestBody JdglQuarterPlan jdglQuarterPlanParam) {
         return toAjax(jdglQuarterPlanService.deleteJdglQuarterPlan(jdglQuarterPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "jdglQuarterPlan:remove")
+    // @PreAuthorize(hasPermi = "jdglQuarterPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteJdglQuarterPlanByPks(@PathVariable Long[] ids) {
         List<Long> jdglQuarterPlanPkList = Arrays.asList(ids);
