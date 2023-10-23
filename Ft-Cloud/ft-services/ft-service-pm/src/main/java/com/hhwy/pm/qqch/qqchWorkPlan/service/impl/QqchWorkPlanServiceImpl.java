@@ -112,6 +112,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
             if (ObjectNullUtil.isEmpty(idMax)) {//代表 新增
 //                busData.setId(IdWorker.createId());
                 busData.setVersion(new BigDecimal("1.0"));
+                //设置策划审批单位
+                this.setPlanApprovalUnit(busData);
                 //获取最新的菜单，并整合原来的数据
                 List<QqchWorkPlanDetail> tree = buildTreeList(null,0);
                 busData.setDetailList(tree);
@@ -150,6 +152,8 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
                 QqchWorkPlan qqchWorkPlan = new QqchWorkPlan();
                 qqchWorkPlan.setId(idMax);
                 BeanUtils.copyProperties(this.getQqchWorkPlan(qqchWorkPlan), busData);
+                //设置策划审批单位
+                this.setPlanApprovalUnit(qqchWorkPlan);
 
                 QqchWorkPlanDetail detail = new QqchWorkPlanDetail();
                 detail.setMainId(idMax);
@@ -195,11 +199,6 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         int listCount = qqchWorkPlanMapper.getQqchWorkPlanListCount(new QqchWorkPlan());
         if (listCount > 1) {
             busData.setIsShowRecord(1);
-        }
-        //查询最新（不论是否生效）版本前期策划工作小组
-        QqchWorkGroup workGroup = qqchWorkGroupService.getMaxVersionQqchWorkGroup();
-        if("3".equals(type) && workGroup != null){
-            busData.setPlanApprovalUnit(workGroup.getPlanApprovalUnit());
         }
         return busData;
     }
@@ -413,6 +412,10 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
         //置为无效
         qqchWorkPlan.setValid("0");
+        qqchWorkPlan.setTaskStatus("0");
+
+        //设置策划审批单位
+        this.setPlanApprovalUnit(qqchWorkPlan);
 
         // 获取前端传入的明细
         List<QqchWorkPlanDetail> detailListLast = null;
@@ -427,6 +430,17 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlanDetailService.insertOrEditBatchByMainId(detailListLast,qqchWorkPlan.getId());
         sysSyncInfoService.pushQqchWorkPlan(qqchWorkPlan);
         return id;
+    }
+
+    /**
+     * 设置策划审批单位
+     * @param qqchWorkPlan
+     */
+    private void setPlanApprovalUnit(QqchWorkPlan qqchWorkPlan){
+        QqchWorkGroup workGroup = qqchWorkGroupService.getMaxVersionQqchWorkGroup();
+        if(workGroup != null){
+            qqchWorkPlan.setPlanApprovalUnit(workGroup.getPlanApprovalUnit());
+        }
     }
 
     @Transactional
