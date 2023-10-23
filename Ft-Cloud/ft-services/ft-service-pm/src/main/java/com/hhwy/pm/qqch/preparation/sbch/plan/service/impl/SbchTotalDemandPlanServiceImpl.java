@@ -151,6 +151,8 @@ public class SbchTotalDemandPlanServiceImpl implements SbchTotalDemandPlanServic
             for (SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail : list) {
                 sbchTotalDemandPlanDetail.setId(IdWorker.createId());
                 sbchTotalDemandPlanDetail.setPlanId(vo.getId());
+                sbchTotalDemandPlanDetail.setProjectId(vo.getProjectId());
+                sbchTotalDemandPlanDetail.setProjectName(vo.getProjectName());
                 EntityUtils.setCreateInfo(sbchTotalDemandPlanDetail);
             }
         }

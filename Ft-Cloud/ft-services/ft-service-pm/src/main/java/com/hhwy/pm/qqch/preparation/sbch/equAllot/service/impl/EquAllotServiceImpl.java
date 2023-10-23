@@ -1,9 +1,12 @@
 package com.hhwy.pm.qqch.preparation.sbch.equAllot.service.impl;
 
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson.JSON;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.EquAllotVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.service.EquAllotService;
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.domain.SbchEquipmentAllot;
@@ -291,5 +294,13 @@ public class EquAllotServiceImpl implements EquAllotService {
         JyDetailsUtil.jyDetailsDetails(detailList,"getDetailsListImport", ValidationGroups.Save.class);
         /*费用估算*/
         JyDetailsUtil.jyDetailsDetails(detailList,"getDetailsListCost", ValidationGroups.Save.class);
+    }
+
+    @Override
+    public EquAllotVo xzxcsb(ActiveEquVo activeEquVo) {
+        String url = "http://10.11.238.63:10003/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
+        String post = HttpUtil.post(url, JSON.toJSONString(activeEquVo));
+
+        return null;
     }
 }

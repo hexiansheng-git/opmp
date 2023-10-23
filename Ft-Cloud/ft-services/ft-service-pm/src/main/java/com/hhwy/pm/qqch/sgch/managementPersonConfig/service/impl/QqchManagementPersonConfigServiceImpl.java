@@ -132,7 +132,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             entity.setValid(valid);
             entity.setVersion(version);
             entity.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-            entity.setCreateUserName(SecurityUtils.getSysUser().getNickName());
+            entity.setCreateUserName(SecurityUtils.getUserName());
             entity.setCreateTime(DateUtils.getNowDate());
             entity.setDelFlag("0");
             list.add(entity);

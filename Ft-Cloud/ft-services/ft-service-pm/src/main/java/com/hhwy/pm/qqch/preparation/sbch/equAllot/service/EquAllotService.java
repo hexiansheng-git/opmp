@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.equAllot.service;
 
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.EquAllotVo;
 
 import java.math.BigDecimal;
@@ -12,4 +13,6 @@ public interface EquAllotService {
     EquAllotVo getList(BigDecimal version);
 
     void batchAdd(EquAllotVo equAllotVo);
+
+    EquAllotVo xzxcsb(ActiveEquVo activeEquVo);
 }
