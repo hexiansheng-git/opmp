@@ -24,8 +24,6 @@ import org.xml.sax.SAXException;
 import javax.validation.constraints.Size;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.rpc.ParameterMode;
-import javax.xml.rpc.ServiceException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +69,7 @@ public class EhrServiceImpl implements IEhrService {
     static String authPattern;
 
     @Override
-    public Map<String,Object> getCertList(String userName4A) throws ServiceException, ParserConfigurationException, IOException, SAXException {
+    public Map<String,Object> getCertList(String userName4A) throws  ParserConfigurationException, IOException, SAXException {
         String sessionId=this.getHrSessionId();
         String certParam = this.getCertParam(sessionId, userName4A);
         String result = this.cretPost(certUrl, certParam);
@@ -79,7 +77,7 @@ public class EhrServiceImpl implements IEhrService {
         return map;
     }
 
-    private String getHrSessionId() throws ServiceException, ParserConfigurationException, IOException, SAXException {
+    private String getHrSessionId() throws  ParserConfigurationException, IOException, SAXException {
         String sessionParam = this.getSessionParam();
         String result = this.cretPost(sessionUrl, sessionParam);
         String sessionId = this.getSessionInfo(result);
@@ -88,7 +86,7 @@ public class EhrServiceImpl implements IEhrService {
 
 
 
-    public  String cretPost(String url,String param) throws ServiceException {
+    public  String cretPost(String url,String param) {
         CloseableHttpClient closeableHttpClient = null;
         HttpPost httpPost = null;
         CloseableHttpResponse response = null;

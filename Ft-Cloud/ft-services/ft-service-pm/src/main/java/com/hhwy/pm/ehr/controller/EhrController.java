@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.rpc.ServiceException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class EhrController {
     public AjaxResult getCertList() {
         try {
             ehrService.getCertList(SecurityUtils.getUserName());
-        } catch (ServiceException | ParserConfigurationException | IOException | SAXException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             throw new RuntimeException(e);
         }
         return AjaxResult.success("1");
