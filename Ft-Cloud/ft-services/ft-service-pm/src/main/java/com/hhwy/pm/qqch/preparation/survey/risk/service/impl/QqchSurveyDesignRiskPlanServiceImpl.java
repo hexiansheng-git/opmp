@@ -16,6 +16,7 @@ import com.hhwy.pm.qqch.preparation.survey.risk.mapper.QqchSurveyDesignRiskPlanM
 import com.hhwy.pm.qqch.preparation.survey.risk.service.IQqchSurveyDesignRiskPlanService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.ListTreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -102,6 +103,7 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
         for (Map<String, Object> map : dictDataList) {
             String dictLabel = (String) map.get("dictLabel");
             QqchSurveyDesignRiskPlan qqchSurveyDesignRiskPlan = new QqchSurveyDesignRiskPlan();
+            qqchSurveyDesignRiskPlan.setId(IdWorker.createId());
             qqchSurveyDesignRiskPlan.setRiskIdentificationItem(dictLabel);
             qqchSurveyDesignRiskPlanList.add(qqchSurveyDesignRiskPlan);
         }
