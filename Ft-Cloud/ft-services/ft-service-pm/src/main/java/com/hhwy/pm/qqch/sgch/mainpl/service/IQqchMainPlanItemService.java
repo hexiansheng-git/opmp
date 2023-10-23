@@ -4,7 +4,6 @@ import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.vo.QqchMainPlanItemVo;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +16,8 @@ public interface IQqchMainPlanItemService {
     QqchMainPlanItem getQqchMainPlanItem(QqchMainPlanItem qqchMainPlanItem);
 
     List<QqchMainPlanItem> getQqchMainPlanItemList(QqchMainPlanItem qqchMainPlanItem);
+
+    List<QqchMainPlanItem> getListByItemCodes(String itemCodes);
 
     List<QqchMainPlanItem> getQqchMainPlanItemList4Lazy(QqchMainPlanItem qqchMainPlanItem);
 

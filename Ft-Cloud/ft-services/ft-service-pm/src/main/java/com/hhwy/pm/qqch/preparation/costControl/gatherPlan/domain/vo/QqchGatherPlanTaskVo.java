@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -94,12 +95,12 @@ public class QqchGatherPlanTaskVo {
      * 字段描述：开工时间
      */
     @JsonProperty
-    private String startWorkTime;
+    private Date startWorkTime;
     /**
      * 字段描述：完工时间
      */
     @JsonProperty
-    private String endWorkTime;
+    private Date endWorkTime;
     /**
      * 字段描述：备注/描述
      */
