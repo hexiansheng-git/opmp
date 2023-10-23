@@ -78,6 +78,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
     public JdglWeekPlan getJdglWeekPlan(JdglWeekPlan jdglWeekPlan) {
         JdglWeekPlan jdglWeekPlan1 = jdglWeekPlanMapper.getJdglWeekPlan(jdglWeekPlan);
         if(jdglWeekPlan1 != null) {
+            if(jdglWeekPlan1.getThisPlanValueDl() != null) jdglWeekPlan1.setThisPlanValueDl(jdglWeekPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
             List<JdglWeekValuePlan> jdglWeekValuePlanListByPlanId = iJdglWeekValuePlanService.getJdglWeekValuePlanListByPlanId(jdglWeekPlan1.getId());
             jdglWeekPlan1.setJdglWeekValuePlanList(jdglWeekValuePlanListByPlanId);
             List<JdglWeekImagePlan> jdglWeekImagePlanListByPlanId = iJdglWeekImagePlanService.getJdglWeekImagePlanListByPlanId(jdglWeekPlan1.getId());
@@ -252,12 +253,13 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
     public List<JdglWeekPlan> getJdglWeekPlanList(JdglWeekPlan jdglWeekPlan) {
         List<JdglWeekPlan> jdglWeekPlanList = jdglWeekPlanMapper.getJdglWeekPlanList(jdglWeekPlan);
         if(!CollectionUtils.isEmpty(jdglWeekPlanList)) {
-//            for (JdglWeekPlan jdglWeekPlan1 : jdglWeekPlanList) {
+            for (JdglWeekPlan jdglWeekPlan1 : jdglWeekPlanList) {
+                if(jdglWeekPlan1.getThisPlanValueDl() != null) jdglWeekPlan1.setThisPlanValueDl(jdglWeekPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 //                List<JdglWeekImagePlan> jdglWeekImagePlanListByPlanId = iJdglWeekImagePlanService.getJdglWeekImagePlanListByPlanId(jdglWeekPlan1.getId());
 //                jdglWeekPlan1.setJdglWeekImagePlanList(jdglWeekImagePlanListByPlanId);
 //                List<JdglWeekValuePlan> jdglWeekValuePlanListByPlanId = iJdglWeekValuePlanService.getJdglWeekValuePlanListByPlanId(jdglWeekPlan1.getId());
 //                jdglWeekPlan1.setJdglWeekValuePlanList(jdglWeekValuePlanListByPlanId);
-//            }
+            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglWeekPlanList,FlowEnum.JDGL_WEEKPLAN);
         return jdglWeekPlanList;

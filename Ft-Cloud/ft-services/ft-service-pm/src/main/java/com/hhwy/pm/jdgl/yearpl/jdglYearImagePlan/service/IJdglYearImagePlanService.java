@@ -17,6 +17,8 @@ public interface IJdglYearImagePlanService {
 
     List<JdglYearImagePlan> getJdglYearImagePlanList(JdglYearImagePlan jdglYearImagePlan);
 
+    List<JdglYearImagePlan> getJdglYearImagePlanList4Lazy(JdglYearImagePlan jdglYearImagePlanParam);
+
     List<JdglYearImagePlan> getJdglYearImagePlanListByYearPlanId(Long yearPlanId);
 
     int insertJdglYearImagePlan(JdglYearImagePlan jdglYearImagePlan);
@@ -38,4 +40,6 @@ public interface IJdglYearImagePlanService {
     List<JdglYearImagePlan> getWbsListByYear(String year);
 
     BigDecimal getThisPlanAmt(Long yearPlanId);
+
+
 }

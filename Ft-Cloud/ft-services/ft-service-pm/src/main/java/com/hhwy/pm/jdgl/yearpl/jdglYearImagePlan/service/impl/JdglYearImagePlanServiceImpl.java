@@ -77,6 +77,29 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         return build;
     }
 
+    @Override
+    public List<JdglYearImagePlan> getJdglYearImagePlanList4Lazy(JdglYearImagePlan jdglYearImagePlanParam) {
+
+        List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearImagePlanMapper.getJdglYearImagePlanList(jdglYearImagePlanParam);
+
+        if(jdglYearImagePlanParam.getPid() == null) {
+            jdglYearImagePlanList = jdglYearImagePlanList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
+        }
+
+
+        if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
+            for (JdglYearImagePlan jdglYearImagePlan : jdglYearImagePlanList) {
+                if(jdglYearImagePlan.getWorkCode().equals(jdglYearImagePlan.getWbsCode())) {
+                    jdglYearImagePlan.setHaveChildren(1);
+                } else {
+                    jdglYearImagePlan.setHaveChildren(0);
+                }
+            }
+        }
+
+        return jdglYearImagePlanList;
+    }
+
     public List<JdglYearImagePlan> getJdglYearImagePlanListByYearPlanId(Long yearPlanId) {
         JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();
         jdglYearImagePlan.setYearPlanId(yearPlanId);

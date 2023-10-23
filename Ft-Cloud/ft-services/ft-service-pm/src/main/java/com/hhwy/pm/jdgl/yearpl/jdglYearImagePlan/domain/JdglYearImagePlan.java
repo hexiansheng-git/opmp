@@ -275,4 +275,10 @@ public class JdglYearImagePlan extends TreeNode<JdglYearImagePlan> {
     @Excel(name = "流程状态（5已完成）")
     private String taskStatus;
 
+    /**
+     * 是否有孩子节点
+     */
+    @JsonSerialize(using = ToStringSerializer.class)
+    private int haveChildren;
+
 }

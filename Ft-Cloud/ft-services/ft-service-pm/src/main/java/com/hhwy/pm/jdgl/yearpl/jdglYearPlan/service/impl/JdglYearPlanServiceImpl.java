@@ -70,6 +70,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
     public JdglYearPlan getJdglYearPlan(JdglYearPlan jdglYearPlan) {
         JdglYearPlan jdglYearPlan1 = jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
         if(jdglYearPlan1 != null) {
+            if(jdglYearPlan1.getYearPlanValueDl() != null) jdglYearPlan1.setYearPlanValueDl(jdglYearPlan1.getYearPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
             List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());
             jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
             List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
@@ -232,12 +233,13 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         List<JdglYearPlan> jdglYearPlanList = jdglYearPlanMapper.getJdglYearPlanList(jdglYearPlan);
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglYearPlanList)) {
-//            for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
+            for (JdglYearPlan jdglYearPlan1 : jdglYearPlanList) {
+                if(jdglYearPlan1.getYearPlanValueDl() != null) jdglYearPlan1.setYearPlanValueDl(jdglYearPlan1.getYearPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 //                List<JdglYearImagePlan> jdglYearImagePlanListByYearPlanId = iJdglYearImagePlanService.getJdglYearImagePlanListByYearPlanId(jdglYearPlan1.getId());
 //                jdglYearPlan1.setJdglYearImagePlanList(jdglYearImagePlanListByYearPlanId);
 //                List<JdglYearValuePlan> jdglYearValuePlanListByYearPlanId = iJdglYearValuePlanService.getJdglYearValuePlanListByYearPlanId(jdglYearPlan1.getId());
 //                jdglYearPlan1.setJdglYearValuePlanList(jdglYearValuePlanListByYearPlanId);
-//            }
+            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglYearPlanList,FlowEnum.JDGL_YEARPLAN);
         return jdglYearPlanList;

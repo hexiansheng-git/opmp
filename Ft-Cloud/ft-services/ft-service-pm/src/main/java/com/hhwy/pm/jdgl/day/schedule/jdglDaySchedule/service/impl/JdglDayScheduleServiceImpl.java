@@ -12,6 +12,8 @@ import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDaySchedule
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.domain.JdglMonthPlan;
 import com.hhwy.pm.jdgl.monthpl.jdglMonthPlan.service.IJdglMonthPlanService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
+import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
+import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.tree.TreeUtil;
 import java.math.BigDecimal;
@@ -45,6 +47,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
     @Autowired
     private IJdglMonthPlanService jdglMonthPlanService;
+
+    @Autowired
+    private IXmslProjectBasicInfoService xmslProjectBasicInfoService;
 
     public JdglDaySchedule getJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
@@ -173,6 +178,10 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         if(date == null){
             return null;
         }
+
+        ProjectBasicInfo projectBasicInfo = xmslProjectBasicInfoService.projectInfo();
+        if(projectBasicInfo != null) jdglDayScheduleParam.setProjectName(projectBasicInfo.getProjectName());
+
         // 获取初始wbs数据
         List<JdglDayScheduleWbs> initWbs = iJdglDayScheduleWbsService.getInitWbs(date);
         jdglDayScheduleParam.setJdglDayScheduleWbsList(initWbs);

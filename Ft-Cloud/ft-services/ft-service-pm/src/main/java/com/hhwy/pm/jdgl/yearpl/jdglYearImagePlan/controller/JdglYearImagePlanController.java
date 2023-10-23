@@ -49,6 +49,13 @@ public class JdglYearImagePlanController extends BaseController {
         return getDataTableAjaxResult(jdglYearImagePlanList);
     }
 
+    //  // @PreAuthorize(hasPermi = "jdglYearImagePlan:list")
+    @GetMapping("/lasyList")
+    public AjaxResult getJdglYearImagePlanList4Lazy(@Validated(ValidationGroups.Select.class) JdglYearImagePlan jdglYearImagePlanParam) {
+        List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearImagePlanService.getJdglYearImagePlanList4Lazy(jdglYearImagePlanParam);
+        return getDataTableAjaxResult(jdglYearImagePlanList);
+    }
+
     // @PreAuthorize(hasPermi = "jdglYearImagePlan:add")
     @PostMapping("/add")
     public AjaxResult insertJdglYearImagePlan(@Validated(ValidationGroups.Save.class) @RequestBody JdglYearImagePlan jdglYearImagePlanParam) {

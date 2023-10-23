@@ -77,6 +77,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
     public JdglMonthPlan getJdglMonthPlan(JdglMonthPlan jdglMonthPlan) {
         JdglMonthPlan jdglMonthPlan1 = jdglMonthPlanMapper.getJdglMonthPlan(jdglMonthPlan);
         if(jdglMonthPlan1 != null) {
+            if(jdglMonthPlan1.getThisPlanValueDl() != null) jdglMonthPlan1.setThisPlanValueDl(jdglMonthPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
             List<JdglMonthValuePlan> jdglMonthValuePlanListByPlanId = iJdglMonthValuePlanService.getJdglMonthValuePlanListByPlanId(jdglMonthPlan1.getId());
             jdglMonthPlan1.setJdglMonthValuePlanList(jdglMonthValuePlanListByPlanId);
             List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = iJdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(jdglMonthPlan1.getId());
@@ -256,12 +257,14 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         List<JdglMonthPlan> jdglMonthPlanList = jdglMonthPlanMapper.getJdglMonthPlanList(jdglMonthPlan);
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglMonthPlanList)) {
-//            for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
+            for (JdglMonthPlan jdglMonthPlan1 : jdglMonthPlanList) {
+                if(jdglMonthPlan1.getThisPlanValueDl() != null) jdglMonthPlan1.setThisPlanValueDl(jdglMonthPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+
 //                List<JdglMonthImagePlan> jdglMonthImagePlanListByPlanId = iJdglMonthImagePlanService.getJdglMonthImagePlanListByPlanId(jdglMonthPlan1.getId());
 //                jdglMonthPlan1.setJdglMonthImagePlanList(jdglMonthImagePlanListByPlanId);
 //                List<JdglMonthValuePlan> jdglMonthValuePlanListByPlanId = iJdglMonthValuePlanService.getJdglMonthValuePlanListByPlanId(jdglMonthPlan1.getId());
 //                jdglMonthPlan1.setJdglMonthValuePlanList(jdglMonthValuePlanListByPlanId);
-//            }
+            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglMonthPlanList,FlowEnum.JDGL_MONTHPLAN);
         return jdglMonthPlanList;

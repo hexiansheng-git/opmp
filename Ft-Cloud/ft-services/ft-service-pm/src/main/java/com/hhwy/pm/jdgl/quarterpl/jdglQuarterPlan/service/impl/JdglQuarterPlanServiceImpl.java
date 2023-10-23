@@ -77,6 +77,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
     public JdglQuarterPlan getJdglQuarterPlan(JdglQuarterPlan jdglQuarterPlan) {
         JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
         if(jdglQuarterPlan1 != null) {
+            if(jdglQuarterPlan1.getThisPlanValueDl() != null) jdglQuarterPlan1.setThisPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
             List<JdglQuarterValuePlan> jdglQuarterValuePlanListByPlanId = iJdglQuarterValuePlanService.getJdglQuarterValuePlanListByPlanId(jdglQuarterPlan1.getId());
             jdglQuarterPlan1.setJdglQuarterValuePlanList(jdglQuarterValuePlanListByPlanId);
             List<JdglQuarterImagePlan> jdglQuarterImagePlanListByPlanId = iJdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(jdglQuarterPlan1.getId());
@@ -248,12 +249,14 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         List<JdglQuarterPlan> jdglQuarterPlanList = jdglQuarterPlanMapper.getJdglQuarterPlanList(jdglQuarterPlan);
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglQuarterPlanList)) {
-//            for (JdglQuarterPlan jdglQuarterPlan1 : jdglQuarterPlanList) {
+            for (JdglQuarterPlan jdglQuarterPlan1 : jdglQuarterPlanList) {
+                if(jdglQuarterPlan1.getThisPlanValueDl() != null) jdglQuarterPlan1.setThisPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+
 //                List<JdglQuarterImagePlan> jdglQuarterImagePlanListByPlanId = iJdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(jdglQuarterPlan1.getId());
 //                jdglQuarterPlan1.setJdglQuarterImagePlanList(jdglQuarterImagePlanListByPlanId);
 //                List<JdglQuarterValuePlan> jdglQuarterValuePlanListByPlanId = iJdglQuarterValuePlanService.getJdglQuarterValuePlanListByPlanId(jdglQuarterPlan1.getId());
 //                jdglQuarterPlan1.setJdglQuarterValuePlanList(jdglQuarterValuePlanListByPlanId);
-//            }
+            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglQuarterPlanList,FlowEnum.JDGL_QUARTERPLAN);
         return jdglQuarterPlanList;
