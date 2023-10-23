@@ -39,34 +39,34 @@ public class EhrServiceImpl implements IEhrService {
 
     //sessionUrl
     @Value("${ehr.sessionUrl}")
-    static String sessionUrl;
+    private String sessionUrl;
     //证书信息url
     @Value("${ehr.certUrl}")
-    static String certUrl;
+    private String certUrl;
     //api白云山 密钥
     @Value("${ehr.apiKey}")
-    static String apiKey;
+    private String apiKey;
 
     @Value("${ehr.userName}")
-    static String userName;
+    private String userName;
 
     @Value("${ehr.password}")
-    static String password;
+    private String password;
 
     @Value("${ehr.slnName}")
-    static String slnName;
+    private String slnName;
 
     @Value("${ehr.language}")
-    static String language;
+    private String language;
 
     @Value("${ehr.dcName}")
-    static String dcName;
+    private String dcName;
 
     @Value("${ehr.dbType}")
-    static int dbType;
+    private int dbType;
 
     @Value("${ehr.authPattern}")
-    static String authPattern;
+    private String authPattern;
 
     @Override
     public Map<String,Object> getCertList(String userName4A) throws  ParserConfigurationException, IOException, SAXException {
