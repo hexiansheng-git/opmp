@@ -57,6 +57,8 @@ public class QqchSurveyDesignRiskPlanServiceImpl implements IQqchSurveyDesignRis
      * @return
      * @param version
      */
+    @Override
+    @Transactional
     public QqchSurveyDesignRiskPlanVo getQqchSurveyDesignRiskPlanVo(BigDecimal version) {
         QqchSurveyDesignRiskPlanVo qqchSurveyDesignRiskPlanVo = new QqchSurveyDesignRiskPlanVo();
 
