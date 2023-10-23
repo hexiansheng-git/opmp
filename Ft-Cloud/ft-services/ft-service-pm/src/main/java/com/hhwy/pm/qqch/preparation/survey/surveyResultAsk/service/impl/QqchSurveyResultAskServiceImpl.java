@@ -2,12 +2,14 @@ package com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganization;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAskVo;
 import com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.mapper.QqchSurveyResultAskMapper;
@@ -16,11 +18,15 @@ import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +54,11 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
      * @return
      */
     public QqchSurveyResultAskVo getQqchSurveyResultAskList(QqchSurveyResultAsk qqchSurveyResultAsk) {
+        List<QqchSurveyResultAsk> list = qqchSurveyResultAskMapper.getCount();
+        //空表需要初始化数据
+        if (CollectionUtil.isEmpty(list)){
+            this.init();
+        }
         BigDecimal version=new BigDecimal(1);
         if (qqchSurveyResultAsk.getVersion() == null) {
             // 获取最大版本号
@@ -146,6 +157,21 @@ public class QqchSurveyResultAskServiceImpl implements IQqchSurveyResultAskServi
             qqchSurveyResultAskMapper.updateQqchSurveyResultAskList(updateList);
         }
         return 1;
+    }
+
+    /**
+     * 初始化数据
+     */
+    @Transactional
+    public void init(){
+        try {
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/2_3_2.json");
+            String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            List<QqchSurveyResultAsk> list = JSONObject.parseArray(json, QqchSurveyResultAsk.class);
+            qqchSurveyResultAskMapper.insertQqchSurveyResultAskList(list);
+        }catch (IOException e){
+            throw new RuntimeException("初始化数据失败！");
+        }
     }
 
 

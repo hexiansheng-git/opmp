@@ -1,523 +1,543 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.mapper.QqchSurveyResultAskMapper">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-    <resultMap type="com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk" id="QqchSurveyResultAskResultMap">
-                    <result property="id" column="id" />
-                    <result property="examinationContent" column="examination_content" />
-                    <result property="examinationResult" column="examination_result" />
-                    <result property="version" column="version" />
-                    <result property="valid" column="valid" />
-                    <result property="fileGroupId" column="file_group_id" />
-                    <result property="remark" column="remark" />
-                    <result property="regionId" column="region_id" />
-                    <result property="regionName" column="region_name" />
-                    <result property="projectId" column="project_id" />
-                    <result property="projectName" column="project_name" />
-                    <result property="deptId" column="dept_id" />
-                    <result property="createUser" column="create_user" />
-                    <result property="createUserName" column="create_user_name" />
-                    <result property="createTime" column="create_time" />
-                    <result property="updateUser" column="update_user" />
-                    <result property="updateTime" column="update_time" />
-                    <result property="delUser" column="del_user" />
-                    <result property="delTime" column="del_time" />
-                    <result property="delFlag" column="del_flag" />
-                    <result property="ptVar1" column="pt_var1" />
-                    <result property="ptVar2" column="pt_var2" />
-                    <result property="ptVar3" column="pt_var3" />
-                    <result property="ptVar4" column="pt_var4" />
-                    <result property="ptVar5" column="pt_var5" />
-                    <result property="taskStatus" column="task_status" />
-            </resultMap>
+
+    <resultMap type="com.hhwy.pm.qqch.preparation.survey.surveyResultAsk.domain.QqchSurveyResultAsk"
+               id="QqchSurveyResultAskResultMap">
+        <result property="id" column="id"/>
+        <result property="examinationContent" column="examination_content"/>
+        <result property="examinationResult" column="examination_result"/>
+        <result property="version" column="version"/>
+        <result property="valid" column="valid"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="remark" column="remark"/>
+        <result property="regionId" column="region_id"/>
+        <result property="regionName" column="region_name"/>
+        <result property="projectId" column="project_id"/>
+        <result property="projectName" column="project_name"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="ptVar5" column="pt_var5"/>
+        <result property="taskStatus" column="task_status"/>
+    </resultMap>
     <sql id="selectQqchSurveyResultAskVo">
-        select
-                                                            `id`
-                                                         ,`examination_content`
-                                                         ,`examination_result`
-                                                         ,`version`
-                                                         ,`valid`
-                                                         ,`file_group_id`
-                                                         ,`remark`
-                                                         ,`region_id`
-                                                         ,`region_name`
-                                                         ,`project_id`
-                                                         ,`project_name`
-                                                         ,`dept_id`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                                         ,`pt_var3`
-                                                         ,`pt_var4`
-                                                         ,`pt_var5`
-                                                         ,`task_status`
-                                    from qqch_survey_result_ask
+        SELECT `id`
+                , `examination_content`
+                , `examination_result`
+                , `version`
+                , `valid`
+                , `file_group_id`
+                , `remark`
+                , `region_id`
+                , `region_name`
+                , `project_id`
+                , `project_name`
+                , `dept_id`
+                , `create_user`
+                , `create_user_name`
+                , `create_time`
+                , `update_user`
+                , `update_time`
+                , `del_user`
+                , `del_time`
+                , `del_flag`
+                , `pt_var1`
+                , `pt_var2`
+                , `pt_var3`
+                , `pt_var4`
+                , `pt_var5`
+                , `task_status`
+        FROM qqch_survey_result_ask
     </sql>
     <select id="getQqchSurveyResultAsk" resultMap="QqchSurveyResultAskResultMap">
-        <include refid="selectQqchSurveyResultAskVo" />
+        <include refid="selectQqchSurveyResultAskVo"/>
         <where>
             del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="examinationContent != null  and examinationContent != ''"> and `examination_content` = #{examinationContent}</if>
-                            <if test="examinationResult != null  and examinationResult != ''"> and `examination_result` = #{examinationResult}</if>
-                            <if test="version != null "> and `version` = #{version}</if>
-                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
-                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
-                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
-                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
-                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-                            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
-                    </where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="examinationContent != null  and examinationContent != ''">and `examination_content` =
+                #{examinationContent}
+            </if>
+            <if test="examinationResult != null  and examinationResult != ''">and `examination_result` =
+                #{examinationResult}
+            </if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
         order by create_time desc
     </select>
 
     <select id="getQqchSurveyResultAskList" resultMap="QqchSurveyResultAskResultMap">
-        <include refid="selectQqchSurveyResultAskVo" />
+        <include refid="selectQqchSurveyResultAskVo"/>
         <where>
             del_flag = "0"
-                            <if test="id != null "> and `id` = #{id}</if>
-                            <if test="examinationContent != null  and examinationContent != ''"> and `examination_content` = #{examinationContent}</if>
-                            <if test="examinationResult != null  and examinationResult != ''"> and `examination_result` = #{examinationResult}</if>
-                            <if test="version != null "> and `version` = #{version}</if>
-                            <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-                            <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                            <if test="regionId != null "> and `region_id` = #{regionId}</if>
-                            <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
-                            <if test="projectId != null "> and `project_id` = #{projectId}</if>
-                            <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
-                            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
-                            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                            <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                            <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                            <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-                            <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
-                    </where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="examinationContent != null  and examinationContent != ''">and `examination_content` =
+                #{examinationContent}
+            </if>
+            <if test="examinationResult != null  and examinationResult != ''">and `examination_result` =
+                #{examinationResult}
+            </if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
         order by create_time desc
     </select>
 
-    <insert id="insertQqchSurveyResultAsk"  useGeneratedKeys="true" keyProperty="id"  >
+    <insert id="insertQqchSurveyResultAsk" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_survey_result_ask
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                            <if test="id != null ">`id`,</if>
-                            <if test="examinationContent != null  and examinationContent != ''">`examination_content`,</if>
-                            <if test="examinationResult != null  and examinationResult != ''">`examination_result`,</if>
-                            <if test="version != null ">`version`,</if>
-                            <if test="valid != null  and valid != ''">`valid`,</if>
-                            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
-                            <if test="remark != null  and remark != ''">`remark`,</if>
-                            <if test="regionId != null ">`region_id`,</if>
-                            <if test="regionName != null  and regionName != ''">`region_name`,</if>
-                            <if test="projectId != null ">`project_id`,</if>
-                            <if test="projectName != null  and projectName != ''">`project_name`,</if>
-                            <if test="deptId != null ">`dept_id`,</if>
-                            <if test="createUser != null  and createUser != ''">`create_user`,</if>
-                            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
-                            <if test="createTime != null ">`create_time`,</if>
-                            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
-                            <if test="updateTime != null ">`update_time`,</if>
-                            <if test="delUser != null  and delUser != ''">`del_user`,</if>
-                            <if test="delTime != null ">`del_time`,</if>
-                            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
-                            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
-                    </trim>
+            <if test="id != null ">`id`,</if>
+            <if test="examinationContent != null  and examinationContent != ''">`examination_content`,</if>
+            <if test="examinationResult != null  and examinationResult != ''">`examination_result`,</if>
+            <if test="version != null ">`version`,</if>
+            <if test="valid != null  and valid != ''">`valid`,</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">`file_group_id`,</if>
+            <if test="remark != null  and remark != ''">`remark`,</if>
+            <if test="regionId != null ">`region_id`,</if>
+            <if test="regionName != null  and regionName != ''">`region_name`,</if>
+            <if test="projectId != null ">`project_id`,</if>
+            <if test="projectName != null  and projectName != ''">`project_name`,</if>
+            <if test="deptId != null ">`dept_id`,</if>
+            <if test="createUser != null  and createUser != ''">`create_user`,</if>
+            <if test="createUserName != null  and createUserName != ''">`create_user_name`,</if>
+            <if test="createTime != null ">`create_time`,</if>
+            <if test="updateUser != null  and updateUser != ''">`update_user`,</if>
+            <if test="updateTime != null ">`update_time`,</if>
+            <if test="delUser != null  and delUser != ''">`del_user`,</if>
+            <if test="delTime != null ">`del_time`,</if>
+            <if test="delFlag != null  and delFlag != ''">`del_flag`,</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">`pt_var1`,</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">`pt_var2`,</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">`pt_var3`,</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">`pt_var4`,</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
+            <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-                            <if test="id != null ">#{id},</if>
-                            <if test="examinationContent != null  and examinationContent != ''">#{examinationContent},</if>
-                            <if test="examinationResult != null  and examinationResult != ''">#{examinationResult},</if>
-                            <if test="version != null ">#{version},</if>
-                            <if test="valid != null  and valid != ''">#{valid},</if>
-                            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
-                            <if test="remark != null  and remark != ''">#{remark},</if>
-                            <if test="regionId != null ">#{regionId},</if>
-                            <if test="regionName != null  and regionName != ''">#{regionName},</if>
-                            <if test="projectId != null ">#{projectId},</if>
-                            <if test="projectName != null  and projectName != ''">#{projectName},</if>
-                            <if test="deptId != null ">#{deptId},</if>
-                            <if test="createUser != null  and createUser != ''">#{createUser},</if>
-                            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
-                            <if test="createTime != null ">#{createTime},</if>
-                            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
-                            <if test="updateTime != null ">#{updateTime},</if>
-                            <if test="delUser != null  and delUser != ''">#{delUser},</if>
-                            <if test="delTime != null ">#{delTime},</if>
-                            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
-                            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
-                            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
-                            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
-                            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
-                            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
-                            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
-                    </trim>
+            <if test="id != null ">#{id},</if>
+            <if test="examinationContent != null  and examinationContent != ''">#{examinationContent},</if>
+            <if test="examinationResult != null  and examinationResult != ''">#{examinationResult},</if>
+            <if test="version != null ">#{version},</if>
+            <if test="valid != null  and valid != ''">#{valid},</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">#{fileGroupId},</if>
+            <if test="remark != null  and remark != ''">#{remark},</if>
+            <if test="regionId != null ">#{regionId},</if>
+            <if test="regionName != null  and regionName != ''">#{regionName},</if>
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="projectName != null  and projectName != ''">#{projectName},</if>
+            <if test="deptId != null ">#{deptId},</if>
+            <if test="createUser != null  and createUser != ''">#{createUser},</if>
+            <if test="createUserName != null  and createUserName != ''">#{createUserName},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateUser != null  and updateUser != ''">#{updateUser},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="delUser != null  and delUser != ''">#{delUser},</if>
+            <if test="delTime != null ">#{delTime},</if>
+            <if test="delFlag != null  and delFlag != ''">#{delFlag},</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">#{ptVar1},</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">#{ptVar2},</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">#{ptVar3},</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">#{ptVar4},</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
+            <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
+        </trim>
     </insert>
 
     <!-- 有默认值的情况下 会有问题，建议遍历插入，调用insertQqchSurveyResultAsk -->
     <insert id="insertQqchSurveyResultAskList">
         insert into qqch_survey_result_ask
         <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                `id`,
-                                                                `examination_content`,
-                                                                `examination_result`,
-                                                                `version`,
-                                                                `valid`,
-                                                                `file_group_id`,
-                                                                `remark`,
-                                                                `region_id`,
-                                                                `region_name`,
-                                                                `project_id`,
-                                                                `project_name`,
-                                                                `dept_id`,
-                                                                `create_user`,
-                                                                `create_user_name`,
-                                                                `create_time`,
-                                                                `update_user`,
-                                                                `update_time`,
-                                                                `del_user`,
-                                                                `del_time`,
-                                                                                            `pt_var1`,
-                                                                `pt_var2`,
-                                                                `pt_var3`,
-                                                                `pt_var4`,
-                                                                `pt_var5`,
-                                                                `task_status`,
-                                    </trim>
+            `id`,
+            `examination_content`,
+            `examination_result`,
+            `version`,
+            `valid`,
+            `file_group_id`,
+            `remark`,
+            `region_id`,
+            `region_name`,
+            `project_id`,
+            `project_name`,
+            `dept_id`,
+            `create_user`,
+            `create_user_name`,
+            `create_time`,
+            `update_user`,
+            `update_time`,
+            `del_user`,
+            `del_time`,
+            `pt_var1`,
+            `pt_var2`,
+            `pt_var3`,
+            `pt_var4`,
+            `pt_var5`,
+            `task_status`,
+        </trim>
         values
         <foreach collection="qqchSurveyResultAskList" item="item" separator=",">
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                                                            #{item.id},
-                                                                                #{item.examinationContent},
-                                                                                #{item.examinationResult},
-                                                                                #{item.version},
-                                                                                #{item.valid},
-                                                                                #{item.fileGroupId},
-                                                                                #{item.remark},
-                                                                                #{item.regionId},
-                                                                                #{item.regionName},
-                                                                                #{item.projectId},
-                                                                                #{item.projectName},
-                                                                                #{item.deptId},
-                                                                                #{item.createUser},
-                                                                                #{item.createUserName},
-                                                                                #{item.createTime},
-                                                                                #{item.updateUser},
-                                                                                #{item.updateTime},
-                                                                                #{item.delUser},
-                                                                                #{item.delTime},
-                                                                                                                    #{item.ptVar1},
-                                                                                #{item.ptVar2},
-                                                                                #{item.ptVar3},
-                                                                                #{item.ptVar4},
-                                                                                #{item.ptVar5},
-                                                                                #{item.taskStatus},
-                                                </trim>
+                #{item.id},
+                #{item.examinationContent},
+                #{item.examinationResult},
+                #{item.version},
+                #{item.valid},
+                #{item.fileGroupId},
+                #{item.remark},
+                #{item.regionId},
+                #{item.regionName},
+                #{item.projectId},
+                #{item.projectName},
+                #{item.deptId},
+                #{item.createUser},
+                #{item.createUserName},
+                #{item.createTime},
+                #{item.updateUser},
+                #{item.updateTime},
+                #{item.delUser},
+                #{item.delTime},
+                #{item.ptVar1},
+                #{item.ptVar2},
+                #{item.ptVar3},
+                #{item.ptVar4},
+                #{item.ptVar5},
+                #{item.taskStatus},
+            </trim>
         </foreach>
     </insert>
 
     <update id="updateQqchSurveyResultAsk">
         update qqch_survey_result_ask
         <trim prefix="SET" suffixOverrides=",">
-                            <if test="id != null ">`id` = #{id},</if>
-                            <if test="examinationContent != null  and  examinationContent != ''">`examination_content` = #{examinationContent},</if>
-                            <if test="examinationResult != null  and  examinationResult != ''">`examination_result` = #{examinationResult},</if>
-                            <if test="version != null ">`version` = #{version},</if>
-                            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
-                            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
-                            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
-                            <if test="regionId != null ">`region_id` = #{regionId},</if>
-                            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
-                            <if test="projectId != null ">`project_id` = #{projectId},</if>
-                            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
-                            <if test="deptId != null ">`dept_id` = #{deptId},</if>
-                            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
-                            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
-                            <if test="createTime != null ">`create_time` = #{createTime},</if>
-                            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
-                            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
-                            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
-                            <if test="delTime != null ">`del_time` = #{delTime},</if>
-                            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
-                            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
-                            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
-                            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
-                            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
-                            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
-                            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
-                    </trim>
+            <if test="id != null ">`id` = #{id},</if>
+            <if test="examinationContent != null  and  examinationContent != ''">`examination_content` =
+                #{examinationContent},
+            </if>
+            <if test="examinationResult != null  and  examinationResult != ''">`examination_result` =
+                #{examinationResult},
+            </if>
+            <if test="version != null ">`version` = #{version},</if>
+            <if test="valid != null  and  valid != ''">`valid` = #{valid},</if>
+            <if test="fileGroupId != null  and  fileGroupId != ''">`file_group_id` = #{fileGroupId},</if>
+            <if test="remark != null  and  remark != ''">`remark` = #{remark},</if>
+            <if test="regionId != null ">`region_id` = #{regionId},</if>
+            <if test="regionName != null  and  regionName != ''">`region_name` = #{regionName},</if>
+            <if test="projectId != null ">`project_id` = #{projectId},</if>
+            <if test="projectName != null  and  projectName != ''">`project_name` = #{projectName},</if>
+            <if test="deptId != null ">`dept_id` = #{deptId},</if>
+            <if test="createUser != null  and  createUser != ''">`create_user` = #{createUser},</if>
+            <if test="createUserName != null  and  createUserName != ''">`create_user_name` = #{createUserName},</if>
+            <if test="createTime != null ">`create_time` = #{createTime},</if>
+            <if test="updateUser != null  and  updateUser != ''">`update_user` = #{updateUser},</if>
+            <if test="updateTime != null ">`update_time` = #{updateTime},</if>
+            <if test="delUser != null  and  delUser != ''">`del_user` = #{delUser},</if>
+            <if test="delTime != null ">`del_time` = #{delTime},</if>
+            <if test="delFlag != null  and  delFlag != ''">`del_flag` = #{delFlag},</if>
+            <if test="ptVar1 != null  and  ptVar1 != ''">`pt_var1` = #{ptVar1},</if>
+            <if test="ptVar2 != null  and  ptVar2 != ''">`pt_var2` = #{ptVar2},</if>
+            <if test="ptVar3 != null  and  ptVar3 != ''">`pt_var3` = #{ptVar3},</if>
+            <if test="ptVar4 != null  and  ptVar4 != ''">`pt_var4` = #{ptVar4},</if>
+            <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
+            <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
+        </trim>
         <where>
-                                                                        <if test="id != null "> and `id` = #{id}</if>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </where>
+            <if test="id != null ">and `id` = #{id}</if>
+        </where>
     </update>
 
-            <update id="updateQqchSurveyResultAskList">
-            update qqch_survey_result_ask
-            <trim prefix="set" suffixOverrides=",">
-                                    <trim prefix="id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.id != null ">
-                            when `id`=#{item.id} then #{item.id}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="examination_content  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.examinationContent != null ">
-                            when `id`=#{item.id} then #{item.examinationContent}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="examination_result  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.examinationResult != null ">
-                            when `id`=#{item.id} then #{item.examinationResult}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="version  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.version != null ">
-                            when `id`=#{item.id} then #{item.version}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="valid  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.valid != null ">
-                            when `id`=#{item.id} then #{item.valid}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="file_group_id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.fileGroupId != null ">
-                            when `id`=#{item.id} then #{item.fileGroupId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="remark  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.remark != null ">
-                            when `id`=#{item.id} then #{item.remark}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="region_id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.regionId != null ">
-                            when `id`=#{item.id} then #{item.regionId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="region_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.regionName != null ">
-                            when `id`=#{item.id} then #{item.regionName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="project_id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.projectId != null ">
-                            when `id`=#{item.id} then #{item.projectId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="project_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.projectName != null ">
-                            when `id`=#{item.id} then #{item.projectName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="dept_id  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.deptId != null ">
-                            when `id`=#{item.id} then #{item.deptId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.createUser != null ">
-                            when `id`=#{item.id} then #{item.createUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_user_name  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.createUserName != null ">
-                            when `id`=#{item.id} then #{item.createUserName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="create_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.createTime != null ">
-                            when `id`=#{item.id} then #{item.createTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="update_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.updateUser != null ">
-                            when `id`=#{item.id} then #{item.updateUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="update_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.updateTime != null ">
-                            when `id`=#{item.id} then #{item.updateTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_user  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.delUser != null ">
-                            when `id`=#{item.id} then #{item.delUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_time  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.delTime != null ">
-                            when `id`=#{item.id} then #{item.delTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="del_flag  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.delFlag != null ">
-                            when `id`=#{item.id} then #{item.delFlag}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var1  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.ptVar1 != null ">
-                            when `id`=#{item.id} then #{item.ptVar1}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var2  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.ptVar2 != null ">
-                            when `id`=#{item.id} then #{item.ptVar2}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var3  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.ptVar3 != null ">
-                            when `id`=#{item.id} then #{item.ptVar3}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var4  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.ptVar4 != null ">
-                            when `id`=#{item.id} then #{item.ptVar4}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="pt_var5  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.ptVar5 != null ">
-                            when `id`=#{item.id} then #{item.ptVar5}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    <trim prefix="task_status  = case" suffix="end,">
-                        <foreach collection="list" item="item" index="index">
-                            <if test="item.taskStatus != null ">
-                            when `id`=#{item.id} then #{item.taskStatus}
-                            </if>
-                        </foreach>
-                    </trim>
-                            </trim>
-            where `id` in
-            <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
-                #{item.id}
-            </foreach>
-        </update>
-    
-            <update id="deleteQqchSurveyResultAsk">
-            update `qqch_survey_result_ask` set del_flag = 1
-            <where>
-                                    <if test="id != null "> and `id` = #{id}</if>
-                                    <if test="examinationContent != null  and examinationContent != ''"> and `examination_content` = #{examinationContent}</if>
-                                    <if test="examinationResult != null  and examinationResult != ''"> and `examination_result` = #{examinationResult}</if>
-                                    <if test="version != null "> and `version` = #{version}</if>
-                                    <if test="valid != null  and valid != ''"> and `valid` = #{valid}</if>
-                                    <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-                                    <if test="remark != null  and remark != ''"> and `remark` = #{remark}</if>
-                                    <if test="regionId != null "> and `region_id` = #{regionId}</if>
-                                    <if test="regionName != null  and regionName != ''"> and `region_name` = #{regionName}</if>
-                                    <if test="projectId != null "> and `project_id` = #{projectId}</if>
-                                    <if test="projectName != null  and projectName != ''"> and `project_name` = #{projectName}</if>
-                                    <if test="deptId != null "> and `dept_id` = #{deptId}</if>
-                                    <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-                                    <if test="createUserName != null  and createUserName != ''"> and `create_user_name` = #{createUserName}</if>
-                                    <if test="createTime != null "> and `create_time` = #{createTime}</if>
-                                    <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-                                    <if test="updateTime != null "> and `update_time` = #{updateTime}</if>
-                                    <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-                                    <if test="delTime != null "> and `del_time` = #{delTime}</if>
-                                    <if test="delFlag != null  and delFlag != ''"> and `del_flag` = #{delFlag}</if>
-                                    <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-                                    <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-                                    <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-                                    <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-                                    <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
-                                    <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
-                            </where>
-        </update>
+    <update id="updateQqchSurveyResultAskList">
+        update qqch_survey_result_ask
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.id != null ">
+                        when `id`=#{item.id} then #{item.id}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="examination_content  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.examinationContent != null ">
+                        when `id`=#{item.id} then #{item.examinationContent}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="examination_result  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.examinationResult != null ">
+                        when `id`=#{item.id} then #{item.examinationResult}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="version  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.version != null ">
+                        when `id`=#{item.id} then #{item.version}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="valid  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.valid != null ">
+                        when `id`=#{item.id} then #{item.valid}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.fileGroupId != null ">
+                        when `id`=#{item.id} then #{item.fileGroupId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id`=#{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.regionId != null ">
+                        when `id`=#{item.id} then #{item.regionId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.regionName != null ">
+                        when `id`=#{item.id} then #{item.regionName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id`=#{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.projectName != null ">
+                        when `id`=#{item.id} then #{item.projectName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id`=#{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id`=#{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id`=#{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id`=#{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id`=#{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id`=#{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id`=#{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id`=#{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id`=#{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id`=#{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id`=#{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id`=#{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar4 != null ">
+                        when `id`=#{item.id} then #{item.ptVar4}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var5  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.ptVar5 != null ">
+                        when `id`=#{item.id} then #{item.ptVar5}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="task_status  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    <if test="item.taskStatus != null ">
+                        when `id`=#{item.id} then #{item.taskStatus}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where `id` in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id}
+        </foreach>
+    </update>
 
-                    <update id="deleteQqchSurveyResultAskByPks">
-                update `qqch_survey_result_ask` set del_flag = 1
-                <where>
-                    `id` in
-                    <foreach item="id" collection="qqchSurveyResultAskPkList" open="(" separator="," close=")">
-                        #{id}
-                    </foreach>
-                </where>
-            </update>
-            </mapper>
+    <update id="deleteQqchSurveyResultAsk">
+        update `qqch_survey_result_ask` set del_flag = 1
+        <where>
+            <if test="id != null ">and `id` = #{id}</if>
+            <if test="examinationContent != null  and examinationContent != ''">and `examination_content` =
+                #{examinationContent}
+            </if>
+            <if test="examinationResult != null  and examinationResult != ''">and `examination_result` =
+                #{examinationResult}
+            </if>
+            <if test="version != null ">and `version` = #{version}</if>
+            <if test="valid != null  and valid != ''">and `valid` = #{valid}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="remark != null  and remark != ''">and `remark` = #{remark}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="regionName != null  and regionName != ''">and `region_name` = #{regionName}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` = #{createUserName}</if>
+            <if test="createTime != null ">and `create_time` = #{createTime}</if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateTime != null ">and `update_time` = #{updateTime}</if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
+            <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
+        </where>
+    </update>
+
+    <update id="deleteQqchSurveyResultAskByPks">
+        update `qqch_survey_result_ask` set del_flag = 1
+        <where>
+            `id` in
+            <foreach item="id" collection="qqchSurveyResultAskPkList" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </where>
+    </update>
+
+    <select id="getCount" resultMap="QqchSurveyResultAskResultMap">
+        SELECT id FROM  qqch_survey_result_ask WHERE  1=1
+    </select>
+</mapper>

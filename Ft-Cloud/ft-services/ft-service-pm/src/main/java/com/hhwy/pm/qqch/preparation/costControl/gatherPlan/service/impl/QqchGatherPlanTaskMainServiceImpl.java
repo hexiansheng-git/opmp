@@ -14,6 +14,8 @@ import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.mapper.QqchGatherPlan
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.mapper.QqchGatherPlanTaskMapper;
 import com.hhwy.pm.qqch.preparation.costControl.gatherPlan.service.IQqchGatherPlanTaskMainService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.ButtonMarkUtil;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.pm.xmsl.wbs.domain.XmslWbs;
@@ -27,6 +29,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -50,6 +53,9 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
 
     @Autowired
     private QqchModuleConfirmCaseServiceImpl qqchModuleConfirmCaseService;
+
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
 
 
     public QqchGatherPlanTaskMain getQqchGatherPlanTaskMain(QqchGatherPlanTaskMain qqchGatherPlanTaskMain) {
@@ -140,6 +146,10 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
         qqchGatherPlanTask.setVersion(version);
         List<QqchGatherPlanTask> qqchGatherPlanTaskList = qqchGatherPlanTaskMapper.getQqchGatherPlanTaskList(qqchGatherPlanTask);
 
+        //获取p6计划数据
+        String wbsCodes = wbsList.stream().map(XmslWbs::getCode).collect(Collectors.joining(","));
+        List<QqchMainPlanItem> mainPlanItemList = qqchMainPlanItemService.getListByItemCodes(wbsCodes);
+
         List<QqchGatherPlanTaskVo> qqchGatherPlanTaskVoList = new ArrayList<>();
 
         for (XmslWbs wbs : wbsList) {
@@ -159,6 +169,13 @@ public class QqchGatherPlanTaskMainServiceImpl implements IQqchGatherPlanTaskMai
                     qqchGatherPlanTaskVo.setVerifier(gatherPlanTask.getVerifier());
                     qqchGatherPlanTaskVo.setRemark(gatherPlanTask.getRemark());
                     break;
+                }
+            }
+
+            for (QqchMainPlanItem qqchMainPlanItem : mainPlanItemList) {
+                if(qqchGatherPlanTaskVo.getWbsCode().equals(qqchMainPlanItem.getItemCode())){
+                    qqchGatherPlanTaskVo.setStartWorkTime(qqchMainPlanItem.getStartDate());
+                    qqchGatherPlanTaskVo.setEndWorkTime(qqchMainPlanItem.getFinishDate());
                 }
             }
 

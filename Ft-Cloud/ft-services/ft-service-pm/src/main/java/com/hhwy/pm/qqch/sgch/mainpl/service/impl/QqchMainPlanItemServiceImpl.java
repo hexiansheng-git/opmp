@@ -59,6 +59,12 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         return qqchMainPlanItemList;
     }
 
+    @Override
+    public List<QqchMainPlanItem> getListByItemCodes(String itemCodes) {
+        BigDecimal version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, null);
+        return qqchMainPlanItemMapper.getListByItemCodes(itemCodes,version);
+    }
+
     /**
      * 懒加载数据
      * @param qqchMainPlanItem

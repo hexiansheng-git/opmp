@@ -41,4 +41,6 @@ public interface QqchMainPlanItemMapper {
     int deleteQqchMainPlanByVersion(@Param("version") BigDecimal version);
 
     int updateValid(@Param("version") BigDecimal version,@Param("valid") String valid);
+
+    List<QqchMainPlanItem> getListByItemCodes(@Param("itemCodes") String itemCodes,@Param("version") BigDecimal version);
 }

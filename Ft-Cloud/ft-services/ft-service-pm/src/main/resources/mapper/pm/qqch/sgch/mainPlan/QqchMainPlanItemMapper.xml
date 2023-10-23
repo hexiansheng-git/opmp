@@ -1031,4 +1031,9 @@
         from qqch_main_plan_item
         where del_flag = "0" and version = #{version}
     </select>
+
+    <select id="getListByItemCodes" resultMap="QqchMainPlanItemResultMap">
+        <include refid="selectQqchMainPlanItemVo"/>
+        where del_flag = '0' and version = #{version} and find_in_set(item_code,#{itemCodes})
+    </select>
 </mapper>

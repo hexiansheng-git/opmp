@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1694285806111428608,
+    "examination_content": "勘察方法、手段及勘探点的布设原则是否合理",
+    "version": 1.0,
+    "valid": "1",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0"
+  },
+  {
+    "id": 1694285806111428609,
+    "examination_content": "勘察内容、深度及工作量是否满足规范和项目勘察大纲的要求",
+    "version": 1.0,
+    "valid": "1",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0"
+  },
+  {
+    "id": 1694285806111428610,
+    "examination_content": "勘察成果是否真实、可靠，重要工点是否进行了综合验证",
+    "version": 1.0,
+    "valid": "1",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0"
+  },
+  {
+    "id": 1694285806111428611,
+    "examination_content": "勘察报告结论是否准确、合理，依据是否充分；对基本地质条件和重要地质问题的揭示和论证能否满足工程设计和方案比选的需要",
+    "version": 1.0,
+    "valid": "1",
+    "create_user": "1",
+    "create_user_name": "admin",
+    "del_flag": "0"
+  }
+]
