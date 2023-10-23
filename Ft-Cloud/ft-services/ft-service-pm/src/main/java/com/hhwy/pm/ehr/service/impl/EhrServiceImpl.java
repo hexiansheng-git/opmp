@@ -2,12 +2,8 @@ package com.hhwy.pm.ehr.service.impl;
 
 
 import com.alibaba.fastjson.JSON;
-import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.ehr.service.IEhrService;
-
 import com.hhwy.utils.exception.CustomBusinessException;
-import org.apache.axis.client.Call;
-import org.apache.axis.encoding.XMLType;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -18,21 +14,20 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import javax.validation.constraints.Size;
 import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.rmi.RemoteException;
-import java.util.*;
-import javax.xml.parsers.DocumentBuilderFactory;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class EhrServiceImpl implements IEhrService {
