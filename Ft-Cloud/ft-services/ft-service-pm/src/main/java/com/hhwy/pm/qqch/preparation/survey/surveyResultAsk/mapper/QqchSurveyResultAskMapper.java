@@ -27,4 +27,6 @@ public interface QqchSurveyResultAskMapper {
     int deleteQqchSurveyResultAsk(QqchSurveyResultAsk qqchSurveyResultAsk);
 
     int deleteQqchSurveyResultAskByPks(@Param("qqchSurveyResultAskPkList") List<Long> qqchSurveyResultAskPkList);
+
+    List<QqchSurveyResultAsk> getCount();
 }

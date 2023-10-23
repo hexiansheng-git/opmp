@@ -1,23 +1,31 @@
 package com.hhwy.pm.qqch.preparation.survey.organization.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.nacos.common.utils.CollectionUtils;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.contractPlan.otherMeasure.domain.QqchStandardExpenseAccount;
 import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganization;
 import com.hhwy.pm.qqch.preparation.survey.organization.domain.QqchSurveyOrganizationVo;
 import com.hhwy.pm.qqch.preparation.survey.organization.mapper.QqchSurveyOrganizationMapper;
 import com.hhwy.pm.qqch.preparation.survey.organization.service.IQqchSurveyOrganizationService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.tree.TreeUtil;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
@@ -36,8 +44,6 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
     private IQqchReviewService qqchReviewService;
 
 
-
-
     /**
      *   列表查询
      *
@@ -45,9 +51,15 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
      * @return
      */
     public QqchSurveyOrganizationVo getQqchSurveyOrganizationList(QqchSurveyOrganization qqchSurveyOrganization) {
+        List<QqchSurveyOrganization> list = qqchSurveyOrganizationMapper.getCount();
+        //空表时需要初始化数据
+        if (CollectionUtil.isEmpty(list)) {
+            this.init();
+        }
         BigDecimal version = VersionUtil.getVersion("qqch_survey_organization",qqchSurveyOrganization.getVersion());
         qqchSurveyOrganization.setVersion(version);
         List<QqchSurveyOrganization> qqchSurveyOrganizationList = qqchSurveyOrganizationMapper.getQqchSurveyOrganizationList(qqchSurveyOrganization);
+
         List<QqchSurveyOrganization> build = TreeUtil.build(qqchSurveyOrganizationList, 0l);
         QqchSurveyOrganizationVo vo = new QqchSurveyOrganizationVo();
         vo.setVersion(version);
@@ -110,6 +122,21 @@ public class QqchSurveyOrganizationServiceImpl implements IQqchSurveyOrganizatio
             }
         }
         return qqchSurveyOrganizationMapper.insertQqchSurveyOrganizationList(insertList);
+    }
+
+    /**
+     * 初始化数据
+     */
+    @Transactional
+    public void init(){
+        try {
+            InputStream resourceAsStream = getClass().getClassLoader().getResourceAsStream("template/2_1_2.json");
+            String json = IOUtils.toString(resourceAsStream, StandardCharsets.UTF_8);
+            List<QqchSurveyOrganization> list = JSONObject.parseArray(json, QqchSurveyOrganization.class);
+            qqchSurveyOrganizationMapper.insertQqchSurveyOrganizationList(list);
+        }catch (IOException e){
+            throw new RuntimeException("初始化数据失败！");
+        }
     }
 
 

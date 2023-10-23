@@ -27,4 +27,7 @@ public interface QqchSurveyOrganizationMapper {
     int deleteQqchSurveyOrganization(QqchSurveyOrganization qqchSurveyOrganization);
 
     int deleteQqchSurveyOrganizationByPks(@Param("qqchSurveyOrganizationPkList") List<Long> qqchSurveyOrganizationPkList);
-    }
+
+    List<QqchSurveyOrganization> getCount();
+
+}
