@@ -1,8 +1,10 @@
 package com.hhwy.pm.qqch.preparation.quality.duty.mapper;
 
 import com.hhwy.pm.qqch.preparation.quality.duty.domain.QqchQualityPostDuty;
-import java.util.List;
 import org.apache.ibatis.annotations.Param;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -27,4 +29,11 @@ public interface QqchQualityPostDutyMapper {
     int deleteQqchQualityPostDuty(QqchQualityPostDuty qqchQualityPostDuty);
 
     int deleteQqchQualityPostDutyByPks(@Param("qqchQualityPostDutyPkList") List<Long> qqchQualityPostDutyPkList);
+
+    /**
+     * 获取根据人员去重后的数据
+     * @param version
+     * @return
+     */
+    List<QqchQualityPostDuty> getDistinctQualityPostDutyList(@Param("version") BigDecimal version);
 }
