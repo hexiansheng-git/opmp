@@ -8,6 +8,7 @@
                id="QqchSafeRiskListDetailResultMap">
         <result property="id" column="id"/>
         <result property="pid" column="pid"/>
+        <result property="sort" column="sort"/>
         <result property="infoId" column="info_id"/>
         <result property="workType" column="work_type"/>
         <result property="workUnit" column="work_unit"/>
@@ -29,29 +30,29 @@
         <result property="ptVar2" column="pt_var2"/>
     </resultMap>
     <sql id="selectQqchSafeRiskListDetailVo">
-        select
-                                                            `id`
-                                                         ,`pid`
-                                                         ,`info_id`
-                                                         ,`work_type`
-                                                         ,`work_unit`
-                                                         ,`danger_thing`
-                                                         ,`possible_result`
-                                                         ,`possible_level`
-                                                         ,`severity_level`
-                                                         ,`risk_level`
-                                                         ,`risk_contro_way`
-                                                         ,`create_user`
-                                                         ,`create_user_name`
-                                                         ,`create_time`
-                                                         ,`update_user`
-                                                         ,`update_time`
-                                                         ,`del_user`
-                                                         ,`del_time`
-                                                         ,`del_flag`
-                                                         ,`pt_var1`
-                                                         ,`pt_var2`
-                                    from qqch_safe_risk_list_detail
+        select `id`
+             , `pid`
+             , `sort`
+             , `info_id`
+             , `work_type`
+             , `work_unit`
+             , `danger_thing`
+             , `possible_result`
+             , `possible_level`
+             , `severity_level`
+             , `risk_level`
+             , `risk_contro_way`
+             , `create_user`
+             , `create_user_name`
+             , `create_time`
+             , `update_user`
+             , `update_time`
+             , `del_user`
+             , `del_time`
+             , `del_flag`
+             , `pt_var1`
+             , `pt_var2`
+        from qqch_safe_risk_list_detail
     </sql>
     <select id="getQqchSafeRiskListDetail" resultMap="QqchSafeRiskListDetailResultMap">
         <include refid="selectQqchSafeRiskListDetailVo"/>
@@ -108,7 +109,7 @@
             <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
         </where>
-        order by create_time desc
+        order by sort
     </select>
 
     <insert id="insertQqchSafeRiskListDetail" useGeneratedKeys="true" keyProperty="id">
@@ -116,6 +117,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
             <if test="pid != null ">`pid`,</if>
+            <if test="sort != null ">`sort`,</if>
             <if test="infoId != null ">`info_id`,</if>
             <if test="workType != null  and workType != ''">`work_type`,</if>
             <if test="workUnit != null  and workUnit != ''">`work_unit`,</if>
@@ -139,6 +141,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null ">#{id},</if>
             <if test="pid != null ">#{pid},</if>
+            <if test="sort != null ">#{sort},</if>
             <if test="infoId != null ">#{infoId},</if>
             <if test="workType != null  and workType != ''">#{workType},</if>
             <if test="workUnit != null  and workUnit != ''">#{workUnit},</if>
@@ -167,6 +170,7 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             `id`,
             `pid`,
+            `sort`,
             `info_id`,
             `work_type`,
             `work_unit`,
@@ -191,6 +195,7 @@
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 #{item.id},
                 #{item.pid},
+                #{item.sort},
                 #{item.infoId},
                 #{item.workType},
                 #{item.workUnit},
@@ -218,6 +223,7 @@
         <trim prefix="SET" suffixOverrides=",">
             <if test="id != null ">`id` = #{id},</if>
             <if test="pid != null ">`pid` = #{pid},</if>
+            <if test="sort != null ">`sort` = #{sort},</if>
             <if test="infoId != null ">`info_id` = #{infoId},</if>
             <if test="workType != null  and  workType != ''">`work_type` = #{workType},</if>
             <if test="workUnit != null  and  workUnit != ''">`work_unit` = #{workUnit},</if>
@@ -254,6 +260,11 @@
             <trim prefix="pid  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.pid}
+                </foreach>
+            </trim>
+            <trim prefix="sort  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.sort}
                 </foreach>
             </trim>
             <trim prefix="info_id  = case" suffix="end,">
