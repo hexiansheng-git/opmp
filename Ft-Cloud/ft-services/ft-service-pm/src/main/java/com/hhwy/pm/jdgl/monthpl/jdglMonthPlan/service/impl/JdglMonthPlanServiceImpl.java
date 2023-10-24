@@ -170,7 +170,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
 
         if(jdglQuarterPlan1 != null) {
-            jdglMonthPlanParam.setQuarterPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl());
+            jdglMonthPlanParam.setQuarterPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl()  == null ? BigDecimal.ZERO : jdglQuarterPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         }
 
         // 计算合同、产值数据
@@ -181,7 +181,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startQ, startM);
 
-        jdglMonthPlanParam.setQuarterCompValueDl(countValue);
+        jdglMonthPlanParam.setQuarterCompValueDl(countValue  == null ? BigDecimal.ZERO : countValue.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         if(jdglMonthPlanParam.getQuarterPlanValueDl() == null) jdglMonthPlanParam.setQuarterPlanValueDl(new BigDecimal(0));
         if(jdglMonthPlanParam.getQuarterCompValueDl()== null) jdglMonthPlanParam.setQuarterCompValueDl(new BigDecimal(0));
         jdglMonthPlanParam.setRemainQuarterAmtDl(jdglMonthPlanParam.getQuarterPlanValueDl().subtract(jdglMonthPlanParam.getQuarterCompValueDl()));

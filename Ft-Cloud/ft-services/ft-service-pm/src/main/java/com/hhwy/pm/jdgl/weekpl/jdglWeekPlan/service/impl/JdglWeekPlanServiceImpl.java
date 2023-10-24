@@ -168,7 +168,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year1, month);
 
         if (usingMonthPlanByYearAndMonth != null) {
-            jdglWeekPlanParam.setMonthPlanValueDl(usingMonthPlanByYearAndMonth.getThisPlanValueDl());
+            jdglWeekPlanParam.setMonthPlanValueDl(usingMonthPlanByYearAndMonth.getThisPlanValueDl() == null ? BigDecimal.ZERO : usingMonthPlanByYearAndMonth.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         }
 
         // 计算合同、产值数据
@@ -178,7 +178,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         Date startM = dateRange4YearMonth.get("start");
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startM, startW);
-        jdglWeekPlanParam.setMonthCompValueDl(countValue);
+        jdglWeekPlanParam.setMonthCompValueDl(countValue == null ? BigDecimal.ZERO : countValue.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
         if(jdglWeekPlanParam.getMonthPlanValueDl() == null) jdglWeekPlanParam.setMonthPlanValueDl(new BigDecimal(0));
         if(jdglWeekPlanParam.getMonthCompValueDl()== null) jdglWeekPlanParam.setMonthCompValueDl(new BigDecimal(0));
