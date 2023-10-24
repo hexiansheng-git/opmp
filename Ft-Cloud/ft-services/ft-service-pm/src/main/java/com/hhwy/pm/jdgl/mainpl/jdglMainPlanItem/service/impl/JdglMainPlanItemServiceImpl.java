@@ -96,6 +96,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
             for (JdglMainPlanItem jdglMainPlanItem1 : jdglMainPlanItemList) {
                 jdglMainPlanItem1.setText(jdglMainPlanItem1.getItemName());
                 jdglMainPlanItem1.setParent(jdglMainPlanItem1.getPid());
+                jdglMainPlanItem1.setTotalFloat(new BigDecimal(jdglMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_HALF_UP).intValue());
 
                 // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
                 Date start_date = jdglMainPlanItem1.getActualStartDate() != null

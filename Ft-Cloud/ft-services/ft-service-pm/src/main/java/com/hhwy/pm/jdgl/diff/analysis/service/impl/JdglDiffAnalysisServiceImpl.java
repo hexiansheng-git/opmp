@@ -34,10 +34,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author 陈锦豪
@@ -362,12 +359,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         // 项目规模
         String type11 = "1-1";
         String type12 = "1-2";
-        String type2 = "";
+        String type29 = "2-9";
         BigDecimal scaleGradeValue = new BigDecimal(0);
 
         // 项目重要性
         String weightedGrade = projectInfo.getWeightedGrade();
-
 
         if(validMaxVersionContractInfo != null) {
             BigDecimal effectiveAmout = validMaxVersionContractInfo.getEffectiveAmout();
@@ -415,14 +411,21 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 if(StringUtils.isNotEmpty(weightedGrade) && weightedGrade.equals(importance)) {
                     jdglDiffAnalysis.setImportanceGrade(score);
                 }
-                if(projectInfo.getBusinessAreasAndProducts() != null && (
-                        projectInfo.getBusinessAreasAndProducts().contains(type11) || projectInfo.getBusinessAreasAndProducts().contains(type12))
-                        && scaleGradeValue.compareTo(roadMaxScore) < 0 && scaleGradeValue.compareTo(roadMinScore) >= 0) {
-                    jdglDiffAnalysis.setScaleGrade(score);
-                }
-                if(type2.contains(projectInfo.getBusinessAreasAndProducts())
-                        && scaleGradeValue.compareTo(buildMaxScore) < 0 && scaleGradeValue.compareTo(buildMinScore) >= 0) {
-                    jdglDiffAnalysis.setScaleGrade(score);
+                if(projectInfo.getBusinessAreasAndProducts() != null) {
+                    String businessAreasAndProducts = projectInfo.getBusinessAreasAndProducts();
+                    String[] split = businessAreasAndProducts.split(",");
+                    String s = Arrays.stream(split).filter(str -> str.equals(type11) || str.equals(type12) || str.equals(type29)).findFirst().orElse(null);
+                    if(StringUtils.isEmpty(s)) {
+                        if(scaleGradeValue.compareTo(buildMaxScore) < 0 && scaleGradeValue.compareTo(buildMinScore) >= 0) {
+                            jdglDiffAnalysis.setScaleGrade(score);
+                        }
+                    } else {
+                        if(scaleGradeValue.compareTo(roadMaxScore) < 0 && scaleGradeValue.compareTo(roadMinScore) >= 0) {
+                            jdglDiffAnalysis.setScaleGrade(score);
+                        }
+                    }
+                } else {
+                    jdglDiffAnalysis.setScaleGrade(BigDecimal.ZERO);
                 }
             }
         }

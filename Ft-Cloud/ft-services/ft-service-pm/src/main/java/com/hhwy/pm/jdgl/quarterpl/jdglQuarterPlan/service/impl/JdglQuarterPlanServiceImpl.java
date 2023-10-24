@@ -283,7 +283,6 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
         jdglQuarterPlan.setIsUse("0");
-        int i = jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
 
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
@@ -293,8 +292,12 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             });
             iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(imagePlans);
         }
+        BigDecimal thisPlanAmt = iJdglQuarterImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglQuarterPlan.getExchangeRate();
+        jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
-        return i;
+        return jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
     }
 
     @Transactional

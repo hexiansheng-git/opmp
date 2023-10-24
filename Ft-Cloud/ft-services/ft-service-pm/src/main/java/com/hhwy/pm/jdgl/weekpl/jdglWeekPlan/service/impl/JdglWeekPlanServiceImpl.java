@@ -286,7 +286,6 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         jdglWeekPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setUpdateTime(DateUtils.getNowDate());
         jdglWeekPlan.setIsUse("0");
-        int i = jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlan);
 
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
@@ -297,7 +296,12 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             iJdglWeekImagePlanService.insertJdglWeekImagePlanList(imagePlans);
         }
 
-        return i;
+        BigDecimal thisPlanAmt = iJdglWeekImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglWeekPlan.getExchangeRate();
+        jdglWeekPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglWeekPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
+
+        return jdglWeekPlanMapper.insertJdglWeekPlan(jdglWeekPlan);
     }
 
     @Transactional
