@@ -3,7 +3,6 @@ package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.module.contant.Valid;
-import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
@@ -38,8 +37,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
     @Autowired
     private IQqchReviewService qqchReviewService;
-    @Autowired
-    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
 
     public QqchSafeRiskList getQqchSafeRiskList(QqchSafeRiskList qqchSafeRiskList) {
         return qqchSafeRiskListMapper.getQqchSafeRiskList(qqchSafeRiskList);
