@@ -1,7 +1,10 @@
 package com.hhwy.pm.qqch.sgch.managementPersonConfig.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.StrUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -21,7 +24,11 @@ import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.xml.sax.SAXException;
 
+import javax.swing.plaf.IconUIResource;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +51,9 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
     @Autowired
     private IQqchOrganizationListService qqchOrganizationListService;
+
+    @Autowired
+    IEhrService hrService;
 
     public QqchManagementPersonConfig getQqchManagementPersonConfig(QqchManagementPersonConfig qqchManagementPersonConfig) {
         return qqchManagementPersonConfigMapper.getQqchManagementPersonConfig(qqchManagementPersonConfig);
@@ -194,6 +204,41 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             String stageIdentity = qqchManagementPersonConfigVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
+        //回填人员类别字段
+        try {
+            this.getPersonType();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    private void getPersonType() throws ParserConfigurationException, IOException, SAXException {
+        List<QqchManagementPersonConfig> list = qqchManagementPersonConfigMapper.getNonPersonTyep();
+        if (CollectionUtil.isEmpty(list))
+            return;
+        List<QqchManagementPersonConfig> saveList = new ArrayList<>();
+        for (QqchManagementPersonConfig perosonConfig : list) {
+            Map<String, Object> certList = hrService.getCertList(perosonConfig.getName());
+            if (CollectionUtil.isEmpty(certList))
+                continue;
+            String employeeModle_name = (String) certList.get("employeeModle_name");
+            if (StrUtil.isBlank(employeeModle_name))
+                continue;
+            //黄玉涛:
+            //需要区分中方和外方
+            //轻舟已过万重山:
+            //带  属地  的是外方
+            QqchManagementPersonConfig bean = new QqchManagementPersonConfig();
+            bean.setId(perosonConfig.getId());
+            if (employeeModle_name.contains("属地")){
+                bean.setPersonType("外方");
+            }else {
+                bean.setPersonType("中方");
+            }
+            saveList.add(bean);
+        }
+        qqchManagementPersonConfigMapper.savePersonType(saveList);
     }
 
 
