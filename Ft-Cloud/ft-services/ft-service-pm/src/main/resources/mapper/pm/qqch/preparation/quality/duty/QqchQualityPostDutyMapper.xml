@@ -139,7 +139,7 @@
     </select>
     <select id="getDistinctQualityPostDutyList" resultMap="QqchQualityPostDutyResultMap">
       <include refid="selectQqchQualityPostDutyVo"/>
-      where del_flag = '0' and persion_id is not null and version = #{version}
+      where del_flag = '0' and person_id is not null and version = #{version}
       group by person_id
     </select>
 
