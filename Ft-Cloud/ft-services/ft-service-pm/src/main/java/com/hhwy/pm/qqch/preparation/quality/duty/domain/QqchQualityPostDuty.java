@@ -6,11 +6,14 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.common.core.web.domain.BaseEntity;
+import com.hhwy.pm.ehr.domain.PersonCertifyCompetency;
 import com.hhwy.utils.validation.ValidationGroups;
+import lombok.Data;
+
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
-import javax.validation.constraints.NotBlank;
-import lombok.Data;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -198,4 +201,9 @@ public class QqchQualityPostDuty extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+    /**
+     * 字段描述：人员资质证件信息
+     */
+    @JsonProperty
+    private List<PersonCertifyCompetency> personCertifyCompetencyList;
 }
