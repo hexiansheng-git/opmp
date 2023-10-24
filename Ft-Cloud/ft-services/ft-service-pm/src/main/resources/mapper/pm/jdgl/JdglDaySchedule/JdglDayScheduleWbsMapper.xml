@@ -200,6 +200,37 @@
              order by sort asc
          ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
     </select>
+    <select id="getWbsListByDateRange4OnlyWbs"
+            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
+        select min(wd.date) editerDate,wd.wbs_id id,wd.wbs_pid pid,wd.wbs_code as wbsCode,wd.wbs_name as wbsName,wd.unit,wd.design_quantity designQuantity,
+               sum(wd.this_quantity) thisQuantity,sum(wd.this_value) thisValue from (
+            select jds.date,jdsw.wbs_id,jdsw.wbs_pid,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(jdsb.bill_value) this_value
+            from (select * from jdgl_day_schedule where del_flag = '0' and `date` &gt;= #{startDate} and `date` &lt;= #{endDate} and task_status != "0") jds
+                     inner join jdgl_day_schedule_wbs jdsw
+                                on jds.id = jdsw.day_schedule_id
+                     left join jdgl_day_schedule_bill jdsb
+                               on jds.id = jdsb.day_schedule_id
+                                   and jdsw.wbs_code = jdsb.wbs_code
+            group by jdsw.wbs_id,jdsw.wbs_pid,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,jdsw.this_quantity
+            order by sort asc
+        ) wd group by wd.wbs_id,wd.wbs_pid,wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
+    </select>
+
+    <select id="getTotalWbsListByDateRange4OnlyWbs"
+            resultType="com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs4Value">
+        select min(wd.date) editerDate,wd.wbs_code wbsCode,wd.wbs_name wbsName,wd.unit,wd.design_quantity designQuantity,
+               sum(wd.this_quantity) thisQuantity,sum(wd.this_value) thisValue from (
+            select jds.date,jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,sum(jdsb.this_quantity) this_quantity,sum(jdsb.bill_value) this_value
+            from (select * from jdgl_day_schedule where del_flag = '0' and `date` &lt;= #{endDate} and task_status != "0") jds
+                     inner join jdgl_day_schedule_wbs jdsw
+                                on jds.id = jdsw.day_schedule_id
+                     left join jdgl_day_schedule_bill jdsb
+                               on jds.id = jdsb.day_schedule_id
+                                   and jdsw.wbs_code = jdsb.wbs_code
+            group by jdsw.wbs_code,jdsw.wbs_name,jdsw.unit,jdsw.design_quantity,jdsw.this_quantity
+            order by sort asc
+        ) wd group by wd.wbs_code,wd.wbs_name,wd.unit,wd.design_quantity
+    </select>
     <select id="getLeafWbsList"
             resultMap="JdglDayScheduleWbsResultMap">
         <include refid="selectJdglDayScheduleWbsVo"/>

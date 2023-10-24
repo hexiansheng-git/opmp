@@ -825,7 +825,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             e.printStackTrace();
         }
 
-        List<JdglDaySchedule> listByDateRange = iJdglDayScheduleService.getListByDateRange(startDate, endDate);
+        List<JdglDaySchedule> listByDateRange = iJdglDayScheduleService.getAllListByDateRange(startDate, endDate);
 
         List<Date> dateList = new ArrayList<>();
         StatisticsUtils.getDayList(dateList, startDate, endDate);

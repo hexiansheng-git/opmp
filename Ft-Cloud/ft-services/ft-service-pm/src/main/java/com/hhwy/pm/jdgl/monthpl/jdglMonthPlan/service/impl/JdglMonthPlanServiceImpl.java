@@ -94,7 +94,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         jdglMonthPlan.setMonth(month);
         jdglMonthPlan.setTaskStatus("5");
         jdglMonthPlan.setIsUse("1");
-        return getJdglMonthPlan(jdglMonthPlan);
+        return jdglMonthPlanMapper.getJdglMonthPlan(jdglMonthPlan);
     }
 
     /**

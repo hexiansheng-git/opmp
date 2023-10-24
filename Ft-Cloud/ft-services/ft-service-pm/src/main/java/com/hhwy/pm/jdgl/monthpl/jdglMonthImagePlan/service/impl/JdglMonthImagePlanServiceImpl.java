@@ -214,7 +214,7 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
             return jdglMonthPlanParam;
         }
 
-        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(dateRange.get("start"));
+        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(StatisticsUtils.addDays(dateRange.get("start"), -1));
 
 
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {

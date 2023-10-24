@@ -94,7 +94,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setQuarter(quarter);
         jdglQuarterPlan.setTaskStatus("5");
         jdglQuarterPlan.setIsUse("1");
-        return getJdglQuarterPlan(jdglQuarterPlan);
+        return jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
     }
 
     /**

@@ -238,7 +238,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             return jdglYearPlanParam;
         }
 
-        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(dateRange.get("start"));
+        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(StatisticsUtils.addDays(dateRange.get("start"), -1));
 
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
             JdglYearImagePlan jdglYearImagePlan = new JdglYearImagePlan();

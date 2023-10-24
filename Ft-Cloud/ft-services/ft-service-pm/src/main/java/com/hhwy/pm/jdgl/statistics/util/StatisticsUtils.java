@@ -322,4 +322,11 @@ public class StatisticsUtils {
 
         return returnDate;
     }
+
+    public static Date addDays(Date date, int i) {
+        Calendar instance = Calendar.getInstance();
+        instance.setTime(date);
+        instance.add(Calendar.DATE, i);
+        return instance.getTime();
+    }
 }

@@ -86,7 +86,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         jdglYearPlan.setYear(year);
         jdglYearPlan.setTaskStatus("5");
         jdglYearPlan.setIsUse("1");
-        return getJdglYearPlan(jdglYearPlan);
+        return jdglYearPlanMapper.getJdglYearPlan(jdglYearPlan);
     }
 
     /**

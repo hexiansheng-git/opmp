@@ -376,4 +376,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
     public BigDecimal getCountValueNotApprove(Date startDate, Date endDate) {
         return jdglDayScheduleMapper.getCountValueNotApprove(startDate, endDate);
     }
+
+    @Override
+    public List<JdglDaySchedule> getAllListByDateRange(Date startDate, Date endDate) {
+        return jdglDayScheduleMapper.getAllListByDateRange(startDate, endDate);
+    }
 }

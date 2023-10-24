@@ -17,6 +17,7 @@ import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWb
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.service.IJdglDayScheduleWbsService;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewList;
 import com.hhwy.pm.xmsl.drawReview.domain.XmslDrawReviewWbs;
@@ -296,9 +297,9 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         }
 
         // 获取图纸复核的清单
-        List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
+//        List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
 
-        List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = getTotalWbsListByDateRange(DateUtils.addDays(date, -1));
+        List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = getTotalWbsListByDateRange4OnlyWbs(StatisticsUtils.addDays(date, -1));
 
         for (JdglMainPlanItem jdglMainPlanItem : allList4User) {
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
@@ -321,18 +322,19 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     }
                 }
             }
+            if(jdglDayScheduleWbs.getRemainQuantity() == null) jdglDayScheduleWbs.setRemainQuantity(jdglDayScheduleWbs.getDesignQuantity());
             jdglDayScheduleWbs.setEditerId(jdglMainPlanItem.getExecuterId());
             jdglDayScheduleWbs.setEditer(jdglMainPlanItem.getExecuter());
             jdglDayScheduleWbs.setEditerDate(DateUtils.getNowDate());
             jdglDayScheduleWbs.setIsAdd("1");
             // 从redis中获取wbs数据
 //            XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
-            XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
-            if(wbsByCode != null) {
-                jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
-                jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
-                jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
-                if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
+//            XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
+//            if(wbsByCode != null) {
+//                jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+//                jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
+//                jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
+//                if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
 //                    jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
 //                    jdglDayScheduleWbs.setUnicode(wbsByCode.getUnicode());
 //                    // 赋值wbs的设计数量
@@ -357,8 +359,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //                            }
 //                        }
 //                    }
-                }
-            }
+//                }
+//            }
             // 源数据id
             jdglDayScheduleWbs.setPtVar1(jdglMainPlanItem.getWbsObjectId());
             // 源数据父id
@@ -400,6 +402,16 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange4Value(endDate);
     }
 
+    @Override
+    public List<JdglDayScheduleWbs4Value> getWbsListByDateRange4OnlyWbs(Date startDate, Date endDate) {
+        return jdglDayScheduleWbsMapper.getWbsListByDateRange4OnlyWbs(startDate, endDate);
+    }
+
+    @Override
+    public List<JdglDayScheduleWbs4Value> getTotalWbsListByDateRange4OnlyWbs(Date endDate) {
+        return jdglDayScheduleWbsMapper.getTotalWbsListByDateRange4OnlyWbs(endDate);
+    }
+
 
     @Transactional
     public int insertJdglDayScheduleWbs(JdglDayScheduleWbs jdglDayScheduleWbs) {
@@ -433,7 +445,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         List<JdglDayScheduleWbs> addWbsList = jdglDayScheduleWbsListParam.getAddWbsList();
         List<JdglDayScheduleWbs> wbsTreeList = jdglDayScheduleWbsListParam.getWbsTreeList() == null ? new ArrayList<>() : jdglDayScheduleWbsListParam.getWbsTreeList();
         Long dayScheduleId = jdglDayScheduleWbsListParam.getDayScheduleId();
-//        Date date = jdglDayScheduleWbsListParam.getDate();
+        Date date = jdglDayScheduleWbsListParam.getDate();
 
         if(CollectionUtils.isEmpty(addWbsList)) {
             return null;
@@ -465,8 +477,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         // 获取图纸复核的清单
         List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
 
-        List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = new ArrayList<>(); //getTotalWbsListByDateRange(DateUtils.addDays(date, -1));
-
+        List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = getTotalWbsListByDateRange4OnlyWbs(StatisticsUtils.addDays(date, -1));
 
         for (String ancestors : ancestorsSet) {
             List<JdglMainPlanItem> JdglMainPlanItemAncestorsList = usingJdglMainPlanItemList.stream().filter(vo -> ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
@@ -490,43 +501,61 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     jdglDayScheduleWbs.setWbsName(jdglMainPlanItem.getItemName());
                     jdglDayScheduleWbs.setUnit(jdglMainPlanItem.getUnit());
                     jdglDayScheduleWbs.setDesignQuantity(jdglMainPlanItem.getQuantity());
+
+                    // 赋值wbs的剩余数量
+                    if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
+                        JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo ->
+                                jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())
+                        ).findFirst().orElse(null);
+                        BigDecimal designQuantity = jdglDayScheduleWbs.getDesignQuantity();
+                        if(jdglDayScheduleWbs4Value == null) {
+                            jdglDayScheduleWbs.setRemainQuantity(designQuantity);
+                        } else {
+                            if(designQuantity != null && jdglDayScheduleWbs4Value.getThisQuantity() != null) {
+                                jdglDayScheduleWbs.setRemainQuantity(designQuantity.subtract(jdglDayScheduleWbs4Value.getThisQuantity()));
+                            }
+                        }
+                    }
+                    if(jdglDayScheduleWbs.getRemainQuantity() == null) jdglDayScheduleWbs.setRemainQuantity(jdglDayScheduleWbs.getDesignQuantity());
+
                     jdglDayScheduleWbs.setEditerId(jdglMainPlanItem.getExecuterId());
                     jdglDayScheduleWbs.setEditer(jdglMainPlanItem.getExecuter());
                     jdglDayScheduleWbs.setIsAdd("1");
                     // 从redis中获取wbs数据
 //                    XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
-                    XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
-                    if(wbsByCode != null) {
-                        jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
-                        jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
-                        jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
-                        if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
-                            jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
-                            jdglDayScheduleWbs.setUnicode(wbsByCode.getUnicode());
-                            // 赋值wbs的设计数量
-                            if(!CollectionUtils.isEmpty(list)) {
-                                XmslDrawReviewList xmslDrawReviewList = list.stream().filter(vo ->
-                                        "1".equals(vo.getImageProgress())
-                                                && jdglMainPlanItem.getItemCode().equals(vo.getWbsCode()))
-                                        .findFirst().orElse(null);
-                                if(xmslDrawReviewList != null) jdglDayScheduleWbs.setDesignQuantity(xmslDrawReviewList.getCheckNum());
-                            }
-                            // 赋值wbs的剩余数量
-                            if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
-                                JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo ->
-                                        jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())
-                                ).findFirst().orElse(null);
-                                BigDecimal designQuantity = jdglDayScheduleWbs.getDesignQuantity();
-                                if(jdglDayScheduleWbs4Value == null) {
-                                    jdglDayScheduleWbs.setRemainQuantity(designQuantity);
-                                } else {
-                                    if(designQuantity != null && jdglDayScheduleWbs4Value.getThisQuantity() != null) {
-                                        jdglDayScheduleWbs.setRemainQuantity(designQuantity.subtract(jdglDayScheduleWbs4Value.getThisQuantity()));
-                                    }
-                                }
-                            }
-                        }
-                    }
+//                    XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
+//                    if(wbsByCode != null) {
+//                        jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+//                        jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
+//                        jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
+//                        if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
+//                            jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
+//                            jdglDayScheduleWbs.setUnicode(wbsByCode.getUnicode());
+//                            // 赋值wbs的设计数量
+//                            if(!CollectionUtils.isEmpty(list)) {
+//                                XmslDrawReviewList xmslDrawReviewList = list.stream().filter(vo ->
+//                                        "1".equals(vo.getImageProgress())
+//                                                && jdglMainPlanItem.getItemCode().equals(vo.getWbsCode()))
+//                                        .findFirst().orElse(null);
+//                                if(xmslDrawReviewList != null) jdglDayScheduleWbs.setDesignQuantity(xmslDrawReviewList.getCheckNum());
+//                            }
+//                            // 赋值wbs的剩余数量
+//                            if(!CollectionUtils.isEmpty(totalWbsListByDateRange)) {
+//                                JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = totalWbsListByDateRange.stream().filter(vo ->
+//                                        jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())
+//                                ).findFirst().orElse(null);
+//                                BigDecimal designQuantity = jdglDayScheduleWbs.getDesignQuantity();
+//                                if(jdglDayScheduleWbs4Value == null) {
+//                                    jdglDayScheduleWbs.setRemainQuantity(designQuantity);
+//                                } else {
+//                                    if(designQuantity != null && jdglDayScheduleWbs4Value.getThisQuantity() != null) {
+//                                        jdglDayScheduleWbs.setRemainQuantity(designQuantity.subtract(jdglDayScheduleWbs4Value.getThisQuantity()));
+//                                    }
+//                                }
+//                            }
+//                            if(jdglDayScheduleWbs.getRemainQuantity() == null) jdglDayScheduleWbs.setRemainQuantity(jdglDayScheduleWbs.getDesignQuantity());
+//                        }
+//                    }
                     // 源数据id
                     jdglDayScheduleWbs.setPtVar1(jdglMainPlanItem.getWbsObjectId());
                     // 源数据父id

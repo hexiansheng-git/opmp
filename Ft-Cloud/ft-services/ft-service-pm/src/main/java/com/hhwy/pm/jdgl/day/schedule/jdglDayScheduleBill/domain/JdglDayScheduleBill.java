@@ -241,4 +241,11 @@ public class JdglDayScheduleBill extends BaseEntity {
      */
     private String isLeaf;
 
+    /**
+     * 字段描述：日期参数
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonProperty
+    private Date date;
+
 }

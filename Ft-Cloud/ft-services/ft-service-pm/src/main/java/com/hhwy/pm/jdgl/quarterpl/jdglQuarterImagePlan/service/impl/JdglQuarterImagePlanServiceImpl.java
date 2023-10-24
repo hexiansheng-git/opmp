@@ -211,7 +211,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             return jdglQuarterPlanParam;
         }
 
-        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(dateRange.get("start"));
+        List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(StatisticsUtils.addDays(dateRange.get("start"), -1));
 
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItemList) {
             JdglQuarterImagePlan jdglQuarterImagePlan = new JdglQuarterImagePlan();

@@ -8,6 +8,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
@@ -58,6 +59,7 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
         String wbsName = jdglDayScheduleBill.getWbsName();
         String itemCode = jdglDayScheduleBill.getItemCode();
         Long dayScheduleId = jdglDayScheduleBill.getDayScheduleId();
+        Date date = jdglDayScheduleBill.getDate();
         if(dayScheduleId == null) {
             jdglDayScheduleBill.setDayScheduleId(-1l);
         }
@@ -92,6 +94,8 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
             // 获取主合同清单数据
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
 
+            List<JdglDayScheduleBill> billValueListByEndDate4WbsBill = getBillValueListByEndDate4WbsBill(StatisticsUtils.addDays(date, -1));
+
             for (XmslDrawReviewList xmslDrawReviewList : xmslDrawReviewLists) {
                 String listCode = xmslDrawReviewList.getListCode();
                 JdglDayScheduleBill jdglDayScheduleBill1 = new JdglDayScheduleBill();
@@ -114,9 +118,15 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                 }
                 jdglDayScheduleBill1.setUnit(xmslDrawReviewList.getUnit());
                 jdglDayScheduleBill1.setDesignQuantity(xmslDrawReviewList.getCheckNum());
-                BigDecimal totalComp = new BigDecimal(0);
-                if(xmslDrawReviewList.getCheckNum() != null && totalComp != null) {
-                    jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum().subtract(totalComp));
+                BigDecimal totalQty = BigDecimal.ZERO;
+                if(!CollectionUtils.isEmpty(billValueListByEndDate4WbsBill)) {
+                    JdglDayScheduleBill jdglDayScheduleBill2 = billValueListByEndDate4WbsBill.stream().filter(vo -> itemCode.equals(vo.getItemCode()) && jdglDayScheduleBill1.getBillCode().equals(vo.getBillCode())).findFirst().orElse(null);
+                    if(jdglDayScheduleBill2 != null) totalQty = jdglDayScheduleBill2.getThisQuantity();
+                }
+                if(xmslDrawReviewList.getCheckNum() != null && totalQty != null) {
+                    jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum().subtract(totalQty));
+                } else {
+                    jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum());
                 }
                 jdglDayScheduleBill1.setIsMain(xmslDrawReviewList.getImageProgress());
                 jdglDayScheduleBillList.add(jdglDayScheduleBill1);
@@ -133,6 +143,16 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
     @Override
     public List<JdglDayScheduleBill> getBillValueListByEndDate(Date endDate) {
         return jdglDayScheduleBillMapper.getBillValueListByEndDate(endDate);
+    }
+
+    @Override
+    public List<JdglDayScheduleBill> getBillValueListByRangeDate4WbsBill(Date startDate, Date endDate) {
+        return jdglDayScheduleBillMapper.getBillValueListByRangeDate4WbsBill(startDate, endDate);
+    }
+
+    @Override
+    public List<JdglDayScheduleBill> getBillValueListByEndDate4WbsBill(Date endDate) {
+        return jdglDayScheduleBillMapper.getBillValueListByEndDate4WbsBill(endDate);
     }
 
     @Transactional

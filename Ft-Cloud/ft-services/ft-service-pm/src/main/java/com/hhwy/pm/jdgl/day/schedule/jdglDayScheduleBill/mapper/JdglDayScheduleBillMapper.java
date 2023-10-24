@@ -39,7 +39,12 @@ public interface JdglDayScheduleBillMapper {
 
     List<JdglDayScheduleBill> getBillValueListByEndDate(@Param("endDate") Date endDate);
 
+    List<JdglDayScheduleBill> getBillValueListByRangeDate4WbsBill(@Param("startDate") Date startDate,@Param("endDate") Date endDate);
+
+    List<JdglDayScheduleBill> getBillValueListByEndDate4WbsBill(@Param("endDate") Date endDate);
+
     int deleteJdglDayScheduleBillByDayWbsIds(@Param("wbsids")List<Long> wbsids,@Param("dayScheduleId") Long dayScheduleId);
 
     List<JdglDayScheduleBill> getJdglDayScheduleBillList4Group(JdglDayScheduleBill jdglDayScheduleBill);
+
 }

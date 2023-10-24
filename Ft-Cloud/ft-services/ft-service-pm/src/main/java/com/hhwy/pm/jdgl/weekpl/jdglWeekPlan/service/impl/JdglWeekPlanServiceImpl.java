@@ -95,7 +95,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         jdglWeekPlan.setWeek(week);
         jdglWeekPlan.setTaskStatus("5");
         jdglWeekPlan.setIsUse("1");
-        return getJdglWeekPlan(jdglWeekPlan);
+        return jdglWeekPlanMapper.getJdglWeekPlan(jdglWeekPlan);
     }
 
     /**

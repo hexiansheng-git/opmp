@@ -45,4 +45,6 @@ public interface IJdglDayScheduleService {
     void updateTaskStatus(Long id);
 
     BigDecimal getCountValueNotApprove(Date startDate, Date endDate);
+
+    List<JdglDaySchedule> getAllListByDateRange(Date startDate, Date endDate);
 }
