@@ -30,7 +30,6 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
-import com.hhwy.utils.BusinessTaskResultUtil;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.date.FtDateUtils;
@@ -103,7 +102,16 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     }
 
     public List<Review> getQqchReviewList(Review review) {
-        return reviewMapper.getQqchReviewList(review);
+        List<Review> qqchReviewList = reviewMapper.getQqchReviewList(review);
+        for (Review review1 : qqchReviewList) {
+            String stage = review1.getStage();
+            if("1".equals(stage) || "2".equals(stage)){
+                FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW1);
+            }else if("3".equals(stage)){
+                FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW2);
+            }
+        }
+        return qqchReviewList;
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -302,7 +310,12 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         review.setInitDate(new Date());
         review.setInitUserId(SecurityUtils.getUserId());
         review.setInitUserName(SecurityUtils.getUserName());
-        BusinessTaskResultUtil.handleProcessData(review, FlowEnum.QQCH_REVIEW);
+        String stage = review.getStage();
+        if("1".equals(stage) || "2".equals(stage)){
+            FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW1);
+        }else if("3".equals(stage)){
+            FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW2);
+        }
         return review;
     }
 
