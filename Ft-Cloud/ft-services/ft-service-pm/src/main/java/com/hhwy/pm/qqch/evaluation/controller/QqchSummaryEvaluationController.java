@@ -23,7 +23,7 @@ public class QqchSummaryEvaluationController extends BaseController {
     @Autowired
     private IQqchSummaryEvaluationService qqchSummaryEvaluationService;
 
-    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:list")
+//    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:list")
     @GetMapping("/getQqchSummaryEvaluation")
     public AjaxResult getQqchSummaryEvaluation(
         @Validated(ValidationGroups.Get.class) QqchSummaryEvaluation qqchSummaryEvaluationParam) {
