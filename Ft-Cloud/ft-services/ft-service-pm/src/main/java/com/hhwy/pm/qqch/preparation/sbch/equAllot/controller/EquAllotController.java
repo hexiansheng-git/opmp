@@ -4,6 +4,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.EquAllotVo;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.XcsbMonthSelfEquInfo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.service.EquAllotService;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -12,6 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zqq
@@ -46,13 +48,13 @@ public class EquAllotController extends BaseController {
     }
 
     /***
-     * 功能描述: 选择调拨设备  调用物设接口
+     * 功能描述: 选择调拨设备  调用物设接口（现场设备）
      * 作者: fushudong
      * 时间: 2023/10/23
      */
     @PostMapping("/xzxcsb")
     public AjaxResult xzxcsb(@RequestBody ActiveEquVo activeEquVo){
-        EquAllotVo equAllotVo = equAllotService.xzxcsb(activeEquVo);
+        List<XcsbMonthSelfEquInfo> equAllotVo = equAllotService.xzxcsb(activeEquVo);
         return AjaxResult.success(equAllotVo);
     }
 

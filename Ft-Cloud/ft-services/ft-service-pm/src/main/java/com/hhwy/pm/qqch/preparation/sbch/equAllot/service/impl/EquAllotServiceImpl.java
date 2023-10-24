@@ -1,13 +1,18 @@
 package com.hhwy.pm.qqch.preparation.sbch.equAllot.service.impl;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquResult;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.EquAllotVo;
+import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.XcsbMonthSelfEquInfo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.service.EquAllotService;
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.domain.SbchEquipmentAllot;
 import com.hhwy.pm.qqch.preparation.sbch.samecountrytransfers.domain.SbchEquipmentAllotDetails;
@@ -297,10 +302,15 @@ public class EquAllotServiceImpl implements EquAllotService {
     }
 
     @Override
-    public EquAllotVo xzxcsb(ActiveEquVo activeEquVo) {
+    public List<XcsbMonthSelfEquInfo> xzxcsb(ActiveEquVo activeEquVo) {
         String url = "http://10.11.238.63:10003/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
-        String post = HttpUtil.post(url, JSON.toJSONString(activeEquVo));
-
-        return null;
+        String resp = HttpUtil.post(url, JSON.toJSONString(activeEquVo));
+        AjaxResult ajaxResult = JSON.parseObject(resp, AjaxResult.class);
+        if (ObjectUtil.isEmpty(ajaxResult) || (int)ajaxResult.get("code") != 200)
+            return null;
+        String data1 = JSON.toJSONString(ajaxResult.get("data"));
+        ActiveEquResult activeEquResult = JSON.parseObject(data1, ActiveEquResult.class);
+        List<XcsbMonthSelfEquInfo> rows = activeEquResult.getRows();
+        return rows;
     }
 }
