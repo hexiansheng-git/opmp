@@ -1,4 +1,4 @@
-package com.hhwy.system.market;
+package com.hhwy.domain.base.system.marketSurvey;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -22,6 +22,8 @@ import java.util.Date;
  */
 public class MarketSurvey extends CommonBaseEntity {
     private static final long serialVersionUID = 1L;
+
+
 
     /** id */
     @JsonSerialize(using= ToStringSerializer.class)
@@ -92,6 +94,25 @@ public class MarketSurvey extends CommonBaseEntity {
     private String deleteUser;
 
     private Date deleteTime;
+
+    private int pageNum;
+    private int pageSize;
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
 
     public String getDeleteUser() {
         return deleteUser;
@@ -280,24 +301,5 @@ public class MarketSurvey extends CommonBaseEntity {
             .append("ptVar3", getPtVar3())
             .append("fileGroupId", getFileGroupId())
             .toString();
-    }
-
-    private Integer pageNum;
-    private Integer pageSize;
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
     }
 }

@@ -1,7 +1,7 @@
 package com.hhwy.system.market.service;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.system.market.MarketSurvey;
+import com.hhwy.domain.base.system.marketSurvey.MarketSurvey;
 
 import java.util.List;
 
