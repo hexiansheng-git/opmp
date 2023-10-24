@@ -22,15 +22,17 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.exception.CustomBusinessException;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.tree.ListTreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -65,9 +67,17 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
         qryParam.setVersion(version);
         List<QqchPersonControlPlan> list = qqchPersonControlPlanMapper.getQqchPersonControlPlanList(qryParam);
 
+        //转树列表
+        List<QqchPersonControlPlan> treeList = ListTreeUtil.formatTree(
+                list,
+                o -> o.getPid() == null,
+                (r, n) -> r.getId().equals(n.getPid()),
+                QqchPersonControlPlan::getChildren,
+                QqchPersonControlPlan::setChildren);
+
         vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
-        vo.setList(list);
+        vo.setList(treeList);
         return vo;
     }
 
@@ -85,14 +95,22 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
         qqchPersonControlPlanMapper.deleteQqchPersonControlPlan(deleteParam);
 
         String buttonMark = voParam.getButtonMark();
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
+        List<QqchPersonControlPlan> list = voParam.getList();
+        if (!CollectionUtils.isEmpty(list)) {
+            list = ListTreeUtil.formatList(
+                    list,
+                    QqchPersonControlPlan::setId,
+                    QqchPersonControlPlan::setPid,
+                    QqchPersonControlPlan::setSort,
+                    QqchPersonControlPlan::getChildren,
+                    QqchPersonControlPlan::setChildren);
+
             // 校验非空
             if (!ButtonMark.SAVE.equals(buttonMark)) {
-                JyDetailsUtil.jyDetails(voParam.getList(), ValidationGroups.Save.class);
+                JyDetailsUtil.jyRoot(list, QqchPersonControlPlan::getPid, ValidationGroups.Save.class);
             }
 
-            for (QqchPersonControlPlan qqchPersonControlPlan : voParam.getList()) {
-                qqchPersonControlPlan.setId(IdWorker.createId());
+            for (QqchPersonControlPlan qqchPersonControlPlan : list) {
                 qqchPersonControlPlan.setVersion(voParam.getVersion());
                 if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
                     qqchPersonControlPlan.setValid(Valid.YES);
@@ -101,7 +119,7 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
                 qqchPersonControlPlan.setCreateUserName(SecurityUtils.getUserName());
                 qqchPersonControlPlan.setCreateTime(DateUtils.getNowDate());
             }
-            qqchPersonControlPlanMapper.insertQqchPersonControlPlanList(voParam.getList());
+            qqchPersonControlPlanMapper.insertQqchPersonControlPlanList(list);
         }
 
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
