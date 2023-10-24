@@ -334,7 +334,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
                 if(StringUtils.isEmpty(ancestors1)) return returnList;
 
                 List<QqchMainPlanItem> collect1 = qqchMainPlanItemListNoTree.stream().filter(vo ->
-                        StringUtils.isNotEmpty(vo.getAncestors()) && ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
+                        StringUtils.isNotEmpty(vo.getAncestors()) && ancestors1.contains(vo.getAncestors())).collect(Collectors.toList());
 
                 if(!CollectionUtils.isEmpty(collect1)) returnList.addAll(collect1);
             }
@@ -342,5 +342,27 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
 
         // 去重后返回
         return returnList.stream().distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public QqchMainPlanItem getUsing4One(QqchMainPlanItem qqchMainPlanItemVoParam) {
+
+        BigDecimal version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, qqchMainPlanItemVoParam.getVersion());
+
+        qqchMainPlanItemVoParam.setVersion(version);
+
+        QqchMainPlanItem qqchMainPlanItem = getQqchMainPlanItem(qqchMainPlanItemVoParam);
+
+        Long id = qqchMainPlanItem.getId();
+
+        List<QqchMainPlanItem> allLinkList = getAllLinkList(Arrays.asList(id));
+
+        if(!CollectionUtils.isEmpty(allLinkList)) {
+            QqchMainPlanItem qqchMainPlanItem1 = allLinkList.stream().filter(vo -> QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType()) && "1".equals(vo.getIsCritical())).findFirst().orElse(null);
+            if(qqchMainPlanItem1 != null) qqchMainPlanItem.setIsCritical("1");
+        }
+        if(qqchMainPlanItem.getIsCritical() == null) qqchMainPlanItem.setIsCritical("0");
+
+        return qqchMainPlanItem;
     }
 }

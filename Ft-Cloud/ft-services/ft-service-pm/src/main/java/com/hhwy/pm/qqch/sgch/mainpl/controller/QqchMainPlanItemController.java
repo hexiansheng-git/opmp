@@ -164,4 +164,13 @@ public class QqchMainPlanItemController extends BaseController {
         return AjaxResult.success(qqchMainPlanItemService.getProjStartAndFinish(version));
     }
 
+    /**
+     * 根据wbs编码获取总体计划数据
+     * @return
+     */
+    @PostMapping("/getUsing4One")
+    public AjaxResult getUsing4One(@RequestBody QqchMainPlanItem qqchMainPlanItemParam) {
+        return AjaxResult.success(qqchMainPlanItemService.getUsing4One(qqchMainPlanItemParam));
+    }
+
 }

@@ -56,4 +56,6 @@ public interface IQqchMainPlanItemService {
      * @return
      */
     List<QqchMainPlanItem> getAllLinkList(List<Long> ids);
+
+    QqchMainPlanItem getUsing4One(QqchMainPlanItem qqchMainPlanItemVoParam);
 }
