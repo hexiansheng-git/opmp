@@ -837,9 +837,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 jdglDaySchedule = new JdglDaySchedule();
                 jdglDaySchedule.setDate(date);
                 jdglDaySchedule.setPtVar5("0");
-                jdglDaySchedule.setDayValueDl(jdglDaySchedule.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
                 listByDateRange.add(jdglDaySchedule);
             } else {
+                jdglDaySchedule.setDayValueDl(jdglDaySchedule.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
                 jdglDaySchedule.setPtVar5("1");
             }
         }
