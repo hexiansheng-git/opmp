@@ -62,7 +62,7 @@ public class ReviewController extends BaseController {
     public AjaxResult getQqchReviewList(@Validated(ValidationGroups.Select.class) Review reviewParam) {
         startPage();
         List<Review> reviewList = qqchReviewService.getQqchReviewList(reviewParam);
-        
+        handlerReviewList(reviewList);
         return getDataTableAjaxResult(reviewList);
     }
 
