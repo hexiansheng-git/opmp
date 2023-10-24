@@ -1,6 +1,6 @@
 package com.hhwy.system.market.mapper;
 
-import com.hhwy.system.market.MarketSurvey;
+import com.hhwy.domain.base.system.marketSurvey.MarketSurvey;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

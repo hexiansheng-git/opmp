@@ -8,7 +8,7 @@ import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.common.security.annotation.PreAuthorize;
-import com.hhwy.system.market.MarketSurvey;
+import com.hhwy.domain.base.system.marketSurvey.MarketSurvey;
 import com.hhwy.system.market.service.IMarketSurveyService;
 import com.hhwy.utils.common.PmsConstant;
 import com.hhwy.utils.exception.CustomBusinessException;
