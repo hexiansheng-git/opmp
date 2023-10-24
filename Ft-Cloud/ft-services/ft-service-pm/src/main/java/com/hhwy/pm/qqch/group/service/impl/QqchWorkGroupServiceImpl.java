@@ -127,6 +127,9 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         version = version.add(BigDecimal.ONE);
         qqchWorkGroup.setVersionStr("v" + version);
         qqchWorkGroup.setVersion(version);
+        qqchWorkGroup.setIssueDate(null);
+        qqchWorkGroup.setCreateTime(null);
+        qqchWorkGroup.setCreateUser(null);
 
         return qqchWorkGroup;
     }
