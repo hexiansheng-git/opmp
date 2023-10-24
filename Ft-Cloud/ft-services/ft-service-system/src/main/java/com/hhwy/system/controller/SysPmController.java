@@ -8,10 +8,7 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.service.TokenService;
 import com.hhwy.system.api.domain.*;
-import com.hhwy.system.core.service.IMenuService;
-import com.hhwy.system.core.service.ISysDictTypeService;
-import com.hhwy.system.core.service.ISysMenuV2Service;
-import com.hhwy.system.core.service.ISysTenantService;
+import com.hhwy.system.core.service.*;
 import com.hhwy.system.service.IDeptService;
 import com.hhwy.system.service.ISysPmService;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,6 +41,10 @@ public class SysPmController {
     private IMenuService menuService;
     @Autowired
     private ISysTenantService tenantService;
+    
+    @Autowired
+    private ISysTenantDbService  dbService;
+
 
     @Autowired
     private IDeptService deptService;
@@ -159,5 +160,50 @@ public class SysPmController {
         }
         return res;
     }
+
+
+    //生成同步sql
+    @PostMapping("/createSql")
+    public String createSql(@RequestBody Map<String,String> map) {
+        String sql=map.get("sql");
+        String flag=map.get("flag");
+        StringBuffer sb = new StringBuffer();
+        SysTenantDb db = new SysTenantDb();
+        List<SysTenantDb> dbList = dbService.selectSysTenantDbList(db);
+        for(SysTenantDb item:dbList){
+            String sbStr = new String(sql);
+            String newStr = sbStr.replaceAll(flag, item.getDbName());
+            sb.append(newStr);
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String sql="ALTER TABLE `ft_service_pm_pj2022003778`.`qqch_perform_inspection` MODIFY COLUMN `pt_var2` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '流程发起人' AFTER `pt_var1`;\n" +
+                "\n" +
+                "ALTER TABLE `ft_service_pm_pj2022003778`.`qqch_person_control_plan` ADD COLUMN `pid` bigint(20) NULL DEFAULT NULL COMMENT '父id' AFTER `id`;\n" +
+                "\n" +
+                "ALTER TABLE `ft_service_pm_pj2022003778`.`qqch_qc_topic_list` MODIFY COLUMN `pt_var5` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '预留字段5' AFTER `pt_var4`;\n" +
+                "\n" +
+                "ALTER TABLE `ft_service_pm_pj2022003778`.`xmsl_contract_info` MODIFY COLUMN `pt_var1` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '预留字段1  调整时返回生效版本id' AFTER `del_flag`;\n" +
+                "\n" +
+                "ALTER TABLE `ft_service_pm_pj2022003778`.`xmsl_draw_review_source_material` DROP INDEX `main_id`;\n" +
+                "\n" +
+                "ALTER TABLE `ft_service_pm_pj2022003778`.`xmsl_draw_review_source_material` ADD INDEX `main_id`(`main_id`, `wbs_code`, `list_code`) USING BTREE;\n";
+        StringBuffer sb = new StringBuffer();
+        SysTenantDb db = new SysTenantDb();
+        ArrayList<String> list = new ArrayList<>();
+        list.add("ft-1111");
+        list.add("ft-2222");
+        list.add("ft-3333");
+        for(String item:list){
+            String sbStr = new String(sql);
+            String newStr = sbStr.replaceAll("ft_service_pm_pj2022003778", item);
+            sb.append(newStr);
+        }
+        System.out.println(sb.toString());
+
+    }
+
 
 }
