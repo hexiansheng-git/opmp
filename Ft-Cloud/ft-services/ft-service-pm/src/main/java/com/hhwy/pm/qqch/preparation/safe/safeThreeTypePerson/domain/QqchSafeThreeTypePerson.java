@@ -28,6 +28,8 @@ public class QqchSafeThreeTypePerson  extends TreeNode<QqchSafeThreeTypePerson> 
     @JsonProperty
     private Long id;
 
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
     private Long pid;
     /**
      * 字段描述：职务

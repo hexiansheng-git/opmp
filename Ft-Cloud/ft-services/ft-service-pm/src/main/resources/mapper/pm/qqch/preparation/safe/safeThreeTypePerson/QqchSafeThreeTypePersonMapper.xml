@@ -7,6 +7,7 @@
     <resultMap type="com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.domain.QqchSafeThreeTypePerson"
                id="QqchSafeThreeTypePersonResultMap">
         <result property="id" column="id"/>
+        <result property="pid" column="pid"/>
         <result property="duties" column="duties"/>
         <result property="personName" column="person_name"/>
         <result property="personId" column="person_id"/>
@@ -35,7 +36,6 @@
         <result property="delFlag" column="del_flag"/>
         <result property="ptVar1" column="pt_var1"/>
         <result property="ptVar2" column="pt_var2"/>
-        <result property="pid" column="pid"/>
     </resultMap>
     <sql id="selectQqchSafeThreeTypePersonVo">
         select `id`
