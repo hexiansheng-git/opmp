@@ -1,12 +1,14 @@
 package com.hhwy.pm.qqch.preparation.sbch.equAllot.domain;
 
 import com.hhwy.common.core.web.domain.BaseEntity;
+import lombok.Data;
 
 /**
  * 功能：现场设备查询实体
  * 作者: fushudong
  * 时间: 2023/10/23
  */
+@Data
 public class ActiveEquVo {
     //页码
     private String pageNum;
