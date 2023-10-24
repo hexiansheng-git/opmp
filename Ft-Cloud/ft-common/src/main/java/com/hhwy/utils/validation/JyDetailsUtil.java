@@ -143,18 +143,40 @@ public class JyDetailsUtil {
     }
 
     /**
-     * 树列表平铺后只校验叶子节点数据
+     * 树列表平铺后不校验根节点
      *
      * @param detailList
      * @param getPid     如何获取根节点
      * @param groups
      * @param <T>
      */
-    public static <T> void jyRootDetails(List<T> detailList, Function<T, Long> getPid, Class<?>... groups) {
+    public static <T> void jyExceptRootDetails(List<T> detailList, Function<T, Long> getPid, Class<?>... groups) {
         StringBuilder str = new StringBuilder();
         for (T t : detailList) {
             Long pid = getPid.apply(t);
             if (pid != null) {
+                jy(str, t, groups);
+            }
+        }
+        if (!"".contentEquals(str)) {
+            log.error(str.toString());
+            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, str.toString());
+        }
+    }
+
+    /**
+     * 树列表平铺后只校验根节点数据
+     *
+     * @param detailList
+     * @param getPid     如何获取根节点
+     * @param groups
+     * @param <T>
+     */
+    public static <T> void jyRoot(List<T> detailList, Function<T, Long> getPid, Class<?>... groups) {
+        StringBuilder str = new StringBuilder();
+        for (T t : detailList) {
+            Long pid = getPid.apply(t);
+            if (pid == null) {
                 jy(str, t, groups);
             }
         }

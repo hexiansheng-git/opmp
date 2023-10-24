@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author zqq
@@ -41,14 +40,14 @@ public class QqchPerformInspectionController extends BaseController {
     private IXmslProjectBasicInfoService projectBasicInfoService;
 
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:list")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:list")
     @GetMapping
     public AjaxResult getQqchPerformInspection(@Validated(ValidationGroups.Get.class) QqchPerformInspection qqchPerformInspectionParam) {
         QqchPerformInspection qqchPerformInspection = qqchPerformInspectionService.getQqchPerformInspection(qqchPerformInspectionParam);
         return AjaxResult.success(qqchPerformInspection);
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:list")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:list")
     @GetMapping("/list")
     public AjaxResult getQqchPerformInspectionList(@Validated(ValidationGroups.Select.class) QqchPerformInspection qqchPerformInspectionParam) {
         startPage();
@@ -56,7 +55,7 @@ public class QqchPerformInspectionController extends BaseController {
         return getDataTableAjaxResult(qqchPerformInspectionList);
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:add")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:save")
     @PostMapping("/add")
     public AjaxResult insertQqchPerformInspection(@Validated(ValidationGroups.Save.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         try{
@@ -70,14 +69,14 @@ public class QqchPerformInspectionController extends BaseController {
         }
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:add")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:save")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchPerformInspectionList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchPerformInspection> qqchPerformInspectionListParam) {
         qqchPerformInspectionService.insertQqchPerformInspectionList(qqchPerformInspectionListParam);
         return AjaxResult.success(qqchPerformInspectionListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:update")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:save")
     @PostMapping("/update")
     public AjaxResult updateQqchPerformInspection(@Validated(ValidationGroups.Update.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         try{
@@ -93,19 +92,19 @@ public class QqchPerformInspectionController extends BaseController {
 
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:update")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:save")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchPerformInspectionList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchPerformInspection> qqchPerformInspectionListParam) {
         return toAjax(qqchPerformInspectionService.updateQqchPerformInspectionList(qqchPerformInspectionListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchPerformInspection(@Validated(ValidationGroups.Delete.class) @RequestBody QqchPerformInspection qqchPerformInspectionParam) {
         return toAjax(qqchPerformInspectionService.deleteQqchPerformInspection(qqchPerformInspectionParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
+//    @PreAuthorize(hasPermi = "qqchPerformInspection:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchPerformInspectionByPks(@PathVariable Long[] ids) {
         List<Long> qqchPerformInspectionPkList = Arrays.asList(ids);

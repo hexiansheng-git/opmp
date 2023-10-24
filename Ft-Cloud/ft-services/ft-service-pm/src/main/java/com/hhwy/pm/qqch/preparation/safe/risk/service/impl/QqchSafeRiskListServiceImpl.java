@@ -1,17 +1,8 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.module.contant.Valid;
-import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
@@ -19,13 +10,18 @@ import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zq
@@ -41,8 +37,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
     @Autowired
     private IQqchReviewService qqchReviewService;
-    @Autowired
-    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+
 
     public QqchSafeRiskList getQqchSafeRiskList(QqchSafeRiskList qqchSafeRiskList) {
         return qqchSafeRiskListMapper.getQqchSafeRiskList(qqchSafeRiskList);
@@ -91,8 +86,14 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
                 qqchSafeRiskList.setType(qqchSafeRiskListVo.getType());
                 List<QqchSafeRiskListDetail> detailList = qqchSafeRiskList.getDetailList();
                 if(!ObjectNullUtil.isEmpty(detailList)){
+                    detailList = ListTreeUtil.formatList(
+                            detailList,
+                            QqchSafeRiskListDetail::setId,
+                            QqchSafeRiskListDetail::setPid,
+                            QqchSafeRiskListDetail::setSort,
+                            QqchSafeRiskListDetail::getChildren,
+                            QqchSafeRiskListDetail::setChildren);
                     for (QqchSafeRiskListDetail qqchSafeRiskListDetail : detailList) {
-                        qqchSafeRiskListDetail.setId(IdWorker.createId());
                         qqchSafeRiskListDetail.setInfoId(qqchSafeRiskList.getId());
                         qqchSafeRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
                         qqchSafeRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
@@ -168,7 +169,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
                     for (QqchSafeRiskListDetail detail : parentList) {
                         if(!ObjectNullUtil.isEmpty(groupByPidMap.get(detail.getId()))){
                             List<QqchSafeRiskListDetail> childrenList = groupByPidMap.get(detail.getId());
-                            detail.setChildrenList(childrenList);
+                            detail.setChildren(childrenList);
                         }
                     }
                     safeRiskList.setDetailList(parentList);

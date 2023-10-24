@@ -12,6 +12,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -148,6 +149,11 @@ public class QqchPersonControlPlan extends BaseEntity {
     @Excel(name = "备注")
     private String remark;
     /**
+     * 字段描述：排序
+     */
+    @JsonProperty
+    private Integer sort;
+    /**
      * 字段描述：所属区域id
      */
     @JsonSerialize(using = ToStringSerializer.class)
@@ -261,4 +267,6 @@ public class QqchPersonControlPlan extends BaseEntity {
     @JsonProperty
     @Excel(name = "预留字段5")
     private String ptVar5;
+
+    private List<QqchPersonControlPlan> children;
 }

@@ -14,12 +14,13 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.tree.TreeUtil;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -77,7 +78,7 @@ public class QqchMonitorDataParamServiceImpl implements IQqchMonitorDataParamSer
             // 校验非空 根节点不校验
             if (!ButtonMark.SAVE.equals(buttonMark)) {
                 JyDetailsUtil
-                    .jyRootDetails(list, QqchMonitorDataParam::getPid, ValidationGroups.Save.class);
+                    .jyExceptRootDetails(list, QqchMonitorDataParam::getPid, ValidationGroups.Save.class);
             }
 
             for (QqchMonitorDataParam qqchMonitorDataParam : list) {

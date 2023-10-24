@@ -7,15 +7,15 @@ import com.hhwy.pm.qqch.preparation.quality.duty.domain.QqchQualityPostDuty;
 import com.hhwy.pm.qqch.preparation.quality.duty.domain.vo.QqchQualityPostDutyVo;
 import com.hhwy.pm.qqch.preparation.quality.duty.service.IQqchQualityPostDutyService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -36,12 +36,21 @@ public class QqchQualityPostDutyController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityPostDuty:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchQualityPostDutyVo qqchQualityPostDutyVo = qqchQualityPostDutyService
             .getQqchQualityPostDutyList(version);
         return AjaxResult.success(qqchQualityPostDutyVo);
+    }
+
+    /**
+     * 9.1.2弹窗
+     * @return
+     */
+    @GetMapping("/getPopWindows")
+    public AjaxResult getPopWindows() throws ParserConfigurationException, IOException, SAXException {
+        List<QqchQualityPostDuty> list = qqchQualityPostDutyService.getPopWindows();
+        return AjaxResult.success(list);
     }
 
     /**
@@ -62,7 +71,6 @@ public class QqchQualityPostDutyController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchQualityPostDuty:list")
     @GetMapping("/getPageList")
     public AjaxResult getPageList() {
         // 获取最新版本

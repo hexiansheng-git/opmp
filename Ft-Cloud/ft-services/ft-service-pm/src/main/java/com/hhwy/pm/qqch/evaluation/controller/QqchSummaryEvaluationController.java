@@ -23,7 +23,7 @@ public class QqchSummaryEvaluationController extends BaseController {
     @Autowired
     private IQqchSummaryEvaluationService qqchSummaryEvaluationService;
 
-    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:list")
+//    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:list")
     @GetMapping("/getQqchSummaryEvaluation")
     public AjaxResult getQqchSummaryEvaluation(
         @Validated(ValidationGroups.Get.class) QqchSummaryEvaluation qqchSummaryEvaluationParam) {
@@ -32,7 +32,7 @@ public class QqchSummaryEvaluationController extends BaseController {
         return AjaxResult.success(qqchSummaryEvaluation);
     }
 
-    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:add")
+//    @PreAuthorize(hasPermi = "qqchSummaryEvaluation:add")
     @PostMapping("/save")
     public AjaxResult save(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchSummaryEvaluation qqchSummaryEvaluationParam) {

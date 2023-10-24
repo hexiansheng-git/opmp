@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
-import com.hhwy.common.core.web.domain.BaseEntity;
 import com.hhwy.utils.tree.TreeNode;
 import lombok.Data;
 
@@ -29,7 +28,9 @@ public class QqchSafeThreeTypePerson  extends TreeNode<QqchSafeThreeTypePerson> 
     @JsonProperty
     private Long id;
 
-    private Long pId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @JsonProperty
+    private Long pid;
     /**
      * 字段描述：职务
      */

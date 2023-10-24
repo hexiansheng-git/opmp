@@ -2,8 +2,15 @@ package com.hhwy.pm.ehr.service.impl;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.pm.ehr.domain.Attachment;
+import com.hhwy.pm.ehr.domain.PersonCertifyCompetency;
 import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.utils.exception.CustomBusinessException;
+import com.hhwy.utils.redisUtil.RedisUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -12,6 +19,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
@@ -26,7 +34,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -63,6 +73,14 @@ public class EhrServiceImpl implements IEhrService {
     @Value("${ehr.authPattern}")
     private String authPattern;
 
+    @Autowired
+    private static RedisUtils redisUtils;
+    static{
+        redisUtils = SpringUtils.getBean(RedisUtils.class);
+    }
+
+    public static final String KEY = "EHR::PersonCertifyCompetency";
+
     @Override
     public Map<String,Object> getCertList(String userName4A) throws  ParserConfigurationException, IOException, SAXException {
         String sessionId=this.getHrSessionId();
@@ -70,6 +88,92 @@ public class EhrServiceImpl implements IEhrService {
         String result = this.cretPost(certUrl, certParam);
         Map map = this.getCertInfo(result);
         return map;
+    }
+
+    @Override
+    public Map<String, List<PersonCertifyCompetency>> getCertListByUserName4As(String userName4As) throws  ParserConfigurationException, IOException, SAXException {
+        Map<String, List<PersonCertifyCompetency>> resultMap = new HashMap<>();
+        if(StringUtils.isBlank(userName4As)){
+            return resultMap;
+        }
+
+        String[] userName4AArr = userName4As.split(",");
+        Map<Object, Object> map = redisUtils.hGetAll(KEY);
+        for (String userName4A : userName4AArr) {
+            Object o = map.get(userName4A);
+            List<PersonCertifyCompetency> personCertifyCompetencyList = new ArrayList<>();
+            if(o == null){
+                Map<String, Object> certList = this.getCertList(userName4A);
+                Object personCertifyCompetency = certList.get("personCertifyCompetency");
+                personCertifyCompetencyList = this.getPersonCertifyCompetencyList(personCertifyCompetency);
+                redisUtils.hPut(KEY,userName4A, JSONArray.toJSONString(personCertifyCompetencyList));
+            }else {
+                Object[] personCertifyCompetencyArr = JSONArray.parseArray(o.toString()).toArray();
+                for (Object personObj : personCertifyCompetencyArr) {
+                    PersonCertifyCompetency personCertifyCompetency = JSONObject.parseObject(personObj.toString(), PersonCertifyCompetency.class);
+                    personCertifyCompetencyList.add(personCertifyCompetency);
+                }
+            }
+
+            resultMap.put(userName4A,personCertifyCompetencyList);
+        }
+        return resultMap;
+    }
+
+    private List<PersonCertifyCompetency> getPersonCertifyCompetencyList(Object personCertifyCompetencyObj){
+        List<PersonCertifyCompetency> personCertifyCompetencyList = new ArrayList<>();
+        Object[] personCertifyCompetencyArr = JSONArray.parseArray(personCertifyCompetencyObj.toString()).toArray();
+        for (Object personObj : personCertifyCompetencyArr) {
+            PersonCertifyCompetency personCertifyCompetency = new PersonCertifyCompetency();
+
+            Map<String,Object> CompetencyMap = JSONObject.parseObject(personObj.toString(), Map.class);
+            String categoryName = (String) CompetencyMap.get("category_name");
+            String certifiedCompetencyName = (String) CompetencyMap.get("certifiedCompetency_name");
+            String przcny = (String) CompetencyMap.get("przcny");
+            String levelNumber = (String) CompetencyMap.get("level_number");
+            String zymc = (String) CompetencyMap.get("zymc");
+            String categoryNumber = (String) CompetencyMap.get("category_number");
+            String appointUnit = (String) CompetencyMap.get("appointUnit");
+            String certifiedCompetencyNumber = (String) CompetencyMap.get("certifiedCompetency_number");
+            String levelName = (String) CompetencyMap.get("level_name");
+            String certificateNumber = (String) CompetencyMap.get("certificateNumber");
+            Boolean isHighest = (Boolean) CompetencyMap.get("isHighest");
+            String obtainDate = (String) CompetencyMap.get("obtainDate");
+
+            Object attachment = CompetencyMap.get("attachment");
+            List<Attachment> attachmentList = new ArrayList<>();
+            if(attachment != null){
+                Object[] attachmentArr = JSONArray.parseArray(attachment.toString()).toArray();
+                for (Object attachmentObj : attachmentArr) {
+                    Attachment attachment1 = new Attachment();
+                    Map<String,String> attachmentMap = JSONObject.parseObject(attachmentObj.toString(), Map.class);
+                    String name = attachmentMap.get("name");
+                    String id = attachmentMap.get("id");
+
+                    attachment1.setName(name);
+                    attachment1.setId(id);
+                    attachmentList.add(attachment1);
+                }
+            }
+
+            personCertifyCompetency.setCategoryName(categoryName);
+            personCertifyCompetency.setCertifiedCompetencyName(certifiedCompetencyName);
+            personCertifyCompetency.setPrzcny(przcny);
+            personCertifyCompetency.setLevelNumber(levelNumber);
+            personCertifyCompetency.setZymc(zymc);
+            personCertifyCompetency.setCategoryNumber(categoryNumber);
+            personCertifyCompetency.setAppointUnit(appointUnit);
+            personCertifyCompetency.setCertifiedCompetencyNumber(certifiedCompetencyNumber);
+            personCertifyCompetency.setLevelName(levelName);
+            personCertifyCompetency.setCertificateNumber(certificateNumber);
+            personCertifyCompetency.setIsHighest(isHighest);
+            personCertifyCompetency.setObtainDate(obtainDate);
+            personCertifyCompetency.setAttachmentList(attachmentList);
+
+            personCertifyCompetencyList.add(personCertifyCompetency);
+        }
+
+        return personCertifyCompetencyList;
     }
 
     private String getHrSessionId() throws  ParserConfigurationException, IOException, SAXException {

@@ -1,20 +1,15 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.domain;
 
-import com.hhwy.common.core.web.domain.BaseEntity;
-
-import java.util.Date;
-import java.math.BigDecimal;
-
-import com.hhwy.common.core.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
-import java.util.List;
-
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhwy.common.core.annotation.Excel;
+import com.hhwy.common.core.web.domain.BaseEntity;
 import lombok.Data;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zq
@@ -45,6 +40,10 @@ public class QqchSafeRiskListDetail extends BaseEntity {
     @JsonProperty
     @Excel(name = "qqch_safe_risk_list主表id")
     private Long infoId;
+    /**
+     * 字段描述：排序
+     */
+    private Integer sort;
     /**
      * 字段描述：作业类型
      */
@@ -157,7 +156,7 @@ public class QqchSafeRiskListDetail extends BaseEntity {
     @Excel(name = "预留字段2")
     private String ptVar2;
 
-    private List<QqchSafeRiskListDetail> childrenList;
+    private List<QqchSafeRiskListDetail> children;
 
     private  List<Long> infoIdList;
 }

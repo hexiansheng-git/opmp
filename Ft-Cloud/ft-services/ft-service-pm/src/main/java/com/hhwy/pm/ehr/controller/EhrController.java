@@ -44,6 +44,14 @@ public class EhrController {
         return AjaxResult.success("1");
     }
 
-
+    @PostMapping("test3")
+    public AjaxResult test3(String userNames){
+        try {
+            ehrService.getCertListByUserName4As(userNames);
+        } catch (ParserConfigurationException | IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+        return AjaxResult.success("1");
+    }
 
 }
