@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.safe.risk.service;
 
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
 
 import java.util.List;
 
@@ -29,5 +30,5 @@ public interface IQqchSafeRiskListService {
 
     int deleteQqchSafeRiskListByPks(List<Long> qqchSafeRiskListPkList);
 
-    QqchSafeRiskListVo getList(QqchSafeRiskListVo qqchSafeRiskListVo);
+    QqchSafeRiskListVo getList(SafeRiskListQueryVo queryVo);
 }

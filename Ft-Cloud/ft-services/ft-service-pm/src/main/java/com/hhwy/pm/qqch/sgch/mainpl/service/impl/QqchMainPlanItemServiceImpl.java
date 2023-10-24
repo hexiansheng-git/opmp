@@ -108,6 +108,8 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
             for (QqchMainPlanItem qqchMainPlanItem1 : qqchMainPlanItemList) {
                 qqchMainPlanItem1.setText(qqchMainPlanItem1.getItemName());
                 qqchMainPlanItem1.setParent(qqchMainPlanItem1.getPid());
+                if(qqchMainPlanItem1.getTotalFloat() != null)
+                    qqchMainPlanItem1.setTotalFloat(new BigDecimal(qqchMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_HALF_UP).intValue());
 
                 // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
                 Date start_date = qqchMainPlanItem1.getActualStartDate() != null

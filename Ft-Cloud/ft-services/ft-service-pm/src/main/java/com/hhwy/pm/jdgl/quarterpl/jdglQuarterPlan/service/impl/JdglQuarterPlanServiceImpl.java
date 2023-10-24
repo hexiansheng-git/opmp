@@ -78,6 +78,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
         if(jdglQuarterPlan1 != null) {
             if(jdglQuarterPlan1.getThisPlanValueDl() != null) jdglQuarterPlan1.setThisPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+//            if(jdglQuarterPlan1.getYearPlanValueDl() != null) jdglQuarterPlan1.setYearPlanValueDl(jdglQuarterPlan1.getYearPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
             List<JdglQuarterValuePlan> jdglQuarterValuePlanListByPlanId = iJdglQuarterValuePlanService.getJdglQuarterValuePlanListByPlanId(jdglQuarterPlan1.getId());
             jdglQuarterPlan1.setJdglQuarterValuePlanList(jdglQuarterValuePlanListByPlanId);
             List<JdglQuarterImagePlan> jdglQuarterImagePlanListByPlanId = iJdglQuarterImagePlanService.getJdglQuarterImagePlanListByPlanId(jdglQuarterPlan1.getId());
@@ -160,7 +161,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
         JdglYearPlan usingYearPlanByYear = jdglYearPlanService.getUsingYearPlanByYear(year1);
         if(usingYearPlanByYear != null) {
-            jdglQuarterPlanParam.setYearPlanValueDl(usingYearPlanByYear.getYearPlanValueDl());
+            jdglQuarterPlanParam.setYearPlanValueDl(usingYearPlanByYear.getYearPlanValueDl() == null ? BigDecimal.ZERO : usingYearPlanByYear.getYearPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         }
 
         // 根据期次获取开累产值数据
@@ -283,7 +284,6 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
         jdglQuarterPlan.setIsUse("0");
-        int i = jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
 
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
@@ -293,8 +293,12 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             });
             iJdglQuarterImagePlanService.insertJdglQuarterImagePlanList(imagePlans);
         }
+        BigDecimal thisPlanAmt = iJdglQuarterImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglQuarterPlan.getExchangeRate();
+        jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
-        return i;
+        return jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
     }
 
     @Transactional

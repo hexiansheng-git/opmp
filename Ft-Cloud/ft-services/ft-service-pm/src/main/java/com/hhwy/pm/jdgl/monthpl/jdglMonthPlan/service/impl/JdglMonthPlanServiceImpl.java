@@ -170,7 +170,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanMapper.getJdglQuarterPlan(jdglQuarterPlan);
 
         if(jdglQuarterPlan1 != null) {
-            jdglMonthPlanParam.setQuarterPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl());
+            jdglMonthPlanParam.setQuarterPlanValueDl(jdglQuarterPlan1.getThisPlanValueDl()  == null ? BigDecimal.ZERO : jdglQuarterPlan1.getThisPlanValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         }
 
         // 计算合同、产值数据
@@ -181,7 +181,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
         BigDecimal countValue = jdglDayScheduleService.getCountValue(startQ, startM);
 
-        jdglMonthPlanParam.setQuarterCompValueDl(countValue);
+        jdglMonthPlanParam.setQuarterCompValueDl(countValue  == null ? BigDecimal.ZERO : countValue.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         if(jdglMonthPlanParam.getQuarterPlanValueDl() == null) jdglMonthPlanParam.setQuarterPlanValueDl(new BigDecimal(0));
         if(jdglMonthPlanParam.getQuarterCompValueDl()== null) jdglMonthPlanParam.setQuarterCompValueDl(new BigDecimal(0));
         jdglMonthPlanParam.setRemainQuarterAmtDl(jdglMonthPlanParam.getQuarterPlanValueDl().subtract(jdglMonthPlanParam.getQuarterCompValueDl()));
@@ -291,8 +291,6 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
         jdglMonthPlan.setIsUse("0");
-        int i = jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
-
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
             List<JdglMonthImagePlan> imagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
@@ -302,7 +300,12 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             iJdglMonthImagePlanService.insertJdglMonthImagePlanList(imagePlans);
         }
 
-        return i;
+        BigDecimal thisPlanAmt = iJdglMonthImagePlanService.getThisPlanAmt(id);
+        BigDecimal exchangeRate = jdglMonthPlan.getExchangeRate();
+        jdglMonthPlan.setThisPlanValueCu(thisPlanAmt);
+        jdglMonthPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
+
+        return jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
     }
 
     @Transactional

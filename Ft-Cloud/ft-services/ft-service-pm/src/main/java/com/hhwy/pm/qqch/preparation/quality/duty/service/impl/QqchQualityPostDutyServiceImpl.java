@@ -2,6 +2,8 @@ package com.hhwy.pm.qqch.preparation.quality.duty.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.ehr.domain.PersonCertifyCompetency;
+import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -14,12 +16,18 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author zhenglili
@@ -35,6 +43,8 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
+    @Autowired
+    private IEhrService ehrService;
 
     /**
      * 列表
@@ -104,6 +114,26 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
         QqchQualityPostDuty qryParam = new QqchQualityPostDuty();
         qryParam.setVersion(version);
         List<QqchQualityPostDuty> list = qqchQualityPostDutyMapper.getQqchQualityPostDutyList(qryParam);
+        return list;
+    }
+
+    /**
+     * 9.1.2弹窗
+     * @return
+     */
+    @Override
+    public List<QqchQualityPostDuty> getPopWindows() throws ParserConfigurationException, IOException, SAXException {
+        BigDecimal version = VersionUtil.getVersion("qqch_quality_post_duty", null);
+        List<QqchQualityPostDuty> list = qqchQualityPostDutyMapper.getDistinctQualityPostDutyList(version);
+
+        String userName4As = list.stream().map(QqchQualityPostDuty::getPersonId).collect(Collectors.joining());
+        Map<String, List<PersonCertifyCompetency>> certList = ehrService.getCertListByUserName4As(userName4As);
+
+        list.stream().forEach(duty -> {
+            String personId = duty.getPersonId();
+            List<PersonCertifyCompetency> personCertifyCompetencyList = certList.get(personId);
+            duty.setPersonCertifyCompetencyList(personCertifyCompetencyList);
+        });
         return list;
     }
 }
