@@ -9,6 +9,7 @@ import com.hhwy.utils.excel.FtExcel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -119,6 +120,10 @@ public class Review extends CommonBaseEntity {
     @JsonProperty
     @FtExcel(name = "编制完成数量")
     private Integer finishNum;
+    
+    //编制完成比例
+    private BigDecimal finishRatio;
+    
     /**
      * 字段描述：紧急程度 0特急 1紧急 2 正常
      */
@@ -229,4 +234,7 @@ public class Review extends CommonBaseEntity {
 
     private Long projectId;
     private String projectName;
+    
+    //当前状态
+    private String taskStatusDesc;
 }

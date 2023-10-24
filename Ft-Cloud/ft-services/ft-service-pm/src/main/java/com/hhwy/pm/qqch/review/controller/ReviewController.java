@@ -5,10 +5,14 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.qqchWorkPlan.service.IQqchWorkPlanService;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.utils.Constant;
 import com.hhwy.utils.JsonUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -17,6 +21,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +62,48 @@ public class ReviewController extends BaseController {
     public AjaxResult getQqchReviewList(@Validated(ValidationGroups.Select.class) Review reviewParam) {
         startPage();
         List<Review> reviewList = qqchReviewService.getQqchReviewList(reviewParam);
+        
         return getDataTableAjaxResult(reviewList);
+    }
+
+    /**
+     *  处理前期策划流程状态等字段
+     * @return
+     */
+    public List<Review> handlerReviewList(List<Review> list){
+        //根据阶段不同，会走不同的流程
+        List<Review> review1List = new ArrayList<>();   //1,2阶段流程
+        List<Review> review3List = new ArrayList<>();   //3阶段流程
+        list.stream().forEach(r->{
+            List temp = r.getPlanStage().equals("3")?review3List:review1List;
+            temp.add(r);
+        });
+        FlowInfoSearchUtil.getFlowInfo(review1List, FlowEnum.QQCH_REVIEW1);
+        FlowInfoSearchUtil.getFlowInfo(review3List, FlowEnum.QQCH_REVIEW2);
+        //处理完成百分比、创建日期>发起日期、
+        for (int i = 0; i < list.size(); i++) {
+            Review review = list.get(i);
+            review.setInitDate(review.getCreateTime());
+            BigDecimal ratio = BigDecimalUtils.divideMay0(review.getFinishNum(),review.getPlanNum() , 4, BigDecimal.ROUND_HALF_UP);
+            review.setFinishRatio(ratio.multiply(new BigDecimal(100)));
+            //处理状态字段 0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
+            String taskStatusDesc = "";
+            if(review.getTaskStatus().equals("0")){
+                if(review.getFinishNum() <= 0){
+                    taskStatusDesc ="未编制"; 
+                }else if(review.getFinishNum() >= review.getPlanNum()){
+                    taskStatusDesc ="编制完成";
+                }else{
+                    taskStatusDesc ="正在编制";
+                }                         
+            }else if(review.getTaskStatus().equals("4")){ //审批结束
+                taskStatusDesc ="审批完成";
+            }else{
+                taskStatusDesc ="正在审批";
+            }
+            review.setTaskStatus(taskStatusDesc);
+        }
+        return list;
     }
 
 //    @PreAuthorize(hasPermi = "qqchReview:add")
