@@ -1,26 +1,22 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.controller;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 //import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
@@ -101,12 +97,12 @@ public class QqchSafeRiskListController extends BaseController {
     /**
      * 列表
      *
-     * @param qqchSafeRiskListVo
+     * @param queryVo
      * @return
      */
 //    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(@Validated(ValidationGroups.Select.class) QqchSafeRiskListVo qqchSafeRiskListVo) {
-         return AjaxResult.success(qqchSafeRiskListService.getList(qqchSafeRiskListVo));
+    public AjaxResult getList(SafeRiskListQueryVo queryVo) {
+         return AjaxResult.success(qqchSafeRiskListService.getList(queryVo));
     }
 }

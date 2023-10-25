@@ -6,13 +6,16 @@ import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -139,33 +142,26 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     }
 
     @Override
-    public QqchSafeRiskListVo getList(QqchSafeRiskListVo qqchSafeRiskListVo) {
+    public QqchSafeRiskListVo getList(SafeRiskListQueryVo queryVo) {
+        QqchSafeRiskListVo qqchSafeRiskListVo = new QqchSafeRiskListVo();
         BigDecimal version = qqchSafeRiskListVo.getVersion();
-        if(ObjectNullUtil.isEmpty(version)){/*查询当前最大有效版本*/
-            version = qqchSafeRiskListMapper.selectMaxVersion(qqchSafeRiskListVo);
-        }else{/*查询当前最接近（小于等于）指定版本的版本号*/
-            version = qqchSafeRiskListMapper.selectLessOrEqualAssignVersion(qqchSafeRiskListVo);
-        }
+        version = VersionUtil.getVersion("qqch_safe_risk_list",version);
         QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
         qqchSafeRiskList.setVersion(version);
         qqchSafeRiskList.setType(qqchSafeRiskListVo.getType());
+        qqchSafeRiskList.setWbsId(qqchSafeRiskList.getWbsId());
         List<QqchSafeRiskList> infoList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList);
-        if(!ObjectNullUtil.isEmpty(infoList)){
-            List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
+        if(!Collections.isEmpty(infoList)){
+            List<Long> infoIdList = infoList.stream().map(QqchSafeRiskList::getId).collect(Collectors.toList());
             QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
             qqchSafeRiskListDetail.setInfoIdList(infoIdList);
             List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListDetailService.getQqchSafeRiskListDetailList(qqchSafeRiskListDetail);
-            Map<Long, List<QqchSafeRiskListDetail>> detailListMap = detailList.stream().collect(Collectors.groupingBy(t -> t.getInfoId()));
+            Map<Long, List<QqchSafeRiskListDetail>> detailListMap = detailList.stream().collect(Collectors.groupingBy(QqchSafeRiskListDetail::getInfoId));
             for (QqchSafeRiskList safeRiskList : infoList) {
                 if(!ObjectNullUtil.isEmpty(detailListMap.get(safeRiskList.getId()))){
                     List<QqchSafeRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeRiskList.getId());
-                    List<QqchSafeRiskListDetail> parentList = qqchSafeEnvirRiskListDetails.stream().filter(t -> {
-                        if ((t.getPid() == Long.parseLong("0"))) {
-                            return true;
-                        }
-                        return false;
-                    }).collect(Collectors.toList());
-                    Map<Long, List<QqchSafeRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(t -> t.getPid()));
+                    List<QqchSafeRiskListDetail> parentList = qqchSafeEnvirRiskListDetails.stream().filter(t -> t.getPid() == null).collect(Collectors.toList());
+                    Map<Long, List<QqchSafeRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(QqchSafeRiskListDetail::getPid));
                     for (QqchSafeRiskListDetail detail : parentList) {
                         if(!ObjectNullUtil.isEmpty(groupByPidMap.get(detail.getId()))){
                             List<QqchSafeRiskListDetail> childrenList = groupByPidMap.get(detail.getId());

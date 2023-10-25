@@ -98,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 </foreach>
             </if>
         </where>
-        order by de.`id` desc
+#         order by de.`id` desc
     </select>
 
     <select id="selectSupplierList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentSupplierDetails" resultMap="SbchEquipmentSupplierDetailsResult">
