@@ -270,7 +270,7 @@
             #{item.deptId},
             #{item.projectId},
             #{item.regionId},
-            #{item.region}),
+            #{item.region},
             #{item.amountPrice})
         </foreach>
     </insert>
