@@ -35,7 +35,7 @@ public class MarketSurveyController extends BaseController {
     /**
      * 查询市场调查列表
      */
-    @PreAuthorize(hasPermi ="market:survey:list")
+//    @PreAuthorize(hasPermi ="market:survey:list")
     @PostMapping("/list")
     public AjaxResult list(@RequestBody MarketSurvey marketSurvey) {
         startPage(marketSurvey.getPageNum(),marketSurvey.getPageSize());
@@ -50,7 +50,7 @@ public class MarketSurveyController extends BaseController {
     /**
      * 导出市场调查列表
      */
-    @PreAuthorize(hasPermi ="market:survey:export")
+//    @PreAuthorize(hasPermi ="market:survey:export")
     @PostMapping("/export")
     public void export(@RequestBody MarketSurvey marketSurvey, HttpServletResponse response)throws Exception {
         List<MarketSurvey> list = marketSurveyService.selectMarketSurveyList(marketSurvey);
@@ -62,7 +62,7 @@ public class MarketSurveyController extends BaseController {
     /**
      * 新增保存市场调查
      */
-    @PreAuthorize(hasPermi ="market:survey:add")
+//    @PreAuthorize(hasPermi ="market:survey:add")
     @PostMapping("/add")
     public AjaxResult addSave(@RequestBody MarketSurvey marketSurvey) {
         return toAjax(marketSurveyService.insertMarketSurvey(marketSurvey));
@@ -70,7 +70,7 @@ public class MarketSurveyController extends BaseController {
 
 
     @PostMapping("/addPage")
-    @PreAuthorize(hasPermi ="market:survey:addPage")
+//    @PreAuthorize(hasPermi ="market:survey:addPage")
     public AjaxResult addPage(){
         MarketSurvey marketSurvey=new MarketSurvey();
         marketSurvey.setCreateTime(DateUtils.getNowDate());
@@ -82,7 +82,7 @@ public class MarketSurveyController extends BaseController {
     /**
      * 修改保存市场调查
      */
-    @PreAuthorize(hasPermi ="market:survey:edit")
+//    @PreAuthorize(hasPermi ="market:survey:edit")
     @PostMapping("/edit")
     public AjaxResult editSave(@RequestBody MarketSurvey marketSurvey) {
         return toAjax(marketSurveyService.updateMarketSurvey(marketSurvey));
@@ -91,7 +91,7 @@ public class MarketSurveyController extends BaseController {
     /**
      * 删除市场调查
      */
-    @PreAuthorize(hasPermi ="market:survey:remove")
+//    @PreAuthorize(hasPermi ="market:survey:remove")
     @PostMapping( "/remove")
     public AjaxResult remove(@RequestBody List<String> ids) {
         String strIds = StringUtils.join(ids.toArray(), ",");
