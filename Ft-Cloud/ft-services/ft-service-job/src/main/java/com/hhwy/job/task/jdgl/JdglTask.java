@@ -4,7 +4,7 @@ import com.hhwy.job.feign.service.PmServiceApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("jdglTask")
+@Component("JdglTask")
 public class JdglTask {
 
     @Autowired
