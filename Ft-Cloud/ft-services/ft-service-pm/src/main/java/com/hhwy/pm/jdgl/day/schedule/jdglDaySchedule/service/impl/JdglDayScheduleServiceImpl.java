@@ -55,8 +55,8 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
         if(jdglDaySchedule1 != null) {
 
-            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
-            jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+            jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
 
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
             jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
@@ -76,6 +76,10 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
     public JdglDaySchedule getJdglDayScheduleByPerson(JdglDaySchedule jdglDayScheduleParam) {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDayScheduleParam);
         if(jdglDaySchedule1 != null) {
+
+            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+            jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
             jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
 //            jdglDayScheduleWbs.setEditer(userName);
@@ -157,13 +161,16 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         List<JdglDaySchedule> jdglDayScheduleList = jdglDayScheduleMapper.getJdglDayScheduleList(jdglDaySchedule);
         String tenantKey = SecurityUtils.getTenantKey();
         if(!CollectionUtils.isEmpty(jdglDayScheduleList)) {
-//            for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
+            for (JdglDaySchedule jdglDaySchedule1 : jdglDayScheduleList) {
+                jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+                jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule1.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+
 //                JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
 //                jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
 //                // 懒加载
 //                List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
 //                jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
-//            }
+            }
         }
         FlowInfoSearchUtil.getFlowInfo(jdglDayScheduleList,FlowEnum.JDGL_DAYSCHEDULE);
         return jdglDayScheduleList;
