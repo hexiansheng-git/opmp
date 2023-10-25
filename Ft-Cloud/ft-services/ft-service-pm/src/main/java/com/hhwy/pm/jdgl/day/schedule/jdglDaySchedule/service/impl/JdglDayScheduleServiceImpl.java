@@ -54,8 +54,13 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
     public JdglDaySchedule getJdglDaySchedule(JdglDaySchedule jdglDaySchedule) {
         JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
         if(jdglDaySchedule1 != null) {
+
+            jdglDaySchedule1.setDayValueDl(jdglDaySchedule1.getDayValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule.getDayValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+            jdglDaySchedule1.setTotalValueDl(jdglDaySchedule1.getTotalValueDl() == null ? BigDecimal.ZERO : jdglDaySchedule.getTotalValueDl().divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
             jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
+
 //            jdglDayScheduleWbs.setEditer(userName);
 //             懒加载
 //            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
