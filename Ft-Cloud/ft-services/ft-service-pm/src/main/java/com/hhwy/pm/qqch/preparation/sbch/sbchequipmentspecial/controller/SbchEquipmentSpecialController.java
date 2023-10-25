@@ -48,7 +48,7 @@ public class SbchEquipmentSpecialController extends BaseController {
     /**
      * 查询特种设备管理列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:special:list")
+//    @PreAuthorize(hasPermi ="equipmentspecial:special:list")
     @PostMapping("/list")
    // @CustomLogger(title = "特种设备管理-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
@@ -66,7 +66,7 @@ public class SbchEquipmentSpecialController extends BaseController {
     /**
      * 导出特种设备管理列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:special:export")
+//    @PreAuthorize(hasPermi ="equipmentspecial:special:export")
    // @CustomLogger(title = "特种设备管理-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -83,7 +83,7 @@ public class SbchEquipmentSpecialController extends BaseController {
     /**
      * 新增保存特种设备管理
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:special:add")
+//    @PreAuthorize(hasPermi ="equipmentspecial:special:add")
    // @CustomLogger(title = "特种设备管理-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -102,7 +102,7 @@ public class SbchEquipmentSpecialController extends BaseController {
     /**
      * 修改保存特种设备管理
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:special:edit")
+//    @PreAuthorize(hasPermi ="equipmentspecial:special:edit")
    // @CustomLogger(title = "特种设备管理-编辑",businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -121,7 +121,7 @@ public class SbchEquipmentSpecialController extends BaseController {
     /**
      * 删除特种设备管理
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:special:remove")
+//    @PreAuthorize(hasPermi ="equipmentspecial:special:remove")
    // @CustomLogger(title = "特种设备管理-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -45,7 +45,7 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 查询大型成套设备运输方案列表
      */
-    @PreAuthorize(hasPermi="train:info:list")
+//    @PreAuthorize(hasPermi="train:info:list")
     //@CustomLogger(title = "大型成套设备运输方案列表-查看", businessType = CustomBusinessType.SELECT)
     @PostMapping("/list")
     @ResponseBody
@@ -58,7 +58,7 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 导出大型成套设备运输方案列表
      */
-    @PreAuthorize(hasPermi="train:info:export")
+//    @PreAuthorize(hasPermi="train:info:export")
     //@CustomLogger(title = "大型成套设备运输方案列表-导出", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -75,7 +75,7 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 新增保存大型成套设备运输方案
      */
-    @PreAuthorize(hasPermi="train:info:add")
+//    @PreAuthorize(hasPermi="train:info:add")
     //@CustomLogger(title = "大型成套设备运输方案-新增保存", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -95,7 +95,7 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 修改保存大型成套设备运输方案
      */
-    @PreAuthorize(hasPermi="train:info:edit")
+//    @PreAuthorize(hasPermi="train:info:edit")
     //@CustomLogger(title = "大型成套设备运输方案-编辑保存", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -114,7 +114,7 @@ public class SbchMaterialTranPlanController extends BaseController {
     /**
      * 删除大型成套设备运输方案
      */
-    @PreAuthorize(hasPermi="train:info:remove")
+//    @PreAuthorize(hasPermi="train:info:remove")
     //@CustomLogger(title = "大型成套设备运输方案-编辑保存", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

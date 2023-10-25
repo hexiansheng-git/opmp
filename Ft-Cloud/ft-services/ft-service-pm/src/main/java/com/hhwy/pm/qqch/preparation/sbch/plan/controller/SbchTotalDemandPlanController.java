@@ -38,7 +38,7 @@ public class SbchTotalDemandPlanController extends BaseController {
      * @param version
      * @return
      */
-    @PreAuthorize(hasPermi = "sbchTotalDemandPlan:list")
+//    @PreAuthorize(hasPermi = "sbchTotalDemandPlan:list")
     @GetMapping("/getList")
     @ResponseBody
     public AjaxResult getList(BigDecimal version) {
@@ -46,7 +46,7 @@ public class SbchTotalDemandPlanController extends BaseController {
         return AjaxResult.success(sbchTotalDemandPlan);
     }
 
-    @PreAuthorize(hasPermi = "sbchTotalDemandPlan:add")
+//    @PreAuthorize(hasPermi = "sbchTotalDemandPlan:add")
     @PostMapping("/batchAdd")
     @ResponseBody
     public AjaxResult add(@Validated(ValidationGroups.Save.class) @RequestBody SbchTotalDemandPlan vo){

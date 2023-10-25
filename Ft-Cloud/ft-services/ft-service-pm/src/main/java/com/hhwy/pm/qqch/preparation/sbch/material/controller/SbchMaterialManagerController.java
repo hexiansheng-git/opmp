@@ -43,7 +43,7 @@ public class SbchMaterialManagerController extends BaseController {
     /**
      * 查询设备现场管理列表
      */
-    @PreAuthorize(hasPermi="material:manager:list")
+//    @PreAuthorize(hasPermi="material:manager:list")
     @PostMapping("/list")
     @ResponseBody
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchMaterialManager sbchMaterialManager) {
@@ -55,7 +55,7 @@ public class SbchMaterialManagerController extends BaseController {
     /**
      * 导出设备现场管理列表
      */
-    @PreAuthorize(hasPermi="material:manager:export")
+//    @PreAuthorize(hasPermi="material:manager:export")
     //@CustomLogger(title = "设备现场管理", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -74,7 +74,7 @@ public class SbchMaterialManagerController extends BaseController {
     /**
      * 新增保存设备现场管理
      */
-    @PreAuthorize(hasPermi="material:manager:add")
+//    @PreAuthorize(hasPermi="material:manager:add")
     //@CustomLogger(title = "设备现场管理", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -94,7 +94,7 @@ public class SbchMaterialManagerController extends BaseController {
     /**
      * 修改保存设备现场管理
      */
-    @PreAuthorize(hasPermi="material:manager:edit")
+//    @PreAuthorize(hasPermi="material:manager:edit")
     //@CustomLogger(title = "设备现场管理", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -113,7 +113,7 @@ public class SbchMaterialManagerController extends BaseController {
     /**
      * 删除设备现场管理
      */
-    @PreAuthorize(hasPermi="material:manager:remove")
+//    @PreAuthorize(hasPermi="material:manager:remove")
     //@CustomLogger(title = "设备现场管理", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

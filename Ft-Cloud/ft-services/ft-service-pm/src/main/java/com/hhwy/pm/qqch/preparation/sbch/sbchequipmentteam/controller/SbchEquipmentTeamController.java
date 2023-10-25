@@ -46,7 +46,7 @@ public class SbchEquipmentTeamController extends BaseController {
     /**
      * 查询协作单位设备管理列表
      */
-    @PreAuthorize(hasPermi ="equipmentteam:team:list")
+//    @PreAuthorize(hasPermi ="equipmentteam:team:list")
     @GetMapping("/getList")
     //@CustomLogger(title = "协作单位设备管理-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
@@ -59,7 +59,7 @@ public class SbchEquipmentTeamController extends BaseController {
     /**
      * 新增保存协作单位设备管理
      */
-    @PreAuthorize(hasPermi ="equipmentteam:team:add")
+//    @PreAuthorize(hasPermi ="equipmentteam:team:add")
     //@CustomLogger(title = "协作单位设备管理-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody

@@ -61,7 +61,7 @@ public class SbchEquipmentAllotTransnationalController extends BaseController {
     /**
      * 查询跨国别设备调拨列表
      */
-    @PreAuthorize(hasPermi="crosscountry:transfers:list")
+//    @PreAuthorize(hasPermi="crosscountry:transfers:list")
     @PostMapping("/list")
     //@CustomDatascope((title = "跨国别设备调拨-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody

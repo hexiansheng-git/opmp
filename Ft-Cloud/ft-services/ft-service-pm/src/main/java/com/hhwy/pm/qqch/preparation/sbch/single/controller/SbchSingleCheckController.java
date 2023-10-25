@@ -44,7 +44,7 @@ public class SbchSingleCheckController extends BaseController {
     /**
      * 查询单机核算策划列表
      */
-    @PreAuthorize(hasPermi="single:check:list")
+//    @PreAuthorize(hasPermi="single:check:list")
     @PostMapping("/list")
     @ResponseBody
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchSingleCheck sbchSingleCheck) {
@@ -56,7 +56,7 @@ public class SbchSingleCheckController extends BaseController {
     /**
      * 导出单机核算策划列表
      */
-    @PreAuthorize(hasPermi="single:check:export")
+//    @PreAuthorize(hasPermi="single:check:export")
     //@CustomLogger(title = "单机核算策划", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -75,7 +75,7 @@ public class SbchSingleCheckController extends BaseController {
     /**
      * 新增保存单机核算策划
      */
-    @PreAuthorize(hasPermi="single:check:add")
+//    @PreAuthorize(hasPermi="single:check:add")
     //@CustomLogger(title = "单机核算策划", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -97,7 +97,7 @@ public class SbchSingleCheckController extends BaseController {
     /**
      * 修改保存单机核算策划
      */
-    @PreAuthorize(hasPermi="single:check:edit")
+//    @PreAuthorize(hasPermi="single:check:edit")
     //@CustomLogger(title = "单机核算策划", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -117,7 +117,7 @@ public class SbchSingleCheckController extends BaseController {
     /**
      * 删除单机核算策划
      */
-    @PreAuthorize(hasPermi="single:check:remove")
+//    @PreAuthorize(hasPermi="single:check:remove")
     //@CustomLogger(title = "单机核算策划", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

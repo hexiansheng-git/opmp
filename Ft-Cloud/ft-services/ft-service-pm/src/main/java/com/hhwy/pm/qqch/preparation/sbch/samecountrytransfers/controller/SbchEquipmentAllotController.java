@@ -40,7 +40,7 @@ public class SbchEquipmentAllotController extends BaseController {
     /**
      * 查询同国别设备列表
      */
-    @PreAuthorize(hasPermi ="samecountry:transfers:list")
+//    @PreAuthorize(hasPermi ="samecountry:transfers:list")
     @GetMapping("/list")
     //@CustomLogger(title = "同国别-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchEquipmentAllot sbchEquipmentAllot) {
@@ -56,7 +56,7 @@ public class SbchEquipmentAllotController extends BaseController {
     /**
      * 新增保存同国别设备
      */
-    @PreAuthorize(hasPermi ="samecountry:transfers:add")
+//    @PreAuthorize(hasPermi ="samecountry:transfers:add")
     //@CustomLogger(title = "同国别-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentAllotDTO sbchEquipmentAllot) {

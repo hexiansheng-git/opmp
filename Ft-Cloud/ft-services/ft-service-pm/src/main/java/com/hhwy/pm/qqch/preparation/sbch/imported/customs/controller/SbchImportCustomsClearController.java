@@ -42,7 +42,7 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 查询清关档案策划列表
      */
-     @PreAuthorize(hasPermi="customs:clear:list")
+//     @PreAuthorize(hasPermi="customs:clear:list")
     @PostMapping("/list")
     @ResponseBody
     public AjaxResult list(@Validated(ValidationGroups.Select.class) @RequestBody SbchImportCustomsClear sbchImportCustomsClear) {
@@ -54,7 +54,7 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 导出清关档案策划列表
      */
-     @PreAuthorize(hasPermi="customs:clear:export")
+//     @PreAuthorize(hasPermi="customs:clear:export")
     //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -72,7 +72,7 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 新增保存清关档案策划
      */
-     @PreAuthorize(hasPermi="customs:clear:add")
+//     @PreAuthorize(hasPermi="customs:clear:add")
     //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -91,7 +91,7 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 修改保存清关档案策划
      */
-     @PreAuthorize(hasPermi="customs:clear:edit")
+//     @PreAuthorize(hasPermi="customs:clear:edit")
     //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -128,7 +128,7 @@ public class SbchImportCustomsClearController extends BaseController {
     /**
      * 删除清关档案策划
      */
-     @PreAuthorize(hasPermi="customs:clear:remove")
+//     @PreAuthorize(hasPermi="customs:clear:remove")
     //@CustomLogger(title = "清关档案策划", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

@@ -43,7 +43,7 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
     /**
      * 查询特种设备风险识别和措施策划列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:plan:list")
+//    @PreAuthorize(hasPermi ="equipmentspecial:plan:list")
     @PostMapping("/list")
     //@CustomLogger(title = "特种设备风险识别和措施策划-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
@@ -61,7 +61,7 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
     /**
      * 导出特种设备风险识别和措施策划列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:plan:export")
+//    @PreAuthorize(hasPermi ="equipmentspecial:plan:export")
     //@CustomLogger(title = "特种设备风险识别和措施策划-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -78,7 +78,7 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
     /**
      * 新增保存特种设备风险识别和措施策划
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:plan:add")
+//    @PreAuthorize(hasPermi ="equipmentspecial:plan:add")
     //@CustomLogger(title = "特种设备风险识别和措施策划-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -97,7 +97,7 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
     /**
      * 修改保存特种设备风险识别和措施策划
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:plan:edit")
+//    @PreAuthorize(hasPermi ="equipmentspecial:plan:edit")
     //@CustomLogger(title = "特种设备风险识别和措施策划-编辑",businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -116,7 +116,7 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
     /**
      * 删除特种设备风险识别和措施策划
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:special:remove")
+//    @PreAuthorize(hasPermi ="equipmentspecial:special:remove")
     //@CustomLogger(title = "特种设备管理-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
@@ -130,7 +130,7 @@ public class SbchEquipmentSpecialPlanController extends BaseController {
     /**
      * 选择特种设备风险识别和措施策划列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:plan:xzSpecialPlan")
+//    @PreAuthorize(hasPermi ="equipmentspecial:plan:xzSpecialPlan")
     @GetMapping("/xzSpecialPlan")
     //@CustomLogger(title = "特种设备风险识别和措施策划-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody

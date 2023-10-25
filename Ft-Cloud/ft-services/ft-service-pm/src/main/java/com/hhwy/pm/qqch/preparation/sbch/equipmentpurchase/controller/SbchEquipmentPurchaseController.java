@@ -39,7 +39,7 @@ public class SbchEquipmentPurchaseController extends BaseController {
     /**
      * 查询设备申购管理列表
      */
-    @PreAuthorize(hasPermi ="equipmentpurchase:purchase:list")
+//    @PreAuthorize(hasPermi ="equipmentpurchase:purchase:list")
     @GetMapping("/getList")
     //@CustomLogger(title = "设备申购-列表查询",businessType = CustomBusinessType.SELECT)
     public AjaxResult list(BigDecimal version) {
@@ -50,7 +50,7 @@ public class SbchEquipmentPurchaseController extends BaseController {
     /**
      * 新增保存设备申购管理
      */
-    @PreAuthorize(hasPermi ="equipmentpurchase:purchase:add")
+//    @PreAuthorize(hasPermi ="equipmentpurchase:purchase:add")
     //@CustomLogger(title = "设备申购-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchEquipmentPurchase sbchEquipmentPurchase) {

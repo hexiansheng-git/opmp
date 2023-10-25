@@ -34,7 +34,7 @@ public class SbchStaffingSpecialInfoController extends BaseController {
     /**
      * 查询特种设备人员配置策划列表
      */
-    @PreAuthorize(hasPermi="staffing:info:list")
+//    @PreAuthorize(hasPermi="staffing:info:list")
     //@CustomLogger(title = "种设备人员配置策划列表-查询", businessType = CustomBusinessType.SELECT)
     @GetMapping("/getList")
     @ResponseBody
@@ -46,7 +46,7 @@ public class SbchStaffingSpecialInfoController extends BaseController {
     /**
      * 新增保存设备人员配置-特种设备爱人员
      */
-    @PreAuthorize(hasPermi="specialStaffing:info:save")
+//    @PreAuthorize(hasPermi="specialStaffing:info:save")
     //@CustomLogger(title = "特种设备人员列表-添加保存", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
