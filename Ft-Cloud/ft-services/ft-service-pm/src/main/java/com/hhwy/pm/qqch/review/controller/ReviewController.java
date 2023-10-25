@@ -101,7 +101,7 @@ public class ReviewController extends BaseController {
             }else{
                 taskStatusDesc ="正在审批";
             }
-            review.setTaskStatus(taskStatusDesc);
+            review.setTaskStatusDesc(taskStatusDesc);
         }
         return list;
     }

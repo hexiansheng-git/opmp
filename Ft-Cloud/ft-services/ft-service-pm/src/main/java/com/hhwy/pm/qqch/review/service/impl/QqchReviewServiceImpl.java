@@ -104,7 +104,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     public List<Review> getQqchReviewList(Review review) {
         List<Review> qqchReviewList = reviewMapper.getQqchReviewList(review);
         for (Review review1 : qqchReviewList) {
-            String stage = review1.getStage();
+            String stage = review1.getPlanStage();
             if("1".equals(stage) || "2".equals(stage)){
                 FlowInfoSearchUtil.getFlowInfo(review1,FlowEnum.QQCH_REVIEW1);
             }else if("3".equals(stage)){
@@ -310,7 +310,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         review.setInitDate(new Date());
         review.setInitUserId(SecurityUtils.getUserId());
         review.setInitUserName(SecurityUtils.getUserName());
-        String stage = review.getStage();
+        String stage = review.getPlanStage();
         if("1".equals(stage) || "2".equals(stage)){
             FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW1);
         }else if("3".equals(stage)){
