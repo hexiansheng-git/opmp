@@ -526,7 +526,7 @@
             jds.day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
             jds.day_value_dl= (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id )*ifnull(jds.exchange_rate,1),
             jds.total_value_cu = ifnull(queryjds.total_value_cu, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),0),
-            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),0)*ifnull(jds.exchange_rate,0)
+            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id )/10000,0)*ifnull(jds.exchange_rate,0)
         where jds.id = #{id}
 
     </update>
