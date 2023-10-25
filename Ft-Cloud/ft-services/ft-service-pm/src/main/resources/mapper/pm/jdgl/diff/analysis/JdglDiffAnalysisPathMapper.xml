@@ -166,7 +166,7 @@
             <if test="projectId != null ">and `project_id` = #{projectId}</if>
             <if test="projectName != null  and projectName != ''">and `project_name` = #{projectName}</if>
         </where>
-        order by create_time desc
+        order by sort asc, plan_item_code asc
     </select>
 
     <insert id="insertJdglDiffAnalysisPath" useGeneratedKeys="true" keyProperty="id">
