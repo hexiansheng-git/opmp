@@ -210,7 +210,6 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
         }catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     private void getPersonType() throws ParserConfigurationException, IOException, SAXException {
@@ -219,7 +218,7 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             return;
         List<QqchManagementPersonConfig> saveList = new ArrayList<>();
         for (QqchManagementPersonConfig perosonConfig : list) {
-            Map<String, Object> certList = hrService.getCertList(perosonConfig.getName());
+            Map<String, Object> certList = hrService.getCertList(perosonConfig.getPtVar1());
             if (CollectionUtil.isEmpty(certList))
                 continue;
             String employeeModle_name = (String) certList.get("employeeModle_name");

@@ -204,7 +204,7 @@ public class QqchManagementPersonConfig extends TreeNode<QqchManagementPersonCon
      * 字段描述：预留字段1
      */
     @JsonProperty
-    @Excel(name = "预留字段1")
+    @Excel(name = "用户登录账号")
     private String ptVar1;
     /**
      * 字段描述：预留字段2

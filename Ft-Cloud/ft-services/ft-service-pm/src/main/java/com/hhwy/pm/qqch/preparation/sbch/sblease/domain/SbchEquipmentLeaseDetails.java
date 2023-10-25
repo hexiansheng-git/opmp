@@ -177,4 +177,8 @@ public class SbchEquipmentLeaseDetails extends CommonBaseEntity {
     /** 所属区域 */
     @Excel(name = "所属区域")
     private String region;
+
+    /** 总价 */
+    @Excel(name = "总价")
+    private BigDecimal amountPrice;
 }
