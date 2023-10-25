@@ -135,7 +135,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 temp.setPtVar2(projectBasicInfo.getProjectCode());
             }
-            rocketMQTemplate.convertAndSend("qqch_work_plan:tenantSuccess", JSONObject.toJSONString(list));
+            rocketMQTemplate.convertAndSend("qqch_work_plan1:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
             e.printStackTrace();
             status = 0;
