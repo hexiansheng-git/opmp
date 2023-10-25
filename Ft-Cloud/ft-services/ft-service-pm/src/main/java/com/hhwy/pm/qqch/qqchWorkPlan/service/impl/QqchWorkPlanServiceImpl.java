@@ -457,7 +457,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlan.setDelUser(SecurityUtils.getSysUser().getUserId()+"");
         int result =qqchWorkPlanMapper.deleteQqchWorkPlan(qqchWorkPlan);
         //推送到总部
-        rocketMQTemplate.convertAndSend("qqch_work_plan:delete", qqchWorkPlan.getId()+"");
+        rocketMQTemplate.convertAndSend("qqch_work_plan_delete:delete", qqchWorkPlan.getId()+"");
         return result;
     }
 

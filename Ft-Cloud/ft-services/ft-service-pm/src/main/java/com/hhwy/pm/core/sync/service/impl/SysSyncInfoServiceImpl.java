@@ -98,8 +98,9 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setProjectName(projectBasicInfo.getProjectName());
                 temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setRegionId(projectBasicInfo.getRegionId());
+                temp.setPtVar2(projectBasicInfo.getProjectCode());
             }
-            rocketMQTemplate.convertAndSend("qqch_work_group:tenantSuccess", JSONObject.toJSONString(list));
+            rocketMQTemplate.convertAndSend("qqch_work_group1:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
             e.printStackTrace();
             status = 0;
@@ -132,6 +133,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setRegionId(projectBasicInfo.getRegionId());
                 temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setPtVar1(projectBasicInfo.getProjectCategory());
+                temp.setPtVar2(projectBasicInfo.getProjectCode());
             }
             rocketMQTemplate.convertAndSend("qqch_work_plan:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
@@ -167,6 +169,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 JSONObject jsonObject = JSONObject.parseObject(JSONObject.toJSONString(temp));
                 jsonObject.put("regionId", projectBasicInfo.getRegionId());
                 jsonObject.put("regionName", projectBasicInfo.getRegionName());
+                jsonObject.put("ptVar2", projectBasicInfo.getProjectCode());
                 jsonObjList.add(jsonObject);
             }
             rocketMQTemplate.convertAndSend("qqch_review:tenantSuccess", JSONObject.toJSONString(jsonObjList));
@@ -204,6 +207,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 jsonObject.put("regionId",projectBasicInfo.getRegionId());
                 jsonObject.put("regionName",projectBasicInfo.getRegionName());
                 jsonObject.put("ptVar1",projectBasicInfo.getProjectCategory());
+                jsonObject.put("ptVar2",projectBasicInfo.getProjectCode());
                 jsonObjectList.add(jsonObject);
             }
             rocketMQTemplate.convertAndSend("qqch_performInspection:tenantSuccess", JSONObject.toJSONString(jsonObjectList));
@@ -239,6 +243,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setRegionId(projectBasicInfo.getRegionId());
                 temp.setRegionName(projectBasicInfo.getRegionName());
                 temp.setPtVar1(projectBasicInfo.getProjectCategory());
+                temp.setPtVar2(projectBasicInfo.getProjectCode());
             }
             rocketMQTemplate.convertAndSend("qqch_evaluation:gm", JSONObject.toJSONString(list));
         }catch(Exception e){

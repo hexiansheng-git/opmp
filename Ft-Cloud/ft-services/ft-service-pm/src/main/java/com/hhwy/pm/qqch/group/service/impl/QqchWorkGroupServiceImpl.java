@@ -352,7 +352,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
         qqchWorkGroup.setUpdateTime(DateUtils.getNowDate());
         int result =qqchWorkGroupMapper.deleteQqchWorkGroup(qqchWorkGroup);
-        rocketMQTemplate.convertAndSend("qqch_work_group:delete", qqchWorkGroup.getId());
+        rocketMQTemplate.convertAndSend("qqch_work_group_delete:delete", qqchWorkGroup.getId());
         return result;
     }
 
