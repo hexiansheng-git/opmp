@@ -49,7 +49,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 查询特种设备过程管控策划列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:control:list")
+//    @PreAuthorize(hasPermi ="equipmentspecial:control:list")
     @PostMapping("/list")
     //@CustomLogger(title = "特种设备过程管控策划-列表查询",businessType = CustomBusinessType.SELECT)
     @ResponseBody
@@ -65,7 +65,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 导出特种设备过程管控策划列表
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:control:export")
+//    @PreAuthorize(hasPermi ="equipmentspecial:control:export")
     //@CustomLogger(title = "特种设备过程管控策划-导出",businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -81,7 +81,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 新增保存特种设备过程管控策划
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:control:add")
+//    @PreAuthorize(hasPermi ="equipmentspecial:control:add")
     //@CustomLogger(title = "特种设备过程管控策划-保存",businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -100,7 +100,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 修改保存特种设备过程管控策划
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:control:edit")
+//    @PreAuthorize(hasPermi ="equipmentspecial:control:edit")
     //@CustomLogger(title = "特种设备过程管控策划-编辑",businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -119,7 +119,7 @@ public class SbchEquipmentSpecialControlPlanController extends BaseController {
     /**
      * 删除特种设备过程管控策划
      */
-    @PreAuthorize(hasPermi ="equipmentspecial:control:remove")
+//    @PreAuthorize(hasPermi ="equipmentspecial:control:remove")
     //@CustomLogger(title = "特种设备过程管控策划-删除",businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

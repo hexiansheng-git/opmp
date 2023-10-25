@@ -40,7 +40,7 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 查询进口方案列表
      */
-    @PreAuthorize(hasPermi="inquiry:plan:list")
+//    @PreAuthorize(hasPermi="inquiry:plan:list")
     @PostMapping("/list")
     //@CustomLogger(title = "设备进口方案 进口调查查询", businessType = CustomBusinessType.SELECT)
     @ResponseBody
@@ -53,7 +53,7 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 导出进口方案列表
      */
-    @PreAuthorize(hasPermi="inquiry:plan:export")
+//    @PreAuthorize(hasPermi="inquiry:plan:export")
     //@CustomLogger(title = "设备进口方案 进口调查导出", businessType = CustomBusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -71,7 +71,7 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 新增保存进口方案
      */
-    @PreAuthorize(hasPermi="inquiry:plan:add")
+//    @PreAuthorize(hasPermi="inquiry:plan:add")
     //@CustomLogger(title = "设备进口方案 进口调查添加", businessType = CustomBusinessType.SAVE)
     @PostMapping("/add")
     @ResponseBody
@@ -91,7 +91,7 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 修改保存进口方案
      */
-    @PreAuthorize(hasPermi="inquiry:plan:edit")
+//    @PreAuthorize(hasPermi="inquiry:plan:edit")
     //@CustomLogger(title = "设备进口策划 进口方案修改保存", businessType = CustomBusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -124,7 +124,7 @@ public class SbchImportPlanController extends BaseController {
     /**
      * 删除进口方案
      */
-    @PreAuthorize(hasPermi="inquiry:plan:remove")
+//    @PreAuthorize(hasPermi="inquiry:plan:remove")
     //@CustomLogger(title = "设备进口策划 进口方案修改删除", businessType = CustomBusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
