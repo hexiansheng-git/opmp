@@ -367,4 +367,49 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
 
         return qqchMainPlanItem;
     }
+
+    @Override
+    public List<QqchMainPlanItem> getUsing4More(String wbsCodes, BigDecimal version) {
+
+        if(StringUtils.isEmpty(wbsCodes)) {
+            throw new RuntimeException("参数异常！");
+        }
+
+        String[] split = wbsCodes.split(",");
+
+        version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
+
+        QqchMainPlanItem qqchMainPlanItemVoParam = new QqchMainPlanItem();
+
+        qqchMainPlanItemVoParam.setVersion(version);
+
+        List<QqchMainPlanItem> qqchMainPlanItemList = getQqchMainPlanItemList(qqchMainPlanItemVoParam);
+
+        List<QqchMainPlanItem> returnList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(qqchMainPlanItemList)) {
+            return returnList;
+        }
+
+        for (String s : split) {
+            QqchMainPlanItem qqchMainPlanItem = qqchMainPlanItemList.stream().filter(vo -> s.equals(vo.getItemCode())).findFirst().orElse(null);
+            if(qqchMainPlanItem != null) {
+                returnList.add(qqchMainPlanItem);
+            }
+        }
+
+        if(!CollectionUtils.isEmpty(returnList)) {
+            for (QqchMainPlanItem qqchMainPlanItem : returnList) {
+                QqchMainPlanItem qqchMainPlanItem1 = qqchMainPlanItemList.stream().filter(vo ->
+                        "1".equals(vo.getIsCritical())
+                                && QqchMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())
+                                && vo.getAncestors().contains(qqchMainPlanItem.getAncestors())
+                ).findFirst().orElse(null);
+                if(qqchMainPlanItem1 != null) qqchMainPlanItem.setIsCritical("1");
+                if(qqchMainPlanItem.getIsCritical() == null) qqchMainPlanItem.setIsCritical("0");
+            }
+        }
+
+        return returnList;
+    }
 }

@@ -58,4 +58,6 @@ public interface IQqchMainPlanItemService {
     List<QqchMainPlanItem> getAllLinkList(List<Long> ids);
 
     QqchMainPlanItem getUsing4One(QqchMainPlanItem qqchMainPlanItemVoParam);
+
+    List<QqchMainPlanItem> getUsing4More(String wbsCodes, BigDecimal version);
 }
