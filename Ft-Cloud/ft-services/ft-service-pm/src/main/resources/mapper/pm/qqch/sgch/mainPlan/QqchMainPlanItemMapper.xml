@@ -214,7 +214,7 @@
             <if test="pid != null "> and `pid` = #{pid}</if>
             <if test="sort != null "> and `sort` = #{sort}</if>
             <if test="itemCode != null  and itemCode != ''"> and `item_code` = #{itemCode}</if>
-            <if test="itemName != null  and itemName != ''"> and `item_name` = #{itemName}</if>
+            <if test="itemName != null  and itemName != ''"> and `item_name` like CONCAT('%',#{itemName},'%')</if>
             <if test="plannedDuration != null "> and `planned_duration` = #{plannedDuration}</if>
             <if test="totalFloat != null "> and `total_float` = #{totalFloat}</if>
             <if test="executerId != null  and executerId != ''"> and `executer_id` = #{executerId}</if>

@@ -70,7 +70,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
     @Transactional
     public int insertJdglDiffAnalysisPathList(List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList) {
         for (JdglDiffAnalysisPath jdglDiffAnalysisPath : jdglDiffAnalysisPathList) {
-            jdglDiffAnalysisPath.setId(IdWorker.createId());
+//            jdglDiffAnalysisPath.setId(IdWorker.createId());
             jdglDiffAnalysisPath.setCreateUser(SecurityUtils.getUserName());
             jdglDiffAnalysisPath.setCreateTime(DateUtils.getNowDate());
         }
@@ -119,8 +119,8 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
         BigDecimal returnBig = new BigDecimal(0);
         List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = new ArrayList<>();
 
-        // 获取总体计划非关键线路数据
-        List<JdglMainPlanItem> usingNoKeyRoad = jdglMainPlanItemService.getUsingNoKeyRoad();
+        // 获取总体计划关键线路数据
+        List<JdglMainPlanItem> usingNoKeyRoad = jdglMainPlanItemService.getUsingKeyRoad();
 
         if(CollectionUtils.isEmpty(usingNoKeyRoad)) return returnBig;
 
@@ -141,6 +141,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             jdglDiffAnalysisPath.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             jdglDiffAnalysisPath.setPlanDays(jdglMainPlanItem.getPlannedDuration());
             jdglDiffAnalysisPath.setIsCriticalPath("1");
+            jdglDiffAnalysisPath.setSort(jdglMainPlanItem.getSort());
 
             // 计算总体工期完成百分比
             int totalPlanDays = jdglMainPlanItem.getPlannedDuration();
@@ -216,7 +217,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
         List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = new ArrayList<>();
 
         // 获取总体计划非关键线路数据
-        List<JdglMainPlanItem> usingKeyRoad = jdglMainPlanItemService.getUsingKeyRoad();
+        List<JdglMainPlanItem> usingKeyRoad = jdglMainPlanItemService.getUsingNoKeyRoad();
 
         // 获取开累wbs填报
         List<JdglDayScheduleWbs4Value> totalWbsListByDateRange = iJdglDayScheduleWbsService.getTotalWbsListByDateRange(endDate);
@@ -235,6 +236,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
             jdglDiffAnalysisPath.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             jdglDiffAnalysisPath.setPlanDays(jdglMainPlanItem.getPlannedDuration());
             jdglDiffAnalysisPath.setIsCriticalPath("0");
+            jdglDiffAnalysisPath.setSort(jdglMainPlanItem.getSort());
 
             // 计算总体工期完成百分比
             int totalPlanDays = jdglMainPlanItem.getPlannedDuration();
