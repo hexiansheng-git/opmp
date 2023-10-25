@@ -2,7 +2,10 @@ package com.hhwy.pm.qqch.sgch.managementPersonConfig.service;
 
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.QqchManagementPersonConfig;
 import com.hhwy.pm.qqch.sgch.managementPersonConfig.domain.vo.QqchManagementPersonConfigVo;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -41,4 +44,6 @@ public interface IQqchManagementPersonConfigService {
      * @return
      */
     List<QqchManagementPersonConfig> getProjectLeadershipPersonList();
+
+    String getPersonType(String userName) throws ParserConfigurationException, IOException, SAXException;
 }
