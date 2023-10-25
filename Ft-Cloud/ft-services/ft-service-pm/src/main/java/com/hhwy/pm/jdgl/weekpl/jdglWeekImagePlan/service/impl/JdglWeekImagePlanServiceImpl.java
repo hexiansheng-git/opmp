@@ -97,11 +97,51 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             return 0;
         }
         Long planId = jdglWeekImagePlanList.get(0).getPlanId();
+
+        // 主合同清单
+        List<XmslContractList> inventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
+
+        // 获取图纸复核的清单
+        List<XmslDrawReviewList> list = drawReviewListService.getFullEffectList();
+
         for (JdglWeekImagePlan jdglWeekImagePlan : jdglWeekImagePlanList) {
-//            jdglWeekImagePlan.setId(IdWorker.createId());
             jdglWeekImagePlan.setCreateUser(SecurityUtils.getUserName());
             jdglWeekImagePlan.setCreateTime(DateUtils.getNowDate());
+            String wbsCode = jdglWeekImagePlan.getWbsCode();
+            Long pid = jdglWeekImagePlan.getPid();
+            if(!CollectionUtils.isEmpty(list)) {
+                JdglWeekImagePlan imagePlan = jdglWeekImagePlanList.stream().filter(vo -> vo.getId().equals(pid)).findFirst().orElse(null);
+                BigDecimal compValue = new BigDecimal(0);
+                BigDecimal designQuantity = jdglWeekImagePlan.getDesignQuantity();
+                BigDecimal planCompQuantity = jdglWeekImagePlan.getPlanCompQuantity();
+                if(imagePlan != null) designQuantity = imagePlan.getDesignQuantity();
+                BigDecimal rate = new BigDecimal(0);
+                if(planCompQuantity != null && designQuantity != null && rate.compareTo(designQuantity) != 0) {
+                    rate = planCompQuantity.divide(designQuantity, 4, BigDecimal.ROUND_HALF_UP);
+                }
+                List<XmslDrawReviewList> collect = list.stream().filter(vo -> wbsCode.equals(vo.getWbsCode())).collect(Collectors.toList());
+                if(!CollectionUtils.isEmpty(collect)) {
+                    for (XmslDrawReviewList xmslDrawReviewList : collect) {
+                        String listCode = xmslDrawReviewList.getListCode();
+                        BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                        if(!CollectionUtils.isEmpty(inventoryList)) {
+                            XmslContractList xmslContractList = inventoryList.stream().filter(vo -> listCode.equals(vo.getCode())).findFirst().orElse(null);
+                            if(xmslContractList != null) {
+                                BigDecimal price = xmslContractList.getChangeUnitPrice() == null
+                                        ? xmslContractList.getWinUnitPrice() : xmslContractList.getChangeUnitPrice();
+                                BigDecimal quantity = checkNum == null
+                                        ? new BigDecimal(0) : checkNum.multiply(rate);
+                                if (quantity != null && price != null) {
+                                    compValue = compValue.add(quantity.multiply(price));
+                                }
+                            }
+                        }
+                    }
+                }
+                jdglWeekImagePlan.setPlanCompValue(compValue);
+            }
         }
+
         jdglWeekValuePlanService.updateValuePlanData(planId, jdglWeekImagePlanList);
         return jdglWeekImagePlanMapper.insertJdglWeekImagePlanList(jdglWeekImagePlanList);
     }

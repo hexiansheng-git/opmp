@@ -285,6 +285,8 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setUpdateTime(DateUtils.getNowDate());
         jdglQuarterPlan.setIsUse("0");
 
+        jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
+
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
             List<JdglQuarterImagePlan> imagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
@@ -298,7 +300,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
         jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
-        return jdglQuarterPlanMapper.insertJdglQuarterPlan(jdglQuarterPlan);
+        return jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);
     }
 
     @Transactional

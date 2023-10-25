@@ -266,6 +266,8 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         jdglYearPlan.setUpdateTime(DateUtils.getNowDate());
         jdglYearPlan.setIsUse("0");
 
+        jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlan);
+
         List<JdglYearImagePlan> jdglYearImagePlanList = jdglYearPlan.getJdglYearImagePlanList();
         if(!CollectionUtils.isEmpty(jdglYearImagePlanList)) {
             List<JdglYearImagePlan> jdglYearImagePlans = TreeUtil.treeToList(jdglYearImagePlanList);
@@ -280,7 +282,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         jdglYearPlan.setYearPlanValueCu(thisPlanAmt);
         jdglYearPlan.setYearPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
-        return jdglYearPlanMapper.insertJdglYearPlan(jdglYearPlan);
+        return jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
     }
 
     @Transactional

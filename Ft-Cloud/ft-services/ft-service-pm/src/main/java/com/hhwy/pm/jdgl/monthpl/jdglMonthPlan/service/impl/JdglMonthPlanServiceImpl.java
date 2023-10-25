@@ -291,6 +291,9 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         jdglMonthPlan.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setUpdateTime(DateUtils.getNowDate());
         jdglMonthPlan.setIsUse("0");
+
+        jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
+
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
             List<JdglMonthImagePlan> imagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
@@ -305,7 +308,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         jdglMonthPlan.setThisPlanValueCu(thisPlanAmt);
         jdglMonthPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
 
-        return jdglMonthPlanMapper.insertJdglMonthPlan(jdglMonthPlan);
+        return jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
     }
 
     @Transactional
