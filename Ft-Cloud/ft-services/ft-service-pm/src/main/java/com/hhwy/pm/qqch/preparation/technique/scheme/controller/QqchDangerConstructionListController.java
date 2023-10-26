@@ -3,24 +3,20 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.QqchDangerConstructionList;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchDangerConstructionListVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchDangerConstructionListService;
 import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zhenglili
@@ -35,7 +31,6 @@ public class QqchDangerConstructionListController extends BaseController {
     @Autowired
     private IQqchDangerConstructionListService qqchDangerConstructionListService;
 
-    @PreAuthorize(hasPermi = "qqchDangerConstructionList:list")
     @GetMapping("/getList")
     public AjaxResult getList(BigDecimal version) {
         QqchDangerConstructionListVo qqchDangerConstructionListVo = qqchDangerConstructionListService
@@ -43,7 +38,6 @@ public class QqchDangerConstructionListController extends BaseController {
         return AjaxResult.success(qqchDangerConstructionListVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchDangerConstructionList:update")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerConstructionListVo qqchDangerConstructionListVo) {
@@ -56,7 +50,6 @@ public class QqchDangerConstructionListController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerConstructionList:add")
     @PostMapping("/syncData")
     public AjaxResult syncData(
         @Validated(ValidationGroups.Update.class) @RequestBody QqchDangerConstructionListVo qqchDangerConstructionListVo) {
