@@ -11,6 +11,8 @@ import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
@@ -36,6 +38,8 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
 
 
     public QqchSafeRiskList getQqchSafeRiskList(QqchSafeRiskList qqchSafeRiskList) {
@@ -151,6 +155,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         QqchSafeRiskList info = qqchSafeRiskListMapper.getQqchSafeRiskList(qqchSafeRiskList);
         if(info != null){
             Long infoId = info.getId();
+
             QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
             qqchSafeRiskListDetail.setInfoId(infoId);
             List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListDetailService.getQqchSafeRiskListDetailList(qqchSafeRiskListDetail);
@@ -167,6 +172,17 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         }else {
             info = new QqchSafeRiskList();
         }
+
+        //获取p6计划数据
+        String wbsCode = queryVo.getWbsCode();
+        List<QqchMainPlanItem> mainPlanItemList = qqchMainPlanItemService.getListByItemCodes(wbsCode);
+        QqchMainPlanItem qqchMainPlanItem = mainPlanItemList.get(0);
+        if(qqchMainPlanItem != null){
+            info.setPlanStartDate(qqchMainPlanItem.getStartDate());
+            info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
+//                info.setPlanOverDate();
+        }
+
         qqchSafeRiskListVo.setSafeRiskList(info);
         qqchSafeRiskListVo.setVersion(version);
         qqchSafeRiskListVo.setStageIdentity(qqchReviewService.getStage());

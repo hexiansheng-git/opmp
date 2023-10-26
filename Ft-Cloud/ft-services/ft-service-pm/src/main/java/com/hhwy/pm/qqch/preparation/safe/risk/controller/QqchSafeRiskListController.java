@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-08-11 13:41:25
- * @remark
+ * @remark 8.2.1安全风险清单
  */
 @Validated
 @RestController
