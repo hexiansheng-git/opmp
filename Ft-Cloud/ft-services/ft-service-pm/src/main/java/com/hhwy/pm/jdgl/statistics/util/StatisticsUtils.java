@@ -216,8 +216,10 @@ public class StatisticsUtils {
         Calendar cl = Calendar.getInstance();
 
         cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 1);
+        cl.add(Calendar.DATE, 1);
         returnMap.put("start", cl.getTime());
         cl.setWeekDate(Integer.valueOf(year), Integer.valueOf(week), 7);
+        cl.add(Calendar.DATE, 1);
         returnMap.put("end", cl.getTime());
 
         return returnMap;
