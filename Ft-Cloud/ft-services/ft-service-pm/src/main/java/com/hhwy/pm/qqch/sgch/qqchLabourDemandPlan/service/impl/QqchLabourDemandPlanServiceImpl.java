@@ -251,8 +251,8 @@ public class QqchLabourDemandPlanServiceImpl implements IQqchLabourDemandPlanSer
             for (QqchLabourDemandPlanDto labourDemandPlanDto : list) {
                 Date startTime1 = labourDemandPlanDto.getStartTime();
                 Date endTime1 = labourDemandPlanDto.getEndTime();
-                boolean in = DateUtil.isIn(startTime1, startTime, endTime);
-                boolean in1 = DateUtil.isIn(endTime1, startTime, endTime);
+                boolean in = DateUtil.isIn(startTime, startTime1, endTime1);
+                boolean in1 = DateUtil.isIn(endTime, startTime1, endTime1);
                 if (in || in1) {
                     qqchLabourDemandPlanDto.setNum(qqchLabourDemandPlanDto.getNum().add(labourDemandPlanDto.getNum()));
                 }
