@@ -24,4 +24,5 @@ public class MyFlowController {
         String firstName = nodeTaskService.isNowfirstNode(insId);
         return AjaxResult.success("",firstName);
     }
+
 }
