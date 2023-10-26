@@ -180,7 +180,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         if(qqchMainPlanItem != null){
             info.setPlanStartDate(qqchMainPlanItem.getStartDate());
             info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
-//                info.setPlanOverDate();
+            info.setPlanOverDate(qqchMainPlanItem.getStartDate());
         }
 
         qqchSafeRiskListVo.setSafeRiskList(info);
