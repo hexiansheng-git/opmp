@@ -5,6 +5,7 @@ import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.domain.JdglWeekPlan;
 import com.hhwy.pm.jdgl.weekpl.jdglWeekPlan.service.IJdglWeekPlanService;
 import com.hhwy.utils.validation.ValidationGroups;
@@ -48,6 +49,16 @@ public class JdglWeekPlanController extends BaseController {
     @GetMapping("/getInitJdglWeekPlan")
     public AjaxResult getInitJdglWeekPlan(@Validated(ValidationGroups.Get.class) JdglWeekPlan jdglWeekPlanParam) {
         return AjaxResult.success(jdglWeekPlanService.getInitJdglWeekPlan(jdglWeekPlanParam));
+    }
+
+
+    /**
+     * 根据年周获取日期区间
+     */
+    //  // @PreAuthorize(hasPermi = "jdglWeekPlan:list")
+    @GetMapping("/dateRange")
+    public AjaxResult dateRange(String year, String week) {
+        return AjaxResult.success(StatisticsUtils.getDateRange4Week(year, week));
     }
 
     //  // @PreAuthorize(hasPermi = "jdglWeekPlan:list")
