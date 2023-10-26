@@ -267,7 +267,7 @@ public class QqchKeyInventoryContentServiceImpl implements IQqchKeyInventoryCont
                 QqchKeyInventoryContent::setChildren);
 
         //校验唯一
-        DataCheckUtil.checkSingle(tileList,QqchKeyInventoryContent::getInventoryCode);
+        DataCheckUtil.checkSingle2(tileList,QqchKeyInventoryContent::getInventoryCode,"清单编号不允许重复！");
 
         //处理数据
         this.insertQqchKeyInventoryContentList(tileList,version);

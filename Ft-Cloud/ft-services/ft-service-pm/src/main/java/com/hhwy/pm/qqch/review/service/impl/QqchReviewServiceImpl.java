@@ -158,6 +158,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
         QqchWorkGroup planEstablishDirector = this.getPlanEstablishDirector();
 
+        //查询紧急程度
+        QqchWorkPlan query = new QqchWorkPlan();
+        query.setVersion(qqchWorkPlan.getVersion());
+        QqchWorkPlan workPlan = workPlanService.getQqchWorkPlan(query);
 
         List<Review> iData = new ArrayList<>();
         for (String planStage : planStages) {
@@ -199,7 +203,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             review.setReqSubmitDate(date);
             review.setTaskStatus("0");
             review.setFinishNum(0);
-            review.setExigencyStatus(qqchWorkPlan.getExigencyStatus());
+            if(workPlan != null){
+                review.setExigencyStatus(workPlan.getExigencyStatus());
+            }
+//            review.setExigencyStatus(qqchWorkPlan.getExigencyStatus());
             EntityUtils.setCreateUpdateInfo(review);
             iData.add(review);
         }
@@ -309,7 +316,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         Review review = this.getQqchReview(new Review(idl));
         review.setInitDate(new Date());
         review.setInitUserId(SecurityUtils.getUserId());
-        review.setInitUserName(SecurityUtils.getUserName());
+        review.setInitUserName(SecurityUtils.getSysUser().getNickName());
         String stage = review.getPlanStage();
         if("1".equals(stage) || "2".equals(stage)){
             FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW1);
