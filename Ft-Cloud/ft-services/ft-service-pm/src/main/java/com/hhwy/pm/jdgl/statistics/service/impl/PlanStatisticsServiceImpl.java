@@ -620,6 +620,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
             planStatisticsWbsImageVO.setId(dayScheduleWbs4Value.getId());
             planStatisticsWbsImageVO.setPid(dayScheduleWbs4Value.getPid());
+            planStatisticsWbsImageVO.setWbsCode(dayScheduleWbs4Value.getWbsCode());
+            planStatisticsWbsImageVO.setWbsName(dayScheduleWbs4Value.getWbsName());
             planStatisticsWbsImageVO.setWbsUnit(dayScheduleWbs4Value.getUnit());
             planStatisticsWbsImageVO.setDesignNum(dayScheduleWbs4Value.getDesignQuantity());
             planStatisticsWbsImageVO.setThisCompNum(dayScheduleWbs4Value.getThisQuantity());
@@ -628,7 +630,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         List<PlanStatisticsWbsImageVO> build = null;
         if(!CollectionUtils.isEmpty(returnList)) {
-            build = TreeUtil.build(returnList, null);
+            build = TreeUtil.build(returnList, -1l);
         }
 
 
