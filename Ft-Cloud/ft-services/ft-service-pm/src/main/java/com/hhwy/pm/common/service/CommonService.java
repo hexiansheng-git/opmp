@@ -83,6 +83,8 @@ public class CommonService {
         this.commonMapper.deleteDetailsByMainId(mainId, tableName);
     }
 
+    private static final String POP_WINDOWS = "popWindows";
+
     /**
      * 检验菜单是否有编辑权限
      *
@@ -92,6 +94,11 @@ public class CommonService {
     public PermissionMark checkIsEditable(String menuId) {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
+
+        if(POP_WINDOWS.equals(menuId)){
+            permissionMark.setButtonStatus("2");
+            return permissionMark;
+        }
 
         //获取当前阶段
         String currentStage = qqchReviewService.getStage();
