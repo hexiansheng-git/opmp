@@ -40,6 +40,7 @@ import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.domain.JdglYearValuePlan;
 import com.hhwy.pm.jdgl.yearpl.jdglYearValuePlan.service.IJdglYearValuePlanService;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.tree.TreeUtil;
@@ -164,9 +165,17 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         BigDecimal contractAmt = new BigDecimal(0);
 
         //查询开累计划产值(有效合同额)
-        XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
         if(xmslContractInfo != null) {
-            contractAmt = xmslContractInfo.getEffectiveAmout();
+            // 获取财务管理-风险管理-汇率登记
+            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
+            BigDecimal exchange = BigDecimal.ZERO;
+            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
+                    exchange = new BigDecimal(xmslContractPayinfo.getObversionRate());
+                }
+            }
+            if(BigDecimal.ZERO.compareTo(exchange) != 0) contractAmt = xmslContractInfo.getEffectiveAmout().divide(exchange, 2, BigDecimal.ROUND_HALF_UP);
         }
 
 

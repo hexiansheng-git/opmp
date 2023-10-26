@@ -524,9 +524,9 @@
         on jds.id != queryjds.id
         set
             jds.day_value_cu = (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),
-            jds.day_value_dl= (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id )*ifnull(jds.exchange_rate,1),
+            jds.day_value_dl= if(jds.exchange_rate is null or jds.exchange_rate = 0, 0,  (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id )/jds.exchange_rate) ,
             jds.total_value_cu = ifnull(queryjds.total_value_cu, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id ),0),
-            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+ifnull((select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id )/10000,0)*ifnull(jds.exchange_rate,0)
+            jds.total_value_dl = ifnull(queryjds.total_value_dl, 0)+if(jds.exchange_rate is null or jds.exchange_rate = 0, 0,  (select sum(bill_value) from jdgl_day_schedule_bill jdsb where jds.id = jdsb.day_schedule_id )/jds.exchange_rate/10000)
         where jds.id = #{id}
 
     </update>

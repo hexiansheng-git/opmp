@@ -348,4 +348,43 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         returnList = returnList.stream().distinct().collect(Collectors.toList());
         return returnList;
     }
+
+    @Override
+    public List<JdglMainPlanItem> getUsingJdglMainPlanItemByItemCodes(List<String> itemCodes) {
+
+//        List<JdglMainPlanItem> returnList = new ArrayList<>();
+
+        if(CollectionUtils.isEmpty(itemCodes)) {
+            return null;
+        }
+
+        JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
+
+        if(usingJdglMainPlan == null) {
+            return null;
+        }
+
+        return jdglMainPlanItemMapper.getUsingJdglMainPlanItemByItemCodes(usingJdglMainPlan.getId(), itemCodes);
+
+//        List<JdglMainPlanItem> usingJdglMainPlanItemList = getUsingJdglMainPlanItemList(new JdglMainPlanItem());
+//
+//        if(CollectionUtils.isEmpty(usingJdglMainPlanItemList)) {
+//            return returnList;
+//        }
+//
+//        for (String itemCode: itemCodes) {
+//            JdglMainPlanItem jdglMainPlanItem = usingJdglMainPlanItemList.stream().filter(vo -> itemCode.equals(vo.getItemCode())).findFirst().orElse(null);
+//            if(jdglMainPlanItem != null) returnList.add(jdglMainPlanItem);
+//        }
+
+//        return returnList;
+    }
+
+    @Override
+    public List<JdglMainPlanItem> getJdglMainPlanItemByMainPlanId(Long mainPlanId) {
+        if(mainPlanId == null) return null;
+        JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
+        jdglMainPlanItem.setMainPlanId(mainPlanId);
+        return getJdglMainPlanItemList(jdglMainPlanItem);
+    }
 }

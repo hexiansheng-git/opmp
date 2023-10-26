@@ -67,7 +67,7 @@ public class JdglMainPlanItemPreServiceImpl implements IJdglMainPlanItemPreServi
         }
         for (JdglMainPlanItemPre jdglMainPlanItemPre : jdglMainPlanItemPreList) {
             jdglMainPlanItemPre.setId(IdWorker.createId());
-            jdglMainPlanItemPre.setCreateUser(SecurityUtils.getUserName());
+//            jdglMainPlanItemPre.setCreateUser(SecurityUtils.getUserName());
             jdglMainPlanItemPre.setCreateTime(DateUtils.getNowDate());
         }
         return jdglMainPlanItemPreMapper.insertJdglMainPlanItemPreList(jdglMainPlanItemPreList);

@@ -8,6 +8,8 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.jdgl.day.schedule.jdglDayScheduleWbs.domain.JdglDayScheduleWbs;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
@@ -47,6 +49,9 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
 
     @Autowired
     private IXmslWbsService wbsService;
+
+    @Autowired
+    private IJdglMainPlanItemService jdglMainPlanItemService;
 
 
     public JdglDayScheduleBill getJdglDayScheduleBill(JdglDayScheduleBill jdglDayScheduleBill) {
@@ -91,6 +96,21 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                 return jdglDayScheduleBillList;
             }
 
+            List<String> itemCodes = new ArrayList<>();
+            itemCodes.add(wbsCode);
+            itemCodes.add(itemCode);
+            List<JdglMainPlanItem> planItemByItemCodes = jdglMainPlanItemService.getUsingJdglMainPlanItemByItemCodes(itemCodes);
+            BigDecimal radio = BigDecimal.ZERO;
+            if(!CollectionUtils.isEmpty(planItemByItemCodes)) {
+                JdglMainPlanItem wbsPlanItem = planItemByItemCodes.stream().filter(vo -> wbsCode.equals(vo.getItemCode())).findFirst().orElse(null);
+                JdglMainPlanItem itemPlanItem = planItemByItemCodes.stream().filter(vo -> itemCode.equals(vo.getItemCode())).findFirst().orElse(null);
+                if(itemPlanItem != null && itemPlanItem.getQuantity() != null && wbsPlanItem != null && wbsPlanItem.getQuantity() != null) {
+                    if(BigDecimal.ZERO.compareTo(wbsPlanItem.getQuantity()) != 0) {
+                        radio = itemPlanItem.getQuantity().divide(wbsPlanItem.getQuantity(), 4, BigDecimal.ROUND_HALF_UP);
+                    }
+                }
+            }
+
             // 获取主合同清单数据
             List<XmslContractList> validMaxVersionContractInventoryList = xmslContractListService.getValidMaxVersionContractInventoryList();
 
@@ -117,16 +137,18 @@ public class JdglDayScheduleBillServiceImpl implements IJdglDayScheduleBillServi
                     }
                 }
                 jdglDayScheduleBill1.setUnit(xmslDrawReviewList.getUnit());
-                jdglDayScheduleBill1.setDesignQuantity(xmslDrawReviewList.getCheckNum());
+                BigDecimal checkNum = xmslDrawReviewList.getCheckNum();
+                if(checkNum != null) jdglDayScheduleBill1.setDesignQuantity(checkNum.multiply(radio));
                 BigDecimal totalQty = BigDecimal.ZERO;
                 if(!CollectionUtils.isEmpty(billValueListByEndDate4WbsBill)) {
-                    JdglDayScheduleBill jdglDayScheduleBill2 = billValueListByEndDate4WbsBill.stream().filter(vo -> itemCode.equals(vo.getItemCode()) && jdglDayScheduleBill1.getBillCode().equals(vo.getBillCode())).findFirst().orElse(null);
+                    JdglDayScheduleBill jdglDayScheduleBill2 = billValueListByEndDate4WbsBill.stream().filter(vo ->
+                            itemCode.equals(vo.getItemCode()) && jdglDayScheduleBill1.getBillCode().equals(vo.getBillCode())).findFirst().orElse(null);
                     if(jdglDayScheduleBill2 != null) totalQty = jdglDayScheduleBill2.getThisQuantity();
                 }
-                if(xmslDrawReviewList.getCheckNum() != null && totalQty != null) {
-                    jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum().subtract(totalQty));
+                if(jdglDayScheduleBill1.getDesignQuantity() != null && totalQty != null) {
+                    jdglDayScheduleBill1.setRemainQuantity(jdglDayScheduleBill1.getDesignQuantity().subtract(totalQty));
                 } else {
-                    jdglDayScheduleBill1.setRemainQuantity(xmslDrawReviewList.getCheckNum());
+                    jdglDayScheduleBill1.setRemainQuantity(jdglDayScheduleBill1.getDesignQuantity());
                 }
                 jdglDayScheduleBill1.setIsMain(xmslDrawReviewList.getImageProgress());
                 jdglDayScheduleBillList.add(jdglDayScheduleBill1);

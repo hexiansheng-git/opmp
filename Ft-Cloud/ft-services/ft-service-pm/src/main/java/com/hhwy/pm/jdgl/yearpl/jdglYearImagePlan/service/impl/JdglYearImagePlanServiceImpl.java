@@ -271,12 +271,41 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
         // 最新获取总进度计划数据（根据年份日期区间获取总计划、形象计划及关联wbs数据）
         JdglMainPlan usingJdglMainPlan = iJdglMainPlanService.getUsingJdglMainPlan();
         Map<String, Date> dateRange = StatisticsUtils.getDateRange4Year(year);
-        List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
 
-
-        if(CollectionUtils.isEmpty(jdglMainPlanItemList)) {
+        // 获取所有总进度计划数据
+        List<JdglMainPlanItem> allMainPlanItem = jdglMainPlanItemService.getJdglMainPlanItemByMainPlanId(usingJdglMainPlan.getId());
+        if(CollectionUtils.isEmpty(allMainPlanItem)) {
             return jdglYearPlanParam;
         }
+
+        List<JdglMainPlanItem> jdglMainPlanItemList = new ArrayList<>();
+
+        // 获取在日期区间内的总进度计划数据
+        List<JdglMainPlanItem> listByDateRange = jdglMainPlanItemService.getUsingJdglMainPlanItemListByDateRange(dateRange.get("start"), dateRange.get("end"));
+
+        if(CollectionUtils.isEmpty(listByDateRange)) {
+            return jdglYearPlanParam;
+        }
+
+        // 获取在日期区间内的总进度计划作业数据
+        listByDateRange = listByDateRange.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())).collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(listByDateRange)) {
+            return jdglYearPlanParam;
+        }
+
+        // 根据作业数据查找上级总体wbs数据
+        for (JdglMainPlanItem jdglMainPlanItem : listByDateRange) {
+            String ancestors = jdglMainPlanItem.getAncestors();
+            List<JdglMainPlanItem> collect = allMainPlanItem.stream().filter(vo -> ancestors.contains(vo.getAncestors())).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(collect)) jdglMainPlanItemList.addAll(collect);
+        }
+
+        if(CollectionUtils.isEmpty(jdglMainPlanItemList)){
+            return jdglYearPlanParam;
+        }
+
+        // 数据去重
+        jdglMainPlanItemList = jdglMainPlanItemList.stream().distinct().collect(Collectors.toList());
 
         List<JdglDayScheduleWbs4Value> dayScheduleWbs4ValueList = jdglDayScheduleWbsService.getTotalWbsListByDateRange(StatisticsUtils.addDays(dateRange.get("start"), -1));
 
