@@ -17,5 +17,8 @@ public class QqchSafeRiskListVo  extends PreparationEntity {
     private String type;//0
     /*是否编辑过*/
     private String isEdit;
+
+    private String wbsId;
+
     private QqchSafeRiskList safeRiskList;
 }

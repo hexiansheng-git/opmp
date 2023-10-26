@@ -283,7 +283,6 @@
     <update id="updateQqchSafeRiskList">
         update qqch_safe_risk_list
         <trim prefix="SET" suffixOverrides=",">
-            <if test="id != null ">`id` = #{id},</if>
             <if test="wbsId != null ">`wbs_id` = #{wbsId},</if>
             <if test="wbsVersionId != null ">`wbs_version_id` = #{wbsVersionId},</if>
             <if test="type != null  and  type != ''">`type` = #{type},</if>
