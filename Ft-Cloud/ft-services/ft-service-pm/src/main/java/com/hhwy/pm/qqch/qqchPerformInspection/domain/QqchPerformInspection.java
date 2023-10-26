@@ -151,6 +151,4 @@ public class QqchPerformInspection extends CommonBaseEntity {
     private Long deptId;
 
     private List<QqchPerformInspectionDetail> detailList;
-
-    private String ids;
 }
