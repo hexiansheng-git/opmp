@@ -117,5 +117,7 @@ public class TWarn extends BaseEntity {
     @Excel(name = "租户标识")
     private String tenantKey;
 
+    private String handleStatus;
+
     private String projectName;
 }

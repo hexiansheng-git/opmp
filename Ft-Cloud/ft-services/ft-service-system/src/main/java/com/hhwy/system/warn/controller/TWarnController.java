@@ -8,6 +8,7 @@ import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,24 @@ public class TWarnController extends BaseController {
         TWarn tWarn = tWarnService.getTWarn(tWarnParam);
         return AjaxResult.success(tWarn);
     }
+
+    @GetMapping({"/selfAllList"})
+    public AjaxResult selfAllList(TWarn warn) {
+        List<TWarn> list = this.tWarnService.selectWarnListForSelf(warn);
+        return AjaxResult.success(list);
+    }
+
+    @PutMapping({"/changeHandleStatus"})
+    public AjaxResult changeHandleStatus(@RequestBody TWarnRecord record) {
+        return this.toAjax(tWarnService.changeHandleStatus(record));
+    }
+
+    @PutMapping({"/batchChangeHandleStatus/{status}/{warnIds}"})
+    public AjaxResult batchChangeHandleStatus(@PathVariable Long[] warnIds, @PathVariable String status) {
+        tWarnService.batchChangeHandleStatus(warnIds, status);
+        return AjaxResult.success();
+    }
+
 
 //    @PreAuthorize(hasPermi = "tWarn:list")
     @GetMapping("/list")

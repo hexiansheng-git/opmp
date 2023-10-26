@@ -7,11 +7,15 @@ import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
+import com.hhwy.system.api.domain.SysRole;
 import com.hhwy.system.api.domain.SysUser;
 import com.hhwy.system.core.config.SseEmitterServer;
+import com.hhwy.system.core.mapper.SysRoleMapper;
 import com.hhwy.system.core.mapper.SysUserMapper;
 import com.hhwy.system.mapper.UserMapper;
 import com.hhwy.system.warn.mapper.TWarnMapper;
+import com.hhwy.system.warn.mapper.TWarnRecordMapper;
 import com.hhwy.system.warn.service.ITWarnService;
 import com.hhwy.utils.idworker.IdWorker;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author han
@@ -33,7 +41,13 @@ public class TWarnServiceImpl implements ITWarnService {
     private TWarnMapper tWarnMapper;
 
     @Autowired
+    private TWarnRecordMapper tWarnRecordMapper;
+
+    @Autowired
     private SysUserMapper userMapper;
+
+    @Autowired
+    private SysRoleMapper roleMapper;
 
     @Autowired
     private UserMapper myUserMapper;
@@ -51,7 +65,6 @@ public class TWarnServiceImpl implements ITWarnService {
     @Override
     @Transactional
     public int addWarn(TWarn tWarn) {
-        tWarn.setWarnId(IdWorker.createId());
         tWarn.setCreateUser("admin");
         tWarn.setCreateTime(DateUtils.getNowDate());
         int result = tWarnMapper.insertTWarn(tWarn);
@@ -100,6 +113,54 @@ public class TWarnServiceImpl implements ITWarnService {
                 SseEmitterServer.sendMessage(user.getUserName(), "system", HtmlToText.filterHtmlStr(warnContent));
             }
         }
+    }
+
+    public List<TWarn> selectWarnListForSelf(TWarn warn) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("deptId", SecurityUtils.getSysUser().getDeptId());
+        params.put("userName", SecurityUtils.getUserName());
+        Long userId = SecurityUtils.getUserId();
+        String tenantKey = SecurityUtils.getTenantKey();
+        List<SysRole> sysRoles = roleMapper.selectRoleListByUserId(userId, tenantKey, Collections.singletonList(tenantKey));
+        String roleKeys = sysRoles.stream().map(SysRole::getRoleKey).collect(Collectors.joining());
+        params.put("roleKeys",roleKeys);
+        warn.setParams(params);
+        warn.setTenantKey(tenantKey);
+        return tWarnMapper.selectWarnListForSelf(warn);
+    }
+
+    @Override
+    @Transactional
+    public int changeHandleStatus(TWarnRecord record) {
+        Long warnId = record.getWarnId();
+        String userName = SecurityUtils.getUserName();
+        record.setUpdateUser(userName);
+        record.setUpdateTime(DateUtils.getNowDate());
+        record.setWarnUserName(userName);
+        TWarnRecord warnRecord = tWarnRecordMapper.getWarnRecordByWarnIdAndWarnUser(warnId, userName);
+        if (warnRecord == null) {
+            TWarn warn = tWarnMapper.selectWarnById(warnId);
+            if (record.getWarnUserName() == null) {
+                record.setWarnUserName(userName);
+            }
+            record.setCreateTime(warn.getCreateTime());
+            record.setCreateUser(warn.getCreateUser());
+            return tWarnRecordMapper.insertTWarnRecord(record);
+        } else {
+            return tWarnRecordMapper.changeStatus(record);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void batchChangeHandleStatus(Long[] warnIds, String status) {
+        for (Long warnId : warnIds) {
+            TWarnRecord record = new TWarnRecord();
+            record.setWarnId(warnId);
+            record.setStatus(status);
+            this.changeHandleStatus(record);
+        }
+
     }
 
 
