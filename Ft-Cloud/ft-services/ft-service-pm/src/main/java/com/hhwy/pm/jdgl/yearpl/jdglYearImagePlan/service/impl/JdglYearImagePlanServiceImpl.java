@@ -332,6 +332,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
                     }
                 }
             }
+            if(jdglYearImagePlan.getTotalCompQuantity() == null) jdglYearImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
             if(jdglYearImagePlan.getRemainQuantity() == null) jdglYearImagePlan.setRemainQuantity(jdglYearImagePlan.getDesignQuantity());
             jdglYearImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             jdglYearImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());

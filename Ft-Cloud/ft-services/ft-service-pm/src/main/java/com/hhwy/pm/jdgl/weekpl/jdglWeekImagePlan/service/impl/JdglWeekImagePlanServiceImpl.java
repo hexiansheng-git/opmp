@@ -308,6 +308,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                     }
                 }
             }
+            if(imagePlan.getTotalCompQuantity() == null) imagePlan.setTotalCompQuantity(BigDecimal.ZERO);
             if(imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
             imagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
