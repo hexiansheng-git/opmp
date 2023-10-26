@@ -304,7 +304,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
                     }
                 }
             }
-            if(jdglQuarterImagePlan.getTotalCompQuantity() == null) jdglQuarterImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
+            if(jdglQuarterImagePlan.getTotalCompQuantity() == null && jdglQuarterImagePlan.getDesignQuantity() != null) jdglQuarterImagePlan.setTotalCompQuantity(BigDecimal.ZERO);
             if(jdglQuarterImagePlan.getRemainQuantity() == null) jdglQuarterImagePlan.setRemainQuantity(jdglQuarterImagePlan.getDesignQuantity());
             jdglQuarterImagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             jdglQuarterImagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
