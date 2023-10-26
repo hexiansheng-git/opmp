@@ -221,7 +221,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
         SbchImportInquiry returnVo = new SbchImportInquiry();
         version = VersionUtil.getVersion("sbch_import_inquiry", version);
         SbchImportInquiry sbchImportInquiry = new SbchImportInquiry();
-        sbchImportInquiry.setVersionNo(version);
+        sbchImportInquiry.setVersion(version);
         List<SbchImportInquiry> sbchImportInquiries = sbchImportInquiryMapper.selectSbchImportInquiryList(sbchImportInquiry);
         if(!ObjectNullUtil.isEmpty(sbchImportInquiries)){
             SbchImportInquiry sbchImportInquiry1 = sbchImportInquiries.get(0);
