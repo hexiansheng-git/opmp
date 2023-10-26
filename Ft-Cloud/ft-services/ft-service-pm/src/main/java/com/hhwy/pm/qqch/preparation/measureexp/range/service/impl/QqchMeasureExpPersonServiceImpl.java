@@ -114,7 +114,7 @@ public class QqchMeasureExpPersonServiceImpl implements IQqchMeasureExpPersonSer
                 person.setPositionCode(teamCode);
                 person.setPositionName(teamName);
 
-                QqchLabourDemandPlan qqchLabourDemandPlan = teamMap.get(teamCode) == null ? new QqchLabourDemandPlan() : teamMap.get(teamCode);
+                QqchLabourDemandPlan qqchLabourDemandPlan = teamMap.get(teamName) == null ? new QqchLabourDemandPlan() : teamMap.get(teamName);
                 person.setCnNum(qqchLabourDemandPlan.getChinaNum());
                 person.setLocalNum(qqchLabourDemandPlan.getOutNum());
                 person.setPlanInDate(qqchLabourDemandPlan.getEntryDate());
