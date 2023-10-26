@@ -70,9 +70,8 @@
         <where>
             del_flag = "0"
             <if test="id != null ">and `id` = #{id}</if>
-            <if test="wbsId != null ">and `wbs_id` = #{wbsId}
-                <if test="wbsVersionId != null ">and `wbs_version_id` = #{wbsVersionId}</if>
-            </if>
+            <if test="wbsId != null ">and `wbs_id` = #{wbsId}</if>
+            <if test="wbsVersionId != null ">and `wbs_version_id` = #{wbsVersionId}</if>
             <if test="type != null  and type != ''">and `type` = #{type}</if>
             <if test="planStartDate != null ">and `plan_start_date` = #{planStartDate}</if>
             <if test="planEndDate != null ">and `plan_end_date` = #{planEndDate}</if>

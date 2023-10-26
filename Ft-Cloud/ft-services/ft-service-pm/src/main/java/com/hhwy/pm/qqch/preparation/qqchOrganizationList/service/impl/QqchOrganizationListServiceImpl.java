@@ -73,7 +73,7 @@ public class QqchOrganizationListServiceImpl implements IQqchOrganizationListSer
         qqchOrganizationList.setVersion(version);
         List<QqchOrganizationList> qqchOrganizationListList = qqchOrganizationListMapper.getQqchOrganizationListList(qqchOrganizationList);
         List<QqchOrganizationList> dateList = new ArrayList<>();
-        dateList = TreeUtil.build(qqchOrganizationListList, null);
+        dateList = TreeUtil.buildLeaf(qqchOrganizationListList, null);
         //初始化数据 F1 F2。。。。
         if (dateList.size() == 0) {
             //获取字典项 组织架构设置

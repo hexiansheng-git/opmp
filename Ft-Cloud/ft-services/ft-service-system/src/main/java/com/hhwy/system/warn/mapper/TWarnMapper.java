@@ -16,6 +16,8 @@ public interface TWarnMapper {
 
     TWarn getTWarn(TWarn tWarn);
 
+    TWarn selectWarnById(@Param("warnId") Long warnId);
+
     List<TWarn> getTWarnList(TWarn tWarn);
 
     int insertTWarn(TWarn tWarn);
@@ -29,4 +31,6 @@ public interface TWarnMapper {
     int deleteTWarn(TWarn tWarn);
 
     int deleteTWarnByPks(@Param("tWarnPkList") List<Long> tWarnPkList);
+
+    List<TWarn> selectWarnListForSelf(TWarn warn);
 }

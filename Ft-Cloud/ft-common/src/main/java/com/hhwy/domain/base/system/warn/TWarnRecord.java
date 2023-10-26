@@ -1,7 +1,6 @@
 package com.hhwy.domain.base.system.warn;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -87,104 +86,4 @@ public class TWarnRecord extends BaseEntity {
     @JsonProperty
     @Excel(name = "备注")
     private String remark;
-
-    @JsonIgnore
-    public Long getId() {
-        return id;
-    }
-
-    @JsonIgnore
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @JsonIgnore
-    public Long getWarnId() {
-        return warnId;
-    }
-
-    @JsonIgnore
-    public void setWarnId(Long warnId) {
-        this.warnId = warnId;
-    }
-
-    @JsonIgnore
-    public String getWarnUserId() {
-        return warnUserId;
-    }
-
-    @JsonIgnore
-    public void setWarnUserId(String warnUserId) {
-        this.warnUserId = warnUserId;
-    }
-
-    @JsonIgnore
-    public String getWarnUserName() {
-        return warnUserName;
-    }
-
-    @JsonIgnore
-    public void setWarnUserName(String warnUserName) {
-        this.warnUserName = warnUserName;
-    }
-
-    @JsonIgnore
-    public String getStatus() {
-        return status;
-    }
-
-    @JsonIgnore
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    @JsonIgnore
-    public String getCreateUser() {
-        return createUser;
-    }
-
-    @JsonIgnore
-    public void setCreateUser(String createUser) {
-        this.createUser = createUser;
-    }
-
-    @JsonIgnore
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    @JsonIgnore
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    @JsonIgnore
-    public String getUpdateUser() {
-        return updateUser;
-    }
-
-    @JsonIgnore
-    public void setUpdateUser(String updateUser) {
-        this.updateUser = updateUser;
-    }
-
-    @JsonIgnore
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    @JsonIgnore
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    @JsonIgnore
-    public String getRemark() {
-        return remark;
-    }
-
-    @JsonIgnore
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
 }

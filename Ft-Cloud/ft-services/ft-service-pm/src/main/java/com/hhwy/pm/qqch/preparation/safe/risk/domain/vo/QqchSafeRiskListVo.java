@@ -6,7 +6,6 @@ import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 /**安全风险清单/重大安全风险清单
  * @author zqq
@@ -16,5 +15,7 @@ import java.util.List;
 public class QqchSafeRiskListVo  extends PreparationEntity {
     @NotBlank(message = "标识不能为空！",groups = {ValidationGroups.Save.class,ValidationGroups.Select.class})
     private String type;//0
-    private List<QqchSafeRiskList> list;
+    /*是否编辑过*/
+    private String isEdit;
+    private QqchSafeRiskList safeRiskList;
 }

@@ -64,8 +64,14 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getWarnRecordByWarnIdAndWarnUser" resultMap="TWarnRecordResultMap">
+        <include refid="selectTWarnRecordVo"/>
+        <where>
+            `warn_id` = #{warnId} and `warn_user_name` = #{userName}
+        </where>
+    </select>
 
-    <insert id="insertTWarnRecord" useGeneratedKeys="true" keyProperty="warn_id">
+    <insert id="insertTWarnRecord" useGeneratedKeys="true" keyProperty="id">
         insert into t_warn_record
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null ">`id`,</if>
@@ -202,6 +208,15 @@
         <foreach collection="warnIdList" index="index" item="item" separator="," open="(" close=")">
             #{item.warnId}
         </foreach>
+    </update>
+    <update id="changeStatus">
+        update t_warn_record
+        <set>
+            status = #{status},
+            <if test="updateUser != null and updateUser != ''">update_user = #{updateUser},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        where warn_id = #{warnId} and `warn_user_name` = #{warnUserName}
     </update>
 
     <delete id="deleteTWarnRecord">

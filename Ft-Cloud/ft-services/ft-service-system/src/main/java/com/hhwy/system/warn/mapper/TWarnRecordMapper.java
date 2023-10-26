@@ -29,4 +29,8 @@ public interface TWarnRecordMapper {
     int deleteTWarnRecord(TWarnRecord tWarnRecord);
 
     int deleteTWarnRecordByPks(@Param("tWarnRecordPkList") List<Long> tWarnRecordPkList);
+
+    TWarnRecord getWarnRecordByWarnIdAndWarnUser(@Param("warnId") Long warnId, @Param("userName") String userName);
+
+    int changeStatus(TWarnRecord record);
 }

@@ -108,12 +108,6 @@
             <if test="delFlag != null  and delFlag != ''">and `del_flag` = #{delFlag}</if>
             <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
             <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
-            <if test="infoIdList != null">
-                and `info_id` in
-                    <foreach collection="infoIdList" item="infoId" index="index">
-                        #{infoId}
-                    </foreach>
-            </if>
         </where>
         order by sort
     </select>
@@ -412,13 +406,10 @@
         </where>
     </update>
 
-    <update id="deleteByInfoIds">
+    <update id="deleteByInfoId">
         update `qqch_safe_risk_list_detail` set del_flag = '1',del_user = #{delUser},del_time = #{delTime}
         <where>
-            `info_id` in
-            <foreach item="infoId" collection="infoIdList" open="(" separator="," close=")">
-                #{infoId}
-            </foreach>
+            `info_id` = #{infoId}
         </where>
     </update>
 </mapper>
