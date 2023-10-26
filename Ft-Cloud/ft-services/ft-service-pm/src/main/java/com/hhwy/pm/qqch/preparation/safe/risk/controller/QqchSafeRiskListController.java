@@ -102,7 +102,7 @@ public class QqchSafeRiskListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(SafeRiskListQueryVo queryVo) {
+    public AjaxResult getList(@Validated(ValidationGroups.Select.class) SafeRiskListQueryVo queryVo) {
          return AjaxResult.success(qqchSafeRiskListService.getList(queryVo));
     }
 }
