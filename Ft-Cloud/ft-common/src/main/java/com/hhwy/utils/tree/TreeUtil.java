@@ -31,6 +31,8 @@ public class TreeUtil {
             if (CollectionUtils.isNotEmpty(oChildren)) {
                 nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
                 nChildren.addAll(oChildren);
+            }else {
+                treeVO.setLeaf("1");
             }
             treeVO.setChildren(nChildren);
         });
