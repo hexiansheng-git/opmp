@@ -308,6 +308,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
                     }
                 }
             }
+            if(imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
             imagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             imagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());
