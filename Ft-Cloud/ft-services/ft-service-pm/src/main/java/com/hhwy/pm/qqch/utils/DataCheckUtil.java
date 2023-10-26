@@ -61,4 +61,28 @@ public class DataCheckUtil {
 
         return true;
     }
+
+    public static <T> void checkSingle2(List<T> source, Function<T, Object> getField, String message){
+
+        if(CollectionUtils.isEmpty(source) || getField == null){
+            return;
+        }
+
+        Set<Object> valueSet = new HashSet<>();
+
+        for (T t : source) {
+            Object value = getField.apply(t);
+            if(value == null){
+                continue;
+            }
+            if (value instanceof String && StringUtils.isBlank(String.valueOf(value))) {
+                continue;
+            }
+            if(valueSet.contains(value)){
+                throw new RuntimeException(message);
+            }
+            valueSet.add(value);
+        }
+
+    }
 }
