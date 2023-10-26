@@ -44,7 +44,6 @@ public class QqchSafeRiskListDetailServiceImpl implements IQqchSafeRiskListDetai
     @Transactional
     public int insertQqchSafeRiskListDetailList(List<QqchSafeRiskListDetail> qqchSafeRiskListDetailList) {
         for (QqchSafeRiskListDetail qqchSafeRiskListDetail : qqchSafeRiskListDetailList) {
-            qqchSafeRiskListDetail.setId(IdWorker.createId());
             qqchSafeRiskListDetail.setCreateUser(SecurityUtils.getUserName());
             qqchSafeRiskListDetail.setCreateTime(DateUtils.getNowDate());
         }

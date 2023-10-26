@@ -7,6 +7,7 @@ import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListDetailMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
@@ -36,6 +37,8 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     private QqchSafeRiskListMapper qqchSafeRiskListMapper;
     @Autowired
     private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
+    @Autowired
+    private QqchSafeRiskListDetailMapper qqchSafeRiskListDetailMapper;
     @Autowired
     private IQqchReviewService qqchReviewService;
     @Autowired
@@ -112,7 +115,7 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
             }
         }
         if(!ObjectNullUtil.isEmpty(detailList)){
-            qqchSafeRiskListDetailService.insertQqchSafeRiskListDetailList(detailList);
+            qqchSafeRiskListDetailMapper.insertQqchSafeRiskListDetailList(detailList);
         }
         return 1;
     }
