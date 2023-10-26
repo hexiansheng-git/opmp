@@ -80,6 +80,7 @@ public class FlowInfoSearchUtil {
         for (int i = 0; i < businessIds.length; i++) {
             CommonBaseEntity entity = new CommonBaseEntity();
             entity.setId(Long.valueOf(businessIds[i]));
+            list.add(entity);
         }
         setProcessInfo(list,flowEnum,flowList);
         return list;
