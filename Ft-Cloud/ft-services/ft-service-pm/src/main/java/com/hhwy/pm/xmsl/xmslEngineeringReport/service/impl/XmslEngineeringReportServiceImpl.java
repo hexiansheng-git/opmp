@@ -115,7 +115,9 @@ public class XmslEngineeringReportServiceImpl implements IXmslEngineeringReportS
                 temp.setPid(-1L);
             contractListMap.put(temp.getCode(),temp);
             XmslEngineeringReport report = instanceList(temp);
-            report.setPtVar1("1"); //标志清单复核的清单，1.3要用
+            if(temp.getHaveChildren() == null || temp.getHaveChildren() == 0){
+                report.setPtVar1("1"); //标志清单是否为末级，1.3要用
+            }
             addReportFunc.apply(report,2);
         }
         //3、wbs挂接清单 <> 清单下wbs

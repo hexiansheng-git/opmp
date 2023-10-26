@@ -21,6 +21,7 @@ import jodd.util.StringUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.SetUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,6 +56,31 @@ public class FlowInfoSearchUtil {
         //           2、ft_act_business有数据，根据process_instance_id联查act_ru_task（PROC_INST_ID_），查到的记录即为当前流程待审核节点，
         //          如若没有数据，表明流程已结束，NAME_：当前审批节点名称，ASSIGNEE_：审批人
         List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, SecurityUtils.getTenantKey());
+        setProcessInfo(list,flowEnum,flowList);
+        return list;
+    }
+
+    /**
+     * 只根据业务id查询流程信息
+     * 为总部提供
+     * @param businessIdStr
+     * @param flowEnum
+     * @param <T>
+     * @return
+     */
+    public static <T extends CommonBaseEntity> List<T> getFlowInfo(String businessIdStr, FlowEnum flowEnum){
+        if(StringUtils.isBlank(businessIdStr) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
+            return new ArrayList<>();
+        String[] businessIds = businessIdStr.split(",");
+        if(ArrayUtils.isEmpty(businessIds))
+            return new ArrayList<>();
+        List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, SecurityUtils.getTenantKey());
+        //生成list
+        List list = new ArrayList<>();
+        for (int i = 0; i < businessIds.length; i++) {
+            CommonBaseEntity entity = new CommonBaseEntity();
+            entity.setId(Long.valueOf(businessIds[i]));
+        }
         setProcessInfo(list,flowEnum,flowList);
         return list;
     }

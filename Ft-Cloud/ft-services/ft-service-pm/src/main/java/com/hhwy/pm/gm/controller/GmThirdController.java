@@ -2,15 +2,16 @@ package com.hhwy.pm.gm.controller;
 
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
+import com.hhwy.enums.FlowEnum;
+import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.gm.service.IGmThirdService;
 import com.hhwy.pm.qqch.evaluation.domain.QqchSummaryEvaluation;
 import com.hhwy.pm.qqch.qqchPerformInspection.domain.QqchPerformInspection;
 import com.hhwy.pm.qqch.review.domain.Review;
+import com.hhwy.utils.ObjectUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,23 @@ public class GmThirdController {
     @PostMapping("/evaluationList")
     public AjaxResult evaluationList(@RequestBody Map map) {
         List<QqchSummaryEvaluation> list = gmThirdService.evauluationList(map);
+        return AjaxResult.success(list);
+    }
+
+    /**
+     * 流程信息
+     * 总部调用该接口
+     * @param map {businessIds,flowKey(FlowEnum枚举key) }
+     * @return
+     */
+    @RequestMapping("/getFlowInfo")
+    public AjaxResult isNowfirstNode(@RequestBody Map map){
+        if(MapUtils.isEmpty(map) || ObjectUtils.isBlank(map.get("businessIds")) || ObjectUtils.isBlank(map.get("flowKey")) )
+            return AjaxResult.success();
+        FlowEnum flowEnum = FlowEnum.valueOf(map.get("flowKey").toString());
+        if(flowEnum == null)
+            return AjaxResult.error("获取枚举类失败");
+        List list = FlowInfoSearchUtil.getFlowInfo(map.get("businessIds").toString(),flowEnum);
         return AjaxResult.success(list);
     }
 }
