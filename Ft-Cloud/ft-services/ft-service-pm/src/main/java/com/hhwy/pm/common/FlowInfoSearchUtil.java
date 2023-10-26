@@ -20,6 +20,7 @@ import com.hhwy.utils.common.CommonBaseEntity;
 import jodd.util.StringUtil;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -63,24 +64,38 @@ public class FlowInfoSearchUtil {
     /**
      * 只根据业务id查询流程信息
      * 为总部提供
-     * @param businessIdStr
+     * @param busMap  
      * @param flowEnum
      * @param <T>
      * @return
      */
-    public static <T extends CommonBaseEntity> List<T> getFlowInfo(String businessIdStr, FlowEnum flowEnum){
-        if(StringUtils.isBlank(businessIdStr) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
+    public static <T extends CommonBaseEntity> List<T> getFlowInfo(Map<String,String> busMap, FlowEnum flowEnum){
+        if(MapUtils.isEmpty(busMap) || flowEnum == null || StringUtil.isBlank(flowEnum.getTableName()))
             return new ArrayList<>();
-        String[] businessIds = businessIdStr.split(",");
-        if(ArrayUtils.isEmpty(businessIds))
+        //租户标识: 业务ID集合
+        Map<String,List<String>> groupBusMap = new HashMap<>();
+        for(String k: busMap.keySet()){
+            if(busMap.get(k) ==null)                
+                continue;
+            ObjectUtils.add2MapList(groupBusMap, busMap.get(k), k);
+        }
+        if(MapUtils.isEmpty(groupBusMap) )
             return new ArrayList<>();
-        List<CommonBaseEntity> flowList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(), businessIds, SecurityUtils.getTenantKey());
+        List<CommonBaseEntity> flowList = new ArrayList<>();
         //生成list
         List list = new ArrayList<>();
-        for (int i = 0; i < businessIds.length; i++) {
-            CommonBaseEntity entity = new CommonBaseEntity();
-            entity.setId(Long.valueOf(businessIds[i]));
-            list.add(entity);
+        for(String k: groupBusMap.keySet()){
+            if(CollectionUtils.isEmpty(groupBusMap.get(k)))
+                continue;
+            List<String> busIdList = groupBusMap.get(k);
+            for (int i = 0; i < busIdList.size(); i++) {
+                CommonBaseEntity entity = new CommonBaseEntity();
+                entity.setId(Long.valueOf(busIdList.get(i)));
+                list.add(entity);
+            }
+            List<CommonBaseEntity> tempList = flowInfoMapper.flowByTBNameAndId(flowEnum.getTableName(),groupBusMap.get(k).toArray(new String[]{}) , k);
+            if(tempList != null)
+                flowList.addAll(tempList);
         }
         setProcessInfo(list,flowEnum,flowList);
         return list;
