@@ -62,7 +62,9 @@ public class TreeUtil {
                 nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
                 nChildren.addAll(oChildren);
             }else {
-                treeVO.setLeaf("1");
+                if (!ObjectUtils.isEmpty(treeVO.getPid())) {
+                    treeVO.setLeaf("1");
+                }
             }
             treeVO.setChildren(nChildren);
         });
