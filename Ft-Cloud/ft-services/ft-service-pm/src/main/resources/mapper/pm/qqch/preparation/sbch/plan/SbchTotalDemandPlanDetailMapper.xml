@@ -690,22 +690,22 @@
             <if test="localBuyNum != null ">and `local_buy_num` = #{localBuyNum}</if>
             <if test="localLeaseNum != null ">and `local_lease_num` = #{localLeaseNum}</if>
             <if test="companySelfNum != null ">and `company_self_num` = #{companySelfNum}</if>
-            <if test="params.allocateNumFlag != null and  params.allocateNumFlag != '' and  params.allocateNumFlag == 'true'">
+            <if test="params.allocateNumFlag != null and params.allocateNumFlag == true">
                 and `allocate_num` > 0
             </if>
-            <if test="params.countryBuyNumFlag != null and  params.countryBuyNumFlag != '' and  params.countryBuyNumFlag == 'true'">
+            <if test="params.countryBuyNumFlag != null and params.countryBuyNumFlag == true">
                 and `country_buy_num` > 0
             </if>
-            <if test="params.localBuyNumFlag != null and  params.localBuyNumFlag != '' and  params.localBuyNumFlag == 'true'">
+            <if test="params.localBuyNumFlag != null and  params.localBuyNumFlag == true">
                 and `local_buy_num` > 0
             </if>
-            <if test="params.localLeaseNumFlag != null and  params.localLeaseNumFlag != '' and  params.localLeaseNumFlag == 'true'">
+            <if test="params.localLeaseNumFlag != null and  params.localLeaseNumFlag == true">
                 and `local_lease_num` > 0
             </if>
-            <if test="params.companySelfNumFlag != null and  params.companySelfNumFlag != '' and  params.companySelfNumFlag == 'true'">
+            <if test="params.companySelfNumFlag != null  and  params.companySelfNumFlag == true">
                 and `company_self_num` > 0
             </if>
-            <if test="params.countryAndLocalFlag != null and  params.countryAndLocalFlag != '' and  params.countryAndLocalFlag == 'true'">
+            <if test="params.countryAndLocalFlag != null and  params.countryAndLocalFlag == true">
                 and (`country_buy_num` > 0 or `local_buy_num` > 0 )
             </if>
             <if test="planEntryTime != null ">and `plan_entry_time` = #{planEntryTime}</if>

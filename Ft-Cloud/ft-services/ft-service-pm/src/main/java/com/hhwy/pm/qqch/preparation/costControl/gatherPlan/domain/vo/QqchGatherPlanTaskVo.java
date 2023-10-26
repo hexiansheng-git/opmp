@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.costControl.gatherPlan.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -94,11 +95,13 @@ public class QqchGatherPlanTaskVo {
     /**
      * 字段描述：开工时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date startWorkTime;
     /**
      * 字段描述：完工时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @JsonProperty
     private Date endWorkTime;
     /**

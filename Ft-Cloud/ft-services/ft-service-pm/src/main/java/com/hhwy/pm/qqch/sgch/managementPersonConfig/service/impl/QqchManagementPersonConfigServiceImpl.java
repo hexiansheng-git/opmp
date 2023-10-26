@@ -204,22 +204,47 @@ public class QqchManagementPersonConfigServiceImpl implements IQqchManagementPer
             String stageIdentity = qqchManagementPersonConfigVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId, stageIdentity);
         }
-        //回填人员类别字段
-        try {
-            this.getPersonType();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+//        //回填人员类别字段
+//        try {
+//            this.getPersonType();
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
+
+    /***
+     * 功能描述:
+     * @param username  人员账号
+     * @return java.lang.String  人员类型
+     * 作者: fushudong
+     * 时间: 2023/10/25
+     */
+    public String getPersonType(String username) throws ParserConfigurationException, IOException, SAXException {
+        Map<String, Object> certList = hrService.getCertList(username);
+        if (CollectionUtil.isEmpty(certList))
+            return null;
+        String employeeModle_name = (String) certList.get("employeeModle_name");
+        if (StrUtil.isBlank(employeeModle_name))
+            return null;
+        //黄玉涛:
+        //需要区分中方和外方
+        //轻舟已过万重山:
+        //带  属地  的是外方
+        if (employeeModle_name.contains("属地")){
+            return  "外方";
+        }else {
+            return "中方";
+        }
+    }
+
 
     private void getPersonType() throws ParserConfigurationException, IOException, SAXException {
         List<QqchManagementPersonConfig> list = qqchManagementPersonConfigMapper.getNonPersonTyep();
         if (CollectionUtil.isEmpty(list))
-            return;
+            return ;
         List<QqchManagementPersonConfig> saveList = new ArrayList<>();
         for (QqchManagementPersonConfig perosonConfig : list) {
-            Map<String, Object> certList = hrService.getCertList(perosonConfig.getName());
+            Map<String, Object> certList = hrService.getCertList(perosonConfig.getPtVar1());
             if (CollectionUtil.isEmpty(certList))
                 continue;
             String employeeModle_name = (String) certList.get("employeeModle_name");

@@ -1,96 +1,114 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hhwy.pm.qqch.preparation.sbch.sblease.mapper.SbchEquipmentLeaseDetailsMapper">
-    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails" id="SbchEquipmentLeaseDetailsResult">
-        <result property="id"    column="id"    />
-        <result property="mainId"    column="main_id"    />
-        <result property="suplierId"    column="suplier_id"    />
-        <result property="supplier"    column="supplier"    />
-        <result property="materialName"    column="material_name"    />
-        <result property="materialSpec"    column="material_spec"    />
-        <result property="brandId"    column="brand_id"    />
-        <result property="brand"    column="brand"    />
-        <result property="userYears"    column="user_years"    />
-        <result property="driveMileage"    column="drive_mileage"    />
-        <result property="workHours"    column="work_hours"    />
-        <result property="wholeStatus"    column="whole_status"    />
-        <result property="fileGroupId"    column="file_group_id"    />
-        <result property="leaseUnitprise"    column="lease_unitprise"    />
-        <result property="leaseType"    column="lease_type"    />
-        <result property="fuelBearer"    column="fuel_bearer"    />
-        <result property="operatorSalary"    column="operator_salary"    />
-        <result property="entryExitCost"    column="entry_exit_cost"    />
-        <result property="isSpecialEqu"    column="is_special_equ"    />
-        <result property="remark"    column="remark"    />
-        <result property="createUser"    column="create_user"    />
-        <result property="createUserName"    column="create_user_name"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateUser"    column="update_user"    />
-        <result property="updateUserName"    column="update_user_name"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="delUser"    column="del_user"    />
-        <result property="delTime"    column="del_time"    />
-        <result property="delFlag"    column="del_flag"    />
-        <result property="ptVar1"    column="pt_var1"    />
-        <result property="ptVar2"    column="pt_var2"    />
-        <result property="ptVar3"    column="pt_var3"    />
-        <result property="ptVar4"    column="pt_var4"    />
-        <result property="deptId"    column="dept_id"    />
-        <result property="projectId"    column="project_id"    />
-        <result property="regionId"    column="region_id"    />
-        <result property="region"    column="region"    />
+    <resultMap type="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails"
+               id="SbchEquipmentLeaseDetailsResult">
+        <result property="id" column="id"/>
+        <result property="mainId" column="main_id"/>
+        <result property="suplierId" column="suplier_id"/>
+        <result property="supplier" column="supplier"/>
+        <result property="materialName" column="material_name"/>
+        <result property="materialSpec" column="material_spec"/>
+        <result property="brandId" column="brand_id"/>
+        <result property="brand" column="brand"/>
+        <result property="userYears" column="user_years"/>
+        <result property="driveMileage" column="drive_mileage"/>
+        <result property="workHours" column="work_hours"/>
+        <result property="wholeStatus" column="whole_status"/>
+        <result property="fileGroupId" column="file_group_id"/>
+        <result property="leaseUnitprise" column="lease_unitprise"/>
+        <result property="leaseType" column="lease_type"/>
+        <result property="fuelBearer" column="fuel_bearer"/>
+        <result property="operatorSalary" column="operator_salary"/>
+        <result property="entryExitCost" column="entry_exit_cost"/>
+        <result property="isSpecialEqu" column="is_special_equ"/>
+        <result property="remark" column="remark"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createUserName" column="create_user_name"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateUserName" column="update_user_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delUser" column="del_user"/>
+        <result property="delTime" column="del_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="ptVar1" column="pt_var1"/>
+        <result property="ptVar2" column="pt_var2"/>
+        <result property="ptVar3" column="pt_var3"/>
+        <result property="ptVar4" column="pt_var4"/>
+        <result property="deptId" column="dept_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="regionId" column="region_id"/>
+        <result property="region" column="region"/>
+        <result property="amountPrice" column="amount_price"/>
     </resultMap>
 
     <sql id="selectSbchEquipmentLeaseDetailsVo">
-        select `id`, `main_id`, `suplier_id`, `supplier`, `material_name`, `material_spec`, `brand_id`, `brand`, `user_years`, `drive_mileage`, `work_hours`, `whole_status`, `file_group_id`, `lease_unitprise`, `lease_type`, `fuel_bearer`, `operator_salary`, `entry_exit_cost`, `is_special_equ`, `remark`, `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`, `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `dept_id`, `project_id`, `region_id`, `region` from `sbch_equipment_lease_details`
+        SELECT `id`, `main_id`, `suplier_id`, `supplier`, `material_name`, `material_spec`, `brand_id`, `brand`,
+            `user_years`, `drive_mileage`, `work_hours`, `whole_status`, `file_group_id`, `lease_unitprise`,
+            `lease_type`, `fuel_bearer`, `operator_salary`, `entry_exit_cost`, `is_special_equ`, `remark`,
+            `create_user`, `create_user_name`, `create_time`, `update_user`, `update_user_name`, `update_time`,
+            `del_user`, `del_time`, `del_flag`, `pt_var1`, `pt_var2`, `pt_var3`, `pt_var4`, `dept_id`, `project_id`,
+            `region_id`, `region`, `amount_price`
+        FROM `sbch_equipment_lease_details`
     </sql>
 
-    <select id="selectSbchEquipmentLeaseDetailsList" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails" resultMap="SbchEquipmentLeaseDetailsResult">
+    <select id="selectSbchEquipmentLeaseDetailsList"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails"
+            resultMap="SbchEquipmentLeaseDetailsResult">
         <include refid="selectSbchEquipmentLeaseDetailsVo"/>
         <where>
             `del_flag` = 0
-            <if test="mainId != null "> and `main_id` = #{mainId}</if>
-            <if test="suplierId != null "> and `suplier_id` = #{suplierId}</if>
-            <if test="supplier != null  and supplier != ''"> and `supplier` = #{supplier}</if>
-            <if test="materialName != null  and materialName != ''"> and `material_name` like concat('%', #{materialName}, '%')</if>
-            <if test="materialSpec != null  and materialSpec != ''"> and `material_spec` = #{materialSpec}</if>
-            <if test="brand != null  and brand != ''"> and `brand` = #{brand}</if>
-            <if test="userYears != null  and userYears != ''"> and `user_years` = #{userYears}</if>
-            <if test="driveMileage != null "> and `drive_mileage` = #{driveMileage}</if>
-            <if test="workHours != null "> and `work_hours` = #{workHours}</if>
-            <if test="wholeStatus != null  and wholeStatus != ''"> and `whole_status` = #{wholeStatus}</if>
-            <if test="fileGroupId != null  and fileGroupId != ''"> and `file_group_id` = #{fileGroupId}</if>
-            <if test="leaseUnitprise != null "> and `lease_unitprise` = #{leaseUnitprise}</if>
-            <if test="leaseType != null  and leaseType != ''"> and `lease_type` = #{leaseType}</if>
-            <if test="fuelBearer != null  and fuelBearer != ''"> and `fuel_bearer` = #{fuelBearer}</if>
-            <if test="operatorSalary != null "> and `operator_salary` = #{operatorSalary}</if>
-            <if test="entryExitCost != null "> and `entry_exit_cost` = #{entryExitCost}</if>
-            <if test="isSpecialEqu != null  and isSpecialEqu != ''"> and `is_special_equ` = #{isSpecialEqu}</if>
-            <if test="createUser != null  and createUser != ''"> and `create_user` = #{createUser}</if>
-            <if test="createUserName != null  and createUserName != ''"> and `create_user_name` like concat('%', #{createUserName}, '%')</if>
-            <if test="updateUser != null  and updateUser != ''"> and `update_user` = #{updateUser}</if>
-            <if test="updateUserName != null  and updateUserName != ''"> and `update_user_name` like concat('%', #{updateUserName}, '%')</if>
-            <if test="delUser != null  and delUser != ''"> and `del_user` = #{delUser}</if>
-            <if test="delTime != null "> and `del_time` = #{delTime}</if>
-            <if test="ptVar1 != null  and ptVar1 != ''"> and `pt_var1` = #{ptVar1}</if>
-            <if test="ptVar2 != null  and ptVar2 != ''"> and `pt_var2` = #{ptVar2}</if>
-            <if test="ptVar3 != null  and ptVar3 != ''"> and `pt_var3` = #{ptVar3}</if>
-            <if test="ptVar4 != null  and ptVar4 != ''"> and `pt_var4` = #{ptVar4}</if>
-            <if test="deptId != null "> and `dept_id` = #{deptId}</if>
-            <if test="projectId != null "> and `project_id` = #{projectId}</if>
-            <if test="regionId != null "> and `region_id` = #{regionId}</if>
-            <if test="region != null  and region != ''"> and `region` = #{region}</if>
+            <if test="mainId != null ">and `main_id` = #{mainId}</if>
+            <if test="suplierId != null ">and `suplier_id` = #{suplierId}</if>
+            <if test="supplier != null  and supplier != ''">and `supplier` = #{supplier}</if>
+            <if test="materialName != null  and materialName != ''">and `material_name` like concat('%',
+                #{materialName}, '%')
+            </if>
+            <if test="materialSpec != null  and materialSpec != ''">and `material_spec` = #{materialSpec}</if>
+            <if test="brand != null  and brand != ''">and `brand` = #{brand}</if>
+            <if test="userYears != null  and userYears != ''">and `user_years` = #{userYears}</if>
+            <if test="driveMileage != null ">and `drive_mileage` = #{driveMileage}</if>
+            <if test="workHours != null ">and `work_hours` = #{workHours}</if>
+            <if test="wholeStatus != null  and wholeStatus != ''">and `whole_status` = #{wholeStatus}</if>
+            <if test="fileGroupId != null  and fileGroupId != ''">and `file_group_id` = #{fileGroupId}</if>
+            <if test="leaseUnitprise != null ">and `lease_unitprise` = #{leaseUnitprise}</if>
+            <if test="leaseType != null  and leaseType != ''">and `lease_type` = #{leaseType}</if>
+            <if test="fuelBearer != null  and fuelBearer != ''">and `fuel_bearer` = #{fuelBearer}</if>
+            <if test="operatorSalary != null ">and `operator_salary` = #{operatorSalary}</if>
+            <if test="entryExitCost != null ">and `entry_exit_cost` = #{entryExitCost}</if>
+            <if test="isSpecialEqu != null  and isSpecialEqu != ''">and `is_special_equ` = #{isSpecialEqu}</if>
+            <if test="createUser != null  and createUser != ''">and `create_user` = #{createUser}</if>
+            <if test="createUserName != null  and createUserName != ''">and `create_user_name` like concat('%',
+                #{createUserName}, '%')
+            </if>
+            <if test="updateUser != null  and updateUser != ''">and `update_user` = #{updateUser}</if>
+            <if test="updateUserName != null  and updateUserName != ''">and `update_user_name` like concat('%',
+                #{updateUserName}, '%')
+            </if>
+            <if test="delUser != null  and delUser != ''">and `del_user` = #{delUser}</if>
+            <if test="delTime != null ">and `del_time` = #{delTime}</if>
+            <if test="ptVar1 != null  and ptVar1 != ''">and `pt_var1` = #{ptVar1}</if>
+            <if test="ptVar2 != null  and ptVar2 != ''">and `pt_var2` = #{ptVar2}</if>
+            <if test="ptVar3 != null  and ptVar3 != ''">and `pt_var3` = #{ptVar3}</if>
+            <if test="ptVar4 != null  and ptVar4 != ''">and `pt_var4` = #{ptVar4}</if>
+            <if test="deptId != null ">and `dept_id` = #{deptId}</if>
+            <if test="projectId != null ">and `project_id` = #{projectId}</if>
+            <if test="regionId != null ">and `region_id` = #{regionId}</if>
+            <if test="region != null  and region != ''">and `region` = #{region}</if>
+            <if test="amountPrice != null  and amountPrice != ''">and `amount_price` = #{amountPrice}</if>
         </where>
-#         order by `id` desc
+        # order by `id` desc
     </select>
-    
+
     <select id="selectSbchEquipmentLeaseDetailsById" parameterType="Long" resultMap="SbchEquipmentLeaseDetailsResult">
         <include refid="selectSbchEquipmentLeaseDetailsVo"/>
         where `id` = #{id}
     </select>
-    <insert id="insertSbchEquipmentLeaseDetails" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails">
+    <insert id="insertSbchEquipmentLeaseDetails"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails">
         insert into `sbch_equipment_lease_details`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">`id`,</if>
@@ -130,7 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">`project_id`,</if>
             <if test="regionId != null">`region_id`,</if>
             <if test="region != null">`region`,</if>
-         </trim>
+            <if test="amountPrice != null">`amount_price`,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
             <if test="mainId != null">#{mainId},</if>
@@ -169,349 +188,352 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">#{projectId},</if>
             <if test="regionId != null">#{regionId},</if>
             <if test="region != null">#{region},</if>
-         </trim>
+            <if test="amountPrice != null">#{amountPrice},</if>
+        </trim>
     </insert>
 
     <insert id="batchInsert" parameterType="list">
         insert `sbch_equipment_lease_details` (
-                                                `id`,
-                                                                `main_id`,
-                                                                `suplier_id`,
-                                                                `supplier`,
-                                                                `material_name`,
-                                                                `material_spec`,
-                                                                `brand_id`,
-                                                                `brand`,
-                                                                `user_years`,
-                                                                `drive_mileage`,
-                                                                `work_hours`,
-                                                                `whole_status`,
-                                                                `file_group_id`,
-                                                                `lease_unitprise`,
-                                                                `lease_type`,
-                                                                `fuel_bearer`,
-                                                                `operator_salary`,
-                                                                `entry_exit_cost`,
-                                                                `is_special_equ`,
-                                                                `remark`,
-                                                                `create_user`,
-                                                                `create_user_name`,
-                                                                `create_time`,
-                                                                `update_user`,
-                                                                `update_user_name`,
-                                                                `update_time`,
-                                                                `del_user`,
-                                                                `del_time`,
-                                                                `del_flag`,
-                                                                `pt_var1`,
-                                                                `pt_var2`,
-                                                                `pt_var3`,
-                                                                `pt_var4`,
-                                                                `dept_id`,
-                                                                `project_id`,
-                                                                `region_id`,
-                                                                `region`
-                                    )values
-        <foreach collection="list" separator="," item="item" index="index" >
-                                                (#{item.id},
-                                                                #{item.mainId},
-                                                                #{item.suplierId},
-                                                                #{item.supplier},
-                                                                #{item.materialName},
-                                                                #{item.materialSpec},
-                                                                #{item.brandId},
-                                                                #{item.brand},
-                                                                #{item.userYears},
-                                                                #{item.driveMileage},
-                                                                #{item.workHours},
-                                                                #{item.wholeStatus},
-                                                                #{item.fileGroupId},
-                                                                #{item.leaseUnitprise},
-                                                                #{item.leaseType},
-                                                                #{item.fuelBearer},
-                                                                #{item.operatorSalary},
-                                                                #{item.entryExitCost},
-                                                                #{item.isSpecialEqu},
-                                                                #{item.remark},
-                                                                #{item.createUser},
-                                                                #{item.createUserName},
-                                                                #{item.createTime},
-                                                                #{item.updateUser},
-                                                                #{item.updateUserName},
-                                                                #{item.updateTime},
-                                                                #{item.delUser},
-                                                                #{item.delTime},
-                                                                #{item.delFlag},
-                                                                #{item.ptVar1},
-                                                                #{item.ptVar2},
-                                                                #{item.ptVar3},
-                                                                #{item.ptVar4},
-                                                                #{item.deptId},
-                                                                #{item.projectId},
-                                                                #{item.regionId},
-                                                                #{item.region})
-                                    </foreach>
+        `id`,
+        `main_id`,
+        `suplier_id`,
+        `supplier`,
+        `material_name`,
+        `material_spec`,
+        `brand_id`,
+        `brand`,
+        `user_years`,
+        `drive_mileage`,
+        `work_hours`,
+        `whole_status`,
+        `file_group_id`,
+        `lease_unitprise`,
+        `lease_type`,
+        `fuel_bearer`,
+        `operator_salary`,
+        `entry_exit_cost`,
+        `is_special_equ`,
+        `remark`,
+        `create_user`,
+        `create_user_name`,
+        `create_time`,
+        `update_user`,
+        `update_user_name`,
+        `update_time`,
+        `del_user`,
+        `del_time`,
+        `del_flag`,
+        `pt_var1`,
+        `pt_var2`,
+        `pt_var3`,
+        `pt_var4`,
+        `dept_id`,
+        `project_id`,
+        `region_id`,
+        `region`,
+        `amount_price`
+        )values
+        <foreach collection="list" separator="," item="item" index="index">
+            (#{item.id},
+            #{item.mainId},
+            #{item.suplierId},
+            #{item.supplier},
+            #{item.materialName},
+            #{item.materialSpec},
+            #{item.brandId},
+            #{item.brand},
+            #{item.userYears},
+            #{item.driveMileage},
+            #{item.workHours},
+            #{item.wholeStatus},
+            #{item.fileGroupId},
+            #{item.leaseUnitprise},
+            #{item.leaseType},
+            #{item.fuelBearer},
+            #{item.operatorSalary},
+            #{item.entryExitCost},
+            #{item.isSpecialEqu},
+            #{item.remark},
+            #{item.createUser},
+            #{item.createUserName},
+            #{item.createTime},
+            #{item.updateUser},
+            #{item.updateUserName},
+            #{item.updateTime},
+            #{item.delUser},
+            #{item.delTime},
+            #{item.delFlag},
+            #{item.ptVar1},
+            #{item.ptVar2},
+            #{item.ptVar3},
+            #{item.ptVar4},
+            #{item.deptId},
+            #{item.projectId},
+            #{item.regionId},
+            #{item.region},
+            #{item.amountPrice})
+        </foreach>
     </insert>
 
     <update id="batchUpdate" parameterType="list">
         update `sbch_equipment_lease_details`
         <trim prefix="set" suffixOverrides=",">
-                                                                <trim prefix="main_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.mainId != null ">
-                                when `id` = #{item.id} then #{item.mainId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="suplier_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.suplierId != null ">
-                                when `id` = #{item.id} then #{item.suplierId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="supplier =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.supplier != null ">
-                                when `id` = #{item.id} then #{item.supplier}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="material_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.materialName != null ">
-                                when `id` = #{item.id} then #{item.materialName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="material_spec =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.materialSpec != null ">
-                                when `id` = #{item.id} then #{item.materialSpec}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="brand =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.brand != null ">
-                                when `id` = #{item.id} then #{item.brand}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="user_years =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.userYears != null ">
-                                when `id` = #{item.id} then #{item.userYears}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="drive_mileage =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.driveMileage != null ">
-                                when `id` = #{item.id} then #{item.driveMileage}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="work_hours =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.workHours != null ">
-                                when `id` = #{item.id} then #{item.workHours}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="whole_status =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.wholeStatus != null ">
-                                when `id` = #{item.id} then #{item.wholeStatus}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="file_group_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.fileGroupId != null ">
-                                when `id` = #{item.id} then #{item.fileGroupId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="lease_unitprise =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.leaseUnitprise != null ">
-                                when `id` = #{item.id} then #{item.leaseUnitprise}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="lease_type =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.leaseType != null ">
-                                when `id` = #{item.id} then #{item.leaseType}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="fuel_bearer =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.fuelBearer != null ">
-                                when `id` = #{item.id} then #{item.fuelBearer}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="operator_salary =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.operatorSalary != null ">
-                                when `id` = #{item.id} then #{item.operatorSalary}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="entry_exit_cost =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.entryExitCost != null ">
-                                when `id` = #{item.id} then #{item.entryExitCost}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="is_special_equ =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.isSpecialEqu != null ">
-                                when `id` = #{item.id} then #{item.isSpecialEqu}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="remark =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.remark != null ">
-                                when `id` = #{item.id} then #{item.remark}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="create_user =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.createUser != null ">
-                                when `id` = #{item.id} then #{item.createUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="create_user_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.createUserName != null ">
-                                when `id` = #{item.id} then #{item.createUserName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="create_time =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.createTime != null ">
-                                when `id` = #{item.id} then #{item.createTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="update_user =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.updateUser != null ">
-                                when `id` = #{item.id} then #{item.updateUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="update_user_name =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.updateUserName != null ">
-                                when `id` = #{item.id} then #{item.updateUserName}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="update_time =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.updateTime != null ">
-                                when `id` = #{item.id} then #{item.updateTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="del_user =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.delUser != null ">
-                                when `id` = #{item.id} then #{item.delUser}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="del_time =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.delTime != null ">
-                                when `id` = #{item.id} then #{item.delTime}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="del_flag =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.delFlag != null ">
-                                when `id` = #{item.id} then #{item.delFlag}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var1 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar1 != null ">
-                                when `id` = #{item.id} then #{item.ptVar1}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var2 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar2 != null ">
-                                when `id` = #{item.id} then #{item.ptVar2}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var3 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar3 != null ">
-                                when `id` = #{item.id} then #{item.ptVar3}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="pt_var4 =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.ptVar4 != null ">
-                                when `id` = #{item.id} then #{item.ptVar4}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="dept_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.deptId != null ">
-                                when `id` = #{item.id} then #{item.deptId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="project_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.projectId != null ">
-                                when `id` = #{item.id} then #{item.projectId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="region_id =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.regionId != null ">
-                                when `id` = #{item.id} then #{item.regionId}
-                            </if>
-                        </foreach>
-                    </trim>
-                                                    <trim prefix="region =case" suffix="end,">
-                        <foreach collection="dataList" item="item" index="index">
-                            <if test="item.region != null ">
-                                when `id` = #{item.id} then #{item.region}
-                            </if>
-                        </foreach>
-                    </trim>
-                                    </trim>
+            <trim prefix="main_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.mainId != null ">
+                        when `id` = #{item.id} then #{item.mainId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="suplier_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.suplierId != null ">
+                        when `id` = #{item.id} then #{item.suplierId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="supplier =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.supplier != null ">
+                        when `id` = #{item.id} then #{item.supplier}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialName != null ">
+                        when `id` = #{item.id} then #{item.materialName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="material_spec =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.materialSpec != null ">
+                        when `id` = #{item.id} then #{item.materialSpec}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="brand =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.brand != null ">
+                        when `id` = #{item.id} then #{item.brand}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_years =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.userYears != null ">
+                        when `id` = #{item.id} then #{item.userYears}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="drive_mileage =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.driveMileage != null ">
+                        when `id` = #{item.id} then #{item.driveMileage}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="work_hours =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.workHours != null ">
+                        when `id` = #{item.id} then #{item.workHours}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="whole_status =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.wholeStatus != null ">
+                        when `id` = #{item.id} then #{item.wholeStatus}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="file_group_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.fileGroupId != null ">
+                        when `id` = #{item.id} then #{item.fileGroupId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="lease_unitprise =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.leaseUnitprise != null ">
+                        when `id` = #{item.id} then #{item.leaseUnitprise}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="lease_type =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.leaseType != null ">
+                        when `id` = #{item.id} then #{item.leaseType}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="fuel_bearer =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.fuelBearer != null ">
+                        when `id` = #{item.id} then #{item.fuelBearer}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="operator_salary =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.operatorSalary != null ">
+                        when `id` = #{item.id} then #{item.operatorSalary}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="entry_exit_cost =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.entryExitCost != null ">
+                        when `id` = #{item.id} then #{item.entryExitCost}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="is_special_equ =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.isSpecialEqu != null ">
+                        when `id` = #{item.id} then #{item.isSpecialEqu}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="remark =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.remark != null ">
+                        when `id` = #{item.id} then #{item.remark}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUser != null ">
+                        when `id` = #{item.id} then #{item.createUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createUserName != null ">
+                        when `id` = #{item.id} then #{item.createUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.createTime != null ">
+                        when `id` = #{item.id} then #{item.createTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUser != null ">
+                        when `id` = #{item.id} then #{item.updateUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_user_name =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateUserName != null ">
+                        when `id` = #{item.id} then #{item.updateUserName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.updateTime != null ">
+                        when `id` = #{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_user =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delUser != null ">
+                        when `id` = #{item.id} then #{item.delUser}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_time =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delTime != null ">
+                        when `id` = #{item.id} then #{item.delTime}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="del_flag =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.delFlag != null ">
+                        when `id` = #{item.id} then #{item.delFlag}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var1 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar1 != null ">
+                        when `id` = #{item.id} then #{item.ptVar1}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var2 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar2 != null ">
+                        when `id` = #{item.id} then #{item.ptVar2}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var3 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar3 != null ">
+                        when `id` = #{item.id} then #{item.ptVar3}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="pt_var4 =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.ptVar4 != null ">
+                        when `id` = #{item.id} then #{item.ptVar4}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="dept_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.deptId != null ">
+                        when `id` = #{item.id} then #{item.deptId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="project_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.projectId != null ">
+                        when `id` = #{item.id} then #{item.projectId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region_id =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.regionId != null ">
+                        when `id` = #{item.id} then #{item.regionId}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="region =case" suffix="end,">
+                <foreach collection="dataList" item="item" index="index">
+                    <if test="item.region != null ">
+                        when `id` = #{item.id} then #{item.region}
+                    </if>
+                </foreach>
+            </trim>
+
+        </trim>
         where
-        <foreach collection="dataList" separator="or" item="item" index="index" >
+        <foreach collection="dataList" separator="or" item="item" index="index">
             `id` = #{item.id}
         </foreach>
     </update>
 
 
-
-
-    <update id="updateSbchEquipmentLeaseDetails" parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails">
+    <update id="updateSbchEquipmentLeaseDetails"
+            parameterType="com.hhwy.pm.qqch.preparation.sbch.sblease.domain.SbchEquipmentLeaseDetails">
         update `sbch_equipment_lease_details`
         <trim prefix="SET" suffixOverrides=",">
             <if test="mainId != null">`main_id` = #{mainId},</if>
@@ -550,12 +572,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="projectId != null">`project_id` = #{projectId},</if>
             <if test="regionId != null">`region_id` = #{regionId},</if>
             <if test="region != null">`region` = #{region},</if>
+            <if test="amountPrice != null">`amountPrice` = #{amountPrice},</if>
         </trim>
         where `id` = #{id}
     </update>
 
     <update id="deleteSbchEquipmentLeaseDetailsById" parameterType="Long">
-        update `sbch_equipment_lease_details` set del_flag = 1 where `id` = #{id}
+        UPDATE `sbch_equipment_lease_details`
+        SET del_flag = 1
+        WHERE `id` = #{id}
     </update>
 
     <update id="deleteSbchEquipmentLeaseDetailsByIds" parameterType="String">
@@ -565,7 +590,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </update>
     <update id="deleteSbchEquipmentLeaseDetailsByMainId" parameterType="Long">
-        update `sbch_equipment_lease_details` set del_flag = 1 where main_id=#{mainId}
+        UPDATE `sbch_equipment_lease_details`
+        SET del_flag = 1
+        WHERE main_id = #{mainId}
     </update>
 
 </mapper>

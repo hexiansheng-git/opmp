@@ -29,7 +29,7 @@ public class QqchTotalDemandController extends BaseController{
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
-    @PreAuthorize(hasPermi = "qqchTotalDemand:list")
+//    @PreAuthorize(hasPermi = "qqchTotalDemand:list")
     @GetMapping
     public AjaxResult getQqchTotalDemand(@Validated(ValidationGroups.Get.class)  QqchTotalDemand qqchTotalDemandParam){
         QqchTotalDemand qqchTotalDemand =  qqchTotalDemandService.getQqchTotalDemand(qqchTotalDemandParam);
@@ -41,7 +41,7 @@ public class QqchTotalDemandController extends BaseController{
      * @param qqchTotalDemandParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTotalDemand:list")
+//    @PreAuthorize(hasPermi = "qqchTotalDemand:list")
     @GetMapping("/list")
     public AjaxResult getQqchTotalDemandList(@Validated(ValidationGroups.Select.class) QqchTotalDemand qqchTotalDemandParam){
         QqchTotalDemandVo vo = qqchTotalDemandService.getQqchTotalDemandList(qqchTotalDemandParam);

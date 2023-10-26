@@ -31,14 +31,14 @@ public class TWarnRecordController extends BaseController {
     private ITWarnRecordService tWarnRecordService;
 
 
-    @PreAuthorize(hasPermi = "tWarnRecord:list")
+//    @PreAuthorize(hasPermi = "tWarnRecord:list")
     @GetMapping
     public AjaxResult getTWarnRecord(@Validated(ValidationGroups.Get.class) TWarnRecord tWarnRecordParam) {
         TWarnRecord tWarnRecord = tWarnRecordService.getTWarnRecord(tWarnRecordParam);
         return AjaxResult.success(tWarnRecord);
     }
 
-    @PreAuthorize(hasPermi = "tWarnRecord:list")
+//    @PreAuthorize(hasPermi = "tWarnRecord:list")
     @GetMapping("/list")
     public AjaxResult getTWarnRecordList(@Validated(ValidationGroups.Select.class) TWarnRecord tWarnRecordParam) {
         startPage();

@@ -118,9 +118,9 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         //修改主表
         int result = qqchPerformInspectionMapper.updateQqchPerformInspection(qqchPerformInspection);
         //若为发起，推送数据到总部
-        if("1".equals(qqchPerformInspection.getPtVar5())) {
+//        if("1".equals(qqchPerformInspection.getPtVar5())) {
             sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);
-        }
+//        }
         return result;
     }
 

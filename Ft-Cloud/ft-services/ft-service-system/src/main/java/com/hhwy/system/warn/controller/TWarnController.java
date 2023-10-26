@@ -33,14 +33,14 @@ public class TWarnController extends BaseController {
     private ITWarnService tWarnService;
 
 
-    @PreAuthorize(hasPermi = "tWarn:list")
+//    @PreAuthorize(hasPermi = "tWarn:list")
     @GetMapping
     public AjaxResult getTWarn(@Validated(ValidationGroups.Get.class) TWarn tWarnParam) {
         TWarn tWarn = tWarnService.getTWarn(tWarnParam);
         return AjaxResult.success(tWarn);
     }
 
-    @PreAuthorize(hasPermi = "tWarn:list")
+//    @PreAuthorize(hasPermi = "tWarn:list")
     @GetMapping("/list")
     public AjaxResult getTWarnList(@Validated(ValidationGroups.Select.class) TWarn tWarnParam) {
         startPage();

@@ -291,9 +291,7 @@ public class QqchAdvancedVindicatePlanServiceImpl implements IQqchAdvancedVindic
         List<QqchAdvancedVindicatePlan> qqchAdvancedVindicatePlanList = qqchAdvancedVindicatePlanVo.getList();
 
         //校验唯一
-        if(!DataCheckUtil.checkSingle1(qqchAdvancedVindicatePlanList,QqchAdvancedVindicatePlan::getTopicCode)){
-            throw new RuntimeException("课题编号不能重复！");
-        }
+        DataCheckUtil.checkSingle2(qqchAdvancedVindicatePlanList,QqchAdvancedVindicatePlan::getTopicCode,"课题编号不能重复");
 
         this.insertQqchAdvancedVindicatePlanList(qqchAdvancedVindicatePlanList,version);
 

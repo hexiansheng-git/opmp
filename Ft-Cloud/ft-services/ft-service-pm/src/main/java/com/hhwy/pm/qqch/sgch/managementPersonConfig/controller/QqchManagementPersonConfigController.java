@@ -106,5 +106,22 @@ public class QqchManagementPersonConfigController extends BaseController {
         return toAjax(qqchManagementPersonConfigService.deleteQqchManagementPersonConfigByPks(qqchManagementPersonConfigPkList));
     }
 
+    /***
+     * 功能描述:
+     * @param userName 员工账号
+     * 作者: fushudong
+     * 时间: 2023/10/25
+     */
+    @GetMapping("/queryPersonType")
+    public AjaxResult queryPersonType(@RequestParam(value = "userName", required = true) String userName){
+        String personType = null;
+        try {
+            personType = qqchManagementPersonConfigService.getPersonType(userName);
+        } catch (Exception e) {
+            return AjaxResult.error("获取人员类型异常");
+        }
+        return AjaxResult.success("success",personType);
+    }
+
 
 }
