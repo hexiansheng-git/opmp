@@ -158,6 +158,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
         QqchWorkGroup planEstablishDirector = this.getPlanEstablishDirector();
 
+        //查询紧急程度
+        QqchWorkPlan query = new QqchWorkPlan();
+        query.setVersion(qqchWorkPlan.getVersion());
+        QqchWorkPlan workPlan = workPlanService.getQqchWorkPlan(query);
 
         List<Review> iData = new ArrayList<>();
         for (String planStage : planStages) {
@@ -199,14 +203,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             review.setReqSubmitDate(date);
             review.setTaskStatus("0");
             review.setFinishNum(0);
-            //查询紧急程度
-            QqchWorkPlan query = new QqchWorkPlan();
-            query.setVersion(qqchWorkPlan.getVersion());
-            QqchWorkPlan workPlan = workPlanService.getQqchWorkPlan(query);
             if(workPlan != null){
                 review.setExigencyStatus(workPlan.getExigencyStatus());
             }
-            review.setExigencyStatus(qqchWorkPlan.getExigencyStatus());
+//            review.setExigencyStatus(qqchWorkPlan.getExigencyStatus());
             EntityUtils.setCreateUpdateInfo(review);
             iData.add(review);
         }
