@@ -488,6 +488,7 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     }
 
     @Override
+    @Transactional
     public void updateWorkPlanProcess(Long id) {
         //所有都置为无效
         qqchWorkPlanMapper.updateAllToInvalid();
@@ -502,6 +503,10 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
 
         //调用前期策划评审
         qqchReviewService.savePlan(id);
+
+        //推送到总部
+        rocketMQTemplate.convertAndSend("qqch_work_plan_effect:effect", qqchWorkPlan.getId()+"");
+
     }
 
     /**
