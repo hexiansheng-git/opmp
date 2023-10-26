@@ -1009,4 +1009,14 @@
         from jdgl_main_plan_item
         where del_flag = "0" and main_plan_id = #{mainPlanId}
     </select>
+    <select id="getUsingJdglMainPlanItemByItemCodes" resultMap="JdglMainPlanItemResultMap">
+        <include refid="selectJdglMainPlanItemVo" />
+        <where>
+            main_plan_id = #{mainPlanId}
+            and `item_code` in
+            <foreach item="itemCode" collection="itemCodes" open="(" separator="," close=")">
+                #{itemCode}
+            </foreach>
+        </where>
+    </select>
 </mapper>

@@ -36,4 +36,6 @@ public interface JdglMainPlanItemMapper {
     JdglMainPlanItem getMaxActualStartDate(@Param("mainPlanId") Long mainPlanId);
 
     JdglMainPlanItem getProjStartAndFinish(@Param("mainPlanId") Long mainPlanId);
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemByItemCodes(@Param("mainPlanId") Long mainPlanId,@Param("itemCodes") List<String> itemCodes);
 }

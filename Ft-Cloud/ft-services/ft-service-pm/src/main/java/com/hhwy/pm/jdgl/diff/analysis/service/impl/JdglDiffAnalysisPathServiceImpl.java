@@ -61,8 +61,8 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
 
     @Transactional
     public int insertJdglDiffAnalysisPath(JdglDiffAnalysisPath jdglDiffAnalysisPath) {
-        jdglDiffAnalysisPath.setId(IdWorker.createId());
-        jdglDiffAnalysisPath.setCreateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysisPath.setId(IdWorker.createId());
+//        jdglDiffAnalysisPath.setCreateUser(SecurityUtils.getUserName());
         jdglDiffAnalysisPath.setCreateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisPathMapper.insertJdglDiffAnalysisPath(jdglDiffAnalysisPath);
     }
@@ -71,7 +71,7 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
     public int insertJdglDiffAnalysisPathList(List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList) {
         for (JdglDiffAnalysisPath jdglDiffAnalysisPath : jdglDiffAnalysisPathList) {
 //            jdglDiffAnalysisPath.setId(IdWorker.createId());
-            jdglDiffAnalysisPath.setCreateUser(SecurityUtils.getUserName());
+//            jdglDiffAnalysisPath.setCreateUser(SecurityUtils.getUserName());
             jdglDiffAnalysisPath.setCreateTime(DateUtils.getNowDate());
         }
         return jdglDiffAnalysisPathMapper.insertJdglDiffAnalysisPathList(jdglDiffAnalysisPathList);

@@ -75,7 +75,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
     @Transactional
     public int insertJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
         jdglDiffAnalysisSv.setId(IdWorker.createId());
-        jdglDiffAnalysisSv.setCreateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysisSv.setCreateUser(SecurityUtils.getUserName());
         jdglDiffAnalysisSv.setCreateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSv(jdglDiffAnalysisSv);
     }
@@ -83,8 +83,8 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
     @Transactional
     public int insertJdglDiffAnalysisSvList(List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList) {
         for (JdglDiffAnalysisSv jdglDiffAnalysisSv : jdglDiffAnalysisSvList) {
-            jdglDiffAnalysisSv.setId(IdWorker.createId());
-            jdglDiffAnalysisSv.setCreateUser(SecurityUtils.getUserName());
+//            jdglDiffAnalysisSv.setId(IdWorker.createId());
+//            jdglDiffAnalysisSv.setCreateUser(SecurityUtils.getUserName());
             jdglDiffAnalysisSv.setCreateTime(DateUtils.getNowDate());
         }
         return jdglDiffAnalysisSvMapper.insertJdglDiffAnalysisSvList(jdglDiffAnalysisSvList);

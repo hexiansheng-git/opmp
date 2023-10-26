@@ -128,7 +128,8 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
             if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglYearPlanParam.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglYearPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+//                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglYearPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
                     jdglYearPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
@@ -280,7 +281,11 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         BigDecimal thisPlanAmt = iJdglYearImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglYearPlan.getExchangeRate();
         jdglYearPlan.setYearPlanValueCu(thisPlanAmt);
-        jdglYearPlan.setYearPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglYearPlan.setYearPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglYearPlan.setYearPlanValueDl(BigDecimal.ZERO);
+        }
 
         return jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
     }
@@ -322,8 +327,11 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
         BigDecimal thisPlanAmt = iJdglYearImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglYearPlan.getExchangeRate();
         jdglYearPlan.setYearPlanValueCu(thisPlanAmt);
-        jdglYearPlan.setYearPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
-
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglYearPlan.setYearPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglYearPlan.setYearPlanValueDl(BigDecimal.ZERO);
+        }
         return jdglYearPlanMapper.updateJdglYearPlan(jdglYearPlan);
     }
 

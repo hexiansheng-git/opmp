@@ -16,26 +16,51 @@ public class JdglData4P6Controller {
     @Autowired
     private IJdglData4P6Service jdglData4P6Service;
 
-    @PostMapping("/initJdglData4P6")
-    public AjaxResult initJdglData4P6() {
-        return AjaxResult.success(jdglData4P6Service.initJdglData4P6());
-    }
-
+    /**
+     * 根据租户编号拉取p6数据(不切租户)
+     * @param tenantKey
+     * @return
+     */
     @PostMapping("/initJdglData4P6ByOne")
     public AjaxResult initJdglData4P6ByOne(String tenantKey) {
         return AjaxResult.success(jdglData4P6Service.initJdglData4P6ByOne(tenantKey));
     }
 
+    /**
+     * 拉取所有租户p6数据(切租户)
+     * @param
+     * @return
+     */
     @PostMapping("/initJdglData4P6ByAll")
     public AjaxResult initJdglData4P6ByAll() {
         return AjaxResult.success(jdglData4P6Service.initAllJdglData4P6());
     }
 
+    /**
+     * 根据租户编号拉取p6数据(切租户)
+     * @param projectId
+     * @return
+     */
     @PostMapping("/initOneJdglData4P6ByTenent")
     public AjaxResult initOneJdglData4P6ByTenent(String projectId) {
         return AjaxResult.success(jdglData4P6Service.initOneJdglData4P6ByTenent(projectId));
     }
 
+    /**
+     * 根据租户编号拉取p6作业逻辑数据(切租户)
+     * @param projectId
+     * @return
+     */
+    @PostMapping("/initJdglWorkPreData4P6ByTenent")
+    public AjaxResult initJdglWorkPreData4P6ByTenent(String projectId) {
+        return AjaxResult.success(jdglData4P6Service.initJdglWorkPreData4P6ByTenent(projectId));
+    }
+
+    /**
+     * 根据项目编码获取项目信息
+     * @param projectCode
+     * @return
+     */
     @GetMapping("/getProjectInfo")
     public AjaxResult getProjectInfo(String projectCode) {
         return AjaxResult.success(jdglData4P6Service.getProjectInfo(projectCode));

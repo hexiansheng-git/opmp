@@ -103,7 +103,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     @Transactional
     public int insertJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis) {
         jdglDiffAnalysis.setId(IdWorker.createId());
-        jdglDiffAnalysis.setCreateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysis.setCreateUser(SecurityUtils.getUserName());
         jdglDiffAnalysis.setCreateTime(DateUtils.getNowDate());
         return jdglDiffAnalysisMapper.insertJdglDiffAnalysis(jdglDiffAnalysis);
     }

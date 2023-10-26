@@ -138,7 +138,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
             if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglQuarterPlanParam.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglQuarterPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
                     jdglQuarterPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
@@ -298,8 +298,11 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         BigDecimal thisPlanAmt = iJdglQuarterImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglQuarterPlan.getExchangeRate();
         jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
-        jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
-
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglQuarterPlan.setThisPlanValueDl(BigDecimal.ZERO);
+        }
         return jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);
     }
 
@@ -344,9 +347,11 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
         BigDecimal thisPlanAmt = iJdglQuarterImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglQuarterPlan.getExchangeRate();
         jdglQuarterPlan.setThisPlanValueCu(thisPlanAmt);
-        jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
-
-
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglQuarterPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglQuarterPlan.setThisPlanValueDl(BigDecimal.ZERO);
+        }
         return jdglQuarterPlanMapper.updateJdglQuarterPlan(jdglQuarterPlan);
     }
 

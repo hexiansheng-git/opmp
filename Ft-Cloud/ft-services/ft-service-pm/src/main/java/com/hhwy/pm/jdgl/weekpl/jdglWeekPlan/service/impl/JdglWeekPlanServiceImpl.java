@@ -136,7 +136,8 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
             if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglWeekPlanParam.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglWeekPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+//                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglWeekPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
                     jdglWeekPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
@@ -301,7 +302,11 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         BigDecimal thisPlanAmt = iJdglWeekImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglWeekPlan.getExchangeRate();
         jdglWeekPlan.setThisPlanValueCu(thisPlanAmt);
-        jdglWeekPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglWeekPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglWeekPlan.setThisPlanValueDl(BigDecimal.ZERO);
+        }
 
         return jdglWeekPlanMapper.updateJdglWeekPlan(jdglWeekPlan);
     }
@@ -346,8 +351,11 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         BigDecimal thisPlanAmt = iJdglWeekImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglWeekPlan.getExchangeRate();
         jdglWeekPlan.setThisPlanValueCu(thisPlanAmt);
-        jdglWeekPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
-
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglWeekPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglWeekPlan.setThisPlanValueDl(BigDecimal.ZERO);
+        }
         return jdglWeekPlanMapper.updateJdglWeekPlan(jdglWeekPlan);
     }
 

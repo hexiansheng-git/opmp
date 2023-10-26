@@ -49,4 +49,8 @@ public interface IJdglMainPlanItemService {
     List<JdglMainPlanItem> getUsingKeyRoad();
 
     List<JdglMainPlanItem> getUsingNoKeyRoad();
+
+    List<JdglMainPlanItem> getUsingJdglMainPlanItemByItemCodes(List<String> itemCodes);
+
+    List<JdglMainPlanItem> getJdglMainPlanItemByMainPlanId(Long mainPlanId);
 }

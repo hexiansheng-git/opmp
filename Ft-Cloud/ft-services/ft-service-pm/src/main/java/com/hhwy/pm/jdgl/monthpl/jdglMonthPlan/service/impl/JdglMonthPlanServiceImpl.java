@@ -134,7 +134,8 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             // 获取财务管理-风险管理-汇率登记
             List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
             if(!CollectionUtils.isEmpty(xmslContractPayinfoList) && jdglMonthPlanParam.getCustUnitCode() != null) {
-                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglMonthPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+//                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> jdglMonthPlanParam.getCustUnitCode().equals(vo.getCurrencyCode())).findFirst().orElse(null);
+                XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
                 if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
                     jdglMonthPlanParam.setExchangeRate(new BigDecimal(xmslContractPayinfo.getObversionRate()));
                 }
@@ -306,8 +307,11 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         BigDecimal thisPlanAmt = iJdglMonthImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglMonthPlan.getExchangeRate();
         jdglMonthPlan.setThisPlanValueCu(thisPlanAmt);
-        jdglMonthPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
-
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglMonthPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglMonthPlan.setThisPlanValueDl(BigDecimal.ZERO);
+        }
         return jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
     }
 
@@ -352,8 +356,11 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
         BigDecimal thisPlanAmt = iJdglMonthImagePlanService.getThisPlanAmt(id);
         BigDecimal exchangeRate = jdglMonthPlan.getExchangeRate();
         jdglMonthPlan.setThisPlanValueCu(thisPlanAmt);
-        jdglMonthPlan.setThisPlanValueDl(thisPlanAmt == null || exchangeRate == null ? thisPlanAmt : thisPlanAmt.multiply(exchangeRate));
-
+        if(thisPlanAmt != null && exchangeRate != null && BigDecimal.ZERO.compareTo(exchangeRate) != 0) {
+            jdglMonthPlan.setThisPlanValueDl(thisPlanAmt.divide(exchangeRate, 2, BigDecimal.ROUND_HALF_UP));
+        } else {
+            jdglMonthPlan.setThisPlanValueDl(BigDecimal.ZERO);
+        }
         return jdglMonthPlanMapper.updateJdglMonthPlan(jdglMonthPlan);
     }
 
