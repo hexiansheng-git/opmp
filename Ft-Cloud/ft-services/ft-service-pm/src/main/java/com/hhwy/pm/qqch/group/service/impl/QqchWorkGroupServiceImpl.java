@@ -433,6 +433,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setIssueDate(DateUtils.getNowDate());
         qqchWorkGroup.setTaskStatus("5");//流程结束
         qqchWorkGroupMapper.updateQqchWorkGroup(qqchWorkGroup);
+        //推送到总部
+        rocketMQTemplate.convertAndSend("qqch_work_group_effect:effect", id);
     }
 
     @Override

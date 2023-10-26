@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.evaluation.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.utils.DateUtils;
@@ -21,6 +22,7 @@ import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -103,6 +105,8 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         QqchSummaryEvaluation summaryEvaluation = qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(query);
         summaryEvaluation.setTaskStatus("5");
         qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(summaryEvaluation);
+        //推送到总部
+        sysSyncInfoService.pushQqchSummaryEvaluation(summaryEvaluation);
     }
 
     @Override
