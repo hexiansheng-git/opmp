@@ -179,12 +179,13 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         fillWzchTotalDemand(wzchTotalDemand);
         fillWzchTotalDemandDetail(wzchTotalDemand);
 
-//        WzchTotalDemand demand = wzchTotalDemandService.selectWzchTotalDemandById(wzchTotalDemand.getId());
-//        if (demand != null) {
-//            wzchTotalDemandService.updateWzchTotalDemand(wzchTotalDemand);
-//        } else {
-//            wzchTotalDemandService.insertWzchTotalDemand(wzchTotalDemand);
-//        }
+        WzchTotalDemand demand = wzchTotalDemandService.selectWzchTotalDemandById(wzchTotalDemand.getId());
+        if (demand != null) {
+            wzchTotalDemandService.updateWzchTotalDemand(wzchTotalDemand);
+        } else {
+            wzchTotalDemand.setId(IdWorker.createId());
+            wzchTotalDemandService.insertWzchTotalDemand(wzchTotalDemand);
+        }
         wzchTotalDemandDetailMapper.deleteByVersion(wzchTotalDemand.getVersion());
         List<WzchTotalDemandDetail> wzchTotalDemandDetailList = wzchTotalDemand.getWzchTotalDemandDetailList();
         if(CollectionUtils.isNotEmpty(wzchTotalDemandDetailList)){

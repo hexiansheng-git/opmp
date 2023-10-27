@@ -470,7 +470,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             return false;
         }
         WzchSource wzchSource = wzchSources.get(0);
-        if (wzchSource.getDemandVersion().equals(wzchSource.getDemandNewVersion())) {
+        if (wzchSource.getDemandVersion() == null || wzchSource.getDemandVersion().equals(wzchSource.getDemandNewVersion())) {
             return false;
         }
         return true;
@@ -510,7 +510,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             return null;
         }
         WzchSource wzchSource = wzchSources.get(0);
-        if(wzchSource.getDemandVersion().equals(wzchSource.getDemandNewVersion())){
+        if(wzchSource==null || wzchSource.getDemandVersion() == null || wzchSource.getDemandVersion().equals(wzchSource.getDemandNewVersion())){
             return null;
         }
 

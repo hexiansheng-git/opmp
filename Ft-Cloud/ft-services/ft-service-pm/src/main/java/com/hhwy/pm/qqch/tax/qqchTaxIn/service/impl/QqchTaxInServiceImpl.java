@@ -236,24 +236,24 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     public List<QqchTaxInDetail> saveInList(List<QqchTaxIn> list) {
         List<QqchTaxInDetail> allDetails = new ArrayList<>();
 
-        List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
+//        List<TaxInVO.CurrencyVO> currencyInfo = this.getCurrencyInfo();
 
-        Map<String, BigDecimal> currencyRateMap = currencyInfo.stream()
-                .filter(ite -> StringUtils.isNotEmpty(ite.getCurrency()))
-                .collect(Collectors.toMap(TaxInVO.CurrencyVO::getCurrency, TaxInVO.CurrencyVO::getRate, (v1, v2) -> v1));
+//        Map<String, BigDecimal> currencyRateMap = currencyInfo.stream()
+//                .filter(ite -> StringUtils.isNotEmpty(ite.getCurrency()))
+//                .collect(Collectors.toMap(TaxInVO.CurrencyVO::getCurrency, TaxInVO.CurrencyVO::getRate, (v1, v2) -> v1));
         for (QqchTaxIn item : list) {
             List<QqchTaxInDetail> detailList = item.getDetailList();
             // 不为空才循环
             if (!CollectionUtils.isEmpty(detailList)) {
                 String currency = item.getCurrency();
                 currency = StringUtils.isEmpty(currency) ? PmConstant.USD : currency;
-                item.setRate(currencyRateMap.get(currency));
+//                item.setRate(currencyRateMap.get(currency));
                 for (QqchTaxInDetail detail : detailList) {
                     detail.setId(IdWorker.createId());
                     // 设置币种
                     detail.setCurrency(currency);
                     // 设置汇率
-                    detail.setRate(currencyRateMap.get(currency));
+                    detail.setRate(item.getRate());
                     detail.setMasterId(item.getId());
                     detail.setDataType(item.getDataType());
                     detail.setVersion(item.getVersion());
