@@ -1,25 +1,22 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.controller;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.QqchSafeEnvirRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.SafeEnvirRiskListQueryVo;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListService;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.vo.QqchSafeEnvirRiskListVo;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 //import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
@@ -99,8 +96,8 @@ public class QqchSafeEnvirRiskListController extends BaseController {
 
 //    @PreAuthorize(hasAnyPermi = "qqchSafeEnvirRiskList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(BigDecimal version){
-        QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo = qqchSafeEnvirRiskListService.getList(version);
+    public AjaxResult getList(SafeEnvirRiskListQueryVo queryVo){
+        QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo = qqchSafeEnvirRiskListService.getList(queryVo);
         return AjaxResult.success(qqchSafeEnvirRiskListVo);
     }
 }

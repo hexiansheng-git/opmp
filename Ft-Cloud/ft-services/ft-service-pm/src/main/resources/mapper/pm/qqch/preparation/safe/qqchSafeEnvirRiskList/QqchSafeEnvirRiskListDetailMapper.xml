@@ -393,13 +393,10 @@
         </where>
     </select>
 
-    <update id="deleteByInfoIds">
+    <update id="deleteByInfoId">
         update `qqch_safe_envir_risk_list_detail` set del_flag = 1,del_user = #{delUser},del_time = #{delTime}
         <where>
-            `info_id` in
-            <foreach item="infoId" collection="infoIdList" open="(" separator="," close=")">
-                #{infoId}
-            </foreach>
+            `info_id` = #{infoId}
         </where>
     </update>
 </mapper>

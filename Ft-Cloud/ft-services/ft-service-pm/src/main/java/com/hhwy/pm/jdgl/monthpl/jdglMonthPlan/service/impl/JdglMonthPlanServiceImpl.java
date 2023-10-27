@@ -89,6 +89,9 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
     @Override
     public JdglMonthPlan getUsingMonthPlanByYearAndMonth(String year, String month) {
+        if(StringUtils.isEmpty(year) || StringUtils.isEmpty(month)) {
+            return null;
+        }
         JdglMonthPlan jdglMonthPlan = new JdglMonthPlan();
         jdglMonthPlan.setYear(year);
         jdglMonthPlan.setMonth(month);

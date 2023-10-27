@@ -1,16 +1,17 @@
 package com.hhwy.pm.xmsl.contractInfo.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.period.PeriodInfo;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.excel.Util;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.core.system.SystemApiService;
 import com.hhwy.pm.xmsl.contractInfo.domain.*;
-import com.hhwy.pm.xmsl.contractInfo.domain.vo.XmslContractListVo;
 import com.hhwy.pm.xmsl.contractInfo.mapper.XmslContractInfoMapper;
 import com.hhwy.pm.xmsl.contractInfo.service.*;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
@@ -24,9 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author ldd
@@ -57,6 +58,8 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
     private IXmslProjectBasicInfoService projectBasicInfoService;
     @Autowired
     private SystemApiService systemApiService;
+    @Autowired
+    private SystemServiceApi systemServiceApi;
 
 
     /***
@@ -148,7 +151,64 @@ public class XmslContractInfoServiceImpl implements IXmslContractInfoService {
      */
     @Override
     public XmslContractInfo getValidMaxVersionContractInfo() {
-        return xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        XmslContractInfo contractInfo = xmslContractInfoMapper.getValidMaxVersionContractInfo();
+        if(contractInfo != null){
+            //有效合同金额对美元转换
+            this.setEffectiveAmoutDollar(contractInfo);
+        }else {
+            contractInfo = new XmslContractInfo();
+        }
+        return contractInfo;
+    }
+
+    public void setEffectiveAmoutDollar(XmslContractInfo contractInfo){
+        String listCurrencyCode = contractInfo.getListCurrencyCode();
+        if("USD".equals(listCurrencyCode)){
+            return;
+        }
+        /*汇率*/
+        BigDecimal exchangeRate = null;
+        //项目支付信息数据
+        XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+        xmslContractPayinfo.setMasterId(contractInfo.getId());
+        List<XmslContractPayinfo> payinfoList = xmslContractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
+        if(!CollectionUtils.isEmpty(payinfoList)) {
+            XmslContractPayinfo USD = payinfoList.stream().filter(o -> "USD".equals(o.getCurrencyCode())).findFirst().orElse(null);
+            if(USD != null){
+                String rateType = USD.getRateType();
+                if("1".equals(rateType)){
+                    exchangeRate = BigDecimal.valueOf(Double.parseDouble(USD.getObversionRate()));
+                }
+            }
+        }
+
+        if(exchangeRate == null){
+            Date nowDate = DateUtils.getNowDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            String nowStr = sdf.format(nowDate);
+
+            PeriodInfo periodInfo = new PeriodInfo();
+            periodInfo.setCurrencyCode(listCurrencyCode);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(nowDate);
+            int year = calendar.get(Calendar.YEAR);
+            periodInfo.setQueryDate(String.valueOf(year));
+            AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
+            if(ajaxResult.get("data") != null) {
+                List<Map> data = (List<Map>) ajaxResult.get("data");
+                Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
+                if(periodMap != null && periodMap.get("rate") != null) {
+                    exchangeRate = BigDecimal.valueOf((double) periodMap.get("rate"));
+                }
+            }
+        }
+
+        BigDecimal effectiveAmout = contractInfo.getEffectiveAmout();
+        BigDecimal effectiveAmoutDollar = BigDecimal.ZERO;
+        if(effectiveAmout != null && exchangeRate != null && exchangeRate.compareTo(BigDecimal.ZERO) != 0){
+            effectiveAmoutDollar = effectiveAmout.divide(exchangeRate,4, RoundingMode.HALF_UP);
+        }
+        contractInfo.setEffectiveAmoutDollar(effectiveAmoutDollar);
     }
 
     /**

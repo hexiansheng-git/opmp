@@ -1,26 +1,23 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.controller;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.vo.QqchSafeMostEnvirRiskListVo;
+import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.poi.ExcelUtils;
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.common.security.annotation.PreAuthorize;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.QqchSafeMostEnvirRiskList;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.vo.QqchSafeMostEnvirRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.vo.SafeMostEnvirRiskListQueryVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service.IQqchSafeMostEnvirRiskListService;
+import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service.IQqchSafeMostEnvirRiskListService;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.QqchSafeMostEnvirRiskList;
-
-import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
-import com.hhwy.common.security.annotation.PreAuthorize;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * @author zq
@@ -99,8 +96,8 @@ public class QqchSafeMostEnvirRiskListController extends BaseController {
 
      @PreAuthorize(hasAnyPermi = "qqchSafeMostEnvirRiskList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(BigDecimal version){
-        QqchSafeMostEnvirRiskListVo qqchSafeEnvirRiskListVo = qqchSafeMostEnvirRiskListService.getList(version);
+    public AjaxResult getList(SafeMostEnvirRiskListQueryVo queryVo){
+        QqchSafeMostEnvirRiskListVo qqchSafeEnvirRiskListVo = qqchSafeMostEnvirRiskListService.getList(queryVo);
         return AjaxResult.success(qqchSafeEnvirRiskListVo);
     }
 }

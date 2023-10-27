@@ -31,5 +31,5 @@ public interface IQqchSafeMostEnvirRiskListDetailService {
 
     List<QqchSafeMostEnvirRiskListDetail> getListByInfoIds(List<Long> infoIdList);
 
-    void deleteByInfoIds(List<Long> infoIdList, String delUser, Date nowDate);
+    void deleteByInfoId(Long infoId, String delUser, Date nowDate);
 }

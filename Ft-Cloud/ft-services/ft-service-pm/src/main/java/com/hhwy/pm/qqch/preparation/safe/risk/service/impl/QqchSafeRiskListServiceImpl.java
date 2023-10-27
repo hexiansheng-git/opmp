@@ -2,7 +2,9 @@ package com.hhwy.pm.qqch.preparation.safe.risk.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
+import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
@@ -43,6 +45,9 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     private IQqchReviewService qqchReviewService;
     @Autowired
     private IQqchMainPlanItemService qqchMainPlanItemService;
+
+    @Autowired
+    private IQqchModuleConfirmCaseService qqchModuleConfirmCaseService;
 
 
     public QqchSafeRiskList getQqchSafeRiskList(QqchSafeRiskList qqchSafeRiskList) {
@@ -92,11 +97,6 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
             //删除子表
             qqchSafeRiskListDetailService.deleteByInfoId(infoId,String.valueOf(SecurityUtils.getUserId()),SecurityUtils.getUserName(), DateUtils.getNowDate());
         }
-        //清空数据库表中数据
-        QqchSafeRiskList delParam = new QqchSafeRiskList();
-        delParam.setVersion(qqchSafeRiskListVo.getVersion());
-        delParam.setType(qqchSafeRiskListVo.getType());
-        delParam.setWbsId(qqchSafeRiskListVo.getWbsId());
 
         List<QqchSafeRiskListDetail> detailList = info.getDetailList();
         if(!ObjectNullUtil.isEmpty(detailList)){
@@ -116,6 +116,12 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         }
         if(!ObjectNullUtil.isEmpty(detailList)){
             qqchSafeRiskListDetailMapper.insertQqchSafeRiskListDetailList(detailList);
+        }
+
+        String buttonMark = qqchSafeRiskListVo.getButtonMark();
+        if (ButtonMark.CONFIRM.equals(buttonMark)) {
+            // 插入确认状态
+            qqchModuleConfirmCaseService.addConfirmRecord(qqchSafeRiskListVo.getMenuId(), qqchSafeRiskListVo.getStageIdentity());
         }
         return 1;
     }

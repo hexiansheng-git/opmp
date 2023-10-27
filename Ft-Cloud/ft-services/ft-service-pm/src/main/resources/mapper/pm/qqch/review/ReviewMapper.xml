@@ -167,7 +167,7 @@
             <if test="initUserName != null  and initUserName != ''">and `init_user_name` = #{initUserName}</if>
             <if test="initDate != null  and initDate != ''">and `init_date` = #{initDate}</if>
         </where>
-        order by create_time desc
+        order by plan_stage
     </select>
 
     <select id="getReviewByPlanStage" resultMap="QqchReviewResultMap">
