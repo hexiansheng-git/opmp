@@ -32,7 +32,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      * @param qqchSurveyWorkPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyWorkPlanList(@Validated(ValidationGroups.Select.class) QqchSurveyWorkPlan qqchSurveyWorkPlanParam) {
         QqchSurveyWorkPlanVo vo = qqchSurveyWorkPlanService.getQqchSurveyWorkPlanList(qqchSurveyWorkPlanParam);
