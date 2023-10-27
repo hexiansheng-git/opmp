@@ -1,5 +1,6 @@
 package com.hhwy.pm.gm.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.core.web.page.TableDataInfo;
 import com.hhwy.enums.FlowEnum;
@@ -89,17 +90,18 @@ public class GmThirdController {
     /**
      * 流程信息
      * 总部调用该接口
-     * @param map {businessIds,flowKey(FlowEnum枚举key) }
+     * @param map {businessIds:{},flowKey(FlowEnum枚举key) }
      * @return
      */
     @RequestMapping("/getFlowInfo")
     public AjaxResult isNowfirstNode(@RequestBody Map map){
-        if(MapUtils.isEmpty(map) || ObjectUtils.isBlank(map.get("businessIds")) || ObjectUtils.isBlank(map.get("flowKey")) )
+        if(MapUtils.isEmpty(map) || map.get("businessIds")==null || ObjectUtils.isBlank(map.get("flowKey")) )
             return AjaxResult.success();
         FlowEnum flowEnum = FlowEnum.valueOf(map.get("flowKey").toString());
         if(flowEnum == null)
             return AjaxResult.error("获取枚举类失败");
-        List list = FlowInfoSearchUtil.getFlowInfo(map.get("businessIds").toString(),flowEnum);
+        Map map1 = ((Map)map.get("businessIds"));
+        List list = FlowInfoSearchUtil.getFlowInfo(map1,flowEnum);
         return AjaxResult.success(list);
     }
 }

@@ -129,6 +129,7 @@
       <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
     </where>
     order by create_time desc
+    limit 1
   </select>
 
   <select id="getQqchSummaryEvaluationList" resultMap="QqchSummaryEvaluationResultMap">

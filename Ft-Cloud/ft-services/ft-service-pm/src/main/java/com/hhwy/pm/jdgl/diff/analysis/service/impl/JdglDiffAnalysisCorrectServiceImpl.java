@@ -57,9 +57,11 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
                 return returnList;
             }
             for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect1 : returnList) {
-                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> vo.getFirstType().equals(jdglDiffAnalysisCorrect1.getFirstType()) && StringUtils.isNotEmpty(vo.getSecondType())).collect(Collectors.toList());
+                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> vo.getFirstTypeValue().equals(jdglDiffAnalysisCorrect1.getFirstTypeValue()) && StringUtils.isNotEmpty(vo.getSecondType())).collect(Collectors.toList());
                 jdglDiffAnalysisCorrect1.setChildren(collect);
             }
+        } else {
+            returnList = getInitDiffAnalysisCorrect(jdglDiffAnalysisCorrect);
         }
         return returnList;
     }
@@ -75,8 +77,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
             returnMapList.put("headerList", headerVos);
 
             for (JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect1 : headerVos) {
-                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> vo.getFirstType().equals(jdglDiffAnalysisCorrect1.getFirstType())).collect(Collectors.toList());
-                returnMapList.put(jdglDiffAnalysisCorrect1.getFirstType(), collect);
+                List<JdglDiffAnalysisCorrect> collect = jdglDiffAnalysisCorrectList.stream().filter(vo -> vo.getFirstTypeValue().equals(jdglDiffAnalysisCorrect1.getFirstTypeValue())).collect(Collectors.toList());
+                returnMapList.put(jdglDiffAnalysisCorrect1.getFirstTypeValue(), collect);
             }
 
         }
@@ -185,8 +187,8 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
             String headerName = scheFactorsHeader.getHeaderName();
             String headerValue = scheFactorsHeader.getHeaderValue();
             JdglDiffAnalysisCorrect vo = new JdglDiffAnalysisCorrect();
-            vo.setFirstType(headerValue);
-            vo.setFirstTypeValue(headerName);
+            vo.setFirstType(headerName);
+            vo.setFirstTypeValue(headerValue);
             for (int i = 0; i < factorsVOList.size(); i++) {
                 List<QqchScheFactors> qqchScheFactors = factorsVOList.get(i);
                 if(!CollectionUtils.isEmpty(qqchScheFactors)) {
@@ -194,11 +196,11 @@ public class JdglDiffAnalysisCorrectServiceImpl implements IJdglDiffAnalysisCorr
                         if(headerValue.equals(qqchScheFactors1.getFactorsType())) {
                             JdglDiffAnalysisCorrect jdglDiffAnalysisCorrect = new JdglDiffAnalysisCorrect();
                             jdglDiffAnalysisCorrect.setSort(i);
-                            jdglDiffAnalysisCorrect.setFirstType(headerValue);
+                            jdglDiffAnalysisCorrect.setFirstType(headerName);
                             jdglDiffAnalysisCorrect.setSecondType(qqchScheFactors1.getFactorsDesc());
                             jdglDiffAnalysisCorrect.setGrade(qqchScheFactors1.getScore());
                             jdglDiffAnalysisCorrect.setIsSelect("0");
-                            jdglDiffAnalysisCorrect.setFirstTypeValue(headerName);
+                            jdglDiffAnalysisCorrect.setFirstTypeValue(headerValue);
                             jdglDiffAnalysisCorrect.setDiffAnalysisId(jdglDiffAnalysisCorrectParam.getDiffAnalysisId());
                             dataVos.add(jdglDiffAnalysisCorrect);
                         }

@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.equAllot.service;
 
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.ActiveEquVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.EquAllotVo;
 import com.hhwy.pm.qqch.preparation.sbch.equAllot.domain.XcsbMonthSelfEquInfo;
@@ -16,5 +17,5 @@ public interface EquAllotService {
 
     void batchAdd(EquAllotVo equAllotVo);
 
-    List<XcsbMonthSelfEquInfo> xzxcsb(ActiveEquVo activeEquVo);
+    AjaxResult xzxcsb(ActiveEquVo activeEquVo);
 }

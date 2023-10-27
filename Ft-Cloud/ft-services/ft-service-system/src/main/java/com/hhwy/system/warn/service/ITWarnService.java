@@ -3,6 +3,7 @@ package com.hhwy.system.warn.service;
 import com.hhwy.constant.WarnItem;
 import com.hhwy.constant.WarnScopeType;
 import com.hhwy.domain.base.system.warn.TWarn;
+import com.hhwy.domain.base.system.warn.TWarnRecord;
 
 import java.util.List;
 
@@ -30,4 +31,10 @@ public interface ITWarnService {
     int deleteTWarnByPks(List<Long> tWarnPkList);
 
     int addWarn(WarnItem warnItem, WarnScopeType warnScopeType, String warnScope,String warnUrl, String projectName, String tenantKey);
+
+    List<TWarn> selectWarnListForSelf(TWarn warn);
+
+    int changeHandleStatus(TWarnRecord record);
+
+    void batchChangeHandleStatus(Long[] warnIds, String status);
 }

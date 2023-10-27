@@ -47,10 +47,10 @@ public class JdglDiffAnalysisCorrect extends BaseEntity {
     private String firstType;
 
     /**
-     * 字段描述：一层分类名
+     * 字段描述：一层分类值
      */
     @JsonProperty
-    @Excel(name = "一层分类名")
+    @Excel(name = "一层分类值")
     private String firstTypeValue;
 
     /**

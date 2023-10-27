@@ -74,7 +74,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         qqchPerformInspection.setCreateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setCreateUserName(SecurityUtils.getSysUser().getNickName());
         qqchPerformInspection.setCreateTime(DateUtils.getNowDate());
-        qqchPerformInspection.setPtVar2(SecurityUtils.getSysUser().getNickName());
+        this.setInitiator(qqchPerformInspection);
         qqchPerformInspection.setDeptId(SecurityUtils.getSysUser().getDeptId());
         List<QqchPerformInspectionDetail> detailList = qqchPerformInspection.getDetailList();
         if(ObjectNullUtil.isEmpty(detailList)){
@@ -103,7 +103,7 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
     public int updateQqchPerformInspection(QqchPerformInspection qqchPerformInspection) {
         qqchPerformInspection.setUpdateUser(SecurityUtils.getUserName());
         qqchPerformInspection.setUpdateTime(DateUtils.getNowDate());
-        qqchPerformInspection.setPtVar2(SecurityUtils.getSysUser().getNickName());
+        this.setInitiator(qqchPerformInspection);
         List<QqchPerformInspectionDetail> detailList = qqchPerformInspection.getDetailList();
         if(ObjectNullUtil.isEmpty(detailList)){
             throw new CustomException("策划项信息不可为空");
@@ -117,11 +117,20 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
         detailService.insertQqchPerformInspectionDetailList(batchAddList);
         //修改主表
         int result = qqchPerformInspectionMapper.updateQqchPerformInspection(qqchPerformInspection);
-        //若为发起，推送数据到总部
-//        if("1".equals(qqchPerformInspection.getPtVar5())) {
-            sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);
-//        }
+        //推送数据到总部
+        sysSyncInfoService.pushQqchPerformInspection(qqchPerformInspection);
         return result;
+    }
+
+    /**
+     * 设置发起人
+     * @param qqchPerformInspection
+     */
+    public void setInitiator(QqchPerformInspection qqchPerformInspection){
+        String ptVar5 = qqchPerformInspection.getPtVar5();
+        if("1".equals(ptVar5)){
+            qqchPerformInspection.setPtVar2(SecurityUtils.getSysUser().getNickName());
+        }
     }
 
     @Transactional
@@ -174,21 +183,6 @@ public class QqchPerformInspectionServiceImpl implements IQqchPerformInspectionS
             detail.setItemId(qqchWorkPlanDetail.getItemId());
             detail.setSort(qqchWorkPlanDetail.getSort());
             detail.setWorkExplain(qqchWorkPlanDetail.getWorkExplain());
-//            List<QqchPerformInspectionDetail> childrenList = new ArrayList<>();
-//            List<QqchWorkPlanDetail> children = qqchWorkPlanDetail.getChildren();
-//            if(!ObjectNullUtil.isEmpty(children)){
-//                for (QqchWorkPlanDetail child : children) {
-//                    QqchPerformInspectionDetail childDetail = new QqchPerformInspectionDetail();
-//                    childDetail.setId(child.getId());
-//                    childDetail.setPid(child.getPid());
-//                    childDetail.setItemName(child.getItemName());
-//                    childDetail.setItemId(child.getItemId());
-//                    childDetail.setSort(child.getSort());
-//                    childDetail.setWorkExplain(child.getWorkExplain());
-//                    childrenList.add(childDetail);
-//                }
-//            }
-//            detail.setChildrenList(childrenList);
             returnList.add(detail);
         }
 

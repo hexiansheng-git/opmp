@@ -79,7 +79,7 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
     public int insertQqchProdPlanList(List<QqchProdPlan> qqchProdPlanList) {
         for (QqchProdPlan qqchProdPlan : qqchProdPlanList) {
             qqchProdPlan.setId(IdWorker.createId());
-            qqchProdPlan.setCreateUser(SecurityUtils.getUserName());
+//            qqchProdPlan.setCreateUser(SecurityUtils.getUserName());
             qqchProdPlan.setCreateTime(DateUtils.getNowDate());
         }
         return qqchProdPlanMapper.insertQqchProdPlanList(qqchProdPlanList);

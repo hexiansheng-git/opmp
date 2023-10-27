@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author zq
  * @date 2023-08-11 13:41:25
- * @remark
+ * @remark 8.2.1安全风险清单
  */
 @Validated
 @RestController
@@ -102,7 +102,7 @@ public class QqchSafeRiskListController extends BaseController {
      */
 //    @PreAuthorize(hasPermi = "qqchSafeRiskList:list")
     @GetMapping("/getList")
-    public AjaxResult getList(SafeRiskListQueryVo queryVo) {
+    public AjaxResult getList(@Validated(ValidationGroups.Select.class) SafeRiskListQueryVo queryVo) {
          return AjaxResult.success(qqchSafeRiskListService.getList(queryVo));
     }
 }

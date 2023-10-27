@@ -54,8 +54,7 @@ public class EquAllotController extends BaseController {
      */
     @PostMapping("/xzxcsb")
     public AjaxResult xzxcsb(@RequestBody ActiveEquVo activeEquVo){
-        List<XcsbMonthSelfEquInfo> equAllotVo = equAllotService.xzxcsb(activeEquVo);
-        return AjaxResult.success(equAllotVo);
+        return equAllotService.xzxcsb(activeEquVo);
     }
 
 }

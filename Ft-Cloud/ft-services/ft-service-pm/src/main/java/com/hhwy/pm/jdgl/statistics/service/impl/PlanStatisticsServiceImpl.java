@@ -162,20 +162,22 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
             }
         }
 
-        BigDecimal contractAmt = new BigDecimal(0);
+        BigDecimal contractAmt = BigDecimal.ZERO;
 
         //查询开累计划产值(有效合同额)
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
         if(xmslContractInfo != null) {
+            contractAmt = xmslContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmout();
             // 获取财务管理-风险管理-汇率登记
-            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-            BigDecimal exchange = BigDecimal.ZERO;
-            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
-                if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-                    exchange = new BigDecimal(xmslContractPayinfo.getObversionRate());
-                }
-            }
-            if(BigDecimal.ZERO.compareTo(exchange) != 0) contractAmt = xmslContractInfo.getEffectiveAmout().divide(exchange, 2, BigDecimal.ROUND_HALF_UP);
+//            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
+//            BigDecimal exchange = BigDecimal.ZERO;
+//            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
+//                if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
+//                    exchange = new BigDecimal(xmslContractPayinfo.getObversionRate());
+//                }
+//            }
+//
+//            if(BigDecimal.ZERO.compareTo(exchange) != 0) contractAmt = xmslContractInfo.getEffectiveAmout().divide(exchange, 2, BigDecimal.ROUND_HALF_UP);
         }
 
 
@@ -184,6 +186,14 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         JdglYearPlan jdglYearPlan1 = jdglYearPlanService.getUsingYearPlanByYear(year);
         if(jdglYearPlan1 != null){
             yearPlanAmt = jdglYearPlan1.getYearPlanValueDl();
+            BigDecimal exchange  = jdglYearPlan1.getExchangeRate();
+            if(exchange != null && BigDecimal.ZERO.compareTo(exchange) != 0) {
+                contractAmt = contractAmt.divide(exchange, 2, BigDecimal.ROUND_HALF_UP);
+            } else {
+                contractAmt = BigDecimal.ZERO;
+            }
+        } else {
+            contractAmt = BigDecimal.ZERO;
         }
 
         // 查询季计划产值
@@ -620,6 +630,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
             planStatisticsWbsImageVO.setId(dayScheduleWbs4Value.getId());
             planStatisticsWbsImageVO.setPid(dayScheduleWbs4Value.getPid());
+            planStatisticsWbsImageVO.setWbsCode(dayScheduleWbs4Value.getWbsCode());
+            planStatisticsWbsImageVO.setWbsName(dayScheduleWbs4Value.getWbsName());
             planStatisticsWbsImageVO.setWbsUnit(dayScheduleWbs4Value.getUnit());
             planStatisticsWbsImageVO.setDesignNum(dayScheduleWbs4Value.getDesignQuantity());
             planStatisticsWbsImageVO.setThisCompNum(dayScheduleWbs4Value.getThisQuantity());
@@ -628,7 +640,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
 
         List<PlanStatisticsWbsImageVO> build = null;
         if(!CollectionUtils.isEmpty(returnList)) {
-            build = TreeUtil.build(returnList, null);
+            build = TreeUtil.build(returnList, -1l);
         }
 
 

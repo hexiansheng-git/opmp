@@ -1,10 +1,10 @@
 package com.hhwy.pm.qqch.preparation.safe.risk.mapper;
 
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zq
@@ -29,5 +29,5 @@ public interface QqchSafeRiskListDetailMapper {
 
     int deleteQqchSafeRiskListDetailByPks(@Param("qqchSafeRiskListDetailPkList") List<Long> qqchSafeRiskListDetailPkList);
 
-    void deleteByInfoIds(@Param("infoIdList") List<Long> infoIdList, @Param("delUser") String userName, @Param("delTime") Date nowDate);
+    void deleteByInfoId(@Param("infoId") Long infoId, @Param("delUser") String userName, @Param("delTime") Date nowDate);
 }

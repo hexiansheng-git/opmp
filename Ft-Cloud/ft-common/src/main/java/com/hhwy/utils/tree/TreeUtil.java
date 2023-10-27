@@ -46,6 +46,40 @@ public class TreeUtil {
     }
 
     /**
+     * 根据pid，构建树节点加是否叶子节点
+     */
+    public static <T extends TreeNode<T>> List<T> buildLeaf(List<T> treeNodes, Long pid) {
+        if (CollectionUtils.isEmpty(treeNodes)) {
+            return new ArrayList<>();
+        }
+        treeNodes.forEach(treeVO -> {
+
+            List<T> nChildren = treeNodes.stream().filter((item) -> treeVO.getId().equals(item.getPid()))
+                    .collect(Collectors.toList());
+
+            List<T> oChildren = treeVO.getChildren();
+            if (CollectionUtils.isNotEmpty(oChildren)) {
+                nChildren = CollectionUtils.isEmpty(nChildren) ? new ArrayList<>() : nChildren;
+                nChildren.addAll(oChildren);
+            }else {
+                if (!ObjectUtils.isEmpty(treeVO.getPid())) {
+                    treeVO.setLeaf("1");
+                }
+            }
+            treeVO.setChildren(nChildren);
+        });
+        List<T> collect;
+        if (pid == null) {
+            collect = treeNodes.stream().filter((item) -> item.getPid() == null)
+                    .collect(Collectors.toList());
+        } else {
+            collect = treeNodes.stream().filter((item) -> pid.equals(item.getPid()))
+                    .collect(Collectors.toList());
+        }
+        return collect;
+    }
+
+    /**
      * 树形list转list
      *
      * @param source

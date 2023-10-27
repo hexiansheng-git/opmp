@@ -2,18 +2,14 @@ package com.hhwy.pm.qqch.preparation.technique.scheme.controller;
 
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.preparation.technique.scheme.domain.vo.QqchMajorConstructionComparisonVo;
 import com.hhwy.pm.qqch.preparation.technique.scheme.service.IQqchMajorConstructionComparisonService;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.math.BigDecimal;
 
 /**
  * @author zhenglili
@@ -28,7 +24,6 @@ public class QqchMajorConstructionComparisonController extends BaseController {
     @Autowired
     private IQqchMajorConstructionComparisonService qqchMajorConstructionComparisonService;
 
-    @PreAuthorize(hasPermi = "qqchMajorConstructionComparison:list")
     @GetMapping("/getTreeList")
     public AjaxResult getTreeList(BigDecimal version) {
         QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo = qqchMajorConstructionComparisonService
@@ -36,7 +31,6 @@ public class QqchMajorConstructionComparisonController extends BaseController {
         return AjaxResult.success(qqchMajorConstructionComparisonVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchMajorConstructionComparison:add")
     @PostMapping("/batchSave")
     public AjaxResult batchSave(
         @Validated(ValidationGroups.Save.class) @RequestBody QqchMajorConstructionComparisonVo qqchMajorConstructionComparisonVo) {

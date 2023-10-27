@@ -25,42 +25,42 @@ public class SbchEquipmentAllot extends MyPrepareBaseEntity {
     /** id */
 
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "主键id不能为空",groups = {ValidationGroups.Update.class})
+//    @NotNull(message = "主键id不能为空",groups = {ValidationGroups.Update.class})
     private Long id;
 
     /** 单据编号 */
     //@PmsExcel(name = "表单编码")
-    @NotBlank(message = "单据编号不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "单据编号不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String adjustCode;
 
     /** 标题 */
     //@PmsExcel(name = "标题")
-    @NotBlank(message = "标题不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "标题不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String title;
 
     /** 项目id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "项目id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "项目id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long projectId;
 
     /** 项目名称 */
     //@PmsExcel(name = "所属项目")
-    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "项目名称不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String projectName;
 
     /** 所属区域id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "所属区域id能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "所属区域id能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long regionId;
 
     /** 所属区域 */
     //@PmsExcel(name = "所属区域")
-    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotBlank(message = "所属区域为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private String region;
 
     /** 版本号 */
     //@PmsExcel(name = "版本号")
-    @NotNull(message = "版本号",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+//    @NotNull(message = "版本号",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private BigDecimal versionCode;
 
     /** 是否有效 1-有效 0-失效 */

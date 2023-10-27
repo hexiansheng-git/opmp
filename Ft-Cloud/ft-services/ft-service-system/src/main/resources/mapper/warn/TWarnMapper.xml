@@ -62,6 +62,11 @@
         order by create_time desc
     </select>
 
+    <select id="selectWarnById" resultMap="TWarnResultMap">
+        <include refid="selectTWarnVo"/>
+        where del_flag = '0' and warn_id = #{warnId}
+    </select>
+
     <select id="getTWarnList" resultMap="TWarnResultMap">
         <include refid="selectTWarnVo"/>
         <where>
@@ -83,6 +88,41 @@
             <if test="tenantKey != null  and tenantKey != ''">and `tenant_key` = #{tenantKey}</if>
         </where>
         order by create_time desc
+    </select>
+    <select id="selectWarnListForSelf" resultMap="TWarnResultMap">
+        SELECT
+        w.warn_id,
+        w.warn_item,
+        w.warn_item_id,
+        cast(w.warn_content AS CHAR) AS warn_content,
+        w.warn_scope_type,
+        w.warn_scope,
+        w.warn_status,
+        w.warn_type,
+        w.warn_url,
+        w.tenant_key,
+        w.create_user,
+        w.create_time,
+        w.update_user,
+        w.update_time,
+        w.remark,
+        r.`status` handleStatus
+        FROM
+        t_warn w
+        LEFT JOIN t_warn_record r ON w.warn_id = r.warn_id
+        <where>
+            w.tenant_key = #{tenantKey} AND
+            (w.warn_scope_type = '1' OR (w.warn_scope_type = '2' AND FIND_IN_SET(#{params.deptId},w.warn_scope)) OR (w.warn_scope_type = '3' AND FIND_IN_SET(#{params.userName},w.warn_scope)) OR (w.warn_scope_type = '4' AND FIND_IN_SET(#{params.roleKeys},w.warn_scope)))
+            <if test="handleStatus != null and handleStatus != ''">
+                <if test="handleStatus == '0'.toString()">
+                    AND (r.`status` IS NULL or r.`status` = '0' )
+                </if>
+                <if test="handleStatus != '0'.toString()">
+                    AND r.`status` = #{handleStatus}
+                </if>
+            </if>
+        </where>
+        order by w.create_time desc
     </select>
 
     <insert id="insertTWarn" useGeneratedKeys="true" keyProperty="warn_id">

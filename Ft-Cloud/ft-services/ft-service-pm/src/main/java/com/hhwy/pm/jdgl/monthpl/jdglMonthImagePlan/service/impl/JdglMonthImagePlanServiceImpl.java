@@ -311,6 +311,8 @@ public class JdglMonthImagePlanServiceImpl implements IJdglMonthImagePlanService
                     }
                 }
             }
+            if(imagePlan.getTotalCompQuantity() == null && imagePlan.getDesignQuantity() != null) imagePlan.setTotalCompQuantity(BigDecimal.ZERO);
+            if(imagePlan.getRemainQuantity() == null) imagePlan.setRemainQuantity(imagePlan.getDesignQuantity());
             imagePlan.setPlanStartDate(jdglMainPlanItem.getStartDate());
             imagePlan.setPlanEndDate(jdglMainPlanItem.getFinishDate());
             imagePlan.setWbsCode(jdglMainPlanItem.getWbsCode());

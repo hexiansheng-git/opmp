@@ -7,24 +7,23 @@ import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskList;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.QqchSafeRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.QqchSafeRiskListVo;
 import com.hhwy.pm.qqch.preparation.safe.risk.domain.vo.SafeRiskListQueryVo;
+import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListDetailMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.mapper.QqchSafeRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.risk.service.IQqchSafeRiskListService;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
+import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
-import io.jsonwebtoken.lang.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author zq
@@ -39,7 +38,11 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     @Autowired
     private IQqchSafeRiskListDetailService qqchSafeRiskListDetailService;
     @Autowired
+    private QqchSafeRiskListDetailMapper qqchSafeRiskListDetailMapper;
+    @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IQqchMainPlanItemService qqchMainPlanItemService;
 
 
     public QqchSafeRiskList getQqchSafeRiskList(QqchSafeRiskList qqchSafeRiskList) {
@@ -60,55 +63,59 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
 
     @Transactional
     public int insertQqchSafeRiskListList(QqchSafeRiskListVo qqchSafeRiskListVo) {
-        //清空数据库表中数据
-        QqchSafeRiskList qqchSafeRiskList1 = new QqchSafeRiskList();
-        qqchSafeRiskList1.setVersion(qqchSafeRiskListVo.getVersion());
-        qqchSafeRiskList1.setType(qqchSafeRiskListVo.getType());
-
-        //删除子表
-        List<QqchSafeRiskList> infoList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList1);
-        if(!ObjectNullUtil.isEmpty(infoList)){
-            List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
-            qqchSafeRiskListDetailService.deleteByInfoIds(infoIdList,String.valueOf(SecurityUtils.getUserId()),SecurityUtils.getUserName(), DateUtils.getNowDate());
+        String isEdit = qqchSafeRiskListVo.getIsEdit();
+        if(!"1".equals(isEdit)){
+            return 1;
         }
-
-        qqchSafeRiskListMapper.deleteQqchSafeRiskList(qqchSafeRiskList1);
-
-        List<QqchSafeRiskList> list = qqchSafeRiskListVo.getList();
-        if(!ObjectNullUtil.isEmpty(list)){
-            ArrayList<QqchSafeRiskListDetail> addDetailList = new ArrayList<>();
-            for (QqchSafeRiskList qqchSafeRiskList : list) {
-                qqchSafeRiskList.setId(IdWorker.createId());
-                qqchSafeRiskList.setVersion(qqchSafeRiskListVo.getVersion());
-                if (qqchSafeRiskListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    qqchSafeRiskList.setValid(Valid.YES);
-                }
-                qqchSafeRiskList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                qqchSafeRiskList.setCreateUserName(SecurityUtils.getUserName());
-                qqchSafeRiskList.setCreateTime(DateUtils.getNowDate());
-                qqchSafeRiskList.setType(qqchSafeRiskListVo.getType());
-                List<QqchSafeRiskListDetail> detailList = qqchSafeRiskList.getDetailList();
-                if(!ObjectNullUtil.isEmpty(detailList)){
-                    detailList = ListTreeUtil.formatList(
-                            detailList,
-                            QqchSafeRiskListDetail::setId,
-                            QqchSafeRiskListDetail::setPid,
-                            QqchSafeRiskListDetail::setSort,
-                            QqchSafeRiskListDetail::getChildren,
-                            QqchSafeRiskListDetail::setChildren);
-                    for (QqchSafeRiskListDetail qqchSafeRiskListDetail : detailList) {
-                        qqchSafeRiskListDetail.setInfoId(qqchSafeRiskList.getId());
-                        qqchSafeRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                        qqchSafeRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
-                        qqchSafeRiskListDetail.setCreateTime(DateUtils.getNowDate());
-                        addDetailList.add(qqchSafeRiskListDetail);
-                    }
-                }
+        QqchSafeRiskList info = qqchSafeRiskListVo.getSafeRiskList();
+        Long infoId = info.getId();
+        if(infoId == null){
+            //新增
+            infoId = IdWorker.createId();
+            info.setId(infoId);
+            info.setWbsId(qqchSafeRiskListVo.getWbsId());
+            info.setVersion(qqchSafeRiskListVo.getVersion());
+            if (qqchSafeRiskListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                info.setValid(Valid.YES);
             }
-            qqchSafeRiskListMapper.insertQqchSafeRiskListList(list);
-            if(!ObjectNullUtil.isEmpty(addDetailList)){
-                qqchSafeRiskListDetailService.insertQqchSafeRiskListDetailList(addDetailList);
+            info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            info.setCreateUserName(SecurityUtils.getUserName());
+            info.setCreateTime(DateUtils.getNowDate());
+            info.setType(qqchSafeRiskListVo.getType());
+
+            qqchSafeRiskListMapper.insertQqchSafeRiskList(info);
+        }else {
+            //修改
+            info.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            info.setUpdateTime(DateUtils.getNowDate());
+            qqchSafeRiskListMapper.updateQqchSafeRiskList(info);
+            //删除子表
+            qqchSafeRiskListDetailService.deleteByInfoId(infoId,String.valueOf(SecurityUtils.getUserId()),SecurityUtils.getUserName(), DateUtils.getNowDate());
+        }
+        //清空数据库表中数据
+        QqchSafeRiskList delParam = new QqchSafeRiskList();
+        delParam.setVersion(qqchSafeRiskListVo.getVersion());
+        delParam.setType(qqchSafeRiskListVo.getType());
+        delParam.setWbsId(qqchSafeRiskListVo.getWbsId());
+
+        List<QqchSafeRiskListDetail> detailList = info.getDetailList();
+        if(!ObjectNullUtil.isEmpty(detailList)){
+            detailList = ListTreeUtil.formatList(
+                    detailList,
+                    QqchSafeRiskListDetail::setId,
+                    QqchSafeRiskListDetail::setPid,
+                    QqchSafeRiskListDetail::setSort,
+                    QqchSafeRiskListDetail::getChildren,
+                    QqchSafeRiskListDetail::setChildren);
+            for (QqchSafeRiskListDetail qqchSafeRiskListDetail : detailList) {
+                qqchSafeRiskListDetail.setInfoId(info.getId());
+                qqchSafeRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                qqchSafeRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
+                qqchSafeRiskListDetail.setCreateTime(DateUtils.getNowDate());
             }
+        }
+        if(!ObjectNullUtil.isEmpty(detailList)){
+            qqchSafeRiskListDetailMapper.insertQqchSafeRiskListDetailList(detailList);
         }
         return 1;
     }
@@ -144,36 +151,45 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
     @Override
     public QqchSafeRiskListVo getList(SafeRiskListQueryVo queryVo) {
         QqchSafeRiskListVo qqchSafeRiskListVo = new QqchSafeRiskListVo();
-        BigDecimal version = qqchSafeRiskListVo.getVersion();
+        BigDecimal version = queryVo.getVersion();
         version = VersionUtil.getVersion("qqch_safe_risk_list",version);
+
         QqchSafeRiskList qqchSafeRiskList = new QqchSafeRiskList();
         qqchSafeRiskList.setVersion(version);
-        qqchSafeRiskList.setType(qqchSafeRiskListVo.getType());
-        qqchSafeRiskList.setWbsId(qqchSafeRiskList.getWbsId());
-        List<QqchSafeRiskList> infoList = qqchSafeRiskListMapper.getQqchSafeRiskListList(qqchSafeRiskList);
-        if(!Collections.isEmpty(infoList)){
-            List<Long> infoIdList = infoList.stream().map(QqchSafeRiskList::getId).collect(Collectors.toList());
-            QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
-            qqchSafeRiskListDetail.setInfoIdList(infoIdList);
-            List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListDetailService.getQqchSafeRiskListDetailList(qqchSafeRiskListDetail);
-            Map<Long, List<QqchSafeRiskListDetail>> detailListMap = detailList.stream().collect(Collectors.groupingBy(QqchSafeRiskListDetail::getInfoId));
-            for (QqchSafeRiskList safeRiskList : infoList) {
-                if(!ObjectNullUtil.isEmpty(detailListMap.get(safeRiskList.getId()))){
-                    List<QqchSafeRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeRiskList.getId());
-                    List<QqchSafeRiskListDetail> parentList = qqchSafeEnvirRiskListDetails.stream().filter(t -> t.getPid() == null).collect(Collectors.toList());
-                    Map<Long, List<QqchSafeRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(QqchSafeRiskListDetail::getPid));
-                    for (QqchSafeRiskListDetail detail : parentList) {
-                        if(!ObjectNullUtil.isEmpty(groupByPidMap.get(detail.getId()))){
-                            List<QqchSafeRiskListDetail> childrenList = groupByPidMap.get(detail.getId());
-                            detail.setChildren(childrenList);
-                        }
-                    }
-                    safeRiskList.setDetailList(parentList);
-                }
+        qqchSafeRiskList.setType(queryVo.getType());
+        qqchSafeRiskList.setWbsId(queryVo.getWbsId());
+        QqchSafeRiskList info = qqchSafeRiskListMapper.getQqchSafeRiskList(qqchSafeRiskList);
+        if(info != null){
+            Long infoId = info.getId();
 
-            }
+            QqchSafeRiskListDetail qqchSafeRiskListDetail = new QqchSafeRiskListDetail();
+            qqchSafeRiskListDetail.setInfoId(infoId);
+            List<QqchSafeRiskListDetail> detailList = qqchSafeRiskListDetailService.getQqchSafeRiskListDetailList(qqchSafeRiskListDetail);
+
+            //转树列表
+            List<QqchSafeRiskListDetail> treeList = ListTreeUtil.formatTree(
+                    detailList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSafeRiskListDetail::getChildren,
+                    QqchSafeRiskListDetail::setChildren);
+
+            info.setDetailList(treeList);
+        }else {
+            info = new QqchSafeRiskList();
         }
-        qqchSafeRiskListVo.setList(infoList);
+
+        //获取p6计划数据
+        String wbsCode = queryVo.getWbsCode();
+        List<QqchMainPlanItem> mainPlanItemList = qqchMainPlanItemService.getListByItemCodes(wbsCode);
+        QqchMainPlanItem qqchMainPlanItem = mainPlanItemList.get(0);
+        if(qqchMainPlanItem != null){
+            info.setPlanStartDate(qqchMainPlanItem.getStartDate());
+            info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
+            info.setPlanOverDate(qqchMainPlanItem.getStartDate());
+        }
+
+        qqchSafeRiskListVo.setSafeRiskList(info);
         qqchSafeRiskListVo.setVersion(version);
         qqchSafeRiskListVo.setStageIdentity(qqchReviewService.getStage());
         return qqchSafeRiskListVo;

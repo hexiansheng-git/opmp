@@ -28,5 +28,5 @@ public interface IQqchSafeRiskListDetailService {
 
     int deleteQqchSafeRiskListDetailByPks(List<Long> qqchSafeRiskListDetailPkList);
 
-    void deleteByInfoIds(List<Long> infoIdList, String valueOf, String userName, Date nowDate);
+    void deleteByInfoId(Long infoId, String valueOf, String userName, Date nowDate);
 }
