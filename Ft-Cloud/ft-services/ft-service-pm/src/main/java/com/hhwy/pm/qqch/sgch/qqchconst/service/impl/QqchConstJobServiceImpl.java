@@ -102,7 +102,7 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN, delFlag = false)
     public void saveList(List<QqchConstJob> paramJobList) {
         CompileEntity qqchConstJob = paramJobList.get(0);
-        if (paramJobList.size() == 0 && PmConstant.MINUS_ONE.equals(qqchConstJob.getSubmitFlag())) {
+        if (paramJobList.size() == 0 || PmConstant.MINUS_ONE.equals(qqchConstJob.getSubmitFlag())) {
             // 如果前端将所有数据删除了 这边根据version删除数据
             this.qqchConstJobMapper.deleteByVersion(qqchConstJob.getVersion());
             return;
