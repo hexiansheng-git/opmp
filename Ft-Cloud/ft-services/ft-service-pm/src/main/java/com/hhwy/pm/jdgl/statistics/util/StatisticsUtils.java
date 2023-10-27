@@ -239,7 +239,15 @@ public class StatisticsUtils {
         long timeS = startDate.getTime();
         long timeE = endDate.getTime();
 
-        return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000) + 1;
+        BigDecimal bigE = new BigDecimal(timeE);
+        BigDecimal bigS = new BigDecimal(timeS);
+
+        BigDecimal divide = bigE.subtract(bigS).divide(new BigDecimal(24 * 60 * 60 * 1000), 0, BigDecimal.ROUND_UP).add(new BigDecimal(1));
+
+        return divide.intValue();
+//        int i = (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000) + 1;
+
+//        return (int) Math.round((timeE - timeS) / 24 / 60 / 60 / 1000) + 1;
 
     }
 
