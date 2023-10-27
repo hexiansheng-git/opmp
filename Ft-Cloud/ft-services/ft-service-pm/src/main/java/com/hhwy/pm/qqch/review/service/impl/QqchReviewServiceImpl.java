@@ -160,7 +160,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
 
         //查询紧急程度
         QqchWorkPlan query = new QqchWorkPlan();
-        query.setVersion(qqchWorkPlan.getVersion());
+        query.setId(workPlanId);
         QqchWorkPlan workPlan = workPlanService.getQqchWorkPlan(query);
 
         List<Review> iData = new ArrayList<>();
