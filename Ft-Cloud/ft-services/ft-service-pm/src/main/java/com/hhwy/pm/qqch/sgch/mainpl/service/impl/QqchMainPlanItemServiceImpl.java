@@ -239,7 +239,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         if(CollectionUtils.isEmpty(qqchMainPlanItemListNoTree)) {
             return returnList;
         }
-        List<QqchMainPlanItem> collect = qqchMainPlanItemListNoTree.stream().filter(vo -> "1".equals(vo.getIsCritical())).collect(Collectors.toList());
+        List<QqchMainPlanItem> collect = qqchMainPlanItemListNoTree.stream().filter(vo -> "是".equals(vo.getIsCritical())).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(collect)) {
             return returnList;
         }

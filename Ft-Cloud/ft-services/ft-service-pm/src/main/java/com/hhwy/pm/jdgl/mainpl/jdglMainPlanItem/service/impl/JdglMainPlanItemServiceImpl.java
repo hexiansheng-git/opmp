@@ -270,7 +270,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         if(CollectionUtils.isEmpty(jdglMainPlanItemListNoTree)) {
             return returnList;
         }
-        List<JdglMainPlanItem> collect = jdglMainPlanItemListNoTree.stream().filter(vo -> "1".equals(vo.getIsCritical())).collect(Collectors.toList());
+        List<JdglMainPlanItem> collect = jdglMainPlanItemListNoTree.stream().filter(vo -> "是".equals(vo.getIsCritical())).collect(Collectors.toList());
         if(CollectionUtils.isEmpty(collect)) {
             return returnList;
         }
