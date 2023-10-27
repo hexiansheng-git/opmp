@@ -1,21 +1,14 @@
 package com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.controller;
 
-import java.util.Arrays;
-import java.util.List;
-import java.io.IOException;
-
+import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.domain.QqchSafeThreeTypePerson;
 import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.service.IQqchSafeThreeTypePersonService;
 import com.hhwy.pm.qqch.preparation.safe.safeThreeTypePerson.vo.QqchSafeThreeTypePersonVo;
-import org.springframework.web.bind.annotation.*;
-import javax.servlet.http.HttpServletResponse;
-import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.utils.poi.ExcelUtils;
-import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.core.web.controller.BaseController;
+import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import com.hhwy.utils.validation.ValidationGroups;
+import org.springframework.web.bind.annotation.*;
 //import com.hhwy.common.security.annotation.PreAuthorize;
 
 /**
@@ -48,7 +41,7 @@ public class QqchSafeThreeTypePersonController extends BaseController {
 
 //    @PreAuthorize(hasPermi = "qqchSafeThreeTypePerson:add")
     @PostMapping("/batchAdd")
-    public AjaxResult insertQqchSafeThreeTypePersonList(@RequestBody QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
+    public AjaxResult insertQqchSafeThreeTypePersonList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafeThreeTypePersonVo qqchSafeThreeTypePersonVo) {
         qqchSafeThreeTypePersonService.insertQqchSafeThreeTypePersonList(qqchSafeThreeTypePersonVo);
         return AjaxResult.success();
     }
