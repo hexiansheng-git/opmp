@@ -1,5 +1,6 @@
 package com.hhwy.utils.myUtilPrepare;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.utils.common.PmsConstant;
 import com.hhwy.utils.multithreading.asyn.AsyncExecutor;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CountDownLatch;
+import java.util.stream.Collectors;
 
 /**
  * @author zqq
@@ -283,7 +285,7 @@ public class SetMaterialNameUtils {
                 busFieldInfoList.add(busField);
             }
             // 分类编码
-            List categoryCodeList = null;
+            List<String> categoryCodeList = null;
             if (tList.size() > 1000) {
                 // 用多线程
                 categoryCodeList = this.mulThreadGetMaterialCodeList(tList, categoryCodeField);
@@ -291,7 +293,8 @@ public class SetMaterialNameUtils {
                 // 单线程
                 categoryCodeList = this.getMaterialCodeList(tList, categoryCodeField);
             }
-            List categoryListRedis = this.redisUtils.hMultiGet(PmsConstant.CATEGORYREDISKEY, categoryCodeList);
+            List collect = categoryCodeList.stream().filter(p -> StrUtil.isNotEmpty(p)).collect(Collectors.toList());
+            List categoryListRedis = this.redisUtils.hMultiGet(PmsConstant.CATEGORYREDISKEY, collect);
             if (categoryListRedis.size() > 1000) {
                 // 用多线程
                 tList = this.mulThreadSetCategory(tList, categoryListRedis, categoryCodeField, busFieldInfoList, busAndCategoryMap);
