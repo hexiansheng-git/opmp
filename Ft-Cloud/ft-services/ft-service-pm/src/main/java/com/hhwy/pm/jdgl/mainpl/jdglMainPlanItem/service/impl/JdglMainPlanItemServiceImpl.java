@@ -125,7 +125,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 // 计算总工期（天。尚需与实际综合计算）
                 Integer plannedDuration = StatisticsUtils.getDaysByRangeDate(start_date, end_date);
                 jdglMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
-                jdglMainPlanItem1.setPlannedDuration(plannedDuration);
+//                jdglMainPlanItem1.setPlannedDuration(plannedDuration);
 
                 jdglMainPlanItem1.setOpen(true);
 //                jdglMainPlanItem1.setType("task");
