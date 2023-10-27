@@ -102,7 +102,7 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN, delFlag = false)
     public void saveList(List<QqchConstJob> paramJobList) {
         CompileEntity qqchConstJob = paramJobList.get(0);
-        if (paramJobList.size() == 1 && PmConstant.MINUS_ONE.equals(qqchConstJob.getSubmitFlag())) {
+        if (paramJobList.size() == 0 && PmConstant.MINUS_ONE.equals(qqchConstJob.getSubmitFlag())) {
             // 如果前端将所有数据删除了 这边根据version删除数据
             this.qqchConstJobMapper.deleteByVersion(qqchConstJob.getVersion());
             return;
@@ -120,14 +120,13 @@ public class QqchConstJobServiceImpl implements IQqchConstJobService {
         // 前端的id
         List<Long> paramIdList = paramJobList.stream().map(QqchConstJob::getId).collect(Collectors.toList());
 
-
         // 数据库中有 但是前端没有的数据 删掉
         List<Long> delIdList = dbIdList.stream().filter(item -> !paramIdList.contains(item)).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(delIdList))  this.qqchConstJobMapper.deleteQqchConstJobByPks(delIdList);
 
         // 前端有 数据库中没有 新增
         List<QqchConstJob> insertDataList = paramJobList.stream().filter(item -> item.getId() == null || !dbIdList.contains(item.getId())).collect(Collectors.toList());
-        insertDataList.stream().forEach(r->r.setId(IdWorker.createId()));
+//        insertDataList.stream().forEach(r->r.setId(IdWorker.createId()));
         if (CollectionUtils.isNotEmpty(insertDataList))  this.qqchConstJobMapper.insertQqchConstJobList(insertDataList);
 
         // 前端和后台都有的数据 更新

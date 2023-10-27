@@ -98,6 +98,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setProjectName(projectBasicInfo.getProjectName());
                 temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setRegionId(projectBasicInfo.getRegionId());
+                temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 temp.setPtVar2(projectBasicInfo.getProjectCode());
             }
             rocketMQTemplate.convertAndSend("qqch_work_group1:tenantSuccess", JSONObject.toJSONString(list));
@@ -126,6 +127,14 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
         Integer status = 1;
         String errMsg = "";
         try{
+            //获取策划编制负责人，
+            String planLeader = "";
+            try{
+                QqchWorkGroup group = qqchWorkGroupService.getValidMaxVersionQqchWorkGroup();
+                planLeader = group!=null?group.getPlanEstablishDirector():"";
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
             for (int i = 0; i < list.size(); i++) {
                 QqchWorkPlan temp =  list.get(i);
@@ -134,6 +143,7 @@ public class SysSyncInfoServiceImpl implements ISysSyncInfoService {
                 temp.setProjectId(projectBasicInfo.getProjectId());
                 temp.setPtVar1(projectBasicInfo.getProjectCategory());
                 temp.setPtVar2(projectBasicInfo.getProjectCode());
+                temp.setPtVar3(planLeader);
             }
             rocketMQTemplate.convertAndSend("qqch_work_plan1:tenantSuccess", JSONObject.toJSONString(list));
         }catch(Exception e){
