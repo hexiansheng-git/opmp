@@ -76,8 +76,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Autowired
     private WarnService warnService;
 
-    @Value("${fileService.url}")
-    private String fileServiceUrl;
+    @Value("${fileService.fileCopyUrl}")
+    private String fileCopyUrl;
 
     /**
      * 台账（历史记录）
@@ -156,7 +156,7 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         HttpPost httpPost = null;
         CloseableHttpResponse response = null;
         try{
-            httpPost = new HttpPost(fileServiceUrl);
+            httpPost = new HttpPost(fileCopyUrl);
             //封装请求参数
             Map<String,Object> paraMap = new HashMap<>();
             paraMap.put("fileGroupId", fileGroupId);
