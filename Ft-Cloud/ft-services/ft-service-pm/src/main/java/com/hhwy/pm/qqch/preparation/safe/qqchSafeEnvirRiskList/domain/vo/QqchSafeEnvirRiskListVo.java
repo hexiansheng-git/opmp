@@ -1,10 +1,8 @@
-package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.vo;
+package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo;
 
 import com.hhwy.pm.qqch.common.domain.PreparationEntity;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
 import lombok.Data;
-
-import java.util.List;
 
 /**
  * @author zqq
@@ -12,5 +10,13 @@ import java.util.List;
  */
 @Data
 public class QqchSafeEnvirRiskListVo extends PreparationEntity {
-    private List<QqchSafeEnvirRiskList> list;
+
+    /*是否编辑过*/
+    private String isEdit;
+
+    private String wbsId;
+
+    private String wbsCode;
+
+    private QqchSafeEnvirRiskList qqchSafeEnvirRiskList;
 }

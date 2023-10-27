@@ -1,10 +1,10 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.service;
 
-import java.math.BigDecimal;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.QqchSafeMostEnvirRiskList;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.vo.QqchSafeMostEnvirRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.vo.QqchSafeMostEnvirRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.vo.SafeMostEnvirRiskListQueryVo;
+
+import java.util.List;
 
 /**
  * @author zq
@@ -29,5 +29,5 @@ public interface IQqchSafeMostEnvirRiskListService {
 
     int deleteQqchSafeMostEnvirRiskListByPks(List<Long> qqchSafeMostEnvirRiskListPkList);
 
-    QqchSafeMostEnvirRiskListVo getList(BigDecimal version);
+    QqchSafeMostEnvirRiskListVo getList(SafeMostEnvirRiskListQueryVo queryVo);
 }

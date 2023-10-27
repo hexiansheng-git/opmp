@@ -1,10 +1,10 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper;
 
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zq
@@ -31,6 +31,6 @@ public interface QqchSafeEnvirRiskListDetailMapper {
 
     List<QqchSafeEnvirRiskListDetail> getQqchSafeEnvirRiskListDetailListByInfoId(@Param("infoIdList") List<Long> infoIdList);
 
-    void deleteByInfoIds(@Param("infoIdList") List<Long> infoIdList, @Param("delUser") String delUser, @Param("delUserName") String delUserName, @Param("delTime") Date delTime);
+    void deleteByInfoId(@Param("infoId") Long infoId, @Param("delUser") String delUser, @Param("delTime") Date delTime);
 
 }

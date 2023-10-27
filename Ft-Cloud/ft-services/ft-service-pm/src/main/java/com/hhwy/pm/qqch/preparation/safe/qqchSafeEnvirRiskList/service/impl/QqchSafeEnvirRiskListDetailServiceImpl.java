@@ -1,19 +1,17 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.impl;
 
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper.QqchSafeEnvirRiskListDetailMapper;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListDetailService;
-import org.springframework.stereotype.Service;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zq
@@ -88,7 +86,7 @@ public class QqchSafeEnvirRiskListDetailServiceImpl implements IQqchSafeEnvirRis
 
     @Override
     @Transactional
-    public void deleteByInfoIds(List<Long> infoIdList, String delUser, String delUserName, Date delTime) {
-        qqchSafeEnvirRiskListDetailMapper.deleteByInfoIds(infoIdList,delUser,delUserName,delTime);
+    public void deleteByInfoId(Long infoId, String delUser, Date delTime) {
+        qqchSafeEnvirRiskListDetailMapper.deleteByInfoId(infoId,delUser,delTime);
     }
 }

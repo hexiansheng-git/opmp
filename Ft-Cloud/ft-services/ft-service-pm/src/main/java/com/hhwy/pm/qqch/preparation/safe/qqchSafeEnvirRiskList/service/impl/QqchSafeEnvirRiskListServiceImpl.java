@@ -1,32 +1,29 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.impl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.hhwy.common.core.utils.DateUtils;
-import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.contant.Valid;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskList;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.QqchSafeEnvirRiskListDetail;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.QqchSafeEnvirRiskListVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.domain.vo.SafeEnvirRiskListQueryVo;
+import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper.QqchSafeEnvirRiskListDetailMapper;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.mapper.QqchSafeEnvirRiskListMapper;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListDetailService;
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.service.IQqchSafeEnvirRiskListService;
-import com.hhwy.pm.qqch.preparation.safe.qqchSafeEnvirRiskList.vo.QqchSafeEnvirRiskListVo;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.pm.qqch.utils.VersionUtil;
-import com.hhwy.utils.core.DateUtil;
-import com.hhwy.utils.objectUtil.ObjectNullUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.hhwy.utils.idworker.IdWorker;
-import org.springframework.util.CollectionUtils;
+import com.hhwy.utils.objectUtil.ObjectNullUtil;
+import com.hhwy.utils.tree.ListTreeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zq
@@ -40,6 +37,8 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     private QqchSafeEnvirRiskListMapper qqchSafeEnvirRiskListMapper;
     @Autowired
     private IQqchSafeEnvirRiskListDetailService detailService;
+    @Autowired
+    private QqchSafeEnvirRiskListDetailMapper detailMapper;
     @Autowired
     private IQqchReviewService qqchReviewService;
     @Autowired
@@ -63,54 +62,59 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     }
 
     @Transactional
-    public int insertQqchSafeEnvirRiskListList(QqchSafeEnvirRiskListVo voParam) {
-        //清空数据库
-        QqchSafeEnvirRiskList qqchSafeEnvirRiskList = new QqchSafeEnvirRiskList();
-        qqchSafeEnvirRiskList.setVersion(voParam.getVersion());
-        qqchSafeEnvirRiskListMapper.deleteQqchSafeEnvirRiskList(qqchSafeEnvirRiskList);
-        //删除子表
-        List<QqchSafeEnvirRiskList> infoList = qqchSafeEnvirRiskListMapper.getQqchSafeEnvirRiskListList(qqchSafeEnvirRiskList);
-        if(!ObjectNullUtil.isEmpty(infoList)){
-            List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
-            detailService.deleteByInfoIds(infoIdList,String.valueOf(SecurityUtils.getUserId()),SecurityUtils.getUserName(), DateUtils.getNowDate());
+    public int insertQqchSafeEnvirRiskListList(QqchSafeEnvirRiskListVo safeEnvirRiskListVo) {
+        String isEdit = safeEnvirRiskListVo.getIsEdit();
+        if(!"1".equals(isEdit)){
+            return 1;
+        }
+        QqchSafeEnvirRiskList info = safeEnvirRiskListVo.getQqchSafeEnvirRiskList();
+        Long infoId = info.getId();
+        if(infoId == null){
+            //新增
+            infoId = IdWorker.createId();
+            info.setId(infoId);
+            info.setWbsId(safeEnvirRiskListVo.getWbsId());
+            info.setWbsCode(safeEnvirRiskListVo.getWbsCode());
+            info.setVersion(safeEnvirRiskListVo.getVersion());
+            if (safeEnvirRiskListVo.getVersion().compareTo(BigDecimal.ONE) == 0) {
+                info.setValid(Valid.YES);
+            }
+            info.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+            info.setCreateUserName(SecurityUtils.getUserName());
+            info.setCreateTime(DateUtils.getNowDate());
+            qqchSafeEnvirRiskListMapper.insertQqchSafeEnvirRiskList(info);
+        }else {
+            //修改
+            info.setUpdateUser(String.valueOf(SecurityUtils.getUserId()));
+            info.setUpdateTime(DateUtils.getNowDate());
+            qqchSafeEnvirRiskListMapper.updateQqchSafeEnvirRiskList(info);
+            //删除子表
+            detailService.deleteByInfoId(infoId,String.valueOf(SecurityUtils.getUserId()), DateUtils.getNowDate());
         }
 
-        if (!CollectionUtils.isEmpty(voParam.getList())) {
-            List<QqchSafeEnvirRiskList> list = voParam.getList();
-
-            ArrayList<QqchSafeEnvirRiskListDetail> addDetailList = new ArrayList<>();
-
-            for (QqchSafeEnvirRiskList safeEnvirRiskList : list) {
-                safeEnvirRiskList.setId(IdWorker.createId());
-                safeEnvirRiskList.setVersion(voParam.getVersion());
-                if (voParam.getVersion().compareTo(BigDecimal.ONE) == 0) {
-                    safeEnvirRiskList.setValid(Valid.YES);
-                }
-                safeEnvirRiskList.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                safeEnvirRiskList.setCreateUserName(SecurityUtils.getUserName());
-                safeEnvirRiskList.setCreateTime(DateUtils.getNowDate());
-                List<QqchSafeEnvirRiskListDetail> detailList = safeEnvirRiskList.getDetailList();
-                if(!ObjectNullUtil.isEmpty(detailList)){
-                    for (QqchSafeEnvirRiskListDetail detail : detailList) {
-                        detail.setId(IdWorker.createId());
-                        detail.setInfoId(safeEnvirRiskList.getId());
-                        detail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
-                        detail.setCreateUserName(SecurityUtils.getUserName());
-                        detail.setCreateTime(DateUtils.getNowDate());
-                        addDetailList.add(detail);
-                    }
-                }
-            }
-            qqchSafeEnvirRiskListMapper.insertQqchSafeEnvirRiskListList(list);
-            if(!ObjectNullUtil.isEmpty(addDetailList)) {
-                detailService.insertQqchSafeEnvirRiskListDetailList(addDetailList);
+        List<QqchSafeEnvirRiskListDetail> detailList = info.getDetailList();
+        if(!ObjectNullUtil.isEmpty(detailList)){
+            detailList = ListTreeUtil.formatList(
+                    detailList,
+                    QqchSafeEnvirRiskListDetail::setId,
+                    QqchSafeEnvirRiskListDetail::setPid,
+                    QqchSafeEnvirRiskListDetail::getChildren,
+                    QqchSafeEnvirRiskListDetail::setChildren);
+            for (QqchSafeEnvirRiskListDetail safeEnvirRiskListDetail : detailList) {
+                safeEnvirRiskListDetail.setInfoId(info.getId());
+                safeEnvirRiskListDetail.setCreateUser(String.valueOf(SecurityUtils.getUserId()));
+                safeEnvirRiskListDetail.setCreateUserName(SecurityUtils.getUserName());
+                safeEnvirRiskListDetail.setCreateTime(DateUtils.getNowDate());
             }
         }
-        String buttonMark = voParam.getButtonMark();
+        if(!ObjectNullUtil.isEmpty(detailList)){
+            detailMapper.insertQqchSafeEnvirRiskListDetailList(detailList);
+        }
+
+        String buttonMark = safeEnvirRiskListVo.getButtonMark();
         if (ButtonMark.CONFIRM.equals(buttonMark)) {
             // 插入确认状态
-            qqchReviewService.updateFinishNum(voParam.getStageIdentity(), voParam.getModuleIdentity());
-            qqchModuleConfirmCaseService.addConfirmRecord(voParam.getMenuId(), voParam.getStageIdentity());
+            qqchModuleConfirmCaseService.addConfirmRecord(safeEnvirRiskListVo.getMenuId(), safeEnvirRiskListVo.getStageIdentity());
         }
         return 1;
     }
@@ -144,42 +148,38 @@ public class QqchSafeEnvirRiskListServiceImpl implements IQqchSafeEnvirRiskListS
     }
 
     @Override
-    public QqchSafeEnvirRiskListVo getList(BigDecimal version) {
-        QqchSafeEnvirRiskListVo qqchSafeEnvirRiskListVo = new QqchSafeEnvirRiskListVo();
-        version = VersionUtil.getVersion("qqch_safe_envir_risk_list", version);
+    public QqchSafeEnvirRiskListVo getList(SafeEnvirRiskListQueryVo queryVo) {
+        QqchSafeEnvirRiskListVo safeEnvirRiskListVo = new QqchSafeEnvirRiskListVo();
+        BigDecimal version = queryVo.getVersion();
+        version = VersionUtil.getVersion("qqch_safe_envir_risk_list",version);
 
-        QqchSafeEnvirRiskList qqchSafeEnvirRiskList = new QqchSafeEnvirRiskList();
-        qqchSafeEnvirRiskList.setVersion(version);
-        List<QqchSafeEnvirRiskList> infoList = qqchSafeEnvirRiskListMapper.getQqchSafeEnvirRiskListList(qqchSafeEnvirRiskList);
-        if(!ObjectNullUtil.isEmpty(infoList)){
-            List<Long> infoIdList = infoList.stream().map(t -> t.getId()).collect(Collectors.toList());
-            List<QqchSafeEnvirRiskListDetail> detailList = detailService.getQqchSafeEnvirRiskListDetailListByInfoId(infoIdList);
-            if(!ObjectNullUtil.isEmpty(detailList)){
-                Map<Long, List<QqchSafeEnvirRiskListDetail>> detailListMap = detailList.stream().collect(Collectors.groupingBy(t -> t.getInfoId()));
-                for (QqchSafeEnvirRiskList safeEnvirRiskList : infoList) {
-                    if(!ObjectNullUtil.isEmpty(detailListMap.get(safeEnvirRiskList.getId()))){
-                        List<QqchSafeEnvirRiskListDetail> qqchSafeEnvirRiskListDetails = detailListMap.get(safeEnvirRiskList.getId());
-                        List<QqchSafeEnvirRiskListDetail> parentList = qqchSafeEnvirRiskListDetails.stream().filter(t->{
-                                            if(t.getPid()==0){
-                                                return true;
-                                            }
-                                            return false;
-                         }).collect(Collectors.toList());
-                        Map<Long, List<QqchSafeEnvirRiskListDetail>> groupByPidMap = qqchSafeEnvirRiskListDetails.stream().collect(Collectors.groupingBy(t -> t.getPid()));
-                        for (QqchSafeEnvirRiskListDetail detail : parentList) {
-                            if(!ObjectNullUtil.isEmpty(groupByPidMap.get(detail.getId()))){
-                                List<QqchSafeEnvirRiskListDetail> childrenList = groupByPidMap.get(detail.getId());
-                                detail.setChildrenList(childrenList);
-                            }
-                        }
-                        safeEnvirRiskList.setDetailList(parentList);
-                    }
-                }
-            }
+        QqchSafeEnvirRiskList safeRiskList = new QqchSafeEnvirRiskList();
+        safeRiskList.setVersion(version);
+        safeRiskList.setWbsId(queryVo.getWbsId());
+        QqchSafeEnvirRiskList info = qqchSafeEnvirRiskListMapper.getQqchSafeEnvirRiskList(safeRiskList);
+        if(info != null){
+            Long infoId = info.getId();
+
+            QqchSafeEnvirRiskListDetail safeEnvirRiskListDetail = new QqchSafeEnvirRiskListDetail();
+            safeEnvirRiskListDetail.setInfoId(infoId);
+            List<QqchSafeEnvirRiskListDetail> detailList = detailService.getQqchSafeEnvirRiskListDetailList(safeEnvirRiskListDetail);
+
+            //转树列表
+            List<QqchSafeEnvirRiskListDetail> treeList = ListTreeUtil.formatTree(
+                    detailList,
+                    o -> o.getPid() == null,
+                    (r, n) -> r.getId().equals(n.getPid()),
+                    QqchSafeEnvirRiskListDetail::getChildren,
+                    QqchSafeEnvirRiskListDetail::setChildren);
+
+            info.setDetailList(treeList);
+        }else {
+            info = new QqchSafeEnvirRiskList();
         }
-        qqchSafeEnvirRiskListVo.setVersion(version);
-        qqchSafeEnvirRiskListVo.setStageIdentity(qqchReviewService.getStage());
-        qqchSafeEnvirRiskListVo.setList(infoList);
-        return qqchSafeEnvirRiskListVo;
+
+        safeEnvirRiskListVo.setQqchSafeEnvirRiskList(info);
+        safeEnvirRiskListVo.setVersion(version);
+        safeEnvirRiskListVo.setStageIdentity(qqchReviewService.getStage());
+        return safeEnvirRiskListVo;
     }
 }

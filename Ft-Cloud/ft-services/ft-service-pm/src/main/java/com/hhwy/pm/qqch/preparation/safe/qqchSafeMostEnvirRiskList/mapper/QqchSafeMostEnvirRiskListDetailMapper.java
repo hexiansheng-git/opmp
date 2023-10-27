@@ -1,16 +1,18 @@
 package com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.mapper;
 
-import java.util.Date;
-import java.util.List;
-
 import com.hhwy.pm.qqch.preparation.safe.qqchSafeMostEnvirRiskList.domain.QqchSafeMostEnvirRiskListDetail;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author zq
  * @date 2023-08-14 14:04:04
  * @remark
  */
+@Repository
 public interface QqchSafeMostEnvirRiskListDetailMapper {
 
     QqchSafeMostEnvirRiskListDetail getQqchSafeMostEnvirRiskListDetail(QqchSafeMostEnvirRiskListDetail qqchSafeMostEnvirRiskListDetail);
@@ -31,5 +33,5 @@ public interface QqchSafeMostEnvirRiskListDetailMapper {
 
     List<QqchSafeMostEnvirRiskListDetail> getListByInfoIds(@Param("infoIdList") List<Long> infoIdList);
 
-    void deleteByInfoIds(@Param("infoIdList") List<Long> infoIdList, @Param("delUser") String delUser, @Param("delTime") Date nowDate);
+    void deleteByInfoId(@Param("infoId") Long infoId, @Param("delUser") String delUser, @Param("delTime") Date nowDate);
 }

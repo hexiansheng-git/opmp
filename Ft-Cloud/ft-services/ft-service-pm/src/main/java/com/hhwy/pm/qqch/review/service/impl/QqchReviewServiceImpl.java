@@ -47,6 +47,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -112,6 +113,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             }
         }
         return qqchReviewList;
+    }
+
+    public void setIsCanApprove(List<Review> qqchReviewList){
+        Map<String, Review> reviewMap = qqchReviewList.stream().collect(Collectors.toMap(Review::getPlanStage, o -> o));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -418,7 +423,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
     @Transactional
     public void listener(Long id) {
         Review qqchReview = this.getQqchReview(new Review(id));
-        qqchReview.setTaskStatus("5");
+        qqchReview.setTaskStatus("4");
         qqchReview.setReviewStatus("4");
         qqchReview.setReviewCompleteDate(DateUtils.getNowDate());
         this.updateQqchReview(qqchReview);
@@ -431,7 +436,7 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         List<Review> qqchReviewList = this.getQqchReviewList(where).stream().sorted(Comparator.comparing(Review::getPlanStage)).collect(toList());
         for (Review review : qqchReviewList) {
             String taskStatus = review.getTaskStatus();
-            if (!"5".equals(taskStatus)){
+            if (!"4".equals(taskStatus)){
                 return review.getPlanStage();
             }
         }

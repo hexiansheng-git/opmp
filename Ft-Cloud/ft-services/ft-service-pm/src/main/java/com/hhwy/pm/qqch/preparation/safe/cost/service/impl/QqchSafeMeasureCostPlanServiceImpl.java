@@ -17,12 +17,13 @@ import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.validation.JyDetailsUtil;
 import com.hhwy.utils.validation.ValidationGroups;
-import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * @author zhenglili
@@ -57,13 +58,11 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
 
         // 查询合同信息
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
-        // 有效合同金额
-        BigDecimal effectiveAmt = BigDecimal.ZERO;
+        // 有效合同金额-美元
+        BigDecimal effectiveAmtDollar = BigDecimal.ZERO;
         if (xmslContractInfo != null) {
             // 有效合同金额
-            effectiveAmt =
-                xmslContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmout();
-
+            effectiveAmtDollar = xmslContractInfo.getEffectiveAmoutDollar() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmoutDollar();
         }
         BigDecimal expectInvestCostTotal = BigDecimal.ZERO;
         // 占工程造价百分比（%）= 预计投入/合同总额
@@ -74,8 +73,8 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
             }
             expectInvestCostTotal = expectInvestCostTotal.add(qqchSafeMeasureCostPlan.getExpectInvestCost());
         }
-        if (effectiveAmt.compareTo(BigDecimal.ZERO) != 0) {
-            projectCostPercentage = BigDecimalUtils.divide0(expectInvestCostTotal, effectiveAmt, 4)
+        if (effectiveAmtDollar.compareTo(BigDecimal.ZERO) != 0) {
+            projectCostPercentage = BigDecimalUtils.divide0(expectInvestCostTotal, effectiveAmtDollar, 4)
                 .multiply(new BigDecimal(100));
         }
 
@@ -88,6 +87,8 @@ public class QqchSafeMeasureCostPlanServiceImpl implements IQqchSafeMeasureCostP
         vo.setList(list);
         return vo;
     }
+
+//    public BigDecimal convert2Dollar()
 
     /**
      * 保存/确认/提交
