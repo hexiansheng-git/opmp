@@ -82,5 +82,4 @@ public interface IQqchWorkGroupService {
     void updateWorkGroupProcess(Long id);
 
     void workGroupSetUpWarn();
-
 }
