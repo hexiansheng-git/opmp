@@ -82,6 +82,9 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
 
     @Override
     public JdglYearPlan getUsingYearPlanByYear(String year) {
+        if(StringUtils.isEmpty(year)) {
+            return null;
+        }
         JdglYearPlan jdglYearPlan = new JdglYearPlan();
         jdglYearPlan.setYear(year);
         jdglYearPlan.setTaskStatus("5");

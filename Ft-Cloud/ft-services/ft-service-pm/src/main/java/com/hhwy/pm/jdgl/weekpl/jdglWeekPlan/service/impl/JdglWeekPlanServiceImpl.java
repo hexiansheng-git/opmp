@@ -90,6 +90,9 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
     @Override
     public JdglWeekPlan getUsingWeekPlanByYearAndWeek(String year, String week) {
+        if(StringUtils.isEmpty(year) || StringUtils.isEmpty(week)) {
+            return null;
+        }
         JdglWeekPlan jdglWeekPlan = new JdglWeekPlan();
         jdglWeekPlan.setYear(year);
         jdglWeekPlan.setWeek(week);

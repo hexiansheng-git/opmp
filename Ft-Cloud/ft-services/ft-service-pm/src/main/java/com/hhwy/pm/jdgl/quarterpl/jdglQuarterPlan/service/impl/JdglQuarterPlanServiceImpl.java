@@ -90,6 +90,9 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
     @Override
     public JdglQuarterPlan getUsingQuarterPlanByYearAndQuarter(String year, String quarter) {
+        if(StringUtils.isEmpty(year) || StringUtils.isEmpty(quarter)) {
+            return null;
+        }
         JdglQuarterPlan jdglQuarterPlan = new JdglQuarterPlan();
         jdglQuarterPlan.setYear(year);
         jdglQuarterPlan.setQuarter(quarter);
