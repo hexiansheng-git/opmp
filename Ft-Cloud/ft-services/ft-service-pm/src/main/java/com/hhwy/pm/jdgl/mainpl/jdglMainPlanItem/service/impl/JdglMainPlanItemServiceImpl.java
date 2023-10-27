@@ -94,10 +94,23 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         List<JdglMainPlanItem> jdglMainPlanItemList = jdglMainPlanItemMapper.getJdglMainPlanItemList(jdglMainPlanItem);
         if(!CollectionUtils.isEmpty(jdglMainPlanItemList)) {
             for (JdglMainPlanItem jdglMainPlanItem1 : jdglMainPlanItemList) {
+                // 计划完成百分比 * 100
+                jdglMainPlanItem1.setSchedulePercentComplete(jdglMainPlanItem1.getSchedulePercentComplete() == null ? BigDecimal.ZERO : jdglMainPlanItem1.getSchedulePercentComplete().multiply(new BigDecimal(100)));
+                // 尚需工期 / 8
+                if(jdglMainPlanItem1.getRemainingDuration() != null)
+                    jdglMainPlanItem1.setRemainingDuration(new BigDecimal(jdglMainPlanItem1.getRemainingDuration()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                // 总浮时 / 8
+                if(jdglMainPlanItem1.getTotalFloat() != null)
+                    jdglMainPlanItem1.setTotalFloat(new BigDecimal(jdglMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                // 自由浮时 / 8
+                if(jdglMainPlanItem1.getFreeFloat() != null)
+                    jdglMainPlanItem1.setFreeFloat(new BigDecimal(jdglMainPlanItem1.getFreeFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                // 是否关键线路转换 0：否，1：是
+                if(jdglMainPlanItem1.getIsCritical() != null && JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem1.getItemType()))
+                    jdglMainPlanItem1.setIsCritical("1".equals(jdglMainPlanItem1.getIsCritical()) ? "是" : "否");
+
                 jdglMainPlanItem1.setText(jdglMainPlanItem1.getItemName());
                 jdglMainPlanItem1.setParent(jdglMainPlanItem1.getPid());
-                jdglMainPlanItem1.setTotalFloat(new BigDecimal(jdglMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_HALF_UP).intValue());
-
                 // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
                 Date start_date = jdglMainPlanItem1.getActualStartDate() != null
                         ? jdglMainPlanItem1.getActualStartDate() : jdglMainPlanItem1.getRemainingEarlyStartDate();
@@ -110,6 +123,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 // 计算总工期（天。尚需与实际综合计算）
                 Integer plannedDuration = StatisticsUtils.getDaysByRangeDate(start_date, end_date);
                 jdglMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
+                jdglMainPlanItem1.setPlannedDuration(plannedDuration);
 
                 jdglMainPlanItem1.setOpen(true);
 //                jdglMainPlanItem1.setType("task");
