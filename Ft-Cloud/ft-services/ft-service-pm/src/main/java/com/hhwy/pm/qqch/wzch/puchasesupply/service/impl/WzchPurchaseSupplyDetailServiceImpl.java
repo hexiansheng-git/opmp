@@ -281,7 +281,10 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
         wzchPurchaseSupplyDetailMapper.deleteBatchDetailBySupplyId(supplyId);
 
         // 批量插入物资详情
-        int i = wzchPurchaseSupplyDetailMapper.insertOrUpdateBatch(detailList);
+        int i=1;
+        if(CollectionUtils.isNotEmpty(detailList)){
+          i = wzchPurchaseSupplyDetailMapper.insertOrUpdateBatch(detailList);
+        }
 
         // 批量插入物资批次详情
         wzchPurchaseSupplyDetailMapper.batchInsertOrUpdateBatchDetails(saveBachDetails);

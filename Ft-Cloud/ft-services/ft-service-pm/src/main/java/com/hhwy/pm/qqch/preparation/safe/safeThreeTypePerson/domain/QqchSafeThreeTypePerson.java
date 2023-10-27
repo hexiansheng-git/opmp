@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.utils.tree.TreeNode;
+import com.hhwy.utils.validation.ValidationGroups;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,7 @@ public class QqchSafeThreeTypePerson  extends TreeNode<QqchSafeThreeTypePerson> 
      */
     @JsonProperty
     @Excel(name = "人员姓名")
+    @NotBlank(message = "人员姓名不能为空！",groups = ValidationGroups.Save.class)
     private String personName;
 
     private String personId;
@@ -87,12 +90,14 @@ public class QqchSafeThreeTypePerson  extends TreeNode<QqchSafeThreeTypePerson> 
      */
     @JsonProperty
     @Excel(name = "管控措施")
+    @NotBlank(message = "管控措施不能为空！",groups = ValidationGroups.Save.class)
     private String controMeasures;
     /**
      * 字段描述：注意事项
      */
     @JsonProperty
     @Excel(name = "注意事项")
+    @NotBlank(message = "注意事项不能为空！",groups = ValidationGroups.Save.class)
     private String attenPoint;
     /**
      * 字段描述：主责部门
@@ -106,6 +111,7 @@ public class QqchSafeThreeTypePerson  extends TreeNode<QqchSafeThreeTypePerson> 
      */
     @JsonProperty
     @Excel(name = "主责部门名称")
+    @NotBlank(message = "主责部门不能为空！",groups = ValidationGroups.Save.class)
     private String mainResDeptName;
     /**
      * 字段描述：协作部门

@@ -801,6 +801,9 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             if(CollectionUtils.isNotEmpty(mSysDictDataList) && StringUtils.isNotBlank(detail.getMaterialStandard())){
                 mSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getMaterialStandard()))
                         .findFirst().ifPresent(val ->  list.add(val.getDictLabel()));
+                //可能没走到上面的if
+                if(list.size() < 5)
+                    list.add(null);
             }else{
                 list.add(detail.getMaterialStandard());
             }
