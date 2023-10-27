@@ -4,6 +4,7 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.mapper.CommonMapper;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.constant.ButtonMark;
 import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
@@ -106,10 +107,23 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         List<QqchMainPlanItem> qqchMainPlanItemList = qqchMainPlanItemMapper.getQqchMainPlanItemList(qqchMainPlanItem);
         if(!CollectionUtils.isEmpty(qqchMainPlanItemList)) {
             for (QqchMainPlanItem qqchMainPlanItem1 : qqchMainPlanItemList) {
+                // 计划完成百分比 * 100
+                qqchMainPlanItem1.setSchedulePercentComplete(qqchMainPlanItem1.getSchedulePercentComplete() == null ? BigDecimal.ZERO : qqchMainPlanItem1.getSchedulePercentComplete().multiply(new BigDecimal(100)));
+                // 尚需工期 / 8
+                if(qqchMainPlanItem1.getRemainingDuration() != null)
+                    qqchMainPlanItem1.setRemainingDuration(new BigDecimal(qqchMainPlanItem1.getRemainingDuration()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                // 总浮时 / 8
+                if(qqchMainPlanItem1.getTotalFloat() != null)
+                    qqchMainPlanItem1.setTotalFloat(new BigDecimal(qqchMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                // 自由浮时 / 8
+                if(qqchMainPlanItem1.getFreeFloat() != null)
+                    qqchMainPlanItem1.setFreeFloat(new BigDecimal(qqchMainPlanItem1.getFreeFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_UP).intValue());
+                // 是否关键线路转换 0：否，1：是
+                if(qqchMainPlanItem1.getIsCritical() != null && JdglMainPlanItem.ITEMTYPE_ITEM.equals(qqchMainPlanItem1.getItemType()))
+                    qqchMainPlanItem1.setIsCritical("1".equals(qqchMainPlanItem1.getIsCritical()) ? "是" : "否");
+
                 qqchMainPlanItem1.setText(qqchMainPlanItem1.getItemName());
                 qqchMainPlanItem1.setParent(qqchMainPlanItem1.getPid());
-                if(qqchMainPlanItem1.getTotalFloat() != null)
-                    qqchMainPlanItem1.setTotalFloat(new BigDecimal(qqchMainPlanItem1.getTotalFloat()).divide(new BigDecimal(8), 0, BigDecimal.ROUND_HALF_UP).intValue());
 
                 // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
                 Date start_date = qqchMainPlanItem1.getActualStartDate() != null
@@ -123,6 +137,7 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
                 // 计算总工期（天。尚需与实际综合计算）
                 Integer plannedDuration = StatisticsUtils.getDaysByRangeDate(start_date, end_date);
                 qqchMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
+                qqchMainPlanItem1.setPlannedDuration(plannedDuration);
 
                 qqchMainPlanItem1.setOpen(true);
 //                qqchMainPlanItem1.setType("task");

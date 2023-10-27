@@ -1,5 +1,7 @@
 package com.hhwy.pm.qqch.group.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.dynamic.datasource.toolkit.DynamicDataSourceContextHolder;
 import com.hhwy.common.core.exception.CustomException;
 import com.hhwy.common.core.text.Convert;
@@ -27,15 +29,21 @@ import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author han
@@ -68,6 +76,8 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
     @Autowired
     private WarnService warnService;
 
+    @Value("${fileService.url}")
+    private String fileServiceUrl;
 
     /**
      * 台账（历史记录）
@@ -131,8 +141,72 @@ public class QqchWorkGroupServiceImpl implements IQqchWorkGroupService {
         qqchWorkGroup.setCreateTime(null);
         qqchWorkGroup.setCreateUser(null);
 
+        String newFileGroupId = copyFile(qqchWorkGroup.getFileGroupId());
+        qqchWorkGroup.setFileGroupId(newFileGroupId);
+
         return qqchWorkGroup;
     }
+
+    public String copyFile(String fileGroupId){
+        String result = null;
+        if(StringUtils.isBlank(fileGroupId)){
+            return result;
+        }
+        CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
+        HttpPost httpPost = null;
+        CloseableHttpResponse response = null;
+        try{
+            httpPost = new HttpPost(fileServiceUrl);
+            //封装请求参数
+            Map<String,Object> paraMap = new HashMap<>();
+            paraMap.put("fileGroupId", fileGroupId);
+            StringEntity stringEntity = new StringEntity(JSON.toJSONString(paraMap));
+            httpPost.setEntity(stringEntity);
+
+            //封装头部信息
+            httpPost.addHeader("Content-Type","application/json");
+            httpPost.addHeader("charset","utf-8");
+            httpPost.addHeader("SOAPAction", null);
+            //返回信息；
+            response = closeableHttpClient.execute(httpPost);
+            //获取结果实体
+            HttpEntity entity = response.getEntity();
+            String resultJson = EntityUtils.toString(entity, "UTF-8");
+            Map<String,Object> map = JSONObject.parseObject(resultJson, Map.class);
+            if(map != null){
+                Object newFileGroupIdObj = map.get("newFileGroupId");
+                if(newFileGroupIdObj != null){
+                    result = newFileGroupIdObj.toString();
+                }
+            }
+            return result;
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            throw new CustomException(exception.getMessage(), exception);
+        } finally {
+            try{
+                if (httpPost != null) {
+                    httpPost.releaseConnection();
+                }
+            } catch (Exception ignored) {
+            }
+            if(closeableHttpClient != null){
+                try{
+                    closeableHttpClient.close();
+                } catch (Exception ignored){
+
+                }
+            }
+            if(response != null){
+                try{
+                    response.close();
+                } catch (Exception ignored){
+
+                }
+            }
+        }
+    }
+
 
     /**
      * 首次新增，初始化数据
