@@ -122,6 +122,8 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
                 if(qqchMainPlanItem1.getIsCritical() != null && JdglMainPlanItem.ITEMTYPE_ITEM.equals(qqchMainPlanItem1.getItemType()))
                     qqchMainPlanItem1.setIsCritical("1".equals(qqchMainPlanItem1.getIsCritical()) ? "是" : "否");
 
+                qqchMainPlanItem1.setPlannedDuration(StatisticsUtils.getDaysByRangeDate(qqchMainPlanItem1.getStartDate(), qqchMainPlanItem1.getFinishDate()));
+
                 qqchMainPlanItem1.setText(qqchMainPlanItem1.getItemName());
                 qqchMainPlanItem1.setParent(qqchMainPlanItem1.getPid());
 
@@ -137,7 +139,6 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
                 // 计算总工期（天。尚需与实际综合计算）
                 Integer plannedDuration = StatisticsUtils.getDaysByRangeDate(start_date, end_date);
                 qqchMainPlanItem1.setDuration(new BigDecimal(plannedDuration));
-                qqchMainPlanItem1.setPlannedDuration(plannedDuration);
 
                 qqchMainPlanItem1.setOpen(true);
 //                qqchMainPlanItem1.setType("task");

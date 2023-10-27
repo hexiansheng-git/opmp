@@ -109,6 +109,8 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
                 if(jdglMainPlanItem1.getIsCritical() != null && JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem1.getItemType()))
                     jdglMainPlanItem1.setIsCritical("1".equals(jdglMainPlanItem1.getIsCritical()) ? "是" : "否");
 
+                jdglMainPlanItem1.setPlannedDuration(StatisticsUtils.getDaysByRangeDate(jdglMainPlanItem1.getStartDate(), jdglMainPlanItem1.getFinishDate()));
+
                 jdglMainPlanItem1.setText(jdglMainPlanItem1.getItemName());
                 jdglMainPlanItem1.setParent(jdglMainPlanItem1.getPid());
                 // 如果已经有实际开始时间，则取实际开始时间，否则取尚需最早开始;
