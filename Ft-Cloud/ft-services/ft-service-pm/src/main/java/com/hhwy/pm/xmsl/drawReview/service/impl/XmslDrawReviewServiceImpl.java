@@ -235,6 +235,8 @@ public class XmslDrawReviewServiceImpl implements IXmslDrawReviewService{
         }
 
         Set<String> listCodeSet = relationList.stream().map(r->r.getListCode()).collect(Collectors.toSet());
+        if(CollectionUtils.isEmpty(listCodeSet))
+            return new ArrayList<>(2);
         //查询清单
         XmslDrawReviewList query = new XmslDrawReviewList();
         query.setMainId(mainId);
