@@ -20,6 +20,7 @@ import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.idworker.IdWorker;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.tree.ListTreeUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -188,11 +189,13 @@ public class QqchSafeRiskListServiceImpl implements IQqchSafeRiskListService {
         //获取p6计划数据
         String wbsCode = queryVo.getWbsCode();
         List<QqchMainPlanItem> mainPlanItemList = qqchMainPlanItemService.getListByItemCodes(wbsCode);
-        QqchMainPlanItem qqchMainPlanItem = mainPlanItemList.get(0);
-        if(qqchMainPlanItem != null){
-            info.setPlanStartDate(qqchMainPlanItem.getStartDate());
-            info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
-            info.setPlanOverDate(qqchMainPlanItem.getStartDate());
+        if(CollectionUtils.isNotEmpty(mainPlanItemList)){
+            QqchMainPlanItem qqchMainPlanItem = mainPlanItemList.get(0);
+            if(qqchMainPlanItem != null){
+                info.setPlanStartDate(qqchMainPlanItem.getStartDate());
+                info.setPlanEndDate(qqchMainPlanItem.getFinishDate());
+                info.setPlanOverDate(qqchMainPlanItem.getStartDate());
+            }
         }
 
         qqchSafeRiskListVo.setSafeRiskList(info);

@@ -108,6 +108,9 @@ public class ListTreeUtil {
      */
     public static <T> List<T> formatTree(List<T> source, Predicate<T> checkRoot, BiPredicate<T, T> checkParent, Function<T, List<T>> getChildren, BiConsumer<T, List<T>> setChildren) {
         List<T> tree = new ArrayList<>();
+        if(CollectionUtils.isEmpty(source)){
+            return tree;
+        }
         List<T> children = new ArrayList<>();
         for (T node : source) {
             if (checkRoot.test(node)) {
