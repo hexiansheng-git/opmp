@@ -60,7 +60,7 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
      */
     public QqchPersonControlPlanVo getQqchPersonControlPlanList(BigDecimal version) {
         QqchPersonControlPlanVo vo = new QqchPersonControlPlanVo();
-
+        version = VersionUtil.getVersion("qqch_person_control_plan",version);
         List<QqchPersonControlPlan> treeList = this.getTreeList(version);
 
         vo.setVersion(version);
@@ -70,8 +70,6 @@ public class QqchPersonControlPlanServiceImpl implements IQqchPersonControlPlanS
     }
 
     private List<QqchPersonControlPlan> getTreeList(BigDecimal version){
-        version = VersionUtil.getVersion("qqch_person_control_plan", version);
-
         QqchPersonControlPlan qryParam = new QqchPersonControlPlan();
         qryParam.setVersion(version);
         List<QqchPersonControlPlan> list = qqchPersonControlPlanMapper.getQqchPersonControlPlanList(qryParam);
