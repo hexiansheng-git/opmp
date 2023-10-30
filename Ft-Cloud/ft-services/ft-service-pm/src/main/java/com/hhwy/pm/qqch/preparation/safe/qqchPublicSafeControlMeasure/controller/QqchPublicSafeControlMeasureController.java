@@ -33,7 +33,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
      * @param qqchPublicSafeControlMeasureParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:list")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:list")
     @GetMapping("/list")
     public AjaxResult getQqchPublicSafeControlMeasureList(@Validated(ValidationGroups.Select.class) QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         QqchPublicSafeControlMeasureVo vo = qqchPublicSafeControlMeasureService.getQqchPublicSafeControlMeasureList(qqchPublicSafeControlMeasureParam);
@@ -46,7 +46,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
      * @param vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:save")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:save")
     @PostMapping("/save")
     public AjaxResult insertQqchPublicSafeControlMeasureList(@Validated(ValidationGroups.Save.class) @RequestBody QqchPublicSafeControlMeasureVo vo) {
         qqchPublicSafeControlMeasureService.save(vo);
@@ -54,7 +54,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:list")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:list")
     @GetMapping
     public AjaxResult getQqchPublicSafeControlMeasure(@Validated(ValidationGroups.Get.class) QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         QqchPublicSafeControlMeasure qqchPublicSafeControlMeasure = qqchPublicSafeControlMeasureService.getQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasureParam);
@@ -62,7 +62,7 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:add")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:add")
     @PostMapping("/add")
     public AjaxResult insertQqchPublicSafeControlMeasure(@Validated(ValidationGroups.Save.class) @RequestBody QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         qqchPublicSafeControlMeasureService.insertQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasureParam);
@@ -70,25 +70,25 @@ public class QqchPublicSafeControlMeasureController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:update")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:update")
     @PostMapping("/update")
     public AjaxResult updateQqchPublicSafeControlMeasure(@Validated(ValidationGroups.Update.class) @RequestBody QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         return toAjax(qqchPublicSafeControlMeasureService.updateQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasureParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:update")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchPublicSafeControlMeasureList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchPublicSafeControlMeasure> qqchPublicSafeControlMeasureListParam) {
         return toAjax(qqchPublicSafeControlMeasureService.updateQqchPublicSafeControlMeasureList(qqchPublicSafeControlMeasureListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:remove")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchPublicSafeControlMeasure(@Validated(ValidationGroups.Delete.class) @RequestBody QqchPublicSafeControlMeasure qqchPublicSafeControlMeasureParam) {
         return toAjax(qqchPublicSafeControlMeasureService.deleteQqchPublicSafeControlMeasure(qqchPublicSafeControlMeasureParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:remove")
+//    @PreAuthorize(hasPermi = "qqchPublicSafeControlMeasure:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchPublicSafeControlMeasureByPks(@PathVariable Long[] ids) {
         List<Long> qqchPublicSafeControlMeasurePkList = Arrays.asList(ids);

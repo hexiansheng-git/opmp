@@ -32,14 +32,14 @@ public class QqchTotalDemandTimeCountController extends BaseController{
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 
-    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
+//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
     @GetMapping
     public AjaxResult getQqchTotalDemandTimeCount(@Validated(ValidationGroups.Get.class)  QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
         QqchTotalDemandTimeCount qqchTotalDemandTimeCount =  qqchTotalDemandTimeCountService.getQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam);
         return AjaxResult.success(qqchTotalDemandTimeCount);
     }
 
-    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
+//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:list")
     @GetMapping("/list")
     public AjaxResult getQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Select.class) QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
         startPage();
@@ -47,39 +47,39 @@ public class QqchTotalDemandTimeCountController extends BaseController{
         return getDataTableAjaxResult(qqchTotalDemandTimeCountList);
     }
 
-    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
+//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTotalDemandTimeCount(@Validated(ValidationGroups.Save.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
         qqchTotalDemandTimeCountService.insertQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam);
         return AjaxResult.success(qqchTotalDemandTimeCountParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
+//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Save.class) @RequestBody List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountListParam){
         qqchTotalDemandTimeCountService.insertQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountListParam);
         return AjaxResult.success(qqchTotalDemandTimeCountListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
+//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTotalDemandTimeCount(@Validated(ValidationGroups.Update.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
         return toAjax(qqchTotalDemandTimeCountService.updateQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
+//            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:update")
         @PostMapping("/batchUpdate")
         public AjaxResult updateQqchTotalDemandTimeCountList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTotalDemandTimeCount> qqchTotalDemandTimeCountListParam){
             return toAjax(qqchTotalDemandTimeCountService.updateQqchTotalDemandTimeCountList(qqchTotalDemandTimeCountListParam));
         }
     
-    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
+//    @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTotalDemandTimeCount(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTotalDemandTimeCount qqchTotalDemandTimeCountParam){
         return toAjax(qqchTotalDemandTimeCountService.deleteQqchTotalDemandTimeCount(qqchTotalDemandTimeCountParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
+//            @PreAuthorize(hasPermi = "qqchTotalDemandTimeCount:remove")
         @PostMapping("/{ids}")
         public AjaxResult deleteQqchTotalDemandTimeCountByPks(@PathVariable Long[] ids){
             List<Long> qqchTotalDemandTimeCountPkList = Arrays.asList(ids);

@@ -33,7 +33,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
      * @param qqchDangerJobIdentificationParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:list")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:list")
     @GetMapping("/list")
     public AjaxResult getQqchDangerJobIdentificationList(@Validated(ValidationGroups.Select.class) QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         QqchDangerJobIdentificationVo vo = qqchDangerJobIdentificationService.getQqchDangerJobIdentificationList(qqchDangerJobIdentificationParam);
@@ -45,7 +45,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
      * @param vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:save")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:save")
     @PostMapping("/save")
     public AjaxResult insertQqchDangerJobIdentificationList(@Validated(ValidationGroups.Save.class) @RequestBody QqchDangerJobIdentificationVo vo) {
         qqchDangerJobIdentificationService.save(vo);
@@ -53,7 +53,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:list")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:list")
     @GetMapping
     public AjaxResult getQqchDangerJobIdentification(@Validated(ValidationGroups.Get.class) QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         QqchDangerJobIdentification qqchDangerJobIdentification = qqchDangerJobIdentificationService.getQqchDangerJobIdentification(qqchDangerJobIdentificationParam);
@@ -61,7 +61,7 @@ public class QqchDangerJobIdentificationController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:add")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:add")
     @PostMapping("/add")
     public AjaxResult insertQqchDangerJobIdentification(@Validated(ValidationGroups.Save.class) @RequestBody QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         qqchDangerJobIdentificationService.insertQqchDangerJobIdentification(qqchDangerJobIdentificationParam);
@@ -69,25 +69,25 @@ public class QqchDangerJobIdentificationController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:update")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:update")
     @PostMapping("/update")
     public AjaxResult updateQqchDangerJobIdentification(@Validated(ValidationGroups.Update.class) @RequestBody QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         return toAjax(qqchDangerJobIdentificationService.updateQqchDangerJobIdentification(qqchDangerJobIdentificationParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:update")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchDangerJobIdentificationList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchDangerJobIdentification> qqchDangerJobIdentificationListParam) {
         return toAjax(qqchDangerJobIdentificationService.updateQqchDangerJobIdentificationList(qqchDangerJobIdentificationListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:remove")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchDangerJobIdentification(@Validated(ValidationGroups.Delete.class) @RequestBody QqchDangerJobIdentification qqchDangerJobIdentificationParam) {
         return toAjax(qqchDangerJobIdentificationService.deleteQqchDangerJobIdentification(qqchDangerJobIdentificationParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:remove")
+//    @PreAuthorize(hasPermi = "qqchDangerJobIdentification:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchDangerJobIdentificationByPks(@PathVariable Long[] ids) {
         List<Long> qqchDangerJobIdentificationPkList = Arrays.asList(ids);

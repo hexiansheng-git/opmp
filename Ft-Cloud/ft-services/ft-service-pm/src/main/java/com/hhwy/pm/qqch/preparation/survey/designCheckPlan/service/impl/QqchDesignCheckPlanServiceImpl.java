@@ -47,11 +47,8 @@ public class QqchDesignCheckPlanServiceImpl implements IQqchDesignCheckPlanServi
      * @return
      */
     public QqchDesignCheckPlanVo getQqchDesignCheckPlanList(QqchDesignCheckPlan qqchDesignCheckPlan) {
-        BigDecimal version = new BigDecimal(1);
-        if (qqchDesignCheckPlan.getVersion() == null) {
-            // 获取最大版本号
-            version = commonMapper.selectMaxVersion("qqch_design_check_plan");
-        }
+        BigDecimal version = qqchDesignCheckPlan.getVersion();
+        version = commonMapper.selectMaxVersion("qqch_design_check_plan");
         qqchDesignCheckPlan.setVersion(version);
         List<QqchDesignCheckPlan> qqchDesignCheckPlanList = qqchDesignCheckPlanMapper.getQqchDesignCheckPlanList(qqchDesignCheckPlan);
         QqchDesignCheckPlanVo vo = new QqchDesignCheckPlanVo();

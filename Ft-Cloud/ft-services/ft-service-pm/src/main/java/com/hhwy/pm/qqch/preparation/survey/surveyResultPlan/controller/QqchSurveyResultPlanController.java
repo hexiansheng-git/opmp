@@ -31,7 +31,7 @@ public class QqchSurveyResultPlanController extends BaseController {
      * @param qqchSurveyResultPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:list")
+//    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyResultPlanList(@Validated(ValidationGroups.Select.class) QqchSurveyResultPlan qqchSurveyResultPlanParam) {
         QqchSurveyResultPlanVo vo = qqchSurveyResultPlanService.getQqchSurveyResultPlanList(qqchSurveyResultPlanParam);
@@ -43,7 +43,7 @@ public class QqchSurveyResultPlanController extends BaseController {
      * @param qqchSurveyResultPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:add")
+//    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSurveyResultPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultPlanVo qqchSurveyResultPlanVo) {
         qqchSurveyResultPlanService.save(qqchSurveyResultPlanVo);
@@ -55,7 +55,7 @@ public class QqchSurveyResultPlanController extends BaseController {
      * @param qqchSurveyResultPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:confirm")
+//    @PreAuthorize(hasPermi = "qqchSurveyResultPlan:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyResultPlanVo qqchSurveyResultPlanVo) {
         qqchSurveyResultPlanService.confirm(qqchSurveyResultPlanVo);

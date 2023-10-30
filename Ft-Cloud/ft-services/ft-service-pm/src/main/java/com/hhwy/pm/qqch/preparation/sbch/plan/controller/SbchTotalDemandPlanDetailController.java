@@ -1,19 +1,22 @@
 package com.hhwy.pm.qqch.preparation.sbch.plan.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
+import com.hhwy.pm.qqch.preparation.measureexp.equ.domain.QqchMeasureExpEqu;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
+import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetailExportVo;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.ImportSbchTotalDemandPlanDetail;
-import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.QqchTopicResearchPlan;
-import com.hhwy.pm.qqch.preparation.technique.techManagePlan.domain.vo.QqchTopicResearchPlanExportVo;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
+import com.hhwy.utils.excel.ExportUtil;
 import com.hhwy.utils.excel.FtExcelUtil;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.redisUtil.RedisUtils;
@@ -122,7 +125,9 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
     public void export(HttpServletResponse response) throws IOException {
         SbchTotalDemandPlanDetail sbchTotalDemandPlanDetail = new SbchTotalDemandPlanDetail();
         List<SbchTotalDemandPlanDetail> list = totalDemandPlanDetailService.selectSbchTotalDemandPlanDetailLeaderList(sbchTotalDemandPlanDetail);
-        FtExcelUtil<SbchTotalDemandPlanDetail> util = new FtExcelUtil<>(SbchTotalDemandPlanDetail.class);
-        util.exportExcel(response, list, DateUtils.getDate());
+        List<SbchTotalDemandPlanDetailExportVo> exportList = BeanUtil.copyToList(list, SbchTotalDemandPlanDetailExportVo.class);
+        FtExcelUtil<SbchTotalDemandPlanDetailExportVo> util = new FtExcelUtil<>(SbchTotalDemandPlanDetailExportVo.class);
+
+        util.exportExcel(response, exportList, DateUtils.getDate());
     }
 }

@@ -29,7 +29,7 @@ public class QqchConstructionEquipmentController extends BaseController{
 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
-    @PreAuthorize(hasPermi = "qqchConstructionEquipment:list")
+//    @PreAuthorize(hasPermi = "qqchConstructionEquipment:list")
     @GetMapping
     public AjaxResult getQqchConstructionEquipment(@Validated(ValidationGroups.Get.class)  QqchConstructionEquipment qqchConstructionEquipmentParam){
         QqchConstructionEquipment qqchConstructionEquipment =  qqchConstructionEquipmentService.getQqchConstructionEquipment(qqchConstructionEquipmentParam);
@@ -41,7 +41,7 @@ public class QqchConstructionEquipmentController extends BaseController{
      * @param qqchConstructionEquipmentParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchConstructionEquipment:list")
+//    @PreAuthorize(hasPermi = "qqchConstructionEquipment:list")
     @GetMapping("/list")
     public AjaxResult getQqchConstructionEquipmentList(@Validated(ValidationGroups.Select.class) QqchConstructionEquipment qqchConstructionEquipmentParam){
         QqchConstructionEquipmentVo vo = qqchConstructionEquipmentService.getQqchConstructionEquipmentList(qqchConstructionEquipmentParam);
@@ -54,7 +54,7 @@ public class QqchConstructionEquipmentController extends BaseController{
      * @param qqchConstructionEquipmentVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchConstructionEquipment:save")
+//    @PreAuthorize(hasPermi = "qqchConstructionEquipment:save")
     @PostMapping("/save")
     public AjaxResult insertQqchConstructionEquipment(@Validated(ValidationGroups.Save.class) @RequestBody QqchConstructionEquipmentVo qqchConstructionEquipmentVo){
         qqchConstructionEquipmentService.save(qqchConstructionEquipmentVo);
@@ -66,25 +66,25 @@ public class QqchConstructionEquipmentController extends BaseController{
 
 
 
-    @PreAuthorize(hasPermi = "qqchConstructionEquipment:update")
+//    @PreAuthorize(hasPermi = "qqchConstructionEquipment:update")
     @PostMapping("/update")
     public AjaxResult updateQqchConstructionEquipment(@Validated(ValidationGroups.Update.class) @RequestBody QqchConstructionEquipment qqchConstructionEquipmentParam){
         return toAjax(qqchConstructionEquipmentService.updateQqchConstructionEquipment(qqchConstructionEquipmentParam));
     }
 
-        @PreAuthorize(hasPermi = "qqchConstructionEquipment:update")
+//        @PreAuthorize(hasPermi = "qqchConstructionEquipment:update")
         @PostMapping("/batchUpdate")
         public AjaxResult updateQqchConstructionEquipmentList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchConstructionEquipment> qqchConstructionEquipmentListParam){
             return toAjax(qqchConstructionEquipmentService.updateQqchConstructionEquipmentList(qqchConstructionEquipmentListParam));
         }
 
-    @PreAuthorize(hasPermi = "qqchConstructionEquipment:remove")
+//    @PreAuthorize(hasPermi = "qqchConstructionEquipment:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchConstructionEquipment(@Validated(ValidationGroups.Delete.class) @RequestBody QqchConstructionEquipment qqchConstructionEquipmentParam){
         return toAjax(qqchConstructionEquipmentService.deleteQqchConstructionEquipment(qqchConstructionEquipmentParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchConstructionEquipment:remove")
+//            @PreAuthorize(hasPermi = "qqchConstructionEquipment:remove")
         @PostMapping("/{ids}")
         public AjaxResult deleteQqchConstructionEquipmentByPks(@PathVariable Long[] ids){
             List<Long> qqchConstructionEquipmentPkList = Arrays.asList(ids);

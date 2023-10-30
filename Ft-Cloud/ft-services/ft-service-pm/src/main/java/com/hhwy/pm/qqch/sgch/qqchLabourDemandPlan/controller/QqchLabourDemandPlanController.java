@@ -32,7 +32,7 @@ public class QqchLabourDemandPlanController extends BaseController {
     private IQqchLabourDemandPlanService qqchLabourDemandPlanService;
 
 
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping
     public AjaxResult getQqchLabourDemandPlan(@Validated(ValidationGroups.Get.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         QqchLabourDemandPlan qqchLabourDemandPlan = qqchLabourDemandPlanService.getQqchLabourDemandPlan(qqchLabourDemandPlanParam);
@@ -40,7 +40,7 @@ public class QqchLabourDemandPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:add")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchLabourDemandPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         qqchLabourDemandPlanService.insertQqchLabourDemandPlan(qqchLabourDemandPlanParam);
@@ -48,25 +48,25 @@ public class QqchLabourDemandPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:update")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchLabourDemandPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         return toAjax(qqchLabourDemandPlanService.updateQqchLabourDemandPlan(qqchLabourDemandPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:update")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchLabourDemandPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchLabourDemandPlan> qqchLabourDemandPlanListParam) {
         return toAjax(qqchLabourDemandPlanService.updateQqchLabourDemandPlanList(qqchLabourDemandPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchLabourDemandPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         return toAjax(qqchLabourDemandPlanService.deleteQqchLabourDemandPlan(qqchLabourDemandPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchLabourDemandPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchLabourDemandPlanPkList = Arrays.asList(ids);
@@ -90,7 +90,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * @param qqchLabourDemandPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchLabourDemandPlanList(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.getQqchLabourDemandPlanList(qqchLabourDemandPlanParam);
@@ -104,7 +104,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * @param qqchLabourDemandPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:list")
     @GetMapping("/listTreeWithSearch")
     public AjaxResult listTreeWithSearch(@Validated(ValidationGroups.Select.class) QqchLabourDemandPlan qqchLabourDemandPlanParam) {
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.getQqchLabourDemandPlanListWithSearch(qqchLabourDemandPlanParam);
@@ -118,7 +118,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * @param qqchLabourDemandPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:save")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:save")
     @PostMapping("/save")
     public AjaxResult insertQqchLabourDemandPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlanVo qqchLabourDemandPlanVo) {
         qqchLabourDemandPlanService.save(qqchLabourDemandPlanVo);
@@ -143,7 +143,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:selectCount")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:selectCount")
     @PostMapping("/selectCount")
     public AjaxResult select(@Validated(ValidationGroups.Save.class) @RequestBody QqchLabourDemandPlan qqchLabourDemandPlan) throws ParseException {
         if (qqchLabourDemandPlan.getStartTime() == null || qqchLabourDemandPlan.getEndTime() == null) {
@@ -175,7 +175,7 @@ public class QqchLabourDemandPlanController extends BaseController {
      * @param
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:sychData")
+//    @PreAuthorize(hasPermi = "qqchLabourDemandPlan:sychData")
     @PostMapping("/sychData")
     public AjaxResult sychData(@RequestBody QqchLabourDemandPlanVo vo1) {
         QqchLabourDemandPlanVo vo = qqchLabourDemandPlanService.sychData(vo1);

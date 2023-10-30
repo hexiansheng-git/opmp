@@ -185,7 +185,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
 
     @Transactional
     public int updateJdglMainPlanItem(JdglMainPlanItem jdglMainPlanItem) {
-        jdglMainPlanItem.setUpdateUser(SecurityUtils.getUserName());
+        jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
         jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
         return jdglMainPlanItemMapper.updateJdglMainPlanItem(jdglMainPlanItem);
     }

@@ -27,7 +27,7 @@ public class QqchWeightEngineeringControlController extends BaseController {
     @Autowired
     private IQqchWeightEngineeringControlService qqchWeightEngineeringControlService;
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:list")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:list")
     @GetMapping("/list")
     public AjaxResult getQqchWeightEngineeringControlList(@Validated(ValidationGroups.Select.class) QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         QqchWeightEngineeringControlVo vo = qqchWeightEngineeringControlService.getQqchWeightEngineeringControlList(qqchWeightEngineeringControlParam);
@@ -35,7 +35,7 @@ public class QqchWeightEngineeringControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:save")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchWeightEngineeringControlVo vo) {
         qqchWeightEngineeringControlService.save(vo);
@@ -43,14 +43,14 @@ public class QqchWeightEngineeringControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:list")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:list")
     @GetMapping
     public AjaxResult getQqchWeightEngineeringControl(@Validated(ValidationGroups.Get.class) QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         QqchWeightEngineeringControl qqchWeightEngineeringControl = qqchWeightEngineeringControlService.getQqchWeightEngineeringControl(qqchWeightEngineeringControlParam);
         return AjaxResult.success(qqchWeightEngineeringControl);
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:add")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:add")
     @PostMapping("/add")
     public AjaxResult insertQqchWeightEngineeringControl(@Validated(ValidationGroups.Save.class) @RequestBody QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         qqchWeightEngineeringControlService.insertQqchWeightEngineeringControl(qqchWeightEngineeringControlParam);
@@ -58,25 +58,25 @@ public class QqchWeightEngineeringControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:update")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:update")
     @PostMapping("/update")
     public AjaxResult updateQqchWeightEngineeringControl(@Validated(ValidationGroups.Update.class) @RequestBody QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         return toAjax(qqchWeightEngineeringControlService.updateQqchWeightEngineeringControl(qqchWeightEngineeringControlParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:update")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchWeightEngineeringControlList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchWeightEngineeringControl> qqchWeightEngineeringControlListParam) {
         return toAjax(qqchWeightEngineeringControlService.updateQqchWeightEngineeringControlList(qqchWeightEngineeringControlListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:remove")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchWeightEngineeringControl(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWeightEngineeringControl qqchWeightEngineeringControlParam) {
         return toAjax(qqchWeightEngineeringControlService.deleteQqchWeightEngineeringControl(qqchWeightEngineeringControlParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:remove")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringControl:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchWeightEngineeringControlByPks(@PathVariable Long[] ids) {
         List<Long> qqchWeightEngineeringControlPkList = Arrays.asList(ids);

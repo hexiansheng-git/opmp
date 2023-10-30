@@ -54,14 +54,12 @@ public class QqchTotalDemandController extends BaseController{
      * @param vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTotalDemand:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchTotalDemandVo vo){
         qqchTotalDemandService.save(vo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchTotalDemand:add")
     @PostMapping("/add")
     public AjaxResult insertQqchTotalDemand(@Validated(ValidationGroups.Save.class) @RequestBody QqchTotalDemand qqchTotalDemandParam){
         qqchTotalDemandService.insertQqchTotalDemand(qqchTotalDemandParam);
@@ -69,25 +67,21 @@ public class QqchTotalDemandController extends BaseController{
     }
 
 
-    @PreAuthorize(hasPermi = "qqchTotalDemand:update")
     @PostMapping("/update")
     public AjaxResult updateQqchTotalDemand(@Validated(ValidationGroups.Update.class) @RequestBody QqchTotalDemand qqchTotalDemandParam){
         return toAjax(qqchTotalDemandService.updateQqchTotalDemand(qqchTotalDemandParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTotalDemand:update")
         @PostMapping("/batchUpdate")
         public AjaxResult updateQqchTotalDemandList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTotalDemand> qqchTotalDemandListParam){
             return toAjax(qqchTotalDemandService.updateQqchTotalDemandList(qqchTotalDemandListParam));
         }
     
-    @PreAuthorize(hasPermi = "qqchTotalDemand:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchTotalDemand(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTotalDemand qqchTotalDemandParam){
         return toAjax(qqchTotalDemandService.deleteQqchTotalDemand(qqchTotalDemandParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTotalDemand:remove")
         @PostMapping("/{ids}")
         public AjaxResult deleteQqchTotalDemandByPks(@PathVariable Long[] ids){
             List<Long> qqchTotalDemandPkList = Arrays.asList(ids);

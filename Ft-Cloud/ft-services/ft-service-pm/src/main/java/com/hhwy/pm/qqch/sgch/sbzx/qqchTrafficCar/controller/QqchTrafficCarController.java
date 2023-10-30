@@ -17,75 +17,75 @@ import java.util.List;
 /**
  * @author ldd
  * @date 2023-08-01 16:12:57
- * @remark 
+ * @remark
  */
 @Validated
 @RestController
 @RequestMapping("/qqchTrafficCar")
-public class QqchTrafficCarController extends BaseController{
+public class QqchTrafficCarController extends BaseController {
 
     @Autowired
     private IQqchTrafficCarService qqchTrafficCarService;
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 
-    @PreAuthorize(hasPermi = "qqchTrafficCar:list")
+    //    @PreAuthorize(hasPermi = "qqchTrafficCar:list")
     @GetMapping
-    public AjaxResult getQqchTrafficCar(@Validated(ValidationGroups.Get.class)  QqchTrafficCar qqchTrafficCarParam){
-        QqchTrafficCar qqchTrafficCar =  qqchTrafficCarService.getQqchTrafficCar(qqchTrafficCarParam);
+    public AjaxResult getQqchTrafficCar(@Validated(ValidationGroups.Get.class) QqchTrafficCar qqchTrafficCarParam) {
+        QqchTrafficCar qqchTrafficCar = qqchTrafficCarService.getQqchTrafficCar(qqchTrafficCarParam);
         return AjaxResult.success(qqchTrafficCar);
     }
 
     /**
-     *  列表接口
+     * 列表接口
+     *
      * @param qqchTrafficCarParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTrafficCar:list")
+//    @PreAuthorize(hasPermi = "qqchTrafficCar:list")
     @GetMapping("/list")
-    public AjaxResult getQqchTrafficCarList(@Validated(ValidationGroups.Select.class) QqchTrafficCar qqchTrafficCarParam){
+    public AjaxResult getQqchTrafficCarList(@Validated(ValidationGroups.Select.class) QqchTrafficCar qqchTrafficCarParam) {
         QqchTrafficCarVo vo = qqchTrafficCarService.getQqchTrafficCarList(qqchTrafficCarParam);
         return AjaxResult.success(vo);
     }
 
     /**
-     *  保存/确认/提交
+     * 保存/确认/提交
+     *
      * @param qqchTrafficCarParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchTrafficCar:save")
+//    @PreAuthorize(hasPermi = "qqchTrafficCar:save")
     @PostMapping("/save")
-    public AjaxResult insertQqchTrafficCar(@Validated(ValidationGroups.Save.class) @RequestBody QqchTrafficCarVo qqchTrafficCarParam){
+    public AjaxResult insertQqchTrafficCar(@Validated(ValidationGroups.Save.class) @RequestBody QqchTrafficCarVo qqchTrafficCarParam) {
         qqchTrafficCarService.save(qqchTrafficCarParam);
         return AjaxResult.success();
     }
 
 
-
-    @PreAuthorize(hasPermi = "qqchTrafficCar:update")
+    //    @PreAuthorize(hasPermi = "qqchTrafficCar:update")
     @PostMapping("/update")
-    public AjaxResult updateQqchTrafficCar(@Validated(ValidationGroups.Update.class) @RequestBody QqchTrafficCar qqchTrafficCarParam){
+    public AjaxResult updateQqchTrafficCar(@Validated(ValidationGroups.Update.class) @RequestBody QqchTrafficCar qqchTrafficCarParam) {
         return toAjax(qqchTrafficCarService.updateQqchTrafficCar(qqchTrafficCarParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTrafficCar:update")
-        @PostMapping("/batchUpdate")
-        public AjaxResult updateQqchTrafficCarList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTrafficCar> qqchTrafficCarListParam){
-            return toAjax(qqchTrafficCarService.updateQqchTrafficCarList(qqchTrafficCarListParam));
-        }
-    
-    @PreAuthorize(hasPermi = "qqchTrafficCar:remove")
+    //            @PreAuthorize(hasPermi = "qqchTrafficCar:update")
+    @PostMapping("/batchUpdate")
+    public AjaxResult updateQqchTrafficCarList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchTrafficCar> qqchTrafficCarListParam) {
+        return toAjax(qqchTrafficCarService.updateQqchTrafficCarList(qqchTrafficCarListParam));
+    }
+
+//    @PreAuthorize(hasPermi = "qqchTrafficCar:remove")
     @PostMapping("/delete")
-    public AjaxResult deleteQqchTrafficCar(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTrafficCar qqchTrafficCarParam){
+    public AjaxResult deleteQqchTrafficCar(@Validated(ValidationGroups.Delete.class) @RequestBody QqchTrafficCar qqchTrafficCarParam) {
         return toAjax(qqchTrafficCarService.deleteQqchTrafficCar(qqchTrafficCarParam));
     }
 
-            @PreAuthorize(hasPermi = "qqchTrafficCar:remove")
-        @PostMapping("/{ids}")
-        public AjaxResult deleteQqchTrafficCarByPks(@PathVariable Long[] ids){
-            List<Long> qqchTrafficCarPkList = Arrays.asList(ids);
-            return toAjax(qqchTrafficCarService.deleteQqchTrafficCarByPks(qqchTrafficCarPkList));
-        }
-    
+//    @PreAuthorize(hasPermi = "qqchTrafficCar:remove")
+    @PostMapping("/{ids}")
+    public AjaxResult deleteQqchTrafficCarByPks(@PathVariable Long[] ids) {
+        List<Long> qqchTrafficCarPkList = Arrays.asList(ids);
+        return toAjax(qqchTrafficCarService.deleteQqchTrafficCarByPks(qqchTrafficCarPkList));
+    }
+
 
 }
