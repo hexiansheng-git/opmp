@@ -31,7 +31,7 @@ public class QqchDesignCheckPlanController extends BaseController {
      * @param qqchDesignCheckPlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignCheckPlan:list")
+//    @PreAuthorize(hasPermi = "qqchDesignCheckPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignCheckPlanList(@Validated(ValidationGroups.Select.class) QqchDesignCheckPlan qqchDesignCheckPlanParam) {
         QqchDesignCheckPlanVo qqchDesignCheckPlanVo = qqchDesignCheckPlanService.getQqchDesignCheckPlanList(qqchDesignCheckPlanParam);
@@ -39,14 +39,14 @@ public class QqchDesignCheckPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchDesignCheckPlan:add")
+//    @PreAuthorize(hasPermi = "qqchDesignCheckPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchDesignCheckPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignCheckPlanVo qqchDesignCheckPlanVo) {
         qqchDesignCheckPlanService.save(qqchDesignCheckPlanVo);
         return AjaxResult.success(qqchDesignCheckPlanVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchDesignCheckPlan:confirm")
+//    @PreAuthorize(hasPermi = "qqchDesignCheckPlan:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignCheckPlanVo qqchDesignCheckPlanVo) {
         qqchDesignCheckPlanService.confirm(qqchDesignCheckPlanVo);

@@ -32,7 +32,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
      * @param qqchSpecialBigProcessControlParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:list")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:list")
     @GetMapping("/list")
     public AjaxResult getQqchSpecialBigProcessControlList(@Validated(ValidationGroups.Select.class) QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         QqchSpecialBigProcessControlVo vo = qqchSpecialBigProcessControlService.getQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlParam);
@@ -40,7 +40,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:save")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:save")
     @PostMapping("/save")
     public AjaxResult insertQqchSpecialBigProcessControlList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigProcessControlVo vo) {
         qqchSpecialBigProcessControlService.save(vo);
@@ -48,7 +48,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:list")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:list")
     @GetMapping
     public AjaxResult getQqchSpecialBigProcessControl(@Validated(ValidationGroups.Get.class) QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         QqchSpecialBigProcessControl qqchSpecialBigProcessControl = qqchSpecialBigProcessControlService.getQqchSpecialBigProcessControl(qqchSpecialBigProcessControlParam);
@@ -56,7 +56,7 @@ public class QqchSpecialBigProcessControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:add")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSpecialBigProcessControl(@Validated(ValidationGroups.Save.class) @RequestBody QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         qqchSpecialBigProcessControlService.insertQqchSpecialBigProcessControl(qqchSpecialBigProcessControlParam);
@@ -64,25 +64,25 @@ public class QqchSpecialBigProcessControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:update")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSpecialBigProcessControl(@Validated(ValidationGroups.Update.class) @RequestBody QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         return toAjax(qqchSpecialBigProcessControlService.updateQqchSpecialBigProcessControl(qqchSpecialBigProcessControlParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:update")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSpecialBigProcessControlList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSpecialBigProcessControl> qqchSpecialBigProcessControlListParam) {
         return toAjax(qqchSpecialBigProcessControlService.updateQqchSpecialBigProcessControlList(qqchSpecialBigProcessControlListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:remove")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSpecialBigProcessControl(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSpecialBigProcessControl qqchSpecialBigProcessControlParam) {
         return toAjax(qqchSpecialBigProcessControlService.deleteQqchSpecialBigProcessControl(qqchSpecialBigProcessControlParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:remove")
+//    @PreAuthorize(hasPermi = "qqchSpecialBigProcessControl:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSpecialBigProcessControlByPks(@PathVariable Long[] ids) {
         List<Long> qqchSpecialBigProcessControlPkList = Arrays.asList(ids);

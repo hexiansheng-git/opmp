@@ -37,7 +37,7 @@ public class QqchEmergencyPlanControlController extends BaseController {
      * @param qqchEmergencyPlanControlParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:list")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:list")
     @GetMapping("/list")
     public AjaxResult getQqchEmergencyPlanControlList(@Validated(ValidationGroups.Select.class) QqchEmergencyPlanControl qqchEmergencyPlanControlParam) {
         QqchEmergencyPlanControlVo vo = qqchEmergencyPlanControlService.getQqchEmergencyPlanControlList(qqchEmergencyPlanControlParam);
@@ -51,14 +51,14 @@ public class QqchEmergencyPlanControlController extends BaseController {
      * @param vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:add")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchEmergencyPlanControlList(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyPlanControlVo vo) {
         qqchEmergencyPlanControlService.save(vo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:list")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:list")
     @GetMapping
     public AjaxResult getQqchEmergencyPlanControl(@Validated(ValidationGroups.Get.class) QqchEmergencyPlanControl qqchEmergencyPlanControlParam) {
         QqchEmergencyPlanControl qqchEmergencyPlanControl = qqchEmergencyPlanControlService.getQqchEmergencyPlanControl(qqchEmergencyPlanControlParam);
@@ -66,7 +66,7 @@ public class QqchEmergencyPlanControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:add")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:add")
     @PostMapping("/add")
     public AjaxResult insertQqchEmergencyPlanControl(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyPlanControl qqchEmergencyPlanControlParam) {
         qqchEmergencyPlanControlService.insertQqchEmergencyPlanControl(qqchEmergencyPlanControlParam);
@@ -74,25 +74,25 @@ public class QqchEmergencyPlanControlController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:update")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:update")
     @PostMapping("/update")
     public AjaxResult updateQqchEmergencyPlanControl(@Validated(ValidationGroups.Update.class) @RequestBody QqchEmergencyPlanControl qqchEmergencyPlanControlParam) {
         return toAjax(qqchEmergencyPlanControlService.updateQqchEmergencyPlanControl(qqchEmergencyPlanControlParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:update")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchEmergencyPlanControlList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchEmergencyPlanControl> qqchEmergencyPlanControlListParam) {
         return toAjax(qqchEmergencyPlanControlService.updateQqchEmergencyPlanControlList(qqchEmergencyPlanControlListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:remove")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchEmergencyPlanControl(@Validated(ValidationGroups.Delete.class) @RequestBody QqchEmergencyPlanControl qqchEmergencyPlanControlParam) {
         return toAjax(qqchEmergencyPlanControlService.deleteQqchEmergencyPlanControl(qqchEmergencyPlanControlParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:remove")
+//    @PreAuthorize(hasPermi = "qqchEmergencyPlanControl:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchEmergencyPlanControlByPks(@PathVariable Long[] ids) {
         List<Long> qqchEmergencyPlanControlPkList = Arrays.asList(ids);

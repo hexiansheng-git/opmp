@@ -35,7 +35,7 @@ public class QqchSurveyManageModelController extends BaseController{
      * @param qqchSurveyManageModelParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:list")
+//    @PreAuthorize(hasPermi = "qqchSurveyManageModel:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyManageModelList(@Validated(ValidationGroups.Select.class) QqchSurveyManageModel qqchSurveyManageModelParam){
         QqchSurveyManageModelVo qqchSurveyManageModelVo = qqchSurveyManageModelService.getQqchSurveyManageModelList(qqchSurveyManageModelParam);
@@ -47,7 +47,7 @@ public class QqchSurveyManageModelController extends BaseController{
      * @param qqchSurveyManageModelVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:add")
+//    @PreAuthorize(hasPermi = "qqchSurveyManageModel:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSurveyManageModel(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyManageModelVo qqchSurveyManageModelVo){
         qqchSurveyManageModelService.save(qqchSurveyManageModelVo);
@@ -59,7 +59,7 @@ public class QqchSurveyManageModelController extends BaseController{
      * @param qqchSurveyManageModelVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyManageModel:confirm")
+//    @PreAuthorize(hasPermi = "qqchSurveyManageModel:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyManageModelVo qqchSurveyManageModelVo){
      QqchSurveyManageModelVo   qqchSurveyManageModelVo1= qqchSurveyManageModelService.confirm(qqchSurveyManageModelVo);

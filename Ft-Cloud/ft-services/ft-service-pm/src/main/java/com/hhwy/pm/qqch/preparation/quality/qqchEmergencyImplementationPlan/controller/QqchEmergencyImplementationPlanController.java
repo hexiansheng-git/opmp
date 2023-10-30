@@ -27,21 +27,21 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
     @Autowired
     private IQqchEmergencyImplementationPlanService qqchEmergencyImplementationPlanService;
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:list")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchEmergencyImplementationPlanList(@Validated(ValidationGroups.Select.class) QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         QqchEmergencyImplementationPlanVo vo = qqchEmergencyImplementationPlanService.getQqchEmergencyImplementationPlanList(qqchEmergencyImplementationPlanParam);
         return AjaxResult.success(vo);
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:save")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:save")
     @PostMapping("/save")
     public AjaxResult insertQqchEmergencyImplementationPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyImplementationPlanVo vo) {
         qqchEmergencyImplementationPlanService.save(vo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:list")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:list")
     @GetMapping
     public AjaxResult getQqchEmergencyImplementationPlan(@Validated(ValidationGroups.Get.class) QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         QqchEmergencyImplementationPlan qqchEmergencyImplementationPlan = qqchEmergencyImplementationPlanService.getQqchEmergencyImplementationPlan(qqchEmergencyImplementationPlanParam);
@@ -49,7 +49,7 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:add")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:add")
     @PostMapping("/add")
     public AjaxResult insertQqchEmergencyImplementationPlan(@Validated(ValidationGroups.Save.class) @RequestBody QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         qqchEmergencyImplementationPlanService.insertQqchEmergencyImplementationPlan(qqchEmergencyImplementationPlanParam);
@@ -57,25 +57,25 @@ public class QqchEmergencyImplementationPlanController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:update")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:update")
     @PostMapping("/update")
     public AjaxResult updateQqchEmergencyImplementationPlan(@Validated(ValidationGroups.Update.class) @RequestBody QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         return toAjax(qqchEmergencyImplementationPlanService.updateQqchEmergencyImplementationPlan(qqchEmergencyImplementationPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:update")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchEmergencyImplementationPlanList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchEmergencyImplementationPlan> qqchEmergencyImplementationPlanListParam) {
         return toAjax(qqchEmergencyImplementationPlanService.updateQqchEmergencyImplementationPlanList(qqchEmergencyImplementationPlanListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchEmergencyImplementationPlan(@Validated(ValidationGroups.Delete.class) @RequestBody QqchEmergencyImplementationPlan qqchEmergencyImplementationPlanParam) {
         return toAjax(qqchEmergencyImplementationPlanService.deleteQqchEmergencyImplementationPlan(qqchEmergencyImplementationPlanParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:remove")
+//    @PreAuthorize(hasPermi = "qqchEmergencyImplementationPlan:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchEmergencyImplementationPlanByPks(@PathVariable Long[] ids) {
         List<Long> qqchEmergencyImplementationPlanPkList = Arrays.asList(ids);

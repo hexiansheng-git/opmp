@@ -30,7 +30,7 @@ public class QqchWeightEngineeringListController extends BaseController {
     private IQqchWeightEngineeringListService qqchWeightEngineeringListService;
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:list")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:list")
     @GetMapping("/list")
     public AjaxResult getQqchWeightEngineeringListList(@Validated(ValidationGroups.Select.class) QqchWeightEngineeringList qqchWeightEngineeringListParam) {
        QqchWeightEngineeringListVo vo = qqchWeightEngineeringListService.getQqchWeightEngineeringListList(qqchWeightEngineeringListParam);
@@ -38,7 +38,7 @@ public class QqchWeightEngineeringListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:save")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchWeightEngineeringListVo vo) {
         qqchWeightEngineeringListService.save(vo);
@@ -46,7 +46,7 @@ public class QqchWeightEngineeringListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:list")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:list")
     @GetMapping
     public AjaxResult getQqchWeightEngineeringList(@Validated(ValidationGroups.Get.class) QqchWeightEngineeringList qqchWeightEngineeringListParam) {
         QqchWeightEngineeringList qqchWeightEngineeringList = qqchWeightEngineeringListService.getQqchWeightEngineeringList(qqchWeightEngineeringListParam);
@@ -54,32 +54,32 @@ public class QqchWeightEngineeringListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:add")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:add")
     @PostMapping("/add")
     public AjaxResult insertQqchWeightEngineeringList(@Validated(ValidationGroups.Save.class) @RequestBody QqchWeightEngineeringList qqchWeightEngineeringListParam) {
         qqchWeightEngineeringListService.insertQqchWeightEngineeringList(qqchWeightEngineeringListParam);
         return AjaxResult.success(qqchWeightEngineeringListParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:update")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:update")
     @PostMapping("/update")
     public AjaxResult updateQqchWeightEngineeringList(@Validated(ValidationGroups.Update.class) @RequestBody QqchWeightEngineeringList qqchWeightEngineeringListParam) {
         return toAjax(qqchWeightEngineeringListService.updateQqchWeightEngineeringList(qqchWeightEngineeringListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:update")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchWeightEngineeringListList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchWeightEngineeringList> qqchWeightEngineeringListListParam) {
         return toAjax(qqchWeightEngineeringListService.updateQqchWeightEngineeringListList(qqchWeightEngineeringListListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:remove")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchWeightEngineeringList(@Validated(ValidationGroups.Delete.class) @RequestBody QqchWeightEngineeringList qqchWeightEngineeringListParam) {
         return toAjax(qqchWeightEngineeringListService.deleteQqchWeightEngineeringList(qqchWeightEngineeringListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:remove")
+//    @PreAuthorize(hasPermi = "qqchWeightEngineeringList:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchWeightEngineeringListByPks(@PathVariable Long[] ids) {
         List<Long> qqchWeightEngineeringListPkList = Arrays.asList(ids);

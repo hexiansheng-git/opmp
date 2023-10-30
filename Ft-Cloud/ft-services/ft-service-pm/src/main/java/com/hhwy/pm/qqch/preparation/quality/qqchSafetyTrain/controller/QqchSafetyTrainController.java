@@ -34,7 +34,7 @@ public class QqchSafetyTrainController extends BaseController {
      * @param qqchSafetyTrainParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:list")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:list")
     @GetMapping("/list")
     public AjaxResult getQqchSafetyTrainList(@Validated(ValidationGroups.Select.class) QqchSafetyTrain qqchSafetyTrainParam) {
         QqchSafetyTrainVo vo = qqchSafetyTrainService.getQqchSafetyTrainList(qqchSafetyTrainParam);
@@ -46,7 +46,7 @@ public class QqchSafetyTrainController extends BaseController {
      * @param vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:save")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:save")
     @PostMapping("/save")
     public AjaxResult insertQqchSafetyTrainList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafetyTrainVo vo) {
         qqchSafetyTrainService.save(vo);
@@ -54,7 +54,7 @@ public class QqchSafetyTrainController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:list")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:list")
     @GetMapping
     public AjaxResult getQqchSafetyTrain(@Validated(ValidationGroups.Get.class) QqchSafetyTrain qqchSafetyTrainParam) {
         QqchSafetyTrain qqchSafetyTrain = qqchSafetyTrainService.getQqchSafetyTrain(qqchSafetyTrainParam);
@@ -62,7 +62,7 @@ public class QqchSafetyTrainController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:add")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSafetyTrain(@Validated(ValidationGroups.Save.class) @RequestBody QqchSafetyTrain qqchSafetyTrainParam) {
         qqchSafetyTrainService.insertQqchSafetyTrain(qqchSafetyTrainParam);
@@ -70,25 +70,25 @@ public class QqchSafetyTrainController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:update")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSafetyTrain(@Validated(ValidationGroups.Update.class) @RequestBody QqchSafetyTrain qqchSafetyTrainParam) {
         return toAjax(qqchSafetyTrainService.updateQqchSafetyTrain(qqchSafetyTrainParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:update")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSafetyTrainList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSafetyTrain> qqchSafetyTrainListParam) {
         return toAjax(qqchSafetyTrainService.updateQqchSafetyTrainList(qqchSafetyTrainListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:remove")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSafetyTrain(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSafetyTrain qqchSafetyTrainParam) {
         return toAjax(qqchSafetyTrainService.deleteQqchSafetyTrain(qqchSafetyTrainParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSafetyTrain:remove")
+//    @PreAuthorize(hasPermi = "qqchSafetyTrain:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSafetyTrainByPks(@PathVariable Long[] ids) {
         List<Long> qqchSafetyTrainPkList = Arrays.asList(ids);

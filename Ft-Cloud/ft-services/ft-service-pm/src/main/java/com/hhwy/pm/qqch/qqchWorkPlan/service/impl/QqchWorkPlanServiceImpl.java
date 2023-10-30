@@ -490,8 +490,11 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
     @Override
     @Transactional
     public void updateWorkPlanProcess(Long id) {
+        System.out.println("工作计划id：    "+id + "----------------------");
         //所有都置为无效
-        qqchWorkPlanMapper.updateAllToInvalid();
+        qqchWorkPlanMapper.updateAllToInvalidExcept(id);
+
+        System.out.println("生效状态改为无效成功---------------");
 
         //当前数据修改为生效，流程状态修改为结束
         QqchWorkPlan query = new QqchWorkPlan();
@@ -501,12 +504,16 @@ public class QqchWorkPlanServiceImpl implements IQqchWorkPlanService {
         qqchWorkPlan.setTaskStatus("5");
         qqchWorkPlanMapper.updateQqchWorkPlan(qqchWorkPlan);
 
+        System.out.println("修改流程状态成功   " + "生效状态：" + qqchWorkPlan.getValid() + "     流程状态：  " + qqchWorkPlan.getTaskStatus());
+
         //调用前期策划评审
         qqchReviewService.savePlan(id);
 
+        System.out.println("前期策划评审修改成功!  ---------------------------");
+
         //推送到总部
         rocketMQTemplate.convertAndSend("qqch_work_plan_effect:effect", qqchWorkPlan.getId()+"");
-
+        System.out.println("推送总部成功---------------------");
     }
 
     /**

@@ -46,5 +46,5 @@ public interface QqchWorkPlanMapper {
 
     int deleteQqchWorkPlanByPks(@Param("qqchWorkPlanPkList") List<Long> qqchWorkPlanPkList);
 
-    void updateAllToInvalid();
+    void updateAllToInvalidExcept(@Param("id") Long id);
 }

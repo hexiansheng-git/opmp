@@ -54,14 +54,14 @@ public class QqchManagementPersonConfigController extends BaseController {
      * @param qqchManagementPersonConfigParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:list")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:list")
     @GetMapping("/list")
     public AjaxResult getQqchManagementPersonConfigList(@Validated(ValidationGroups.Select.class) QqchManagementPersonConfig qqchManagementPersonConfigParam) {
         QqchManagementPersonConfigVo qqchManagementPersonConfigVo = qqchManagementPersonConfigService.getQqchManagementPersonConfigList(qqchManagementPersonConfigParam);
         return AjaxResult.success(qqchManagementPersonConfigVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:add")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:add")
     @PostMapping("/add")
     public AjaxResult insertQqchManagementPersonConfig(@Validated(ValidationGroups.Save.class) @RequestBody QqchManagementPersonConfig qqchManagementPersonConfigParam) {
         qqchManagementPersonConfigService.insertQqchManagementPersonConfig(qqchManagementPersonConfigParam);
@@ -74,32 +74,32 @@ public class QqchManagementPersonConfigController extends BaseController {
      * @param qqchManagementPersonConfigVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:add")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:add")
     @PostMapping("/save")
     public AjaxResult insertQqchManagementPersonConfigList(@Validated(ValidationGroups.Save.class) @RequestBody QqchManagementPersonConfigVo qqchManagementPersonConfigVo) {
         qqchManagementPersonConfigService.save(qqchManagementPersonConfigVo);
         return AjaxResult.success(qqchManagementPersonConfigVo);
     }
 
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:update")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:update")
     @PostMapping("/update")
     public AjaxResult updateQqchManagementPersonConfig(@Validated(ValidationGroups.Update.class) @RequestBody QqchManagementPersonConfig qqchManagementPersonConfigParam) {
         return toAjax(qqchManagementPersonConfigService.updateQqchManagementPersonConfig(qqchManagementPersonConfigParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:update")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchManagementPersonConfigList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchManagementPersonConfig> qqchManagementPersonConfigListParam) {
         return toAjax(qqchManagementPersonConfigService.updateQqchManagementPersonConfigList(qqchManagementPersonConfigListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:remove")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchManagementPersonConfig(@Validated(ValidationGroups.Delete.class) @RequestBody QqchManagementPersonConfig qqchManagementPersonConfigParam) {
         return toAjax(qqchManagementPersonConfigService.deleteQqchManagementPersonConfig(qqchManagementPersonConfigParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:remove")
+//    @PreAuthorize(hasPermi = "qqchManagementPersonConfig:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchManagementPersonConfigByPks(@PathVariable Long[] ids) {
         List<Long> qqchManagementPersonConfigPkList = Arrays.asList(ids);

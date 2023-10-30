@@ -46,7 +46,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      * @param qqchSurveyWorkPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:add")
+//    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSurveyWorkPlanList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
         qqchSurveyWorkPlanService.save(qqchSurveyWorkPlanVo);
@@ -59,7 +59,7 @@ public class QqchSurveyWorkPlanController extends BaseController {
      * @param qqchSurveyWorkPlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:confirm")
+//    @PreAuthorize(hasPermi = "qqchSurveyWorkPlan:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyWorkPlanVo qqchSurveyWorkPlanVo) {
         qqchSurveyWorkPlanService.confirm(qqchSurveyWorkPlanVo);

@@ -27,21 +27,21 @@ public class QqchCareerHealthRiskManagementController extends BaseController {
     @Autowired
     private IQqchCareerHealthRiskManagementService qqchCareerHealthRiskManagementService;
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:list")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:list")
     @GetMapping("/list")
     public AjaxResult getQqchCareerHealthRiskManagementList(@Validated(ValidationGroups.Select.class) QqchCareerHealthRiskManagement qqchCareerHealthRiskManagementParam) {
         QqchCareerHealthRiskManagementVo vo = qqchCareerHealthRiskManagementService.getQqchCareerHealthRiskManagementList(qqchCareerHealthRiskManagementParam);
         return AjaxResult.success(vo);
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:save")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:save")
     @PostMapping("/save")
     public AjaxResult insertQqchCareerHealthRiskManagementList(@Validated(ValidationGroups.Save.class) @RequestBody QqchCareerHealthRiskManagementVo vo) {
         qqchCareerHealthRiskManagementService.save(vo);
         return AjaxResult.success();
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:list")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:list")
     @GetMapping
     public AjaxResult getQqchCareerHealthRiskManagement(@Validated(ValidationGroups.Get.class) QqchCareerHealthRiskManagement qqchCareerHealthRiskManagementParam) {
         QqchCareerHealthRiskManagement qqchCareerHealthRiskManagement = qqchCareerHealthRiskManagementService.getQqchCareerHealthRiskManagement(qqchCareerHealthRiskManagementParam);
@@ -49,32 +49,32 @@ public class QqchCareerHealthRiskManagementController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:add")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:add")
     @PostMapping("/add")
     public AjaxResult insertQqchCareerHealthRiskManagement(@Validated(ValidationGroups.Save.class) @RequestBody QqchCareerHealthRiskManagement qqchCareerHealthRiskManagementParam) {
         qqchCareerHealthRiskManagementService.insertQqchCareerHealthRiskManagement(qqchCareerHealthRiskManagementParam);
         return AjaxResult.success(qqchCareerHealthRiskManagementParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:update")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:update")
     @PostMapping("/update")
     public AjaxResult updateQqchCareerHealthRiskManagement(@Validated(ValidationGroups.Update.class) @RequestBody QqchCareerHealthRiskManagement qqchCareerHealthRiskManagementParam) {
         return toAjax(qqchCareerHealthRiskManagementService.updateQqchCareerHealthRiskManagement(qqchCareerHealthRiskManagementParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:update")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchCareerHealthRiskManagementList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchCareerHealthRiskManagement> qqchCareerHealthRiskManagementListParam) {
         return toAjax(qqchCareerHealthRiskManagementService.updateQqchCareerHealthRiskManagementList(qqchCareerHealthRiskManagementListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:remove")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchCareerHealthRiskManagement(@Validated(ValidationGroups.Delete.class) @RequestBody QqchCareerHealthRiskManagement qqchCareerHealthRiskManagementParam) {
         return toAjax(qqchCareerHealthRiskManagementService.deleteQqchCareerHealthRiskManagement(qqchCareerHealthRiskManagementParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:remove")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskManagement:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchCareerHealthRiskManagementByPks(@PathVariable Long[] ids) {
         List<Long> qqchCareerHealthRiskManagementPkList = Arrays.asList(ids);
