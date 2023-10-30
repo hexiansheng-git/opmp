@@ -121,6 +121,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     @Transactional
     public int updateJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis) {
         Date period = jdglDiffAnalysis.getPeriod();
+
+        if(jdglDiffAnalysis == null || jdglDiffAnalysis.getId() == null) {
+            return 0;
+        }
+
         jdglDiffAnalysis.setUpdateUser(SecurityUtils.getUserName());
         jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
 
@@ -139,7 +144,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             }
         }
         BigDecimal sumMin = new BigDecimal(0);
-        if(totalCompValue != null && new BigDecimal(0).equals(totalCompValue)) {
+        if(totalCompValue != null && new BigDecimal(0).compareTo(totalCompValue) != 0) {
             sumMin = totalMeterValue.divide(totalCompValue);
         }
 
@@ -151,8 +156,8 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             if(!CollectionUtils.isEmpty(analyseList)) {
                 for (QqchScheAnalyse qqchScheAnalyse : analyseList) {
                     BigDecimal score = qqchScheAnalyse.getScore();
-                    BigDecimal sumMaxScore = qqchScheAnalyse.getSumMaxScore();
-                    BigDecimal sumMinScore = qqchScheAnalyse.getSumMinScore();
+                    BigDecimal sumMaxScore = qqchScheAnalyse.getSumMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getSumMaxScore();
+                    BigDecimal sumMinScore = qqchScheAnalyse.getSumMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getSumMinScore();
 
                     if(sumMin.compareTo(sumMaxScore) < 0 && sumMin.compareTo(sumMinScore) >= 0) {
                         jdglDiffAnalysis.setValueGrade(score);
@@ -369,7 +374,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
             BigDecimal effectiveAmout = validMaxVersionContractInfo.getEffectiveAmout();
             String duration = validMaxVersionContractInfo.getDuration();
             BigDecimal durationM = BigDecimal.valueOf(Double.valueOf(duration)/12);
-            if(durationM != null && new BigDecimal(0).equals(durationM)) {
+            if(durationM != null && new BigDecimal(0).compareTo(durationM) != 0) {
                 scaleGradeValue = effectiveAmout.divide(durationM);
             }
         }
