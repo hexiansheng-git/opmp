@@ -39,7 +39,7 @@ public class JdglMainPlanServiceImpl implements IJdglMainPlanService {
     public JdglMainPlan getJdglMainPlan(JdglMainPlan jdglMainPlan) {
         JdglMainPlan jdglMainPlan1 = jdglMainPlanMapper.getJdglMainPlan(jdglMainPlan);
         if(jdglMainPlan1 == null) {
-            return jdglMainPlan1;
+            return new JdglMainPlan();
         }
         JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
         jdglMainPlanItem.setMainPlanId(jdglMainPlan1.getId());
