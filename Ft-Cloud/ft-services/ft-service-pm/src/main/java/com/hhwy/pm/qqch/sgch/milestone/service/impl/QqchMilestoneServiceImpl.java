@@ -58,6 +58,9 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
 
     @Transactional(rollbackFor = Exception.class)
     public int insertQqchMilestoneList(List<QqchMilestone> qqchMilestoneList) {
+        if(CollectionUtils.isEmpty(qqchMilestoneList)) {
+            return 0;
+        }
         for (QqchMilestone qqchMilestone : qqchMilestoneList) {
             qqchMilestone.setId(IdWorker.createId());
             qqchMilestone.setCreateUser(SecurityUtils.getUserName());
@@ -75,6 +78,9 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
 
     @Transactional(rollbackFor = Exception.class)
     public int updateQqchMilestoneList(List<QqchMilestone> qqchMilestoneList) {
+        if(CollectionUtils.isEmpty(qqchMilestoneList)) {
+            return 0;
+        }
         for (QqchMilestone qqchMilestone : qqchMilestoneList) {
             qqchMilestone.setUpdateUser(SecurityUtils.getUserName());
             qqchMilestone.setUpdateTime(DateUtils.getNowDate());
