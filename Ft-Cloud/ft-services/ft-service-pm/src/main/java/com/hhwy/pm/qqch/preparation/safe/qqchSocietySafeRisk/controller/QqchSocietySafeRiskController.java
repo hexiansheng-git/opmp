@@ -27,14 +27,14 @@ public class QqchSocietySafeRiskController extends BaseController {
     @Autowired
     private IQqchSocietySafeRiskService qqchSocietySafeRiskService;
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:list")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:list")
     @GetMapping("/list")
     public AjaxResult getQqchSocietySafeRiskList(@Validated(ValidationGroups.Select.class) QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         QqchSocietySafeRiskVo vo = qqchSocietySafeRiskService.getQqchSocietySafeRiskList(qqchSocietySafeRiskParam);
         return AjaxResult.success(vo);
     }
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:save")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:save")
     @PostMapping("/save")
     public AjaxResult insertQqchSocietySafeRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSocietySafeRiskVo vo) {
         qqchSocietySafeRiskService.save(vo);
@@ -42,14 +42,14 @@ public class QqchSocietySafeRiskController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:list")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:list")
     @GetMapping
     public AjaxResult getQqchSocietySafeRisk(@Validated(ValidationGroups.Get.class) QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         QqchSocietySafeRisk qqchSocietySafeRisk = qqchSocietySafeRiskService.getQqchSocietySafeRisk(qqchSocietySafeRiskParam);
         return AjaxResult.success(qqchSocietySafeRisk);
     }
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:add")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:add")
     @PostMapping("/add")
     public AjaxResult insertQqchSocietySafeRisk(@Validated(ValidationGroups.Save.class) @RequestBody QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         qqchSocietySafeRiskService.insertQqchSocietySafeRisk(qqchSocietySafeRiskParam);
@@ -57,25 +57,25 @@ public class QqchSocietySafeRiskController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:update")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:update")
     @PostMapping("/update")
     public AjaxResult updateQqchSocietySafeRisk(@Validated(ValidationGroups.Update.class) @RequestBody QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         return toAjax(qqchSocietySafeRiskService.updateQqchSocietySafeRisk(qqchSocietySafeRiskParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:update")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchSocietySafeRiskList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchSocietySafeRisk> qqchSocietySafeRiskListParam) {
         return toAjax(qqchSocietySafeRiskService.updateQqchSocietySafeRiskList(qqchSocietySafeRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:remove")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchSocietySafeRisk(@Validated(ValidationGroups.Delete.class) @RequestBody QqchSocietySafeRisk qqchSocietySafeRiskParam) {
         return toAjax(qqchSocietySafeRiskService.deleteQqchSocietySafeRisk(qqchSocietySafeRiskParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:remove")
+//    @PreAuthorize(hasPermi = "qqchSocietySafeRisk:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchSocietySafeRiskByPks(@PathVariable Long[] ids) {
         List<Long> qqchSocietySafeRiskPkList = Arrays.asList(ids);

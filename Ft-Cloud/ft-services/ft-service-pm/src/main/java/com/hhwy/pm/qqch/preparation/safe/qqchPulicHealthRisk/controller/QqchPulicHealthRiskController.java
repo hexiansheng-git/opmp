@@ -27,14 +27,14 @@ public class QqchPulicHealthRiskController extends BaseController {
     @Autowired
     private IQqchPulicHealthRiskService qqchPulicHealthRiskService;
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:list")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:list")
     @GetMapping("/list")
     public AjaxResult getQqchPulicHealthRiskList(@Validated(ValidationGroups.Select.class) QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         QqchPulicHealthRiskVo vo = qqchPulicHealthRiskService.getQqchPulicHealthRiskList(qqchPulicHealthRiskParam);
         return AjaxResult.success(vo);
     }
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:save")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:save")
     @PostMapping("/save")
     public AjaxResult insertQqchPulicHealthRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchPulicHealthRiskVo vo) {
         qqchPulicHealthRiskService.save(vo);
@@ -42,39 +42,39 @@ public class QqchPulicHealthRiskController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:list")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:list")
     @GetMapping
     public AjaxResult getQqchPulicHealthRisk(@Validated(ValidationGroups.Get.class) QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         QqchPulicHealthRisk qqchPulicHealthRisk = qqchPulicHealthRiskService.getQqchPulicHealthRisk(qqchPulicHealthRiskParam);
         return AjaxResult.success(qqchPulicHealthRisk);
     }
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:add")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:add")
     @PostMapping("/add")
     public AjaxResult insertQqchPulicHealthRisk(@Validated(ValidationGroups.Save.class) @RequestBody QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         qqchPulicHealthRiskService.insertQqchPulicHealthRisk(qqchPulicHealthRiskParam);
         return AjaxResult.success(qqchPulicHealthRiskParam);
     }
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:update")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:update")
     @PostMapping("/update")
     public AjaxResult updateQqchPulicHealthRisk(@Validated(ValidationGroups.Update.class) @RequestBody QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         return toAjax(qqchPulicHealthRiskService.updateQqchPulicHealthRisk(qqchPulicHealthRiskParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:update")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchPulicHealthRiskList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchPulicHealthRisk> qqchPulicHealthRiskListParam) {
         return toAjax(qqchPulicHealthRiskService.updateQqchPulicHealthRiskList(qqchPulicHealthRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:remove")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchPulicHealthRisk(@Validated(ValidationGroups.Delete.class) @RequestBody QqchPulicHealthRisk qqchPulicHealthRiskParam) {
         return toAjax(qqchPulicHealthRiskService.deleteQqchPulicHealthRisk(qqchPulicHealthRiskParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:remove")
+//    @PreAuthorize(hasPermi = "qqchPulicHealthRisk:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchPulicHealthRiskByPks(@PathVariable Long[] ids) {
         List<Long> qqchPulicHealthRiskPkList = Arrays.asList(ids);

@@ -32,7 +32,7 @@ public class QqchDesignDisclosurePlanController extends BaseController {
      * @param qqchDesignDisclosurePlanParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:list")
+//    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:list")
     @GetMapping("/list")
     public AjaxResult getQqchDesignDisclosurePlanList(@Validated(ValidationGroups.Select.class) QqchDesignDisclosurePlan qqchDesignDisclosurePlanParam) {
         QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo = qqchDesignDisclosurePlanService.getQqchDesignDisclosurePlanList(qqchDesignDisclosurePlanParam);
@@ -45,7 +45,7 @@ public class QqchDesignDisclosurePlanController extends BaseController {
      * @param qqchDesignDisclosurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:add")
+//    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:add")
     @PostMapping("/batchAdd")
     public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo) {
         qqchDesignDisclosurePlanService.save(qqchDesignDisclosurePlanVo);
@@ -58,7 +58,7 @@ public class QqchDesignDisclosurePlanController extends BaseController {
      * @param qqchDesignDisclosurePlanVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:confirm")
+//    @PreAuthorize(hasPermi = "qqchDesignDisclosurePlan:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchDesignDisclosurePlanVo qqchDesignDisclosurePlanVo) {
         qqchDesignDisclosurePlanService.confirm(qqchDesignDisclosurePlanVo);

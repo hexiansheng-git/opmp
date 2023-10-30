@@ -30,7 +30,7 @@ public class QqchSurveyOrganizationController extends BaseController {
      * @param qqchSurveyOrganizationParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyOrganization:list")
+//    @PreAuthorize(hasPermi = "qqchSurveyOrganization:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyOrganizationList(@Validated(ValidationGroups.Select.class) QqchSurveyOrganization qqchSurveyOrganizationParam) {
         QqchSurveyOrganizationVo vo = qqchSurveyOrganizationService.getQqchSurveyOrganizationList(qqchSurveyOrganizationParam);
@@ -45,7 +45,7 @@ public class QqchSurveyOrganizationController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyOrganization:add")
+//    @PreAuthorize(hasPermi = "qqchSurveyOrganization:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSurveyOrganizationList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyOrganizationVo qqchSurveyOrganizationVo) {
         qqchSurveyOrganizationService.save(qqchSurveyOrganizationVo);
@@ -59,7 +59,7 @@ public class QqchSurveyOrganizationController extends BaseController {
      *
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyOrganization:confirm")
+//    @PreAuthorize(hasPermi = "qqchSurveyOrganization:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyOrganizationVo qqchSurveyOrganizationVo) {
         qqchSurveyOrganizationService.confirm(qqchSurveyOrganizationVo);

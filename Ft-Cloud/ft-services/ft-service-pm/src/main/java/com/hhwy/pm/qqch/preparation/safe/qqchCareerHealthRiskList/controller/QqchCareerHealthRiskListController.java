@@ -32,14 +32,14 @@ public class QqchCareerHealthRiskListController extends BaseController {
      * @param qqchCareerHealthRiskListParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:list")
     @GetMapping("/list")
     public AjaxResult getQqchCareerHealthRiskListList(@Validated(ValidationGroups.Select.class) QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         QqchCareerHealthRiskListVo vo = qqchCareerHealthRiskListService.getQqchCareerHealthRiskListList(qqchCareerHealthRiskListParam);
         return AjaxResult.success(vo);
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:save")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:save")
     @PostMapping("/save")
     public AjaxResult insertQqchCareerHealthRiskListList(@Validated(ValidationGroups.Save.class) @RequestBody QqchCareerHealthRiskListVo vo) {
         qqchCareerHealthRiskListService.save(vo);
@@ -47,7 +47,7 @@ public class QqchCareerHealthRiskListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:list")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:list")
     @GetMapping
     public AjaxResult getQqchCareerHealthRiskList(@Validated(ValidationGroups.Get.class) QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         QqchCareerHealthRiskList qqchCareerHealthRiskList = qqchCareerHealthRiskListService.getQqchCareerHealthRiskList(qqchCareerHealthRiskListParam);
@@ -55,7 +55,7 @@ public class QqchCareerHealthRiskListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:add")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:add")
     @PostMapping("/add")
     public AjaxResult insertQqchCareerHealthRiskList(@Validated(ValidationGroups.Save.class) @RequestBody QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         qqchCareerHealthRiskListService.insertQqchCareerHealthRiskList(qqchCareerHealthRiskListParam);
@@ -63,19 +63,19 @@ public class QqchCareerHealthRiskListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:update")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:update")
     @PostMapping("/update")
     public AjaxResult updateQqchCareerHealthRiskList(@Validated(ValidationGroups.Update.class) @RequestBody QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         return toAjax(qqchCareerHealthRiskListService.updateQqchCareerHealthRiskList(qqchCareerHealthRiskListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:update")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchCareerHealthRiskListList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchCareerHealthRiskList> qqchCareerHealthRiskListListParam) {
         return toAjax(qqchCareerHealthRiskListService.updateQqchCareerHealthRiskListList(qqchCareerHealthRiskListListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:remove")
+//    @PreAuthorize(hasPermi = "qqchCareerHealthRiskList:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchCareerHealthRiskList(@Validated(ValidationGroups.Delete.class) @RequestBody QqchCareerHealthRiskList qqchCareerHealthRiskListParam) {
         return toAjax(qqchCareerHealthRiskListService.deleteQqchCareerHealthRiskList(qqchCareerHealthRiskListParam));

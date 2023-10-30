@@ -30,7 +30,7 @@ public class QqchSurveyDesignTeamsController extends BaseController {
      * @param qqchSurveyDesignTeamsParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyDesignTeams:list")
+//    @PreAuthorize(hasPermi = "qqchSurveyDesignTeams:list")
     @GetMapping("/list")
     public AjaxResult getQqchSurveyDesignTeamsList(@Validated(ValidationGroups.Select.class) QqchSurveyDesignTeams qqchSurveyDesignTeamsParam) {
         QqchSurveyDesignTeamsVo vo = qqchSurveyDesignTeamsService.getQqchSurveyDesignTeamsList(qqchSurveyDesignTeamsParam);
@@ -44,7 +44,7 @@ public class QqchSurveyDesignTeamsController extends BaseController {
      * @param qqchSurveyDesignTeamsVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyDesignTeams:add")
+//    @PreAuthorize(hasPermi = "qqchSurveyDesignTeams:add")
     @PostMapping("/batchAdd")
     public AjaxResult insertQqchSurveyDesignTeamsList(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyDesignTeamsVo qqchSurveyDesignTeamsVo) {
         qqchSurveyDesignTeamsService.save(qqchSurveyDesignTeamsVo);
@@ -57,7 +57,7 @@ public class QqchSurveyDesignTeamsController extends BaseController {
      * @param qqchSurveyDesignTeamsVo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchSurveyDesignTeams:confirm")
+//    @PreAuthorize(hasPermi = "qqchSurveyDesignTeams:confirm")
     @PostMapping("/confirm")
     public AjaxResult confirm(@Validated(ValidationGroups.Save.class) @RequestBody QqchSurveyDesignTeamsVo qqchSurveyDesignTeamsVo) {
         qqchSurveyDesignTeamsService.confirm(qqchSurveyDesignTeamsVo);

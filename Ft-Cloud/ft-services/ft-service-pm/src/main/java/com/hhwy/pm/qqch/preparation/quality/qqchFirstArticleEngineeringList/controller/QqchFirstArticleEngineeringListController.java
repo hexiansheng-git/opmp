@@ -36,7 +36,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
      * @param qqchFirstArticleEngineeringListParam
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:list")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:list")
     @GetMapping("/list")
     public AjaxResult getQqchFirstArticleEngineeringListList(@Validated(ValidationGroups.Select.class) QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         QqchFirstArticleEngineeringListVo vo=qqchFirstArticleEngineeringListService.getQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListParam);
@@ -49,7 +49,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
      * @param vo
      * @return
      */
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:save")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:save")
     @PostMapping("/save")
     public AjaxResult save(@Validated(ValidationGroups.Save.class) @RequestBody QqchFirstArticleEngineeringListVo vo) {
         qqchFirstArticleEngineeringListService.save(vo);
@@ -59,7 +59,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
 
 
 
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:list")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:list")
     @GetMapping
     public AjaxResult getQqchFirstArticleEngineeringList(@Validated(ValidationGroups.Get.class) QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         QqchFirstArticleEngineeringList qqchFirstArticleEngineeringList = qqchFirstArticleEngineeringListService.getQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringListParam);
@@ -68,7 +68,7 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
 
 
 
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:add")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:add")
     @PostMapping("/add")
     public AjaxResult insertQqchFirstArticleEngineeringList(@Validated(ValidationGroups.Save.class) @RequestBody QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         qqchFirstArticleEngineeringListService.insertQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringListParam);
@@ -76,25 +76,25 @@ public class QqchFirstArticleEngineeringListController extends BaseController {
     }
 
 
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:update")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:update")
     @PostMapping("/update")
     public AjaxResult updateQqchFirstArticleEngineeringList(@Validated(ValidationGroups.Update.class) @RequestBody QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         return toAjax(qqchFirstArticleEngineeringListService.updateQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:update")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:update")
     @PostMapping("/batchUpdate")
     public AjaxResult updateQqchFirstArticleEngineeringListList(@Validated(ValidationGroups.Update.class) @RequestBody List<QqchFirstArticleEngineeringList> qqchFirstArticleEngineeringListListParam) {
         return toAjax(qqchFirstArticleEngineeringListService.updateQqchFirstArticleEngineeringListList(qqchFirstArticleEngineeringListListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:remove")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:remove")
     @PostMapping("/delete")
     public AjaxResult deleteQqchFirstArticleEngineeringList(@Validated(ValidationGroups.Delete.class) @RequestBody QqchFirstArticleEngineeringList qqchFirstArticleEngineeringListParam) {
         return toAjax(qqchFirstArticleEngineeringListService.deleteQqchFirstArticleEngineeringList(qqchFirstArticleEngineeringListParam));
     }
 
-    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:remove")
+//    @PreAuthorize(hasPermi = "qqchFirstArticleEngineeringList:remove")
     @PostMapping("/{ids}")
     public AjaxResult deleteQqchFirstArticleEngineeringListByPks(@PathVariable Long[] ids) {
         List<Long> qqchFirstArticleEngineeringListPkList = Arrays.asList(ids);
