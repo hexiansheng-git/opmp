@@ -85,7 +85,7 @@ public class WzchSceneManageDetailServiceImpl implements WzchSceneManageDetailSe
     @Override
     public int insertOrUpdateBatch(List<WzchSceneManageDetail> detailList, Long sceneId) {
         if (CollectionUtils.isEmpty(detailList)) {
-            throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "详情不能为空");
+            return 0;
         }
 
         Assert.notNull(sceneId, "资金策划id不能为空");

@@ -9,6 +9,7 @@ import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
 import com.hhwy.utils.JsonUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.validation.ValidationGroups;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +77,10 @@ public class ReviewController extends BaseController {
         for (int i = 0; i < list.size(); i++) {
             Review review = list.get(i);
             review.setInitDate(review.getCreateTime());
+            review.setPlanNum(ObjectUtils.nvl(review.getPlanNum()));
+            review.setFinishNum(ObjectUtils.nvl(review.getFinishNum()));
             BigDecimal ratio = BigDecimalUtils.divideMay0(review.getFinishNum(),review.getPlanNum() , 4, BigDecimal.ROUND_HALF_UP);
-            review.setFinishRatio(ratio.multiply(new BigDecimal(100)));
+            review.setFinishRatio(ObjectUtils.nvlBigDecimal(ratio).multiply(new BigDecimal(100)));
             //处理状态字段 0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
             String taskStatusDesc = "";
             if(review.getTaskStatus().equals("0")){
