@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author zhenglili
  * @date 2023-08-03 14:28:57
- * @remark 9.1.1 质量岗位职责
+ * @remark 9.1.1 岗位质量职责
  */
 @Validated
 @RestController
