@@ -60,12 +60,9 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
 
             JdglDayScheduleWbs jdglDayScheduleWbs = new JdglDayScheduleWbs();
             jdglDayScheduleWbs.setDayScheduleId(jdglDaySchedule1.getId());
-
-//            jdglDayScheduleWbs.setEditer(userName);
-//             懒加载
-//            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsLazyList(jdglDayScheduleWbs);
             // 获取wbs列表中的wbs数据
-            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
+//            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsList(jdglDayScheduleWbs);
+            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = iJdglDayScheduleWbsService.getJdglDayScheduleWbsListByPerson(jdglDayScheduleWbs);
             jdglDaySchedule1.setJdglDayScheduleWbsList(jdglDayScheduleWbsList);
             FlowInfoSearchUtil.getFlowInfo(jdglDaySchedule1, FlowEnum.JDGL_DAYSCHEDULE);
         }
@@ -272,7 +269,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
             if(i > 0) {
 
                 if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList)) {
-                    List<JdglDayScheduleWbs> jdglDayScheduleWbs = TreeUtil.treeToList(jdglDayScheduleWbsList);
+                    List<JdglDayScheduleWbs> jdglDayScheduleWbs = TreeUtil.treeToListWithoutId(jdglDayScheduleWbsList);
                     if(!CollectionUtils.isEmpty(jdglDayScheduleWbs)) {
                         for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbs) {
                             jdglDayScheduleWbs1.setDayScheduleId(id);
@@ -323,7 +320,7 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
         List<JdglDayScheduleWbs> jdglDayScheduleWbsList1 = jdglDaySchedule.getJdglDayScheduleWbsList();
         List<JdglDayScheduleWbs> jdglDayScheduleWbsListAdd = new ArrayList<>();
         if(!CollectionUtils.isEmpty(jdglDayScheduleWbsList1)) {
-            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = TreeUtil.treeToList(jdglDayScheduleWbsList1);
+            List<JdglDayScheduleWbs> jdglDayScheduleWbsList = TreeUtil.treeToListWithoutId(jdglDayScheduleWbsList1);
             for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsList) {
                 if("1".equals(jdglDayScheduleWbs1.getIsAdd())) {
                     jdglDayScheduleWbs1.setDayScheduleId(id);
@@ -392,5 +389,14 @@ public class JdglDayScheduleServiceImpl implements IJdglDayScheduleService {
     @Override
     public List<JdglDaySchedule> getAllListByDateRange(Date startDate, Date endDate) {
         return jdglDayScheduleMapper.getAllListByDateRange(startDate, endDate);
+    }
+
+    @Override
+    public JdglDaySchedule getJdglDayScheduleById(Long dayScheduleId) {
+        JdglDaySchedule jdglDaySchedule = new JdglDaySchedule();
+        jdglDaySchedule.setId(dayScheduleId);
+        JdglDaySchedule jdglDaySchedule1 = jdglDayScheduleMapper.getJdglDaySchedule(jdglDaySchedule);
+        FlowInfoSearchUtil.getFlowInfo(jdglDaySchedule1, FlowEnum.JDGL_DAYSCHEDULE);
+        return jdglDaySchedule1;
     }
 }

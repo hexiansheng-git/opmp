@@ -300,7 +300,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
 
         List<JdglMonthImagePlan> jdglMonthImagePlanList = jdglMonthPlan.getJdglMonthImagePlanList();
         if(!CollectionUtils.isEmpty(jdglMonthImagePlanList)) {
-            List<JdglMonthImagePlan> imagePlans = TreeUtil.treeToList(jdglMonthImagePlanList);
+            List<JdglMonthImagePlan> imagePlans = TreeUtil.treeToListWithoutId(jdglMonthImagePlanList);
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });

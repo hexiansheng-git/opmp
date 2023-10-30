@@ -241,6 +241,10 @@
         </where>
 
     </select>
+    <select id="getJdglDayScheduleWbsByDate" resultMap="JdglDayScheduleWbsResultMap">
+        select jdsw.* from jdgl_day_schedule_wbs jdsw,(select * from jdgl_day_schedule where `date` = #{date} and del_flag = '0') jds
+        where jdsw.day_schedule_id  = jds.id
+    </select>
 
     <insert id="insertJdglDayScheduleWbs" useGeneratedKeys="true" keyProperty="id">
         insert into jdgl_day_schedule_wbs

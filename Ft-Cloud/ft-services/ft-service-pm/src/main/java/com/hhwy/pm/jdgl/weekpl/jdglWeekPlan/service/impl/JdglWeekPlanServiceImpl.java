@@ -295,7 +295,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
-            List<JdglWeekImagePlan> imagePlans = TreeUtil.treeToList(jdglWeekImagePlanList);
+            List<JdglWeekImagePlan> imagePlans = TreeUtil.treeToListWithoutId(jdglWeekImagePlanList);
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });
