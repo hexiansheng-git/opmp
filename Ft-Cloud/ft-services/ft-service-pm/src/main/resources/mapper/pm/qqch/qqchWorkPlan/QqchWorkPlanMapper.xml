@@ -665,7 +665,8 @@
             </foreach>
         </where>
     </update>
-    <update id="updateAllToInvalid">
-        update `qqch_work_plan` set valid = '0' where del_flag = '0'
+    <update id="updateAllToInvalidExcept">
+        update `qqch_work_plan` set valid = '0' where del_flag = '0' and id != #{id}
     </update>
+
 </mapper>
