@@ -128,10 +128,13 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
     @CompileAspect(type = CompileOptEnum.SAVE_LIST, tableName = TN)
     @Transactional(rollbackFor = Exception.class)
     public void save(List<QqchMilestone> list) {
-        for (QqchMilestone qqchMilestone : list) {
-            if(qqchMilestone.getJobCode() != null) qqchMilestone.setId(IdWorker.createId());
+        if(CollectionUtils.isEmpty(list)) {
+            return;
         }
-        this.qqchMilestoneMapper.insertQqchMilestoneList(list);
+//        for (QqchMilestone qqchMilestone : list) {
+//            if(qqchMilestone.getJobCode() != null) qqchMilestone.setId(IdWorker.createId());
+//        }
+        this.qqchMilestoneMapper.updateQqchMilestoneList(list);
     }
 
     /**

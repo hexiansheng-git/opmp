@@ -45,7 +45,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     @Autowired
     private SystemServiceApi systemServiceApi;
-    
+
     @Autowired
     private IJdglMainPlanItemPreService iJdglMainPlanItemPreService;
 
@@ -60,24 +60,26 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         List<JdglMainPlanItem> returnList = new ArrayList<>();
 
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
-        if(projectInfo == null)  return returnList;
+        if (projectInfo == null) return returnList;
 
-        String urlwbs= p6IpPort + pre + "/wbsInfo";
-        String urlwork= p6IpPort + pre + "/activityInfo";
+        String urlwbs = p6IpPort + pre + "/wbsInfo";
+        String urlwork = p6IpPort + pre + "/activityInfo";
 
-        HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
+        HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
 
         Map<String, Object> params = new HashMap<>();
         String projectId = projectInfo.getProjectCode();
         params.put("projectId", StringUtils.isEmpty(projectId) ? tenantKey : projectId);
-        ParameterizedTypeReference<List<WbsInfo>> responseType4Wbs = new ParameterizedTypeReference<List<WbsInfo>>() {};
-        ParameterizedTypeReference<List<ActivityConstField>> responseType4Work = new ParameterizedTypeReference<List<ActivityConstField>>() {};
+        ParameterizedTypeReference<List<WbsInfo>> responseType4Wbs = new ParameterizedTypeReference<List<WbsInfo>>() {
+        };
+        ParameterizedTypeReference<List<ActivityConstField>> responseType4Work = new ParameterizedTypeReference<List<ActivityConstField>>() {
+        };
 
         // 获取p6 wbs数据
         ResponseEntity<List<WbsInfo>> wbsResult = restTemplate.exchange(urlwbs + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Wbs, params);
         // 获取p6 作业数据
         ResponseEntity<List<ActivityConstField>> workResult = restTemplate.exchange(urlwork + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Work, params);
-        
+
 
         // 获取当前启用的总体计划主表数据
         JdglMainPlan usingJdglMainPlan = jdglMainPlanService.getUsingJdglMainPlan();
@@ -85,13 +87,13 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         Date nowDate = DateUtils.getNowDate();
         Calendar cl = Calendar.getInstance();
         cl.setTime(nowDate);
-        String datePro = "Y" + cl.get(Calendar.YEAR) + "M" +  (cl.get(Calendar.MONTH)+1) + "W" + (cl.get(Calendar.WEEK_OF_MONTH));
-        if(usingJdglMainPlan != null) {
+        String datePro = "Y" + cl.get(Calendar.YEAR) + "M" + (cl.get(Calendar.MONTH) + 1) + "W" + (cl.get(Calendar.WEEK_OF_MONTH));
+        if (usingJdglMainPlan != null) {
             usingJdglMainPlan.setIsUse("0");
             jdglMainPlanService.updateJdglMainPlan(usingJdglMainPlan);
             usingJdglMainPlan.setId(mainPlanId);
             String versionPro = usingJdglMainPlan.getVersionPro();
-            if(datePro.equals(versionPro)) {
+            if (datePro.equals(versionPro)) {
                 Integer num = usingJdglMainPlan.getNum() + 1;
                 usingJdglMainPlan.setVersion(versionPro + "." + num);
                 usingJdglMainPlan.setNum(num);
@@ -113,7 +115,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         List<WbsInfo> wbsInfos = wbsResult.getBody();
         List<ActivityConstField> workInfos = workResult.getBody();
-        if(!CollectionUtils.isEmpty(wbsInfos) && !CollectionUtils.isEmpty(workInfos)) {
+        if (!CollectionUtils.isEmpty(wbsInfos) && !CollectionUtils.isEmpty(workInfos)) {
             for (WbsInfo wbsInfo : wbsInfos) {
                 JdglMainPlanItem jdglMainPlanItem = new JdglMainPlanItem();
                 Long id = IdWorker.createId();
@@ -179,7 +181,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
                 jdglMainPlanItem.setStartDate(activityInfo.getStartDate());
                 jdglMainPlanItem.setFinishDate(activityInfo.getFinishDate());
-                jdglMainPlanItem.setIsCritical(activityInfo.getCritical()?"1":"0");
+                jdglMainPlanItem.setIsCritical(activityInfo.getCritical() ? "1" : "0");
                 jdglMainPlanItem.setWbsCode(activityInfo.getWbsCode());
 //                jdglMainPlanItem.setWbsObjectId();
                 jdglMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());
@@ -217,21 +219,22 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             }
 
             // 处理作业逻辑关系数据
-            if(!CollectionUtils.isEmpty(workMainPlanItemList)) {
+            if (!CollectionUtils.isEmpty(workMainPlanItemList)) {
                 PlanItemPreThread planItemPreThread = new PlanItemPreThread();
                 planItemPreThread.setMainPlanId(mainPlanId);
                 planItemPreThread.setProjectId(projectId);
                 planItemPreThread.setWorkInfos(workMainPlanItemList);
+                planItemPreThread.setTenantKey(tenantKey);
                 Thread thread = new Thread(planItemPreThread);
                 thread.start();
             }
 
-            if(!CollectionUtils.isEmpty(returnList)) {
+            if (!CollectionUtils.isEmpty(returnList)) {
                 for (JdglMainPlanItem jdglMainPlanItem : returnList) {
                     JdglMainPlanItem jdglMainPlanItem1 = returnList.stream().filter(
                             vo -> jdglMainPlanItem.getWbsParentObjectId().equals(vo.getWbsObjectId()))
                             .findFirst().orElse(null);
-                    if(jdglMainPlanItem1 != null) {
+                    if (jdglMainPlanItem1 != null) {
                         jdglMainPlanItem.setPid(jdglMainPlanItem1.getId());
                     }
                 }
@@ -239,64 +242,94 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 setWbsDate(returnList);
 //                System.out.println(returnList);
                 jdglMainPlanItemService.insertJdglMainPlanItemList(returnList);
-                
+
             }
         }
 
         return returnList;
 
     }
+
     private class PlanItemPreThread implements Runnable {
         public Long mainPlanId;
         public String projectId;
+        public String tenantKey;
         public List<JdglMainPlanItem> workInfos;
+
         public Long getMainPlanId() {
             return mainPlanId;
         }
+
         public void setMainPlanId(Long mainPlanId) {
             this.mainPlanId = mainPlanId;
         }
+
         public String getProjectId() {
             return projectId;
         }
+
         public void setProjectId(String projectId) {
             this.projectId = projectId;
         }
+
         public List<JdglMainPlanItem> getWorkInfos() {
             return workInfos;
         }
+
         public void setWorkInfos(List<JdglMainPlanItem> workInfos) {
             this.workInfos = workInfos;
         }
-        @Override
-        public void run() {
-            addMainPlanItemPreList(this.mainPlanId, this.projectId, this.workInfos);
+
+        public String getTenantKey() {
+            return tenantKey;
         }
 
-        public void addMainPlanItemPreList(Long mainPlanId, String projectId, List<JdglMainPlanItem> workInfos) {
-            // 获取转换后的p6逻辑关系数据
-            List<JdglMainPlanItemPre> relInfos = getPre(projectId);
+        public void setTenantKey(String tenantKey) {
+            this.tenantKey = tenantKey;
+        }
 
-            if(!CollectionUtils.isEmpty(relInfos) && !CollectionUtils.isEmpty(workInfos)) {
-                for (JdglMainPlanItem jdglMainPlanItem : workInfos) {
-                    String p6Id = jdglMainPlanItem.getItemCode();
-                    Long id = jdglMainPlanItem.getId();
-                    for (JdglMainPlanItemPre jdglMainPlanItemPre : relInfos) {
-                        jdglMainPlanItemPre.setMainPlanId(mainPlanId);
-                        if(p6Id.equals(jdglMainPlanItemPre.getItemCode())){
-                            jdglMainPlanItemPre.setItemId(id);
-                        }
-                        if(p6Id.equals(jdglMainPlanItemPre.getPredecessorItemCode())) {
-                            jdglMainPlanItemPre.setPredecessorItemId(id);
+        @Override
+        public void run() {
+            addMainPlanItemPreList(this.mainPlanId, this.projectId, this.tenantKey, this.workInfos);
+        }
+
+        public void addMainPlanItemPreList(Long mainPlanId, String projectId, String tenantKey, List<JdglMainPlanItem> workInfos) {
+
+            if (StringUtils.isEmpty(tenantKey)) {
+                throw new RuntimeException("tenantKey参数异常");
+            }
+
+            String oldDataSource = DynamicDataSourceContextHolder.peek();
+            DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
+            try {
+                // 获取转换后的p6逻辑关系数据
+                List<JdglMainPlanItemPre> relInfos = getPre(projectId);
+
+                if (!CollectionUtils.isEmpty(relInfos) && !CollectionUtils.isEmpty(workInfos)) {
+                    for (JdglMainPlanItem jdglMainPlanItem : workInfos) {
+                        String p6Id = jdglMainPlanItem.getItemCode();
+                        Long id = jdglMainPlanItem.getId();
+                        for (JdglMainPlanItemPre jdglMainPlanItemPre : relInfos) {
+                            jdglMainPlanItemPre.setMainPlanId(mainPlanId);
+                            if (p6Id.equals(jdglMainPlanItemPre.getItemCode())) {
+                                jdglMainPlanItemPre.setItemId(id);
+                            }
+                            if (p6Id.equals(jdglMainPlanItemPre.getPredecessorItemCode())) {
+                                jdglMainPlanItemPre.setPredecessorItemId(id);
+                            }
                         }
                     }
                 }
+                iJdglMainPlanItemPreService.insertJdglMainPlanItemPreList(relInfos);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new CustomBusinessException(e.getMessage());
+            } finally {
+                DynamicDataSourceContextHolder.poll();
+                DynamicDataSourceContextHolder.push(oldDataSource);
             }
-
-            iJdglMainPlanItemPreService.insertJdglMainPlanItemPreList(relInfos);
         }
     }
-
 
 
     @Override
@@ -306,11 +339,11 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         List<String> tenantKeyList = new ArrayList<>();
         List<SysTenant> sysTenants = systemServiceApi.tenantList();
 
-        if(!CollectionUtils.isEmpty(sysTenants)) {
+        if (!CollectionUtils.isEmpty(sysTenants)) {
             sysTenants.forEach(vo -> tenantKeyList.add(vo.getTenantKey()));
         }
 
-        if(!CollectionUtils.isEmpty(tenantKeyList)) {
+        if (!CollectionUtils.isEmpty(tenantKeyList)) {
 
             // 创建固定数量的线程池
             int threadPoolSize = 10;
@@ -324,10 +357,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                     DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(tenantKey));
                     try {
                         initJdglData4P6ByOne(tenantKey);
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         throw new CustomBusinessException(e.getMessage());
-                    }finally {
+                    } finally {
                         DynamicDataSourceContextHolder.poll();
                         DynamicDataSourceContextHolder.push(oldDataSource);
                     }
@@ -349,7 +382,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
     @Override
     public List<JdglMainPlanItem> initOneJdglData4P6ByTenent(String projectId) {
 
-        if(StringUtils.isEmpty(projectId)) {
+        if (StringUtils.isEmpty(projectId)) {
             throw new RuntimeException("projectId参数异常");
         }
 
@@ -357,10 +390,10 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         DynamicDataSourceContextHolder.push(TenantDataSourceUtils.getDataSourceNameByTenantKey(projectId));
         try {
             initJdglData4P6ByOne(projectId);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             throw new CustomBusinessException(e.getMessage());
-        }finally {
+        } finally {
             DynamicDataSourceContextHolder.poll();
             DynamicDataSourceContextHolder.push(oldDataSource);
         }
@@ -370,31 +403,32 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     /**
      * 给wbs赋值开始结束时间
+     *
      * @param jdglMainPlanItems
      */
-    private void setWbsDate(List<JdglMainPlanItem> jdglMainPlanItems){
-        if(jdglMainPlanItems != null) {
+    private void setWbsDate(List<JdglMainPlanItem> jdglMainPlanItems) {
+        if (jdglMainPlanItems != null) {
             List<JdglMainPlanItem> workList = jdglMainPlanItems.stream().filter(vo -> JdglMainPlanItem.ITEMTYPE_ITEM.equals(vo.getItemType())).collect(Collectors.toList());
-            if(!CollectionUtils.isEmpty(workList)) {
+            if (!CollectionUtils.isEmpty(workList)) {
 //                iteration4Date(jdglMainPlanItems, collect);
                 for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
-                    if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
+                    if (JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
                         List<JdglMainPlanItem> workInWbs = workList.stream().filter(vo -> vo.getAncestors().contains(jdglMainPlanItem.getAncestors())).collect(Collectors.toList());
-                        if(!CollectionUtils.isEmpty(workInWbs)) {
+                        if (!CollectionUtils.isEmpty(workInWbs)) {
                             Date startDate = workInWbs.get(0).getStartDate();
                             Date finishDate = workInWbs.get(0).getFinishDate();
                             for (JdglMainPlanItem jdglMainPlanItem1 : workInWbs) {
-                                if(startDate == null) {
+                                if (startDate == null) {
                                     startDate = jdglMainPlanItem1.getStartDate();
                                 } else {
-                                    if(startDate.after(jdglMainPlanItem1.getStartDate())) {
+                                    if (startDate.after(jdglMainPlanItem1.getStartDate())) {
                                         startDate = jdglMainPlanItem1.getStartDate();
                                     }
                                 }
-                                if(finishDate == null) {
+                                if (finishDate == null) {
                                     finishDate = jdglMainPlanItem1.getFinishDate();
                                 } else {
-                                    if(finishDate.before(jdglMainPlanItem1.getFinishDate())) {
+                                    if (finishDate.before(jdglMainPlanItem1.getFinishDate())) {
                                         finishDate = jdglMainPlanItem1.getFinishDate();
                                     }
                                 }
@@ -410,43 +444,44 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     /**
      * 迭代开始结束时间赋值(废弃，数据会错位)
+     *
      * @param AllItems
      * @param thisItems
      */
     private void iteration4Date(List<JdglMainPlanItem> AllItems, List<JdglMainPlanItem> thisItems) {
-        if(CollectionUtils.isEmpty(thisItems) || CollectionUtils.isEmpty(AllItems)) {
+        if (CollectionUtils.isEmpty(thisItems) || CollectionUtils.isEmpty(AllItems)) {
             return;
         }
         Set<Long> parentIds = new HashSet<>();
         List<JdglMainPlanItem> parentItems = new ArrayList<>();
         for (JdglMainPlanItem jdglMainPlanItem : thisItems) {
-            if(jdglMainPlanItem.getPid() != null) parentIds.add(jdglMainPlanItem.getPid());
+            if (jdglMainPlanItem.getPid() != null) parentIds.add(jdglMainPlanItem.getPid());
         }
-        if(CollectionUtils.isEmpty(parentIds)) {
+        if (CollectionUtils.isEmpty(parentIds)) {
             return;
         }
         for (Long parentId : parentIds) {
             for (JdglMainPlanItem jdglMainPlanItem : AllItems) {
-                if(parentId.equals(jdglMainPlanItem.getId())) {
-                    if("8".equals(jdglMainPlanItem.getItemCode())) {
+                if (parentId.equals(jdglMainPlanItem.getId())) {
+                    if ("8".equals(jdglMainPlanItem.getItemCode())) {
                         System.out.println("11111");
                     }
                     List<JdglMainPlanItem> collect = thisItems.stream().filter(vo -> parentId.equals(vo.getPid())).collect(Collectors.toList());
-                    if(!CollectionUtils.isEmpty(collect)) {
+                    if (!CollectionUtils.isEmpty(collect)) {
                         Date startDate = collect.get(0).getStartDate();
                         Date finishDate = collect.get(0).getFinishDate();
                         for (JdglMainPlanItem jdglMainPlanItem1 : collect) {
-                            if(startDate == null) {
+                            if (startDate == null) {
                                 startDate = jdglMainPlanItem1.getStartDate();
                             } else {
-                                if(startDate.after(jdglMainPlanItem1.getStartDate())) {
+                                if (startDate.after(jdglMainPlanItem1.getStartDate())) {
                                     startDate = jdglMainPlanItem1.getStartDate();
                                 }
                             }
-                            if(finishDate == null) {
+                            if (finishDate == null) {
                                 finishDate = jdglMainPlanItem1.getFinishDate();
                             } else {
-                                if(finishDate.before(jdglMainPlanItem1.getFinishDate())) {
+                                if (finishDate.before(jdglMainPlanItem1.getFinishDate())) {
                                     finishDate = jdglMainPlanItem1.getFinishDate();
                                 }
                             }
@@ -459,16 +494,17 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
             }
         }
 
-        iteration4Date(AllItems,parentItems);
+        iteration4Date(AllItems, parentItems);
     }
 
     /**
      * 给wbs拼接wbs编码
+     *
      * @param jdglMainPlanItems
      */
     private void setWbsCode(List<JdglMainPlanItem> jdglMainPlanItems) {
 
-        if(CollectionUtils.isEmpty(jdglMainPlanItems)) {
+        if (CollectionUtils.isEmpty(jdglMainPlanItems)) {
             return;
         }
 
@@ -479,21 +515,22 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     /**
      * 迭代拼接wbs编码
+     *
      * @param allItem
      * @param thisItems
      */
     public void teration4WbsCode(List<JdglMainPlanItem> allItem, List<JdglMainPlanItem> thisItems) {
 
-        if(CollectionUtils.isEmpty(allItem) || CollectionUtils.isEmpty(thisItems)) {
+        if (CollectionUtils.isEmpty(allItem) || CollectionUtils.isEmpty(thisItems)) {
             return;
         }
 
         List<JdglMainPlanItem> childItem = new ArrayList<>();
         for (JdglMainPlanItem jdglMainPlanItem : thisItems) {
-            if(jdglMainPlanItem.getPid() == null) jdglMainPlanItem.setAncestors(jdglMainPlanItem.getWbsObjectId());
+            if (jdglMainPlanItem.getPid() == null) jdglMainPlanItem.setAncestors(jdglMainPlanItem.getWbsObjectId());
             for (JdglMainPlanItem jdglMainPlanItem1 : allItem) {
-                if(jdglMainPlanItem.getId() != null && jdglMainPlanItem.getId().equals(jdglMainPlanItem1.getPid())) {
-                    if("wbs".equals(jdglMainPlanItem1.getItemType())) {
+                if (jdglMainPlanItem.getId() != null && jdglMainPlanItem.getId().equals(jdglMainPlanItem1.getPid())) {
+                    if ("wbs".equals(jdglMainPlanItem1.getItemType())) {
                         jdglMainPlanItem1.setItemCode(jdglMainPlanItem.getItemCode() + "-" + jdglMainPlanItem1.getItemCode());
                         jdglMainPlanItem1.setWbsCode(jdglMainPlanItem1.getItemCode());
                         jdglMainPlanItem1.setAncestors(jdglMainPlanItem.getAncestors() + "," + jdglMainPlanItem1.getWbsObjectId());
@@ -511,24 +548,26 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     /**
      * 根据项目编码从p6获取项目数据接口
+     *
      * @param projectCode
      * @return
      */
     public ProjectInfo getProjectInfo(String projectCode) {
         String urlProj = p6IpPort + pre + "/projectInfo";
-        ParameterizedTypeReference<List<ProjectInfo>> responseType4Proj = new ParameterizedTypeReference<List<ProjectInfo>>() {};
-        HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
+        ParameterizedTypeReference<List<ProjectInfo>> responseType4Proj = new ParameterizedTypeReference<List<ProjectInfo>>() {
+        };
+        HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
 
         Map<String, Object> params = new HashMap<>();
         // 获取p6 项目数据
         ResponseEntity<List<ProjectInfo>> projResult = restTemplate.exchange(urlProj, HttpMethod.GET, entity, responseType4Proj, params);
         List<ProjectInfo> body = projResult.getBody();
-        if(CollectionUtils.isEmpty(body)) {
-            return  null;
+        if (CollectionUtils.isEmpty(body)) {
+            return null;
         }
         List<ProjectInfo> collect = body.stream().filter(vo -> StringUtils.isNotEmpty(vo.getProjectId())).collect(Collectors.toList());
         ProjectInfo projectInfo = body.stream().filter(vo -> projectCode.equals(vo.getProjectId())).findFirst().orElse(null);
-        if(projectInfo == null) {
+        if (projectInfo == null) {
             projectInfo = body.stream().filter(vo -> projectCode.equals(vo.getProjectCode())).findFirst().orElse(null);
         }
         return projectInfo;
@@ -540,13 +579,13 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         String returnStr = "";
 
         ProjectInfo projectInfo = getProjectInfo(tenantKey);
-        if(projectInfo == null)  return returnStr;
+        if (projectInfo == null) return returnStr;
 
         String projectId = projectInfo.getProjectCode();
 
         List<JdglMainPlanItem> mainPlanItemList = jdglMainPlanItemService.getUsingJdglMainPlanItemList(new JdglMainPlanItem());
 
-        if(CollectionUtils.isEmpty(mainPlanItemList)) {
+        if (CollectionUtils.isEmpty(mainPlanItemList)) {
             return returnStr;
         }
 
@@ -560,6 +599,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
     /**
      * 获取转换后的逻辑关系数据
+     *
      * @return
      */
     public List<JdglMainPlanItemPre> getPre(String projectId) {
@@ -568,19 +608,20 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
 
         String urlRel = p6IpPort + pre + "/relationInfo";
 
-        HttpEntity<?> entity=new HttpEntity(new HttpHeaders());
+        HttpEntity<?> entity = new HttpEntity(new HttpHeaders());
 
         Map<String, Object> params = new HashMap<>();
 
         params.put("projectId", projectId);
 
-        ParameterizedTypeReference<List<PredecessorRelationships>> responseType4Rel = new ParameterizedTypeReference<List<PredecessorRelationships>>() {};
+        ParameterizedTypeReference<List<PredecessorRelationships>> responseType4Rel = new ParameterizedTypeReference<List<PredecessorRelationships>>() {
+        };
         // 获取p6 逻辑关系数据
         ResponseEntity<List<PredecessorRelationships>> relResult = restTemplate.exchange(urlRel + "?projectId={projectId}", HttpMethod.GET, entity, responseType4Rel, params);
 
         List<PredecessorRelationships> relInfos = relResult.getBody();
 
-        if(!CollectionUtils.isEmpty(relInfos)) {
+        if (!CollectionUtils.isEmpty(relInfos)) {
 
             for (PredecessorRelationships predecessorRelationships : relInfos) {
                 JdglMainPlanItemPre jdglMainPlanItemPre = new JdglMainPlanItemPre();
@@ -600,16 +641,16 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
         // 获取转换后的p6逻辑关系数据
         List<JdglMainPlanItemPre> relInfos = getPre(projectId);
 
-        if(!CollectionUtils.isEmpty(relInfos) && !CollectionUtils.isEmpty(workInfos)) {
+        if (!CollectionUtils.isEmpty(relInfos) && !CollectionUtils.isEmpty(workInfos)) {
             for (JdglMainPlanItem jdglMainPlanItem : workInfos) {
                 String p6Id = jdglMainPlanItem.getItemCode();
                 Long id = jdglMainPlanItem.getId();
                 for (JdglMainPlanItemPre jdglMainPlanItemPre : relInfos) {
                     jdglMainPlanItemPre.setMainPlanId(mainPlanId);
-                    if(p6Id.equals(jdglMainPlanItemPre.getItemCode())){
+                    if (p6Id.equals(jdglMainPlanItemPre.getItemCode())) {
                         jdglMainPlanItemPre.setItemId(id);
                     }
-                    if(p6Id.equals(jdglMainPlanItemPre.getPredecessorItemCode())) {
+                    if (p6Id.equals(jdglMainPlanItemPre.getPredecessorItemCode())) {
                         jdglMainPlanItemPre.setPredecessorItemId(id);
                     }
                 }
