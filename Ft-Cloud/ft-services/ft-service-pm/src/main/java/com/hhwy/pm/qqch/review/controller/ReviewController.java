@@ -77,7 +77,9 @@ public class ReviewController extends BaseController {
             Review review = list.get(i);
             review.setInitDate(review.getCreateTime());
             BigDecimal ratio = BigDecimalUtils.divideMay0(review.getFinishNum(),review.getPlanNum() , 4, BigDecimal.ROUND_HALF_UP);
-            review.setFinishRatio(ratio.multiply(new BigDecimal(100)));
+            if(ratio != null){
+                review.setFinishRatio(ratio.multiply(new BigDecimal(100)));
+            }
             //处理状态字段 0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
             String taskStatusDesc = "";
             if(review.getTaskStatus().equals("0")){
