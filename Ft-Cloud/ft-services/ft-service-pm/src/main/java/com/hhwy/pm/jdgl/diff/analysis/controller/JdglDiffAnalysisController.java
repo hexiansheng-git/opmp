@@ -74,8 +74,8 @@ public class JdglDiffAnalysisController extends BaseController {
 
     // @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
     @PostMapping("/update")
-    public AjaxResult updateJdglDiffAnalysis(@Validated(ValidationGroups.Update.class) @RequestBody JdglDiffAnalysis jdglDiffAnalysisParam) {
-        return toAjax(jdglDiffAnalysisService.updateJdglDiffAnalysis(jdglDiffAnalysisParam));
+    public AjaxResult updateJdglDiffAnalysis(@RequestBody JdglDiffAnalysis jdglDiffAnalysisParam) {
+        return AjaxResult.success(jdglDiffAnalysisService.updateJdglDiffAnalysis(jdglDiffAnalysisParam));
     }
 
     // @PreAuthorize(hasPermi = "jdglDiffAnalysis:update")
