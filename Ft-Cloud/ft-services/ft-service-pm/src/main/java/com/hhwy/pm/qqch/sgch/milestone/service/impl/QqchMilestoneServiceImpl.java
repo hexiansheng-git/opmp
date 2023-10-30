@@ -131,10 +131,10 @@ public class QqchMilestoneServiceImpl implements IQqchMilestoneService {
         if(CollectionUtils.isEmpty(list)) {
             return;
         }
-//        for (QqchMilestone qqchMilestone : list) {
-//            if(qqchMilestone.getJobCode() != null) qqchMilestone.setId(IdWorker.createId());
-//        }
-        this.qqchMilestoneMapper.updateQqchMilestoneList(list);
+        for (QqchMilestone qqchMilestone : list) {
+            if(qqchMilestone.getJobCode() != null) qqchMilestone.setId(IdWorker.createId());
+        }
+        this.qqchMilestoneMapper.insertQqchMilestoneList(list);
     }
 
     /**
