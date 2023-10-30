@@ -122,7 +122,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
     public int updateJdglDiffAnalysis(JdglDiffAnalysis jdglDiffAnalysis) {
         Date period = jdglDiffAnalysis.getPeriod();
 
-        if(jdglDiffAnalysis == null || jdglDiffAnalysis.getId() == null) {
+        if(jdglDiffAnalysis.getId() == null) {
             return 0;
         }
 
@@ -255,8 +255,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
     @Transactional
     public int updateJdglDiffAnalysisList(List<JdglDiffAnalysis> jdglDiffAnalysisList) {
+        if(CollectionUtils.isEmpty(jdglDiffAnalysisList)) {
+            return 0;
+        }
         for (JdglDiffAnalysis jdglDiffAnalysis : jdglDiffAnalysisList) {
-            jdglDiffAnalysis.setUpdateUser(SecurityUtils.getUserName());
+            jdglDiffAnalysis.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
         }
         return jdglDiffAnalysisMapper.updateJdglDiffAnalysisList(jdglDiffAnalysisList);

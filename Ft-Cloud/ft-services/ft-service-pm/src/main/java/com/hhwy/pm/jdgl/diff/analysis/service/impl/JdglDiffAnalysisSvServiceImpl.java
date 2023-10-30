@@ -206,7 +206,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
 
         jdglDiffAnalysis.setTotalCompValue(thisTotalActAmt);
 
-        if(new BigDecimal(0).equals(thisTotalPlanAmt)) {
+        if(new BigDecimal(0).compareTo(thisTotalPlanAmt) == 0) {
             return new BigDecimal(0);
         }
 
