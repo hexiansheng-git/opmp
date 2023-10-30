@@ -57,7 +57,7 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
     @Value("${p6.ip_port}")
     private String p6IpPort;
 
-    private String pre = "/p6";
+    private String pre = "";
 
     @Override
     public List<QqchMainPlanItem> initQqchData4P6(String tenantKey, BigDecimal version) {
