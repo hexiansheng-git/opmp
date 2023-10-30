@@ -102,6 +102,7 @@ public class QqchSummaryEvaluationServiceImpl implements IQqchSummaryEvaluationS
         query.setId(id);
         QqchSummaryEvaluation summaryEvaluation = qqchSummaryEvaluationMapper.getQqchSummaryEvaluation(query);
         summaryEvaluation.setTaskStatus("5");
+        summaryEvaluation.setPtVar3(DateUtils.getDate());
         qqchSummaryEvaluationMapper.updateQqchSummaryEvaluation(summaryEvaluation);
         //推送到总部
         sysSyncInfoService.pushQqchSummaryEvaluation(summaryEvaluation);

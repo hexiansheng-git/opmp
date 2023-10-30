@@ -147,6 +147,7 @@
             <if test="deptId != null ">and `dept_id` = #{deptId}</if>
         </where>
         order by create_time desc
+        limit 1
     </select>
 
     <insert id="insertQqchSafeMostEnvirRiskList" useGeneratedKeys="true" keyProperty="id">

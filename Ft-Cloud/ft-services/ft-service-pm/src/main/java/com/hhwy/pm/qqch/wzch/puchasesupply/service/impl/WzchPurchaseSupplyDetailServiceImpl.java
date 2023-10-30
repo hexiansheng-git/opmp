@@ -287,8 +287,9 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
         }
 
         // 批量插入物资批次详情
-        wzchPurchaseSupplyDetailMapper.batchInsertOrUpdateBatchDetails(saveBachDetails);
-
+        if(CollectionUtils.isNotEmpty(saveBachDetails)) {
+            wzchPurchaseSupplyDetailMapper.batchInsertOrUpdateBatchDetails(saveBachDetails);
+        }
         return i;
     }
 
