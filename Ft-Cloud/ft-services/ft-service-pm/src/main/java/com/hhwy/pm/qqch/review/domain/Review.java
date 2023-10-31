@@ -237,4 +237,7 @@ public class Review extends CommonBaseEntity {
     
     //当前状态
     private String taskStatusDesc;
+
+    //当前合同有效金额（万美元）
+    private BigDecimal effectiveAmoutDollar;
 }
