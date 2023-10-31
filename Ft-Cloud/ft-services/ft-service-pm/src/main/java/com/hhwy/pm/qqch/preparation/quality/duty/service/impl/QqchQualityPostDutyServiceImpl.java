@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.preparation.quality.duty.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.ehr.domain.Attachment;
 import com.hhwy.pm.ehr.domain.PersonCertifyCompetency;
 import com.hhwy.pm.ehr.service.IEhrService;
 import com.hhwy.pm.qqch.constant.ButtonMark;
@@ -25,8 +26,8 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -127,11 +128,35 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
         List<QqchQualityPostDuty> list = qqchQualityPostDutyMapper.getDistinctQualityPostDutyList(version);
 
         String userName4As = list.stream().map(QqchQualityPostDuty::getPersonId).collect(Collectors.joining());
-        Map<String, List<PersonCertifyCompetency>> certList = ehrService.getCertListByUserName4As(userName4As);
+//        Map<String, List<PersonCertifyCompetency>> certList = ehrService.getCertListByUserName4As(userName4As);
 
         list.stream().forEach(duty -> {
-            String personId = duty.getPersonId();
-            List<PersonCertifyCompetency> personCertifyCompetencyList = certList.get(personId);
+            List<PersonCertifyCompetency> personCertifyCompetencyList = new ArrayList<>();
+
+            PersonCertifyCompetency competency1 = new PersonCertifyCompetency();
+            competency1.setCategoryName("职(执)业资格类别名称");
+            competency1.setCategoryNumber("职(执)业资格类别编码");
+            competency1.setCertifiedCompetencyName("职(执)业资格名称");
+            competency1.setCertifiedCompetencyNumber("职(执)业资格编码");
+            competency1.setLevelName("职(执)业资格级别名称");
+            competency1.setLevelNumber("职(执)业资格级别编码");
+            competency1.setZymc("专业名称");
+            competency1.setPrzcny("聘任注册时间 格式为:yyyy-MM-dd");
+            competency1.setAppointUnit("聘任或注册单位");
+            competency1.setCertificateNumber("注册编号");
+            competency1.setIsHighest(true);
+            competency1.setObtainDate("2022-02-01");
+
+            List<Attachment> attachmentList = new ArrayList<>();
+            Attachment attachment = new Attachment();
+            attachment.setId("jkljlkjlksdf0980234");
+            attachment.setName("测试证件");
+            attachmentList.add(attachment);
+            competency1.setAttachmentList(attachmentList);
+
+            personCertifyCompetencyList.add(competency1);
+//            String personId = duty.getPersonId();
+//            List<PersonCertifyCompetency> personCertifyCompetencyList = certList.get(personId);
             duty.setPersonCertifyCompetencyList(personCertifyCompetencyList);
         });
         return list;
