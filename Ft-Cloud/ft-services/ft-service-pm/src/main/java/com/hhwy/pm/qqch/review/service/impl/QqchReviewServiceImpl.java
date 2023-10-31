@@ -50,7 +50,6 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -116,10 +115,6 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             }
         }
         return qqchReviewList;
-    }
-
-    public void setIsCanApprove(List<Review> qqchReviewList){
-        Map<String, Review> reviewMap = qqchReviewList.stream().collect(Collectors.toMap(Review::getPlanStage, o -> o));
     }
 
     @Transactional(rollbackFor = Exception.class)

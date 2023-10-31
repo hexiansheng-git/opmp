@@ -119,7 +119,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         }
 
         // 过滤出当前登录人过滤出的wbs叶子节点集合
-        String userId = SecurityUtils.getUserId() + "";
+        String userId = SecurityUtils.getUserName();
         List<JdglDayScheduleWbs> collect = jdglDayScheduleWbsList.stream().filter(vo -> "1".equals(vo.getIsLeaf()) && userId.equals(vo.getEditerId())).collect(Collectors.toList());
 
         if(CollectionUtils.isEmpty(collect)) {
@@ -468,8 +468,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //            jdglDayScheduleWbs.setId(IdWorker.createId());
             jdglDayScheduleWbs.setCreateUser(SecurityUtils.getUserName());
             jdglDayScheduleWbs.setCreateTime(DateUtils.getNowDate());
-            jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
-            jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserId()+"");
+            if(StringUtils.isEmpty(jdglDayScheduleWbs.getEditerId())) {
+                jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
+                jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserName()+"");
+            }
             jdglDayScheduleWbs.setEditerDate(DateUtils.getNowDate());
         }
 
@@ -694,6 +696,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
         List<JdglDayScheduleBill> jdglDayScheduleBillListUpdate = new ArrayList<>();
 
         for (JdglDayScheduleWbs jdglDayScheduleWbs1 : jdglDayScheduleWbsList ) {
+            jdglDayScheduleWbs1.setDelFlag(jdglDayScheduleWbs1.getDelFlag() == null ? "0" : jdglDayScheduleWbs1.getDelFlag());
             List<JdglDayScheduleBill> jdglDayScheduleBillList = jdglDayScheduleWbs1.getJdglDayScheduleBillList();
             if(CollectionUtils.isEmpty(jdglDayScheduleBillList)) {
                 continue;
