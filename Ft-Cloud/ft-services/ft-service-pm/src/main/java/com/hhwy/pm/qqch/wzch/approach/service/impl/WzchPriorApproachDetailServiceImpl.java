@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -160,7 +161,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
     @Override
     @Transactional
     public void save(WzchPriorApproach wzchPriorApproach) {
-        if(wzchPriorApproach==null || CollectionUtils.isEmpty(wzchPriorApproach.getWzchPriorApproachDetailList())){
+        if(wzchPriorApproach==null ){
             throw new BaseException("入参缺失");
         }
         fillWzchPriorApproach(wzchPriorApproach);
@@ -175,11 +176,15 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
             wzchPriorApproachYearCounts.addAll(wzchPriorApproachDetail.getWzchPriorApproachYearCountList());
         }
         List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());
-        wzchPriorApproachDetailMapper.deleteByIds(detialIds);
+        if(CollectionUtils.isNotEmpty(detialIds))
+            wzchPriorApproachDetailMapper.deleteByIds(detialIds);
         List<Long> countIds = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getId).collect(Collectors.toList());
-        wzchPriorApproachYearCountService.deleteByIds(countIds);
-        wzchPriorApproachDetailMapper.batchInsert(wzchPriorApproach.getWzchPriorApproachDetailList());
-        wzchPriorApproachYearCountService.batchInsert(wzchPriorApproachYearCounts);
+        if(CollectionUtils.isNotEmpty(countIds))
+            wzchPriorApproachYearCountService.deleteByIds(countIds);
+        if(CollectionUtils.isNotEmpty(wzchPriorApproach.getWzchPriorApproachDetailList()))
+            wzchPriorApproachDetailMapper.batchInsert(wzchPriorApproach.getWzchPriorApproachDetailList());
+        if(CollectionUtils.isNotEmpty(wzchPriorApproachYearCounts))
+            wzchPriorApproachYearCountService.batchInsert(wzchPriorApproachYearCounts);
         if (ButtonMark.CONFIRM.equals(wzchPriorApproach.getButtonMark())) {
             // 插入确认状态
             String menuId = wzchPriorApproach.getMenuId();
@@ -507,8 +512,8 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
                 list.add(detail.getCategoryName());
             }
             list.add(detail.getPriorApproachNum());
-            list.add(detail.getEarliestReqTime());
-            list.add(detail.getPresentTime());
+            list.add(new SimpleDateFormat("yyyy-MM-dd").format(detail.getEarliestReqTime()));
+            list.add(new SimpleDateFormat("yyyy-MM-dd").format(detail.getPresentTime()));
             List<WzchPriorApproachYearCount> yearCountList = detail.getWzchPriorApproachYearCountList();
 
             for(String year:yesrs){

@@ -358,6 +358,10 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
     @Override
     @Transactional()
     public void sync(BigDecimal version) {
+        //3 -SP、清理当前版本数据
+        wzchSourceDetailMapper.deleteDirectSourceByVersion(version);
+        wzchSourceDetailMapper.deleteDirectByVersion(version);
+        wzchSourceDetailMapper.deleteTimeDirectByVersion(version);
         //1、根据版本号获取总需用数据
         WzchTotalDemandDetail queryDetail = new WzchTotalDemandDetail();
         queryDetail.setVersion(version);
@@ -395,10 +399,7 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             tempSource.setId(IdWorker.createId());
             detailTimeList.add(tempSource);
         }
-        //3、清理当前版本数据
-        wzchSourceDetailMapper.deleteDirectSourceByVersion(version);
-        wzchSourceDetailMapper.deleteDirectByVersion(version);
-        wzchSourceDetailMapper.deleteTimeDirectByVersion(version);
+
 
 
         wzchSourceService.insertWzchSource(wzchSource);

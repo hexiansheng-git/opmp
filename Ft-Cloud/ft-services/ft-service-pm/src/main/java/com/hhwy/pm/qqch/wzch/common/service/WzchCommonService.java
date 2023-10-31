@@ -317,7 +317,9 @@ public class WzchCommonService {
                 // 单线程
                 materialCodeList = this.getMaterialCodeList(tList, materialCodeField);
             }
-
+            if(CollectionUtils.isEmpty(materialCodeList)){
+                return tList;
+            }
             // 根据物资编码获取物资信息 这里只请求redis一次 避免浪费网络资源
             List materialListRedis = this.redisUtils.hMultiGet(PmsConstant.MATERIALREDISKEY, materialCodeList);
 
