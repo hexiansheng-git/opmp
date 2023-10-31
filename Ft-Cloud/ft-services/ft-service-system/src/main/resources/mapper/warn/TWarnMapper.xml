@@ -125,7 +125,7 @@
         order by w.create_time desc
     </select>
 
-    <insert id="insertTWarn" useGeneratedKeys="true" keyProperty="warn_id">
+    <insert id="insertTWarn" useGeneratedKeys="true" keyProperty="warnId">
         insert into t_warn
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="warnId != null ">`warn_id`,</if>
