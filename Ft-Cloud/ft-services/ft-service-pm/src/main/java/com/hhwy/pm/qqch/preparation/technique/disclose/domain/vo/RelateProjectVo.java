@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.technique.disclose.domain.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -36,5 +37,6 @@ public class RelateProjectVo {
     private String schemeQuery;
 
     //计划实施日期
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date planImplementTime;
 }

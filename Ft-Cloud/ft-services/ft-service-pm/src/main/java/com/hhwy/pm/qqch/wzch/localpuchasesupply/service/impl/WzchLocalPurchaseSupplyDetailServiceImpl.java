@@ -232,6 +232,7 @@ public class WzchLocalPurchaseSupplyDetailServiceImpl implements IWzchLocalPurch
     @Override
     public int insertOrUpdateBatch(List<WzchLocalPurchaseSupplyDetailDTO> detailList, Long supplyId,boolean ignoreBatch) {
         if (CollectionUtils.isEmpty(detailList)) {
+            return 0;
             // TODO throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "物资详情不能为空");
         }
         Assert.notNull(supplyId, "采购供应策划id不能为空");
