@@ -205,12 +205,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select u.user_id userId, u.dept_id deptId, u.user_name userName, u.nick_name nickName, u.user_type userType, u.tenant_key tenantKey, u.email, u.phone_number, u.password, u.sex, u.id_card idCard,
         u.status, u.del_flag delFlag, u.super_flag superFlag, u.login_ip loginIp, u.login_date loginDate, u.create_user createUser, u.create_time createTime, u.remark, u.pt_var_1, u.pt_var_2, u.pt_var_3, u.pt_var_4, u.pt_var_5
         FROM
-        sys_user u
-        LEFT JOIN sys_user_role ur ON u.user_id = ur.user_id
-        WHERE ur.tenant_key = #{tenantKey}
-        and ur.role_key in
+        sys_user u,
+        (select user_id from sys_user_role sur,sys_role sr where sur.tenant_key = #{tenantKey} and sur.role_id = sr.role_id and sr.role_key in
         <foreach item="roleKey" collection="roleKeyList" open="(" separator="," close=")">
             #{roleKey}
-        </foreach>
+        </foreach>) uid
+        where u.user_id = uid.user_id
     </select>
 </mapper>

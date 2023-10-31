@@ -108,7 +108,7 @@ public class TWarnServiceImpl implements ITWarnService {
         if(StringUtils.isNotBlank(warnScopeType) && WarnScopeType.ROLE.getWarnScopeType().equals(warnScopeType)){
             String warnScope = tWarn.getWarnScope();
             String[] roleKeyList = warnScope.split(",");
-            List<SysUser> userList = myUserMapper.selectByRoleKeyList(roleKeyList, "master");
+            List<SysUser> userList = myUserMapper.selectByRoleKeyList(roleKeyList, tWarn.getTenantKey());
             for (SysUser user : userList) {
                 SseEmitterServer.sendMessage(user.getUserName(), "system", HtmlToText.filterHtmlStr(warnContent));
             }

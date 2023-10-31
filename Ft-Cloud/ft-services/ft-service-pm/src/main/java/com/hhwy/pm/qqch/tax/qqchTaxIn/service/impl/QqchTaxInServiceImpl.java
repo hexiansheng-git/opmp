@@ -3,7 +3,10 @@ package com.hhwy.pm.qqch.tax.qqchTaxIn.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.core.utils.StringUtils;
+import com.hhwy.common.core.web.domain.AjaxResult;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.domain.base.system.period.PeriodInfo;
+import com.hhwy.feign.service.SystemServiceApi;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
@@ -12,6 +15,8 @@ import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
+import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.mapper.QqchTaxInMapper;
@@ -19,11 +24,17 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInDetailService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.qqch.tax.qqchTaxInstallment.service.IQqchTaxStageService;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractList;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
+import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.common.PmsUtils;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
 import lombok.extern.java.Log;
@@ -34,6 +45,8 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -66,6 +79,12 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     private IQqchTaxStageService qqchTaxStageService;
     @Resource
     private IJdglMainPlanItemService jdglMainPlanItemService;
+    @Resource
+    private IQqchProdPlanService qqchProdPlanService;
+    @Resource
+    private IXmslContractInfoService contractInfoService;
+    @Resource
+    private SystemServiceApi systemServiceApi;
 
     public QqchTaxIn getQqchTaxIn(QqchTaxIn qqchTaxIn) {
         return qqchTaxInMapper.getQqchTaxIn(qqchTaxIn);
@@ -136,20 +155,18 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         qqchTaxInParam.setDataType("1");
         List<QqchTaxIn> inList = bean.getInList(qqchTaxInParam);
         if (CollectionUtils.isEmpty(inList)) {
-            List<QqchTaxInDetail> detailList = this.getDetialList();
-
-
-            inList = new ArrayList<>();
-            for (TaxInVO.CurrencyVO currencyVO : currencyInfo) {
-                QqchTaxIn qqchTaxIn = new QqchTaxIn();
-                qqchTaxIn.setId(IdWorker.createId());
-                qqchTaxIn.setOtherBusName(currencyVO.getCurrencyName());
-                qqchTaxIn.setCurrency(currencyVO.getCurrency());
-                qqchTaxIn.setCurrencyName(currencyVO.getCurrencyName());
-                qqchTaxIn.setRate(currencyVO.getRate());
-                qqchTaxIn.setDetailList(detailList);
-                inList.add(qqchTaxIn);
-            }
+            inList = this.getDefaultAmtInfo(qqchTaxInParam.getVersion(),currencyInfo);
+//            inList = new ArrayList<>();
+//            for (TaxInVO.CurrencyVO currencyVO : currencyInfo) {
+//                QqchTaxIn qqchTaxIn = new QqchTaxIn();
+//                qqchTaxIn.setId(IdWorker.createId());
+//                qqchTaxIn.setOtherBusName(currencyVO.getCurrencyName());
+//                qqchTaxIn.setCurrency(currencyVO.getCurrency());
+//                qqchTaxIn.setCurrencyName(currencyVO.getCurrencyName());
+//                qqchTaxIn.setRate(currencyVO.getRate());
+//                qqchTaxIn.setDetailList(detailList);
+//                inList.add(qqchTaxIn);
+//            }
         }
 
         taxInVO.setInList(inList);
@@ -171,9 +188,109 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             QqchTaxInDetail qqchTaxInDetail = new QqchTaxInDetail();
             qqchTaxInDetail.setId(IdWorker.createId());
             qqchTaxInDetail.setYear(item);
+
+//            amtMap.get(item);
             return qqchTaxInDetail;
         }).collect(Collectors.toList());
+    }
 
+    private List<QqchTaxInDetail> getDetialList(QqchTaxIn taxIn,Map<String,BigDecimal> amtMap,BigDecimal listRate) {
+        List<String> yearList = this.getYearList();
+
+        return yearList.stream().map(item -> {
+            BigDecimal sourceAmt = ObjectUtils.nvlBigDecimal(amtMap.get(item));
+            BigDecimal amt = PmsUtils.amountTransfer(sourceAmt,listRate,taxIn.getRate());
+            BigDecimal usdAmt = PmsUtils.amountTransferUSD(amt,listRate,taxIn.getCurrency());
+            QqchTaxInDetail qqchTaxInDetail = new QqchTaxInDetail();
+            qqchTaxInDetail.setId(IdWorker.createId());
+            qqchTaxInDetail.setYear(item);
+            qqchTaxInDetail.setDataType("1");
+            qqchTaxInDetail.setCurrency(taxIn.getCurrency());
+            qqchTaxInDetail.setRate(taxIn.getRate());
+            qqchTaxInDetail.setAmt(amt);
+            qqchTaxInDetail.setUsdAmt(usdAmt);
+            return qqchTaxInDetail;
+        }).collect(Collectors.toList());
+    }
+
+
+    public List<QqchTaxIn> getDefaultAmtInfo(BigDecimal version,List<TaxInVO.CurrencyVO> currencyInfo){
+        //获取1.2.5的产值，币种为合同的清单标价货币。格式化为10.3.3的明细
+        QqchProdPlan query = new QqchProdPlan();
+        query.setVersion(version);
+        List<QqchProdPlan> list = qqchProdPlanService.getQqchProdPlanList(query);
+        //汇总每年的产值
+        Map<String,BigDecimal> yearAmtMap = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            QqchProdPlan temp = list.get(i);
+            Calendar tempCalendar = Calendar.getInstance();
+            tempCalendar.setTime(temp.getPlanDate());
+            Integer year = tempCalendar.get(Calendar.YEAR);
+            ObjectUtils.add2Map(yearAmtMap,year+"",temp.getMonthProdValue());
+        }
+        //获取清单标价货币的汇率
+        BigDecimal listRate = getListCurrencyRate();
+        //构建数据
+        List<QqchTaxIn> inList = new ArrayList<>();
+        for (TaxInVO.CurrencyVO currencyVO : currencyInfo) {
+            QqchTaxIn qqchTaxIn = new QqchTaxIn();
+            qqchTaxIn.setId(IdWorker.createId());
+            qqchTaxIn.setOtherBusName(currencyVO.getCurrencyName());
+            qqchTaxIn.setCurrency(currencyVO.getCurrency());
+            qqchTaxIn.setCurrencyName(currencyVO.getCurrencyName());
+            qqchTaxIn.setRate(currencyVO.getRate());
+            List<QqchTaxInDetail> detailList = this.getDetialList(qqchTaxIn,yearAmtMap,listRate);
+            qqchTaxIn.setDetailList(detailList);
+            inList.add(qqchTaxIn);
+        }
+        return null;
+    }
+
+    /**
+     * 从清单里获取清单标价货币的汇率
+     * 优先从支付信息里拿，没有再取实时汇率
+     */
+    public BigDecimal getListCurrencyRate(){
+        XmslContractInfo contractInfo = contractInfoService.getValidMaxVersionContractInfo();
+        String listCurrencyCode = contractInfo.getListCurrencyCode();
+        if(StringUtils.isBlank(listCurrencyCode))
+            return BigDecimal.ONE;
+        /*汇率*/
+        BigDecimal exchangeRate = null;
+        //项目支付信息数据
+        XmslContractPayinfo xmslContractPayinfo = new XmslContractPayinfo();
+        xmslContractPayinfo.setMasterId(contractInfo.getId());
+        List<XmslContractPayinfo> payinfoList = contractPayinfoService.getXmslContractPayinfoList(xmslContractPayinfo);
+        if(!org.apache.commons.collections4.CollectionUtils.isEmpty(payinfoList)) {
+            XmslContractPayinfo payInfo = payinfoList.stream().filter(o -> listCurrencyCode.equals(o.getCurrencyCode())).findFirst().orElse(null);
+            if(payInfo != null){
+                String rateType = payInfo.getRateType();
+                if("1".equals(rateType)){
+                    exchangeRate = new BigDecimal(payInfo.getObversionRate());
+                }
+            }
+        }
+        if(exchangeRate == null){ //取实时汇率
+            Date nowDate = DateUtils.getNowDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+            String nowStr = sdf.format(nowDate);
+
+            PeriodInfo periodInfo = new PeriodInfo();
+            periodInfo.setCurrencyCode(listCurrencyCode);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(nowDate);
+            int year = calendar.get(Calendar.YEAR);
+            periodInfo.setQueryDate(String.valueOf(year));
+            AjaxResult ajaxResult = systemServiceApi.selectPeriodByYear(periodInfo);
+            if(ajaxResult.get("data") != null) {
+                List<Map> data = (List<Map>) ajaxResult.get("data");
+                Map periodMap = data.stream().filter(map -> nowStr.equals(map.get("periodCode"))).findFirst().orElse(null);
+                if(periodMap != null && periodMap.get("rate") != null) {
+                    exchangeRate = ObjectUtils.nvlBigDecimal(periodMap.get("rate"));
+                }
+            }
+        }
+        return ObjectUtils.nvlBigDecimal(exchangeRate,BigDecimal.ONE);
     }
 
 

@@ -17,10 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -206,5 +203,10 @@ public class CommonServiceUtil {
             return new HashMap<>();
         }
 
+    }
+    public static BigDecimal getUsdRate() {
+        String usdCode = "USD";
+        Map<String, BigDecimal> map= CommonServiceUtil.getUsdRate(Arrays.asList(usdCode));
+        return map==null?BigDecimal.ONE:map.get(usdCode);
     }
 }
