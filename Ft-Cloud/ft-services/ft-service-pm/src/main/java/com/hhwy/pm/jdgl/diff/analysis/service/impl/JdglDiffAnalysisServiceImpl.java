@@ -130,7 +130,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         jdglDiffAnalysis.setUpdateTime(DateUtils.getNowDate());
 
         BigDecimal totalCompValue = jdglDiffAnalysis.getTotalCompValue();
-        BigDecimal totalMeterValue = jdglDiffAnalysis.getMeterValue() == null ? new BigDecimal(0) : jdglDiffAnalysis.getMeterValue();
+        BigDecimal totalMeterValue = jdglDiffAnalysis.getMeterValue() == null ? BigDecimal.ZERO : jdglDiffAnalysis.getMeterValue();
 
         QqchScheDTO dto = new QqchScheDTO();
 
@@ -143,9 +143,9 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
                 }
             }
         }
-        BigDecimal sumMin = new BigDecimal(0);
-        if(totalCompValue != null && new BigDecimal(0).compareTo(totalCompValue) != 0) {
-            sumMin = totalMeterValue.divide(totalCompValue);
+        BigDecimal sumMin = BigDecimal.ZERO;
+        if(totalCompValue != null && BigDecimal.ZERO.compareTo(totalCompValue) != 0) {
+            sumMin = totalMeterValue.divide(totalCompValue, 2, BigDecimal.ROUND_HALF_UP);
         }
 
         // 调取获取进度差异化管控策划列表接口
@@ -188,7 +188,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         }
 
         // 总得分
-        BigDecimal thisTotalGrage = new BigDecimal(0);
+        BigDecimal thisTotalGrage = BigDecimal.ZERO;
         // 修改前总得分
         BigDecimal oldTotalGrage = jdglDiffAnalysis.getTotalGrade();
 
@@ -324,7 +324,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         jdglDiffAnalysis.setId(IdWorker.createId());
         jdglDiffAnalysis.setPeriod(nowDate);
         jdglDiffAnalysis.setCreateTime(nowDate);
-        jdglDiffAnalysis.setCreateUser(SecurityUtils.getUserName());
+//        jdglDiffAnalysis.setCreateUser(SecurityUtils.getUserName());
 
         QqchScheDTO dto = new QqchScheDTO();
 
@@ -339,9 +339,11 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
 
         // 初始化sv曲线
         BigDecimal diffGradeValue = iJdglDiffAnalysisSvService.initJdglDiffAnalysisSv(jdglDiffAnalysis);
+        if(diffGradeValue == null) diffGradeValue = BigDecimal.ZERO;
 
         // 初始化关键线路
         BigDecimal keyGradeValue = jdglDiffAnalysisPathService.initKeyJdglDiffAnalysisPath(jdglDiffAnalysis);
+        if(keyGradeValue == null) keyGradeValue = BigDecimal.ZERO;
 
         // 初始化非关键线路
         jdglDiffAnalysisPathService.initNotKeyJdglDiffAnalysisPath(jdglDiffAnalysis);
@@ -353,7 +355,7 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         if(validMaxVersionContractInfo != null) {
             Date nowDate1 = DateUtils.getNowDate();
             Date handoverTime = validMaxVersionContractInfo.getHandoverTime();
-            if(nowDate1.before(handoverTime)) {
+            if(handoverTime != null && nowDate1.before(handoverTime)) {
                 isOver = "1";
             }
             jdglDiffAnalysis.setContractAmtDl(validMaxVersionContractInfo.getEffectiveAmout());
@@ -368,44 +370,44 @@ public class JdglDiffAnalysisServiceImpl implements IJdglDiffAnalysisService {
         String type11 = "1-1";
         String type12 = "1-2";
         String type29 = "2-9";
-        BigDecimal scaleGradeValue = new BigDecimal(0);
+        BigDecimal scaleGradeValue = BigDecimal.ZERO;
 
         // 项目重要性
         String weightedGrade = projectInfo.getWeightedGrade();
 
         if(validMaxVersionContractInfo != null) {
-            BigDecimal effectiveAmout = validMaxVersionContractInfo.getEffectiveAmout();
+            BigDecimal effectiveAmout = validMaxVersionContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : validMaxVersionContractInfo.getEffectiveAmout();
             String duration = validMaxVersionContractInfo.getDuration();
-            BigDecimal durationM = BigDecimal.valueOf(Double.valueOf(duration)/12);
-            if(durationM != null && new BigDecimal(0).compareTo(durationM) != 0) {
-                scaleGradeValue = effectiveAmout.divide(durationM);
+            BigDecimal durationM = duration == null ? BigDecimal.ZERO : BigDecimal.valueOf(Double.valueOf(duration)/12);
+            if(durationM != null && BigDecimal.ZERO.compareTo(durationM) != 0) {
+                scaleGradeValue = effectiveAmout.divide(durationM, 2, BigDecimal.ROUND_HALF_UP);
             }
         }
 
         if(!CollectionUtils.isEmpty(analyseList)) {
             for (QqchScheAnalyse qqchScheAnalyse : analyseList) {
                 // 得分
-                BigDecimal score = qqchScheAnalyse.getScore();
+                BigDecimal score = qqchScheAnalyse.getScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getScore();
                 // s差异最大
-                BigDecimal diffMaxScore = qqchScheAnalyse.getDiffMaxScore();
+                BigDecimal diffMaxScore = qqchScheAnalyse.getDiffMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getDiffMaxScore();
                 // s差异最小
-                BigDecimal diffMinScore = qqchScheAnalyse.getDiffMinScore();
+                BigDecimal diffMinScore = qqchScheAnalyse.getDiffMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getDiffMinScore();
                 // 关键线路最大
-                BigDecimal lineMaxScore = qqchScheAnalyse.getLineMaxScore();
+                BigDecimal lineMaxScore = qqchScheAnalyse.getLineMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getLineMaxScore();
                 // 关键线路最小
-                BigDecimal lineMinScore = qqchScheAnalyse.getLineMinScore();
+                BigDecimal lineMinScore = qqchScheAnalyse.getLineMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getLineMinScore();
                 // 合同超期
                 String contFlag = qqchScheAnalyse.getContFlag();
                 // 重要性
                 String importance = qqchScheAnalyse.getImportance();
                 // 公路铁路最大
-                BigDecimal roadMaxScore = qqchScheAnalyse.getRoadMaxScore();
+                BigDecimal roadMaxScore = qqchScheAnalyse.getRoadMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getRoadMaxScore();
                 // 公路铁路最小
-                BigDecimal roadMinScore = qqchScheAnalyse.getRoadMinScore();
+                BigDecimal roadMinScore = qqchScheAnalyse.getRoadMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getRoadMinScore();
                 // 基建房建最大
-                BigDecimal buildMaxScore = qqchScheAnalyse.getBuildMaxScore();
+                BigDecimal buildMaxScore = qqchScheAnalyse.getBuildMaxScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getBuildMaxScore();
                 // 基建房建最小
-                BigDecimal buildMinScore = qqchScheAnalyse.getBuildMinScore();
+                BigDecimal buildMinScore = qqchScheAnalyse.getBuildMinScore() == null ? BigDecimal.ZERO : qqchScheAnalyse.getBuildMinScore();
 
                 if(diffGradeValue.compareTo(diffMaxScore) < 0 && diffGradeValue.compareTo(diffMinScore) >= 0){
                     jdglDiffAnalysis.setSDiffGrade(score);

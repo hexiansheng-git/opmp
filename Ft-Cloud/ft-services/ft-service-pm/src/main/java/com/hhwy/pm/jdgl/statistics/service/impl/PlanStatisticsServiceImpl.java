@@ -119,11 +119,11 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         // 根据结束日期获取日填报数据
         List<JdglDaySchedule> listByDateRange = iJdglDayScheduleService.getListByDateRange(null, endDate);
 
-        BigDecimal totalActAmt = new BigDecimal(0);
-        BigDecimal yearActAmt = new BigDecimal(0);
-        BigDecimal quarterActAmt = new BigDecimal(0);
-        BigDecimal monthActAmt = new BigDecimal(0);
-        BigDecimal weekActAmt = new BigDecimal(0);
+        BigDecimal totalActAmt = BigDecimal.ZERO;
+        BigDecimal yearActAmt = BigDecimal.ZERO;
+        BigDecimal quarterActAmt = BigDecimal.ZERO;
+        BigDecimal monthActAmt = BigDecimal.ZERO;
+        BigDecimal weekActAmt = BigDecimal.ZERO;
         if(!CollectionUtils.isEmpty(listByDateRange)) {
             for (JdglDaySchedule jdglDaySchedule : listByDateRange) {
                 BigDecimal dayValueDl = jdglDaySchedule.getDayValueDl();
@@ -133,12 +133,12 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 if(endDate.before(date)) {
                     continue;
                 }
-                totalActAmt = totalActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
+                totalActAmt = totalActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
                 int yearI = cl.get(Calendar.YEAR);
                 if(!year.equals(yearI + "")) {
                     continue;
                 }
-                yearActAmt = yearActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
+                yearActAmt = yearActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
                 int dateMonth = cl.get(Calendar.MONTH) + 1;
 
                 if(quarter == null) {
@@ -149,15 +149,15 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                 if(i*3 < dateMonth || i*3-2 > dateMonth) {
                     continue;
                 }
-                quarterActAmt = quarterActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
+                quarterActAmt = quarterActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
 
                 if(month == null || Integer.parseInt(month) != dateMonth){
                     continue;
                 }
-                monthActAmt = monthActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
+                monthActAmt = monthActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
 
                 if((startDate.before(date) || startDate.equals(date)) && (endDate.after(date)||endDate.equals(date))) {
-                    weekActAmt = weekActAmt.add(dayValueDl == null ? new BigDecimal(0) : dayValueDl);
+                    weekActAmt = weekActAmt.add(dayValueDl == null ? BigDecimal.ZERO : dayValueDl);
                 }
             }
         }
@@ -168,21 +168,10 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         XmslContractInfo xmslContractInfo = xmslContractInfoService.getXmslContractInfo(new XmslContractInfo());
         if(xmslContractInfo != null) {
             contractAmt = xmslContractInfo.getEffectiveAmout() == null ? BigDecimal.ZERO : xmslContractInfo.getEffectiveAmout();
-            // 获取财务管理-风险管理-汇率登记
-//            List<XmslContractPayinfo> xmslContractPayinfoList = xmslContractInfo.getXmslContractPayinfoList();
-//            BigDecimal exchange = BigDecimal.ZERO;
-//            if(!CollectionUtils.isEmpty(xmslContractPayinfoList)) {XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> "USD".equals(vo.getCurrencyCode())).findFirst().orElse(null);
-//                if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
-//                    exchange = new BigDecimal(xmslContractPayinfo.getObversionRate());
-//                }
-//            }
-//
-//            if(BigDecimal.ZERO.compareTo(exchange) != 0) contractAmt = xmslContractInfo.getEffectiveAmout().divide(exchange, 2, BigDecimal.ROUND_HALF_UP);
         }
 
-
         // 查询年计划产值
-        BigDecimal yearPlanAmt = new BigDecimal(0);
+        BigDecimal yearPlanAmt = BigDecimal.ZERO;
         JdglYearPlan jdglYearPlan1 = jdglYearPlanService.getUsingYearPlanByYear(year);
         if(jdglYearPlan1 != null){
             yearPlanAmt = jdglYearPlan1.getYearPlanValueDl();
@@ -197,30 +186,30 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         }
 
         // 查询季计划产值
-        BigDecimal quarterPlanAmt = new BigDecimal(0);
+        BigDecimal quarterPlanAmt = BigDecimal.ZERO;
         JdglQuarterPlan jdglQuarterPlan1 = jdglQuarterPlanService.getUsingQuarterPlanByYearAndQuarter(year,quarter);
         if(jdglQuarterPlan1 != null) {
             quarterPlanAmt = jdglQuarterPlan1.getThisPlanValueDl();
         }
 
         // 查询月计划产值
-        BigDecimal monthPlanAmt = new BigDecimal(0);
+        BigDecimal monthPlanAmt = BigDecimal.ZERO;
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year, month);
         if(usingMonthPlanByYearAndMonth != null) {
             monthPlanAmt = usingMonthPlanByYearAndMonth.getThisPlanValueDl();
         }
 
         // 查询周计划产值
-        BigDecimal weekPlanAmt = new BigDecimal(0);
+        BigDecimal weekPlanAmt = BigDecimal.ZERO;
         JdglWeekPlan usingWeekPlanByYearAndWeek = jdglWeekPlanService.getUsingWeekPlanByYearAndWeek(year, week);
         if(usingWeekPlanByYearAndWeek != null) {
             weekPlanAmt = usingWeekPlanByYearAndWeek.getThisPlanValueDl();
         }
 
         Map<String, BigDecimal> totalMap = new HashMap<>();
-        totalMap.put("planAmt", contractAmt == null ? new BigDecimal(0) : contractAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        totalMap.put("planAmt", contractAmt == null ? BigDecimal.ZERO : contractAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         totalMap.put("actAmt", totalActAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
-        if(contractAmt != null && BigDecimal.ZERO.compareTo(contractAmt) != 0 && totalActAmt != null) {
+        if(contractAmt != null && BigDecimal.ZERO.compareTo(contractAmt) != 0) {
             totalMap.put("ratio", totalActAmt.divide(contractAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
         } else {
             totalMap.put("ratio", BigDecimal.ZERO);
@@ -228,9 +217,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return2Map.put("total", totalMap);
 
         Map<String, BigDecimal> yearMap = new HashMap<>();
-        yearMap.put("planAmt", yearPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        yearMap.put("planAmt", yearPlanAmt == null ? BigDecimal.ZERO : yearPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         yearMap.put("actAmt", yearActAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
-        if(yearPlanAmt != null && BigDecimal.ZERO.compareTo(yearPlanAmt) != 0 && yearActAmt != null) {
+        if(yearPlanAmt != null && BigDecimal.ZERO.compareTo(yearPlanAmt) != 0) {
             yearMap.put("ratio", yearActAmt.divide(yearPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
         } else {
             yearMap.put("ratio", BigDecimal.ZERO);
@@ -238,9 +227,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return2Map.put("year", yearMap);
 
         Map<String, BigDecimal> quarterMap = new HashMap<>();
-        quarterMap.put("planAmt", quarterPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        quarterMap.put("planAmt", quarterPlanAmt == null ? BigDecimal.ZERO : quarterPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         quarterMap.put("actAmt", quarterActAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
-        if(quarterPlanAmt != null && BigDecimal.ZERO.compareTo(quarterPlanAmt) != 0 && quarterActAmt != null) {
+        if(quarterPlanAmt != null && BigDecimal.ZERO.compareTo(quarterPlanAmt) != 0) {
             quarterMap.put("ratio", quarterActAmt.divide(quarterPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
         } else {
             quarterMap.put("ratio", BigDecimal.ZERO);
@@ -248,9 +237,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return2Map.put("quarter", quarterMap);
 
         Map<String, BigDecimal> monthMap = new HashMap<>();
-        monthMap.put("planAmt", monthPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        monthMap.put("planAmt", monthPlanAmt == null ? BigDecimal.ZERO : monthPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         monthMap.put("actAmt", monthActAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
-        if(monthPlanAmt != null && BigDecimal.ZERO.compareTo(monthPlanAmt) != 0 && monthActAmt != null) {
+        if(monthPlanAmt != null && BigDecimal.ZERO.compareTo(monthPlanAmt) != 0) {
             monthMap.put("ratio", monthActAmt.divide(monthPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
         } else {
             monthMap.put("ratio", BigDecimal.ZERO);
@@ -258,9 +247,9 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
         return2Map.put("month", monthMap);
 
         Map<String, BigDecimal> weekMap = new HashMap<>();
-        weekMap.put("planAmt", weekPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
+        weekMap.put("planAmt", weekPlanAmt == null ? BigDecimal.ZERO : weekPlanAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
         weekMap.put("actAmt", weekActAmt.divide(new BigDecimal(10000), 2, BigDecimal.ROUND_HALF_UP));
-        if(weekPlanAmt != null && BigDecimal.ZERO.compareTo(weekPlanAmt) != 0 && weekActAmt != null) {
+        if(weekPlanAmt != null && BigDecimal.ZERO.compareTo(weekPlanAmt) != 0) {
             weekMap.put("ratio", weekActAmt.divide(weekPlanAmt, 4, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(100)));
         } else {
             weekMap.put("ratio", BigDecimal.ZERO);
@@ -494,8 +483,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         planStatisticsBillValueVO.setRemainDesignNum(xmslContractList.getChangeNum().subtract(planStatisticsBillValueVO.getLastTotalDesignNum()));
                     }
                     if(billCode.equals(listCode)) {
-                        BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getThisCompDesignNum();
-                        BigDecimal lastTotalDesignNum = planStatisticsBillValueVO.getLastTotalDesignNum() == null ? new BigDecimal(0) : planStatisticsBillValueVO.getLastTotalDesignNum();
+                        BigDecimal thisCompDesignNum = planStatisticsBillValueVO.getThisCompDesignNum() == null ? BigDecimal.ZERO : planStatisticsBillValueVO.getThisCompDesignNum();
+                        BigDecimal lastTotalDesignNum = planStatisticsBillValueVO.getLastTotalDesignNum() == null ? BigDecimal.ZERO : planStatisticsBillValueVO.getLastTotalDesignNum();
                         thisCompDesignNum = thisCompDesignNum.add(jdglDayScheduleBill.getThisQuantity());
                         planStatisticsBillValueVO.setThisCompDesignNum(thisCompDesignNum);
                         BigDecimal thisCompValue = price.multiply(thisCompDesignNum);
@@ -716,7 +705,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         List<JdglQuarterPlan> collect = jdglQuarterPlanList.stream().filter(vo -> period.equals(vo.getQuarter()) && year.equals(vo.getYear())).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglQuarterPlan jdglQuarterPlan1 : collect) {
-                                if(planStatisticsPeriodValueVO.getPlanValue() == null) planStatisticsPeriodValueVO.setPlanValue(new BigDecimal(0));
+                                if(planStatisticsPeriodValueVO.getPlanValue() == null) planStatisticsPeriodValueVO.setPlanValue(BigDecimal.ZERO);
                                 if(jdglQuarterPlan1.getThisPlanValueDl() != null) {
                                     planStatisticsPeriodValueVO.setPlanValue(planStatisticsPeriodValueVO.getPlanValue().add(jdglQuarterPlan1.getThisPlanValueDl()));
                                 }
@@ -733,7 +722,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         ).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglDaySchedule jdglDaySchedule : collect) {
-                                if (planStatisticsPeriodValueVO.getCompValue() == null) planStatisticsPeriodValueVO.setCompValue(new BigDecimal(0));
+                                if (planStatisticsPeriodValueVO.getCompValue() == null) planStatisticsPeriodValueVO.setCompValue(BigDecimal.ZERO);
                                 if(jdglDaySchedule.getDayValueDl() != null) {
                                     planStatisticsPeriodValueVO.setCompValue(planStatisticsPeriodValueVO.getCompValue().add(jdglDaySchedule.getDayValueDl()));
                                 }
@@ -742,8 +731,8 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         }
                     }
 
-                    planValueListQ.add(planStatisticsPeriodValueVO.getPlanValue() == null ? new BigDecimal(0) : planStatisticsPeriodValueVO.getPlanValue());
-                    compValueListQ.add(planStatisticsPeriodValueVO.getCompValue() == null ? new BigDecimal(0) : planStatisticsPeriodValueVO.getCompValue());
+                    planValueListQ.add(planStatisticsPeriodValueVO.getPlanValue() == null ? BigDecimal.ZERO : planStatisticsPeriodValueVO.getPlanValue());
+                    compValueListQ.add(planStatisticsPeriodValueVO.getCompValue() == null ? BigDecimal.ZERO : planStatisticsPeriodValueVO.getCompValue());
 //                    quarterList.add(planStatisticsPeriodValueVO);
                 }
                 planStatisticsPeriodValueVOQuarter.setPeriodList(periodListQ);
@@ -770,7 +759,7 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                             planStatisticsPeriodValueVO.setPeriod(jdglYearPlan.getYear());
                             periodListY.add(jdglYearPlan.getYear());
                             planStatisticsPeriodValueVO.setPlanValue(jdglYearPlan.getYearPlanValueDl());
-                            planValueListY.add(jdglYearPlan.getYearPlanValueDl() == null ? new BigDecimal(0) : jdglYearPlan.getYearPlanValueDl());
+                            planValueListY.add(jdglYearPlan.getYearPlanValueDl() == null ? BigDecimal.ZERO : jdglYearPlan.getYearPlanValueDl());
                             yearList.add(planStatisticsPeriodValueVO);
                         }
                     }
@@ -792,14 +781,14 @@ public class PlanStatisticsServiceImpl implements IPlanStatisticsService {
                         ).collect(Collectors.toList());
                         if(!CollectionUtils.isEmpty(collect)) {
                             for (JdglDaySchedule jdglDaySchedule : collect) {
-                                if(planStatisticsPeriodValueVO.getCompValue() == null)planStatisticsPeriodValueVO.setCompValue(new BigDecimal(0));
+                                if(planStatisticsPeriodValueVO.getCompValue() == null)planStatisticsPeriodValueVO.setCompValue(BigDecimal.ZERO);
                                 if(jdglDaySchedule.getDayValueDl() != null) {
                                     planStatisticsPeriodValueVO.setCompValue(planStatisticsPeriodValueVO.getCompValue().add(jdglDaySchedule.getDayValueDl()));
                                 }
                             }
                         }
                     }
-                    compValueListY.add(planStatisticsPeriodValueVO.getCompValue() == null ? new BigDecimal(0) : planStatisticsPeriodValueVO.getCompValue());
+                    compValueListY.add(planStatisticsPeriodValueVO.getCompValue() == null ? BigDecimal.ZERO : planStatisticsPeriodValueVO.getCompValue());
                 }
 
                 planStatisticsPeriodValueVOYear.setPeriodList(periodListY);
