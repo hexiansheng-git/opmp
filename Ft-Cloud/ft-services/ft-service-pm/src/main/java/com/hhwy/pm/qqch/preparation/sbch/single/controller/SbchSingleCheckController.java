@@ -169,7 +169,7 @@ public class SbchSingleCheckController extends BaseController {
 
     @PostMapping("batchAdd")
     @ResponseBody
-    public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody SbchSingleCheck sbchSingleCheck){
+    public AjaxResult batchAdd(@RequestBody SbchSingleCheck sbchSingleCheck){
         try{
             sbchSingleCheckService.batchSave(sbchSingleCheck);
             return AjaxResult.success();
