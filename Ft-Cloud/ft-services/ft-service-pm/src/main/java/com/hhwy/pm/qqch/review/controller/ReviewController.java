@@ -8,10 +8,12 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
 import com.hhwy.utils.validation.ValidationGroups;
+import io.seata.common.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author mls
@@ -37,6 +40,8 @@ public class ReviewController extends BaseController {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
 
 
     public static void main(String[] args) {
@@ -56,6 +61,7 @@ public class ReviewController extends BaseController {
         startPage();
         List<Review> reviewList = qqchReviewService.getQqchReviewList(reviewParam);
         handlerReviewList(reviewList);
+        setIsCanApprove(reviewList);
         return getDataTableAjaxResult(reviewList);
     }
 
@@ -63,7 +69,7 @@ public class ReviewController extends BaseController {
      *  处理前期策划流程状态等字段
      * @return
      */
-    public List<Review> handlerReviewList(List<Review> list){
+    private List<Review> handlerReviewList(List<Review> list){
         //根据阶段不同，会走不同的流程
         List<Review> review1List = new ArrayList<>();   //1,2阶段流程
         List<Review> review3List = new ArrayList<>();   //3阶段流程
@@ -83,25 +89,64 @@ public class ReviewController extends BaseController {
             review.setFinishRatio(ObjectUtils.nvlBigDecimal(ratio).multiply(new BigDecimal(100)));
             //处理状态字段 0-未发起; 1审核中; 4-流程已结束,业务未结束; 5-流程和业务都已结束'
             String taskStatusDesc = "";
+            String reviewStatus = "";
             if(review.getTaskStatus().equals("0")){
                 if(review.getFinishNum() <= 0){
-                    taskStatusDesc ="未编制"; 
+                    taskStatusDesc ="未编制";
+                    reviewStatus = "0";
                 }else if(review.getFinishNum() >= review.getPlanNum()){
                     taskStatusDesc ="编制完成";
+                    reviewStatus = "2";
                 }else{
                     taskStatusDesc ="正在编制";
+                    reviewStatus = "1";
                 }                         
             }else if(review.getTaskStatus().equals("4")){ //审批结束
                 taskStatusDesc ="审批完成";
+                reviewStatus = "4";
             }else{
                 taskStatusDesc ="正在审批";
+                reviewStatus = "3";
             }
             review.setTaskStatusDesc(taskStatusDesc);
+            review.setReviewStatus(reviewStatus);
         }
         return list;
     }
 
-//    @PreAuthorize(hasPermi = "qqchReview:add")
+    /**
+     * 设置评审阶段数据是否可以发起审批
+     * @param qqchReviewList
+     */
+    private void setIsCanApprove(List<Review> qqchReviewList){
+        if(CollectionUtils.isEmpty(qqchReviewList)){
+            return;
+        }
+        Map<String, Review> reviewMap = qqchReviewList.stream().collect(Collectors.toMap(Review::getPlanStage, o -> o));
+
+        Review review1 = reviewMap.get("1");
+        if (isCanApprove(review1)) return;
+
+        Review review2 = reviewMap.get("2");
+        if (isCanApprove(review2)) return;
+
+        Review review3 = reviewMap.get("3");
+        isCanApprove(review3);
+    }
+
+    private boolean isCanApprove(Review review) {
+        if(review == null){
+            return true;
+        }
+        String reviewStatus = review.getReviewStatus();
+        if("2".equals(reviewStatus)){
+            review.setIsCanApprove("1");
+            return true;
+        }
+        return !"4".equals(reviewStatus);
+    }
+
+    //    @PreAuthorize(hasPermi = "qqchReview:add")
     @PostMapping("/add")
     public AjaxResult insertQqchReview(@Validated(ValidationGroups.Save.class) @RequestBody Map<String, Object> params) {
         qqchReviewService.savePlan(Long.valueOf(params.get("id") + ""));
@@ -220,4 +265,5 @@ public class ReviewController extends BaseController {
         qqchReviewService.reviewWarn();
         return AjaxResult.success();
     }
+
 }

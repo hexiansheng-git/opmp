@@ -334,12 +334,11 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
         ArrayList<String> res = new ArrayList<>();
 
-        // TODO 目前掉不通 先注释
         try {
             JdglMainPlanItem item = jdglMainPlanItemService.getProjStartAndFinish();
             if(item == null || item.getStartDate()==null || item.getFinishDate() ==null)
                 return new ArrayList<>();
-            List<Date> dateList = FtDateUtils.getDateList(item.getStartDate(), item.getFinishDate());
+            List<Date> dateList = FtDateUtils.getYearList(item.getStartDate(), item.getFinishDate());
 
             // 获取p6的计划开始时间和结束时间
             res = new ArrayList<>();
@@ -348,7 +347,7 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            log.info("10.3.2,ERROR:获取项目开始、结束日期异常");
+            log.info("10.3,ERROR:获取项目开始、结束日期异常");
             res.add("2023");
             res.add("2024");
             res.add("2025");

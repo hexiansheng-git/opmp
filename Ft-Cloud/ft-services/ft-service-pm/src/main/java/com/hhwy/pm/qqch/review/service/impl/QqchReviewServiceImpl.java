@@ -31,6 +31,7 @@ import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.system.api.domain.SysTenant;
 import com.hhwy.utils.EntityUtils;
+import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.common.CommonAssert;
 import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.dict.DictUtil;
@@ -46,8 +47,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -113,10 +115,6 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
             }
         }
         return qqchReviewList;
-    }
-
-    public void setIsCanApprove(List<Review> qqchReviewList){
-        Map<String, Review> reviewMap = qqchReviewList.stream().collect(Collectors.toMap(Review::getPlanStage, o -> o));
     }
 
     @Transactional(rollbackFor = Exception.class)
@@ -328,6 +326,10 @@ public class QqchReviewServiceImpl implements IQqchReviewService {
         }else if("3".equals(stage)){
             FlowInfoSearchUtil.getFlowInfo(review,FlowEnum.QQCH_REVIEW2);
         }
+        //获取合同有效合同金额
+        XmslContractInfo xmslContractInfo = xmslContractInfoService.getValidMaxVersionContractInfo();
+        BigDecimal effectiveAmoutDollar = ObjectUtils.nvlBigDecimal(xmslContractInfo.getEffectiveAmoutDollar()).divide (new BigDecimal("10000"), 4,RoundingMode.HALF_UP);
+        review.setEffectiveAmoutDollar(ObjectUtils.nvlBigDecimal(effectiveAmoutDollar));
         return review;
     }
 

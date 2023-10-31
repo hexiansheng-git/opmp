@@ -105,7 +105,9 @@ public class EhrServiceImpl implements IEhrService {
             if(o == null){
                 Map<String, Object> certList = this.getCertList(userName4A);
                 Object personCertifyCompetency = certList.get("personCertifyCompetency");
-                personCertifyCompetencyList = this.getPersonCertifyCompetencyList(personCertifyCompetency);
+                if(personCertifyCompetency != null) {
+                    personCertifyCompetencyList = this.getPersonCertifyCompetencyList(personCertifyCompetency);
+                }
                 redisUtils.hPut(KEY,userName4A, JSONArray.toJSONString(personCertifyCompetencyList));
             }else {
                 Object[] personCertifyCompetencyArr = JSONArray.parseArray(o.toString()).toArray();

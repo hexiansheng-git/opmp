@@ -137,6 +137,10 @@ public class Review extends CommonBaseEntity {
     @FtExcel(name = "流程状态")
     private String taskStatus;
     /**
+     * 字段描述：是否可以发起审批   1: 可发起   0： 不可发起
+     */
+    private String isCanApprove = "0";
+    /**
      * 字段描述：附件组id
      */
     @JsonProperty
@@ -237,4 +241,7 @@ public class Review extends CommonBaseEntity {
     
     //当前状态
     private String taskStatusDesc;
+
+    //当前合同有效金额（万美元）
+    private BigDecimal effectiveAmoutDollar;
 }
