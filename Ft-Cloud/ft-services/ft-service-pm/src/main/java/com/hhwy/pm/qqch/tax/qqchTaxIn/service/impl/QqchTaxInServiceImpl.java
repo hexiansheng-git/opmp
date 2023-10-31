@@ -6,7 +6,9 @@ import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain.JdglMainPlanItem;
 import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglData4P6Service;
+import com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.service.IJdglMainPlanItemService;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
@@ -22,7 +24,9 @@ import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractPayinfoService;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
 import com.hhwy.utils.EntityUtils;
 import com.hhwy.utils.common.CommonAssert;
+import com.hhwy.utils.date.FtDateUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,10 +34,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -41,6 +42,7 @@ import java.util.stream.Collectors;
  * @date 2023-08-09 18:17:32
  * @remark
  */
+@Log
 @Service
 public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
@@ -62,6 +64,8 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
 
     @Resource
     private IQqchTaxStageService qqchTaxStageService;
+    @Resource
+    private IJdglMainPlanItemService jdglMainPlanItemService;
 
     public QqchTaxIn getQqchTaxIn(QqchTaxIn qqchTaxIn) {
         return qqchTaxInMapper.getQqchTaxIn(qqchTaxIn);
@@ -331,33 +335,24 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         ArrayList<String> res = new ArrayList<>();
 
         // TODO 目前掉不通 先注释
-//        try {
-//            ProjectBasicInfo projectBasicInfo = projectBasicInfoService.projectInfo();
-//
-//            ProjectInfo projectInfo = jdglData4P6Service.getProjectInfo(projectBasicInfo.getProjectCode());
-//
-//            // 开始时间 
-//            Date startDate = projectInfo.getStartDate();
-//            //结束时间
-//            Date finishDate = projectInfo.getFinishDate();
-//
-//            List<Date> dateList = FtDateUtils.getDateList(startDate, finishDate);
-//
-//            // 获取p6的计划开始时间和结束时间
-//            res = new ArrayList<>();
-//            for (Date date : dateList) {
-//                res.add(FtDateUtils.getYear(date) + "");
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            res.add("2023");
-//            res.add("2024");
-//            res.add("2025");
-//        }
+        try {
+            JdglMainPlanItem item = jdglMainPlanItemService.getProjStartAndFinish();
+            if(item == null || item.getStartDate()==null || item.getFinishDate() ==null)
+                return new ArrayList<>();
+            List<Date> dateList = FtDateUtils.getDateList(item.getStartDate(), item.getFinishDate());
 
-        res.add("2023");
-        res.add("2024");
-        res.add("2025");
+            // 获取p6的计划开始时间和结束时间
+            res = new ArrayList<>();
+            for (Date date : dateList) {
+                res.add(FtDateUtils.getYear(date) + "");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.info("10.3.2,ERROR:获取项目开始、结束日期异常");
+            res.add("2023");
+            res.add("2024");
+            res.add("2025");
+        }
         return res;
     }
 
