@@ -468,8 +468,8 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //            jdglDayScheduleWbs.setId(IdWorker.createId());
             jdglDayScheduleWbs.setCreateUser(SecurityUtils.getUserName());
             jdglDayScheduleWbs.setCreateTime(DateUtils.getNowDate());
-            jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
-            jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserId()+"");
+//            jdglDayScheduleWbs.setEditer(SecurityUtils.getSysUser().getNickName());
+//            jdglDayScheduleWbs.setEditerId(SecurityUtils.getUserId()+"");
             jdglDayScheduleWbs.setEditerDate(DateUtils.getNowDate());
         }
 
