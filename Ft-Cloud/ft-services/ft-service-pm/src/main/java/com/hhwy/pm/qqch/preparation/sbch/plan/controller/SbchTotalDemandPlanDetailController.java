@@ -3,6 +3,7 @@ package com.hhwy.pm.qqch.preparation.sbch.plan.controller;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
@@ -14,6 +15,7 @@ import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetailExportVo;
 import com.hhwy.pm.qqch.preparation.sbch.plan.service.ISbchTotalDemandPlanDetailService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.vo.ImportSbchTotalDemandPlanDetail;
+import com.hhwy.pm.qqch.wzch.enums.YesOrNoEnum;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.dict.DictUtil;
 import com.hhwy.utils.excel.ExportUtil;
@@ -75,42 +77,30 @@ public class SbchTotalDemandPlanDetailController extends BaseController {
         try {
             ExcelUtils<ImportSbchTotalDemandPlanDetail> util = new ExcelUtils(ImportSbchTotalDemandPlanDetail.class);
             List<ImportSbchTotalDemandPlanDetail> list = util.importExcel(file.getInputStream());
-            Map<String, String> isSpecialMap = DictUtil.getDictData("is_special");
-            //根据设备编号查询设备分类
-
-            if (!ObjectNullUtil.isEmpty(list)) {
-                for (ImportSbchTotalDemandPlanDetail detail : list) {
-                    String materialCode = detail.getMaterialCode();
-                    detail.setIsSpecial(isSpecialMap.get(detail.getIsSpecial()));
-                    Object materialInfo = redisUtils.hGet("materialInfoRedis", materialCode);
-                    if (materialInfo != null) {
-                        Map<String, Object> materialMap = JSON.parseObject(materialInfo.toString(), Map.class);
-                        detail.setMaterialName(ObjectUtils.toString(materialMap.get("materialName")));
-                        detail.setMaterialSpec(ObjectUtils.toString(materialMap.get("materialSpec")));
-                        detail.setMaterialUnit(ObjectUtils.toString(materialMap.get("unit")));
-                        detail.setMaterialType(ObjectUtils.toString(materialMap.get("categoryCode")));
-
-                        //从categoryInfoRedis取出来分类名称
-                        Object categoryInfo = redisUtils.hGet("categoryInfoRedis", ObjectUtils.toString(materialMap.get("categoryCode")));
-                        Map<String, Object> categoryMap = JSON.parseObject(categoryInfo.toString(), Map.class);
-                        detail.setPtVar1(ObjectUtils.toString(categoryMap.get("categoryName")));
-                    }
-                }
-//                List<String> collect = list.stream().map(t -> t.getMaterialType()).collect(Collectors.toList());
-//                materialCategory.setCategoryCodes(collect);
+            //根据设备编号查询设备分类s
+            if (ObjectNullUtil.isEmpty(list)) {
+                return AjaxResult.success();
             }
-//            List<MaterialCategory> materialCategories = materialCategoryService.selectMaterialCategoryList(materialCategory);
-//            Map<String, String> categoryMap = materialCategories.stream().collect(Collectors.groupingBy(t -> t.getCategoryCode(), Collectors.collectingAndThen(Collectors.toList(), v -> v.get(0).getCategoryName())));
-//            StringBuffer str = new StringBuffer("");
-//            for (ImportSbchTotalDemandPlanDetail detail : list) {
-//                detail.setPtVar1(categoryMap.get(detail.getMaterialType()));
-//                if(ObjectNullUtil.isEmpty(categoryMap.get(detail.getMaterialType())) || ObjectNullUtil.isEmpty(materialCategories)){//找不到设备分类名称的设备
-//                    str=str.append(detail.getMaterialType()+",");
-//                }
-//            }
-//            if(!"".equals(str.toString())){
-//                return AjaxResult.error(str+"设备分类编码不存在");
-//            }
+            for (ImportSbchTotalDemandPlanDetail detail : list) {
+                String materialCode = detail.getMaterialCode();
+                Object materialInfo = redisUtils.hGet("materialInfoRedis", materialCode);
+                String isSpecial = detail.getIsSpecial();
+                if (StrUtil.isNotBlank(isSpecial)){
+                    detail.setIsSpecial(isSpecial.equals(YesOrNoEnum.YES.getDesc())?YesOrNoEnum.YES.getValue():YesOrNoEnum.NO.getValue());
+                }
+                if (materialInfo != null) {
+                    Map<String, Object> materialMap = JSON.parseObject(materialInfo.toString(), Map.class);
+                    detail.setMaterialName(ObjectUtils.toString(materialMap.get("materialName")));
+                    detail.setMaterialSpec(ObjectUtils.toString(materialMap.get("materialSpec")));
+                    detail.setMaterialUnit(ObjectUtils.toString(materialMap.get("unit")));
+                    detail.setMaterialType(ObjectUtils.toString(materialMap.get("categoryCode")));
+
+                    //从categoryInfoRedis取出来分类名称
+                    Object categoryInfo = redisUtils.hGet("categoryInfoRedis", ObjectUtils.toString(materialMap.get("categoryCode")));
+                    Map<String, Object> categoryMap = JSON.parseObject(categoryInfo.toString(), Map.class);
+                    detail.setPtVar1(ObjectUtils.toString(categoryMap.get("categoryName")));
+                }
+            }
             return AjaxResult.success(list);
         } catch (Exception e) {
             e.printStackTrace();

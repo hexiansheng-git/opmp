@@ -22,7 +22,7 @@ public interface QqchMilestoneMapper {
 
     int updateQqchMilestone(QqchMilestone qqchMilestone);
 
-    int updateQqchMilestoneList(@Param("qqchMilestoneList") List<QqchMilestone> qqchMilestoneList);
+    int updateQqchMilestoneList(@Param("list") List<QqchMilestone> qqchMilestoneList);
 
     int deleteQqchMilestone(QqchMilestone qqchMilestone);
 
