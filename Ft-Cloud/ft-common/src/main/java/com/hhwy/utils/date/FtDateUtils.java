@@ -173,6 +173,25 @@ public class FtDateUtils extends DateUtils {
         return resDates;
     }
 
+    public static List<Date> getYearList(Date startDate, Date endDate) {
+        List<Date> resDates = new ArrayList<>();
+        Calendar start = Calendar.getInstance();
+        start.setTime(startDate);
+        Calendar end = Calendar.getInstance();
+        end.setTime(endDate);
+        //起始 > 结束
+        int startYear = start.get(Calendar.YEAR);
+        int endYear = end.get(Calendar.YEAR);
+        for (int i = startYear; i <= endYear; i++) {
+            try{
+                resDates.add(DateUtils.parseDate(i+"","yyyy"));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return resDates;
+    }
+
     public static Date getFirstDay(Date date) {
         Calendar c = Calendar.getInstance();
         c.setTime(date);

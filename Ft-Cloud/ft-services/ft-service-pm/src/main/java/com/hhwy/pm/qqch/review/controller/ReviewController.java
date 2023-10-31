@@ -8,6 +8,8 @@ import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.common.FlowInfoSearchUtil;
 import com.hhwy.pm.qqch.review.domain.Review;
 import com.hhwy.pm.qqch.review.service.IQqchReviewService;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
+import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractListService;
 import com.hhwy.utils.JsonUtils;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.bigDecimalUtils.BigDecimalUtils;
@@ -37,6 +39,8 @@ public class ReviewController extends BaseController {
 
     @Autowired
     private IQqchReviewService qqchReviewService;
+    @Autowired
+    private IXmslContractInfoService contractInfoService;
 
 
     public static void main(String[] args) {
@@ -220,4 +224,5 @@ public class ReviewController extends BaseController {
         qqchReviewService.reviewWarn();
         return AjaxResult.success();
     }
+
 }
