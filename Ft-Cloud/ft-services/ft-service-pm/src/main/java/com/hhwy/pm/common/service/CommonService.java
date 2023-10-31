@@ -150,12 +150,12 @@ public class CommonService {
         // 根据阶段 编制人 页面唯一标识查询有没有编辑权限
         List<QqchWorkPlanDetail> qqchWorkPlanDetailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(planDetail);
         // 如果没有查询到数据
-        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)){
-            permissionMark.setMsg("当前用户在当前阶段没有当前页面的编辑权限!");
-            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
-            permissionMark.setEditable(CommonYesNo.NO);
-            return permissionMark;
-        }
+//        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)){
+//            permissionMark.setMsg("当前用户在当前阶段没有当前页面的编辑权限!");
+//            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
+//            permissionMark.setEditable(CommonYesNo.NO);
+//            return permissionMark;
+//        }
 
         // 获取当前菜单 当前阶段 当前登录人有没有确认过
         List<QqchModuleConfirmCase> confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, null);

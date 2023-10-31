@@ -810,12 +810,12 @@ public class WzchSourceDetailServiceImpl implements IWzchSourceDetailService {
             list.add(detail.getUnit());
             list.add(detail.getTotalDemandAmount());
             list.add(detail.getSelfDemandAmount());
-            if(CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())){
-                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
-                        .findFirst().ifPresent(val ->  list.add(val.getDictLabel()));
-            }else{
+//            if(CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())){
+//                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
+//                        .findFirst().ifPresent(val ->  list.add(val.getDictLabel()));
+//            }else{
                 list.add(detail.getCategoryName());
-            }
+//            }
 
             List<WzchSourceApproachYearCount> yearCountList = detail.getWzchSourceApproachYearCountList();
 

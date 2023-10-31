@@ -1305,6 +1305,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         List<List<Object>> data = new ArrayList<>();
         List<SysDictData> tSysDictDataList = systemApiService.selectDictDataByType("total_demand_category_name");
         List<SysDictData> mSysDictDataList = systemApiService.selectDictDataByType("material_standard");
+        List<SysDictData> wSysDictDataList = systemApiService.selectDictDataByType("warn_flag");
         for (WzchTotalDemandDetail detail : wzchTotalDemandDetails) {
             List<Object> list = new ArrayList<>();
             list.add(detail.getMaterialCode());
@@ -1325,14 +1326,15 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             list.add(detail.getTotalDemandAmount());
             list.add(detail.getSelfDemandAmount());
             list.add(detail.getNonSelfAmount());
-            if (CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())) {
-                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
-                        .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
-            } else {
+//            if (CollectionUtils.isNotEmpty(tSysDictDataList) && StringUtils.isNotBlank(detail.getCategoryName())) {
+//                tSysDictDataList.stream().filter(i -> StringUtils.isNotEmpty(i.getDictValue()) && i.getDictValue().equals(detail.getCategoryName()))
+//                        .findFirst().ifPresent(val -> list.add(val.getDictLabel()));
+//            } else {
+                //格式化类型
                 list.add(detail.getCategoryName());
-            }
+//            }
 
-            if ("0".equals(leaderFlag)) {
+            if (!"1".equals(leaderFlag)) {
                 list.add(YesOrNoEnum.parseDesc(detail.getFirstEnterFlag()));
             }
             List<WzchTotalDemandTimeCount> wzchTotalDemandTimeCountList = detail.getWzchTotalDemandTimeCountList();
