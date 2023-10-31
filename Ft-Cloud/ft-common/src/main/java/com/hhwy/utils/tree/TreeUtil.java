@@ -276,7 +276,7 @@ public class TreeUtil {
         if (!CollectionUtils.isEmpty(children)) {
             for (T child : children) {
                 child.setSort(sort++);
-                split(child, resultList);
+                splitWithoutId(child, resultList);
             }
         }
     }
