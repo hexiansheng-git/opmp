@@ -151,8 +151,7 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
     @Override
     public WzchSpecialProjectDTO baseInfo(WzchSpecialProjectDTO vo) {
         BigDecimal version = VersionUtil.getVersion("wzch_special_project", vo.getVersion());
-        vo.setVersion(version);
-        vo.setStageIdentity(qqchReviewService.getStage());
+//        vo.setStageIdentity(qqchReviewService.getStage());
 
         List<WzchSpecialProject> list =this.wzchSpecialProjectMapper.selectWzchSpecialProjectList(new WzchSpecialProject(version));
         if(CollectionUtils.isEmpty(list)){
@@ -160,6 +159,7 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
             return vo;
         }
         BeanUtils.copyProperties(list.get(0), vo);
+        vo.setVersion(version);
         vo.setStageIdentity(qqchReviewService.getStage());
         WzchSpecialProjectDetail detail = new WzchSpecialProjectDetail();
         detail.setSpecialProjectId(vo.getId());
@@ -220,8 +220,8 @@ public class WzchSpecialProjectServiceImpl implements IWzchSpecialProjectService
         // 新增条数不为 1, 失败
         if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");
         // 新增详情
-        this.detailService.insertOrUpdateBatch(detailList, specialProjectId);
-
+        if(CollectionUtils.isNotEmpty(detailList))
+            this.detailService.insertOrUpdateBatch(detailList, specialProjectId);
         return specialProjectId;
     }
 

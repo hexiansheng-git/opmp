@@ -228,7 +228,7 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
 
             });
             wzchPurchaseSupplyDetailDTO.setSourceMap(sourceMapList);
-            wzchPurchaseSupplyDetailDTO.setSource(source.toString());
+//            wzchPurchaseSupplyDetailDTO.setSource(source.toString());
             wzchPurchaseSupplyDetailDTO.setSourceName("-");
         }
 
