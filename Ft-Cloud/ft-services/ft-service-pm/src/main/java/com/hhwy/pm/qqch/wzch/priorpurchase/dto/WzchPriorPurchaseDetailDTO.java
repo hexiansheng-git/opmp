@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.wzch.priorpurchase.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.hhwy.common.core.annotation.Excel;
 import com.hhwy.pm.qqch.wzch.priorpurchase.domain.WzchPriorPurchaseDetail;
 import lombok.Data;
@@ -86,6 +87,7 @@ public class WzchPriorPurchaseDetailDTO extends WzchPriorPurchaseDetail {
     /**
      * 最早需用日期
      */
+    @JsonFormat( pattern = "yyyy-MM-dd",timezone = "GMT+8")
     @Excel(name = "最早需用日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date earliestReqTime;
 

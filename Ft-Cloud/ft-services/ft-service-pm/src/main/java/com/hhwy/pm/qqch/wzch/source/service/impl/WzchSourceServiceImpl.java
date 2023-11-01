@@ -446,6 +446,12 @@ public class WzchSourceServiceImpl implements IWzchSourceService {
         for(WzchSourceDetail wzchSourceDetail:wzchSourceDetails){
             for(Map.Entry<Long, List<WzchSourceApproachYearCount>> map : collect.entrySet()){
                 if(wzchSourceDetail.getId().equals(map.getKey())){
+                    //按照年份排序
+                    map.getValue().sort((r,r1)->{
+                        Integer y1 = Integer.parseInt(r.getYear());
+                        Integer y2 = Integer.parseInt(r1.getYear());
+                        return y1==y2?0:(y1>y2?1:-1);
+                    });
                     wzchSourceDetail.setWzchSourceApproachYearCountList(map.getValue());
                 }
             }

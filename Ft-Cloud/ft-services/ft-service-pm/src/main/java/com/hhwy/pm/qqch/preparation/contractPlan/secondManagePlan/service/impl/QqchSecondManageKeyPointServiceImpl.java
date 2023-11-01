@@ -244,7 +244,9 @@ public class QqchSecondManageKeyPointServiceImpl implements IQqchSecondManageKey
             SecondManageKeyPointPlan secondManageKeyPointPlan = new SecondManageKeyPointPlan();
             secondManageKeyPointPlan.setId(secondManageKeyPoint.getId());
             secondManageKeyPointPlan.setPid(secondManageKeyPoint.getPid());
-            secondManageKeyPointPlan.setClauseCode(secondManageKeyPoint.getSpecialContractClause() + secondManageKeyPoint.getGeneralContractClause());
+            secondManageKeyPointPlan.setClauseCode(
+                    (secondManageKeyPoint.getSpecialContractClause()==null?"":secondManageKeyPoint.getSpecialContractClause()) +
+                    (secondManageKeyPoint.getGeneralContractClause()==null?"":secondManageKeyPoint.getGeneralContractClause()));
             secondManageKeyPointPlan.setOptimizedDirection(secondManageKeyPoint.getOptimizedDirection());
             secondManageKeyPointPlan.setContentDescription(secondManageKeyPoint.getContentDescription());
             secondManageKeyPointPlan.setContractBasis(secondManageKeyPoint.getRelatedContractClause());

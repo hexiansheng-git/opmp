@@ -3,7 +3,7 @@ package com.hhwy.pm.common.service;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.common.constant.ButtonStatus;
-import com.hhwy.pm.common.constant.PermissionMark;
+import com.hhwy.pm.common.domain.PermissionMark;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
@@ -95,8 +95,12 @@ public class CommonService {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
 
+        if(SecurityUtils.getSysUser().isAdmin()){
+            return permissionMark;
+        }
+
         if(POP_WINDOWS.equals(menuId)){
-            permissionMark.setButtonStatus("2");
+            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             return permissionMark;
         }
 
@@ -150,12 +154,12 @@ public class CommonService {
         // 根据阶段 编制人 页面唯一标识查询有没有编辑权限
         List<QqchWorkPlanDetail> qqchWorkPlanDetailList = qqchWorkPlanDetailService.getQqchWorkPlanDetailList(planDetail);
         // 如果没有查询到数据
-        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)){
-            permissionMark.setMsg("当前用户在当前阶段没有当前页面的编辑权限!");
-            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
-            permissionMark.setEditable(CommonYesNo.NO);
-            return permissionMark;
-        }
+//        if (CollectionUtils.isEmpty(qqchWorkPlanDetailList)){
+//            permissionMark.setMsg("当前用户在当前阶段没有当前页面的编辑权限!");
+//            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
+//            permissionMark.setEditable(CommonYesNo.NO);
+//            return permissionMark;
+//        }
 
         // 获取当前菜单 当前阶段 当前登录人有没有确认过
         List<QqchModuleConfirmCase> confirmStatus = qqchModuleConfirmCaseService.getConfirmStatus(menuId, currentStage, null);
