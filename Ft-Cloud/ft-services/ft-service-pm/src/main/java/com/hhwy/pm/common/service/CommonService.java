@@ -95,12 +95,12 @@ public class CommonService {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
 
-        if(SecurityUtils.getSysUser().isAdmin()){
+        if(POP_WINDOWS.equals(menuId)){
+            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             return permissionMark;
         }
 
-        if(POP_WINDOWS.equals(menuId)){
-            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
+        if(SecurityUtils.getSysUser().isAdmin()){
             return permissionMark;
         }
 
