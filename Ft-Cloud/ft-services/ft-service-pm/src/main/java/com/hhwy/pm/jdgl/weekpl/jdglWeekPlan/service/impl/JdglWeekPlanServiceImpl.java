@@ -201,8 +201,8 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 //        int i = 0;
         JdglWeekPlan jdglWeekPlanParam = getJdglWeekPlan(jdglWeekPlan);
         if(jdglWeekPlanParam != null) {
-//            Long id = IdWorker.createId();
-//            jdglWeekPlanParam.setId(id);
+            Long id = IdWorker.createId();
+            jdglWeekPlanParam.setId(id);
             jdglWeekPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglWeekPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglWeekPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());

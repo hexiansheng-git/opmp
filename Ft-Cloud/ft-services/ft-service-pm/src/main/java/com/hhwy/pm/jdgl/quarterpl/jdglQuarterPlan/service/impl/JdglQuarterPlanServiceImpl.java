@@ -196,8 +196,8 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
         JdglQuarterPlan jdglQuarterPlanParam = getJdglQuarterPlan(jdglQuarterPlan);
         if(jdglQuarterPlanParam != null) {
-//            Long id = IdWorker.createId();
-//            jdglQuarterPlanParam.setId(id);
+            Long id = IdWorker.createId();
+            jdglQuarterPlanParam.setId(id);
             jdglQuarterPlanParam.setCreateUser(SecurityUtils.getSysUser().getNickName());
             jdglQuarterPlanParam.setCreateTime(DateUtils.getNowDate());
             jdglQuarterPlanParam.setUpdateUser(SecurityUtils.getSysUser().getNickName());
