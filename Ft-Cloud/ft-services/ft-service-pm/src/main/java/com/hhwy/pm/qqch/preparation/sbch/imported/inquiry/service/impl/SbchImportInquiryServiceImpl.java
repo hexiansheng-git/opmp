@@ -314,6 +314,8 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
 
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(vo.getButtonMark())){
+            JyDetailsUtil.jyDetails(customsList, ValidationGroups.Save.class);
+            JyDetailsUtil.jyDetails(countryList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();
             String stageIdentity = vo.getStageIdentity();

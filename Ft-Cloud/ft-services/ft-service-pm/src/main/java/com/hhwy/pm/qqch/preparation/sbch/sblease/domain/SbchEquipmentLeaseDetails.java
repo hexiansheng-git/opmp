@@ -37,7 +37,7 @@ public class SbchEquipmentLeaseDetails extends CommonBaseEntity {
     @Excel(name = "供应商id")
 
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "供应商id不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+    @NotNull(message = "供应商编号不能为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long suplierId;
 
     /** 供应商名称 */

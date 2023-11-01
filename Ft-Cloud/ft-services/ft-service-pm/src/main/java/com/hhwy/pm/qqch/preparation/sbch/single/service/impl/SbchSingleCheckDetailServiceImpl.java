@@ -107,21 +107,21 @@ public class SbchSingleCheckDetailServiceImpl implements ISbchSingleCheckDetailS
     @Transactional
     public void batchInsert(List<SbchSingleCheckDetail> detailList) {
         if(!ObjectNullUtil.isEmpty(detailList)){
-            StringBuffer str = new StringBuffer("");
-            for (SbchSingleCheckDetail sbchSingleCheckDetail : detailList) {
-                EntityUtils.setCreateInfo(sbchSingleCheckDetail);
-                sbchSingleCheckDetail.setId(IdWorker.createId());
-                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(sbchSingleCheckDetail, ValidationGroups.Save.class);
-                if(!beanValidationResult.isSuccess()){
-                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
-                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                        str=str.append(errorMessage.getMessage()+",");
-                    }
-                }
-            }
-            if(!"".equals(str.toString())){
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,str.toString());
-            }
+//            StringBuffer str = new StringBuffer("");
+//            for (SbchSingleCheckDetail sbchSingleCheckDetail : detailList) {
+//                EntityUtils.setCreateInfo(sbchSingleCheckDetail);
+//                sbchSingleCheckDetail.setId(IdWorker.createId());
+//                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(sbchSingleCheckDetail, ValidationGroups.Save.class);
+//                if(!beanValidationResult.isSuccess()){
+//                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
+//                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
+//                        str=str.append(errorMessage.getMessage()+",");
+//                    }
+//                }
+//            }
+//            if(!"".equals(str.toString())){
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,str.toString());
+//            }
             sbchSingleCheckDetailMapper.batchInsert(detailList);
         }
     }

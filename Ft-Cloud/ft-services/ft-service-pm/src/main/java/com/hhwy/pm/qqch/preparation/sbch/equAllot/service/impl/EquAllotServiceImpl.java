@@ -170,7 +170,6 @@ public class EquAllotServiceImpl implements EquAllotService {
         //处理同国别
         List<SbchEquipmentAllotDetails> sameCountryList = equAllotVo.getSameCountryList();
         if(!ObjectNullUtil.isEmpty(sameCountryList)){
-            JyDetailsUtil.jyDetails(sameCountryList, ValidationGroups.Save.class);
             // 明细
             sbchEquipmentAllotDetailsService.insertOrEditBatchByMainId(sameCountryList, allot.getId(), false);
         }
@@ -178,13 +177,14 @@ public class EquAllotServiceImpl implements EquAllotService {
         //处理跨国别数据
         List<SbchEquipmentAllotTransnationalDetails> internationList = equAllotVo.getInternationList();
         if(!ObjectNullUtil.isEmpty(internationList)){
-            /*整体校验*/
-            jyDetailsList(internationList);
             // 明细
             sbchEquipmentAllotTransnationalDetailsService.insertOrEditBatchByMainId(internationList, sbchEquipmentAllotTransnational.getId(), false);
         }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(equAllotVo.getButtonMark())){
+            JyDetailsUtil.jyDetails(sameCountryList, ValidationGroups.Save.class);
+            /*整体校验*/
+            jyDetailsList(internationList);
             //插入确认记录
             String menuId = equAllotVo.getMenuId();
             String stageIdentity = equAllotVo.getStageIdentity();
