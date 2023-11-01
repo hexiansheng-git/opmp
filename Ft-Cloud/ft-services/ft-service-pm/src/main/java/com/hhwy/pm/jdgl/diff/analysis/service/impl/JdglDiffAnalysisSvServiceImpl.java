@@ -164,6 +164,7 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
                 jdglDiffAnalysisSv.setIsCriticalPath(jdglMonthImagePlan.getIsCriticalPath());
                 jdglDiffAnalysisSv.setUnit(jdglMonthImagePlan.getUnit());
                 jdglDiffAnalysisSv.setDesignNum(jdglMonthImagePlan.getPlanCompQuantity());
+                jdglDiffAnalysisSv.setSort(jdglMonthImagePlan.getSort());
 //                jdglDiffAnalysisSv.setActStartDate(jdglMonthImagePlan.getCreateTime());
                 jdglDiffAnalysisSv.setActEndDate(jdglMonthImagePlan.getPlanEndDate());
 
