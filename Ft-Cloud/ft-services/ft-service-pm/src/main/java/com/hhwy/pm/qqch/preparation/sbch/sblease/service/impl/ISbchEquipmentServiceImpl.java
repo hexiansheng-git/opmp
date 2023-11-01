@@ -140,17 +140,17 @@ public class ISbchEquipmentServiceImpl implements ISbchEquipmentService {
 
         List<SbchEquipmentSupplierDetails> supplierList = leaseVo.getSupplierList();
         if(!ObjectNullUtil.isEmpty(supplierList)){
-            JyDetailsUtil.jyDetails(supplierList, ValidationGroups.Save.class);
             sbchEquipmentSupplierDetailsService.insertOrEditBatchByMainId(supplierList, sbchEquipmentSupplier.getId(), false);
         }
         List<SbchEquipmentLeaseDetails> leaseDetailsList = leaseVo.getLeaseDetailsList();
         if(!ObjectNullUtil.isEmpty(leaseDetailsList)){
-            JyDetailsUtil.jyDetails(leaseDetailsList, ValidationGroups.Save.class);
             sbchEquipmentLeaseDetailsService.insertOrEditBatchByMainId(leaseDetailsList, sbchEquipmentLease.getId(), false);
         }
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(leaseVo.getButtonMark())){
             //插入确认记录
+            JyDetailsUtil.jyDetails(supplierList, ValidationGroups.Save.class);
+            JyDetailsUtil.jyDetails(leaseDetailsList, ValidationGroups.Save.class);
             String menuId = leaseVo.getMenuId();
             String stageIdentity = leaseVo.getStageIdentity();
             qqchModuleConfirmCaseService.addConfirmRecord(menuId,stageIdentity);

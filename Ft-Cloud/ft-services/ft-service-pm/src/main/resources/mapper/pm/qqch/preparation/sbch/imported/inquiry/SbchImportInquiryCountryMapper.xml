@@ -29,7 +29,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSbchImportInquiryCountryVo">
-        select `id`, `inquiry_id`, `country_code`, `country_language`, `currency_code`, `nature_cuntoms`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`, `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_import_inquiry_country`
+        select `id`, `inquiry_id`, `country_code`, `country_language`, `currency_code`, `nature_cuntoms`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`, `del_flag`, `remark`, `pt_var1`, `pt_var2`, `pt_var3`
+               , `project_id`, `project_name`, `region_id`, `region_name`, `dept_id` from `sbch_import_inquiry_country`
     </sql>
 
     <select id="selectSbchImportInquiryCountryList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.domain.SbchImportInquiryCountry" resultMap="SbchImportInquiryCountryResult">

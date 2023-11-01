@@ -112,6 +112,8 @@ public class SbchStaffingDetail extends CommonBaseEntity {
     /** 删除标识：0有效1无效 */
     private String delFlag;
 
+    private String remark;
+
     /** 预留字段1 */
     @Excel(name = "预留字段1")
     private String ptVar1;

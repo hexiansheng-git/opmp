@@ -107,18 +107,18 @@ public class SbchMaterialTranPlanDetailServiceImpl implements ISbchMaterialTranP
     @Override
     public void batchInsert(List<SbchMaterialTranPlanDetail> detailList) {
         if(!ObjectNullUtil.isEmpty(detailList)){
-            StringBuffer str = new StringBuffer("");
-            for (SbchMaterialTranPlanDetail sbchMaterialTranPlanDetail : detailList) {
-                EntityUtils.setCreateInfo(sbchMaterialTranPlanDetail);
-                sbchMaterialTranPlanDetail.setId(IdWorker.createId());
-                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(sbchMaterialTranPlanDetail, ValidationGroups.Save.class);
-                if(!beanValidationResult.isSuccess()){
-                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
-                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                        str=str.append(errorMessage.getMessage()+",");
-                    }
-                }
-            }
+//            StringBuffer str = new StringBuffer("");
+//            for (SbchMaterialTranPlanDetail sbchMaterialTranPlanDetail : detailList) {
+//                EntityUtils.setCreateInfo(sbchMaterialTranPlanDetail);
+//                sbchMaterialTranPlanDetail.setId(IdWorker.createId());
+//                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(sbchMaterialTranPlanDetail, ValidationGroups.Save.class);
+//                if(!beanValidationResult.isSuccess()){
+//                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
+//                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
+//                        str=str.append(errorMessage.getMessage()+",");
+//                    }
+//                }
+//            }
 //            if(!"".equals(str.toString())){
 //                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,str.toString());
 //            }

@@ -110,7 +110,7 @@
             </if>
         </where>
         ${params.dataScope}
-        order by sbch.create_time desc
+#         order by sbch.create_time desc
     </select>
 
     <update id="deletePlan" parameterType="com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan">

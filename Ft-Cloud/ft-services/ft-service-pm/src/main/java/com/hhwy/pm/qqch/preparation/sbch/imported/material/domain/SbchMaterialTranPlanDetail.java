@@ -140,6 +140,8 @@ public class SbchMaterialTranPlanDetail extends CommonBaseEntity {
     //运输方案
     private String fileGroupId;
 
+    //设备名称
     private String materialName;
+    //设备规格型号
     private String materialSpec;
 }

@@ -64,25 +64,6 @@ public class SbchImportInquiryController extends BaseController {
         }
     }
 
-    /**
-     * 新增保存设备进口策划 进口调查
-     */
-//    @PreAuthorize(hasPermi="inquiry:info:add")
-    //@CustomLogger(title = "设备进口策划 进口调查添加", businessType = CustomBusinessType.SAVE)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(@Validated(ValidationGroups.Save.class) @RequestBody SbchImportInquiry sbchImportInquiry) {
-        try{
-            return toAjax(sbchImportInquiryService.insertSbchImportInquiry(sbchImportInquiry));
-        }catch (CustomBusinessException e){
-            e.printStackTrace();
-            return AjaxResult.error(e.getMsg());
-        }catch (Exception e){
-            e.printStackTrace();
-            return AjaxResult.error(e.getMessage());
-        }
-    }
-
 
     /**
      * 修改保存设备进口策划 进口调查
@@ -161,10 +142,27 @@ public class SbchImportInquiryController extends BaseController {
 
     @PostMapping("/batchAdd")
     @ResponseBody
-    public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody SbchImportInquiry sbchImportInquiry){
+    public AjaxResult batchAdd(@RequestBody SbchImportInquiry sbchImportInquiry){
         try{
             sbchImportInquiryService.batchSave(sbchImportInquiry);
             return AjaxResult.success();
+        }catch (CustomBusinessException e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMsg());
+        }catch (Exception e){
+            e.printStackTrace();
+            return AjaxResult.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 新增保存设备进口策划 进口调查
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(@RequestBody SbchImportInquiry sbchImportInquiry) {
+        try{
+            return toAjax(sbchImportInquiryService.insertSbchImportInquiry(sbchImportInquiry));
         }catch (CustomBusinessException e){
             e.printStackTrace();
             return AjaxResult.error(e.getMsg());
