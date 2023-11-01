@@ -32,10 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 资金策划Service业务层处理
@@ -205,7 +202,9 @@ public class WzchFundServiceImpl implements IWzchFundService {
         // 新增条数不为 1, 失败
         if (i != 1) throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "新增失败");
         // 新增详情
-        this.detailService.insertOrUpdateBatch(detailList, fundId);
+        WzchFundDetail[] as = detailList.toArray(new WzchFundDetail[]{});
+        CollectionUtils.reverseArray(as);
+        this.detailService.insertOrUpdateBatch(Arrays.asList(as), fundId);
 
         return fundId;
     }

@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="materialName"    column="material_name"    />
         <result property="materialEnName"    column="material_en_name"    />
         <result property="materialSpec"    column="material_spec"    />
+        <result property="materialType"    column="material_type"    />
         <result property="sort"    column="sort"    />
         <result property="status"    column="status"    />
         <result property="type"    column="type"    />
@@ -34,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMaterialInfoVo">
-        select `id`, `category_code`, `unit`, `unit_code`, `alias`, `material_code`, `material_name`, `material_en_name`, `material_spec`,
+        select `id`, `category_code`, `unit`, `unit_code`, `alias`, `material_code`,material_type, `material_name`, `material_en_name`, `material_spec`,
                `status`, `type`, `create_user`, `create_time`, `update_user`, `update_time`, `del_user`, `del_time`,`category_id`,
                `del_flag`, `remark`, `pt_var1`,`pt_var2`,`pt_var3` ,`sort`,`own_type`,`own_site`,`part_no` from `t_material_info`
     </sql>

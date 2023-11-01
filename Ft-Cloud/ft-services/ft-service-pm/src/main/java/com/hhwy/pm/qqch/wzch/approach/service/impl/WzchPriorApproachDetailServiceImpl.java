@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.wzch.approach.service.impl;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.support.ExcelTypeEnum;
 import com.alibaba.fastjson.JSONObject;
 import com.hhwy.common.core.exception.BaseException;
 import com.hhwy.common.core.utils.DateUtils;
@@ -40,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -173,14 +175,16 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         List<WzchPriorApproachYearCount> wzchPriorApproachYearCounts = new ArrayList<>();
         for (WzchPriorApproachDetail wzchPriorApproachDetail : wzchPriorApproach.getWzchPriorApproachDetailList()) {
             wzchPriorApproachDetail.setVersion(wzchPriorApproach.getVersion());
+            //设置version
+            List<WzchPriorApproachYearCount> list = wzchPriorApproachDetail.getWzchPriorApproachYearCountList();
+            for (int i = 0; i < list.size(); i++)
+                list.get(i).setVersion(wzchPriorApproach.getVersion());
             wzchPriorApproachYearCounts.addAll(wzchPriorApproachDetail.getWzchPriorApproachYearCountList());
         }
         List<Long> detialIds = wzchPriorApproach.getWzchPriorApproachDetailList().stream().map(WzchPriorApproachDetail::getId).collect(Collectors.toList());
-        if(CollectionUtils.isNotEmpty(detialIds))
-            wzchPriorApproachDetailMapper.deleteByIds(detialIds);
+        wzchPriorApproachDetailMapper.deleteDirectByVersion(wzchPriorApproach.getVersion());
         List<Long> countIds = wzchPriorApproachYearCounts.stream().map(WzchPriorApproachYearCount::getId).collect(Collectors.toList());
-        if(CollectionUtils.isNotEmpty(countIds))
-            wzchPriorApproachYearCountService.deleteByIds(countIds);
+        wzchPriorApproachDetailMapper.deleteYearDirectByVersion(wzchPriorApproach.getVersion());
         if(CollectionUtils.isNotEmpty(wzchPriorApproach.getWzchPriorApproachDetailList()))
             wzchPriorApproachDetailMapper.batchInsert(wzchPriorApproach.getWzchPriorApproachDetailList());
         if(CollectionUtils.isNotEmpty(wzchPriorApproachYearCounts))
@@ -255,7 +259,7 @@ public class WzchPriorApproachDetailServiceImpl implements IWzchPriorApproachDet
         }
         List<WzchPriorApproachDetail> approachDetails = new ArrayList<>();
         InputStream inputStream = file.getInputStream();
-        List<Map<String,String>> list = EasyExcel.read(inputStream).headRowNumber(0).sheet().doReadSync();
+        List<Map<String,String>> list = EasyExcel.read(inputStream).headRowNumber(0).excelType(ExcelTypeEnum.XLSX).sheet().doReadSync();
         if(CollectionUtils.isEmpty(list)){
             return null;
         }
