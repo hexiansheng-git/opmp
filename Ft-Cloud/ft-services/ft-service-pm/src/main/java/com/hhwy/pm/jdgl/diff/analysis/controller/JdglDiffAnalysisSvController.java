@@ -45,6 +45,13 @@ public class JdglDiffAnalysisSvController extends BaseController {
         return getDataTableAjaxResult(jdglDiffAnalysisSvList);
     }
 
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:list")
+    @GetMapping("/lazyList")
+    public AjaxResult getJdglDiffAnalysisSvLazyList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
+        List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList = jdglDiffAnalysisSvService.getJdglDiffAnalysisSvLazyList(jdglDiffAnalysisSvParam);
+        return getDataTableAjaxResult(jdglDiffAnalysisSvList);
+    }
+
     // @PreAuthorize(hasPermi = "jdglDiffAnalysisSv:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDiffAnalysisSv(@Validated(ValidationGroups.Save.class) @RequestBody JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {

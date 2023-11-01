@@ -237,4 +237,7 @@ public class JdglDiffAnalysisPath extends TreeNode<JdglDiffAnalysisPath> {
     @JsonProperty
     @Excel(name = "项目名称")
     private String projectName;
+
+
+    private Integer haveChildren;
 }

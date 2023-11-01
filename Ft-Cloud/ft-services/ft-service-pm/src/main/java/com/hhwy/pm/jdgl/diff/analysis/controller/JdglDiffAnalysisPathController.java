@@ -46,6 +46,13 @@ public class JdglDiffAnalysisPathController extends BaseController{
         return getDataTableAjaxResult(jdglDiffAnalysisPathList);
     }
 
+    //  // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:list")
+    @GetMapping("/lazyList")
+    public AjaxResult getJdglDiffAnalysisPathLazyList(@Validated(ValidationGroups.Select.class) JdglDiffAnalysisPath jdglDiffAnalysisPathParam){
+        List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathService.getJdglDiffAnalysisPathLazyList(jdglDiffAnalysisPathParam);
+        return getDataTableAjaxResult(jdglDiffAnalysisPathList);
+    }
+
     // @PreAuthorize(hasPermi = "jdglDiffAnalysisPath:add")
     @PostMapping("/add")
     public AjaxResult insertJdglDiffAnalysisPath(@Validated(ValidationGroups.Save.class) @RequestBody JdglDiffAnalysisPath jdglDiffAnalysisPathParam){

@@ -2,6 +2,7 @@ package com.hhwy.pm.jdgl.diff.analysis.service.impl;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.text.Convert;
@@ -57,6 +58,40 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
         }
         List<JdglDiffAnalysisPath> build = TreeUtil.build(jdglDiffAnalysisPathList, jdglDiffAnalysisPath.getPid());
         return build;
+    }
+
+    @Override
+    public List<JdglDiffAnalysisPath> getJdglDiffAnalysisPathLazyList(JdglDiffAnalysisPath jdglDiffAnalysisPathParam) {
+
+        List<JdglDiffAnalysisPath> returnList = new ArrayList<>();
+
+        Long pid = jdglDiffAnalysisPathParam.getPid();
+
+        jdglDiffAnalysisPathParam.setPid(null);
+
+        List<JdglDiffAnalysisPath> jdglDiffAnalysisPathList = jdglDiffAnalysisPathMapper.getJdglDiffAnalysisPathList(jdglDiffAnalysisPathParam);
+
+        if(CollectionUtils.isEmpty(jdglDiffAnalysisPathList)) {
+            return returnList;
+        }
+
+        if(pid == null) {
+            returnList = jdglDiffAnalysisPathList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
+        } else {
+            returnList = jdglDiffAnalysisPathList.stream().filter(vo -> pid.equals(vo.getPid())).collect(Collectors.toList());
+        }
+
+        if(CollectionUtils.isEmpty(returnList)) {
+            return returnList;
+        }
+
+        for (JdglDiffAnalysisPath jdglDiffAnalysisPath :  returnList) {
+            Long id = jdglDiffAnalysisPath.getId();
+            List<JdglDiffAnalysisPath> collect = jdglDiffAnalysisPathList.stream().filter(vo -> id.equals(vo.getPid())).collect(Collectors.toList());
+            jdglDiffAnalysisPath.setHaveChildren(CollectionUtils.isEmpty(collect) ? 0 : 1);
+        }
+
+        return returnList;
     }
 
     @Transactional
@@ -280,4 +315,6 @@ public class JdglDiffAnalysisPathServiceImpl implements IJdglDiffAnalysisPathSer
 
         return returnBig;
     }
+
+
 }

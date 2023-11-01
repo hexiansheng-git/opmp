@@ -243,4 +243,6 @@ public class JdglDiffAnalysisSv extends TreeNode<JdglDiffAnalysisSv> {
     private Long oldId;
 
     private Long oldPid;
+
+    private Integer haveChildren;
 }

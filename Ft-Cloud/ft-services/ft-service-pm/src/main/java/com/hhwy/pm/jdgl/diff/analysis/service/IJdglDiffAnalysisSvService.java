@@ -34,4 +34,6 @@ public interface IJdglDiffAnalysisSvService {
     BigDecimal initJdglDiffAnalysisSv(JdglDiffAnalysis jdglDiffAnalysis);
 
     Map<String, Object> getPlanAndComp(JdglDiffAnalysisSv jdglDiffAnalysisSvParam);
+
+    List<JdglDiffAnalysisSv> getJdglDiffAnalysisSvLazyList(JdglDiffAnalysisSv jdglDiffAnalysisSvParam);
 }

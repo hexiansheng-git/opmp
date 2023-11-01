@@ -72,6 +72,45 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
         return build;
     }
 
+    /**
+     * 懒加载
+     * @param jdglDiffAnalysisSvParam
+     * @return
+     */
+    @Override
+    public List<JdglDiffAnalysisSv> getJdglDiffAnalysisSvLazyList(JdglDiffAnalysisSv jdglDiffAnalysisSvParam) {
+
+        List<JdglDiffAnalysisSv> returnList = new ArrayList<>();
+
+        Long pid = jdglDiffAnalysisSvParam.getPid();
+
+        jdglDiffAnalysisSvParam.setPid(null);
+
+        List<JdglDiffAnalysisSv> jdglDiffAnalysisSvList = jdglDiffAnalysisSvMapper.getJdglDiffAnalysisSvList(jdglDiffAnalysisSvParam);
+
+        if(CollectionUtils.isEmpty(jdglDiffAnalysisSvList)) {
+            return returnList;
+        }
+
+        if(pid == null) {
+            returnList = jdglDiffAnalysisSvList.stream().filter(vo -> vo.getPid() == null).collect(Collectors.toList());
+        } else {
+            returnList = jdglDiffAnalysisSvList.stream().filter(vo -> pid.equals(vo.getPid())).collect(Collectors.toList());
+        }
+
+        if(CollectionUtils.isEmpty(returnList)) {
+            return returnList;
+        }
+
+        for (JdglDiffAnalysisSv jdglDiffAnalysisSv : returnList) {
+            Long id = jdglDiffAnalysisSv.getId();
+            List<JdglDiffAnalysisSv> collect = jdglDiffAnalysisSvList.stream().filter(vo -> id.equals(vo.getPid())).collect(Collectors.toList());
+            jdglDiffAnalysisSv.setHaveChildren(CollectionUtils.isEmpty(collect) ? 0 : 1);
+        }
+
+        return returnList;
+    }
+
     @Transactional
     public int insertJdglDiffAnalysisSv(JdglDiffAnalysisSv jdglDiffAnalysisSv) {
         jdglDiffAnalysisSv.setId(IdWorker.createId());
@@ -286,4 +325,5 @@ public class JdglDiffAnalysisSvServiceImpl implements IJdglDiffAnalysisSvService
 
         return returnMap;
     }
+
 }
