@@ -3,7 +3,7 @@ package com.hhwy.pm.common.service;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.constant.CommonYesNo;
 import com.hhwy.pm.common.constant.ButtonStatus;
-import com.hhwy.pm.common.constant.PermissionMark;
+import com.hhwy.pm.common.domain.PermissionMark;
 import com.hhwy.pm.common.mapper.CommonMapper;
 import com.hhwy.pm.constant.PmConstant;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
@@ -95,8 +95,12 @@ public class CommonService {
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
         PermissionMark permissionMark = new PermissionMark();
 
+        if(SecurityUtils.getSysUser().isAdmin()){
+            return permissionMark;
+        }
+
         if(POP_WINDOWS.equals(menuId)){
-            permissionMark.setButtonStatus("2");
+            permissionMark.setButtonStatus(ButtonStatus.DISAPPEAR);
             return permissionMark;
         }
 

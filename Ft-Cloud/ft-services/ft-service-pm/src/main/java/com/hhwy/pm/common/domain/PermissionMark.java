@@ -1,5 +1,6 @@
-package com.hhwy.pm.common.constant;
+package com.hhwy.pm.common.domain;
 
+import com.hhwy.pm.common.constant.ButtonStatus;
 import lombok.Data;
 
 /**
@@ -23,5 +24,5 @@ public class PermissionMark {
     /*按钮状态：1：显示，2：消失，3：置灰*/
     private String buttonStatus = ButtonStatus.DISPLAY;
 
-    private String msg;
+    private String msg = "";
 }
