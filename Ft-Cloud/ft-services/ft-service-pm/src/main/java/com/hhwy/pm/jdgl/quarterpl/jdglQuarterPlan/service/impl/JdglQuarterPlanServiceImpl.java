@@ -292,7 +292,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
 
         List<JdglQuarterImagePlan> jdglQuarterImagePlanList = jdglQuarterPlan.getJdglQuarterImagePlanList();
         if(!CollectionUtils.isEmpty(jdglQuarterImagePlanList)) {
-            List<JdglQuarterImagePlan> imagePlans = TreeUtil.treeToListWithoutId(jdglQuarterImagePlanList);
+            List<JdglQuarterImagePlan> imagePlans = TreeUtil.treeToList(jdglQuarterImagePlanList);
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });

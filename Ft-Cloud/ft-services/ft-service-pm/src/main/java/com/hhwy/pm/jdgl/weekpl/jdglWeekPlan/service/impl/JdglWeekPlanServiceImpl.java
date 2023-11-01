@@ -167,7 +167,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
         Calendar cl = Calendar.getInstance();
         cl.setWeekDate(Integer.valueOf(year1), Integer.valueOf(week), 1);
 
-        String month = cl.get(Calendar.MONTH + 1) + "";
+        String month = (cl.get(Calendar.MONTH) + 1) + "";
 
         JdglMonthPlan usingMonthPlanByYearAndMonth = jdglMonthPlanService.getUsingMonthPlanByYearAndMonth(year1, month);
 
@@ -295,7 +295,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
 
         List<JdglWeekImagePlan> jdglWeekImagePlanList = jdglWeekPlan.getJdglWeekImagePlanList();
         if(!CollectionUtils.isEmpty(jdglWeekImagePlanList)) {
-            List<JdglWeekImagePlan> imagePlans = TreeUtil.treeToListWithoutId(jdglWeekImagePlanList);
+            List<JdglWeekImagePlan> imagePlans = TreeUtil.treeToList(jdglWeekImagePlanList);
             imagePlans.forEach(vo -> {
                 vo.setPlanId(id);
             });

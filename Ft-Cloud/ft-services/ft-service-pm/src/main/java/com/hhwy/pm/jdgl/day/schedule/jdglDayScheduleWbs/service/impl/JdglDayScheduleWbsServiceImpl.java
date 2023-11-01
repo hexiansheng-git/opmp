@@ -366,10 +366,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
             }
             // 从redis中获取wbs数据
 //            XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
-//            XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
-//            if(wbsByCode != null) {
-//                jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
-//                jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
+            XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
+            if(wbsByCode != null) {
+                jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+                jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
 //                jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
 //                if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
 //                    jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
@@ -397,7 +397,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //                        }
 //                    }
 //                }
-//            }
+            }
             // 源数据id
             jdglDayScheduleWbs.setPtVar1(jdglMainPlanItem.getWbsObjectId());
             // 源数据父id
@@ -581,10 +581,10 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
                     }
                     // 从redis中获取wbs数据
 //                    XmslWbs wbsByCode = WbsRedisUtils.getWbsByCode(jdglMainPlanItem.getWbsCode());
-//                    XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
-//                    if(wbsByCode != null) {
-//                        jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
-//                        jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
+                    XmslWbs wbsByCode = xmslWbsService.getByCode(jdglMainPlanItem.getWbsCode());
+                    if(wbsByCode != null) {
+                        jdglDayScheduleWbs.setWbsId(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? IdWorker.createId() : Long.valueOf(wbsByCode.getId()));
+                        jdglDayScheduleWbs.setWbsPid(JdglMainPlanItem.ITEMTYPE_ITEM.equals(jdglMainPlanItem.getItemType()) ? Long.valueOf(wbsByCode.getId()) : Long.valueOf(wbsByCode.getParentId()));
 //                        jdglDayScheduleWbs.setAncestrals(wbsByCode.getAncestors());
 //                        if(JdglMainPlanItem.ITEMTYPE_WBS.equals(jdglMainPlanItem.getItemType())) {
 //                            jdglDayScheduleWbs.setUnit(wbsByCode.getUnit());
@@ -613,7 +613,7 @@ public class JdglDayScheduleWbsServiceImpl implements IJdglDayScheduleWbsService
 //                            }
 //                            if(jdglDayScheduleWbs.getRemainQuantity() == null) jdglDayScheduleWbs.setRemainQuantity(jdglDayScheduleWbs.getDesignQuantity());
 //                        }
-//                    }
+                    }
                     // 源数据id
                     jdglDayScheduleWbs.setPtVar1(jdglMainPlanItem.getWbsObjectId());
                     // 源数据父id
