@@ -178,7 +178,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''">and `task_status` = #{taskStatus}</if>
         </where>
-        order by sort asc
+        order by sort asc,work_code asc
     </select>
     <select id="getWbsListByYearAndQuarter"
             resultMap="JdglQuarterImagePlanResultMap">

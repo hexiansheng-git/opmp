@@ -298,6 +298,7 @@ public class JdglWeekImagePlanServiceImpl implements IJdglWeekImagePlanService {
             imagePlan.setWorkName(jdglMainPlanItem.getItemName());
             imagePlan.setUnit(jdglMainPlanItem.getUnit());
             imagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            imagePlan.setSort(jdglMainPlanItem.getSort());
             if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
                 if(jdglDayScheduleWbs4Value != null) {

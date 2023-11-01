@@ -322,6 +322,7 @@ public class JdglYearImagePlanServiceImpl implements IJdglYearImagePlanService {
             jdglYearImagePlan.setWorkName(jdglMainPlanItem.getItemName());
             jdglYearImagePlan.setUnit(jdglMainPlanItem.getUnit());
             jdglYearImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            jdglYearImagePlan.setSort(jdglMainPlanItem.getSort());
             if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
                 if(jdglDayScheduleWbs4Value != null) {

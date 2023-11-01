@@ -294,6 +294,7 @@ public class JdglQuarterImagePlanServiceImpl implements IJdglQuarterImagePlanSer
             jdglQuarterImagePlan.setWorkName(jdglMainPlanItem.getItemName());
             jdglQuarterImagePlan.setUnit(jdglMainPlanItem.getUnit());
             jdglQuarterImagePlan.setDesignQuantity(jdglMainPlanItem.getQuantity());
+            jdglQuarterImagePlan.setSort(jdglMainPlanItem.getSort());
             if(!CollectionUtils.isEmpty(dayScheduleWbs4ValueList)) {
                 JdglDayScheduleWbs4Value jdglDayScheduleWbs4Value = dayScheduleWbs4ValueList.stream().filter(vo -> jdglMainPlanItem.getItemCode().equals(vo.getWbsCode())).findFirst().orElse(null);
                 if(jdglDayScheduleWbs4Value != null) {
