@@ -283,7 +283,7 @@ public class JdglWeekPlanServiceImpl implements IJdglWeekPlanService {
             throw new RuntimeException("已存在"+year+"年第"+week+"周数据!");
         }
 
-        Long id = IdWorker.createId();
+        Long id = jdglWeekPlan.getId() == null ? IdWorker.createId() : jdglWeekPlan.getId();
         jdglWeekPlan.setId(id);
         jdglWeekPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglWeekPlan.setCreateTime(DateUtils.getNowDate());
