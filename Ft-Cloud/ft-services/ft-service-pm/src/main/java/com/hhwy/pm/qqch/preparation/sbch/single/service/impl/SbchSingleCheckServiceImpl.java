@@ -340,7 +340,7 @@ public class SbchSingleCheckServiceImpl implements ISbchSingleCheckService {
                 JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
             }
             for (SbchSingleCheckDetail sbchSingleCheckDetail : detailList) {
-                BeanUtils.copyProperties(sbchSingleCheck,sbchSingleCheckDetail);
+                BeanUtils.copyProperties(sbchSingleCheck, sbchSingleCheckDetail, "remark");
                 sbchSingleCheckDetail.setId(IdWorker.createId());
                 sbchSingleCheckDetail.setDeptId(sbchSingleCheck.getDeptId());
                 sbchSingleCheckDetail.setInfoId(sbchSingleCheck.getId());

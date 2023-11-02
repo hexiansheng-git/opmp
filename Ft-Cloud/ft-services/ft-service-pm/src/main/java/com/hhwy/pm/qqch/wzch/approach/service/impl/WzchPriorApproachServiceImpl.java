@@ -109,6 +109,8 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
     @Override
     @Transactional
     public void sync(BigDecimal version) {
+        this.wzchPriorApproachDetailService.deleteDirectByVersion(version);
+        this.wzchPriorApproachDetailService.deleteYearDirectByVersion(version);
         //1、根据版本号从总需用、来源策划获取优先进场物资
         WzchTotalDemandDetail query = new WzchTotalDemandDetail("","1", null);
         query.setVersion(version);
@@ -140,8 +142,6 @@ public class WzchPriorApproachServiceImpl implements IWzchPriorApproachService {
             addDetailList.add(tempYear);
         }
         //3、删除当前版本数据，插入
-        this.wzchPriorApproachDetailService.deleteDirectByVersion(version);
-        this.wzchPriorApproachDetailService.deleteYearDirectByVersion(version);
         wzchPriorApproachDetailService.batchInsert(addList);
         wzchPriorApproachYearCountService.batchInsert(addDetailList);
     }

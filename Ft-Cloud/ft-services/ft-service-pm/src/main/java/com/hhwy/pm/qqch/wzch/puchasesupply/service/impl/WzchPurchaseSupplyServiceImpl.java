@@ -404,6 +404,7 @@ public class WzchPurchaseSupplyServiceImpl implements IWzchPurchaseSupplyService
     @Override
     @Transactional
     public void sync(WzchPurchaseSupply purchaseSupply) {
+        purchaseSupply.setLimitPriceDesc(StringUtils.equals("null",purchaseSupply.getLimitPriceDesc())?"":purchaseSupply.getLimitPriceDesc());
         List<WzchPurchaseSupply> masterList = this.wzchPurchaseSupplyMapper.selectWzchPurchaseSupplyList(new WzchPurchaseSupply(purchaseSupply.getVersion()));
         boolean isNew = CollectionUtils.isEmpty(masterList);
         if(isNew){

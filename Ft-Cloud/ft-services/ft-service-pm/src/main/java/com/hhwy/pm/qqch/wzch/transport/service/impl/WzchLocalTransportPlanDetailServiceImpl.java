@@ -141,7 +141,8 @@ public class WzchLocalTransportPlanDetailServiceImpl implements IWzchLocalTransp
         wzchLocalTransportPlan.getWzchLocalTransportPlanDetailList().stream().forEach(r->{
             r.setPlanId(wzchLocalTransportPlan.getId());
         });
-        wzchLocalTransportPlanDetailMapper.batchInsert(wzchLocalTransportPlan.getWzchLocalTransportPlanDetailList());
+        if(CollectionUtils.isNotEmpty(wzchLocalTransportPlan.getWzchLocalTransportPlanDetailList()))
+            wzchLocalTransportPlanDetailMapper.batchInsert(wzchLocalTransportPlan.getWzchLocalTransportPlanDetailList());
 
         if (ButtonMark.CONFIRM.equals(wzchLocalTransportPlan.getButtonMark())) {
             // 插入确认状态

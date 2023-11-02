@@ -127,6 +127,8 @@ public class WzchSpecialProjectDetailServiceImpl implements IWzchSpecialProjectD
         Assert.notNull(specialProjectId, "专项物资策划id不能为空");
         this.wzchSpecialProjectDetailMapper.deleteBySpecialProjectId(specialProjectId);
 
+        if(CollectionUtils.isEmpty(detailList))
+            return 0;
         List<WzchSpecialProjectDetail> insertOrUpdateData = detailList.stream().map(item -> {
             Long id = item.getId() == null ? IdWorker.createId() : item.getId();
             item.setId(id);

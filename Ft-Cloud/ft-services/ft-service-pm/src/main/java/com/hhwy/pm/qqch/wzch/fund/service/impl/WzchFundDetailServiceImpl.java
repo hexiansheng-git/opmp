@@ -108,13 +108,13 @@ public class WzchFundDetailServiceImpl implements IWzchFundDetailService {
      */
     @Override
     public int insertOrUpdateBatch(List<WzchFundDetail> detailList, Long fundId) {
+
+        Assert.notNull(fundId, "资金策划id不能为空");
+        this.wzchFundDetailMapper.deleteByFundId(fundId);
         if (CollectionUtils.isEmpty(detailList)) {
             return 0;
             // TODO throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error, "物资详情不能为空");
         }
-
-        Assert.notNull(fundId, "资金策划id不能为空");
-        this.wzchFundDetailMapper.deleteByFundId(fundId);
         WzchFundDetail[] as = detailList.toArray(new WzchFundDetail[]{});
         CollectionUtils.reverseArray(as);
         detailList = Arrays.asList(as);

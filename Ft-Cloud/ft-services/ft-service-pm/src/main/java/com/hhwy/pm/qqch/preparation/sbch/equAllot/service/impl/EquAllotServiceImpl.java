@@ -304,14 +304,20 @@ public class EquAllotServiceImpl implements EquAllotService {
     @Override
     public AjaxResult xzxcsb(ActiveEquVo activeEquVo) {
         String url = "http://10.11.238.63:10003/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
-        String resp = HttpUtil.post(url, JSON.toJSONString(activeEquVo));
-        AjaxResult ajaxResult = JSON.parseObject(resp, AjaxResult.class);
-        return ajaxResult;
+//        String url = "https://wms.cfhec.net/basic-api/fms/xcsb/xcsbMonthSelfEquInfo/list";
+        AjaxResult ajaxResult;
+        try {
+            String resp = HttpUtil.post(url, JSON.toJSONString(activeEquVo), 3000);
+            ajaxResult = JSON.parseObject(resp, AjaxResult.class);
+        }catch (Exception e){
+            e.printStackTrace();
+            ajaxResult = AjaxResult.error("请求无法到达");
+        }
 //        if (ObjectUtil.isEmpty(ajaxResult) || (int)ajaxResult.get("code") != 200)
 //            return null;
 //        String data1 = JSON.toJSONString(ajaxResult.get("data"));
 //        ActiveEquResult activeEquResult = JSON.parseObject(data1, ActiveEquResult.class);
 //        List<XcsbMonthSelfEquInfo> rows = activeEquResult.getRows();
-//        return rows;
+        return ajaxResult;
     }
 }

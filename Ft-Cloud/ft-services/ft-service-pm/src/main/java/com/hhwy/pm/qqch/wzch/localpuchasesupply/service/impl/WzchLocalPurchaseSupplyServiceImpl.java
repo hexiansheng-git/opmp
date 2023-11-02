@@ -395,6 +395,7 @@ public class WzchLocalPurchaseSupplyServiceImpl implements IWzchLocalPurchaseSup
     @Override
     @Transactional
     public void sync(WzchLocalPurchaseSupply purchaseSupply) {
+        purchaseSupply.setLimitPriceDesc(StringUtils.equals("null",purchaseSupply.getLimitPriceDesc())?"":purchaseSupply.getLimitPriceDesc());
         List<WzchLocalPurchaseSupply> masterList = this.localPurchaseSupplyMapper.selectWzchPurchaseSupplyList(purchaseSupply);
         boolean isNew = CollectionUtils.isEmpty(masterList);
         if(isNew){

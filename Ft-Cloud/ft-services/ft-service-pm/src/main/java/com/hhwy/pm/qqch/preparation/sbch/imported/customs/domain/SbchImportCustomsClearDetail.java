@@ -46,6 +46,8 @@ public class SbchImportCustomsClearDetail extends CommonBaseEntity {
     @Excel(name = "存档年限")
     private String saveYear;
 
+    private String remark;
+
     /** 创建人id */
     private String createUser;
 

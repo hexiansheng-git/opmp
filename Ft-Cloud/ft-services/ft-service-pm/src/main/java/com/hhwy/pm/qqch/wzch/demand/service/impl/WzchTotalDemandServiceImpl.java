@@ -519,12 +519,23 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
         List<Long> totalDemandIds = wzchTotalDemandDetailList.stream().map(WzchTotalDemandDetail::getId).collect(Collectors.toList());
         List<WzchTotalDemandTimeCount> wzchTotalDemandTimeCounts = wzchTotalDemandTimeCountService.selectByTotalDemandDetailIds(totalDemandIds);
         if (CollectionUtils.isEmpty(wzchTotalDemandTimeCounts)) {
+            //缓存中获取物资信息
+            setMaterialInfo(wzchTotalDemandDetailList);
             return vo;
         }
         WzchTotalDemandServiceImpl.wzchTotalDemandDetail(wzchTotalDemandDetailList, wzchTotalDemandTimeCounts);
         //缓存中获取物资信息
-        wzchCommonService.setWzchtMaterialInfo(wzchTotalDemandDetailList);
+        setMaterialInfo(wzchTotalDemandDetailList);
         return vo;
+    }
+
+    private void setMaterialInfo(List list){
+        Map<String, String> busAndMaterialMap = new HashMap<>(4);
+        busAndMaterialMap.put("materialName", "materialName");
+        busAndMaterialMap.put("materialSpec", "materialSpec");
+        busAndMaterialMap.put("unit", "unit");
+        busAndMaterialMap.put("categoryName", "materialType");
+        wzchCommonService.setMaterialInfo(list,"materialCode",busAndMaterialMap);
     }
 
     @Override

@@ -964,6 +964,7 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
         //年度
         if ("Y".equals(viewType)) {
             demandDetailList = yearView(demandDetailList, list, head0s, yearList, tSysDictDataList, mSysDictDataList, head0Size);
+            setMaterialInfo(demandDetailList);
             return demandDetailList;
         }
 
@@ -1056,7 +1057,17 @@ public class WzchTotalDemandDetailServiceImpl implements IWzchTotalDemandDetailS
             demandDetailList.add(detail);
             dataFlag++;
         }
+        setMaterialInfo(demandDetailList);
         return demandDetailList;
+    }
+
+    private void setMaterialInfo(List list){
+        Map<String, String> busAndMaterialMap = new HashMap<>(4);
+        busAndMaterialMap.put("materialName", "materialName");
+        busAndMaterialMap.put("materialSpec", "materialSpec");
+        busAndMaterialMap.put("unit", "unit");
+        busAndMaterialMap.put("categoryName", "materialType");
+        wzchCommonService.setMaterialInfo(list,"materialCode",busAndMaterialMap);
     }
 
     private List<WzchTotalDemandDetail> yearView(List<WzchTotalDemandDetail> demandDetailList, List<Map<String, String>> list, List<String> head0s, List<String> yearList, List<SysDictData> tSysDictDataList, List<SysDictData> mSysDictDataList, int head0Size) {

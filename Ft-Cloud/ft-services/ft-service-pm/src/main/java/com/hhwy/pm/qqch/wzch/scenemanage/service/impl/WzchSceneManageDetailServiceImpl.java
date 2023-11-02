@@ -84,13 +84,13 @@ public class WzchSceneManageDetailServiceImpl implements WzchSceneManageDetailSe
 
     @Override
     public int insertOrUpdateBatch(List<WzchSceneManageDetail> detailList, Long sceneId) {
-        if (CollectionUtils.isEmpty(detailList)) {
-            return 0;
-        }
 
         Assert.notNull(sceneId, "资金策划id不能为空");
 
         this.wzchSceneManageDetailDao.deleteBySceneId(sceneId);
+        if (CollectionUtils.isEmpty(detailList)) {
+            return 0;
+        }
         List<WzchSceneManageDetail> collect = detailList.stream().map(item -> {
             Long id = item.getId() == null ? IdWorker.createId() : item.getId();
             item.setId(id);
