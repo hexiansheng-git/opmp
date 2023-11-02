@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionId != null "> and `region_id` = #{regionId}</if>
             <if test="deptId != null "> and `dept_id` = #{deptId}</if>
         </where>
-        order by `id` desc
+#         order by `id` desc
     </select>
 
     <select id="selectDetailValidList" parameterType="com.hhwy.pm.qqch.preparation.sbch.imported.customs.domain.SbchImportCustomsClearDetail" resultMap="SbchImportCustomsClearDetailResult">

@@ -49,7 +49,7 @@
     <select id="selectSbchStaffingDetailList"
             parameterType="com.hhwy.pm.qqch.preparation.sbch.staffing.domain.SbchStaffingDetail"
             resultMap="SbchStaffingDetailResult">
-        select detail.`id`, detail.`staffing_id`, detail.`plan_id`, detail.`plan_detail_id`,
+        select detail.`id`, detail.`staffing_id`, detail.`plan_id`, detail.`plan_detail_id`,detail.`material_name`,
         detail.`material_code`, detail.`post_name`, detail.`work_type`, detail.`staff_name`, detail.`qualification`,
         detail.`quali_group_id`, detail.`work_group_id`, detail.`is_satisfy`, detail.`plan_coming_date`,
         detail.`create_user`, detail.`create_time`, detail.`update_user`, detail.`update_time`, detail.`del_user`,
@@ -90,7 +90,7 @@
             </if>
             <if test="deptId != null ">and detail.`dept_id` = #{deptId}</if>
         </where>
-        order by detail.`id` desc
+#         order by detail.`id` desc
     </select>
 
     <select id="selectSbchStaffingDetailById" parameterType="Long" resultMap="SbchStaffingDetailResult">

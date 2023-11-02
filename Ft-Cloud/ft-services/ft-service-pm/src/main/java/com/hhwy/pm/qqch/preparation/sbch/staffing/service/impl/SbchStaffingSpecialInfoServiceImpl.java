@@ -101,7 +101,7 @@ public class SbchStaffingSpecialInfoServiceImpl implements ISbchStaffingSpecialI
                 JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
             }
             for (SbchStaffingSpecialDetail sbchStaffingSpecialDetail : detailList) {
-                BeanUtils.copyProperties(sbchStaffingSpecialInfo,sbchStaffingSpecialDetail);
+                BeanUtils.copyProperties(sbchStaffingSpecialInfo,sbchStaffingSpecialDetail, "remark");
                 sbchStaffingSpecialDetail.setId(IdWorker.createId());
                 sbchStaffingSpecialDetail.setInfoId(sbchStaffingSpecialInfo.getId());
                 sbchStaffingSpecialDetail.setDeptId(sbchStaffingSpecialInfo.getDeptId());
