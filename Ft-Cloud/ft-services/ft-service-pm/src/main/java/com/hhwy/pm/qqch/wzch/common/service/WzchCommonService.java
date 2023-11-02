@@ -365,7 +365,7 @@ public class WzchCommonService {
                         // 根据 busAndMaterialMap 中的业务字段和物资字段的 k-v 关系 设置业务数据的字段值
                         for (String busFieldName : busAndMaterialMap.keySet()) {
                             String materialFieldName = busAndMaterialMap.get(busFieldName);
-                            busFieldList.stream().filter(field -> field.getName().equals(busFieldName)).findFirst().ifPresent(fieldInfo -> {
+                             busFieldList.stream().filter(field -> field.getName().equals(busFieldName)).findFirst().ifPresent(fieldInfo -> {
                                 this.setFieldValue(t, fieldInfo, materialInfo.get(materialFieldName));
                             });
                         }

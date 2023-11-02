@@ -2,6 +2,7 @@ package com.hhwy.pm.qqch.wzch.revolverent.service.impl;
 
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.enums.FlowEnum;
 import com.hhwy.pm.gencode.enums.CodeEnum;
 import com.hhwy.pm.gencode.service.GenCodeService;
@@ -328,6 +329,7 @@ public class WzchRevolveRentServiceImpl implements IWzchRevolveRentService {
     @Override
     @Transactional
     public void sync(WzchRevolveRentDTO wzchRevolveRent) {
+        wzchRevolveRent.setLimitPriceDesc(StringUtils.equals("null",wzchRevolveRent.getLimitPriceDesc())?"":wzchRevolveRent.getLimitPriceDesc());
         List<WzchRevolveRent> masterList = this.wzchRevolveRentMapper.selectWzchRevolveRentList(wzchRevolveRent);
         boolean isNew = CollectionUtils.isEmpty(masterList);
         if(isNew){
