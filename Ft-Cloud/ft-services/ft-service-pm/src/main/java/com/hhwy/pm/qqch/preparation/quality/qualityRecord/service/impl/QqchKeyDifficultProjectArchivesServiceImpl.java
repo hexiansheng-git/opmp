@@ -220,6 +220,9 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
      */
     @Transactional
     public void disposeKeyDifficultWbsList(List<KeyDifficultWbs> list, BigDecimal version) {
+        if(CollectionUtils.isEmpty(list)){
+            return;
+        }
         //拆树
         list = ListTreeUtil.formatList(list,KeyDifficultWbs::getChildren,KeyDifficultWbs::setChildren);
 
@@ -246,7 +249,8 @@ public class QqchKeyDifficultProjectArchivesServiceImpl implements IQqchKeyDiffi
                 }
             }
         }
-
-        qqchKeyDifficultProjectArchivesMapper.insertQqchKeyDifficultProjectArchivesList(insertList);
+        if(CollectionUtils.isNotEmpty(insertList)){
+            qqchKeyDifficultProjectArchivesMapper.insertQqchKeyDifficultProjectArchivesList(insertList);
+        }
     }
 }
