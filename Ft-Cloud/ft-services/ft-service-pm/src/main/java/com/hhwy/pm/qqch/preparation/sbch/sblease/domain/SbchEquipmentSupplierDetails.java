@@ -44,7 +44,7 @@ public class SbchEquipmentSupplierDetails extends CommonBaseEntity {
 
     /** 国家id */
     @JsonSerialize(using= ToStringSerializer.class)
-    @NotNull(message = "国家id不可为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
+    @NotNull(message = "国家不可为空",groups = {ValidationGroups.Update.class, ValidationGroups.Save.class})
     private Long countryId;
 
     /** 国家 */

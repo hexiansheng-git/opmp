@@ -193,7 +193,8 @@ public class WzchImportExportPlanDetailServiceImpl implements IWzchImportExportP
         }
         
         List<WzchImportExportPlanDetail> wzchImportExportPlanDetailList = wzchImportExportPlan.getWzchImportExportPlanDetailList();
-        if (CollectionUtils.isEmpty(wzchImportExportPlanDetailList)) throw new CustomBusinessException("物资详情不能为空");
+        if (CollectionUtils.isEmpty(wzchImportExportPlanDetailList))
+            return wzchImportExportPlan.getId();
         for (int i = 0; i < wzchImportExportPlanDetailList.size(); i++) {
             wzchImportExportPlanDetailList.get(i).setPlanId(wzchImportExportPlan.getId());
         }

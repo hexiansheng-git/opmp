@@ -12,6 +12,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -114,6 +115,9 @@ public class WzchFundDetailServiceImpl implements IWzchFundDetailService {
 
         Assert.notNull(fundId, "资金策划id不能为空");
         this.wzchFundDetailMapper.deleteByFundId(fundId);
+        WzchFundDetail[] as = detailList.toArray(new WzchFundDetail[]{});
+        CollectionUtils.reverseArray(as);
+        detailList = Arrays.asList(as);
         List<WzchFundDetail> insertOrUpdateData = detailList.stream().map(item -> {
             Long id = item.getId() == null ? IdWorker.createId() : item.getId();
             item.setId(id);

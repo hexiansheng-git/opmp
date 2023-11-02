@@ -34,7 +34,7 @@ public class EquAllotController extends BaseController {
     }
 
     @PostMapping("/batchAdd")
-    public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody EquAllotVo equAllotVo){
+    public AjaxResult batchAdd(@RequestBody EquAllotVo equAllotVo){
         try {
             equAllotService.batchAdd(equAllotVo);
             return AjaxResult.success();

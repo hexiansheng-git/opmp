@@ -57,7 +57,7 @@ public class SbchEquipmentSupplierController extends BaseController {
     }
 
     @PostMapping("/batchAdd")
-    public AjaxResult batchAdd(@Validated(ValidationGroups.Save.class) @RequestBody LeaseVo leaseVo){
+    public AjaxResult batchAdd(@RequestBody LeaseVo leaseVo){
         try {
             sbchEquipmentService.batchAdd(leaseVo);
             return AjaxResult.success();

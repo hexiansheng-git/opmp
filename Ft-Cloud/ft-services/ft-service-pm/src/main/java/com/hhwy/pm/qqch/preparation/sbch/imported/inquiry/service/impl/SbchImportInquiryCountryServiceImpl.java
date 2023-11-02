@@ -106,21 +106,21 @@ public class SbchImportInquiryCountryServiceImpl implements ISbchImportInquiryCo
     @Transactional
     public void batchInsert(List<SbchImportInquiryCountry> countryList) {
         if(null!=countryList && countryList.size()>0){
-            StringBuffer str = new StringBuffer("");
-            for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
-                EntityUtils.setCreateInfo(sbchImportInquiryCountry);
-                sbchImportInquiryCountry.setId(IdWorker.createId());
-                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(sbchImportInquiryCountry, ValidationGroups.Save.class);
-                if(!beanValidationResult.isSuccess()){
-                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
-                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
-                        str=str.append(errorMessage.getMessage()+",");
-                    }
-                }
-            }
-            if(!"".equals(str.toString())){
-                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,str.toString());
-            }
+//            StringBuffer str = new StringBuffer("");
+//            for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
+//                EntityUtils.setCreateInfo(sbchImportInquiryCountry);
+//                sbchImportInquiryCountry.setId(IdWorker.createId());
+//                BeanValidationResult beanValidationResult = ValidationUtil.warpValidate(sbchImportInquiryCountry, ValidationGroups.Save.class);
+//                if(!beanValidationResult.isSuccess()){
+//                    List<BeanValidationResult.ErrorMessage> errorMessages = beanValidationResult.getErrorMessages();
+//                    for (BeanValidationResult.ErrorMessage errorMessage : errorMessages) {
+//                        str=str.append(errorMessage.getMessage()+",");
+//                    }
+//                }
+//            }
+//            if(!"".equals(str.toString())){
+//                throw new CustomBusinessException(CustomBusinessException.ErrorCodes.Error,str.toString());
+//            }
             sbchImportInquiryCountryMapper.batchInsert(countryList);
         }
     }

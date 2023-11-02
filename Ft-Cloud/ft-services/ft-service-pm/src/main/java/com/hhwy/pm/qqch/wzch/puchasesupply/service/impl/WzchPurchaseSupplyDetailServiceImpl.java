@@ -463,7 +463,8 @@ public class WzchPurchaseSupplyDetailServiceImpl implements IWzchPurchaseSupplyD
         if (!CollectionUtils.isEmpty(list)) {
             collect = list.stream().map(WzchPurchaseViewDetailDTO::getPlanPurchaseDateGroup).collect(Collectors.joining(","));
         }
-        redisUtils.hPut(PmsConstant.WPP_PURCHASE_VIEW + SecurityUtils.getTenantKey()+projectId, String.valueOf(SecurityUtils.getUserId()), collect);
+
+        redisUtils.hPut(PmsConstant.WPP_PURCHASE_VIEW + SecurityUtils.getTenantKey(), String.valueOf(SecurityUtils.getUserId()), collect);
     }
 
     @Transactional(rollbackFor = Exception.class)
