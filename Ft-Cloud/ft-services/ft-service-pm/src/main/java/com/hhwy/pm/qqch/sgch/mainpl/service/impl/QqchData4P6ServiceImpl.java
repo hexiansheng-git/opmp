@@ -119,8 +119,8 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                 qqchMainPlanItem.setRemainingDuration(wbsInfo.getSummaryRemainingDuration());
                 qqchMainPlanItem.setActualStartDate(wbsInfo.getSummaryActualStartDate());
                 qqchMainPlanItem.setActualFinishDate(wbsInfo.getSummaryActualFinishDate());
-//                qqchMainPlanItem.setUnit();
-//                qqchMainPlanItem.setQuantity();
+                qqchMainPlanItem.setUnit(wbsInfo.getUnit());
+                qqchMainPlanItem.setQuantity(wbsInfo.getQuantity());
                 qqchMainPlanItem.setSchedulePercentComplete(wbsInfo.getSummarySchedulePercentComplete());
                 qqchMainPlanItem.setExpectedFinishDate(wbsInfo.getSummaryProgressFinishDate());
                 qqchMainPlanItem.setFinishDateVariance(wbsInfo.getSummaryFinishDateVariance());
@@ -167,7 +167,8 @@ public class QqchData4P6ServiceImpl implements IQqchData4P6Service {
                 qqchMainPlanItem.setExecuter(activityInfo.getExecuter());
                 qqchMainPlanItem.setStartDate(activityInfo.getStartDate());
                 qqchMainPlanItem.setFinishDate(activityInfo.getFinishDate());
-                qqchMainPlanItem.setIsCritical(activityInfo.getCritical()?"1":"0");
+                qqchMainPlanItem.setIsCritical(activityInfo.getIsCritical()?"1":"0");
+                qqchMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath()?"1":"0");
                 qqchMainPlanItem.setWbsCode(activityInfo.getWbsCode());
 //                qqchMainPlanItem.setWbsObjectId();
                 qqchMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());

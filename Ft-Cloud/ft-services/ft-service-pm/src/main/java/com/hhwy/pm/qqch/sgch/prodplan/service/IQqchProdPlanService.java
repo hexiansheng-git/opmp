@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -39,5 +40,7 @@ public interface IQqchProdPlanService {
     CompileEntity<HashMap<String, Object>>  selectList(QqchProdPlan qqchProdPlanParam);
 
     int putProdPlanData(BigDecimal version);
+
+    BigDecimal getQqchProdPlanAmt4DateRange(BigDecimal version, Date start, Date end);
 
 }

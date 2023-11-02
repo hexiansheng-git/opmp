@@ -2,12 +2,15 @@ package com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.common.service.CommonServiceUtil;
 import com.hhwy.pm.constant.PmConstant;
+import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
+import com.hhwy.pm.qqch.sgch.prodplan.service.IQqchProdPlanService;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobal;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.domain.QqchTaxGlobalFormula;
 import com.hhwy.pm.qqch.tax.qqchTaxGlobal.mapper.QqchTaxGlobalFormulaMapper;
@@ -15,6 +18,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxGlobal.service.IQqchTaxGlobalFormulaService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractInfo;
+import com.hhwy.pm.xmsl.contractInfo.domain.XmslContractPayinfo;
 import com.hhwy.pm.xmsl.contractInfo.service.IXmslContractInfoService;
 import com.hhwy.pm.xmsl.project.domain.vo.ProjectBasicInfo;
 import com.hhwy.pm.xmsl.project.service.IXmslProjectBasicInfoService;
@@ -27,6 +31,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,6 +54,8 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
     private IXmslProjectBasicInfoService projectBasicInfoService;
     @Resource
     private IQqchTaxInService taxInService;
+    @Resource
+    private IQqchProdPlanService qqchProdPlanService;
 
 
     public QqchTaxGlobalFormula getQqchTaxGlobalFormula(QqchTaxGlobalFormula qqchTaxGlobalFormula) {
@@ -108,32 +115,197 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
     @Override
     @CompileAspect(type = CompileOptEnum.LIST, tableName = TN)
     public CompileEntity<QqchTaxGlobalFormula> getFormula(QqchTaxGlobalFormula dto) {
+
+        Integer year = dto.getYear();
+
+        if(year == null) {
+            throw new RuntimeException("年份参数异常!");
+        }
+
         CompileEntity<QqchTaxGlobalFormula> qqchTaxGlobalFormulaCompileEntity = new CompileEntity<>();
 
+        // 获取当前的明细填报数据
         List<QqchTaxGlobalFormula> qqchTaxGlobalFormulaList = this.qqchTaxGlobalFormulaMapper.getQqchTaxGlobalFormulaList(dto);
-        ProjectBasicInfo prj = this.getPrj();
-        BigDecimal prePayRate = prj.getPrepaymentRatio();
-        XmslContractInfo cont = this.getCont();
-        BigDecimal excContAmt = cont.getExcludingAmout();
-        String currency = cont.getListCurrencyCode();
-        BigDecimal rate = this.getRateByCurrency(currency);
-        BigDecimal cnyRate = this.getRateByCurrency("CNY");
-        BigDecimal localRate = this.getRateByCurrency(prj.getPaymentCurrency());
+
         QqchTaxGlobalFormula res = new QqchTaxGlobalFormula();
         if (!CollectionUtils.isEmpty(qqchTaxGlobalFormulaList)) {
             res = qqchTaxGlobalFormulaList.get(0);
         }
 
+        // 获取项目信息
+        ProjectBasicInfo prj = this.getPrj();
+        // 预付款比例
+        BigDecimal prePayRate = prj.getPrepaymentRatio();
+        // 项目-当地货币
+        String paymentCurrency = prj.getPaymentCurrency();
+
+        // 获取合同信息
+        XmslContractInfo cont = this.getCont();
+        // 合同-支付信息集合
+        List<XmslContractPayinfo> xmslContractPayinfoList = cont.getXmslContractPayinfoList();
+        // 合同不含税金额
+        BigDecimal excContAmt = cont.getExcludingAmout();
+        // 合同币种：清单标价货币(编码)
+        String currency = cont.getListCurrencyCode();
+
+        // 合同币种对美汇率
+        BigDecimal rate = res.getRate();
+        // 合同币种比例
+        BigDecimal contProportion = BigDecimal.ZERO;
+        // 合同币种
+        if(rate == null || rate.compareTo(BigDecimal.ZERO) == 0) {
+            rate = getExchageRate(currency, xmslContractPayinfoList);
+            contProportion = getProportion(currency, xmslContractPayinfoList);
+        }
+
+        // 获取人民币币种
+        BigDecimal cnyRate = res.getCnyRate();
+        // 人民币比例
+        BigDecimal cnyProportion = BigDecimal.ZERO;
+        // 人民币对美汇率
+        if(cnyRate == null || cnyRate.compareTo(BigDecimal.ZERO) == 0) {
+            cnyRate = getExchageRate("CNY", xmslContractPayinfoList);
+            cnyProportion = getProportion("CNY", xmslContractPayinfoList);
+        }
+
+        // 当地币种对美汇率
+        BigDecimal localRate = res.getLocalRate();
+        // 当地币种比例
+        BigDecimal localProportion = BigDecimal.ZERO;
+        // 当地币种对美汇率
+        if(localRate == null || localRate.compareTo(BigDecimal.ZERO) == 0) {
+            localRate = getExchageRate(paymentCurrency, xmslContractPayinfoList);
+            localProportion = getProportion(paymentCurrency, xmslContractPayinfoList);
+        }
+
+        // 美元比例
+        BigDecimal usdProportion = getProportion("USD", xmslContractPayinfoList);
+
+        // 计量账单审核时长（天)
+        BigDecimal meteringCircle = BigDecimal.ZERO;
+        // 合同-计量批复时限（天）
+        String meteringTime = cont.getMeteringTime();
+        meteringCircle = meteringCircle.add(StringUtils.isEmpty(meteringTime) || !StatisticsUtils.isNumeric2(meteringTime)
+                ? BigDecimal.ZERO : new BigDecimal(meteringTime));
+        // 合同-计量账单审核时长（天)
+        String billProcessDuration = cont.getBillProcessDuration();
+        meteringCircle = meteringCircle.add(StringUtils.isEmpty(billProcessDuration) || !StatisticsUtils.isNumeric2(billProcessDuration)
+                ? BigDecimal.ZERO : new BigDecimal(billProcessDuration));
+        meteringCircle = meteringCircle.divide(new BigDecimal(30), 0, BigDecimal.ROUND_UP);
+
+        res.setMeteringCircle(meteringCircle); // 计量账单审核时长（天)
+
+        // 从1.2.5获取工程量计量金额
+        Map<String, Date> dateRange = getDateRange(year,meteringCircle);
+        BigDecimal qqchProdPlanAmt = qqchProdPlanService.getQqchProdPlanAmt4DateRange(null, dateRange.get("start"), dateRange.get("end"));
+
+        if(rate != null && qqchProdPlanAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
+            res.setQuantities(qqchProdPlanAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP)); // 工程量计量金额
+        } else {
+            res.setQuantities(BigDecimal.ZERO); // 工程量计量金额
+        }
+
+        // 节点回收比例
+        BigDecimal nodeRecoveryRate = BigDecimal.ZERO;
+        // 合同-竣工日期
+        Date completedTime = cont.getCompletedTime();
+        // 合同缺陷责任(月)
+        String defectLiability = cont.getDefectLiability();
+
+        if(completedTime != null) {
+            Calendar cl = Calendar.getInstance();
+            cl.setTime(completedTime);
+            int year1 = cl.get(Calendar.YEAR);
+            nodeRecoveryRate = nodeRecoveryRate.add(year1 == year ? new BigDecimal(50) : BigDecimal.ZERO);
+            if(StringUtils.isNotEmpty(defectLiability) && StatisticsUtils.isNumeric2(defectLiability)) {
+                BigDecimal divide = new BigDecimal(defectLiability).divide(BigDecimal.ONE, 0, BigDecimal.ROUND_UP);
+                cl.add(Calendar.MONTH, divide.intValue());
+                int year2 = cl.get(Calendar.YEAR);
+                nodeRecoveryRate = nodeRecoveryRate.add(year2 == year ? new BigDecimal(50) : BigDecimal.ZERO);
+
+            }
+        }
+
+        res.setNodeRecoveryRate(res.getNodeRecoveryRate() == null ? nodeRecoveryRate : res.getNodeRecoveryRate()); // 节点回收比例
         res.setCurrency(currency);      //币种
-        res.setExcContAmt(excContAmt);  //不含税合同金额
-        res.setRate(rate);              //汇率
-        res.setCnyRate(cnyRate);        //美元对人民币汇率
-        res.setLocalRate(localRate);    //项目当地币汇率
-        res.setPrePayRate(prePayRate);  //预付款比例
+        if(rate != null && excContAmt != null && rate.compareTo(BigDecimal.ZERO) != 0) {
+            res.setExcContAmt(excContAmt.divide(rate, 2, BigDecimal.ROUND_HALF_UP));  //不含税合同金额
+        } else {
+            res.setExcContAmt(BigDecimal.ZERO);  //不含税合同金额
+        }
+        res.setRate(rate == null ? BigDecimal.ZERO : rate);              //汇率
+        res.setCnyRate(cnyRate == null ? BigDecimal.ZERO : cnyRate);        //美元对人民币汇率
+        res.setLocalRate(localRate == null ? BigDecimal.ZERO : localRate);    //项目当地币汇率
+        res.setPrePayRate(prePayRate == null ? BigDecimal.ZERO : prePayRate);  //预付款比例
+        res.setLocalProportion(localProportion == null ? BigDecimal.ZERO : localProportion); // 当地币种支付比例
+        res.setCnyProportion(cnyProportion == null ? BigDecimal.ZERO : cnyProportion); // 人民币支付比例
+        res.setContProportion(contProportion == null ? BigDecimal.ZERO : contProportion); // 合同币种支付比例
+        res.setUsdProportion(usdProportion == null ? BigDecimal.ZERO : usdProportion); // 美元支付比例
         //质保金（保留金）扣除比例（%） 从项目中拿  qualityGuaranteeDepositRatio
         res.setGuaDeductRate(ObjectUtils.nvlBigDecimal(prj.getQualityGuaranteeDepositRatio()));
         qqchTaxGlobalFormulaCompileEntity.setDto(res);
         return qqchTaxGlobalFormulaCompileEntity;
+    }
+
+    private BigDecimal getProportion(String currency, List<XmslContractPayinfo> xmslContractPayinfoList) {
+        BigDecimal proportion = BigDecimal.ZERO;
+        if(StringUtils.isNotEmpty(currency)) {
+            XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> currency.equals(vo.getCurrencyCode())).findFirst().orElse(null);
+            if(xmslContractPayinfo != null && xmslContractPayinfo.getProportion() != null)
+                proportion = new BigDecimal(xmslContractPayinfo.getProportion());
+        }
+        return proportion;
+    }
+
+    /**
+     * 获取汇率
+     * @param currency
+     * @param xmslContractPayinfoList
+     * @return
+     */
+    private BigDecimal getExchageRate(String currency, List<XmslContractPayinfo> xmslContractPayinfoList) {
+        BigDecimal rate = BigDecimal.ZERO;
+        if(StringUtils.isNotEmpty(currency)) {
+            XmslContractPayinfo xmslContractPayinfo = xmslContractPayinfoList.stream().filter(vo -> currency.equals(vo.getCurrencyCode())).findFirst().orElse(null);
+            if(xmslContractPayinfo != null && "1".equals(xmslContractPayinfo.getRateType())) {
+                String obversionRate = xmslContractPayinfo.getObversionRate();
+                rate = StringUtils.isEmpty(obversionRate) ? BigDecimal.ZERO : new BigDecimal(obversionRate);
+            } else {
+                rate = this.getRateByCurrency(currency);
+            }
+        }
+        return rate;
+    }
+
+    /**
+     * 根据年份、计量账单审核时长获取计量年月区间
+     * @param year
+     * @param meteringCircle
+     * @return
+     */
+    private Map<String, Date> getDateRange(Integer year, BigDecimal meteringCircle) {
+
+        Map<String, Date> returnMap = new HashMap<>();
+
+        if(year == null || meteringCircle == null) {
+            return returnMap;
+        }
+
+        int meteringI = 0 - meteringCircle.intValue();
+
+        Calendar cl = Calendar.getInstance();
+        cl.set(year, Calendar.JANUARY, 1);
+        cl.add(Calendar.MONTH, meteringI);
+        Date startDate = cl.getTime();
+
+        cl.set(year, Calendar.DECEMBER, 1);
+        cl.add(Calendar.MONTH, meteringI);
+        Date endDate = cl.getTime();
+
+        returnMap.put("start", startDate);
+        returnMap.put("end", endDate);
+
+        return returnMap;
     }
 
     @Override
@@ -239,27 +411,32 @@ public class QqchTaxGlobalFormulaServiceImpl implements IQqchTaxGlobalFormulaSer
     }
 
     private XmslContractInfo getCont() {
-        XmslContractInfo validMaxVersionContractInfo = null;
+        XmslContractInfo xmslContractInfo = new XmslContractInfo();
         try {
-            validMaxVersionContractInfo = contractInfoService.getValidMaxVersionContractInfo();
+//            validMaxVersionContractInfo = contractInfoService.getValidMaxVersionContractInfo();
+            xmslContractInfo = contractInfoService.getXmslContractInfo(xmslContractInfo);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return validMaxVersionContractInfo == null ? new XmslContractInfo() : validMaxVersionContractInfo;
+        return xmslContractInfo == null ? new XmslContractInfo() : xmslContractInfo;
     }
 
 
     private BigDecimal getRateByCurrency(String currency) {
-        // TODO 
-
-        return getRateByCurrency(currency, new Date());
+        BigDecimal returnBig = BigDecimal.ZERO;
+        List<String> currencyList = Arrays.asList(currency);
+        Map<String, BigDecimal> usdRate = CommonServiceUtil.getUsdRate(currencyList);
+        if(usdRate != null) {
+            returnBig = usdRate.get(currency);
+        }
+        return returnBig;
     }
 
 
     private BigDecimal getRateByCurrency(String currency, Date date) {
-        // TODO 
+        // TODO
 
-        return BigDecimal.ONE;
+        return BigDecimal.ZERO;
     }
 
 }

@@ -197,7 +197,7 @@ public class JdglMainPlanItemServiceImpl implements IJdglMainPlanItemService {
         }
         List<JdglMainPlanItem> jdglMainPlanItems = TreeUtil.treeToListWithoutId(jdglMainPlanItemList);
         for (JdglMainPlanItem jdglMainPlanItem : jdglMainPlanItems) {
-            jdglMainPlanItem.setUpdateUser(SecurityUtils.getUserName());
+            jdglMainPlanItem.setUpdateUser(SecurityUtils.getSysUser().getNickName());
             jdglMainPlanItem.setUpdateTime(DateUtils.getNowDate());
         }
         return jdglMainPlanItemMapper.updateJdglMainPlanItemList(jdglMainPlanItems);

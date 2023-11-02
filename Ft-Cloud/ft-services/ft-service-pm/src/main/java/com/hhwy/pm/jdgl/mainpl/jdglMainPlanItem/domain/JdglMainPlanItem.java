@@ -223,6 +223,12 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
     @Excel(name = "是否关键线路")
     private String isCritical;
     /**
+     * 字段描述：是否最长线路
+     */
+    @JsonProperty
+    @Excel(name = "是否最长线路")
+    private String isLongestPath;;
+    /**
      * 字段描述：wbs编码
      */
     @JsonProperty
@@ -483,4 +489,6 @@ public class JdglMainPlanItem extends TreeNode<JdglMainPlanItem> {
      */
     @JsonProperty
     private int haveChildren;
+
+
 }

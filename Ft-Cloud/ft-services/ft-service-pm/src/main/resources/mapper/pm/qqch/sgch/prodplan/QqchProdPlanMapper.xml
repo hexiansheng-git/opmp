@@ -139,6 +139,12 @@
         </where>
         order by create_time desc
     </select>
+    <select id="getQqchProdPlanAmt4DateRange" resultType="java.math.BigDecimal">
+        select sum(ifnull(month_prod_value,0)) from qqch_prod_plan
+            where version = #{version}
+            <if test="end != null ">and plan_date &lt;= #{end}</if>
+            <if test="start != null ">and plan_date &gt;= #{start}</if>
+    </select>
 
     <insert id="insertQqchProdPlan" useGeneratedKeys="true" keyProperty="id">
         insert into qqch_prod_plan
