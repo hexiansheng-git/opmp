@@ -267,6 +267,14 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
         return returnList.stream().sorted(Comparator.comparing(QqchMainPlanItem::getSort, Comparator.nullsFirst(Integer::compareTo)).thenComparing(QqchMainPlanItem::getItemCode, Comparator.nullsFirst(String::compareTo))).collect(Collectors.toList());
     }
 
+    /**
+     * 获取项目开始与结束
+     * @return
+     */
+    @Override
+    public QqchMainPlanItem getProjStartAndFinish() {
+        return this.getProjStartAndFinish(null);
+    }
 
     /**
      * 获取项目开始与结束
@@ -276,7 +284,6 @@ public class QqchMainPlanItemServiceImpl implements IQqchMainPlanItemService {
     public QqchMainPlanItem getProjStartAndFinish(BigDecimal version) {
         version = VersionUtil.getVersion(QqchMainPlanItem.TABLE_NAME, version);
         return qqchMainPlanItemMapper.getProjStartAndFinish(version);
-
     }
 
     /**

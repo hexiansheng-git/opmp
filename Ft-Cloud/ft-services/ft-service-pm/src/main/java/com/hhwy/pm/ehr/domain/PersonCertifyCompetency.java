@@ -12,9 +12,9 @@ public class PersonCertifyCompetency {
     /*职(执)业资格类别编码*/
     private String categoryNumber;
     /*职(执)业资格名称*/
-    private String certifiedCompetencyName;
+    private String certificateName;
     /*职(执)业资格编码*/
-    private String certifiedCompetencyNumber;
+    private String certificateNo;
     /*职(执)业资格级别名称*/
     private String levelName;
     /*职(执)业资格级别编码*/
@@ -30,7 +30,7 @@ public class PersonCertifyCompetency {
     /*主要职业资格*/
     private Boolean isHighest;
     /*获取时间 格式:yyyy-MM-dd*/
-    private String obtainDate;
+    private String issueDate;
     /*附件列表*/
     private List<Attachment> attachmentList;
 }

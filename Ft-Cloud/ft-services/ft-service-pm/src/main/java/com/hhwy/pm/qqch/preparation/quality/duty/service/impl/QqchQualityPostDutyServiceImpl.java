@@ -132,29 +132,31 @@ public class QqchQualityPostDutyServiceImpl implements IQqchQualityPostDutyServi
 
         list.stream().forEach(duty -> {
             List<PersonCertifyCompetency> personCertifyCompetencyList = new ArrayList<>();
+            for (int i = 1; i < 4; i++) {
+                PersonCertifyCompetency competency1 = new PersonCertifyCompetency();
+                competency1.setCategoryName("职(执)业资格类别名称" + i);
+                competency1.setCategoryNumber("职(执)业资格类别编码" + i);
+                competency1.setCertificateName("职(执)业资格名称" + i);
+                competency1.setCertificateNo("职(执)业资格编码" + i);
+                competency1.setLevelName("职(执)业资格级别名称" + i);
+                competency1.setLevelNumber("职(执)业资格级别编码" + i);
+                competency1.setZymc("专业名称" + i);
+                competency1.setPrzcny("聘任注册时间 格式为:yyyy-MM-dd" + i);
+                competency1.setAppointUnit("聘任或注册单位" + i);
+                competency1.setCertificateNumber("注册编号" + i);
+                competency1.setIsHighest(true);
+                competency1.setIssueDate("2022-02-01");
 
-            PersonCertifyCompetency competency1 = new PersonCertifyCompetency();
-            competency1.setCategoryName("职(执)业资格类别名称");
-            competency1.setCategoryNumber("职(执)业资格类别编码");
-            competency1.setCertifiedCompetencyName("职(执)业资格名称");
-            competency1.setCertifiedCompetencyNumber("职(执)业资格编码");
-            competency1.setLevelName("职(执)业资格级别名称");
-            competency1.setLevelNumber("职(执)业资格级别编码");
-            competency1.setZymc("专业名称");
-            competency1.setPrzcny("聘任注册时间 格式为:yyyy-MM-dd");
-            competency1.setAppointUnit("聘任或注册单位");
-            competency1.setCertificateNumber("注册编号");
-            competency1.setIsHighest(true);
-            competency1.setObtainDate("2022-02-01");
+                List<Attachment> attachmentList = new ArrayList<>();
+                Attachment attachment = new Attachment();
+                attachment.setId("jkljlkjlksdf0980234" + i);
+                attachment.setName("测试证件" + i);
+                attachmentList.add(attachment);
+                competency1.setAttachmentList(attachmentList);
 
-            List<Attachment> attachmentList = new ArrayList<>();
-            Attachment attachment = new Attachment();
-            attachment.setId("jkljlkjlksdf0980234");
-            attachment.setName("测试证件");
-            attachmentList.add(attachment);
-            competency1.setAttachmentList(attachmentList);
+                personCertifyCompetencyList.add(competency1);
+            }
 
-            personCertifyCompetencyList.add(competency1);
 //            String personId = duty.getPersonId();
 //            List<PersonCertifyCompetency> personCertifyCompetencyList = certList.get(personId);
             duty.setPersonCertifyCompetencyList(personCertifyCompetencyList);

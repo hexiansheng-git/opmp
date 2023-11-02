@@ -159,17 +159,17 @@ public class EhrServiceImpl implements IEhrService {
             }
 
             personCertifyCompetency.setCategoryName(categoryName);
-            personCertifyCompetency.setCertifiedCompetencyName(certifiedCompetencyName);
+            personCertifyCompetency.setCertificateName(certifiedCompetencyName);
             personCertifyCompetency.setPrzcny(przcny);
             personCertifyCompetency.setLevelNumber(levelNumber);
             personCertifyCompetency.setZymc(zymc);
             personCertifyCompetency.setCategoryNumber(categoryNumber);
             personCertifyCompetency.setAppointUnit(appointUnit);
-            personCertifyCompetency.setCertifiedCompetencyNumber(certifiedCompetencyNumber);
+            personCertifyCompetency.setCertificateNo(certifiedCompetencyNumber);
             personCertifyCompetency.setLevelName(levelName);
             personCertifyCompetency.setCertificateNumber(certificateNumber);
             personCertifyCompetency.setIsHighest(isHighest);
-            personCertifyCompetency.setObtainDate(obtainDate);
+            personCertifyCompetency.setIssueDate(obtainDate);
             personCertifyCompetency.setAttachmentList(attachmentList);
 
             personCertifyCompetencyList.add(personCertifyCompetency);
