@@ -165,19 +165,6 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
         return entity;
     }
 
-    private List<QqchTaxInDetail> getDetialList() {
-        List<String> yearList = this.getYearList();
-
-        return yearList.stream().map(item -> {
-            QqchTaxInDetail qqchTaxInDetail = new QqchTaxInDetail();
-            qqchTaxInDetail.setId(IdWorker.createId());
-            qqchTaxInDetail.setYear(item);
-
-//            amtMap.get(item);
-            return qqchTaxInDetail;
-        }).collect(Collectors.toList());
-    }
-
     /**
      * 同步主营业务收入数据
      * @param version
@@ -189,10 +176,8 @@ public class QqchTaxInServiceImpl implements IQqchTaxInService {
     }
 
     public List<QqchTaxIn> getDefaultAmtInfo(BigDecimal version){
-        //获取1.2.5的产值，币种为合同的清单标价货币。格式化为10.3.3的明细
-        QqchProdPlan query = new QqchProdPlan();
-        query.setVersion(version);
-        List<QqchProdPlan> list = qqchProdPlanService.getQqchProdPlanList(query);
+        //获取1.2.5的产值（最新有效版本），币种为合同的清单标价货币。格式化为10.3.3的明细
+        List<QqchProdPlan> list = qqchProdPlanService.getValidList();
         //汇总每年的产值
         Map<String,BigDecimal> yearAmtMap = new HashMap<>();
         for (QqchProdPlan temp : list) {

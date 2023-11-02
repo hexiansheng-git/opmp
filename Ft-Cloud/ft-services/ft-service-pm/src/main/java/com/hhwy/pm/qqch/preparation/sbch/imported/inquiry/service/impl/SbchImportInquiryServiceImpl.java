@@ -1,5 +1,6 @@
 package com.hhwy.pm.qqch.preparation.sbch.imported.inquiry.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.hhwy.common.core.text.Convert;
 import com.hhwy.common.core.utils.SecurityUtils;
 
@@ -92,42 +93,43 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
     @Override
     @Transactional
     public int insertSbchImportInquiry(SbchImportInquiry sbchImportInquiry) {
-//        EntityUtils.setCreateInfo(sbchImportInquiry);
-        sbchImportInquiry.setId(IdWorker.createId());
-        String code = genCodeService.getSetCode(CodeEnum.EQU_IMPORT_INQUIRY);
-        sbchImportInquiry.setFormNo(code);
-
-        List<SbchImportInquiryCountry> countryList = sbchImportInquiry.getCountryList();
-        List<SbchImportInquiryCustoms> customsList = sbchImportInquiry.getCustomsList();
-        for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
-            BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCountry);
-            sbchImportInquiryCountry.setInquiryId(sbchImportInquiry.getId());
-        }
-
-        if(!ObjectNullUtil.isEmpty(countryList)){
-            //国家详情
-            sbchImportInquiryCountryService.batchInsert(countryList);
-            Map<String, Long> countryMap = countryList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode(), Collectors.collectingAndThen(Collectors.toList(), v -> v.get(0).getId())));
-
-            //处理港口详情数据
-            for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
-                String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
-                BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCustoms);
-                sbchImportInquiryCustoms.setInquiryId(sbchImportInquiry.getId());
-                sbchImportInquiryCustoms.setCountryId(countryMap.get(sbchImportInquiryCustoms.getCountryCode()));
-                sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
-            }
-            //港口详情
-            customsList = customsList.stream().filter(t->{
-                if(!ObjectNullUtil.isEmpty(t.getCountryId())){
-                    return true;
-                }
-                return false;
-            }).collect(Collectors.toList());
-            sbchImportInquiryCustomsService.batchInsert(customsList);
-        }
-
-        return sbchImportInquiryMapper.insertSbchImportInquiry(sbchImportInquiry);
+////        EntityUtils.setCreateInfo(sbchImportInquiry);
+//        sbchImportInquiry.setId(IdWorker.createId());
+//        String code = genCodeService.getSetCode(CodeEnum.EQU_IMPORT_INQUIRY);
+//        sbchImportInquiry.setFormNo(code);
+//
+//        List<SbchImportInquiryCountry> countryList = sbchImportInquiry.getCountryList();
+////        List<SbchImportInquiryCustoms> customsList = sbchImportInquiry.getCustomsList();
+//        for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
+//            BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCountry);
+//            sbchImportInquiryCountry.setInquiryId(sbchImportInquiry.getId());
+//        }
+//
+//        if(!ObjectNullUtil.isEmpty(countryList)){
+//            //国家详情
+//            sbchImportInquiryCountryService.batchInsert(countryList);
+//            Map<String, Long> countryMap = countryList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode(), Collectors.collectingAndThen(Collectors.toList(), v -> v.get(0).getId())));
+//
+//            //处理港口详情数据
+//            for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
+//                String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
+//                BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCustoms);
+//                sbchImportInquiryCustoms.setInquiryId(sbchImportInquiry.getId());
+//                sbchImportInquiryCustoms.setCountryId(countryMap.get(sbchImportInquiryCustoms.getCountryCode()));
+//                sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
+//            }
+//            //港口详情
+//            customsList = customsList.stream().filter(t->{
+//                if(!ObjectNullUtil.isEmpty(t.getCountryId())){
+//                    return true;
+//                }
+//                return false;
+//            }).collect(Collectors.toList());
+//            sbchImportInquiryCustomsService.batchInsert(customsList);
+//        }
+//
+//        return sbchImportInquiryMapper.insertSbchImportInquiry(sbchImportInquiry);
+        return 0;
     }
 
     /**
@@ -139,39 +141,40 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
     @Override
     @Transactional
     public int updateSbchImportInquiry(SbchImportInquiry sbchImportInquiry) {
-//        EntityUtils.setUpdateInfo(sbchImportInquiry);
-
-        List<SbchImportInquiryCountry> countryList = sbchImportInquiry.getCountryList();
-        List<SbchImportInquiryCustoms> customsList = sbchImportInquiry.getCustomsList();
-        for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
-            BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCountry);
-            sbchImportInquiryCountry.setInquiryId(sbchImportInquiry.getId());
-        }
-        //删除旧的国家详情和港口详情
-        sbchImportInquiryCountryService.deleteSbchImportInquiryCountryByInquiryId(sbchImportInquiry.getId());
-        sbchImportInquiryCustomsService.deleteSbchImportInquiryCustomsByInquiryId(sbchImportInquiry.getId());
-        if(!ObjectNullUtil.isEmpty(countryList)){
-            //国家详情
-            sbchImportInquiryCountryService.batchInsert(countryList);
-            Map<String, Long> countryMap = countryList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode(), Collectors.collectingAndThen(Collectors.toList(), v -> v.get(0).getId())));
-            //处理港口详情数据
-            for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
-                String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
-                BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCustoms);
-                sbchImportInquiryCustoms.setInquiryId(sbchImportInquiry.getId());
-                sbchImportInquiryCustoms.setCountryId(countryMap.get(sbchImportInquiryCustoms.getCountryCode()));
-                sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
-            }
-            //港口详情
-            customsList = customsList.stream().filter(t->{
-                if(!ObjectNullUtil.isEmpty(t.getCountryId())){
-                    return true;
-                }
-                return false;
-            }).collect(Collectors.toList());
-            sbchImportInquiryCustomsService.batchInsert(customsList);
-        }
-        return sbchImportInquiryMapper.updateSbchImportInquiry(sbchImportInquiry);
+////        EntityUtils.setUpdateInfo(sbchImportInquiry);
+//
+//        List<SbchImportInquiryCountry> countryList = sbchImportInquiry.getCountryList();
+////        List<SbchImportInquiryCustoms> customsList = sbchImportInquiry.getCustomsList();
+//        for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
+//            BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCountry);
+//            sbchImportInquiryCountry.setInquiryId(sbchImportInquiry.getId());
+//        }
+//        //删除旧的国家详情和港口详情
+//        sbchImportInquiryCountryService.deleteSbchImportInquiryCountryByInquiryId(sbchImportInquiry.getId());
+//        sbchImportInquiryCustomsService.deleteSbchImportInquiryCustomsByInquiryId(sbchImportInquiry.getId());
+//        if(!ObjectNullUtil.isEmpty(countryList)){
+//            //国家详情
+//            sbchImportInquiryCountryService.batchInsert(countryList);
+//            Map<String, Long> countryMap = countryList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode(), Collectors.collectingAndThen(Collectors.toList(), v -> v.get(0).getId())));
+//            //处理港口详情数据
+////            for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
+//                String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
+//                BeanUtils.copyProperties(sbchImportInquiry,sbchImportInquiryCustoms);
+//                sbchImportInquiryCustoms.setInquiryId(sbchImportInquiry.getId());
+//                sbchImportInquiryCustoms.setCountryId(countryMap.get(sbchImportInquiryCustoms.getCountryCode()));
+//                sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
+//            }
+//            //港口详情
+//            customsList = customsList.stream().filter(t->{
+//                if(!ObjectNullUtil.isEmpty(t.getCountryId())){
+//                    return true;
+//                }
+//                return false;
+//            }).collect(Collectors.toList());
+//            sbchImportInquiryCustomsService.batchInsert(customsList);
+//        }
+//        return sbchImportInquiryMapper.updateSbchImportInquiry(sbchImportInquiry);
+        return 0;
     }
 
     /**
@@ -237,7 +240,9 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
             List<SbchImportInquiryCustoms> customsList = sbchImportInquiryCustomsService.selectSbchImportInquiryCustomsList(sbchImportInquiryCustoms);
             if(!ObjectNullUtil.isEmpty(customsList)){
                 Map<String, List<SbchImportInquiryCustoms>> customsListMap = customsList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode()));
-                returnVo.setCustomsListMap(customsListMap);
+                for (SbchImportInquiryCountry bean : countryList) {
+                    bean.setCustomsList(customsListMap.get(bean.getCountryCode()));
+                }
             }
         }
         returnVo.setVersion(version);
@@ -250,7 +255,7 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
         //国家列表
         List<SbchImportInquiryCountry> countryList = vo.getCountryList();
         //港口列表
-        List<SbchImportInquiryCustoms> customsList = vo.getCustomsList();
+//        List<SbchImportInquiryCustoms> customsList = vo.getCustomsList();
 
         SbchImportInquiry temp = new SbchImportInquiry();
         temp.setVersion(vo.getVersion());
@@ -277,44 +282,40 @@ public class SbchImportInquiryServiceImpl implements ISbchImportInquiryService {
             if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
                 JyDetailsUtil.jyDetails(countryList, ValidationGroups.Save.class);
             }
+            List<SbchImportInquiryCustoms> saveList = null;
             for (SbchImportInquiryCountry sbchImportInquiryCountry : countryList) {
                 BeanUtils.copyProperties(vo,sbchImportInquiryCountry);
                 sbchImportInquiryCountry.setInquiryId(vo.getId());
                 EntityUtils.setCreateInfo(sbchImportInquiryCountry);
                 sbchImportInquiryCountry.setId(IdWorker.createId());
-            }
-            Map<String, Long> countryMap = countryList.stream().collect(Collectors.groupingBy(t -> t.getCountryCode(), Collectors.collectingAndThen(Collectors.toList(), v -> v.get(0).getId())));
 
-            //港口数据
-            if(!ObjectNullUtil.isEmpty(customsList)){
-                //校验数据必填
-                if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
-                    JyDetailsUtil.jyDetails(customsList, ValidationGroups.Save.class);
-                }
-                //处理港口详情数据
-                for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
-                    String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
-                    BeanUtils.copyProperties(vo,sbchImportInquiryCustoms);
-                    sbchImportInquiryCustoms.setId(IdWorker.createId());
-                    sbchImportInquiryCustoms.setInquiryId(vo.getId());
-                    sbchImportInquiryCustoms.setCountryId(countryMap.get(sbchImportInquiryCustoms.getCountryCode()));
-                    sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
-                }
-                //港口详情
-                customsList = customsList.stream().filter(t->{
-                    if(!ObjectNullUtil.isEmpty(t.getCountryId())){
-                        return true;
+                //港口数据
+                List<SbchImportInquiryCustoms> customsList = sbchImportInquiryCountry.getCustomsList();
+                if(!ObjectNullUtil.isEmpty(customsList)){
+                    //校验数据必填
+//                    if("1".equals(vo.getButtonMark())||"2".equals(vo.getButtonMark())){//确认
+//                        JyDetailsUtil.jyDetails(customsList, ValidationGroups.Save.class);
+//                    }
+                    //处理港口详情数据
+                    for (SbchImportInquiryCustoms sbchImportInquiryCustoms : customsList) {
+                        String fileGroupId = sbchImportInquiryCustoms.getFileGroupId();
+                        BeanUtils.copyProperties(vo,sbchImportInquiryCustoms);
+                        sbchImportInquiryCustoms.setId(IdWorker.createId());
+                        sbchImportInquiryCustoms.setInquiryId(vo.getId());
+                        sbchImportInquiryCustoms.setCountryId(sbchImportInquiryCustoms.getId());
+                        sbchImportInquiryCustoms.setFileGroupId(fileGroupId);
                     }
-                    return false;
-                }).collect(Collectors.toList());
-                sbchImportInquiryCustomsService.batchInsert(customsList);
+                    saveList.addAll(customsList);
+                }
             }
             sbchImportInquiryCountryService.batchInsert(countryList);
+            if (CollectionUtil.isNotEmpty(saveList)){
+                sbchImportInquiryCustomsService.batchInsert(saveList);
+            }
         }
 
         //判断是否是确认
         if(ButtonMark.CONFIRM.equals(vo.getButtonMark())){
-            JyDetailsUtil.jyDetails(customsList, ValidationGroups.Save.class);
             JyDetailsUtil.jyDetails(countryList, ValidationGroups.Save.class);
             //插入确认记录
             String menuId = vo.getMenuId();

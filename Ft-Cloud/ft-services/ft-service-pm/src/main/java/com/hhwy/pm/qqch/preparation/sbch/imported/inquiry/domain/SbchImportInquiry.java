@@ -104,9 +104,9 @@ public class SbchImportInquiry extends MyPrepareBaseEntity {
     private List<SbchImportInquiryCountry> countryList;
 
     //港口详情
-    private List<SbchImportInquiryCustoms> customsList;
+//    private List<SbchImportInquiryCustoms> customsList;
 
     private String[] ids;
 
-    private Map<String,List<SbchImportInquiryCustoms>> customsListMap;
+//    private Map<String,List<SbchImportInquiryCustoms>> customsListMap;
 }

@@ -6,7 +6,6 @@ import com.hhwy.pm.jdgl.statistics.util.StatisticsUtils;
 import com.hhwy.pm.qqch.common.aspect.CompileAspect;
 import com.hhwy.pm.qqch.common.aspect.CompileOptEnum;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
-import com.hhwy.pm.qqch.module.service.IQqchModuleConfirmCaseService;
 import com.hhwy.pm.qqch.sgch.mainpl.domain.QqchMainPlanItem;
 import com.hhwy.pm.qqch.sgch.mainpl.service.IQqchMainPlanItemService;
 import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
@@ -64,6 +63,14 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
     }
 
     public List<QqchProdPlan> getQqchProdPlanList(QqchProdPlan qqchProdPlan) {
+        return qqchProdPlanMapper.getQqchProdPlanList(qqchProdPlan);
+    }
+
+    @Override
+    public List<QqchProdPlan> getValidList() {
+        BigDecimal version = VersionUtil.getVersion(TN, null);
+        QqchProdPlan qqchProdPlan = new QqchProdPlan();
+        qqchProdPlan.setVersion(version);
         return qqchProdPlanMapper.getQqchProdPlanList(qqchProdPlan);
     }
 
