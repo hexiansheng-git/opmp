@@ -122,4 +122,6 @@ public class SbchSingleCheckDetail extends CommonBaseEntity {
 
     @Excel(name = "备注")
     private String contentRemark;
+
+    private String remark;
 }

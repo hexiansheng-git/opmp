@@ -261,7 +261,7 @@ public class JdglYearPlanServiceImpl implements IJdglYearPlanService {
             throw new RuntimeException("已存在"+year+"年数据!");
         }
 
-        Long id = IdWorker.createId();
+        Long id = jdglYearPlan.getId() == null ? IdWorker.createId() : jdglYearPlan.getId();
         jdglYearPlan.setId(id);
         jdglYearPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglYearPlan.setCreateTime(DateUtils.getNowDate());

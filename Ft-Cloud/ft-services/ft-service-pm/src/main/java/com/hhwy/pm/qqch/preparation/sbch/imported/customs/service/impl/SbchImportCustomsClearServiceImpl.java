@@ -207,7 +207,7 @@ public class SbchImportCustomsClearServiceImpl implements ISbchImportCustomsClea
                 JyDetailsUtil.jyDetails(detailList, ValidationGroups.Save.class);
             }
             for (SbchImportCustomsClearDetail sbchImportCustomsClearDetail : detailList) {
-                BeanUtils.copyProperties(sbchImportCustomsClear,sbchImportCustomsClearDetail);
+                BeanUtils.copyProperties(sbchImportCustomsClear,sbchImportCustomsClearDetail, "remark");
                 sbchImportCustomsClearDetail.setInfoId(sbchImportCustomsClear.getId());
                 EntityUtils.setCreateInfo(sbchImportCustomsClearDetail);
                 sbchImportCustomsClearDetail.setId(IdWorker.createId());

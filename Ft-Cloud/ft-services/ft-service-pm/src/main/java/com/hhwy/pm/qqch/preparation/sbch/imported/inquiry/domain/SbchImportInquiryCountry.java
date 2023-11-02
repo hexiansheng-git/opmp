@@ -10,6 +10,7 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 设备进口策划 进口调查-国家详情对象 sbch_import_inquiry_country
@@ -94,4 +95,7 @@ public class SbchImportInquiryCountry extends CommonBaseEntity {
     /** 部门id */
     @JsonSerialize(using= ToStringSerializer.class)
     private Long deptId;
+
+    //港口详情
+    private List<SbchImportInquiryCustoms> customsList;
 }

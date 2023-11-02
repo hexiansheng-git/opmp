@@ -120,7 +120,7 @@ public class SbchStaffingInfoServiceImpl implements ISbchStaffingInfoService {
             }
 
             for (SbchStaffingDetail sbchStaffingDetail : sbchStaffingDetailList) {
-                BeanUtils.copyProperties(sbchStaffingInfo,sbchStaffingDetail);
+                BeanUtils.copyProperties(sbchStaffingInfo,sbchStaffingDetail, "remark");
                 sbchStaffingDetail.setId(IdWorker.createId());
                 sbchStaffingDetail.setDeptId(sbchStaffingInfo.getDeptId());
                 sbchStaffingDetail.setStaffingId(sbchStaffingInfo.getId());

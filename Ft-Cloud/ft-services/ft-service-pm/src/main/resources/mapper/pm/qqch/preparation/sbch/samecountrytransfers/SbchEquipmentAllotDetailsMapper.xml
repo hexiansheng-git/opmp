@@ -102,7 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="appearanceStatus != null  and appearanceStatus != ''"> and `appearance_status` = #{appearanceStatus}</if>
             <if test="wholeStatus != null  and wholeStatus != ''"> and `whole_status` = #{wholeStatus}</if>
         </where>
-        order by `id` desc
+#         order by `id` desc
     </select>
     
     <select id="selectSbchEquipmentAllotDetailsById" parameterType="Long" resultMap="SbchEquipmentAllotDetailsResult">

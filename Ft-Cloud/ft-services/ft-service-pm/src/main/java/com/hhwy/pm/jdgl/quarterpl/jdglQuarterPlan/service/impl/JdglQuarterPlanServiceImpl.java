@@ -280,7 +280,7 @@ public class JdglQuarterPlanServiceImpl implements IJdglQuarterPlanService {
             throw new RuntimeException("已存在"+year+"年第"+quarter+"季度数据!");
         }
 
-        Long id = IdWorker.createId();
+        Long id = jdglQuarterPlan.getId() == null ? IdWorker.createId() : jdglQuarterPlan.getId();
         jdglQuarterPlan.setId(id);
         jdglQuarterPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglQuarterPlan.setCreateTime(DateUtils.getNowDate());

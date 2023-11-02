@@ -288,7 +288,7 @@ public class JdglMonthPlanServiceImpl implements IJdglMonthPlanService {
             throw new RuntimeException("已存在"+year+"年"+month+"月数据!");
         }
 
-        Long id = IdWorker.createId();
+        Long id = jdglMonthPlan.getId() == null ? IdWorker.createId() : jdglMonthPlan.getId();
         jdglMonthPlan.setId(id);
         jdglMonthPlan.setCreateUser(SecurityUtils.getSysUser().getNickName());
         jdglMonthPlan.setCreateTime(DateUtils.getNowDate());

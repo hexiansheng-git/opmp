@@ -52,7 +52,7 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
     @Value("${p6.ip_port}")
     private String p6IpPort;
 
-    private String pre = "/p6";
+    private String pre = "";
 
     @Override
     public List<JdglMainPlanItem> initJdglData4P6ByOne(String tenantKey) {
