@@ -3,6 +3,8 @@ package com.hhwy.pm.qqch.preparation.sbch.plan.service.impl;
 import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.SpringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
+import com.hhwy.pm.gencode.enums.CodeEnum;
+import com.hhwy.pm.gencode.service.GenCodeService;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlan;
 import com.hhwy.pm.qqch.preparation.sbch.plan.domain.SbchTotalDemandPlanDetail;
 import com.hhwy.pm.qqch.preparation.sbch.plan.mapper.SbchTotalDemandPlanDetailMapper;
@@ -12,6 +14,7 @@ import com.hhwy.pm.qqch.preparation.sbch.plan.service.SbchTotalDemandPlanService
 import com.hhwy.pm.qqch.utils.VersionUtil;
 import com.hhwy.utils.ObjectUtils;
 import com.hhwy.utils.idworker.IdWorker;
+import com.hhwy.utils.myUtilPrepare.MyUtilPrepareUtil;
 import com.hhwy.utils.myUtilPrepare.SetMaterialNameUtils;
 import com.hhwy.utils.objectUtil.ObjectNullUtil;
 import com.hhwy.utils.selfEmpty.SelfEmpty;
@@ -45,6 +48,8 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
     private SbchTotalDemandPlanMapper sbchTotalDemandPlanMapper;
     @Autowired
     private SbchTotalDemandPlanService totalDemandPlanService;
+    @Autowired
+    private GenCodeService genCodeService;
 
     /***
      * 功能描述:  同步施工策划设备总需数据
@@ -62,17 +67,30 @@ public class SbchTotalDemandPlanDetailServiceImpl implements ISbchTotalDemandPla
         sbchTotalDemandPlan.setVersion(version);
         //查询主表
         List<SbchTotalDemandPlan> sbchTotalDemandPlans = sbchTotalDemandPlanMapper.selectSbchTotalDemandPlanList(sbchTotalDemandPlan);
+        Long planId;
+        if (ObjectNullUtil.isEmpty(sbchTotalDemandPlans)) {
+            Long id = IdWorker.createId();
+            planId = id;
+            SbchTotalDemandPlan vo = new SbchTotalDemandPlan();
+            vo.setId(id);
+            String setCode = genCodeService.getSetCode(CodeEnum.EQU_TOTAL_PLAN);
+            vo.setUnicode(setCode);
+            vo.setTitleName("设备总需");
+            MyUtilPrepareUtil.setCreateUpdateInfo(vo);
+            sbchTotalDemandPlanMapper.insertSbchTotalDemandPlan(vo);
+        }else {
+            planId = sbchTotalDemandPlans.get(0).getId();
+        }
         //获取设备总需所有设备
         List<SbchTotalDemandPlanDetail> list = sbchTotalDemandPlanDetailMapper.getAllDemandDevice(version);
-        if (CollectionUtils.isEmpty(sbchTotalDemandPlans) || CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)){
             return result;
         }
-        SbchTotalDemandPlan totalDemandPlan = sbchTotalDemandPlans.get(0);
         list.forEach(p -> {
             p.setId(IdWorker.createId());
-            p.setPlanId(totalDemandPlan.getId());
+            p.setPlanId(planId);
         });
-        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(totalDemandPlan.getId(), SecurityUtils.getUserId(), DateUtils.getNowDate());
+        sbchTotalDemandPlanDetailMapper.deleteSbchTotalDemandPlanDetailByPlanId(planId, SecurityUtils.getUserId(), DateUtils.getNowDate());
         sbchTotalDemandPlanDetailMapper.batchInsert(list);
         return totalDemandPlanService.getList(version);
     }
