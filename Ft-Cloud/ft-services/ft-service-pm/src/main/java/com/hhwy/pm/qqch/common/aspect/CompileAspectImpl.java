@@ -105,9 +105,7 @@ public class CompileAspectImpl {
     private void addConfirmAndUpdateFinishNum(CompileEntity compileEntity) {
         String reqId = compileEntity.getReqId();
         if (!redisUtils.hasKey(reqId) && "1".equals(compileEntity.getSubmitFlag())) {
-            String stage = reviewService.getStage();
             moduleConfirmCaseService.addConfirmRecord(compileEntity.getModuleIdentity(), compileEntity.getStageIdentity());
-            reviewService.updateFinishNum(stage, compileEntity.getModuleIdentity());
             redisUtils.setEx(reqId, reqId, 60000);
         }
     }

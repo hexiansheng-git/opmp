@@ -1,6 +1,7 @@
 package com.hhwy.pm.qqch.module.service.impl;
 
 import com.hhwy.common.core.utils.DateUtils;
+import com.hhwy.common.core.utils.StringUtils;
 import com.hhwy.common.security.util.SecurityUtils;
 import com.hhwy.pm.qqch.constant.ConfirmStatus;
 import com.hhwy.pm.qqch.module.domain.QqchModuleConfirmCase;
@@ -63,6 +64,9 @@ public class QqchModuleConfirmCaseServiceImpl implements IQqchModuleConfirmCaseS
     @Transactional
     public void addConfirmRecord(String menuId,String stageIdentity){
         CommonAssert.notBlank(menuId,"菜单id不能为空！");
+        if(StringUtils.isBlank(stageIdentity)){
+            stageIdentity = qqchReviewService.getStage();
+        }
         CommonAssert.notBlank(stageIdentity,"阶段不能为空！");
         //查询是否存在确认记录
         QqchModuleConfirmCase qqchModuleConfirmCase = new QqchModuleConfirmCase();

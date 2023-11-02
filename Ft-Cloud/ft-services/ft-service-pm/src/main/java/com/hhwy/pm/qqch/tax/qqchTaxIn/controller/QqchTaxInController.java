@@ -4,7 +4,6 @@ import com.hhwy.common.core.utils.DateUtils;
 import com.hhwy.common.core.utils.poi.ExcelUtils;
 import com.hhwy.common.core.web.controller.BaseController;
 import com.hhwy.common.core.web.domain.AjaxResult;
-import com.hhwy.common.security.annotation.PreAuthorize;
 import com.hhwy.pm.qqch.common.domain.CompileEntity;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.service.IQqchTaxInService;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,6 +79,17 @@ public class QqchTaxInController extends BaseController {
         List<QqchTaxIn> qqchTaxInList = qqchTaxInService.getQqchTaxInList(qqchTaxInParam);
         ExcelUtils<QqchTaxIn> util = new ExcelUtils<>(QqchTaxIn.class);
         util.exportExcel(response, qqchTaxInList, DateUtils.getDate());
+    }
+
+    /**
+     * 同步主营业务收入数据
+     * @param version
+     * @return
+     */
+    @GetMapping("/syncMajorIn")
+    public AjaxResult syncMajorIn(BigDecimal version){
+        List<QqchTaxIn> inList = qqchTaxInService.syncMajorIn(version);
+        return AjaxResult.success(inList);
     }
 
 

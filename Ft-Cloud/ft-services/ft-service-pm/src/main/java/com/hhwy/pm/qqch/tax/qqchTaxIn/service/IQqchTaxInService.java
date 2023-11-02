@@ -5,6 +5,7 @@ import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxIn;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.domain.QqchTaxInDetail;
 import com.hhwy.pm.qqch.tax.qqchTaxIn.vo.TaxInVO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -48,4 +49,10 @@ public interface IQqchTaxInService {
 
     public List<String> getYearList();
 
+    /**
+     * 同步主营业务收入数据
+     * @param version
+     * @return
+     */
+    List<QqchTaxIn> syncMajorIn(BigDecimal version);
 }

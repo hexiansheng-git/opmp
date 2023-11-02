@@ -37,6 +37,7 @@ public interface IQqchMainPlanItemService {
 
     List<QqchMainPlanItem> getKeyRoad(QqchMainPlanItem qqchMainPlanItemParam);
 
+    QqchMainPlanItem getProjStartAndFinish();
     QqchMainPlanItem getProjStartAndFinish(BigDecimal version);
 
     /**
