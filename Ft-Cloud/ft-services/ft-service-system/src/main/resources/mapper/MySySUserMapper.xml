@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="userName != null and userName != ''">
             and user_name = #{userName}
         </if>
-        <if test="params != null and params.nickNameList != null and params.nickNameList != ''">
+        <if test="params != null and params.nickNameList != null and params.nickNameList.size() != 0">
             and nick_name in
             <foreach item="item" collection="params.nickNameList" open="(" separator="," close=")">
                 #{item}
