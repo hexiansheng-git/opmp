@@ -18,6 +18,8 @@ public interface IQqchProdPlanService {
 
     List<QqchProdPlan> getQqchProdPlanList(QqchProdPlan qqchProdPlan);
 
+    List<QqchProdPlan> getValidList();
+
     int insertQqchProdPlan(QqchProdPlan qqchProdPlan);
 
     int insertQqchProdPlanList(List<QqchProdPlan> qqchProdPlanList);
