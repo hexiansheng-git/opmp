@@ -241,6 +241,12 @@ public class QqchMainPlanItem extends TreeNode<QqchMainPlanItem> {
     @Excel(name = "是否关键线路")
     private String isCritical;
     /**
+     * 字段描述：是否最长线路
+     */
+    @JsonProperty
+    @Excel(name = "是否最长线路")
+    public String isLongestPath;
+    /**
      * 字段描述：wbs编码
      */
     @JsonProperty
@@ -501,4 +507,6 @@ public class QqchMainPlanItem extends TreeNode<QqchMainPlanItem> {
      */
     @JsonProperty
     private int haveChildren;
+
+
 }

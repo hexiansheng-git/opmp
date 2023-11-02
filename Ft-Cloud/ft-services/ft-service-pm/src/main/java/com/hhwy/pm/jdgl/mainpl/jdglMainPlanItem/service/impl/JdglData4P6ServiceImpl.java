@@ -144,8 +144,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setRemainingDuration(wbsInfo.getSummaryRemainingDuration());
                 jdglMainPlanItem.setActualStartDate(wbsInfo.getSummaryActualStartDate());
                 jdglMainPlanItem.setActualFinishDate(wbsInfo.getSummaryActualFinishDate());
-//                jdglMainPlanItem.setUnit();
-//                jdglMainPlanItem.setQuantity();
+                jdglMainPlanItem.setUnit(wbsInfo.getUnit());
+                jdglMainPlanItem.setQuantity(wbsInfo.getQuantity());
                 jdglMainPlanItem.setSchedulePercentComplete(wbsInfo.getSummarySchedulePercentComplete());
                 jdglMainPlanItem.setExpectedFinishDate(wbsInfo.getSummaryProgressFinishDate());
                 jdglMainPlanItem.setFinishDateVariance(wbsInfo.getSummaryFinishDateVariance());
@@ -181,7 +181,8 @@ public class JdglData4P6ServiceImpl implements IJdglData4P6Service {
                 jdglMainPlanItem.setExecuter(activityInfo.getExecuter());
                 jdglMainPlanItem.setStartDate(activityInfo.getStartDate());
                 jdglMainPlanItem.setFinishDate(activityInfo.getFinishDate());
-                jdglMainPlanItem.setIsCritical(activityInfo.getCritical() ? "1" : "0");
+                jdglMainPlanItem.setIsCritical(activityInfo.getIsCritical() ? "1" : "0");
+                jdglMainPlanItem.setIsLongestPath(activityInfo.getIsLongestPath() ? "1" : "0");
                 jdglMainPlanItem.setWbsCode(activityInfo.getWbsCode());
 //                jdglMainPlanItem.setWbsObjectId();
                 jdglMainPlanItem.setWbsParentObjectId(activityInfo.getWbsObjectId());

@@ -1,6 +1,8 @@
 package com.hhwy.pm.jdgl.mainpl.jdglMainPlanItem.domain;
 
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -9,6 +11,7 @@ import java.util.Date;
  * 作者: fushudong
  * 时间: 2023/09/18
  */
+@Data
 public class ActivityConstField extends  ActivityInfo{
 
 
@@ -52,76 +55,4 @@ public class ActivityConstField extends  ActivityInfo{
      */
     private BigDecimal quantity;
 
-
-    public String getActivityCode() {
-        return activityCode;
-    }
-
-    public void setActivityCode(String activityCode) {
-        this.activityCode = activityCode;
-    }
-
-    public String getActivityName() {
-        return activityName;
-    }
-
-    public void setActivityName(String activityName) {
-        this.activityName = activityName;
-    }
-
-    public String getLagReason() {
-        return lagReason;
-    }
-
-    public void setLagReason(String lagReason) {
-        this.lagReason = lagReason;
-    }
-
-    public String getCorrectionTarget() {
-        return correctionTarget;
-    }
-
-    public void setCorrectionTarget(String correctionTarget) {
-        this.correctionTarget = correctionTarget;
-    }
-
-    public String getConcreteMeasure() {
-        return concreteMeasure;
-    }
-
-    public void setConcreteMeasure(String concreteMeasure) {
-        this.concreteMeasure = concreteMeasure;
-    }
-
-    public Date getCorrectionCompDate() {
-        return correctionCompDate;
-    }
-
-    public void setCorrectionCompDate(Date correctionCompDate) {
-        this.correctionCompDate = correctionCompDate;
-    }
-
-    public String getExecuter() {
-        return executer;
-    }
-
-    public void setExecuter(String executer) {
-        this.executer = executer;
-    }
-
-    public String getUnit() {
-        return unit;
-    }
-
-    public void setUnit(String unit) {
-        this.unit = unit;
-    }
-
-    public BigDecimal getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
-    }
 }

@@ -4,6 +4,7 @@ import com.hhwy.pm.qqch.sgch.prodplan.domain.QqchProdPlan;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -30,4 +31,6 @@ public interface QqchProdPlanMapper {
     int deleteQqchProdPlanByPks(@Param("qqchProdPlanPkList") List<Long> qqchProdPlanPkList);
 
     int deleteQqchProdPlanByVersion(@Param("version") BigDecimal version);
+
+    BigDecimal getQqchProdPlanAmt4DateRange(@Param("version") BigDecimal version, @Param("start") Date start,@Param("end") Date end);
 }

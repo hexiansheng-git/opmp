@@ -34,6 +34,7 @@
         <result property="ptVar5" column="pt_var5" />
         <result property="taskStatus" column="task_status" />
         <result property="isCritical" column="is_critical" />
+        <result property="isLongestPath" column="is_longest_path" />
         <result property="wbsCode" column="wbs_code" />
         <result property="wbsPcode" column="wbs_pcode" />
         <result property="wbsName" column="wbs_name" />
@@ -97,6 +98,7 @@
              ,`pt_var5`
              ,`task_status`
              ,`is_critical`
+             ,`is_longest_path`
              ,`wbs_code`
              ,`wbs_pcode`
              ,`wbs_name`
@@ -163,6 +165,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
             <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="isLongestPath != null  and isLongestPath != ''"> and `is_longest_path` = #{isLongestPath}</if>
             <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
             <if test="wbsPcode != null  and wbsPcode != ''"> and `wbs_pcode` = #{wbsPcode}</if>
             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
@@ -231,6 +234,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
             <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="isLongestPath != null  and isLongestPath != ''"> and `is_longest_path` = #{isLongestPath}</if>
             <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
             <if test="wbsPcode != null  and wbsPcode != ''"> and `wbs_pcode` = #{wbsPcode}</if>
             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>
@@ -314,6 +318,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">`pt_var5`,</if>
             <if test="taskStatus != null  and taskStatus != ''">`task_status`,</if>
             <if test="isCritical != null  and isCritical != ''">`is_critical`,</if>
+            <if test="isLongestPath != null  and isLongestPath != ''">`is_longest_path`,</if>
             <if test="wbsCode != null  and wbsCode != ''">`wbs_code`,</if>
             <if test="wbsPcode != null  and wbsPcode != ''">`wbs_pcode`,</if>
             <if test="wbsName != null  and wbsName != ''">`wbs_name`,</if>
@@ -376,6 +381,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''">#{ptVar5},</if>
             <if test="taskStatus != null  and taskStatus != ''">#{taskStatus},</if>
             <if test="isCritical != null  and isCritical != ''">#{isCritical},</if>
+            <if test="isLongestPath != null  and isLongestPath != ''">#{isLongestPath},</if>
             <if test="wbsCode != null  and wbsCode != ''">#{wbsCode},</if>
             <if test="wbsPcode != null  and wbsPcode != ''">#{wbsPcode},</if>
             <if test="wbsName != null  and wbsName != ''">#{wbsName},</if>
@@ -442,6 +448,7 @@
             `pt_var5`,
             `task_status`,
             `is_critical`,
+            `is_longest_path`,
             `wbs_code`,
             `wbs_pcode`,
             `wbs_name`,
@@ -505,6 +512,7 @@
                 #{item.ptVar5},
                 #{item.taskStatus},
                 #{item.isCritical},
+                #{item.isLongestPath},
                 #{item.wbsCode},
                 #{item.wbsPcode},
                 #{item.wbsName},
@@ -572,6 +580,7 @@
             <if test="ptVar5 != null  and  ptVar5 != ''">`pt_var5` = #{ptVar5},</if>
             <if test="taskStatus != null  and  taskStatus != ''">`task_status` = #{taskStatus},</if>
             <if test="isCritical != null  and  isCritical != ''">`is_critical` = #{isCritical},</if>
+            <if test="isLongestPath != null  and  isLongestPath != ''">`is_longest_path` = #{isLongestPath},</if>
             <if test="wbsCode != null  and  wbsCode != ''">`wbs_code` = #{wbsCode},</if>
             <if test="wbsPcode != null  and  wbsPcode != ''">`wbs_pcode` = #{wbsPcode},</if>
             <if test="wbsName != null  and  wbsName != ''">`wbs_name` = #{wbsName},</if>
@@ -755,6 +764,11 @@
             <trim prefix="is_critical  = case" suffix="end,">
                 <foreach collection="list" item="item" index="index">
                     when `id`=#{item.id} then #{item.isCritical}
+                </foreach>
+            </trim>
+            <trim prefix="is_longest_path  = case" suffix="end,">
+                <foreach collection="list" item="item" index="index">
+                    when `id`=#{item.id} then #{item.isLongestPath}
                 </foreach>
             </trim>
             <trim prefix="wbs_code  = case" suffix="end,">
@@ -951,6 +965,7 @@
             <if test="ptVar5 != null  and ptVar5 != ''"> and `pt_var5` = #{ptVar5}</if>
             <if test="taskStatus != null  and taskStatus != ''"> and `task_status` = #{taskStatus}</if>
             <if test="isCritical != null  and isCritical != ''"> and `is_critical` = #{isCritical}</if>
+            <if test="isLongestPath != null  and isLongestPath != ''"> and `is_longest_path` = #{isLongestPath}</if>
             <if test="wbsCode != null  and wbsCode != ''"> and `wbs_code` = #{wbsCode}</if>
             <if test="wbsPcode != null  and wbsPcode != ''"> and `wbs_pcode` = #{wbsPcode}</if>
             <if test="wbsName != null  and wbsName != ''"> and `wbs_name` = #{wbsName}</if>

@@ -38,6 +38,12 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
     @Excel(name = "年份")
     private Integer year;
     /**
+     * 字段描述：工程量计量周期(月)
+     */
+    @JsonProperty
+    @Excel(name = "工程量计量周期(月)")
+    private BigDecimal meteringCircle;
+    /**
      * 字段描述：工程量计算
      */
     @JsonProperty
@@ -254,5 +260,22 @@ public class QqchTaxGlobalFormula extends CompileEntity<QqchTaxGlobalFormula> {
     private BigDecimal usdPayAmt;
     private BigDecimal cnyPayAmt;
     private BigDecimal localPayAmt;
+
+    /**
+     * 合同币种支付比例
+     */
+    private BigDecimal contProportion;
+    /**
+     * 美元支付比例
+     */
+    private BigDecimal usdProportion;
+    /**
+     * 人民币支付比例
+     */
+    private BigDecimal cnyProportion;
+    /**
+     * 当地币种支付比例
+     */
+    private BigDecimal localProportion;
     
 }

@@ -307,6 +307,15 @@ public class QqchProdPlanServiceImpl implements IQqchProdPlanService {
 
     }
 
+    @Override
+    public BigDecimal getQqchProdPlanAmt4DateRange(BigDecimal version, Date start, Date end) {
+        if(start == null || end == null) {
+            return BigDecimal.ZERO;
+        }
+        version = VersionUtil.getVersion(this.TN, version);
+        return qqchProdPlanMapper.getQqchProdPlanAmt4DateRange(version, start, end);
+    }
+
     /**
      * 删除版本数据
      * @param version
