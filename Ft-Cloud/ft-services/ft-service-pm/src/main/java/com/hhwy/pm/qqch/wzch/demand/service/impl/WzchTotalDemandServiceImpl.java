@@ -534,7 +534,7 @@ public class WzchTotalDemandServiceImpl implements IWzchTotalDemandService
         busAndMaterialMap.put("materialName", "materialName");
         busAndMaterialMap.put("materialSpec", "materialSpec");
         busAndMaterialMap.put("unit", "unit");
-        busAndMaterialMap.put("categoryName", "materialType");
+//        busAndMaterialMap.put("categoryName", "materialType");
         wzchCommonService.setMaterialInfo(list,"materialCode",busAndMaterialMap);
     }
 
